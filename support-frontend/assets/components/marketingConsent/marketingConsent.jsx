@@ -2,109 +2,131 @@
 
 // ----- Imports ----- //
 
-import * as React from 'react';
-import CtaLink from 'components/ctaLink/ctaLink';
-import CheckboxInput from 'components/checkboxInput/checkboxInput';
-import ErrorMessage from 'components/errorMessage/errorMessage';
-import DotcomCta from 'components/dotcomCta/dotcomCta';
-import PageSection from 'components/pageSection/pageSection';
-
+import React, { type Node } from 'react';
+import { classNameWithModifiers } from 'helpers/utilities';
+import SvgSubscribe from 'components/svgs/subscribe';
+import SvgSubscribed from 'components/svgs/subscribed';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import { checkEmail } from 'helpers/formValidation';
+import { logException } from 'helpers/logger';
+import Button from 'components/button/button';
+import NonInteractiveButton from 'components/button/nonInteractiveButton';
+import 'components/marketingConsent/marketingConsent.scss';
 
 // ----- Types ----- //
 
-type PropTypes = {|
-  consentApiError: boolean,
+type ButtonPropTypes = {|
   confirmOptIn: ?boolean,
-  onClick: (boolean, ?string, CsrfState) => void,
-  marketingPreferencesOptIn: boolean,
-  marketingPreferenceUpdate: (preference: boolean) => void,
-  email?: ?string,
+  email: string,
   csrf: CsrfState,
+  onClick: (?string, CsrfState) => void,
+  requestPending: boolean,
 |};
 
-// ----- Component ----- //
+type PropTypes = {|
+  ...ButtonPropTypes,
+  error: boolean,
+  render: ({title: string, message: string}) => Node
+|};
 
-const MarketingConsent = (props: PropTypes): React.Node => {
-  let content = null;
-  if (!props.email) {
-    return content;
-  }
+// ----- Render ----- //
 
-  if (props.confirmOptIn === null && props.email !== null && props.email !== undefined) {
-    content = (
-      <ChooseMarketingPreference
-        marketingPreferencesOptIn={props.marketingPreferencesOptIn}
-        email={props.email}
-        marketingPreferenceUpdate={props.marketingPreferenceUpdate}
-        consentApiError={props.consentApiError}
-        onClick={props.onClick}
-        csrf={props.csrf}
-      />
-    );
-  } else {
-    const message = props.confirmOptIn ? 'We\'ll be in touch. Check your inbox for a confirmation link.' : 'Your preference has been recorded.';
-    content = (<MarketingConfirmationMessage message={message} />);
-  }
-
-  return content;
-};
-
-
-// ----- Auxiliary components ----- //
-
-function ChooseMarketingPreference(props: {
-    marketingPreferencesOptIn: boolean,
-    email: string,
-    csrf: CsrfState,
-    marketingPreferenceUpdate: (preference: boolean) => void,
-    consentApiError: boolean,
-    onClick: (boolean, ?string, CsrfState) => void,
-  }) {
-
-  return (
-    <PageSection
-      modifierClass="marketing-consent"
-      heading="Stay in touch"
-    >
-      <CheckboxInput
-        id="gnm-marketing-preference"
-        checked={props.marketingPreferencesOptIn}
-        onChange={props.marketingPreferenceUpdate}
-        labelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
-        labelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
-      />
-      <ErrorMessage
-        showError={props.consentApiError}
-        message="Error confirming selection. Please try again later"
-      />
-      <CtaLink
-        onClick={
-          () => props.onClick(props.marketingPreferencesOptIn, props.email, props.csrf)
-        }
-        text="Next"
-        accessibilityHint="Go to the guardian dot com front page"
-        modifierClasses={['next']}
-      />
-    </PageSection>
-  );
-}
-
-
-function MarketingConfirmationMessage(props: {message: string}) {
-  return (
-    <div className="component-marketing-consent__confirmation-message">
-      <PageSection
-        modifierClass="marketing-consent"
-        heading="Stay in touch"
+function MarketingButton(props: ButtonPropTypes) {
+  if (props.confirmOptIn === true) {
+    return (
+      <NonInteractiveButton
+        appearance="greenHollow"
+        iconSide="right"
+        icon={<SvgSubscribed />}
       >
-        <span className="marketing-consent__final-message">{props.message}</span>
-      </PageSection>
-      <DotcomCta />
-    </div>
+        Signed up
+      </NonInteractiveButton>
+    );
+  } else if (props.requestPending === true) {
+    return (
+      <NonInteractiveButton
+        appearance="greyHollow"
+        iconSide="right"
+        icon={<SvgSubscribe />}
+      >
+        Pending...
+      </NonInteractiveButton>
+    );
+  }
+  return (
+    <Button
+      appearance="green"
+      iconSide="right"
+      aria-label="Sign me up to news and offers from The Guardian"
+      onClick={
+          () => props.onClick(props.email, props.csrf)
+        }
+      icon={<SvgSubscribe />}
+    >
+        Sign me up
+    </Button>
   );
+
 }
+
+function MarketingConsent(props: PropTypes) {
+
+  if (props.error) {
+    return (<GeneralErrorMessage
+      classModifiers={['marketing_consent_api_error']}
+      errorHeading="Sorry, something went wrong"
+      errorReason="marketing_consent_api_error"
+    />);
+  }
+
+  if (checkEmail(props.email)) {
+    return (
+      <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
+        {props.render({
+          title: 'Contributions, subscriptions and membership',
+          message: 'Get related news and offers – whether you are a contributor, subscriber, member or would like to become one',
+        })}
+
+        {MarketingButton({
+          confirmOptIn: props.confirmOptIn,
+          email: props.email,
+          csrf: props.csrf,
+          onClick: props.onClick,
+          requestPending: props.requestPending,
+        })}
+
+        <p className="component-marketing-consent-confirmation">
+          <small>
+            {props.confirmOptIn === true ?
+              'We\'ll be in touch. Check your inbox for a confirmation link.' :
+              <div>
+                <span className="component-marketing-consent-confirmation__message">You can unsubscribe at any time</span>
+              </div>
+            }
+          </small>
+        </p>
+      </section>
+    );
+  }
+
+  logException('Unable to display marketing consent button due to not having a valid email address to send to the API');
+  return null;
+}
+
+
+MarketingConsent.defaultProps = {
+  error: false,
+  requestPending: false,
+  render: ({ title, message }: {title: string, message: string}) => (
+    <div>
+      <h3 className="contribution-thank-you-block__title">{title}</h3>
+      <p className="contribution-thank-you-block__message">
+        {message}
+      </p>
+    </div>
+  ),
+};
 
 
 // ----- Exports ----- //
