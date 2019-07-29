@@ -1,18 +1,19 @@
 // @flow
 import type { Tests } from './abtest';
+import { get as getCookie } from 'helpers/cookie';
 
-export type LandingPageCopyAllContributionsTestVariants = 'control' | 'allContributions' | 'notintest';
 // ----- Tests ----- //
+export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 
 export const tests: Tests = {
-  landingPageCopyAllContributionsRevision1: {
+  landingPageCopyReturningSingles: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'allContributions',
+        id: 'returningSingle',
       },
     ],
     audiences: {
@@ -24,6 +25,6 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 1,
+    canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
   },
 };
-
