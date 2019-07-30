@@ -17,7 +17,7 @@ import 'components/marketingConsent/marketingConsent.scss';
 
 // ----- Types ----- //
 
-export type ButtonPropTypes = {|
+type ButtonPropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
   csrf: CsrfState,
@@ -26,13 +26,13 @@ export type ButtonPropTypes = {|
   checkboxChecked: boolean,
 |};
 
-export type PropTypes = {|
+type PropTypes = {|
   ...ButtonPropTypes,
   error: boolean,
   renderMessage: ({title: string, message: string}) => Node
 |};
 
-export type StateTypes ={|
+type StateTypes ={|
   checkboxChecked: boolean,
 |}
 
