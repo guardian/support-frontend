@@ -17,7 +17,7 @@ import 'components/marketingConsent/marketingConsent.scss';
 
 // ----- Types ----- //
 
-type ButtonPropTypes = {|
+export type ButtonPropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
   csrf: CsrfState,
@@ -26,13 +26,13 @@ type ButtonPropTypes = {|
   checkboxChecked: boolean,
 |};
 
-type PropTypes = {|
+export type PropTypes = {|
   ...ButtonPropTypes,
   error: boolean,
-  render: ({title: string, message: string}) => Node
+  renderMessage: ({title: string, message: string}) => Node
 |};
 
-type StateTypes ={|
+export type StateTypes ={|
   checkboxChecked: boolean,
 |}
 
@@ -87,18 +87,19 @@ function MarketingButton(props: ButtonPropTypes) {
 
 }
 
+const renderMessage = ({ title, message }: {title: string, message: string}) => (
+  <div>
+    <h3 className="contribution-thank-you-block__title">{title}</h3>
+    <p className="contribution-thank-you-block__message">
+      {message}
+    </p>
+  </div>);
+
 class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
   static defaultProps = {
     error: false,
     requestPending: false,
-    render: ({ title, message }: {title: string, message: string}) => (
-      <div>
-        <h3 className="contribution-thank-you-block__title">{title}</h3>
-        <p className="contribution-thank-you-block__message">
-          {message}
-        </p>
-      </div>
-    ),
+    renderMessage,
   };
 
   state = {
@@ -117,7 +118,7 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
     if (checkEmail(this.props.email)) {
       return (
         <section className={classNameWithModifiers('component-marketing-consent', ['newsletter', 'with-checkbox'])}>
-          {this.props.render({
+          {this.props.renderMessage({
             title: 'Would you like to receive a weekly email from inside The Guardian? ',
             message: 'Our membership editor will discuss the most important news stories from the week and suggest compelling articles to read. Opt in below to receive this and more information on ways to support The Guardian.',
           })}
@@ -138,7 +139,7 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
             csrf: this.props.csrf,
             onClick: this.props.onClick,
             requestPending: this.props.requestPending,
-            checkboxChecked: this.state.checkboxChecked || false,
+            checkboxChecked: this.state.checkboxChecked,
           })}
 
           <p className="component-marketing-consent-confirmation">
