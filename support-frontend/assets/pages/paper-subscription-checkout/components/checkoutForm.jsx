@@ -63,7 +63,6 @@ import {
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
-import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
