@@ -1,6 +1,6 @@
 package actions
 
-import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
+import services.AsyncAuthenticationService.logUserAuthenticationError
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 
@@ -19,7 +19,7 @@ class AsyncAuthenticatedBuilder[U](
     defaultParser: BodyParser[AnyContent],
     onUnauthorized: RequestHeader => Result
 )(implicit val executionContext: ExecutionContext)
-  extends ActionBuilder[({ type R[A] = AuthenticatedRequest[A, U] })#R, AnyContent] with LazyLogging { // scalastyle:ignore
+  extends ActionBuilder[({ type R[A] = AuthenticatedRequest[A, U] })#R, AnyContent] { // scalastyle:ignore
 
   lazy val parser = defaultParser
 
@@ -33,7 +33,7 @@ class AsyncAuthenticatedBuilder[U](
     userinfo(request)
       .flatMap(user => block(new AuthenticatedRequest(user, request)))
       .recover { case err =>
-        logger.error("unable to authorize user", err)
+        logUserAuthenticationError(err)
         onUnauthorized(request)
       }
   }

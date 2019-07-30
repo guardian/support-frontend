@@ -4,7 +4,9 @@ import cats.implicits._
 import com.gu.identity.auth.UserCredentials
 import com.gu.identity.model.User
 import com.gu.identity.play.IdentityPlayAuthService
-import com.typesafe.scalalogging.LazyLogging
+import com.gu.identity.play.IdentityPlayAuthService.UserCredentialsMissingError
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import config.Identity
 import org.http4s.Uri
 import play.api.mvc.{Cookie, RequestHeader}
@@ -31,7 +33,7 @@ case class AuthenticatedIdUser(credentials: AccessCredentials, minimalUser: IdMi
 class AsyncAuthenticationService(
     identityPlayAuthService: IdentityPlayAuthService,
     testUserService: TestUserService
-)(implicit ec: ExecutionContext) extends LazyLogging {
+)(implicit ec: ExecutionContext) {
 
   import AsyncAuthenticationService._
 
@@ -44,8 +46,7 @@ class AsyncAuthenticationService(
     authenticateUser(requestHeader)
       .map(user => Option(user))
       .handleError { err =>
-        // TODO: inspect errors that this is generating and see if we want log level and/or message to be dependent on error type.
-        logger.info("unable to authenticate user", err)
+        logUserAuthenticationError(err)
         None
       }
 
@@ -70,4 +71,15 @@ object AsyncAuthenticationService {
     }
     AuthenticatedIdUser(accessCredentials, IdMinimalUser(user.id, user.publicFields.displayName))
   }
+
+  // Logs failure to authenticate a user.
+  // User shouldn't necessarily be signed in,
+  // in which case, don't log failure to authenticate as an error.
+  // All other failures are considered errors.
+  def logUserAuthenticationError(error: Throwable): Unit =
+    error match {
+      // Utilises the custom error introduced in: https://github.com/guardian/identity/pull/1578
+      case _: UserCredentialsMissingError => SafeLogger.info(s"unable to authorize user - $error")
+      case _ => SafeLogger.error(scrub"unable to authorize user", error)
+    }
 }
