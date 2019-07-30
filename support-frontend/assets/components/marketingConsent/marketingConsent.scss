@@ -16,3 +16,24 @@
   margin-top: $gu-v-spacing/4;
   font-weight: 100;
 }
+
+.component-marketing-consent--with-checkbox .component-checkbox__text {
+  @include gu-typeface(textSans, 14);
+  display: initial ;
+  align-items: initial;
+  position: relative;
+  padding-left: 30px;
+  line-height: 16px;
+  margin-bottom: $gu-v-spacing;
+}
+
+.component-marketing-consent--with-checkbox .component-checkbox__text:before {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 2px;
+}
+
+.component-marketing-consent--with-checkbox .component-checkbox__tick {
+  top: 5px;
+}

@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { connect } from 'react-redux';
-import MarketingConsent from 'components/marketingConsent/marketingConsent';
+import MarketingConsentWithCheckbox from 'components/marketingConsent/marketingConsentWithCheckbox';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { Dispatch } from 'redux';
 import type { Action } from 'helpers/user/userActions';
@@ -35,4 +35,4 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(MarketingConsent);
+export default connect(mapStateToProps, mapDispatchToProps)(MarketingConsentWithCheckbox);
