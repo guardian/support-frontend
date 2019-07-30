@@ -69,7 +69,7 @@ const selectedCountryGroup = countryGroups[countryGroupId];
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
-const cookieDaysToLive = 365;
+const cookieDaysToLive = 30*6;
 
 const setOneOffContributionCookie = () => {
   setCookie(
