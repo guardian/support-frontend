@@ -45,8 +45,6 @@ export function set(name: string, value: string, daysToLive: ?number): void {
     expires.setDate(1);
   }
 
-  console.log("date:", expires.getMonth(), expires.getDate())
-
   document.cookie = `${name}=${value}; path=/; secure; expires=${expires.toUTCString()};${getDomainAttribute()}`;
 
 }
