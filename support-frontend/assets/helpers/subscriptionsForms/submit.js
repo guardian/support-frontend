@@ -254,13 +254,26 @@ function submitForm(
 
   trackSubmitAttempt(paymentMethod, product);
 
-  const { price, currency } = finalPrice(
+  let priceDetails = finalPrice(
     state.page.checkout.productPrices,
     state.page.billingAddress.fields.country,
     state.page.checkout.billingPeriod,
     state.page.checkout.fulfilmentOption,
     state.page.checkout.productOption,
   );
+
+  // This is a small hack to make sure we show quarterly pricing until we have promos tooling
+  if (state.page.checkout.billingPeriod === Quarterly && priceDetails.price === 6) {
+    priceDetails = getProductPrice(
+      state.page.checkout.productPrices,
+      state.page.billingAddress.fields.country,
+      state.page.checkout.billingPeriod,
+      state.page.checkout.fulfilmentOption,
+      state.page.checkout.productOption,
+    );
+  }
+
+  const { price, currency } = priceDetails;
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
     onPaymentAuthorised(
