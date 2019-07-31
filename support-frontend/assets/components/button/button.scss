@@ -21,12 +21,11 @@
   &:hover, &:focus {
     outline: 0;
   }
-}
 
-&[data-disabled] {
-  pointer-events: none;
+  &[data-disabled] {
+    pointer-events: none;
+  }
 }
-
 .component-button--non-interactive {
   pointer-events: none;
 }
