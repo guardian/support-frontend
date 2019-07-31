@@ -26,7 +26,7 @@ function ContributionThankYouPasswordSet() {
           </p>
         </section>
         <MarketingConsent />
-        <ContributionSurvey isRunning />
+        <ContributionSurvey isRunning={false} />
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
