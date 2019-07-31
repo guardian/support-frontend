@@ -14,6 +14,7 @@ import Button from 'components/button/button';
 import NonInteractiveButton from 'components/button/nonInteractiveButton';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import 'components/marketingConsent/marketingConsent.scss';
+import type { ThankYouPageMarketingComponentTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -21,13 +22,19 @@ type ButtonPropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
   csrf: CsrfState,
-  onClick: (?string, CsrfState) => void,
+  onClick: (?string, CsrfState, ?ThankYouPageMarketingComponentTestVariants) => void,
   requestPending: boolean,
+  marketingComponentVariant?: ThankYouPageMarketingComponentTestVariants,
   checkboxChecked: boolean,
 |};
 
 type PropTypes = {|
-  ...ButtonPropTypes,
+  confirmOptIn: ?boolean,
+  email: string,
+  csrf: CsrfState,
+  onClick: (?string, CsrfState, ?ThankYouPageMarketingComponentTestVariants) => void,
+  requestPending: boolean,
+  marketingComponentVariant?: ThankYouPageMarketingComponentTestVariants,
   error: boolean,
   renderMessage: ({title: string, message: string}) => Node
 |};
@@ -77,15 +84,18 @@ function MarketingButton(props: ButtonPropTypes) {
       iconSide="right"
       aria-label="Sign me up to news and offers from The Guardian"
       onClick={
-          () => props.onClick(props.email, props.csrf)
+          () => props.onClick(props.email, props.csrf, props.marketingComponentVariant)
         }
       icon={<SvgSubscribe />}
     >
         Sign me up
     </Button>
   );
-
 }
+
+MarketingButton.defaultProps = {
+  marketingComponentVariant: 'notintest',
+};
 
 const renderMessage = ({ title, message }: {title: string, message: string}) => (
   <div>
@@ -100,6 +110,7 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
     error: false,
     requestPending: false,
     renderMessage,
+    marketingComponentVariant: 'notintest',
   };
 
   state = {
@@ -139,6 +150,7 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
             csrf: this.props.csrf,
             onClick: this.props.onClick,
             requestPending: this.props.requestPending,
+            marketingComponentVariant: this.props.marketingComponentVariant,
             checkboxChecked: this.state.checkboxChecked,
           })}
 

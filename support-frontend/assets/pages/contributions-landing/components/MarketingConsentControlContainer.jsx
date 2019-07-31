@@ -3,12 +3,13 @@
 // ----- Imports ----- //
 
 import { connect } from 'react-redux';
-import MarketingConsentWithCheckbox from 'components/marketingConsent/marketingConsentWithCheckbox';
+import MarketingConsent from 'components/marketingConsent/marketingConsent';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { Dispatch } from 'redux';
 import type { Action } from 'helpers/user/userActions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
+import type { ThankYouPageMarketingComponentTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 const mapStateToProps = state => ({
@@ -17,12 +18,20 @@ const mapStateToProps = state => ({
   csrf: state.page.csrf,
   error: state.page.marketingConsent.error,
   requestPending: state.page.marketingConsent.requestPending,
+  marketingComponentVariant: state.common.abParticipations.thankYouPageMarketingComponent,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
-    onClick: (email: string, csrf: CsrfState) => {
+    onClick: (
+      email: string,
+      csrf: CsrfState,
+      marketingComponentVariant?: ThankYouPageMarketingComponentTestVariants,
+    ) => {
       trackComponentClick('marketing-permissions');
+      if (marketingComponentVariant && marketingComponentVariant !== 'notintest') {
+        trackComponentClick(`marketing-permissions-abtest-${marketingComponentVariant}`);
+      }
       sendMarketingPreferencesToIdentity(
         true, // it's TRUE because the button says Sign Me Up!
         email,
@@ -35,4 +44,4 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(MarketingConsentWithCheckbox);
+export default connect(mapStateToProps, mapDispatchToProps)(MarketingConsent);

@@ -13,6 +13,7 @@ import { logException } from 'helpers/logger';
 import Button from 'components/button/button';
 import NonInteractiveButton from 'components/button/nonInteractiveButton';
 import 'components/marketingConsent/marketingConsent.scss';
+import type { ThankYouPageMarketingComponentTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -20,12 +21,18 @@ type ButtonPropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
   csrf: CsrfState,
-  onClick: (?string, CsrfState) => void,
+  onClick: (?string, CsrfState, ?ThankYouPageMarketingComponentTestVariants) => void,
   requestPending: boolean,
+  marketingComponentVariant?: ThankYouPageMarketingComponentTestVariants,
 |};
 
 type PropTypes = {|
-  ...ButtonPropTypes,
+  confirmOptIn: ?boolean,
+  email: string,
+  csrf: CsrfState,
+  onClick: (?string, CsrfState, ?ThankYouPageMarketingComponentTestVariants) => void,
+  requestPending: boolean,
+  marketingComponentVariant?: ThankYouPageMarketingComponentTestVariants,
   error: boolean,
   render: ({title: string, message: string}) => Node
 |};
@@ -60,15 +67,18 @@ function MarketingButton(props: ButtonPropTypes) {
       iconSide="right"
       aria-label="Sign me up to news and offers from The Guardian"
       onClick={
-          () => props.onClick(props.email, props.csrf)
+          () => props.onClick(props.email, props.csrf, props.marketingComponentVariant)
         }
       icon={<SvgSubscribe />}
     >
         Sign me up
     </Button>
   );
-
 }
+
+MarketingButton.defaultProps = {
+  marketingComponentVariant: 'notintest',
+};
 
 function MarketingConsent(props: PropTypes) {
 
@@ -94,6 +104,7 @@ function MarketingConsent(props: PropTypes) {
           csrf: props.csrf,
           onClick: props.onClick,
           requestPending: props.requestPending,
+          marketingComponentVariant: props.marketingComponentVariant,
         })}
 
         <p className="component-marketing-consent-confirmation">
@@ -118,6 +129,7 @@ function MarketingConsent(props: PropTypes) {
 MarketingConsent.defaultProps = {
   error: false,
   requestPending: false,
+  marketingComponentVariant: 'notintest',
   render: ({ title, message }: {title: string, message: string}) => (
     <div>
       <h3 className="contribution-thank-you-block__title">{title}</h3>

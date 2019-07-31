@@ -29,6 +29,16 @@ export const tests: Tests = {
     canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
   },
 
+  // JTL - 31 July 2019 - Ab-test: thankYouPageMarketingComponent
+  // files related to this test:
+  // - 'MarketingConsentContainer.jsx' became 'MarketingConsentControlContainer.jsx' and
+  //    'MarketingConsentVariantContainer.jsx'
+  // - 'MarketingConsentControlContainer.jsx renders the MarketingComponent (which
+  //    should not be deleted regardless of this test's results because subscriptions
+  //    uses it)
+  // - 'MarketingConsentVariantContainer.jsx renders the MarketingComponent (which should become
+  //    our default if it succeeds)
+
   thankYouPageMarketingComponent: {
     type: 'OTHER',
     variants: [
