@@ -38,6 +38,9 @@ export const tests: Tests = {
   //    uses it)
   // - 'MarketingConsentVariantContainer.jsx renders the MarketingComponent (which should become
   //    our default if it succeeds)
+  // - 'ContributionsThankYouContainer', 'ContributionsThankYou', and
+  //    'ContributionsThankYouPasswordSet' all incorporate the variants to control which
+  //    marketing component is rendered on the thank you pages
 
   thankYouPageMarketingComponent: {
     type: 'OTHER',
