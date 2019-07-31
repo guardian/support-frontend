@@ -51,7 +51,10 @@ import {
   validateCheckoutForm,
   validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
-import { isPhysicalProduct } from 'helpers/subscriptions';
+import {
+  isPhysicalProduct,
+  type SubscriptionProduct,
+} from 'helpers/subscriptions';
 import {
   loadStripe,
   openDialogBox,
@@ -61,7 +64,6 @@ import { isPostDeployUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
-import { type SubscriptionProduct } from 'helpers/subscriptions';
 
 // ----- Functions ----- //
 
@@ -316,4 +318,5 @@ export {
   showStripe,
   submitCheckoutForm,
   submitWithDeliveryForm,
+  trackSubmitAttempt,
 };
