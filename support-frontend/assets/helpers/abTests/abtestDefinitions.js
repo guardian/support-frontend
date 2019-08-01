@@ -5,6 +5,7 @@ import { get as getCookie } from 'helpers/cookie';
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 export type ThankYouPageMarketingComponentTestVariants = 'control' | 'newMarketingComponent' | 'notintest';
+export type LandingPageChoiceArchitectureLabelsTestVariants = 'control' | 'withLabels' | 'notintest';
 
 export const tests: Tests = {
   landingPageCopyReturningSingles: {
@@ -61,5 +62,26 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 2,
+  },
+
+  landingPageChoiceArchitectureLabels: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'withLabels',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 3,
   },
 };
