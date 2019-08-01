@@ -58,6 +58,7 @@ import {
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
+import { PayPal } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -120,7 +121,7 @@ function mapDispatchToProps() {
       // We need to track PayPal payment attempts here because PayPal behaves
       // differently to other payment methods. All others are tracked in submit.js
       const { paymentMethod } = state.page.checkout;
-      if(paymentMethod === PayPal) {
+      if (paymentMethod === PayPal) {
         trackSubmitAttempt(PayPal, DigitalPack);
       }
     },

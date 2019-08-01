@@ -4,12 +4,16 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Route, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import { isDetailsSupported, polyfillDetails } from 'helpers/details';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+  type CountryGroupId,
+  countryGroups,
+  detect,
+} from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as storage from 'helpers/storage';
@@ -22,7 +26,8 @@ import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { ContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
-import ContributionThankYouContainer from './components/ContributionThankYou/ContributionThankYouContainer';
+import ContributionThankYouContainer
+  from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
@@ -69,7 +74,7 @@ const selectedCountryGroup = countryGroups[countryGroupId];
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
-const cookieDaysToLive = 30*6;
+const cookieDaysToLive = 30 * 6;
 
 const setOneOffContributionCookie = () => {
   setCookie(
