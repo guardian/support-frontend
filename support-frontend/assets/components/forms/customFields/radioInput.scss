@@ -107,14 +107,16 @@
   opacity: 1;
 }
 
-.component-radio-input--normal:hover {
+.component-radio-input--normal:hover,
+ .component-radio-input--with-helpers:hover {
   .component-radio-input__text:before {
     box-shadow: inset 0 0 0 3px #fff,
       0 0 0 2px lighten(gu-colour(neutral-86), 6%);
   }
 }
 
-.component-radio-input--normal .component-radio-input__input {
+.component-radio-input--normal .component-radio-input__input,
+ .component-radio-input--with-helpers .component-radio-input__input {
   &:focus + .component-radio-input__text:before {
     box-shadow: inset 0 0 0 3px #fff,
       0 0 0 2px lighten(gu-colour(highlight-main), 6%);
