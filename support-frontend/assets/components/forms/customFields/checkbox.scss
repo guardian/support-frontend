@@ -10,9 +10,9 @@
 }
 
 .component-checkbox__text {
-  display: flex;
   align-items: center;
   position: relative;
+  padding: 0 0 0 30px;
 }
 
 .component-checkbox__input {
@@ -25,6 +25,9 @@
 }
 
 .component-checkbox__text:before {
+  position: absolute;
+  left: 0;
+  top: 1px;
   display: inline-block;
   content: '';
   width: 18px;
@@ -43,7 +46,7 @@
 .component-checkbox__tick {
   position: absolute;
   left: 7px;
-  top: 4px;
+  top: 3px;
   width: 6px;
   height: 12px;
   transform: rotate(45deg);
