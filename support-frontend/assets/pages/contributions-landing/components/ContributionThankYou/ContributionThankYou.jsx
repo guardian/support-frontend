@@ -6,7 +6,8 @@ import { type Dispatch } from 'redux';
 import React from 'react';
 import { connect } from 'react-redux';
 import { type ContributionType, getSpokenType } from 'helpers/contributions';
-import MarketingConsent from '../MarketingConsentContainer';
+import MarketingConsentControl from 'pages/contributions-landing/components/MarketingConsentControlContainer';
+import MarketingConsentVariant from 'pages/contributions-landing/components/MarketingConsentVariantContainer';
 import {
   type Action,
   setHasSeenDirectDebitThankYouCopy,
@@ -24,6 +25,7 @@ import {
   trackComponentLoad,
 } from 'helpers/tracking/behaviour';
 import TrackableButton from 'components/button/trackableButton';
+import type { ThankYouPageMarketingComponentTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -38,6 +40,7 @@ type PropTypes = {|
   csrf: string,
   emailValidated: boolean,
   paymentComplete: boolean,
+  marketingComponentVariant: ThankYouPageMarketingComponentTestVariants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -185,7 +188,13 @@ function ContributionThankYou(props: PropTypes) {
           </section>
         ) : null}
         { renderIdentityCTA() }
-        <MarketingConsent />
+        {props.marketingComponentVariant === 'newMarketingComponent' ? (
+          <MarketingConsentVariant />
+          )
+         : (
+           <MarketingConsentControl />
+        )
+        }
         <ContributionSurvey isRunning={false} />
         <SpreadTheWord />
         <div className="gu-content__return-link">

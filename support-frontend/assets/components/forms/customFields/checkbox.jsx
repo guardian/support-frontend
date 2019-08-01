@@ -10,7 +10,7 @@ import './checkbox.scss';
 
 type PropTypes = {
   id?: string,
-  text: Node,
+  text: Node
 };
 
 // ----- Component ----- //

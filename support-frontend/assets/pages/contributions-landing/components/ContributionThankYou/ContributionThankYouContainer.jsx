@@ -8,17 +8,20 @@ import { type ThankYouPageStageMap, type ThankYouPageStage } from '../../contrib
 import ContributionThankYou from './ContributionThankYou';
 import ContributionThankYouSetPassword from './ContributionThankYouSetPassword';
 import ContributionThankYouPasswordSet from './ContributionThankYouPasswordSet';
+import type { ThankYouPageMarketingComponentTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   thankYouPageStage: ThankYouPageStage,
+  marketingComponentVariant: ThankYouPageMarketingComponentTestVariants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   thankYouPageStage: state.page.form.thankYouPageStage,
+  marketingComponentVariant: state.common.abParticipations.thankYouPageMarketingComponent,
 });
 
 // ----- Render ----- //
@@ -26,10 +29,18 @@ const mapStateToProps = state => ({
 function ContributionThankYouContainer(props: PropTypes) {
 
   const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
-    thankYou: (<ContributionThankYou />),
-    thankYouSetPassword: (<ContributionThankYouSetPassword />),
-    thankYouPasswordDeclinedToSet: (<ContributionThankYou />),
-    thankYouPasswordSet: (<ContributionThankYouPasswordSet />),
+    thankYou: (
+      <ContributionThankYou marketingComponentVariant={props.marketingComponentVariant} />
+    ),
+    thankYouSetPassword: (
+      <ContributionThankYouSetPassword />
+    ),
+    thankYouPasswordDeclinedToSet: (
+      <ContributionThankYou marketingComponentVariant={props.marketingComponentVariant} />
+    ),
+    thankYouPasswordSet: (
+      <ContributionThankYouPasswordSet marketingComponentVariant={props.marketingComponentVariant} />
+    ),
   };
 
   return (
