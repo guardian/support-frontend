@@ -12,6 +12,8 @@ import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOp
 import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3._
+import ophan.thrift.event.PrintProduct.{GuardianWeekly, HomeDeliveryEveryday, HomeDeliveryEverydayPlus, HomeDeliverySaturday, HomeDeliverySaturdayPlus, HomeDeliverySixday, HomeDeliverySixdayPlus, HomeDeliverySunday, HomeDeliverySundayPlus, HomeDeliveryWeekend, HomeDeliveryWeekendPlus, VoucherEveryday, VoucherEverydayPlus, VoucherSaturday, VoucherSaturdayPlus, VoucherSixday, VoucherSixdayPlus, VoucherSunday, VoucherSundayPlus, VoucherWeekend, VoucherWeekendPlus}
+import ophan.thrift.event.Product.{Contribution, DigitalSubscription, PrintSubscription}
 import ophan.thrift.event.{AbTestInfo, Acquisition, PrintOptions, Product}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -58,9 +60,9 @@ private[services] class GAService(implicit client: OkHttpClient)
 
   private def getSuccessfulSubscriptionSignUpMetric(conversionCategory: ConversionCategory) =
     conversionCategory match {
-      case  _: ConversionCategory.ContributionConversion.type => ""
+      case _: ConversionCategory.ContributionConversion.type => ""
       case _ => "1"
-  }
+    }
 
   private[services] def buildPayload(submission: AcquisitionSubmission, annualisedValue: Double, transactionId: Option[String] = None): Either[BuildError, String] = {
     import submission._
@@ -72,6 +74,7 @@ private[services] class GAService(implicit client: OkHttpClient)
       clientId =>
         val productName = getProductName(submission.acquisition)
         val conversionCategory = getConversionCategory(submission.acquisition)
+        val productCheckout = getProductCheckout(submission.acquisition)
         val body = Map(
           "v" -> "1", //Version
           "cid" -> clientId,
@@ -87,6 +90,7 @@ private[services] class GAService(implicit client: OkHttpClient)
           "cd19" -> acquisition.promoCode.getOrElse(""), // Promo code
           "cd25" -> acquisition.labels.exists(_.contains("REUSED_EXISTING_PAYMENT_METHOD")), // usedExistingPaymentMethod
           "cd26" -> acquisition.labels.exists(_.contains("gift-subscription")), // gift subscription
+          "cd27" -> productCheckout,
 
           // Custom metrics
           "cm10" -> getSuccessfulSubscriptionSignUpMetric(conversionCategory),
@@ -132,6 +136,26 @@ private[services] class GAService(implicit client: OkHttpClient)
       case _ => Right(maybeId) // Otherwise assume that the caller has passed in the client id correctly
     }
   }
+
+  private[services] def getProductCheckout(acquisition: Acquisition) =
+    acquisition.product match {
+      case Contribution => Some("Contribution")
+      case DigitalSubscription => Some("DigitalPack")
+      case PrintSubscription => getProductCheckoutForPrint(acquisition.printOptions)
+    }
+
+  private def getProductCheckoutForPrint(maybePrintOptions: Option[PrintOptions]) =
+    maybePrintOptions.map(
+      _.product match {
+        case VoucherEveryday | VoucherSaturday | VoucherSunday | VoucherSixday | VoucherWeekend |
+             HomeDeliveryEveryday | HomeDeliverySaturday | HomeDeliverySunday | HomeDeliverySixday | HomeDeliveryWeekend
+        => "Paper"
+        case VoucherEverydayPlus | VoucherSaturdayPlus | VoucherSundayPlus | VoucherSixdayPlus | VoucherWeekendPlus |
+             HomeDeliveryEverydayPlus | HomeDeliverySaturdayPlus | HomeDeliverySundayPlus | HomeDeliverySixdayPlus | HomeDeliveryWeekendPlus
+        => "PaperAndDigital"
+        case GuardianWeekly => "GuardianWeekly"
+      }
+    )
 
   private[services] def getProductName(acquisition: Acquisition) =
     acquisition.printOptions.map(_.product.name).getOrElse(acquisition.product.name)
