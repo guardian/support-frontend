@@ -17,6 +17,7 @@ import {
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import { type PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import { postcodeIsWithinDeliveryArea } from 'components/subscriptionCheckouts/address/deliveryCheck';
 
 import styles
   from 'components/subscriptionCheckouts/address/postcodeFinder.module.scss';
@@ -59,9 +60,21 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
   </div>
 );
 
-const ComposedInputWithButton = compose(withLabel, asControlled, withError)(InputWithButton);
-const ComposedSelect = compose(withLabel)(Select);
+const withDeliveryCheck = WappedComponent => ({ value, results, ...props }) => (
+  <div>
+    <WappedComponent {...props} />
+    { results.length > 0 && postcodeIsWithinDeliveryArea(value) && (
+      <p>
+        Sorry, we cannot deliver a paper to an address with this postcode.
+        Please call Customer Services on: 0330 333 6767 or press Back to purchase a voucher subscription.
+      </p>
+      )
+    }
+  </div>
+);
 
+const ComposedInputWithButton = compose(withDeliveryCheck, withLabel, asControlled, withError)(InputWithButton);
+const ComposedSelect = compose(withLabel)(Select);
 
 // Main class
 
@@ -89,7 +102,9 @@ class PostcodeFinder extends Component<PropTypes> {
           }}
           isLoading={isLoading}
           value={postcode}
+          results={results}
         />
+        
         {(results.length > 0) &&
           <ComposedSelect
             onChange={(ev) => {
