@@ -29,12 +29,12 @@ export const onFormSubmit = (params: FormSubmitParameters) => {
       if (params.handlePayment) {
         params.handlePayment();
       }
-      trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-allowed-for-user-type-${userType}`, params.paymentMethod, 'Contribution');
+      trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-allowed-for-user-type-${userType}`, params.paymentMethod);
     } else {
-      trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-blocked-because-user-type-is-${userType}`, params.paymentMethod, 'Contribution');
+      trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-blocked-because-user-type-is-${userType}`, params.paymentMethod);
     }
   } else {
-    trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-blocked-because-form-not-valid${invalidReason(params.form)}`, params.paymentMethod, 'Contribution');
+    trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-blocked-because-form-not-valid${invalidReason(params.form)}`, params.paymentMethod);
   }
   params.setCheckoutFormHasBeenSubmitted();
 };
