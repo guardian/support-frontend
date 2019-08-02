@@ -24,13 +24,13 @@ type PropTypes = {
 }
 
 const PaymentSelection = ({ paymentOptions, dailyEditionsVariant }: PropTypes) => {
-  const variantCopy = dailyEditionsVariant ? 'variantB' : 'control';
+  const variantCopy = dailyEditionsVariant ? 'variantA' : 'control';
 
   return (
     <div className="payment-selection">
       {
         (paymentOptions.map(paymentOption => (
-          <div className={cx('payment-selection__card', { 'payment-selection__card--variantB-width': dailyEditionsVariant })}>
+          <div className={cx('payment-selection__card', { 'payment-selection__card--variantA-width': dailyEditionsVariant })}>
             <ProductOption
               href={paymentOption.href}
               onClick={paymentOption.onClick}
