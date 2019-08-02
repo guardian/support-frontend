@@ -2,6 +2,7 @@
 import { trackComponentEvents } from 'helpers/tracking/ophan';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
   gaEvent({
@@ -20,12 +21,19 @@ const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
   });
 };
 
-const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string, paymentMethod: ?PaymentMethod): void => {
+export type ProductCheckout = 'Contribution' | SubscriptionProduct;
+
+const trackCheckoutSubmitAttempt = (
+  componentId: string,
+  eventDetails: string,
+  paymentMethod: ?PaymentMethod,
+  productCheckout: ProductCheckout,
+): void => {
   gaEvent({
     category: 'click',
     action: eventDetails,
     label: componentId,
-  }, { paymentMethod });
+  }, { paymentMethod, productCheckout });
 
   trackComponentEvents({
     component: {
