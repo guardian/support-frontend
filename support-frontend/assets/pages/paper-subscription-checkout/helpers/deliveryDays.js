@@ -49,7 +49,9 @@ const getVoucherDays = (today: number, product: ProductOptions): Date[] => {
   const now = new Date(today);
   const [currentWeekday, currentHour] = [now.getDay(), now.getHours()];
   const weeksToAdd =
-    currentWeekday >= voucherExtraDelayCutoffWeekday && currentHour >= voucherExtraDelayCutoffHour
+    currentWeekday > voucherExtraDelayCutoffWeekday ||
+    currentWeekday === 0 || // For fulfilment, Sunday is the last day of the week
+    (currentWeekday === voucherExtraDelayCutoffWeekday && currentHour >= voucherExtraDelayCutoffHour)
       ? voucherExtraDelayWeeks
       : voucherNormalDelayWeeks;
   return getDeliveryDays(

@@ -11,6 +11,7 @@ const monday = 1551075752198; /* 2019-02-25 */
 const tuesday = 1551175752198; /* 2019-02-26 */
 const wednesday5amGMT = 1551243600000; /* 2019-02-27 05:00 GMT */
 const wednesday = 1551275752198; /* 2019-02-27 */
+const thursday4am = 1551326400000; /* 2019-02-28 04:00 GMT */
 const sunday = 1551577952198; /* 2019-03-03 */
 
 describe('deliveryDays', () => {
@@ -43,8 +44,16 @@ describe('deliveryDays', () => {
       const days = getVoucherDays(wednesday, 'Saturday');
       expect(formatMachineDate(days[0])).toEqual('2019-03-30');
     });
+    it('outside the fast delivery window (early morning), delivers Sixday on the next Monday, four weeks after the preceding Monday', () => {
+      const days = getVoucherDays(thursday4am, 'Sixday');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-25');
+    });
     it('outside the fast delivery window, delivers Sixday on the next Monday, four weeks after the preceding Monday', () => {
       const days = getVoucherDays(wednesday, 'Sixday');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-25');
+    });
+    it('outside the fast delivery window (on a Sunday), delivers Sixday on the next Monday, four weeks after the preceding Monday', () => {
+      const days = getVoucherDays(sunday, 'Sixday');
       expect(formatMachineDate(days[0])).toEqual('2019-03-25');
     });
 
