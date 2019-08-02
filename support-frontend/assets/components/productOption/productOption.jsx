@@ -32,7 +32,7 @@ type ProductOptionOfferType = {
 
 // hocs
 const withProductOptionsStyle = WrappedComponent => (props: WrappedProps) => (
-  <div className={cx('product-option__button', { 'product-option__button--variantB': props.dailyEditionsVariant })}>
+  <div className={cx('product-option__button', { 'product-option__button--variantA': props.dailyEditionsVariant })}>
     <div className="product-option__sales-copy">{props.salesCopy}</div>
     <WrappedComponent {...props} />
   </div>
@@ -57,7 +57,7 @@ export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: b
 
 export const ProductOptionOffer = ({ dailyEditionsVariant, children, hidden }: ProductOptionOfferType) => (
   <div className={cx('product-option__offer-container', { 'product-option__sales-copy--hidden': hidden })}>
-    <span className={cx('product-option__offer', { 'product-option__offer--variantB': dailyEditionsVariant })}>{ children }</span>
+    <span className={cx('product-option__offer', { 'product-option__offer--variantA': dailyEditionsVariant })}>{ children }</span>
   </div>
 
 );

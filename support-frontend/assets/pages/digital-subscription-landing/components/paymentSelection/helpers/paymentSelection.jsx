@@ -38,7 +38,7 @@ const BILLING_PERIOD = {
           <br className="product-option__full-screen-break" />
         </span>
       ),
-      variantB: () => (
+      variantA: () => (
         <span>
           14 day free trial, then <strong>{displayPrice}</strong> {saving && null}
           <br className="product-option__full-screen-break" />
@@ -59,7 +59,7 @@ const BILLING_PERIOD = {
           (save <strong>{saving}</strong> per year)
         </span>
       ),
-      variantB: () => (
+      variantA: () => (
         <span>
           14 day free trial, then <strong>{displayPrice}</strong>
           &nbsp;for the first year (save <strong>{saving}</strong> per year)
@@ -74,7 +74,7 @@ export type PaymentOption = {
   title: string,
   singlePeriod: string,
   href: string,
-  salesCopy: { control: () => Element<'span'>, variantB: () => Element<'span'>},
+  salesCopy: { control: () => Element<'span'>, variantA: () => Element<'span'>},
   offer: Option<string>,
   price: Option<string>,
   onClick: Function,
