@@ -28,7 +28,7 @@ type PropTypes = {|
   heading: string,
   content?: Option<Node>,
   hasCampaign: boolean,
-  dailyEditionsVariant?: boolean
+  dailyEditionsVariant: boolean
 |};
 
 // ----- Render ----- //
@@ -94,6 +94,7 @@ ProductPageHero.defaultProps = {
   children: null,
   content: null,
   ...HeroWrapper.defaultProps,
+  dailyEditionsVariant: false,
 };
 
 export { HeroHanger, HeroWrapper, HeroHeading };

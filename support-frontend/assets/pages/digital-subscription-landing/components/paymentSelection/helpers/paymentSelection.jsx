@@ -74,7 +74,7 @@ export type PaymentOption = {
   title: string,
   singlePeriod: string,
   href: string,
-  salesCopy: Element<'span'>,
+  salesCopy: { control: () => Element<'span'>, variantB: () => Element<'span'>},
   offer: Option<string>,
   price: Option<string>,
   onClick: Function,
