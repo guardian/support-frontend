@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.{ExpectedCondition, ExpectedConditions, We
 import org.scalatest.selenium.WebBrowser
 import scala.collection.JavaConverters.asScalaSetConverter
 import scala.util.Try
+import scala.collection.JavaConverters._
 
 trait Browser extends WebBrowser {
 
@@ -19,6 +20,12 @@ trait Browser extends WebBrowser {
 
   def pageHasElement(q: Query): Boolean =
     waitUntil(ExpectedConditions.visibilityOfElementLocated(q.by))
+
+  // If there is more than 1 element matching the query then only one of them needs to be visible
+  def pageHasAtLeastOneVisibleElement(q: Query): Boolean = {
+    val elements = webDriver.findElements(q.by)
+    elements.asScala.exists(element => element.isDisplayed)
+  }
 
   def elementIsClickable(q: Query): Boolean =
     waitUntil(ExpectedConditions.elementToBeClickable(q.by))
