@@ -15,6 +15,7 @@ type Props = {
 type WrappedProps = {
   ...PropTypes,
   salesCopy: Node,
+  dailyEditionsVariant: boolean
 }
 
 type ProductOptionType = {

@@ -50,9 +50,9 @@ stories.add('Product Option', () => (
           £11.99&nbsp;
           <ProductOptionCopy>/month</ProductOptionCopy>
         </ProductOptionPrice>
-        <ProductOptionOffer hidden={false}>Save 22% a month on <br />&nbsp;retail price</ProductOptionOffer>
+        <ProductOptionOffer dailyEditionsVariant={false} hidden={false}>Save 22% a month on <br />&nbsp;retail price</ProductOptionOffer>
       </ProductOptionContent>
-      <ProductOptionButton salesCopy={<span>This is sales copy</span>} href="#" aria-label="Subscribe-button">Subscribe now</ProductOptionButton>
+      <ProductOptionButton dailyEditionsVariant={false} salesCopy={<span>This is sales copy</span>} href="#" aria-label="Subscribe-button">Subscribe now</ProductOptionButton>
     </ProductOption>
   </div>
 ));
