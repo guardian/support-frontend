@@ -17,9 +17,21 @@ type WrappedProps = {
   salesCopy: Node,
 }
 
+type ProductOptionType = {
+  children: Node,
+  onClick: Function,
+  href: string
+}
+
+type ProductOptionOfferType = {
+  dailyEditionsVariant: boolean,
+  children: Node,
+  hidden: boolean
+}
+
 // hocs
 const withProductOptionsStyle = WrappedComponent => (props: WrappedProps) => (
-  <div className="product-option__button">
+  <div className={cx('product-option__button', { 'product-option__button--variantB': props.dailyEditionsVariant })}>
     <div className="product-option__sales-copy">{props.salesCopy}</div>
     <WrappedComponent {...props} />
   </div>
@@ -39,17 +51,21 @@ export const ProductOptionPrice = ({ children }: { children: Node}) => (
 );
 
 export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: boolean }) => (
-  <span className={cx({ 'product-option__copy': true, 'product-option__copy--bold': bold })}>{ children }</span>
+  <span className={cx('product-option__copy', { 'product-option__copy--bold': bold })}>{ children }</span>
 );
 
-export const ProductOptionOffer = ({ children, hidden }: { children: Node, hidden: boolean }) => (
-  <div className={cx({ 'product-option__offer-container': true, 'product-option__sales-copy--hidden': hidden })}>
-    <span className="product-option__offer">{ children }</span>
+export const ProductOptionOffer = ({ dailyEditionsVariant, children, hidden }: ProductOptionOfferType) => (
+  <div className={cx('product-option__offer-container', { 'product-option__sales-copy--hidden': hidden })}>
+    <span className={cx('product-option__offer', { 'product-option__offer--variantB': dailyEditionsVariant })}>{ children }</span>
   </div>
 
 );
 
 export const ProductOptionButton = withProductOptionsStyle(AnchorButton);
+
+const ProductOption = ({ onClick, href, children }: ProductOptionType) => (
+  <a href={href} onClick={onClick} className="product-option">{ children }</a>
+);
 
 // default props
 ProductOptionCopy.defaultProps = {
@@ -59,10 +75,5 @@ ProductOptionCopy.defaultProps = {
 ProductOptionButton.defaultProps = {
   ...defaultProps,
 };
-
-// default component
-const ProductOption = ({ onClick, href, children }: { children: Node, onClick: Function, href: string }) => (
-  <a href={href} onClick={onClick} className="product-option">{ children }</a>
-);
 
 export default ProductOption;

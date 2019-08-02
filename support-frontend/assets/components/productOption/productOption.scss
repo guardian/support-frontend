@@ -117,3 +117,13 @@
     display: block;
   }
 }
+
+.product-option__button--variantB {
+  .component-button {
+    max-width: 210px;
+  }
+}
+
+.product-option__offer--variantB {
+  font-weight: bold;
+}

@@ -16,21 +16,15 @@ import headerWithCountrySwitcherContainer
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
-import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
-import Content from 'components/content/content';
-import Text from 'components/text/text';
-import ProductPageInfoChip
-  from 'components/productPage/productPageInfoChip/productPageInfoChip';
+
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection
   from './components/independentJournalismSection';
-import ProductBlock from './components/productBlock';
 import ProductBlockB from './components/productBlockB/productBlockB';
 import PromotionPopUp from './components/promotionPopUp';
-import Form from './components/form';
 
 import './digitalSubscriptionLanding.scss';
 import './components/theMoment.scss';
@@ -145,30 +139,10 @@ class LandingPage extends Component<Props, State> {
             countryGroupId={countryGroupId}
             dailyEditionsVariant={dailyEditionsVariant}
           />
-          {
-          dailyEditionsVariant ?
-            (
-              <div>
-                <ProductBlockB />
-                <AdFreeSectionB />
-              </div>
-            ) : (
-              <div>
-                <ProductBlock countryGroupId={countryGroupId} />
-                <AdFreeSection headingSize={2} />
-
-                <Content appearance="feature" id="subscribe">
-                  <Text title="Subscribe to Digital Pack today">
-                    <p>Choose how you’d like to pay</p>
-                  </Text>
-                  <Form />
-                  <ProductPageInfoChip >
-                      You can cancel your subscription at any time
-                  </ProductPageInfoChip>
-                </Content>
-              </div>
-            )
-        }
+          <div>
+            <ProductBlockB />
+            <AdFreeSectionB />
+          </div>
           <IndependentJournalismSection />
           <PromotionPopUp />
           <ConsentBanner />
