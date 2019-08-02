@@ -13,7 +13,7 @@ import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3._
 import ophan.thrift.event.PrintProduct.{GuardianWeekly, HomeDeliveryEveryday, HomeDeliveryEverydayPlus, HomeDeliverySaturday, HomeDeliverySaturdayPlus, HomeDeliverySixday, HomeDeliverySixdayPlus, HomeDeliverySunday, HomeDeliverySundayPlus, HomeDeliveryWeekend, HomeDeliveryWeekendPlus, VoucherEveryday, VoucherEverydayPlus, VoucherSaturday, VoucherSaturdayPlus, VoucherSixday, VoucherSixdayPlus, VoucherSunday, VoucherSundayPlus, VoucherWeekend, VoucherWeekendPlus}
-import ophan.thrift.event.Product.{Contribution, DigitalSubscription, PrintSubscription}
+import ophan.thrift.event.Product.{Contribution, DigitalSubscription, PrintSubscription, RecurringContribution}
 import ophan.thrift.event.{AbTestInfo, Acquisition, PrintOptions, Product}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -139,9 +139,10 @@ private[services] class GAService(implicit client: OkHttpClient)
 
   private[services] def getProductCheckout(acquisition: Acquisition) =
     acquisition.product match {
-      case Contribution => Some("Contribution")
+      case Contribution | RecurringContribution => Some("Contribution")
       case DigitalSubscription => Some("DigitalPack")
       case PrintSubscription => getProductCheckoutForPrint(acquisition.printOptions)
+      case default => None
     }
 
   private def getProductCheckoutForPrint(maybePrintOptions: Option[PrintOptions]) =
