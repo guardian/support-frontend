@@ -76,7 +76,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   def hasStripeOverlay: Boolean = {
     Thread.sleep(500)
-    pageHasElement(stripeOverlayIframe)
+    pageHasAtLeastOneVisibleElement(stripeOverlayIframe)
   }
 
 }
