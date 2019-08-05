@@ -64,6 +64,10 @@ export const tests: Tests = {
     seed: 2,
   },
 
+  // JTL - 5 August 2019 - Ab-test: landingPageChoiceArchitectureLabels
+  // file created for this test: abTestContributionsLandingChoiceArchitecture.scss
+  // if variant is successful, we will need to integrate the styles from the test stylesheet
+  // into the main stylesheet: contributionsLanding.scss
   landingPageChoiceArchitectureLabels: {
     type: 'OTHER',
     variants: [
