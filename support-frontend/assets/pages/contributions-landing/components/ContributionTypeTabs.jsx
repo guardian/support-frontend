@@ -62,7 +62,7 @@ function withProps(props: PropTypes) {
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to give?</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
           const { contributionType } = contributionTypeSetting;
@@ -97,7 +97,7 @@ function withProps(props: PropTypes) {
 function withoutProps() {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to give?</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
         {
           ['a', 'b', 'c'].map(id => (
