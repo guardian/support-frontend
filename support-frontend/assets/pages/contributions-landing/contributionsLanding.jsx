@@ -31,6 +31,7 @@ import ContributionThankYouContainer
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
+import './abTestContributionsLandingChoiceArchitecture.scss';
 
 if (!isDetailsSupported) {
   polyfillDetails();

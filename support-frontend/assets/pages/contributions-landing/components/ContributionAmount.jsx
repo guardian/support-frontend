@@ -160,7 +160,7 @@ function withProps(props: PropTypes) {
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
       <ul className="form__radio-group-list">
         {validAmounts.map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
         <li className="form__radio-group-item">
@@ -213,7 +213,7 @@ function withProps(props: PropTypes) {
 function withoutProps() {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
       <ul className="form__radio-group-list">
         {
           ['a', 'b', 'c', 'd'].map(renderEmptyAmount)

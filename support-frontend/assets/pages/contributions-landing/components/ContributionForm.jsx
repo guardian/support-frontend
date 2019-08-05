@@ -51,6 +51,7 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
+import type { LandingPageChoiceArchitectureLabelsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -82,6 +83,7 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
+  landingPageChoiceArchitectureLabelsTestVariant: LandingPageChoiceArchitectureLabelsTestVariants
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -112,6 +114,7 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
+  landingPageChoiceArchitectureLabelsTestVariant: state.common.abParticipations.landingPageChoiceArchitectureLabels,
 });
 
 
@@ -222,9 +225,11 @@ function onSubmit(props: PropTypes): Event => void {
 
 function withProps(props: PropTypes) {
   const campaignName = getCampaignName();
+  const baseClass = 'form';
+  const classModifiers = props.landingPageChoiceArchitectureLabelsTestVariant === 'withLabels' ? ['contribution', 'with-labels'] : ['contribution'];
 
   return (
-    <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
+    <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
       <div>
         <ContributionTypeTabs />
         <ContributionAmount
