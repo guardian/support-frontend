@@ -1,14 +1,16 @@
 package selenium.util
 
+import com.typesafe.scalalogging.LazyLogging
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 import org.openqa.selenium.support.ui.{ExpectedCondition, ExpectedConditions, WebDriverWait}
 import org.scalatest.selenium.WebBrowser
+
 import scala.collection.JavaConverters.asScalaSetConverter
 import scala.util.Try
 import scala.collection.JavaConverters._
 
-trait Browser extends WebBrowser {
+trait Browser extends WebBrowser with LazyLogging {
 
   implicit val webDriver: WebDriver
 
@@ -24,6 +26,7 @@ trait Browser extends WebBrowser {
   // If there is more than 1 element matching the query then only one of them needs to be visible
   def pageHasAtLeastOneVisibleElement(q: Query): Boolean = {
     val elements = webDriver.findElements(q.by)
+    logger.info(s"Visibility of element ${q.queryString}: ${elements.asScala.toList.map(_.isDisplayed)}")
     elements.asScala.exists(element => element.isDisplayed)
   }
 
