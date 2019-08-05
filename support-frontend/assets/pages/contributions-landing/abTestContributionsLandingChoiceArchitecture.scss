@@ -34,7 +34,7 @@
   }
 
   .form--content {
-     @include mq($to: tablet) {
+     @include mq($until: tablet) {
        padding-top: 0;
      }
   }
