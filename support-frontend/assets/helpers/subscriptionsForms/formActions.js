@@ -54,7 +54,9 @@ const setStage = (
   product: SubscriptionProduct,
   paymentMethod: ?PaymentMethod,
 ): Action => {
-  trackThankYouPageLoaded(product, paymentMethod);
+  if (stage === 'thankyou' || stage === 'thankyou-pending'){
+    trackThankYouPageLoaded(product, paymentMethod);
+  }
   return { type: 'SET_STAGE', stage };
 };
 const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({
