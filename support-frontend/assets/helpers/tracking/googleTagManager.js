@@ -2,15 +2,14 @@
 
 import uuidv4 from 'uuid';
 import * as storage from 'helpers/storage';
+import type { Participations } from 'helpers/abTests/abtest';
 import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getTrackingConsent } from './thirdPartyTrackingConsent';
 import { maybeTrack } from './doNotTrack';
-import { type PaymentMethod, DirectDebit, PayPal } from '../paymentMethods';
-
+import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent' | 'AppStoreCtaClick';
@@ -42,14 +41,6 @@ function getOrderId() {
     storage.setSession('orderId', value);
   }
   return value;
-}
-
-function getContributionType() {
-  const param = getQueryParameter('contribType');
-  if (param) {
-    storage.setSession('contribType', param);
-  }
-  return (storage.getSession('contribType') || 'one_off').toLowerCase(); // PayPal route doesn't set the contribType
 }
 
 function getCurrency(): string {
@@ -173,21 +164,6 @@ function getData(
     experience: getVariantsAsString(participations),
     paymentRequestApiStatus,
     thirdPartyTrackingConsent: getTrackingConsent(),
-    ecommerce: {
-      currencyCode: currency,
-      purchase: {
-        actionField: {
-          id: orderId,
-          revenue: value, // Total transaction value (incl. tax and shipping)
-        },
-        products: [{
-          name: `${getContributionType()}_contribution`,
-          category: 'contribution',
-          price: value,
-          quantity: 1,
-        }],
-      },
-    },
   };
 }
 
