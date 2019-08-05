@@ -81,5 +81,9 @@
 
 .payment-selection-container {
   position: relative;
-  margin: -95px 0 0 0;
+  margin: 0;
+  
+  @include mq($from: tablet) {
+    margin: -95px 0 0 0;
+  }
 }

@@ -10,8 +10,6 @@ import { type Option } from 'helpers/types/option';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
-import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
-
 import './productPageHero.scss';
 
 
@@ -72,32 +70,13 @@ const HeroHeading = ({
   </div>
 );
 
-const PaymentSelectionContainer = () => (
-  <div className="payment-selection-container">
-    <LeftMarginSection>
-      <PaymentSelection />
-    </LeftMarginSection>
-  </div>
-);
-
 const ProductPageHero = ({
-  overheading, heading, content, modifierClasses, children, appearance, hasCampaign, dailyEditionsVariant,
+  modifierClasses, children, appearance,
 }: PropTypes) => (
   <header>
     <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
     </HeroWrapper>
-
-    {dailyEditionsVariant ? (
-      <PaymentSelectionContainer />
-      ) : (
-        <div>
-          <HeroHeading {...{ hasCampaign }}>
-            <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
-          </HeroHeading>
-          {content && <HeroHanger>{content}</HeroHanger>}
-        </div>
-      )}
   </header>
 );
 
