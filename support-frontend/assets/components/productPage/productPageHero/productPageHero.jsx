@@ -7,6 +7,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type Option } from 'helpers/types/option';
 
 // ----- Component Imports ----- //
+import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
@@ -28,7 +29,7 @@ type PropTypes = {|
   heading: string,
   content?: Option<Node>,
   hasCampaign: boolean,
-  dailyEditionsVariant: boolean
+  dailyEditionsVariant?: boolean
 |};
 
 // ----- Render ----- //
@@ -71,22 +72,32 @@ const HeroHeading = ({
   </div>
 );
 
-const PaymentSelectionContainer = ({ dailyEditionsVariant }: { dailyEditionsVariant: boolean }) => (
+const PaymentSelectionContainer = () => (
   <div className="payment-selection-container">
     <LeftMarginSection>
-      <PaymentSelection dailyEditionsVariant={dailyEditionsVariant} />
+      <PaymentSelection />
     </LeftMarginSection>
   </div>
 );
 
 const ProductPageHero = ({
-  modifierClasses, children, appearance, dailyEditionsVariant,
+  overheading, heading, content, modifierClasses, children, appearance, hasCampaign, dailyEditionsVariant,
 }: PropTypes) => (
   <header>
     <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
     </HeroWrapper>
-    <PaymentSelectionContainer dailyEditionsVariant={dailyEditionsVariant} />
+
+    {dailyEditionsVariant ? (
+      <PaymentSelectionContainer />
+      ) : (
+        <div>
+          <HeroHeading {...{ hasCampaign }}>
+            <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
+          </HeroHeading>
+          {content && <HeroHanger>{content}</HeroHanger>}
+        </div>
+      )}
   </header>
 );
 
@@ -94,7 +105,6 @@ ProductPageHero.defaultProps = {
   children: null,
   content: null,
   ...HeroWrapper.defaultProps,
-  dailyEditionsVariant: false,
 };
 
 export { HeroHanger, HeroWrapper, HeroHeading };
