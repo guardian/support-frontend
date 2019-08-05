@@ -7,7 +7,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type Option } from 'helpers/types/option';
 
 // ----- Component Imports ----- //
-import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 import './productPageHero.scss';
