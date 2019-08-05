@@ -31,41 +31,21 @@ const BILLING_PERIOD = {
   [Monthly]: {
     title: 'Monthly',
     singlePeriod: 'month',
-    salesCopy: (displayPrice: string, saving?: string) => ({
-      control: () => (
-        <span>14 day free trial, then <strong>{displayPrice}</strong> {saving && null}
-          <br className="product-option__full-screen-break" />
-          <br className="product-option__full-screen-break" />
-        </span>
-      ),
-      variantA: () => (
-        <span>
-          14 day free trial, then <strong>{displayPrice}</strong> {saving && null}
-          <br className="product-option__full-screen-break" />
-          <br className="product-option__full-screen-break" />
-        </span>
-      ),
-    }
+    salesCopy: (displayPrice: string, saving?: string) => (
+      <span>14 day free trial, then <strong>{displayPrice}</strong> a month for 12 months {saving && null}
+        <br className="product-option__full-screen-break" />
+      </span>
     ),
   },
   [Annual]: {
-    title: 'Annual',
+    title: 'Annually',
     singlePeriod: 'year',
-    salesCopy: (displayPrice: string, saving?: string) => ({
-      control: () => (
-        <span>
-          14 day free trial, then <strong>{displayPrice}</strong>
-          &nbsp;for the first year <br />
-          (save <strong>{saving}</strong> per year)
-        </span>
-      ),
-      variantA: () => (
-        <span>
-          14 day free trial, then <strong>{displayPrice}</strong>
-          &nbsp;for the first year (save <strong>{saving}</strong> per year)
-        </span>
-      ),
-    }
+    salesCopy: (displayPrice: string, saving?: string) => (
+      <span>
+        14 day free trial, then <strong>{displayPrice}</strong>
+        &nbsp;for the first year<br />
+        (save <strong>{saving}</strong> per year)
+      </span>
     ),
   },
 };
@@ -74,7 +54,7 @@ export type PaymentOption = {
   title: string,
   singlePeriod: string,
   href: string,
-  salesCopy: { control: () => Element<'span'>, variantA: () => Element<'span'>},
+  salesCopy: Element<'span'>,
   offer: Option<string>,
   price: Option<string>,
   onClick: Function,
