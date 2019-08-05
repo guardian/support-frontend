@@ -31,8 +31,8 @@ object StripeApiError {
   def fromStripeException(err: StripeException): StripeApiError = {
     val exceptionType: Option[String] = {
       condOpt(err) {
-        case _: APIConnectionException => "APIConnectionException"
-        case _: APIException => "APIException"
+        case _: ApiConnectionException => "ApiConnectionException"
+        case _: ApiException => "ApiException"
         case _: AuthenticationException => "AuthenticationException"
         case _: CardException => "CardException"
         case _: InvalidRequestException => "InvalidRequestException"

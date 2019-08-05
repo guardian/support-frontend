@@ -9,7 +9,7 @@ import com.paypal.api.payments.Payment
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import model.PaymentProvider.SubscribeWithGoogle
-import model.acquisition.StripeSource
+import model.acquisition.StripeCharge
 import model.paypal.PaypalApiError
 import model.subscribewithgoogle.GoogleRecordPayment
 import model.{Currency, PaymentProvider, PaymentStatus}
@@ -58,7 +58,7 @@ object ContributionData extends StrictLogging {
       // Stripe can return currency in lower case
       currency = Currency.withNameInsensitive(charge.getCurrency),
       amount = BigDecimal(charge.getAmount, 2),
-      countryCode = StripeSource.getCountryCode(charge),
+      countryCode = StripeCharge.getCountryCode(charge),
       countrySubdivisionCode = countrySubdivisionCode
     )
 

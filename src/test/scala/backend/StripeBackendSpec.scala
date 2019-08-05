@@ -5,6 +5,7 @@ import cats.implicits._
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
+import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, Event, ExternalAccount}
 import model.email.ContributorRow
 import model.paypal.PaypalApiError
@@ -95,13 +96,17 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockCloudWatchService)(new DefaultThreadPool(ec))
 
   def populateChargeMock(): Unit = {
-    val externalAccount = new ExternalAccount()
     when(chargeMock.getId).thenReturn("id")
     when(chargeMock.getReceiptEmail).thenReturn("email@email.com")
     when(chargeMock.getCreated).thenReturn(123123123132L)
     when(chargeMock.getCurrency).thenReturn("GBP")
     when(chargeMock.getAmount).thenReturn(12L)
-    when(chargeMock.getSource).thenReturn(externalAccount)
+
+    val paymentMethodDetailsMock = mock[PaymentMethodDetails]
+    val cardMock = mock[PaymentMethodDetails.Card]
+    when(cardMock.getCountry).thenReturn("GB")
+    when(paymentMethodDetailsMock.getCard).thenReturn(cardMock)
+    when(chargeMock.getPaymentMethodDetails).thenReturn(paymentMethodDetailsMock)
     ()
   }
 }

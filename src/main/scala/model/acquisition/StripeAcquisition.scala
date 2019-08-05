@@ -51,7 +51,7 @@ object StripeAcquisition extends StrictLogging {
             paymentProvider = Some(paymentProvider),
             campaignCode = acquisitionData.campaignCodes,
             abTests = acquisitionData.abTests.map(AbTestInfo(_)),
-            countryCode = StripeSource.getCountryCode(stripeAcquisition.charge),
+            countryCode = StripeCharge.getCountryCode(stripeAcquisition.charge),
             referrerPageViewId = acquisitionData.referrerPageviewId,
             referrerUrl = acquisitionData.referrerUrl,
             componentId = acquisitionData.componentId,

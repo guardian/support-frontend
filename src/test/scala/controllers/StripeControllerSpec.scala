@@ -49,7 +49,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(StripeApiError.fromStripeException)
 
   val stripeServiceInvalidRequestErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", 500, new Throwable)))
+    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", "code", 500, new Throwable)))
 
   val stripeServiceCardErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
     EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromStripeException(new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable)))
