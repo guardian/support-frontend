@@ -1,6 +1,18 @@
 # support-frontend-static
 
-This cloudforms the assets bucket for the assets.
+This cloudforms the assets bucket for the assets that
+is used by support-frontend.
+
+# Deploying to PROD (manual)
+
+1. make your changes to cfn
+1. do a PR and get it approved
+1. merge to master
+1. check out master locally
+1. get janus credentials
+1. run ./PROD-deploy.sh
+
+# More information
 
 Traditionally this would just be a manually created bucket
 but that doesn't really help us if we need to recreate the
@@ -14,7 +26,7 @@ SSM)
 
 This does make it a little tricky to cloudform along with
 the rest of the app, but it's simple enough to put the
-bucket in its own cloudformation in its own deploy.
+bucket in its own cloudformation.
 
 It's only possible to deploy this into PROD and once
 deployed it should not be deleted, only updated, as
