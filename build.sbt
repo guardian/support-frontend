@@ -57,7 +57,18 @@ lazy val commonDependencies = Seq(
 )
 
 lazy val root = (project in file("."))
-  .aggregate(`support-frontend`, `support-workers`, `support-models`, `support-config`, `support-internationalisation`, `support-services`)
+  .aggregate(
+    `support-frontend`,
+    `support-workers`,
+    `support-models`,
+    `support-config`,
+    `support-internationalisation`,
+    `support-services`,
+    `support-frontend-static`
+  )
+
+lazy val `support-frontend-static` = (project in file("support-frontend-static"))
+  .enablePlugins(RiffRaffArtifact)
 
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)

@@ -1,6 +1,15 @@
 stacks: [support]
 regions: [eu-west-1]
 deployments:
+  assets-static:
+    type: aws-s3
+    parameters:
+      app: frontend
+      bucket: support-frontend-static
+      prefixPackage: false
+      prefixStack: false
+      prefixStage: true
+      cacheControl: public, max-age=31536000
   cfn:
     type: cloud-formation
     app: frontend
@@ -12,7 +21,7 @@ deployments:
       amiEncrypted: true
   frontend:
     type: autoscaling
-    dependencies: [cfn]
+    dependencies: [cfn, assets-static]
     parameters:
       bucket: membership-dist
   storybook-static:

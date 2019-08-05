@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: support-frontend-static
+Parameters:
+  Stack:
+    Description: Applied directly as a tag
+    Type: String
+  Stage:
+    Description: Applied directly as a tag
+    Type: String
+  App:
+    Description: Applied directly as a tag
+    Type: String
+    Default: frontend
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Join 
+      - '-'
+      - - !Ref Stack
+        - !Ref App
+        - static
+      MetricsConfigurations: 
+        - Id: EntireBucket
+      WebsiteConfiguration:
+        IndexDocument: index.html
