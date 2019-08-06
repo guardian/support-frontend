@@ -55,7 +55,7 @@ export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: b
   <span className={cx('product-option__copy', { 'product-option__copy--bold': bold })}>{ children }</span>
 );
 
-export const ProductOptionOffer = ({ dailyEditionsVariant, children, hidden }: ProductOptionOfferType) => (
+export const ProductOptionOffer = ({ children, hidden }: ProductOptionOfferType) => (
   <div className={cx('product-option__offer-container', { 'product-option__sales-copy--hidden': hidden })}>
     <span className="product-option__offer">{ children }</span>
   </div>
