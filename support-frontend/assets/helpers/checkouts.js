@@ -65,6 +65,16 @@ function toHumanReadableContributionType(contributionType: ContributionType): 'S
   }
 }
 
+// JTL - TBD: Remove after landing page choice architecture test
+function toHumanReadableContributionTypeAbTest(contributionType: ContributionType): 'Once' | 'Monthly' | 'Yearly' {
+  switch (contributionType) {
+    case 'ONE_OFF': return 'Once';
+    case 'MONTHLY': return 'Monthly';
+    case 'ANNUAL': return 'Yearly';
+    default: return 'Annual';
+  }
+}
+
 function getContributionTypeFromSession(): ?ContributionType {
   return toContributionType(storage.getSession('selectedContributionType'));
 }
@@ -187,6 +197,7 @@ export {
   getContributionTypeFromSession,
   getContributionTypeFromUrl,
   toHumanReadableContributionType,
+  toHumanReadableContributionTypeAbTest,
   getValidPaymentMethods,
   getPaymentMethodToSelect,
   getPaymentMethodFromSession,
