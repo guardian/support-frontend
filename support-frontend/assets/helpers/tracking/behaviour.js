@@ -46,6 +46,29 @@ const trackCheckoutSubmitAttempt = (
   });
 };
 
+const trackThankYouPageLoaded = (
+  productCheckout: SubscriptionProduct,
+  paymentMethod: ?PaymentMethod,
+) => {
+  gaEvent({
+    category: 'Thank you page load',
+    action: productCheckout,
+    label: paymentMethod,
+  }, { paymentMethod, productCheckout });
+
+  if (trackComponentEvents) {
+    trackComponentEvents({
+      component: {
+        componentType: 'ACQUISITIONS_OTHER',
+        id: 'thank-you-page',
+        labels: ['checkout-submit'],
+      },
+      action: 'VIEW',
+      value: `thank-you-page-loaded-${productCheckout}-${paymentMethod || ''}`,
+    });
+  }
+};
+
 const trackComponentClick = (componentId: string): void => {
   gaEvent({
     category: 'click',
@@ -82,6 +105,7 @@ const trackComponentLoad = (componentId: string): void => {
 
 export {
   trackPaymentMethodSelected,
+  trackThankYouPageLoaded,
   trackComponentClick,
   trackCheckoutSubmitAttempt,
   trackComponentLoad,
