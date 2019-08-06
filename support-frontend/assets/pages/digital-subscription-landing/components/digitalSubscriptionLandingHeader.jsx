@@ -21,6 +21,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { HeroHanger } from 'components/productPage/productPageHero/productPageHero';
+import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
 
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import GridImage, { type GridImg } from 'components/gridImage/gridImage';
@@ -177,91 +178,103 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   };
 }
 
+const PaymentSelectionContainer = ({ dailyEditionsVariant }: { dailyEditionsVariant: boolean }) => (
+  <div className="payment-selection-container">
+    <LeftMarginSection>
+      <PaymentSelection dailyEditionsVariant={dailyEditionsVariant} />
+    </LeftMarginSection>
+  </div>
+);
+
 function CampaignHeader(props: PropTypes) {
   const product: SubscriptionProduct = 'DigitalPack';
   const copy = getCopy(product, props.countryGroupId);
   return (
-    <ProductPagehero
-      appearance="campaign"
-      overheading={copy.heading}
-      heading={copy.subHeading}
-      modifierClasses={['digital-campaign']}
-      content={<AnchorButton id="qa-subscription-options" aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
-      hasCampaign
-      dailyEditionsVariant={props.dailyEditionsVariant}
-    >
-      <div className="the-moment-hero">
-        <div className="the-moment-hero__copy">
-          <h2>A better way to fund journalism <br />
-            <span>A better way to read it
-            </span>
-          </h2>
-        </div>
+    <div>
+      <ProductPagehero
+        appearance="campaign"
+        overheading={copy.heading}
+        heading={copy.subHeading}
+        modifierClasses={['digital-campaign']}
+        content={<AnchorButton id="qa-subscription-options" aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+        hasCampaign
+        dailyEditionsVariant={props.dailyEditionsVariant}
+      >
+        <div className="the-moment-hero">
+          <div className="the-moment-hero__copy">
+            <h2>A better way to fund journalism <br />
+              <span>A better way to read it
+              </span>
+            </h2>
+          </div>
 
-        <div className="the-moment-hero__graphic-outer">
-          <div className="the-moment-hero__graphic-inner">
-            <div className="the-moment-hero__badge">
-              <span className="the-moment-hero__badge-lgeCopy">14 Day</span>
-              <span>Free trial</span>
-            </div>
-            <div className="the-moment-hero__graphic">
-              <GridImage
-                gridId="theMomentDigiHero"
-                srcSizes={[486]}
-                sizes="(max-width: 740px) 315px, 486px"
-                imgType="png"
-                altText="A mobile device"
-              />
-            </div>
-            <div className="the-moment-hero__graphic-slider">
-              <div className="the-moment-hero__graphic-slider-inner">
-                <div className="the-moment-hero__graphic-slider-1">
-                  <GridImage
-                    gridId="theMomentDigiHero"
-                    srcSizes={[486]}
-                    sizes="(max-width: 740px) 315px, 486px"
-                    imgType="png"
-                    altText="A mobile device"
-                  />
-                </div>
-                <div className="the-moment-hero__graphic-slider-2">
-                  <GridImage
-                    gridId="theMomentDigiHero2"
-                    srcSizes={[486]}
-                    sizes="(max-width: 740px) 315px, 486px"
-                    imgType="png"
-                    altText="A mobile device"
-                  />
-                </div>
-                <div className="the-moment-hero__graphic-slider-3">
-                  <GridImage
-                    gridId="theMomentDigiHero3"
-                    srcSizes={[486]}
-                    sizes="(max-width: 740px) 315px, 486px"
-                    imgType="png"
-                    altText="A mobile device"
-                  />
+          <div className="the-moment-hero__graphic-outer">
+            <div className="the-moment-hero__graphic-inner">
+              <div className="the-moment-hero__badge">
+                <span className="the-moment-hero__badge-lgeCopy">14 Day</span>
+                <span>Free trial</span>
+              </div>
+              <div className="the-moment-hero__graphic">
+                <GridImage
+                  gridId="theMomentDigiHero"
+                  srcSizes={[486]}
+                  sizes="(max-width: 740px) 315px, 486px"
+                  imgType="png"
+                  altText="A mobile device"
+                />
+              </div>
+              <div className="the-moment-hero__graphic-slider">
+                <div className="the-moment-hero__graphic-slider-inner">
+                  <div className="the-moment-hero__graphic-slider-1">
+                    <GridImage
+                      gridId="theMomentDigiHero"
+                      srcSizes={[486]}
+                      sizes="(max-width: 740px) 315px, 486px"
+                      imgType="png"
+                      altText="A mobile device"
+                    />
+                  </div>
+                  <div className="the-moment-hero__graphic-slider-2">
+                    <GridImage
+                      gridId="theMomentDigiHero2"
+                      srcSizes={[486]}
+                      sizes="(max-width: 740px) 315px, 486px"
+                      imgType="png"
+                      altText="A mobile device"
+                    />
+                  </div>
+                  <div className="the-moment-hero__graphic-slider-3">
+                    <GridImage
+                      gridId="theMomentDigiHero3"
+                      srcSizes={[486]}
+                      sizes="(max-width: 740px) 315px, 486px"
+                      imgType="png"
+                      altText="A mobile device"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      {props.dailyEditionsVariant && (
-        <div className="payment-selection__title-container" >
-          <h2 className="payment-selection__title">
-            The Premium App and the Daily Edition iPad app in one pack, plus ad-free reading on all your devices
-          </h2>
-        </div>
-      )}
+        {props.dailyEditionsVariant && (
+          <div className="payment-selection__title-container" >
+            <h2 className="payment-selection__title">
+              The Premium App and the Daily Edition iPad app in one pack, plus ad-free reading on all your devices
+            </h2>
+          </div>
+        )}
 
-      {showCountdownTimer(product, props.countryGroupId) &&
-      <FlashSaleCountdownInHero
-        product={product}
-        countryGroupId={props.countryGroupId}
-      />
-      }
-    </ProductPagehero>
+        {showCountdownTimer(product, props.countryGroupId) &&
+        <FlashSaleCountdownInHero
+          product={product}
+          countryGroupId={props.countryGroupId}
+        />
+        }
+      </ProductPagehero>
+      <PaymentSelectionContainer dailyEditionsVariant={props.dailyEditionsVariant} />
+
+    </div>
   );
 }
 

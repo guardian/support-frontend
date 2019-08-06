@@ -77,6 +77,7 @@ stories.add('Hero', () => (
     appearance="feature"
     content="Hero blocks showcase a product and really help set the mood of a page. They work great right under the header!"
     hasCampaign={false}
+    showProductPageHeroHeader
   >
     <div />
   </ProductPageHero>
@@ -89,6 +90,7 @@ stories.add('Hero (campaign)', () => (
     appearance="campaign"
     content="Hero blocks showcase a product and really help set the mood of a page. They work great right under the header!"
     hasCampaign
+    showProductPageHeroHeader
   >
     <div />
   </ProductPageHero>
