@@ -25,7 +25,6 @@ type ProductOptionType = {
 }
 
 type ProductOptionOfferType = {
-  dailyEditionsVariant: boolean,
   children: Node,
   hidden: boolean
 }
