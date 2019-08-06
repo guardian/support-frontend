@@ -210,7 +210,6 @@ function CampaignHeader(props: PropTypes) {
         modifierClasses={['digital-campaign']}
         content={anchorButton()}
         hasCampaign
-        dailyEditionsVariant={props.dailyEditionsVariant}
       >
         <div className="the-moment-hero">
           <div className="the-moment-hero__copy">

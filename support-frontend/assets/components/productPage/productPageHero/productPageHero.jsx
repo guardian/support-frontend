@@ -27,7 +27,6 @@ type PropTypes = {|
   heading: string,
   content?: Option<Node>,
   hasCampaign: boolean,
-  dailyEditionsVariant?: boolean,
   showProductPageHeroHeader?: boolean,
 |};
 
