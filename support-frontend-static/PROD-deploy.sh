@@ -1,4 +1,5 @@
-# Run this file to deploy the bucket
+# Run this file to deploy the frontend static assets bucket defined in the cfn
+# This probably won't be a common task, but see the Readme to understand more
 
 aws cloudformation deploy \
     --profile membership \
