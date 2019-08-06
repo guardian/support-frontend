@@ -26,6 +26,7 @@ import SvgPound from 'components/svgs/pound';
 
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
+import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'assets/helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -42,6 +43,7 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+  landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -55,6 +57,7 @@ const mapStateToProps = state => ({
   otherAmounts: state.page.form.formData.otherAmounts,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
+  landingPageChoiceArchitectureAmountsFirstTestVariant: state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -158,9 +161,14 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
+  const isTestVariant =
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo';
+  const titleCopy = isTestVariant ? 'How much would you like to contribute?' : 'How much would you like to give?';
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>{titleCopy}</legend>
       <ul className="form__radio-group-list">
         {validAmounts.map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
         <li className="form__radio-group-item">

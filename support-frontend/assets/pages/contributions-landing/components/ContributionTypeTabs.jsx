@@ -19,7 +19,11 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
 import type { ContributionTypes, ContributionTypeSetting } from 'helpers/contributions';
+<<<<<<< HEAD
 import type { LandingPageChoiceArchitectureLabelsTestVariants } from 'helpers/abTests/abtestDefinitions';
+=======
+import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'assets/helpers/abTests/abtestDefinitions';
+>>>>>>> layout reversed
 
 // ----- Types ----- //
 
@@ -31,6 +35,7 @@ type PropTypes = {|
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
   landingPageChoiceArchitectureLabelsTestVariants: LandingPageChoiceArchitectureLabelsTestVariants
+  landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -40,6 +45,8 @@ const mapStateToProps = (state: State) => ({
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
   landingPageChoiceArchitectureLabelsTestVariants: state.common.abParticipations.landingPageChoiceArchitectureLabels,
+  landingPageChoiceArchitectureAmountsFirstTestVariant:
+  state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -68,9 +75,15 @@ function withProps(props: PropTypes) {
     return (null);
   }
 
+  const isTestVariant =
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo';
+
+  const titleCopy = isTestVariant ? 'How often would you like to give?' : 'How often would you like to contribute?';
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>{titleCopy}</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
           const { contributionType } = contributionTypeSetting;

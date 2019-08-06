@@ -253,18 +253,19 @@ function withProps(props: PropTypes) {
   const baseClass = 'form';
 
   const classModifiers = constructClassModifiersForChoiceArchitectureTests(
-    ['contributions'],
+    ['contribution'],
     props.landingPageChoiceArchitectureLabelsTestVariant,
     props.landingPageChoiceArchitectureAmountsFirstTestVariant,
   );
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
-      <div>
+      <div className="contributions-form-selectors">
         <ContributionTypeTabs />
         <ContributionAmount
           checkOtherAmount={checkAmount}
         />
+      </div>
         <StripePaymentRequestButtonContainer
           setStripeHasLoaded={props.setStripeV3HasLoaded}
           stripeHasLoaded={props.stripeV3HasLoaded}
@@ -281,15 +282,12 @@ function withProps(props: PropTypes) {
           <ContributionErrorMessage />
           <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
         </div>
-      </div>
-      <div>
         <TermsPrivacy
           countryGroupId={props.countryGroupId}
           contributionType={props.contributionType}
           campaignName={campaignName}
         />
         {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
-      </div>
     </form>
   );
 }

@@ -44,5 +44,16 @@
 // JTL TBD: integrate this css into ContributionsLanding.scss
 // if the labels variant is successful
 .form--with-labels.form--amounts-first {
+  .contributions-form-selectors {
+    display: flex;
+    flex-flow: column-reverse;
+  }
 
+  .form__radio-group--tabs {
+    margin-top: $gu-v-spacing;
+  }
+
+  .form__radio-group--contribution-amount {
+    margin-top: $gu-v-spacing / 2;
+  }
 }
