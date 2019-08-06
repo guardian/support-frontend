@@ -80,6 +80,7 @@
   color: gu-colour(neutral-7);
   line-height: 1.4;
   @include gu-fontset-body-sans;
+  font-weight: bold;
 }  
 
 .product-option__button {
@@ -122,8 +123,4 @@
   .component-button {
     max-width: 210px;
   }
-}
-
-.product-option__offer--variantA {
-  font-weight: bold;
 }
