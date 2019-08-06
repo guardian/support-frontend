@@ -4,7 +4,6 @@ deployments:
   assets-static:
     type: aws-s3
     parameters:
-      app: frontend
       bucket: support-frontend-static
       prefixPackage: false
       prefixStack: false
