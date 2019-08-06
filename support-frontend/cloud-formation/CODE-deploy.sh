@@ -5,4 +5,5 @@ aws cloudformation deploy \
     --stack-name support-CODE-frontend \
     --template-file cfn.yaml \
     --region eu-west-1 \
-    --capabilities CAPABILITY_IAM
+    --capabilities CAPABILITY_IAM \
+    --tags App=frontend Stage=CODE Stack=support
