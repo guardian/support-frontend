@@ -27,12 +27,8 @@ type PropTypes = {|
   heading: string,
   content?: Option<Node>,
   hasCampaign: boolean,
-<<<<<<< HEAD
   dailyEditionsVariant?: boolean,
   showProductPageHeroHeader?: boolean,
-=======
-  dailyEditionsVariant: boolean
->>>>>>> c104a79d3... chore: flow fixes
 |};
 
 type ProductPageHeroHeaderTypes = {
@@ -108,11 +104,7 @@ ProductPageHero.defaultProps = {
   children: null,
   content: null,
   ...HeroWrapper.defaultProps,
-<<<<<<< HEAD
   showProductPageHeroHeader: false,
-=======
-  dailyEditionsVariant: false,
->>>>>>> c104a79d3... chore: flow fixes
 };
 
 ProductPageHeroHeader.defaultProps = {
