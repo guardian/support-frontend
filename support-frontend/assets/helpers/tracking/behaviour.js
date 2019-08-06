@@ -56,15 +56,17 @@ const trackThankYouPageLoaded = (
     label: paymentMethod,
   }, { paymentMethod, productCheckout });
 
-  trackComponentEvents({
-    component: {
-      componentType: 'ACQUISITIONS_OTHER',
-      id: 'thank-you-page',
-      labels: ['checkout-submit'],
-    },
-    action: 'VIEW',
-    value: `thank-you-page-loaded-${productCheckout}-${paymentMethod || ''}`,
-  });
+  if (trackComponentEvents) {
+    trackComponentEvents({
+      component: {
+        componentType: 'ACQUISITIONS_OTHER',
+        id: 'thank-you-page',
+        labels: ['checkout-submit'],
+      },
+      action: 'VIEW',
+      value: `thank-you-page-loaded-${productCheckout}-${paymentMethod || ''}`,
+    });
+  }
 };
 
 const trackComponentClick = (componentId: string): void => {
