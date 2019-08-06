@@ -26,7 +26,9 @@ import SvgPound from 'components/svgs/pound';
 
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
-import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'assets/helpers/abTests/abtestDefinitions';
+import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { testAmounts } from 'helpers/abTests/data/testAmountsData';
+
 
 // ----- Types ----- //
 
@@ -151,6 +153,7 @@ const getAmountPerWeekBreakdown = (
 };
 
 function withProps(props: PropTypes) {
+  console.log(testAmounts);
   const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';

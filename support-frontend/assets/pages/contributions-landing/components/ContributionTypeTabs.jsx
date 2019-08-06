@@ -19,11 +19,9 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
 import type { ContributionTypes, ContributionTypeSetting } from 'helpers/contributions';
-<<<<<<< HEAD
 import type { LandingPageChoiceArchitectureLabelsTestVariants } from 'helpers/abTests/abtestDefinitions';
-=======
-import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'assets/helpers/abTests/abtestDefinitions';
->>>>>>> layout reversed
+import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'helpers/abTests/abtestDefinitions';
+
 
 // ----- Types ----- //
 
