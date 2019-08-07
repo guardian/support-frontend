@@ -266,28 +266,28 @@ function withProps(props: PropTypes) {
           checkOtherAmount={checkAmount}
         />
       </div>
-        <StripePaymentRequestButtonContainer
-          setStripeHasLoaded={props.setStripeV3HasLoaded}
-          stripeHasLoaded={props.stripeV3HasLoaded}
-          currency={props.currency}
-          contributionType={props.contributionType}
-          isTestUser={props.isTestUser}
-          country={props.country}
-          otherAmounts={props.otherAmounts}
-          selectedAmounts={props.selectedAmounts}
-        />
-        <div className={classNameWithModifiers('form', ['content'])}>
-          <ContributionFormFields />
-          <PaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
-          <ContributionErrorMessage />
-          <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
-        </div>
-        <TermsPrivacy
-          countryGroupId={props.countryGroupId}
-          contributionType={props.contributionType}
-          campaignName={campaignName}
-        />
-        {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
+      <StripePaymentRequestButtonContainer
+        setStripeHasLoaded={props.setStripeV3HasLoaded}
+        stripeHasLoaded={props.stripeV3HasLoaded}
+        currency={props.currency}
+        contributionType={props.contributionType}
+        isTestUser={props.isTestUser}
+        country={props.country}
+        otherAmounts={props.otherAmounts}
+        selectedAmounts={props.selectedAmounts}
+      />
+      <div className={classNameWithModifiers('form', ['content'])}>
+        <ContributionFormFields />
+        <PaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
+        <ContributionErrorMessage />
+        <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
+      </div>
+      <TermsPrivacy
+        countryGroupId={props.countryGroupId}
+        contributionType={props.contributionType}
+        campaignName={campaignName}
+      />
+      {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
   );
 }

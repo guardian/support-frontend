@@ -38,7 +38,7 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
-  landingPageChoiceArchitectureLabelsTestVariants: LandingPageChoiceArchitectureLabelsTestVariants
+  landingPageChoiceArchitectureLabelsTestVariants: LandingPageChoiceArchitectureLabelsTestVariants,
   landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
   // JTL - Note: these two props are for the AB test showing amounts first
   selectedAmounts: SelectedAmounts,
