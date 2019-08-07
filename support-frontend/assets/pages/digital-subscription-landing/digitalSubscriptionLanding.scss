@@ -52,6 +52,8 @@
     overflow: hidden;
 
     .product-block__heading-wrapper {
+      border-top: 1px solid gu-colour(neutral-86);
+
       @include mq($from: phablet) {
         width: 100%;
       }
