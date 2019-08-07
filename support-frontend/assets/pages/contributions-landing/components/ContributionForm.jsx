@@ -228,10 +228,10 @@ function onSubmit(props: PropTypes): Event => void {
 }
 
 function constructClassModifiersForChoiceArchitectureTests(
-  classMods: Array<string | null>,
+  classMods: Array<?string>,
   choiceArchitectureLabelsTestVariant: LandingPageChoiceArchitectureLabelsTestVariants,
   choiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
-) {
+): Array<?string> {
   if (choiceArchitectureLabelsTestVariant === 'withLabels') {
     classMods.push('with-labels');
   }
