@@ -61,17 +61,17 @@ function toHumanReadableContributionType(contributionType: ContributionType): 'S
     case 'ONE_OFF': return 'Single';
     case 'MONTHLY': return 'Monthly';
     case 'ANNUAL': return 'Annual';
-    default: return 'Annual';
+    default: return 'Monthly';
   }
 }
 
 // JTL - TBD: Remove after landing page choice architecture test
-function toHumanReadableContributionTypeAbTest(contributionType: ContributionType): 'Once' | 'Monthly' | 'Yearly' {
+function toHumanReadableContributionTypeAbTest(contributionType: ContributionType): 'Once' | 'Monthly' | 'Annually' {
   switch (contributionType) {
     case 'ONE_OFF': return 'Once';
     case 'MONTHLY': return 'Monthly';
-    case 'ANNUAL': return 'Yearly';
-    default: return 'Annual';
+    case 'ANNUAL': return 'Annually';
+    default: return 'Monthly';
   }
 }
 
