@@ -9,6 +9,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import {
   getPaymentMethodToSelect,
   toHumanReadableContributionType,
+  toHumanReadableContributionTypeAbTest,
 } from 'helpers/checkouts';
 
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -18,6 +19,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
 import type { ContributionTypes, ContributionTypeSetting } from 'helpers/contributions';
+import type { LandingPageChoiceArchitectureLabelsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -28,6 +30,7 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
+  landingPageChoiceArchitectureLabelsTestVariants: LandingPageChoiceArchitectureLabelsTestVariants
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -36,6 +39,7 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
+  landingPageChoiceArchitectureLabelsTestVariants: state.common.abParticipations.landingPageChoiceArchitectureLabels,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -55,6 +59,10 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
+  const isLabelTestVariant = props.landingPageChoiceArchitectureLabelsTestVariants === 'withLabels';
+  const createContributionTypeLabel = isLabelTestVariant ?
+    toHumanReadableContributionTypeAbTest :
+    toHumanReadableContributionType;
 
   if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
     return (null);
@@ -85,7 +93,7 @@ function withProps(props: PropTypes) {
                 checked={props.contributionType === contributionType}
               />
               <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
-                {toHumanReadableContributionType(contributionType)}
+                {createContributionTypeLabel(contributionType)}
               </label>
             </li>);
         })}
