@@ -57,7 +57,8 @@ const mapStateToProps = state => ({
   otherAmounts: state.page.form.formData.otherAmounts,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
-  landingPageChoiceArchitectureAmountsFirstTestVariant: state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
+  landingPageChoiceArchitectureAmountsFirstTestVariant:
+  state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -167,7 +168,9 @@ function withProps(props: PropTypes) {
     props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo';
   const titleCopy = isTestVariant ? 'How much would you like to contribute?' : 'How much would you like to give?';
   const testAmounts = testAmountsData[props.countryGroupId];
-  const amountsToDisplay = isTestVariant ? testAmounts[props.landingPageChoiceArchitectureAmountsFirstTestVariant] : validAmounts;
+  const amountsToDisplay = isTestVariant ?
+    testAmounts[props.landingPageChoiceArchitectureAmountsFirstTestVariant] :
+    validAmounts;
 
   // JTL - TBD : Delete this line after Landing Page Amounts First AB Test has run
   const showWeeklyBreakdown: boolean = (props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL') && !isTestVariant;

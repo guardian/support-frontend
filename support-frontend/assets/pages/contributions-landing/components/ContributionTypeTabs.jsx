@@ -18,9 +18,13 @@ import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
-import type { ContributionTypes, ContributionTypeSetting } from 'helpers/contributions';
+import type {
+  ContributionTypes,
+  ContributionTypeSetting,
+  OtherAmounts,
+  SelectedAmounts,
+} from 'helpers/contributions';
 import type { LandingPageChoiceArchitectureLabelsTestVariants } from 'helpers/abTests/abtestDefinitions';
-import type { Amount, ContributionTypes, ContributionTypeSetting, OtherAmounts } from 'helpers/contributions';
 import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { getAmountPerWeekBreakdown } from 'pages/contributions-landing/components/ContributionAmount';
 
@@ -37,7 +41,7 @@ type PropTypes = {|
   landingPageChoiceArchitectureLabelsTestVariants: LandingPageChoiceArchitectureLabelsTestVariants
   landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
   // JTL - Note: these two props are for the AB test showing amounts first
-  selectAmount: (Amount | 'other', CountryGroupId, ContributionType) => (() => void),
+  selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
 |};
 
@@ -121,7 +125,7 @@ function withProps(props: PropTypes) {
             </li>);
         })}
       </ul>
-      {/*// JTL - Note: this is for the AB test showing amounts first*/}
+      {/* // JTL - Note: this is for the AB test showing amounts first */}
       {showWeeklyBreakdown ? (
         <p className="amount-per-week-breakdown">
           {getAmountPerWeekBreakdown(
