@@ -210,6 +210,7 @@ function CampaignHeader(props: PropTypes) {
         modifierClasses={['digital-campaign']}
         content={anchorButton()}
         hasCampaign
+        showProductPageHeroHeader={false}
       >
         <div className="the-moment-hero">
           <div className="the-moment-hero__copy">
@@ -284,7 +285,6 @@ function CampaignHeader(props: PropTypes) {
         }
       </ProductPagehero>
       <PaymentSelectionContainer dailyEditionsVariant={props.dailyEditionsVariant} />
-
     </div>
   );
 }

@@ -47,7 +47,6 @@ const DefaultHeader = () => (
       modifierClasses={['weekly']}
       content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       hasCampaign={false}
-      showProductPageHeroHeader
     >
       <GridPicture
         sources={[
@@ -83,7 +82,6 @@ const CampaignHeader = () => (
     modifierClasses={['weekly-campaign']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
-    showProductPageHeroHeader
   >
 
     <div className="weekly-campaign-hero">

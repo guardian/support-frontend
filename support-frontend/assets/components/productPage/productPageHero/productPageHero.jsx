@@ -103,7 +103,7 @@ ProductPageHero.defaultProps = {
   children: null,
   content: null,
   ...HeroWrapper.defaultProps,
-  showProductPageHeroHeader: false,
+  showProductPageHeroHeader: true,
 };
 
 ProductPageHeroHeader.defaultProps = {

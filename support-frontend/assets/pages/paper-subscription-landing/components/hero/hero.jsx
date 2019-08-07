@@ -108,7 +108,6 @@ const CampaignHeader = () => (
     modifierClasses={['paper-sale']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
-    showProductPageHeroHeader
   >
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
