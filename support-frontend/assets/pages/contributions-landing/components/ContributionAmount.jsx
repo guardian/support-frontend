@@ -129,7 +129,7 @@ const amountFormatted = (amount: number, currencyString: string, countryGroupId:
   return `${currencyString}${(amount).toFixed(2)}`;
 };
 
-const getAmountPerWeekBreakdown = (
+export const getAmountPerWeekBreakdown = (
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   selectedAmounts: SelectedAmounts,
@@ -156,7 +156,8 @@ function withProps(props: PropTypes) {
   console.log(testAmounts);
   const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
-  const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';
+  // JTL - TBD : Uncomment this after Landing Page Amounts First AB Test has run
+  // const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
@@ -168,6 +169,9 @@ function withProps(props: PropTypes) {
     props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
     props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo';
   const titleCopy = isTestVariant ? 'How much would you like to contribute?' : 'How much would you like to give?';
+
+  // JTL - TBD : Delete this line after Landing Page Amounts First AB Test has run
+  const showWeeklyBreakdown: boolean = (props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL') && !isTestVariant;
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
