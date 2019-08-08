@@ -274,7 +274,7 @@ function createFormReducer() {
             ...state.formData,
             otherAmounts: {
               ...state.formData.otherAmounts,
-              [state.contributionType]: {
+              [action.contributionType]: {
                 amount: action.otherAmount,
               },
             },
