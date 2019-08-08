@@ -1122,13 +1122,12 @@ form {
   border: 1px solid gu-colour(highlight-main);
 }
 
-
-// Editorialise Amounts Test
-
 .amount-per-week-breakdown {
+  font-family: $gu-text-sans-web;
   margin-top: $gu-v-spacing;
   font-style: italic;
   line-height: 20px;
+  font-weight: normal;
 }
 
 .amount-per-week-breakdown:empty {

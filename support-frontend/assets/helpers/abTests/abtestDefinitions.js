@@ -6,6 +6,7 @@ import { get as getCookie } from 'helpers/cookie';
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 export type ThankYouPageMarketingComponentTestVariants = 'control' | 'newMarketingComponent' | 'notintest';
 export type LandingPageChoiceArchitectureLabelsTestVariants = 'control' | 'withLabels' | 'notintest';
+export type LandingPageChoiceArchitectureAmountsFirstTestVariants = 'control' | 'amountsFirstSetOne' | 'amountsFirstSetTwo' | 'notintest';
 
 export const tests: Tests = {
   landingPageCopyReturningSingles: {
@@ -87,5 +88,34 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 3,
+  },
+
+  // JTL - 5 August 2019 - Ab-test: landingPageChoiceArchitectureAmountsFirst
+  // file used for this test: abTestContributionsLandingChoiceArchitecture.scss
+  // if a variant is successful, we will need to integrate the styles from the test stylesheet
+  // into the main stylesheet: contributionsLanding.scss
+  // This test also involves hardcoded amounts, which will need to be discussed moving forward
+  landingPageChoiceArchitectureAmountsFirst: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'amountsFirstSetOne',
+      },
+      {
+        id: 'amountsFirstSetTwo',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 4,
   },
 };

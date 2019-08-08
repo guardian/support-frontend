@@ -51,7 +51,10 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { LandingPageChoiceArchitectureLabelsTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type {
+  LandingPageChoiceArchitectureAmountsFirstTestVariants,
+  LandingPageChoiceArchitectureLabelsTestVariants,
+} from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -83,7 +86,8 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
-  landingPageChoiceArchitectureLabelsTestVariant: LandingPageChoiceArchitectureLabelsTestVariants
+  landingPageChoiceArchitectureLabelsTestVariant: LandingPageChoiceArchitectureLabelsTestVariants,
+  landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -115,6 +119,8 @@ const mapStateToProps = (state: State) => ({
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
   landingPageChoiceArchitectureLabelsTestVariant: state.common.abParticipations.landingPageChoiceArchitectureLabels,
+  landingPageChoiceArchitectureAmountsFirstTestVariant:
+    state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
 });
 
 
@@ -221,45 +227,67 @@ function onSubmit(props: PropTypes): Event => void {
   };
 }
 
+function constructClassModifiersForChoiceArchitectureTests(
+  classMods: Array<?string>,
+  choiceArchitectureLabelsTestVariant: LandingPageChoiceArchitectureLabelsTestVariants,
+  choiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
+): Array<?string> {
+  if (choiceArchitectureLabelsTestVariant === 'withLabels') {
+    classMods.push('with-labels');
+  }
+
+  if (
+    choiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
+    choiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo'
+  ) {
+    classMods.push('amounts-first');
+  }
+
+  return classMods;
+}
+
 // ----- Render ----- //
 
 function withProps(props: PropTypes) {
   const campaignName = getCampaignName();
   const baseClass = 'form';
-  const classModifiers = props.landingPageChoiceArchitectureLabelsTestVariant === 'withLabels' ? ['contribution', 'with-labels'] : ['contribution'];
+
+  const classModifiers = constructClassModifiersForChoiceArchitectureTests(
+    ['contribution'],
+    props.landingPageChoiceArchitectureLabelsTestVariant,
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant,
+  );
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
-      <div>
+      <div className="contributions-form-selectors">
         <ContributionTypeTabs />
         <ContributionAmount
           checkOtherAmount={checkAmount}
         />
-        <StripePaymentRequestButtonContainer
-          setStripeHasLoaded={props.setStripeV3HasLoaded}
-          stripeHasLoaded={props.stripeV3HasLoaded}
-          currency={props.currency}
-          contributionType={props.contributionType}
-          isTestUser={props.isTestUser}
-          country={props.country}
-          otherAmounts={props.otherAmounts}
-          selectedAmounts={props.selectedAmounts}
-        />
-        <div className={classNameWithModifiers('form', ['content'])}>
-          <ContributionFormFields />
-          <PaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
-          <ContributionErrorMessage />
-          <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
-        </div>
       </div>
-      <div>
-        <TermsPrivacy
-          countryGroupId={props.countryGroupId}
-          contributionType={props.contributionType}
-          campaignName={campaignName}
-        />
-        {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
+      <StripePaymentRequestButtonContainer
+        setStripeHasLoaded={props.setStripeV3HasLoaded}
+        stripeHasLoaded={props.stripeV3HasLoaded}
+        currency={props.currency}
+        contributionType={props.contributionType}
+        isTestUser={props.isTestUser}
+        country={props.country}
+        otherAmounts={props.otherAmounts}
+        selectedAmounts={props.selectedAmounts}
+      />
+      <div className={classNameWithModifiers('form', ['content'])}>
+        <ContributionFormFields />
+        <PaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
+        <ContributionErrorMessage />
+        <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       </div>
+      <TermsPrivacy
+        countryGroupId={props.countryGroupId}
+        contributionType={props.contributionType}
+        campaignName={campaignName}
+      />
+      {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
   );
 }
