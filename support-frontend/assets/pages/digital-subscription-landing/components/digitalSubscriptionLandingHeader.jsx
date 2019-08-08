@@ -269,13 +269,12 @@ function CampaignHeader(props: PropTypes) {
             </div>
           </div>
         </div>
-        {props.dailyEditionsVariant && (
-          <div className="payment-selection__title-container" >
-            <h2 className="payment-selection__title">
-              The Premium App and the Daily Edition iPad app in one pack, plus ad-free reading on all your devices
-            </h2>
-          </div>
-        )}
+
+        <div className="payment-selection__title-container" >
+          <h2 className="payment-selection__title">
+            The Premium App and the Daily Edition iPad app in one pack, plus ad-free reading on all your devices
+          </h2>
+        </div>
 
         {showCountdownTimer(product, props.countryGroupId) &&
         <FlashSaleCountdownInHero
