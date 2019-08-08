@@ -1,6 +1,7 @@
 // @flow
 import type { Tests } from './abtest';
 import { get as getCookie } from 'helpers/cookie';
+import { amountsFirstSetOne, amountsFirstSetTwo } from 'helpers/abTests/data/testAmountsData';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
@@ -96,16 +97,18 @@ export const tests: Tests = {
   // into the main stylesheet: contributionsLanding.scss
   // This test also involves hardcoded amounts, which will need to be discussed moving forward
   landingPageChoiceArchitectureAmountsFirst: {
-    type: 'OTHER',
+    type: 'AMOUNTS',
     variants: [
       {
         id: 'control',
       },
       {
         id: 'amountsFirstSetOne',
+        amountsRegions: amountsFirstSetOne,
       },
       {
         id: 'amountsFirstSetTwo',
+        amountsRegions: amountsFirstSetTwo,
       },
     ],
     audiences: {

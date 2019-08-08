@@ -27,7 +27,6 @@ import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
 import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'helpers/abTests/abtestDefinitions';
-import { testAmountsData } from 'helpers/abTests/data/testAmountsData';
 
 // ----- Types ----- //
 
@@ -95,24 +94,29 @@ const isSelected = (amount: Amount, props: PropTypes) => {
   return amount.isDefault;
 };
 
-const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropTypes, isTestVariant) => (amount: Amount) => (
-  <li className="form__radio-group-item">
-    <input
-      id={`contributionAmount-${amount.value}`}
-      className="form__radio-group-input"
-      type="radio"
-      name="contributionAmount"
-      value={amount.value}
+const renderAmount = (
+  currency: Currency,
+  spokenCurrency: SpokenCurrency,
+  props: PropTypes,
+  isTestVariant,
+) =>
+  (amount: Amount) => (
+    <li className="form__radio-group-item">
+      <input
+        id={`contributionAmount-${amount.value}`}
+        className="form__radio-group-input"
+        type="radio"
+        name="contributionAmount"
+        value={amount.value}
       /* eslint-disable react/prop-types */
-      checked={isSelected(amount, props)}
-      onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType, isTestVariant)}
-      /* eslint-enable react/prop-types */
-    />
-    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
-      {formatAmount(currency, spokenCurrency, amount, false)}
-    </label>
-  </li>
-);
+        checked={isSelected(amount, props)}
+        onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType, isTestVariant)}
+      />
+      <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
+        {formatAmount(currency, spokenCurrency, amount, false)}
+      </label>
+    </li>
+  );
 
 const renderEmptyAmount = (id: string) => (
   <li className="form__radio-group-item amounts__placeholder">
@@ -180,10 +184,6 @@ function withProps(props: PropTypes) {
     props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
     props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo';
   const titleCopy = isTestVariant ? 'How much would you like to contribute?' : 'How much would you like to give?';
-  const testAmounts = testAmountsData[props.countryGroupId];
-  const amountsToDisplay = isTestVariant ?
-    testAmounts[props.landingPageChoiceArchitectureAmountsFirstTestVariant] :
-    validAmounts;
 
   // JTL - TBD : Delete this line after Landing Page Amounts First AB Test has run
   const showWeeklyBreakdown: boolean = (props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL') && !isTestVariant;
@@ -192,7 +192,12 @@ function withProps(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>{titleCopy}</legend>
       <ul className="form__radio-group-list">
-        {amountsToDisplay.map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props, isTestVariant))}
+        {validAmounts.map(renderAmount(
+          currencies[props.currency],
+          spokenCurrencies[props.currency],
+          props,
+          isTestVariant,
+        ))}
         <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"
@@ -214,7 +219,12 @@ function withProps(props: PropTypes) {
           label="Other amount"
           value={otherAmount}
           icon={iconForCountryGroup(props.countryGroupId)}
-          onInput={e => props.updateOtherAmount((e.target: any).value, props.countryGroupId, props.contributionType, isTestVariant)}
+          onInput={e => props.updateOtherAmount(
+            (e.target: any).value,
+            props.countryGroupId,
+            props.contributionType,
+            isTestVariant,
+          )}
           isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
           formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
