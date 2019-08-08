@@ -8,7 +8,7 @@ class DigitalPackProductPage(implicit val webDriver: WebDriver) extends Page wit
 
   val url = s"${Config.supportFrontendUrl}/uk/subscribe/digital"
 
-  private val header = className("component-heading-block")
+  private val header = className("component-footer")
 
   def pageHasLoaded: Boolean = {
     pageHasElement(header) && pageHasUrl(s"/uk/subscribe/digital")
