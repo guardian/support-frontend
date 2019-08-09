@@ -111,10 +111,10 @@
   line-height: 1.4rem;
 }
 
-.product-option__full-screen-break {
+.product-option__sales-copy--break {
   display: none;
 
-  @include mq($from: tablet) {
+  @include mq($from: mobileLandscape) {
     display: block;
   }
 }

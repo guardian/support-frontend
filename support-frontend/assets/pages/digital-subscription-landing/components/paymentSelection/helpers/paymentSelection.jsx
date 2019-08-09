@@ -55,7 +55,7 @@ const BILLING_PERIOD = {
       control: () => (
         <span>
           14 day free trial, then <strong>{displayPrice}</strong>
-          &nbsp;for the first year <br />
+          &nbsp;for the first year <br className="product-option__sales-copy--break" />
           (save <strong>{saving}</strong> per year)
         </span>
       ),
