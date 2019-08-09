@@ -112,7 +112,7 @@ function CheckoutForm(props: PropTypes) {
   const days = getDays(props.fulfilmentOption, props.productOption);
   const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
   const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : 'Voucher booklet';
-  const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper' : 'Where should we deliver your vouchers';
+  const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : 'Where should we deliver your vouchers?';
 
   return (
     <Content modifierClasses={['your-details']}>
