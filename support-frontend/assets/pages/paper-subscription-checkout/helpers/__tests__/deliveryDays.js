@@ -2,9 +2,11 @@
 
 // ----- Imports ----- //
 
-import { getVoucherDays, getHomeDeliveryDays } from '../deliveryDays';
+import { getVoucherDays } from '../deliveryDays';
+import { daysTillNextDelivery, getHomeDeliveryDays } from '../homeDeliveryDays';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
-
+import { canDeliverOnNextDeliveryDay } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
+import { DeliveryDays } from 'helpers/subscriptionsForms/deliveryDays';
 
 // ----- Tests ----- //
 const monday = 1551075752198; /* 2019-02-25 */
@@ -12,6 +14,7 @@ const tuesday = 1551175752198; /* 2019-02-26 */
 const wednesday5amGMT = 1551243600000; /* 2019-02-27 05:00 GMT */
 const wednesday = 1551275752198; /* 2019-02-27 */
 const thursday4am = 1551326400000; /* 2019-02-28 04:00 GMT */
+const thursday = 1551312000000; /* 2019-02-28 */
 const sunday = 1551577952198; /* 2019-03-03 */
 
 describe('deliveryDays', () => {
@@ -26,15 +29,34 @@ describe('deliveryDays', () => {
     });
   });
 
-  // TODO: re-enable these once home delivery available again
-  xdescribe('getHomeDeliveryDays', () => {
+  describe('getHomeDeliveryDays', () => {
+    it('can work out the number of days till the next delivery', () => {
+      expect(daysTillNextDelivery(DeliveryDays.Monday, DeliveryDays.Tuesday)).toEqual(1);
+      expect(daysTillNextDelivery(DeliveryDays.Monday, DeliveryDays.Friday)).toEqual(4);
+      expect(daysTillNextDelivery(DeliveryDays.Friday, DeliveryDays.Monday)).toEqual(3);
+      expect(daysTillNextDelivery(DeliveryDays.Wednesday, DeliveryDays.Sunday)).toEqual(4);
+    });
+    it('can work out whether we can deliver on the next delivery date', () => {
+      expect(canDeliverOnNextDeliveryDay(DeliveryDays.Tuesday, DeliveryDays.Sunday, 4)).toEqual(true);
+      expect(canDeliverOnNextDeliveryDay(DeliveryDays.Wednesday, DeliveryDays.Saturday, 4)).toEqual(false);
+      expect(canDeliverOnNextDeliveryDay(DeliveryDays.Saturday, DeliveryDays.Monday, 3)).toEqual(false);
+      expect(canDeliverOnNextDeliveryDay(DeliveryDays.Wednesday, DeliveryDays.Sunday, 4)).toEqual(true);
+    });
     it('delivers the Sunday paper on the next Sunday', () => {
       const days = getHomeDeliveryDays(wednesday, 'Sunday');
       expect(formatMachineDate(days[0])).toEqual('2019-03-03');
     });
-    it('delivers the Monday paper on the next Monday even if it\'s a Sunday', () => {
-      const days = getHomeDeliveryDays(sunday, 'Everyday');
-      expect(formatMachineDate(days[0])).toEqual('2019-03-04');
+    it('delivers first Sixday paper 6 days later if ordered on a Thursday', () => {
+      const days = getHomeDeliveryDays(thursday, 'Sixday');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-06');
+    });
+    it('delivers first Weekend paper 9 days later if ordered on a Thursday', () => {
+      const days = getHomeDeliveryDays(thursday, 'Weekend');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-09');
+    });
+    it('delivers first Sunday paper 10 days later if ordered on a Thursday', () => {
+      const days = getHomeDeliveryDays(thursday, 'Sunday');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-10');
     });
   });
 
