@@ -28,7 +28,7 @@
   @include mq($from: tablet) {
     margin: 0 10px 0 0;
     max-width: 30rem;
-    width: 240px;
+    width: 320px;
   }
 }
 
@@ -37,15 +37,6 @@
 
   @include mq($from: tablet) {
     margin: 0 20px;
-  }
-}
-
-.payment-selection__card.payment-selection__card--variantA-width {
-  margin: 10px;
-
-  @include mq($from: tablet) {
-    margin: 0 20px 0 0 ;
-    width: 320px;
   }
 }
 
