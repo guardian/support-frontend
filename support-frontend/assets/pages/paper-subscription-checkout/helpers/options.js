@@ -18,7 +18,7 @@ import {
   HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
 import { getQueryParameter } from 'helpers/url';
-import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/deliveryDays';
+import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { formatMachineDate } from 'helpers/dateConversions';
 

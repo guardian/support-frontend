@@ -45,7 +45,7 @@ const canDeliverOnNextDeliveryDay = (
 const getHomeDeliveryDays = (today: number, product: ProductOptions): Date[] => {
   const currentWeekday = new Date(today).getDay();
   const delayDays = getDaysToAdd(currentWeekday, product);
-  const deliveryDay: Day =  ((currentWeekday + delayDays) % 7 : any);
+  const deliveryDay: Day = ((currentWeekday + delayDays) % 7: any);
   const canMakeNextDelivery = canDeliverOnNextDeliveryDay(currentWeekday, deliveryDay, delayDays);
   const deliveryIsThisWeek = jsDayToFulfilmentDay(deliveryDay) > jsDayToFulfilmentDay(currentWeekday);
   const weeksToAdd = canMakeNextDelivery && deliveryIsThisWeek ? 0 : 1;

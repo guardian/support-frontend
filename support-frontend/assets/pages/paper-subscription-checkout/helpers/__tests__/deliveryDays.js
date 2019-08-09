@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { getVoucherDays } from '../deliveryDays';
+import { getVoucherDays } from '../voucherDeliveryDays';
 import { daysTillNextDelivery, getHomeDeliveryDays } from '../homeDeliveryDays';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { canDeliverOnNextDeliveryDay } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
