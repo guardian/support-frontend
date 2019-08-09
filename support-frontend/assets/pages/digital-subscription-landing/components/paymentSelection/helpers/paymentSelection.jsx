@@ -33,14 +33,14 @@ const BILLING_PERIOD = {
     singlePeriod: 'month',
     salesCopy: (displayPrice: string, saving?: string) => ({
       control: () => (
-        <span>14 day free trial, then <strong>{displayPrice}</strong> {saving && null}
+        <span>14 day free trial, then <strong>{displayPrice}</strong> {saving && null} a month
           <br className="product-option__full-screen-break" />
           <br className="product-option__full-screen-break" />
         </span>
       ),
       variantA: () => (
         <span>
-          14 day free trial, then <strong>{displayPrice}</strong> {saving && null}
+          14 day free trial, then <strong>{displayPrice}</strong> {saving && null} a month
           <br className="product-option__full-screen-break" />
           <br className="product-option__full-screen-break" />
         </span>
