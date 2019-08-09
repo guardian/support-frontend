@@ -3,24 +3,18 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import MarketingConsentControl from 'pages/contributions-landing/components/MarketingConsentControlContainer';
-import MarketingConsentVariant from 'pages/contributions-landing/components/MarketingConsentVariantContainer';
+import MarketingConsent from 'pages/contributions-landing/components/MarketingConsentContainer';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
-import type { ThankYouPageMarketingComponentTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
-type PropTypes = {|
-  marketingComponentVariant: ThankYouPageMarketingComponentTestVariants,
-|};
-
 // ----- Render ----- //
 
-function ContributionThankYouPasswordSet(props: PropTypes) {
+function ContributionThankYouPasswordSet() {
   const title = 'You now have a Guardian account';
   const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
@@ -33,13 +27,7 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
             {body}
           </p>
         </section>
-        {props.marketingComponentVariant === 'newMarketingComponent' ? (
-          <MarketingConsentVariant />
-          )
-          : (
-            <MarketingConsentControl />
-          )
-        }
+        <MarketingConsent />
         <ContributionSurvey isRunning={false} />
         <SpreadTheWord />
         <div className="gu-content__return-link">

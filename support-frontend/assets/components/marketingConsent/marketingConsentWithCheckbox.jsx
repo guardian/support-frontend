@@ -14,29 +14,28 @@ import Button from 'components/button/button';
 import NonInteractiveButton from 'components/button/nonInteractiveButton';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import 'components/marketingConsent/marketingConsent.scss';
-import type { ThankYouPageMarketingComponentTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
-type ButtonPropTypes = {|
+type SharedPropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
   csrf: CsrfState,
-  onClick: (?string, CsrfState, ?ThankYouPageMarketingComponentTestVariants) => void,
+  onClick: (?string, CsrfState) => void,
   requestPending: boolean,
-  marketingComponentVariant?: ThankYouPageMarketingComponentTestVariants,
+|}
+
+type ButtonPropTypes = {|
+  ...SharedPropTypes,
   checkboxChecked: boolean,
 |};
 
 type PropTypes = {|
-  confirmOptIn: ?boolean,
-  email: string,
-  csrf: CsrfState,
-  onClick: (?string, CsrfState, ?ThankYouPageMarketingComponentTestVariants) => void,
-  requestPending: boolean,
-  marketingComponentVariant?: ThankYouPageMarketingComponentTestVariants,
+  ...SharedPropTypes,
   error: boolean,
-  renderMessage: ({title: string, message: string}) => Node
+  renderMessage: ({title: string, message: string}) => Node,
+  countryGroupId: CountryGroupId,
 |};
 
 type StateTypes ={|
@@ -84,7 +83,7 @@ function MarketingButton(props: ButtonPropTypes) {
       iconSide="right"
       aria-label="Sign me up to news and offers from The Guardian"
       onClick={
-          () => props.onClick(props.email, props.csrf, props.marketingComponentVariant)
+          () => props.onClick(props.email, props.csrf)
         }
       icon={<SvgSubscribe />}
     >
@@ -92,10 +91,6 @@ function MarketingButton(props: ButtonPropTypes) {
     </Button>
   );
 }
-
-MarketingButton.defaultProps = {
-  marketingComponentVariant: 'notintest',
-};
 
 const renderMessage = ({ title, message }: {title: string, message: string}) => (
   <div>
@@ -110,7 +105,6 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
     error: false,
     requestPending: false,
     renderMessage,
-    marketingComponentVariant: 'notintest',
   };
 
   state = {
@@ -118,6 +112,8 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
   }
 
   render() {
+    const emailFrequency = this.props.countryGroupId === 'AUDCountries' ? 'an occasional' : 'a weekly';
+
     if (this.props.error) {
       return (<GeneralErrorMessage
         classModifiers={['marketing_consent_api_error']}
@@ -130,7 +126,7 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
       return (
         <section className={classNameWithModifiers('component-marketing-consent', ['newsletter', 'with-checkbox'])}>
           {this.props.renderMessage({
-            title: 'Would you like to receive a weekly email from inside The Guardian? ',
+            title: `Would you like to receive ${emailFrequency} email from inside The Guardian?`,
             message: 'Our membership editor will discuss the most important news stories from the week and suggest compelling articles to read. Opt in below to receive this and more information on ways to support The Guardian.',
           })}
 
@@ -150,7 +146,6 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
             csrf: this.props.csrf,
             onClick: this.props.onClick,
             requestPending: this.props.requestPending,
-            marketingComponentVariant: this.props.marketingComponentVariant,
             checkboxChecked: this.state.checkboxChecked,
           })}
 
