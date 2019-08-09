@@ -15,6 +15,7 @@ const wednesday5amGMT = 1551243600000; /* 2019-02-27 05:00 GMT */
 const wednesday = 1551275752198; /* 2019-02-27 */
 const thursday4am = 1551326400000; /* 2019-02-28 04:00 GMT */
 const thursday = 1551312000000; /* 2019-02-28 */
+const saturday = 1551484800000; /* 2019-03-02 */
 const sunday = 1551577952198; /* 2019-03-03 */
 
 describe('deliveryDays', () => {
@@ -57,6 +58,14 @@ describe('deliveryDays', () => {
     it('delivers first Sunday paper 10 days later if ordered on a Thursday', () => {
       const days = getHomeDeliveryDays(thursday, 'Sunday');
       expect(formatMachineDate(days[0])).toEqual('2019-03-10');
+    });
+    it('delivers first Weekend paper 5 days later if ordered on a Monday', () => {
+      const days = getHomeDeliveryDays(monday, 'Weekend');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-02');
+    });
+    it('delivers first Everyday paper 4 days later if ordered on a Saturday', () => {
+      const days = getHomeDeliveryDays(saturday, 'Everyday');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-06');
     });
   });
 
