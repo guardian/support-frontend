@@ -80,7 +80,6 @@
   color: gu-colour(neutral-7);
   line-height: 1.4;
   @include gu-fontset-body-sans;
-  font-weight: bold;
 }  
 
 .product-option__button {
@@ -109,6 +108,14 @@
   font-family: $gu-text-sans-web;
   font-size: 16px;
   line-height: 1.4rem;
+}
+
+.product-option__full-screen-break {
+  display: none;
+
+  @include mq($from: tablet) {
+    display: block;
+  }
 }
 
 .product-option__sales-copy--break {
