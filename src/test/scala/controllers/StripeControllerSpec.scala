@@ -345,6 +345,39 @@ class StripeControllerSpec extends PlaySpec with Status {
         status(stripeControllerResult).mustBe(400)
       }
 
+      "return a 400 response with an appropriate failure reason if the request contains an empty token" in {
+        val fixture = new StripeControllerFixture()(executionContext, context) {
+          when(mockStripeBackend.createCharge(any(), any()))
+            .thenReturn(stripeServiceResponse)
+          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
+            .thenReturn(mockStripeBackend)
+        }
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
+          .withJsonBody(parse(
+            """
+            {
+              "paymentData": {
+                "currency": "GBP",
+                "amount": 1.23,
+                "token": "",
+                "email": "email@theguardian.com"
+              },
+              "acquisitionData": {
+                "platform": "android"
+              }
+            }
+            """.stripMargin))
+
+        val stripeControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
+
+        status(stripeControllerResult).mustBe(400)
+
+        val expectedBody = Json.obj("type" -> "error", "error" -> "Empty string is not permitted for this field: DownField(token),DownField(paymentData)")
+        contentAsJson(stripeControllerResult).mustBe(expectedBody)
+
+      }
+
       "return a 402 response with an appropriate failure reason if the response from the service contains a CardException" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.createCharge(any(), any()))

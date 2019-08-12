@@ -7,6 +7,7 @@ import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, Event, ExternalAccount}
+import io.circe.Json
 import model.email.ContributorRow
 import model.paypal.PaypalApiError
 import model.stripe.{StripeApiError, _}
@@ -26,8 +27,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   //-- entities
+  val email = Json.fromString("email@email.com").as[NonEmptyString].right.get
+  val token = Json.fromString("token").as[NonEmptyString].right.get
   val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
-  val stripePaymentData = StripePaymentData("email@email.com", Currency.USD, 12, "token", None)
+  val stripePaymentData = StripePaymentData(email, Currency.USD, 12, token, None)
   val stripeChargeData = StripeChargeData(stripePaymentData, acquisitionData)
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo =  ClientBrowserInfo("","",None,"",countrySubdivisionCode)

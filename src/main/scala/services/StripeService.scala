@@ -30,8 +30,8 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
     Map[String, AnyRef](
       "amount" -> new Integer((data.paymentData.amount * 100).toInt), //-- stripe amount must be in pence
       "currency" -> data.paymentData.currency.entryName,
-      "source" -> data.paymentData.token,
-      "receipt_email" -> data.paymentData.email
+      "source" -> data.paymentData.token.value,
+      "receipt_email" -> data.paymentData.email.value
     ).asJava
 
   def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge] = {

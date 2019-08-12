@@ -43,8 +43,8 @@ class StripeBackend(
 
         cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
 
-        getOrCreateIdentityIdFromEmail(chargeData.paymentData.email).map { identityIdWithGuestAccountCreationToken =>
-          postPaymentTasks(chargeData.paymentData.email, chargeData, charge, clientBrowserInfo, identityIdWithGuestAccountCreationToken.map(_.identityId))
+        getOrCreateIdentityIdFromEmail(chargeData.paymentData.email.value).map { identityIdWithGuestAccountCreationToken =>
+          postPaymentTasks(chargeData.paymentData.email.value, chargeData, charge, clientBrowserInfo, identityIdWithGuestAccountCreationToken.map(_.identityId))
 
           StripeCreateChargeResponse.fromCharge(
             charge,

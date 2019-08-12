@@ -1,7 +1,7 @@
 package model.stripe
 
 import enumeratum.{CirceEnum, Enum, EnumEntry}
-import io.circe.Decoder
+import io.circe.{Decoder, Encoder}
 import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto._
 import model.{AcquisitionData, Currency}
@@ -13,6 +13,7 @@ import scala.collection.immutable.IndexedSeq
 object StripeJsonDecoder {
 
   import controllers.JsonReadableOps._
+  import NonEmptyString.decoder
 
   // This will decode Stripe charge data in the format expected by the old contributions-frontend API.
   private val legacyStripeChargeDataDecoder: Decoder[StripeChargeData] = Decoder.instance { cursor =>
@@ -20,8 +21,8 @@ object StripeJsonDecoder {
     for {
       currency <- downField("currency").as[String]
       amount <- downField("amount").as[BigDecimal]
-      token <- downField("token").as[String]
-      email <- downField("email").as[String]
+      token <- downField("token").as[NonEmptyString]
+      email <- downField("email").as[NonEmptyString]
       browserId <- downField("ophanBrowserId").as[Option[String]]
       visitId <- downField("ophanVisitId").as[Option[String]]
       pageviewId <- downField("ophanPageviewId").as[Option[String]]
@@ -73,12 +74,23 @@ object StripeJsonDecoder {
   implicit val stripeChargeDataDecoder: Decoder[StripeChargeData] = legacyStripeChargeDataDecoder.or(deriveDecoder[StripeChargeData])
 }
 
+// Private because it should only be constructed using the accompanying Decoder
+class NonEmptyString private(val value: String) extends AnyVal
+
+object NonEmptyString {
+  implicit val decoder: Decoder[NonEmptyString] = Decoder.decodeString
+    .ensure(_.nonEmpty, s"Empty string is not permitted for this field")
+    .map(s => new NonEmptyString(s))
+
+  implicit val encoder: Encoder[NonEmptyString] = Encoder.encodeString.contramap(_.value)
+}
+
 // https://stripe.com/docs/api/java#create_charge
 @JsonCodec case class StripePaymentData(
-  email: String,  //for receipt_email
+  email: NonEmptyString,  //for receipt_email
   currency: Currency,
   amount: BigDecimal,
-  token: String,
+  token: NonEmptyString,
   stripePaymentMethod: Option[StripePaymentMethod])
 
 sealed trait StripePaymentMethod extends EnumEntry
