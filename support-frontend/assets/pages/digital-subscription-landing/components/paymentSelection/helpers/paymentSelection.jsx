@@ -7,13 +7,17 @@ import { getDigitalCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { currencies } from 'helpers/internationalisation/currency';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
-import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import { type Option } from 'helpers/types/option';
 import { fixDecimals } from 'helpers/subscriptions';
 
-const getProductOptions = (productPrices, countryGroupId) => (
+// types
+import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { type Option } from 'helpers/types/option';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
+export const getProductOptions = (productPrices: ProductPrices, countryGroupId: CountryGroupId) => (
   productPrices[countryGroups[countryGroupId].name].NoFulfilmentOptions.NoProductOptions
 );
 
