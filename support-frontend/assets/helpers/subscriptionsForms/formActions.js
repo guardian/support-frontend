@@ -9,7 +9,10 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import type { FormField, Stage } from './formFields';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import * as storage from 'helpers/storage';
-import { trackPaymentMethodSelected } from 'helpers/tracking/ophan';
+import {
+  trackPaymentMethodSelected,
+  trackThankYouPageLoaded,
+} from 'helpers/tracking/behaviour';
 import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -17,11 +20,9 @@ import type { Action as DDAction } from 'components/directDebit/directDebitActio
 import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-  buildRegularPaymentRequest,
-  onPaymentAuthorised,
-} from 'helpers/subscriptionsForms/submit';
+import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -48,7 +49,16 @@ export type Action =
 
 // ----- Action Creators ----- //
 
-const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
+const setStage = (
+  stage: Stage,
+  product: SubscriptionProduct,
+  paymentMethod: ?PaymentMethod,
+): Action => {
+  if (stage === 'thankyou' || stage === 'thankyou-pending') {
+    trackThankYouPageLoaded(product, paymentMethod);
+  }
+  return { type: 'SET_STAGE', stage };
+};
 const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({
   type: 'SET_FORM_ERRORS',
   errors,
@@ -94,10 +104,9 @@ const formActionCreators = {
     (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
       const state = getState();
       onPaymentAuthorised(
+        authorisation,
         dispatch,
-        buildRegularPaymentRequest(state, authorisation),
-        state.page.csrf,
-        state.common.abParticipations,
+        state,
       );
     },
   setGiftStatus: (orderIsAGift: boolean | null): Action => ({

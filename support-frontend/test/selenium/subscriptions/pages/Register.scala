@@ -4,9 +4,9 @@ import org.scalatest.selenium.Page
 import java.net.URLEncoder
 
 import org.openqa.selenium.WebDriver
-import selenium.util.{Browser, Config, TestUser}
+import selenium.util.{Browser, Config, PostDeployTestUser}
 
-case class Register(testUser: TestUser, checkoutType: String)(implicit val webDriver: WebDriver) extends Page with Browser {
+case class Register(testUser: PostDeployTestUser, checkoutType: String)(implicit val webDriver: WebDriver) extends Page with Browser {
   private val returnUrlParam = URLEncoder.encode(s"${Config.supportFrontendUrl}/subscribe/$checkoutType/checkout", "UTF-8")
   val url = s"${Config.identityFrontendUrl}/register?returnUrl=$returnUrlParam&skipConfirmation=true&skipValidationReturn=true&clientId=subscriptions"
 

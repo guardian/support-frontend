@@ -17,6 +17,7 @@ export const Appearances = {
   green: 'green',
   greenHollow: 'greenHollow',
   greyHollow: 'greyHollow',
+  disabled: 'disabled',
 };
 export const Sides = {
   right: 'right', left: 'left',

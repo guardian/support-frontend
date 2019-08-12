@@ -2,7 +2,7 @@
 import type { ContributionType } from 'helpers/contributions';
 import { invalidReason } from 'helpers/checkoutForm/checkoutForm';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophan';
+import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 
 type OldFlowOrNewFlow = 'opf' | 'npf';
@@ -29,12 +29,12 @@ export const onFormSubmit = (params: FormSubmitParameters) => {
       if (params.handlePayment) {
         params.handlePayment();
       }
-      trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-allowed-for-user-type-${userType}`);
+      trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-allowed-for-user-type-${userType}`, params.paymentMethod, 'Contribution');
     } else {
-      trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-blocked-because-user-type-is-${userType}`);
+      trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-blocked-because-user-type-is-${userType}`, params.paymentMethod, 'Contribution');
     }
   } else {
-    trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-blocked-because-form-not-valid${invalidReason(params.form)}`);
+    trackCheckoutSubmitAttempt(componentId, `${params.flowPrefix}-blocked-because-form-not-valid${invalidReason(params.form)}`, params.paymentMethod, 'Contribution');
   }
   params.setCheckoutFormHasBeenSubmitted();
 };

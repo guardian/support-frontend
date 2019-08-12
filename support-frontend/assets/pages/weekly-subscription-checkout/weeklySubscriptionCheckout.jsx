@@ -9,7 +9,6 @@ import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy
@@ -30,6 +29,7 @@ import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/delive
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { formatMachineDate } from 'helpers/dateConversions';
+import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
@@ -53,14 +53,13 @@ const store = pageInit(
 );
 
 const { countryGroupId } = store.getState().common.internationalisation;
-const { stage } = store.getState().page.checkout;
 
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header display={stage === 'checkout' ? 'checkout' : 'guardianLogo'} />}
+      header={<HeaderWrapper />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="GuardianWeekly" />

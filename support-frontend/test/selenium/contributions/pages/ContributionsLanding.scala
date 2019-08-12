@@ -24,6 +24,8 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   private val payPalSelector = cssSelector(".form__radio-group-label[for='paymentMethodSelector-PayPal']")
   private val stateSelector = id("contributionState")
 
+  private val stripeOverlayIframe = cssSelector(".stripe_checkout_app")
+
   private object RegisterFields {
     private val firstName = id("contributionFirstName")
     private val lastName = id("contributionLastName")
@@ -38,20 +40,24 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
       }
     }
 
-    def clear(): Unit = {
+    def clear(hasNameFields: Boolean): Unit = {
       clearValue(email)
-      clearValue(firstName)
-      clearValue(lastName)
+      if (hasNameFields) {
+        clearValue(firstName)
+        clearValue(lastName)
+      }
     }
   }
 
   def fillInPersonalDetails(hasNameFields: Boolean) { RegisterFields.fillIn(hasNameFields) }
 
-  def clearForm(): Unit = RegisterFields.clear()
+  def clearForm(hasNameFields: Boolean): Unit = RegisterFields.clear(hasNameFields)
 
   def selectState: Unit = setSingleSelectionValue(stateSelector, "NY")
 
   def selectStripePayment(): Unit = clickOn(stripeSelector)
+
+  def selectPayPalPayment(): Unit = clickOn(payPalSelector)
 
   def pageHasLoaded: Boolean = {
     pageHasElement(contributeButton)
@@ -67,5 +73,10 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   def clickOtherAmount: Unit = clickOn(otherAmountButton)
 
   def enterAmount(amount: Double): Unit = setValueSlowly(otherAmount, amount.toString)
+
+  def hasStripeOverlay: Boolean = {
+    Thread.sleep(500)
+    pageHasAtLeastOneVisibleElement(stripeOverlayIframe)
+  }
 
 }

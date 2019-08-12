@@ -2,15 +2,22 @@ package com.gu.support.config
 
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.AUD
+import com.gu.monitoring.SafeLogger
 import com.typesafe.config.Config
 
 
 case class StripeConfig(defaultAccount: StripeAccountConfig, australiaAccount: StripeAccountConfig, version: Option[String] = None)
   extends TouchpointConfig {
-  def forCurrency(country: Option[Currency] = None) =
-    country match {
-      case Some(AUD) => australiaAccount
-      case _ => defaultAccount
+  def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig =
+    maybeCurrency match {
+      case Some(AUD) => {
+        SafeLogger.info(s"StripeConfig: getting AU stripe account for $maybeCurrency")
+        australiaAccount
+      }
+      case _ => {
+        SafeLogger.info(s"StripeConfig: getting default stripe account for $maybeCurrency")
+        defaultAccount
+      }
     }
 }
 

@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "simple-configuration-ssm" % "1.5.1",
   "org.scalatest" %% "scalatest" % "3.0.5" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
-  "org.mockito" % "mockito-core" % "2.11.0" % Test,
+  "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "1.7.5",
   "com.amazonaws" % "aws-java-sdk-kms" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
@@ -25,23 +25,23 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.dripower" %% "play-circe" % "2609.1",
-  "com.gu" %% "fezziwig" % "0.8",
+  "com.gu" %% "fezziwig" % "1.2",
   "com.typesafe.akka" %% "akka-agent" % "2.5.14",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-play-auth" % "2.5",
+  "com.gu.identity" %% "identity-auth-play" % "3.184-M7",
   "com.gu" %% "identity-test-users" % "0.6",
   "com.google.guava" % "guava" % "25.0-jre",
   "com.netaporter" %% "scala-uri" % "0.4.16",
   "com.gu" %% "play-googleauth" % "0.7.6",
   "io.github.bonigarcia" % "webdrivermanager" % "3.3.0" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
-  "com.squareup.okhttp3" % "okhttp" % "3.9.0",
+  "com.squareup.okhttp3" % "okhttp" % "3.10.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
-  "com.gu" %% "tip" % "0.5.1",
+  "com.gu" %% "tip" % "0.6.1",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
@@ -68,15 +68,19 @@ riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-frontend/cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffArtifactResources ++= getFiles(file("support-frontend/public/compiled-assets"), "assets-static")
 
-def getFiles(f: File): Seq[(File, String)] = {
-  f match {
-    case file if file.isFile => Seq((file, file.toString.replace("support-frontend/", "")))
-    case dir if dir.isDirectory => dir.listFiles.toSeq.flatMap(getFiles)
+def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
+  def getFiles0(f: File): Seq[(File, String)] = {
+    f match {
+      case file if file.isFile => Seq((file, file.toString.replace(rootFile.getPath, deployName)))
+      case dir if dir.isDirectory => dir.listFiles.toSeq.flatMap(getFiles0)
+    }
   }
+  getFiles0(rootFile)
 }
 
-riffRaffArtifactResources ++= getFiles(file("support-frontend/storybook-static"))
+riffRaffArtifactResources ++= getFiles(file("support-frontend/storybook-static"), "storybook-static")
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",

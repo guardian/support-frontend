@@ -2,9 +2,15 @@
 
 // ----- Imports ----- //
 
-import { type Campaign, deriveSubsAcquisitionData, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
-import { type Option } from 'helpers/types/option';
+import {
+  type Campaign,
+  deriveSubsAcquisitionData,
+  type ReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
+import {
+  type CountryGroupId,
+  countryGroups,
+} from 'helpers/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
@@ -12,9 +18,6 @@ import {
   Annual,
   type DigitalBillingPeriod,
   Monthly,
-  Quarterly,
-  SixWeekly,
-  type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { getAnnualPlanPromoCode, getIntcmp, getPromoCode } from './flashSale';
@@ -40,57 +43,12 @@ const subsUrl = `https://subscribe.${getBaseDomain()}`;
 const patronsUrl = 'https://patrons.theguardian.com';
 const profileUrl = `https://profile.${getBaseDomain()}`;
 const manageUrl = `https://manage.${getBaseDomain()}`;
-const homeDeliveryUrl = `${getBaseDomain()}/help/2017/dec/11/help-with-delivery#nav1`;
+const homeDeliveryUrl = `https://www.${getBaseDomain()}/help/2017/dec/11/help-with-delivery#nav1`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
-const emailPreferencesUrl = `${profileUrl}/email-prefs`;
 const myAccountUrl = `${profileUrl}/account/edit`;
 const manageSubsUrl = `${manageUrl}/subscriptions`;
 
-
-function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGroupId) {
-
-  const sixWeekDomestic = 'weeklydomestic-gwoct18-sixforsix-domestic';
-  const sixWeekRow = 'weeklyrestofworld-gwoct18-sixforsix-row';
-
-  const quarterDomestic = 'weeklydomestic-gwoct18-quarterly-domestic';
-  const quarterRow = 'weeklyrestofworld-gwoct18-quarterly-row';
-
-  const yearDomestic = 'weeklydomestic-gwoct18-annual-domestic';
-  const yearRow = 'weeklyrestofworld-gwoct18-annual-row';
-
-  const urls = {
-    [SixWeekly]: {
-      GBPCountries: sixWeekDomestic,
-      UnitedStates: sixWeekDomestic,
-      AUDCountries: sixWeekDomestic,
-      NZDCountries: sixWeekDomestic,
-      EURCountries: sixWeekDomestic,
-      Canada: sixWeekDomestic,
-      International: sixWeekRow,
-    },
-    [Quarterly]: {
-      GBPCountries: quarterDomestic,
-      UnitedStates: quarterDomestic,
-      AUDCountries: quarterDomestic,
-      NZDCountries: quarterDomestic,
-      EURCountries: quarterDomestic,
-      Canada: quarterDomestic,
-      International: quarterRow,
-    },
-    [Annual]: {
-      GBPCountries: yearDomestic,
-      UnitedStates: yearDomestic,
-      AUDCountries: yearDomestic,
-      NZDCountries: yearDomestic,
-      EURCountries: yearDomestic,
-      Canada: yearDomestic,
-      International: yearRow,
-    },
-  };
-
-  return urls[period][countryGroup];
-}
 
 const memUrls: {
   [MemProduct]: string,
@@ -270,34 +228,6 @@ function getDigitalCheckout(
 }
 
 
-// Builds a link to the GW checkout.
-function getWeeklyCheckout(
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  period: WeeklyBillingPeriod,
-  cgId: CountryGroupId,
-  nativeAbParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
-  promoCode: Option<string>,
-): string {
-  const acquisitionData = deriveSubsAcquisitionData(
-    referrerAcquisitionData,
-    nativeAbParticipations,
-    optimizeExperiments,
-  );
-
-  const url = getWeeklyZuoraCode(period, cgId);
-  const params = new URLSearchParams(window.location.search);
-
-  params.set('acquisitionData', JSON.stringify(acquisitionData));
-  params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
-
-  if (promoCode) {
-    params.set('promoCode', promoCode);
-  }
-
-  return `${subsUrl}/checkout/${url}?${params.toString()}`;
-}
-
 function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
   const groupFromId = countryGroups[cgId];
   if (groupFromId) {
@@ -348,9 +278,7 @@ export {
   getDailyEditionUrl,
   getSignoutUrl,
   getReauthenticateUrl,
-  emailPreferencesUrl,
   myAccountUrl,
   manageSubsUrl,
-  getWeeklyCheckout,
   homeDeliveryUrl,
 };

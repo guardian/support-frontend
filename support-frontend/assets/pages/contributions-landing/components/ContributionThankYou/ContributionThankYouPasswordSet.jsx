@@ -3,26 +3,18 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
-import { type ContributionType } from 'helpers/contributions';
-import MarketingConsent from '../MarketingConsentContainer';
+import MarketingConsent from 'pages/contributions-landing/components/MarketingConsentContainer';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 
-type PropTypes = {|
-  contributionType: ContributionType,
-|};
-
-const mapStateToProps = state => ({
-  contributionType: state.page.form.contributionType,
-});
+// ----- Types ----- //
 
 // ----- Render ----- //
 
-function ContributionThankYouPasswordSet(props: PropTypes) {
+function ContributionThankYouPasswordSet() {
   const title = 'You now have a Guardian account';
   const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
@@ -36,7 +28,7 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
           </p>
         </section>
         <MarketingConsent />
-        <ContributionSurvey isRunning={false} contributionType={props.contributionType} />
+        <ContributionSurvey isRunning={false} />
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
@@ -56,4 +48,4 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps)(ContributionThankYouPasswordSet);
+export default ContributionThankYouPasswordSet;

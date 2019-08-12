@@ -55,7 +55,8 @@ const isSwitchOn = (switchName: string): boolean => {
 };
 
 const isTestSwitchedOn = (testName: string): boolean => {
-  const test = getGlobal(`settings.switches.experiments${testName}`);
+  const test = getGlobal(`settings.switches.experiments.${testName}`);
+
   if (test) {
     return !!(test && test.state && test.state === 'On');
   }

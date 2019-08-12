@@ -117,3 +117,17 @@
     display: block;
   }
 }
+
+.product-option__sales-copy--break {
+  display: none;
+
+  @include mq($from: mobileLandscape) {
+    display: block;
+  }
+}
+
+.product-option__button--variantA {
+  .component-button {
+    max-width: 210px;
+  }
+}

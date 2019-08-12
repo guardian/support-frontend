@@ -28,7 +28,7 @@ const subscriptionsTermsLinks: {
   PremiumTier: 'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions',
   DailyEdition: 'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions',
   GuardianWeekly: 'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions',
-  Paper: 'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions',
+  Paper: 'https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions',
   PaperAndDigital: 'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions',
 };
 

@@ -2,28 +2,49 @@
 
 // ----- Imports ----- //
 
-import 'ophan';
+import * as ophan from 'ophan';
 import type { Store } from 'redux';
-import { applyMiddleware, combineReducers, compose, createStore, type Reducer } from 'redux';
+import {
+  applyMiddleware,
+  combineReducers,
+  compose,
+  createStore,
+  type Reducer,
+} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import type { Participations } from 'helpers/abTests/abtest';
-import { renderError } from 'helpers/render';
 import * as abTest from 'helpers/abTests/abtest';
+import { renderError } from 'helpers/render';
 import { overrideAmountsForParticipations } from 'helpers/abTests/helpers';
 import type { Settings } from 'helpers/settings';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
-import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
-import { detect as detectCurrency, type IsoCurrency } from 'helpers/internationalisation/currency';
+import {
+  detect as detectCountry,
+  type IsoCountry,
+} from 'helpers/internationalisation/country';
+import {
+  detect as detectCurrency,
+  type IsoCurrency,
+} from 'helpers/internationalisation/currency';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createCommonReducer } from 'helpers/page/commonReducer';
-import { getCampaign, getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { type CountryGroupId, detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { addOptimizeExperiments, readExperimentsFromSession } from 'helpers/optimize/optimize';
-import storeReferrer from 'helpers/tracking/awin';
+import {
+  getCampaign,
+  getReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
+import {
+  type CountryGroupId,
+  detect as detectCountryGroup,
+} from 'helpers/internationalisation/countryGroup';
 import type { OptimizeExperiment } from 'helpers/optimize/optimize';
+import {
+  addOptimizeExperiments,
+  readExperimentsFromSession,
+} from 'helpers/optimize/optimize';
+import storeReferrer from 'helpers/tracking/awin';
 import { setExperimentVariant } from 'helpers/page/commonActions';
 import {
   trackAbTests,
@@ -31,6 +52,7 @@ import {
 } from 'helpers/tracking/ophan';
 import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 import { getSettings } from 'helpers/globals';
+import { doNotTrack } from 'helpers/tracking/doNotTrack';
 
 if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');
@@ -46,20 +68,14 @@ export type ReduxState<PageState> = {|
 
 // ----- Functions ----- //
 
-function doNotTrack(): boolean {
-  // $FlowIgnore
-  const doNotTrackFlag = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-
-  return doNotTrackFlag === '1' || doNotTrackFlag === 'yes';
-}
-
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations): void {
   if (!(doNotTrack())) {
     googleTagManager.init(participations);
     storeReferrer();
+    ophan.init();
+    trackAbTests(participations);
   }
-  trackAbTests(participations);
   // Logging.
   logger.init();
 }

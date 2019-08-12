@@ -28,22 +28,27 @@ class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter w
 
   feature("Digital Pack checkout") {
     scenario("Stripe checkout") {
-      testCheckout("Digital Pack", new DigitalPackCheckout, payWithStripe)
+      testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
     }
   }
 
   feature("Paper checkout") {
     scenario("Direct Debit checkout") {
-      testCheckout("Paper", new PaperCheckout, payWithDirectDebit)
+      testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
     }
   }
 
-  def testCheckout(checkoutName: String, checkoutPage: CheckoutPage, paymentFunction: CheckoutPage => Unit): Unit = {
-    val testUser = new TestUser(driverConfig)
+  feature("Guardian Weekly checkout") {
+    scenario("Direct Debit checkout") {
+      testCheckout("Guardian Weekly", new GuardianWeeklyCheckout, new WeeklyProductPage, payWithDirectDebit)
+    }
+  }
 
-    val landingPage = new DigitalPackSubs()
-    Given("that a user goes to the UK landing page")
-    goTo(landingPage)
+  def testCheckout(checkoutName: String, checkoutPage: CheckoutPage, productPage: ProductPage, paymentFunction: CheckoutPage => Unit): Unit = {
+    val testUser = new PostDeployTestUser(driverConfig)
+
+    Given("that a user goes to the UK product page")
+    goTo(productPage)
 
     Given(s"that a user goes to the $checkoutName checkout page")
     goTo(checkoutPage)

@@ -3,20 +3,15 @@
 @import '~stylesheets/gu-sass/gu-sass';
 @import '~components/progressMessage/progressMessage';
 @import '~components/spinners/animatedDots';
-@import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-@import '~components/directDebit/directDebitForm/directDebitForm';
 @import '~components/errorMessage/errorMessage';
 @import '~components/ctaLink/ctaLink';
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/button/button';
-@import '~components/marketingConsentNew/marketingConsent';
-@import '~components/marketingConsentNew/marketingConsent';
+@import '~components/marketingConsent/marketingConsent';
 @import '~components/spreadTheWord/spreadTheWord';
 @import '~components/socialShare/socialShare';
 @import '~pages/contributions-landing/components/ContributionThankYou/ContributionThankYou';
 @import '~pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
-@import '~pages/contributions-landing/components/ContributionSurvey/ContributionSurvey';
-
 
 $content-left-margin-leftCol: calc(50% - 480px);
 

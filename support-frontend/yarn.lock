@@ -10264,10 +10264,10 @@ opener@^1.5.1:
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.1.tgz#6d2f0e77f1a0af0032aca716c2c1fbb8e7e8abed"
   integrity sha512-goYSy5c2UXE4Ra1xixabeVh1guIX/ZV/YokJksb6q2lubWu6UbvPQ20p542/sFIll1nl8JnCyK9oBaOcCWXwvA==
 
-ophan-tracker-js@^1.3.13:
-  version "1.3.13"
-  resolved "https://registry.yarnpkg.com/ophan-tracker-js/-/ophan-tracker-js-1.3.13.tgz#715aa8655c1ec4c8e45379bae55a95b535522ff6"
-  integrity sha512-oxzDPBc01CsHhsHZKt8g839vSevshbJSVo+kXh17lSTYn5nDirLJT/5n8L9LeCoJmpNwP9We6T9AzKbuCbFu8w==
+ophan-tracker-js@^1.3.17:
+  version "1.3.17"
+  resolved "https://registry.yarnpkg.com/ophan-tracker-js/-/ophan-tracker-js-1.3.17.tgz#49bf3984978356f0c5fc719592d1300347311785"
+  integrity sha512-22x+66NntYxML1YGFkJmOc8eErXnhkQg4hKAY1egsjQjJNWHDvT/YGuyMSIz2gl7nZYFLH5nZTCeP3AqZxJRCw==
 
 opn@5.4.0, opn@^5.4.0:
   version "5.4.0"

@@ -5,7 +5,7 @@ import { routes } from 'helpers/routes';
 import { getPatronsLink } from 'helpers/externalLinks';
 import { type Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { clickedEvent } from 'helpers/tracking/clickTracking';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { type CountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // types
@@ -84,7 +84,7 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
             }
           >
             <a
-              onClick={() => { clickedEvent(['header-link', trackAs, location].join(' - ')); }}
+              onClick={() => { trackComponentClick(['header-link', trackAs, location].join(' - ')); }}
               className="component-header-links__link"
               href={href}
               target={opensInNewWindow ? '_blank' : null}

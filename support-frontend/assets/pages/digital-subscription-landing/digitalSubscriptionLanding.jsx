@@ -16,27 +16,21 @@ import headerWithCountrySwitcherContainer
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
-import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
-import Content from 'components/content/content';
-import Text from 'components/text/text';
-import ProductPageInfoChip
-  from 'components/productPage/productPageInfoChip/productPageInfoChip';
+
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection
   from './components/independentJournalismSection';
-import ProductBlock from './components/productBlock';
 import ProductBlockB from './components/productBlockB/productBlockB';
 import PromotionPopUp from './components/promotionPopUp';
-import Form from './components/form';
 
 import './digitalSubscriptionLanding.scss';
 import './components/theMoment.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
-import digitalSubscriptionLandingReducer
-  from './digitalSubscriptionLandingReducer';
+import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
+import { isPostDeployUser } from 'helpers/user/user';
 
 // ----- Redux Store ----- //
 
@@ -74,9 +68,11 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 const mapStateToProps = (state) => {
   const { optimizeExperiments } = state.common;
-  const dailyEditionsExperimentId = 'xOzjpaFDQlO5L6_ORotRWA';
+  const dailyEditionsExperimentId = 'wEirukCSRkKyneyREe1Jew';
   const dailyEditionsVariant = optimizeExperiments
-    .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
+    .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0
+    && !isPostDeployUser();
+
 
   return {
     dailyEditionsVariant,
@@ -144,30 +140,8 @@ class LandingPage extends Component<Props, State> {
             countryGroupId={countryGroupId}
             dailyEditionsVariant={dailyEditionsVariant}
           />
-          {
-          dailyEditionsVariant ?
-            (
-              <div>
-                <ProductBlockB />
-                <AdFreeSectionB />
-              </div>
-            ) : (
-              <div>
-                <ProductBlock countryGroupId={countryGroupId} />
-                <AdFreeSection headingSize={2} />
-
-                <Content appearance="feature" id="subscribe">
-                  <Text title="Subscribe to Digital Pack today">
-                    <p>Choose how you’d like to pay</p>
-                  </Text>
-                  <Form />
-                  <ProductPageInfoChip >
-                      You can cancel your subscription at any time
-                  </ProductPageInfoChip>
-                </Content>
-              </div>
-            )
-        }
+          <ProductBlockB />
+          <AdFreeSectionB />
           <IndependentJournalismSection />
           <PromotionPopUp />
           <ConsentBanner />

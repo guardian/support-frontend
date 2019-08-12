@@ -7,7 +7,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
-import com.gu.identity.play.IdUser
+import com.gu.identity.model.{User => IdUser}
 import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
@@ -15,10 +15,12 @@ import config.StringsConfig
 import cookies.ServersideAbTestCookie
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import lib.RedirectWithEncodedQueryString
+import models.GeoData
 import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
-import utils.RequestCountry._
+import utils.FastlyGEOIP._
 import views.{EmptyDiv, Preload}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -49,15 +51,8 @@ class Application(
     Ok(views.html.contributionsRedirect())
   }
 
-  //Encode the querystring parameter keys, as Play only encodes the values
-  def redirectWithEncodedQueryString(url: String, queryString: Map[String, Seq[String]] = Map.empty, status: Int = SEE_OTHER): Result = Redirect(
-    url = url,
-    queryString = queryString.map { case (k,v) => java.net.URLEncoder.encode(k, "utf-8") -> v },
-    status = status
-  )
-
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.fastlyCountry match {
+    val redirectUrl = request.geoData.countryGroup match {
       case Some(UK) => buildCanonicalShowcaseLink("uk")
       case Some(US) => "/us/contribute"
       case Some(Australia) => "/au/contribute"
@@ -68,33 +63,33 @@ class Application(
       case _ => "/uk/contribute"
     }
 
-    redirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
+    RedirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = List(getRedirectUrl(request.fastlyCountry), campaignCode)
+    val url = List(getRedirectUrl(request.geoData.countryGroup), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
 
-    redirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    redirectWithEncodedQueryString(location, request.queryString, status = FOUND)
+    RedirectWithEncodedQueryString(location, request.queryString, status = FOUND)
   }
 
   def permanentRedirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    redirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
+    RedirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
   }
 
   // Country code is required here because it's a parameter in the route.
   def permanentRedirectWithCountry(country: String, location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    redirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
+    RedirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
   }
 
   def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
-    redirectWithEncodedQueryString(location + path, request.queryString)
+    RedirectWithEncodedQueryString(location + path, request.queryString)
   }
 
   def unsupportedBrowser: Action[AnyContent] = NoCacheAction() { implicit request =>
@@ -109,19 +104,22 @@ class Application(
   ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
+    val geoData = request.geoData
+
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
 
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption, guestAccountCreationToken)),
-      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption, guestAccountCreationToken))
+    request.user.traverse[Attempt, IdUser](user => identityService.getUser(user.minimalUser)).fold(
+      _ => Ok(contributionsHtml(countryCode, geoData, None, campaignCodeOption, guestAccountCreationToken)),
+      user => Ok(contributionsHtml(countryCode, geoData, user, campaignCodeOption, guestAccountCreationToken))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String], guestAccountCreationToken: Option[String])
+  private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],
+                                campaignCode: Option[String], guestAccountCreationToken: Option[String])
                                (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
@@ -144,7 +142,6 @@ class Application(
       mainElement = mainElement,
       js = js,
       css = css,
-      fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.contributionsLandingDescription,
       oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
       oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
@@ -156,7 +153,9 @@ class Application(
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       idUser = idUser,
-      guestAccountCreationToken = guestAccountCreationToken
+      guestAccountCreationToken = guestAccountCreationToken,
+      fontLoaderBundle = fontLoaderBundle,
+      geoData = geoData
     )
   }
 
@@ -180,7 +179,7 @@ class Application(
   // Remove trailing slashes so that /uk/ redirects to /uk
   def removeTrailingSlash(path: String): Action[AnyContent] = CachedAction() {
     request =>
-      redirectWithEncodedQueryString("/" + path, request.queryString, MOVED_PERMANENTLY)
+      RedirectWithEncodedQueryString("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
 
 

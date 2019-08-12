@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { trackComponentClick } from 'helpers/tracking/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionType } from 'helpers/contributions';
 
 // ---- Types ----- //

@@ -53,8 +53,12 @@ import {
   checkoutFormIsValid,
   validateCheckoutForm,
 } from 'helpers/subscriptionsForms/formValidation';
-import { submitCheckoutForm } from 'helpers/subscriptionsForms/submit';
+import {
+  submitCheckoutForm,
+  trackSubmitAttempt,
+} from 'helpers/subscriptionsForms/submit';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
+import { PayPal } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -111,8 +115,16 @@ function mapDispatchToProps() {
     formIsValid: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => checkoutFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
       submitCheckoutForm(dispatch, getState()),
-    validateForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
-      validateCheckoutForm(dispatch, getState()),
+    validateForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      const state = getState();
+      validateCheckoutForm(dispatch, state);
+      // We need to track PayPal payment attempts here because PayPal behaves
+      // differently to other payment methods. All others are tracked in submit.js
+      const { paymentMethod } = state.page.checkout;
+      if (paymentMethod === PayPal) {
+        trackSubmitAttempt(PayPal, DigitalPack);
+      }
+    },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
     signOut,
   };

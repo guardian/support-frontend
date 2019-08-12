@@ -2,6 +2,7 @@
 
 import { setSession } from 'helpers/storage';
 import { type Action } from './userActions';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
 
 // ----- Actions Creators ----- //
 
@@ -57,6 +58,22 @@ function setGnmMarketing(preference: boolean): Action {
   return { type: 'SET_GNM_MARKETING', preference };
 }
 
+function setEmailValidated(emailValidated: boolean): Action {
+  return { type: 'SET_EMAIL_VALIDATED', emailValidated };
+}
+
+function setIsReturningContributor(isReturningContributor: boolean): Action {
+  // JTL: We want to send an Ophan event when we recognize a user is a returning contributor and on the landing page
+  const isReturningContributorOnLandingPage = isReturningContributor &&
+    !!document.location.pathname.match(/^https:\/\/support\.\w+\.com\/\w\w\/contribute/);
+
+  if (isReturningContributorOnLandingPage) {
+    trackComponentLoad('returning-single-contributor-landing-page-view');
+  }
+
+  return { type: 'SET_IS_RETURNING_CONTRIBUTOR', isReturningContributor };
+}
+
 const defaultUserActionFunctions = {
   setId,
   setDisplayName,
@@ -70,6 +87,8 @@ const defaultUserActionFunctions = {
   setTestUser,
   setPostDeploymentTestUser,
   setGnmMarketing,
+  setEmailValidated,
+  setIsReturningContributor,
 };
 
 export { defaultUserActionFunctions };

@@ -58,6 +58,28 @@ const signOut = () => { window.location.href = getSignoutUrl(); };
 
 const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
 
+// JTL: The user cookie is built to have particular values at
+// particular indices by design. Index 7 in the cookie object represents
+// whether a signed in user is validated or not. Though it's not ideal
+// to grab values at unnamed indexes, this is a decision made a long
+// time ago, on which a lot of other code relies, so it's unlikely
+// there will be a breaking change affecting our base without some advance
+// communication to a broader segment of engineering that also uses
+// the user cookie.
+const getEmailValidatedFromUserCookie = (guuCookie: ?string) => {
+  if (guuCookie) {
+    const tokens = guuCookie.split('.');
+    try {
+      const parsed = JSON.parse(atob(tokens[0]));
+      return !!parsed[7];
+    } catch (e) {
+      return false;
+    }
+  }
+
+  return false;
+};
+
 const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActionFunctions) => {
 
   const {
@@ -68,9 +90,12 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     setFullName,
     setIsSignedIn,
     setEmail,
+    setStateField,
     setIsRecurringContributor,
     setTestUser,
     setPostDeploymentTestUser,
+    setEmailValidated,
+    setIsReturningContributor,
   } = actions;
 
   const windowHasUser = window.guardian && window.guardian.user;
@@ -109,6 +134,10 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setIsRecurringContributor());
   }
 
+  if (getCookie('gu.contributions.contrib-timestamp')) {
+    dispatch(setIsReturningContributor(true));
+  }
+
   if (windowHasUser) {
     dispatch(setId(window.guardian.user.id));
     dispatch(setEmail(window.guardian.user.email));
@@ -116,8 +145,11 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setFirstName(window.guardian.user.firstName));
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
+    // default value from Identity Billing Address, or Fastly GEO-IP
+    dispatch(setStateField(window.guardian.user.address4 || window.guardian.geoip.stateCode));
     dispatch(setIsSignedIn(true));
-  } else if (userAppearsLoggedIn) {
+    dispatch(setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))));
+  } else if (userAppearsLoggedIn) { // TODO - remove in another PR as this condition is deprecated
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
@@ -137,8 +169,11 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
         });
       }
     });
-  } else if (emailFromBrowser) {
-    dispatch(setEmail(emailFromBrowser));
+  } else {
+    if (emailFromBrowser) {
+      dispatch(setEmail(emailFromBrowser));
+    }
+    dispatch(setStateField(window.guardian.geoip.stateCode));
   }
 };
 
@@ -152,4 +187,5 @@ export {
   isPostDeployUser,
   signOut,
   doesUserAppearToBeSignedIn,
+  getEmailValidatedFromUserCookie,
 };

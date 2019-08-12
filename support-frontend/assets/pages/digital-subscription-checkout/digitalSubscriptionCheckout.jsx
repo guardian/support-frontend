@@ -9,7 +9,6 @@ import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
@@ -27,6 +26,7 @@ import { Monthly } from 'helpers/billingPeriods';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { DigitalPack } from 'helpers/subscriptions';
+import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
@@ -44,14 +44,13 @@ const reducer = (commonState: CommonState) => createCheckoutReducer(
 const store = pageInit(reducer, true);
 
 const { countryGroupId } = store.getState().common.internationalisation;
-const { stage } = store.getState().page.checkout;
 
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header display={stage === 'checkout' ? 'checkout' : 'guardianLogo'} />}
+      header={<HeaderWrapper />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />

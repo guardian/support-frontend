@@ -47,6 +47,8 @@ lazy val commonSettings = Seq(
     url("https://github.com/guardian/support-frontend"),
     "scm:git:git@github.com:guardian/support-frontend.git"
   )),
+  // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
+  updateOptions := updateOptions.value.withCachedResolution(true)
 )
 
 lazy val commonDependencies = Seq(
@@ -55,7 +57,14 @@ lazy val commonDependencies = Seq(
 )
 
 lazy val root = (project in file("."))
-  .aggregate(`support-frontend`, `support-workers`, `support-models`, `support-config`, `support-internationalisation`, `support-services`)
+  .aggregate(
+    `support-frontend`,
+    `support-workers`,
+    `support-models`,
+    `support-config`,
+    `support-internationalisation`,
+    `support-services`
+  )
 
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)

@@ -2,13 +2,14 @@
 
 import uuidv4 from 'uuid';
 import * as storage from 'helpers/storage';
+import type { Participations } from 'helpers/abTests/abtest';
 import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getTrackingConsent } from './thirdPartyTrackingConsent';
-
+import { maybeTrack } from './doNotTrack';
+import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent' | 'AppStoreCtaClick';
@@ -40,14 +41,6 @@ function getOrderId() {
     storage.setSession('orderId', value);
   }
   return value;
-}
-
-function getContributionType() {
-  const param = getQueryParameter('contribType');
-  if (param) {
-    storage.setSession('contribType', param);
-  }
-  return (storage.getSession('contribType') || 'one_off').toLowerCase(); // PayPal route doesn't set the contribType
 }
 
 function getCurrency(): string {
@@ -121,55 +114,74 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
   });
 }
 
+function ophanPaymentMethod(paymentMethod: ?PaymentMethod) {
+  switch (paymentMethod) {
+    case DirectDebit: return 'Gocardless';
+    case PayPal: return 'Paypal';
+    default: return paymentMethod;
+  }
+
+}
+
+// Perform any conversions on the data being sent
+// for instance we need to convert the payment method
+// from our PaymentMethod type to Ophan's type so that
+// it is consistent with the conversion data from
+// the acquisition-event-producer library
+function mapFields(data: Object) {
+  const { paymentMethod, ...others } = data;
+  return {
+    paymentMethod: ophanPaymentMethod(paymentMethod),
+    ...others,
+  };
+}
+
+function push(data: Object) {
+  window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
+  window.googleTagManagerDataLayer.push(mapFields(data));
+}
+
+function getData(
+  event: EventType,
+  participations: Participations,
+  paymentRequestApiStatus?: PaymentRequestAPIStatus,
+) {
+  const orderId = getOrderId();
+  const value = getContributionValue();
+  const currency = getCurrency();
+  return {
+    event,
+    // orderId anonymously identifies this user in this session.
+    // We need this to prevent page refreshes on conversion pages being
+    // treated as new conversions
+    orderId,
+    currency,
+    value,
+    paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
+    campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+    campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+    internalCampaignCode: getQueryParameter('INTCMP') || undefined,
+    experience: getVariantsAsString(participations),
+    paymentRequestApiStatus,
+    thirdPartyTrackingConsent: getTrackingConsent(),
+  };
+}
+
 function sendData(
   event: EventType,
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
-  try {
-    const orderId = getOrderId();
-    const value = getContributionValue();
-    const currency = getCurrency();
-    window.googleTagManagerDataLayer.push({
-      event,
-      // orderId anonymously identifies this user in this session.
-      // We need this to prevent page refreshes on conversion pages being
-      // treated as new conversions
-      orderId,
-      currency,
-      value,
-      paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
-      campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-      campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-      internalCampaignCode: getQueryParameter('INTCMP') || undefined,
-      experience: getVariantsAsString(participations),
-      paymentRequestApiStatus,
-      thirdPartyTrackingConsent: getTrackingConsent(),
-      ecommerce: {
-        currencyCode: currency,
-        purchase: {
-          actionField: {
-            id: orderId,
-            revenue: value, // Total transaction value (incl. tax and shipping)
-          },
-          products: [{
-            name: `${getContributionType()}_contribution`,
-            category: 'contribution',
-            price: value,
-            quantity: 1,
-          }],
-        },
-      },
-    });
-  } catch (e) {
-    console.log(`Error in GTM tracking ${e}`);
-  }
+  maybeTrack(() => {
+    try {
+      push(getData(event, participations, paymentRequestApiStatus));
+    } catch (e) {
+      console.log(`Error in GTM tracking ${e}`);
+    }
+  });
 }
 
-
 function pushToDataLayer(event: EventType, participations: Participations) {
-  window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
-
   try {
     getPaymentAPIStatus()
       .then((paymentRequestApiStatus) => {
@@ -192,15 +204,16 @@ function successfulConversion(participations: Participations) {
   sendData('SuccessfulConversion', participations);
 }
 
-function gaEvent(gaEventData: GaEventData) {
-  if (window.googleTagManagerDataLayer) {
-    window.googleTagManagerDataLayer.push({
+function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
+  maybeTrack(() => {
+    push({
       event: 'GAEvent',
       eventCategory: gaEventData.category,
       eventAction: gaEventData.action,
       eventLabel: gaEventData.label,
+      ...additionalFields,
     });
-  }
+  });
 }
 
 function appStoreCtaClick() {
@@ -215,4 +228,5 @@ export {
   successfulConversion,
   appStoreCtaClick,
   gaPropertyId,
+  mapFields,
 };

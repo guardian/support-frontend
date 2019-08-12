@@ -299,13 +299,13 @@ Resources:
   #     cloudwatch handles that is to create a new metric for every value dimension value
 
 
-  NoDigipackAcquisitionInEightHoursAlarm:
+  NoDigipackAcquisitionInTwelveHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful digipack checkouts in 8h
+      AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful digipack checkouts in 12h
       Metrics:
         - Id: e1
           Expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])"
@@ -363,7 +363,7 @@ Resources:
           ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      EvaluationPeriods: 96
+      EvaluationPeriods: 144
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 

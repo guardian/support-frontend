@@ -13,10 +13,9 @@ import play.api.test.Helpers._
 import play.api.mvc.RequestHeader
 import play.api.Environment
 import assets.{AssetsResolver, RefPath}
-import com.gu.identity.play.PublicFields
-import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
+import com.gu.identity.model.{PublicFields, User => IdUser}
 import config.Configuration.IdentityUrl
-import services.{HttpIdentityService, MembersDataService, TestUserService}
+import services._
 import services.MembersDataService._
 import fixtures.TestCSRFComponents
 import play.twirl.api.Html
@@ -36,13 +35,18 @@ trait DisplayFormMocks extends TestCSRFComponents {
     override protected def loadSsrHtmlCache: Map[String,Html] = Map()
   }
 
-  val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
+  val idUser = IdUser(
+    id = "123",
+    primaryEmailAddress = "test@gu.com",
+    publicFields = PublicFields(displayName = Some("test-user"))
+  )
+
+  val asyncAuthenticationService = mock[AsyncAuthenticationService]
 
   val loggedInActionRefiner = new CustomActionBuilders(
-    authenticatedIdUserProvider = _ => Some(authenticatedIdUser),
+    asyncAuthenticationService,
     idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
-    testUsers = testUsers,
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
@@ -50,10 +54,9 @@ trait DisplayFormMocks extends TestCSRFComponents {
   )
 
   val loggedOutActionRefiner = new CustomActionBuilders(
-    authenticatedIdUserProvider = _ => None,
+    asyncAuthenticationService,
     idWebAppUrl = IdentityUrl("https://identity-url.local"),
     supportUrl = "",
-    testUsers = testUsers,
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
@@ -68,8 +71,8 @@ trait DisplayFormMocks extends TestCSRFComponents {
     membersDataService
   }
 
-  def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): HttpIdentityService = {
-    val m = mock[HttpIdentityService]
+  def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): IdentityService = {
+    val m = mock[IdentityService]
     when(
       m.getUser(argEq(data._1))(any[RequestHeader], any[ExecutionContext])
     ).thenReturn(EitherT.fromEither[Future](data._2))
