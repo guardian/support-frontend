@@ -1,5 +1,8 @@
 package com.gu.zuora
 
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, OffsetDateTime}
+
 import cats.data.OptionT
 import cats.implicits._
 import com.gu.helpers.WebServiceHelper
@@ -29,9 +32,11 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
   def getAccount(accountNumber: String): Future[GetAccountResponse] =
     get[GetAccountResponse](s"accounts/$accountNumber", authHeaders)
 
-  def getAccountFields(identityId: IdentityId): Future[List[DomainAccount]] = {
+  def getAccountFields(identityId: IdentityId, now: OffsetDateTime): Future[List[DomainAccount]] = {
+    val recentDays = 28
+    val recently = now.minusDays(recentDays).format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
     // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
-    val queryData = QueryData(s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}'")
+    val queryData = QueryData(s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}' and UpdatedDate > '$recently'")
     postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(DomainAccount.fromAccountRecord))
   }
 

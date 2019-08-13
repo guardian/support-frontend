@@ -1,6 +1,7 @@
 package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
+import java.time.OffsetDateTime
 
 import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvider}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
@@ -90,7 +91,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     // Need to return None from the Zuora service `getRecurringSubscription`
     // method or the subscribe step gets skipped
     // if these methods weren't coupled into one class then we could pass them separately and avoid reflection
-    when(mockZuora.getAccountFields(any[IdentityId]))
+    when(mockZuora.getAccountFields(any[IdentityId], any[OffsetDateTime]))
       .thenReturn(Future.successful(Nil))
     when(mockZuora.getSubscriptions(any[ZuoraAccountNumber]))
       .thenReturn(Future.successful(Nil))

@@ -67,7 +67,9 @@ class EndToEndSpec extends LambdaSpec {
 
     def last(handler: Handler[_, _]): ByteArrayOutputStream = {
       val output = new ByteArrayOutputStream()
+      SafeLogger.info(s"calling handler: ${handler.getClass}")
       handler.handleRequest(stream, output, context)
+      SafeLogger.info(s"finished handler: ${handler.getClass}")
       output
     }
 

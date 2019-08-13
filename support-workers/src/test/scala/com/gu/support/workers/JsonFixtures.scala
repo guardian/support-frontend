@@ -534,7 +534,8 @@ object JsonFixtures {
               "Id": "0036E00000VlOPDQA3",
               "AccountId": "0016E00000f17pYQAQ"
           },
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          $salesforceContactsJson
       }
       """
 

@@ -1,5 +1,6 @@
 package com.gu.zuora
 
+import java.time.{OffsetDateTime, ZoneOffset}
 import java.util.UUID
 
 import com.gu.config.Configuration.zuoraConfigProvider
@@ -19,6 +20,8 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
 
   def uatService: ZuoraService = new ZuoraService(zuoraConfigProvider.get(true), RequestRunners.configurableFutureRunner(30.seconds))
 
+  val earlyDate = OffsetDateTime.of(2010, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
+
   "ZuoraService" should "retrieve an account" in {
     uatService.getAccount(Fixtures.accountNumber).map {
       response =>
@@ -28,7 +31,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve account ids from an Identity id" in {
-    uatService.getAccountFields(IdentityId("30001758").get).map {
+    uatService.getAccountFields(IdentityId("30001758").get, earlyDate).map {
       response =>
         response.nonEmpty should be(true)
     }
@@ -48,13 +51,25 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "be able to find a monthly recurring subscription" in {
-    GetSubscriptionWithCurrentRequestId(uatService, UUID.fromString("cac90497-3001-4dbc-88c3-1f47d54c511c"), IdentityId("30001758").get, Monthly).map {
+    GetSubscriptionWithCurrentRequestId(
+      uatService,
+      UUID.fromString("cac90497-3001-4dbc-88c3-1f47d54c511c"),
+      IdentityId("30001758").get,
+      Monthly,
+      () => earlyDate
+    ).map {
       _.flatMap(_.ratePlans.headOption.map(_.productName)) should be(Some("Contributor"))
     }
   }
 
   it should "ignore a subscription with wrong session id" in {
-    GetSubscriptionWithCurrentRequestId(uatService, UUID.fromString("00000000-3001-4dbc-88c3-1f47d54c511c"), IdentityId("30001758").get, Monthly).map {
+    GetSubscriptionWithCurrentRequestId(
+      uatService,
+      UUID.fromString("00000000-3001-4dbc-88c3-1f47d54c511c"),
+      IdentityId("30001758").get,
+      Monthly,
+      () => earlyDate
+    ).map {
       _ should be(None)
     }
   }
