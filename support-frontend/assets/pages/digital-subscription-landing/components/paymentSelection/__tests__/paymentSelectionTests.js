@@ -1,6 +1,6 @@
 // flow
 
-import { getProductOptions, getCurrencySymbol, getDisplayPrice } from '../helpers/paymentSelection';
+import { getProductOptions, getCurrencySymbol, getDisplayPrice, getProductPrice } from '../helpers/paymentSelection';
 
 jest.mock('ophan', () => {}); // required to get the test to run! why?
 
@@ -26,7 +26,7 @@ describe.only('PaymentSelection', () => {
       },
       Annual: {
         GBP: {
-          price: 17.99,
+          price: 109.99,
           currency: {
             glyph: '£',
             extendedGlyph: '£',
@@ -65,6 +65,13 @@ describe.only('PaymentSelection', () => {
     const isoCurrency = 'GBP';
     const price = 12.9899999999;
     expect(getDisplayPrice(isoCurrency, price)).toEqual('£12.99');
+  });
+
+  it('should get the product price from the product options for a billing period', () => {
+    const BillingPeriod = 'Monthly';
+    const currencyId = 'GBP';
+
+    expect(getProductPrice(productOptions, BillingPeriod, currencyId)).toBe(17.99);
   });
 
 });

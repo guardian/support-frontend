@@ -14,9 +14,10 @@ import { fixDecimals } from 'helpers/subscriptions';
 import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { type Option } from 'helpers/types/option';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { ProductPrices, BillingPeriods } from 'helpers/productPrice/productPrices';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 
 export type PaymentOption = {
   title: string,
@@ -37,7 +38,11 @@ export const getCurrencySymbol = (currencyId: IsoCurrency): string => currencies
 export const getDisplayPrice = (currencyId: IsoCurrency, price: number) =>
   getCurrencySymbol(currencyId) + fixDecimals(price);
 
-const getProductPrice = (productOptions, billingPeriodTitle, currencyId) => (
+export const getProductPrice = (
+  productOptions: BillingPeriods,
+  billingPeriodTitle: DigitalBillingPeriod,
+  currencyId: IsoCurrency,
+): number => (
   productOptions[billingPeriodTitle][currencyId].price
 );
 
