@@ -26,7 +26,6 @@ import { DirectDebit, PayPal } from 'helpers/paymentMethods';
 import {
   type Action,
   updatePaymentMethod,
-  setThirdPartyPaymentLibrary,
   updateSelectedExistingPaymentMethod,
 } from '../contributionsLandingActions';
 import { isUsableExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
@@ -55,11 +54,9 @@ type PropTypes = {|
   existingPaymentMethods: ExistingPaymentMethod[] | typeof undefined,
   paymentMethod: PaymentMethod,
   existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-  onPaymentAuthorisation: PaymentAuthorisation => void,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   updatePaymentMethod: PaymentMethod => Action,
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
-  setThirdPartyPaymentLibrary: (?{ [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary }}) => Action,
   isTestUser: boolean,
   switches: Switches,
 |};
@@ -80,7 +77,6 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = {
   updatePaymentMethod,
   updateSelectedExistingPaymentMethod,
-  setThirdPartyPaymentLibrary,
 };
 
 // ----- Render ----- //

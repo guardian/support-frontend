@@ -24,7 +24,7 @@ import {
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { StripeChargeData } from 'helpers/paymentIntegrations/oneOffContributions';
+import type { StripeChargeData, CreateStripePaymentIntentRequest } from 'helpers/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
@@ -365,6 +365,15 @@ const executeStripeOneOffPayment = (
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage)));
 
+const createStripePaymentIntent = (
+  data: CreateStripePaymentIntentRequest,
+  setGuestToken: (string) => void,
+  setThankYouPage: (ThankYouPageStage) => void,
+) =>
+  (dispatch: Dispatch<Action>): Promise<PaymentResult> => {
+    debugger
+    return dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage)));
+  };
 
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
@@ -416,11 +425,20 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
       if (paymentAuthorisation.paymentMethod === Stripe) {
-        return dispatch(executeStripeOneOffPayment(
-          stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
+        //TODO - create Payment Intent with paymentMethodId etc
+        return dispatch(createStripePaymentIntent(
+          {
+            ...stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
+            paymentMethodId: paymentAuthorisation.paymentMethodId
+          },
           (token: string) => dispatch(setGuestAccountCreationToken(token)),
           (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
         ));
+        // return dispatch(executeStripeOneOffPayment(
+        //   stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
+        //   (token: string) => dispatch(setGuestAccountCreationToken(token)),
+        //   (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+        // ));
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
       return Promise.resolve(error);
@@ -479,6 +497,18 @@ const onStripePaymentRequestApiPaymentAuthorised =
       );
     };
 
+const onStripePaymentIntentApiPaymentAuthorised =
+  (paymentAuthorisation: PaymentAuthorisation) =>
+    (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
+      const state = getState();
+      debugger
+      return paymentAuthorisationHandlers.ONE_OFF.Stripe(
+        dispatch,
+        state,
+        paymentAuthorisation,
+      );
+    };
+
 export {
   updateContributionTypeAndPaymentMethod,
   updatePaymentMethod,
@@ -509,6 +539,7 @@ export {
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
+  onStripePaymentIntentApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,
   setStripeV3HasLoaded,
   setTickerGoalReached,

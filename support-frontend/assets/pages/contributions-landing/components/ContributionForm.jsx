@@ -47,6 +47,7 @@ import {
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
+import StripeCardFormContainer from "./StripeCardForm/StripeCardFormContainer";
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
@@ -173,7 +174,16 @@ const formHandlersForRecurring = {
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
-    Stripe: openStripePopup,
+    // Stripe: openStripePopup,
+    Stripe: (props: PropTypes) => {
+      //TODO - trigger paymentAuthorisationHandler
+      const paymentLibraries = props.thirdPartyPaymentLibraries[props.contributionType];
+      debugger
+      if (paymentLibraries && paymentLibraries.Stripe) {
+        debugger
+        props.thirdPartyPaymentLibraries[props.contributionType]()
+      }
+    },
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);
       props.createOneOffPayPalPayment({
@@ -269,7 +279,19 @@ function withProps(props: PropTypes) {
       />
       <div className={classNameWithModifiers('form', ['content'])}>
         <ContributionFormFields />
-        <PaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
+        <PaymentMethodSelector />
+
+        <StripeCardFormContainer
+          setStripeHasLoaded={props.setStripeV3HasLoaded}
+          stripeHasLoaded={props.stripeV3HasLoaded}
+          currency={props.currency}
+          contributionType={props.contributionType}
+          isTestUser={props.isTestUser}
+          country={props.country}
+          otherAmounts={props.otherAmounts}
+          selectedAmounts={props.selectedAmounts}
+        />
+
         <ContributionErrorMessage />
         <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       </div>

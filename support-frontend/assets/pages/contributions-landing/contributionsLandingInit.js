@@ -99,14 +99,15 @@ function initialiseStripeCheckout(
   isTestUser: boolean,
   dispatch: Function,
 ) {
-  const library: ThirdPartyPaymentLibrary =
-    setupStripeCheckout(
-      onPaymentAuthorisation,
-      stripeAccountForContributionType[contributionType],
-      currencyId,
-      isTestUser,
-    );
-  dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
+  //TODO - will not be used
+  // const library: ThirdPartyPaymentLibrary =
+  //   setupStripeCheckout(
+  //     onPaymentAuthorisation,
+  //     stripeAccountForContributionType[contributionType],
+  //     currencyId,
+  //     isTestUser,
+  //   );
+  // dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
 }
 
 
