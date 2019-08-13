@@ -94,7 +94,7 @@ const content = (
           <LargeParagraph>Inside the essential magazine from
           The&nbsp;Guardian, you&rsquo;ll find expert opinion, insight and culture, curated to
           bring you a progressive, international perspective. You&rsquo;ll also discover
-          challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
+          challenging new puzzles every week. Subscribe today and get delivery worldwide.
           </LargeParagraph>
         </Text>
       </Content>
