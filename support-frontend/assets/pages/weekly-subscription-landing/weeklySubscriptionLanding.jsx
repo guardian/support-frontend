@@ -102,10 +102,10 @@ const content = (
         <Text title="As a subscriber you’ll enjoy" />
         <Outset>
           <ProductPageFeatures features={[
-            { title: 'Up to 35% off the retail cover price' },
-            { title: 'Free international shipping' },
+            { title: 'Every issue delivered with up to 35% off the cover price' },
+            { title: 'Access to the magazine\'s digital archive' },
             { title: 'A weekly email newsletter from the editor' },
-            { title: 'Access to every edition on any device, through PressReader' },
+            { title: 'The very best of the Guardian\'s puzzles' },
           ]}
           />
         </Outset>
@@ -119,7 +119,7 @@ const content = (
               Gifting is available
         </ProductPageInfoChip>
         <ProductPageInfoChip icon={<SvgInformation />}>
-              You can cancel your subscription at any time
+              Delivery cost included. You can cancel your subscription at any time
         </ProductPageInfoChip>
       </Content>
       <Content>
