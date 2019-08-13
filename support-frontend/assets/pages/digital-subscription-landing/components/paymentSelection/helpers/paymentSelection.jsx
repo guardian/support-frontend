@@ -24,7 +24,8 @@ export const getProductOptions = (productPrices: ProductPrices, countryGroupId: 
 
 export const getCurrencySymbol = (currencyId: IsoCurrency): string => currencies[currencyId].glyph;
 
-const getDisplayPrice = (currencyId, price) => getCurrencySymbol(currencyId) + fixDecimals(price);
+export const getDisplayPrice = (currencyId: IsoCurrency, price: number) =>
+  getCurrencySymbol(currencyId) + fixDecimals(price);
 
 const getProductPrice = (productOptions, billingPeriodTitle, currencyId) => (
   productOptions[billingPeriodTitle][currencyId].price
