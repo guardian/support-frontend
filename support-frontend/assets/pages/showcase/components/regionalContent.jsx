@@ -5,43 +5,42 @@ export const regionalContent = {
     title: 'Windrush',
     caption: (
       <span>
-        In 2018, we revealed that the British Home Office had wrongly detained and threatened with deportation&#32;
-        hundreds of UK residents. Among their number were members of the Windrush Generation &mdash; so named after&#32;
-        the &quot;Empire Windrush&quot;, the ship that brought one of the&#32;
-        first groups of West Indian migrants to the UK. The scandal prompted a wider debate about British&#32;
-        immigration policy.
+        The Guardian is committed to holding power to account at every turn &mdash; from our reporting on&#32;
+        the Windrush revelations to the Cambridge Analytica scandal &mdash; while keeping the climate emergency&#32;
+        front and centre at all times. We will continue to report vigorously on the fallout from the EU referendum,&#32;
+        the immigration crisis, and data privacy issues. We remain dedicated to truth, to giving a voice to those&#32;
+        who have previously gone unheard, and to helping bring about a more hopeful future.
       </span>),
     images: {
-      first: 'windrushPortrait',
-      second: 'windrushWelcome',
-      third: 'windrushLammy',
-      fourth: 'showcaseWindrush',
+      first: 'showcaseUKChris',
+      second: 'showcaseUKBrexit',
+      third: 'showcaseUKFloods',
+      fourth: 'showcaseUKWindrushGroup',
     },
   },
   AUDCountries: {
     title: 'Climate crisis',
     caption: (
       <span>
-        <i>Guardian Australia</i> gives climate crisis reporting the prominence it deserves,&#32;
-        stories that often go unreported in the mainstream media. At this critical time for our planet,&#32;
-        we are determined to inform readers about threats, consequences and solutions based on scientific&#32;
-        facts, not political prejudice or business interests.
+        <i>Guardian Australia</i> has made the climate emergency a top editorial priority, covering issues from the&#32;
+        management of the Murray-Darling basin, to farming in a changing climate, and disappearing species across&#32;
+        the nation. Our political team in Canberra continues to report on the issues of the day and, across&#32;
+        Australia, our award-winning coverage of Indigenous affairs and immigration issues remains core to our work.
       </span>),
     images: {
-      first: 'showcaseGreta',
-      second: 'showcaseProtest',
-      third: 'showcaseProtestKids',
-      fourth: 'showcaseIndustry',
+      first: 'showcaseAusAsylum',
+      second: 'showcaseAusScottMorrison',
+      third: 'showcaseAusProtest',
+      fourth: 'showcaseAusAboriginal',
     },
   },
   UnitedStates: {
-    title: 'Cambridge Analytica',
-    caption: 'A year-long investigation in which we revealed that 50 million Facebook profiles had been harvested without their consent by data analytics firm Cambridge Analytica, which worked with Trump\'s election team and the Brexit campaign.',
+    caption: 'From reproductive rights to the climate crisis; from the unchecked power of Big Tech to the fast-approaching 2020 election, and the changes it could bring for the nation and the world, Guardian US is committed to reporting the big issues of the day with honesty and integrity, to giving a voice to those who have previously gone unheard, and helping bring about a more hopeful future.',
     images: {
-      first: 'showcaseImpeach',
-      second: 'showcaseTrump',
-      third: 'showcaseNancyP',
-      fourth: 'showcaseMueller',
+      first: 'showcaseUSTrump',
+      second: 'showcaseUSZuckerberg',
+      third: 'showcaseUSCongresswomen',
+      fourth: 'showcaseUSProtest',
     },
   },
 };

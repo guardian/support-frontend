@@ -9,10 +9,9 @@ import { regionalContent } from './regionalContent';
 import HeroImg from './hero.svg';
 import './hero.scss';
 
-const Caption = (props: { className: string, captionTitle: String, captionText: String }) => (
+const Caption = (props: { className: string, captionText: String }) => (
   <div className={props.className}>
     <figcaption className="showcase-hero__caption">
-      <strong>{props.captionTitle}</strong>
       <p>{props.captionText}</p>
     </figcaption>
   </div>
@@ -50,7 +49,6 @@ export default function Hero(props: { countryGroupId: CountryGroupId }) {
           <div className="showcase-hero__image showcase-hero__image--first">
             <Caption
               className="showcase-hero__caption--desktop"
-              captionTitle={regionalContent[countrySelector].title}
               captionText={regionalContent[countrySelector].caption}
             />
             <div>
