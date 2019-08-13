@@ -46,7 +46,7 @@ export const getProductPrice = (
   productOptions[billingPeriodTitle][currencyId].price
 );
 
-const getSavingPercentage = (annualCost, annualizedMonthlyCost) => `${Math.round((1 - (annualCost / annualizedMonthlyCost)) * 100)}%`;
+export const getSavingPercentage = (annualCost: number, monthlyCostAnnualized: number) => `${Math.round((1 - (annualCost / monthlyCostAnnualized)) * 100)}%`;
 
 const BILLING_PERIOD = {
   [Monthly]: {

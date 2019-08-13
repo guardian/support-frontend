@@ -1,6 +1,6 @@
 // flow
 
-import { getProductOptions, getCurrencySymbol, getDisplayPrice, getProductPrice } from '../helpers/paymentSelection';
+import { getProductOptions, getCurrencySymbol, getDisplayPrice, getProductPrice, getSavingPercentage } from '../helpers/paymentSelection';
 
 jest.mock('ophan', () => {}); // required to get the test to run! why?
 
@@ -72,6 +72,13 @@ describe.only('PaymentSelection', () => {
     const currencyId = 'GBP';
 
     expect(getProductPrice(productOptions, BillingPeriod, currencyId)).toBe(17.99);
+  });
+
+  it('should return saving percentage', () => {
+    const annualCost = 100;
+    const monthlyCostAnnualized = 150;
+
+    expect(getSavingPercentage(annualCost, monthlyCostAnnualized)).toBe('33%');
   });
 
 });
