@@ -18,6 +18,16 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
+export type PaymentOption = {
+  title: string,
+  singlePeriod: string,
+  href: string,
+  salesCopy: { control: () => Element<'span'>, variantA: () => Element<'span'>},
+  offer: Option<string>,
+  price: Option<string>,
+  onClick: Function,
+}
+
 export const getProductOptions = (productPrices: ProductPrices, countryGroupId: CountryGroupId) => (
   productPrices[countryGroups[countryGroupId].name].NoFulfilmentOptions.NoProductOptions
 );
@@ -74,16 +84,6 @@ const BILLING_PERIOD = {
     ),
   },
 };
-
-export type PaymentOption = {
-  title: string,
-  singlePeriod: string,
-  href: string,
-  salesCopy: { control: () => Element<'span'>, variantA: () => Element<'span'>},
-  offer: Option<string>,
-  price: Option<string>,
-  onClick: Function,
-}
 
 // state
 const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> } => {
