@@ -75,8 +75,7 @@ const selectedCountryGroup = countryGroups[countryGroupId];
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
-// 30 months: 30 * 30.417 average days per month = 913 days
-const cookieDaysToLive = 913;
+const cookieDaysToLive = 365;
 
 const setOneOffContributionCookie = () => {
   setCookie(
