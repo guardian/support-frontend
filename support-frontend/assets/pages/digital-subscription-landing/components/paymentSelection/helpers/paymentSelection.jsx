@@ -16,12 +16,13 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import { type Option } from 'helpers/types/option';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 export const getProductOptions = (productPrices: ProductPrices, countryGroupId: CountryGroupId) => (
   productPrices[countryGroups[countryGroupId].name].NoFulfilmentOptions.NoProductOptions
 );
 
-const getCurrencySymbol = currencyId => currencies[currencyId].glyph;
+export const getCurrencySymbol = (currencyId: IsoCurrency): string => currencies[currencyId].glyph;
 
 const getDisplayPrice = (currencyId, price) => getCurrencySymbol(currencyId) + fixDecimals(price);
 
