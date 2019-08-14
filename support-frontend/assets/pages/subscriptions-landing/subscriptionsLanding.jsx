@@ -25,7 +25,7 @@ const store = pageInit();
 const Header = headerWithCountrySwitcherContainer({
   path: '/subscribe/weekly',
   countryGroupId,
-  listOfCountries: [
+  listOfCountryGroups: [
     GBPCountries,
     UnitedStates,
     AUDCountries,

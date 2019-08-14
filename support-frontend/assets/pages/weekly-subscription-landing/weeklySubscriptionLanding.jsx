@@ -68,7 +68,7 @@ const reactElementId: {
 const Header = headerWithCountrySwitcherContainer({
   path: '/subscribe/weekly',
   countryGroupId,
-  listOfCountries: [
+  listOfCountryGroups: [
     GBPCountries,
     UnitedStates,
     AUDCountries,
