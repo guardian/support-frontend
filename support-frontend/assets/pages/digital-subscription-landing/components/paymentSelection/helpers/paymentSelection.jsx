@@ -105,7 +105,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   const saving = getDisplayPrice(currencyId, annualizedMonthlyCost - annualCost);
   const offer = getSavingPercentage(annualCost, annualizedMonthlyCost);
 
-  const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map((productTitle: BillingPeriod) => {
+  const createPaymentOption = (productTitle: BillingPeriod): PaymentOption => {
 
     const billingPeriodTitle = productTitle === 'Monthly' || productTitle === 'Annual' ? productTitle : 'Monthly';
     const displayPrice = getDisplayPrice(currencyId, getProductPrice(productOptions, billingPeriodTitle, currencyId));
@@ -120,7 +120,9 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
       offer,
     };
 
-  });
+  };
+
+  const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map(createPaymentOption);
 
   return {
     paymentOptions,

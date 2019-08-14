@@ -1,18 +1,27 @@
 // flow
 
-import { getProductOptions, getCurrencySymbol, getDisplayPrice, getProductPrice, getSavingPercentage } from '../helpers/paymentSelection';
+import {
+  getProductOptions,
+  getCurrencySymbol,
+  getDisplayPrice,
+  getProductPrice,
+  getSavingPercentage,
+  mapStateToProps,
+} from '../helpers/paymentSelection';
 
 jest.mock('ophan', () => {}); // required to get the test to run! why?
 
-describe.only('PaymentSelection', () => {
+const functionReplacer = (k, v) => {
+  if (typeof v === 'function') { return 'function'; } return v;
+};
+
+describe('PaymentSelection', () => {
   let productPrices;
   let productOptions;
+  let state;
 
   beforeEach(() => {
-    // create an object with all country groups
-    // start with an array with all country groups
-    // then create an object containing all the options
-    // remove some to the options on the object
+
     productOptions = {
       Monthly: {
         GBP: {
@@ -40,6 +49,16 @@ describe.only('PaymentSelection', () => {
       'United Kingdom': {
         NoFulfilmentOptions: {
           NoProductOptions: productOptions,
+        },
+      },
+    };
+
+    state = {
+      page: { productPrices },
+      common: {
+        internationalisation: {
+          countryGroupId: 'GBPCountries',
+          currencyId: 'GBP',
         },
       },
     };
@@ -80,6 +99,50 @@ describe.only('PaymentSelection', () => {
 
     expect(getSavingPercentage(annualCost, monthlyCostAnnualized)).toBe('33%');
   });
+
+  describe('mapStateToProps', () => {
+    it('should return a payment options object for mapStateToProps', () => {
+
+      const anonymous = () => {};
+
+      const expected = {
+        paymentOptions: [
+          {
+            title: 'Monthly',
+            singlePeriod: 'month',
+            price: '£17.99',
+            href: 'http://localhost/subscribe/digital/checkout?promoCode=DXX83X',
+            onClick: anonymous,
+            salesCopy: {
+              control: () => {},
+              variantA: () => {},
+            },
+            offer: '49%',
+          },
+          {
+            href: 'http://localhost/subscribe/digital/checkout?promoCode=DXX83X&period=Annual',
+            offer: '49%',
+            onClick: anonymous,
+            price: '£109.99',
+            salesCopy: {
+              control: () => {},
+              variantA: () => {},
+            },
+            singlePeriod: 'year',
+            title: 'Annual',
+          },
+        ],
+      };
+
+      const result = mapStateToProps(state);
+
+      // JSON.stringify is used to fix the problem of comparing deep equality in the object
+      expect(JSON.stringify(result.paymentOptions[0], functionReplacer))
+        .toEqual(JSON.stringify(expected.paymentOptions[0], functionReplacer));
+    });
+
+  });
+
 
 });
 
