@@ -1,10 +1,11 @@
 package com.gu.support.workers.lambdas
 
+import java.time.OffsetDateTime
+
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -12,13 +13,16 @@ import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
-import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+
+
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
+
+  import com.gu.FutureLogging._
 
   def this() = this(ServiceProvider)
 
@@ -28,14 +32,20 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     context: Context,
     services: Services
   ): FutureHandlerResult = {
+    val now = () => OffsetDateTime.now
     val subscribeItem = buildSubscribeItem(state, services.promotionService)
     for {
       identityId <- Future.fromTry(IdentityId(state.user.id))
-      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod)
+        .withLogging("identity id")
+      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
+          .withLogging("GetSubscriptionWithCurrentRequestId")
       previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
+          .withLogging("PreviewPaymentSchedule")
       thankYouState <- maybeDomainSubscription match {
         case Some(domainSubscription) => skipSubscribe(state, requestInfo, previewPaymentSchedule, domainSubscription)
+            .withLogging("skipSubscribe")
         case None => subscribe(state, subscribeItem, services).map(response => toHandlerResult(state, response, previewPaymentSchedule, requestInfo))
+          .withLogging("subscribe")
       }
     } yield thankYouState
   }
