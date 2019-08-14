@@ -13,18 +13,19 @@ import scala.concurrent.Future
 import scala.reflect.{ClassTag, classTag}
 import scala.util.{Failure, Success, Try}
 
-sealed abstract class WebServiceHelperErrorBase(responseCode: String, responseBody: Option[String]) extends Throwable
+sealed abstract class WebServiceHelperErrorBase(responseCode: String, responseBody: String) extends Throwable
 
 case class WebServiceHelperError[T: ClassTag](
   responseCode: String,
-  responseBody: Option[String]
+  responseBody: String,
+  message: String
 ) extends WebServiceHelperErrorBase(responseCode, responseBody) {
-  override def getMessage: String = s"${classTag[T]} - $responseCode: $responseBody"
+  override def getMessage: String = s"${classTag[T]} - $message: $responseCode: $responseBody"
 }
 
 case class WebServiceClientError(
   responseCode: String,
-  responseBody: Option[String]
+  responseBody: String
 ) extends WebServiceHelperErrorBase(responseCode, responseBody) {
   override def getMessage: String = s"$responseCode: $responseBody"
 }
@@ -69,25 +70,22 @@ trait WebServiceHelper[Error <: Throwable] {
       response <- httpClient(req)
       decodedResponse <- {
         val code = response.code().toString
-        SafeLogger.info(s"response code: $code")
-        val contentType = Option(response.header("content-type"))
-        SafeLogger.info(s"content type: $contentType")
-        val maybeResponseBody = Option(response.body).flatMap(body => Try(body.string()).toOption)
-        SafeLogger.info(s"response body: ${maybeResponseBody.map(_.length)} bytes")
         val failableDecodedResponse = for {
-          _ <- code.splitAt(1) match {
-            case ("2", _) => Success(())
-            case ("4", _) => Failure(maybeResponseBody.flatMap(decodeError(_).right.toOption).getOrElse(
-              WebServiceClientError(code, maybeResponseBody))
+          body <- Option(response.body).toRight(WebServiceHelperError(code, "", "no body")).toTry
+          contentType <- Option(body.contentType()).toRight(WebServiceHelperError(code, "", "no content type")).toTry
+          bodyString <- Try(body.string())
+          _ = SafeLogger.info(s"response $code body: ${bodyString.length} bytes")
+          _ <- if (contentType.`type`() == "application" && contentType.subtype() == "json") Success(())
+          else Failure(WebServiceHelperError(code, bodyString, s"wrong content type"))
+          result <- code.splitAt(1) match {
+            case ("2", _) => decode[A](bodyString).left.map { err =>
+              WebServiceHelperError[A](code, bodyString, s"failed to parse response: $err")
+            }.toTry
+            case ("4", _) => Failure((decodeError(bodyString).right.toOption).getOrElse(
+              WebServiceClientError(code, bodyString))
             )
-            case _ => Failure(WebServiceHelperError[A](code, maybeResponseBody))
+            case _ => Failure(WebServiceHelperError[A](code, bodyString, "unrecognised response code"))
           }
-          responseBody <- maybeResponseBody.toRight(WebServiceHelperError(code, maybeResponseBody)).toTry
-          result <- decode[A](responseBody)/*.left.map { err =>
-            throw decodeError(responseBody).right.getOrElse(
-              WebServiceHelperError[A](code, maybeResponseBody)
-            )
-          }*/.toTry
         } yield result
         Future.fromTry(failableDecodedResponse)
       }

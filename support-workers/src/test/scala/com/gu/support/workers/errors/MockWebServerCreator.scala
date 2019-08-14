@@ -8,7 +8,7 @@ trait MockWebServerCreator {
     // instance for every unit test.
     val server = new MockWebServer
     // Add the response which you want to serve
-    server.enqueue(new MockResponse().setResponseCode(responseCode).setBody(body))
+    server.enqueue(new MockResponse().setResponseCode(responseCode).setBody(body).setHeader("Content-type", "application/json"))
     server.start()
     server
   }
