@@ -9,7 +9,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import {
   getPaymentMethodToSelect,
   toHumanReadableContributionType,
-  toHumanReadableContributionTypeAbTest,
 } from 'helpers/checkouts';
 
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -30,7 +29,6 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
-  landingPageChoiceArchitectureLabelsTestVariants: LandingPageChoiceArchitectureLabelsTestVariants
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -39,7 +37,6 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-  landingPageChoiceArchitectureLabelsTestVariants: state.common.abParticipations.landingPageChoiceArchitectureLabels,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
