@@ -18,7 +18,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
 import type { ContributionTypes, ContributionTypeSetting } from 'helpers/contributions';
-import type { LandingPageChoiceArchitectureLabelsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
