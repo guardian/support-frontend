@@ -11,9 +11,22 @@ import scala.collection.immutable.Map.empty
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.reflect.{ClassTag, classTag}
+import scala.util.{Failure, Success, Try}
 
-case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: String) extends Throwable {
+sealed abstract class WebServiceHelperErrorBase(responseCode: String, responseBody: Option[String]) extends Throwable
+
+case class WebServiceHelperError[T: ClassTag](
+  responseCode: String,
+  responseBody: Option[String]
+) extends WebServiceHelperErrorBase(responseCode, responseBody) {
   override def getMessage: String = s"${classTag[T]} - $responseCode: $responseBody"
+}
+
+case class WebServiceClientError(
+  responseCode: String,
+  responseBody: Option[String]
+) extends WebServiceHelperErrorBase(responseCode, responseBody) {
+  override def getMessage: String = s"$responseCode: $responseBody"
 }
 
 /**
@@ -51,19 +64,35 @@ trait WebServiceHelper[Error <: Throwable] {
    */
   private def request[A](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val req = wsPreExecute(rb).build()
-    SafeLogger.debug(s"Issuing request ${req.method} ${req.url}")
+    SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
     for {
       response <- httpClient(req)
-    } yield {
-      val responseBody = response.body.string()
-      SafeLogger.debug(responseBody)
-      decode[A](responseBody) match {
-        case Left(err) => throw decodeError(responseBody).right.getOrElse(
-          WebServiceHelperError[A](response.code(), responseBody)
-        )
-        case Right(value) => value
+      decodedResponse <- {
+        val code = response.code().toString
+        SafeLogger.info(s"response code: $code")
+        val contentType = Option(response.header("content-type"))
+        SafeLogger.info(s"content type: $contentType")
+        val maybeResponseBody = Option(response.body).flatMap(body => Try(body.string()).toOption)
+        SafeLogger.info(s"response body: ${maybeResponseBody.map(_.length)} bytes")
+        val failableDecodedResponse = for {
+          _ <- code.splitAt(1) match {
+            case ("2", _) => Success(())
+            case ("4", _) => Failure(maybeResponseBody.flatMap(decodeError(_).right.toOption).getOrElse(
+              WebServiceClientError(code, maybeResponseBody))
+            )
+            case _ => Failure(WebServiceHelperError[A](code, maybeResponseBody))
+          }
+          responseBody <- maybeResponseBody.toRight(WebServiceHelperError(code, maybeResponseBody)).toTry
+          result <- decode[A](responseBody)/*.left.map { err =>
+            throw decodeError(responseBody).right.getOrElse(
+              WebServiceHelperError[A](code, maybeResponseBody)
+            )
+          }*/.toTry
+        } yield result
+        Future.fromTry(failableDecodedResponse)
       }
-    }
+    } yield decodedResponse
+
   }
 
   /**

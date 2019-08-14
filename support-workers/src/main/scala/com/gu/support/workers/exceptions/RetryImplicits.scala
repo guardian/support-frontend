@@ -5,7 +5,7 @@ import java.net.{SocketException, SocketTimeoutException}
 import com.amazonaws.services.kms.model._
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.helpers.WebServiceHelperError
+import com.gu.helpers.{WebServiceClientError, WebServiceHelperError}
 import io.circe.ParsingFailure
 
 object RetryImplicits {
@@ -15,8 +15,8 @@ object RetryImplicits {
       //Timeouts/connection issues and 500s
       case e @ (_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) => new RetryUnlimited(message = e.getMessage, cause = throwable)
 
-      //Invalid Json
-      case e @ (_: ParsingFailure | _: MatchError) => new RetryNone(message = e.getMessage, cause = throwable)
+      //Invalid Json or http client error (4xx)
+      case e @ (_: ParsingFailure | _: MatchError | _: WebServiceClientError) => new RetryNone(message = e.getMessage, cause = throwable)
 
       //Any Exception that we haven't specifically handled
       case e: Throwable => new RetryLimited(message = e.getMessage, cause = throwable)

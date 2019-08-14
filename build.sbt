@@ -7,7 +7,8 @@ skip in publish := true
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
   javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
-  testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
+  testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest")),
+  parallelExecution in IntegrationTest := false
 )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
