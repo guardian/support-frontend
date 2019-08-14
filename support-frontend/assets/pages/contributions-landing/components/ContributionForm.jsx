@@ -114,7 +114,7 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
-  landingPageChoiceArchitectureLabelsTestVariant: state.common.abParticipations.landingPageChoiceArchitectureLabels,
+  landingPageChoiceArchitectureLabelsTestVariant: state.common.abParticipations.landingPageChoiceArchitectureLabels1b,
 });
 
 

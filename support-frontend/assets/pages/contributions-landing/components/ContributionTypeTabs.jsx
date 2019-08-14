@@ -59,10 +59,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
-  const isLabelTestVariant = props.landingPageChoiceArchitectureLabelsTestVariants === 'withLabels';
-  const createContributionTypeLabel = isLabelTestVariant ?
-    toHumanReadableContributionTypeAbTest :
-    toHumanReadableContributionType;
 
   if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
     return (null);
@@ -93,7 +89,7 @@ function withProps(props: PropTypes) {
                 checked={props.contributionType === contributionType}
               />
               <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
-                {createContributionTypeLabel(contributionType)}
+                {toHumanReadableContributionType(contributionType)}
               </label>
             </li>);
         })}

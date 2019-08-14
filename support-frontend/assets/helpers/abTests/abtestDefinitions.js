@@ -33,7 +33,7 @@ export const tests: Tests = {
   // file created for this test: abTestContributionsLandingChoiceArchitecture.scss
   // if variant is successful, we will need to integrate the styles from the test stylesheet
   // into the main stylesheet: contributionsLanding.scss
-  landingPageChoiceArchitectureLabels: {
+  landingPageChoiceArchitectureLabels1b: {
     type: 'OTHER',
     variants: [
       {
