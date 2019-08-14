@@ -28,7 +28,7 @@ export const regionalContent = {
         Australia, our award-winning coverage of Indigenous affairs and immigration issues remains core to our work.
       </span>),
     images: {
-      first: 'showcaseAusAsylum',
+      first: 'showcaseAusDetainees',
       second: 'showcaseAusScottMorrison',
       third: 'showcaseAusProtest',
       fourth: 'showcaseAusAboriginal',
