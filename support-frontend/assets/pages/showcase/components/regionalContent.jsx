@@ -5,11 +5,11 @@ export const regionalContent = {
     title: 'Windrush',
     caption: (
       <span>
-        The Guardian is committed to holding power to account at every turn &mdash; from our reporting on&#32;
+        The Guardian is committed to holding power to account &mdash; from our reporting on&#32;
         the Windrush revelations to the Cambridge Analytica scandal &mdash; while keeping the climate emergency&#32;
-        front and centre at all times. We will continue to report vigorously on the fallout from the EU referendum,&#32;
-        the immigration crisis, and data privacy issues. We remain dedicated to truth, to giving a voice to those&#32;
-        who have previously gone unheard, and to helping bring about a more hopeful future.
+        front and centre. We will continue to report on the fallout from the EU referendum, the immigration&#32;
+        crisis, and data privacy issues. We remain dedicated to truth, to giving a voice to those&#32;
+        who have gone unheard, and to helping bring about a more hopeful future.
       </span>),
     images: {
       first: 'showcaseUKChris',
