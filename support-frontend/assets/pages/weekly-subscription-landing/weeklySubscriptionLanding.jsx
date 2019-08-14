@@ -94,7 +94,7 @@ const content = (
           <LargeParagraph>Inside the essential magazine from
           The&nbsp;Guardian, you&rsquo;ll find expert opinion, insight and culture, curated to
           bring you a progressive, international perspective. You&rsquo;ll also discover
-          challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
+          challenging new puzzles every week. Subscribe today and get delivery worldwide.
           </LargeParagraph>
         </Text>
       </Content>
@@ -102,10 +102,10 @@ const content = (
         <Text title="As a subscriber you’ll enjoy" />
         <Outset>
           <ProductPageFeatures features={[
-            { title: 'Up to 35% off the retail cover price' },
-            { title: 'Free international shipping' },
+            { title: 'Every issue delivered with up to 35% off the cover price' },
+            { title: 'Access to the magazine\'s digital archive' },
             { title: 'A weekly email newsletter from the editor' },
-            { title: 'Access to every edition on any device, through PressReader' },
+            { title: 'The very best of the Guardian\'s puzzles' },
           ]}
           />
         </Outset>
@@ -119,7 +119,7 @@ const content = (
               Gifting is available
         </ProductPageInfoChip>
         <ProductPageInfoChip icon={<SvgInformation />}>
-              You can cancel your subscription at any time
+              Delivery cost included. You can cancel your subscription at any time
         </ProductPageInfoChip>
       </Content>
       <Content>
