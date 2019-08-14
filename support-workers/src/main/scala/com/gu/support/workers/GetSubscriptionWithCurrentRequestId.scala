@@ -22,7 +22,7 @@ object GetSubscriptionWithCurrentRequestId {
   )(implicit ec: ExecutionContext): Future[Option[DomainSubscription]] = for {
     accountNumbers <- zuoraService.getAccountFields(identityId, now())
       .withLogging("getAccountFields")
-    subscriptions <- accountNumbers.map(_.accountNumber).map{ zuoraAccountNumber =>
+    subscriptions <- accountNumbers.map(_.accountNumber).map { zuoraAccountNumber =>
       zuoraService.getSubscriptions(zuoraAccountNumber).withLogging(s"getSubscriptions($zuoraAccountNumber)")
     }.combineAll.withLogging("combineAll")
   } yield subscriptions.find(subscription => CreatedBySameRequest(requestId, subscription.existingSubscriptionRequestId))

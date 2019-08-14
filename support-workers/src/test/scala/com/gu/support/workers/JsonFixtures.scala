@@ -1,6 +1,7 @@
 package com.gu.support.workers
 
 import java.io.ByteArrayInputStream
+import java.util.UUID
 
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
@@ -64,7 +65,7 @@ object JsonFixtures {
           "isTestUser": false
         }
     """
-  val requestIdJson = "\"requestId\": \"e18f6418-45f2-11e7-8bfa-8faac2182601\""
+  def requestIdJson: String = s""""requestId": "${UUID.randomUUID()}\""""
   val validBaid = "B-23637766K5365543J"
   val payPalEmail = "test@paypal.com"
   val payPalPaymentMethod =
@@ -169,7 +170,7 @@ object JsonFixtures {
       }
     """
 
-  val stripeToken = "tok_AXY4M16p60c2sg"
+  val stripeToken = "tok_visa"
   val stripeJson =
     s"""
       {
@@ -187,13 +188,14 @@ object JsonFixtures {
           "acquisitionData": $acquisitionData
         }"""
 
-  def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5): String =
+  def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
     s"""{
           $requestIdJson,
           ${userJson()},
-          "product": ${contribution(amount = amount, billingPeriod = billingPeriod)},
+          "product": ${contribution(amount = amount, billingPeriod = billingPeriod, currency = currency)},
           "paymentFields": $stripeJson,
-          "sessionId": "testingToken"
+          "sessionId": "testingToken",
+          "acquisitionData": $acquisitionData
         }"""
 
   val createPayPalPaymentMethodDigitalPackJson =

@@ -33,7 +33,7 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     get[GetAccountResponse](s"accounts/$accountNumber", authHeaders)
 
   def getAccountFields(identityId: IdentityId, now: OffsetDateTime): Future[List[DomainAccount]] = {
-    val recentDays = 28
+    val recentDays = 28 // the step functions only try for 1 day, so 28 would be ample to find subs already created in this execution
     val recently = now.minusDays(recentDays).format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
     // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
     val queryData = QueryData(s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}' and UpdatedDate > '$recently'")
