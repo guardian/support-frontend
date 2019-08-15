@@ -7,7 +7,6 @@ deployments:
       bucket: support-frontend-static
       prefixPackage: false
       prefixStack: false
-      prefixStage: true
       cacheControl: public, max-age=31536000
   cfn:
     type: cloud-formation
