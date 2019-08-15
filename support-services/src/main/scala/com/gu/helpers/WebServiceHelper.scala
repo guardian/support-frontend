@@ -13,21 +13,21 @@ import scala.concurrent.Future
 import scala.reflect.{ClassTag, classTag}
 import scala.util.{Failure, Success, Try}
 
-sealed abstract class WebServiceHelperErrorBase(responseCode: String, responseBody: String) extends Throwable
+sealed abstract class WebServiceHelperErrorBase() extends Throwable
 
 case class WebServiceHelperError[T: ClassTag](
-  responseCode: String,
-  responseBody: String,
+  codeBody: CodeBody,
   message: String
-) extends WebServiceHelperErrorBase(responseCode, responseBody) {
-  override def getMessage: String = s"${classTag[T]} - $message: $responseCode: $responseBody"
+) extends WebServiceHelperErrorBase {
+  override def getMessage: String = s"${classTag[T]} - $message: ${codeBody.getMessage}"
 }
 
-case class WebServiceClientError(
-  responseCode: String,
-  responseBody: String
-) extends WebServiceHelperErrorBase(responseCode, responseBody) {
-  override def getMessage: String = s"$responseCode: $responseBody"
+case class WebServiceClientError(codeBody: CodeBody) extends WebServiceHelperErrorBase {
+  override def getMessage: String = codeBody.getMessage
+}
+
+case class CodeBody(code: String, body: String) {
+  def getMessage: String = s"$code: $body"
 }
 
 /**
@@ -68,32 +68,43 @@ trait WebServiceHelper[Error <: Throwable] {
     SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
     for {
       response <- httpClient(req)
-      decodedResponse <- Future.fromTry(decodeResponse[A](response))
+      codeBody <- Future.fromTry(getJsonBody(response))
+      decodedResponse <- Future.fromTry(decodeBody[A](codeBody))
     } yield decodedResponse
 
   }
 
-  def decodeResponse[A](response: Response)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Try[A] = {
+  def getJsonBody[A](response: Response)(implicit ctag: ClassTag[A]): Try[CodeBody] = {
     val code = response.code().toString
     for {
-      body <- Option(response.body).toRight(WebServiceHelperError(code, "", "no body")).toTry
-      contentType <- Option(body.contentType()).toRight(WebServiceHelperError(code, "", "no content type")).toTry
+      body <- Option(response.body).toRight(WebServiceHelperError(CodeBody(code, ""), "no body")).toTry
+      contentType <- Option(body.contentType()).toRight(WebServiceHelperError(CodeBody(code, ""), "no content type")).toTry
       responseBody <- Try(body.string())
+      codeBody = CodeBody(code, responseBody)
       _ = SafeLogger.info(s"response $code body: ${responseBody.length} bytes")
-      _ <- if (contentType.`type`() == "application" && contentType.subtype() == "json") Success(())
-      else Failure(WebServiceHelperError(code, responseBody, s"wrong content type"))
-      result <- code(0) + "xx" match {
-        case "2xx" => decode[A](responseBody).left.map { err =>
+      _ <-
+        if ((contentType.`type`(), contentType.subtype()) == ("application", "json")) Success(())
+        else Failure(WebServiceHelperError(codeBody, s"wrong content type"))
+    } yield codeBody
+  }
+
+  def decodeBody[A](codeBody: CodeBody)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Try[A] = {
+    val CodeBody(code, responseBody) = codeBody
+    val responseFamily = code(0) + "xx"
+    responseFamily match {
+      case "2xx" =>
+        decode[A](responseBody).left.map { err =>
           decodeError(responseBody).right.getOrElse(
-            WebServiceHelperError[A](code, responseBody, s"failed to parse response: $err")
+            WebServiceHelperError[A](codeBody, s"failed to parse response: $err")
           )
         }.toTry
-        case "4xx" => Failure((decodeError(responseBody).right.toOption).getOrElse(
-          WebServiceClientError(code, responseBody))
+      case "4xx" =>
+        Failure((decodeError(responseBody).right.toOption).getOrElse(
+          WebServiceClientError(codeBody))
         )
-        case _ => Failure(WebServiceHelperError[A](code, responseBody, "unrecognised response code"))
-      }
-    } yield result
+      case _ =>
+        Failure(WebServiceHelperError[A](codeBody, "unrecognised response code"))
+    }
 
   }
 

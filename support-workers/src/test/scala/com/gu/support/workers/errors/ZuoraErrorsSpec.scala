@@ -125,6 +125,34 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
     server.shutdown()
   }
 
+  "200s with wrong content type" should "throw a RetryNone" in {
+
+    val zuoraSubscribeError: String =
+      """
+        |[{
+        |  "Success": false,
+        |  "Errors": [{
+        |    "Code": "INVALID_VALUE",
+        |    "Message": "The content type is wrong, but if this is parsed, it would retryNone and thus fail the test"
+        |  }]
+        |}]
+        |""".stripMargin
+
+    val server = createMockServer(200, zuoraSubscribeError, "text/html")
+    val baseUrl = server.url("/v1")
+    val services = errorServices(Some(baseUrl.toString))
+
+    val createZuoraSubscription = new CreateZuoraSubscription(services)
+
+    val outStream = new ByteArrayOutputStream()
+
+    a[RetryUnlimited] should be thrownBy {
+      createZuoraSubscription.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+    }
+
+    server.shutdown()
+  }
+
   "JsonWrapped error" should "deserialise correctly" in {
 
     val zuoraErrorResponse = for {
