@@ -68,28 +68,32 @@ trait WebServiceHelper[Error <: Throwable] {
     SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
     for {
       response <- httpClient(req)
-      decodedResponse <- {
-        val code = response.code().toString
-        val failableDecodedResponse = for {
-          body <- Option(response.body).toRight(WebServiceHelperError(code, "", "no body")).toTry
-          contentType <- Option(body.contentType()).toRight(WebServiceHelperError(code, "", "no content type")).toTry
-          bodyString <- Try(body.string())
-          _ = SafeLogger.info(s"response $code body: ${bodyString.length} bytes")
-          _ <- if (contentType.`type`() == "application" && contentType.subtype() == "json") Success(())
-          else Failure(WebServiceHelperError(code, bodyString, s"wrong content type"))
-          result <- code.splitAt(1) match {
-            case ("2", _) => decode[A](bodyString).left.map { err =>
-              WebServiceHelperError[A](code, bodyString, s"failed to parse response: $err")
-            }.toTry
-            case ("4", _) => Failure((decodeError(bodyString).right.toOption).getOrElse(
-              WebServiceClientError(code, bodyString))
-            )
-            case _ => Failure(WebServiceHelperError[A](code, bodyString, "unrecognised response code"))
-          }
-        } yield result
-        Future.fromTry(failableDecodedResponse)
-      }
+      decodedResponse <- Future.fromTry(decodeResponse[A](response))
     } yield decodedResponse
+
+  }
+
+  def decodeResponse[A](response: Response)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Try[A] = {
+    val code = response.code().toString
+    for {
+      body <- Option(response.body).toRight(WebServiceHelperError(code, "", "no body")).toTry
+      contentType <- Option(body.contentType()).toRight(WebServiceHelperError(code, "", "no content type")).toTry
+      responseBody <- Try(body.string())
+      _ = SafeLogger.info(s"response $code body: ${responseBody.length} bytes")
+      _ <- if (contentType.`type`() == "application" && contentType.subtype() == "json") Success(())
+      else Failure(WebServiceHelperError(code, responseBody, s"wrong content type"))
+      result <- code(0) + "xx" match {
+        case "2xx" => decode[A](responseBody).left.map { err =>
+          decodeError(responseBody).right.getOrElse(
+            WebServiceHelperError[A](code, responseBody, s"failed to parse response: $err")
+          )
+        }.toTry
+        case "4xx" => Failure((decodeError(responseBody).right.toOption).getOrElse(
+          WebServiceClientError(code, responseBody))
+        )
+        case _ => Failure(WebServiceHelperError[A](code, responseBody, "unrecognised response code"))
+      }
+    } yield result
 
   }
 

@@ -9,7 +9,7 @@ import com.gu.services.ServiceProvider
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.JsonFixtures.{createContributionZuoraSubscriptionJson, wrapFixture}
-import com.gu.support.workers.exceptions.RetryUnlimited
+import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.{JsonFixtures, JsonWrapper, LambdaSpec}
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
@@ -63,6 +63,62 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
     val outStream = new ByteArrayOutputStream()
 
     a[RetryUnlimited] should be thrownBy {
+      createZuoraSubscription.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+    }
+
+    server.shutdown()
+  }
+
+  "200s with success = false from Zuora and a trnasient error" should "throw a RetryUnlimited" in {
+
+    val zuoraSubscribeError: String =
+      """
+        |[{
+        |  "Success": false,
+        |  "Errors": [{
+        |    "Code": "LOCK_COMPETITION",
+        |    "Message": "This error will go away if you retry"
+        |  }]
+        |}]
+        |""".stripMargin
+
+    val server = createMockServer(200, zuoraSubscribeError)
+    val baseUrl = server.url("/v1")
+    val services = errorServices(Some(baseUrl.toString))
+
+    val createZuoraSubscription = new CreateZuoraSubscription(services)
+
+    val outStream = new ByteArrayOutputStream()
+
+    a[RetryUnlimited] should be thrownBy {
+      createZuoraSubscription.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+    }
+
+    server.shutdown()
+  }
+
+  "200s with success = false from Zuora and a permanent error" should "throw a RetryNone" in {
+
+    val zuoraSubscribeError: String =
+      """
+        |[{
+        |  "Success": false,
+        |  "Errors": [{
+        |    "Code": "INVALID_VALUE",
+        |    "Message": "There's no use retrying this error, it won't work ever"
+        |  }]
+        |}]
+        |""".stripMargin
+
+    val server = createMockServer(200, zuoraSubscribeError)
+    val baseUrl = server.url("/v1")
+    val services = errorServices(Some(baseUrl.toString))
+
+    val createZuoraSubscription = new CreateZuoraSubscription(services)
+
+    val outStream = new ByteArrayOutputStream()
+
+    a[RetryNone] should be thrownBy {
       createZuoraSubscription.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
     }
 
