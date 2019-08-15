@@ -14,6 +14,7 @@ object StripeJsonDecoder {
 
   import controllers.JsonReadableOps._
   import NonEmptyString.decoder
+  import StripePublicKey.decoder
 
   // This will decode Stripe charge data in the format expected by the old contributions-frontend API.
   private val legacyStripeChargeDataDecoder: Decoder[StripeChargeData] = Decoder.instance { cursor =>
@@ -41,6 +42,7 @@ object StripeJsonDecoder {
       queryParameters <- downField("queryParameters").as[Option[Set[QueryParameter]]]
       gaId <- downField("gaId").as[Option[String]]
       stripePaymentMethod <- downField("stripePaymentMethod").as[Option[StripePaymentMethod]]
+      stripePublicKey <- downField("publicKey").as[Option[StripePublicKey]]
     } yield {
       StripeChargeData(
         paymentData = StripePaymentData(
@@ -66,7 +68,8 @@ object StripeJsonDecoder {
             .filter(_.nonEmpty),
           queryParameters = queryParameters,
           gaId = gaId
-        )
+        ),
+        publicKey = stripePublicKey
       )
     }
   }
@@ -106,10 +109,19 @@ object StripePaymentMethod extends Enum[StripePaymentMethod] with CirceEnum[Stri
   case object StripePaymentRequestButton extends StripePaymentMethod
 
 }
+
+
+case class StripePublicKey(value: String) extends AnyVal
+object StripePublicKey {
+  implicit val decoder: Decoder[StripePublicKey] = Decoder.decodeString.map(StripePublicKey.apply)
+}
+
 // Fields are grouped by what they're used for:
 // - paymentData - required to create a Stripe charge
 // - acquisitionData - required to create an acquisition event (used for analytics)
+// - publicKey - required to determine which Stripe service to use
 case class StripeChargeData(
   paymentData: StripePaymentData,
-  acquisitionData: AcquisitionData
+  acquisitionData: AcquisitionData,
+  publicKey: Option[StripePublicKey]
 )

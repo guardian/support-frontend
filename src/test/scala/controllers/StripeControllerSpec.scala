@@ -157,7 +157,8 @@ class StripeControllerSpec extends PlaySpec with Status {
               |      "name":"param2",
               |      "value":"val2"
               |    }
-              |  ]
+              |  ],
+              |  "publicKey": "pk_test_FOO"
               |}
             """.stripMargin))
 
@@ -229,7 +230,8 @@ class StripeControllerSpec extends PlaySpec with Status {
               |         "variant":"b-stripe"
               |       }
               |     ]
-              |  }
+              |  },
+              |  "publicKey": "pk_test_FOO"
               |}
             """.stripMargin))
 
@@ -240,6 +242,55 @@ class StripeControllerSpec extends PlaySpec with Status {
       }
 
       "return a 200 response if the request is valid and the amount contains a decimal point - full request" in {
+        val fixture = new StripeControllerFixture()(executionContext, context) {
+          when(mockStripeBackend.createCharge(any(), any()))
+            .thenReturn(stripeServiceResponse)
+          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
+            .thenReturn(mockStripeBackend)
+        }
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
+          .withJsonBody(parse(
+            """
+              |{
+              |  "paymentData": {
+              |    "currency": "GBP",
+              |    "amount": 1.23,
+              |    "token": "token",
+              |    "email": "email@theguardian.com"
+              |  },
+              |  "acquisitionData": {
+              |    "platform": "android",
+              |    "visitId": "visitId",
+              |    "browserId": "ophanBrowserId",
+              |    "pageviewId": "ophanPageviewId",
+              |    "referrerPageviewId": "refererPageviewId",
+              |    "referrerUrl": "refererUrl",
+              |    "componentId": "componentId",
+              |    "campaignCodes" : ["code", "code2"],
+              |    "componentType": "AcquisitionsOther",
+              |    "source": "GuardianWeb",
+              |    "nativeAbTests":[
+              |       {
+              |         "name":"a-checkout",
+              |         "variant":"a-stripe"
+              |       },
+              |       {
+              |         "name":"b-checkout",
+              |         "variant":"b-stripe"
+              |       }
+              |     ]
+              |  },
+              |  "publicKey": "pk_test_FOO"
+              |}
+            """.stripMargin))
+
+        val stripeControllerResult: Future[play.api.mvc.Result] =
+          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
+
+        status(stripeControllerResult).mustBe(200)
+      }
+
+      "return a 200 response if the request is valid and no publicKey is passed in - backwards compatible request" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
           when(mockStripeBackend.createCharge(any(), any()))
             .thenReturn(stripeServiceResponse)
@@ -306,7 +357,8 @@ class StripeControllerSpec extends PlaySpec with Status {
               |  },
               |  "acquisitionData": {
               |    "platform": "android"
-              |  }
+              |  },
+              |  "publicKey": "pk_test_FOO"
               |}
             """.stripMargin)).withHeaders("origin" -> "https://cors.com")
 
@@ -335,7 +387,8 @@ class StripeControllerSpec extends PlaySpec with Status {
               |    "amount": 1,
               |    "token": "token",
               |    "email": "email@theguardian.com"
-              |  }
+              |  },
+              |  "publicKey": "pk_test_FOO"
               |}
             """.stripMargin))
 
@@ -392,7 +445,8 @@ class StripeControllerSpec extends PlaySpec with Status {
               |  "currency": "GBP",
               |  "amount": 1,
               |  "token": "token",
-              |  "email": "email@theguardian.com"
+              |  "email": "email@theguardian.com",
+              |  "publicKey": "pk_test_FOO"
               |}
             """.stripMargin))
 
@@ -420,7 +474,8 @@ class StripeControllerSpec extends PlaySpec with Status {
               |  "currency": "GBP",
               |  "amount": 1,
               |  "token": "token",
-              |  "email": "email@theguardian.com"
+              |  "email": "email@theguardian.com",
+              |  "publicKey": "pk_test_FOO"
               |}
             """.stripMargin))
 

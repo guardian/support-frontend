@@ -17,9 +17,10 @@ object StripeAccountConfig {
   // Try to ensure some type safety for using the different accounts in conjunction
   case class Default(publicKey: String, secretKey: String) extends StripeAccountConfig
   case class Australia(publicKey: String, secretKey: String) extends StripeAccountConfig
+  case class UnitedStates(publicKey: String, secretKey: String) extends StripeAccountConfig
 }
 
-case class StripeConfig(default: StripeAccountConfig.Default, au: StripeAccountConfig.Australia)
+case class StripeConfig(default: StripeAccountConfig.Default, au: StripeAccountConfig.Australia, us: StripeAccountConfig.UnitedStates)
 
 object StripeConfig {
 
@@ -44,7 +45,12 @@ object StripeConfig {
         validate("au-private-key")
       ).mapN(StripeAccountConfig.Australia.apply)
 
-      (defaultAccount, auAccount).mapN(StripeConfig.apply)
+      val usAccount = (
+        validate("us-public-key"),
+        validate("us-private-key")
+        ).mapN(StripeAccountConfig.UnitedStates.apply)
+
+      (defaultAccount, auAccount, usAccount).mapN(StripeConfig.apply)
     }
   }
 }
