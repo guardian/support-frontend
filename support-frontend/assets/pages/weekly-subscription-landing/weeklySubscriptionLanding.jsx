@@ -94,7 +94,7 @@ const content = (
           <LargeParagraph>The Guardian Weekly magazine is a round-up of the world news,&#32;
             opinion and long reads that have shaped the week. Inside, the past seven days&apos;&#32;
             most memorable stories are reframed with striking photography and insightful companion&#32;
-            pieces, all handpicked from the Guardian and the Observer.
+            pieces, all handpicked from The Guardian and The Observer.
           </LargeParagraph>
         </Text>
       </Content>
@@ -105,7 +105,7 @@ const content = (
             { title: 'Every issue delivered with up to 35% off the cover price' },
             { title: 'Access to the magazine\'s digital archive' },
             { title: 'A weekly email newsletter from the editor' },
-            { title: 'The very best of the Guardian\'s puzzles' },
+            { title: 'The very best of The Guardian\'s puzzles' },
           ]}
           />
         </Outset>
