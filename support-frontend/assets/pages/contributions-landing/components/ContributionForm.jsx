@@ -181,7 +181,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       debugger
       if (paymentLibraries && paymentLibraries.Stripe) {
         debugger
-        props.thirdPartyPaymentLibraries[props.contributionType]()
+        paymentLibraries.Stripe()
       }
     },
     PayPal: (props: PropTypes) => {
