@@ -112,6 +112,7 @@ function paymentResultFromObject(
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
+  debugger
   if (json.error) {
     const failureReason: ErrorReason = json.error.failureReason ? json.error.failureReason : 'unknown';
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
@@ -135,7 +136,20 @@ function postOneOffStripeExecutePaymentRequest(
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
-    paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
+    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/execute-payment`),
+    requestOptions(data, 'omit', 'POST', null),
+  ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
+}
+
+function postOneOffStripeCreatePaymentRequest(
+  data: CreateStripePaymentIntentRequest,
+  setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
+): Promise<PaymentResult> {
+  console.log(`POSTING TO: ${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`)
+  debugger
+  return logPromise(fetchJson(
+    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
     requestOptions(data, 'omit', 'POST', null),
   ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
 }
@@ -167,4 +181,5 @@ function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Pr
 export {
   postOneOffStripeExecutePaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
+  postOneOffStripeCreatePaymentRequest,
 };

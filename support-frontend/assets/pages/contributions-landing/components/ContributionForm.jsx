@@ -178,9 +178,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
     Stripe: (props: PropTypes) => {
       //TODO - trigger paymentAuthorisationHandler
       const paymentLibraries = props.thirdPartyPaymentLibraries[props.contributionType];
-      debugger
       if (paymentLibraries && paymentLibraries.Stripe) {
-        debugger
         paymentLibraries.Stripe()
       }
     },

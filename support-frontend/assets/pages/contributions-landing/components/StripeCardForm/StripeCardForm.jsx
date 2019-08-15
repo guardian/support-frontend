@@ -51,7 +51,6 @@ function CardForm(props: PropTypes) {
   //TODO - this needs to be called when the contribute button is clicked
   //as this component is created, add this function to redux store as
   const createPaymentMethod = () => {
-    debugger
     props.stripe.createPaymentMethod('card', {
       billing_details: { email: 'tom.forbes@theguardian.com' }
     }).then(result => {
@@ -67,7 +66,7 @@ function CardForm(props: PropTypes) {
     <form className='stripe-card-element' onSubmit={onSubmit}>
       <CardElement
       />
-      <button type='submit'>Submit</button>
+      {/*<button type='submit'>Submit</button>*/}
     </form>
   )
 }

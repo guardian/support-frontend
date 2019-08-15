@@ -53,11 +53,11 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
 
   private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
   private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
-  private val stripeExecutePaymentPath = "/contribute/one-off/stripe/execute-payment"
+//  private val stripeExecutePaymentPath = "/contribute/one-off/stripe/execute-payment"
 
   val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$paypalCreatePaymentPath"
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
-  val stripeExecutePaymentEndpoint: String = s"$paymentAPIUrl$stripeExecutePaymentPath"
+  val stripeUrl: String = s"$paymentAPIUrl"
 
   private def postPaypalData[A](
     data: ExecutePaymentBody,
