@@ -78,7 +78,7 @@ const CampaignHeader = () => (
   <ProductPagehero
     appearance="campaign"
     overheading="Guardian Weekly subscriptions"
-    heading="The Guardian's essential news magazine"
+    heading="Pause for thought with The Guardian's essential news magazine"
     modifierClasses={['weekly-campaign']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
@@ -86,7 +86,7 @@ const CampaignHeader = () => (
 
     <div className="weekly-campaign-hero">
       <div className="weekly-campaign-hero__copy">
-        <h2>Think globally.<br />Read Weekly.</h2>
+        <h2>The Guardian<br />Weekly</h2>
       </div>
 
       <div className="weekly-campaign-hero__graphic">
