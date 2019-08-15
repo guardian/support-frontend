@@ -86,7 +86,7 @@ const CampaignHeader = () => (
 
     <div className="weekly-campaign-hero">
       <div className="weekly-campaign-hero__copy">
-        <h2>Think globally.<br />Read Weekly.</h2>
+        <h2>The Guardian<br />Weekly</h2>
       </div>
 
       <div className="weekly-campaign-hero__graphic">
