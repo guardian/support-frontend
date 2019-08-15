@@ -60,10 +60,10 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
   </div>
 );
 
-const withDeliveryCheck = WappedComponent => ({ value, results, ...props }) => (
+const withDeliveryCheck = WappedComponent => ({ results, ...props }) => (
   <div>
     <WappedComponent {...props} />
-    { results.length > 0 && postcodeIsWithinDeliveryArea(value) && (
+    { results.length > 0 && postcodeIsWithinDeliveryArea(props.value) && (
       <p>
         Sorry, we cannot deliver a paper to an address with this postcode.
         Please call Customer Services on: 0330 333 6767 or press Back to purchase a voucher subscription.
@@ -104,7 +104,7 @@ class PostcodeFinder extends Component<PropTypes> {
           value={postcode}
           results={results}
         />
-        
+
         {(results.length > 0) &&
           <ComposedSelect
             onChange={(ev) => {
