@@ -31,10 +31,9 @@
 .component-radio-input__helper {
   margin-left: $gu-h-spacing * 1.5;
   margin-bottom: $gu-v-spacing;
-}
-
-.component-radio-input__offer {
-  font-weight: bold;
+  @include mq($from: phablet) {
+    padding-right: $gu-h-spacing * 2;
+  }
 }
 
 .component-radio-input__input {
