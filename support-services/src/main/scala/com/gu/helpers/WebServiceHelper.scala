@@ -11,9 +11,23 @@ import scala.collection.immutable.Map.empty
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.reflect.{ClassTag, classTag}
+import scala.util.{Failure, Success, Try}
 
-case class WebServiceHelperError[T: ClassTag](responseCode: Int, responseBody: String) extends Throwable {
-  override def getMessage: String = s"${classTag[T]} - $responseCode: $responseBody"
+sealed abstract class WebServiceHelperErrorBase() extends Throwable
+
+case class WebServiceHelperError[T: ClassTag](
+  codeBody: CodeBody,
+  message: String
+) extends WebServiceHelperErrorBase {
+  override def getMessage: String = s"${classTag[T]} - $message: ${codeBody.getMessage}"
+}
+
+case class WebServiceClientError(codeBody: CodeBody) extends WebServiceHelperErrorBase {
+  override def getMessage: String = codeBody.getMessage
+}
+
+case class CodeBody(code: String, body: String) {
+  def getMessage: String = s"$code: $body"
 }
 
 /**
@@ -51,19 +65,47 @@ trait WebServiceHelper[Error <: Throwable] {
    */
   private def request[A](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val req = wsPreExecute(rb).build()
-    SafeLogger.debug(s"Issuing request ${req.method} ${req.url}")
+    SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
     for {
       response <- httpClient(req)
-    } yield {
-      val responseBody = response.body.string()
-      SafeLogger.debug(responseBody)
-      decode[A](responseBody) match {
-        case Left(err) => throw decodeError(responseBody).right.getOrElse(
-          WebServiceHelperError[A](response.code(), responseBody)
+      codeBody <- Future.fromTry(getJsonBody(response))
+      decodedResponse <- Future.fromTry(decodeBody[A](codeBody))
+    } yield decodedResponse
+
+  }
+
+  def getJsonBody[A](response: Response)(implicit ctag: ClassTag[A]): Try[CodeBody] = {
+    val code = response.code().toString
+    for {
+      body <- Option(response.body).toRight(WebServiceHelperError(CodeBody(code, ""), "no body")).toTry
+      contentType <- Option(body.contentType()).toRight(WebServiceHelperError(CodeBody(code, ""), "no content type")).toTry
+      responseBody <- Try(body.string())
+      codeBody = CodeBody(code, responseBody)
+      _ = SafeLogger.info(s"response $code body: ${responseBody.length} bytes")
+      _ <-
+        if ((contentType.`type`(), contentType.subtype()) == ("application", "json")) Success(())
+        else Failure(WebServiceHelperError(codeBody, s"wrong content type"))
+    } yield codeBody
+  }
+
+  def decodeBody[A](codeBody: CodeBody)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Try[A] = {
+    val CodeBody(code, responseBody) = codeBody
+    val responseFamily = code(0) + "xx"
+    responseFamily match {
+      case "2xx" =>
+        decode[A](responseBody).left.map { err =>
+          decodeError(responseBody).right.getOrElse(
+            WebServiceHelperError[A](codeBody, s"failed to parse response: $err")
+          )
+        }.toTry
+      case "4xx" =>
+        Failure((decodeError(responseBody).right.toOption).getOrElse(
+          WebServiceClientError(codeBody))
         )
-        case Right(value) => value
-      }
+      case _ =>
+        Failure(WebServiceHelperError[A](codeBody, "unrecognised response code"))
     }
+
   }
 
   /**
