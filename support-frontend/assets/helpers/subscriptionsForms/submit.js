@@ -63,6 +63,7 @@ import { isPostDeployUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
+import type {IsoCountry} from "../internationalisation/country";
 
 // ----- Functions ----- //
 
@@ -202,6 +203,7 @@ function showStripe(
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
+  country: IsoCountry,
   email: string,
 ) {
   if (isPostDeployUser()) {
@@ -212,7 +214,7 @@ function showStripe(
     });
   } else {
     loadStripe()
-      .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, isTestUser))
+      .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, country, isTestUser))
       .then(stripe => openDialogBox(stripe, price, email));
   }
 }

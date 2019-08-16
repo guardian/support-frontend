@@ -19,6 +19,7 @@
  */
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import type {IsoCountry} from "helpers/internationalisation/country";
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
 
@@ -46,12 +47,16 @@ function loadStripe(): Promise<void> {
 
 }
 
-function getStripeKey(stripeAccount: StripeAccount, currency: IsoCurrency, isTestUser: boolean): string {
-  switch (currency) {
-    case 'AUD':
+function getStripeKey(stripeAccount: StripeAccount, country: IsoCountry, isTestUser: boolean): string {
+  switch (country) {
+    case 'AU':
       return isTestUser ?
         window.guardian.stripeKeyAustralia[stripeAccount].uat :
         window.guardian.stripeKeyAustralia[stripeAccount].default;
+    case 'US':
+      return isTestUser ?
+        window.guardian.stripeKeyUnitedStates[stripeAccount].uat :
+        window.guardian.stripeKeyUnitedStates[stripeAccount].default;
     default:
       return isTestUser ?
         window.guardian.stripeKeyDefaultCurrencies[stripeAccount].uat :
@@ -63,13 +68,15 @@ function setupStripeCheckout(
   onPaymentAuthorisation: StripeAuthorisation => void,
   stripeAccount: StripeAccount,
   currency: IsoCurrency,
+  country: IsoCountry,
   isTestUser: boolean,
 ): Object {
-  const handleToken = (token) => {
-    onPaymentAuthorisation({ paymentMethod: Stripe, token: token.id, stripePaymentMethod: 'StripeCheckout' });
-  };
 
-  const stripeKey = getStripeKey(stripeAccount, currency, isTestUser);
+  const stripeKey = getStripeKey(stripeAccount, country, isTestUser);
+
+  const handleToken = (token) => {
+    onPaymentAuthorisation({ paymentMethod: Stripe, token: token.id, stripePaymentMethod: 'StripeCheckout', publicKey: stripeKey });
+  };
 
   return window.StripeCheckout.configure({
     name: 'Guardian',

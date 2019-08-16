@@ -96,6 +96,7 @@ function initialiseStripeCheckout(
   onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void,
   contributionType: ContributionType,
   currencyId: IsoCurrency,
+  countryId: IsoCountry,
   isTestUser: boolean,
   dispatch: Function,
 ) {
@@ -104,6 +105,7 @@ function initialiseStripeCheckout(
       onPaymentAuthorisation,
       stripeAccountForContributionType[contributionType],
       currencyId,
+      countryId,
       isTestUser,
     );
   dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
@@ -130,6 +132,7 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
             onPaymentAuthorisation,
             contributionTypeSetting.contributionType,
             currencyId,
+            countryId,
             !!isTestUser,
             dispatch,
           );

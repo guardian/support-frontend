@@ -254,6 +254,7 @@ const stripeChargeDataFromAuthorisation = (
     state.common.abParticipations,
     state.common.optimizeExperiments,
   ),
+  publicKey: authorisation.publicKey
 });
 
 const regularPaymentRequestFromAuthorisation = (

@@ -1,6 +1,6 @@
 @import admin.settings.AllSettings
 @import assets.AssetsResolver
-@import com.gu.i18n.Currency.AUD
+@import com.gu.i18n.Country.Australia
 @import com.gu.identity.model.{User => IdUser}
 @import com.gu.support.config._
 @import helper.CSRF
@@ -43,16 +43,17 @@
 
       window.guardian.stripeKeyDefaultCurrencies = {
         REGULAR: {
-          default: "@defaultStripeConfig.forCurrency(None).publicKey",
-          uat: "@uatStripeConfig.forCurrency(None).publicKey"
+          default: "@defaultStripeConfig.defaultAccount.publicKey",
+          uat: "@uatStripeConfig.defaultAccount.publicKey"
         }
       };
       window.guardian.stripeKeyAustralia = {
         REGULAR: {
-          default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
-          uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
+          default: "@defaultStripeConfig.forCountry(Some(Australia)).publicKey",
+          uat: "@uatStripeConfig.forCountry(Some(Australia)).publicKey"
         }
       };
+      window.guardian.stripeKeyUnitedStates = window.guardian.stripeKeyDefaultCurrencies,
       window.guardian.payPalEnvironment = {
         default: "@defaultPayPalConfig.payPalEnvironment",
         uat: "@uatPayPalConfig.payPalEnvironment"

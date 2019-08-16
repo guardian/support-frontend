@@ -108,7 +108,8 @@ export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 export type StripeAuthorisation = {|
   paymentMethod: typeof Stripe,
   token: string,
-  stripePaymentMethod: StripePaymentMethod
+  stripePaymentMethod: StripePaymentMethod,
+  publicKey: string // IS THIS A GOOD PLACE TO STORE THIS?
 |};
 export type PayPalAuthorisation = {|
   paymentMethod: typeof PayPal,
