@@ -100,14 +100,14 @@ function initialiseStripeCheckout(
   dispatch: Function,
 ) {
   //TODO - will not be used
-  // const library: ThirdPartyPaymentLibrary =
-  //   setupStripeCheckout(
-  //     onPaymentAuthorisation,
-  //     stripeAccountForContributionType[contributionType],
-  //     currencyId,
-  //     isTestUser,
-  //   );
-  // dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
+  const library: ThirdPartyPaymentLibrary =
+    setupStripeCheckout(
+      onPaymentAuthorisation,
+      stripeAccountForContributionType[contributionType],
+      currencyId,
+      isTestUser,
+    );
+  dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
 }
 
 
@@ -126,7 +126,7 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
     loadStripe().then(() => {
       contributionTypes[countryGroupId].forEach((contributionTypeSetting) => {
         const validPayments = getValidPaymentMethods(contributionTypeSetting.contributionType, switches, countryId);
-        if (validPayments.includes(Stripe)) {
+        if (validPayments.includes(Stripe) && state.common.abParticipations.stripeElements !== 'stripeCardElement') {
           initialiseStripeCheckout(
             onPaymentAuthorisation,
             contributionTypeSetting.contributionType,

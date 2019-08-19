@@ -112,7 +112,7 @@ function paymentResultFromObject(
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
-  debugger
+  console.log("paymentResultFromObject", json)
   if (json.error) {
     const failureReason: ErrorReason = json.error.failureReason ? json.error.failureReason : 'unknown';
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
@@ -146,8 +146,6 @@ function postOneOffStripeCreatePaymentRequest(
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
-  console.log(`POSTING TO: ${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`)
-  debugger
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
     requestOptions(data, 'omit', 'POST', null),

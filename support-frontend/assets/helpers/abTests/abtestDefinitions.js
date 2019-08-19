@@ -11,6 +11,7 @@ export type LandingPageChoiceArchitectureAmountsFirstTestVariants = 'control'
   | 'productFirstSetOne'
   | 'productFirstSetTwo'
   | 'notintest';
+export type StripeElementsTestVariants = 'control' | 'stripeCardElement' | 'notintest';
 
 export const tests: Tests = {
   landingPageCopyReturningSingles: {
@@ -72,5 +73,26 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 4,
+  },
+
+  stripeElements: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'stripeCardElement',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 3,
   },
 };

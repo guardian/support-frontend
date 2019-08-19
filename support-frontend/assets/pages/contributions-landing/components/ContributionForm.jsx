@@ -52,9 +52,7 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type {
-  LandingPageChoiceArchitectureAmountsFirstTestVariants,
-} from 'helpers/abTests/abtestDefinitions';
+import type { LandingPageChoiceArchitectureAmountsFirstTestVariants, StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -87,6 +85,7 @@ type PropTypes = {|
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
   landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
+  stripeElementsTestVariant: StripeElementsTestVariants,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -119,6 +118,7 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
   landingPageChoiceArchitectureAmountsFirstTestVariant:
     state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
+  stripeElementsTestVariant: state.common.abParticipations.stripeElements,
 });
 
 
@@ -174,12 +174,13 @@ const formHandlersForRecurring = {
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
-    // Stripe: openStripePopup,
     Stripe: (props: PropTypes) => {
-      //TODO - trigger paymentAuthorisationHandler
-      const paymentLibraries = props.thirdPartyPaymentLibraries[props.contributionType];
-      if (paymentLibraries && paymentLibraries.Stripe) {
-        paymentLibraries.Stripe()
+      if (props.stripeElementsTestVariant !== 'stripeCardElement') openStripePopup(props);
+      else {
+        const paymentLibraries = props.thirdPartyPaymentLibraries[props.contributionType];
+        if (paymentLibraries && paymentLibraries.Stripe) {
+          paymentLibraries.Stripe()
+        }
       }
     },
     PayPal: (props: PropTypes) => {

@@ -425,20 +425,22 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
       if (paymentAuthorisation.paymentMethod === Stripe) {
-        //TODO - create Payment Intent with paymentMethodId etc
-        return dispatch(createStripePaymentIntent(
-          {
-            ...stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
-            paymentMethodId: paymentAuthorisation.paymentMethodId
-          },
-          (token: string) => dispatch(setGuestAccountCreationToken(token)),
-          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-        ));
-        // return dispatch(executeStripeOneOffPayment(
-        //   stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
-        //   (token: string) => dispatch(setGuestAccountCreationToken(token)),
-        //   (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-        // ));
+        if (state.common.abParticipations.stripeElements !== 'stripeCardElement') {
+          return dispatch(executeStripeOneOffPayment(
+            stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
+            (token: string) => dispatch(setGuestAccountCreationToken(token)),
+            (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+          ));
+        } else {
+          return dispatch(createStripePaymentIntent(
+            {
+              ...stripeChargeDataFromAuthorisation({...paymentAuthorisation, token: 'token-deprecated'}, state),
+              paymentMethodId: paymentAuthorisation.paymentMethodId
+            },
+            (token: string) => dispatch(setGuestAccountCreationToken(token)),
+            (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+          ));
+        }
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
       return Promise.resolve(error);
