@@ -63,10 +63,11 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
 const withDeliveryCheck = WappedComponent => ({ results, ...props }) => (
   <div>
     <WappedComponent {...props} />
-    { results.length > 0 && postcodeIsWithinDeliveryArea(props.value) && (
+    { results.length > 0 && !postcodeIsWithinDeliveryArea(props.value) && (
       <p>
-        Sorry, we cannot deliver a paper to an address with this postcode.
-        Please call Customer Services on: 0330 333 6767 or press Back to purchase a voucher subscription.
+        Sorry, we cannot deliver a paper outside the M25.
+        You can have vouchers delivered anywhere in the UK to redeem at your newsagent, please click
+        &nbsp;<a href="https://support.thegulocal.com/uk/subscribe/paper#subscribe">here</a> to switch to vouchers.
       </p>
       )
     }
