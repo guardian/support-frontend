@@ -107,9 +107,8 @@ export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
 export type StripeAuthorisation = {|
   paymentMethod: typeof Stripe,
-  token?: string,
+  token: string,
   stripePaymentMethod: StripePaymentMethod,
-  paymentMethodId?: string,  //TODO - is this a good way to model this?
 |};
 export type PayPalAuthorisation = {|
   paymentMethod: typeof PayPal,
