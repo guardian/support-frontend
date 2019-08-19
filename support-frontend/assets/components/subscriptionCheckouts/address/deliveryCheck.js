@@ -1,3 +1,6 @@
+// @flow
+import type { Option } from 'helpers/types/option';
+
 const M25_POSTCODE_PREFIXES = [
   'CR0', 'CR2', 'CR3', 'CR4', 'CR5', 'CR6', 'CR7', 'CR8', 'CR9',
   'BR1', 'BR2', 'BR3', 'BR4', 'BR5', 'BR6', 'BR7', 'BR8',
@@ -27,17 +30,17 @@ const M25_POSTCODE_PREFIXES = [
   'TN16',
 ];
 
-const isPostcodeInPrefixes = (postcode, prefix) => {
-  // check postcode length is greater than 6 characters
-  const formattedPostcode = postcode.replace(' ', '').toUpperCase();
-  const lastThreeCharacters = formattedPostcode.split('').slice(-3).join('');
-  const newPostcode = formattedPostcode.replace(lastThreeCharacters, '');
+export const postcodeHasPrefix = (postcode: Option<string>, prefix: string): boolean => {
 
-  return newPostcode === prefix;
+  const formattedPostcode = postcode !== null ? postcode.replace(' ', '').toUpperCase() : '';
+  const lastThreeCharacters = formattedPostcode.slice(-3);
+  const postcodePrefix = formattedPostcode.replace(lastThreeCharacters, '');
+
+  return postcodePrefix === prefix;
 };
 
-const postcodeIsWithinDeliveryArea = postcode => M25_POSTCODE_PREFIXES
-  .filter(prefix => isPostcodeInPrefixes(postcode, prefix)).length > 0;
+const postcodeIsWithinDeliveryArea = (postcode: Option<string>): boolean =>
+  postcode !== null && M25_POSTCODE_PREFIXES.filter(prefix => postcodeHasPrefix(postcode, prefix)).length > 0;
 
 export {
   postcodeIsWithinDeliveryArea,
