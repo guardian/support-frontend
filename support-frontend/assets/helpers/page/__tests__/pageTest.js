@@ -50,14 +50,14 @@ describe('reducer tests', () => {
   });
 
   it('should return the initial state', () => {
-    expect(global.reducer(undefined, { type: 'SET_COUNTRY', country: 'GB' })).toMatchSnapshot();
+    expect(global.reducer(undefined, { type: 'SET_COUNTRY_INTERNATIONALISATION', country: 'GB' })).toMatchSnapshot();
   });
 
-  it('should handle SET_COUNTRY to US', () => {
+  it('should handle SET_COUNTRY_INTERNATIONALISATION to US', () => {
 
     const country: IsoCountry = 'US';
     const action = {
-      type: 'SET_COUNTRY',
+      type: 'SET_COUNTRY_INTERNATIONALISATION',
       country,
     };
 
