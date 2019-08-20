@@ -61,17 +61,23 @@ type StripePaymentRequestButtonData = {
   stripeV3HasLoaded: boolean,
 }
 
+type StripePaymentIntentsData = {
+  // Callbacks that must be initialised after the StripeCardForm component has been created
+  createPaymentMethod: (email: string) => void,
+  handle3DS: (clientSecret: string) => void,
+  //TODO - hold state to show if it's in progress, stripe.js has loaded
+}
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
-  createStripePaymentMethod: () => void,
-  handleStripe3DS: (clientSecret: string) => void,
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
   stripePaymentRequestButtonData: StripePaymentRequestButtonData,
+  stripePaymentIntentsData: StripePaymentIntentsData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
   paymentError: ErrorReason | null,
@@ -140,6 +146,10 @@ function createFormReducer() {
       stripePaymentRequestButtonClicked: false,
       stripeV3HasLoaded: false,
     },
+    stripePaymentIntentsData: {
+      createPaymentMethod: null,
+      handle3DS: null,
+    },
     setPasswordData: {
       password: '',
       passwordHasBeenSubmitted: false,
@@ -196,10 +206,22 @@ function createFormReducer() {
         };
 
       case 'SET_CREATE_STRIPE_PAYMENT_METHOD':
-        return { ...state, createStripePaymentMethod: action.createStripePaymentMethod };
+        return {
+          ...state,
+          stripePaymentIntentsData: {
+            ...state.stripePaymentIntentsData,
+            createPaymentMethod: action.createStripePaymentMethod,
+          }
+        };
 
       case 'SET_HANDLE_STRIPE_3DS':
-        return { ...state, handleStripe3DS: action.handleStripe3DS };
+        return {
+          ...state,
+          stripePaymentIntentsData: {
+            ...state.stripePaymentIntentsData,
+            handle3DS: action.handleStripe3DS,
+          }
+        };
 
       case 'UPDATE_FIRST_NAME':
         return { ...state, formData: { ...state.formData, firstName: action.firstName } };
@@ -260,6 +282,15 @@ function createFormReducer() {
             ...state.stripePaymentRequestButtonData,
             stripeV3HasLoaded: true,
           },
+        };
+
+      case 'SET_STRIPE_PAYMENT_INTENTS_DATA':
+        return {
+          ...state,
+          stripePaymentIntentsData: {
+            ...state.stripePaymentIntentsData,
+            ...action,
+          }
         };
 
       case 'UPDATE_USER_FORM_DATA':

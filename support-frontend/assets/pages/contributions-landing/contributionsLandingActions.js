@@ -75,13 +75,14 @@ export type Action =
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
+  | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
+  | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => void }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
-  | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: () => void };
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -221,7 +222,7 @@ const checkIfEmailHasPassword = (email: string) =>
 
 const setTickerGoalReached = (): Action => ({ type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: true });
 
-const setCreateStripePaymentMethod = (createStripePaymentMethod: () => void): Action =>
+const setCreateStripePaymentMethod = (createStripePaymentMethod: (email: string) => void): Action =>
   ({ type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod });
 
 const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => void): Action =>
@@ -448,7 +449,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
             },
             (token: string) => dispatch(setGuestAccountCreationToken(token)),
             (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-            state.page.form.handleStripe3DS,
+            state.page.form.stripePaymentIntentsData.handle3DS,
           ));
         }
       }

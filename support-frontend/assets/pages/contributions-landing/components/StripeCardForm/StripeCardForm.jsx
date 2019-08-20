@@ -6,7 +6,7 @@ import React from 'react';
 import {CardElement, injectStripe} from 'react-stripe-elements';
 import {connect} from "react-redux";
 import type {State} from "assets/pages/contributions-landing/contributionsLandingReducer";
-import {onThirdPartyPaymentAuthorised} from "../../contributionsLandingActions";
+import {onThirdPartyPaymentAuthorised, paymentWaiting} from "../../contributionsLandingActions";
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
 import {type PaymentResult} from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -14,6 +14,7 @@ import {setCreateStripePaymentMethod, setHandleStripe3DS} from 'pages/contributi
 import {type ContributionType} from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
+import type {Action} from "../../contributionsLandingActions";
 
 // ----- Types -----//
 
@@ -21,8 +22,9 @@ import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 type PropTypes = {|
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   contributionType: ContributionType,
-  setCreateStripePaymentMethod: (() => void) => Action,
+  setCreateStripePaymentMethod: ((email: string) => void) => Action,
   setHandleStripe3DS: ((clientSecret: string) => void) => Action,
+  paymentWaiting: (isWaiting: boolean) => Action,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -33,45 +35,36 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
     (paymentAuthorisation: PaymentAuthorisation) =>
       dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
-  setCreateStripePaymentMethod: (createStripePaymentMethod: () => void) =>
+  setCreateStripePaymentMethod: (createStripePaymentMethod: (email: string) => void) =>
     dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
   setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => void) =>
-    dispatch(setHandleStripe3DS(handleStripe3DS))
+    dispatch(setHandleStripe3DS(handleStripe3DS)),
+  paymentWaiting: (isWaiting: boolean) =>
+    dispatch(paymentWaiting(isWaiting))
 });
 
 function CardForm(props: PropTypes) {
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    createPaymentMethod();
-  };
+  props.setCreateStripePaymentMethod((email: string) => {
+    props.paymentWaiting(true);
 
-  const createPaymentMethod = () => {
     props.stripe.createPaymentMethod('card', {
-      billing_details: { email: 'tom.forbes@theguardian.com' }
+      billing_details: { email }
     }).then(result => {
       //TODO - error handling
       console.log("paymentMethod", result)
       props.onPaymentAuthorised({paymentMethod: Stripe, paymentMethodId: result.paymentMethod.id})
     });
-  };
+  });
 
-  const handle3DS = (clientSecret: string) => {
+  props.setHandleStripe3DS((clientSecret: string) => {
     return props.stripe.handleCardAction(clientSecret).then(result => {
       console.log("handle3DS", result)
       return result.paymentIntent
     })
-  };
+  });
 
-  props.setCreateStripePaymentMethod(createPaymentMethod);
-  props.setHandleStripe3DS(handle3DS);
-
-  //TODO - get rid of form
-  return (
-    <form className='stripe-card-element' onSubmit={onSubmit}>
-      <CardElement hidePostalCode={true}/>
-    </form>
-  )
+  return (<CardElement hidePostalCode={true}/>)
 }
 
 // ----- Default props----- //

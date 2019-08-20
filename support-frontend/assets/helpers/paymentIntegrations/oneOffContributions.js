@@ -70,6 +70,10 @@ export type CreateStripePaymentIntentRequest = StripeChargeData & {|
   paymentMethodId: string
 |};
 
+export type ConfirmStripePaymentIntentRequest = StripeChargeData & {|
+  paymentIntentId: string
+|};
+
 
 // Data that should be posted to the payment API to get a url for the PayPal UI
 // where the user is redirected to so that they can authorize the payment.
@@ -107,7 +111,6 @@ function paymentApiEndpointWithMode(url: string) {
 // Object is expected to have structure:
 // { type: "error", error: { failureReason: string } }, or
 // { type: "success", data: { currency: string, amount: number } }
-// { type: "requiresaction", data: { clientSecret: string } }   -- Stripe only
 function paymentResultFromObject(
   json: Object,
   setGuestAccountCreationToken: (string) => void,
@@ -142,34 +145,37 @@ function postOneOffStripeExecutePaymentRequest(
   ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
 }
 
+function postOneOffStripeConfirmPaymentRequest(
+  data: ConfirmStripePaymentIntentRequest,
+) {
+  return fetchJson(
+    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/confirm-payment`),
+    requestOptions(data, 'omit', 'POST', null),
+  )
+}
+
 function postOneOffStripeCreatePaymentRequest(
   data: CreateStripePaymentIntentRequest,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
   handleStripe3DS: (clientSecret: string) => void,
 ): Promise<PaymentResult> {
-  return logPromise(fetchJson(
-    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
-    requestOptions(data, 'omit', 'POST', null),
-  ).then(result => {
-    if (result.type === 'requiresaction') {
-      // Do 3DS
-      return handleStripe3DS(result.data.clientSecret)
-        //TODO - tidy up
-        .then(paymentIntent => {
-          debugger
-          // Send to payment-api for confirmation
-          return logPromise(fetchJson(
-            paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/confirm-payment`),
-            requestOptions({ ...data, paymentIntentId: paymentIntent.id}, 'omit', 'POST', null),
-          ).then(confirmationResult => {
-            debugger
-            return paymentResultFromObject(confirmationResult, setGuestAccountCreationToken, setThankYouPageStage)
-          }))
-        });
-    }
-    else return paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)
-  }));
+  return logPromise(
+    fetchJson(
+      paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
+      requestOptions(data, 'omit', 'POST', null),
+    ).then(createIntentResponse => {
+      if (createIntentResponse.type === 'requiresaction') {
+        // Do 3DS auth and then send back to payment-api for payment confirmation
+        //TODO - handle failure
+        return handleStripe3DS(createIntentResponse.data.clientSecret)
+          .then(authorisedPaymentIntent => postOneOffStripeConfirmPaymentRequest({ ...data, paymentIntentId: authorisedPaymentIntent.id}))
+          .then(confirmIntentResponse => paymentResultFromObject(confirmIntentResponse, setGuestAccountCreationToken, setThankYouPageStage))
+      }
+      // No 3DS auth required
+      else return paymentResultFromObject(createIntentResponse, setGuestAccountCreationToken, setThankYouPageStage)
+    })
+  );
 }
 
 // Object is expected to have structure:
