@@ -62,6 +62,7 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
 const ComposedInputWithButton = compose(withLabel, asControlled, withError)(InputWithButton);
 const ComposedSelect = compose(withLabel)(Select);
 
+
 // Main class
 
 class PostcodeFinder extends Component<PropTypes> {
@@ -88,9 +89,7 @@ class PostcodeFinder extends Component<PropTypes> {
           }}
           isLoading={isLoading}
           value={postcode}
-          results={results}
         />
-
         {(results.length > 0) &&
           <ComposedSelect
             onChange={(ev) => {
