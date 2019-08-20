@@ -8,7 +8,6 @@ import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import {
   loadStripe,
   setupStripeCheckout,
-  type StripeAccount,
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
