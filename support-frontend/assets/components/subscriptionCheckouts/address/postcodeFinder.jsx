@@ -17,7 +17,6 @@ import {
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import { type PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import { postcodeIsWithinDeliveryArea } from 'components/subscriptionCheckouts/address/deliveryCheck';
 
 import styles
   from 'components/subscriptionCheckouts/address/postcodeFinder.module.scss';
@@ -60,21 +59,7 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
   </div>
 );
 
-const withDeliveryCheck = WappedComponent => ({ results, ...props }) => (
-  <div>
-    <WappedComponent {...props} />
-    { results.length > 0 && !postcodeIsWithinDeliveryArea(props.value) && (
-      <p>
-        Sorry, we cannot deliver a paper outside the M25.
-        You can have vouchers delivered anywhere in the UK to redeem at your newsagent, please click
-        &nbsp;<a href="https://support.thegulocal.com/uk/subscribe/paper#subscribe">here</a> to switch to vouchers.
-      </p>
-      )
-    }
-  </div>
-);
-
-const ComposedInputWithButton = compose(withDeliveryCheck, withLabel, asControlled, withError)(InputWithButton);
+const ComposedInputWithButton = compose(withLabel, asControlled, withError)(InputWithButton);
 const ComposedSelect = compose(withLabel)(Select);
 
 // Main class
