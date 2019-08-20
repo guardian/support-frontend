@@ -145,31 +145,38 @@ function postOneOffStripeExecutePaymentRequest(
   ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
 }
 
-function postOneOffStripeConfirmPaymentRequest(
+function postStripeCreatePaymentIntentRequest(
+  data: CreateStripePaymentIntentRequest,
+): Promise<PaymentResult> {
+  return fetchJson(
+    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
+    requestOptions(data, 'omit', 'POST', null),
+  )
+}
+
+function postStripeConfirmPaymentIntentRequest(
   data: ConfirmStripePaymentIntentRequest,
-) {
+): Promise<PaymentResult> {
   return fetchJson(
     paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/confirm-payment`),
     requestOptions(data, 'omit', 'POST', null),
   )
 }
 
-function postOneOffStripeCreatePaymentRequest(
+// Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
+function processStripePaymentIntentRequest(
   data: CreateStripePaymentIntentRequest,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
   handleStripe3DS: (clientSecret: string) => void,
 ): Promise<PaymentResult> {
   return logPromise(
-    fetchJson(
-      paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
-      requestOptions(data, 'omit', 'POST', null),
-    ).then(createIntentResponse => {
+    postStripeCreatePaymentIntentRequest(data).then(createIntentResponse => {
       if (createIntentResponse.type === 'requiresaction') {
         // Do 3DS auth and then send back to payment-api for payment confirmation
         //TODO - handle failure
         return handleStripe3DS(createIntentResponse.data.clientSecret)
-          .then(authorisedPaymentIntent => postOneOffStripeConfirmPaymentRequest({ ...data, paymentIntentId: authorisedPaymentIntent.id}))
+          .then(authorisedPaymentIntent => postStripeConfirmPaymentIntentRequest({ ...data, paymentIntentId: authorisedPaymentIntent.id}))
           .then(confirmIntentResponse => paymentResultFromObject(confirmIntentResponse, setGuestAccountCreationToken, setThankYouPageStage))
       }
       // No 3DS auth required
@@ -205,5 +212,5 @@ function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Pr
 export {
   postOneOffStripeExecutePaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
-  postOneOffStripeCreatePaymentRequest,
+  processStripePaymentIntentRequest,
 };

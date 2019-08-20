@@ -30,7 +30,7 @@ import {
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
-  postOneOffStripeCreatePaymentRequest,
+  processStripePaymentIntentRequest,
 } from 'helpers/paymentIntegrations/oneOffContributions';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
@@ -382,7 +382,7 @@ const makeCreateStripePaymentIntentRequest = (
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> => {
     // TODO - only call onPaymentResult if success
-    return dispatch(onPaymentResult(postOneOffStripeCreatePaymentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS)));
+    return dispatch(onPaymentResult(processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS)));
   };
 
 function recurringPaymentAuthorisationHandler(
