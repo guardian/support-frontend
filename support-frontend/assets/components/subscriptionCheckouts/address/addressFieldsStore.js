@@ -85,15 +85,15 @@ const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormFi
 const applyAddressRules = (fields: FormFields): FormError<FormField>[] => validate([
   {
     rule: nonEmptyString(fields.lineOne),
-    error: formError('lineOne', 'Please enter an address'),
+    error: formError('lineOne', 'Please enter an address.'),
   },
   {
     rule: nonEmptyString(fields.city),
-    error: formError('city', 'Please enter a city'),
+    error: formError('city', 'Please enter a city.'),
   },
   {
     rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postCode),
-    error: formError('postCode', 'Please enter a postcode'),
+    error: formError('postCode', 'Please enter a postcode.'),
   },
   {
     rule: notNull(fields.country),

@@ -1,16 +1,32 @@
 @import '../formFields';
 
-.component-form-error__error {
+.component-form-error__error, .component-form-error__summary-error {
   @include gu-fontset-explainer;
   color: gu-colour(state-error);
   display: block;
-  margin-top: $gu-v-spacing;
   
   @include mq($from: mobileMedium) {
     width: 80%;
   }
 }
 
+.component-form-error__error {
+  margin-top: $gu-v-spacing;
+}
+
+.component-form-error__summary-error {
+  &:first-of-type {
+    margin-top: $gu-v-spacing;
+  }
+}
+
 .component-form-error .component-input:not([type-radio]) {
   border-color: gu-colour(state-error);
+}
+
+.component-form-error__heading {
+  font-size: 1rem;
+  font-family: $gu-text-sans-web;
+  margin-top: $gu-v-spacing * 2;
+  font-weight: bold;
 }

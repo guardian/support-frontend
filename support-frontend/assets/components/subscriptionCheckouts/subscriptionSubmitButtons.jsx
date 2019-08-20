@@ -14,6 +14,10 @@ import Button from 'components/button/button';
 import { type Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
+import { type FormError } from 'helpers/subscriptionsForms/validation';
+import { type FormField } from 'helpers/subscriptionsForms/formFields';
+
+import 'components/forms/customFields/error.scss';
 
 // ----- Types ----- //
 
@@ -29,8 +33,24 @@ type PropTypes = {|
   billingPeriod: BillingPeriod,
   validateForm: Function,
   formIsValid: Function,
+  allErrors: FormError<FormField>[],
 |};
 
+type ErrorSummaryPropTypes = {
+  errors: Array<Object>,
+}
+
+const ErrorSummary = (props: ErrorSummaryPropTypes) => (
+  <div>
+    <p className="component-form-error__heading">There is a problem</p>
+    {props.errors.map(error => (
+      <div className="component-form-error__summary-error">
+        {error.message}
+      </div>
+    ))}
+  </div>
+
+);
 
 // ----- Render ----- //
 
@@ -66,6 +86,7 @@ function SubscriptionSubmitButtons(props: PropTypes) {
       >
         Continue to payment
       </Button>
+      {props.allErrors.length > 0 && <ErrorSummary errors={props.allErrors} />}
     </div>
   );
 }
