@@ -17,11 +17,11 @@ case class StripeConfig(defaultAccount: StripeAccountConfig,
     maybeCurrency match {
       case Some(AUD) => {
         SafeLogger.info(s"StripeConfig: getting AU stripe account for AUD")
-        forCountry(Some(Country.Australia))
+        australiaAccount
       }
       case _ => {
         SafeLogger.info(s"StripeConfig: getting default stripe account for ${maybeCurrency.map(_.iso).mkString}")
-        forCountry(None)
+        defaultAccount
       }
     }
   }
