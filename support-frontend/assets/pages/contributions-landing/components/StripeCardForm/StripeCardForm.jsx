@@ -10,7 +10,7 @@ import {onThirdPartyPaymentAuthorised} from "../../contributionsLandingActions";
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
 import {type PaymentResult} from 'helpers/paymentIntegrations/readerRevenueApis';
-import {setCreateStripePaymentMethod} from 'pages/contributions-landing/contributionsLandingActions';
+import {setCreateStripePaymentMethod, setHandleStripe3DS} from 'pages/contributions-landing/contributionsLandingActions';
 import {type ContributionType} from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
@@ -22,6 +22,7 @@ type PropTypes = {|
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   contributionType: ContributionType,
   setCreateStripePaymentMethod: (() => void) => Action,
+  setHandleStripe3DS: ((clientSecret: string) => void) => Action,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -33,7 +34,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
     (paymentAuthorisation: PaymentAuthorisation) =>
       dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
   setCreateStripePaymentMethod: (createStripePaymentMethod: () => void) =>
-    dispatch(setCreateStripePaymentMethod(createStripePaymentMethod))
+    dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
+  setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => void) =>
+    dispatch(setHandleStripe3DS(handleStripe3DS))
 });
 
 function CardForm(props: PropTypes) {
@@ -54,13 +57,14 @@ function CardForm(props: PropTypes) {
   };
 
   const handle3DS = (clientSecret: string) => {
-    props.stripe.handleCardAction(clientSecret).then(result => {
+    return props.stripe.handleCardAction(clientSecret).then(result => {
       console.log("handle3DS", result)
       return result.paymentIntent
     })
   };
 
   props.setCreateStripePaymentMethod(createPaymentMethod);
+  props.setHandleStripe3DS(handle3DS);
 
   //TODO - get rid of form
   return (

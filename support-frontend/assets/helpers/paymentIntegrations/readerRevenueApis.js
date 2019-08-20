@@ -109,6 +109,9 @@ export type StripeAuthorisation = {|
   paymentMethod: typeof Stripe,
   token: string,
   stripePaymentMethod: StripePaymentMethod,
+  //TODO -  model this better?
+  paymentMethodId?: string,
+  paymentIntentId?: string,
 |};
 export type PayPalAuthorisation = {|
   paymentMethod: typeof PayPal,

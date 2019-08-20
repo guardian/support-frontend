@@ -224,6 +224,9 @@ const setTickerGoalReached = (): Action => ({ type: 'SET_TICKER_GOAL_REACHED', t
 const setCreateStripePaymentMethod = (createStripePaymentMethod: () => void): Action =>
   ({ type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod });
 
+const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => void): Action =>
+  ({ type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS });
+
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
@@ -374,10 +377,11 @@ const makeCreateStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,
   setGuestToken: (string) => void,
   setThankYouPage: (ThankYouPageStage) => void,
+  handleStripe3DS: (clientSecret: string) => void,
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> => {
     // TODO - only call onPaymentResult if success
-    return dispatch(onPaymentResult(postOneOffStripeCreatePaymentRequest(data, setGuestToken, setThankYouPage)));
+    return dispatch(onPaymentResult(postOneOffStripeCreatePaymentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS)));
   };
 
 function recurringPaymentAuthorisationHandler(
@@ -444,6 +448,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
             },
             (token: string) => dispatch(setGuestAccountCreationToken(token)),
             (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+            state.page.form.handleStripe3DS,
           ));
         }
       }
@@ -540,4 +545,5 @@ export {
   setStripeV3HasLoaded,
   setTickerGoalReached,
   setCreateStripePaymentMethod,
+  setHandleStripe3DS,
 };

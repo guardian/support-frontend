@@ -146,12 +146,28 @@ function postOneOffStripeCreatePaymentRequest(
   data: CreateStripePaymentIntentRequest,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
+  handleStripe3DS: (clientSecret: string) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
     requestOptions(data, 'omit', 'POST', null),
   ).then(result => {
-    if (result.type === 'requiresaction') return null; //3DS
+    if (result.type === 'requiresaction') {
+      // Do 3DS
+      return handleStripe3DS(result.data.clientSecret)
+        //TODO - tidy up
+        .then(paymentIntent => {
+          debugger
+          // Send to payment-api for confirmation
+          return logPromise(fetchJson(
+            paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/confirm-payment`),
+            requestOptions({ ...data, paymentIntentId: paymentIntent.id}, 'omit', 'POST', null),
+          ).then(confirmationResult => {
+            debugger
+            return paymentResultFromObject(confirmationResult, setGuestAccountCreationToken, setThankYouPageStage)
+          }))
+        });
+    }
     else return paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)
   }));
 }
