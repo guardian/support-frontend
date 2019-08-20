@@ -18,6 +18,7 @@ import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 
 import 'components/forms/customFields/error.scss';
+import './subscriptionSubmitButton.scss';
 
 // ----- Types ----- //
 
@@ -41,7 +42,7 @@ type ErrorSummaryPropTypes = {
 }
 
 const ErrorSummary = (props: ErrorSummaryPropTypes) => (
-  <div>
+  <div className="component-form-error__border">
     <p className="component-form-error__heading">There is a problem</p>
     {props.errors.map(error => (
       <div className="component-form-error__summary-error">
@@ -60,33 +61,35 @@ function SubscriptionSubmitButtons(props: PropTypes) {
   // because we don't want to destroy and replace the iframe each time.
   // See PayPalExpressButton for more info.
   return (
-    <div>
-      <div
-        id="component-paypal-button-checkout"
-        className={hiddenIf(props.paymentMethod !== PayPal, 'component-paypal-button-checkout')}
-      >
-        <PayPalExpressButton
-          onPaymentAuthorisation={props.onPaymentAuthorised}
-          csrf={props.csrf}
-          currencyId={props.currencyId}
-          hasLoaded={props.payPalHasLoaded}
-          canOpen={props.formIsValid}
-          onClick={props.validateForm}
-          formClassName="form--contribution"
-          isTestUser={props.isTestUser}
-          setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-          amount={props.amount}
-          billingPeriod={props.billingPeriod}
-        />
+    <div className="component-submit-button">
+      <div className="component-submit-button--margin">
+        <div
+          id="component-paypal-button-checkout"
+          className={hiddenIf(props.paymentMethod !== PayPal, 'component-paypal-button-checkout')}
+        >
+          <PayPalExpressButton
+            onPaymentAuthorisation={props.onPaymentAuthorised}
+            csrf={props.csrf}
+            currencyId={props.currencyId}
+            hasLoaded={props.payPalHasLoaded}
+            canOpen={props.formIsValid}
+            onClick={props.validateForm}
+            formClassName="form--contribution"
+            isTestUser={props.isTestUser}
+            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+            amount={props.amount}
+            billingPeriod={props.billingPeriod}
+          />
+        </div>
+        <Button
+          id="qa-submit-button"
+          type="submit"
+          modifierClasses={props.paymentMethod === PayPal ? ['hidden'] : []}
+        >
+          Continue to payment
+        </Button>
       </div>
-      <Button
-        id="qa-submit-button"
-        type="submit"
-        modifierClasses={props.paymentMethod === PayPal ? ['hidden'] : []}
-      >
-        Continue to payment
-      </Button>
-      {props.allErrors.length > 0 && <ErrorSummary errors={props.allErrors} />}
+      <span>{props.allErrors.length > 0 && <ErrorSummary errors={props.allErrors} />}</span>
     </div>
   );
 }

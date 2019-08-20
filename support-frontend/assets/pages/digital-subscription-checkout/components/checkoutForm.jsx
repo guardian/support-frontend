@@ -200,22 +200,20 @@ function CheckoutForm(props: PropTypes) {
             validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
           />
-          <FormSection noBorder>
-            <SubscriptionSubmitButtons
-              paymentMethod={props.paymentMethod}
-              onPaymentAuthorised={props.onPaymentAuthorised}
-              csrf={props.csrf}
-              currencyId={props.currencyId}
-              payPalHasLoaded={props.payPalHasLoaded}
-              formIsValid={props.formIsValid}
-              validateForm={props.validateForm}
-              isTestUser={props.isTestUser}
-              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-              amount={props.amount}
-              billingPeriod={props.billingPeriod}
-              allErrors={[...props.billingErrors, ...props.formErrors]}
-            />
-          </FormSection>
+          <SubscriptionSubmitButtons
+            paymentMethod={props.paymentMethod}
+            onPaymentAuthorised={props.onPaymentAuthorised}
+            csrf={props.csrf}
+            currencyId={props.currencyId}
+            payPalHasLoaded={props.payPalHasLoaded}
+            formIsValid={props.formIsValid}
+            validateForm={props.validateForm}
+            isTestUser={props.isTestUser}
+            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+            amount={props.amount}
+            billingPeriod={props.billingPeriod}
+            allErrors={[...props.billingErrors, ...props.formErrors]}
+          />
           <CancellationSection />
         </Form>
       </CheckoutLayout>
