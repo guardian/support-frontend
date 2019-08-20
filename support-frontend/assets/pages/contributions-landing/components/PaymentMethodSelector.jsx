@@ -9,7 +9,6 @@ import { type ThirdPartyPaymentLibrary, getPaymentLabel, getValidPaymentMethods 
 import { type Switches } from 'helpers/settings';
 import {
   type ContributionType, contributionTypeIsRecurring,
-  type ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
@@ -54,7 +53,6 @@ type PropTypes = {|
   existingPaymentMethods: ExistingPaymentMethod[] | typeof undefined,
   paymentMethod: PaymentMethod,
   existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   updatePaymentMethod: PaymentMethod => Action,
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   isTestUser: boolean,
@@ -69,7 +67,6 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethods: state.common.existingPaymentMethods,
   paymentMethod: state.page.form.paymentMethod,
   existingPaymentMethod: state.page.form.existingPaymentMethod,
-  thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
 });

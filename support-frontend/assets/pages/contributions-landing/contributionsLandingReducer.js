@@ -66,6 +66,7 @@ type FormState = {
   paymentMethod: PaymentMethod,
   existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
+  createStripePaymentMethod: () => void,
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
@@ -118,6 +119,7 @@ function createFormReducer() {
         PayPal: null,
       },
     },
+    createStripePaymentMethod: null,
     formData: {
       firstName: null,
       lastName: null,
@@ -190,6 +192,9 @@ function createFormReducer() {
             },
           },
         };
+
+      case 'SET_CREATE_STRIPE_PAYMENT_METHOD':
+        return { ...state, createStripePaymentMethod: action.createStripePaymentMethod };
 
       case 'UPDATE_FIRST_NAME':
         return { ...state, formData: { ...state.formData, firstName: action.firstName } };

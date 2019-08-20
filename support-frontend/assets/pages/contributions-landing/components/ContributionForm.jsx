@@ -86,6 +86,7 @@ type PropTypes = {|
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
   landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
   stripeElementsTestVariant: StripeElementsTestVariants,
+  createStripePaymentMethod: () => void,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -103,6 +104,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
+  createStripePaymentMethod: state.page.form.createStripePaymentMethod,
   contributionType: state.page.form.contributionType,
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
@@ -176,11 +178,9 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
     Stripe: (props: PropTypes) => {
       if (props.stripeElementsTestVariant !== 'stripeCardElement') openStripePopup(props);
-      else {
-        const paymentLibraries = props.thirdPartyPaymentLibraries[props.contributionType];
-        if (paymentLibraries && paymentLibraries.Stripe) {
-          paymentLibraries.Stripe()
-        }
+      //TODO - submit button should be disabled until this is available
+      else if (props.createStripePaymentMethod) {
+        props.createStripePaymentMethod();
       }
     },
     PayPal: (props: PropTypes) => {

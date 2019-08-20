@@ -80,7 +80,8 @@ export type Action =
   | { type: 'PAYMENT_SUCCESS' }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
-  | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean };
+  | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
+  | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: () => void };
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -219,6 +220,9 @@ const checkIfEmailHasPassword = (email: string) =>
   };
 
 const setTickerGoalReached = (): Action => ({ type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: true });
+
+const setCreateStripePaymentMethod = (createStripePaymentMethod: () => void): Action =>
+  ({ type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod });
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
@@ -366,12 +370,13 @@ const executeStripeOneOffPayment = (
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage)));
 
-const createStripePaymentIntent = (
+const makeCreateStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,
   setGuestToken: (string) => void,
   setThankYouPage: (ThankYouPageStage) => void,
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> => {
+    // TODO - only call onPaymentResult if success
     return dispatch(onPaymentResult(postOneOffStripeCreatePaymentRequest(data, setGuestToken, setThankYouPage)));
   };
 
@@ -432,7 +437,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
             (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
           ));
         } else {
-          return dispatch(createStripePaymentIntent(
+          return dispatch(makeCreateStripePaymentIntentRequest(
             {
               ...stripeChargeDataFromAuthorisation({...paymentAuthorisation, token: 'token-deprecated'}, state),
               paymentMethodId: paymentAuthorisation.paymentMethodId
@@ -478,6 +483,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
 };
 
+// Used for Stripe Checkout one-off
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
     const state = getState();
@@ -491,17 +497,7 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
 const onStripePaymentRequestApiPaymentAuthorised =
   (paymentAuthorisation: PaymentAuthorisation) =>
     (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
-      const state = getState();
-      return paymentAuthorisationHandlers.ONE_OFF.Stripe(
-        dispatch,
-        state,
-        paymentAuthorisation,
-      );
-    };
-
-const onStripePaymentIntentApiPaymentAuthorised =
-  (paymentAuthorisation: PaymentAuthorisation) =>
-    (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
+      debugger
       const state = getState();
       return paymentAuthorisationHandlers.ONE_OFF.Stripe(
         dispatch,
@@ -540,8 +536,8 @@ export {
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
-  onStripePaymentIntentApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,
   setStripeV3HasLoaded,
   setTickerGoalReached,
+  setCreateStripePaymentMethod,
 };

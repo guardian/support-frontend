@@ -99,7 +99,7 @@ function initialiseStripeCheckout(
   isTestUser: boolean,
   dispatch: Function,
 ) {
-  //TODO - will not be used
+  console.log("initialiseStripeCheckout", contributionType)
   const library: ThirdPartyPaymentLibrary =
     setupStripeCheckout(
       onPaymentAuthorisation,
@@ -107,6 +107,7 @@ function initialiseStripeCheckout(
       currencyId,
       isTestUser,
     );
+  //The only place that setThirdPartyPaymentLibrary is called
   dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
 }
 

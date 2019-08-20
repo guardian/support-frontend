@@ -6,11 +6,11 @@ import React from 'react';
 import {CardElement, injectStripe} from 'react-stripe-elements';
 import {connect} from "react-redux";
 import type {State} from "assets/pages/contributions-landing/contributionsLandingReducer";
-import {onStripePaymentIntentApiPaymentAuthorised} from "../../contributionsLandingActions";
+import {onThirdPartyPaymentAuthorised} from "../../contributionsLandingActions";
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
 import {type PaymentResult} from 'helpers/paymentIntegrations/readerRevenueApis';
-import {setThirdPartyPaymentLibrary} from 'pages/contributions-landing/contributionsLandingActions';
+import {setCreateStripePaymentMethod} from 'pages/contributions-landing/contributionsLandingActions';
 import {type ContributionType} from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
@@ -21,7 +21,7 @@ import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 type PropTypes = {|
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   contributionType: ContributionType,
-  setThirdPartyPaymentLibrary: (?{ [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary }}) => Action,
+  setCreateStripePaymentMethod: (() => void) => Action,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -31,13 +31,9 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
     (paymentAuthorisation: PaymentAuthorisation) =>
-      dispatch(onStripePaymentIntentApiPaymentAuthorised(paymentAuthorisation)),
-  setThirdPartyPaymentLibrary:
-    (thirdPartyPaymentLibraryByContrib: {
-      [ContributionType]: {
-        [PaymentMethod]: ThirdPartyPaymentLibrary
-      }
-    }) => dispatch(setThirdPartyPaymentLibrary(thirdPartyPaymentLibraryByContrib)),
+      dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
+  setCreateStripePaymentMethod: (createStripePaymentMethod: () => void) =>
+    dispatch(setCreateStripePaymentMethod(createStripePaymentMethod))
 });
 
 function CardForm(props: PropTypes) {
@@ -47,9 +43,6 @@ function CardForm(props: PropTypes) {
     createPaymentMethod();
   };
 
-
-  //TODO - this needs to be called when the contribute button is clicked
-  //as this component is created, add this function to redux store as
   const createPaymentMethod = () => {
     props.stripe.createPaymentMethod('card', {
       billing_details: { email: 'tom.forbes@theguardian.com' }
@@ -60,13 +53,19 @@ function CardForm(props: PropTypes) {
     });
   };
 
-  props.setThirdPartyPaymentLibrary({ [props.contributionType]: { Stripe: createPaymentMethod } });
+  const handle3DS = (clientSecret: string) => {
+    props.stripe.handleCardAction(clientSecret).then(result => {
+      console.log("handle3DS", result)
+      return result.paymentIntent
+    })
+  };
 
+  props.setCreateStripePaymentMethod(createPaymentMethod);
+
+  //TODO - get rid of form
   return (
     <form className='stripe-card-element' onSubmit={onSubmit}>
-      <CardElement
-      />
-      {/*<button type='submit'>Submit</button>*/}
+      <CardElement hidePostalCode={true}/>
     </form>
   )
 }

@@ -107,6 +107,7 @@ function paymentApiEndpointWithMode(url: string) {
 // Object is expected to have structure:
 // { type: "error", error: { failureReason: string } }, or
 // { type: "success", data: { currency: string, amount: number } }
+// { type: "requiresaction", data: { clientSecret: string } }   -- Stripe only
 function paymentResultFromObject(
   json: Object,
   setGuestAccountCreationToken: (string) => void,
@@ -149,7 +150,10 @@ function postOneOffStripeCreatePaymentRequest(
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
     requestOptions(data, 'omit', 'POST', null),
-  ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
+  ).then(result => {
+    if (result.type === 'requiresaction') return null; //3DS
+    else return paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)
+  }));
 }
 
 // Object is expected to have structure:
