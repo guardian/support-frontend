@@ -23,6 +23,8 @@ import {
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
+import { postcodeIsWithinDeliveryArea } from 'components/subscriptionCheckouts/address/deliveryCheck';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Types ----- //
 
@@ -77,36 +79,49 @@ const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
+const isHomeDeliveryInM25 = (fulfilmentOption: Option<FulfilmentOptions>, fields) => {
+  if (fulfilmentOption === 'HomeDelivery') {
+    return postcodeIsWithinDeliveryArea(fields.postCode);
+  }
+  return true;
+};
+
 const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormField>>): Action => ({
   scope,
   type: 'SET_ADDRESS_FORM_ERRORS',
   errors,
 });
-const applyAddressRules = (fields: FormFields): FormError<FormField>[] => validate([
-  {
-    rule: nonEmptyString(fields.lineOne),
-    error: formError('lineOne', 'Please enter an address'),
-  },
-  {
-    rule: nonEmptyString(fields.city),
-    error: formError('city', 'Please enter a city'),
-  },
-  {
-    rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postCode),
-    error: formError('postCode', 'Please enter a postcode'),
-  },
-  {
-    rule: notNull(fields.country),
-    error: formError('country', 'Please select a country.'),
-  },
-  {
-    rule: isStateNullable(fields.country) || notNull(fields.state),
-    error: formError(
-      'state',
-      fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
-    ),
-  },
-]);
+
+const applyAddressRules =
+  (fulfilmentOption: Option<FulfilmentOptions>, fields: FormFields): FormError<FormField>[] => validate([
+    {
+      rule: nonEmptyString(fields.lineOne),
+      error: formError('lineOne', 'Please enter an address'),
+    },
+    {
+      rule: nonEmptyString(fields.city),
+      error: formError('city', 'Please enter a city'),
+    },
+    {
+      rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postCode),
+      error: formError('postCode', 'Please enter a postcode'),
+    },
+    {
+      rule: isHomeDeliveryInM25(fulfilmentOption, fields),
+      error: formError('postCode', 'Sorry, we cannot deliver a paper outside the M25. However you can have vouchers delivered anywhere in the UK. Please switch to vouchers if you would like to continue with this address.'),
+    },
+    {
+      rule: notNull(fields.country),
+      error: formError('country', 'Please select a country.'),
+    },
+    {
+      rule: isStateNullable(fields.country) || notNull(fields.state),
+      error: formError(
+        'state',
+        fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
+      ),
+    },
+  ]);
 
 // ----- Action Creators ----- //
 

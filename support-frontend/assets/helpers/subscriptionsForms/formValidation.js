@@ -25,6 +25,7 @@ import type {
 import {
   getBillingAddressFields,
   getDeliveryAddressFields,
+  getFulfilmentOption,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { applyCheckoutRules, applyDeliveryRules } from './rules';
 
@@ -42,7 +43,7 @@ function checkoutValidation(state: CheckoutState): AnyErrorType[] {
       errorAction: setFormErrors,
     }: Error<FormField>),
     ({
-      errors: applyAddressRules(getBillingAddressFields(state)),
+      errors: applyAddressRules(null, getBillingAddressFields(state)),
       errorAction: setAddressFormErrorsFor('billing'),
     }: Error<AddressFormField>),
   ].filter(({ errors }) => errors.length > 0);
@@ -59,12 +60,12 @@ function withDeliveryValidation(state: WithDeliveryCheckoutState): AnyErrorType[
       errorAction: setFormErrors,
     }: Error<FormField>),
     ({
-      errors: applyAddressRules(getDeliveryAddressFields(state)),
+      errors: applyAddressRules(getFulfilmentOption(state), getDeliveryAddressFields(state)),
       errorAction: setAddressFormErrorsFor('delivery'),
     }: Error<AddressFormField>),
     ...(shouldValidateBillingAddress(formFields) ? [
       ({
-        errors: applyAddressRules(getBillingAddressFields(state)),
+        errors: applyAddressRules(null, getBillingAddressFields(state)),
         errorAction: setAddressFormErrorsFor('billing'),
       }: Error<AddressFormField>)] : []
     ),
