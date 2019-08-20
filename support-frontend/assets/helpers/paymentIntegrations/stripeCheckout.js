@@ -22,10 +22,17 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type {IsoCountry} from "helpers/internationalisation/country";
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
+import type { ContributionType } from 'helpers/contributions';
 
 // ----- Types ----- //
 
 export type StripeAccount = 'ONE_OFF' | 'REGULAR';
+
+const stripeAccountForContributionType: {[ContributionType]: StripeAccount } = {
+  ONE_OFF: 'ONE_OFF',
+  MONTHLY: 'REGULAR',
+  ANNUAL: 'REGULAR',
+};
 
 // ----- Functions ----- //
 
@@ -72,11 +79,11 @@ function setupStripeCheckout(
   isTestUser: boolean,
 ): Object {
 
-  const stripeKey = getStripeKey(stripeAccount, country, isTestUser);
-
   const handleToken = (token) => {
-    onPaymentAuthorisation({ paymentMethod: Stripe, token: token.id, stripePaymentMethod: 'StripeCheckout', publicKey: stripeKey });
+    onPaymentAuthorisation({ paymentMethod: Stripe, token: token.id, stripePaymentMethod: 'StripeCheckout'});
   };
+
+  const stripeKey = getStripeKey(stripeAccount, country, isTestUser);
 
   return window.StripeCheckout.configure({
     name: 'Guardian',
@@ -103,4 +110,5 @@ export {
   setupStripeCheckout,
   openDialogBox,
   getStripeKey,
+  stripeAccountForContributionType,
 };
