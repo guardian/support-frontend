@@ -79,7 +79,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       val stripe = mock[StripeConfigProvider]
       val stripeAccountConfig = StripeAccountConfig("", "")
       when(stripe.get(any[Boolean])).thenReturn(
-        StripeConfig(stripeAccountConfig, stripeAccountConfig, None)
+        StripeConfig(stripeAccountConfig, stripeAccountConfig, stripeAccountConfig, None)
       )
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
