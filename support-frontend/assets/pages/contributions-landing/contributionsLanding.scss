@@ -522,7 +522,7 @@ form {
 }
 
 .form__legend--radio-group {
-  @include accessibility-hint;
+  display: none;
 }
 
 .form__radio-group-list {
@@ -533,8 +533,7 @@ form {
 }
 
 .form__radio-group-input {
-  position: absolute;
-  opacity: 0;
+  display: none;
 }
 
 .form__radio-group-label {
@@ -547,7 +546,6 @@ form {
 }
 
 .form__radio-group--tabs .form__radio-group-item {
-  position: relative;
   flex: 1;
 }
 
