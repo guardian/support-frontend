@@ -11,6 +11,8 @@ case class StripeConfig(defaultAccount: StripeAccountConfig,
                         unitedStatesAccount: StripeAccountConfig,
                         version: Option[String] = None)
   extends TouchpointConfig {
+
+  // Still needed for SupportWorkers (recurring products) which don't support a US Stripe account yet.
   def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig = {
     maybeCurrency match {
       case Some(AUD) => {
