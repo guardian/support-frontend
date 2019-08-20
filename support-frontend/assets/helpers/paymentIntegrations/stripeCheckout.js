@@ -78,9 +78,8 @@ function setupStripeCheckout(
   country: IsoCountry,
   isTestUser: boolean,
 ): Object {
-
   const handleToken = (token) => {
-    onPaymentAuthorisation({ paymentMethod: Stripe, token: token.id, stripePaymentMethod: 'StripeCheckout'});
+    onPaymentAuthorisation({ paymentMethod: Stripe, token: token.id, stripePaymentMethod: 'StripeCheckout' });
   };
 
   const stripeKey = getStripeKey(stripeAccount, country, isTestUser);
