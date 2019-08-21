@@ -81,7 +81,7 @@ type PropTypes = {|
   validateForm: () => Function,
   formIsValid: Function,
   optimizeExperiments: OptimizeExperiments,
-  billingErrors: Array<Object>,
+  addressErrors: Array<Object>,
 |};
 
 
@@ -106,7 +106,7 @@ function mapStateToProps(state: CheckoutState) {
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
     optimizeExperiments: state.common.optimizeExperiments,
-    billingErrors: state.page.billingAddress.fields.formErrors,
+    addressErrors: state.page.billingAddress.fields.formErrors,
   };
 }
 
@@ -212,7 +212,7 @@ function CheckoutForm(props: PropTypes) {
             setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
             amount={props.amount}
             billingPeriod={props.billingPeriod}
-            allErrors={[...props.billingErrors, ...props.formErrors]}
+            allErrors={[...props.addressErrors, ...props.formErrors]}
           />
           <CancellationSection />
         </Form>

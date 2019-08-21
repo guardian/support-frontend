@@ -16,6 +16,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
+import Heading from 'components/heading/heading';
 
 import 'components/forms/customFields/error.scss';
 import './subscriptionSubmitButton.scss';
@@ -43,12 +44,14 @@ type ErrorSummaryPropTypes = {
 
 const ErrorSummary = (props: ErrorSummaryPropTypes) => (
   <div className="component-form-error__border">
-    <p className="component-form-error__heading">There is a problem</p>
-    {props.errors.map(error => (
-      <div className="component-form-error__summary-error">
-        {error.message}
-      </div>
-    ))}
+    <Heading className="component-form-error__heading" size={2}>There is a problem</Heading>
+    <ul>
+      {props.errors.map(error => (
+        <li className="component-form-error__summary-error">
+          {error.message}
+        </li>
+      ))}
+    </ul>
   </div>
 
 );
