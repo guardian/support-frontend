@@ -1,9 +1,5 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.component-submit-button {
-    margin-bottom: $gu-v-spacing;
-}
-
 .component-submit-button--margin {
     max-width: gu-span(5);
     margin: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing * 2;
