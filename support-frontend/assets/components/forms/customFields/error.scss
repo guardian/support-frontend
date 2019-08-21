@@ -33,7 +33,7 @@
 
 .component-form-error__border {
   border: 1px gu-colour(state-error) solid;
-  padding: $gu-v-spacing;
+  padding: $gu-v-spacing / 2 $gu-v-spacing $gu-h-spacing;
   margin-top: $gu-v-spacing;
   background-color: rgba(199, 0, 0, 0.03);
 }
