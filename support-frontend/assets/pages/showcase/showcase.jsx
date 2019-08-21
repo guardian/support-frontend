@@ -69,7 +69,7 @@ const content = (
       </Content>
       <CtaSubscribe />
       <CtaContribute />
-      <OtherProducts />
+      {countryGroupId === 'GBPCountries' && <OtherProducts />}
       <ConsentBanner />
     </Page>
   </Provider>
