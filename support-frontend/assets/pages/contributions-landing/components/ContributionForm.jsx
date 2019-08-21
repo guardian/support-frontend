@@ -178,10 +178,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
     Stripe: (props: PropTypes) => {
       if (props.stripeElementsTestVariant !== 'stripeCardElement') openStripePopup(props);
-      //TODO - submit button should be disabled until this is available
-      else if (props.createStripePaymentMethod) {
-        props.createStripePaymentMethod(props.email);
-      }
+      else if (props.createStripePaymentMethod) props.createStripePaymentMethod(props.email);
     },
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);

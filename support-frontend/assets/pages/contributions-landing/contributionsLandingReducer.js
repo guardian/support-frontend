@@ -66,6 +66,8 @@ type StripePaymentIntentsData = {
   createPaymentMethod: (email: string) => void,
   handle3DS: (clientSecret: string) => void,
   //TODO - hold state to show if it's in progress, stripe.js has loaded
+  stripeCardFormReady: boolean,
+  errorMessage: string | null,
 }
 
 type FormState = {
@@ -126,8 +128,6 @@ function createFormReducer() {
         PayPal: null,
       },
     },
-    createStripePaymentMethod: null,
-    handleStripe3DS: null,
     formData: {
       firstName: null,
       lastName: null,
@@ -149,6 +149,8 @@ function createFormReducer() {
     stripePaymentIntentsData: {
       createPaymentMethod: null,
       handle3DS: null,
+      stripeCardFormReady: false,
+      errorMessage: null,
     },
     setPasswordData: {
       password: '',
@@ -220,6 +222,24 @@ function createFormReducer() {
           stripePaymentIntentsData: {
             ...state.stripePaymentIntentsData,
             handle3DS: action.handleStripe3DS,
+          }
+        };
+
+      case 'SET_STRIPE_CARD_FORM_READY':
+        return {
+          ...state,
+          stripePaymentIntentsData: {
+            ...state.stripePaymentIntentsData,
+            stripeCardFormReady: action.stripeCardFormReady,
+          }
+        };
+
+      case 'SET_STRIPE_CARD_FORM_ERROR':
+        return {
+          ...state,
+          stripePaymentIntentsData: {
+            ...state.stripePaymentIntentsData,
+            errorMessage: action.errorMessage,
           }
         };
 

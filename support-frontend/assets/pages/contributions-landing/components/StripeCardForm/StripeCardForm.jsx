@@ -10,7 +10,7 @@ import {onThirdPartyPaymentAuthorised, paymentWaiting} from "../../contributions
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
 import {type PaymentResult} from 'helpers/paymentIntegrations/readerRevenueApis';
-import {setCreateStripePaymentMethod, setHandleStripe3DS} from 'pages/contributions-landing/contributionsLandingActions';
+import {setCreateStripePaymentMethod, setHandleStripe3DS, setStripeCardFormReady, setStripeCardFormError} from 'pages/contributions-landing/contributionsLandingActions';
 import {type ContributionType} from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
@@ -24,11 +24,15 @@ type PropTypes = {|
   contributionType: ContributionType,
   setCreateStripePaymentMethod: ((email: string) => void) => Action,
   setHandleStripe3DS: ((clientSecret: string) => void) => Action,
+  setStripeCardFormReady: (stripeCardFormReady: boolean) => Action,
+  setStripeCardFormError: (errorMessage: string | null) => Action,
   paymentWaiting: (isWaiting: boolean) => Action,
+  errorMessage: string | null,
 |};
 
 const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
+  errorMessage: state.page.form.stripePaymentIntentsData.errorMessage
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -39,6 +43,10 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
   setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => void) =>
     dispatch(setHandleStripe3DS(handleStripe3DS)),
+  setStripeCardFormReady: (stripeCardFormReady: boolean) =>
+    dispatch(setStripeCardFormReady(stripeCardFormReady)),
+  setStripeCardFormError: (errorMessage: string | null) =>
+    dispatch(setStripeCardFormError(errorMessage)),
   paymentWaiting: (isWaiting: boolean) =>
     dispatch(paymentWaiting(isWaiting))
 });
@@ -64,7 +72,21 @@ function CardForm(props: PropTypes) {
     })
   });
 
-  return (<CardElement hidePostalCode={true}/>)
+  const onChange = (update) => {
+    console.log(update)
+    if (update.error) props.setStripeCardFormError(update.error.message);
+    else if (props.errorMessage) props.setStripeCardFormError(null);
+
+    if (update.complete) props.setStripeCardFormReady(true);
+    else props.setStripeCardFormReady(false);
+  };
+
+  return (
+    <div>
+      <CardElement hidePostalCode={true} onChange={onChange}/>
+      { props.errorMessage ?<div className='form__error'>{props.errorMessage}</div> : null}
+    </div>
+  )
 }
 
 // ----- Default props----- //

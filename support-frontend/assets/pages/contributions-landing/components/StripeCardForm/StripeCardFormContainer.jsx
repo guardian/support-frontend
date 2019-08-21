@@ -21,8 +21,6 @@ type PropTypes = {|
   contributionType: ContributionType,
   setStripeHasLoaded: () => void,
   stripeHasLoaded: boolean,
-  selectedAmounts: SelectedAmounts,
-  otherAmounts: OtherAmounts,
 |};
 
 //TODO - share this function
@@ -39,6 +37,7 @@ const setupStripe = (setStripeHasLoaded: () => void) => {
 function StripeCardFormContainer(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
     if (props.stripeHasLoaded === false && window.Stripe === undefined) {
+      //TODO - show spinner
       setupStripe(props.setStripeHasLoaded);
       return null;
     }

@@ -18,8 +18,9 @@ import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpres
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { PayPal } from 'helpers/paymentMethods';
+import { PayPal, Stripe } from 'helpers/paymentMethods';
 import Button from 'components/button/button';
+import type {StripeElementsTestVariants} from "assets/helpers/abTests/abtestDefinitions";
 
 // ----- Types ----- //
 
@@ -40,6 +41,8 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   amount: number,
   billingPeriod: BillingPeriod,
+  stripeCardFormReady: boolean,
+  stripeElementsTestVariant: StripeElementsTestVariants,
 |};
 
 function mapStateToProps(state: State) {
@@ -62,6 +65,8 @@ function mapStateToProps(state: State) {
       contributionType,
     ),
     billingPeriod: billingPeriodFromContrib(contributionType),
+    stripeCardFormReady: state.page.form.stripePaymentIntentsData.stripeCardFormReady,
+    stripeElementsTestVariant: state.common.abParticipations.stripeElements,
   });
 }
 
@@ -80,8 +85,13 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 // ----- Render ----- //
 
+const buttonDisabled = (props: PropTypes): boolean =>
+  props.isWaiting ||
+    (props.contributionType === 'ONE_OFF' && props.paymentMethod === Stripe && props.stripeElementsTestVariant === 'stripeCardElement' && !props.stripeCardFormReady);
 
 function withProps(props: PropTypes) {
+
+  console.log("buttonDisabled", buttonDisabled(props))
 
   if (props.paymentMethod !== 'None') {
     // if all payment methods are switched off, do not display the button
@@ -123,7 +133,7 @@ function withProps(props: PropTypes) {
           <Button
             type="submit"
             aria-label={submitButtonCopy}
-            disabled={props.isWaiting}
+            disabled={buttonDisabled(props)}
             postDeploymentTestID="contributions-landing-submit-contribution-button"
           >
             {submitButtonCopy}
