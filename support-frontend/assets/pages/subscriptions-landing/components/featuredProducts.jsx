@@ -134,7 +134,7 @@ const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId:
   return {
     headingText: 'Guardian Weekly',
     subheadingText: `6 issues for ${showPrice(sixPrice)}`,
-    bodyText: 'The Guardian\'s essential news magazine with free worldwide delivery.',
+    bodyText: 'The Guardian\'s essential news magazine with worldwide delivery.',
   };
   // }
 };

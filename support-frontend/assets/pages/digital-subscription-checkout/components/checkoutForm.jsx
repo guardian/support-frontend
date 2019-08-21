@@ -81,6 +81,7 @@ type PropTypes = {|
   validateForm: () => Function,
   formIsValid: Function,
   optimizeExperiments: OptimizeExperiments,
+  addressErrors: Array<Object>,
 |};
 
 
@@ -105,6 +106,7 @@ function mapStateToProps(state: CheckoutState) {
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
     optimizeExperiments: state.common.optimizeExperiments,
+    addressErrors: state.page.billingAddress.fields.formErrors,
   };
 }
 
@@ -198,21 +200,20 @@ function CheckoutForm(props: PropTypes) {
             validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
           />
-          <FormSection noBorder>
-            <SubscriptionSubmitButtons
-              paymentMethod={props.paymentMethod}
-              onPaymentAuthorised={props.onPaymentAuthorised}
-              csrf={props.csrf}
-              currencyId={props.currencyId}
-              payPalHasLoaded={props.payPalHasLoaded}
-              formIsValid={props.formIsValid}
-              validateForm={props.validateForm}
-              isTestUser={props.isTestUser}
-              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-              amount={props.amount}
-              billingPeriod={props.billingPeriod}
-            />
-          </FormSection>
+          <SubscriptionSubmitButtons
+            paymentMethod={props.paymentMethod}
+            onPaymentAuthorised={props.onPaymentAuthorised}
+            csrf={props.csrf}
+            currencyId={props.currencyId}
+            payPalHasLoaded={props.payPalHasLoaded}
+            formIsValid={props.formIsValid}
+            validateForm={props.validateForm}
+            isTestUser={props.isTestUser}
+            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+            amount={props.amount}
+            billingPeriod={props.billingPeriod}
+            allErrors={[...props.addressErrors, ...props.formErrors]}
+          />
           <CancellationSection />
         </Form>
       </CheckoutLayout>

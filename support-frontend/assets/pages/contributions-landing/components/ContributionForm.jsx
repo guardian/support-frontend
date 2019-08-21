@@ -53,7 +53,6 @@ import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/
 import { getCampaignName } from 'helpers/campaigns';
 import type {
   LandingPageChoiceArchitectureAmountsFirstTestVariants,
-  LandingPageChoiceArchitectureLabelsTestVariants,
 } from 'helpers/abTests/abtestDefinitions';
 
 
@@ -86,7 +85,6 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
-  landingPageChoiceArchitectureLabelsTestVariant: LandingPageChoiceArchitectureLabelsTestVariants,
   landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
 |};
 
@@ -118,7 +116,6 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
-  landingPageChoiceArchitectureLabelsTestVariant: state.common.abParticipations.landingPageChoiceArchitectureLabels,
   landingPageChoiceArchitectureAmountsFirstTestVariant:
     state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
 });
@@ -229,13 +226,8 @@ function onSubmit(props: PropTypes): Event => void {
 
 function constructClassModifiersForChoiceArchitectureTests(
   classMods: Array<?string>,
-  choiceArchitectureLabelsTestVariant: LandingPageChoiceArchitectureLabelsTestVariants,
   choiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
 ): Array<?string> {
-  if (choiceArchitectureLabelsTestVariant === 'withLabels') {
-    classMods.push('with-labels');
-  }
-
   if (
     choiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
     choiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo'
@@ -253,8 +245,7 @@ function withProps(props: PropTypes) {
   const baseClass = 'form';
 
   const classModifiers = constructClassModifiersForChoiceArchitectureTests(
-    ['contribution'],
-    props.landingPageChoiceArchitectureLabelsTestVariant,
+    ['contribution', 'with-labels'],
     props.landingPageChoiceArchitectureAmountsFirstTestVariant,
   );
 

@@ -33,6 +33,7 @@ import {
   finalPrice,
   getAppliedPromo,
   getProductPrice,
+  getCurrency,
 } from 'helpers/productPrice/productPrices';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
@@ -103,8 +104,8 @@ const getPromoCode = (billingPeriod: BillingPeriod, promotions: ?Promotion[]) =>
 function buildRegularPaymentRequest(
   state: AnyCheckoutState,
   paymentAuthorisation: PaymentAuthorisation,
+  currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
-  const { currencyId } = state.common.internationalisation;
   const {
     title,
     firstName,
@@ -130,7 +131,7 @@ function buildRegularPaymentRequest(
   );
 
   const product = {
-    currency: currencyId,
+    currency: currencyId || state.common.internationalisation.currencyId,
     billingPeriod: billingPeriod === SixWeekly ? Quarterly : billingPeriod,
     ...getOptions(fulfilmentOption, productOption),
   };
@@ -166,9 +167,10 @@ function onPaymentAuthorised(
   paymentAuthorisation: PaymentAuthorisation,
   dispatch: Dispatch<Action>,
   state: AnyCheckoutState,
+  currencyId?: Option<IsoCurrency>,
 ) {
 
-  const data = buildRegularPaymentRequest(state, paymentAuthorisation);
+  const data = buildRegularPaymentRequest(state, paymentAuthorisation, currencyId);
   const { product, paymentMethod } = state.page.checkout;
   const { csrf } = state.page;
   const { abParticipations } = state.common;
@@ -279,12 +281,14 @@ function submitForm(
   }
 
   const { price, currency } = priceDetails;
+  const currencyId = getCurrency(state.page.billingAddress.fields.country);
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
     onPaymentAuthorised(
       paymentAuthorisation,
       dispatch,
       state,
+      currencyId,
     );
 
   showPaymentMethod(

@@ -1,14 +1,14 @@
 // @flow
 
-const GBSetOne = [{ value: '10' }, { value: '20', isDefault: true }, { value: '30' }, { value: '40' }];
-const USSetOne = [{ value: '20' }, { value: '30', isDefault: true }, { value: '40' }, { value: '50' }];
-const EURSetOne = [{ value: '30' }, { value: '40', isDefault: true }, { value: '50' }, { value: '60' }];
-const AUSetOne = [{ value: '40' }, { value: '50', isDefault: true }, { value: '60' }, { value: '70' }];
-const INTSetOne = [{ value: '50' }, { value: '60', isDefault: true }, { value: '70' }, { value: '80' }];
-const NZSetOne = [{ value: '60' }, { value: '70', isDefault: true }, { value: '80' }, { value: '90' }];
-const CASetOne = [{ value: '70' }, { value: '80', isDefault: true }, { value: '90' }, { value: '100' }];
+const USSetOne = [{ value: '7' }, { value: '15', isDefault: true }, { value: '30' }, { value: '50' }];
+const GBSetOne = [{ value: '2' }, { value: '5', isDefault: true }, { value: '10' }, { value: '25' }];
+const AUSetOne = [{ value: '10' }, { value: '20', isDefault: true }, { value: '40' }, { value: '80' }];
+const EURSetOne = [{ value: '6' }, { value: '10', isDefault: true }, { value: '20' }, { value: '50' }];
+const INTSetOne = [{ value: '5' }, { value: '10', isDefault: true }, { value: '20' }, { value: '50' }];
+const NZSetOne = [{ value: '10' }, { value: '20', isDefault: true }, { value: '50' }, { value: '100' }];
+const CASetOne = [{ value: '5' }, { value: '10', isDefault: true }, { value: '20' }, { value: '50' }];
 
-export const amountsFirstSetOne = {
+export const SetOne = {
   GBPCountries: {
     ONE_OFF: GBSetOne,
     MONTHLY: GBSetOne,
@@ -46,15 +46,15 @@ export const amountsFirstSetOne = {
   },
 };
 
-const GBSetTwo = [{ value: '15' }, { value: '25', isDefault: true }, { value: '35' }, { value: '45' }];
-const USSetTwo = [{ value: '25' }, { value: '35', isDefault: true }, { value: '45' }, { value: '55' }];
-const EURSetTwo = [{ value: '35' }, { value: '45', isDefault: true }, { value: '55' }, { value: '65' }];
-const AUSetTwo = [{ value: '45' }, { value: '55', isDefault: true }, { value: '65' }, { value: '75' }];
-const INTSetTwo = [{ value: '55' }, { value: '65', isDefault: true }, { value: '75' }, { value: '85' }];
-const NZSetTwo = [{ value: '65' }, { value: '75', isDefault: true }, { value: '85' }, { value: '95' }];
-const CASetTwo = [{ value: '75' }, { value: '85', isDefault: true }, { value: '95' }, { value: '105' }];
+const USSetTwo = [{ value: '10' }, { value: '15', isDefault: true }, { value: '25' }, { value: '50' }];
+const GBSetTwo = [{ value: '2' }, { value: '7', isDefault: true }, { value: '25' }, { value: '50' }];
+const AUSetTwo = [{ value: '10' }, { value: '25', isDefault: true }, { value: '50' }, { value: '100' }];
+const EURSetTwo = [{ value: '6' }, { value: '15', isDefault: true }, { value: '35' }, { value: '100' }];
+const INTSetTwo = [{ value: '5' }, { value: '15', isDefault: true }, { value: '35' }, { value: '100' }];
+const NZSetTwo = [{ value: '10' }, { value: '25', isDefault: true }, { value: '50' }, { value: '100' }];
+const CASetTwo = [{ value: '5' }, { value: '15', isDefault: true }, { value: '35' }, { value: '100' }];
 
-export const amountsFirstSetTwo = {
+export const SetTwo = {
   GBPCountries: {
     ONE_OFF: GBSetTwo,
     MONTHLY: GBSetTwo,

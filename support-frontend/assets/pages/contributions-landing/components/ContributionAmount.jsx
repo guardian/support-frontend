@@ -62,9 +62,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   // JTL TBD: remove the testvariant conditions on these dispatched functions
-  selectAmount: (amount, countryGroupId, contributionType, isTestVariant) => () => {
+  selectAmount: (amount, countryGroupId, contributionType, sameAmountsForSingleMonthlyAnnual) => () => {
     trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount.value || amount}`);
-    if (isTestVariant) {
+    if (sameAmountsForSingleMonthlyAnnual) {
       dispatch(selectAmount(amount, 'ONE_OFF'));
       dispatch(selectAmount(amount, 'MONTHLY'));
       dispatch(selectAmount(amount, 'ANNUAL'));
@@ -72,9 +72,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
       dispatch(selectAmount(amount, contributionType));
     }
   },
-  updateOtherAmount: (amount, countryGroupId, contributionType, isTestVariant) => {
+  updateOtherAmount: (amount, countryGroupId, contributionType, sameAmountsForSingleMonthlyAnnual) => {
     trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`);
-    if (isTestVariant) {
+    if (sameAmountsForSingleMonthlyAnnual) {
       dispatch(updateOtherAmount(amount, 'ONE_OFF'));
       dispatch(updateOtherAmount(amount, 'MONTHLY'));
       dispatch(updateOtherAmount(amount, 'ANNUAL'));
@@ -98,7 +98,7 @@ const renderAmount = (
   currency: Currency,
   spokenCurrency: SpokenCurrency,
   props: PropTypes,
-  isTestVariant,
+  sameAmountsForSingleMonthlyAnnual: boolean,
 ) =>
   (amount: Amount) => (
     <li className="form__radio-group-item">
@@ -110,7 +110,9 @@ const renderAmount = (
         value={amount.value}
       /* eslint-disable react/prop-types */
         checked={isSelected(amount, props)}
-        onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType, isTestVariant)}
+        onChange={
+          props.selectAmount(amount, props.countryGroupId, props.contributionType, sameAmountsForSingleMonthlyAnnual)
+        }
       />
       <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
         {formatAmount(currency, spokenCurrency, amount, false)}
@@ -180,13 +182,21 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
-  const isTestVariant =
+  const showAmountsFirst =
     props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
     props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo';
-  const titleCopy = isTestVariant ? 'How much would you like to contribute?' : 'How much would you like to give?';
+
+  const sameAmountsForSingleMonthlyAnnual = showAmountsFirst ||
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'productFirstSetOne' ||
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'productFirstSetTwo';
+
+  const titleCopy = showAmountsFirst ? 'How much would you like to contribute?' : 'How much would you like to give?';
 
   // JTL - TBD : Delete this line after Landing Page Amounts First AB Test has run
-  const showWeeklyBreakdown: boolean = (props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL') && !isTestVariant;
+  const showWeeklyBreakdown: boolean = (
+    props.contributionType === 'MONTHLY'
+    || props.contributionType === 'ANNUAL'
+  ) && !showAmountsFirst;
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
@@ -196,7 +206,7 @@ function withProps(props: PropTypes) {
           currencies[props.currency],
           spokenCurrencies[props.currency],
           props,
-          isTestVariant,
+          sameAmountsForSingleMonthlyAnnual,
         ))}
         <li className="form__radio-group-item">
           <input
@@ -206,7 +216,7 @@ function withProps(props: PropTypes) {
             name="contributionAmount"
             value="other"
             checked={showOther}
-            onChange={props.selectAmount('other', props.countryGroupId, props.contributionType, isTestVariant)}
+            onChange={props.selectAmount('other', props.countryGroupId, props.contributionType, showAmountsFirst)}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
@@ -223,7 +233,7 @@ function withProps(props: PropTypes) {
             (e.target: any).value,
             props.countryGroupId,
             props.contributionType,
-            isTestVariant,
+            showAmountsFirst,
           )}
           isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
           formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}

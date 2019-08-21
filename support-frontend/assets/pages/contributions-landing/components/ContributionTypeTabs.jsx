@@ -9,7 +9,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import {
   getPaymentMethodToSelect,
   toHumanReadableContributionType,
-  toHumanReadableContributionTypeAbTest,
 } from 'helpers/checkouts';
 
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -24,7 +23,6 @@ import type {
   OtherAmounts,
   SelectedAmounts,
 } from 'helpers/contributions';
-import type { LandingPageChoiceArchitectureLabelsTestVariants } from 'helpers/abTests/abtestDefinitions';
 import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { getAmountPerWeekBreakdown } from 'pages/contributions-landing/components/ContributionAmount';
 
@@ -38,7 +36,6 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
-  landingPageChoiceArchitectureLabelsTestVariants: LandingPageChoiceArchitectureLabelsTestVariants,
   landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
   // JTL - Note: these two props are for the AB test showing amounts first
   selectedAmounts: SelectedAmounts,
@@ -51,7 +48,6 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-  landingPageChoiceArchitectureLabelsTestVariants: state.common.abParticipations.landingPageChoiceArchitectureLabels,
   landingPageChoiceArchitectureAmountsFirstTestVariant:
   state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
   // JTL - Note: these two props are for the AB test showing amounts first
@@ -76,24 +72,20 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
-  const isLabelTestVariant = props.landingPageChoiceArchitectureLabelsTestVariants === 'withLabels';
-  const createContributionTypeLabel = isLabelTestVariant ?
-    toHumanReadableContributionTypeAbTest :
-    toHumanReadableContributionType;
 
   if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
     return (null);
   }
 
-  const isTestVariant =
+  const amountsAreBeingShownFirst =
     props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
     props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo';
 
-  const titleCopy = isTestVariant ? 'How often would you like to give?' : 'How often would you like to contribute?';
+  const titleCopy = amountsAreBeingShownFirst ? 'How often would you like to give?' : 'How often would you like to contribute?';
 
 
   // JTL - Note: this is for the AB test showing amounts first
-  const showWeeklyBreakdown: boolean = (props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL') && isTestVariant;
+  const showWeeklyBreakdown: boolean = (props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL') && amountsAreBeingShownFirst;
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
@@ -120,7 +112,7 @@ function withProps(props: PropTypes) {
                 checked={props.contributionType === contributionType}
               />
               <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
-                {createContributionTypeLabel(contributionType)}
+                {toHumanReadableContributionType(contributionType)}
               </label>
             </li>);
         })}

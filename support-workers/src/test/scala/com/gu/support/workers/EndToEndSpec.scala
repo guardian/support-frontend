@@ -6,7 +6,7 @@ import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.monitoring.SafeLogger
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.JsonFixtures.{createPayPalPaymentMethodContributionJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createStripePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.lambdas._
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.generic.auto._
@@ -22,8 +22,9 @@ class EndToEndSpec extends LambdaSpec {
   they should "work with other currencies" in runSignupWithCurrency(EUR)
 
   def runSignupWithCurrency(currency: Currency) {
-    SafeLogger.info(createPayPalPaymentMethodContributionJson(currency))
-    val output = wrapFixture(createPayPalPaymentMethodContributionJson(currency))
+    val json = createStripePaymentMethodContributionJson(currency = currency)
+    SafeLogger.info(json)
+    val output = wrapFixture(json)
       .chain(new CreatePaymentMethod())
       .chain(new CreateSalesforceContact())
       .chain(new CreateZuoraSubscription())
@@ -67,7 +68,9 @@ class EndToEndSpec extends LambdaSpec {
 
     def last(handler: Handler[_, _]): ByteArrayOutputStream = {
       val output = new ByteArrayOutputStream()
+      SafeLogger.info(s"calling handler: ${handler.getClass}")
       handler.handleRequest(stream, output, context)
+      SafeLogger.info(s"finished handler: ${handler.getClass}")
       output
     }
 

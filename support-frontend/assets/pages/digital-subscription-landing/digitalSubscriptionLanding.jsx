@@ -55,7 +55,7 @@ const reactElementId: {
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   path: '/subscribe/digital',
   countryGroupId,
-  listOfCountries: [
+  listOfCountryGroups: [
     GBPCountries,
     UnitedStates,
     AUDCountries,
@@ -68,10 +68,11 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 const mapStateToProps = (state) => {
   const { optimizeExperiments } = state.common;
-  const dailyEditionsExperimentId = 'IscBgfXeTmyDoga1IGKcOQ';
+  const dailyEditionsExperimentId = 'wEirukCSRkKyneyREe1Jew';
   const dailyEditionsVariant = optimizeExperiments
     .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0
     && !isPostDeployUser();
+
 
   return {
     dailyEditionsVariant,

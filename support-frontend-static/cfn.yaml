@@ -4,9 +4,7 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      AccessControl: PublicRead
+      AccessControl: Private
       BucketName: support-frontend-static
       MetricsConfigurations: 
         - Id: EntireBucket
-      WebsiteConfiguration:
-        IndexDocument: index.html

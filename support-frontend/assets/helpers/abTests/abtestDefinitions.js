@@ -1,13 +1,17 @@
 // @flow
 import type { Tests } from './abtest';
 import { get as getCookie } from 'helpers/cookie';
-import { amountsFirstSetOne, amountsFirstSetTwo } from 'helpers/abTests/data/testAmountsData';
+import { SetOne, SetTwo } from 'helpers/abTests/data/testAmountsData';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
-export type ThankYouPageMarketingComponentTestVariants = 'control' | 'newMarketingComponent' | 'notintest';
 export type LandingPageChoiceArchitectureLabelsTestVariants = 'control' | 'withLabels' | 'notintest';
-export type LandingPageChoiceArchitectureAmountsFirstTestVariants = 'control' | 'amountsFirstSetOne' | 'amountsFirstSetTwo' | 'notintest';
+export type LandingPageChoiceArchitectureAmountsFirstTestVariants = 'control'
+  | 'amountsFirstSetOne'
+  | 'amountsFirstSetTwo'
+  | 'productFirstSetOne'
+  | 'productFirstSetTwo'
+  | 'notintest';
 
 export const tests: Tests = {
   landingPageCopyReturningSingles: {
@@ -32,65 +36,6 @@ export const tests: Tests = {
     canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
   },
 
-  // JTL - 31 July 2019 - Ab-test: thankYouPageMarketingComponent
-  // files related to this test:
-  // - 'MarketingConsentContainer.jsx' became 'MarketingConsentControlContainer.jsx' and
-  //    'MarketingConsentVariantContainer.jsx'
-  // - 'MarketingConsentControlContainer.jsx renders the MarketingComponent (which
-  //    should not be deleted regardless of this test's results because subscriptions
-  //    uses it)
-  // - 'MarketingConsentVariantContainer.jsx renders the MarketingComponent (which should become
-  //    our default if it succeeds)
-  // - 'ContributionsThankYouContainer', 'ContributionsThankYou', and
-  //    'ContributionsThankYouPasswordSet' all incorporate the variants to control which
-  //    marketing component is rendered on the thank you pages
-
-  thankYouPageMarketingComponent: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'newMarketingComponent',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 2,
-  },
-
-  // JTL - 5 August 2019 - Ab-test: landingPageChoiceArchitectureLabels
-  // file created for this test: abTestContributionsLandingChoiceArchitecture.scss
-  // if variant is successful, we will need to integrate the styles from the test stylesheet
-  // into the main stylesheet: contributionsLanding.scss
-  landingPageChoiceArchitectureLabels: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'withLabels',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 3,
-  },
-
   // JTL - 5 August 2019 - Ab-test: landingPageChoiceArchitectureAmountsFirst
   // file used for this test: abTestContributionsLandingChoiceArchitecture.scss
   // if a variant is successful, we will need to integrate the styles from the test stylesheet
@@ -104,11 +49,19 @@ export const tests: Tests = {
       },
       {
         id: 'amountsFirstSetOne',
-        amountsRegions: amountsFirstSetOne,
+        amountsRegions: SetOne,
       },
       {
         id: 'amountsFirstSetTwo',
-        amountsRegions: amountsFirstSetTwo,
+        amountsRegions: SetTwo,
+      },
+      {
+        id: 'productFirstSetOne',
+        amountsRegions: SetOne,
+      },
+      {
+        id: 'productFirstSetTwo',
+        amountsRegions: SetTwo,
       },
     ],
     audiences: {
