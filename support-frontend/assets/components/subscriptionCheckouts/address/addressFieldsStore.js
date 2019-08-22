@@ -79,7 +79,8 @@ const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
-export const isHomeDeliveryInM25 = (fulfilmentOption: Option<FulfilmentOptions>, fields) => {
+export const isHomeDeliveryInM25 = (fulfilmentOption: Option<FulfilmentOptions>, fields: FormFields) => {
+
   if (fulfilmentOption === 'HomeDelivery') {
     return postcodeIsWithinDeliveryArea(fields.postCode);
   }
