@@ -3,6 +3,13 @@
 import ReactDOM from 'react-dom';
 import { logException } from 'helpers/logger';
 
+// Without this the build-time pre-rendering breaks, because fetch is undefined when running with node
+const safeFetch = (url: string, opts) => {
+  if (typeof fetch !== 'undefined') {
+    fetch(url, opts);
+  }
+};
+
 const getElement = (id: string): ?HTMLElement => document.getElementById(id);
 
 const getElementOrBody = (id: ?string): HTMLElement => {
@@ -20,7 +27,7 @@ const getElementOrBody = (id: ?string): HTMLElement => {
 };
 
 const renderError = (e: Error, id: ?string) => {
-  fetch(window.guardian.settings.metricUrl, { mode: 'no-cors' }); // ignore result, fire and forget
+  safeFetch(window.guardian.settings.metricUrl, { mode: 'no-cors' }); // ignore result, fire and forget
 
   const element = getElementOrBody(id);
 
@@ -48,7 +55,7 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
       renderError(e, id);
     }
   } else {
-    fetch(window.guardian.settings.metricUrl, { mode: 'no-cors' }); // ignore result, fire and forget
+    safeFetch(window.guardian.settings.metricUrl, { mode: 'no-cors' }); // ignore result, fire and forget
     logException(`Fatal error trying to render a page. id:${id}`);
   }
 };

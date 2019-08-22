@@ -49,7 +49,7 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
 
     switch (action.type) {
 
-      case 'SET_COUNTRY':
+      case 'SET_COUNTRY_INTERNATIONALISATION':
         return {
           ...state,
           internationalisation: {

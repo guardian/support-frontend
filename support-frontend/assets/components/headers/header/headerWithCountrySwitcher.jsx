@@ -17,16 +17,16 @@ import Header from './header';
 export default function ({
   path,
   countryGroupId,
-  listOfCountries,
+  listOfCountryGroups,
   trackProduct,
 }: {
   path: string,
   countryGroupId?: CountryGroupId,
-  listOfCountries: CountryGroupId[],
+  listOfCountryGroups: CountryGroupId[],
   trackProduct?: Option<SubscriptionProduct>,
 }) {
 
-  const Switcher = countrySwitcherContainer(path, listOfCountries, trackProduct);
+  const Switcher = countrySwitcherContainer(path, listOfCountryGroups, trackProduct);
 
   return () => <Header countryGroupId={countryGroupId} utility={<Switcher />} />;
 }

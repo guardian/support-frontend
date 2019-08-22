@@ -61,7 +61,7 @@ function toHumanReadableContributionType(contributionType: ContributionType): 'S
     case 'ONE_OFF': return 'Single';
     case 'MONTHLY': return 'Monthly';
     case 'ANNUAL': return 'Annual';
-    default: return 'Annual';
+    default: return 'Monthly';
   }
 }
 

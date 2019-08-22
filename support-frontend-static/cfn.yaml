@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: support-frontend-static
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: support-frontend-static
+      MetricsConfigurations: 
+        - Id: EntireBucket

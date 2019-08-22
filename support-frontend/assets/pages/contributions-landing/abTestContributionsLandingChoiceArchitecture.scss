@@ -1,0 +1,59 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+// Styles for landing page choice architecture round one
+// JTL TBD: integrate this css into ContributionsLanding.scss
+// if the labels variant is successful
+.form--with-labels {
+  .form__radio-group--tabs {
+    margin-top: $gu-v-spacing;
+  }
+
+  .form__radio-group--contribution-amount {
+    margin-top: 18px;
+  }
+
+  .form__legend {
+    @include gu-typeface(headline, 18);
+    font-weight: 700;
+    margin-bottom: $gu-v-spacing;
+  }
+
+  .form__radio-group-list--border {
+    margin: 0;
+    border: 1px solid gu-colour(neutral-86);
+  }
+
+  .form__radio-group--tabs .form__radio-group-input + .form__radio-group-label,
+  .form__radio-group-list--border li label {
+    @include gu-typeface(textSans, 16);
+    padding: 4px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+  }
+
+  .form--content {
+     @include mq($until: tablet) {
+       padding-top: 0;
+     }
+  }
+}
+
+// Styles for landing page choice architecture round two
+// JTL TBD: integrate this css into ContributionsLanding.scss
+// if the labels variant is successful
+.form--with-labels.form--amounts-first {
+  .contributions-form-selectors {
+    margin-top: $gu-v-spacing;
+    display: flex;
+    flex-flow: column-reverse;
+  }
+
+  .form__radio-group--tabs {
+    margin-top: $gu-v-spacing;
+  }
+
+  .form__radio-group--contribution-amount {
+    margin-top: $gu-v-spacing / 2;
+  }
+}

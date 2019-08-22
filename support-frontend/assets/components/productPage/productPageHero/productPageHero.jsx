@@ -10,8 +10,6 @@ import { type Option } from 'helpers/types/option';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
-import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
-
 import './productPageHero.scss';
 
 
@@ -29,8 +27,15 @@ type PropTypes = {|
   heading: string,
   content?: Option<Node>,
   hasCampaign: boolean,
-  dailyEditionsVariant?: boolean
+  showProductPageHeroHeader?: boolean,
 |};
+
+type ProductPageHeroHeaderTypes = {
+  overheading: string,
+  hasCampaign: boolean,
+  heading: string,
+  content?: Option<Node>,
+}
 
 // ----- Render ----- //
 
@@ -72,41 +77,38 @@ const HeroHeading = ({
   </div>
 );
 
-const PaymentSelectionContainer = () => (
-  <div className="payment-selection-container">
-    <LeftMarginSection>
-      <PaymentSelection />
-    </LeftMarginSection>
-  </div>
-);
-
 const ProductPageHero = ({
-  overheading, heading, content, modifierClasses, children, appearance, hasCampaign, dailyEditionsVariant,
+  modifierClasses, children, appearance, showProductPageHeroHeader, ...props
 }: PropTypes) => (
   <header>
     <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
     </HeroWrapper>
-
-    {dailyEditionsVariant ? (
-      <PaymentSelectionContainer />
-      ) : (
-        <div>
-          <HeroHeading {...{ hasCampaign }}>
-            <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
-          </HeroHeading>
-          {content && <HeroHanger>{content}</HeroHanger>}
-        </div>
-      )}
+    {showProductPageHeroHeader && <ProductPageHeroHeader {...props} />}
   </header>
+);
+
+const ProductPageHeroHeader = ({
+  overheading, heading, content, hasCampaign,
+}: ProductPageHeroHeaderTypes) => (
+  <div>
+    <HeroHeading {...{ hasCampaign }}>
+      <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
+    </HeroHeading>
+    {content && <HeroHanger>{content}</HeroHanger>}
+  </div>
 );
 
 ProductPageHero.defaultProps = {
   children: null,
   content: null,
   ...HeroWrapper.defaultProps,
+  showProductPageHeroHeader: true,
 };
 
-export { HeroHanger, HeroWrapper, HeroHeading };
+ProductPageHeroHeader.defaultProps = {
+  content: null,
+};
+export { HeroHanger, HeroWrapper, HeroHeading, ProductPageHeroHeader };
 
 export default ProductPageHero;

@@ -2,7 +2,7 @@
     "checkpoints": {
         "PROD": {
             "url": "https://support.theguardian.com/uk",
-            "overdue": "14M",
+            "overdue": "16M",
             "messages": {
                 "seen": "prout/seen.md"
             },

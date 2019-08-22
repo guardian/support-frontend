@@ -26,6 +26,7 @@ import SvgPound from 'components/svgs/pound';
 
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
+import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -36,14 +37,14 @@ type PropTypes = {|
   contributionType: ContributionType,
   amounts: AmountsRegions,
   selectedAmounts: SelectedAmounts,
-  selectAmount: (Amount | 'other', CountryGroupId, ContributionType) => (() => void),
+  selectAmount: (Amount | 'other', CountryGroupId, ContributionType, boolean) => (() => void),
   otherAmounts: OtherAmounts,
   checkOtherAmount: (string, CountryGroupId, ContributionType) => boolean,
-  updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
+  updateOtherAmount: (string, CountryGroupId, ContributionType, boolean) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+  landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
 |};
-
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
@@ -55,16 +56,31 @@ const mapStateToProps = state => ({
   otherAmounts: state.page.form.formData.otherAmounts,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
+  landingPageChoiceArchitectureAmountsFirstTestVariant:
+  state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  selectAmount: (amount, countryGroupId, contributionType) => () => {
+  // JTL TBD: remove the testvariant conditions on these dispatched functions
+  selectAmount: (amount, countryGroupId, contributionType, sameAmountsForSingleMonthlyAnnual) => () => {
     trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount.value || amount}`);
-    dispatch(selectAmount(amount, contributionType));
+    if (sameAmountsForSingleMonthlyAnnual) {
+      dispatch(selectAmount(amount, 'ONE_OFF'));
+      dispatch(selectAmount(amount, 'MONTHLY'));
+      dispatch(selectAmount(amount, 'ANNUAL'));
+    } else {
+      dispatch(selectAmount(amount, contributionType));
+    }
   },
-  updateOtherAmount: (amount, countryGroupId, contributionType) => {
+  updateOtherAmount: (amount, countryGroupId, contributionType, sameAmountsForSingleMonthlyAnnual) => {
     trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`);
-    dispatch(updateOtherAmount(amount));
+    if (sameAmountsForSingleMonthlyAnnual) {
+      dispatch(updateOtherAmount(amount, 'ONE_OFF'));
+      dispatch(updateOtherAmount(amount, 'MONTHLY'));
+      dispatch(updateOtherAmount(amount, 'ANNUAL'));
+    } else {
+      dispatch(updateOtherAmount(amount, contributionType));
+    }
   },
 });
 
@@ -78,24 +94,31 @@ const isSelected = (amount: Amount, props: PropTypes) => {
   return amount.isDefault;
 };
 
-const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropTypes) => (amount: Amount) => (
-  <li className="form__radio-group-item">
-    <input
-      id={`contributionAmount-${amount.value}`}
-      className="form__radio-group-input"
-      type="radio"
-      name="contributionAmount"
-      value={amount.value}
+const renderAmount = (
+  currency: Currency,
+  spokenCurrency: SpokenCurrency,
+  props: PropTypes,
+  sameAmountsForSingleMonthlyAnnual: boolean,
+) =>
+  (amount: Amount) => (
+    <li className="form__radio-group-item">
+      <input
+        id={`contributionAmount-${amount.value}`}
+        className="form__radio-group-input"
+        type="radio"
+        name="contributionAmount"
+        value={amount.value}
       /* eslint-disable react/prop-types */
-      checked={isSelected(amount, props)}
-      onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType)}
-      /* eslint-enable react/prop-types */
-    />
-    <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
-      {formatAmount(currency, spokenCurrency, amount, false)}
-    </label>
-  </li>
-);
+        checked={isSelected(amount, props)}
+        onChange={
+          props.selectAmount(amount, props.countryGroupId, props.contributionType, sameAmountsForSingleMonthlyAnnual)
+        }
+      />
+      <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
+        {formatAmount(currency, spokenCurrency, amount, false)}
+      </label>
+    </li>
+  );
 
 const renderEmptyAmount = (id: string) => (
   <li className="form__radio-group-item amounts__placeholder">
@@ -124,7 +147,7 @@ const amountFormatted = (amount: number, currencyString: string, countryGroupId:
   return `${currencyString}${(amount).toFixed(2)}`;
 };
 
-const getAmountPerWeekBreakdown = (
+export const getAmountPerWeekBreakdown = (
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   selectedAmounts: SelectedAmounts,
@@ -150,7 +173,8 @@ const getAmountPerWeekBreakdown = (
 function withProps(props: PropTypes) {
   const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
-  const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';
+  // JTL - TBD : Uncomment this after Landing Page Amounts First AB Test has run
+  // const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
@@ -158,11 +182,32 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
+  const showAmountsFirst =
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo';
+
+  const sameAmountsForSingleMonthlyAnnual = showAmountsFirst ||
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'productFirstSetOne' ||
+    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'productFirstSetTwo';
+
+  const titleCopy = showAmountsFirst ? 'How much would you like to contribute?' : 'How much would you like to give?';
+
+  // JTL - TBD : Delete this line after Landing Page Amounts First AB Test has run
+  const showWeeklyBreakdown: boolean = (
+    props.contributionType === 'MONTHLY'
+    || props.contributionType === 'ANNUAL'
+  ) && !showAmountsFirst;
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>{titleCopy}</legend>
       <ul className="form__radio-group-list">
-        {validAmounts.map(renderAmount(currencies[props.currency], spokenCurrencies[props.currency], props))}
+        {validAmounts.map(renderAmount(
+          currencies[props.currency],
+          spokenCurrencies[props.currency],
+          props,
+          sameAmountsForSingleMonthlyAnnual,
+        ))}
         <li className="form__radio-group-item">
           <input
             id="contributionAmount-other"
@@ -171,7 +216,7 @@ function withProps(props: PropTypes) {
             name="contributionAmount"
             value="other"
             checked={showOther}
-            onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
+            onChange={props.selectAmount('other', props.countryGroupId, props.contributionType, showAmountsFirst)}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
@@ -184,7 +229,12 @@ function withProps(props: PropTypes) {
           label="Other amount"
           value={otherAmount}
           icon={iconForCountryGroup(props.countryGroupId)}
-          onInput={e => props.updateOtherAmount((e.target: any).value, props.countryGroupId, props.contributionType)}
+          onInput={e => props.updateOtherAmount(
+            (e.target: any).value,
+            props.countryGroupId,
+            props.contributionType,
+            showAmountsFirst,
+          )}
           isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
           formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
@@ -213,7 +263,7 @@ function withProps(props: PropTypes) {
 function withoutProps() {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
       <ul className="form__radio-group-list">
         {
           ['a', 'b', 'c', 'd'].map(renderEmptyAmount)

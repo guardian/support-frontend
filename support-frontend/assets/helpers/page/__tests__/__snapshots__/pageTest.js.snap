@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`reducer tests should handle SET_COUNTRY to US 1`] = `null`;
+exports[`reducer tests should handle SET_COUNTRY_INTERNATIONALISATION to US 1`] = `null`;
 
-exports[`reducer tests should handle SET_COUNTRY to US 2`] = `"dummy_campaign"`;
+exports[`reducer tests should handle SET_COUNTRY_INTERNATIONALISATION to US 2`] = `"dummy_campaign"`;
 
-exports[`reducer tests should handle SET_COUNTRY to US 3`] = `null`;
+exports[`reducer tests should handle SET_COUNTRY_INTERNATIONALISATION to US 3`] = `null`;
 
-exports[`reducer tests should handle SET_COUNTRY to US 4`] = `Object {}`;
+exports[`reducer tests should handle SET_COUNTRY_INTERNATIONALISATION to US 4`] = `Object {}`;
 
 exports[`reducer tests should return the initial state 1`] = `
 Object {

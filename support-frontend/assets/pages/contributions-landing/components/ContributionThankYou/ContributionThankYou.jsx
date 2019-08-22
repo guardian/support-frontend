@@ -6,7 +6,7 @@ import { type Dispatch } from 'redux';
 import React from 'react';
 import { connect } from 'react-redux';
 import { type ContributionType, getSpokenType } from 'helpers/contributions';
-import MarketingConsent from '../MarketingConsentContainer';
+import MarketingConsent from 'pages/contributions-landing/components/MarketingConsentContainer';
 import {
   type Action,
   setHasSeenDirectDebitThankYouCopy,
@@ -186,7 +186,7 @@ function ContributionThankYou(props: PropTypes) {
         ) : null}
         { renderIdentityCTA() }
         <MarketingConsent />
-        <ContributionSurvey isRunning />
+        <ContributionSurvey isRunning={false} />
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton

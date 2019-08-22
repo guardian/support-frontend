@@ -522,7 +522,7 @@ form {
 }
 
 .form__legend--radio-group {
-  display: none;
+  @include accessibility-hint;
 }
 
 .form__radio-group-list {
@@ -533,7 +533,8 @@ form {
 }
 
 .form__radio-group-input {
-  display: none;
+  position: absolute;
+  opacity: 0;
 }
 
 .form__radio-group-label {
@@ -546,6 +547,7 @@ form {
 }
 
 .form__radio-group--tabs .form__radio-group-item {
+  position: relative;
   flex: 1;
 }
 
@@ -1122,13 +1124,12 @@ form {
   border: 1px solid gu-colour(highlight-main);
 }
 
-
-// Editorialise Amounts Test
-
 .amount-per-week-breakdown {
+  font-family: $gu-text-sans-web;
   margin-top: $gu-v-spacing;
   font-style: italic;
   line-height: 20px;
+  font-weight: normal;
 }
 
 .amount-per-week-breakdown:empty {

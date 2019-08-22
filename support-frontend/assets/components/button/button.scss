@@ -22,13 +22,10 @@
     outline: 0;
   }
 
-  &[disabled], &[data-disabled] {
-    background-color: gu-colour(neutral-100);
-    opacity: .5;
+  &[data-disabled] {
     pointer-events: none;
   }
 }
-
 .component-button--non-interactive {
   pointer-events: none;
 }
@@ -73,6 +70,15 @@
   &:hover, &:focus {
     background: gu-colour(neutral-97);
   }
+}
+
+.component-button--disabled,
+.component-button[disabled],
+.component-button[data-disabled] {
+  color: gu-colour(neutral-60);
+  background-color: gu-colour(neutral-93);
+  border: 1px solid gu-colour(neutral-86);
+  cursor: not-allowed;
 }
 
 .component-button__content,

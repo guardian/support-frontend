@@ -67,7 +67,6 @@ function MarketingButton(props: ButtonPropTypes) {
         Sign me up
     </Button>
   );
-
 }
 
 function MarketingConsent(props: PropTypes) {

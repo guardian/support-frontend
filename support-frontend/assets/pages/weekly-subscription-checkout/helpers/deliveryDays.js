@@ -14,7 +14,8 @@ const getWeeklyDays = (today: ?number): Date[] => {
   const now = new Date(today || new Date().getTime());
   const currentWeekday = now.getDay();
   const weeksToAdd =
-      currentWeekday > extraDelayCutoffWeekday
+      currentWeekday > extraDelayCutoffWeekday ||
+      currentWeekday === 0 // Sunday is considered the last day of the week
         ? extraDelayWeeks
         : normalDelayWeeks;
   return getDeliveryDays(

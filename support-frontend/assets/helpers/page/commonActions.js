@@ -14,7 +14,7 @@ import {
 
 // ----- Types ----- //
 
-export type SetCountryAction = { type: 'SET_COUNTRY', country: IsoCountry };
+export type SetCountryAction = { type: 'SET_COUNTRY_INTERNATIONALISATION', country: IsoCountry };
 
 export type Action =
   | SetCountryAction
@@ -27,7 +27,7 @@ export type Action =
 // ----- Action Creators ----- //
 
 function setCountry(country: IsoCountry): SetCountryAction {
-  return { type: 'SET_COUNTRY', country };
+  return { type: 'SET_COUNTRY_INTERNATIONALISATION', country };
 }
 
 function setExperimentVariant(experiment: OptimizeExperiment): Action {

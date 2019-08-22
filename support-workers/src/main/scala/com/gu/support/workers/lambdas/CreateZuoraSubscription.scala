@@ -1,10 +1,11 @@
 package com.gu.support.workers.lambdas
 
+import java.time.OffsetDateTime
+
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -12,13 +13,16 @@ import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
-import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+
+
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
+
+  import com.gu.FutureLogging._
 
   def this() = this(ServiceProvider)
 
@@ -28,14 +32,20 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     context: Context,
     services: Services
   ): FutureHandlerResult = {
+    val now = () => OffsetDateTime.now
     val subscribeItem = buildSubscribeItem(state, services.promotionService)
     for {
       identityId <- Future.fromTry(IdentityId(state.user.id))
-      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod)
+        .withLogging("identity id")
+      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
+          .withLogging("GetSubscriptionWithCurrentRequestId")
       previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
+          .withLogging("PreviewPaymentSchedule")
       thankYouState <- maybeDomainSubscription match {
         case Some(domainSubscription) => skipSubscribe(state, requestInfo, previewPaymentSchedule, domainSubscription)
+            .withLogging("skipSubscribe")
         case None => subscribe(state, subscribeItem, services).map(response => toHandlerResult(state, response, previewPaymentSchedule, requestInfo))
+          .withLogging("subscribe")
       }
     } yield thankYouState
   }
@@ -102,8 +112,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
     SubscribeItem(
       account = buildAccount(state),
-      billToContact = buildContactDetails(state.user, state.user.billingAddress),
-      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, _)),
+      billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
+      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _)),
       paymentMethod = state.paymentMethod,
       subscriptionData = buildSubscriptionData(state, promotionService),
       subscribeOptions= SubscribeOptions()
@@ -134,11 +144,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     }
   }
 
-  private def buildContactDetails(user: User, address: Address) = {
+  private def buildContactDetails(user: User, giftRecipient: Option[GiftRecipient], address: Address) = {
     ContactDetails(
-      firstName = user.firstName,
-      lastName = user.lastName,
-      workEmail = user.primaryEmailAddress,
+      firstName = giftRecipient.fold(user.firstName)(_.firstName),
+      lastName = giftRecipient.fold(user.lastName)(_.lastName),
+      workEmail = giftRecipient.fold(Option(user.primaryEmailAddress))(_.email),
       address1 = address.lineOne,
       address2 = address.lineTwo,
       city = address.city,
@@ -152,7 +162,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     name = state.salesforceContacts.recipient.AccountId, //We store the Salesforce Account id in the name field
     currency = state.product.currency,
     crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
-    sfContactId__c = state.salesforceContacts.buyer.Id,
+    sfContactId__c = state.salesforceContacts.recipient.Id,
     identityId__c = state.user.id,
     paymentGateway = PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
     createdRequestId__c = state.requestId.toString

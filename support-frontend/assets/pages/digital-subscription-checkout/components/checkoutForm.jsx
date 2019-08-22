@@ -53,8 +53,12 @@ import {
   checkoutFormIsValid,
   validateCheckoutForm,
 } from 'helpers/subscriptionsForms/formValidation';
-import { submitCheckoutForm } from 'helpers/subscriptionsForms/submit';
+import {
+  submitCheckoutForm,
+  trackSubmitAttempt,
+} from 'helpers/subscriptionsForms/submit';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
+import { PayPal } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -77,6 +81,7 @@ type PropTypes = {|
   validateForm: () => Function,
   formIsValid: Function,
   optimizeExperiments: OptimizeExperiments,
+  addressErrors: Array<Object>,
 |};
 
 
@@ -101,6 +106,7 @@ function mapStateToProps(state: CheckoutState) {
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
     optimizeExperiments: state.common.optimizeExperiments,
+    addressErrors: state.page.billingAddress.fields.formErrors,
   };
 }
 
@@ -111,8 +117,16 @@ function mapDispatchToProps() {
     formIsValid: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => checkoutFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
       submitCheckoutForm(dispatch, getState()),
-    validateForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
-      validateCheckoutForm(dispatch, getState()),
+    validateForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      const state = getState();
+      validateCheckoutForm(dispatch, state);
+      // We need to track PayPal payment attempts here because PayPal behaves
+      // differently to other payment methods. All others are tracked in submit.js
+      const { paymentMethod } = state.page.checkout;
+      if (paymentMethod === PayPal) {
+        trackSubmitAttempt(PayPal, DigitalPack);
+      }
+    },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
     signOut,
   };
@@ -186,21 +200,20 @@ function CheckoutForm(props: PropTypes) {
             validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
           />
-          <FormSection noBorder>
-            <SubscriptionSubmitButtons
-              paymentMethod={props.paymentMethod}
-              onPaymentAuthorised={props.onPaymentAuthorised}
-              csrf={props.csrf}
-              currencyId={props.currencyId}
-              payPalHasLoaded={props.payPalHasLoaded}
-              formIsValid={props.formIsValid}
-              validateForm={props.validateForm}
-              isTestUser={props.isTestUser}
-              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-              amount={props.amount}
-              billingPeriod={props.billingPeriod}
-            />
-          </FormSection>
+          <SubscriptionSubmitButtons
+            paymentMethod={props.paymentMethod}
+            onPaymentAuthorised={props.onPaymentAuthorised}
+            csrf={props.csrf}
+            currencyId={props.currencyId}
+            payPalHasLoaded={props.payPalHasLoaded}
+            formIsValid={props.formIsValid}
+            validateForm={props.validateForm}
+            isTestUser={props.isTestUser}
+            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+            amount={props.amount}
+            billingPeriod={props.billingPeriod}
+            allErrors={[...props.addressErrors, ...props.formErrors]}
+          />
           <CancellationSection />
         </Form>
       </CheckoutLayout>

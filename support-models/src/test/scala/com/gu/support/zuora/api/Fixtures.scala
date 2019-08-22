@@ -116,7 +116,7 @@ object Fixtures {
     "createdreqid_hi"
   )
 
-  val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
+  val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@gu.com"), Country.UK)
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   val directDebitPaymentMethod = DirectDebitPaymentMethod(

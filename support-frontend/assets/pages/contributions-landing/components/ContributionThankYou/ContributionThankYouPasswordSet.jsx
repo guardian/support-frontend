@@ -3,12 +3,14 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import MarketingConsent from '../MarketingConsentContainer';
+import MarketingConsent from 'pages/contributions-landing/components/MarketingConsentContainer';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
+
+// ----- Types ----- //
 
 // ----- Render ----- //
 
@@ -26,7 +28,7 @@ function ContributionThankYouPasswordSet() {
           </p>
         </section>
         <MarketingConsent />
-        <ContributionSurvey isRunning />
+        <ContributionSurvey isRunning={false} />
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton

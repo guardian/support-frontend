@@ -2,6 +2,7 @@
 import { trackComponentEvents } from 'helpers/tracking/ophan';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
   gaEvent({
@@ -20,12 +21,19 @@ const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
   });
 };
 
-const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string, paymentMethod: ?PaymentMethod): void => {
+export type ProductCheckout = 'Contribution' | SubscriptionProduct;
+
+const trackCheckoutSubmitAttempt = (
+  componentId: string,
+  eventDetails: string,
+  paymentMethod: ?PaymentMethod,
+  productCheckout: ProductCheckout,
+): void => {
   gaEvent({
     category: 'click',
     action: eventDetails,
     label: componentId,
-  }, { paymentMethod });
+  }, { paymentMethod, productCheckout });
 
   trackComponentEvents({
     component: {
@@ -36,6 +44,29 @@ const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string, p
     action: 'CLICK',
     value: eventDetails,
   });
+};
+
+const trackThankYouPageLoaded = (
+  productCheckout: SubscriptionProduct,
+  paymentMethod: ?PaymentMethod,
+) => {
+  gaEvent({
+    category: 'Thank you page load',
+    action: productCheckout,
+    label: paymentMethod,
+  }, { paymentMethod, productCheckout });
+
+  if (trackComponentEvents) {
+    trackComponentEvents({
+      component: {
+        componentType: 'ACQUISITIONS_OTHER',
+        id: 'thank-you-page',
+        labels: ['checkout-submit'],
+      },
+      action: 'VIEW',
+      value: `thank-you-page-loaded-${productCheckout}-${paymentMethod || ''}`,
+    });
+  }
 };
 
 const trackComponentClick = (componentId: string): void => {
@@ -74,6 +105,7 @@ const trackComponentLoad = (componentId: string): void => {
 
 export {
   trackPaymentMethodSelected,
+  trackThankYouPageLoaded,
   trackComponentClick,
   trackCheckoutSubmitAttempt,
   trackComponentLoad,
