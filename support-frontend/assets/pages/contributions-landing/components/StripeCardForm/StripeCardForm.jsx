@@ -14,18 +14,22 @@ import {
   setHandleStripe3DS,
   setStripeCardFormComplete,
   onThirdPartyPaymentAuthorised,
+  paymentFailure,
   paymentWaiting,
   StripeCardFormField,
   type Action} from 'pages/contributions-landing/contributionsLandingActions';
 import {type ContributionType} from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
+import type { ErrorReason } from 'helpers/errorReasons';
+import { logException } from 'helpers/logger';
 
 // ----- Types -----//
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
+  paymentFailure: (paymentError: ErrorReason) => Action,
   contributionType: ContributionType,
   setCreateStripePaymentMethod: ((email: string) => void) => Action,
   setHandleStripe3DS: ((clientSecret: string) => void) => Action,
@@ -44,6 +48,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
     (paymentAuthorisation: PaymentAuthorisation) =>
       dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
+  paymentFailure: (paymentError: ErrorReason) => dispatch(paymentFailure(paymentError)),
   setCreateStripePaymentMethod: (createStripePaymentMethod: (email: string) => void) =>
     dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
   setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => void) =>
@@ -83,9 +88,23 @@ class CardForm extends Component<PropTypes, StateTypes> {
       this.props.stripe.createPaymentMethod('card', {
         billing_details: {email}
       }).then(result => {
-        //TODO - error handling
-        console.log("paymentMethod", result)
-        this.props.onPaymentAuthorised({paymentMethod: Stripe, paymentMethodId: result.paymentMethod.id})
+        if (result.error) {
+          this.props.paymentWaiting(false);
+
+          logException(`Error creating Payment Method: ${result.error}`);
+
+          if (result.error.type === 'validation_error') {
+            // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
+            // happen then display a generic error about card details
+            this.props.paymentFailure('payment_details_incorrect');
+          } else {
+            // This is probably a Stripe or network problem
+            this.props.paymentFailure('payment_provider_unavailable');
+          }
+        }
+        else {
+          this.props.onPaymentAuthorised({paymentMethod: Stripe, paymentMethodId: result.paymentMethod.id})
+        }
       });
     });
 
@@ -98,7 +117,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
     this.state.CVC === 'Complete';
 
   onChange = (fieldName: CardFieldName) => (update) => {
-    console.log(fieldName, update)
     let newFieldState = 'Incomplete';
 
     if (update.error) newFieldState = { errorMessage: update.error.message };
@@ -116,7 +134,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
       this.state.Expiry.errorMessage ||
       this.state.CVC.errorMessage;
 
-    console.log(this.state)
     return (
       <div className='form__fields'>
         <legend className='form__legend'>Your card details</legend>

@@ -97,8 +97,6 @@ const buttonDisabled = (props: PropTypes): boolean =>
 
 function withProps(props: PropTypes) {
 
-  console.log("buttonDisabled", buttonDisabled(props))
-
   if (props.paymentMethod !== 'None') {
     // if all payment methods are switched off, do not display the button
     const formClassName = 'form--contribution';

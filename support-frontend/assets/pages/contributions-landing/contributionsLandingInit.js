@@ -99,7 +99,6 @@ function initialiseStripeCheckout(
   isTestUser: boolean,
   dispatch: Function,
 ) {
-  console.log("initialiseStripeCheckout", contributionType)
   const library: ThirdPartyPaymentLibrary =
     setupStripeCheckout(
       onPaymentAuthorisation,

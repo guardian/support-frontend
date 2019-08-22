@@ -116,7 +116,6 @@ function paymentResultFromObject(
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
-  console.log("paymentResultFromObject", json)
   if (json.error) {
     const failureReason: ErrorReason = json.error.failureReason ? json.error.failureReason : 'unknown';
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
@@ -176,7 +175,8 @@ function processStripePaymentIntentRequest(
         // Do 3DS auth and then send back to payment-api for payment confirmation
         return handleStripe3DS(createIntentResponse.data.clientSecret).then(authResult => {
           if (authResult.error) {
-            return { type: 'error', error: { message: authResult.error.message } };
+            // TODO - send to ophan?
+            return { type: 'error', error: { failureReason: 'card_authentication_error' } };
           } else {
             return postStripeConfirmPaymentIntentRequest({...data, paymentIntentId: authResult.paymentIntent.id})
           }
