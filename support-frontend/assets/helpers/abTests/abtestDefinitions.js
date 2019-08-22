@@ -5,7 +5,6 @@ import { SetOne, SetTwo } from 'helpers/abTests/data/testAmountsData';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
-export type LandingPageChoiceArchitectureLabelsTestVariants = 'control' | 'withLabels' | 'notintest';
 export type LandingPageChoiceArchitectureAmountsFirstTestVariants = 'control'
   | 'amountsFirstSetOne'
   | 'amountsFirstSetTwo'
