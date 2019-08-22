@@ -174,13 +174,17 @@ function processStripePaymentIntentRequest(
     postStripeCreatePaymentIntentRequest(data).then(createIntentResponse => {
       if (createIntentResponse.type === 'requiresaction') {
         // Do 3DS auth and then send back to payment-api for payment confirmation
-        //TODO - handle failure
-        return handleStripe3DS(createIntentResponse.data.clientSecret).then(authorisedPaymentIntent =>
-          postStripeConfirmPaymentIntentRequest({ ...data, paymentIntentId: authorisedPaymentIntent.id})
-        )
+        return handleStripe3DS(createIntentResponse.data.clientSecret).then(authResult => {
+          if (authResult.error) {
+            return { type: 'error', error: { message: authResult.error.message } };
+          } else {
+            return postStripeConfirmPaymentIntentRequest({...data, paymentIntentId: authResult.paymentIntent.id})
+          }
+        })
       }
       // No 3DS auth required
       else return createIntentResponse
+
     }).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage))
   );
 }

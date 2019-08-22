@@ -3,18 +3,23 @@
 // ----- Imports ----- //
 
 import React, { Component } from 'react';
-import {CardElement, injectStripe, CardNumberElement, CardExpiryElement, CardCVCElement} from 'react-stripe-elements';
+import {injectStripe, CardNumberElement, CardExpiryElement, CardCVCElement} from 'react-stripe-elements';
 import {connect} from "react-redux";
 import type {State} from "assets/pages/contributions-landing/contributionsLandingReducer";
-import {onThirdPartyPaymentAuthorised, paymentWaiting, StripeCardFormField} from "../../contributionsLandingActions";
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
 import {type PaymentResult} from 'helpers/paymentIntegrations/readerRevenueApis';
-import {setCreateStripePaymentMethod, setHandleStripe3DS, setStripeCardFormComplete} from 'pages/contributions-landing/contributionsLandingActions';
+import {
+  setCreateStripePaymentMethod,
+  setHandleStripe3DS,
+  setStripeCardFormComplete,
+  onThirdPartyPaymentAuthorised,
+  paymentWaiting,
+  StripeCardFormField,
+  type Action} from 'pages/contributions-landing/contributionsLandingActions';
 import {type ContributionType} from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
-import type {Action} from "../../contributionsLandingActions";
 
 // ----- Types -----//
 
@@ -84,12 +89,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       });
     });
 
-    this.props.setHandleStripe3DS((clientSecret: string) => {
-      return this.props.stripe.handleCardAction(clientSecret).then(result => {
-        console.log("handle3DS", result)
-        return result.paymentIntent
-      })
-    });
+    this.props.setHandleStripe3DS((clientSecret: string) => this.props.stripe.handleCardAction(clientSecret));
   }
 
   formIsComplete = () =>
@@ -119,6 +119,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
     console.log(this.state)
     return (
       <div className='form__fields'>
+        <legend className='form__legend'>Your card details</legend>
+
         <div className='form__field'>
           <label className="form__label">
             <span>Card number</span>
