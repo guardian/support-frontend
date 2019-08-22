@@ -60,7 +60,7 @@ export type Action =
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
-  | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
+  | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
   | { type: 'PAYMENT_FAILURE', paymentError: ErrorReason }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
@@ -153,9 +153,9 @@ const setPasswordHasBeenSubmitted = (): Action => ({ type: 'SET_PASSWORD_HAS_BEE
 
 const setPasswordError = (passwordError: boolean): Action => ({ type: 'SET_PASSWORD_ERROR', passwordError });
 
-const updateOtherAmount = (otherAmount: string): ((Function) => void) =>
+const updateOtherAmount = (otherAmount: string, contributionType: ContributionType): ((Function) => void) =>
   (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount })));
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount, contributionType })));
   };
 
 const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
