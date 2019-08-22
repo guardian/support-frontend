@@ -15,6 +15,7 @@ import { ErrorSummary } from './submitFormErrorSummary';
 import { type Option } from 'helpers/types/option';
 import { PayPal } from 'helpers/paymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { hiddenIf } from 'helpers/utilities';
 
 import 'components/forms/customFields/error.scss';
 import './subscriptionSubmitButton.scss';
@@ -44,29 +45,31 @@ function PayPalSubmitButton(props: PropTypes) {
   // because we don't want to destroy and replace the iframe each time.
   // See PayPalExpressButton for more info.
   return (
-    <span>
-      {props.paymentMethod === PayPal && (
-      <div className="component-submit-button">
-        <div className="component-submit-button--margin">
-          <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
-            <PayPalExpressButton
-              onPaymentAuthorisation={props.onPaymentAuthorised}
-              csrf={props.csrf}
-              currencyId={props.currencyId}
-              hasLoaded={props.payPalHasLoaded}
-              canOpen={props.formIsValid}
-              onClick={props.validateForm}
-              formClassName="form--contribution"
-              isTestUser={props.isTestUser}
-              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-              amount={props.amount}
-              billingPeriod={props.billingPeriod}
-            />
-          </div>
+    <div className="component-submit-button">
+      <div className="component-submit-button--margin">
+        <div
+          id="component-paypal-button-checkout"
+          className={hiddenIf(props.paymentMethod !== PayPal, 'component-paypal-button-checkout')}
+        >
+          <PayPalExpressButton
+            onPaymentAuthorisation={props.onPaymentAuthorised}
+            csrf={props.csrf}
+            currencyId={props.currencyId}
+            hasLoaded={props.payPalHasLoaded}
+            canOpen={props.formIsValid}
+            onClick={props.validateForm}
+            formClassName="form--contribution"
+            isTestUser={props.isTestUser}
+            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+            amount={props.amount}
+            billingPeriod={props.billingPeriod}
+          />
         </div>
+      </div>
+      {props.paymentMethod === PayPal && (
         <span>{props.allErrors.length > 0 && <ErrorSummary errors={props.allErrors} />}</span>
-      </div>)}
-    </span>
+      )}
+    </div>
   );
 }
 
