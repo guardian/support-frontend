@@ -42,7 +42,7 @@ function checkoutValidation(state: CheckoutState): AnyErrorType[] {
       errorAction: setFormErrors,
     }: Error<FormField>),
     ({
-      errors: applyAddressRules(getBillingAddressFields(state)),
+      errors: applyAddressRules(getBillingAddressFields(state), 'billing'),
       errorAction: setAddressFormErrorsFor('billing'),
     }: Error<AddressFormField>),
   ].filter(({ errors }) => errors.length > 0);
@@ -59,12 +59,12 @@ function withDeliveryValidation(state: WithDeliveryCheckoutState): AnyErrorType[
       errorAction: setFormErrors,
     }: Error<FormField>),
     ({
-      errors: applyAddressRules(getDeliveryAddressFields(state)),
+      errors: applyAddressRules(getDeliveryAddressFields(state), 'delivery'),
       errorAction: setAddressFormErrorsFor('delivery'),
     }: Error<AddressFormField>),
     ...(shouldValidateBillingAddress(formFields) ? [
       ({
-        errors: applyAddressRules(getBillingAddressFields(state)),
+        errors: applyAddressRules(getBillingAddressFields(state), 'billing'),
         errorAction: setAddressFormErrorsFor('billing'),
       }: Error<AddressFormField>)] : []
     ),
