@@ -77,33 +77,34 @@ const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
+
 const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormField>>): Action => ({
   scope,
   type: 'SET_ADDRESS_FORM_ERRORS',
   errors,
 });
-const applyAddressRules = (fields: FormFields): FormError<FormField>[] => validate([
+const applyAddressRules = (fields: FormFields, addressType: AddressType): FormError<FormField>[] => validate([
   {
     rule: nonEmptyString(fields.lineOne),
-    error: formError('lineOne', 'Please enter an address.'),
+    error: formError('lineOne', `Please enter a ${addressType} address.`),
   },
   {
     rule: nonEmptyString(fields.city),
-    error: formError('city', 'Please enter a city.'),
+    error: formError('city', `Please enter a ${addressType} city.`),
   },
   {
     rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postCode),
-    error: formError('postCode', 'Please enter a postcode.'),
+    error: formError('postCode', `Please enter a ${addressType} postcode.`),
   },
   {
     rule: notNull(fields.country),
-    error: formError('country', 'Please select a country.'),
+    error: formError('country', `Please select a ${addressType} country.`),
   },
   {
-    rule: isStateNullable(fields.country) || notNull(fields.state),
+    rule: isStateNullable(fields.country) || (notNull(fields.state) && nonEmptyString(fields.state)),
     error: formError(
       'state',
-      fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
+      fields.country === 'CA' ? `Please select a ${addressType} province/territory.` : `Please select a ${addressType} state.`,
     ),
   },
 ]);

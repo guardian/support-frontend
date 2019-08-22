@@ -23,7 +23,6 @@ function notNull<A>(value: A): boolean {
   return value !== null;
 }
 
-
 // ----- Functions ----- //
 
 function firstError<FieldType>(field: FieldType, errors: FormError<FieldType>[]): Option<string> {
