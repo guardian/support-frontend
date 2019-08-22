@@ -222,4 +222,5 @@ export {
   setFormErrorsFor,
   addressActionCreatorsFor,
   isPostcodeOptional,
+  isStateNullable,
 };
