@@ -4,8 +4,8 @@ jest.mock('ophan', () => {});
 
 describe('addressFieldStore', () => {
 
-  describe('isHomeDeliveryInM25 - this is a form error check so when this function returns "false" when there is an error', () => {
-
+  describe('isHomeDeliveryInM25 ', () => {
+    // - this is a "form error" check so when this function returns "false" there is an error
     it('should return true when the order is a home delivery and the postcode in the M25', () => {
       const fulfilmentOption = 'HomeDelivery';
       const fields = {
