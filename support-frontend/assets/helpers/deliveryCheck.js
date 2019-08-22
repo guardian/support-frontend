@@ -33,8 +33,7 @@ const M25_POSTCODE_PREFIXES = [
 export const postcodeHasPrefix = (postcode: Option<string>, prefix: string): boolean => {
 
   const formattedPostcode = postcode !== null ? postcode.replace(' ', '').toUpperCase() : '';
-  const lastThreeCharacters = formattedPostcode.slice(-3);
-  const postcodePrefix = formattedPostcode.replace(lastThreeCharacters, '');
+  const postcodePrefix = formattedPostcode.slice(0, -3);
 
   return postcodePrefix === prefix;
 };

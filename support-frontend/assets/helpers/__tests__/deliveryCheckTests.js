@@ -22,6 +22,10 @@ describe('Delivery Check', () => {
       expect(postcodeIsWithinDeliveryArea('GE1 5JK')).toBeFalsy();
     });
 
+    it('should false if input is less than 3 characters', () => {
+      expect(postcodeIsWithinDeliveryArea('Se')).toBeFalsy();
+    });
+
     it('should false is input is null', () => {
       expect(postcodeIsWithinDeliveryArea(null)).toBeFalsy();
     });
