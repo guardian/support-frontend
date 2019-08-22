@@ -12,7 +12,7 @@ object ContactDetails {
 case class ContactDetails(
   firstName: String,
   lastName: String,
-  workEmail: String,
+  workEmail: Option[String],
   country: Country,
   address1: Option[String] = None,
   address2: Option[String] = None,

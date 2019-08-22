@@ -112,8 +112,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
     SubscribeItem(
       account = buildAccount(state),
-      billToContact = buildContactDetails(state.user, state.user.billingAddress),
-      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, _)),
+      billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
+      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _)),
       paymentMethod = state.paymentMethod,
       subscriptionData = buildSubscriptionData(state, promotionService),
       subscribeOptions= SubscribeOptions()
@@ -144,11 +144,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     }
   }
 
-  private def buildContactDetails(user: User, address: Address) = {
+  private def buildContactDetails(user: User, giftRecipient: Option[GiftRecipient], address: Address) = {
     ContactDetails(
-      firstName = user.firstName,
-      lastName = user.lastName,
-      workEmail = user.primaryEmailAddress,
+      firstName = giftRecipient.fold(user.firstName)(_.firstName),
+      lastName = giftRecipient.fold(user.lastName)(_.lastName),
+      workEmail = giftRecipient.fold(Option(user.primaryEmailAddress))(_.email),
       address1 = address.lineOne,
       address2 = address.lineTwo,
       city = address.city,
@@ -162,7 +162,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     name = state.salesforceContacts.recipient.AccountId, //We store the Salesforce Account id in the name field
     currency = state.product.currency,
     crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
-    sfContactId__c = state.salesforceContacts.buyer.Id,
+    sfContactId__c = state.salesforceContacts.recipient.Id,
     identityId__c = state.user.id,
     paymentGateway = PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
     createdRequestId__c = state.requestId.toString
