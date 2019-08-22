@@ -13,7 +13,6 @@ import {
 import { weeklyBillingPeriods } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import Button from 'components/button/button';
 import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
 import { options } from 'components/forms/customFields/options';
@@ -67,6 +66,7 @@ import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOption
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import { addressActionCreatorsFor, type SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
+import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 
 // ----- Types ----- //
 
@@ -81,6 +81,8 @@ type PropTypes = {|
   ...FormActionCreators,
   submitForm: Function,
   setBillingCountry: Function,
+  billingAddressErrors: Array<Object>,
+  deliveryAddressErrors: Array<Object>,
 |};
 
 
@@ -96,6 +98,8 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
+    deliveryAddressErrors: state.page.deliveryAddress.fields.formErrors,
+    billingAddressErrors: state.page.billingAddress.fields.formErrors,
   };
 }
 
@@ -304,14 +308,10 @@ function WeeklyCheckoutForm(props: PropTypes) {
             validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
           />
-          <FormSection noBorder>
-            <Button
-              id="qa-submit-button"
-              type="submit"
-            >
-              Continue to payment
-            </Button>
-          </FormSection>
+          <SubscriptionSubmitButton
+            paymentMethod={props.paymentMethod}
+            allErrors={[...props.formErrors, ...props.deliveryAddressErrors, ...props.billingAddressErrors]}
+          />
           <CancellationSection />
         </Form>
       </Layout>
