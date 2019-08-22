@@ -26,12 +26,8 @@ type PropTypes = {|
 
 
 function SubscriptionSubmitButton(props: PropTypes) {
-  // We have to show/hide PayPalExpressButton rather than conditionally rendering it
-  // because we don't want to destroy and replace the iframe each time.
-  // See PayPalExpressButton for more info.
   return (
     <span>
-      {console.log(props.paymentMethod)}
       {props.paymentMethod !== PayPal && (
       <div className="component-submit-button">
         <div className="component-submit-button--margin">

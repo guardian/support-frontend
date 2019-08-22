@@ -77,7 +77,6 @@ const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
-
 const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormField>>): Action => ({
   scope,
   type: 'SET_ADDRESS_FORM_ERRORS',
