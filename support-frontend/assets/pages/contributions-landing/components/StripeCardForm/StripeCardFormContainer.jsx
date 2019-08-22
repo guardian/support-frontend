@@ -11,6 +11,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
+import { setupStripe } from 'helpers/stripe';
 import type {StripeElementsTestVariants} from "assets/helpers/abTests/abtestDefinitions";
 import AnimatedDots from 'components/spinners/animatedDots';
 import './stripeCardForm.scss'
@@ -28,17 +29,6 @@ type PropTypes = {|
   setStripeHasLoaded: () => void,
   stripeHasLoaded: boolean,
 |};
-
-//TODO - share this function
-const setupStripe = (setStripeHasLoaded: () => void) => {
-  const htmlElement = document.getElementById('stripe-js');
-  if (htmlElement !== null) {
-    htmlElement.addEventListener(
-      'load',
-      setStripeHasLoaded,
-    );
-  }
-};
 
 function StripeCardFormContainer(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF' &&

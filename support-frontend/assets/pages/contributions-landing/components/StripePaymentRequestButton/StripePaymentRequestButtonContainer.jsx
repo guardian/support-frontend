@@ -12,6 +12,7 @@ import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/co
 import { getAmount } from 'helpers/contributions';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { setupStripe } from 'helpers/stripe';
 import { hiddenIf } from 'helpers/utilities';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 
@@ -29,17 +30,6 @@ type PropTypes = {|
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
 |};
-
-
-const setupStripe = (setStripeHasLoaded: () => void) => {
-  const htmlElement = document.getElementById('stripe-js');
-  if (htmlElement !== null) {
-    htmlElement.addEventListener(
-      'load',
-      setStripeHasLoaded,
-    );
-  }
-};
 
 // ----- Component ----- //
 
