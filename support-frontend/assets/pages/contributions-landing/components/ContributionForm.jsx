@@ -282,6 +282,8 @@ function withProps(props: PropTypes) {
           stripeHasLoaded={props.stripeV3HasLoaded}
           currency={props.currency}
           contributionType={props.contributionType}
+          paymentMethod={props.paymentMethod}
+          stripeElementsTestVariant={props.stripeElementsTestVariant}
           isTestUser={props.isTestUser}
           country={props.country}
           otherAmounts={props.otherAmounts}

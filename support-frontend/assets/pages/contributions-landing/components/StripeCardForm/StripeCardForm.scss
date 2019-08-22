@@ -1,0 +1,16 @@
+.stripe-card-element-container {
+  margin-top: 20px;
+}
+
+.stripe-card-element-container .form__input {
+  padding-left: 10px;
+}
+
+.stripe-card-element-container__inline-fields {
+  display: flex;
+
+  .form__field {
+    width: 30%;
+    margin-right: 15px;
+  }
+}

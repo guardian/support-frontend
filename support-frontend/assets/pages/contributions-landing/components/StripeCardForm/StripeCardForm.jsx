@@ -118,17 +118,37 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
     console.log(this.state)
     return (
-      <div className='form__field'>
-        <label className="form__label">
-          <span>Your card details</span>
-        </label>
+      <div className='form__fields'>
+        <div className='form__field'>
+          <label className="form__label">
+            <span>Card number</span>
+          </label>
+          <span className='form__input'>
+            <CardNumberElement
+              onChange={this.onChange('CardNumber')}
+            />
+          </span>
+        </div>
 
-        <CardNumberElement
-          placeholder="Card Number"
-          onChange={this.onChange('CardNumber')}
-        />
-        <CardExpiryElement onChange={this.onChange('Expiry')}/>
-        <CardCVCElement onChange={this.onChange('CVC')}/>
+        <div className='stripe-card-element-container__inline-fields'>
+          <div className='form__field'>
+            <label className="form__label">
+              <span>Expiry date</span>
+            </label>
+            <span className='form__input'>
+              <CardExpiryElement onChange={this.onChange('Expiry')}/>
+            </span>
+          </div>
+
+          <div className='form__field'>
+            <label className="form__label">
+              <span>CVC</span>
+            </label>
+            <span className='form__input'>
+              <CardCVCElement placeholder='' onChange={this.onChange('CVC')}/>
+            </span>
+          </div>
+        </div>
 
         {errorMessage ? <div className='form__error'>{errorMessage}</div> : null}
       </div>

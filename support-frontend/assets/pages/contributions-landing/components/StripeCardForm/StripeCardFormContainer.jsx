@@ -10,6 +10,10 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
+import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
+import type {StripeElementsTestVariants} from "assets/helpers/abTests/abtestDefinitions";
+import AnimatedDots from 'components/spinners/animatedDots';
+import './stripeCardForm.scss'
 
 // ----- Types -----//
 
@@ -19,6 +23,8 @@ type PropTypes = {|
   currency: IsoCurrency,
   isTestUser: boolean,
   contributionType: ContributionType,
+  paymentMethod: PaymentMethod,
+  stripeElementsTestVariant: StripeElementsTestVariants,
   setStripeHasLoaded: () => void,
   stripeHasLoaded: boolean,
 |};
@@ -35,11 +41,14 @@ const setupStripe = (setStripeHasLoaded: () => void) => {
 };
 
 function StripeCardFormContainer(props: PropTypes) {
-  if (props.contributionType === 'ONE_OFF') {
+  if (props.contributionType === 'ONE_OFF' &&
+    props.paymentMethod === Stripe &&
+    props.stripeElementsTestVariant === 'stripeCardElement') {
+
     if (props.stripeHasLoaded === false && window.Stripe === undefined) {
-      //TODO - show spinner
       setupStripe(props.setStripeHasLoaded);
-      return null;
+
+      return <AnimatedDots appearance='dark'/>
     }
 
     const key = getStripeKey('ONE_OFF', props.currency, props.isTestUser);
