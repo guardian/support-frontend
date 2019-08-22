@@ -61,13 +61,11 @@ type StripePaymentRequestButtonData = {
   stripeV3HasLoaded: boolean,
 }
 
-type StripePaymentIntentsData = {
+export type StripePaymentIntentsData = {
+  formComplete: boolean,
   // Callbacks that must be initialised after the StripeCardForm component has been created
   createPaymentMethod: (email: string) => void,
   handle3DS: (clientSecret: string) => void,
-  //TODO - hold state to show if it's in progress, stripe.js has loaded
-  stripeCardFormReady: boolean,
-  errorMessage: string | null,
 }
 
 type FormState = {
@@ -147,10 +145,9 @@ function createFormReducer() {
       stripeV3HasLoaded: false,
     },
     stripePaymentIntentsData: {
+      formComplete: false,
       createPaymentMethod: null,
       handle3DS: null,
-      stripeCardFormReady: false,
-      errorMessage: null,
     },
     setPasswordData: {
       password: '',
@@ -225,21 +222,12 @@ function createFormReducer() {
           }
         };
 
-      case 'SET_STRIPE_CARD_FORM_READY':
+      case 'SET_STRIPE_CARD_FORM_COMPLETE':
         return {
           ...state,
           stripePaymentIntentsData: {
             ...state.stripePaymentIntentsData,
-            stripeCardFormReady: action.stripeCardFormReady,
-          }
-        };
-
-      case 'SET_STRIPE_CARD_FORM_ERROR':
-        return {
-          ...state,
-          stripePaymentIntentsData: {
-            ...state.stripePaymentIntentsData,
-            errorMessage: action.errorMessage,
+            formComplete: action.isComplete,
           }
         };
 

@@ -77,8 +77,7 @@ export type Action =
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
   | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => void }
-  | { type: 'SET_STRIPE_CARD_FORM_READY', stripeCardFormReady: boolean}
-  | { type: 'SET_STRIPE_CARD_FORM_ERROR', errorMessage: string }
+  | { type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete: boolean }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -230,11 +229,8 @@ const setCreateStripePaymentMethod = (createStripePaymentMethod: (email: string)
 const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => void): Action =>
   ({ type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS });
 
-const setStripeCardFormReady = (stripeCardFormReady: boolean): Action =>
-  ({ type: 'SET_STRIPE_CARD_FORM_READY', stripeCardFormReady });
-
-const setStripeCardFormError = (errorMessage: string | null): Action =>
-  ({ type: 'SET_STRIPE_CARD_FORM_ERROR', errorMessage });
+const setStripeCardFormComplete = (isComplete: boolean): Action =>
+  ({ type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete });
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
@@ -555,6 +551,5 @@ export {
   setTickerGoalReached,
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
-  setStripeCardFormReady,
-  setStripeCardFormError,
+  setStripeCardFormComplete,
 };

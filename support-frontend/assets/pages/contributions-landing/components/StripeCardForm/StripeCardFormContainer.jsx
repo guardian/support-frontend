@@ -47,7 +47,7 @@ function StripeCardFormContainer(props: PropTypes) {
     return (
       <div className='stripe-card-element-container'>
         <StripeProvider apiKey={key}>
-          <Elements>
+          <Elements onChange={(ev) => console.log("ELEMENTS CHANGE:", ev)}>
             <StripeCardForm/>
           </Elements>
         </StripeProvider>

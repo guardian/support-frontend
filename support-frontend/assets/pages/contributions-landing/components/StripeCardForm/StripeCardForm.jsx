@@ -2,15 +2,15 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
-import {CardElement, injectStripe} from 'react-stripe-elements';
+import React, { Component } from 'react';
+import {CardElement, injectStripe, CardNumberElement, CardExpiryElement, CardCVCElement} from 'react-stripe-elements';
 import {connect} from "react-redux";
 import type {State} from "assets/pages/contributions-landing/contributionsLandingReducer";
-import {onThirdPartyPaymentAuthorised, paymentWaiting} from "../../contributionsLandingActions";
+import {onThirdPartyPaymentAuthorised, paymentWaiting, StripeCardFormField} from "../../contributionsLandingActions";
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
 import {type PaymentResult} from 'helpers/paymentIntegrations/readerRevenueApis';
-import {setCreateStripePaymentMethod, setHandleStripe3DS, setStripeCardFormReady, setStripeCardFormError} from 'pages/contributions-landing/contributionsLandingActions';
+import {setCreateStripePaymentMethod, setHandleStripe3DS, setStripeCardFormComplete} from 'pages/contributions-landing/contributionsLandingActions';
 import {type ContributionType} from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
@@ -24,10 +24,10 @@ type PropTypes = {|
   contributionType: ContributionType,
   setCreateStripePaymentMethod: ((email: string) => void) => Action,
   setHandleStripe3DS: ((clientSecret: string) => void) => Action,
-  setStripeCardFormReady: (stripeCardFormReady: boolean) => Action,
-  setStripeCardFormError: (errorMessage: string | null) => Action,
   paymentWaiting: (isWaiting: boolean) => Action,
   errorMessage: string | null,
+
+  setStripeCardFormComplete: (isComplete: boolean) => Action,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -43,50 +43,97 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
   setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => void) =>
     dispatch(setHandleStripe3DS(handleStripe3DS)),
-  setStripeCardFormReady: (stripeCardFormReady: boolean) =>
-    dispatch(setStripeCardFormReady(stripeCardFormReady)),
-  setStripeCardFormError: (errorMessage: string | null) =>
-    dispatch(setStripeCardFormError(errorMessage)),
+  setStripeCardFormComplete: (isComplete: boolean) =>
+    dispatch(setStripeCardFormComplete(isComplete)),
   paymentWaiting: (isWaiting: boolean) =>
     dispatch(paymentWaiting(isWaiting))
 });
 
-function CardForm(props: PropTypes) {
+type CardFieldError = { errorMessage: string }
 
-  props.setCreateStripePaymentMethod((email: string) => {
-    props.paymentWaiting(true);
+type CardFieldState = 'Incomplete' | CardFieldError | 'Complete';
 
-    props.stripe.createPaymentMethod('card', {
-      billing_details: { email }
-    }).then(result => {
-      //TODO - error handling
-      console.log("paymentMethod", result)
-      props.onPaymentAuthorised({paymentMethod: Stripe, paymentMethodId: result.paymentMethod.id})
+type CardFieldName = 'CardNumber' | 'Expiry' | 'CVC';
+
+type StateTypes = {
+  [CardFieldName]: CardFieldState,
+};
+
+class CardForm extends Component<PropTypes, StateTypes> {
+
+  constructor(props: PropTypes) {
+    super(props);
+    
+    this.state = {
+      CardNumber: 'Incomplete',
+      Expiry: 'Incomplete',
+      CVC: 'Incomplete',
+    }
+  }
+
+  componentDidMount(): void {
+    this.props.setCreateStripePaymentMethod((email: string) => {
+      this.props.paymentWaiting(true);
+
+      this.props.stripe.createPaymentMethod('card', {
+        billing_details: {email}
+      }).then(result => {
+        //TODO - error handling
+        console.log("paymentMethod", result)
+        this.props.onPaymentAuthorised({paymentMethod: Stripe, paymentMethodId: result.paymentMethod.id})
+      });
     });
-  });
 
-  props.setHandleStripe3DS((clientSecret: string) => {
-    return props.stripe.handleCardAction(clientSecret).then(result => {
-      console.log("handle3DS", result)
-      return result.paymentIntent
-    })
-  });
+    this.props.setHandleStripe3DS((clientSecret: string) => {
+      return this.props.stripe.handleCardAction(clientSecret).then(result => {
+        console.log("handle3DS", result)
+        return result.paymentIntent
+      })
+    });
+  }
 
-  const onChange = (update) => {
-    console.log(update)
-    if (update.error) props.setStripeCardFormError(update.error.message);
-    else if (props.errorMessage) props.setStripeCardFormError(null);
+  formIsComplete = () =>
+    this.state.CardNumber === 'Complete' &&
+    this.state.Expiry === 'Complete' &&
+    this.state.CVC === 'Complete';
 
-    if (update.complete) props.setStripeCardFormReady(true);
-    else props.setStripeCardFormReady(false);
+  onChange = (fieldName: CardFieldName) => (update) => {
+    console.log(fieldName, update)
+    let newFieldState = 'Incomplete';
+
+    if (update.error) newFieldState = { errorMessage: update.error.message };
+    else if (update.complete) newFieldState = 'Complete';
+
+    this.setState(
+      { [fieldName]: newFieldState },
+      () => this.props.setStripeCardFormComplete(this.formIsComplete())
+    );
   };
 
-  return (
-    <div>
-      <CardElement hidePostalCode={true} onChange={onChange}/>
-      { props.errorMessage ?<div className='form__error'>{props.errorMessage}</div> : null}
-    </div>
-  )
+  render() {
+    const errorMessage =
+      this.state.CardNumber.errorMessage ||
+      this.state.Expiry.errorMessage ||
+      this.state.CVC.errorMessage;
+
+    console.log(this.state)
+    return (
+      <div className='form__field'>
+        <label className="form__label">
+          <span>Your card details</span>
+        </label>
+
+        <CardNumberElement
+          placeholder="Card Number"
+          onChange={this.onChange('CardNumber')}
+        />
+        <CardExpiryElement onChange={this.onChange('Expiry')}/>
+        <CardCVCElement onChange={this.onChange('CVC')}/>
+
+        {errorMessage ? <div className='form__error'>{errorMessage}</div> : null}
+      </div>
+    )
+  }
 }
 
 // ----- Default props----- //
