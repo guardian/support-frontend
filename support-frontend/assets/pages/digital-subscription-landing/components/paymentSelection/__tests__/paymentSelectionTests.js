@@ -8,7 +8,7 @@ import {
   getSavingPercentage,
 } from '../helpers/paymentSelection';
 
-jest.mock('ophan', () => {}); // required to get the test to run! why?
+jest.mock('ophan', () => {});
 
 describe('PaymentSelection', () => {
   let productPrices;
