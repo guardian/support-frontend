@@ -64,6 +64,14 @@ type CardFieldName = 'CardNumber' | 'Expiry' | 'CVC';
 
 type StateTypes = {
   [CardFieldName]: CardFieldState,
+  currentlySelected: CardFieldName | null,
+};
+
+const fieldStyle = {
+  base: {
+    fontFamily: "'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
+    fontSize: "16px",
+  }
 };
 
 class CardForm extends Component<PropTypes, StateTypes> {
@@ -75,6 +83,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       CardNumber: 'Incomplete',
       Expiry: 'Incomplete',
       CVC: 'Incomplete',
+      currentlySelected: null,
     }
   }
 
@@ -125,16 +134,16 @@ class CardForm extends Component<PropTypes, StateTypes> {
     );
   };
 
-  fieldStyle = {
-    base: {
-      fontFamily: "'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-      border: "0.0625rem solid #00b2ff",
-      boxShadow: "0 0 0 2px #00b2ff",
-      fontSize: "16px",
-      ":focus": {
-        boxShadow: "0 0 0 2px #00b2ff"
-      }
-    }
+  onFocus = (fieldName: CardFieldName) => {
+    this.setState({
+      currentlySelected: fieldName
+    });
+  };
+
+  onBlur = (fieldName: CardFieldName) => {
+    this.setState({
+      currentlySelected: null
+    });
   };
 
   render() {
@@ -142,6 +151,9 @@ class CardForm extends Component<PropTypes, StateTypes> {
       this.state.CardNumber.errorMessage ||
       this.state.Expiry.errorMessage ||
       this.state.CVC.errorMessage;
+
+    const getClasses = (fieldName: CardFieldName): string =>
+      `form__input ${this.state.currentlySelected === fieldName ? 'form__input-enabled' : ''}`;
 
     return (
       <div className='form__fields'>
@@ -151,10 +163,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
           <label className="form__label">
             <span>Card number</span>
           </label>
-          <span className='form__input'>
+          <span className={getClasses('CardNumber')}>
             <CardNumberElement
-              style={this.fieldStyle}
+              style={fieldStyle}
               onChange={this.onChange('CardNumber')}
+              onFocus={() => this.onFocus('CardNumber')}
+              onBlur={() => this.onBlur('CardNumber')}
             />
           </span>
         </div>
@@ -164,10 +178,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
             <label className="form__label">
               <span>Expiry date</span>
             </label>
-            <span className='form__input'>
+            <span className={getClasses('Expiry')}>
               <CardExpiryElement
-                style={this.fieldStyle}
+                style={fieldStyle}
                 onChange={this.onChange('Expiry')}
+                onFocus={() => this.onFocus('Expiry')}
+                onBlur={() => this.onBlur('Expiry')}
               />
             </span>
           </div>
@@ -176,11 +192,13 @@ class CardForm extends Component<PropTypes, StateTypes> {
             <label className="form__label">
               <span>CVC</span>
             </label>
-            <span className='form__input'>
+            <span className={getClasses('CVC')}>
               <CardCVCElement
-                style={this.fieldStyle}
+                style={fieldStyle}
                 placeholder=''
                 onChange={this.onChange('CVC')}
+                onFocus={() => this.onFocus('CVC')}
+                onBlur={() => this.onBlur('CVC')}
               />
             </span>
           </div>
