@@ -34,14 +34,11 @@ type PropTypes = {|
   setCreateStripePaymentMethod: ((email: string) => void) => Action,
   setHandleStripe3DS: ((clientSecret: string) => void) => Action,
   paymentWaiting: (isWaiting: boolean) => Action,
-  errorMessage: string | null,
-
   setStripeCardFormComplete: (isComplete: boolean) => Action,
 |};
 
 const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
-  errorMessage: state.page.form.stripePaymentIntentsData.errorMessage
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
