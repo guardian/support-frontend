@@ -29,12 +29,12 @@ const M25_POSTCODE_PREFIXES = [
   'TN16',
 ];
 
-export const postcodeHasPrefix = (postcode: string, prefix: string): boolean => {
+export const postcodeHasPrefix = (postcode: string, expectedPrefix: string): boolean => {
 
   const formattedPostcode = postcode.replace(' ', '').toUpperCase();
-  const postcodePrefix = formattedPostcode.slice(0, -3);
+  const actualPrefix = formattedPostcode.slice(0, -3);
 
-  return postcodePrefix === prefix;
+  return actualPrefix === expectedPrefix;
 };
 
 const postcodeIsWithinDeliveryArea = (postcode: string): boolean =>
