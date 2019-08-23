@@ -125,7 +125,7 @@ const applyDeliveryAddressRules =
     const homeRules = validate([
       {
         rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
-        error: formError('postCode', 'Sorry, we cannot deliver a paper outside the M25. However you can have vouchers delivered anywhere in the UK. Please switch to vouchers if you would like to continue with this address.'),
+        error: formError('postCode', 'Sorry, we cannot deliver a paper to an address with this postcode. Please call Customer Services on: 0330 333 6767 or press Back to purchase a voucher subscription.'),
       },
     ]);
 
