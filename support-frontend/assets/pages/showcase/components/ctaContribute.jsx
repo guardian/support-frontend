@@ -29,12 +29,11 @@ export default function CtaContribute() {
             <p>
               The Guardian{'\''}s open, independent journalism has now been supported by
               over a million people around the world – but we must keep building
-              on this for the years to come. Every contribution, whether big or
-              small, means we can keep investigating and exploring the critical
-              issues of our time.&nbsp;
+              on this for the years to come.&nbsp;
               <strong>
-                Make a contribution from as little as
-                £1, and it only takes a minute.
+                Every contribution, whether big or
+                small, means we can keep investigating and exploring the critical
+                issues of our time. And it only takes a minute.
               </strong>
             </p>
           </Text>
