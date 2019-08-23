@@ -77,11 +77,6 @@ const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
-const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormField>>): Action => ({
-  scope,
-  type: 'SET_ADDRESS_FORM_ERRORS',
-  errors,
-});
 const applyAddressRules = (fields: FormFields, addressType: AddressType): FormError<FormField>[] => validate([
   {
     rule: nonEmptyString(fields.lineOne),
@@ -109,6 +104,12 @@ const applyAddressRules = (fields: FormFields, addressType: AddressType): FormEr
 ]);
 
 // ----- Action Creators ----- //
+
+const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormField>>): Action => ({
+  scope,
+  type: 'SET_ADDRESS_FORM_ERRORS',
+  errors,
+});
 
 const addressActionCreatorsFor = (scope: AddressType) => ({
   setCountry: (countryRaw: string) => (dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) => {
