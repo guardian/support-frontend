@@ -68,6 +68,12 @@ export type ProductPrices = {
   }
 }
 
+export type BillingPeriods = {
+  [BillingPeriod]: {
+    [IsoCurrency]: ProductPrice
+  }
+}
+
 const isNumeric = (num: ?number): boolean %checks =>
   num !== null &&
   num !== undefined &&

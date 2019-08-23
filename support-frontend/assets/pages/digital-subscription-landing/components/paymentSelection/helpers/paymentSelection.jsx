@@ -7,25 +7,46 @@ import { getDigitalCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { currencies } from 'helpers/internationalisation/currency';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
-import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import { type Option } from 'helpers/types/option';
 import { fixDecimals } from 'helpers/subscriptions';
 
-const getProductOptions = (productPrices, countryGroupId) => (
+// types
+import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { type Option } from 'helpers/types/option';
+import type { ProductPrices, BillingPeriods } from 'helpers/productPrice/productPrices';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
+
+export type PaymentOption = {
+  title: string,
+  singlePeriod: string,
+  href: string,
+  salesCopy: { control: () => Element<'span'>, variantA: () => Element<'span'>},
+  offer: Option<string>,
+  price: Option<string>,
+  onClick: Function,
+}
+
+export const getProductOptions = (productPrices: ProductPrices, countryGroupId: CountryGroupId) => (
   productPrices[countryGroups[countryGroupId].name].NoFulfilmentOptions.NoProductOptions
 );
 
-const getCurrencySymbol = currencyId => currencies[currencyId].glyph;
+export const getCurrencySymbol = (currencyId: IsoCurrency): string => currencies[currencyId].glyph;
 
-const getDisplayPrice = (currencyId, price) => getCurrencySymbol(currencyId) + fixDecimals(price);
+export const getDisplayPrice = (currencyId: IsoCurrency, price: number) =>
+  getCurrencySymbol(currencyId) + fixDecimals(price);
 
-const getProductPrice = (productOptions, billingPeriodTitle, currencyId) => (
+export const getProductPrice = (
+  productOptions: BillingPeriods,
+  billingPeriodTitle: DigitalBillingPeriod,
+  currencyId: IsoCurrency,
+): number => (
   productOptions[billingPeriodTitle][currencyId].price
 );
 
-const getSavingPercentage = (annualCost, annualizedMonthlyCost) => `${Math.round((1 - (annualCost / annualizedMonthlyCost)) * 100)}%`;
+export const getSavingPercentage = (annualCost: number, monthlyCostAnnualized: number) => `${Math.round((1 - (annualCost / monthlyCostAnnualized)) * 100)}%`;
 
 const BILLING_PERIOD = {
   [Monthly]: {
@@ -69,16 +90,6 @@ const BILLING_PERIOD = {
   },
 };
 
-export type PaymentOption = {
-  title: string,
-  singlePeriod: string,
-  href: string,
-  salesCopy: { control: () => Element<'span'>, variantA: () => Element<'span'>},
-  offer: Option<string>,
-  price: Option<string>,
-  onClick: Function,
-}
-
 // state
 const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> } => {
   const { productPrices } = state.page;
@@ -94,7 +105,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   const saving = getDisplayPrice(currencyId, annualizedMonthlyCost - annualCost);
   const offer = getSavingPercentage(annualCost, annualizedMonthlyCost);
 
-  const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map((productTitle: BillingPeriod) => {
+  const createPaymentOption = (productTitle: BillingPeriod): PaymentOption => {
 
     const billingPeriodTitle = productTitle === 'Monthly' || productTitle === 'Annual' ? productTitle : 'Monthly';
     const displayPrice = getDisplayPrice(currencyId, getProductPrice(productOptions, billingPeriodTitle, currencyId));
@@ -109,7 +120,9 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
       offer,
     };
 
-  });
+  };
+
+  const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map(createPaymentOption);
 
   return {
     paymentOptions,

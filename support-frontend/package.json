@@ -14,6 +14,7 @@
     "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com --disable-host-check",
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest",
+    "test-watch": "echo 'Running JS tests in watch mode' && jest --watch",
     "stat": "yarn build-prod && webpack-bundle-analyzer public/compiled-assets/stats.json",
     "paparazzi": "paparazzi && open ./paparazzi",
     "storybook": "start-storybook --ci -p 9001 -c .storybook -s .storybook/static",
