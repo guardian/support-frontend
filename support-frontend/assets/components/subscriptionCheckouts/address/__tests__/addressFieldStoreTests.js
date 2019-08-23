@@ -8,22 +8,18 @@ describe('addressFieldStore', () => {
     // - this is a "form error" check so when this function returns "false" there is an error
     it('should return true when the order is a home delivery and the postcode in the M25', () => {
       const fulfilmentOption = 'HomeDelivery';
-      const fields = {
-        postCode: 'SE23 2AB',
-      };
+      const postcode = 'SE23 2AB';
 
-      const result = isHomeDeliveryInM25(fulfilmentOption, fields);
+      const result = isHomeDeliveryInM25(fulfilmentOption, postcode);
 
       expect(result).toBeTruthy();
     });
 
     it('should return false when the order is a home delivery and the postcode is outside the M25', () => {
       const fulfilmentOption = 'HomeDelivery';
-      const fields = {
-        postCode: 'DA11 7NP',
-      };
+      const postcode = 'DA11 7NP';
 
-      const result = isHomeDeliveryInM25(fulfilmentOption, fields);
+      const result = isHomeDeliveryInM25(fulfilmentOption, postcode);
 
       expect(result).toBeFalsy();
     });
@@ -31,11 +27,9 @@ describe('addressFieldStore', () => {
     it('should return true when the fulfilment option is not home delivery', () => {
       // this error is not applicable if the fulfilment option is not home delivery
       const fulfilmentOption = 'Collection';
-      const fields = {
-        postCode: 'DA11 7NP',
-      };
+      const postcode = 'DA11 7NP';
 
-      const result = isHomeDeliveryInM25(fulfilmentOption, fields);
+      const result = isHomeDeliveryInM25(fulfilmentOption, postcode);
 
       expect(result).toBeTruthy();
     });
