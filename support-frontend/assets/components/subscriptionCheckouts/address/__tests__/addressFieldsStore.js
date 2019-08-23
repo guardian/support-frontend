@@ -12,7 +12,6 @@ import {
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
 jest.mock('ophan', () => () => ({}));
-jest.mock('helpers/fontLoader', () => () => ({}));
 
 // ----- Tests ----- //
 
