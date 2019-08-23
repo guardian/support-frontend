@@ -93,7 +93,7 @@ const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormFi
   errors,
 });
 
-export const applyBillingAddressRules =
+const applyBillingAddressRules =
   (fields: FormFields): FormError<FormField>[] => validate([
     {
       rule: nonEmptyString(fields.lineOne),
@@ -120,7 +120,7 @@ export const applyBillingAddressRules =
     },
   ]);
 
-export const applyDeliveryAddressRules =
+const applyDeliveryAddressRules =
   (fulfilmentOption: Option<FulfilmentOptions>, fields: FormFields): FormError<FormField>[] => {
     const homeRules = validate([
       {
@@ -244,8 +244,9 @@ export {
   getFormFields,
   getStateFormErrors,
   getPostcodeForm,
-  applyAddressRules,
   setFormErrorsFor,
   addressActionCreatorsFor,
   isPostcodeOptional,
+  applyBillingAddressRules,
+  applyDeliveryAddressRules,
 };
