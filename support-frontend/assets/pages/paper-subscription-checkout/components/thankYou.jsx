@@ -102,7 +102,7 @@ function ThankYouContent({
           )
         }
         {startDate &&
-          <Text title="You can start using your vouchers from">
+          <Text title={fulfilmentOption === HomeDelivery ? 'You will receive your newspapers from' : 'You can start using your vouchers from'}>
             <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
           </Text>
         }
