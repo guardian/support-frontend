@@ -79,10 +79,10 @@ const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
-export const isHomeDeliveryInM25 = (fulfilmentOption: Option<FulfilmentOptions>, fields: FormFields) => {
+export const isHomeDeliveryInM25 = (fulfilmentOption: Option<FulfilmentOptions>, postcode: Option<string>) => {
 
-  if (fulfilmentOption === 'HomeDelivery') {
-    return postcodeIsWithinDeliveryArea(fields.postCode);
+  if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
+    return postcodeIsWithinDeliveryArea(postcode);
   }
   return true;
 };
@@ -93,8 +93,8 @@ const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormFi
   errors,
 });
 
-const applyAddressRules =
-  (fulfilmentOption: Option<FulfilmentOptions>, fields: FormFields): FormError<FormField>[] => validate([
+export const applyBillingAddressRules =
+  (fields: FormFields): FormError<FormField>[] => validate([
     {
       rule: nonEmptyString(fields.lineOne),
       error: formError('lineOne', 'Please enter an address'),
@@ -108,10 +108,6 @@ const applyAddressRules =
       error: formError('postCode', 'Please enter a postcode'),
     },
     {
-      rule: isHomeDeliveryInM25(fulfilmentOption, fields),
-      error: formError('postCode', 'Sorry, we cannot deliver a paper outside the M25. However you can have vouchers delivered anywhere in the UK. Please switch to vouchers if you would like to continue with this address.'),
-    },
-    {
       rule: notNull(fields.country),
       error: formError('country', 'Please select a country.'),
     },
@@ -123,6 +119,20 @@ const applyAddressRules =
       ),
     },
   ]);
+
+export const applyDeliveryAddressRules =
+  (fulfilmentOption: Option<FulfilmentOptions>, fields: FormFields): FormError<FormField>[] => {
+    const homeRules = validate([
+      {
+        rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
+        error: formError('postCode', 'Sorry, we cannot deliver a paper outside the M25. However you can have vouchers delivered anywhere in the UK. Please switch to vouchers if you would like to continue with this address.'),
+      },
+    ]);
+
+    const billingRules = applyBillingAddressRules(fields);
+
+    return [...homeRules, ...billingRules];
+  };
 
 // ----- Action Creators ----- //
 

@@ -1,5 +1,4 @@
 // @flow
-import type { Option } from 'helpers/types/option';
 
 const M25_POSTCODE_PREFIXES = [
   'CR0', 'CR2', 'CR3', 'CR4', 'CR5', 'CR6', 'CR7', 'CR8', 'CR9',
@@ -30,16 +29,16 @@ const M25_POSTCODE_PREFIXES = [
   'TN16',
 ];
 
-export const postcodeHasPrefix = (postcode: Option<string>, prefix: string): boolean => {
+export const postcodeHasPrefix = (postcode: string, prefix: string): boolean => {
 
-  const formattedPostcode = postcode !== null ? postcode.replace(' ', '').toUpperCase() : '';
+  const formattedPostcode = postcode.replace(' ', '').toUpperCase();
   const postcodePrefix = formattedPostcode.slice(0, -3);
 
   return postcodePrefix === prefix;
 };
 
-const postcodeIsWithinDeliveryArea = (postcode: Option<string>): boolean =>
-  postcode !== null && M25_POSTCODE_PREFIXES.filter(prefix => postcodeHasPrefix(postcode, prefix)).length > 0;
+const postcodeIsWithinDeliveryArea = (postcode: string): boolean =>
+  M25_POSTCODE_PREFIXES.filter(prefix => postcodeHasPrefix(postcode, prefix)).length > 0;
 
 export {
   postcodeIsWithinDeliveryArea,
