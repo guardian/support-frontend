@@ -128,6 +128,18 @@ class CardForm extends Component<PropTypes, StateTypes> {
     );
   };
 
+  fieldStyle = {
+    base: {
+      fontFamily: "'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
+      border: "0.0625rem solid #00b2ff",
+      boxShadow: "0 0 0 2px #00b2ff",
+      fontSize: "16px",
+      ":focus": {
+        boxShadow: "0 0 0 2px #00b2ff"
+      }
+    }
+  };
+
   render() {
     const errorMessage =
       this.state.CardNumber.errorMessage ||
@@ -144,6 +156,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
           </label>
           <span className='form__input'>
             <CardNumberElement
+              style={this.fieldStyle}
               onChange={this.onChange('CardNumber')}
             />
           </span>
@@ -155,7 +168,10 @@ class CardForm extends Component<PropTypes, StateTypes> {
               <span>Expiry date</span>
             </label>
             <span className='form__input'>
-              <CardExpiryElement onChange={this.onChange('Expiry')}/>
+              <CardExpiryElement
+                style={this.fieldStyle}
+                onChange={this.onChange('Expiry')}
+              />
             </span>
           </div>
 
@@ -164,7 +180,11 @@ class CardForm extends Component<PropTypes, StateTypes> {
               <span>CVC</span>
             </label>
             <span className='form__input'>
-              <CardCVCElement placeholder='' onChange={this.onChange('CVC')}/>
+              <CardCVCElement
+                style={this.fieldStyle}
+                placeholder=''
+                onChange={this.onChange('CVC')}
+              />
             </span>
           </div>
         </div>
