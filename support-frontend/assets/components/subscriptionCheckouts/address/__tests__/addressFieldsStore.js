@@ -6,7 +6,7 @@ import {
   isPostcodeOptional,
   isStateNullable,
   setFormErrorsFor,
-  applyAddressRules,
+  applyBillingAddressRules,
   addressActionCreatorsFor,
   addressReducerFor,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
@@ -51,7 +51,7 @@ describe('address form fields functionality', () => {
   });
 
   it('can apply a series of address rules to form fields', () => {
-    const addresRulesAppliedBilling = applyAddressRules({
+    const addresRulesAppliedBilling = applyBillingAddressRules({
       city: null,
       country: 'IN',
       lineOne: null,
