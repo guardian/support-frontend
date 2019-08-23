@@ -37,6 +37,7 @@ export type WithDeliveryCheckoutState = ReduxState<{|
   billingAddress: AddressState,
   deliveryAddress: AddressState,
   hasDeliveryAddress: true,
+  fulfilmentOption: Option<FulfilmentOptions>,
 |}>;
 
 export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
@@ -125,6 +126,8 @@ const getDeliveryAddress = (state: WithDeliveryCheckoutState): AddressState =>
 const getDeliveryAddressFields = (state: WithDeliveryCheckoutState): AddressFormFields =>
   addressFieldsFromAddress(getDeliveryAddress(state));
 
+const getFulfilmentOption = (state: WithDeliveryCheckoutState): Option<FulfilmentOptions> =>
+  state.page.checkout.fulfilmentOption;
 
 export {
   createCheckoutReducer,
@@ -133,4 +136,5 @@ export {
   getBillingAddressFields,
   getDeliveryAddress,
   getDeliveryAddressFields,
+  getFulfilmentOption,
 };

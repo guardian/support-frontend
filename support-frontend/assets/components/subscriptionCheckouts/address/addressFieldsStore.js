@@ -23,6 +23,8 @@ import {
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
+import { postcodeIsWithinDeliveryArea } from 'helpers/deliveryCheck';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Types ----- //
 
@@ -77,7 +79,14 @@ const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
-const applyAddressRules = (fields: FormFields, addressType: AddressType): FormError<FormField>[] => validate([
+export const isHomeDeliveryInM25 = (fulfilmentOption: Option<FulfilmentOptions>, postcode: Option<string>) => {
+  if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
+    return postcodeIsWithinDeliveryArea(postcode);
+  }
+  return true;
+};
+
+const applyBillingAddressRules = (fields: FormFields, addressType: AddressType): FormError<FormField>[] => validate([
   {
     rule: nonEmptyString(fields.lineOne),
     error: formError('lineOne', `Please enter a ${addressType} address.`),
@@ -102,6 +111,23 @@ const applyAddressRules = (fields: FormFields, addressType: AddressType): FormEr
     ),
   },
 ]);
+
+const applyDeliveryAddressRules = (
+  fulfilmentOption: Option<FulfilmentOptions>,
+  fields: FormFields,
+  addressType: AddressType,
+): FormError<FormField>[] => {
+  const homeRules = validate([
+    {
+      rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
+      error: formError('postCode', 'Sorry, we cannot deliver a paper to an address with this postcode. Please call Customer Services on: 0330 333 6767 or press Back to purchase a voucher subscription.'),
+    },
+  ]);
+
+  const billingRules = applyBillingAddressRules(fields, addressType);
+
+  return [...homeRules, ...billingRules];
+};
 
 // ----- Action Creators ----- //
 
@@ -219,9 +245,10 @@ export {
   getFormFields,
   getStateFormErrors,
   getPostcodeForm,
-  applyAddressRules,
   setFormErrorsFor,
   addressActionCreatorsFor,
   isPostcodeOptional,
+  applyBillingAddressRules,
+  applyDeliveryAddressRules,
   isStateNullable,
 };
