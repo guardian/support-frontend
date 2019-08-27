@@ -74,6 +74,7 @@ export type Action =
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
+  | { type: 'SET_BRAINTREE_HAS_LOADED' }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -129,6 +130,9 @@ const setStripePaymentRequestObject =
 
 const setStripeV3HasLoaded =
   (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
+
+const setBraintreeHasLoaded =
+  (): Action => ({ type: 'SET_BRAINTREE_HAS_LOADED' });
 
 const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 
@@ -511,5 +515,6 @@ export {
   onStripePaymentRequestApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,
   setStripeV3HasLoaded,
+  setBraintreeHasLoaded,
   setTickerGoalReached,
 };

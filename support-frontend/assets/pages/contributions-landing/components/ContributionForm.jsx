@@ -36,16 +36,19 @@ import { ContributionTypeTabs, EmptyContributionTypeTabs } from './ContributionT
 import { ContributionAmount, EmptyContributionAmount } from './ContributionAmount';
 import { PaymentMethodSelector, EmptyPaymentMethodSelector } from './PaymentMethodSelector';
 import { ContributionSubmit, EmptyContributionSubmit } from './ContributionSubmit';
-
 import { type State } from 'pages/contributions-landing/contributionsLandingReducer';
+
 
 import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
   setStripeV3HasLoaded,
+  setBraintreeHasLoaded,
 } from 'pages/contributions-landing/contributionsLandingActions';
+
 import ContributionErrorMessage from './ContributionErrorMessage';
+import BraintreeButton from './Braintree/BraintreeButton';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -74,6 +77,7 @@ type PropTypes = {|
   openDirectDebitPopUp: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   setStripeV3HasLoaded: () => void,
+  setBraintreeHasLoaded: () => void,
   stripeV3HasLoaded: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
@@ -115,6 +119,7 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
+  braintreeHasLoaded: state.page.form.braintreeHasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
   landingPageChoiceArchitectureAmountsFirstTestVariant:
     state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
@@ -127,6 +132,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
   setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded); },
+  setBraintreeHasLoaded: () => {
+    console.log("Here");
+    dispatch(setBraintreeHasLoaded);},
 });
 
 // ----- Functions ----- //
@@ -257,6 +265,10 @@ function withProps(props: PropTypes) {
           checkOtherAmount={checkAmount}
         />
       </div>
+      <BraintreeButton
+        setBraintreeHasLoaded={props.setBraintreeHasLoaded}
+        braintreeHasLoaded={props.braintreeHasLoaded}
+      />
       <StripePaymentRequestButtonContainer
         setStripeHasLoaded={props.setStripeV3HasLoaded}
         stripeHasLoaded={props.stripeV3HasLoaded}

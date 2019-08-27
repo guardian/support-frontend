@@ -77,6 +77,7 @@ type FormState = {
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,
   payPalHasLoaded: boolean,
+  braintreeHasLoaded: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
@@ -149,6 +150,7 @@ function createFormReducer() {
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
+    braintreeHasLoaded: false,
     hasSeenDirectDebitThankYouCopy: false,
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
@@ -250,6 +252,12 @@ function createFormReducer() {
             ...state.stripePaymentRequestButtonData,
             stripeV3HasLoaded: true,
           },
+        };
+
+      case 'SET_BRAINTREE_HAS_LOADED':
+        return {
+          ...state,
+          braintreeHasLoaded: true,
         };
 
       case 'UPDATE_USER_FORM_DATA':
