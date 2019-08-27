@@ -34,6 +34,7 @@ import {
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
   setThankYouPageStage,
+  setStripeV3HasLoaded,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -136,6 +137,19 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
           );
         }
       });
+
+
+      // const stripeHtmlElement = document.getElementById('stripe-js');
+      // if (stripeHtmlElement !== null) {
+      //   debugger
+      //   stripeHtmlElement.addEventListener(
+      //     'load',
+      //     () => {
+      //       debugger
+      //       dispatch(setStripeV3HasLoaded())
+      //     },
+      //   );
+      // }
     });
 
     // initiate fetch of existing payment methods

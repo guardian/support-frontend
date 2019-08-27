@@ -36,10 +36,12 @@ type PropTypes = {|
 function StripePaymentRequestButtonContainer(props: PropTypes) {
 
   const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country);
+  console.log("props.stripeHasLoaded", props.stripeHasLoaded, window.Stripe === undefined)
 
   if (showStripePaymentRequestButton) {
 
     if (props.stripeHasLoaded === false && window.Stripe === undefined) {
+      // debugger
       setupStripe(props.setStripeHasLoaded);
       return null;
     }

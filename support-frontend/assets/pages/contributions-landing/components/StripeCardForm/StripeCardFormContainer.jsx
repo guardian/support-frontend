@@ -30,26 +30,16 @@ type PropTypes = {|
   stripeHasLoaded: boolean,
 |};
 
-const setupStripe = (setStripeHasLoaded: () => void) => {
-  console.log("setupStripe", document.getElementById('stripe-js'))
-  const htmlElement = document.getElementById('stripe-js');
-  if (htmlElement !== null) {
-    debugger
-    htmlElement.addEventListener(
-      'load',
-      setStripeHasLoaded,
-    );
-  }
-};
-
 function StripeCardFormContainer(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF' &&
     props.paymentMethod === Stripe &&
     props.stripeElementsTestVariant === 'stripeCardElement') {
 
+    // console.log("props.stripeHasLoaded", props.stripeHasLoaded, window.Stripe === undefined)
+
     if (props.stripeHasLoaded === false && window.Stripe === undefined) {
       // debugger
-      setupStripe(props.setStripeHasLoaded);
+      // setupStripe(props.setStripeHasLoaded);
 
       return <AnimatedDots appearance='dark'/>
     }
