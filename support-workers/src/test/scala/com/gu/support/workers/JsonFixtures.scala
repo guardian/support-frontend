@@ -171,11 +171,18 @@ object JsonFixtures {
     """
 
   val stripeToken = "tok_visa"
+  val stripePaymentMethodToken = "tok_visa"
   val stripeJson =
     s"""
       {
-        "userId": "12345",
         "stripeToken": "$stripeToken"
+      }
+    """
+
+  val stripePaymentMethodJson =
+    s"""
+      {
+        "paymentMethod": "$stripePaymentMethodToken"
       }
     """
 
@@ -188,12 +195,22 @@ object JsonFixtures {
           "acquisitionData": $acquisitionData
         }"""
 
-  def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
+  def createStripeSourcePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
     s"""{
           $requestIdJson,
           ${userJson()},
           "product": ${contribution(amount = amount, billingPeriod = billingPeriod, currency = currency)},
           "paymentFields": $stripeJson,
+          "sessionId": "testingToken",
+          "acquisitionData": $acquisitionData
+        }"""
+
+  def createStripePaymentMethodPaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
+    s"""{
+          $requestIdJson,
+          ${userJson()},
+          "product": ${contribution(amount = amount, billingPeriod = billingPeriod, currency = currency)},
+          "paymentFields": $stripePaymentMethodJson,
           "sessionId": "testingToken",
           "acquisitionData": $acquisitionData
         }"""

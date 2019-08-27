@@ -57,13 +57,23 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
 
   }
 
-  it should "be able to decode a contribution with Stripe payment fields" in {
-    val maybeState = decode[CreatePaymentMethodState](createStripePaymentMethodContributionJson())
+  it should "be able to decode a contribution with Stripe source payment fields" in {
+    val maybeState = decode[CreatePaymentMethodState](createStripeSourcePaymentMethodContributionJson())
     val fieldsToTest = maybeState.map(state =>
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      StripePaymentFields(stripeToken)
+      StripeSourcePaymentFields(stripeToken)
+    ))
+  }
+
+  it should "be able to decode a contribution with Stripe payment method payment fields" in {
+    val maybeState = decode[CreatePaymentMethodState](createStripePaymentMethodPaymentMethodContributionJson())
+    val fieldsToTest = maybeState.map(state =>
+      (state.product, state.paymentFields))
+    fieldsToTest should be(Right(
+      Contribution(5, GBP, Monthly),
+      StripePaymentMethodPaymentFields(stripePaymentMethodToken)
     ))
   }
 

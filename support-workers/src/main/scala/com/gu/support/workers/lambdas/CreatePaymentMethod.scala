@@ -6,7 +6,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.stripe.StripeService
+import com.gu.stripe.{CreateCustomer, StripeService}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
@@ -39,7 +39,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ) =
     state.paymentFields match {
       case stripe: StripePaymentFields =>
-        createStripePaymentMethod(stripe, state.product.currency, services.stripeService)
+        createStripePaymentMethod(stripe, services.stripeService.withCurrency(state.product.currency))
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
@@ -60,14 +60,15 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.acquisitionData
     )
 
-  def createStripePaymentMethod(stripe: StripePaymentFields, currency: Currency, stripeService: StripeService): Future[CreditCardReferenceTransaction] =
-    stripeService
-      .createCustomer(stripe.stripeToken, currency)
-      .map { stripeCustomer =>
-        val card = stripeCustomer.source
-        CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
-          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.zuoraCardType)
-      }
+  def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeService#WithCurrency): Future[CreditCardReferenceTransaction] =
+    (stripe match {
+      case StripeSourcePaymentFields(source) => CreateCustomer.fromSource(source)
+      case StripePaymentMethodPaymentFields(paymentMethod) => CreateCustomer.fromPaymentMethod(paymentMethod)
+    })(stripeService).map { stripeCustomer =>
+      val card = stripeCustomer.source
+      CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
+        CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.zuoraCardType)
+    }
 
   def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =
     payPalService
