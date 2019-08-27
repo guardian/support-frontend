@@ -33,6 +33,7 @@ type PropTypes = {|
 
 // ----- Component ----- //
 
+//TODO - turn into a class and implement componentDidMount to set stripeHasLoaded
 function StripePaymentRequestButtonContainer(props: PropTypes) {
 
   const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country);

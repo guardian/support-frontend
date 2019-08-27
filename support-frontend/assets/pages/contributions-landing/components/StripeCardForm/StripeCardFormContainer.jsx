@@ -30,6 +30,7 @@ type PropTypes = {|
   stripeHasLoaded: boolean,
 |};
 
+//TODO - turn into a class and implement componentDidMount to set stripeHasLoaded
 function StripeCardFormContainer(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF' &&
     props.paymentMethod === Stripe &&
