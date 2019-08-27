@@ -80,61 +80,62 @@ const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
 export const isHomeDeliveryInM25 = (fulfilmentOption: Option<FulfilmentOptions>, postcode: Option<string>) => {
-
   if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
     return postcodeIsWithinDeliveryArea(postcode);
   }
   return true;
 };
 
+const applyBillingAddressRules = (fields: FormFields, addressType: AddressType): FormError<FormField>[] => validate([
+  {
+    rule: nonEmptyString(fields.lineOne),
+    error: formError('lineOne', `Please enter a ${addressType} address.`),
+  },
+  {
+    rule: nonEmptyString(fields.city),
+    error: formError('city', `Please enter a ${addressType} city.`),
+  },
+  {
+    rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postCode),
+    error: formError('postCode', `Please enter a ${addressType} postcode.`),
+  },
+  {
+    rule: notNull(fields.country),
+    error: formError('country', `Please select a ${addressType} country.`),
+  },
+  {
+    rule: isStateNullable(fields.country) || (notNull(fields.state) && nonEmptyString(fields.state)),
+    error: formError(
+      'state',
+      fields.country === 'CA' ? `Please select a ${addressType} province/territory.` : `Please select a ${addressType} state.`,
+    ),
+  },
+]);
+
+const applyDeliveryAddressRules = (
+  fulfilmentOption: Option<FulfilmentOptions>,
+  fields: FormFields,
+  addressType: AddressType,
+): FormError<FormField>[] => {
+  const homeRules = validate([
+    {
+      rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
+      error: formError('postCode', 'Sorry, we cannot deliver a paper to an address with this postcode. Please call Customer Services on: 0330 333 6767 or press Back to purchase a voucher subscription.'),
+    },
+  ]);
+
+  const billingRules = applyBillingAddressRules(fields, addressType);
+
+  return [...homeRules, ...billingRules];
+};
+
+// ----- Action Creators ----- //
+
 const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormField>>): Action => ({
   scope,
   type: 'SET_ADDRESS_FORM_ERRORS',
   errors,
 });
-
-const applyBillingAddressRules =
-  (fields: FormFields): FormError<FormField>[] => validate([
-    {
-      rule: nonEmptyString(fields.lineOne),
-      error: formError('lineOne', 'Please enter an address'),
-    },
-    {
-      rule: nonEmptyString(fields.city),
-      error: formError('city', 'Please enter a city'),
-    },
-    {
-      rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postCode),
-      error: formError('postCode', 'Please enter a postcode'),
-    },
-    {
-      rule: notNull(fields.country),
-      error: formError('country', 'Please select a country.'),
-    },
-    {
-      rule: isStateNullable(fields.country) || notNull(fields.state),
-      error: formError(
-        'state',
-        fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
-      ),
-    },
-  ]);
-
-const applyDeliveryAddressRules =
-  (fulfilmentOption: Option<FulfilmentOptions>, fields: FormFields): FormError<FormField>[] => {
-    const homeRules = validate([
-      {
-        rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
-        error: formError('postCode', 'Sorry, we cannot deliver a paper to an address with this postcode. Please call Customer Services on: 0330 333 6767 or press Back to purchase a voucher subscription.'),
-      },
-    ]);
-
-    const billingRules = applyBillingAddressRules(fields);
-
-    return [...homeRules, ...billingRules];
-  };
-
-// ----- Action Creators ----- //
 
 const addressActionCreatorsFor = (scope: AddressType) => ({
   setCountry: (countryRaw: string) => (dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) => {
@@ -249,4 +250,5 @@ export {
   isPostcodeOptional,
   applyBillingAddressRules,
   applyDeliveryAddressRules,
+  isStateNullable,
 };

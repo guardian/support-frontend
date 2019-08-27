@@ -29,7 +29,7 @@ import {
 } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
+import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import { signOut } from 'helpers/user/user';
@@ -59,6 +59,7 @@ import {
 } from 'helpers/subscriptionsForms/submit';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { PayPal } from 'helpers/paymentMethods';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 
 // ----- Types ----- //
 
@@ -138,7 +139,6 @@ const Address = withStore(countries, 'billing', getBillingAddress);
 // ----- Component ----- //
 
 function CheckoutForm(props: PropTypes) {
-
   return (
     <Content>
       <CheckoutLayout aside={(
@@ -200,7 +200,11 @@ function CheckoutForm(props: PropTypes) {
             validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
           />
-          <SubscriptionSubmitButtons
+          <SubscriptionSubmitButton
+            paymentMethod={props.paymentMethod}
+            allErrors={[...props.addressErrors, ...props.formErrors]}
+          />
+          <PayPalSubmitButton
             paymentMethod={props.paymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
             csrf={props.csrf}

@@ -14,7 +14,6 @@ import { routes } from 'helpers/routes';
 
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import Button from 'components/button/button';
 import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
 import { options } from 'components/forms/customFields/options';
@@ -63,6 +62,7 @@ import {
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
+import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 
 // ----- Types ----- //
 
@@ -74,6 +74,8 @@ type PropTypes = {|
   productPrices: ProductPrices,
   ...FormActionCreators,
   submitForm: Function,
+  billingAddressErrors: Array<Object>,
+  deliveryAddressErrors: Array<Object>,
 |};
 
 
@@ -85,6 +87,8 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
+    billingAddressErrors: state.page.deliveryAddress.fields.formErrors,
+    deliveryAddressErrors: state.page.billingAddress.fields.formErrors,
   };
 }
 
@@ -250,14 +254,10 @@ function CheckoutForm(props: PropTypes) {
             validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
           />
-          <FormSection noBorder>
-            <Button
-              id="qa-submit-button"
-              type="submit"
-            >
-              Continue to payment
-            </Button>
-          </FormSection>
+          <SubscriptionSubmitButton
+            paymentMethod={props.paymentMethod}
+            allErrors={[...props.formErrors, ...props.deliveryAddressErrors, ...props.billingAddressErrors]}
+          />
           <CancellationSection />
         </Form>
       </Layout>

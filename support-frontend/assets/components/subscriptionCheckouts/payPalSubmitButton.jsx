@@ -6,17 +6,16 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { hiddenIf } from 'helpers/utilities';
 import { type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
-import Button from 'components/button/button';
-import { type Option } from 'helpers/types/option';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { PayPal } from 'helpers/paymentMethods';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
-import Heading from 'components/heading/heading';
+import { ErrorSummary } from './submitFormErrorSummary';
+import { type Option } from 'helpers/types/option';
+import { PayPal } from 'helpers/paymentMethods';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { hiddenIf } from 'helpers/utilities';
 
 import 'components/forms/customFields/error.scss';
 import './subscriptionSubmitButton.scss';
@@ -38,28 +37,10 @@ type PropTypes = {|
   allErrors: FormError<FormField>[],
 |};
 
-type ErrorSummaryPropTypes = {
-  errors: Array<Object>,
-}
-
-const ErrorSummary = (props: ErrorSummaryPropTypes) => (
-  <div className="component-form-error__border">
-    <Heading className="component-form-error__heading" size={2}>There is a problem</Heading>
-    <ul>
-      {props.errors.map(error => (
-        <li className="component-form-error__summary-error">
-          {error.message}
-        </li>
-      ))}
-    </ul>
-  </div>
-
-);
-
 // ----- Render ----- //
 
 
-function SubscriptionSubmitButtons(props: PropTypes) {
+function PayPalSubmitButton(props: PropTypes) {
   // We have to show/hide PayPalExpressButton rather than conditionally rendering it
   // because we don't want to destroy and replace the iframe each time.
   // See PayPalExpressButton for more info.
@@ -84,17 +65,12 @@ function SubscriptionSubmitButtons(props: PropTypes) {
             billingPeriod={props.billingPeriod}
           />
         </div>
-        <Button
-          id="qa-submit-button"
-          type="submit"
-          modifierClasses={props.paymentMethod === PayPal ? ['hidden'] : []}
-        >
-          Continue to payment
-        </Button>
       </div>
-      <span>{props.allErrors.length > 0 && <ErrorSummary errors={props.allErrors} />}</span>
+      {props.paymentMethod === PayPal && (
+        <span>{props.allErrors.length > 0 && <ErrorSummary errors={props.allErrors} />}</span>
+      )}
     </div>
   );
 }
 
-export { SubscriptionSubmitButtons };
+export { PayPalSubmitButton };
