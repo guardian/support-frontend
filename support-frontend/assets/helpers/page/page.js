@@ -99,7 +99,9 @@ function buildInitialState(
   };
 
   // Override the default amounts config with any test participations
-  const amountsWithParticipationOverrides = overrideAmountsForParticipations(abParticipations, settings.amounts);
+  const amountsWithParticipationOverrides = settings.amounts ?
+    overrideAmountsForParticipations(abParticipations, settings.amounts) : settings.amounts;
+
   const trackingConsent = getTrackingConsent();
 
   return {
