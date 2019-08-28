@@ -131,8 +131,7 @@ const setPaymentRequestButtonPaymentMethod =
 const setStripePaymentRequestObject =
   (stripePaymentRequestObject: Object): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject });
 
-const setStripeV3HasLoaded =
-  (): Action => {console.log("setStripeV3HasLoaded"); return ({ type: 'SET_STRIPE_V3_HAS_LOADED' });}
+const setStripeV3HasLoaded = (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
 
 const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 

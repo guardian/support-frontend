@@ -1,12 +1,17 @@
 // @flow
+import { logException } from 'helpers/logger';
 
 export const setupStripe = (setStripeHasLoaded: () => void) => {
-  const htmlElement = document.getElementById('stripe-js');
-  if (htmlElement !== null) {
-    debugger
-    htmlElement.addEventListener(
-      'load',
-      setStripeHasLoaded,
-    );
+  if (window.Stripe) setStripeHasLoaded();
+  else {
+    const htmlElement = document.getElementById('stripe-js');
+    if (htmlElement !== null) {
+      htmlElement.addEventListener(
+        'load',
+        setStripeHasLoaded,
+      );
+    } else {
+      logException('Failed to find stripe-js element, cannot initialise Stripe Elements')
+    }
   }
 };

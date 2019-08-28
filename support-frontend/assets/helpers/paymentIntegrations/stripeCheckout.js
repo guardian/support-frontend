@@ -30,9 +30,7 @@ export type StripeAccount = 'ONE_OFF' | 'REGULAR';
 
 function loadStripe(): Promise<void> {
   if (!window.StripeCheckout) {
-    console.log("loadStripe")
     return new Promise((resolve, reject) => {
-      console.log("loadStripe loaded")
       const script = document.createElement('script');
 
       script.onload = resolve;

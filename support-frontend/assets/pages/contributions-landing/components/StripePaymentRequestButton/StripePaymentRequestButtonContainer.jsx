@@ -12,8 +12,8 @@ import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/co
 import { getAmount } from 'helpers/contributions';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { setupStripe } from 'helpers/stripe';
 import { hiddenIf } from 'helpers/utilities';
+import { setupStripe } from 'helpers/stripe';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 
 
@@ -33,39 +33,36 @@ type PropTypes = {|
 
 // ----- Component ----- //
 
-//TODO - turn into a class and implement componentDidMount to set stripeHasLoaded
-function StripePaymentRequestButtonContainer(props: PropTypes) {
-
-  const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country);
-  console.log("props.stripeHasLoaded", props.stripeHasLoaded, window.Stripe === undefined)
-
-  if (showStripePaymentRequestButton) {
-
-    if (props.stripeHasLoaded === false && window.Stripe === undefined) {
-      // debugger
-      setupStripe(props.setStripeHasLoaded);
-      return null;
-    }
-
-    const key = getStripeKey('ONE_OFF', props.currency, props.isTestUser);
-    const amount = getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType);
-
-    return (
-      <div className={hiddenIf(props.contributionType !== 'ONE_OFF', 'stripe-payment-request-button')}>
-        <StripeProvider apiKey={key}>
-          <Elements>
-            <StripePaymentRequestButton
-              amount={amount}
-            />
-          </Elements>
-        </StripeProvider>
-      </div>
-    );
+class StripePaymentRequestButtonContainer extends React.Component<PropTypes, void> {
+  constructor(props: PropTypes) {
+    super(props);
   }
-  return null;
+
+  componentDidMount(): void {
+    if (!this.props.stripeHasLoaded) setupStripe(this.props.setStripeHasLoaded);
+  }
+
+  render() {
+    const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
+
+    if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
+      const key = getStripeKey('ONE_OFF', this.props.currency, this.props.isTestUser);
+      const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
+
+      return (
+        <div className={hiddenIf(this.props.contributionType !== 'ONE_OFF', 'stripe-payment-request-button')}>
+          <StripeProvider apiKey={key}>
+            <Elements>
+              <StripePaymentRequestButton
+                amount={amount}
+              />
+            </Elements>
+          </StripeProvider>
+        </div>
+      );
+    }
+    return null;
+  }
 }
-
-// ----- Default props----- //
-
 
 export default StripePaymentRequestButtonContainer;
