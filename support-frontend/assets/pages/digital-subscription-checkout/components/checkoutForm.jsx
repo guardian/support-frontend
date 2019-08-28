@@ -12,7 +12,7 @@ import {
 } from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
+import Form, { FormSection, FormSectionHidden } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -58,8 +58,15 @@ import {
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
-import { PayPal } from 'helpers/paymentMethods';
+import { PayPal, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import CreditCardForm from 'components/subscriptionCheckouts/creditCardForm';
+import { type Option } from 'helpers/types/option';
+import {
+  getAppliedPromoDescription,
+  getPriceDescription,
+} from 'helpers/productPrice/priceDescriptions';
+
 
 // ----- Types ----- //
 
@@ -83,6 +90,9 @@ type PropTypes = {|
   formIsValid: Function,
   optimizeExperiments: OptimizeExperiments,
   addressErrors: Array<Object>,
+  creditCardNumber: Option<number> | null,
+  expiryDate: Option<string> | null,
+  cvc: Option<number> | null,
 |};
 
 
@@ -135,10 +145,17 @@ function mapDispatchToProps() {
 
 const Address = withStore(countries, 'billing', getBillingAddress);
 
-
 // ----- Component ----- //
 
 function CheckoutForm(props: PropTypes) {
+  const productPrice = getProductPrice(
+    props.productPrices,
+    props.country,
+    props.billingPeriod,
+  );
+  const offerSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
+  const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
+
   return (
     <Content>
       <CheckoutLayout aside={(
@@ -154,11 +171,7 @@ function CheckoutForm(props: PropTypes) {
           }
           title="Digital Pack"
           description="Premium App + iPad daily edition + Ad-free"
-          productPrice={getProductPrice(
-            props.productPrices,
-            props.country,
-            props.billingPeriod,
-          )}
+          productPrice={productPrice}
           billingPeriod={props.billingPeriod}
           product={props.product}
         />)}
@@ -200,10 +213,6 @@ function CheckoutForm(props: PropTypes) {
             validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
           />
-          <SubscriptionSubmitButton
-            paymentMethod={props.paymentMethod}
-            allErrors={[...props.addressErrors, ...props.formErrors]}
-          />
           <PayPalSubmitButton
             paymentMethod={props.paymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
@@ -218,6 +227,28 @@ function CheckoutForm(props: PropTypes) {
             billingPeriod={props.billingPeriod}
             allErrors={[...props.addressErrors, ...props.formErrors]}
           />
+          <SubscriptionSubmitButton
+            paymentMethod={props.paymentMethod}
+            allErrors={[...props.addressErrors, ...props.formErrors]}
+            className={DirectDebit}
+          />
+          <FormSectionHidden
+            hidden={props.paymentMethod !== Stripe}
+            title="Your card details"
+          >
+            <CreditCardForm
+              paymentMethod={props.paymentMethod}
+              creditCardNumber={props.creditCardNumber}
+              setCreditCardNumber={props.setCreditCardNumber}
+              expiryDate={props.expiryDate}
+              setExpiryDate={props.setExpiryDate}
+              cvc={props.cvc}
+              setCvc={props.setCvc}
+              formErrors={props.formErrors}
+              allErrors={[...props.addressErrors, ...props.formErrors]}
+              priceSummary={`${offerSelected} ${helperSelected}`}
+            />
+          </FormSectionHidden>
           <CancellationSection />
         </Form>
       </CheckoutLayout>

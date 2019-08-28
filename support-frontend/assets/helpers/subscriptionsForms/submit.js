@@ -56,7 +56,6 @@ import {
 } from 'helpers/subscriptions';
 import {
   loadStripe,
-  openDialogBox,
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import { isPostDeployUser } from 'helpers/user/user';
@@ -202,7 +201,6 @@ function showStripe(
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
-  email: string,
 ) {
   if (isPostDeployUser()) {
     onAuthorised({
@@ -213,7 +211,7 @@ function showStripe(
   } else {
     loadStripe()
       .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, isTestUser))
-      .then(stripe => openDialogBox(stripe, price, email));
+      .then(stripe => console.log({ stripe }));
   }
 }
 
@@ -224,12 +222,11 @@ function showPaymentMethod(
   price: number,
   currency: IsoCurrency,
   paymentMethod: Option<PaymentMethod>,
-  email: string,
 ): void {
 
   switch (paymentMethod) {
     case Stripe:
-      showStripe(onAuthorised, isTestUser, price, currency, email);
+      showStripe(onAuthorised, isTestUser, price, currency);
       break;
     case DirectDebit:
       dispatch(openDirectDebitPopUp());
@@ -256,7 +253,7 @@ function submitForm(
   state: AnyCheckoutState,
 ) {
   const {
-    paymentMethod, email, product, isTestUser,
+    paymentMethod, product, isTestUser,
   } = state.page.checkout;
 
   trackSubmitAttempt(paymentMethod, product);
@@ -293,7 +290,7 @@ function submitForm(
 
   showPaymentMethod(
     dispatch, onAuthorised, isTestUser, price, currency,
-    paymentMethod, email,
+    paymentMethod,
   );
 }
 

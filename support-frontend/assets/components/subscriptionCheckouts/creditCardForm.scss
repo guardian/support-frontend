@@ -1,0 +1,11 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-credit-card-inputs {
+  display: inline-flex;
+  margin-bottom: $gu-v-spacing;
+}
+
+.component-credit-card-price {
+    @include gu-fontset-body-sans;
+    margin-top: $gu-v-spacing;
+}

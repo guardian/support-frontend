@@ -35,6 +35,32 @@ FormSection.defaultProps = {
   noBorder: false,
 };
 
+// Hidden version of form section
+
+type FormSectionHiddenPropTypes = {|
+  title: Option<string>,
+  children: Node,
+  headingSize: HeadingSize,
+  hidden?: boolean,
+|};
+
+const FormSectionHidden = ({
+  children, title, headingSize, hidden,
+}: FormSectionHiddenPropTypes) => (
+  <div className={`component-checkout-form-section ${hidden ? 'component-checkout-form-section--hidden' : ''}`}>
+    <div className="component-checkout-form-section__wrap">
+      {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
+      {children}
+    </div>
+  </div>
+);
+
+FormSectionHidden.defaultProps = {
+  headingSize: 2,
+  title: null,
+  hidden: false,
+};
+
 /*
 Form
 the top level form itself
@@ -46,4 +72,4 @@ type FormPropTypes = {
 const Form = ({ children, ...otherProps }: FormPropTypes) => (<form {...otherProps} className="component-checkout-form">{children}</form>);
 
 export default Form;
-export { FormSection };
+export { FormSection, FormSectionHidden };

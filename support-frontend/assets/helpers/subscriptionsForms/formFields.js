@@ -35,6 +35,9 @@ export type FormFields = {|
   product: SubscriptionProduct,
   productOption: ProductOptions,
   orderIsAGift: Option<boolean>,
+  creditCardNumber: Option<number> | null,
+  expiryDate: Option<string> | null,
+  cvc: Option<number> | null,
 |};
 
 export type FormField = $Keys<FormFields>;
@@ -71,6 +74,9 @@ function getFormFields(state: AnyCheckoutState): FormFields {
     product: state.page.checkout.product,
     billingAddressIsSame: state.page.checkout.billingAddressIsSame,
     orderIsAGift: state.page.checkout.orderIsAGift,
+    creditCardNumber: state.page.checkout.creditCardNumber,
+    expiryDate: state.page.checkout.expiryDate,
+    cvc: state.page.checkout.cvc,
   };
 }
 

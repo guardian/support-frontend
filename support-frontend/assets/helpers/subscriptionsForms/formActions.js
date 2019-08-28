@@ -43,6 +43,9 @@ export type Action =
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
   | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean> }
   | { type: 'SET_ORDER_IS_GIFT', orderIsAGift: Option<boolean>}
+  | { type: 'SET_CREDIT_CARD_NUMBER', creditCardNumber: Option<number> | null}
+  | { type: 'SET_EXPIRY_DATE', expiryDate: Option<string> | null}
+  | { type: 'SET_CVC', cvc: Option<number> | null}
   | AddressAction
   | PayPalAction
   | DDAction;
@@ -113,6 +116,9 @@ const formActionCreators = {
     type: 'SET_ORDER_IS_GIFT',
     orderIsAGift,
   }),
+  setCreditCardNumber: (creditCardNumber: number): Action => ({ type: 'SET_CREDIT_CARD_NUMBER', creditCardNumber }),
+  setExpiryDate: (expiryDate: string): Action => ({ type: 'SET_EXPIRY_DATE', expiryDate }),
+  setCvc: (cvc: number): Action => ({ type: 'SET_CVC', cvc }),
 };
 
 export type FormActionCreators = typeof formActionCreators;

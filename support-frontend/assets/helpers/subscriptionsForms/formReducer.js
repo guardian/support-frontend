@@ -56,6 +56,9 @@ function createFormReducer(
     fulfilmentOption: fulfilmentOption || NoFulfilmentOptions,
     payPalHasLoaded: false,
     orderIsAGift: false,
+    creditCardNumber: null,
+    expiryDate: null,
+    cvc: null,
   };
 
   const getFulfilmentOption = (action, currentOption) =>
@@ -135,6 +138,15 @@ function createFormReducer(
 
       case 'SET_ORDER_IS_GIFT':
         return { ...state, orderIsAGift: action.orderIsAGift };
+
+      case 'SET_CREDIT_CARD_NUMBER':
+        return { ...state, creditCardNumber: action.creditCardNumber };
+
+      case 'SET_EXPIRY_DATE':
+        return { ...state, expiryDate: action.expiryDate };
+
+      case 'SET_CVC':
+        return { ...state, cvc: action.cvc };
 
       default:
         return state;

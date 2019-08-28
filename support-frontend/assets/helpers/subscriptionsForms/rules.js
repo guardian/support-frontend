@@ -30,9 +30,23 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
       error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
     },
   ];
+  const creditCardFields = [
+    {
+      rule: notNull(fields.creditCardNumber),
+      error: formError('creditCardNumber', 'Please enter a credit card number.'),
+    },
+    {
+      rule: nonEmptyString(fields.expiryDate),
+      error: formError('expiryDate', 'Please enter an expiry date.'),
+    },
+    {
+      rule: notNull(fields.cvc),
+      error: formError('cvc', 'Please enter a CVC.'),
+    },
+  ];
   const formFieldsToCheck = orderIsAGift ?
-    [...userFormFields, ...giftFormFields]
-    : [...userFormFields];
+    [...userFormFields, ...giftFormFields, ...creditCardFields]
+    : [...userFormFields, ...creditCardFields];
 
   return validate(formFieldsToCheck);
 }
