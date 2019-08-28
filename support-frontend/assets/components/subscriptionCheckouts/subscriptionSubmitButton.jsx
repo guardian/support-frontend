@@ -19,7 +19,7 @@ import './subscriptionSubmitButton.scss';
 type PropTypes = {|
   paymentMethod: Option<PaymentMethod>,
   allErrors: FormError<FormField>[],
-  className: Option<string>,
+  className?: Option<string>,
 |};
 
 // ----- Render ----- //
@@ -42,5 +42,9 @@ function SubscriptionSubmitButton(props: PropTypes) {
     </span>
   );
 }
+
+SubscriptionSubmitButton.defaultProps = {
+  className: '',
+};
 
 export { SubscriptionSubmitButton };
