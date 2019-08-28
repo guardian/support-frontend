@@ -79,6 +79,7 @@ type PropTypes = {|
   setStripeV3HasLoaded: () => void,
   setBraintreeHasLoaded: () => void,
   stripeV3HasLoaded: boolean,
+  braintreeHasLoaded: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
@@ -133,7 +134,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
   setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded); },
   setBraintreeHasLoaded: () => {
-    console.log("Here");
+    console.log("Heredd");
     dispatch(setBraintreeHasLoaded);},
 });
 

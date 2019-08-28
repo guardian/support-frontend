@@ -14,32 +14,21 @@ type PropTypes = {|
 |};
 
 
-const setupBraintree = (setBraintreeHasLoaded: () => void) => {
-  const htmlElement = document.getElementById('braintree-js');
-  if (htmlElement !== null) {
-    htmlElement.addEventListener(
-      'load',
-      setBraintreeHasLoaded,
-    );
-  }
-};
 
 // ----- Component ----- //
 
 function BraintreeButton(props: PropTypes){
-    if (props.braintreeHasLoaded === false && window.braintree === undefined) {
-      setupBraintree(props.setBraintreeHasLoaded);
-      return null;
-    }
-    return (
-      <div >
-        <form id="checkout" method="post" action="/checkout">
+  console.log(props.braintreeHasLoaded);
+  return (
+      <div id="venmo-button">
+        <form id="checkout">
           <div id="payment-form"></div>
           <input type="submit" value="Pay $10" />
         </form>
       </div>
     );
   }
+
 
 
 // ----- Default props----- //

@@ -1,5 +1,7 @@
 // @flow
 
+import { setupBraintree } from 'helpers/paymentIntegrations/braintreeCheckout';
+import { setBraintreeHasLoaded } from 'pages/contributions-landing/contributionsLandingActions';
 // ----- Imports ----- //
 import { type Store } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -241,6 +243,8 @@ const init = (store: Store<State, Action, Function>) => {
   dispatch(updateUserFormData({
     firstName, lastName, email, state: stateField,
   }));
+
+  setupBraintree(dispatch);
 
 };
 
