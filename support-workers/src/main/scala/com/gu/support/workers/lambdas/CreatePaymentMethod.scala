@@ -6,7 +6,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.stripe.StripeServiceForCurrency
+import com.gu.stripe.{Stripe, StripeServiceForCurrency}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
@@ -59,14 +59,18 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     )
 
   def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeServiceForCurrency): Future[CreditCardReferenceTransaction] = {
-    val eventualStripeCustomer = stripe match {
+    createCustomer(stripeService, stripe)
+      .map { stripeCustomer =>
+        val card = stripeCustomer.source
+        CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
+          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.zuoraCardType)
+      }
+  }
+
+  private def createCustomer(stripeService: StripeServiceForCurrency, stripe: StripePaymentFields): Future[Stripe.Customer] = {
+    stripe match {
       case StripeSourcePaymentFields(source) => stripeService.createCustomerFromToken(source)
       case StripePaymentMethodPaymentFields(paymentMethod) => stripeService.createCustomerFromPaymentMethod(paymentMethod)
-    }
-    eventualStripeCustomer.map { stripeCustomer =>
-      val card = stripeCustomer.source
-      CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
-        CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.zuoraCardType)
     }
   }
 
