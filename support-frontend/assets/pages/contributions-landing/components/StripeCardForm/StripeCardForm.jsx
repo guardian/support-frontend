@@ -71,6 +71,7 @@ const fieldStyle = {
   base: {
     fontFamily: "'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
     fontSize: "16px",
+    lineHeight: "24px"
   }
 };
 
