@@ -66,6 +66,7 @@ export type Test = {|
   canRun?: () => boolean,
   independent: boolean,
   seed: number,
+  urlParticipationOnly: boolean,
 |};
 
 export type Tests = { [testId: string]: Test }
@@ -199,6 +200,15 @@ function getParticipations(
 
     if (test.canRun && !test.canRun()) {
       return;
+    }
+
+    if (test.urlParticipationOnly) {
+      const participationsFromUrl = getParticipationsFromUrl();
+      if (participationsFromUrl && participationsFromUrl[testId]) {
+        participations[testId] = participationsFromUrl[testId];
+      } else {
+        return;
+      }
     }
 
     if (testId in currentParticipation) {
