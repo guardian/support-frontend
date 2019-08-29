@@ -6,7 +6,7 @@ import cats.syntax.apply._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.stripe.model.Charge
+import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
 import conf.ConfigLoader._
 import conf._
@@ -14,10 +14,11 @@ import model._
 import model.acquisition.StripeAcquisition
 import model.db.ContributionData
 import model.email.ContributorRow
-import model.stripe._
+import model.stripe.{StripePaymentIntentRequest, _}
 import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
+import scala.collection.JavaConverters._
 
 import scala.concurrent.Future
 
@@ -32,7 +33,8 @@ class StripeBackend(
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
-  def createCharge(chargeData: StripeChargeData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
+  // Legacy handler for the Stripe Charges API
+  def createCharge(chargeData: LegacyStripeChargeRequest, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
     stripeService.createCharge(chargeData)
       .leftMap(err => {
         logger.error(s"unable to create Stripe charge ($chargeData)", err)
@@ -60,7 +62,85 @@ class StripeBackend(
     } yield dbUpdateResult
   }
 
-  private def postPaymentTasks(email: String, chargeData: StripeChargeData, charge: Charge, clientBrowserInfo: ClientBrowserInfo, identityId: Option[Long]): Unit = {
+  def createPaymentIntent(
+    request: StripePaymentIntentRequest.CreatePaymentIntent,
+    clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
+
+    stripeService.createPaymentIntent(request)
+      .leftMap(err => {
+        logger.error(s"Unable to create Stripe Payment Intent ($request)", err)
+        cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
+        err
+      })
+      .flatMap { paymentIntent =>
+
+        //https://stripe.com/docs/payments/intents#intent-statuses
+        paymentIntent.getStatus match {
+          case "requires_action" =>
+            //3DS required, return the clientSecret to the client
+            EitherT.fromEither(Right(StripePaymentIntentsApiResponse.RequiresAction(paymentIntent.getClientSecret)))
+
+          case "succeeded" =>
+            //Payment complete without the need for 3DS - do post-payment tasks and return success to client
+            EitherT.liftF(paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo))
+
+          case otherStatus =>
+            logger.error(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
+            EitherT.fromEither(Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus")))
+        }
+      }
+  }
+
+  def confirmPaymentIntent(
+    request: StripePaymentIntentRequest.ConfirmPaymentIntent,
+    clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse.Success] = {
+
+    stripeService.confirmPaymentIntent(request)
+      .leftMap(err => {
+        logger.error(s"Unable to confirm Stripe Payment Intent ($request)", err)
+        cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
+        err
+      })
+      .flatMap { paymentIntent =>
+        //At this point we expect the PaymentIntent to have been ready for confirmation. Status should be 'succeeded'
+        paymentIntent.getStatus match {
+          case "succeeded" => EitherT.liftF(paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo))
+
+          case otherStatus =>
+            logger.error(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
+            EitherT.fromEither(Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus")))
+        }
+      }
+  }
+
+  private def paymentIntentSucceeded(
+    request: StripeRequest,
+    paymentIntent: PaymentIntent,
+    clientBrowserInfo: ClientBrowserInfo): Future[StripePaymentIntentsApiResponse.Success] = {
+
+    cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
+
+    getOrCreateIdentityIdFromEmail(request.paymentData.email.value).map { identityIdWithGuestAccountCreationToken =>
+      paymentIntent.getCharges.getData.asScala.toList.headOption match {
+        case Some(charge) =>
+          postPaymentTasks(request.paymentData.email.value, request, charge, clientBrowserInfo, identityIdWithGuestAccountCreationToken.map(_.identityId))
+        case None =>
+          /**
+            * This should never happen, but in case it does we still return success to the client because the payment
+            * was reported as successful by Stripe. It does however prevent us from executing post-payment tasks and so
+            * would need investigation.
+            */
+          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Stripe)
+          logger.error(s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request")
+      }
+
+      StripePaymentIntentsApiResponse.Success(
+        identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken)
+      )
+    }
+  }
+
+  private def postPaymentTasks(email: String, chargeData: StripeRequest, charge: Charge, clientBrowserInfo: ClientBrowserInfo, identityId: Option[Long]): Unit = {
     trackContribution(charge, chargeData, identityId, clientBrowserInfo).leftMap { err =>
       logger.error(s"unable to track contribution due to error: ${err.getMessage}")
     }
@@ -72,7 +152,7 @@ class StripeBackend(
     }
   }
 
-  private def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  =
+  private def trackContribution(charge: Charge, data: StripeRequest, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  =
     BackendError.combineResults(
       insertContributionDataIntoDatabase(
         ContributionData.fromStripeCharge(
@@ -113,7 +193,7 @@ class StripeBackend(
     databaseService.flagContributionAsRefunded(stripePaymentId)
       .leftMap(BackendError.fromDatabaseError)
 
-  private def sendThankYouEmail(email: String, data: StripeChargeData, identityId: Long): EitherT[Future, BackendError, SendMessageResult] = {
+  private def sendThankYouEmail(email: String, data: StripeRequest, identityId: Long): EitherT[Future, BackendError, SendMessageResult] = {
     val contributorRow = ContributorRow(
       email,
       data.paymentData.currency.toString,

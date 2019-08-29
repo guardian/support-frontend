@@ -20,6 +20,12 @@ OPTIONS  /contribute/one-off/stripe/execute-payment           controllers.AppCon
 # This endpoint is called by Stripe via a webhook to notify us of refunds
 POST     /contribute/one-off/stripe/refund                    controllers.StripeController.processRefund
 
+POST     /contribute/one-off/stripe/create-payment            controllers.StripeController.createPayment
+OPTIONS  /contribute/one-off/stripe/create-payment            controllers.AppController.corsOptions
+
+POST     /contribute/one-off/stripe/confirm-payment           controllers.StripeController.confirmPayment
+OPTIONS  /contribute/one-off/stripe/confirm-payment           controllers.AppController.corsOptions
+
 #############################################
 # PAYPAL
 #############################################

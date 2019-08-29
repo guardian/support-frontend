@@ -549,7 +549,7 @@ Resources:
       MetricName: post-payment-tasks-error
       Namespace: support-payment-api-PROD
       ComparisonOperator: GreaterThanThreshold
-      Threshold: 3
+      Threshold: 1
       Period: 900
       EvaluationPeriods: 1
       Statistic: Sum

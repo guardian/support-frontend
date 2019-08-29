@@ -2,8 +2,10 @@ package services
 
 import cats.data.EitherT
 import cats.implicits._
-import com.stripe.model.{Charge, Event}
+import com.stripe.model.{Charge, Event, PaymentIntent}
 import com.stripe.net.RequestOptions
+import com.stripe.param.PaymentIntentCreateParams
+import com.stripe.param.PaymentIntentCreateParams.ConfirmationMethod
 import com.typesafe.scalalogging.StrictLogging
 
 import scala.collection.JavaConverters._
@@ -15,8 +17,11 @@ import model.stripe._
 
 trait StripeService {
 
-  def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge]
+  def createCharge(data: LegacyStripeChargeRequest): EitherT[Future, StripeApiError, Charge]
   def validateRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit]
+
+  def createPaymentIntent(data: StripePaymentIntentRequest.CreatePaymentIntent): EitherT[Future, StripeApiError, PaymentIntent]
+  def confirmPaymentIntent(request: StripePaymentIntentRequest.ConfirmPaymentIntent): EitherT[Future, StripeApiError, PaymentIntent]
 }
 
 class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: StripeThreadPool) extends StripeService with StrictLogging {
@@ -26,7 +31,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
   private val requestOptions = RequestOptions.builder().setApiKey(config.secretKey).build()
 
   // https://stripe.com/docs/api/java#create_charge
-  private def getChargeParams(data: StripeChargeData) =
+  private def getChargeParams(data: StripeRequest) =
     Map[String, AnyRef](
       "amount" -> new Integer((data.paymentData.amount * 100).toInt), //-- stripe amount must be in pence
       "currency" -> data.paymentData.currency.entryName,
@@ -34,7 +39,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
       "receipt_email" -> data.paymentData.email.value
     ).asJava
 
-  def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge] = {
+  def createCharge(data: LegacyStripeChargeRequest): EitherT[Future, StripeApiError, Charge] = {
     if (model.Currency.exceedsMaxAmount(data.paymentData.amount, data.paymentData.currency)) {
       Left(StripeApiError.fromString("Amount exceeds the maximum allowed ")).toEitherT[Future]
     } else {
@@ -65,6 +70,48 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
       )
   }
 
+  def createPaymentIntent(data: StripePaymentIntentRequest.CreatePaymentIntent): EitherT[Future, StripeApiError, PaymentIntent] = {
+    if (model.Currency.exceedsMaxAmount(data.paymentData.amount, data.paymentData.currency)) {
+      Left(StripeApiError.fromString("Amount exceeds the maximum allowed ")).toEitherT[Future]
+    } else {
+      Future {
+        val params = PaymentIntentCreateParams.builder
+          .setPaymentMethod(data.paymentMethodId)
+          .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
+          .setCurrency(data.paymentData.currency.entryName)
+          .setReceiptEmail(data.paymentData.email.value)
+          .setConfirmationMethod(ConfirmationMethod.MANUAL) // Allows us to do 3DS auth and final confirmation as separate steps
+          .setConfirm(true) // If 3DS is not required then it will go ahead and complete the payment
+          .build
+
+        PaymentIntent.create(params, requestOptions)
+      }
+    }
+      .attemptT
+      .bimap(
+        err => StripeApiError.fromThrowable(err),
+        paymentIntent => {
+          logger.info(s"Created Stripe Payment Intent with id ${paymentIntent.getId}, status ${paymentIntent.getStatus}")
+          paymentIntent
+        }
+      )
+  }
+
+  def confirmPaymentIntent(data: StripePaymentIntentRequest.ConfirmPaymentIntent): EitherT[Future, StripeApiError, PaymentIntent] = {
+    val result = for {
+      paymentIntent <- Future(PaymentIntent.retrieve(data.paymentIntentId, requestOptions)).attemptT
+      confirmedPaymentIntent <- Future(paymentIntent.confirm(requestOptions)).attemptT
+    } yield confirmedPaymentIntent
+
+    result.bimap(
+      err => StripeApiError.fromThrowable(err),
+      paymentIntent => {
+        logger.info(s"Confirmed Stripe Payment Intent with id ${paymentIntent.getId}")
+        paymentIntent
+      }
+    )
+  }
+
   def iAmForThisPublicKey(publicKey: StripePublicKey): Boolean = config.publicKey == publicKey.value
 }
 
@@ -89,19 +136,26 @@ class UnitedStatesStripeService(config: StripeAccountConfig.UnitedStates)(implic
 class CountryBasedStripeService(default: DefaultStripeService, au: AustraliaStripeService, us: UnitedStatesStripeService)
                                (implicit pool: StripeThreadPool) extends StripeService with StrictLogging {
 
-  private def getBackwardsCompatibleAccount(data: StripeChargeData) =
+  private def getBackwardsCompatibleAccount(data: StripeRequest) =
     if (data.paymentData.currency == Currency.AUD) au else default
 
   private def getAccountForPublicKey(publicKey: StripePublicKey): StripeService =
     Seq(au, us).find(_.iAmForThisPublicKey(publicKey)) getOrElse default
 
+  private def getAccountToUse(data: StripeRequest): StripeService =
+    data.publicKey.map(getAccountForPublicKey) getOrElse getBackwardsCompatibleAccount(data)
+
   private def validateRefundHookForUSD(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit] =
     us.validateRefundHook(stripeHook) orElse default.validateRefundHook(stripeHook)
 
-  override def createCharge(data: StripeChargeData): EitherT[Future, StripeApiError, Charge] = {
-    val accountToUse = data.publicKey.map(getAccountForPublicKey) getOrElse getBackwardsCompatibleAccount(data)
-    accountToUse.createCharge(data)
-  }
+  override def createCharge(data: LegacyStripeChargeRequest): EitherT[Future, StripeApiError, Charge] =
+    getAccountToUse(data).createCharge(data)
+
+  override def createPaymentIntent(data: StripePaymentIntentRequest.CreatePaymentIntent): EitherT[Future, StripeApiError, PaymentIntent] =
+    getAccountToUse(data).createPaymentIntent(data)
+
+  override def confirmPaymentIntent(data: StripePaymentIntentRequest.ConfirmPaymentIntent): EitherT[Future, StripeApiError, PaymentIntent] =
+    getAccountToUse(data).confirmPaymentIntent(data)
 
   override def validateRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit] = {
     val stripeCurrency = stripeHook.data.`object`.currency.toUpperCase
@@ -116,7 +170,6 @@ class CountryBasedStripeService(default: DefaultStripeService, au: AustraliaStri
       }
     }
   }
-
 }
 
 object StripeService {

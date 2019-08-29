@@ -8,10 +8,10 @@ import ophan.thrift.event.Acquisition
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import model.ClientBrowserInfo
-import model.stripe.{StripeChargeData, StripePaymentMethod}
+import model.stripe.{StripeRequest, StripePaymentMethod}
 
 
-case class StripeAcquisition(stripeChargeData: StripeChargeData, charge: Charge, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo)
+case class StripeAcquisition(stripeChargeData: StripeRequest, charge: Charge, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo)
 
 object StripeAcquisition extends StrictLogging {
 

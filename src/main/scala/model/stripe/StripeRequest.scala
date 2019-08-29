@@ -17,7 +17,7 @@ object StripeJsonDecoder {
   import StripePublicKey.decoder
 
   // This will decode Stripe charge data in the format expected by the old contributions-frontend API.
-  private val legacyStripeChargeDataDecoder: Decoder[StripeChargeData] = Decoder.instance { cursor =>
+  private val legacyStripeChargeDataDecoder: Decoder[LegacyStripeChargeRequest] = Decoder.instance { cursor =>
     import cursor._
     for {
       currency <- downField("currency").as[String]
@@ -44,7 +44,7 @@ object StripeJsonDecoder {
       stripePaymentMethod <- downField("stripePaymentMethod").as[Option[StripePaymentMethod]]
       stripePublicKey <- downField("publicKey").as[Option[StripePublicKey]]
     } yield {
-      StripeChargeData(
+      LegacyStripeChargeRequest(
         paymentData = StripePaymentData(
           email = email,
           currency = Currency.withName(currency),
@@ -74,7 +74,7 @@ object StripeJsonDecoder {
     }
   }
 
-  implicit val stripeChargeDataDecoder: Decoder[StripeChargeData] = legacyStripeChargeDataDecoder.or(deriveDecoder[StripeChargeData])
+  implicit val stripeChargeDataDecoder: Decoder[LegacyStripeChargeRequest] = legacyStripeChargeDataDecoder.or(deriveDecoder[LegacyStripeChargeRequest])
 }
 
 // Private because it should only be constructed using the accompanying Decoder
@@ -93,7 +93,7 @@ object NonEmptyString {
   email: NonEmptyString,  //for receipt_email
   currency: Currency,
   amount: BigDecimal,
-  token: NonEmptyString,
+  token: NonEmptyString,  //This field will be deprecated once the migration to Stripe Payment Intents is complete
   stripePaymentMethod: Option[StripePaymentMethod])
 
 sealed trait StripePaymentMethod extends EnumEntry
@@ -110,18 +110,41 @@ object StripePaymentMethod extends Enum[StripePaymentMethod] with CirceEnum[Stri
 
 }
 
-
 case class StripePublicKey(value: String) extends AnyVal
 object StripePublicKey {
   implicit val decoder: Decoder[StripePublicKey] = Decoder.decodeString.map(StripePublicKey.apply)
 }
 
-// Fields are grouped by what they're used for:
-// - paymentData - required to create a Stripe charge
-// - acquisitionData - required to create an acquisition event (used for analytics)
-// - publicKey - required to determine which Stripe service to use
-case class StripeChargeData(
+// Trait for modelling client requests for Stripe payments. This file can be simplified once we have moved away from
+// the Stripe Charges API.
+sealed trait StripeRequest {
+  val paymentData: StripePaymentData      //data required to create a Stripe payment
+  val acquisitionData: AcquisitionData    //data required to create an acquisition event (used for analytics)
+  val publicKey: Option[StripePublicKey]  //required to determine which Stripe service to use
+}
+
+// Legacy model for Stripe Charges API
+case class LegacyStripeChargeRequest(
   paymentData: StripePaymentData,
   acquisitionData: AcquisitionData,
-  publicKey: Option[StripePublicKey]
-)
+  publicKey: Option[StripePublicKey]) extends StripeRequest
+
+// Models for the Stripe Payment Intents API
+object StripePaymentIntentRequest {
+
+  case class CreatePaymentIntent(
+    paymentMethodId: String,
+    paymentData: StripePaymentData,
+    acquisitionData: AcquisitionData,
+    publicKey: Option[StripePublicKey]) extends StripeRequest
+
+  case class ConfirmPaymentIntent(
+    paymentIntentId: String,
+    paymentData: StripePaymentData,
+    acquisitionData: AcquisitionData,
+    publicKey: Option[StripePublicKey]) extends StripeRequest
+
+  import controllers.JsonReadableOps._
+  implicit val createPaymentIntentDecoder = deriveDecoder[CreatePaymentIntent]
+  implicit val confirmPaymentIntent = deriveDecoder[ConfirmPaymentIntent]
+}

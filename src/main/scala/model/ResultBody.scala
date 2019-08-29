@@ -12,11 +12,14 @@ import scala.reflect._
 // so you'd have to specify an arbitrary type for A for which there is an implicit encoder in scope (seems weird).
 // Otherwise you have to start doing stuff like `implicit val nothingEncoder: Encoder[Nothing] = null`,
 // which can't be good.
+
 object ResultBody {
 
   case class Success[A](data: A)
 
   case class Error[A](error: A)
+
+  case class RequiresAction[A](data: A)
 
   private def typeDiscriminatorEncoder[A : ClassTag](encoder: ObjectEncoder[A]): ObjectEncoder[A] =
     encoder.mapJsonObject { obj =>
@@ -26,4 +29,6 @@ object ResultBody {
   implicit def successEncoder[A : Encoder]: Encoder[Success[A]] = typeDiscriminatorEncoder(deriveEncoder[Success[A]])
 
   implicit def errorEncoderEncoder[A : Encoder]: Encoder[Error[A]] = typeDiscriminatorEncoder(deriveEncoder[Error[A]])
+
+  implicit def requiresActionEncoder[A : Encoder]: Encoder[RequiresAction[A]] = typeDiscriminatorEncoder(deriveEncoder[RequiresAction[A]])
 }
