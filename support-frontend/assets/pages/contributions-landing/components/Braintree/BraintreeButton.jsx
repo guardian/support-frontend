@@ -22,7 +22,7 @@ function BraintreeButton(props: PropTypes) {
     <div id="venmo-button">
       <form id="checkout">
         <div id="payment-form" />
-        <input type="submit" value="Pay $10" />
+        <input value="Pay $10" />
       </form>
     </div>
   );

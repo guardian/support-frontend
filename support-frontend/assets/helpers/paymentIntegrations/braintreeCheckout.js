@@ -65,10 +65,10 @@ function displayVenmoButton(venmoInstance, venmoButton) {
   // Assumes that venmoButton is initially display: none.
 
   if (venmoButton) {
-    venmoButton.style.display = 'block';
+    //venmoButton.style.display = 'block';
 
     venmoButton.addEventListener('click', () => {
-      venmoButton.disabled = true;
+     // venmoButton.disabled = true;
 
       venmoInstance.tokenize((tokenizeErr, payload) => {
         venmoButton.removeAttribute('disabled');
@@ -127,13 +127,14 @@ const getVenmoInstance: (Object) => Promise<Object> = clientInstance => new Prom
 function setupVenmoButton(venmoInstance) {
   console.log(venmoInstance);
   if (!venmoInstance.isBrowserSupported()) {
-    console.log('Browser does not support Venmo');
+    alert('Browser does not support Venmo');
     return;
   }
   const venmoButton = document.getElementById('venmo-button');
-  if (venmoButton && venmoButton instanceof HTMLButtonElement) {
+
+    console.log("about to display");
     displayVenmoButton(venmoInstance, venmoButton);
-  }
+
   console.log('supported:', venmoInstance.isBrowserSupported());
   // venmoInstance is ready to be used.
 }
