@@ -167,7 +167,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
               style={fieldStyle}
               onChange={this.onChange('CardNumber')}
               onFocus={() => this.onFocus('CardNumber')}
-              onBlur={() => this.onBlur('CardNumber')}
+              onBlur={this.onBlur}
             />
           </span>
         </div>
@@ -183,7 +183,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
                 style={fieldStyle}
                 onChange={this.onChange('Expiry')}
                 onFocus={() => this.onFocus('Expiry')}
-                onBlur={() => this.onBlur('Expiry')}
+                onBlur={this.onBlur}
               />
             </span>
           </div>
@@ -199,7 +199,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
                 placeholder=""
                 onChange={this.onChange('CVC')}
                 onFocus={() => this.onFocus('CVC')}
-                onBlur={() => this.onBlur('CVC')}
+                onBlur={this.onBlur}
               />
             </span>
           </div>

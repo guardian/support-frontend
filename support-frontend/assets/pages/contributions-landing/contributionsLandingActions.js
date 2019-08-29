@@ -446,6 +446,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
             (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
           ));
         }
+
         return dispatch(makeCreateStripePaymentIntentRequest(
           {
             ...stripeChargeDataFromAuthorisation({ ...paymentAuthorisation, token: 'token-deprecated' }, state),

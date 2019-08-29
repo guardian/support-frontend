@@ -177,7 +177,11 @@ const formHandlersForRecurring = {
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
     Stripe: (props: PropTypes) => {
-      if (props.stripeElementsTestVariant !== 'stripeCardElement') { openStripePopup(props); } else if (props.createStripePaymentMethod) { props.createStripePaymentMethod(props.email); }
+      if (props.stripeElementsTestVariant !== 'stripeCardElement') {
+        openStripePopup(props);
+      } else if (props.createStripePaymentMethod) {
+        props.createStripePaymentMethod(props.email);
+      }
     },
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);

@@ -5,7 +5,9 @@ import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
 import type { StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 export const setupStripe = (setStripeHasLoaded: () => void) => {
-  if (window.Stripe) { setStripeHasLoaded(); } else {
+  if (window.Stripe) {
+    setStripeHasLoaded();
+  } else {
     const htmlElement = document.getElementById('stripe-js');
     if (htmlElement !== null) {
       htmlElement.addEventListener(
