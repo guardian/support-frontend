@@ -79,11 +79,22 @@
     }
   };
   window.guardian.stripeKeyUnitedStates = {
-    ONE_OFF: {
-        default: "@oneOffDefaultStripeConfig.forCountry(Some(Country.US)).publicKey",
-        uat: "@oneOffUatStripeConfig.forCountry(Some(Country.US)).publicKey"
-    },
-    REGULAR: window.guardian.stripeKeyDefaultCurrencies.REGULAR
+    @if(settings.switches.oneOffPaymentMethods.usStripeAccount.exists(_.isOn)) {
+        ONE_OFF: {
+            default: "@oneOffDefaultStripeConfig.forCountry(Some(Country.US)).publicKey",
+            uat: "@oneOffUatStripeConfig.forCountry(Some(Country.US)).publicKey"
+        },
+    } else {
+      ONE_OFF: window.guardian.stripeKeyDefaultCurrencies.ONE_OFF,
+    }
+    @if(settings.switches.recurringPaymentMethods.usStripeAccount.exists(_.isOn)) {
+      REGULAR: {
+        default: "@regularDefaultStripeConfig.forCountry(Some(Country.US)).publicKey",
+        uat: "@regularUatStripeConfig.forCountry(Some(Country.US)).publicKey"
+      },
+    } else {
+      REGULAR: window.guardian.stripeKeyDefaultCurrencies.REGULAR,
+    }
   };
   window.guardian.payPalEnvironment = {
     default: "@regularDefaultPayPalConfig.payPalEnvironment",
