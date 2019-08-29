@@ -37,7 +37,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ) =
     state.paymentFields match {
       case stripe: StripePaymentFields =>
-        createStripePaymentMethod(stripe, StripeServiceForCurrency(services.stripeService, state.product.currency))
+        createStripePaymentMethod(stripe, services.stripeService.withCurrency(state.product.currency))
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>

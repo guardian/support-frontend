@@ -9,8 +9,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.Stripe.{Customer, StripeError, StripeList}
-import com.gu.stripe.{CreateCustomer, Stripe, StripeService}
-import com.gu.support.encoding.CustomCodecs._
+import com.gu.stripe.{Stripe, StripeService, StripeServiceForCurrency}
 import com.gu.support.workers.JsonFixtures.{validBaid, _}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
@@ -19,7 +18,6 @@ import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.states.CreateSalesforceContactState
 import com.gu.test.tags.objects.IntegrationTest
 import io.circe.Decoder
-import io.circe.generic.auto._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 
@@ -82,9 +80,9 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
   }
 
   "StripeService" should "throw a card_declined StripeError" taggedAs IntegrationTest in {
-    val service = new StripeService(Configuration.stripeConfigProvider.get(true), configurableFutureRunner(40.seconds))
+    val service = new StripeService(Configuration.stripeConfigProvider.get(true), configurableFutureRunner(40.seconds)).withCurrency(GBP)
     val ex = recoverToExceptionIf[StripeError] {
-      CreateCustomer.fromSource("tok_chargeDeclined")(service.withCurrency(GBP))
+      service.createCustomerFromToken("tok_chargeDeclined")
     }
     ex.map(_.code should be(Some("card_declined")))
   }
@@ -94,17 +92,11 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
     val stripe = mock[StripeService]
-    val stripeWithCurrency = mock[stripe.WithCurrency]
+    val stripeWithCurrency = mock[StripeServiceForCurrency]
     val card = Stripe.Source("1234", "visa", "1234", 1, 2099, "GB")
     val customer = Stripe.Customer("12345", StripeList(1, Seq(card)))
-    when(stripeWithCurrency.post[Customer](
-      any[String],
-      any[Map[String, Seq[String]]]
-    )(
-      any[Decoder[Customer]],
-      any[Decoder[StripeError]],
-      any[ClassTag[Customer]])
-    ).thenReturn(Future(customer))
+    when(stripeWithCurrency.createCustomerFromPaymentMethod(any[String])).thenReturn(Future(customer))
+    when(stripeWithCurrency.createCustomerFromToken(any[String])).thenReturn(Future(customer))
     when(services.stripeService).thenReturn(stripe)
     when(stripe.withCurrency(any[Currency])).thenReturn(stripeWithCurrency)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)

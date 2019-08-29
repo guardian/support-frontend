@@ -14,9 +14,12 @@ class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl:
   // Stripe URL is the same in all environments
   val wsUrl = baseUrl
   val httpClient: FutureHttpClient = client
+
+  def withCurrency(currency: Currency): StripeServiceForCurrency = new StripeServiceForCurrency(this, currency)
+
 }
 
-case class StripeServiceForCurrency(stripeService: StripeService, currency: Currency) {
+class StripeServiceForCurrency(stripeService: StripeService, currency: Currency) {
   import stripeService._
 
   def createCustomerFromToken(token: String): Future[Customer] =
