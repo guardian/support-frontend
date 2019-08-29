@@ -55,9 +55,9 @@ function handleVenmoError(err) {
 function handleVenmoSuccess(payload) {
 
   // Send payload.nonce to your server.
-  console.log('Got a payment method nonce:', payload.nonce);
+  alert('Got a payment method nonce:' + payload.nonce);
   // Display the Venmo username in your checkout UI.
-  console.log('Venmo user:', payload.details.username);
+  alert('Venmo user:'+ payload.details.username);
 }
 
 /* eslint-disable no-param-reassign */
