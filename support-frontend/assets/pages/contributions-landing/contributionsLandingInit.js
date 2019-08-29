@@ -126,7 +126,8 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
     loadStripe().then(() => {
       contributionTypes[countryGroupId].forEach((contributionTypeSetting) => {
         const validPayments = getValidPaymentMethods(contributionTypeSetting.contributionType, switches, countryId);
-        if (validPayments.includes(Stripe) && state.common.abParticipations.stripeElements !== 'stripeCardElement') {
+        // Stripe Payment Intents is currently only for one-offs, so always initialise Stripe Checkout for now
+        if (validPayments.includes(Stripe)) {
           initialiseStripeCheckout(
             onPaymentAuthorisation,
             contributionTypeSetting.contributionType,
