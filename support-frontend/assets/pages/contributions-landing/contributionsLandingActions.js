@@ -93,13 +93,14 @@ const updateContributionType = (contributionType: ContributionType): ((Function)
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType })));
   };
 
-const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
-  // PayPal one-off redirects away from the site before hitting the thank you page
-  // so we need to store the payment method in the storage so that it is available on the
-  // thank you page in all scenarios.
-  storage.setSession('selectedPaymentMethod', paymentMethod);
-  return ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });
-};
+const updatePaymentMethod = (paymentMethod: PaymentMethod): Action =>
+  (dispatch: Function): void => {
+    // PayPal one-off redirects away from the site before hitting the thank you page
+    // so we need to store the payment method in the storage so that it is available on the
+    // thank you page in all scenarios.
+    storage.setSession('selectedPaymentMethod', paymentMethod);
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod })));
+  };
 
 const updateSelectedExistingPaymentMethod = (existingPaymentMethod: RecentlySignedInExistingPaymentMethod): Action =>
   ({ type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD', existingPaymentMethod });
@@ -452,7 +453,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
           },
           (token: string) => dispatch(setGuestAccountCreationToken(token)),
           (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-          state.page.form.stripePaymentIntentsData.handle3DS,
+          state.page.form.stripeCardFormData.handle3DS,
         ));
 
       }

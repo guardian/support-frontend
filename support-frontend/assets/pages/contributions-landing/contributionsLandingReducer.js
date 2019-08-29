@@ -60,7 +60,7 @@ type StripePaymentRequestButtonData = {
   stripePaymentRequestButtonClicked: boolean,
 }
 
-export type StripePaymentIntentsData = {
+export type StripeCardFormData = {
   formComplete: boolean,
   // These callbacks that must be initialised after the StripeCardForm component has been created
   createPaymentMethod: (email: string) => void | null,
@@ -77,7 +77,7 @@ type FormState = {
   formData: FormData,
   stripeV3HasLoaded: boolean,
   stripePaymentRequestButtonData: StripePaymentRequestButtonData,
-  stripePaymentIntentsData: StripePaymentIntentsData,
+  stripeCardFormData: StripeCardFormData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
   paymentError: ErrorReason | null,
@@ -144,7 +144,7 @@ function createFormReducer() {
       stripePaymentRequestObject: null,
       stripePaymentRequestButtonClicked: false,
     },
-    stripePaymentIntentsData: {
+    stripeCardFormData: {
       formComplete: false,
       createPaymentMethod: null,
       handle3DS: null,
@@ -207,8 +207,8 @@ function createFormReducer() {
       case 'SET_CREATE_STRIPE_PAYMENT_METHOD':
         return {
           ...state,
-          stripePaymentIntentsData: {
-            ...state.stripePaymentIntentsData,
+          stripeCardFormData: {
+            ...state.stripeCardFormData,
             createPaymentMethod: action.createStripePaymentMethod,
           },
         };
@@ -216,8 +216,8 @@ function createFormReducer() {
       case 'SET_HANDLE_STRIPE_3DS':
         return {
           ...state,
-          stripePaymentIntentsData: {
-            ...state.stripePaymentIntentsData,
+          stripeCardFormData: {
+            ...state.stripeCardFormData,
             handle3DS: action.handleStripe3DS,
           },
         };
@@ -225,8 +225,8 @@ function createFormReducer() {
       case 'SET_STRIPE_CARD_FORM_COMPLETE':
         return {
           ...state,
-          stripePaymentIntentsData: {
-            ...state.stripePaymentIntentsData,
+          stripeCardFormData: {
+            ...state.stripeCardFormData,
             formComplete: action.isComplete,
           },
         };
@@ -292,8 +292,8 @@ function createFormReducer() {
       case 'SET_STRIPE_PAYMENT_INTENTS_DATA':
         return {
           ...state,
-          stripePaymentIntentsData: {
-            ...state.stripePaymentIntentsData,
+          stripeCardFormData: {
+            ...state.stripeCardFormData,
             ...action,
           },
         };

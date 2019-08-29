@@ -104,7 +104,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
-  createStripePaymentMethod: state.page.form.stripePaymentIntentsData.createPaymentMethod,
+  createStripePaymentMethod: state.page.form.stripeCardFormData.createPaymentMethod,
   contributionType: state.page.form.contributionType,
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,

@@ -66,7 +66,7 @@ function mapStateToProps(state: State) {
       contributionType,
     ),
     billingPeriod: billingPeriodFromContrib(contributionType),
-    stripeCardFormComplete: state.page.form.stripePaymentIntentsData.formComplete,
+    stripeCardFormComplete: state.page.form.stripeCardFormData.formComplete,
     stripeElementsTestVariant: state.common.abParticipations.stripeElements,
   });
 }
