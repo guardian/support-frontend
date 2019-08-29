@@ -229,7 +229,9 @@ const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => void): Ac
   ({ type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS });
 
 const setStripeCardFormComplete = (isComplete: boolean): Action =>
-  ({ type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete });
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete })));
+  };
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
