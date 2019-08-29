@@ -153,8 +153,12 @@ function CheckoutForm(props: PropTypes) {
     props.country,
     props.billingPeriod,
   );
-  const offerSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
+  const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
   const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
+  const priceSummary = `${offerOnSelected || 'Enjoy your digital pack free for 14 days, then'} ${helperSelected}.`;
+
+  const PriceSummary = () =>
+    <p className="component-credit-card-price">{priceSummary}</p>;
 
   return (
     <Content>
@@ -231,6 +235,7 @@ function CheckoutForm(props: PropTypes) {
             paymentMethod={props.paymentMethod}
             allErrors={[...props.addressErrors, ...props.formErrors]}
             className={DirectDebit}
+            component={<PriceSummary />}
           />
           <FormSectionHidden
             hidden={props.paymentMethod !== Stripe}
@@ -246,7 +251,7 @@ function CheckoutForm(props: PropTypes) {
               setCvc={props.setCvc}
               formErrors={props.formErrors}
               allErrors={[...props.addressErrors, ...props.formErrors]}
-              priceSummary={`${offerSelected} ${helperSelected}`}
+              component={<PriceSummary />}
             />
           </FormSectionHidden>
           <CancellationSection />

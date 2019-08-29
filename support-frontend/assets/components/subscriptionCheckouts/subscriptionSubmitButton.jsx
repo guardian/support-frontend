@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 import Button from 'components/button/button';
 import { type Option } from 'helpers/types/option';
@@ -20,6 +20,7 @@ type PropTypes = {|
   paymentMethod: Option<PaymentMethod>,
   allErrors: FormError<FormField>[],
   className?: Option<string>,
+  component: Node,
 |};
 
 // ----- Render ----- //
@@ -36,6 +37,7 @@ function SubscriptionSubmitButton(props: PropTypes) {
           >
             Start your free trial now
           </Button>
+          <span>{props.component}</span>
         </div>
         <span>{props.allErrors.length > 0 && <ErrorSummary errors={props.allErrors} />}</span>
       </div>

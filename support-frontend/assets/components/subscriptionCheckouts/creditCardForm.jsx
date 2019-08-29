@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 import { compose } from 'redux';
 import { asControlled } from 'hocs/asControlled';
@@ -28,7 +28,7 @@ export type PropTypes = {
     setCvc: Function,
     formErrors: FormError<FormField>[],
     allErrors: Array<Object>,
-    priceSummary: string,
+    component: Node,
 }
 
 export default function CreditCardForm(props: PropTypes) {
@@ -66,8 +66,9 @@ export default function CreditCardForm(props: PropTypes) {
         paymentMethod={props.paymentMethod}
         allErrors={props.allErrors}
         className={Stripe}
+        component={props.component}
       />
-      <p className="component-credit-card-price">{props.priceSummary}.</p>
     </div>
   );
 }
+
