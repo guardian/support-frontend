@@ -1,8 +1,7 @@
 // @flow
 
-import { setupBraintree } from 'helpers/paymentIntegrations/braintreeCheckout';
-import { setBraintreeHasLoaded } from 'pages/contributions-landing/contributionsLandingActions';
 // ----- Imports ----- //
+import { setupBraintree } from 'helpers/paymentIntegrations/braintreeCheckout';
 import { type Store } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';

@@ -9,7 +9,7 @@
     "lint": "eslint --ext .js --ext .jsx .",
     "build-dev": "webpack --config webpack.dev.js",
     "build-ssr": "webpack --config webpack.ssr.js && node scripts/ssrScript.js",
-    "build-prod": "npm-run-all clean validate test storybook-static 'webpack --config webpack.prod.js --env.prod'",
+    "build-prod": "npm-run-all clean validate storybook-static 'webpack --config webpack.prod.js --env.prod'",
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com --disable-host-check",
     "devrun": "npm-run-all clean webpack-dev-server",

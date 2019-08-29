@@ -4,6 +4,8 @@
 import { setBraintreeHasLoaded } from '../../pages/contributions-landing/contributionsLandingActions';
 
 
+const clientToken = 'sandbox_hcjm93t6_tfkv8f9d3sjvg8gy';
+
 // ----- Functions ----- //
 
 function loadBraintree(): Promise<void> {
@@ -58,87 +60,81 @@ function handleVenmoSuccess(payload) {
   console.log('Venmo user:', payload.details.username);
 }
 
-
+/* eslint-disable no-param-reassign */
 function displayVenmoButton(venmoInstance, venmoButton) {
-
-  const test = true;
-
-  console.log(venmoButton);
   // Assumes that venmoButton is initially display: none.
-  venmoButton.style.display = 'block';
 
-  venmoButton.addEventListener('click', function () {
-    venmoButton.disabled = true;
+  if (venmoButton) {
+    venmoButton.style.display = 'block';
 
-    venmoInstance.tokenize(function (tokenizeErr, payload) {
-      venmoButton.removeAttribute('disabled');
-      if (tokenizeErr) {
-        console.log(tokenizeErr);
-        handleVenmoError(tokenizeErr);
-      } else {
-        console.log(payload);
-        handleVenmoSuccess(payload);
-      }
-      // ...
+    venmoButton.addEventListener('click', () => {
+      venmoButton.disabled = true;
+
+      venmoInstance.tokenize((tokenizeErr, payload) => {
+        venmoButton.removeAttribute('disabled');
+        if (tokenizeErr) {
+          console.log(tokenizeErr);
+          handleVenmoError(tokenizeErr);
+        } else {
+          console.log(payload);
+          handleVenmoSuccess(payload);
+        }
+        // ...
+      });
     });
-  });
+  }
 }
 
-const getClientInstance: Promise<Object> = () => {
-  return new Promise((resolve, reject) => {
-    window.braintree.client.create({
-      authorization: clientToken
-    }, function (clientErr, clientInstance) {
-      // Stop if there was a problem creating the client.
-      // This could happen if there is a network error or if the authorization
-      // is invalid.
-      if (clientErr) {
-        return reject(clientErr);
-      }
-      return resolve(clientInstance);
-    })
-  })
-};
+const getClientInstance: () => Promise<Object> = () => new Promise((resolve, reject) => {
+  window.braintree.client.create({
+    authorization: clientToken,
+  }, (clientErr, clientInstance) => {
+    // Stop if there was a problem creating the client.
+    // This could happen if there is a network error or if the authorization
+    // is invalid.
+    if (clientErr) {
+      return reject(clientErr);
+    }
+    return resolve(clientInstance);
+  });
+});
 
 
-const getDeviceData: Promise<Object> = (clientInstance) => {
-  return new Promise((resolve, reject) => {
-    window.braintree.dataCollector.create({
-      client: clientInstance,
-      paypal: true
-    }, function (dataCollectorErr, dataCollectorInstance) {
-      if (dataCollectorErr) {
-        return reject(dataCollectorErr);
-      }
-      return resolve(dataCollectorInstance.deviceData)
-    });
-  })
-};
+const getDeviceData: (Object) => Promise<Object> = clientInstance => new Promise((resolve, reject) => {
+  window.braintree.dataCollector.create({
+    client: clientInstance,
+    paypal: true,
+  }, (dataCollectorErr, dataCollectorInstance) => {
+    if (dataCollectorErr) {
+      return reject(dataCollectorErr);
+    }
+    return resolve(dataCollectorInstance.deviceData);
+  });
+});
 
-const getVenmoInstance: Promise<Object> = (clientInstance) => {
-  return new Promise((resolve, reject) => {
-    window.braintree.venmo.create({
-      client: clientInstance
-    }, function (venmoInstanceErr, venmoInstance) {
-      if (venmoInstanceErr) {
-        return reject(venmoInstanceErr);
-      }
-      return resolve(venmoInstance)
-    });
-  })
-};
+const getVenmoInstance: (Object) => Promise<Object> = clientInstance => new Promise((resolve, reject) => {
+  window.braintree.venmo.create({
+    client: clientInstance,
+  }, (venmoInstanceErr, venmoInstance) => {
+    if (venmoInstanceErr) {
+      return reject(venmoInstanceErr);
+    }
+    return resolve(venmoInstance);
+  });
+});
 
-const clientToken = 'sandbox_hcjm93t6_tfkv8f9d3sjvg8gy';
 
 function setupVenmoButton(venmoInstance) {
-  const venmoButton = document.getElementById('venmo-button');
   console.log(venmoInstance);
   if (!venmoInstance.isBrowserSupported()) {
     console.log('Browser does not support Venmo');
     return;
   }
-  displayVenmoButton(venmoInstance, venmoButton);
-  console.log('supported:', venmoInstance.isBrowserSupported())
+  const venmoButton = document.getElementById('venmo-button');
+  if (venmoButton && venmoButton instanceof HTMLButtonElement) {
+    displayVenmoButton(venmoInstance, venmoButton);
+  }
+  console.log('supported:', venmoInstance.isBrowserSupported());
   // venmoInstance is ready to be used.
 }
 
@@ -147,38 +143,35 @@ function setupBraintree(dispatch: Function) {
     getClientInstance().then((clientInstance) => {
       loadDataCollector().then(() => {
         getDeviceData(clientInstance).then((deviceData) => {
+          console.log(deviceData);
           loadVenmo().then(() => {
             getVenmoInstance(clientInstance).then((venmoInstance) => {
               setupVenmoButton(venmoInstance);
-            }).catch(function (createErr) {
+            }).catch((createErr) => {
               console.error('Error creating Venmo instance', createErr);
             });
             dispatch(setBraintreeHasLoaded());
-          })
-        }).catch(err => {
+          });
+        }).catch((err) => {
           console.log('error getting device collector data: ', err);
         });
-      })
-    }).catch(err => {
+      });
+    }).catch((err) => {
       console.log('error getting braintree client: ', err);
     });
   });
 }
 
-  const showBraintree = (dispatch: Function) => {
-    loadBraintree()
-      .then(() => {
-        dispatch(setBraintreeHasLoaded());
-      });
-  };
+const showBraintree = (dispatch: Function) => {
+  loadBraintree()
+    .then(() => {
+      dispatch(setBraintreeHasLoaded());
+    });
+};
 
 // ----- Exports ----- //
 
-  export {
-    getPayPalOptions,
-    showBraintree,
-    setupBraintree,
-    payPalRequestData,
-    setupSubscriptionPayPalPayment,
-    setupRecurringPayPalPayment,
-  };
+export {
+  showBraintree,
+  setupBraintree,
+};

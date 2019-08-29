@@ -14,21 +14,19 @@ type PropTypes = {|
 |};
 
 
-
 // ----- Component ----- //
 
-function BraintreeButton(props: PropTypes){
+function BraintreeButton(props: PropTypes) {
   console.log(props.braintreeHasLoaded);
   return (
-      <div id="venmo-button">
-        <form id="checkout">
-          <div id="payment-form"></div>
-          <input type="submit" value="Pay $10" />
-        </form>
-      </div>
-    );
-  }
-
+    <div id="venmo-button">
+      <form id="checkout">
+        <div id="payment-form" />
+        <input type="submit" value="Pay $10" />
+      </form>
+    </div>
+  );
+}
 
 
 // ----- Default props----- //

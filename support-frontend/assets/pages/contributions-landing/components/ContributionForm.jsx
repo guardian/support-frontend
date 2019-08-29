@@ -134,8 +134,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
   setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded); },
   setBraintreeHasLoaded: () => {
-    console.log("Heredd");
-    dispatch(setBraintreeHasLoaded);},
+    console.log('Heredd');
+    dispatch(setBraintreeHasLoaded);
+  },
 });
 
 // ----- Functions ----- //
