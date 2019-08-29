@@ -34,12 +34,9 @@ type PropTypes = {|
 // ----- Component ----- //
 
 class StripePaymentRequestButtonContainer extends React.Component<PropTypes, void> {
-  constructor(props: PropTypes) {
-    super(props);
-  }
 
   componentDidMount(): void {
-    if (!this.props.stripeHasLoaded) setupStripe(this.props.setStripeHasLoaded);
+    if (!this.props.stripeHasLoaded) { setupStripe(this.props.setStripeHasLoaded); }
   }
 
   render() {

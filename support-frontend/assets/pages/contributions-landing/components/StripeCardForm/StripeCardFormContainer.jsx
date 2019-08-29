@@ -3,18 +3,17 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import {StripeProvider, Elements} from 'react-stripe-elements';
-import StripeCardForm from "./StripeCardForm";
+import { StripeProvider, Elements } from 'react-stripe-elements';
+import StripeCardForm from './StripeCardForm';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
-import { getAmount } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
 import { setupStripe } from 'helpers/stripe';
-import type {StripeElementsTestVariants} from "assets/helpers/abTests/abtestDefinitions";
+import type { StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
 import AnimatedDots from 'components/spinners/animatedDots';
-import './stripeCardForm.scss'
+import './stripeCardForm.scss';
 
 // ----- Types -----//
 
@@ -30,13 +29,10 @@ type PropTypes = {|
   stripeHasLoaded: boolean,
 |};
 
-class StripeCardFormContainer extends React.Component<PropTypes,void> {
-  constructor(props: PropTypes) {
-    super(props);
-  }
+class StripeCardFormContainer extends React.Component<PropTypes, void> {
 
   componentDidMount(): void {
-    if (!this.props.stripeHasLoaded) setupStripe(this.props.setStripeHasLoaded);
+    if (!this.props.stripeHasLoaded) { setupStripe(this.props.setStripeHasLoaded); }
   }
 
   render() {
@@ -49,20 +45,20 @@ class StripeCardFormContainer extends React.Component<PropTypes,void> {
         const key = getStripeKey('ONE_OFF', this.props.currency, this.props.isTestUser);
 
         return (
-          <div className='stripe-card-element-container'>
+          <div className="stripe-card-element-container">
             <StripeProvider apiKey={key}>
               <Elements>
-                <StripeCardForm/>
+                <StripeCardForm />
               </Elements>
             </StripeProvider>
           </div>
-        )
-      } else {
-        return <AnimatedDots appearance='dark'/>
+        );
       }
-    } else {
-      return null;
+      return <AnimatedDots appearance="dark" />;
+
     }
+    return null;
+
   }
 }
 

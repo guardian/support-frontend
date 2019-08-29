@@ -210,7 +210,7 @@ function createFormReducer() {
           stripePaymentIntentsData: {
             ...state.stripePaymentIntentsData,
             createPaymentMethod: action.createStripePaymentMethod,
-          }
+          },
         };
 
       case 'SET_HANDLE_STRIPE_3DS':
@@ -219,7 +219,7 @@ function createFormReducer() {
           stripePaymentIntentsData: {
             ...state.stripePaymentIntentsData,
             handle3DS: action.handleStripe3DS,
-          }
+          },
         };
 
       case 'SET_STRIPE_CARD_FORM_COMPLETE':
@@ -228,7 +228,7 @@ function createFormReducer() {
           stripePaymentIntentsData: {
             ...state.stripePaymentIntentsData,
             formComplete: action.isComplete,
-          }
+          },
         };
 
       case 'UPDATE_FIRST_NAME':
@@ -298,7 +298,7 @@ function createFormReducer() {
           stripePaymentIntentsData: {
             ...state.stripePaymentIntentsData,
             ...action,
-          }
+          },
         };
 
       case 'UPDATE_USER_FORM_DATA':

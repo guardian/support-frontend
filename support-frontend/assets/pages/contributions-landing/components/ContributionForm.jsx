@@ -47,7 +47,7 @@ import {
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
-import StripeCardFormContainer from "./StripeCardForm/StripeCardFormContainer";
+import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
@@ -177,8 +177,7 @@ const formHandlersForRecurring = {
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
     Stripe: (props: PropTypes) => {
-      if (props.stripeElementsTestVariant !== 'stripeCardElement') openStripePopup(props);
-      else if (props.createStripePaymentMethod) props.createStripePaymentMethod(props.email);
+      if (props.stripeElementsTestVariant !== 'stripeCardElement') { openStripePopup(props); } else if (props.createStripePaymentMethod) { props.createStripePaymentMethod(props.email); }
     },
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);

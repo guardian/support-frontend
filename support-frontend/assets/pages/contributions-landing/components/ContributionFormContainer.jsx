@@ -92,7 +92,6 @@ const campaign = campaignName && campaigns[campaignName] ? campaigns[campaignNam
 function withProps(props: PropTypes) {
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
-    //Note - only called for recurring
     props.setPaymentIsWaiting(true);
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };

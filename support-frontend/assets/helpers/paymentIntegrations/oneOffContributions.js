@@ -144,22 +144,18 @@ function postOneOffStripeExecutePaymentRequest(
   ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
 }
 
-function postStripeCreatePaymentIntentRequest(
-  data: CreateStripePaymentIntentRequest,
-): Promise<PaymentResult> {
+function postStripeCreatePaymentIntentRequest(data: CreateStripePaymentIntentRequest): Promise<PaymentResult> {
   return fetchJson(
     paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
     requestOptions(data, 'omit', 'POST', null),
-  )
+  );
 }
 
-function postStripeConfirmPaymentIntentRequest(
-  data: ConfirmStripePaymentIntentRequest,
-): Promise<PaymentResult> {
+function postStripeConfirmPaymentIntentRequest(data: ConfirmStripePaymentIntentRequest): Promise<PaymentResult> {
   return fetchJson(
     paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/confirm-payment`),
     requestOptions(data, 'omit', 'POST', null),
-  )
+  );
 }
 
 // Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
@@ -169,24 +165,22 @@ function processStripePaymentIntentRequest(
   setThankYouPageStage: (ThankYouPageStage) => void,
   handleStripe3DS: (clientSecret: string) => void,
 ): Promise<PaymentResult> {
-  return logPromise(
-    postStripeCreatePaymentIntentRequest(data).then(createIntentResponse => {
-      if (createIntentResponse.type === 'requiresaction') {
-        // Do 3DS auth and then send back to payment-api for payment confirmation
-        return handleStripe3DS(createIntentResponse.data.clientSecret).then(authResult => {
-          if (authResult.error) {
-            // TODO - send to ophan?
-            return { type: 'error', error: { failureReason: 'card_authentication_error' } };
-          } else {
-            return postStripeConfirmPaymentIntentRequest({...data, paymentIntentId: authResult.paymentIntent.id})
-          }
-        })
-      }
-      // No 3DS auth required
-      else return createIntentResponse
+  return logPromise(postStripeCreatePaymentIntentRequest(data).then((createIntentResponse) => {
+    if (createIntentResponse.type === 'requiresaction') {
+      // Do 3DS auth and then send back to payment-api for payment confirmation
+      return handleStripe3DS(createIntentResponse.data.clientSecret).then((authResult) => {
+        if (authResult.error) {
+          // TODO - send to ophan?
+          return { type: 'error', error: { failureReason: 'card_authentication_error' } };
+        }
+        return postStripeConfirmPaymentIntentRequest({ ...data, paymentIntentId: authResult.paymentIntent.id });
 
-    }).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage))
-  );
+      });
+    }
+    // No 3DS auth required
+    return createIntentResponse;
+
+  }).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
 }
 
 // Object is expected to have structure:

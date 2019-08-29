@@ -106,7 +106,7 @@ function initialiseStripeCheckout(
       currencyId,
       isTestUser,
     );
-  //The only place that setThirdPartyPaymentLibrary is called
+
   dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
 }
 

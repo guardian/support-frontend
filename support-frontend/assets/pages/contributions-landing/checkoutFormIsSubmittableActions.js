@@ -19,7 +19,6 @@ import {
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CaState, UsState } from 'helpers/internationalisation/country';
-import { Stripe } from 'helpers/paymentMethods';
 import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 import type { State } from './contributionsLandingReducer';
 import {

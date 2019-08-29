@@ -3,24 +3,20 @@
 // ----- Imports ----- //
 
 import React, { Component } from 'react';
-import {injectStripe, CardNumberElement, CardExpiryElement, CardCVCElement} from 'react-stripe-elements';
-import {connect} from "react-redux";
-import type {State} from "assets/pages/contributions-landing/contributionsLandingReducer";
+import { injectStripe, CardNumberElement, CardExpiryElement, CardCVCElement } from 'react-stripe-elements';
+import { connect } from 'react-redux';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
-import {type PaymentResult} from 'helpers/paymentIntegrations/readerRevenueApis';
-import {
-  setCreateStripePaymentMethod,
+import { type PaymentResult } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { setCreateStripePaymentMethod,
   setHandleStripe3DS,
   setStripeCardFormComplete,
   onThirdPartyPaymentAuthorised,
   paymentFailure,
   paymentWaiting,
-  StripeCardFormField,
-  type Action} from 'pages/contributions-landing/contributionsLandingActions';
-import {type ContributionType} from 'helpers/contributions';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
+  type Action } from 'pages/contributions-landing/contributionsLandingActions';
+import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
 
@@ -28,6 +24,7 @@ import { logException } from 'helpers/logger';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
+  stripe: Object, // Available through the injectStripe 'Higher-Order Component'
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   paymentFailure: (paymentError: ErrorReason) => Action,
   contributionType: ContributionType,
@@ -53,7 +50,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setStripeCardFormComplete: (isComplete: boolean) =>
     dispatch(setStripeCardFormComplete(isComplete)),
   paymentWaiting: (isWaiting: boolean) =>
-    dispatch(paymentWaiting(isWaiting))
+    dispatch(paymentWaiting(isWaiting)),
 });
 
 type CardFieldError = { errorMessage: string }
@@ -67,23 +64,23 @@ type StateTypes = {
 
 const fieldStyle = {
   base: {
-    fontFamily: "'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-    fontSize: "16px",
-    lineHeight: "24px"
-  }
+    fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
+    fontSize: '16px',
+    lineHeight: '24px',
+  },
 };
 
 class CardForm extends Component<PropTypes, StateTypes> {
 
   constructor(props: PropTypes) {
     super(props);
-    
+
     this.state = {
       CardNumber: 'Incomplete',
       Expiry: 'Incomplete',
       CVC: 'Incomplete',
       currentlySelected: null,
-    }
+    };
   }
 
   componentDidMount(): void {
@@ -91,8 +88,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
       this.props.paymentWaiting(true);
 
       this.props.stripe.createPaymentMethod('card', {
-        billing_details: {email}
-      }).then(result => {
+        billing_details: { email },
+      }).then((result) => {
         if (result.error) {
           this.props.paymentWaiting(false);
 
@@ -106,9 +103,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
             // This is probably a Stripe or network problem
             this.props.paymentFailure('payment_provider_unavailable');
           }
-        }
-        else {
-          this.props.onPaymentAuthorised({paymentMethod: Stripe, paymentMethodId: result.paymentMethod.id})
+        } else {
+          this.props.onPaymentAuthorised({ paymentMethod: Stripe, paymentMethodId: result.paymentMethod.id });
         }
       });
     });
@@ -116,34 +112,33 @@ class CardForm extends Component<PropTypes, StateTypes> {
     this.props.setHandleStripe3DS((clientSecret: string) => this.props.stripe.handleCardAction(clientSecret));
   }
 
-  formIsComplete = () =>
-    this.state.CardNumber === 'Complete' &&
-    this.state.Expiry === 'Complete' &&
-    this.state.CVC === 'Complete';
-
   onChange = (fieldName: CardFieldName) => (update) => {
     let newFieldState = 'Incomplete';
 
-    if (update.error) newFieldState = { errorMessage: update.error.message };
-    else if (update.complete) newFieldState = 'Complete';
+    if (update.error) { newFieldState = { errorMessage: update.error.message }; } else if (update.complete) { newFieldState = 'Complete'; }
 
     this.setState(
       { [fieldName]: newFieldState },
-      () => this.props.setStripeCardFormComplete(this.formIsComplete())
+      () => this.props.setStripeCardFormComplete(this.formIsComplete()),
     );
   };
 
   onFocus = (fieldName: CardFieldName) => {
     this.setState({
-      currentlySelected: fieldName
+      currentlySelected: fieldName,
     });
   };
 
-  onBlur = (fieldName: CardFieldName) => {
+  onBlur = () => {
     this.setState({
-      currentlySelected: null
+      currentlySelected: null,
     });
   };
+
+  formIsComplete = () =>
+    this.state.CardNumber === 'Complete' &&
+    this.state.Expiry === 'Complete' &&
+    this.state.CVC === 'Complete';
 
   render() {
     const errorMessage =
@@ -155,15 +150,16 @@ class CardForm extends Component<PropTypes, StateTypes> {
       `form__input ${this.state.currentlySelected === fieldName ? 'form__input-enabled' : ''}`;
 
     return (
-      <div className='form__fields'>
-        <legend className='form__legend'>Your card details</legend>
+      <div className="form__fields">
+        <legend className="form__legend">Your card details</legend>
 
-        <div className='form__field'>
-          <label className="form__label">
+        <div className="form__field">
+          <label className="form__label" htmlFor="stripeCardNumberElement">
             <span>Card number</span>
           </label>
           <span className={getClasses('CardNumber')}>
             <CardNumberElement
+              id="stripeCardNumberElement"
               style={fieldStyle}
               onChange={this.onChange('CardNumber')}
               onFocus={() => this.onFocus('CardNumber')}
@@ -172,13 +168,14 @@ class CardForm extends Component<PropTypes, StateTypes> {
           </span>
         </div>
 
-        <div className='stripe-card-element-container__inline-fields'>
-          <div className='form__field'>
-            <label className="form__label">
+        <div className="stripe-card-element-container__inline-fields">
+          <div className="form__field">
+            <label className="form__label" htmlFor="stripeCardExpiryElement">
               <span>Expiry date</span>
             </label>
             <span className={getClasses('Expiry')}>
               <CardExpiryElement
+                id="stripeCardExpiryElement"
                 style={fieldStyle}
                 onChange={this.onChange('Expiry')}
                 onFocus={() => this.onFocus('Expiry')}
@@ -187,14 +184,15 @@ class CardForm extends Component<PropTypes, StateTypes> {
             </span>
           </div>
 
-          <div className='form__field'>
-            <label className="form__label">
+          <div className="form__field">
+            <label className="form__label" htmlFor="stripeCardCVCElement">
               <span>CVC</span>
             </label>
             <span className={getClasses('CVC')}>
               <CardCVCElement
+                id="stripeCardCVCElement"
                 style={fieldStyle}
-                placeholder=''
+                placeholder=""
                 onChange={this.onChange('CVC')}
                 onFocus={() => this.onFocus('CVC')}
                 onBlur={() => this.onBlur('CVC')}
@@ -203,9 +201,9 @@ class CardForm extends Component<PropTypes, StateTypes> {
           </div>
         </div>
 
-        {errorMessage ? <div className='form__error'>{errorMessage}</div> : null}
+        {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
       </div>
-    )
+    );
   }
 }
 

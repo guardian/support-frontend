@@ -385,11 +385,9 @@ const makeCreateStripePaymentIntentRequest = (
   setThankYouPage: (ThankYouPageStage) => void,
   handleStripe3DS: (clientSecret: string) => void,
 ) =>
-  (dispatch: Dispatch<Action>): Promise<PaymentResult> => {
+  (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     // TODO - only call onPaymentResult if success
-    return dispatch(onPaymentResult(processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS)));
-  };
-
+    dispatch(onPaymentResult(processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS)));
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
   state: State,
@@ -446,17 +444,17 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
             (token: string) => dispatch(setGuestAccountCreationToken(token)),
             (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
           ));
-        } else {
-          return dispatch(makeCreateStripePaymentIntentRequest(
-            {
-              ...stripeChargeDataFromAuthorisation({...paymentAuthorisation, token: 'token-deprecated'}, state),
-              paymentMethodId: paymentAuthorisation.paymentMethodId
-            },
-            (token: string) => dispatch(setGuestAccountCreationToken(token)),
-            (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-            state.page.form.stripePaymentIntentsData.handle3DS,
-          ));
         }
+        return dispatch(makeCreateStripePaymentIntentRequest(
+          {
+            ...stripeChargeDataFromAuthorisation({ ...paymentAuthorisation, token: 'token-deprecated' }, state),
+            paymentMethodId: paymentAuthorisation.paymentMethodId,
+          },
+          (token: string) => dispatch(setGuestAccountCreationToken(token)),
+          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+          state.page.form.stripePaymentIntentsData.handle3DS,
+        ));
+
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
       return Promise.resolve(error);
