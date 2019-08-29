@@ -58,7 +58,6 @@ type StripePaymentRequestButtonData = {
   paymentMethod: 'none' | StripePaymentMethod | null,
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
-  stripeV3HasLoaded: boolean,
 }
 
 export type StripePaymentIntentsData = {
@@ -76,6 +75,7 @@ type FormState = {
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
+  stripeV3HasLoaded: boolean,
   stripePaymentRequestButtonData: StripePaymentRequestButtonData,
   stripePaymentIntentsData: StripePaymentIntentsData,
   setPasswordData: SetPasswordData,
@@ -138,11 +138,11 @@ function createFormReducer() {
       state: null,
       checkoutFormHasBeenSubmitted: false,
     },
+    stripeV3HasLoaded: false,
     stripePaymentRequestButtonData: {
       paymentMethod: null,
       stripePaymentRequestObject: null,
       stripePaymentRequestButtonClicked: false,
-      stripeV3HasLoaded: false,
     },
     stripePaymentIntentsData: {
       formComplete: false,
@@ -286,10 +286,7 @@ function createFormReducer() {
       case 'SET_STRIPE_V3_HAS_LOADED':
         return {
           ...state,
-          stripePaymentRequestButtonData: {
-            ...state.stripePaymentRequestButtonData,
-            stripeV3HasLoaded: true,
-          },
+          stripeV3HasLoaded: true,
         };
 
       case 'SET_STRIPE_PAYMENT_INTENTS_DATA':

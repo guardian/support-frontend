@@ -116,7 +116,7 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
-  stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
+  stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
   landingPageChoiceArchitectureAmountsFirstTestVariant:
     state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
