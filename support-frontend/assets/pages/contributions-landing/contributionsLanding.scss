@@ -539,6 +539,7 @@ form {
 
 .form__radio-group-label {
   cursor: pointer;
+  transition: 0.3s ease-in-out;
 }
 
 .form__radio-group--tabs .form__radio-group-list {
@@ -562,10 +563,11 @@ form {
 
 .form__radio-group--tabs .form__radio-group-input:checked + .form__radio-group-label {
   background: gu-colour(highlight-main);
+  transition: 0.3s ease-in-out;
 }
 
 .form__radio-group--tabs .form__radio-group-input:hover + .form__radio-group-label {
-  background: #E6CE05;
+  background: gu-colour(highlight-dark);
 }
 
 .form__radio-group--pills .form__radio-group-list {
@@ -596,10 +598,11 @@ form {
 .form__radio-group--pills .form__radio-group-input:checked + .form__radio-group-label {
   background: gu-colour(highlight-main);
   font-weight: bold;
+  transition: 0.3s ease-in-out;
 }
 
 .form__radio-group--pills .form__radio-group-input:hover + .form__radio-group-label {
-  background: #E6CE05;
+  background: gu-colour(highlight-dark);
 }
 
 .form__radio-group--buttons .form__radio-group-item + .form__radio-group-item {

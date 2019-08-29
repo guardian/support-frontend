@@ -6,7 +6,7 @@ addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.0")
 
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.0")
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.16")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.23")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 
