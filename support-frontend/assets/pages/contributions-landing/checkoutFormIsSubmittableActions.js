@@ -20,6 +20,7 @@ import {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CaState, UsState } from 'helpers/internationalisation/country';
 import { Stripe } from 'helpers/paymentMethods';
+import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 import type { State } from './contributionsLandingReducer';
 import {
   type Action as ContributionsLandingAction,
@@ -82,13 +83,6 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
     && checkAmountOrOtherAmount(selectedAmounts, otherAmounts, contributionType, countryGroupId);
 };
 
-const stripeCardFormIsIncomplete = (state: State): boolean =>
-  state.page.form.contributionType === 'ONE_OFF' &&
-  state.page.form.paymentMethod === Stripe &&
-  state.common.abParticipations.stripeElements === 'stripeCardElement' &&
-  !(state.page.form.stripePaymentIntentsData.formComplete);
-
-
 const formIsValidParameters = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
@@ -98,7 +92,12 @@ const formIsValidParameters = (state: State) => ({
   firstName: state.page.form.formData.firstName,
   lastName: state.page.form.formData.lastName,
   email: state.page.form.formData.email,
-  stripeCardFormOk: !stripeCardFormIsIncomplete(state),
+  stripeCardFormOk: !stripeCardFormIsIncomplete(
+    state.page.form.contributionType,
+    state.page.form.paymentMethod,
+    state.common.abParticipations.stripeElements,
+    state.page.form.stripePaymentIntentsData.formComplete,
+  ),
 });
 
 function enableOrDisableForm() {

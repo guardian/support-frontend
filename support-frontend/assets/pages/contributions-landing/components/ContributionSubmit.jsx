@@ -17,11 +17,11 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
-import type { StripePaymentIntentsData } from '../contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal, Stripe } from 'helpers/paymentMethods';
+import type { StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 import Button from 'components/button/button';
-import type {StripeElementsTestVariants} from "assets/helpers/abTests/abtestDefinitions";
 
 // ----- Types ----- //
 
@@ -42,7 +42,6 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   amount: number,
   billingPeriod: BillingPeriod,
-  stripeCardFormComplete: boolean,
   stripeElementsTestVariant: StripeElementsTestVariants,
 |};
 
@@ -83,14 +82,13 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
 });
 
-const stripeCardFormIsIncomplete = (props: PropTypes): boolean =>
-  props.contributionType === 'ONE_OFF' &&
-  props.paymentMethod === Stripe &&
-  props.stripeElementsTestVariant === 'stripeCardElement' &&
-  !(props.stripeCardFormOk);
-
 const buttonDisabled = (props: PropTypes): boolean =>
-  props.isWaiting || stripeCardFormIsIncomplete(props);
+  props.isWaiting || stripeCardFormIsIncomplete(
+    props.contributionType,
+    props.paymentMethod,
+    props.stripeElementsTestVariant,
+    props.stripeCardFormOk
+  );
 
 // ----- Render ----- //
 
