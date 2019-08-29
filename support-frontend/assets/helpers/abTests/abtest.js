@@ -206,9 +206,8 @@ function getParticipations(
       const participationsFromUrl = getParticipationsFromUrl();
       if (participationsFromUrl && participationsFromUrl[testId]) {
         participations[testId] = participationsFromUrl[testId];
-      } else {
-        return;
       }
+      return;
     }
 
     if (testId in currentParticipation) {
