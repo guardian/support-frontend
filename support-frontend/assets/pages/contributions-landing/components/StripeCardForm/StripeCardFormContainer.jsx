@@ -51,7 +51,7 @@ class StripeCardFormContainer extends React.Component<PropTypes,void> {
         return (
           <div className='stripe-card-element-container'>
             <StripeProvider apiKey={key}>
-              <Elements onChange={(ev) => console.log("ELEMENTS CHANGE:", ev)}>
+              <Elements>
                 <StripeCardForm/>
               </Elements>
             </StripeProvider>
