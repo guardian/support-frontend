@@ -170,7 +170,6 @@ function processStripePaymentIntentRequest(
       // Do 3DS auth and then send back to payment-api for payment confirmation
       return handleStripe3DS(createIntentResponse.data.clientSecret).then((authResult) => {
         if (authResult.error) {
-          // TODO - send to ophan?
           return { type: 'error', error: { failureReason: 'card_authentication_error' } };
         }
         return postStripeConfirmPaymentIntentRequest({ ...data, paymentIntentId: authResult.paymentIntent.id });

@@ -19,6 +19,7 @@ import { setCreateStripePaymentMethod,
 import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
 
 // ----- Types -----//
 
@@ -109,7 +110,10 @@ class CardForm extends Component<PropTypes, StateTypes> {
       });
     });
 
-    this.props.setHandleStripe3DS((clientSecret: string) => this.props.stripe.handleCardAction(clientSecret));
+    this.props.setHandleStripe3DS((clientSecret: string) => {
+      trackComponentLoad('stripe-3ds');
+      return this.props.stripe.handleCardAction(clientSecret);
+    });
   }
 
   onChange = (fieldName: CardFieldName) => (update) => {

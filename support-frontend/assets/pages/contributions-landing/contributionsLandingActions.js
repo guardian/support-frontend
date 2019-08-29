@@ -387,8 +387,8 @@ const makeCreateStripePaymentIntentRequest = (
   handleStripe3DS: (clientSecret: string) => void,
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-    // TODO - only call onPaymentResult if success
     dispatch(onPaymentResult(processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS)));
+
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
   state: State,
