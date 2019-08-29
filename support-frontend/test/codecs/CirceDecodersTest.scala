@@ -97,8 +97,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |  "switches": {
           |    "oneOffPaymentMethods": {
           |      "stripe": "On",
-          |      "payPal": "On",
-          |      "usStripeAccount": "On"
+          |      "payPal": "On"
           |    },
           |    "recurringPaymentMethods": {
           |      "stripe": "On",
@@ -114,7 +113,8 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |        "state": "On"
           |      }
           |    },
-          |    "optimize": "Off"
+          |    "optimize": "Off",
+          |    "usStripeAccount": "On"
           |  },
           |  "amounts": {
           |    "GBPCountries": {
@@ -260,16 +260,14 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
             payPal = On,
             directDebit = None,
             existingCard = None,
-            existingDirectDebit = None,
-            usStripeAccount = Some(On)
+            existingDirectDebit = None
           ),
           recurringPaymentMethods = PaymentMethodsSwitch(
             stripe = On,
             payPal = On,
             directDebit = Some(On),
             existingCard = Some(On),
-            existingDirectDebit = Some(On),
-            usStripeAccount = None
+            existingDirectDebit = Some(On)
           ),
           experiments = Map(
             "newFlow" -> ExperimentSwitch(
@@ -278,7 +276,8 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
               state = On
             )
           ),
-          optimize = Off
+          optimize = Off,
+          usStripeAccount = Some(On)
         ),
         amountsRegions,
         contributionTypes,
