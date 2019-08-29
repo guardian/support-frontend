@@ -52,6 +52,11 @@ const links: HeaderNavLink[] = [
     trackAs: 'subscriptions:guardianweekly',
   },
   {
+    href: routes.recurringContribCheckout,
+    text: 'Contributions',
+    trackAs: 'contributions',
+  },
+  {
     href: getPatronsLink('support-header'),
     text: 'Patrons',
     trackAs: 'patrons',
