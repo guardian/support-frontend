@@ -57,9 +57,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 });
 
 type CardFieldError = { errorMessage: string }
-
 type CardFieldState = 'Incomplete' | CardFieldError | 'Complete';
-
 type CardFieldName = 'CardNumber' | 'Expiry' | 'CVC';
 
 type StateTypes = {
@@ -210,8 +208,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
     )
   }
 }
-
-// ----- Default props----- //
 
 const StripeCardForm =
   injectStripe(connect(mapStateToProps, mapDispatchToProps)(CardForm));

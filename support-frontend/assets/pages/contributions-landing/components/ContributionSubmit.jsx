@@ -66,7 +66,7 @@ function mapStateToProps(state: State) {
       contributionType,
     ),
     billingPeriod: billingPeriodFromContrib(contributionType),
-    stripeCardFormComplete: state.page.form.stripePaymentIntentsData.formComplete,
+    stripeCardFormOk: state.page.form.stripePaymentIntentsData.formComplete,
     stripeElementsTestVariant: state.common.abParticipations.stripeElements,
   });
 }
@@ -87,7 +87,7 @@ const stripeCardFormIsIncomplete = (props: PropTypes): boolean =>
   props.contributionType === 'ONE_OFF' &&
   props.paymentMethod === Stripe &&
   props.stripeElementsTestVariant === 'stripeCardElement' &&
-  !(props.stripeCardFormComplete);
+  !(props.stripeCardFormOk);
 
 const buttonDisabled = (props: PropTypes): boolean =>
   props.isWaiting || stripeCardFormIsIncomplete(props);

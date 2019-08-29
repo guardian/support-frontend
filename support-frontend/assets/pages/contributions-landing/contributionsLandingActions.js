@@ -492,7 +492,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
 };
 
-// Used for Stripe Checkout one-off
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
     const state = getState();
@@ -506,7 +505,6 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
 const onStripePaymentRequestApiPaymentAuthorised =
   (paymentAuthorisation: PaymentAuthorisation) =>
     (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
-      debugger
       const state = getState();
       return paymentAuthorisationHandlers.ONE_OFF.Stripe(
         dispatch,
