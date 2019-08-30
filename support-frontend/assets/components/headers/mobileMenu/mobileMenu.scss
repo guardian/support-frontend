@@ -57,14 +57,6 @@ $mobile-menu-gutter: ($gu-h-spacing*2.5);
     &:first-child {
       border-top: none;
     }
-
-    &.show-on-tablet {
-      display: block;
-
-      @include mq($until: tablet) {
-        display: none;
-      }
-    }
   }
 }
 
