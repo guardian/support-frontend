@@ -9,7 +9,7 @@ import com.typesafe.config.Config
 case class StripeConfig(defaultAccount: StripeAccountConfig,
                         australiaAccount: StripeAccountConfig,
                         unitedStatesAccount: StripeAccountConfig,
-                        version: Option[String] = None)
+                        version: Option[String])
   extends TouchpointConfig {
 
   // Still needed for SupportWorkers (recurring products) which don't support a US Stripe account yet.
@@ -51,7 +51,8 @@ class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String =
   def fromConfig(config: Config): StripeConfig = StripeConfig(
     accountFromConfig(config, prefix, "default"),
     accountFromConfig(config, prefix, Country.Australia.alpha2),
-    accountFromConfig(config, prefix, Country.US.alpha2)
+    accountFromConfig(config, prefix, Country.US.alpha2),
+    version = stripeVersion(config)
   )
 
   private def accountFromConfig(config: Config, prefix: String, country: String) =
