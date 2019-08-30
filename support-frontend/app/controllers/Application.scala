@@ -67,13 +67,13 @@ class Application(
   }
 
   def supportGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.geoData.countryGroup match {
-      case Some(US) => buildCanonicalShowcaseLink("us")
-      case Some(Australia) => buildCanonicalShowcaseLink("au")
-      case _ => buildCanonicalShowcaseLink("uk")
+    val supportPageVariant = request.geoData.countryGroup match {
+      case Some(US) => "us"
+      case Some(Australia) => "au"
+      case _ => "uk"
     }
 
-    RedirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
+    RedirectWithEncodedQueryString(buildCanonicalShowcaseLink(supportPageVariant), request.queryString, status = FOUND)
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
