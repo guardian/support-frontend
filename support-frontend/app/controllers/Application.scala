@@ -66,6 +66,16 @@ class Application(
     RedirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
   }
 
+  def supportGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val redirectUrl = request.geoData.countryGroup match {
+      case Some(US) => buildCanonicalShowcaseLink("us")
+      case Some(Australia) => buildCanonicalShowcaseLink("au")
+      case _ => buildCanonicalShowcaseLink("uk")
+    }
+
+    RedirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
+  }
+
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val url = List(getContributeRedirectUrl(request.geoData.countryGroup), campaignCode)
       .filter(_.nonEmpty)
