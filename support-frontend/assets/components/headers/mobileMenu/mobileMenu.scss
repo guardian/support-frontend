@@ -23,7 +23,7 @@ $mobile-menu-gutter: ($gu-h-spacing*2.5);
     box-sizing: border-box;
     padding: $gu-v-spacing/2 0 $gu-v-spacing*2;
   }
-  
+
 }
 
 .component-header-links--mobile {
@@ -56,6 +56,14 @@ $mobile-menu-gutter: ($gu-h-spacing*2.5);
     border-top: 1px solid gu-colour(brand-pastel);
     &:first-child {
       border-top: none;
+    }
+
+    &.show-on-tablet {
+      display: block;
+
+      @include mq($until: tablet) {
+        display: none;
+      }
     }
   }
 }
