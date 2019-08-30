@@ -9,7 +9,7 @@ import com.gu.stripe.Stripe.StripeError
 import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
-import com.gu.support.workers.JsonFixtures.{createStripePaymentMethodContributionJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createStripeSourcePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.{JsonFixtures, JsonWrapper, LambdaSpec}
@@ -27,7 +27,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     val outStream = new ByteArrayOutputStream()
 
     a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodContributionJson()), outStream, context)
+      createPaymentMethod.handleRequest(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
     }
   }
 
@@ -41,7 +41,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     val outStream = new ByteArrayOutputStream()
 
     a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodContributionJson()), outStream, context)
+      createPaymentMethod.handleRequest(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
     }
 
     // Shut down the server. Instances cannot be reused.
@@ -60,7 +60,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     val outStream = new ByteArrayOutputStream()
 
     a[RetryNone] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createStripePaymentMethodContributionJson()), outStream, context)
+      createPaymentMethod.handleRequest(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
     }
 
     server.shutdown()

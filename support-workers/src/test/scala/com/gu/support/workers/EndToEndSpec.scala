@@ -6,7 +6,7 @@ import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.monitoring.SafeLogger
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.JsonFixtures.{createStripePaymentMethodContributionJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createStripeSourcePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.lambdas._
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.generic.auto._
@@ -22,7 +22,7 @@ class EndToEndSpec extends LambdaSpec {
   they should "work with other currencies" in runSignupWithCurrency(EUR)
 
   def runSignupWithCurrency(currency: Currency) {
-    val json = createStripePaymentMethodContributionJson(currency = currency)
+    val json = createStripeSourcePaymentMethodContributionJson(currency = currency)
     SafeLogger.info(json)
     val output = wrapFixture(json)
       .chain(new CreatePaymentMethod())
