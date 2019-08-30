@@ -55,9 +55,9 @@ function handleVenmoError(err) {
 function handleVenmoSuccess(payload) {
 
   // Send payload.nonce to your server.
-  alert('Got a payment method nonce:' + payload.nonce);
+  console.log('Got a payment method nonce:', payload.nonce);
   // Display the Venmo username in your checkout UI.
-  alert('Venmo user:'+ payload.details.username);
+  console.log('Venmo user:', payload.details.username);
 }
 
 /* eslint-disable no-param-reassign */
@@ -65,10 +65,10 @@ function displayVenmoButton(venmoInstance, venmoButton) {
   // Assumes that venmoButton is initially display: none.
 
   if (venmoButton) {
-    //venmoButton.style.display = 'block';
+    venmoButton.style.display = 'block';
 
     venmoButton.addEventListener('click', () => {
-     // venmoButton.disabled = true;
+      venmoButton.disabled = true;
 
       venmoInstance.tokenize((tokenizeErr, payload) => {
         venmoButton.removeAttribute('disabled');
@@ -131,10 +131,10 @@ function setupVenmoButton(venmoInstance) {
     return;
   }
   const venmoButton = document.getElementById('venmo-button');
-
+  if (venmoButton && venmoButton instanceof HTMLButtonElement) {
     console.log("about to display");
     displayVenmoButton(venmoInstance, venmoButton);
-
+  }
   console.log('supported:', venmoInstance.isBrowserSupported());
   // venmoInstance is ready to be used.
 }
