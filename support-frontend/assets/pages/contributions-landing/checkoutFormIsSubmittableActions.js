@@ -55,6 +55,7 @@ export type FormIsValidParameters = {
   firstName: string | null,
   lastName: string | null,
   email: string | null,
+  stripeCardFormOk: boolean,
 }
 
 const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
