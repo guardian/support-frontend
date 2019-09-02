@@ -289,8 +289,6 @@ function withProps(props: PropTypes) {
           stripeElementsTestVariant={props.stripeElementsTestVariant}
           isTestUser={props.isTestUser}
           country={props.country}
-          otherAmounts={props.otherAmounts}
-          selectedAmounts={props.selectedAmounts}
         />
 
         <ContributionErrorMessage />

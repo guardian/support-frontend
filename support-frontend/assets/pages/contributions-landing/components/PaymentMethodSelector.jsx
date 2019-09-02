@@ -52,7 +52,7 @@ type PropTypes = {|
   existingPaymentMethods: ExistingPaymentMethod[] | typeof undefined,
   paymentMethod: PaymentMethod,
   existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-  updatePaymentMethod: PaymentMethod => Action,
+  updatePaymentMethod: PaymentMethod => (Function) => void,
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   isTestUser: boolean,
   switches: Switches,
