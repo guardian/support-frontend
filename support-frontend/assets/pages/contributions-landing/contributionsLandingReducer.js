@@ -289,15 +289,6 @@ function createFormReducer() {
           stripeV3HasLoaded: true,
         };
 
-      case 'SET_STRIPE_PAYMENT_INTENTS_DATA':
-        return {
-          ...state,
-          stripeCardFormData: {
-            ...state.stripeCardFormData,
-            ...action,
-          },
-        };
-
       case 'UPDATE_USER_FORM_DATA':
         return { ...state, formData: { ...state.formData, ...action.userFormData } };
 
