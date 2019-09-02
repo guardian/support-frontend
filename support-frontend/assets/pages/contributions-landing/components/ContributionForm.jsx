@@ -180,7 +180,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       if (props.stripeElementsTestVariant !== 'stripeCardElement') {
         openStripePopup(props);
       } else if (props.createStripePaymentMethod) {
-        props.createStripePaymentMethod(props.email);
+        props.createStripePaymentMethod();
       }
     },
     PayPal: (props: PropTypes) => {

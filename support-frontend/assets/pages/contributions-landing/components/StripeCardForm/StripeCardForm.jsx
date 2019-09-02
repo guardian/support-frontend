@@ -91,12 +91,10 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   componentDidMount(): void {
-    this.props.setCreateStripePaymentMethod((email: string) => {
+    this.props.setCreateStripePaymentMethod(() => {
       this.props.paymentWaiting(true);
 
-      this.props.stripe.createPaymentMethod('card', {
-        billing_details: { email },
-      }).then((result) => {
+      this.props.stripe.createPaymentMethod('card').then((result) => {
         if (result.error) {
           this.props.paymentWaiting(false);
 
