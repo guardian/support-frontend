@@ -23,7 +23,8 @@ class PaymentMethodEncoderSpec extends FlatSpec with Matchers with LazyLogging w
       "StreetName" : null,
       "StreetNumber" : null,
       "BankTransferType" : "DirectDebitUK",
-      "Type" : "BankTransfer"
+      "Type" : "BankTransfer",
+      "paymentGateway": "GoCardless"
     }"""
 
     testDecoding[PaymentMethod](json, {case _: DirectDebitPaymentMethod => succeed})
@@ -41,7 +42,8 @@ class PaymentMethodEncoderSpec extends FlatSpec with Matchers with LazyLogging w
       "BankTransferAccountNumber" : "00009911",
       "Country" : "GB",
       "BankTransferType" : "DirectDebitUK",
-      "Type" : "BankTransfer"
+      "Type" : "BankTransfer",
+      "paymentGateway": "GoCardless"
     }"""
 
     testDecoding[PaymentMethod](json, {case _: ClonedDirectDebitPaymentMethod => succeed})

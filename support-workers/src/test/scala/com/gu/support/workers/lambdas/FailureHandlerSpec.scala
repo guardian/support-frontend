@@ -16,7 +16,7 @@ import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.generic.auto._
 import io.circe.parser.decode
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 
 import scala.concurrent.ExecutionContext.Implicits.global

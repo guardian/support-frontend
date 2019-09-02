@@ -4,11 +4,13 @@ import cats.syntax.functor._
 import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.capitalizingCodec
+import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
 sealed trait PaymentMethod {
   def `type`: String
+  def paymentGateway: PaymentGateway
 }
 
 case class CreditCardReferenceTransaction(
@@ -19,6 +21,7 @@ case class CreditCardReferenceTransaction(
   creditCardExpirationMonth: Int,
   creditCardExpirationYear: Int,
   creditCardType: String /*TODO: strip spaces?*/ ,
+  paymentGateway: PaymentGateway,
   `type`: String = "CreditCardReferenceTransaction"
 ) extends PaymentMethod
 
@@ -26,7 +29,8 @@ case class PayPalReferenceTransaction(
   paypalBaid: String,
   paypalEmail: String,
   paypalType: String = "ExpressCheckout",
-  `type`: String = "PayPal"
+  `type`: String = "PayPal",
+  paymentGateway: PaymentGateway = PayPalGateway
 ) extends PaymentMethod
 
 case class DirectDebitPaymentMethod(
@@ -42,7 +46,8 @@ case class DirectDebitPaymentMethod(
   streetName: Option[String],
   streetNumber: Option[String],
   bankTransferType: String = "DirectDebitUK",
-  `type`: String = "BankTransfer"
+  `type`: String = "BankTransfer",
+  paymentGateway: PaymentGateway = DirectDebitGateway
 ) extends PaymentMethod
 
 case class ClonedDirectDebitPaymentMethod(
@@ -56,7 +61,8 @@ case class ClonedDirectDebitPaymentMethod(
   bankTransferAccountNumber: String,
   country: Country = Country.UK,
   bankTransferType: String = "DirectDebitUK",
-  `type`: String = "BankTransfer"
+  `type`: String = "BankTransfer",
+  paymentGateway: PaymentGateway = DirectDebitGateway
 ) extends PaymentMethod
 
 object PaymentMethod {

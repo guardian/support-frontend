@@ -7,6 +7,7 @@ skip in publish := true
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
   javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
+  resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
   testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
 )
 
@@ -29,7 +30,7 @@ lazy val release = Seq[ReleaseStep](
 
 lazy val commonSettings = Seq(
   organization := "com.gu",
-  scalaVersion := "2.12.7",
+  scalaVersion := "2.12.8",
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
   isSnapshot := false,
   publishTo := {
@@ -47,6 +48,7 @@ lazy val commonSettings = Seq(
     url("https://github.com/guardian/support-frontend"),
     "scm:git:git@github.com:guardian/support-frontend.git"
   )),
+  ThisBuild / turbo := true,
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
   updateOptions := updateOptions.value.withCachedResolution(true)
 )
@@ -81,6 +83,7 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
     (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
   ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
+  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
 lazy val `support-workers` = (project in file("support-workers"))
   .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
@@ -90,6 +93,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`)
+  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
 
 lazy val `support-models` = (project in file("support-models"))
@@ -99,6 +103,7 @@ lazy val `support-models` = (project in file("support-models"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-internationalisation`)
+  .aggregate(`support-internationalisation`)
 
 lazy val `support-config` = (project in file("support-config"))
   .configs(IntegrationTest)
@@ -107,6 +112,7 @@ lazy val `support-config` = (project in file("support-config"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-models`, `support-internationalisation`)
+  .aggregate(`support-models`, `support-internationalisation`)
 
 lazy val `support-services` = (project in file("support-services"))
   .configs(IntegrationTest)
@@ -115,6 +121,7 @@ lazy val `support-services` = (project in file("support-services"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-internationalisation`, `support-models`, `support-config`)
+  .aggregate(`support-internationalisation`, `support-models`, `support-config`)
 
 lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
