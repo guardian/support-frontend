@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 import { injectStripe, CardNumberElement, CardExpiryElement, CardCVCElement } from 'react-stripe-elements';
 import { connect } from 'react-redux';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
+import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
 import { type PaymentResult } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -30,7 +30,7 @@ type PropTypes = {|
   paymentFailure: (paymentError: ErrorReason) => Action,
   contributionType: ContributionType,
   setCreateStripePaymentMethod: ((email: string) => void) => Action,
-  setHandleStripe3DS: ((clientSecret: string) => void) => Action,
+  setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   paymentWaiting: (isWaiting: boolean) => Action,
   setStripeCardFormComplete: (isComplete: boolean) => Action,
 |};
@@ -46,7 +46,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   paymentFailure: (paymentError: ErrorReason) => dispatch(paymentFailure(paymentError)),
   setCreateStripePaymentMethod: (createStripePaymentMethod: (email: string) => void) =>
     dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
-  setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => void) =>
+  setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>) =>
     dispatch(setHandleStripe3DS(handleStripe3DS)),
   setStripeCardFormComplete: (isComplete: boolean) =>
     dispatch(setStripeCardFormComplete(isComplete)),

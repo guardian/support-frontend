@@ -43,7 +43,7 @@ import * as cookie from 'helpers/cookie';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
+import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
@@ -76,7 +76,7 @@ export type Action =
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
-  | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => void }
+  | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
   | { type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete: boolean }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
@@ -226,7 +226,7 @@ const setTickerGoalReached = (): Action => ({ type: 'SET_TICKER_GOAL_REACHED', t
 const setCreateStripePaymentMethod = (createStripePaymentMethod: (email: string) => void): Action =>
   ({ type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod });
 
-const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => void): Action =>
+const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>): Action =>
   ({ type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS });
 
 const setStripeCardFormComplete = (isComplete: boolean): ((Function) => void) =>
@@ -403,7 +403,7 @@ const makeCreateStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,
   setGuestToken: (string) => void,
   setThankYouPage: (ThankYouPageStage) => void,
-  handleStripe3DS: (clientSecret: string) => void,
+  handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS)));

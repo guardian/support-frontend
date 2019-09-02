@@ -11,7 +11,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
-import type { ThankYouPageStage } from 'pages/contributions-landing/contributionsLandingReducer';
+import type { ThankYouPageStage, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -146,14 +146,14 @@ function postOneOffStripeExecutePaymentRequest(
   ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
 }
 
-function postStripeCreatePaymentIntentRequest(data: CreateStripePaymentIntentRequest): Promise<PaymentResult> {
+function postStripeCreatePaymentIntentRequest(data: CreateStripePaymentIntentRequest): Promise<Object> {
   return fetchJson(
     paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
     requestOptions(data, 'omit', 'POST', null),
   );
 }
 
-function postStripeConfirmPaymentIntentRequest(data: ConfirmStripePaymentIntentRequest): Promise<PaymentResult> {
+function postStripeConfirmPaymentIntentRequest(data: ConfirmStripePaymentIntentRequest): Promise<Object> {
   return fetchJson(
     paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/confirm-payment`),
     requestOptions(data, 'omit', 'POST', null),
@@ -165,12 +165,12 @@ function processStripePaymentIntentRequest(
   data: CreateStripePaymentIntentRequest,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
-  handleStripe3DS: (clientSecret: string) => void,
+  handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
 ): Promise<PaymentResult> {
   return logPromise(postStripeCreatePaymentIntentRequest(data).then((createIntentResponse) => {
     if (createIntentResponse.type === 'requiresaction') {
       // Do 3DS auth and then send back to payment-api for payment confirmation
-      return handleStripe3DS(createIntentResponse.data.clientSecret).then((authResult) => {
+      return handleStripe3DS(createIntentResponse.data.clientSecret).then((authResult: Stripe3DSResult) => {
         if (authResult.error) {
           return { type: 'error', error: { failureReason: 'card_authentication_error' } };
         }

@@ -60,11 +60,18 @@ type StripePaymentRequestButtonData = {
   stripePaymentRequestButtonClicked: boolean,
 }
 
+export type Stripe3DSResult = {
+  error?: Object,
+  paymentIntent: {
+    id: string,
+  }
+}
+
 export type StripeCardFormData = {
   formComplete: boolean,
   // These callbacks must be initialised after the StripeCardForm component has been created
   createPaymentMethod: ((email: string) => void) | null,
-  handle3DS: ((clientSecret: string) => void) | null,
+  handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null,
 }
 
 type FormState = {
