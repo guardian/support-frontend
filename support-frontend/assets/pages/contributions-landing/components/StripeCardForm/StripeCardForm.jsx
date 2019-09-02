@@ -54,8 +54,11 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(paymentWaiting(isWaiting)),
 });
 
-type CardFieldError = { errorMessage: string }
-type CardFieldState = 'Incomplete' | CardFieldError | 'Complete';
+type CardFieldState =
+  {| name: 'Error', errorMessage: string |} |
+  {| name: 'Incomplete' |} |
+  {| name: 'Complete' |};
+
 type CardFieldName = 'CardNumber' | 'Expiry' | 'CVC';
 
 type StateTypes = {
@@ -71,15 +74,18 @@ const fieldStyle = {
   },
 };
 
+const errorMessageFromState = (state: CardFieldState): string | null =>
+  state.name === 'Error' ? state.errorMessage : null;
+
 class CardForm extends Component<PropTypes, StateTypes> {
 
   constructor(props: PropTypes) {
     super(props);
 
     this.state = {
-      CardNumber: 'Incomplete',
-      Expiry: 'Incomplete',
-      CVC: 'Incomplete',
+      CardNumber: {name: 'Incomplete'},
+      Expiry: {name: 'Incomplete'},
+      CVC: {name: 'Incomplete'},
       currentlySelected: null,
     };
   }
@@ -121,9 +127,13 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   onChange = (fieldName: CardFieldName) => (update) => {
-    let newFieldState = 'Incomplete';
+    let newFieldState = {name: 'Incomplete'};
 
-    if (update.error) { newFieldState = { errorMessage: update.error.message }; } else if (update.complete) { newFieldState = 'Complete'; }
+    if (update.error) {
+      newFieldState = {name: 'Error', errorMessage: update.error.message};
+    } else if (update.complete) {
+      newFieldState = {name: 'Complete'};
+    }
 
     this.setState(
       { [fieldName]: newFieldState },
@@ -144,15 +154,15 @@ class CardForm extends Component<PropTypes, StateTypes> {
   };
 
   formIsComplete = () =>
-    this.state.CardNumber === 'Complete' &&
-    this.state.Expiry === 'Complete' &&
-    this.state.CVC === 'Complete';
+    this.state.CardNumber.name === 'Complete' &&
+    this.state.Expiry.name === 'Complete' &&
+    this.state.CVC.name === 'Complete';
 
   render() {
-    const errorMessage =
-      this.state.CardNumber.errorMessage ||
-      this.state.Expiry.errorMessage ||
-      this.state.CVC.errorMessage;
+    const errorMessage: ?string =
+      errorMessageFromState(this.state.CardNumber) ||
+      errorMessageFromState(this.state.Expiry) ||
+      errorMessageFromState(this.state.CVC);
 
     const getClasses = (fieldName: CardFieldName): string =>
       `form__input ${this.state.currentlySelected === fieldName ? 'form__input-enabled' : ''}`;
