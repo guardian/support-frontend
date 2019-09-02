@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import cx from 'classnames';
 
 import { routes } from 'helpers/routes';
 import { getPatronsLink } from 'helpers/externalLinks';
@@ -7,7 +8,6 @@ import { type Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { type CountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
-import cx from 'classnames';
 
 // types
 type HeaderNavLink = {
