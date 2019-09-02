@@ -16,6 +16,7 @@ export type ErrorReason =
   'marketing_consent_api_error' |
   'incompatible_payment_method_and_contribution_type' |
   'internal_error' |
+  'card_authentication_error' |
   'unknown';
 
 // ----- Functions ----- //
