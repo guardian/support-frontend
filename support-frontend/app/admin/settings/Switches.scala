@@ -7,8 +7,7 @@ case class Switches(
   oneOffPaymentMethods: PaymentMethodsSwitch,
   recurringPaymentMethods: PaymentMethodsSwitch,
   experiments: Map[String, ExperimentSwitch],
-  optimize: SwitchState,
-  usStripeAccount: Option[SwitchState]
+  optimize: SwitchState
 )
 
 object Switches {

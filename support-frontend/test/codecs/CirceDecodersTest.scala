@@ -113,8 +113,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |        "state": "On"
           |      }
           |    },
-          |    "optimize": "Off",
-          |    "usStripeAccount": "On"
+          |    "optimize": "Off"
           |  },
           |  "amounts": {
           |    "GBPCountries": {
@@ -276,8 +275,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
               state = On
             )
           ),
-          optimize = Off,
-          usStripeAccount = Some(On)
+          optimize = Off
         ),
         amountsRegions,
         contributionTypes,
