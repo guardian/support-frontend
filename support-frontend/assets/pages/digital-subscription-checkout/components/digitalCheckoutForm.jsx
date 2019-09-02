@@ -138,7 +138,7 @@ const Address = withStore(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 
-function CheckoutForm(props: PropTypes) {
+function DigitalCheckoutForm(props: PropTypes) {
   return (
     <Content>
       <CheckoutLayout aside={(
@@ -229,4 +229,4 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps())(CheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(DigitalCheckoutForm);

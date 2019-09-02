@@ -11,11 +11,13 @@ import { init as pageInit } from 'helpers/page/page';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
-import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
+import SubscriptionTermsPrivacy
+  from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import ThankYouContent from './thankYouContent';
 import ThankYouPendingContent from './thankYouPendingContent';
-import CheckoutForm from './components/checkoutForm';
+import CheckoutForm
+  from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import './digitalSubscriptionCheckout.scss';
