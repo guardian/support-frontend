@@ -111,7 +111,7 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 
 // ----- Component ----- //
 
-function CheckoutForm(props: PropTypes) {
+function PaperCheckoutForm(props: PropTypes) {
 
   const days = getDays(props.fulfilmentOption, props.productOption);
   const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
@@ -269,4 +269,4 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps())(CheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(PaperCheckoutForm);
