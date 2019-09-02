@@ -66,8 +66,18 @@ class Application(
     RedirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
   }
 
+  def supportGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val supportPageVariant = request.geoData.countryGroup match {
+      case Some(US) => "us"
+      case Some(Australia) => "au"
+      case _ => "uk"
+    }
+
+    RedirectWithEncodedQueryString(buildCanonicalShowcaseLink(supportPageVariant), request.queryString, status = FOUND)
+  }
+
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = List(getRedirectUrl(request.geoData.countryGroup), campaignCode)
+    val url = List(getContributeRedirectUrl(request.geoData.countryGroup), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
 
@@ -183,7 +193,7 @@ class Application(
   }
 
 
-  private def getRedirectUrl(fastlyCountry: Option[CountryGroup]): String = {
+  private def getContributeRedirectUrl(fastlyCountry: Option[CountryGroup]): String = {
     fastlyCountry match {
       case Some(UK) => "/uk/contribute"
       case Some(US) => "/us/contribute"
