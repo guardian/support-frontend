@@ -7,6 +7,7 @@ import { type Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { type CountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
+import cx from 'classnames';
 
 // types
 type HeaderNavLink = {
@@ -35,7 +36,7 @@ const links: HeaderNavLink[] = [
     href: routes.recurringContribCheckout,
     text: 'Contributions',
     trackAs: 'contributions',
-    additionalClasses: 'show-on-tablet',
+    additionalClasses: 'component-header-links__li--show-on-tablet',
   },
   {
     href: routes.subscriptionsLanding,
@@ -83,13 +84,10 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
         href, text, trackAs, opensInNewWindow, additionalClasses,
         }) => (
           <li
-            className={[
-              classNameWithModifiers(
+            className={cx(classNameWithModifiers(
                 'component-header-links__li',
                 [window.location.href.endsWith(href) ? 'active' : null],
-              ), (additionalClasses || null),
-            ].join(' ')
-            }
+              ), additionalClasses)}
           >
             <a
               onClick={() => { trackComponentClick(['header-link', trackAs, location].join(' - ')); }}

@@ -319,10 +319,11 @@ $header-links-min-width: gu-span(12);
   }
 }
 
-.component-header-links__li.show-on-tablet {
-  display: none;
+.component-header-links__li.component-header-links__li--show-on-tablet {
+  display: block;
 
-  @include mq($until: desktop) {
-    display: block;
+  // custom breakpoint - we are using a 'custom breakpoint' because this is linked to the menu toggle which has a custom break point applied in js
+  @media (min-width: 884px) {
+    display: none;
   }
 }
