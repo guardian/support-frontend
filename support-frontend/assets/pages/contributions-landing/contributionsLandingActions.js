@@ -447,15 +447,22 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
           ));
         }
 
-        return dispatch(makeCreateStripePaymentIntentRequest(
-          {
-            ...stripeChargeDataFromAuthorisation({ ...paymentAuthorisation, token: 'token-deprecated' }, state),
-            paymentMethodId: paymentAuthorisation.paymentMethodId,
-          },
-          (token: string) => dispatch(setGuestAccountCreationToken(token)),
-          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-          state.page.form.stripeCardFormData.handle3DS,
-        ));
+        const handle3DS = state.page.form.stripeCardFormData.handle3DS;
+        if (handle3DS) {
+          return dispatch(makeCreateStripePaymentIntentRequest(
+            {
+              ...stripeChargeDataFromAuthorisation({...paymentAuthorisation, token: 'token-deprecated'}, state),
+              paymentMethodId: paymentAuthorisation.paymentMethodId,
+            },
+            (token: string) => dispatch(setGuestAccountCreationToken(token)),
+            (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+            handle3DS,
+          ));
+        } else {
+          // It shouldn't be possible to get this far without the handle3DS having been set
+          logException(`Stripe 3DS handler unavailable`);
+          return Promise.resolve(error);
+        }
 
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
