@@ -105,7 +105,11 @@ class CardForm extends Component<PropTypes, StateTypes> {
             this.props.paymentFailure('payment_provider_unavailable');
           }
         } else {
-          this.props.onPaymentAuthorised({ paymentMethod: Stripe, paymentMethodId: result.paymentMethod.id });
+          this.props.onPaymentAuthorised({
+            paymentMethod: Stripe,
+            stripePaymentMethod: 'StripeCheckout',
+            paymentMethodId: result.paymentMethod.id
+          });
         }
       });
     });

@@ -15,7 +15,7 @@ import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'help
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
-  StripeAuthorisation, StripePaymentMethod,
+  StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -93,7 +93,7 @@ const updateContributionType = (contributionType: ContributionType): ((Function)
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType })));
   };
 
-const updatePaymentMethod = (paymentMethod: PaymentMethod): Action =>
+const updatePaymentMethod = (paymentMethod: PaymentMethod): ((Function) => void) =>
   (dispatch: Function): void => {
     // PayPal one-off redirects away from the site before hitting the thank you page
     // so we need to store the payment method in the storage so that it is available on the
@@ -229,7 +229,7 @@ const setCreateStripePaymentMethod = (createStripePaymentMethod: (email: string)
 const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => void): Action =>
   ({ type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS });
 
-const setStripeCardFormComplete = (isComplete: boolean): Action =>
+const setStripeCardFormComplete = (isComplete: boolean): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete })));
   };
@@ -249,8 +249,9 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     onFormSubmit(formSubmitParameters);
   };
 
-const stripeChargeDataFromAuthorisation = (
-  authorisation: StripeAuthorisation,
+const buildStripeChargeDataFromAuthorisation = (
+  stripePaymentMethod: StripePaymentMethod,
+  token: string,
   state: State,
 ): StripeChargeData => ({
   paymentData: {
@@ -260,9 +261,9 @@ const stripeChargeDataFromAuthorisation = (
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
     ),
-    token: authorisation.token,
+    token: token,
     email: state.page.form.formData.email || '',
-    stripePaymentMethod: authorisation.stripePaymentMethod,
+    stripePaymentMethod: stripePaymentMethod,
   },
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,
@@ -270,6 +271,24 @@ const stripeChargeDataFromAuthorisation = (
     state.common.optimizeExperiments,
   ),
 });
+
+const stripeChargeDataFromCheckoutAuthorisation = (
+  authorisation: StripeCheckoutAuthorisation,
+  state: State,
+): StripeChargeData => buildStripeChargeDataFromAuthorisation(
+  authorisation.stripePaymentMethod,
+  authorisation.token,
+  state
+);
+
+const stripeChargeDataFromPaymentIntentAuthorisation = (
+  authorisation: StripePaymentIntentAuthorisation,
+  state: State,
+): StripeChargeData => buildStripeChargeDataFromAuthorisation(
+  authorisation.stripePaymentMethod,
+  'token-deprecated',
+  state
+);
 
 const regularPaymentRequestFromAuthorisation = (
   authorisation: PaymentAuthorisation,
@@ -439,31 +458,33 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
       if (paymentAuthorisation.paymentMethod === Stripe) {
-        if (state.common.abParticipations.stripeElements !== 'stripeCardElement') {
+        if (paymentAuthorisation.token) {
           return dispatch(executeStripeOneOffPayment(
-            stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
+            stripeChargeDataFromCheckoutAuthorisation(paymentAuthorisation, state),
             (token: string) => dispatch(setGuestAccountCreationToken(token)),
             (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
           ));
         }
 
-        const handle3DS = state.page.form.stripeCardFormData.handle3DS;
-        if (handle3DS) {
-          return dispatch(makeCreateStripePaymentIntentRequest(
-            {
-              ...stripeChargeDataFromAuthorisation({...paymentAuthorisation, token: 'token-deprecated'}, state),
+        if (paymentAuthorisation.paymentMethodId) {
+          const handle3DS = state.page.form.stripeCardFormData.handle3DS;
+          if (handle3DS) {
+            const stripeData: CreateStripePaymentIntentRequest = {
+              ...stripeChargeDataFromPaymentIntentAuthorisation(paymentAuthorisation, state),
               paymentMethodId: paymentAuthorisation.paymentMethodId,
-            },
-            (token: string) => dispatch(setGuestAccountCreationToken(token)),
-            (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-            handle3DS,
-          ));
-        } else {
-          // It shouldn't be possible to get this far without the handle3DS having been set
-          logException(`Stripe 3DS handler unavailable`);
-          return Promise.resolve(error);
+            };
+            return dispatch(makeCreateStripePaymentIntentRequest(
+              stripeData,
+              (token: string) => dispatch(setGuestAccountCreationToken(token)),
+              (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+              handle3DS,
+            ));
+          } else {
+            // It shouldn't be possible to get this far without the handle3DS having been set
+            logException(`Stripe 3DS handler unavailable`);
+            return Promise.resolve(error);
+          }
         }
-
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
       return Promise.resolve(error);

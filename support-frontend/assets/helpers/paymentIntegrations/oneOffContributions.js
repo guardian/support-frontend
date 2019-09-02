@@ -66,13 +66,15 @@ export type StripeChargeData = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
-export type CreateStripePaymentIntentRequest = StripeChargeData & {|
-  paymentMethodId: string
-|};
+export type CreateStripePaymentIntentRequest = {
+  ...StripeChargeData,
+  paymentMethodId: string,
+};
 
-export type ConfirmStripePaymentIntentRequest = StripeChargeData & {|
-  paymentIntentId: string
-|};
+export type ConfirmStripePaymentIntentRequest = {
+  ...StripeChargeData,
+  paymentIntentId: string,
+};
 
 
 // Data that should be posted to the payment API to get a url for the PayPal UI
