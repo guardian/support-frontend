@@ -261,9 +261,9 @@ const buildStripeChargeDataFromAuthorisation = (
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
     ),
-    token: token,
+    token,
     email: state.page.form.formData.email || '',
-    stripePaymentMethod: stripePaymentMethod,
+    stripePaymentMethod,
   },
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,
@@ -278,7 +278,7 @@ const stripeChargeDataFromCheckoutAuthorisation = (
 ): StripeChargeData => buildStripeChargeDataFromAuthorisation(
   authorisation.stripePaymentMethod,
   authorisation.token,
-  state
+  state,
 );
 
 const stripeChargeDataFromPaymentIntentAuthorisation = (
@@ -287,7 +287,7 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 ): StripeChargeData => buildStripeChargeDataFromAuthorisation(
   authorisation.stripePaymentMethod,
   'token-deprecated',
-  state
+  state,
 );
 
 const regularPaymentRequestFromAuthorisation = (
@@ -467,7 +467,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
         }
 
         if (paymentAuthorisation.paymentMethodId) {
-          const handle3DS = state.page.form.stripeCardFormData.handle3DS;
+          const { handle3DS } = state.page.form.stripeCardFormData;
           if (handle3DS) {
             const stripeData: CreateStripePaymentIntentRequest = {
               ...stripeChargeDataFromPaymentIntentAuthorisation(paymentAuthorisation, state),
@@ -479,11 +479,11 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
               (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
               handle3DS,
             ));
-          } else {
-            // It shouldn't be possible to get this far without the handle3DS having been set
-            logException(`Stripe 3DS handler unavailable`);
-            return Promise.resolve(error);
           }
+          // It shouldn't be possible to get this far without the handle3DS having been set
+          logException('Stripe 3DS handler unavailable');
+          return Promise.resolve(error);
+
         }
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);

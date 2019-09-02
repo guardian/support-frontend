@@ -2,7 +2,6 @@
 import { logException } from 'helpers/logger';
 import type { ContributionType } from 'helpers/contributions';
 import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
-import type { StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 export const setupStripe = (setStripeHasLoaded: () => void) => {
   if (window.Stripe) {

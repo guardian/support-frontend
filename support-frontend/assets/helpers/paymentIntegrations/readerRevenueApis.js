@@ -168,8 +168,8 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
   switch (authorisation.paymentMethod) {
     case Stripe:
       // Only Stripe checkout is currently supported for recurring
-      if (authorisation.token) return { stripeToken: authorisation.token };
-      else throw new Error('Stripe Payment Intents not currently supported for recurring contributions');
+      if (authorisation.token) { return { stripeToken: authorisation.token }; }
+      throw new Error('Stripe Payment Intents not currently supported for recurring contributions');
     case PayPal:
       return { baid: authorisation.token };
     case DirectDebit:

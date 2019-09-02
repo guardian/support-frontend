@@ -75,7 +75,7 @@ const fieldStyle = {
 };
 
 const errorMessageFromState = (state: CardFieldState): string | null =>
-  state.name === 'Error' ? state.errorMessage : null;
+  (state.name === 'Error' ? state.errorMessage : null);
 
 class CardForm extends Component<PropTypes, StateTypes> {
 
@@ -83,9 +83,9 @@ class CardForm extends Component<PropTypes, StateTypes> {
     super(props);
 
     this.state = {
-      CardNumber: {name: 'Incomplete'},
-      Expiry: {name: 'Incomplete'},
-      CVC: {name: 'Incomplete'},
+      CardNumber: { name: 'Incomplete' },
+      Expiry: { name: 'Incomplete' },
+      CVC: { name: 'Incomplete' },
       currentlySelected: null,
     };
   }
@@ -112,7 +112,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
           this.props.onPaymentAuthorised({
             paymentMethod: Stripe,
             stripePaymentMethod: 'StripeCheckout',
-            paymentMethodId: result.paymentMethod.id
+            paymentMethodId: result.paymentMethod.id,
           });
         }
       });
@@ -125,12 +125,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   onChange = (fieldName: CardFieldName) => (update) => {
-    let newFieldState = {name: 'Incomplete'};
+    let newFieldState = { name: 'Incomplete' };
 
     if (update.error) {
-      newFieldState = {name: 'Error', errorMessage: update.error.message};
+      newFieldState = { name: 'Error', errorMessage: update.error.message };
     } else if (update.complete) {
-      newFieldState = {name: 'Complete'};
+      newFieldState = { name: 'Complete' };
     }
 
     this.setState(
