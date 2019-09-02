@@ -43,6 +43,7 @@ export type Action =
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
   | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean> }
   | { type: 'SET_ORDER_IS_GIFT', orderIsAGift: Option<boolean>}
+  | { type: 'SET_DELIVERY_INSTRUCTIONS', instructions: Option<string>}
   | AddressAction
   | PayPalAction
   | DDAction;
@@ -112,6 +113,10 @@ const formActionCreators = {
   setGiftStatus: (orderIsAGift: boolean | null): Action => ({
     type: 'SET_ORDER_IS_GIFT',
     orderIsAGift,
+  }),
+  setDeliveryInstructions: (instructions: string | null): Action => ({
+    type: 'SET_DELIVERY_INSTRUCTIONS',
+    instructions,
   }),
 };
 

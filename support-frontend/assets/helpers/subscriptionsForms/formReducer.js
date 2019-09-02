@@ -56,6 +56,7 @@ function createFormReducer(
     fulfilmentOption: fulfilmentOption || NoFulfilmentOptions,
     payPalHasLoaded: false,
     orderIsAGift: false,
+    deliveryInstructions: null,
   };
 
   const getFulfilmentOption = (action, currentOption) =>
@@ -135,6 +136,9 @@ function createFormReducer(
 
       case 'SET_ORDER_IS_GIFT':
         return { ...state, orderIsAGift: action.orderIsAGift };
+
+      case 'SET_DELIVERY_INSTRUCTIONS':
+        return { ...state, deliveryInstructions: action.instructions };
 
       default:
         return state;
