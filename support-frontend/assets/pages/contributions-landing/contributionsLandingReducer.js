@@ -63,8 +63,8 @@ type StripePaymentRequestButtonData = {
 export type StripeCardFormData = {
   formComplete: boolean,
   // These callbacks must be initialised after the StripeCardForm component has been created
-  createPaymentMethod: (email: string) => void | null,
-  handle3DS: (clientSecret: string) => void | null,
+  createPaymentMethod: ((email: string) => void) | null,
+  handle3DS: ((clientSecret: string) => void) | null,
 }
 
 type FormState = {
