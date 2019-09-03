@@ -19,12 +19,20 @@
  */
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import type {IsoCountry} from "helpers/internationalisation/country";
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
+import type { ContributionType } from 'helpers/contributions';
 
 // ----- Types ----- //
 
 export type StripeAccount = 'ONE_OFF' | 'REGULAR';
+
+const stripeAccountForContributionType: {[ContributionType]: StripeAccount } = {
+  ONE_OFF: 'ONE_OFF',
+  MONTHLY: 'REGULAR',
+  ANNUAL: 'REGULAR',
+};
 
 // ----- Functions ----- //
 
@@ -46,12 +54,16 @@ function loadStripe(): Promise<void> {
 
 }
 
-function getStripeKey(stripeAccount: StripeAccount, currency: IsoCurrency, isTestUser: boolean): string {
-  switch (currency) {
-    case 'AUD':
+function getStripeKey(stripeAccount: StripeAccount, country: IsoCountry, isTestUser: boolean): string {
+  switch (country) {
+    case 'AU':
       return isTestUser ?
         window.guardian.stripeKeyAustralia[stripeAccount].uat :
         window.guardian.stripeKeyAustralia[stripeAccount].default;
+    case 'US':
+      return isTestUser ?
+        window.guardian.stripeKeyUnitedStates[stripeAccount].uat :
+        window.guardian.stripeKeyUnitedStates[stripeAccount].default;
     default:
       return isTestUser ?
         window.guardian.stripeKeyDefaultCurrencies[stripeAccount].uat :
@@ -63,13 +75,14 @@ function setupStripeCheckout(
   onPaymentAuthorisation: StripeAuthorisation => void,
   stripeAccount: StripeAccount,
   currency: IsoCurrency,
+  country: IsoCountry,
   isTestUser: boolean,
 ): Object {
   const handleToken = (token) => {
     onPaymentAuthorisation({ paymentMethod: Stripe, token: token.id, stripePaymentMethod: 'StripeCheckout' });
   };
 
-  const stripeKey = getStripeKey(stripeAccount, currency, isTestUser);
+  const stripeKey = getStripeKey(stripeAccount, country, isTestUser);
 
   return window.StripeCheckout.configure({
     name: 'Guardian',
@@ -96,4 +109,5 @@ export {
   setupStripeCheckout,
   openDialogBox,
   getStripeKey,
+  stripeAccountForContributionType,
 };
