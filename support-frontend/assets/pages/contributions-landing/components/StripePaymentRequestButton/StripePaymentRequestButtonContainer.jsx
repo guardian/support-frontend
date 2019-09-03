@@ -54,7 +54,7 @@ function StripePaymentRequestButtonContainer(props: PropTypes) {
       return null;
     }
 
-    const key = getStripeKey('ONE_OFF', props.country, props.isTestUser);
+    const key = getStripeKey('ONE_OFF', props.currency, props.isTestUser);
     const amount = getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType);
 
     return (

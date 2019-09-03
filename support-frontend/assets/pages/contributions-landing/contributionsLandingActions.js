@@ -46,8 +46,7 @@ import { type State, type ThankYouPageStage, type UserFormData } from './contrib
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
-import { getStripeKey, stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
+import { ExistingCard, ExistingDirectDebit } from '../../helpers/paymentMethods';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -255,11 +254,6 @@ const stripeChargeDataFromAuthorisation = (
     state.common.abParticipations,
     state.common.optimizeExperiments,
   ),
-  publicKey: getStripeKey(
-    stripeAccountForContributionType[state.page.form.contributionType],
-    state.common.internationalisation.countryId,
-    state.page.user.isTestUser || false
-  )
 });
 
 const regularPaymentRequestFromAuthorisation = (
