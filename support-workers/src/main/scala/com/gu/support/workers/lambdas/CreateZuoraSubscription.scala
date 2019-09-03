@@ -113,7 +113,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     SubscribeItem(
       account = buildAccount(state),
       billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
-      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _)),
+      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
       paymentMethod = state.paymentMethod,
       subscriptionData = buildSubscriptionData(state, promotionService),
       subscribeOptions= SubscribeOptions()
@@ -144,7 +144,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     }
   }
 
-  private def buildContactDetails(user: User, giftRecipient: Option[GiftRecipient], address: Address) = {
+  private def buildContactDetails(user: User, giftRecipient: Option[GiftRecipient], address: Address, deliveryInstructions: Option[String] = None) = {
     ContactDetails(
       firstName = giftRecipient.fold(user.firstName)(_.firstName),
       lastName = giftRecipient.fold(user.lastName)(_.lastName),
@@ -154,7 +154,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       city = address.city,
       postalCode = address.postCode,
       country = address.country,
-      state = address.state
+      state = address.state,
+      deliveryInstructions = deliveryInstructions
     )
   }
 

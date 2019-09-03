@@ -16,7 +16,8 @@ case class User(
   allowMembershipMail: Boolean = false,
   allowThirdPartyMail: Boolean = false,
   allowGURelatedMail: Boolean = false,
-  isTestUser: Boolean = false
+  isTestUser: Boolean = false,
+  deliveryInstructions: Option[String] = None
 )
 
 object User {
