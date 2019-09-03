@@ -63,6 +63,7 @@ import { isPostDeployUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
+import type {IsoCountry} from "../internationalisation/country";
 
 // ----- Functions ----- //
 
@@ -202,6 +203,7 @@ function showStripe(
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
+  country: IsoCountry,
   email: string,
 ) {
   if (isPostDeployUser()) {
@@ -212,7 +214,7 @@ function showStripe(
     });
   } else {
     loadStripe()
-      .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, isTestUser))
+      .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, country, isTestUser))
       .then(stripe => openDialogBox(stripe, price, email));
   }
 }
@@ -223,13 +225,14 @@ function showPaymentMethod(
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
+  country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
   email: string,
 ): void {
 
   switch (paymentMethod) {
     case Stripe:
-      showStripe(onAuthorised, isTestUser, price, currency, email);
+      showStripe(onAuthorised, isTestUser, price, currency, country, email);
       break;
     case DirectDebit:
       dispatch(openDirectDebitPopUp());
@@ -255,6 +258,8 @@ function submitForm(
   dispatch: Dispatch<Action>,
   state: AnyCheckoutState,
 ) {
+  const billingCountry = state.page.billingAddress.fields.country;
+
   const {
     paymentMethod, email, product, isTestUser,
   } = state.page.checkout;
@@ -263,7 +268,7 @@ function submitForm(
 
   let priceDetails = finalPrice(
     state.page.checkout.productPrices,
-    state.page.billingAddress.fields.country,
+    billingCountry,
     state.page.checkout.billingPeriod,
     state.page.checkout.fulfilmentOption,
     state.page.checkout.productOption,
@@ -292,7 +297,7 @@ function submitForm(
     );
 
   showPaymentMethod(
-    dispatch, onAuthorised, isTestUser, price, currency,
+    dispatch, onAuthorised, isTestUser, price, currency, billingCountry,
     paymentMethod, email,
   );
 }
