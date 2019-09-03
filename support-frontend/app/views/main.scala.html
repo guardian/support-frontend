@@ -30,8 +30,6 @@
       </script>
     }
 
-    <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
-
     @description.map { definedDescription =>
       <meta name="description" content="@definedDescription" />
       <meta property="og:description" content="@definedDescription" />
@@ -66,11 +64,15 @@
       <script type="text/javascript" src="@assets(path)"></script>
     }
 
-      @inlineJs(inlineJs: StyleContent) = {
-        <script type="text/javascript">
-          @inlineJs.value
-        </script>
-      }
+     @asyncLinkedJs(path: RefPath) = {
+       <script async type="text/javascript" src="@assets(path)"></script>
+     }
+
+     @inlineJs(inlineJs: StyleContent) = {
+       <script type="text/javascript">
+         @inlineJs.value
+       </script>
+     }
 
     @fontLoaderBundle.fold(linkedJs, inlineJs)
     @mainStyleBundle.fold(linkedCss, inline)
@@ -143,9 +145,10 @@
 
     @body
 
-    @mainJsBundle.fold(linkedJs, inlineJs)
+    @mainJsBundle.fold(asyncLinkedJs, inlineJs)
 
     <script defer type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
+    <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
 
     <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
     <iframe id="gu-font-loader-iframe" style="display:none" src="https://www.theguardian.com/font-loader"></iframe>
