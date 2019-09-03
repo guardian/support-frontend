@@ -64,7 +64,6 @@ export type StripeChargeData = {|
     stripePaymentMethod: StripePaymentMethod,
   },
   acquisitionData: PaymentAPIAcquisitionData,
-  publicKey: string
 |};
 
 
