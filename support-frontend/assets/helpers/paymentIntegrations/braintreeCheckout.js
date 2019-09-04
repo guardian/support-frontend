@@ -4,6 +4,7 @@
 import { setBraintreeHasLoaded } from '../../pages/contributions-landing/contributionsLandingActions';
 
 
+
 const clientToken = 'sandbox_hcjm93t6_tfkv8f9d3sjvg8gy';
 
 // ----- Functions ----- //
@@ -52,16 +53,18 @@ function handleVenmoError(err) {
   }
 }
 
-function handleVenmoSuccess(payload) {
+function handleVenmoSuccess(payload, deviceData) {
 
   // Send payload.nonce to your server.
+  const amount = payload.amount;
+  const paymentNonce = payload.nonce;
   console.log('Got a payment method nonce:', payload.nonce);
   // Display the Venmo username in your checkout UI.
   console.log('Venmo user:', payload.details.username);
 }
 
 /* eslint-disable no-param-reassign */
-function displayVenmoButton(venmoInstance, venmoButton) {
+function displayVenmoButton(venmoInstance, venmoButton, deviceData) {
   // Assumes that venmoButton is initially display: none.
 
   if (venmoButton) {
@@ -71,13 +74,15 @@ function displayVenmoButton(venmoInstance, venmoButton) {
       venmoButton.disabled = true;
 
       venmoInstance.tokenize((tokenizeErr, payload) => {
-        venmoButton.removeAttribute('disabled');
         if (tokenizeErr) {
+          venmoButton.style.display = 'block';
+          venmoButton.style.cssText = 'color: red; border: 1px solid black';
           console.log(tokenizeErr);
           handleVenmoError(tokenizeErr);
         } else {
-          console.log(payload);
-          handleVenmoSuccess(payload);
+          venmoButton.style.display = 'block';
+          venmoButton.style.cssText = 'color: blue; border: 1px solid black';
+          handleVenmoSuccess(payload, deviceData);
         }
         // ...
       });
@@ -124,7 +129,7 @@ const getVenmoInstance: (Object) => Promise<Object> = clientInstance => new Prom
 });
 
 
-function setupVenmoButton(venmoInstance) {
+function setupVenmoButton(venmoInstance: Object, deviceData: string) {
   console.log(venmoInstance);
   if (!venmoInstance.isBrowserSupported()) {
     alert('Browser does not support Venmo');
@@ -132,8 +137,8 @@ function setupVenmoButton(venmoInstance) {
   }
   const venmoButton = document.getElementById('venmo-button');
   if (venmoButton && venmoButton instanceof HTMLButtonElement) {
-    console.log("about to display");
-    displayVenmoButton(venmoInstance, venmoButton);
+    console.log('about to display');
+    displayVenmoButton(venmoInstance, venmoButton, deviceData);
   }
   console.log('supported:', venmoInstance.isBrowserSupported());
   // venmoInstance is ready to be used.
@@ -144,10 +149,9 @@ function setupBraintree(dispatch: Function) {
     getClientInstance().then((clientInstance) => {
       loadDataCollector().then(() => {
         getDeviceData(clientInstance).then((deviceData) => {
-          console.log(deviceData);
           loadVenmo().then(() => {
             getVenmoInstance(clientInstance).then((venmoInstance) => {
-              setupVenmoButton(venmoInstance);
+              setupVenmoButton(venmoInstance, JSON.stringify(deviceData));
             }).catch((createErr) => {
               console.error('Error creating Venmo instance', createErr);
             });
