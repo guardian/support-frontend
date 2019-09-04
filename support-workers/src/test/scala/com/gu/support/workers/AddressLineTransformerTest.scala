@@ -20,8 +20,6 @@ class AddressLineTransformerTest extends FlatSpec with Matchers with MockitoSuga
     accountNumber = "55779911"
   )
 
-  val stripePaymentFields = StripePaymentFields("test-token")
-
   "combinedAddressLine" should "return an AddressLine when there is only a lineOne" in {
 
     val lineOne = Some("123 trash alley")

@@ -29,7 +29,7 @@ GET /                                                              controllers.A
 
 # ----- Bundles Landing Page ----- #
 
-GET /support                                                       controllers.Application.redirect(location="/uk/support")
+GET /support                                                       controllers.Application.supportGeoRedirect()
 GET /$country<(uk|us|au|eu|int|nz|ca)>/support                     controllers.Application.showcase(country: String)
 # redirect from old ab test
 GET /showcase                                                      controllers.Application.permanentRedirect(location="/uk/support")

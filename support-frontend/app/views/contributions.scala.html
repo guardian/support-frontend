@@ -1,6 +1,6 @@
 @import admin.settings.AllSettings
 @import assets.{AssetsResolver, RefPath, StyleContent}
-@import com.gu.i18n.Currency.AUD
+@import com.gu.i18n.Country
 @import com.gu.identity.model.{User => IdUser}
 @import com.gu.support.config.{PayPalConfig, StripeConfig}
 @import helper.CSRF
@@ -51,30 +51,43 @@
       }
     };
   }
-  window.guardian.stripeKeyDefaultCurrencies = {
-    ONE_OFF: {
-      default: "@oneOffDefaultStripeConfig.forCurrency(None).publicKey",
-      uat: "@oneOffUatStripeConfig.forCurrency(None).publicKey"
-    },
-    REGULAR: {
-      default: "@regularDefaultStripeConfig.forCurrency(None).publicKey",
-      uat: "@regularUatStripeConfig.forCurrency(None).publicKey"
-    }
-  };
+
   window.guardian.geoip = {
     countryGroup: "@geoData.countryGroup.map(_.id).mkString",
     countryCode: "@geoData.country.map(_.alpha2).mkString",
     stateCode: "@geoData.validatedStateCodeForCountry.mkString"
   };
-  window.guardian.stripeKeyAustralia = {
+
+  window.guardian.stripeKeyDefaultCurrencies = {
     ONE_OFF: {
-      default: "@oneOffDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
-      uat: "@oneOffUatStripeConfig.forCurrency(Some(AUD)).publicKey"
+      default: "@oneOffDefaultStripeConfig.defaultAccount.publicKey",
+      uat: "@oneOffUatStripeConfig.defaultAccount.publicKey"
     },
     REGULAR: {
-      default: "@regularDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
-      uat: "@regularUatStripeConfig.forCurrency(Some(AUD)).publicKey"
+      default: "@regularDefaultStripeConfig.defaultAccount.publicKey",
+      uat: "@regularUatStripeConfig.defaultAccount.publicKey"
     }
+  };
+  window.guardian.stripeKeyAustralia = {
+    ONE_OFF: {
+      default: "@oneOffDefaultStripeConfig.forCountry(Some(Country.Australia)).publicKey",
+      uat: "@oneOffUatStripeConfig.forCountry(Some(Country.Australia)).publicKey"
+    },
+    REGULAR: {
+      default: "@regularDefaultStripeConfig.forCountry(Some(Country.Australia)).publicKey",
+      uat: "@regularUatStripeConfig.forCountry(Some(Country.Australia)).publicKey"
+    }
+  };
+  window.guardian.stripeKeyUnitedStates = {
+    @if(settings.switches.experiments.get("usStripeAccountForSingle").exists(_.isOn)) {
+        ONE_OFF: {
+            default: "@oneOffDefaultStripeConfig.forCountry(Some(Country.US)).publicKey",
+            uat: "@oneOffUatStripeConfig.forCountry(Some(Country.US)).publicKey"
+        },
+    } else {
+      ONE_OFF: window.guardian.stripeKeyDefaultCurrencies.ONE_OFF,
+    }
+    REGULAR: window.guardian.stripeKeyDefaultCurrencies.REGULAR
   };
   window.guardian.payPalEnvironment = {
     default: "@regularDefaultPayPalConfig.payPalEnvironment",

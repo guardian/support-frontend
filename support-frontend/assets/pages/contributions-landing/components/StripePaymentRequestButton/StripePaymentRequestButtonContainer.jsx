@@ -43,7 +43,7 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
     const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
 
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
-      const key = getStripeKey('ONE_OFF', this.props.currency, this.props.isTestUser);
+      const key = getStripeKey('ONE_OFF', this.props.country, this.props.isTestUser);
       const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
 
       return (

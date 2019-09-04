@@ -73,7 +73,7 @@ object PathVerification {
   def monitoredPaymentMethod(paymentFields: PaymentFields): MonitoredPaymentMethod = paymentFields match {
     case DirectDebitPaymentFields(_, _, _) => DirectDebit
     case PayPalPaymentFields(_) => PayPal
-    case StripePaymentFields(_) => Card
+    case _: StripePaymentFields => Card
     case ExistingPaymentFields(_) => ExistingPaymentMethod
   }
 

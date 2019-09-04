@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import cx from 'classnames';
 
 import { routes } from 'helpers/routes';
 import { getPatronsLink } from 'helpers/externalLinks';
@@ -15,6 +16,7 @@ type HeaderNavLink = {
   trackAs: string,
   opensInNewWindow?: boolean,
   include?: CountryGroupId[],
+  additionalClasses?: string,
 }
 
 type PropTypes = {|
@@ -29,6 +31,12 @@ const links: HeaderNavLink[] = [
     href: routes.showcase,
     text: 'Support',
     trackAs: 'showcase',
+  },
+  {
+    href: routes.recurringContribCheckout,
+    text: 'Contributions',
+    trackAs: 'contributions',
+    additionalClasses: 'component-header-links__li--show-on-tablet',
   },
   {
     href: routes.subscriptionsLanding,
@@ -73,15 +81,13 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
         }
         return true;
       }).map(({
-        href, text, trackAs, opensInNewWindow,
+        href, text, trackAs, opensInNewWindow, additionalClasses,
         }) => (
           <li
-            className={
-              classNameWithModifiers(
+            className={cx(classNameWithModifiers(
                 'component-header-links__li',
                 [window.location.href.endsWith(href) ? 'active' : null],
-              )
-            }
+              ), additionalClasses)}
           >
             <a
               onClick={() => { trackComponentClick(['header-link', trackAs, location].join(' - ')); }}
