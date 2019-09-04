@@ -8,7 +8,7 @@ import io.circe.{Decoder, Encoder}
 
 object ContactDetails {
   private val customFieldName = "SpecialDeliveryInstructions__c"
-  private val classMemberName = "deliveryInstructions"
+  private val classMemberName = "DeliveryInstructions"
   implicit val decoder: Decoder[ContactDetails] = decapitalizingDecoder[ContactDetails].prepare(
     _.withFocus(_.mapObject(_.renameField(customFieldName, classMemberName)))
   )
