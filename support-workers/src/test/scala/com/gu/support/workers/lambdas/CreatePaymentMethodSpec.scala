@@ -18,7 +18,7 @@ import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.states.CreateSalesforceContactState
 import com.gu.test.tags.objects.IntegrationTest
 import io.circe.Decoder
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 
 import scala.concurrent.Future

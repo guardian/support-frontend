@@ -10,6 +10,7 @@ import com.gu.stripe.{Stripe, StripeServiceForCurrency}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
+import com.gu.support.zuora.api.PaymentGateway
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,7 +38,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ) =
     state.paymentFields match {
       case stripe: StripePaymentFields =>
-        createStripePaymentMethod(stripe, services.stripeService.withCurrency(state.product.currency))
+        createStripePaymentMethod(stripe, services.stripeService.withCurrency(state.product.currency), StripeServiceForCurrency.gateway(state.product.currency))
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
@@ -58,12 +59,24 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.acquisitionData
     )
 
-  def createStripePaymentMethod(stripe: StripePaymentFields, stripeService: StripeServiceForCurrency): Future[CreditCardReferenceTransaction] = {
+  def createStripePaymentMethod(
+    stripe: StripePaymentFields,
+    stripeService: StripeServiceForCurrency,
+    gateway: PaymentGateway
+  ): Future[CreditCardReferenceTransaction] = {
     createCustomer(stripeService, stripe)
       .map { stripeCustomer =>
         val card = stripeCustomer.source
-        CreditCardReferenceTransaction(card.id, stripeCustomer.id, card.last4,
-          CountryGroup.countryByCode(card.country), card.exp_month, card.exp_year, card.zuoraCardType)
+        CreditCardReferenceTransaction(
+          card.id,
+          stripeCustomer.id,
+          card.last4,
+          CountryGroup.countryByCode(card.country),
+          card.exp_month,
+          card.exp_year,
+          card.zuoraCardType,
+          paymentGateway = gateway
+        )
       }
   }
 

@@ -7,6 +7,7 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
+import com.gu.support.zuora.api.PaymentGateway
 import io.circe.Decoder.Result
 import io.circe.{Decoder, HCursor}
 import org.joda.time.LocalDate
@@ -80,14 +81,15 @@ case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends Zu
 
 //this response cannot extend ZuoraResponse because this endpoint doesn't return a 'success' boolean field
 case class GetObjectAccountResponse(
-   IdentityId__c: Option[String],
-   sfContactId__c: Option[String],
-   CrmId: Option[String],
-   DefaultPaymentMethodId: Option[String],
-   AutoPay: Boolean,
-   Balance: Double,
-   Currency: String
-  )
+  IdentityId__c: Option[String],
+  sfContactId__c: Option[String],
+  CrmId: Option[String],
+  DefaultPaymentMethodId: Option[String],
+  AutoPay: Boolean,
+  Balance: Double,
+  Currency: String,
+  PaymentGateway: PaymentGateway
+)
 
 object GetObjectAccountResponse {
   implicit val codec: Codec[GetObjectAccountResponse] = deriveCodec

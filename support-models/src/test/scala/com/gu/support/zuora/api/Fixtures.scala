@@ -117,7 +117,14 @@ object Fixtures {
   )
 
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@gu.com"), Country.UK)
-  val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
+  val creditCardPaymentMethod = CreditCardReferenceTransaction(
+    tokenId,
+    secondTokenId,
+    cardNumber,
+    Some(Country.UK),
+    12, 22,
+    "AmericanExpress",
+    StripeGatewayDefault)
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   val directDebitPaymentMethod = DirectDebitPaymentMethod(
     firstName = "Barry",
@@ -205,7 +212,8 @@ object Fixtures {
           "CreditCardExpirationMonth" : 2,
           "CreditCardExpirationYear" : 2022,
           "CreditCardType" : "Visa",
-          "Type" : "CreditCardReferenceTransaction"
+          "Type" : "CreditCardReferenceTransaction",
+          "paymentGateway": "Stripe Gateway 1"
         },
         "SubscriptionData" : {
           "RatePlanData" : [

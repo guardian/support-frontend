@@ -3,6 +3,7 @@ package com.gu.zuora
 import com.gu.config.Configuration
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
+import com.gu.stripe.StripeServiceForCurrency
 import com.gu.support.catalog
 import com.gu.support.catalog.{Everyday, HomeDelivery, Product, ProductRatePlan}
 import com.gu.support.config.TouchPointEnvironments
@@ -49,7 +50,15 @@ object Fixtures {
     Some("n1 9gu"),
     None
   )
-  val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
+  val creditCardPaymentMethod = CreditCardReferenceTransaction(
+    tokenId,
+    secondTokenId,
+    cardNumber,
+    Some(Country.UK),
+    12, 22,
+    "AmericanExpress",
+    _: PaymentGateway
+  )
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   val directDebitPaymentMethod = DirectDebitPaymentMethod("Barry", "Humphreys", "Barry Humphreys", "200000", "55779911",
     city = Some("Edited city"), postalCode = Some("n19gu"), state = Some("blah"), streetName = Some("easy street"), streetNumber = Some("123"))
@@ -84,7 +93,14 @@ object Fixtures {
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(currency), contactDetails, None, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(
+        account(currency),
+        contactDetails,
+        None,
+        creditCardPaymentMethod(StripeServiceForCurrency.gateway(currency)),
+        monthlySubscriptionData,
+        SubscribeOptions()
+      )
     ))
 
   def directDebitSubscriptionRequest: SubscribeRequest =
@@ -117,7 +133,7 @@ object Fixtures {
     Subscription(date, date, date, "id123", termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account(), contactDetails, None, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
+    SubscribeItem(account(), contactDetails, None, creditCardPaymentMethod(StripeGatewayDefault), invalidMonthlySubsData, SubscribeOptions())
   ))
 
   val incorrectPaymentMethod = SubscribeRequest(

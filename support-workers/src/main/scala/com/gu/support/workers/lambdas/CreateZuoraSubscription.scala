@@ -164,7 +164,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
     sfContactId__c = state.salesforceContacts.recipient.Id,
     identityId__c = state.user.id,
-    paymentGateway = PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
+    paymentGateway = state.paymentMethod.paymentGateway,
     createdRequestId__c = state.requestId.toString
   )
 }

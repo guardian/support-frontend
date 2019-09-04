@@ -1,7 +1,7 @@
 package com.gu.support.workers.errors
 
 import com.gu.services.{ServiceProvider, Services}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar._
 
