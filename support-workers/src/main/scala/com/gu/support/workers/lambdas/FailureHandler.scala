@@ -17,7 +17,7 @@ import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHandlerState, CheckoutFailureState] {
+class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerState, CheckoutFailureState] {
 
   def this() = this(new EmailService)
 

@@ -20,6 +20,7 @@ import com.gu.test.tags.objects.IntegrationTest
 import io.circe.Decoder
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
+import cats.implicits._
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -32,17 +33,19 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodContributionJson()), outStream, context)
+    createPaymentMethod.handleRequestExtractFunctor[Future](
+      wrapFixture(createPayPalPaymentMethodContributionJson()), outStream, context, identity).map { _ =>
 
-    //Check the output
-    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
+      //Check the output
+      val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
 
-    createSalesforceContactState.isSuccess should be(true)
-    createSalesforceContactState.get._1.paymentMethod match {
-      case payPal: PayPalReferenceTransaction =>
-        payPal.paypalBaid should be(validBaid)
-        payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
-      case _ => fail()
+      createSalesforceContactState.isSuccess should be(true)
+      createSalesforceContactState.get._1.paymentMethod match {
+        case payPal: PayPalReferenceTransaction =>
+          payPal.paypalBaid should be(validBaid)
+          payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
+        case _ => fail()
+      }
     }
   }
 
@@ -52,16 +55,18 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequest(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
+    createPaymentMethod.handleRequestExtractFunctor[Future](
+      wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context, identity).map { _ =>
 
-    //Check the output
-    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
+      //Check the output
+      val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
 
-    createSalesforceContactState.isSuccess should be(true)
-    createSalesforceContactState.get._1.paymentMethod match {
-      case stripe: CreditCardReferenceTransaction =>
-        stripe.tokenId should be("1234")
-      case _ => fail()
+      createSalesforceContactState.isSuccess should be(true)
+      createSalesforceContactState.get._1.paymentMethod match {
+        case stripe: CreditCardReferenceTransaction =>
+          stripe.tokenId should be("1234")
+        case _ => fail()
+      }
     }
   }
 
@@ -73,9 +78,10 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
       val inStream = "Test user".asInputStream
 
-      createPaymentMethod.handleRequest(inStream, outStream, mock[Context])
+      createPaymentMethod.handleRequestExtractFunctor[Future](inStream, outStream, mock[Context], identity).map { _ =>
 
-      val p = outStream.toClass[PaymentMethod](encrypted = false)
+        val p = outStream.toClass[PaymentMethod](encrypted = false)
+      }
     }
   }
 
