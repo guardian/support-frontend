@@ -16,6 +16,7 @@ export type ErrorReason =
   'marketing_consent_api_error' |
   'incompatible_payment_method_and_contribution_type' |
   'internal_error' |
+  'card_authentication_error' |
   'unknown';
 
 // ----- Functions ----- //
@@ -42,6 +43,9 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
       return 'We are unable to sign you up at this time';
     case 'internal_error':
       return 'Sorry, something has gone wrong. Please try again, or come back later.';
+    case 'card_authentication_error':
+      // TODO - is this copy ok?
+      return 'Your card issuer\'s authentication was unsuccessful and you have not been charged. Please try again or choose another payment method.';
     default:
       return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
   }

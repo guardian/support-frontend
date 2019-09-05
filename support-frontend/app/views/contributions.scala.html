@@ -20,7 +20,7 @@
   regularUatStripeConfig: StripeConfig,
   regularDefaultPayPalConfig: PayPalConfig,
   regularUatPayPalConfig: PayPalConfig,
-  paymentApiStripeEndpoint: String,
+  paymentApiStripeUrl: String,
   paymentApiPayPalEndpoint: String,
   existingPaymentOptionsEndpoint: String,
   idUser: Option[IdUser],
@@ -93,7 +93,7 @@
     default: "@regularDefaultPayPalConfig.payPalEnvironment",
     uat: "@regularUatPayPalConfig.payPalEnvironment"
   };
-  window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
+  window.guardian.paymentApiStripeUrl = "@paymentApiStripeUrl";
   window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
   window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
   window.guardian.csrf = { token: "@CSRF.getToken.value" };

@@ -11,7 +11,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
-import type { ThankYouPageStage } from 'pages/contributions-landing/contributionsLandingReducer';
+import type { ThankYouPageStage, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -66,6 +66,16 @@ export type StripeChargeData = {|
   acquisitionData: PaymentAPIAcquisitionData,
   publicKey: string
 |};
+
+export type CreateStripePaymentIntentRequest = {
+  ...StripeChargeData,
+  paymentMethodId: string,
+};
+
+export type ConfirmStripePaymentIntentRequest = {
+  ...StripeChargeData,
+  paymentIntentId: string,
+};
 
 
 // Data that should be posted to the payment API to get a url for the PayPal UI
@@ -132,9 +142,47 @@ function postOneOffStripeExecutePaymentRequest(
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
-    paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
+    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/execute-payment`),
     requestOptions(data, 'omit', 'POST', null),
   ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
+}
+
+function postStripeCreatePaymentIntentRequest(data: CreateStripePaymentIntentRequest): Promise<Object> {
+  return fetchJson(
+    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
+    requestOptions(data, 'omit', 'POST', null),
+  );
+}
+
+function postStripeConfirmPaymentIntentRequest(data: ConfirmStripePaymentIntentRequest): Promise<Object> {
+  return fetchJson(
+    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/confirm-payment`),
+    requestOptions(data, 'omit', 'POST', null),
+  );
+}
+
+// Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
+function processStripePaymentIntentRequest(
+  data: CreateStripePaymentIntentRequest,
+  setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
+  handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
+): Promise<PaymentResult> {
+  return logPromise(postStripeCreatePaymentIntentRequest(data).then((createIntentResponse) => {
+    if (createIntentResponse.type === 'requiresaction') {
+      // Do 3DS auth and then send back to payment-api for payment confirmation
+      return handleStripe3DS(createIntentResponse.data.clientSecret).then((authResult: Stripe3DSResult) => {
+        if (authResult.error) {
+          return { type: 'error', error: { failureReason: 'card_authentication_error' } };
+        }
+        return postStripeConfirmPaymentIntentRequest({ ...data, paymentIntentId: authResult.paymentIntent.id });
+
+      });
+    }
+    // No 3DS auth required
+    return createIntentResponse;
+
+  }).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
 }
 
 // Object is expected to have structure:
@@ -164,4 +212,5 @@ function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Pr
 export {
   postOneOffStripeExecutePaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
+  processStripePaymentIntentRequest,
 };

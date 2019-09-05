@@ -19,8 +19,8 @@
  */
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import type { StripeCheckoutAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type {IsoCountry} from "helpers/internationalisation/country";
-import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/paymentMethods';
 import type { ContributionType } from 'helpers/contributions';
 
@@ -72,7 +72,7 @@ function getStripeKey(stripeAccount: StripeAccount, country: IsoCountry, isTestU
 }
 
 function setupStripeCheckout(
-  onPaymentAuthorisation: StripeAuthorisation => void,
+  onPaymentAuthorisation: StripeCheckoutAuthorisation => void,
   stripeAccount: StripeAccount,
   currency: IsoCurrency,
   country: IsoCountry,

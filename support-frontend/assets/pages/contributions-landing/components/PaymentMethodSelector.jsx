@@ -5,16 +5,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type ThirdPartyPaymentLibrary, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
+import { getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
 import { type Switches } from 'helpers/settings';
 import {
   type ContributionType, contributionTypeIsRecurring,
-  type ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
@@ -26,7 +24,6 @@ import { DirectDebit, PayPal } from 'helpers/paymentMethods';
 import {
   type Action,
   updatePaymentMethod,
-  setThirdPartyPaymentLibrary,
   updateSelectedExistingPaymentMethod,
 } from '../contributionsLandingActions';
 import { isUsableExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
@@ -55,11 +52,8 @@ type PropTypes = {|
   existingPaymentMethods: ExistingPaymentMethod[] | typeof undefined,
   paymentMethod: PaymentMethod,
   existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-  onPaymentAuthorisation: PaymentAuthorisation => void,
-  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
-  updatePaymentMethod: PaymentMethod => Action,
+  updatePaymentMethod: PaymentMethod => (Function) => void,
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
-  setThirdPartyPaymentLibrary: (?{ [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary }}) => Action,
   isTestUser: boolean,
   switches: Switches,
 |};
@@ -72,7 +66,6 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethods: state.common.existingPaymentMethods,
   paymentMethod: state.page.form.paymentMethod,
   existingPaymentMethod: state.page.form.existingPaymentMethod,
-  thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
 });
@@ -80,7 +73,6 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = {
   updatePaymentMethod,
   updateSelectedExistingPaymentMethod,
-  setThirdPartyPaymentLibrary,
 };
 
 // ----- Render ----- //
