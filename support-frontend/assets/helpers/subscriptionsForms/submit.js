@@ -54,10 +54,6 @@ import {
   isPhysicalProduct,
   type SubscriptionProduct,
 } from 'helpers/subscriptions';
-import {
-  loadStripe,
-  setupStripeCheckout,
-} from 'helpers/paymentIntegrations/stripeCheckout';
 import { isPostDeployUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
@@ -168,7 +164,7 @@ function onPaymentAuthorised(
   state: AnyCheckoutState,
   currencyId?: Option<IsoCurrency>,
 ) {
-
+  console.log('Here!');
   const data = buildRegularPaymentRequest(state, paymentAuthorisation, currencyId);
   const { product, paymentMethod } = state.page.checkout;
   const { csrf } = state.page;
@@ -196,11 +192,12 @@ function onPaymentAuthorised(
   ).then(handleSubscribeResult);
 }
 
-function showStripe(
+function checkStripeUserType(
   onAuthorised: (pa: PaymentAuthorisation) => void,
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
+  stripeToken: string,
 ) {
   if (isPostDeployUser()) {
     onAuthorised({
@@ -209,9 +206,11 @@ function showStripe(
       stripePaymentMethod: 'StripeCheckout',
     });
   } else {
-    loadStripe()
-      .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, isTestUser))
-      .then(stripe => console.log({ stripe }));
+    onAuthorised({
+      paymentMethod: Stripe,
+      token: stripeToken,
+      stripePaymentMethod: 'StripeElements',
+    });
   }
 }
 
@@ -222,11 +221,12 @@ function showPaymentMethod(
   price: number,
   currency: IsoCurrency,
   paymentMethod: Option<PaymentMethod>,
+  stripeToken: Option<string>,
 ): void {
-
+  console.log('Here in showPaymentMethod');
   switch (paymentMethod) {
     case Stripe:
-      showStripe(onAuthorised, isTestUser, price, currency);
+      checkStripeUserType(onAuthorised, isTestUser, price, currency, stripeToken);
       break;
     case DirectDebit:
       dispatch(openDirectDebitPopUp());
@@ -252,6 +252,7 @@ function submitForm(
   dispatch: Dispatch<Action>,
   state: AnyCheckoutState,
 ) {
+  console.log('Form was submitted');
   const {
     paymentMethod, product, isTestUser,
   } = state.page.checkout;
@@ -279,6 +280,7 @@ function submitForm(
 
   const { price, currency } = priceDetails;
   const currencyId = getCurrency(state.page.billingAddress.fields.country);
+  const stripeToken = paymentMethod === Stripe ? state.page.checkout.stripeToken : null;
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
     onPaymentAuthorised(
@@ -290,7 +292,7 @@ function submitForm(
 
   showPaymentMethod(
     dispatch, onAuthorised, isTestUser, price, currency,
-    paymentMethod,
+    paymentMethod, stripeToken,
   );
 }
 
@@ -318,7 +320,6 @@ export {
   onPaymentAuthorised,
   buildRegularPaymentRequest,
   showPaymentMethod,
-  showStripe,
   submitCheckoutForm,
   submitWithDeliveryForm,
   trackSubmitAttempt,

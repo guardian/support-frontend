@@ -102,7 +102,7 @@ export type RegularPaymentRequest = {|
   promoCode?: Option<string>,
 |};
 
-export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton';
+export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
 export type StripeAuthorisation = {|

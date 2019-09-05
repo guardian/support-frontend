@@ -48,10 +48,11 @@ const FormSectionHidden = ({
   children, title, headingSize, hidden,
 }: FormSectionHiddenPropTypes) => (
   <div className={`component-checkout-form-section ${hidden ? 'component-checkout-form-section--hidden' : ''}`}>
+    {!hidden && (
     <div className="component-checkout-form-section__wrap">
       {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
       {children}
-    </div>
+    </div>)}
   </div>
 );
 

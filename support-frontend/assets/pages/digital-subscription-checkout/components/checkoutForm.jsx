@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
@@ -60,12 +60,14 @@ import {
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { PayPal, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
-import CreditCardForm from 'components/subscriptionCheckouts/creditCardForm';
+import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { type Option } from 'helpers/types/option';
 import {
   getAppliedPromoDescription,
   getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
+import { StripeProvider, Elements } from 'react-stripe-elements';
+import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 
 
 // ----- Types ----- //
@@ -94,6 +96,10 @@ type PropTypes = {|
   expiryDate: Option<string> | null,
   cvc: Option<number> | null,
 |};
+
+type StateTypes = {
+  stripe: Option<Object>,
+}
 
 
 // ----- Map State/Props ----- //
@@ -145,121 +151,146 @@ function mapDispatchToProps() {
 
 const Address = withStore(countries, 'billing', getBillingAddress);
 
+
 // ----- Component ----- //
 
-function CheckoutForm(props: PropTypes) {
-  const productPrice = getProductPrice(
-    props.productPrices,
-    props.country,
-    props.billingPeriod,
-  );
-  const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
-  const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
-  const priceSummary = `${offerOnSelected || 'Enjoy your digital pack free for 14 days, then'} ${helperSelected}.`;
+class CheckoutForm extends Component<PropTypes, StateTypes> {
+  constructor() {
+    super();
+    this.state = { stripe: null };
+  }
 
-  const PriceSummary = () =>
-    <p className="component-credit-card-price">{priceSummary}</p>;
+  componentDidMount() {
+    this.checkStripe();
+  }
 
-  return (
-    <Content>
-      <CheckoutLayout aside={(
-        <Summary
-          image={
-            <GridImage
-              gridId="checkoutPackshotDigitalPack"
-              srcSizes={[1000, 500]}
-              sizes="(max-width: 740px) 50vw, 500"
-              imgType="png"
-              altText=""
-            />
-          }
-          title="Digital Pack"
-          description="Premium App + iPad daily edition + Ad-free"
-          productPrice={productPrice}
-          billingPeriod={props.billingPeriod}
-          product={props.product}
-        />)}
-      >
-        <Form onSubmit={(ev) => {
-            ev.preventDefault();
-            props.submitForm();
-          }}
-        >
-          <FormSection title="Your details">
-            <PersonalDetails
-              firstName={props.firstName}
-              setFirstName={props.setFirstName}
-              lastName={props.lastName}
-              setLastName={props.setLastName}
-              email={props.email}
-              telephone={props.telephone}
-              setTelephone={props.setTelephone}
-              formErrors={props.formErrors}
-              signOut={props.signOut}
-            />
-          </FormSection>
-          <FormSection title="Address">
-            <Address />
-          </FormSection>
-          <BillingPeriodSelector
-            billingCountry={props.country}
-            billingPeriods={[Monthly, Annual]}
-            productPrices={props.productPrices}
-            selected={props.billingPeriod}
-            onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
-          />
-          <PaymentMethodSelector
-            country={props.country}
-            product={DigitalPack}
-            paymentMethod={props.paymentMethod}
-            setPaymentMethod={props.setPaymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
-            validationError={firstError('paymentMethod', props.formErrors)}
-            submissionError={props.submissionError}
-          />
-          <PayPalSubmitButton
-            paymentMethod={props.paymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
-            csrf={props.csrf}
-            currencyId={props.currencyId}
-            payPalHasLoaded={props.payPalHasLoaded}
-            formIsValid={props.formIsValid}
-            validateForm={props.validateForm}
-            isTestUser={props.isTestUser}
-            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            amount={props.amount}
-            billingPeriod={props.billingPeriod}
-            allErrors={[...props.addressErrors, ...props.formErrors]}
-          />
-          <SubscriptionSubmitButton
-            paymentMethod={props.paymentMethod}
-            allErrors={[...props.addressErrors, ...props.formErrors]}
-            className={DirectDebit}
-            component={<PriceSummary />}
-          />
-          <FormSectionHidden
-            hidden={props.paymentMethod !== Stripe}
-            title="Your card details"
-          >
-            <CreditCardForm
-              paymentMethod={props.paymentMethod}
-              creditCardNumber={props.creditCardNumber}
-              setCreditCardNumber={props.setCreditCardNumber}
-              expiryDate={props.expiryDate}
-              setExpiryDate={props.setExpiryDate}
-              cvc={props.cvc}
-              setCvc={props.setCvc}
-              formErrors={props.formErrors}
-              allErrors={[...props.addressErrors, ...props.formErrors]}
-              component={<PriceSummary />}
-            />
-          </FormSectionHidden>
-          <CancellationSection />
-        </Form>
-      </CheckoutLayout>
-    </Content>
-  );
+  checkStripe = () => {
+    const stripeKey = getStripeKey('REGULAR', this.props.currencyId, this.props.isTestUser);
+    if (window.Stripe) {
+      this.setState({ stripe: window.Stripe(stripeKey) });
+    } else {
+      document.querySelector('#stripe-js').addEventListener('load', () => {
+        // Create Stripe instance once Stripe.js loads
+        this.setState({ stripe: window.Stripe(stripeKey) });
+      });
+    }
 
+  }
+
+  render() {
+    const { props } = this;
+    const productPrice = getProductPrice(
+      props.productPrices,
+      props.country,
+      props.billingPeriod,
+    );
+    const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
+    const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
+    const priceSummary = `${offerOnSelected || 'Enjoy your digital pack free for 14 days, then'} ${helperSelected}.`;
+    console.log(this.props);
+
+    const PriceSummary = () =>
+      <p className="component-credit-card-price">{priceSummary}</p>;
+
+    return (
+      <StripeProvider stripe={this.state.stripe}>
+        <Elements>
+          <Content>
+            <CheckoutLayout aside={(
+              <Summary
+                image={
+                  <GridImage
+                    gridId="checkoutPackshotDigitalPack"
+                    srcSizes={[1000, 500]}
+                    sizes="(max-width: 740px) 50vw, 500"
+                    imgType="png"
+                    altText=""
+                  />
+                }
+                title="Digital Pack"
+                description="Premium App + iPad daily edition + Ad-free"
+                productPrice={productPrice}
+                billingPeriod={props.billingPeriod}
+                product={props.product}
+              />)}
+            >
+              <Form onSubmit={(ev) => {
+                  ev.preventDefault();
+                  props.submitForm();
+                }}
+              >
+                <FormSection title="Your details">
+                  <PersonalDetails
+                    firstName={props.firstName}
+                    setFirstName={props.setFirstName}
+                    lastName={props.lastName}
+                    setLastName={props.setLastName}
+                    email={props.email}
+                    telephone={props.telephone}
+                    setTelephone={props.setTelephone}
+                    formErrors={props.formErrors}
+                    signOut={props.signOut}
+                  />
+                </FormSection>
+                <FormSection title="Address">
+                  <Address />
+                </FormSection>
+                <BillingPeriodSelector
+                  billingCountry={props.country}
+                  billingPeriods={[Monthly, Annual]}
+                  productPrices={props.productPrices}
+                  selected={props.billingPeriod}
+                  onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
+                />
+                <PaymentMethodSelector
+                  country={props.country}
+                  product={DigitalPack}
+                  paymentMethod={props.paymentMethod}
+                  setPaymentMethod={props.setPaymentMethod}
+                  onPaymentAuthorised={props.onPaymentAuthorised}
+                  validationError={firstError('paymentMethod', props.formErrors)}
+                  submissionError={props.submissionError}
+                />
+                <PayPalSubmitButton
+                  paymentMethod={props.paymentMethod}
+                  onPaymentAuthorised={props.onPaymentAuthorised}
+                  csrf={props.csrf}
+                  currencyId={props.currencyId}
+                  payPalHasLoaded={props.payPalHasLoaded}
+                  formIsValid={props.formIsValid}
+                  validateForm={props.validateForm}
+                  isTestUser={props.isTestUser}
+                  setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+                  amount={props.amount}
+                  billingPeriod={props.billingPeriod}
+                  allErrors={[...props.addressErrors, ...props.formErrors]}
+                />
+                <SubscriptionSubmitButton
+                  paymentMethod={props.paymentMethod}
+                  allErrors={[...props.addressErrors, ...props.formErrors]}
+                  className={DirectDebit}
+                  component={<PriceSummary />}
+                />
+                <FormSectionHidden
+                  hidden={props.paymentMethod !== Stripe}
+                  title="Your card details"
+                >
+                  <StripeForm
+                    component={<PriceSummary />}
+                    submitForm={props.submitForm}
+                    paymentMethod={props.paymentMethod}
+                    allErrors={[...props.addressErrors]}
+                    setStripeToken={this.props.setStripeToken}
+                  />
+                </FormSectionHidden>
+                <CancellationSection />
+              </Form>
+            </CheckoutLayout>
+          </Content>
+        </Elements>
+      </StripeProvider>
+    );
+  }
 }
 
 
