@@ -50,10 +50,14 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
   if (element) {
     delete element.dataset.notHydrated;
     try {
-      import('react-axe').then(axe => {
-        axe.default(React, ReactDOM, 1000);
+      if (process.env.NODE_ENV === 'DEV') {
+        import('react-axe').then(axe => {
+          axe.default(React, ReactDOM, 1000);
+          ReactDOM.render(content, element, callBack);
+        });
+      } else {
         ReactDOM.render(content, element, callBack);
-      });
+      }
     } catch (e) {
       renderError(e, id);
     }
