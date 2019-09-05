@@ -1,5 +1,5 @@
 // @flow
-
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { logException } from 'helpers/logger';
 
@@ -50,7 +50,10 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
   if (element) {
     delete element.dataset.notHydrated;
     try {
-      ReactDOM.render(content, element, callBack);
+      import('react-axe').then(axe => {
+        axe.default(React, ReactDOM, 1000);
+        ReactDOM.render(content, element, callBack);
+      });
     } catch (e) {
       renderError(e, id);
     }
