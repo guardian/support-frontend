@@ -20,7 +20,7 @@
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { StripeCheckoutAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type {IsoCountry} from "helpers/internationalisation/country";
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Stripe } from 'helpers/paymentMethods';
 import type { ContributionType } from 'helpers/contributions';
 
