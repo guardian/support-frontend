@@ -6,7 +6,7 @@
 @import helper.CSRF
 @import views.{Preload, SSRContent, ReactDiv}
 @import models.GeoData
-
+@import services.PaymentApiEndpoints
 @(
   title: String,
   id: String,
@@ -20,8 +20,7 @@
   regularUatStripeConfig: StripeConfig,
   regularDefaultPayPalConfig: PayPalConfig,
   regularUatPayPalConfig: PayPalConfig,
-  paymentApiStripeEndpoint: String,
-  paymentApiPayPalEndpoint: String,
+  paymentApiEndpoints: PaymentApiEndpoints,
   existingPaymentOptionsEndpoint: String,
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
@@ -80,8 +79,9 @@
     default: "@regularDefaultPayPalConfig.payPalEnvironment",
     uat: "@regularUatPayPalConfig.payPalEnvironment"
   };
-  window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
-  window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
+  window.guardian.paymentApiStripeEndpoint = "@paymentApiEndpoints.paymentApiStripeEndpoint";
+  window.guardian.paymentApiPayPalEndpoint = "@paymentApiEndpoints.paymentApiPayPalEndpoint";
+  window.guardian.paymentApiVenmoEndpoint = "@paymentApiEndpoints.paymentApiVenmoEndpoint";
   window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
   window.guardian.csrf = { token: "@CSRF.getToken.value" };
 

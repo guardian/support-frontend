@@ -16,7 +16,7 @@ import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationa
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { Amount, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, Stripe, Venmo } from 'helpers/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
 import { isSwitchOn } from 'helpers/globals';
 
@@ -78,7 +78,7 @@ function getContributionTypeFromUrl(): ?ContributionType {
 function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry): PaymentMethod[] {
   return contributionType !== 'ONE_OFF' && countryId === 'GB'
     ? [DirectDebit, Stripe, PayPal]
-    : [Stripe, PayPal];
+    : [Stripe, PayPal, Venmo];
 }
 
 function getValidPaymentMethods(
@@ -89,7 +89,7 @@ function getValidPaymentMethods(
   const switchKey = (contributionType === 'ONE_OFF') ? 'oneOffPaymentMethods' : 'recurringPaymentMethods';
   return getPaymentMethods(contributionType, countryId)
     .filter(paymentMethod =>
-      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
+      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`) || paymentMethod === Venmo);
 }
 
 function getPaymentMethodToSelect(
@@ -104,7 +104,7 @@ function getPaymentMethodToSelect(
 function getPaymentMethodFromSession(): ?PaymentMethod {
   const pm: ?string = storage.getSession('selectedPaymentMethod');
   // can't use Flow types for these comparisons for some strange reason
-  if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal' || pm === 'ExistingCard' || pm === 'ExistingDirectDebit') {
+  if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal' || pm === 'ExistingCard' || pm === 'ExistingDirectDebit' || pm === 'Venmo') {
     return (pm: PaymentMethod);
   }
   return null;
@@ -114,6 +114,9 @@ function getPaymentDescription(contributionType: ContributionType, paymentMethod
   if (contributionType === 'ONE_OFF') {
     if (paymentMethod === PayPal) {
       return 'with PayPal';
+    }
+    if (paymentMethod === Venmo) {
+      return 'with Venmo';
     }
 
     return 'with card';
@@ -172,6 +175,8 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
       return 'Direct debit';
     case PayPal:
       return PayPal;
+    case Venmo:
+      return Venmo;
     default:
       return 'Other Payment Method';
   }

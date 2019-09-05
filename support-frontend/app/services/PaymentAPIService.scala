@@ -34,6 +34,8 @@ object PaymentAPIResponseError {
   case class APIError[A](error: A) extends PaymentAPIResponseError[A]
 }
 
+case class PaymentApiEndpoints(paymentApiStripeEndpoint: String, paymentApiPayPalEndpoint: String, paymentApiVenmoEndpoint: String)
+
 case class ExecutePaymentBody(
   // TODO: remove this field once the Payment API switches over to use mandatory email field
   signedInUserEmail: Option[String],
@@ -54,10 +56,12 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
   private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
   private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
   private val stripeExecutePaymentPath = "/contribute/one-off/stripe/execute-payment"
+  private val venmoCreateTransactionPath = "/contribute/one-off/braintree/create-transaction"
 
   val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$paypalCreatePaymentPath"
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
   val stripeExecutePaymentEndpoint: String = s"$paymentAPIUrl$stripeExecutePaymentPath"
+  val venmoCreateTransactionEndpoint: String = s"$paymentAPIUrl$venmoCreateTransactionPath"
 
   private def postPaypalData[A](
     data: ExecutePaymentBody,

@@ -52,7 +52,7 @@ import BraintreeButton from './Braintree/BraintreeButton';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, Venmo } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import type {
   LandingPageChoiceArchitectureAmountsFirstTestVariants,
@@ -158,6 +158,7 @@ function openStripePopup(props: PropTypes) {
   }
 }
 
+
 // Bizarrely, adding a type to this object means the type-checking on the
 // formHandlers is no longer accurate.
 // (Flow thinks it's OK when it's missing required properties).
@@ -167,6 +168,7 @@ const formHandlersForRecurring = {
     // we don't get an onSubmit event for PayPal recurring, so there
     // is no need to handle anything here
   },
+  Venmo: () => {},
   Stripe: openStripePopup,
   DirectDebit: (props: PropTypes) => {
     props.openDirectDebitPopUp();
@@ -183,6 +185,28 @@ const formHandlersForRecurring = {
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
+    Venmo: () => {
+      window.venmoInstance.tokenize((tokenizeErr, payload) => {
+        if (tokenizeErr) {
+          //window.venmoOnError(tokenizeErr);
+          const authorisation = {
+            paymentMethod: Venmo,
+            paymentNonce: 'fake-venmo-account-nonce',
+            deviceData: 'test',
+          };
+          window.venmoOnSuccess(authorisation);
+        } else {
+          console.log(payload);
+          const authorisation = {
+            paymentMethod: Venmo,
+            paymentNonce: 'fake-venmo-account-nonce',
+            deviceData: 'test',
+          };
+          window.venmoOnSuccess(authorisation);
+        }
+        // ...
+      });
+    },
     Stripe: openStripePopup,
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);
@@ -283,7 +307,7 @@ function withProps(props: PropTypes) {
       />
       <div className={classNameWithModifiers('form', ['content'])}>
         <ContributionFormFields />
-        <PaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
+        <PaymentMethodSelector />
         <ContributionErrorMessage />
         <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       </div>

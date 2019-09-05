@@ -1,8 +1,10 @@
 // @flow
 
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 // ----- Imports ----- //
-import { setBraintreeHasLoaded } from '../../pages/contributions-landing/contributionsLandingActions';
-
+import {
+  setBraintreeHasLoaded,
+} from '../../pages/contributions-landing/contributionsLandingActions';
 
 
 const clientToken = 'sandbox_hcjm93t6_tfkv8f9d3sjvg8gy';
@@ -40,53 +42,6 @@ function loadDataCollector(): Promise<void> {
       document.head.appendChild(script);
     }
   });
-}
-
-
-function handleVenmoError(err) {
-  if (err.code === 'VENMO_CANCELED') {
-    console.log('App is not available or user aborted payment flow');
-  } else if (err.code === 'VENMO_APP_CANCELED') {
-    console.log('User canceled payment flow');
-  } else {
-    console.error('An error occurred:', err.message);
-  }
-}
-
-function handleVenmoSuccess(payload) {
-
-  // Send payload.nonce to your server.
-  console.log('Got a payment method nonce:', payload.nonce);
-  // Display the Venmo username in your checkout UI.
-  console.log('Venmo user:', payload.details.username);
-}
-
-/* eslint-disable no-param-reassign */
-function displayVenmoButton(venmoInstance, venmoButton, deviceData) {
-  // Assumes that venmoButton is initially display: none.
-  console.log(deviceData);
-  if (venmoButton) {
-    venmoButton.style.display = 'block';
-
-    venmoButton.addEventListener('click', () => {
-      venmoButton.disabled = true;
-
-      venmoInstance.tokenize((tokenizeErr, payload) => {
-        if (tokenizeErr) {
-          venmoButton.style.display = 'block';
-          venmoButton.style.cssText = 'color: red; border: 1px solid black';
-          console.log(tokenizeErr);
-          handleVenmoError(tokenizeErr);
-        } else {
-          venmoButton.style.display = 'block';
-          venmoButton.style.cssText = 'color: blue; border: 1px solid black';
-          venmoButton.innerHTML = JSON.stringify(payload);
-          handleVenmoSuccess(payload);
-        }
-        // ...
-      });
-    });
-  }
 }
 
 const getClientInstance: () => Promise<Object> = () => new Promise((resolve, reject) => {
@@ -128,29 +83,53 @@ const getVenmoInstance: (Object) => Promise<Object> = clientInstance => new Prom
 });
 
 
-function setupVenmoButton(venmoInstance: Object, deviceData: string) {
+function setupVenmoButton(
+  venmoInstance: Object,
+  deviceData: string,
+  onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void,
+) {
+
+  window.venmoInstance = venmoInstance;
+  window.venmoOnSuccess = onPaymentAuthorisation;
   console.log(venmoInstance);
   if (!venmoInstance.isBrowserSupported()) {
-    alert('Browser does not support Venmo');
+    console.log('Browser does not support Venmo');
     return;
   }
-  const venmoButton = document.getElementById('venmo-button');
-  if (venmoButton && venmoButton instanceof HTMLButtonElement) {
-    console.log('about to display');
-    displayVenmoButton(venmoInstance, venmoButton, deviceData);
-  }
+
+  // displayVenmoButton(venmoInstance, venmoButton, deviceData);
   console.log('supported:', venmoInstance.isBrowserSupported());
   // venmoInstance is ready to be used.
 }
 
-function setupBraintree(dispatch: Function) {
+
+function handleVenmoError(dispatch: Function) {
+  return (err) => {
+    dispatch();
+    if (err.code === 'VENMO_CANCELED') {
+      console.log('App is not available or user aborted payment flow');
+    } else if (err.code === 'VENMO_APP_CANCELED') {
+      console.log('User canceled payment flow');
+    } else {
+      console.error('An error occurred:', err.message);
+    }
+  };
+}
+
+function setupBraintree(
+  dispatch: Function,
+  onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void,
+) {
+
+  window.venmoOnError = handleVenmoError(dispatch);
+
   loadBraintree().then(() => {
     getClientInstance().then((clientInstance) => {
       loadDataCollector().then(() => {
         getDeviceData(clientInstance).then((deviceData) => {
           loadVenmo().then(() => {
             getVenmoInstance(clientInstance).then((venmoInstance) => {
-              setupVenmoButton(venmoInstance, JSON.stringify(deviceData));
+              setupVenmoButton(venmoInstance, JSON.stringify(deviceData), onPaymentAuthorisation);
             }).catch((createErr) => {
               console.error('Error creating Venmo instance', createErr);
             });

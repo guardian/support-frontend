@@ -18,10 +18,11 @@ import com.gu.monitoring.SafeLogger._
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.mvc._
-import services.{IdentityService, MembersDataService, PaymentAPIService}
+import services.{IdentityService, MembersDataService, PaymentAPIService, PaymentApiEndpoints}
 import utils.BrowserCheck
 import utils.FastlyGEOIP._
 import views.{EmptyDiv, Preload}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class Application(
@@ -149,8 +150,12 @@ class Application(
       regularUatStripeConfig = regularStripeConfigProvider.get(true),
       regularDefaultPayPalConfig = payPalConfigProvider.get(false),
       regularUatPayPalConfig = payPalConfigProvider.get(true),
-      paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
-      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      paymentApiEndpoints =
+        PaymentApiEndpoints(
+          paymentAPIService.stripeExecutePaymentEndpoint,
+          paymentAPIService.payPalCreatePaymentEndpoint,
+          paymentAPIService.venmoCreateTransactionEndpoint
+        ),
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,

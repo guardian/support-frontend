@@ -67,6 +67,16 @@ export type StripeChargeData = {|
 |};
 
 
+export type VenmoChargeData = {|
+  paymentData: {
+    paymentNonce: string,
+    amount: number,
+    deviceData: string,
+  },
+  acquisitionData: PaymentAPIAcquisitionData,
+|};
+
+
 // Data that should be posted to the payment API to get a url for the PayPal UI
 // where the user is redirected to so that they can authorize the payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
@@ -136,6 +146,19 @@ function postOneOffStripeExecutePaymentRequest(
   ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
 }
 
+
+function postOneOffVenmoCreateTransactionRequest(
+  data: VenmoChargeData,
+  setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
+): Promise<PaymentResult> {
+  console.log(JSON.stringify(data));
+  return logPromise(fetchJson(
+    paymentApiEndpointWithMode(window.guardian.paymentApiVenmoEndpoint),
+    requestOptions(data, 'omit', 'POST', null),
+  ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
+}
+
 // Object is expected to have structure:
 // { type: "error", error: PayPalApiError }, or
 // { type: "success", data: PaypalPaymentSuccess }
@@ -163,4 +186,5 @@ function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Pr
 export {
   postOneOffStripeExecutePaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
+  postOneOffVenmoCreateTransactionRequest,
 };

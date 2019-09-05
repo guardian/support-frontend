@@ -29,6 +29,7 @@ import {
   ExistingDirectDebit,
   PayPal,
   Stripe,
+  Venmo,
 } from 'helpers/paymentMethods';
 import type { Title } from 'helpers/user/details';
 
@@ -105,6 +106,12 @@ export type RegularPaymentRequest = {|
 export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton';
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
+
+export type VenmoAuthorisation ={|
+  paymentMethod: typeof Venmo,
+  paymentNonce: string,
+  deviceData: string,
+|}
 export type StripeAuthorisation = {|
   paymentMethod: typeof Stripe,
   token: string,
@@ -135,6 +142,7 @@ export type ExistingDirectDebitAuthorisation = {|
 // immediately executes the payment, and recurring, where it ultimately ends up in Zuora
 // which uses it to execute payments in the future.
 export type PaymentAuthorisation =
+  VenmoAuthorisation |
   StripeAuthorisation |
   PayPalAuthorisation |
   DirectDebitAuthorisation |

@@ -138,6 +138,8 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
       });
     });
 
+    setupBraintree(dispatch, onPaymentAuthorisation);
+
     // initiate fetch of existing payment methods
     const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
     const existingDirectDebitON = isSwitchOn('recurringPaymentMethods.existingDirectDebit');
@@ -242,8 +244,6 @@ const init = (store: Store<State, Action, Function>) => {
   dispatch(updateUserFormData({
     firstName, lastName, email, state: stateField,
   }));
-
-  setupBraintree(dispatch);
 
 };
 

@@ -15,7 +15,7 @@ import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'help
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
-  StripeAuthorisation, StripePaymentMethod,
+  StripeAuthorisation, StripePaymentMethod, VenmoAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -24,12 +24,13 @@ import {
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { StripeChargeData } from 'helpers/paymentIntegrations/oneOffContributions';
+import type { StripeChargeData, VenmoChargeData } from 'helpers/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
+  postOneOffVenmoCreateTransactionRequest,
 } from 'helpers/paymentIntegrations/oneOffContributions';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
@@ -44,7 +45,7 @@ import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalA
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe, Venmo } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from '../../helpers/paymentMethods';
 
@@ -260,6 +261,26 @@ const stripeChargeDataFromAuthorisation = (
   ),
 });
 
+const venmoChargeDataFromAuthorisation = (
+  authorisation: VenmoAuthorisation,
+  state: State,
+): VenmoChargeData => ({
+  paymentData: {
+    amount: getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    ),
+    paymentNonce: authorisation.paymentNonce,
+    deviceData: 'dummy data',
+  },
+  acquisitionData: derivePaymentApiAcquisitionData(
+    state.common.referrerAcquisitionData,
+    state.common.abParticipations,
+    state.common.optimizeExperiments,
+  ),
+});
+
 const regularPaymentRequestFromAuthorisation = (
   authorisation: PaymentAuthorisation,
   state: State,
@@ -370,6 +391,14 @@ const executeStripeOneOffPayment = (
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage)));
 
 
+const executeVenmoOneOffPayment = (
+  data: VenmoChargeData,
+  setGuestToken: (string) => void,
+  setThankYouPage: (ThankYouPageStage) => void,
+) =>
+  (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
+    dispatch(onPaymentResult(postOneOffVenmoCreateTransactionRequest(data, setGuestToken, setThankYouPage)));
+
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
   state: State,
@@ -408,6 +437,21 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   PaymentAuthorisation,
 ) => Promise<PaymentResult>> = {
   ONE_OFF: {
+    Venmo: (
+      dispatch: Dispatch<Action>,
+      state: State,
+      paymentAuthorisation: PaymentAuthorisation,
+    ): Promise<PaymentResult> => {
+      if (paymentAuthorisation.paymentMethod === Venmo) {
+        return dispatch(executeVenmoOneOffPayment(
+          venmoChargeDataFromAuthorisation(paymentAuthorisation, state),
+          (token: string) => dispatch(setGuestAccountCreationToken(token)),
+          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+        ));
+      }
+      logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Venmo`);
+      return Promise.resolve(error);
+    },
     PayPal: () => {
       // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
       // endpoint, after PayPal redirects the browser back to our site.
@@ -448,6 +492,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   ANNUAL: {
     ...recurringPaymentAuthorisationHandlers,
+    Venmo: () => {
+      logInvalidCombination('ANNUAL', 'Venmo');
+      return Promise.resolve(error);
+    },
     None: () => {
       logInvalidCombination('ANNUAL', 'None');
       return Promise.resolve(error);
@@ -455,6 +503,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   MONTHLY: {
     ...recurringPaymentAuthorisationHandlers,
+    Venmo: () => {
+      logInvalidCombination('MONTHLY', 'Venmo');
+      return Promise.resolve(error);
+    },
     None: () => {
       logInvalidCombination('MONTHLY', 'None');
       return Promise.resolve(error);

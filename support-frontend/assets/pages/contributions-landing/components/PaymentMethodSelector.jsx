@@ -14,7 +14,6 @@ import {
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
@@ -55,7 +54,6 @@ type PropTypes = {|
   existingPaymentMethods: ExistingPaymentMethod[] | typeof undefined,
   paymentMethod: PaymentMethod,
   existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-  onPaymentAuthorisation: PaymentAuthorisation => void,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   updatePaymentMethod: PaymentMethod => Action,
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
