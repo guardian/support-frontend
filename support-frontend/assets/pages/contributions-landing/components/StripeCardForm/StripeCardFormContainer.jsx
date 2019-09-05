@@ -42,7 +42,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
 
       if (this.props.stripeHasLoaded) {
 
-        const key = getStripeKey('ONE_OFF', this.props.currency, this.props.isTestUser);
+        const key = getStripeKey('ONE_OFF', this.props.country, this.props.isTestUser);
 
         return (
           <div className="stripe-card-element-container">
