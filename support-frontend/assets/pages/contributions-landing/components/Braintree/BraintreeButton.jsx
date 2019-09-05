@@ -20,9 +20,9 @@ function BraintreeButton(props: PropTypes) {
   console.log(props.braintreeHasLoaded);
   return (
     <button id="venmo-button">
-        <div id="payment-form">
-          <p>Pay $10</p>
-        </div>
+      <div id="payment-form">
+        <p>Pay $10</p>
+      </div>
     </button>
   );
 }

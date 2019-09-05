@@ -53,11 +53,9 @@ function handleVenmoError(err) {
   }
 }
 
-function handleVenmoSuccess(payload, deviceData) {
+function handleVenmoSuccess(payload) {
 
   // Send payload.nonce to your server.
-  const amount = payload.amount;
-  const paymentNonce = payload.nonce;
   console.log('Got a payment method nonce:', payload.nonce);
   // Display the Venmo username in your checkout UI.
   console.log('Venmo user:', payload.details.username);
@@ -66,7 +64,7 @@ function handleVenmoSuccess(payload, deviceData) {
 /* eslint-disable no-param-reassign */
 function displayVenmoButton(venmoInstance, venmoButton, deviceData) {
   // Assumes that venmoButton is initially display: none.
-
+  console.log(deviceData);
   if (venmoButton) {
     venmoButton.style.display = 'block';
 
@@ -82,7 +80,8 @@ function displayVenmoButton(venmoInstance, venmoButton, deviceData) {
         } else {
           venmoButton.style.display = 'block';
           venmoButton.style.cssText = 'color: blue; border: 1px solid black';
-          handleVenmoSuccess(payload, deviceData);
+          venmoButton.innerHTML = JSON.stringify(payload);
+          handleVenmoSuccess(payload);
         }
         // ...
       });
