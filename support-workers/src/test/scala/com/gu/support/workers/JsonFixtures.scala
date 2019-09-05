@@ -35,7 +35,8 @@ object JsonFixtures {
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false,
-          "isTestUser": false
+          "isTestUser": false,
+          "deliveryInstructions": "Leave with neighbour"
         }
     """
 
@@ -62,7 +63,8 @@ object JsonFixtures {
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false,
-          "isTestUser": false
+          "isTestUser": false,
+          "deliveryInstructions": "Leave with neighbour"
         }
     """
   def requestIdJson: String = s""""requestId": "${UUID.randomUUID()}\""""

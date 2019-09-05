@@ -6,17 +6,17 @@ import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.workers.{Address, BillingPeriod, User}
-import io.circe.syntax._
-import lib.PlayImplicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.workers.{BillingPeriod, User}
+import io.circe.syntax._
+import lib.PlayImplicits._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, TestUserService}
-import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 import utils.NormalisedTelephoneNumber.asFormattedString
+import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -94,7 +94,8 @@ class CreateSubscription(
       // TODO: in a subsequent PR set these values based on the respective user.
       allowThirdPartyMail = false,
       allowGURelatedMail = false,
-      isTestUser = testUsers.isTestUser(user.publicFields.displayName)
+      isTestUser = testUsers.isTestUser(user.publicFields.displayName),
+      deliveryInstructions = request.deliveryInstructions
     )
   }
 

@@ -63,6 +63,7 @@ import {
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
+import { TextArea } from 'components/forms/textArea';
 
 // ----- Types ----- //
 
@@ -103,6 +104,7 @@ function mapDispatchToProps() {
 
 // ----- Form Fields ----- //
 
+const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
@@ -111,7 +113,7 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 
 // ----- Component ----- //
 
-function CheckoutForm(props: PropTypes) {
+function PaperCheckoutForm(props: PropTypes) {
 
   const days = getDays(props.fulfilmentOption, props.productOption);
   const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
@@ -181,6 +183,16 @@ function CheckoutForm(props: PropTypes) {
 
           <FormSection title={deliveryTitle}>
             <DeliveryAddress />
+            {
+              props.fulfilmentOption === HomeDelivery ?
+                <TextAreaWithLabel
+                  id="delivery-instructions"
+                  label="Delivery instructions"
+                  value={props.deliveryInstructions}
+                  setValue={props.setDeliveryInstructions}
+                />
+                : null
+            }
           </FormSection>
 
           <FormSection title="Is the billing address the same as the delivery address?">
@@ -269,4 +281,4 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps())(CheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(PaperCheckoutForm);

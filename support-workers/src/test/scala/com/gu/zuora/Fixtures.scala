@@ -48,7 +48,8 @@ object Fixtures {
     None,
     Some("london"),
     Some("n1 9gu"),
-    None
+    None,
+    Some("Leave with neighbour")
   )
   val creditCardPaymentMethod = CreditCardReferenceTransaction(
     tokenId,

@@ -11,15 +11,21 @@ import { init as pageInit } from 'helpers/page/page';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
-import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
+import SubscriptionTermsPrivacy
+  from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import ThankYouContent from './components/thankYou';
-import CheckoutForm from './components/checkoutForm';
+import CheckoutForm
+  from 'pages/paper-subscription-checkout/components/paperCheckoutForm';
 import './_legacyImports.scss';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
-import { getFulfilmentOption, getProductOption, getStartDate } from 'pages/paper-subscription-checkout/helpers/options';
+import {
+  getFulfilmentOption,
+  getProductOption,
+  getStartDate,
+} from 'pages/paper-subscription-checkout/helpers/options';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { Monthly } from 'helpers/billingPeriods';

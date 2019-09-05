@@ -11,6 +11,29 @@ object Fixtures {
   val accountNumber = "A00071408"
   val promoCode = "TEST_CODE"
 
+  val soldToContact = s"""{
+    "address1" : "Test",
+    "address2" : "Test",
+    "city" : "Test",
+    "country" : "GB",
+    "county" : null,
+    "fax" : null,
+    "firstName" : "Test",
+    "homePhone" : null,
+    "lastName" : "Test",
+    "mobilePhone" : null,
+    "nickname" : null,
+    "otherPhone" : null,
+    "otherPhoneType" : null,
+    "personalEmail" : null,
+    "state" : "Test",
+    "taxRegion" : null,
+    "workEmail" : "test@foo.com",
+    "workPhone" : null,
+    "zipCode" : "T223EST",
+    "SpecialDeliveryInstructions__c" : "Stick it in the shed"
+    }"""
+
   val getAccountResponse =
     s"""
        {
@@ -65,28 +88,7 @@ object Fixtures {
            "zipCode" : "T223EST",
            "SpecialDeliveryInstructions__c" : null
          },
-         "soldToContact" : {
-           "address1" : "Test",
-           "address2" : "TEst",
-           "city" : "Test",
-           "country" : "United Kingdom",
-           "county" : null,
-           "fax" : null,
-           "firstName" : "Test",
-           "homePhone" : null,
-           "lastName" : "Test",
-           "mobilePhone" : null,
-           "nickname" : null,
-           "otherPhone" : null,
-           "otherPhoneType" : null,
-           "personalEmail" : null,
-           "state" : "Test",
-           "taxRegion" : null,
-           "workEmail" : "test@foo.com",
-           "workPhone" : null,
-           "zipCode" : "T223EST",
-           "SpecialDeliveryInstructions__c" : null
-         },
+         "soldToContact" : $soldToContact,
          "taxInfo" : null,
          "success" : true
        }
@@ -116,7 +118,8 @@ object Fixtures {
     "createdreqid_hi"
   )
 
-  val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@gu.com"), Country.UK)
+  val deliveryInstructions = "Leave behind the dustbin"
+  val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@gu.com"), Country.UK, deliveryInstructions = Some(deliveryInstructions))
   val creditCardPaymentMethod = CreditCardReferenceTransaction(
     tokenId,
     secondTokenId,

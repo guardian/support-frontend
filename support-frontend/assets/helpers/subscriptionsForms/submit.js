@@ -32,8 +32,8 @@ import type { Promotion } from 'helpers/productPrice/productPrices';
 import {
   finalPrice,
   getAppliedPromo,
-  getProductPrice,
   getCurrency,
+  getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
@@ -121,6 +121,7 @@ function buildRegularPaymentRequest(
     fulfilmentOption,
     productOption,
     productPrices,
+    deliveryInstructions,
   } = state.page.checkout;
 
   const price = getProductPrice(
@@ -161,6 +162,7 @@ function buildRegularPaymentRequest(
       state.common.optimizeExperiments,
     ),
     promoCode,
+    deliveryInstructions,
   };
 }
 

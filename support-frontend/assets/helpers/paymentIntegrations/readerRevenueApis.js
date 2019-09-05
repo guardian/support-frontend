@@ -100,6 +100,7 @@ export type RegularPaymentRequest = {|
   supportAbTests: AcquisitionABTest[],
   telephoneNumber: Option<string>,
   promoCode?: Option<string>,
+  deliveryInstructions?: Option<string>,
 |};
 
 export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton';
