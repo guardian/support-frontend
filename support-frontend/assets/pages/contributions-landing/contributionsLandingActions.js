@@ -274,8 +274,8 @@ const buildStripeChargeDataFromAuthorisation = (
   publicKey: getStripeKey(
     stripeAccountForContributionType[state.page.form.contributionType],
     state.common.internationalisation.countryId,
-    state.page.user.isTestUser || false
-  )
+    state.page.user.isTestUser || false,
+  ),
 });
 
 const stripeChargeDataFromCheckoutAuthorisation = (

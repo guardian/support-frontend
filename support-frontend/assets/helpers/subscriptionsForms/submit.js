@@ -63,7 +63,7 @@ import { isPostDeployUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
-import type {IsoCountry} from "../internationalisation/country";
+import type { IsoCountry } from '../internationalisation/country';
 
 // ----- Functions ----- //
 
