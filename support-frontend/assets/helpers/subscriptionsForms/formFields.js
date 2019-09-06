@@ -35,6 +35,7 @@ export type FormFields = {|
   product: SubscriptionProduct,
   productOption: ProductOptions,
   orderIsAGift: Option<boolean>,
+  deliveryInstructions: Option<string>,
 |};
 
 export type FormField = $Keys<FormFields>;
@@ -72,6 +73,7 @@ function getFormFields(state: AnyCheckoutState): FormFields {
     product: state.page.checkout.product,
     billingAddressIsSame: state.page.checkout.billingAddressIsSame,
     orderIsAGift: state.page.checkout.orderIsAGift,
+    deliveryInstructions: state.page.checkout.deliveryInstructions,
   };
 }
 

@@ -100,16 +100,23 @@ export type RegularPaymentRequest = {|
   supportAbTests: AcquisitionABTest[],
   telephoneNumber: Option<string>,
   promoCode?: Option<string>,
+  deliveryInstructions?: Option<string>,
 |};
 
 export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
-export type StripeAuthorisation = {|
+export type StripeCheckoutAuthorisation = {|
   paymentMethod: typeof Stripe,
+  stripePaymentMethod: StripePaymentMethod,
   token: string,
-  stripePaymentMethod: StripePaymentMethod
 |};
+export type StripePaymentIntentAuthorisation = {|
+  paymentMethod: typeof Stripe,
+  stripePaymentMethod: StripePaymentMethod,
+  paymentMethodId: string,
+|};
+
 export type PayPalAuthorisation = {|
   paymentMethod: typeof PayPal,
   token: string
@@ -135,7 +142,8 @@ export type ExistingDirectDebitAuthorisation = {|
 // immediately executes the payment, and recurring, where it ultimately ends up in Zuora
 // which uses it to execute payments in the future.
 export type PaymentAuthorisation =
-  StripeAuthorisation |
+  StripeCheckoutAuthorisation |
+  StripePaymentIntentAuthorisation |
   PayPalAuthorisation |
   DirectDebitAuthorisation |
   ExistingCardAuthorisation |
@@ -160,7 +168,9 @@ const MAX_POLLS = 10;
 function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
   switch (authorisation.paymentMethod) {
     case Stripe:
-      return { stripeToken: authorisation.token };
+      // Only Stripe checkout is currently supported for recurring
+      if (authorisation.token) { return { stripeToken: authorisation.token }; }
+      throw new Error('Stripe Payment Intents not currently supported for recurring contributions');
     case PayPal:
       return { baid: authorisation.token };
     case DirectDebit:

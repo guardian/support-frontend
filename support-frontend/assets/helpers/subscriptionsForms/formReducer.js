@@ -57,6 +57,7 @@ function createFormReducer(
     payPalHasLoaded: false,
     orderIsAGift: false,
     stripeToken: null,
+    deliveryInstructions: null,
   };
 
   const getFulfilmentOption = (action, currentOption) =>
@@ -139,6 +140,8 @@ function createFormReducer(
 
       case 'SET_STRIPE_TOKEN':
         return { ...state, stripeToken: action.stripeToken };
+      case 'SET_DELIVERY_INSTRUCTIONS':
+        return { ...state, deliveryInstructions: action.instructions };
 
       default:
         return state;

@@ -151,7 +151,7 @@ const Address = withStore(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 
-class CheckoutForm extends Component<PropTypes, StateTypes> {
+class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
   constructor() {
     super();
     this.state = { stripe: null };
@@ -162,7 +162,8 @@ class CheckoutForm extends Component<PropTypes, StateTypes> {
   }
 
   checkStripe = () => {
-    const stripeKey = getStripeKey('REGULAR', this.props.currencyId, this.props.isTestUser);
+    console.log(this.props.currencyId);
+    const stripeKey = getStripeKey('REGULAR', this.props.country, this.props.isTestUser);
     if (window.Stripe) {
       this.setState({ stripe: window.Stripe(stripeKey) });
     } else {
@@ -291,4 +292,4 @@ class CheckoutForm extends Component<PropTypes, StateTypes> {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps())(CheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(DigitalCheckoutForm);

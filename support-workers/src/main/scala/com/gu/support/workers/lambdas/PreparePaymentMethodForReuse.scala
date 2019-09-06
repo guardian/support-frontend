@@ -10,6 +10,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PreparePaymentMethodForReuseState}
+import com.gu.support.zuora.api.PaymentGateway
 import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodDirectDebitResponse, GetPaymentMethodResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -33,7 +34,7 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       _ <- ifFalseReturnError(getPaymentMethodResponse.paymentMethodStatus == "Active", s"Zuora account $accountId has a non active default payment method")
       sfContactId <- getOrFailWithMessage(account.sfContactId__c, s"Zuora account $accountId has no sfContact")
       crmId <- getOrFailWithMessage(account.CrmId, s"Zuora account $accountId has not CrmId")
-      paymentMethod <- toPaymentMethod(getPaymentMethodResponse, services.goCardlessService)
+      paymentMethod <- toPaymentMethod(getPaymentMethodResponse, services.goCardlessService, account.PaymentGateway)
       sfContact = SalesforceContactRecord(sfContactId, crmId)
     } yield  HandlerResult(
         CreateZuoraSubscriptionState(
@@ -56,7 +57,8 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
 
   def toPaymentMethod(
     getPaymentMethodResponse: GetPaymentMethodResponse,
-    goCardlessService: GoCardlessWorkersService
+    goCardlessService: GoCardlessWorkersService,
+    paymentGateway: PaymentGateway
   ): Future[PaymentMethod] = getPaymentMethodResponse match {
 
     case cardResponse: GetPaymentMethodCardReferenceResponse =>
@@ -69,7 +71,8 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
           creditCardCountry = maybeCountry,
           creditCardExpirationMonth = cardResponse.creditCardExpirationMonth,
           creditCardExpirationYear = cardResponse.creditCardExpirationYear,
-          creditCardType = cardResponse.creditCardType
+          creditCardType = cardResponse.creditCardType,
+          paymentGateway = paymentGateway
         )
       )
     case directDebitResponse: GetPaymentMethodDirectDebitResponse =>

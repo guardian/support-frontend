@@ -8,7 +8,6 @@ import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import {
   loadStripe,
   setupStripeCheckout,
-  type StripeAccount,
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
@@ -48,6 +47,7 @@ import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
+import { stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
 
 // ----- Functions ----- //
 
@@ -85,17 +85,11 @@ function getInitialContributionType(
     contributionTypes[countryGroupId][0].contributionType;
 }
 
-const stripeAccountForContributionType: {[ContributionType]: StripeAccount } = {
-  ONE_OFF: 'ONE_OFF',
-  MONTHLY: 'REGULAR',
-  ANNUAL: 'REGULAR',
-};
-
-
 function initialiseStripeCheckout(
   onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void,
   contributionType: ContributionType,
   currencyId: IsoCurrency,
+  countryId: IsoCountry,
   isTestUser: boolean,
   dispatch: Function,
 ) {
@@ -104,8 +98,10 @@ function initialiseStripeCheckout(
       onPaymentAuthorisation,
       stripeAccountForContributionType[contributionType],
       currencyId,
+      countryId,
       isTestUser,
     );
+
   dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
 }
 
@@ -125,11 +121,13 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
     loadStripe().then(() => {
       contributionTypes[countryGroupId].forEach((contributionTypeSetting) => {
         const validPayments = getValidPaymentMethods(contributionTypeSetting.contributionType, switches, countryId);
+        // Stripe Payment Intents is currently only for one-offs, so always initialise Stripe Checkout for now
         if (validPayments.includes(Stripe)) {
           initialiseStripeCheckout(
             onPaymentAuthorisation,
             contributionTypeSetting.contributionType,
             currencyId,
+            countryId,
             !!isTestUser,
             dispatch,
           );

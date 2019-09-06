@@ -1,0 +1,32 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.stripe-card-element-container {
+  margin-top: 20px;
+  margin-bottom: 6px;
+}
+
+.stripe-card-element-container .form__error {
+  margin-top: 10px;
+}
+
+.stripe-card-element-container .form__input {
+  padding-left: 10px;
+}
+
+.stripe-card-element-container .form__input-enabled {
+  box-shadow: 0 0 0 3px gu-colour(sport-bright);
+  outline: none;
+}
+
+.form--with-labels  .stripe-card-element-container .form__legend {
+  margin-bottom: 18px;
+}
+
+.stripe-card-element-container__inline-fields {
+  display: flex;
+
+  .form__field {
+    width: 30%;
+    margin-right: 15px;
+  }
+}

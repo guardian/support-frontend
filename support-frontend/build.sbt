@@ -26,7 +26,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.dripower" %% "play-circe" % "2609.1",
   "com.gu" %% "fezziwig" % "1.2",
-  "com.typesafe.akka" %% "akka-agent" % "2.5.14",
+  "com.typesafe.akka" %% "akka-agent" % "2.5.21",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,

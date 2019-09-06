@@ -113,7 +113,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     SubscribeItem(
       account = buildAccount(state),
       billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
-      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _)),
+      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
       paymentMethod = state.paymentMethod,
       subscriptionData = buildSubscriptionData(state, promotionService),
       subscribeOptions= SubscribeOptions()
@@ -144,7 +144,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     }
   }
 
-  private def buildContactDetails(user: User, giftRecipient: Option[GiftRecipient], address: Address) = {
+  private def buildContactDetails(user: User, giftRecipient: Option[GiftRecipient], address: Address, deliveryInstructions: Option[String] = None) = {
     ContactDetails(
       firstName = giftRecipient.fold(user.firstName)(_.firstName),
       lastName = giftRecipient.fold(user.lastName)(_.lastName),
@@ -154,7 +154,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       city = address.city,
       postalCode = address.postCode,
       country = address.country,
-      state = address.state
+      state = address.state,
+      deliveryInstructions = deliveryInstructions
     )
   }
 
@@ -164,7 +165,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
     sfContactId__c = state.salesforceContacts.recipient.Id,
     identityId__c = state.user.id,
-    paymentGateway = PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
+    paymentGateway = state.paymentMethod.paymentGateway,
     createdRequestId__c = state.requestId.toString
   )
 }

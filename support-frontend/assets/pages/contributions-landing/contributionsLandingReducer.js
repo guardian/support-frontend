@@ -58,7 +58,20 @@ type StripePaymentRequestButtonData = {
   paymentMethod: 'none' | StripePaymentMethod | null,
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
-  stripeV3HasLoaded: boolean,
+}
+
+export type Stripe3DSResult = {
+  error?: Object,
+  paymentIntent: {
+    id: string,
+  }
+}
+
+export type StripeCardFormData = {
+  formComplete: boolean,
+  // These callbacks must be initialised after the StripeCardForm component has been created
+  createPaymentMethod: ((email: string) => void) | null,
+  handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null,
 }
 
 type FormState = {
@@ -69,7 +82,9 @@ type FormState = {
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
+  stripeV3HasLoaded: boolean,
   stripePaymentRequestButtonData: StripePaymentRequestButtonData,
+  stripeCardFormData: StripeCardFormData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
   paymentError: ErrorReason | null,
@@ -130,11 +145,16 @@ function createFormReducer() {
       state: null,
       checkoutFormHasBeenSubmitted: false,
     },
+    stripeV3HasLoaded: false,
     stripePaymentRequestButtonData: {
       paymentMethod: null,
       stripePaymentRequestObject: null,
       stripePaymentRequestButtonClicked: false,
-      stripeV3HasLoaded: false,
+    },
+    stripeCardFormData: {
+      formComplete: false,
+      createPaymentMethod: null,
+      handle3DS: null,
     },
     setPasswordData: {
       password: '',
@@ -188,6 +208,33 @@ function createFormReducer() {
               ...state.thirdPartyPaymentLibraries.ANNUAL,
               ...action.thirdPartyPaymentLibraryByContrib.ANNUAL,
             },
+          },
+        };
+
+      case 'SET_CREATE_STRIPE_PAYMENT_METHOD':
+        return {
+          ...state,
+          stripeCardFormData: {
+            ...state.stripeCardFormData,
+            createPaymentMethod: action.createStripePaymentMethod,
+          },
+        };
+
+      case 'SET_HANDLE_STRIPE_3DS':
+        return {
+          ...state,
+          stripeCardFormData: {
+            ...state.stripeCardFormData,
+            handle3DS: action.handleStripe3DS,
+          },
+        };
+
+      case 'SET_STRIPE_CARD_FORM_COMPLETE':
+        return {
+          ...state,
+          stripeCardFormData: {
+            ...state.stripeCardFormData,
+            formComplete: action.isComplete,
           },
         };
 
@@ -246,10 +293,7 @@ function createFormReducer() {
       case 'SET_STRIPE_V3_HAS_LOADED':
         return {
           ...state,
-          stripePaymentRequestButtonData: {
-            ...state.stripePaymentRequestButtonData,
-            stripeV3HasLoaded: true,
-          },
+          stripeV3HasLoaded: true,
         };
 
       case 'UPDATE_USER_FORM_DATA':

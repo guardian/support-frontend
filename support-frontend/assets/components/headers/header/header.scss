@@ -253,12 +253,12 @@ $header-links-min-width: gu-span(12);
         color: gu-colour(neutral-100);
         @include gu-fontset-body-sans;
         border-right: 1px solid gu-colour(brand-pastel);
-  
+
         @include mq($until: tablet) {
           flex: none;
           border-right: none;
         }
-      
+
         .component-header-topnav--checkout-text {
           border-top: 1px solid gu-colour(brand-pastel);
           border-left: 1px solid gu-colour(brand-pastel);
@@ -270,18 +270,18 @@ $header-links-min-width: gu-span(12);
             display: inline-block;
             vertical-align: top;
           }
-  
+
           @include mq($until: tablet) {
             border-left: none;
             border-top: none;
             padding-left: $gu-h-spacing /4;
           }
         }
-      
+
         @include mq($from: tablet, $until: desktop) {
           display: none;
         }
-  
+
         @include mq($from: leftCol) {
           flex: 0 0 650px;
         }
@@ -315,6 +315,15 @@ $header-links-min-width: gu-span(12);
   }
 
   @include mq($until: tablet) {
+    display: none;
+  }
+}
+
+.component-header-links__li.component-header-links__li--show-on-tablet {
+  display: block;
+
+  // custom breakpoint - we are using a 'custom breakpoint' because this is linked to the menu toggle which has a custom break point applied in js
+  @media (min-width: 884px) {
     display: none;
   }
 }

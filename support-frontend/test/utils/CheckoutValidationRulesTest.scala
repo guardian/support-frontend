@@ -99,8 +99,13 @@ class DigitalPackValidationTest extends FlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingPostcode) shouldBe true
   }
 
-  it should "fail if the payment field received is an empty string" in {
-    val requestMissingState = validDigitalPackRequest.copy(paymentFields = StripePaymentFields(""))
+  it should "fail if the payment method payment field received is an empty string" in {
+    val requestMissingState = validDigitalPackRequest.copy(paymentFields = StripePaymentMethodPaymentFields(""))
+    DigitalPackValidation.passes(requestMissingState) shouldBe false
+  }
+
+  it should "fail if the source payment field received is an empty string" in {
+    val requestMissingState = validDigitalPackRequest.copy(paymentFields = StripeSourcePaymentFields(""))
     DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
@@ -182,7 +187,7 @@ object TestData {
     lastName = "hopper",
     product = DigitalPack(Currency.USD, Monthly),
     firstDeliveryDate = None,
-    paymentFields = StripePaymentFields("test-token"),
+    paymentFields = StripePaymentMethodPaymentFields("test-token"),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
@@ -201,7 +206,8 @@ object TestData {
     titleGiftRecipient = None,
     firstNameGiftRecipient = None,
     lastNameGiftRecipient = None,
-    emailGiftRecipient = None
+    emailGiftRecipient = None,
+    deliveryInstructions = None
   )
 
   val someDateNextMonth = new LocalDate().plusMonths(1)
@@ -219,7 +225,7 @@ object TestData {
     lastName = "hopper",
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields = StripePaymentFields("test-token"),
+    paymentFields = StripePaymentMethodPaymentFields("test-token"),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
@@ -231,7 +237,8 @@ object TestData {
     titleGiftRecipient = None,
     firstNameGiftRecipient = None,
     lastNameGiftRecipient = None,
-    emailGiftRecipient = None
+    emailGiftRecipient = None,
+    deliveryInstructions = None
   )
 
 }

@@ -222,9 +222,10 @@ const init = (
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  setLocalStorageParticipations({ ...participations, ...urlParticipations });
+  const combinedParticipations: Participations = { ...participations, ...urlParticipations };
+  setLocalStorageParticipations(combinedParticipations);
 
-  return participations;
+  return combinedParticipations;
 };
 
 const getVariantsAsString = (participation: Participations): string => {

@@ -14,12 +14,6 @@ sealed trait PaymentGateway {
 }
 
 object PaymentGateway {
-  def forPaymentMethod(paymentMethod: PaymentMethod, currency: Currency): PaymentGateway = paymentMethod match {
-    case _: PayPalReferenceTransaction => PayPalGateway
-    case _: CreditCardReferenceTransaction if currency == AUD => StripeGatewayAUD
-    case _: CreditCardReferenceTransaction => StripeGatewayDefault
-    case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => DirectDebitGateway
-  }
 
   def fromString(s: String): Option[PaymentGateway] = condOpt(s) {
     case StripeGatewayDefault.name => StripeGatewayDefault
@@ -28,7 +22,7 @@ object PaymentGateway {
     case DirectDebitGateway.name => DirectDebitGateway
   }
 
-  implicit val ecoder: Encoder[PaymentGateway] = Encoder.encodeString.contramap[PaymentGateway](_.name)
+  implicit val encoder: Encoder[PaymentGateway] = Encoder.encodeString.contramap[PaymentGateway](_.name)
   implicit val decoder: Decoder[PaymentGateway] =
     Decoder.decodeString.emap[PaymentGateway](s => PaymentGateway.fromString(s).toRight(s"Invalid payment gateway $s"))
 }

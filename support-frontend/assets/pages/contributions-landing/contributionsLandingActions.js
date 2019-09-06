@@ -15,7 +15,7 @@ import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'help
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
-  StripeAuthorisation, StripePaymentMethod,
+  StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -24,12 +24,13 @@ import {
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { StripeChargeData } from 'helpers/paymentIntegrations/oneOffContributions';
+import type { StripeChargeData, CreateStripePaymentIntentRequest } from 'helpers/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
+  processStripePaymentIntentRequest,
 } from 'helpers/paymentIntegrations/oneOffContributions';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
@@ -42,11 +43,12 @@ import * as cookie from 'helpers/cookie';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
+import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import { ExistingCard, ExistingDirectDebit } from '../../helpers/paymentMethods';
+import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
+import { getStripeKey, stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -74,12 +76,15 @@ export type Action =
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
+  | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
+  | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
+  | { type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete: boolean }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
-  | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean };
+  | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -89,13 +94,14 @@ const updateContributionType = (contributionType: ContributionType): ((Function)
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType })));
   };
 
-const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
-  // PayPal one-off redirects away from the site before hitting the thank you page
-  // so we need to store the payment method in the storage so that it is available on the
-  // thank you page in all scenarios.
-  storage.setSession('selectedPaymentMethod', paymentMethod);
-  return ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });
-};
+const updatePaymentMethod = (paymentMethod: PaymentMethod): ((Function) => void) =>
+  (dispatch: Function): void => {
+    // PayPal one-off redirects away from the site before hitting the thank you page
+    // so we need to store the payment method in the storage so that it is available on the
+    // thank you page in all scenarios.
+    storage.setSession('selectedPaymentMethod', paymentMethod);
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod })));
+  };
 
 const updateSelectedExistingPaymentMethod = (existingPaymentMethod: RecentlySignedInExistingPaymentMethod): Action =>
   ({ type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD', existingPaymentMethod });
@@ -127,8 +133,7 @@ const setPaymentRequestButtonPaymentMethod =
 const setStripePaymentRequestObject =
   (stripePaymentRequestObject: Object): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject });
 
-const setStripeV3HasLoaded =
-  (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
+const setStripeV3HasLoaded = (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
 
 const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 
@@ -219,6 +224,17 @@ const checkIfEmailHasPassword = (email: string) =>
 
 const setTickerGoalReached = (): Action => ({ type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: true });
 
+const setCreateStripePaymentMethod = (createStripePaymentMethod: (email: string) => void): Action =>
+  ({ type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod });
+
+const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>): Action =>
+  ({ type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS });
+
+const setStripeCardFormComplete = (isComplete: boolean): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete })));
+  };
+
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
@@ -234,8 +250,9 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     onFormSubmit(formSubmitParameters);
   };
 
-const stripeChargeDataFromAuthorisation = (
-  authorisation: StripeAuthorisation,
+const buildStripeChargeDataFromAuthorisation = (
+  stripePaymentMethod: StripePaymentMethod,
+  token: string,
   state: State,
 ): StripeChargeData => ({
   paymentData: {
@@ -245,16 +262,39 @@ const stripeChargeDataFromAuthorisation = (
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
     ),
-    token: authorisation.token,
+    token,
     email: state.page.form.formData.email || '',
-    stripePaymentMethod: authorisation.stripePaymentMethod,
+    stripePaymentMethod,
   },
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,
     state.common.abParticipations,
     state.common.optimizeExperiments,
   ),
+  publicKey: getStripeKey(
+    stripeAccountForContributionType[state.page.form.contributionType],
+    state.common.internationalisation.countryId,
+    state.page.user.isTestUser || false,
+  ),
 });
+
+const stripeChargeDataFromCheckoutAuthorisation = (
+  authorisation: StripeCheckoutAuthorisation,
+  state: State,
+): StripeChargeData => buildStripeChargeDataFromAuthorisation(
+  authorisation.stripePaymentMethod,
+  authorisation.token,
+  state,
+);
+
+const stripeChargeDataFromPaymentIntentAuthorisation = (
+  authorisation: StripePaymentIntentAuthorisation,
+  state: State,
+): StripeChargeData => buildStripeChargeDataFromAuthorisation(
+  authorisation.stripePaymentMethod,
+  'token-deprecated',
+  state,
+);
 
 const regularPaymentRequestFromAuthorisation = (
   authorisation: PaymentAuthorisation,
@@ -365,6 +405,14 @@ const executeStripeOneOffPayment = (
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage)));
 
+const makeCreateStripePaymentIntentRequest = (
+  data: CreateStripePaymentIntentRequest,
+  setGuestToken: (string) => void,
+  setThankYouPage: (ThankYouPageStage) => void,
+  handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
+) =>
+  (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
+    dispatch(onPaymentResult(processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS)));
 
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
@@ -416,11 +464,33 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
       if (paymentAuthorisation.paymentMethod === Stripe) {
-        return dispatch(executeStripeOneOffPayment(
-          stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
-          (token: string) => dispatch(setGuestAccountCreationToken(token)),
-          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-        ));
+        if (paymentAuthorisation.token) {
+          return dispatch(executeStripeOneOffPayment(
+            stripeChargeDataFromCheckoutAuthorisation(paymentAuthorisation, state),
+            (token: string) => dispatch(setGuestAccountCreationToken(token)),
+            (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+          ));
+        }
+
+        if (paymentAuthorisation.paymentMethodId) {
+          const { handle3DS } = state.page.form.stripeCardFormData;
+          if (handle3DS) {
+            const stripeData: CreateStripePaymentIntentRequest = {
+              ...stripeChargeDataFromPaymentIntentAuthorisation(paymentAuthorisation, state),
+              paymentMethodId: paymentAuthorisation.paymentMethodId,
+            };
+            return dispatch(makeCreateStripePaymentIntentRequest(
+              stripeData,
+              (token: string) => dispatch(setGuestAccountCreationToken(token)),
+              (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+              handle3DS,
+            ));
+          }
+          // It shouldn't be possible to get this far without the handle3DS having been set
+          logException('Stripe 3DS handler unavailable');
+          return Promise.resolve(error);
+
+        }
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
       return Promise.resolve(error);
@@ -512,4 +582,7 @@ export {
   setStripePaymentRequestButtonClicked,
   setStripeV3HasLoaded,
   setTickerGoalReached,
+  setCreateStripePaymentMethod,
+  setHandleStripe3DS,
+  setStripeCardFormComplete,
 };

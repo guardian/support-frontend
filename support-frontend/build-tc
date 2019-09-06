@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit if any of these commands fail
+set -e
+
 # Installing yarn
 YARN_VERSION="1.12.3"
 YARN_LOCATION="tools/${YARN_VERSION}"

@@ -47,13 +47,12 @@ import {
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
+import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type {
-  LandingPageChoiceArchitectureAmountsFirstTestVariants,
-} from 'helpers/abTests/abtestDefinitions';
+import type { LandingPageChoiceArchitectureAmountsFirstTestVariants, StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -86,6 +85,8 @@ type PropTypes = {|
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
   landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
+  stripeElementsTestVariant: StripeElementsTestVariants,
+  createStripePaymentMethod: () => void,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -103,6 +104,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
+  createStripePaymentMethod: state.page.form.stripeCardFormData.createPaymentMethod,
   contributionType: state.page.form.contributionType,
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
@@ -114,10 +116,11 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
-  stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
+  stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
   landingPageChoiceArchitectureAmountsFirstTestVariant:
     state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
+  stripeElementsTestVariant: state.common.abParticipations.stripeElements,
 });
 
 
@@ -126,7 +129,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded); },
+  setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded()); },
 });
 
 // ----- Functions ----- //
@@ -173,7 +176,13 @@ const formHandlersForRecurring = {
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
-    Stripe: openStripePopup,
+    Stripe: (props: PropTypes) => {
+      if (props.stripeElementsTestVariant !== 'stripeCardElement') {
+        openStripePopup(props);
+      } else if (props.createStripePaymentMethod) {
+        props.createStripePaymentMethod();
+      }
+    },
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);
       props.createOneOffPayPalPayment({
@@ -269,7 +278,19 @@ function withProps(props: PropTypes) {
       />
       <div className={classNameWithModifiers('form', ['content'])}>
         <ContributionFormFields />
-        <PaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
+        <PaymentMethodSelector />
+
+        <StripeCardFormContainer
+          setStripeHasLoaded={props.setStripeV3HasLoaded}
+          stripeHasLoaded={props.stripeV3HasLoaded}
+          currency={props.currency}
+          contributionType={props.contributionType}
+          paymentMethod={props.paymentMethod}
+          stripeElementsTestVariant={props.stripeElementsTestVariant}
+          isTestUser={props.isTestUser}
+          country={props.country}
+        />
+
         <ContributionErrorMessage />
         <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       </div>

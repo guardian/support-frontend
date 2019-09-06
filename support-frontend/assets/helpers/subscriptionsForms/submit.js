@@ -32,8 +32,8 @@ import type { Promotion } from 'helpers/productPrice/productPrices';
 import {
   finalPrice,
   getAppliedPromo,
-  getProductPrice,
   getCurrency,
+  getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
@@ -58,6 +58,7 @@ import { isPostDeployUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
+import type { IsoCountry } from '../internationalisation/country';
 
 // ----- Functions ----- //
 
@@ -101,7 +102,6 @@ function buildRegularPaymentRequest(
   paymentAuthorisation: PaymentAuthorisation,
   currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
-  console.log('build regular payment request was called');
   const {
     title,
     firstName,
@@ -116,6 +116,7 @@ function buildRegularPaymentRequest(
     fulfilmentOption,
     productOption,
     productPrices,
+    deliveryInstructions,
   } = state.page.checkout;
 
   const price = getProductPrice(
@@ -156,6 +157,7 @@ function buildRegularPaymentRequest(
       state.common.optimizeExperiments,
     ),
     promoCode,
+    deliveryInstructions,
   };
 }
 
@@ -165,7 +167,6 @@ function onPaymentAuthorised(
   state: AnyCheckoutState,
   currencyId?: Option<IsoCurrency>,
 ) {
-  console.log('onPaymentAuthorised was called!');
   const data = buildRegularPaymentRequest(state, paymentAuthorisation, currencyId);
   const { product, paymentMethod } = state.page.checkout;
   const { csrf } = state.page;
@@ -173,7 +174,6 @@ function onPaymentAuthorised(
 
   const handleSubscribeResult = (result: PaymentResult) => {
     if (result.paymentStatus === 'success') {
-      console.log('result.paymentStatus was success');
       if (result.subscriptionCreationPending) {
         dispatch(setStage('thankyou-pending', product, paymentMethod));
       } else {
@@ -183,8 +183,6 @@ function onPaymentAuthorised(
   };
 
   dispatch(setFormSubmitted(true));
-
-  console.log('form now set to submitted');
 
   postRegularPaymentRequest(
     routes.subscriptionCreate,
@@ -224,10 +222,10 @@ function showPaymentMethod(
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
+  country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
   stripeToken: Option<string>,
 ): void {
-  console.log('Here in showPaymentMethod');
   switch (paymentMethod) {
     case Stripe:
       checkStripeUserType(onAuthorised, isTestUser, price, currency, stripeToken);
@@ -256,7 +254,8 @@ function submitForm(
   dispatch: Dispatch<Action>,
   state: AnyCheckoutState,
 ) {
-  console.log('submitForm has been called');
+  const billingCountry = state.page.billingAddress.fields.country;
+
   const {
     paymentMethod, product, isTestUser,
   } = state.page.checkout;
@@ -265,7 +264,7 @@ function submitForm(
 
   let priceDetails = finalPrice(
     state.page.checkout.productPrices,
-    state.page.billingAddress.fields.country,
+    billingCountry,
     state.page.checkout.billingPeriod,
     state.page.checkout.fulfilmentOption,
     state.page.checkout.productOption,
@@ -295,7 +294,7 @@ function submitForm(
     );
 
   showPaymentMethod(
-    dispatch, onAuthorised, isTestUser, price, currency,
+    dispatch, onAuthorised, isTestUser, price, currency, billingCountry,
     paymentMethod, stripeToken,
   );
 }

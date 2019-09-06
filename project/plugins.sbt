@@ -27,7 +27,7 @@ addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.2.0")
 // dependency tracker plugin - needed for snyk cli integration
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.0")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.4.1")
 
 // needed for riffraff as it uses AWS S3 SDK 1.11 which uses some base64 methods that were removed in JDK11
 // this is not needed for the current build server, but it is a good reason to move to AWS SDK v2

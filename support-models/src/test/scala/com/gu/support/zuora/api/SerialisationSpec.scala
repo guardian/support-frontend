@@ -30,10 +30,15 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
     testDecoding[PaymentFields](directDebitPaymentFieldsJson)
   }
 
+  "ContactDetails" should "deserialise correctly" in {
+    testDecoding[ContactDetails](soldToContact, c => c.deliveryInstructions shouldBe Some("Stick it in the shed"))
+  }
+
   "SubscribeRequest" should "serialise to correct json" in {
     val json = creditCardSubscriptionRequest().asJson
     (json \\ "GenerateInvoice").head.asBoolean should be(Some(true))
     (json \\ "sfContactId__c").head.asString.get should be(salesforceId)
+    (json \\ "SpecialDeliveryInstructions__c").head.asString.get should be(deliveryInstructions)
   }
 
   it should "deserialise correctly" in {

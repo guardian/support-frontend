@@ -35,7 +35,8 @@ object JsonFixtures {
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false,
-          "isTestUser": false
+          "isTestUser": false,
+          "deliveryInstructions": "Leave with neighbour"
         }
     """
 
@@ -62,7 +63,8 @@ object JsonFixtures {
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false,
-          "isTestUser": false
+          "isTestUser": false,
+          "deliveryInstructions": "Leave with neighbour"
         }
     """
   def requestIdJson: String = s""""requestId": "${UUID.randomUUID()}\""""
@@ -74,7 +76,8 @@ object JsonFixtures {
               "PaypalBaid": "$validBaid",
               "PaypalEmail": "$payPalEmail",
               "PaypalType": "ExpressCheckout",
-              "Type": "PayPal"
+              "Type": "PayPal",
+              "paymentGateway": "PayPal Express"
          }
        """
 
@@ -88,7 +91,8 @@ object JsonFixtures {
            "CreditCardExpirationMonth": 2,
            "CreditCardExpirationYear": 2022,
            "CreditCardType": "Visa",
-           "Type": "CreditCardReferenceTransaction"
+           "Type": "CreditCardReferenceTransaction",
+           "paymentGateway": "Stripe Gateway 1"
          }
        """
 
@@ -171,11 +175,18 @@ object JsonFixtures {
     """
 
   val stripeToken = "tok_visa"
+  val stripePaymentMethodToken = "tok_visa"
   val stripeJson =
     s"""
       {
-        "userId": "12345",
         "stripeToken": "$stripeToken"
+      }
+    """
+
+  val stripePaymentMethodJson =
+    s"""
+      {
+        "paymentMethod": "$stripePaymentMethodToken"
       }
     """
 
@@ -188,12 +199,22 @@ object JsonFixtures {
           "acquisitionData": $acquisitionData
         }"""
 
-  def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
+  def createStripeSourcePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
     s"""{
           $requestIdJson,
           ${userJson()},
           "product": ${contribution(amount = amount, billingPeriod = billingPeriod, currency = currency)},
           "paymentFields": $stripeJson,
+          "sessionId": "testingToken",
+          "acquisitionData": $acquisitionData
+        }"""
+
+  def createStripePaymentMethodPaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
+    s"""{
+          $requestIdJson,
+          ${userJson()},
+          "product": ${contribution(amount = amount, billingPeriod = billingPeriod, currency = currency)},
+          "paymentFields": $stripePaymentMethodJson,
           "sessionId": "testingToken",
           "acquisitionData": $acquisitionData
         }"""
@@ -500,7 +521,7 @@ object JsonFixtures {
   val wrapperWithMessages =
     """
       {
-        "state": "eyJyZXF1ZXN0SWQiOiI5NjViOTU1Zi00MmQ4LWEwMDEtMDAwMC0wMDAwMDAwMDAwMDIiLCJ1c2VyIjp7ImlkIjoiMTAwMDAzNDUzIiwicHJpbWFyeUVtYWlsQWRkcmVzcyI6InNzbGpmc2Rsa2ZzZGxmQGd1LmNvbSIsImZpcnN0TmFtZSI6InNsZmtzZGtsZiIsImxhc3ROYW1lIjoic2xka2ZqZHNsZmoiLCJiaWxsaW5nQWRkcmVzcyI6eyJjb3VudHJ5IjoiR0IifSwiY291bnRyeSI6IkdCIiwic3RhdGUiOm51bGwsInRlbGVwaG9uZU51bWJlciI6IiIsImFsbG93TWVtYmVyc2hpcE1haWwiOmZhbHNlLCJhbGxvd1RoaXJkUGFydHlNYWlsIjpmYWxzZSwiYWxsb3dHVVJlbGF0ZWRNYWlsIjpmYWxzZSwiaXNUZXN0VXNlciI6ZmFsc2V9LCJwcm9kdWN0Ijp7ImN1cnJlbmN5IjoiR0JQIiwiYmlsbGluZ1BlcmlvZCI6Ik1vbnRobHkifSwicGF5bWVudE1ldGhvZCI6eyJUb2tlbklkIjoiY2FyZF9FUmY1dHcyNDVGY2Q0RiIsIlNlY29uZFRva2VuSWQiOiJjdXNfRVJmNWM2ajJ5OUEwWFYiLCJDcmVkaXRDYXJkTnVtYmVyIjoiNDI0MiIsIkNyZWRpdENhcmRDb3VudHJ5IjoiVVMiLCJDcmVkaXRDYXJkRXhwaXJhdGlvbk1vbnRoIjoyLCJDcmVkaXRDYXJkRXhwaXJhdGlvblllYXIiOjIwMjIsIkNyZWRpdENhcmRUeXBlIjoiVmlzYSIsIlR5cGUiOiJDcmVkaXRDYXJkUmVmZXJlbmNlVHJhbnNhY3Rpb24ifSwicHJvbW9Db2RlIjoiREpSSFlNRFM4Iiwic2FsZXNGb3JjZUNvbnRhY3QiOnsiSWQiOiIwMDM2RTAwMDAwVmxPUERRQTMiLCJBY2NvdW50SWQiOiIwMDE2RTAwMDAwZjE3cFlRQVEifSwiYWNxdWlzaXRpb25EYXRhIjp7Im9waGFuSWRzIjp7InBhZ2V2aWV3SWQiOiJqcmwxcnpyY25qNWdrM2oyMXN0dyIsInZpc2l0SWQiOm51bGwsImJyb3dzZXJJZCI6bnVsbH0sInJlZmVycmVyQWNxdWlzaXRpb25EYXRhIjp7ImNhbXBhaWduQ29kZSI6bnVsbCwicmVmZXJyZXJQYWdldmlld0lkIjpudWxsLCJyZWZlcnJlclVybCI6bnVsbCwiY29tcG9uZW50SWQiOm51bGwsImNvbXBvbmVudFR5cGUiOm51bGwsInNvdXJjZSI6bnVsbCwiYWJUZXN0cyI6bnVsbCwicXVlcnlQYXJhbWV0ZXJzIjpbeyJuYW1lIjoiZGlzcGxheUNoZWNrb3V0IiwidmFsdWUiOiJ0cnVlIn1dLCJob3N0bmFtZSI6InN1cHBvcnQudGhlZ3Vsb2NhbC5jb20iLCJnYUNsaWVudElkIjoiR0ExLjIuMTUwNjcwMTk4OC4xNTQ1NDA5MDcxIiwidXNlckFnZW50IjoiTW96aWxsYS81LjAoTWFjaW50b3NoO0ludGVsTWFjT1NYMTBfMTNfMilBcHBsZVdlYktpdC81MzcuMzYoS0hUTUwsbGlrZUdlY2tvKUNocm9tZS83MS4wLjM1NzguOThTYWZhcmkvNTM3LjM2IiwiaXBBZGRyZXNzIjoiMTI3LjAuMC4xIn0sInN1cHBvcnRBYlRlc3RzIjpbXX19",
+        "state": "CiAgICAgICAgICB7CiAgICAgICAgICAgICJyZXF1ZXN0SWQiOiAiYTY0YWQ5OGUtNWQzOS00ZmZjLWE0YTktMjE3MzU3ZGMyYjE5IiwKICAgICAgICAgICAgCiAgICAgICJ1c2VyIjp7CiAgICAgICAgICAiaWQiOiAiOTk5OTk5OSIsCiAgICAgICAgICAicHJpbWFyeUVtYWlsQWRkcmVzcyI6ICJpbnRlZ3JhdGlvbi10ZXN0QGd1LmNvbSIsCiAgICAgICAgICAiZmlyc3ROYW1lIjogInRlc3QiLAogICAgICAgICAgImxhc3ROYW1lIjogInVzZXIiLAogICAgICAgICAgImNvdW50cnkiOiAiR0IiLAogICAgICAgICAgImJpbGxpbmdBZGRyZXNzIjogewogICAgICAgICAgICAiY291bnRyeSI6ICJHQiIKICAgICAgICAgIH0sCiAgICAgICAgICAiYWxsb3dNZW1iZXJzaGlwTWFpbCI6IGZhbHNlLAogICAgICAgICAgImFsbG93VGhpcmRQYXJ0eU1haWwiOiBmYWxzZSwKICAgICAgICAgICJhbGxvd0dVUmVsYXRlZE1haWwiOiBmYWxzZSwKICAgICAgICAgICJpc1Rlc3RVc2VyIjogZmFsc2UKICAgICAgICB9CiAgICAsCiAgICAgICAgICAgICJwcm9kdWN0IjogCiAgICAgIHsKICAgICAgICAiYW1vdW50IjogNSwKICAgICAgICAiY3VycmVuY3kiOiAiR0JQIiwKICAgICAgICAiYmlsbGluZ1BlcmlvZCI6ICJNb250aGx5IgogICAgICB9CiAgICAsCiAgICAgICAgICAgICJwYXltZW50TWV0aG9kIjogCiAgICAgICAgewogICAgICAgICAgICAgICJQYXlwYWxCYWlkIjogIkItMjM2Mzc3NjZLNTM2NTU0M0oiLAogICAgICAgICAgICAgICJQYXlwYWxFbWFpbCI6ICJ0ZXN0QHBheXBhbC5jb20iLAogICAgICAgICAgICAgICJQYXlwYWxUeXBlIjogIkV4cHJlc3NDaGVja291dCIsCiAgICAgICAgICAgICAgIlR5cGUiOiAiUGF5UGFsIiwKICAgICAgICAgICAgICAicGF5bWVudEdhdGV3YXkiOiAiUGF5UGFsIEV4cHJlc3MiCiAgICAgICAgIH0KICAgICAgICwKICAgICAgICAgICAgImdpZnRSZWNpcGllbnQiOiB7CiAgICAgICAgICAgICAgInRpdGxlIjogIk1yIiwKICAgICAgICAgICAgICAiZmlyc3ROYW1lIjogIkdpZnR5IiwKICAgICAgICAgICAgICAibGFzdE5hbWUiOiAiTWNSZWNpcGVudCIsCiAgICAgICAgICAgICAgImVtYWlsIjogImdpZnQucmVjaXBpZW50QGd1LmNvbSIKICAgICAgICAgICAgfQogICAgICAgICAgfQogICAgICAgIA==",
         "error": null,
         "requestInfo": {
           "encrypted": false,
