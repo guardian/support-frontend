@@ -1,25 +1,53 @@
+// @flow
+
 import React from 'react';
 import { CardNumberElement, CardExpiryElement, CardCvcElement } from 'react-stripe-elements';
+import { Error } from 'components/forms/customFields/error';
 
-const CardNumber = () => (
-  <label htmlFor="card-details">
+import './stripeForm.scss';
+
+const baseStyles = {
+  fontSize: '16px',
+  color: '#000',
+  '::placeholder': {
+    color: 'white',
+  },
+};
+
+const invalidStyles = {
+  color: '#c70000',
+};
+
+type PropTypes = {
+  error: string,
+}
+
+const CardNumber = (props: PropTypes) => (
+  <label htmlFor="card-details" className="component-credit-card-label">
     Card number
-    <CardNumberElement style={{ base: { fontSize: '18px' } }} />
+    {props.error && <Error htmlFor="card-details" error={props.error} />}
+    <CardNumberElement style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }} />
   </label>
 );
 
-const CardExpiry = () => (
-  <label htmlFor="expiry">
-    Expiry date
-    <CardExpiryElement style={{ base: { fontSize: '18px' } }} />
-  </label>
+const CardExpiry = (props: PropTypes) => (
+  <div className="component-credit-card-inline-elements">
+    <label htmlFor="expiry" className="component-credit-card-label">
+      Expiry date
+      {props.error && <Error htmlFor="expiry" error={props.error} />}
+      <CardExpiryElement style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }} />
+    </label>
+  </div>
 );
 
-const CardCvc = () => (
-  <label htmlFor="cvc">
-    CVC
-    <CardCvcElement style={{ base: { fontSize: '18px' } }} />
-  </label>
+const CardCvc = (props: PropTypes) => (
+  <div className="component-credit-card-inline-elements">
+    <label htmlFor="cvc" className="component-credit-card-label">
+      CVC
+      {props.error && <Error htmlFor="cvc" error={props.error} />}
+      <CardCvcElement style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }} />
+    </label>
+  </div>
 );
 
 export {

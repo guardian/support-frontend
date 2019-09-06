@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 // @flow
 
 import React, { Component, type Node } from 'react';
@@ -8,11 +9,11 @@ import {
   CardCvc,
 } from './cardElements';
 import Button from 'components/button/button';
-
-import './stripeForm.scss';
 import { ErrorSummary } from '../submitFormErrorSummary';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
+
+import './stripeForm.scss';
 
 // Types
 
@@ -23,19 +24,44 @@ type PropTypes = {
   setStripeToken: Function,
   submitForm: Function,
   name: string,
+  validateForm: Function,
+}
+
+type StateTypes = {
+  incomplete_number: string,
+  incomplete_expiry: string,
+  incomplete_cvc: string,
 }
 
 // Main component
 
-class StripeForm extends Component<PropTypes> {
-  // This bit is still a stand in for the real code, which needs to be dynamic
+class StripeForm extends Component<PropTypes, StateTypes> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      incomplete_number: '',
+      incomplete_expiry: '',
+      incomplete_cvc: '',
+    };
+  }
+
+  handleError = (error: Object) => {
+    this.setState({ [error.code]: error.message });
+  }
 
   requestStripeToken = (event) => {
     event.preventDefault();
-    if (this.props.stripe) {
+    this.props.validateForm();
+    if (this.props.stripe && this.props.allErrors.length === 0) {
       const { stripe } = this.props;
       stripe.createToken({ type: 'card', name: this.props.name })
-        .then(tokenObject => this.props.setStripeToken(tokenObject.token.id))
+        .then(({ token, error }) => {
+          if (error) {
+            this.handleError(error);
+          } else {
+            this.props.setStripeToken(token.id);
+          }
+        })
         .then(() => this.props.submitForm());
     }
   }
@@ -49,12 +75,14 @@ class StripeForm extends Component<PropTypes> {
       <span>
         {stripe && (
           <div>
-            <CardNumber />
-            <CardExpiry />
-            <CardCvc />
-            <Button onClick={event => this.requestStripeToken(event)}>
-              Start your free trial now
-            </Button>
+            <CardNumber error={this.state.incomplete_number} />
+            <CardExpiry error={this.state.incomplete_expiry} />
+            <CardCvc error={this.state.incomplete_cvc} />
+            <div className="component-stripe-submit-button">
+              <Button onClick={event => this.requestStripeToken(event)}>
+                Start your free trial now
+              </Button>
+            </div>
             <span>{this.props.component}</span>
             {this.props.allErrors.length > 0 && <ErrorSummary errors={this.props.allErrors} />}
           </div>

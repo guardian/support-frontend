@@ -162,7 +162,6 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
   }
 
   checkStripe = () => {
-    console.log(this.props.currencyId);
     const stripeKey = getStripeKey('REGULAR', this.props.country, this.props.isTestUser);
     if (window.Stripe) {
       this.setState({ stripe: window.Stripe(stripeKey) });
@@ -277,6 +276,7 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
                     allErrors={[...props.addressErrors]}
                     setStripeToken={this.props.setStripeToken}
                     name={`${props.firstName} ${props.lastName}`}
+                    validateForm={props.validateForm}
                   />
                 </FormSectionHidden>
                 <CancellationSection />
