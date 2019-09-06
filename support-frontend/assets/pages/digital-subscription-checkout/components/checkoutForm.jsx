@@ -92,9 +92,6 @@ type PropTypes = {|
   formIsValid: Function,
   optimizeExperiments: OptimizeExperiments,
   addressErrors: Array<Object>,
-  creditCardNumber: Option<number> | null,
-  expiryDate: Option<string> | null,
-  cvc: Option<number> | null,
 |};
 
 type StateTypes = {
@@ -169,12 +166,10 @@ class CheckoutForm extends Component<PropTypes, StateTypes> {
     if (window.Stripe) {
       this.setState({ stripe: window.Stripe(stripeKey) });
     } else {
-      document.querySelector('#stripe-js').addEventListener('load', () => {
-        // Create Stripe instance once Stripe.js loads
+      window.onload = () => {
         this.setState({ stripe: window.Stripe(stripeKey) });
-      });
+      };
     }
-
   }
 
   render() {
@@ -187,7 +182,6 @@ class CheckoutForm extends Component<PropTypes, StateTypes> {
     const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
     const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
     const priceSummary = `${offerOnSelected || 'Enjoy your digital pack free for 14 days, then'} ${helperSelected}.`;
-    console.log(this.props);
 
     const PriceSummary = () =>
       <p className="component-credit-card-price">{priceSummary}</p>;
@@ -281,6 +275,7 @@ class CheckoutForm extends Component<PropTypes, StateTypes> {
                     paymentMethod={props.paymentMethod}
                     allErrors={[...props.addressErrors]}
                     setStripeToken={this.props.setStripeToken}
+                    name={`${props.firstName} ${props.lastName}`}
                   />
                 </FormSectionHidden>
                 <CancellationSection />

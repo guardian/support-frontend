@@ -101,6 +101,7 @@ function buildRegularPaymentRequest(
   paymentAuthorisation: PaymentAuthorisation,
   currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
+  console.log('build regular payment request was called');
   const {
     title,
     firstName,
@@ -164,7 +165,7 @@ function onPaymentAuthorised(
   state: AnyCheckoutState,
   currencyId?: Option<IsoCurrency>,
 ) {
-  console.log('Here!');
+  console.log('onPaymentAuthorised was called!');
   const data = buildRegularPaymentRequest(state, paymentAuthorisation, currencyId);
   const { product, paymentMethod } = state.page.checkout;
   const { csrf } = state.page;
@@ -172,6 +173,7 @@ function onPaymentAuthorised(
 
   const handleSubscribeResult = (result: PaymentResult) => {
     if (result.paymentStatus === 'success') {
+      console.log('result.paymentStatus was success');
       if (result.subscriptionCreationPending) {
         dispatch(setStage('thankyou-pending', product, paymentMethod));
       } else {
@@ -181,6 +183,8 @@ function onPaymentAuthorised(
   };
 
   dispatch(setFormSubmitted(true));
+
+  console.log('form now set to submitted');
 
   postRegularPaymentRequest(
     routes.subscriptionCreate,
@@ -197,7 +201,7 @@ function checkStripeUserType(
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
-  stripeToken: string,
+  stripeToken: Option<string>,
 ) {
   if (isPostDeployUser()) {
     onAuthorised({
@@ -208,7 +212,7 @@ function checkStripeUserType(
   } else {
     onAuthorised({
       paymentMethod: Stripe,
-      token: stripeToken,
+      token: stripeToken || '',
       stripePaymentMethod: 'StripeElements',
     });
   }
@@ -252,7 +256,7 @@ function submitForm(
   dispatch: Dispatch<Action>,
   state: AnyCheckoutState,
 ) {
-  console.log('Form was submitted');
+  console.log('submitForm has been called');
   const {
     paymentMethod, product, isTestUser,
   } = state.page.checkout;

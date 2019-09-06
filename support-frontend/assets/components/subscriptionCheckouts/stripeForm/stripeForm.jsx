@@ -22,6 +22,7 @@ type PropTypes = {
   allErrors: FormError<FormField>[],
   setStripeToken: Function,
   submitForm: Function,
+  name: string,
 }
 
 // Main component
@@ -29,11 +30,11 @@ type PropTypes = {
 class StripeForm extends Component<PropTypes> {
   // This bit is still a stand in for the real code, which needs to be dynamic
 
-  handleSubmit = (event) => {
+  requestStripeToken = (event) => {
     event.preventDefault();
     if (this.props.stripe) {
       const { stripe } = this.props;
-      stripe.createToken({ name: 'Luke Skywalker' })
+      stripe.createToken({ type: 'card', name: this.props.name })
         .then(tokenObject => this.props.setStripeToken(tokenObject.token.id))
         .then(() => this.props.submitForm());
     }
@@ -51,7 +52,7 @@ class StripeForm extends Component<PropTypes> {
             <CardNumber />
             <CardExpiry />
             <CardCvc />
-            <Button onClick={event => this.handleSubmit(event)}>
+            <Button onClick={event => this.requestStripeToken(event)}>
               Start your free trial now
             </Button>
             <span>{this.props.component}</span>
