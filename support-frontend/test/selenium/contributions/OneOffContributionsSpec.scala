@@ -63,38 +63,6 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       }
     }
 
-    scenario("Check Stripe pop-up appears") {
-      val testUser = new TestUser {
-        val username = "test-stripe-pop-up"
-        driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
-      }
-
-      val landingPage = ContributionsLanding("au", testUser)
-
-      Given("that a test user goes to the contributions landing page")
-      goTo(landingPage)
-      assert(landingPage.pageHasLoaded)
-      landingPage.clearForm(hasNameFields = false)
-
-      When("the user selects the one-time option")
-      landingPage.clickOneOff
-
-      Given("The user fills in their details correctly")
-      landingPage.fillInPersonalDetails(hasNameFields = false)
-
-      Given("that the user selects to pay with Stripe")
-      When("they press the Stripe payment button")
-      landingPage.selectStripePayment()
-
-      When("they click contribute")
-      landingPage.clickContribute
-
-      Then("the overlay should appear")
-      eventually {
-        assert(landingPage.hasStripeOverlay)
-      }
-    }
-
     scenario("Check browser navigates to paypal") {
       val testUser = new TestUser {
         val username = "test-stripe-pop-up"
