@@ -91,7 +91,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: window.guardian.stripeElements,
+    isActive: window.guardian && window.guardian.stripeElements ? window.guardian.stripeElements : false,
     independent: true,
     seed: 3,
   },
