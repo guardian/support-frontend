@@ -44,8 +44,7 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
     case 'internal_error':
       return 'Sorry, something has gone wrong. Please try again, or come back later.';
     case 'card_authentication_error':
-      // TODO - is this copy ok?
-      return 'Your card issuer\'s authentication was unsuccessful and you have not been charged. Please try again or choose another payment method.';
+      return 'You have not been charged. Please check your payment details and try again, or choose another payment method.';
     default:
       return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
   }
