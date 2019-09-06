@@ -70,6 +70,9 @@ const fieldStyle = {
   base: {
     fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
     fontSize: '16px',
+    '::placeholder': {
+      color: '#999999',
+    },
     lineHeight: '24px',
   },
 };
