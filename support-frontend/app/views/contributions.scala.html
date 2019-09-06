@@ -101,5 +101,7 @@
   @guestAccountCreationToken.map { guestAccountCreationToken =>
     window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
   }
+
+  window.guardian.stripeElements = @settings.switches.experiments.get("stripeElements").exists(_.isOn)
   </script>
 }
