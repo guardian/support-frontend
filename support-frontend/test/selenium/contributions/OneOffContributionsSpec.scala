@@ -1,9 +1,10 @@
 package selenium.contributions
 
+import org.openqa.selenium.JavascriptExecutor
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.contributions.pages.{ContributionsLanding, ContributionThankYou}
+import selenium.contributions.pages.{ContributionThankYou, ContributionsLanding}
 import selenium.util._
 
 class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
@@ -13,7 +14,14 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
 
   override implicit val patienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
 
-  before { driverConfig.reset() }
+  before {
+    driverConfig.reset()
+    // TODO - change tests to support new Stripe Elements UI
+    webDriver.asInstanceOf[JavascriptExecutor].executeScript(
+      """window.localStorage.setItem('gu.support.abTests',""" +
+        """'{"stripeElements":"control"}')"""
+    )
+  }
 
   override def beforeAll(): Unit = {
     Config.printSummary(driverConfig.sessionId)
@@ -60,6 +68,38 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
 
       eventually {
         assert(contributionThankYou.pageHasLoaded)
+      }
+    }
+
+    scenario("Check Stripe pop-up appears") {
+      val testUser = new TestUser {
+        val username = "test-stripe-pop-up"
+        driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
+      }
+
+      val landingPage = ContributionsLanding("au", testUser)
+
+      Given("that a test user goes to the contributions landing page")
+      goTo(landingPage)
+      assert(landingPage.pageHasLoaded)
+      landingPage.clearForm(hasNameFields = false)
+
+      When("the user selects the one-time option")
+      landingPage.clickOneOff
+
+      Given("The user fills in their details correctly")
+      landingPage.fillInPersonalDetails(hasNameFields = false)
+
+      Given("that the user selects to pay with Stripe")
+      When("they press the Stripe payment button")
+      landingPage.selectStripePayment()
+
+      When("they click contribute")
+      landingPage.clickContribute
+
+      Then("the overlay should appear")
+      eventually {
+        assert(landingPage.hasStripeOverlay)
       }
     }
 
