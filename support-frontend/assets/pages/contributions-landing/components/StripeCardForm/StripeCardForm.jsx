@@ -66,16 +66,6 @@ type StateTypes = {
   currentlySelected: CardFieldName | null,
 };
 
-// Unfortunately the only way to currently use custom fonts with Stripe Elements
-// is to pass the font itself along with the styles referencing it
-const customFonts = [{
-  src: `local('Guardian Text Sans Web'), 
-    local('GuardianTextSansWeb'),
-    url(https://pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-Regular.woff)`,
-  family: 'Guardian Text Sans Web',
-  style: 'normal',
-}];
-
 const fieldStyle = {
   base: {
     fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
@@ -188,7 +178,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
       `form__input ${this.getFieldBorderClass(fieldName)}`;
 
     return (
-      <Elements fonts={customFonts} >
         <div className="form__fields">
           <legend className="form__legend">Your card details</legend>
 
@@ -242,7 +231,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
           {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
         </div>
-      </Elements>
     );
   }
 }
