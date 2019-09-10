@@ -20,13 +20,17 @@ const invalidStyles = {
 
 type PropTypes = {
   error: string,
+  handleChange: Function,
 }
 
 const CardNumber = (props: PropTypes) => (
   <label htmlFor="card-details" className="component-credit-card-label">
     Card number
     {props.error && <Error htmlFor="card-details" error={props.error} />}
-    <CardNumberElement style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }} />
+    <CardNumberElement
+      style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+      onChange={e => props.handleChange(e)}
+    />
   </label>
 );
 
@@ -35,7 +39,10 @@ const CardExpiry = (props: PropTypes) => (
     <label htmlFor="expiry" className="component-credit-card-label">
       Expiry date
       {props.error && <Error htmlFor="expiry" error={props.error} />}
-      <CardExpiryElement style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }} />
+      <CardExpiryElement
+        style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+        onChange={e => props.handleChange(e)}
+      />
     </label>
   </div>
 );
@@ -45,7 +52,10 @@ const CardCvc = (props: PropTypes) => (
     <label htmlFor="cvc" className="component-credit-card-label">
       CVC
       {props.error && <Error htmlFor="cvc" error={props.error} />}
-      <CardCvcElement style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }} />
+      <CardCvcElement
+        style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+        onChange={e => props.handleChange(e)}
+      />
     </label>
   </div>
 );
