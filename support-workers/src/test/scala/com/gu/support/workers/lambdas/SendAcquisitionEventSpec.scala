@@ -23,7 +23,7 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    sendAcquisitionEvent.handleRequestExtractFunctor[Future](sendAcquisitionEventJson, outStream, context, identity).map { _ =>
+    sendAcquisitionEvent.handleRequestFuture(sendAcquisitionEventJson, outStream, context).map { _ =>
 
       //Check the output
       val out = Encoding.in[Unit](outStream.toInputStream)

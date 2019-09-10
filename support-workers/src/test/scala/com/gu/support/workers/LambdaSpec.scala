@@ -7,9 +7,7 @@ import org.scalatest.{AsyncFlatSpec, FlatSpec, Matchers}
 
 abstract class LambdaSpec extends FlatSpec with Matchers with MockContext
 
-abstract class AsyncLambdaSpec extends AsyncFlatSpec with Matchers {
-  //implicit override def executionContext = scala.concurrent.ExecutionContext.Implicits.global
-}
+abstract class AsyncLambdaSpec extends AsyncFlatSpec with Matchers
 
 trait MockContext extends MockitoSugar {
   val context = mock[Context]

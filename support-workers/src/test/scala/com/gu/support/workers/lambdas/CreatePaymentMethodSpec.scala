@@ -20,7 +20,6 @@ import com.gu.test.tags.objects.IntegrationTest
 import io.circe.Decoder
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import cats.implicits._
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -33,8 +32,8 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequestExtractFunctor[Future](
-      wrapFixture(createPayPalPaymentMethodContributionJson()), outStream, context, identity).map { _ =>
+    createPaymentMethod.handleRequestFuture(
+      wrapFixture(createPayPalPaymentMethodContributionJson()), outStream, context).map { _ =>
 
       //Check the output
       val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
@@ -55,8 +54,8 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequestExtractFunctor[Future](
-      wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context, identity).map { _ =>
+    createPaymentMethod.handleRequestFuture(
+      wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context).map { _ =>
 
       //Check the output
       val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
@@ -71,14 +70,14 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
   }
 
   it should "fail when passed invalid json" in {
-    a[RetryNone] should be thrownBy {
+    recoverToSucceededIf[RetryNone] {
       val createPaymentMethod = new CreatePaymentMethod()
 
       val outStream = new ByteArrayOutputStream()
 
       val inStream = "Test user".asInputStream
 
-      createPaymentMethod.handleRequestExtractFunctor[Future](inStream, outStream, mock[Context], identity).map { _ =>
+      createPaymentMethod.handleRequestFuture(inStream, outStream, mock[Context]).map { _ =>
 
         val p = outStream.toClass[PaymentMethod](encrypted = false)
       }

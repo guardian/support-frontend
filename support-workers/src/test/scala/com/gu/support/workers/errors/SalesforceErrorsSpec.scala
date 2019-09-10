@@ -16,6 +16,7 @@ import scala.concurrent.duration._
 
 @IntegrationTest
 class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
+
   "AuthService" should "throw a SalesforceAuthenticationErrorResponse" in {
     val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
     val authService = new AuthService(invalidConfig)
@@ -51,7 +52,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
 
     val service = new SalesforceService(invalidConfig, configurableFutureRunner(10.seconds))
 
-    assertThrows[SalesforceAuthenticationErrorResponse] {
+    recoverToSucceededIf[SalesforceAuthenticationErrorResponse] {
       service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
     }
   }
