@@ -154,20 +154,19 @@ class CardForm extends Component<PropTypes, StateTypes> {
     });
   };
 
+  getFieldBorder = (fieldName: CardFieldName): string => {
+    if (this.state.currentlySelected === fieldName) {
+      return 'form__input-enabled';
+    } else if (this.state[fieldName].name === 'Error') {
+      return 'form__input--invalid';
+    }
+    return '';
+  };
+
   formIsComplete = () =>
     this.state.CardNumber.name === 'Complete' &&
     this.state.Expiry.name === 'Complete' &&
     this.state.CVC.name === 'Complete';
-
-  getFieldBorder = (fieldName: CardFieldName): string => {
-    if (this.state.currentlySelected === fieldName) {
-      return 'form__input-enabled'
-    } else if (this.state[fieldName].name === 'Error') {
-      return 'form__input--invalid'
-    } else {
-      return '';
-    }
-  };
 
   render() {
     const errorMessage: ?string =
