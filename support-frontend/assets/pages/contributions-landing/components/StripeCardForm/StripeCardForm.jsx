@@ -154,7 +154,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
     });
   };
 
-  getFieldBorder = (fieldName: CardFieldName): string => {
+  getFieldBorderClass = (fieldName: CardFieldName): string => {
     if (this.state.currentlySelected === fieldName) {
       return 'form__input-enabled';
     } else if (this.state[fieldName].name === 'Error') {
@@ -175,7 +175,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       errorMessageFromState(this.state.CVC);
 
     const getClasses = (fieldName: CardFieldName): string =>
-      `form__input ${this.getFieldBorder(fieldName)}`;
+      `form__input ${this.getFieldBorderClass(fieldName)}`;
 
     return (
       <div className="form__fields">
