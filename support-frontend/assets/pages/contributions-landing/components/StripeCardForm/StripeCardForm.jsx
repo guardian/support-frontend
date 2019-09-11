@@ -178,59 +178,59 @@ class CardForm extends Component<PropTypes, StateTypes> {
       `form__input ${this.getFieldBorderClass(fieldName)}`;
 
     return (
-        <div className="form__fields">
-          <legend className="form__legend">Your card details</legend>
+      <div className="form__fields">
+        <legend className="form__legend">Your card details</legend>
 
+        <div className="form__field">
+          <label className="form__label" htmlFor="stripeCardNumberElement">
+            <span>Card number</span>
+          </label>
+          <span className={getClasses('CardNumber')}>
+            <CardNumberElement
+              id="stripeCardNumberElement"
+              style={fieldStyle}
+              onChange={this.onChange('CardNumber')}
+              onFocus={() => this.onFocus('CardNumber')}
+              onBlur={this.onBlur}
+            />
+          </span>
+        </div>
+
+        <div className="stripe-card-element-container__inline-fields">
           <div className="form__field">
-            <label className="form__label" htmlFor="stripeCardNumberElement">
-              <span>Card number</span>
+            <label className="form__label" htmlFor="stripeCardExpiryElement">
+              <span>Expiry date</span>
             </label>
-            <span className={getClasses('CardNumber')}>
-              <CardNumberElement
-                id="stripeCardNumberElement"
+            <span className={getClasses('Expiry')}>
+              <CardExpiryElement
+                id="stripeCardExpiryElement"
                 style={fieldStyle}
-                onChange={this.onChange('CardNumber')}
-                onFocus={() => this.onFocus('CardNumber')}
+                onChange={this.onChange('Expiry')}
+                onFocus={() => this.onFocus('Expiry')}
                 onBlur={this.onBlur}
               />
             </span>
           </div>
 
-          <div className="stripe-card-element-container__inline-fields">
-            <div className="form__field">
-              <label className="form__label" htmlFor="stripeCardExpiryElement">
-                <span>Expiry date</span>
-              </label>
-              <span className={getClasses('Expiry')}>
-                <CardExpiryElement
-                  id="stripeCardExpiryElement"
-                  style={fieldStyle}
-                  onChange={this.onChange('Expiry')}
-                  onFocus={() => this.onFocus('Expiry')}
-                  onBlur={this.onBlur}
-                />
-              </span>
-            </div>
-
-            <div className="form__field">
-              <label className="form__label" htmlFor="stripeCardCVCElement">
-                <span>CVC</span>
-              </label>
-              <span className={getClasses('CVC')}>
-                <CardCVCElement
-                  id="stripeCardCVCElement"
-                  style={fieldStyle}
-                  placeholder=""
-                  onChange={this.onChange('CVC')}
-                  onFocus={() => this.onFocus('CVC')}
-                  onBlur={this.onBlur}
-                />
-              </span>
-            </div>
+          <div className="form__field">
+            <label className="form__label" htmlFor="stripeCardCVCElement">
+              <span>CVC</span>
+            </label>
+            <span className={getClasses('CVC')}>
+              <CardCVCElement
+                id="stripeCardCVCElement"
+                style={fieldStyle}
+                placeholder=""
+                onChange={this.onChange('CVC')}
+                onFocus={() => this.onFocus('CVC')}
+                onBlur={this.onBlur}
+              />
+            </span>
           </div>
-
-          {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
         </div>
+
+        {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
+      </div>
     );
   }
 }
