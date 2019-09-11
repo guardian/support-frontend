@@ -20,7 +20,7 @@ type PropTypes = {|
   paymentMethod: Option<PaymentMethod>,
   allErrors: FormError<FormField>[],
   className?: Option<string>,
-  component: Node,
+  component?: Option<Node>,
   text: string,
 |};
 
@@ -48,6 +48,7 @@ function SubscriptionSubmitButton(props: PropTypes) {
 
 SubscriptionSubmitButton.defaultProps = {
   className: '',
+  component: null,
 };
 
 export { SubscriptionSubmitButton };

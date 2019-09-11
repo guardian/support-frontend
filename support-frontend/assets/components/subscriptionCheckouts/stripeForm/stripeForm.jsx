@@ -24,6 +24,7 @@ type PropTypes = {
   submitForm: Function,
   name: string,
   validateForm: Function,
+  buttonText: string,
 }
 
 type StateTypes = {
@@ -180,7 +181,7 @@ class StripeForm extends Component<PropTypes, StateTypes> {
             />
             <div className="component-stripe-submit-button">
               <Button onClick={event => this.requestStripeToken(event)}>
-                Start your free trial now
+                {this.props.buttonText}
               </Button>
             </div>
             <span>{this.props.component}</span>

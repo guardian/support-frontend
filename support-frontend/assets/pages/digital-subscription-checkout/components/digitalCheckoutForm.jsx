@@ -279,6 +279,7 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
                     setStripeToken={this.props.setStripeToken}
                     name={`${props.firstName} ${props.lastName}`}
                     validateForm={props.validateForm}
+                    buttonText="Start your free trial now"
                   />
                 </FormSectionHidden>
                 <CancellationSection />
