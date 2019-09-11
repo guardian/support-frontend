@@ -150,7 +150,7 @@ class StripeForm extends Component<PropTypes, StateTypes> {
     return (
       <span>
         {stripe && (
-          <div>
+          <fieldset>
             <CardElementWrapper
               error={this.state.cardNumber.error}
               fieldLabel="card-details"
@@ -175,7 +175,6 @@ class StripeForm extends Component<PropTypes, StateTypes> {
                 onChange={e => this.handleChange(e)}
               />
             </CardElementWrapper>
-
             <CardElementWrapper
               error={this.state.cardCvc.error}
               fieldLabel="cvc"
@@ -196,7 +195,7 @@ class StripeForm extends Component<PropTypes, StateTypes> {
             <span>{this.props.component}</span>
             {(this.state.cardErrors.length > 0 || this.props.allErrors.length > 0)
               && <ErrorSummary errors={[...this.props.allErrors, ...this.state.cardErrors]} />}
-          </div>
+          </fieldset>
         )}
       </span>
     );

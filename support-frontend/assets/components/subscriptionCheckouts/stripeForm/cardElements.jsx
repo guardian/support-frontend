@@ -16,13 +16,18 @@ type PropTypes = {
 }
 
 const CardElementWrapper = (props: PropTypes) => (
-  <div>
-    <label htmlFor={props.fieldLabel} className={props.error ? props.classNameError : props.className}>
-      <span>{props.fieldName}</span>
-      <span>{props.children}</span>
-      <span>{props.error && <Error htmlFor={props.fieldLabel} error={props.error} />}</span>
-    </label>
-  </div>
+  <label
+    htmlFor={props.fieldLabel}
+    className={props.error ? props.classNameError : props.className}
+    aria-labelledby={props.fieldName}
+    aria-atomic="true"
+    aria-live="polite"
+  >
+    <input id={props.fieldLabel} className="component-credit-card-input-hidden" aria-roledescription={props.fieldName} />
+    <span>{props.fieldName}</span>
+    <span>{props.children}</span>
+    <span>{props.error && <Error htmlFor={props.fieldLabel} error={props.error} />}</span>
+  </label>
 );
 
 export {
