@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
 
@@ -20,7 +20,7 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
-import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
+import Form, { FormSection, FormSectionHidden } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -67,6 +67,12 @@ import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import { addressActionCreatorsFor, type SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
 import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
+import { type Option } from 'helpers/types/option';
+import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
+import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
+import { StripeProvider, Elements } from 'react-stripe-elements';
 
 // ----- Types ----- //
 
@@ -83,8 +89,14 @@ type PropTypes = {|
   setBillingCountry: Function,
   billingAddressErrors: Array<Object>,
   deliveryAddressErrors: Array<Object>,
+  country: IsoCountry,
+  isTestUser: boolean,
+  validateForm: () => Function,
 |};
 
+type StateTypes = {
+  stripe: Option<Object>,
+}
 
 // ----- Map State/Props ----- //
 
@@ -100,6 +112,8 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     productPrices: state.page.checkout.productPrices,
     deliveryAddressErrors: state.page.deliveryAddress.fields.formErrors,
     billingAddressErrors: state.page.billingAddress.fields.formErrors,
+    isTestUser: state.page.checkout.isTestUser,
+    country: state.common.internationalisation.countryId,
   };
 }
 
@@ -112,6 +126,10 @@ function mapDispatchToProps() {
     signOut,
     setBillingCountry: country => (dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) =>
       setCountry(country)(dispatch),
+    validateForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
+      const state = getState();
+      validateWithDeliveryForm(dispatch, state);
+    },
   };
 }
 
@@ -126,197 +144,241 @@ const days = getWeeklyDays();
 
 // ----- Component ----- //
 
-function WeeklyCheckoutForm(props: PropTypes) {
-  const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
-  const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
-  const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
+class WeeklyCheckoutForm extends Component<PropTypes, StateTypes> {
+  constructor() {
+    super();
+    this.state = { stripe: null };
+  }
 
-  const setBillingAddressIsSameHandler = () => {
-    props.setBillingAddressIsSame(true);
-    props.setBillingCountry(props.deliveryCountry);
-  };
+  componentDidMount() {
+    this.checkStripe();
+  }
 
-  return (
-    <Content modifierClasses={['your-details']}>
-      <Layout aside={(
-        <Summary
-          image={
-            <GridImage
-              gridId="checkoutPackshotWeekly"
-              srcSizes={[696, 500]}
-              sizes="(max-width: 740px) 50vw, 696"
-              imgType="png"
-              altText=""
-            />
-          }
-          title="Guardian Weekly"
-          description=""
-          productPrice={price}
-          dataList={[
-            {
-              title: 'Delivery method',
-              value: 'Home delivery',
-            },
-          ]}
-          billingPeriod={props.billingPeriod}
-          changeSubscription={routes.guardianWeeklySubscriptionLanding}
-          product={props.product}
-        />
-      )}
-      >
-        <Form onSubmit={(ev) => {
-          ev.preventDefault();
-          props.submitForm();
-        }}
-        >
-          <FormSection title="Your details">
-            <SelectWithLabel
-              id="title"
-              label="Title"
-              optional
-              value={props.title}
-              setValue={props.setTitle}
-            >
-              <option value="">--</option>
-              {options(titles)}
-            </SelectWithLabel>
-            <PersonalDetails
-              firstName={props.firstName}
-              setFirstName={props.setFirstName}
-              lastName={props.lastName}
-              setLastName={props.setLastName}
-              email={props.email}
-              telephone={props.telephone}
-              setTelephone={props.setTelephone}
-              formErrors={props.formErrors}
-              signOut={props.signOut}
-            />
-          </FormSection>
-          <FormSection title="Where should we deliver your magazine?">
-            <CheckboxInput
-              id="qa-gift-checkbox"
-              text="This is a gift"
-              checked={props.orderIsAGift}
-              onChange={() => props.setGiftStatus(!props.orderIsAGift)}
-            />
-            {!props.orderIsAGift ? <DeliveryAddress /> : null}
-          </FormSection>
-          {props.orderIsAGift ? (
-            <span>
-              <FormSection title="Gift recipient's details">
-                <SelectWithLabel
-                  id="title"
-                  label="Title"
-                  optional
-                  value={props.titleGiftRecipient}
-                  setValue={props.setTitleGift}
-                >
-                  <option value="">--</option>
-                  {options(titles)}
-                </SelectWithLabel>
-                <PersonalDetailsGift
-                  firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
-                  setFirstNameGift={props.setFirstNameGift}
-                  lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
-                  setLastNameGift={props.setLastNameGift}
-                  emailGiftRecipient={props.emailGiftRecipient || ''}
-                  setEmailGift={props.setEmailGift}
-                  formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
-                  isGiftRecipient
-                />
-              </FormSection>
-              <FormSection title="Gift recipient's address">
-                <DeliveryAddress />
-              </FormSection>
-            </span>)
-          : null}
-          <FormSection title={props.orderIsAGift ?
-            'Is the billing address the same as the recipient\'s address?'
-            : 'Is the billing address the same as the delivery address?'}
-          >
-            <Rows>
-              <FieldsetWithError
-                id="billingAddressIsSame"
-                error={firstError('billingAddressIsSame', props.formErrors)}
-                legend="Is the billing address the same as the delivery address?"
-              >
-                <RadioInput
-                  text="Yes"
-                  name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame === true}
-                  onChange={setBillingAddressIsSameHandler}
-                />
-                <RadioInput
-                  inputId="qa-billing-address-different"
-                  text="No"
-                  name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame === false}
-                  onChange={() => props.setBillingAddressIsSame(false)}
-                />
-              </FieldsetWithError>
-            </Rows>
-          </FormSection>
-          {
-            props.billingAddressIsSame === false ?
-              <FormSection title="Your billing address">
-                <BillingAddress />
-              </FormSection>
-            : null
-          }
-          <FormSection title={subscriptionStart}>
-            <Rows>
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend={subscriptionStart}>
-                {days.map((day) => {
-                  const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
-                  return (
-                    <RadioInput
-                      appearance="group"
-                      text={userDate}
-                      name={machineDate}
-                      checked={machineDate === props.startDate}
-                      onChange={() => props.setStartDate(machineDate)}
-                    />
-                  );
-                })
+  checkStripe = () => {
+    const stripeKey = getStripeKey('REGULAR', this.props.country, this.props.isTestUser);
+    if (window.Stripe) {
+      this.setState({ stripe: window.Stripe(stripeKey) });
+    } else {
+      window.onload = () => {
+        this.setState({ stripe: window.Stripe(stripeKey) });
+      };
+    }
+  }
+
+  render() {
+    const { props } = this;
+    const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
+    const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
+    const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
+
+    const setBillingAddressIsSameHandler = () => {
+      props.setBillingAddressIsSame(true);
+      props.setBillingCountry(props.deliveryCountry);
+    };
+
+    return (
+      <StripeProvider stripe={this.state.stripe}>
+        <Elements>
+          <Content modifierClasses={['your-details']}>
+            <Layout aside={(
+              <Summary
+                image={
+                  <GridImage
+                    gridId="checkoutPackshotWeekly"
+                    srcSizes={[696, 500]}
+                    sizes="(max-width: 740px) 50vw, 696"
+                    imgType="png"
+                    altText=""
+                  />
                 }
-              </FieldsetWithError>
-              <Text className="component-text__paddingTop">
-                <p className="component-text__sans">
-                We will take the first payment on the
-                date you receive your first Guardian Weekly.
-                </p>
-                <p className="component-text__sans">
-                Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
-                </p>
-              </Text>
-            </Rows>
-          </FormSection>
-          <BillingPeriodSelector
-            fulfilmentOption={fulfilmentOption}
-            onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
-            billingPeriods={weeklyBillingPeriods}
-            billingCountry={props.billingCountry}
-            productPrices={props.productPrices}
-            selected={props.billingPeriod}
-          />
-          <PaymentMethodSelector
-            country={props.billingCountry}
-            product={GuardianWeekly}
-            paymentMethod={props.paymentMethod}
-            setPaymentMethod={props.setPaymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
-            validationError={firstError('paymentMethod', props.formErrors)}
-            submissionError={props.submissionError}
-          />
-          <SubscriptionSubmitButton
-            paymentMethod={props.paymentMethod}
-            allErrors={[...props.formErrors, ...props.deliveryAddressErrors, ...props.billingAddressErrors]}
-          />
-          <CancellationSection />
-        </Form>
-      </Layout>
-    </Content>
-  );
+                title="Guardian Weekly"
+                description=""
+                productPrice={price}
+                dataList={[
+                  {
+                    title: 'Delivery method',
+                    value: 'Home delivery',
+                  },
+                ]}
+                billingPeriod={props.billingPeriod}
+                changeSubscription={routes.guardianWeeklySubscriptionLanding}
+                product={props.product}
+              />
+            )}
+            >
+              <Form onSubmit={(ev) => {
+                ev.preventDefault();
+                props.submitForm();
+              }}
+              >
+                <FormSection title="Your details">
+                  <SelectWithLabel
+                    id="title"
+                    label="Title"
+                    optional
+                    value={props.title}
+                    setValue={props.setTitle}
+                  >
+                    <option value="">--</option>
+                    {options(titles)}
+                  </SelectWithLabel>
+                  <PersonalDetails
+                    firstName={props.firstName}
+                    setFirstName={props.setFirstName}
+                    lastName={props.lastName}
+                    setLastName={props.setLastName}
+                    email={props.email}
+                    telephone={props.telephone}
+                    setTelephone={props.setTelephone}
+                    formErrors={props.formErrors}
+                    signOut={props.signOut}
+                  />
+                </FormSection>
+                <FormSection title="Where should we deliver your magazine?">
+                  <CheckboxInput
+                    id="qa-gift-checkbox"
+                    text="This is a gift"
+                    checked={props.orderIsAGift}
+                    onChange={() => props.setGiftStatus(!props.orderIsAGift)}
+                  />
+                  {!props.orderIsAGift ? <DeliveryAddress /> : null}
+                </FormSection>
+                {props.orderIsAGift ? (
+                  <span>
+                    <FormSection title="Gift recipient's details">
+                      <SelectWithLabel
+                        id="title"
+                        label="Title"
+                        optional
+                        value={props.titleGiftRecipient}
+                        setValue={props.setTitleGift}
+                      >
+                        <option value="">--</option>
+                        {options(titles)}
+                      </SelectWithLabel>
+                      <PersonalDetailsGift
+                        firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
+                        setFirstNameGift={props.setFirstNameGift}
+                        lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
+                        setLastNameGift={props.setLastNameGift}
+                        emailGiftRecipient={props.emailGiftRecipient || ''}
+                        setEmailGift={props.setEmailGift}
+                        formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+                        isGiftRecipient
+                      />
+                    </FormSection>
+                    <FormSection title="Gift recipient's address">
+                      <DeliveryAddress />
+                    </FormSection>
+                  </span>)
+                : null}
+                <FormSection title={props.orderIsAGift ?
+                  'Is the billing address the same as the recipient\'s address?'
+                  : 'Is the billing address the same as the delivery address?'}
+                >
+                  <Rows>
+                    <FieldsetWithError
+                      id="billingAddressIsSame"
+                      error={firstError('billingAddressIsSame', props.formErrors)}
+                      legend="Is the billing address the same as the delivery address?"
+                    >
+                      <RadioInput
+                        text="Yes"
+                        name="billingAddressIsSame"
+                        checked={props.billingAddressIsSame === true}
+                        onChange={setBillingAddressIsSameHandler}
+                      />
+                      <RadioInput
+                        inputId="qa-billing-address-different"
+                        text="No"
+                        name="billingAddressIsSame"
+                        checked={props.billingAddressIsSame === false}
+                        onChange={() => props.setBillingAddressIsSame(false)}
+                      />
+                    </FieldsetWithError>
+                  </Rows>
+                </FormSection>
+                {
+                  props.billingAddressIsSame === false ?
+                    <FormSection title="Your billing address">
+                      <BillingAddress />
+                    </FormSection>
+                  : null
+                }
+                <FormSection title={subscriptionStart}>
+                  <Rows>
+                    <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend={subscriptionStart}>
+                      {days.map((day) => {
+                        const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                        return (
+                          <RadioInput
+                            appearance="group"
+                            text={userDate}
+                            name={machineDate}
+                            checked={machineDate === props.startDate}
+                            onChange={() => props.setStartDate(machineDate)}
+                          />
+                        );
+                      })
+                      }
+                    </FieldsetWithError>
+                    <Text className="component-text__paddingTop">
+                      <p className="component-text__sans">
+                      We will take the first payment on the
+                      date you receive your first Guardian Weekly.
+                      </p>
+                      <p className="component-text__sans">
+                      Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                      </p>
+                    </Text>
+                  </Rows>
+                </FormSection>
+                <BillingPeriodSelector
+                  fulfilmentOption={fulfilmentOption}
+                  onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
+                  billingPeriods={weeklyBillingPeriods}
+                  billingCountry={props.billingCountry}
+                  productPrices={props.productPrices}
+                  selected={props.billingPeriod}
+                />
+                <PaymentMethodSelector
+                  country={props.billingCountry}
+                  product={GuardianWeekly}
+                  paymentMethod={props.paymentMethod}
+                  setPaymentMethod={props.setPaymentMethod}
+                  onPaymentAuthorised={props.onPaymentAuthorised}
+                  validationError={firstError('paymentMethod', props.formErrors)}
+                  submissionError={props.submissionError}
+                />
+                <SubscriptionSubmitButton
+                  paymentMethod={props.paymentMethod}
+                  allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+                  className={DirectDebit}
+                  text="Pay now"
+                />
+                <FormSectionHidden
+                  id="stripeForm"
+                  hidden={props.paymentMethod !== Stripe}
+                  title="Your card details"
+                >
+                  <StripeForm
+                    submitForm={props.submitForm}
+                    paymentMethod={props.paymentMethod}
+                    allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+                    setStripeToken={this.props.setStripeToken}
+                    name={`${props.firstName} ${props.lastName}`}
+                    validateForm={props.validateForm}
+                    buttonText="Pay now"
+                  />
+                </FormSectionHidden>
+                <CancellationSection />
+              </Form>
+            </Layout>
+          </Content>
+        </Elements>
+      </StripeProvider>
+    );
+  }
 
 }
 
