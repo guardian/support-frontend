@@ -26,3 +26,7 @@
     margin-bottom: 0;
   }
 }
+
+div#card-expiry.StripeElement, div#cvc.StripeElement {
+  width: 30%;
+}
