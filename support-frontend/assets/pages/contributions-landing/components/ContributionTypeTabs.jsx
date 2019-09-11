@@ -20,12 +20,7 @@ import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingA
 import type {
   ContributionTypes,
   ContributionTypeSetting,
-  OtherAmounts,
-  SelectedAmounts,
 } from 'helpers/contributions';
-import type { LandingPageChoiceArchitectureAmountsFirstTestVariants } from 'helpers/abTests/abtestDefinitions';
-import { getAmountPerWeekBreakdown } from 'pages/contributions-landing/components/ContributionAmount';
-
 
 // ----- Types ----- //
 
@@ -36,10 +31,6 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
-  landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
-  // JTL - Note: these two props are for the AB test showing amounts first
-  selectedAmounts: SelectedAmounts,
-  otherAmounts: OtherAmounts,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -48,11 +39,6 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-  landingPageChoiceArchitectureAmountsFirstTestVariant:
-  state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
-  // JTL - Note: these two props are for the AB test showing amounts first
-  selectedAmounts: state.page.form.selectedAmounts,
-  otherAmounts: state.page.form.formData.otherAmounts,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -77,19 +63,9 @@ function withProps(props: PropTypes) {
     return (null);
   }
 
-  const amountsAreBeingShownFirst =
-    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
-    props.landingPageChoiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo';
-
-  const titleCopy = amountsAreBeingShownFirst ? 'How often would you like to give?' : 'How often would you like to contribute?';
-
-
-  // JTL - Note: this is for the AB test showing amounts first
-  const showWeeklyBreakdown: boolean = (props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL') && amountsAreBeingShownFirst;
-
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>{titleCopy}</legend>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
           const { contributionType } = contributionTypeSetting;
@@ -117,17 +93,6 @@ function withProps(props: PropTypes) {
             </li>);
         })}
       </ul>
-      {/* // JTL - Note: this is for the AB test showing amounts first */}
-      {showWeeklyBreakdown ? (
-        <p className="amount-per-week-breakdown">
-          {getAmountPerWeekBreakdown(
-            props.contributionType,
-            props.countryGroupId,
-            props.selectedAmounts,
-            props.otherAmounts,
-          )}
-        </p>
-      ) : null}
     </fieldset>
   );
 }

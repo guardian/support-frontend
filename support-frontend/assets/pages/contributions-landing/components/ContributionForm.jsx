@@ -52,7 +52,7 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { LandingPageChoiceArchitectureAmountsFirstTestVariants, StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -84,7 +84,6 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
-  landingPageChoiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
   stripeElementsTestVariant: StripeElementsTestVariants,
   createStripePaymentMethod: () => void,
 |};
@@ -118,8 +117,6 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
-  landingPageChoiceArchitectureAmountsFirstTestVariant:
-    state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
   stripeElementsTestVariant: state.common.abParticipations.stripeElements,
 });
 
@@ -233,30 +230,13 @@ function onSubmit(props: PropTypes): Event => void {
   };
 }
 
-function constructClassModifiersForChoiceArchitectureTests(
-  classMods: Array<?string>,
-  choiceArchitectureAmountsFirstTestVariant: LandingPageChoiceArchitectureAmountsFirstTestVariants,
-): Array<?string> {
-  if (
-    choiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetOne' ||
-    choiceArchitectureAmountsFirstTestVariant === 'amountsFirstSetTwo'
-  ) {
-    classMods.push('amounts-first');
-  }
-
-  return classMods;
-}
-
 // ----- Render ----- //
 
 function withProps(props: PropTypes) {
   const campaignName = getCampaignName();
   const baseClass = 'form';
 
-  const classModifiers = constructClassModifiersForChoiceArchitectureTests(
-    ['contribution', 'with-labels'],
-    props.landingPageChoiceArchitectureAmountsFirstTestVariant,
-  );
+  const classModifiers = ['contribution', 'with-labels'];
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
