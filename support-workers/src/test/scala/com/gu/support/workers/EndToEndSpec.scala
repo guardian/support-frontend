@@ -5,26 +5,27 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.monitoring.SafeLogger
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.JsonFixtures.{createStripeSourcePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.lambdas._
 import com.gu.test.tags.annotations.IntegrationTest
-import io.circe.generic.auto._
+import io.circe
 import io.circe.parser._
+import org.scalatest.Assertion
 
+import scala.concurrent.Future
 import scala.io.Source
 
 @IntegrationTest
-class EndToEndSpec extends LambdaSpec {
+class EndToEndSpec extends AsyncLambdaSpec with MockContext {
 
   "The monthly contribution lambdas" should "chain successfully" in runSignupWithCurrency(GBP)
 
   they should "work with other currencies" in runSignupWithCurrency(EUR)
 
-  def runSignupWithCurrency(currency: Currency) {
+  def runSignupWithCurrency(currency: Currency): Future[Assertion] = {
     val json = createStripeSourcePaymentMethodContributionJson(currency = currency)
     SafeLogger.info(json)
-    val output = wrapFixture(json)
+    val output = Future.successful(wrapFixture(json))
       .chain(new CreatePaymentMethod())
       .chain(new CreateSalesforceContact())
       .chain(new CreateZuoraSubscription())
@@ -34,14 +35,17 @@ class EndToEndSpec extends LambdaSpec {
       )
       .last()
 
-    val decoded = decode[List[JsonWrapper]](output.toString("utf-8"))
-    decoded.isRight should be(true)
-    decoded.right.get.size should be(2)
+    output.map { output =>
+      val decoded: Either[circe.Error, List[JsonWrapper]] = decode[List[JsonWrapper]](output.toString("utf-8"))
+      withClue(s"decoded: $decoded") {
+        decoded.map(_.size) should be(Right(2))
+      }
+    }
   }
 
-  implicit class InputStreamChaining(val stream: InputStream) {
+  implicit class InputStreamChaining(val stream: Future[InputStream]) {
 
-    def parallel(handlers: Handler[_, _]*): InputStream = {
+    def parallel(handlers: Handler[_, _]*): Future[InputStream] = {
       val listStartMarker = Array[Byte]('[')
       val listEndMarker = Array[Byte](']')
       val listSeparator = Array[Byte](',')
@@ -50,31 +54,38 @@ class EndToEndSpec extends LambdaSpec {
 
       output.write(listStartMarker)
 
-      handlers.zipWithIndex.foreach {
-        case (handler, index) =>
-          if (index != 0) output.write(listSeparator)
-          handler.handleRequest(stream, output, context)
-          stream.reset()
+      stream.flatMap { stream =>
+        val parallelTasks = handlers.zipWithIndex.foldLeft(Future.successful(())) {
+          case (future, (handler, index)) =>
+            future.flatMap { _ =>
+              if (index != 0) output.write(listSeparator)
+              handler.handleRequestFuture(stream, output, context).map { _ =>
+                stream.reset()
+              }
+            }
+        }
+
+        parallelTasks.map { _ =>
+          output.write(listEndMarker)
+          new ByteArrayInputStream(output.toByteArray)
+        }
       }
-
-      output.write(listEndMarker)
-
-      new ByteArrayInputStream(output.toByteArray)
     }
 
-    def chain(handler: Handler[_, _]): InputStream = {
-      new ByteArrayInputStream(last(handler).toByteArray)
+    def chain(handler: Handler[_, _]): Future[InputStream] = {
+      last(handler).map(stream => new ByteArrayInputStream(stream.toByteArray))
     }
 
-    def last(handler: Handler[_, _]): ByteArrayOutputStream = {
+    def last(handler: Handler[_, _]): Future[ByteArrayOutputStream] = stream flatMap { stream =>
       val output = new ByteArrayOutputStream()
       SafeLogger.info(s"calling handler: ${handler.getClass}")
-      handler.handleRequest(stream, output, context)
-      SafeLogger.info(s"finished handler: ${handler.getClass}")
-      output
+      handler.handleRequestFuture(stream, output, context).map { _ =>
+        SafeLogger.info(s"finished handler: ${handler.getClass}")
+        output
+      }
     }
 
-    def last(): ByteArrayOutputStream = {
+    def last(): Future[ByteArrayOutputStream] = stream map { stream =>
       val output = new ByteArrayOutputStream()
       output.write(Source.fromInputStream(stream).mkString.getBytes)
       output
