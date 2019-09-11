@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React, { Component } from 'react';
-import { injectStripe, Elements, CardNumberElement, CardExpiryElement, CardCVCElement } from 'react-stripe-elements';
+import { injectStripe, CardNumberElement, CardExpiryElement, CardCVCElement } from 'react-stripe-elements';
 import { connect } from 'react-redux';
 import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
