@@ -154,6 +154,15 @@ class CardForm extends Component<PropTypes, StateTypes> {
     });
   };
 
+  getFieldBorderClass = (fieldName: CardFieldName): string => {
+    if (this.state.currentlySelected === fieldName) {
+      return 'form__input-enabled';
+    } else if (this.state[fieldName].name === 'Error') {
+      return 'form__input--invalid';
+    }
+    return '';
+  };
+
   formIsComplete = () =>
     this.state.CardNumber.name === 'Complete' &&
     this.state.Expiry.name === 'Complete' &&
@@ -166,7 +175,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       errorMessageFromState(this.state.CVC);
 
     const getClasses = (fieldName: CardFieldName): string =>
-      `form__input ${this.state.currentlySelected === fieldName ? 'form__input-enabled' : ''}`;
+      `form__input ${this.getFieldBorderClass(fieldName)}`;
 
     return (
       <div className="form__fields">
