@@ -29,8 +29,17 @@ type PropTypes = {|
   stripeHasLoaded: boolean,
 |};
 
-class StripeCardFormContainer extends React.Component<PropTypes, void> {
+// Unfortunately the only way to currently use custom fonts with Stripe Elements
+// is to pass the font itself along with the styles referencing it
+const customFonts = [{
+  src: `local('Guardian Text Sans Web'), 
+    local('GuardianTextSansWeb'),
+    url(https://pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-Regular.woff)`,
+  family: 'Guardian Text Sans Web',
+  style: 'normal',
+}];
 
+class StripeCardFormContainer extends React.Component<PropTypes, void> {
   componentDidMount(): void {
     if (!this.props.stripeHasLoaded) { setupStripe(this.props.setStripeHasLoaded); }
   }
@@ -47,7 +56,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
         return (
           <div className="stripe-card-element-container">
             <StripeProvider apiKey={key}>
-              <Elements>
+              <Elements fonts={customFonts}>
                 <StripeCardForm />
               </Elements>
             </StripeProvider>
