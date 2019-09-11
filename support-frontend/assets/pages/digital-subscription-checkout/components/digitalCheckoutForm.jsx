@@ -264,6 +264,7 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
                   allErrors={[...props.addressErrors, ...props.formErrors]}
                   className={DirectDebit}
                   component={<PriceSummary />}
+                  text="Start your free trial now"
                 />
                 <FormSectionHidden
                   id="stripeForm"

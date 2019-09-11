@@ -21,6 +21,7 @@ type PropTypes = {|
   allErrors: FormError<FormField>[],
   className?: Option<string>,
   component: Node,
+  text: string,
 |};
 
 // ----- Render ----- //
@@ -35,7 +36,7 @@ function SubscriptionSubmitButton(props: PropTypes) {
             id="qa-submit-button"
             type="submit"
           >
-            Start your free trial now
+            {props.text}
           </Button>
           <span>{props.component}</span>
         </div>
