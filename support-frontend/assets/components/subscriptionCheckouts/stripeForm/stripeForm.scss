@@ -1,28 +1,5 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.component-credit-card-label, .component-credit-card-label--short,
-.component-credit-card-label--error, .component-credit-card-label--short-error {
-  @include gu-fontset-body-sans;
-  font-size: 16px;
-  font-weight: 700;
-  .component-form-error {
-    margin-bottom: $gu-v-spacing;
-  }
-  
-}
-
-.component-credit-card-label--error, .component-credit-card-label--short-error {
-  .StripeElement--invalid, .StripeElement--empty {
-    border: 1px solid #c70000;
-  }
-}
-
-.component-credit-card-label--short, .component-credit-card-label--short-error {
-  .StripeElement {
-    margin-bottom: $gu-v-spacing;
-    width: 30%;
-  }
-}
 
 .StripeElement {
   border: 0.0625rem solid #dcdcdc;
@@ -37,8 +14,15 @@
 
 .component-stripe-submit-button {
   display: block;
+  margin-top: $gu-v-spacing * 2;
 }
 
 .component-credit-card-input-hidden {
   display: none;
+}
+
+#stripeForm {
+  .component-checkout-form-section__heading {
+    margin-bottom: 0;
+  }
 }

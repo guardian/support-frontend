@@ -2,13 +2,15 @@
 // @flow
 
 import React, { Component, type Node } from 'react';
+import { compose } from 'redux';
 import { injectStripe } from 'react-stripe-elements';
-import { CardElementWrapper } from './cardElements';
 import Button from 'components/button/button';
 import { ErrorSummary } from '../submitFormErrorSummary';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { CardNumberElement, CardExpiryElement, CardCvcElement } from 'react-stripe-elements';
+import { withError } from 'hocs/withError';
+import { withLabel } from 'hocs/withLabel';
 
 import './stripeForm.scss';
 
@@ -46,6 +48,10 @@ const invalidStyles = {
 };
 
 // Main component
+
+const CardNumberWithError = compose(withError, withLabel)(CardNumberElement);
+const CardExpiryWithError = compose(withError, withLabel)(CardExpiryElement);
+const CardCvcWithError = compose(withError, withLabel)(CardCvcElement);
 
 class StripeForm extends Component<PropTypes, StateTypes> {
   constructor(props) {
@@ -151,42 +157,27 @@ class StripeForm extends Component<PropTypes, StateTypes> {
       <span>
         {stripe && (
           <fieldset>
-            <CardElementWrapper
+            <CardNumberWithError
+              id="card-number"
               error={this.state.cardNumber.error}
-              fieldLabel="card-details"
-              fieldName="Card number"
-              className="component-credit-card-label"
-              classNameError="component-credit-card-label--error"
-            >
-              <CardNumberElement
-                style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-                onChange={e => this.handleChange(e)}
-              />
-            </CardElementWrapper>
-            <CardElementWrapper
+              label="Card number"
+              style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+              onChange={e => this.handleChange(e)}
+            />
+            <CardExpiryWithError
+              id="card-expiry"
               error={this.state.cardExpiry.error}
-              fieldLabel="expiry"
-              fieldName="Expiry date"
-              className="component-credit-card-label--short"
-              classNameError="component-credit-card-label--short-error"
-            >
-              <CardExpiryElement
-                style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-                onChange={e => this.handleChange(e)}
-              />
-            </CardElementWrapper>
-            <CardElementWrapper
+              label="Expiry date"
+              style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+              onChange={e => this.handleChange(e)}
+            />
+            <CardCvcWithError
+              id="cvc"
               error={this.state.cardCvc.error}
-              fieldLabel="cvc"
-              fieldName="CVC"
-              className="component-credit-card-label--short"
-              classNameError="component-credit-card-label--short-error"
-            >
-              <CardCvcElement
-                style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-                onChange={e => this.handleChange(e)}
-              />
-            </CardElementWrapper>
+              label="CVC"
+              style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+              onChange={e => this.handleChange(e)}
+            />
             <div className="component-stripe-submit-button">
               <Button onClick={event => this.requestStripeToken(event)}>
                 Start your free trial now

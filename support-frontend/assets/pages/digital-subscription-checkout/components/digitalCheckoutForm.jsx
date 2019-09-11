@@ -266,6 +266,7 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
                   component={<PriceSummary />}
                 />
                 <FormSectionHidden
+                  id="stripeForm"
                   hidden={props.paymentMethod !== Stripe}
                   title="Your card details"
                 >

@@ -25,6 +25,12 @@
   border-color: gu-colour(state-error);
 }
 
+.component-form-error {
+  .StripeElement--invalid, .StripeElement--empty {
+    border: 1px solid #c70000;
+  }  
+}
+
 .component-form-error__heading {
   font-size: 1rem;
   @include gu-fontset-heading;

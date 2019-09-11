@@ -42,12 +42,13 @@ type FormSectionHiddenPropTypes = {|
   children: Node,
   headingSize: HeadingSize,
   hidden?: boolean,
+  id?: Option<string>,
 |};
 
 const FormSectionHidden = ({
-  children, title, headingSize, hidden,
+  children, title, headingSize, hidden, id,
 }: FormSectionHiddenPropTypes) => (
-  <div className={`component-checkout-form-section ${hidden ? 'component-checkout-form-section--hidden' : ''}`}>
+  <div id={id} className={`component-checkout-form-section ${hidden ? 'component-checkout-form-section--hidden' : ''}`}>
     {!hidden && (
     <div className="component-checkout-form-section__wrap">
       {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
@@ -60,6 +61,7 @@ FormSectionHidden.defaultProps = {
   headingSize: 2,
   title: null,
   hidden: false,
+  id: '',
 };
 
 /*
