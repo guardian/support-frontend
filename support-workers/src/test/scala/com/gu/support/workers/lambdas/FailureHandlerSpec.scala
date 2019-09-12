@@ -137,8 +137,7 @@ class FailureHandlerSpec extends AsyncLambdaSpec with MockContext {
   }
 
   it should "convert a transaction declined error from Zuora to an appropriate CheckoutFailureReason" in {
-    val failureHandler = new FailureHandler()
-    val reason = failureHandler.toCheckoutFailureReason(ZuoraError("TRANSACTION_FAILED", "Transaction declined.do_not_honor - Your card was declined."))
+    val reason = FailureHandler.toCheckoutFailureReason(ZuoraError("TRANSACTION_FAILED", "Transaction declined.do_not_honor - Your card was declined."))
     reason should be(PaymentMethodUnacceptable)
   }
 
