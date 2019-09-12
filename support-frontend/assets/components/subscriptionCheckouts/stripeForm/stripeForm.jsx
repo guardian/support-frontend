@@ -174,7 +174,7 @@ class StripeForm extends Component<PropTypes, StateTypes> {
               onChange={e => this.handleChange(e)}
             />
             <div className="component-stripe-submit-button">
-              <Button onClick={event => this.requestStripeToken(event)}>
+              <Button id="qa-submit-button" onClick={event => this.requestStripeToken(event)}>
                 {this.props.buttonText}
               </Button>
             </div>
