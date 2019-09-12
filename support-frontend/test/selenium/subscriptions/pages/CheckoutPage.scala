@@ -7,14 +7,14 @@ trait CheckoutPage extends Page with Browser {
   private val stripeRadioButton = id("qa-credit-card")
   private val submitButton = id("qa-submit-button")
   private val directDebitButton = id("qa-direct-debit")
+  private val personalDetails = id("qa-personal-details")
 
   def selectStripePaymentMethod(): Unit = clickOn(stripeRadioButton)
 
   def selectDirectDebitPaymentMethod(): Unit = clickOn(directDebitButton)
 
   def pageHasLoaded: Boolean = {
-    pageHasElement(submitButton)
-    elementIsClickable(submitButton)
+    pageHasElement(personalDetails)
   }
 
   def thankYouPageHasLoaded: Boolean = {
