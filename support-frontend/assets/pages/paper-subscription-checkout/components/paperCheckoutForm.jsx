@@ -21,7 +21,7 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
-import Form, { FormSection, FormSectionHidden } from 'components/checkoutForm/checkoutForm';
+import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -315,9 +315,9 @@ class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
                   className={DirectDebit}
                   text="Pay now"
                 />
-                <FormSectionHidden
+                <FormSectionHiddenUntilSelected
                   id="stripeForm"
-                  hidden={props.paymentMethod !== Stripe}
+                  show={props.paymentMethod === Stripe}
                   title="Your card details"
                 >
                   <StripeForm
@@ -329,7 +329,7 @@ class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
                     validateForm={props.validateForm}
                     buttonText="Pay now"
                   />
-                </FormSectionHidden>
+                </FormSectionHiddenUntilSelected>
                 <CancellationSection />
               </Form>
             </Layout>

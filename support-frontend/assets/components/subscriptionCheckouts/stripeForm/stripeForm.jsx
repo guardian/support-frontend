@@ -38,7 +38,7 @@ type StateTypes = {
 
 const baseStyles = {
   fontSize: '16px',
-  color: '#000',
+  color: '#121212',
   '::placeholder': {
     color: 'white',
   },

@@ -41,15 +41,15 @@ type FormSectionHiddenPropTypes = {|
   title: Option<string>,
   children: Node,
   headingSize: HeadingSize,
-  hidden?: boolean,
+  show?: boolean,
   id?: Option<string>,
 |};
 
-const FormSectionHidden = ({
-  children, title, headingSize, hidden, id,
+const FormSectionHiddenUntilSelected = ({
+  children, title, headingSize, show, id,
 }: FormSectionHiddenPropTypes) => (
-  <div id={id} className={`component-checkout-form-section ${hidden ? 'component-checkout-form-section--hidden' : ''}`}>
-    {!hidden && (
+  <div id={id} className={show ? 'component-checkout-form-section' : 'component-checkout-form-section is-hidden'}>
+    {show && (
     <div className="component-checkout-form-section__wrap">
       {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
       {children}
@@ -57,10 +57,10 @@ const FormSectionHidden = ({
   </div>
 );
 
-FormSectionHidden.defaultProps = {
+FormSectionHiddenUntilSelected.defaultProps = {
   headingSize: 2,
   title: null,
-  hidden: false,
+  show: false,
   id: '',
 };
 
@@ -75,4 +75,4 @@ type FormPropTypes = {
 const Form = ({ children, ...otherProps }: FormPropTypes) => (<form {...otherProps} className="component-checkout-form">{children}</form>);
 
 export default Form;
-export { FormSection, FormSectionHidden };
+export { FormSection, FormSectionHiddenUntilSelected };

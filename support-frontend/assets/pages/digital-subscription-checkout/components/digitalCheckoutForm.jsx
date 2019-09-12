@@ -12,7 +12,7 @@ import {
 } from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import Form, { FormSection, FormSectionHidden } from 'components/checkoutForm/checkoutForm';
+import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -266,9 +266,9 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
                   component={<PriceSummary />}
                   text="Start your free trial now"
                 />
-                <FormSectionHidden
+                <FormSectionHiddenUntilSelected
                   id="stripeForm"
-                  hidden={props.paymentMethod !== Stripe}
+                  show={props.paymentMethod === Stripe}
                   title="Your card details"
                 >
                   <StripeForm
@@ -281,7 +281,7 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
                     validateForm={props.validateForm}
                     buttonText="Start your free trial now"
                   />
-                </FormSectionHidden>
+                </FormSectionHiddenUntilSelected>
                 <CancellationSection />
               </Form>
             </CheckoutLayout>
