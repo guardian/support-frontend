@@ -21,13 +21,20 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def stripeFormHasLoaded: Boolean = {
+    switchToFrame(0)
     pageHasElement(cardNumber)
   }
 
   def fillStripeForm: Unit = {
-    setValue(cardNumber, "4242424242424242")
-    setValue(expiry, "1221")
+    for (_ <- 1 to 8) setValue(cardNumber, "42")
+    switchToParentFrame
+    switchToFrame(1)
+    setValue(expiry, "12")
+    setValue(expiry, "21")
+    switchToParentFrame
+    switchToFrame(2)
     setValue(cvc, "123")
+    switchToParentFrame
   }
 
   def thankYouPageHasLoaded: Boolean = {
