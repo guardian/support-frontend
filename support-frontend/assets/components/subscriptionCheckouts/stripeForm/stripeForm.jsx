@@ -138,13 +138,7 @@ class StripeForm extends Component<PropTypes, StateTypes> {
     if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
       const { stripe } = this.props;
       stripe.createToken({ type: 'card', name: this.props.name })
-        .then(({ token, error }) => {
-          if (error) {
-            console.log(error);
-          } else {
-            this.props.setStripeToken(token.id);
-          }
-        })
+        .then(({ token }) => this.props.setStripeToken(token.id))
         .then(() => this.props.submitForm());
     }
   }
