@@ -7,27 +7,24 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.stripe.Stripe.StripeError
 import com.gu.stripe.{Stripe, StripeService}
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.JsonFixtures.{createStripeSourcePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
-import com.gu.support.workers.{JsonFixtures, JsonWrapper, LambdaSpec}
-import io.circe.generic.auto._
+import com.gu.support.workers.{AsyncLambdaSpec, JsonFixtures, JsonWrapper, MockContext}
 import io.circe.parser.decode
 import io.circe.syntax._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
-class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServicesCreator {
+class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with MockServicesCreator with MockContext {
   "Timeouts from Stripe" should "throw a NonFatalException" in {
     val createPaymentMethod = new CreatePaymentMethod(timeoutServices)
 
     val outStream = new ByteArrayOutputStream()
 
-    a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
+    recoverToSucceededIf[RetryUnlimited]  {
+      createPaymentMethod.handleRequestFuture(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
     }
   }
 
@@ -40,12 +37,14 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
 
     val outStream = new ByteArrayOutputStream()
 
-    a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
+    val assertion = recoverToSucceededIf[RetryUnlimited] {
+      createPaymentMethod.handleRequestFuture(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
     }
-
-    // Shut down the server. Instances cannot be reused.
-    server.shutdown()
+    assertion.onComplete { _ =>
+      // Shut down the server. Instances cannot be reused.
+      server.shutdown()
+    }
+    assertion
   }
 
   "402s from Stripe" should "throw a FatalException" in {
@@ -59,11 +58,13 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
 
     val outStream = new ByteArrayOutputStream()
 
-    a[RetryNone] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
+    val assertion = recoverToSucceededIf[RetryNone] {
+      createPaymentMethod.handleRequestFuture(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
     }
-
-    server.shutdown()
+    assertion.onComplete { _ =>
+      server.shutdown()
+    }
+    assertion
   }
 
   "Stripe error" should "deserialise correctly" in {

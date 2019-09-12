@@ -7,21 +7,20 @@ import com.gu.okhttp.RequestRunners
 import com.gu.paypal.PayPalService
 import com.gu.support.config.PayPalConfig
 import com.gu.support.workers.JsonFixtures.{createPayPalPaymentMethodDigitalPackJson, wrapFixture}
-import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.exceptions.RetryUnlimited
 import com.gu.support.workers.lambdas.CreatePaymentMethod
+import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
-class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServicesCreator {
+class PayPalErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with MockServicesCreator with MockContext {
   "Timeouts from PayPal" should "throw a NonFatalException" in {
     val createPaymentMethod = new CreatePaymentMethod(timeOutServices)
 
     val outStream = new ByteArrayOutputStream()
 
-    a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodDigitalPackJson), outStream, context)
+    recoverToSucceededIf[RetryUnlimited] {
+      createPaymentMethod.handleRequestFuture(wrapFixture(createPayPalPaymentMethodDigitalPackJson), outStream, context)
     }
   }
 
@@ -34,12 +33,15 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
 
     val outStream = new ByteArrayOutputStream()
 
-    a[RetryUnlimited] should be thrownBy {
-      createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodDigitalPackJson), outStream, context)
+    val assertion = recoverToSucceededIf[RetryUnlimited] {
+      createPaymentMethod.handleRequestFuture(wrapFixture(createPayPalPaymentMethodDigitalPackJson), outStream, context)
     }
+      assertion.onComplete { _ =>
 
-    // Shut down the server. Instances cannot be reused.
-    server.shutdown()
+      // Shut down the server. Instances cannot be reused.
+      server.shutdown()
+    }
+    assertion
   }
 
   lazy private val timeOutServices = mockService(

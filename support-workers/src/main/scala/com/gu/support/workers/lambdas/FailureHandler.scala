@@ -9,6 +9,7 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.CheckoutFailureReasons._
 import com.gu.support.workers._
+import com.gu.support.workers.lambdas.FailureHandler.{extractUnderlyingError, toCheckoutFailureReason}
 import com.gu.support.workers.states.{CheckoutFailureState, FailureHandlerState}
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
@@ -17,7 +18,7 @@ import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHandlerState, CheckoutFailureState] {
+class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerState, CheckoutFailureState] {
 
   def this() = this(new EmailService)
 
@@ -76,6 +77,10 @@ class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHa
     SafeLogger.info(s"Returning CheckoutFailure state...")
     HandlerResult(CheckoutFailureState(state.user, checkoutFailureReason), requestInfo)
   }
+
+}
+
+object FailureHandler {
 
   private def extractUnderlyingError(executionError: ExecutionError): Option[Throwable] = for {
     errorJson <- decode[ErrorJson](executionError.Cause).toOption

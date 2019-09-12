@@ -40,7 +40,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     SafeLogger.info(s"Sending acquisition event to ophan: ${state.toString}")
 
     // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
-    val result: Future[(Unit, RequestInfo)] = services.acquisitionService.submit(
+    val result: Future[HandlerResult[Unit]] = services.acquisitionService.submit(
       SendAcquisitionEventStateAndRequestInfo(state, requestInfo)
     ).fold(
       errors => throw AnalyticsServiceErrorList(errors),

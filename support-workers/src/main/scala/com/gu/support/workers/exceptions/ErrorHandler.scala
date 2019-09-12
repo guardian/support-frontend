@@ -15,7 +15,7 @@ import com.gu.support.zuora.api.response.ZuoraErrorResponse
  * see support-workers/docs/error-handling.md
  */
 object ErrorHandler {
-  val handleException: PartialFunction[Throwable, Any] = {
+  val handleException: Throwable => Nothing = {
     //Stripe
     case e: Stripe.StripeError => logAndRethrow(e.asRetryException)
     //PayPal
@@ -32,7 +32,7 @@ object ErrorHandler {
     case e: Throwable => logAndRethrow(e.asRetryException)
   }
 
-  def logAndRethrow(t: RetryException): Unit = {
+  def logAndRethrow(t: RetryException): Nothing = {
     SafeLogger.error(scrub"${t.getMessage}", t)
     throw t
   }

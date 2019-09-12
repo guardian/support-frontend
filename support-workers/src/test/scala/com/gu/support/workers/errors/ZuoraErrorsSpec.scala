@@ -6,25 +6,23 @@ import com.gu.config.Configuration
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.JsonFixtures.{createContributionZuoraSubscriptionJson, wrapFixture}
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
-import com.gu.support.workers.{JsonFixtures, JsonWrapper, LambdaSpec}
+import com.gu.support.workers._
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures.{incorrectPaymentMethod, invalidSubscriptionRequest}
 import com.gu.zuora.ZuoraService
-import io.circe.generic.auto._
 import io.circe.parser.decode
 import org.scalatest.RecoverMethods
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 @IntegrationTest
-class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServicesCreator with RecoverMethods {
+class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with MockServicesCreator with RecoverMethods with MockContext {
+
   "Subscribe request with invalid term type" should "fail with a ZuoraErrorResponse" in {
     val zuoraService = new ZuoraService(Configuration.zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
     recoverToSucceededIf[ZuoraErrorResponse] {
@@ -48,8 +46,8 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
   "Timeouts from Zuora" should "throw a RetryUnlimited" in {
     val createZuoraSubscription = new CreateZuoraSubscription(timeoutServices)
     val outputStream = new ByteArrayOutputStream()
-    a[RetryUnlimited] should be thrownBy {
-      createZuoraSubscription.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson()), outputStream, context)
+    recoverToSucceededIf[RetryUnlimited] {
+      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outputStream, context)
     }
   }
 
@@ -62,11 +60,13 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
 
     val outStream = new ByteArrayOutputStream()
 
-    a[RetryUnlimited] should be thrownBy {
-      createZuoraSubscription.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+    val assertion = recoverToSucceededIf[RetryUnlimited] {
+      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
     }
-
-    server.shutdown()
+    assertion.onComplete { _ =>
+      server.shutdown()
+    }
+    assertion
   }
 
   "200s with success = false from Zuora and a trnasient error" should "throw a RetryUnlimited" in {
@@ -90,11 +90,13 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
 
     val outStream = new ByteArrayOutputStream()
 
-    a[RetryUnlimited] should be thrownBy {
-      createZuoraSubscription.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+    val assertion = recoverToSucceededIf[RetryUnlimited] {
+      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
     }
-
-    server.shutdown()
+    assertion.onComplete { _ =>
+      server.shutdown()
+    }
+    assertion
   }
 
   "200s with success = false from Zuora and a permanent error" should "throw a RetryNone" in {
@@ -118,11 +120,13 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
 
     val outStream = new ByteArrayOutputStream()
 
-    a[RetryNone] should be thrownBy {
-      createZuoraSubscription.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+    val assertion = recoverToSucceededIf[RetryNone] {
+      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
     }
-
-    server.shutdown()
+    assertion.onComplete { _ =>
+      server.shutdown()
+    }
+    assertion
   }
 
   "200s with wrong content type" should "throw a RetryNone" in {
@@ -146,12 +150,25 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
 
     val outStream = new ByteArrayOutputStream()
 
-    a[RetryUnlimited] should be thrownBy {
-      createZuoraSubscription.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+    val assertion = recoverToSucceededIf[RetryUnlimited] {
+      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
     }
-
-    server.shutdown()
+    assertion.onComplete { _ =>
+      server.shutdown()
+    }
+    assertion
   }
+
+  private val timeoutServices = errorServices(None, 1.milliseconds)
+
+  def errorServices(baseUrl: Option[String], timeout: Duration = 10.seconds): ServiceProvider = mockService(
+    s => s.zuoraService,
+    new ZuoraService(Configuration.zuoraConfigProvider.get(), configurableFutureRunner(timeout), baseUrl)
+  )
+
+}
+
+class ZuoraErrorsSpec extends LambdaSpec {
 
   "JsonWrapped error" should "deserialise correctly" in {
 
@@ -164,12 +181,5 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
 
     zuoraErrorResponse.get.errors.head.Code should be("TRANSACTION_FAILED")
   }
-
-  private val timeoutServices = errorServices(None, 1.milliseconds)
-
-  def errorServices(baseUrl: Option[String], timeout: Duration = 10.seconds): ServiceProvider = mockService(
-    s => s.zuoraService,
-    new ZuoraService(Configuration.zuoraConfigProvider.get(), configurableFutureRunner(timeout), baseUrl)
-  )
 
 }
