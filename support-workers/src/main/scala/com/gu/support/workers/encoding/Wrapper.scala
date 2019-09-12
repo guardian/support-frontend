@@ -5,6 +5,7 @@ import java.util.Base64
 
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.encoding.Encryption.encrypt
+import com.gu.support.workers.lambdas.HandlerResult
 import com.gu.support.workers.{JsonWrapper, RequestInfo}
 import io.circe.Encoder
 import io.circe.generic.auto._
@@ -26,8 +27,8 @@ object Wrapper {
     t
   }
 
-  def wrap[T](value: T, requestInfo: RequestInfo)(implicit encoder: Encoder[T]): JsonWrapper =
-    wrapString(value.asJson.noSpaces, requestInfo)
+  def wrap[T](handlerResult: HandlerResult[T])(implicit encoder: Encoder[T]): JsonWrapper =
+    wrapString(handlerResult.value.asJson.noSpaces, handlerResult.requestInfo)
 
   def wrapString(string: String, requestInfo: RequestInfo): JsonWrapper =
     JsonWrapper(encodeToBase64String(encrypt(string, requestInfo.encrypted)), None, requestInfo)

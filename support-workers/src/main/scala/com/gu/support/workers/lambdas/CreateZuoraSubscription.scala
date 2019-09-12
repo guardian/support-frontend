@@ -58,10 +58,10 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   ): FutureHandlerResult = {
     val message = "Skipping subscribe for user because a subscription has already been created for this request"
     SafeLogger.info(message)
-    FutureHandlerResult(
+    Future.successful(HandlerResult(
       getEmailState(state, subscription.accountNumber, subscription.subscriptionNumber, previewedPaymentSchedule),
       requestInfo.appendMessage(message)
-    )
+    ))
   }
 
   def singleSubscribe(
@@ -85,7 +85,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     response: SubscribeResponseAccount,
     previewedPaymentSchedule: PaymentSchedule,
     requestInfo: RequestInfo
-  ): HandlerResult = HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber, previewedPaymentSchedule), requestInfo)
+  ): HandlerResult[SendThankYouEmailState] =
+    HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber, previewedPaymentSchedule), requestInfo)
 
   private def getEmailState(
     state: CreateZuoraSubscriptionState,

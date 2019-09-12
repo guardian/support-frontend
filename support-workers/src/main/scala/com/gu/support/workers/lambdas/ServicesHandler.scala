@@ -9,17 +9,17 @@ import io.circe.{Decoder, Encoder}
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class ServicesHandler[T <: StepFunctionUserState, R](servicesProvider: ServiceProvider)(
+abstract class ServicesHandler[IN <: StepFunctionUserState, OUT](servicesProvider: ServiceProvider)(
     implicit
-    decoder: Decoder[T],
-    encoder: Encoder[R],
+    decoder: Decoder[IN],
+    encoder: Encoder[OUT],
     ec: ExecutionContext
-) extends Handler[T, R] {
+) extends Handler[IN, OUT] {
 
-  override protected def handlerFuture(input: T, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context) = {
+  override protected def handlerFuture(input: IN, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context) = {
     servicesHandler(input, requestInfo, context, servicesProvider.forUser(input.user.isTestUser))
   }
 
-  protected def servicesHandler(input: T, requestInfo: RequestInfo, context: Context, services: Services): Future[(R, RequestInfo)]
+  protected def servicesHandler(input: IN, requestInfo: RequestInfo, context: Context, services: Services): FutureHandlerResult
 
 }

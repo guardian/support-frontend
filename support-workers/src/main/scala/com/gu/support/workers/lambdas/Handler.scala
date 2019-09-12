@@ -12,22 +12,16 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-abstract class Handler[T, R](
+abstract class Handler[IN, OUT](
   implicit
-  decoder: Decoder[T],
-  encoder: Encoder[R],
+  decoder: Decoder[IN],
+  encoder: Encoder[OUT],
   ec: ExecutionContext
 ) extends RequestStreamHandler {
 
   import com.gu.support.workers.encoding.Encoding._
 
-  type HandlerResult = (R, RequestInfo)
-
-  type FutureHandlerResult = Future[HandlerResult]
-
-  def HandlerResult(r: R, ri: RequestInfo): HandlerResult = (r, ri) // scalastyle:ignore method.name
-
-  def FutureHandlerResult(r: R, ri: RequestInfo): FutureHandlerResult = Future.successful((r, ri)) // scalastyle:ignore method.name
+  type FutureHandlerResult = Future[HandlerResult[OUT]]
 
   override def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
     try {
@@ -48,14 +42,15 @@ abstract class Handler[T, R](
       (input, error, requestInfo) = inputData
       result <- handlerFuture(input, error, requestInfo, context)
       _ = SafeLogger.info(s"FINISH ${this.getClass} with $result")
-      _ <- Future.fromTry(out(result._1, result._2, os))
+      _ <- Future.fromTry(out(result, os))
     } yield ()
     eventualUnit.recover {
       case t => ErrorHandler.handleException(t)
     }
   }
 
-  protected def handlerFuture(input: T, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): FutureHandlerResult
+  protected def handlerFuture(input: IN, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): FutureHandlerResult
 
 }
 
+case class HandlerResult[RESULT](value: RESULT, requestInfo: RequestInfo)
