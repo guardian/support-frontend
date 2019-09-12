@@ -86,11 +86,16 @@ class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter w
     When("they press the Stripe payment button")
     checkoutPage.selectStripePaymentMethod()
 
-    When("they click continue to payment")
+    Then("the stripe form loads")
+    assert(checkoutPage.stripeFormHasLoaded)
+
+    Given("they fill in the stripe form")
+    checkoutPage.fillStripeForm
+
+    When("they click to process payment")
     checkoutPage.clickSubmit
 
     And("the mock calls the backend using a test Stripe token")
-
     thankYouPage(checkoutPage)
   }
 
