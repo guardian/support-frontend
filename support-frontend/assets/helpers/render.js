@@ -51,7 +51,8 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
     delete element.dataset.notHydrated;
     try {
       if (process.env.NODE_ENV === 'DEV') {
-        import('react-axe').then(axe => {
+        import('react-axe').then((axe) => {
+          console.log('Loading react-axe for accessibility analysis');
           axe.default(React, ReactDOM, 1000);
           ReactDOM.render(content, element, callBack);
         });
