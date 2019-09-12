@@ -6,7 +6,7 @@ import React, { type Node } from 'react';
 
 import Button from 'components/button/button';
 import { type Option } from 'helpers/types/option';
-import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
+import { type PaymentMethod } from 'helpers/paymentMethods';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { ErrorSummary } from './submitFormErrorSummary';
@@ -29,9 +29,9 @@ type PropTypes = {|
 
 function SubscriptionSubmitButton(props: PropTypes) {
   return (
-    <span className={props.paymentMethod === props.className ? 'show' : 'hide'}>
+    <span className={props.paymentMethod === props.className ? 'show' : 'is-hidden'}>
       <div className="component-submit-button">
-        <div className={props.paymentMethod === DirectDebit ? 'component-submit-button--margin' : ''}>
+        <div className={props.paymentMethod ? `component-submit-button--${props.paymentMethod}` : 'component-submit-button'}>
           <Button
             id="qa-submit-button"
             type="submit"

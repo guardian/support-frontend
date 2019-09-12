@@ -46,7 +46,7 @@ function PayPalSubmitButton(props: PropTypes) {
   // See PayPalExpressButton for more info.
   return (
     <div className="component-submit-button">
-      <div className={props.paymentMethod === PayPal ? 'component-submit-button--margin' : ''}>
+      <div className={props.paymentMethod ? `component-submit-button--${props.paymentMethod}` : 'component-submit-button'}>
         <div
           id="component-paypal-button-checkout"
           className={hiddenIf(props.paymentMethod !== PayPal, 'component-paypal-button-checkout')}
