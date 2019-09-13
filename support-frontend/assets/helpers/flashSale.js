@@ -235,6 +235,38 @@ const Sales: Sale[] = [
       },
     },
   },
+  {
+    subscriptionProduct: 'Paper',
+    activeRegions: [GBPCountries],
+    startTime: new Date(2019, 8, 1).getTime(), // 1 Sep 2019
+    endTime: new Date(2019, 9, 6).getTime(), // 6 Oct 2019
+    saleDetails: {
+      GBPCountries: {
+        promoCode: '',
+        annualPlanPromoCode: '',
+        intcmp: '',
+        price: 5.40,
+        annualPrice: 0,
+        discountPercentage: 0.25,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Paper',
+            subHeading: '50% off for 3 months',
+            description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
+          },
+          landingPage: {
+            heading: 'Print',
+            subHeading: '',
+          },
+          bundle: {
+            heading: 'Paper',
+            subHeading: '50% off for 3 months',
+            description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
+          },
+        },
+      },
+    },
+  },
 ];
 
 function getTimeTravelDaysOverride() {

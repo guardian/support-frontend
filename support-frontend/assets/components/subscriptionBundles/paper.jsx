@@ -26,6 +26,7 @@ function getCopy() {
     return {
       subHeading: `from £${salePrice}/Monthly`,
       description: `${saleCopy.bundle.description}`,
+      highlightSavings: `${saleCopy.bundle.subHeading}`,
     };
   }
   return {
@@ -41,6 +42,7 @@ export default function Paper(props: PropTypes) {
       modifierClass="paper"
       heading="Paper"
       subheading={copy.subHeading}
+      highlightSavings={copy.highlightSavings ? copy.highlightSavings : null}
       headingSize={3}
       benefits={{
         list: false,
