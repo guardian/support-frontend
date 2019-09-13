@@ -49,8 +49,7 @@ lazy val commonSettings = Seq(
     "scm:git:git@github.com:guardian/support-frontend.git"
   )),
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
-  updateOptions := updateOptions.value.withCachedResolution(true),
-  ThisBuild / turbo := true
+  updateOptions := updateOptions.value.withCachedResolution(true)
 )
 
 lazy val commonDependencies = Seq(
