@@ -30,7 +30,7 @@ lazy val release = Seq[ReleaseStep](
 
 lazy val commonSettings = Seq(
   organization := "com.gu",
-  scalaVersion := "2.12.8",
+  scalaVersion := "2.12.10",
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
   isSnapshot := false,
   publishTo := {
