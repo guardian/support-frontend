@@ -17,7 +17,6 @@ import type { GridImg } from 'components/gridImage/gridImage';
 import { type Option } from 'helpers/types/option';
 
 import 'components/threeSubscriptions/threeSubscriptions.scss';
-import Highlights from 'components/highlights/highlights';
 
 
 // ----- Props ----- //
