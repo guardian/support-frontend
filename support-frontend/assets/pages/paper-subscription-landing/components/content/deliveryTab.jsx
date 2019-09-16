@@ -57,11 +57,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
 const DeliveryTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
   <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
     <ContentDeliveryFaqBlock setTabAction={setTabAction} />
-    <ContentForm
-      selectedTab={selectedTab}
-      setTabAction={setTabAction}
-      title="Pick your subscription package below: Delivery"
-    />
+    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below: Delivery" />
     <ContentHelpBlock
       faqLink={
         <a
