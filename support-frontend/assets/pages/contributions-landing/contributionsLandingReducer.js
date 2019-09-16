@@ -78,6 +78,7 @@ type FormState = {
   hasSeenDirectDebitThankYouCopy: boolean,
   payPalHasLoaded: boolean,
   braintreeHasLoaded: boolean,
+  venmoDeviceData: string,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
@@ -151,6 +152,7 @@ function createFormReducer() {
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
     braintreeHasLoaded: false,
+    venmoDeviceData: '',
     hasSeenDirectDebitThankYouCopy: false,
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
@@ -258,6 +260,12 @@ function createFormReducer() {
         return {
           ...state,
           braintreeHasLoaded: true,
+        };
+
+      case 'SET_VENMO_DEVICE_DATA':
+        return {
+          ...state,
+          venmoDeviceData: action.deviceData,
         };
 
       case 'UPDATE_USER_FORM_DATA':

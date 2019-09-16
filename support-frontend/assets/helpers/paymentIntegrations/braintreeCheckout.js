@@ -1,6 +1,7 @@
 // @flow
 
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { setVenmoDeviceData } from 'pages/contributions-landing/contributionsLandingActions';
 // ----- Imports ----- //
 import {
   setBraintreeHasLoaded,
@@ -85,7 +86,6 @@ const getVenmoInstance: (Object) => Promise<Object> = clientInstance => new Prom
 
 function setupVenmoButton(
   venmoInstance: Object,
-  deviceData: string,
   onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void,
 ) {
 
@@ -97,9 +97,7 @@ function setupVenmoButton(
     return;
   }
 
-  // displayVenmoButton(venmoInstance, venmoButton, deviceData);
   console.log('supported:', venmoInstance.isBrowserSupported());
-  // venmoInstance is ready to be used.
 }
 
 
@@ -127,9 +125,11 @@ function setupBraintree(
     getClientInstance().then((clientInstance) => {
       loadDataCollector().then(() => {
         getDeviceData(clientInstance).then((deviceData) => {
+          console.log(JSON.stringify(deviceData));
+          dispatch(setVenmoDeviceData(JSON.stringify(deviceData)));
           loadVenmo().then(() => {
             getVenmoInstance(clientInstance).then((venmoInstance) => {
-              setupVenmoButton(venmoInstance, JSON.stringify(deviceData), onPaymentAuthorisation);
+              setupVenmoButton(venmoInstance, onPaymentAuthorisation);
             }).catch((createErr) => {
               console.error('Error creating Venmo instance', createErr);
             });

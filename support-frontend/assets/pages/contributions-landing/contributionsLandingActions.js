@@ -76,6 +76,7 @@ export type Action =
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_BRAINTREE_HAS_LOADED' }
+  | { type: 'SET_VENMO_DEVICE_DATA', deviceData: string }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -134,6 +135,8 @@ const setStripeV3HasLoaded =
 
 const setBraintreeHasLoaded =
   (): Action => ({ type: 'SET_BRAINTREE_HAS_LOADED' });
+
+const setVenmoDeviceData = (deviceData: string): Action => ({ type: 'SET_VENMO_DEVICE_DATA', deviceData });
 
 const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 
@@ -264,6 +267,7 @@ const stripeChargeDataFromAuthorisation = (
 const venmoChargeDataFromAuthorisation = (
   authorisation: VenmoAuthorisation,
   state: State,
+  deviceData: string,
 ): VenmoChargeData => ({
   paymentData: {
     amount: getAmount(
@@ -272,7 +276,7 @@ const venmoChargeDataFromAuthorisation = (
       state.page.form.contributionType,
     ),
     paymentNonce: authorisation.paymentNonce,
-    deviceData: 'dummy data',
+    deviceData,
   },
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,
@@ -443,8 +447,9 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
       if (paymentAuthorisation.paymentMethod === Venmo) {
+        const deviceData = state.page.form.venmoDeviceData;
         return dispatch(executeVenmoOneOffPayment(
-          venmoChargeDataFromAuthorisation(paymentAuthorisation, state),
+          venmoChargeDataFromAuthorisation(paymentAuthorisation, state, deviceData),
           (token: string) => dispatch(setGuestAccountCreationToken(token)),
           (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
         ));
@@ -569,4 +574,5 @@ export {
   setStripeV3HasLoaded,
   setBraintreeHasLoaded,
   setTickerGoalReached,
+  setVenmoDeviceData,
 };
