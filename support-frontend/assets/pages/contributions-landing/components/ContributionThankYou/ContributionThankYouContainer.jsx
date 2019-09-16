@@ -15,13 +15,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   thankYouPageStage: ThankYouPageStage,
-  countryForSurvey: IsoCountry,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   thankYouPageStage: state.page.form.thankYouPageStage,
-  countryForSurvey: state.common.internationalisation.countryId,
 });
 
 // ----- Render ----- //
@@ -30,16 +28,16 @@ function ContributionThankYouContainer(props: PropTypes) {
 
   const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
     thankYou: (
-      <ContributionThankYou countryForSurvey={props.countryForSurvey} />
+      <ContributionThankYou />
     ),
     thankYouSetPassword: (
       <ContributionThankYouSetPassword />
     ),
     thankYouPasswordDeclinedToSet: (
-      <ContributionThankYou countryForSurvey={props.countryForSurvey} />
+      <ContributionThankYou />
     ),
     thankYouPasswordSet: (
-      <ContributionThankYouPasswordSet countryForSurvey={props.countryForSurvey} />
+      <ContributionThankYouPasswordSet />
     ),
   };
 
