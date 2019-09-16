@@ -15,7 +15,6 @@ type Props = {
 type WrappedProps = {
   ...PropTypes,
   salesCopy: Node,
-  dailyEditionsVariant: boolean
 }
 
 type ProductOptionType = {
@@ -31,7 +30,7 @@ type ProductOptionOfferType = {
 
 // hocs
 const withProductOptionsStyle = WrappedComponent => (props: WrappedProps) => (
-  <div className={cx('product-option__button', { 'product-option__button--variantA': props.dailyEditionsVariant })}>
+  <div className="product-option__button">
     <div className="product-option__sales-copy">{props.salesCopy}</div>
     <WrappedComponent {...props} />
   </div>

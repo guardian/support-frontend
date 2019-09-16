@@ -29,7 +29,7 @@
   margin-bottom: 10px;
   position: relative;
   transition: .2s background;
-  
+
   @include mq(tablet) {
     font-size: 20px;
   }
@@ -80,7 +80,7 @@
   color: gu-colour(neutral-7);
   line-height: 1.4;
   @include gu-fontset-body-sans;
-}  
+}
 
 .product-option__button {
   border-top: 1px solid gu-colour(neutral-86);
@@ -90,9 +90,9 @@
   .component-button {
     margin-top: 20px;
     width: 100%;
-    max-width: 180px;
+    max-width: 210px;
   }
-  
+
 }
 
 .product-option__sales-copy--hidden {
@@ -126,8 +126,3 @@
   }
 }
 
-.product-option__button--variantA {
-  .component-button {
-    max-width: 210px;
-  }
-}
