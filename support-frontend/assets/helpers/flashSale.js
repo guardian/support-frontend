@@ -7,7 +7,7 @@ import { type BillingPeriod } from 'helpers/billingPeriods';
 
 import { type SubscriptionProduct } from './subscriptions';
 import { AUDCountries, GBPCountries, EURCountries, Canada, International, UnitedStates, NZDCountries } from './internationalisation/countryGroup';
-import { Collection, type FulfilmentOptions } from './productPrice/fulfilmentOptions';
+import { type FulfilmentOptions } from './productPrice/fulfilmentOptions';
 import { type Option } from 'helpers/types/option';
 
 export type SaleCopy = {
@@ -251,16 +251,15 @@ const Sales: Sale[] = [
         price: 8.09,
         annualPrice: 0,
         discountPercentage: 0.52,
-        fulfilmentOption: Collection,
         saleCopy: {
           featuredProduct: {
             heading: 'Paper',
-            subHeading: '',
+            subHeading: 'Save up to 52% for a year',
             description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
           },
           landingPage: {
             heading: 'Print',
-            subHeading: '',
+            subHeading: 'Save up to 52% for a year',
           },
           bundle: {
             heading: 'Paper',
@@ -288,28 +287,18 @@ function sortSalesByStartTimesDescending(a: Sale, b: Sale) {
 function getActiveFlashSales(
   product: SubscriptionProduct,
   countryGroupId: CountryGroupId = detect(),
-  fulfilmentOption?: Option<FulfilmentOptions>,
 ): Sale[] {
   const timeTravelDays = getTimeTravelDaysOverride();
   const now = timeTravelDays ? Date.now() + (timeTravelDays * 86400000) : Date.now();
 
-  let sales = Sales.filter(sale =>
+  const sales = Sales.filter(sale =>
     sale.subscriptionProduct === product &&
     sale.activeRegions.includes(countryGroupId)).sort(sortSalesByStartTimesDescending);
-
-  if (fulfilmentOption) {
-    sales = sales.filter(sale => sale.saleDetails[countryGroupId].fulfilmentOption &&
-      (sale.saleDetails[countryGroupId].fulfilmentOption === fulfilmentOption));
-  }
 
   return sales.filter(sale =>
     (now > sale.startTime && now < sale.endTime) ||
     getFlashSaleActiveOverride() === true);
 }
-
-getActiveFlashSales.default = {
-  fulfilmentOptions: null,
-};
 
 function getDiscount(product: SubscriptionProduct, countryGroupId: CountryGroupId): ?number {
   const sale = getActiveFlashSales(product, countryGroupId)[0];
@@ -324,12 +313,7 @@ function getDuration(product: SubscriptionProduct, countryGroupId: CountryGroupI
 function flashSaleIsActive(
   product: SubscriptionProduct,
   countryGroupId: CountryGroupId = detect(),
-  fulfilmentOption?: Option<FulfilmentOptions>,
 ): boolean {
-  if (fulfilmentOption) {
-    const sales = getActiveFlashSales(product, countryGroupId, fulfilmentOption);
-    return sales.length > 0;
-  }
   const sales = getActiveFlashSales(product, countryGroupId);
   return sales.length > 0;
 }

@@ -48,6 +48,7 @@ const getPriceStr = (price: ProductPrice): string => {
 const getOfferStr = (subscription: Option<number>, newsstand: Option<number>, index: number): Option<string> => {
 
   if (discountParam !== 'save') {
+    // This is the function call that returns the discount copy from the A/B test
     return getDiscountCopy(discountParam).offer[index];
   }
 

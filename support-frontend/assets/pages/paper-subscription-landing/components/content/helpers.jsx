@@ -15,7 +15,7 @@ import { type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 
 import Form from './form';
-import { Collection, HomeDelivery, type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 
@@ -30,10 +30,6 @@ export type ContentTabPropTypes = {|
   getRef: (?HTMLElement)=> void
 |};
 
-type DiscountCalloutMaybePropTypes = {
-  fulfilmentOption: FulfilmentOptions,
-}
-
 
 // Helper functions
 const getPageInfoChip = (): string => {
@@ -43,8 +39,8 @@ const getPageInfoChip = (): string => {
   return 'You can cancel your subscription at any time.';
 };
 
-const DiscountCalloutMaybe = (props: DiscountCalloutMaybePropTypes) => {
-  if (!flashSaleIsActive('Paper', 'GBPCountries', props.fulfilmentOption)) { return null; }
+const DiscountCalloutMaybe = () => {
+  if (!flashSaleIsActive('Paper', 'GBPCountries')) { return null; }
   const [discount, duration] = [
     getDiscount('Paper', 'GBPCountries'),
     getDuration('Paper', 'GBPCountries'),
@@ -108,7 +104,7 @@ const ContentForm = ({
     <Text
       title={title}
     >
-      <DiscountCalloutMaybe fulfilmentOption={selectedTab} />
+      <DiscountCalloutMaybe />
       {text &&
       <p>{text}</p>
       }
