@@ -335,7 +335,7 @@ function flashSaleIsActive(
 }
 
 flashSaleIsActive.default = {
-  state: null,
+  fulfilmentOption: null,
 };
 
 function getPromoCode(
