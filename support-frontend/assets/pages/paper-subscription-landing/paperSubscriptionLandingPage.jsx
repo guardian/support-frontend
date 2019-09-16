@@ -46,7 +46,7 @@ const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supp
 // ----- Redux Store ----- //
 
 const store = pageInit(() => reducer(fulfilment), true);
-
+const { tab } = store.getState().page;
 
 // ----- Render ----- //
 
@@ -61,34 +61,37 @@ function getStandfirst(): string {
 }
 
 const content = (
-  <Provider store={store}>
-    <Page
-      header={<Header />}
-      footer={<Footer />}
-    >
-      <CampaignHeader />
-      {paperHasDeliveryEnabled() &&
-        <Content needsHigherZindex>
-          <Text>
-            <LargeParagraph>
-              {getStandfirst()}
-            </LargeParagraph>
-          </Text>
-          <Tabs />
-        </Content>
-      }
-      <TabsContent />
-      {flashSaleIsActive('Paper', GBPCountries) &&
-        <Content>
-          <Text title="Promotion terms and conditions">
-            <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/GCB80X/terms?country=${subsCountry}`}>here</a>.
-            </p>
-          </Text>
-        </Content>
-      }
-      <ConsentBanner />
-    </Page>
-  </Provider>
+  <span>
+    {tab && (
+    <Provider store={store}>
+      <Page
+        header={<Header />}
+        footer={<Footer />}
+      >
+        <CampaignHeader />
+        {paperHasDeliveryEnabled() &&
+          <Content needsHigherZindex>
+            <Text>
+              <LargeParagraph>
+                {getStandfirst()}
+              </LargeParagraph>
+            </Text>
+            <Tabs />
+          </Content>
+        }
+        <TabsContent />
+        {flashSaleIsActive('Paper', GBPCountries, tab) &&
+          <Content>
+            <Text title="Promotion terms and conditions">
+              <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/GCB80X/terms?country=${subsCountry}`}>here</a>.
+              </p>
+            </Text>
+          </Content>
+        }
+        <ConsentBanner />
+      </Page>
+    </Provider>)}
+  </span>
 );
 
 renderPage(content, reactElementId);

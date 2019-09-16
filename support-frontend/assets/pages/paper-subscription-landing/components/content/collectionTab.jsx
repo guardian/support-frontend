@@ -49,7 +49,11 @@ const ContentVoucherFaqBlock = () => (
 const CollectionTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
   <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
     <ContentVoucherFaqBlock />
-    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below: Voucher" />
+    <ContentForm
+      selectedTab={selectedTab}
+      setTabAction={setTabAction}
+      title="Pick your subscription package below: Voucher"
+    />
     <ContentHelpBlock
       faqLink={
         <a
