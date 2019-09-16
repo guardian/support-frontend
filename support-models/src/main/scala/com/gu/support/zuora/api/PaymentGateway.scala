@@ -20,6 +20,8 @@ object PaymentGateway {
     case StripeGatewayAUD.name => StripeGatewayAUD
     case PayPalGateway.name => PayPalGateway
     case DirectDebitGateway.name => DirectDebitGateway
+    case StripeGatewayPaymentIntentsDefault.name => StripeGatewayPaymentIntentsDefault
+    case StripeGatewayPaymentIntentsAUD.name => StripeGatewayPaymentIntentsAUD
   }
 
   implicit val encoder: Encoder[PaymentGateway] = Encoder.encodeString.contramap[PaymentGateway](_.name)
@@ -35,6 +37,14 @@ case object StripeGatewayDefault extends PaymentGateway {
 
 case object StripeGatewayAUD extends PaymentGateway {
   val name = "Stripe Gateway GNM Membership AUS"
+}
+
+case object StripeGatewayPaymentIntentsDefault extends PaymentGateway {
+  val name = "Stripe PaymentIntents GNM Membership"
+}
+
+case object StripeGatewayPaymentIntentsAUD extends PaymentGateway {
+  val name = "Stripe PaymentIntents GNM Membership AUS"
 }
 
 case object PayPalGateway extends PaymentGateway {
