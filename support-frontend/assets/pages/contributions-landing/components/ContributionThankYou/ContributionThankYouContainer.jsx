@@ -8,7 +8,6 @@ import { type ThankYouPageStageMap, type ThankYouPageStage } from '../../contrib
 import ContributionThankYou from './ContributionThankYou';
 import ContributionThankYouSetPassword from './ContributionThankYouSetPassword';
 import ContributionThankYouPasswordSet from './ContributionThankYouPasswordSet';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 
