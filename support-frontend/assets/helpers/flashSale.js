@@ -248,14 +248,14 @@ const Sales: Sale[] = [
         promoCode: '',
         annualPlanPromoCode: '',
         intcmp: '',
-        price: 5.40,
+        price: 8.09,
         annualPrice: 0,
-        discountPercentage: 0.5,
+        discountPercentage: 0.52,
         fulfilmentOption: Collection,
         saleCopy: {
           featuredProduct: {
             heading: 'Paper',
-            subHeading: '50% off for 3 months',
+            subHeading: '',
             description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
           },
           landingPage: {
@@ -264,7 +264,7 @@ const Sales: Sale[] = [
           },
           bundle: {
             heading: 'Paper',
-            subHeading: '50% off for 3 months',
+            subHeading: 'Save up to 52% for a year',
             description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
           },
         },
