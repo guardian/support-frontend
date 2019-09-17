@@ -19,8 +19,6 @@ type WrappedProps = {
 
 type ProductOptionType = {
   children: Node,
-  onClick: Function,
-  href: string
 }
 
 type ProductOptionOfferType = {
@@ -62,8 +60,8 @@ export const ProductOptionOffer = ({ children, hidden }: ProductOptionOfferType)
 
 export const ProductOptionButton = withProductOptionsStyle(AnchorButton);
 
-const ProductOption = ({ onClick, href, children }: ProductOptionType) => (
-  <a href={href} onClick={onClick} className="product-option">{ children }</a>
+const ProductOption = ({ children }: ProductOptionType) => (
+  <div className="product-option">{ children }</div>
 );
 
 // default props
