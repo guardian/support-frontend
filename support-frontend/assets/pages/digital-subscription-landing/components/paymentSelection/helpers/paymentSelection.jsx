@@ -59,13 +59,13 @@ const BILLING_PERIOD = {
       const display = price => getDisplayPrice(currencyId, price);
       return promotionalPrice ?
         <span>
-          <strong>
-            {display(promotionalPrice)}
-          </strong> then {display(displayPrice)}/month
+          <span className="product-option__price">{display(promotionalPrice)}</span>
+          <span className="product-option__price-detail">then {display(displayPrice)}/month</span>
         </span>
         :
         <span>
-          14 day free trial, then <strong>{display(displayPrice)}</strong>
+          <span className="product-option__price">{display(displayPrice)}</span>
+          <span className="product-option__price-detail">14 day free trial</span>
         </span>;
     },
     offer: 'null',
@@ -77,15 +77,13 @@ const BILLING_PERIOD = {
       const display = price => getDisplayPrice(currencyId, price);
       return promotionalPrice ?
         <span>
-          <strong>
-            {display(promotionalPrice)}
-          </strong> then {display(displayPrice)}/year
+          <span className="product-option__price">{display(promotionalPrice)}</span>
+          <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
         </span>
         :
         <span>
-          <strong>
-            {display(displayPrice)}
-          </strong> equivalent of {display(displayPrice / 12)}/month
+          <span className="product-option__price">{display(displayPrice)}</span>
+          <span className="product-option__price-detail">equivalent of {display(displayPrice / 12)}/month</span>
         </span>;
     },
     offer: 'Save an additional 21% - Best Deal',
