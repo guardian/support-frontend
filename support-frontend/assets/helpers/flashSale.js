@@ -34,7 +34,7 @@ type SaleDetails = {
     price: number,
     annualPrice?: number,
     discountPercentage?: number,
-    saleCopy: SaleCopy,
+    saleCopy?: SaleCopy,
   },
 };
 
@@ -50,189 +50,27 @@ type Sale = {
 };
 
 // Days are 1 based, months are 0 based
+
+const dpSale = {
+  promoCode: 'DK0NT24WG',
+  intcmp: '',
+  price: 0,
+};
+
 const Sales: Sale[] = [
   {
     subscriptionProduct: 'DigitalPack',
-    activeRegions: [UnitedStates, AUDCountries, International, EURCountries, Canada, NZDCountries],
-    startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
-    endTime: new Date(2019, 2, 18).getTime(), // 17 Mar 2019
+    activeRegions: [GBPCountries, UnitedStates, AUDCountries, International, EURCountries, Canada, NZDCountries],
+    startTime: new Date(2019, 8, 23).getTime(), // 23 Sept 2019
+    endTime: new Date(2020, 8, 23).getTime(), // 23 Sept 2020 - we don't have an end date yet
     saleDetails: {
-      UnitedStates: {
-        promoCode: 'DDPFMINT80',
-        annualPlanPromoCode: 'DDPFMANINT80',
-        intcmp: '',
-        price: 14.99,
-        annualPrice: 179.87,
-        discountPercentage: 0.25,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
-          },
-          landingPage: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
-          },
-          bundle: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
-          },
-        },
-      },
-      International: {
-        promoCode: 'DDPFMINT80',
-        annualPlanPromoCode: 'DDPFMANINT80',
-        intcmp: '',
-        price: 14.99,
-        annualPrice: 179.87,
-        discountPercentage: 0.25,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
-          },
-          landingPage: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
-          },
-          bundle: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
-          },
-        },
-      },
-      Canada: {
-        promoCode: 'DDPFMINT80',
-        annualPlanPromoCode: 'DDPFMANINT80',
-        intcmp: '',
-        price: 16.46,
-        annualPrice: 197.48,
-        discountPercentage: 0.25,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
-          },
-          landingPage: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
-          },
-          bundle: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
-          },
-        },
-      },
-      NZDCountries: {
-        promoCode: 'DDPFMINT80',
-        annualPlanPromoCode: 'DDPFMANINT80',
-        intcmp: '',
-        price: 17.63,
-        annualPrice: 211.43,
-        discountPercentage: 0.25,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
-          },
-          landingPage: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
-          },
-          bundle: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
-          },
-        },
-      },
-      EURCountries: {
-        promoCode: 'DDPFMINT80',
-        annualPlanPromoCode: 'DDPFMANINT80',
-        intcmp: '',
-        price: 11.24,
-        annualPrice: 134.87,
-        discountPercentage: 0.25,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
-          },
-          landingPage: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
-          },
-          bundle: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
-          },
-        },
-      },
-      AUDCountries: {
-        promoCode: 'DDPFMINT80',
-        annualPlanPromoCode: 'DDPFMANINT80',
-        intcmp: '',
-        price: 16.12,
-        annualPrice: 193.46,
-        discountPercentage: 0.25,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
-          },
-          landingPage: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
-          },
-          bundle: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
-          },
-        },
-      },
-    },
-  },
-  {
-    subscriptionProduct: 'DigitalPack',
-    activeRegions: [GBPCountries],
-    startTime: new Date(2019, 1, 18).getTime(), // 18 Feb 2019
-    endTime: new Date(2019, 2, 18).getTime(), // 17 Mar 2019
-    saleDetails: {
-      GBPCountries: {
-        promoCode: 'DDPFM80X',
-        annualPlanPromoCode: 'DDPFMAN80X',
-        intcmp: '',
-        price: 8.99,
-        annualPrice: 107.88,
-        discountPercentage: 0.25,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
-          },
-          landingPage: {
-            heading: 'Digital Pack subscriptions',
-            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
-          },
-          bundle: {
-            heading: 'Digital Pack',
-            subHeading: 'Save 25% for a year',
-            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
-          },
-        },
-      },
+      GBPCountries: dpSale,
+      UnitedStates: dpSale,
+      International: dpSale,
+      Canada: dpSale,
+      NZDCountries: dpSale,
+      EURCountries: dpSale,
+      AUDCountries: dpSale,
     },
   },
 ];
@@ -342,7 +180,7 @@ function getSaleCopy(product: SubscriptionProduct, countryGroupId: CountryGroupI
   };
   if (flashSaleIsActive(product, countryGroupId)) {
     const sale = getActiveFlashSales(product, countryGroupId)[0];
-    return sale.saleDetails[countryGroupId].saleCopy;
+    return sale.saleDetails[countryGroupId].saleCopy || emptyCopy;
   }
   return emptyCopy;
 }
