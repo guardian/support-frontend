@@ -69,7 +69,7 @@ const BILLING_PERIOD = {
         </span>;
     },
     offer: null,
-    label: 'Popular',
+    label: null,
   },
   [Annual]: {
     title: 'Annual',
@@ -86,8 +86,8 @@ const BILLING_PERIOD = {
           <span className="product-option__price-detail">equivalent of {display(displayPrice / 12)}/month</span>
         </span>;
     },
-    offer: 'Save an additional 21% - Best Deal',
-    label: null,
+    offer: 'Save an additional 21%',
+    label: 'Best Deal',
   },
 };
 
