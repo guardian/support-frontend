@@ -311,17 +311,10 @@ function getDuration(product: SubscriptionProduct, countryGroupId: CountryGroupI
   return sale && sale.duration;
 }
 
-function flashSaleIsActive(
-  product: SubscriptionProduct,
-  countryGroupId: CountryGroupId = detect(),
-): boolean {
+function flashSaleIsActive(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): boolean {
   const sales = getActiveFlashSales(product, countryGroupId);
   return sales.length > 0;
 }
-
-flashSaleIsActive.default = {
-  fulfilmentOption: null,
-};
 
 function getPromoCode(
   product: SubscriptionProduct,

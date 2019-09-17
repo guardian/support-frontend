@@ -56,6 +56,7 @@ const newsstandPrices: {[PaperProductOptions]: number} = {
   Sunday: weekendNewsstandPrice,
   Everyday: (dailyNewsstandPrice * 5) + (weekendNewsstandPrice * 2),
   Weekend: weekendNewsstandPrice * 2,
+  Sixday: (dailyNewsstandPrice * 5) + weekendNewsstandPrice,
 };
 
 // ----- Config ----- //

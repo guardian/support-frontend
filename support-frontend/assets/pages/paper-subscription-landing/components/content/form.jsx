@@ -21,15 +21,11 @@ import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { paperCheckoutUrl } from 'helpers/routes';
 import { getTitle } from '../../helpers/products';
-import { getDiscountCopy } from '../hero/discountCopy';
-import { getQueryParameter } from 'helpers/url';
 import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 
 // ---- Helpers ----- //
 
-
-const discountParam: ?string = getQueryParameter('heroCopy');
 
 // TODO: We will need to make this work for flash sales
 const getRegularPriceStr = (price: ProductPrice): string => `You pay ${showPrice(price)} a month`;
@@ -45,17 +41,10 @@ const getPriceStr = (price: ProductPrice): string => {
   return getRegularPriceStr(price);
 };
 
-const getOfferStr = (subscription: Option<number>, newsstand: Option<number>, index: number): Option<string> => {
-
-  if (discountParam !== 'save') {
-    // This is the function call that returns the discount copy from the A/B test
-    return getDiscountCopy(discountParam).offer[index];
-  }
-
+const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> => {
   if ((subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0)) {
     return `Save £${getNewsstandSaving(subscription, newsstand)} a month on retail price`;
   }
-
   return null;
 };
 
@@ -90,7 +79,7 @@ const getPlans = (
   fulfilmentOption: PaperFulfilmentOptions,
   productPrices: ProductPrices,
 ) =>
-  ActivePaperProductTypes.reduce((products, productOption, index) => {
+  ActivePaperProductTypes.reduce((products, productOption) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
     const promoCode = getPromoCode('Paper', GBPCountries, '');
     return {
@@ -106,7 +95,7 @@ const getPlans = (
         title: getTitle(productOption),
         copy: copy[fulfilmentOption][productOption],
         price: getPriceStr(price),
-        offer: getOfferStr(price.price, getNewsstandPrice(productOption), index),
+        offer: getOfferStr(price.price, getNewsstandPrice(productOption)),
         saving: getSavingStr(getProductPrice(productPrices, fulfilmentOption, productOption)),
       },
     };
