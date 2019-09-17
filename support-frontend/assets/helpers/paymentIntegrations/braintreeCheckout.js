@@ -1,7 +1,11 @@
 // @flow
 
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { setVenmoDeviceData } from 'pages/contributions-landing/contributionsLandingActions';
+import {
+  paymentFailure,
+  paymentWaiting,
+  setVenmoDeviceData
+} from 'pages/contributions-landing/contributionsLandingActions';
 // ----- Imports ----- //
 import {
   setBraintreeHasLoaded,
@@ -103,7 +107,8 @@ function setupVenmoButton(
 
 function handleVenmoError(dispatch: Function) {
   return (err) => {
-    dispatch();
+    dispatch(paymentFailure('unknown'));
+    dispatch(paymentWaiting(false));
     if (err.code === 'VENMO_CANCELED') {
       console.log('App is not available or user aborted payment flow');
     } else if (err.code === 'VENMO_APP_CANCELED') {
