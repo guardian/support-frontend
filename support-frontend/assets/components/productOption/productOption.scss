@@ -40,7 +40,9 @@
 }
 
 .product-option__content {
-  padding: 15px 24px;
+  // padding: 15px 24px;
+  padding: 15px 24px 15px 0;
+  margin-left: 24px;
 }
 
 .product-option__price {
@@ -74,12 +76,12 @@
 }
 
 .product-option__offer {
-  padding: 5px;
+  @include gu-fontset-body-sans;
+  padding: 5px 0;
   margin-top: 20px;
-  background: gu-colour(highlight-main);
   color: gu-colour(neutral-7);
   line-height: 1.4;
-  @include gu-fontset-body-sans;
+  font-weight: bold;
 }
 
 .product-option__button {
@@ -124,5 +126,18 @@
   @include mq($from: mobileLandscape) {
     display: block;
   }
+}
+
+.product-option__label {
+  position: absolute;
+  right: 0;
+  top: -10px;
+  text-align: center;
+  padding: 2px 4px;
+  background: gu-colour(neutral-7);
+  font-family: $gu-headline;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
 }
 

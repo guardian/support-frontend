@@ -56,7 +56,7 @@ const BILLING_PERIOD = {
   [Monthly]: {
     title: 'Monthly',
     salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
-      const display = (price) => getDisplayPrice(currencyId, price);
+      const display = price => getDisplayPrice(currencyId, price);
       return promotionalPrice ?
         <span>
           <strong>
@@ -66,15 +66,15 @@ const BILLING_PERIOD = {
         :
         <span>
           14 day free trial, then <strong>{display(displayPrice)}</strong>
-        </span>
+        </span>;
     },
-    offer: null,
+    offer: 'null',
     label: 'Popular',
   },
   [Annual]: {
     title: 'Annual',
     salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
-      const display = (price) => getDisplayPrice(currencyId, price);
+      const display = price => getDisplayPrice(currencyId, price);
       return promotionalPrice ?
         <span>
           <strong>
@@ -86,7 +86,7 @@ const BILLING_PERIOD = {
           <strong>
             {display(displayPrice)}
           </strong> equivalent of {display(displayPrice / 12)}/month
-        </span>
+        </span>;
     },
     offer: 'Save an additional 21% - Best Deal',
     label: null,
