@@ -131,9 +131,10 @@
 .product-option__label {
   position: absolute;
   right: 0;
-  top: -10px;
+  top: 1px;
+  transform: translateY(-100%);
   text-align: center;
-  padding: 2px 4px;
+  padding: 0 4px;
   background: gu-colour(neutral-7);
   font-family: $gu-headline;
   font-weight: bold;
