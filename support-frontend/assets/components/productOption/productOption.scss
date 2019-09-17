@@ -3,7 +3,9 @@
 
 .product-option {
   box-sizing: border-box;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   background-color: gu-colour(neutral-100);
   border: 1px solid gu-colour(neutral-86);
@@ -15,6 +17,7 @@
 
   & * {
     box-sizing: border-box;
+    z-index: 2;
   }
 
   &:hover,
@@ -39,7 +42,7 @@
   position: relative;
 
   @include mq(tablet) {
-    font-size: 20px;
+    font-size: 28px;
   }
 
   @include mq($from: desktop) {
@@ -56,7 +59,12 @@
 .product-option__price {
   font-family: $gu-headline;
   font-weight: bold;
-  font-size: 40px;
+  font-size: 32px;
+
+  @include mq(tablet) {
+    font-size: 40px;
+  }
+
 }
 
 .product-option__price-detail {
@@ -103,7 +111,8 @@
   padding: 6px 6px 15px 0;
 
   .component-button {
-    margin-top: 35px;
+    position: static;
+    margin-top: 20px;
     width: 100%;
     max-width: 210px;
     
@@ -113,6 +122,14 @@
       right: 0;
       bottom: 0;
       left: 0;
+      content: '';
+      z-index: 1;
+    }
+  }
+
+  @include mq($from: tablet) {
+    .component-button {
+      margin-top: 35px;
     }
   }
 
@@ -161,11 +178,12 @@
   top: 1px;
   transform: translateY(-100%);
   text-align: center;
-  padding: 0 4px;
+  padding: 0 5px;
   background: gu-colour(neutral-7);
   font-family: $gu-headline;
   font-weight: bold;
   font-size: 16px;
+  line-height: 1.4;
   color: #fff;
 }
 
