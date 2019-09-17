@@ -12,7 +12,7 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
-import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
+import { flashSaleIsActive, getDuration, getPromoCode } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
@@ -71,8 +71,19 @@ const getSavingStr = (price: ProductPrice): Option<string> => {
 
 
 const copy = {
-  HomeDelivery: 'Have your papers delivered to your home',
-  Collection: 'Collect your papers from your local retailer',
+  HomeDelivery: {
+    Everyday: 'Guardian and Observer papers, deliverd',
+    Sixday: 'Guardian papers, deliverd',
+    Weekend: 'Saturday Guardian and Observer papers, deliverd',
+    Sunday: 'Observer paper, deliverd',
+  },
+
+  Collection: {
+    Everyday: 'Guardian and Observer papers',
+    Sixday: 'Guardian papers',
+    Weekend: 'Saturday Guardian and Observer papers',
+    Sunday: 'Observer paper',
+  },
 };
 
 const getPlans = (
@@ -81,10 +92,11 @@ const getPlans = (
 ) =>
   ActivePaperProductTypes.reduce((products, productOption, index) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
+    const promoCode = getPromoCode('Paper', GBPCountries, '');
     return {
       ...products,
       [productOption]: {
-        href: paperCheckoutUrl(fulfilmentOption, productOption),
+        href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
         onClick: sendTrackingEventsOnClick(
           'subscribe_now_cta',
           'Paper',
@@ -92,7 +104,7 @@ const getPlans = (
           [productOption, fulfilmentOption].join(),
         ),
         title: getTitle(productOption),
-        copy: copy[fulfilmentOption],
+        copy: copy[fulfilmentOption][productOption],
         price: getPriceStr(price),
         offer: getOfferStr(price.price, getNewsstandPrice(productOption), index),
         saving: getSavingStr(getProductPrice(productPrices, fulfilmentOption, productOption)),
