@@ -27,10 +27,7 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
         (paymentOptions.map(paymentOption => (
           <div className="payment-selection__card">
             <span>{paymentOption.label}</span>
-            <ProductOption
-              href={paymentOption.href}
-              onClick={paymentOption.onClick}
-            >
+            <ProductOption>
               <ProductOptionContent>
                 <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
                 <ProductOptionOffer
