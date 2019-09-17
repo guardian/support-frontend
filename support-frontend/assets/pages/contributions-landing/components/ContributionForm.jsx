@@ -188,14 +188,20 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
     Venmo: () => {
       window.venmoInstance.tokenize((tokenizeErr, payload) => {
         if (tokenizeErr) {
-          window.venmoOnError();
+          const authorisation = {
+            paymentMethod: Venmo,
+            paymentNonce: "fake-venmo-account-nonce",
+            deviceData: 'test',
+          };
+          window.venmoOnSuccess(authorisation);
+          //window.venmoOnError();
         } else {
-          console.log("payload: ");
+          console.log('payload: ');
           console.log(payload);
           console.log(JSON.stringify(payload));
           const authorisation = {
             paymentMethod: Venmo,
-            paymentNonce: payload.paymentNonce,
+            paymentNonce: payload.nonce,
             deviceData: 'test',
           };
           window.venmoOnSuccess(authorisation);
