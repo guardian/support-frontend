@@ -14,19 +14,23 @@ import { fixDecimals } from 'helpers/subscriptions';
 import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { type Option } from 'helpers/types/option';
-import type { ProductPrices, BillingPeriods } from 'helpers/productPrice/productPrices';
+import type {
+  ProductPrices,
+  BillingPeriods,
+  ProductPrice,
+} from 'helpers/productPrice/productPrices';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
+import { getAppliedPromo } from 'helpers/productPrice/productPrices';
 
 export type PaymentOption = {
   title: string,
-  singlePeriod: string,
   href: string,
   salesCopy: Element<'span'>,
   offer: Option<string>,
-  price: Option<string>,
   onClick: Function,
+  label: Option<string>,
 }
 
 export const getProductOptions = (productPrices: ProductPrices, countryGroupId: CountryGroupId) => (
@@ -40,10 +44,10 @@ export const getDisplayPrice = (currencyId: IsoCurrency, price: number) =>
 
 export const getProductPrice = (
   productOptions: BillingPeriods,
-  billingPeriodTitle: DigitalBillingPeriod,
+  billingPeriod: DigitalBillingPeriod,
   currencyId: IsoCurrency,
-): number => (
-  productOptions[billingPeriodTitle][currencyId].price
+): ProductPrice => (
+  productOptions[billingPeriod][currencyId]
 );
 
 export const getSavingPercentage = (annualCost: number, monthlyCostAnnualized: number) => `${Math.round((1 - (annualCost / monthlyCostAnnualized)) * 100)}%`;
@@ -51,23 +55,39 @@ export const getSavingPercentage = (annualCost: number, monthlyCostAnnualized: n
 const BILLING_PERIOD = {
   [Monthly]: {
     title: 'Monthly',
-    singlePeriod: 'month',
-    salesCopy: (displayPrice: string, saving?: string) => (
-      <span>14 day free trial, then <strong>{displayPrice}</strong> {saving && null} a month
-        <br className="product-option__full-screen-break" />
-        <br className="product-option__full-screen-break" />
-      </span>
+    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => (
+      promotionalPrice ?
+        <span>
+          <strong>
+            {getDisplayPrice(currencyId, promotionalPrice)}
+          </strong> then {getDisplayPrice(currencyId, displayPrice)}/month
+        </span>
+        :
+        <span>
+          14 day free trial, then <strong>{getDisplayPrice(currencyId, displayPrice)}</strong>
+        </span>
     ),
+    offer: null,
+    label: 'Popular',
   },
   [Annual]: {
     title: 'Annual',
-    singlePeriod: 'year',
-    salesCopy: (displayPrice: string, saving?: string) => (
-      <span>
-          14 day free trial, then <strong>{displayPrice}</strong>
-          &nbsp;for the first year (save <strong>{saving}</strong> per year)
-      </span>
+    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => (
+      promotionalPrice ?
+        <span>
+          <strong>
+            {getDisplayPrice(currencyId, promotionalPrice)}
+          </strong> then {getDisplayPrice(currencyId, displayPrice)}/year
+        </span>
+        :
+        <span>
+          <strong>
+            {getDisplayPrice(currencyId, displayPrice)}
+          </strong> equivalent of {getDisplayPrice(currencyId, displayPrice / 12)}/month
+        </span>
     ),
+    offer: 'Save an additional 21% - Best Deal',
+    label: null,
   },
 };
 
@@ -75,30 +95,24 @@ const BILLING_PERIOD = {
 const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> } => {
   const { productPrices } = state.page;
   const { countryGroupId, currencyId } = state.common.internationalisation;
-
-  /*
-  * NoFulfilmentOptions - means there this nothing to be delivered
-  * NoProductOptions   - means there is only one product to choose
-  */
   const productOptions = getProductOptions(productPrices, countryGroupId);
-  const annualizedMonthlyCost = getProductPrice(productOptions, 'Monthly', currencyId) * 12;
-  const annualCost = getProductPrice(productOptions, 'Annual', currencyId);
-  const saving = getDisplayPrice(currencyId, annualizedMonthlyCost - annualCost);
-  const offer = getSavingPercentage(annualCost, annualizedMonthlyCost);
 
-  const createPaymentOption = (productTitle: BillingPeriod): PaymentOption => {
+  const createPaymentOption = (billingPeriod: BillingPeriod): PaymentOption => {
+    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
 
-    const billingPeriodTitle = productTitle === 'Monthly' || productTitle === 'Annual' ? productTitle : 'Monthly';
-    const displayPrice = getDisplayPrice(currencyId, getProductPrice(productOptions, billingPeriodTitle, currencyId));
+    const productPrice = getProductPrice(productOptions, digitalBillingPeriod, currencyId);
+    const fullPrice = productPrice.price;
+    const promotion = getAppliedPromo(productPrice.promotions);
+    const promotionalPrice = promotion && promotion.discountedPrice ? promotion.discountedPrice : null;
+    const offer = promotion ? promotion.description : BILLING_PERIOD[digitalBillingPeriod].offer;
 
     return {
-      title: BILLING_PERIOD[billingPeriodTitle].title,
-      singlePeriod: BILLING_PERIOD[billingPeriodTitle].singlePeriod,
-      price: displayPrice,
-      href: getDigitalCheckout(countryGroupId, billingPeriodTitle),
-      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, billingPeriodTitle),
-      salesCopy: BILLING_PERIOD[billingPeriodTitle].salesCopy(displayPrice, saving),
+      title: BILLING_PERIOD[digitalBillingPeriod].title,
+      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod),
+      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, digitalBillingPeriod),
+      salesCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
       offer,
+      label: BILLING_PERIOD[digitalBillingPeriod].label,
     };
 
   };

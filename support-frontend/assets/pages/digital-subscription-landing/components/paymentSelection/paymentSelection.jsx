@@ -26,6 +26,7 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
     {
         (paymentOptions.map(paymentOption => (
           <div className="payment-selection__card">
+            <span>{paymentOption.label}</span>
             <ProductOption
               href={paymentOption.href}
               onClick={paymentOption.onClick}
@@ -33,9 +34,9 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
               <ProductOptionContent>
                 <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
                 <ProductOptionOffer
-                  hidden={paymentOption.title === 'Monthly'}
+                  hidden={!paymentOption.offer}
                 >
-                    Save {paymentOption.offer}
+                  {paymentOption.offer}
                 </ProductOptionOffer>
               </ProductOptionContent>
               <ProductOptionButton
