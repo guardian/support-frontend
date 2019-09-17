@@ -48,7 +48,6 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
           </div>
         )))
       }
-    <p className="payment-selection_cancel-text">You can cancel your subscription at any time</p>
   </div>
 );
 
