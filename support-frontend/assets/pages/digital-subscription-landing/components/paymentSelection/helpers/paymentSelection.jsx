@@ -55,37 +55,39 @@ export const getSavingPercentage = (annualCost: number, monthlyCostAnnualized: n
 const BILLING_PERIOD = {
   [Monthly]: {
     title: 'Monthly',
-    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => (
-      promotionalPrice ?
+    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+      const display = (price) => getDisplayPrice(currencyId, price);
+      return promotionalPrice ?
         <span>
           <strong>
-            {getDisplayPrice(currencyId, promotionalPrice)}
-          </strong> then {getDisplayPrice(currencyId, displayPrice)}/month
+            {display(promotionalPrice)}
+          </strong> then {display(displayPrice)}/month
         </span>
         :
         <span>
-          14 day free trial, then <strong>{getDisplayPrice(currencyId, displayPrice)}</strong>
+          14 day free trial, then <strong>{display(displayPrice)}</strong>
         </span>
-    ),
+    },
     offer: null,
     label: 'Popular',
   },
   [Annual]: {
     title: 'Annual',
-    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => (
-      promotionalPrice ?
+    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+      const display = (price) => getDisplayPrice(currencyId, price);
+      return promotionalPrice ?
         <span>
           <strong>
-            {getDisplayPrice(currencyId, promotionalPrice)}
-          </strong> then {getDisplayPrice(currencyId, displayPrice)}/year
+            {display(promotionalPrice)}
+          </strong> then {display(displayPrice)}/year
         </span>
         :
         <span>
           <strong>
-            {getDisplayPrice(currencyId, displayPrice)}
-          </strong> equivalent of {getDisplayPrice(currencyId, displayPrice / 12)}/month
+            {display(displayPrice)}
+          </strong> equivalent of {display(displayPrice / 12)}/month
         </span>
-    ),
+    },
     offer: 'Save an additional 21% - Best Deal',
     label: null,
   },
