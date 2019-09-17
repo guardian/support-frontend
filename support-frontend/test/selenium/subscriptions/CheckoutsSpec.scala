@@ -26,11 +26,11 @@ class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter w
     driverConfig.quit()
   }
 
-  feature("Digital Pack checkout") {
-    scenario("Stripe checkout") {
-      testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
-    }
-  }
+  // feature("Digital Pack checkout") {
+  //   scenario("Stripe checkout") {
+  //     testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
+  //   }
+  // }
 
   feature("Paper checkout") {
     scenario("Direct Debit checkout") {
