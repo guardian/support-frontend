@@ -46,9 +46,9 @@ const DiscountCalloutMaybe = () => {
     getDuration('Paper', 'GBPCountries'),
   ];
   if (discount && duration) {
-    return <Callout>Save an extra {Math.round(discount * 100)}% for {duration}</Callout>;
+    return <Callout>Save up to {Math.round(discount * 100)}% for {duration}</Callout>;
   } else if (discount) {
-    return <Callout>Save an extra {Math.round(discount * 100)}% </Callout>;
+    return <Callout>Save up to {Math.round(discount * 100)}% </Callout>;
   }
   return null;
 

@@ -61,10 +61,10 @@ const getSavingStr = (price: ProductPrice): Option<string> => {
 
 const copy = {
   HomeDelivery: {
-    Everyday: 'Guardian and Observer papers, deliverd',
-    Sixday: 'Guardian papers, deliverd',
-    Weekend: 'Saturday Guardian and Observer papers, deliverd',
-    Sunday: 'Observer paper, deliverd',
+    Everyday: 'Guardian and Observer papers, delivered',
+    Sixday: 'Guardian papers, delivered',
+    Weekend: 'Saturday Guardian and Observer papers, delivered',
+    Sunday: 'Observer paper, delivered',
   },
 
   Collection: {
