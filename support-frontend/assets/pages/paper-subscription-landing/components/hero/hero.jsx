@@ -111,8 +111,8 @@ const CampaignHeader = () => (
   >
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
-        <h2>Subscribe to the joy of print</h2>
-        <p>Get your hands on journalism that’s really worth keeping.</p>
+        <h2><span>Challenge the</span><br /><span>writing on the wall.</span></h2>
+        <p>Become a Guardian and<br />Observer subscriber</p>
       </div>
 
       <div className="sale-joy-of-print-graphic-outer">
@@ -122,11 +122,11 @@ const CampaignHeader = () => (
           </div>
           <div className="sale-joy-of-print-graphic">
             <GridImage
-              gridId="paperLandingSale"
-              srcSizes={[800, 466]}
+              gridId="printShowcase"
+              srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 800px"
-              imgType="png"
-              altText="A couple sit together sharing one newspaper"
+              imgType="jpg"
+              altText="Newspapers"
             />
           </div>
         </div>
