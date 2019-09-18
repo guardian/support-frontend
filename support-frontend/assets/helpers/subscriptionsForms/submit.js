@@ -54,11 +54,6 @@ import {
   isPhysicalProduct,
   type SubscriptionProduct,
 } from 'helpers/subscriptions';
-import {
-  loadStripe,
-  openDialogBox,
-  setupStripeCheckout,
-} from 'helpers/paymentIntegrations/stripeCheckout';
 import { isPostDeployUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
@@ -172,7 +167,6 @@ function onPaymentAuthorised(
   state: AnyCheckoutState,
   currencyId?: Option<IsoCurrency>,
 ) {
-
   const data = buildRegularPaymentRequest(state, paymentAuthorisation, currencyId);
   const { product, paymentMethod } = state.page.checkout;
   const { csrf } = state.page;
@@ -200,13 +194,12 @@ function onPaymentAuthorised(
   ).then(handleSubscribeResult);
 }
 
-function showStripe(
+function checkStripeUserType(
   onAuthorised: (pa: PaymentAuthorisation) => void,
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
-  country: IsoCountry,
-  email: string,
+  stripeToken: Option<string>,
 ) {
   if (isPostDeployUser()) {
     onAuthorised({
@@ -215,9 +208,11 @@ function showStripe(
       stripePaymentMethod: 'StripeCheckout',
     });
   } else {
-    loadStripe()
-      .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, country, isTestUser))
-      .then(stripe => openDialogBox(stripe, price, email));
+    onAuthorised({
+      paymentMethod: Stripe,
+      token: stripeToken || '',
+      stripePaymentMethod: 'StripeElements',
+    });
   }
 }
 
@@ -229,12 +224,11 @@ function showPaymentMethod(
   currency: IsoCurrency,
   country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
-  email: string,
+  stripeToken: Option<string>,
 ): void {
-
   switch (paymentMethod) {
     case Stripe:
-      showStripe(onAuthorised, isTestUser, price, currency, country, email);
+      checkStripeUserType(onAuthorised, isTestUser, price, currency, stripeToken);
       break;
     case DirectDebit:
       dispatch(openDirectDebitPopUp());
@@ -263,7 +257,7 @@ function submitForm(
   const billingCountry = state.page.billingAddress.fields.country;
 
   const {
-    paymentMethod, email, product, isTestUser,
+    paymentMethod, product, isTestUser,
   } = state.page.checkout;
 
   trackSubmitAttempt(paymentMethod, product);
@@ -289,6 +283,7 @@ function submitForm(
 
   const { price, currency } = priceDetails;
   const currencyId = getCurrency(state.page.billingAddress.fields.country);
+  const stripeToken = paymentMethod === Stripe ? state.page.checkout.stripeToken : null;
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
     onPaymentAuthorised(
@@ -300,7 +295,7 @@ function submitForm(
 
   showPaymentMethod(
     dispatch, onAuthorised, isTestUser, price, currency, billingCountry,
-    paymentMethod, email,
+    paymentMethod, stripeToken,
   );
 }
 
@@ -328,7 +323,6 @@ export {
   onPaymentAuthorised,
   buildRegularPaymentRequest,
   showPaymentMethod,
-  showStripe,
   submitCheckoutForm,
   submitWithDeliveryForm,
   trackSubmitAttempt,
