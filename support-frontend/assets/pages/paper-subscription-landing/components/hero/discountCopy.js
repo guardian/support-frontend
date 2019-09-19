@@ -3,7 +3,7 @@
 
 export const discountCopyChoices = {
   control: {
-    roundel: ['Save up to', '52%'],
+    roundel: ['Save up to', '52%', 'for a year'],
     heading: 'Save up to 52% on The Guardian and The Observer - all year round',
     offer: [
       'Save 37% a month on retail price',

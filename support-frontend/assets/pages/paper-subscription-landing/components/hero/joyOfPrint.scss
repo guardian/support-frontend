@@ -50,6 +50,7 @@
     }
     p {
       @include gu-fontset-heading;
+      padding-left: $gu-h-spacing / 3;
     }
   }
   @include mq($from: desktop) {
@@ -96,7 +97,8 @@
 }
 
 .sale-joy-of-print-badge {
-  margin-bottom: -4rem;
+  margin-bottom: -3rem;
+  margin-left: -4rem;
   position: relative;
   z-index: 1;
   flex-direction: column;
