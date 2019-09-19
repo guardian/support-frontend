@@ -169,7 +169,7 @@ class Application(
         regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
         regularUatStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-        regularUatPayPalConfig = payPalConfigProvider.get(true),
+        regularUatPayPalConfig = payPalConfigProvider.get(true)
       ),
       paymentApiStripeUrl = paymentAPIService.stripeUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
