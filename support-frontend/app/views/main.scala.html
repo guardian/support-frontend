@@ -12,6 +12,7 @@
   canonicalLink: Option[String] = None,
   hrefLangLinks: Map[String, String] = Map(),
   csrf: Option[String] = None,
+  shareImageUrl: Option[String] = None,
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
@@ -29,7 +30,7 @@
         }
       </script>
     }
-    
+
     @description.map { definedDescription =>
       <meta name="description" content="@definedDescription" />
       <meta property="og:description" content="@definedDescription" />

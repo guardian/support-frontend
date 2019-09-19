@@ -26,10 +26,11 @@
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent],
-  geoData: GeoData
+  geoData: GeoData,
+  shareImageUrl: String
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
-@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css) {
+@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl)) {
   <script type="text/javascript">
   window.guardian = window.guardian || {};
   @idUser.map { user =>

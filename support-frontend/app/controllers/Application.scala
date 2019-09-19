@@ -165,7 +165,8 @@ class Application(
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
-      geoData = geoData
+      geoData = geoData,
+      shareImageUrl = ""
     )
   }
 
