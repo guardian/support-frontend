@@ -5,6 +5,7 @@ import cats.syntax.either._
 import com.gu.okhttp.RequestRunners
 import com.gu.support.getaddressio.GetAddressIOService
 import com.gu.support.pricing.PriceSummaryServiceProvider
+import com.gu.support.promotions.PromotionServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services.aws.AwsS3Client.s3
@@ -49,4 +50,6 @@ trait Services {
   lazy val getAddressIOService: GetAddressIOService = new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
 
   lazy val sendReminderEmailService = new RemindMeService(appConfig.stage)
+
+  lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
 }

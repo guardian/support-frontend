@@ -1,7 +1,9 @@
 package com.gu.support.promotions
 
+import com.gu.i18n.Country
 import com.gu.support.SerialisationTestHelpers
 import com.typesafe.scalalogging.LazyLogging
+import org.joda.time.DateTime
 import org.joda.time.Days.days
 import org.joda.time.Months.months
 import org.scalatest.FlatSpec
@@ -95,6 +97,23 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
         incentive.termsAndConditions shouldBe Some("Offer open to UK mainland residents aged 18+. You must purchase a new Guardian Digital Pack subscription by 11.59pm on 22/12/2016 to be eligible for this offer and maintain the subscription for at least 35 days. Offer is a £10 M&S e-gift card for new Digital Pack subscribers. Please allow 35 days to receive details of how to claim your e-gift card. If you opt to use the SMS response service to place your order you will be charged your standard network rate. Offer subject to availability. In the event stock runs out you may be offered an alternative gift of a similar value or full refund. Customers will be contacted a minimum of 35 days after their subscription start date with the redemption code to claim their incentive offer. This offer ends 22/12/2016 and Guardian and Observer reserve the right to end this offer at any time.")
       }
     )
+  }
+
+  it should "be able to roundtrip a promotion" in {
+    val appliesTo = AppliesTo(Set(""), Set(Country.UK))
+    testRoundTripSerialisation(appliesTo)
+    val discountBenefit = new DiscountBenefit(12, None)
+    testRoundTripSerialisation(discountBenefit)
+    val promotion = Promotion(
+      "test",
+      "test",
+      appliesTo,
+      "",
+      Map[Channel, Set[PromoCode]]("" -> Set()),
+      DateTime.now(),
+      None, None, None
+    )
+    testRoundTripSerialisation(promotion)
   }
 
   it should "be able to decode a landing page" in {

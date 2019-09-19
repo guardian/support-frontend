@@ -3,8 +3,8 @@ package com.gu.support.promotions
 import com.gu.i18n.CountryGroup
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.encoding.JsonHelpers._
-import io.circe.generic.semiauto.deriveDecoder
-import io.circe.{ACursor, Decoder, Json}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{ACursor, Decoder, Encoder, Json}
 import org.joda.time.DateTime
 
 case class Promotion(
@@ -27,7 +27,7 @@ case class Promotion(
 }
 
 object Promotion {
-  import com.gu.support.encoding.CustomCodecs.decodeDateTime
+  import com.gu.support.encoding.CustomCodecs.{decodeDateTime, encodeDateTime}
   implicit val decoder: Decoder[Promotion] = deriveDecoder[Promotion].prepare(mapFields)
 
   private def mapFields(c: ACursor) = c.withFocus {
@@ -38,6 +38,8 @@ object Promotion {
       .checkKeyExists("tracking", Json.fromBoolean(false))
     )
   }
+
+  implicit val encoder: Encoder[Promotion] = deriveEncoder[Promotion].mapJsonObject(_.renameField("channelCodes", "codes"))
 }
 
 object Promotions {
