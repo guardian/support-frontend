@@ -241,7 +241,7 @@ const Sales: Sale[] = [
   {
     subscriptionProduct: 'Paper',
     activeRegions: [GBPCountries],
-    startTime: new Date(2019, 8, 15).getTime(), // 1 Sep 2019
+    startTime: new Date(2019, 8, 23).getTime(), // 23 Sep 2019
     endTime: new Date(2020, 8, 23).getTime(), // 6 Oct 2019
     duration: '12 months',
     saleDetails: {
