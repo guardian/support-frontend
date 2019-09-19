@@ -8,7 +8,7 @@ import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfig, PayPalConfigProvider, Stage, Stages, StripeConfig, StripeConfigProvider}
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
 import config.StringsConfig
@@ -22,7 +22,17 @@ import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.FastlyGEOIP._
 import views.{EmptyDiv, Preload}
+
 import scala.concurrent.{ExecutionContext, Future}
+
+case class ContributionsPaymentMethodConfigs(
+  oneOffDefaultStripeConfig: StripeConfig,
+  oneOffUatStripeConfig: StripeConfig,
+  regularDefaultStripeConfig: StripeConfig,
+  regularUatStripeConfig: StripeConfig,
+  regularDefaultPayPalConfig: PayPalConfig,
+  regularUatPayPalConfig: PayPalConfig
+)
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -153,12 +163,14 @@ class Application(
       js = js,
       css = css,
       description = stringsConfig.contributionsLandingDescription,
-      oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-      oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
-      regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-      regularUatStripeConfig = regularStripeConfigProvider.get(true),
-      regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-      regularUatPayPalConfig = payPalConfigProvider.get(true),
+      paymentMethodConfigs = ContributionsPaymentMethodConfigs(
+        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+        oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+        regularUatStripeConfig = regularStripeConfigProvider.get(true),
+        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+        regularUatPayPalConfig = payPalConfigProvider.get(true),
+      ),
       paymentApiStripeUrl = paymentAPIService.stripeUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
@@ -166,7 +178,7 @@ class Application(
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
       geoData = geoData,
-      shareImageUrl = ""
+      shareImageUrl = "https://media.guim.co.uk/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/2000.png"
     )
   }
 

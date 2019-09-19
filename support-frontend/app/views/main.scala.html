@@ -36,6 +36,12 @@
       <meta property="og:description" content="@definedDescription" />
     }
 
+    @shareImageUrl.map { imageUrl =>
+      <meta property="twitter:image" content="@imageUrl" />
+      <meta property="og:image" content="@imageUrl" />
+      <meta property="og:image:secure_url" content="@imageUrl" />
+    }
+
     @canonicalLink.map { definedCanonicalLink =>
       <link rel="canonical" href="@definedCanonicalLink" />
     }
