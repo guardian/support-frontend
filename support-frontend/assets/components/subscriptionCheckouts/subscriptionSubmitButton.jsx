@@ -2,12 +2,11 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 import Button from 'components/button/button';
 import { type Option } from 'helpers/types/option';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { PayPal } from 'helpers/paymentMethods';
+import { type PaymentMethod } from 'helpers/paymentMethods';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { ErrorSummary } from './submitFormErrorSummary';
@@ -20,6 +19,9 @@ import './subscriptionSubmitButton.scss';
 type PropTypes = {|
   paymentMethod: Option<PaymentMethod>,
   allErrors: FormError<FormField>[],
+  className?: Option<string>,
+  component?: Option<Node>,
+  text: string,
 |};
 
 // ----- Render ----- //
@@ -27,21 +29,26 @@ type PropTypes = {|
 
 function SubscriptionSubmitButton(props: PropTypes) {
   return (
-    <span>
-      {props.paymentMethod !== PayPal && (
+    <span className={props.paymentMethod === props.className ? 'show' : 'is-hidden'}>
       <div className="component-submit-button">
-        <div className="component-submit-button--margin">
+        <div className={props.paymentMethod ? `component-submit-button--${props.paymentMethod}` : 'component-submit-button'}>
           <Button
             id="qa-submit-button"
             type="submit"
           >
-            Continue to payment
+            {props.text}
           </Button>
+          <span>{props.component}</span>
         </div>
         <span>{props.allErrors.length > 0 && <ErrorSummary errors={props.allErrors} />}</span>
-      </div>)}
+      </div>
     </span>
   );
 }
+
+SubscriptionSubmitButton.defaultProps = {
+  className: '',
+  component: null,
+};
 
 export { SubscriptionSubmitButton };

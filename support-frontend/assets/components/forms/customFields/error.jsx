@@ -15,7 +15,7 @@ export type PropsForHoc = {
 
 type Props = PropsForHoc & {
   htmlFor: Option<string>,
-  children: Node,
+  children?: Option<Node>,
 };
 
 // ----- Component ----- //
@@ -24,7 +24,7 @@ function Error({ error, htmlFor, children }: Props) {
   const Element = htmlFor ? 'label' : 'div';
   return (
     <div className={error ? 'component-form-error' : null}>
-      {children}
+      {children && children}
       <Element
         aria-hidden={!error}
         aria-atomic="true"
