@@ -44,8 +44,6 @@ const getPriceStr = (price: ProductPrice): string => {
 
 const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> => {
   if ((subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0)) {
-    const monthlyNews = ((newsstand * 52) / 12).toFixed(2);
-    console.log({ monthlyNews }, { subscription });
     return `Save ${getNewsstandSavingPercentage(subscription, newsstand)}% a month on retail price`;
   }
   return null;
