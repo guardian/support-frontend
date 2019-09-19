@@ -5,6 +5,7 @@ import { type Option } from 'helpers/types/option';
 import {
   getNewsstandPrice,
   getNewsstandSaving,
+  getNewsstandSavingPercentage,
   sendTrackingEventsOnClick,
 } from 'helpers/subscriptions';
 import {
@@ -43,7 +44,9 @@ const getPriceStr = (price: ProductPrice): string => {
 
 const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> => {
   if ((subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0)) {
-    return `Save £${getNewsstandSaving(subscription, newsstand)} a month on retail price`;
+    const monthlyNews = ((newsstand * 52) / 12).toFixed(2);
+    console.log({ monthlyNews }, { subscription });
+    return `Save ${getNewsstandSavingPercentage(subscription, newsstand)}% a month on retail price`;
   }
   return null;
 };
