@@ -115,22 +115,21 @@ const CampaignHeader = () => (
         <p>Become a Guardian and<br />Observer subscriber</p>
       </div>
 
-      <div className="sale-joy-of-print-graphic-outer">
-        <div className="sale-joy-of-print-graphic-inner">
-          <div className="sale-joy-of-print-badge">
-            <Discount discountCopy={getDiscountCopy(discountParam).roundel} />
-          </div>
-          <div className="sale-joy-of-print-graphic">
-            <GridImage
-              gridId="printShowcase"
-              srcSizes={[1000, 500]}
-              sizes="(max-width: 740px) 100vw, 800px"
-              imgType="jpg"
-              altText="Newspapers"
-            />
-          </div>
+    </div>
+    <div className="sale-joy-of-print-graphic-outer">
+      <div className="sale-joy-of-print-graphic-inner">
+        <div className="sale-joy-of-print-badge">
+          <Discount discountCopy={getDiscountCopy(discountParam).roundel} />
         </div>
-
+        <div className="sale-joy-of-print-graphic">
+          <GridImage
+            gridId="printShowcase"
+            srcSizes={[1000, 500]}
+            sizes="(max-width: 740px) 100vw, 800px"
+            imgType="jpg"
+            altText="Newspapers"
+          />
+        </div>
       </div>
     </div>
   </ProductPagehero>
