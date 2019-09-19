@@ -24,7 +24,6 @@ import {
   trackComponentLoad,
 } from 'helpers/tracking/behaviour';
 import TrackableButton from 'components/button/trackableButton';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 
@@ -39,7 +38,6 @@ type PropTypes = {|
   csrf: string,
   emailValidated: boolean,
   paymentComplete: boolean,
-  countryForSurvey: IsoCountry,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -187,7 +185,7 @@ function ContributionThankYou(props: PropTypes) {
           </section>
         ) : null}
         { renderIdentityCTA() }
-        <ContributionSurvey isRunning={props.countryForSurvey === 'US'} />
+        <ContributionSurvey isRunning={false} />
         <MarketingConsent />
         <SpreadTheWord />
         <div className="gu-content__return-link">

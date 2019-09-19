@@ -93,9 +93,9 @@ type State = {
 // ----- Render ----- //
 class LandingPage extends Component<Props, State> {
   state = {
-    showPage: this.props.optimizeHasLoaded,
+    showPage: true, // this.props.optimizeHasLoaded,
     pageReadyChecks: 0,
-  }
+  };
 
   checkOptimizeIsReady = (interval: number) => {
     const maxNumberOfChecks = OPTIMIZE_CHECK_TIMEOUT / interval;

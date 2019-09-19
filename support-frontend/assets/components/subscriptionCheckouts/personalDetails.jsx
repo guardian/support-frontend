@@ -49,7 +49,7 @@ export default function PersonalDetails(props: PropTypes) {
   );
 
   return (
-    <div>
+    <div id="qa-personal-details">
       <InputWithError
         id="first-name"
         label="First name"
