@@ -18,13 +18,14 @@ export type CampaignSettings = {
   backgroundImage?: string,
   goalReachedCopy: React$Element<string> | null,
   localCurrencySymbol: string,
+  extraComponent?: React$Element<string>,
 };
 
 export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = null;
+const currentCampaignName = 'toxicamerica';
 
 export const campaigns: Campaigns = {
   toxicamerica: {
@@ -115,12 +116,15 @@ export const campaigns: Campaigns = {
     goalReachedCopy: null,
     tickerJsonUrl: '/ticker.json',
     tickerType: 'unlimited',
-    cssModifiers: ['campaign-landing'],
+    cssModifiers: ['yellow-background'],
     contributionTypes: generateContributionTypes([
       { contributionType: 'ONE_OFF', isDefault: true },
     ]),
-    backgroundImage: 'https://media.guim.co.uk/de76ba8d8823325d02ff93376cfe0c39962b215d/0_0_2000_577/2000.jpg',
+    // backgroundImage: 'https://media.guim.co.uk/de76ba8d8823325d02ff93376cfe0c39962b215d/0_0_2000_577/2000.jpg',
     localCurrencySymbol: '$',
+    extraComponent: (
+      <div></div>
+    )
   },
 };
 

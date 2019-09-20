@@ -934,8 +934,18 @@ form {
 //***************************
 // Campaign styles:
 //***************************
+
+.gu-content--yellow-background {
+  background-color: yellow;
+
+  .gu-content__main {
+    position: relative;
+    background-color: transparent;
+  }
+}
+
 .gu-content--campaign-landing {
-  background-color: gu-colour(sport-faded);
+  //background-color: gu-colour(sport-faded);
 
   .gu-content__main {
     position: relative;
