@@ -18,13 +18,14 @@ case class StripePaymentMethodPaymentFields(paymentMethod: PaymentMethodId) exte
 
 object PaymentMethodId {
 
-  def apply(value: String): Option[PaymentMethodId] ={ println(s"value: $value")
-    if (value.forall { char =>
-      (char >= 'a' && char <= 'z') ||
-        (char >= 'A' && char <= 'Z') ||
-        (char >= '0' && char <= '9') ||
-        char == '_'
-    }) Some(new PaymentMethodId(value)) else None}
+  def apply(value: String): Option[PaymentMethodId] =
+    if (value.nonEmpty &&
+      value.forall { char =>
+        (char >= 'a' && char <= 'z') ||
+          (char >= 'A' && char <= 'Z') ||
+          (char >= '0' && char <= '9') ||
+          char == '_'
+      }) Some(new PaymentMethodId(value)) else None
 
   implicit val decoder: Decoder[PaymentMethodId] = Decoder.decodeString.emap { str =>
     apply(str).toRight(s"PaymentMethodId $str had invalid characters")

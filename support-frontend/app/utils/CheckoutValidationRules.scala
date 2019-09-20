@@ -29,7 +29,7 @@ object SimpleCheckoutFormValidation {
   private def noEmptyPaymentFields(paymentFields: PaymentFields): Boolean = paymentFields match {
     case directDebitDetails: DirectDebitPaymentFields =>
       !directDebitDetails.accountHolderName.isEmpty && !directDebitDetails.accountNumber.isEmpty && !directDebitDetails.sortCode.isEmpty
-    case stripeDetails: StripePaymentMethodPaymentFields => !stripeDetails.paymentMethod.isEmpty
+    case _: StripePaymentMethodPaymentFields => true // already validated in PaymentMethodId.apply
     case stripeDetails: StripeSourcePaymentFields => !stripeDetails.stripeToken.isEmpty
     case payPalDetails: PayPalPaymentFields => !payPalDetails.baid.isEmpty
     case existingDetails: ExistingPaymentFields => !existingDetails.billingAccountId.isEmpty
