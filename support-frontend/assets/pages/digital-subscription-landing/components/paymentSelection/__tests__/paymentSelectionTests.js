@@ -74,7 +74,7 @@ describe('PaymentSelection', () => {
     const BillingPeriod = 'Monthly';
     const currencyId = 'GBP';
 
-    expect(getProductPrice(productOptions, BillingPeriod, currencyId)).toBe(17.99);
+    expect(getProductPrice(productOptions, BillingPeriod, currencyId).price).toBe(17.99);
   });
 
   it('should return saving percentage', () => {
