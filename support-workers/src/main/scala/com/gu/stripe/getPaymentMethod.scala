@@ -15,6 +15,7 @@ object getPaymentMethod {
 
   object StripeCard {
 
+    implicit val brandDecoder = StripeBrand.decoder(_.paymentMethodValue)
     implicit val decoder: Decoder[StripeCard] = deriveDecoder
 
   }
