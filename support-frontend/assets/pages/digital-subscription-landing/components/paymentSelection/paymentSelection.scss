@@ -3,7 +3,6 @@
 .payment-selection {
   display: flex;
   flex-wrap: wrap;
-  // justify-content: center;
   margin: -80px 0 24px;
 
   @include mq($from: phablet) {
