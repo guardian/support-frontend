@@ -17,6 +17,7 @@ import { setTab } from '../../paperSubscriptionLandingPageActions';
 import Form from './form';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 
 // Types
@@ -63,6 +64,13 @@ const ContentHelpBlock = ({
   telephoneLink: Element<string>
 |}) => (
   <Content appearance="feature" modifierClasses={['faqs']}>
+    {flashSaleIsActive('Paper', GBPCountries) &&
+      <Text title="Promotion terms and conditions">
+        <SansParagraph>
+          Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href="https://subscribe.theguardian.com/p/SEP2512VHD/terms">here</a>.
+        </SansParagraph>
+      </Text>
+    }
     <Text title="FAQ and help">
       <SansParagraph>
         If you’ve got any more questions, you might well find the answers in the {faqLink}.

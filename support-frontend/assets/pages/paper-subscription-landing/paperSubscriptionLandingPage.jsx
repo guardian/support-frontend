@@ -11,8 +11,6 @@ import Footer from 'components/footer/footer';
 import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 
-
-import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
@@ -35,13 +33,6 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
 
 const reactElementId = 'paper-subscription-landing-page';
-
-// ----- Internationalisation ----- //
-
-const countryGroupId: CountryGroupId = detect();
-const { supportInternationalisationId } = countryGroups[countryGroupId];
-const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supportInternationalisationId : 'gb').toUpperCase();
-
 
 // ----- Redux Store ----- //
 
@@ -78,14 +69,6 @@ const content = (
         </Content>
       }
       <TabsContent />
-      {flashSaleIsActive('Paper', GBPCountries) &&
-        <Content>
-          <Text title="Promotion terms and conditions">
-            <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/GCB80X/terms?country=${subsCountry}`}>here</a>.
-            </p>
-          </Text>
-        </Content>
-      }
       <ConsentBanner />
     </Page>
   </Provider>
