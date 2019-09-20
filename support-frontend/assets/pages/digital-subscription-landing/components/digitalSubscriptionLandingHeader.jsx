@@ -274,7 +274,7 @@ function CampaignHeader(props: PropTypes) {
           <h2 className="payment-selection__title">
           Choose one of our special offers and subscribe today
           </h2>
-          <p className="payment-selection_cancel-text">You can cancel your subscription at any time</p>
+          <p className="payment-selection_cancel-text">Start your 14 day free trial <br /> You can cancel your subscription at any time</p>
         </div>
 
         {showCountdownTimer(product, props.countryGroupId) &&
