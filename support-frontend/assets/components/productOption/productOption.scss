@@ -93,7 +93,7 @@
 
 .product-option__offer-container {
   border-top: 1px solid gu-colour(neutral-86);
-  padding: 6px 24px 0 0;
+  padding: 4px 24px 0 0;
 }
 
 .product-option__offer {
@@ -112,7 +112,7 @@
 
   .component-button {
     position: static;
-    margin-top: 20px;
+    margin-top: 15px;
     width: 100%;
     max-width: 210px;
     
@@ -124,12 +124,6 @@
       left: 0;
       content: '';
       z-index: 1;
-    }
-  }
-
-  @include mq($from: tablet) {
-    .component-button {
-      margin-top: 35px;
     }
   }
 
@@ -149,11 +143,14 @@
   font-size: 16px;
   line-height: 1.4rem;
 
-  & > span {
-    display: flex;
-    align-items: flex-start;
+  & span {
+    display: block;
     width: 100%;
   }
+}
+
+.product-option__price-detail {
+  padding: 12px 0 0 0;
 }
 
 .product-option__full-screen-break {
@@ -174,11 +171,11 @@
 
 .product-option__label {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 1px;
   transform: translateY(-100%);
   text-align: center;
-  padding: 0 5px;
+  padding: 0 25px;
   background: gu-colour(neutral-7);
   font-family: $gu-headline;
   font-weight: bold;
