@@ -37,3 +37,363 @@
   }
 
 }
+
+[class^="subscriptions"] {
+  box-sizing: border-box;
+}
+
+.subscriptions-landing-page {
+  width: 100%;
+}
+
+.subscriptions__feature {
+  width: 100%;
+  height: 200px;
+  background-color: gu-colour('highlight-main');
+}
+
+/****************** subscriptions product-container ********************/
+
+.subscriptions__product-container {
+  position: relative;
+}
+
+.subscriptions__product-container::after {
+  content: ' ';
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  background-color: gu-colour('highlight-main');
+  display: block;
+  z-index: -1;
+  top: 0;
+}
+
+/****************** subscriptions product ********************/
+.subscriptions__product {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  max-width: 1180px;
+  border: 1px solid gu-colour(neutral-86);
+  border-top: none;
+
+  @include mq($until: tablet) {
+    border: none;
+  }
+
+  @include mq($from: tablet) {
+    min-height: 350px;
+  }
+}
+
+.subscriptions__product:nth-child(odd) {
+  @include mq($from: tablet) {
+    flex-direction: row-reverse
+  }
+}
+
+.subscriptions__product:last-child {
+  border-bottom: none;
+}
+
+.subscriptions__product::before {
+  content: ' ';
+  position: absolute;
+  width: 1px;
+  height: calc(100% - 24px);
+  top: 12px;
+  left: 50%;
+  z-index: 4;
+  background-color: gu-colour(neutral-86);
+
+  @include mq($until: tablet) {
+    content: none;
+    z-index: 1;
+  }
+}
+
+.subscriptions__product--reverse {
+  @include mq($until: tablet) {
+    padding-bottom: 30px;
+  }
+}
+/****************** subscriptions product--feature ********************/
+
+.subscriptions__product.subscriptions__product--feature {
+  color: gu-colour('neutral-100');
+  min-height: 500px;
+  border: none;
+}
+
+.subscriptions__product.subscriptions__product--feature::before{
+  content: none;
+}
+
+.subscriptions__feature-image-wrapper {
+  overflow: hidden;
+}
+
+/****************** subscriptions copy-container / image-container ********************/
+
+.subscriptions__copy-container {
+  position: relative;
+  width: 70%;
+
+  @include mq($until: tablet) {
+    z-index: 1;
+  }
+}
+
+.subscriptions__image-container {
+  position: relative;
+  width: 30%;
+}
+
+.subscriptions__copy-container,
+.subscriptions__image-container {
+  @include mq($from: tablet) {
+    width: 50%;
+  }
+}
+
+.subscriptions__image-container.subscriptions__product--feature {
+  overflow: hidden;
+  height: 540px;
+  position: relative;
+  width: 100%;
+  background-color: gu-colour('brand-main');
+
+  @include mq($from: tablet) {
+    width: 50%;
+  }
+}
+
+.subscriptions__copy-container.subscriptions__product--feature {
+  position: relative;
+  width: 100%;
+  background-color: gu-colour('brand-main');
+
+  @include mq($from: tablet) {
+    width: 50%;
+  }
+}
+
+/****************** Copy ********************/
+
+.subscriptions__copy-wrapper {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 90px;
+
+  @include mq($until: desktop) {
+    padding: 0 30px;
+  }
+
+  @include mq($until: tablet) {
+    padding: 30px 0 30px 10px;
+    position: static;
+    transform: none;
+  }
+}
+
+.subscriptions__copy-container.subscriptions__product--feature .subscriptions__product-title {
+  border-top: solid white 1px;
+}
+
+.subscriptions__product-title {
+  font-size: 36px;
+  font-weight: bold;
+  font-family: $gu-headline;
+  margin: 0;
+  border-top: 1px solid gu-colour(neutral-86);
+  line-height: 1.2;
+
+  @include mq($until: tablet) {
+    font-size: 30px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 24px;
+  }
+}
+
+.subscriptions__product-subtitle {
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 300;
+  font-family: $gu-headline;
+
+  @include mq($until: tablet) {
+    font-size: 26px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 24px;
+  }
+}
+
+.subscriptions__description {
+  margin: 30px 0;
+}
+
+.subscriptions__sales {
+  font-size: 26px;
+  display: inline;
+  background-color: gu-colour('highlight-main');
+
+  @include mq($until: tablet) {
+    font-size: 30px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 24px;
+  }
+
+}
+
+/****************** feature-image ********************/
+
+.component-grid-image--subscriptions-feature-image {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%),
+}
+
+.component-grid-image--subscriptions-feature-image:nth-child(1) {
+  width: 260px;
+  left: 0;
+}
+
+.component-grid-image--subscriptions-feature-image:nth-child(2) {
+  width: 215px;
+  left: 290px;
+}
+
+.component-grid-image--subscriptions-feature-image:nth-child(3) {
+  width: 215px;
+  left: 540px;
+}
+
+/****************** product-image ********************/
+
+.subscriptions-packshot {
+  position: absolute;
+  bottom: 0;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  width: 430px;
+
+  @include mq($until: desktop) {
+    width: 355px;
+  }
+
+  @include mq($until: tablet) {
+    top: 0;
+    width: 100%;
+    margin: 0;
+    transform: translateX(0);
+    padding: 30px 0 0 10px;
+  }
+}
+
+.component-grid-image--subscriptions-product-image,
+.component-grid-image--subscriptions-product-image--reverse {
+  position: absolute;
+  bottom: 0;
+
+  @include mq($until: tablet) {
+    position: static;
+  }
+}
+
+.component-grid-image--subscriptions-product-image:nth-child(1) {
+  @include mq($until: tablet) {
+    display: none;
+  }
+}
+
+.component-grid-image--subscriptions-product-image:nth-child(2) {
+  left: 95px;
+  @include mq($until: tablet) {
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+
+.component-grid-image--subscriptions-product-image:nth-child(3) {
+  left: 180px;
+  @include mq($until: tablet) {
+    display: none;
+  }
+}
+
+/****************** product image reverse ********************/
+
+.component-grid-image--subscriptions-product-image--reverse:nth-child(1) {
+  z-index: 3;
+
+  @include mq($until: tablet) {
+    display: none;
+  }
+}
+
+.component-grid-image--subscriptions-product-image--reverse:nth-child(2) {
+  z-index: 2;
+  left: 60px;
+
+  @include mq($until: desktop) {
+    left: 20px;
+  }
+
+  @include mq($until: tablet) {
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+
+.component-grid-image--subscriptions-product-image--reverse:nth-child(3) {
+  z-index: 1;
+  left: 200px;
+
+  @include mq($until: desktop) {
+    left: 165px;
+  }
+
+  @include mq($until: tablet) {
+    display: none;
+  }
+}
+
+/****************** subscriptions__product-button ********************/
+
+.component-button--subscriptions__product-button {
+  background-color: gu-colour(neutral-7);
+  color: gu-colour(neutral-100);
+}
+
+/****************** premium app ********************/
+
+.subscriptions__premuim-app {
+  display: none;
+
+  @include mq($until: tablet) {
+    display: block;
+  }
+  padding-bottom: 30px;
+}
+
+.component-grid-image--subscriptions-premium-image {
+    position: relative;
+    width: 100%;
+    max-width: 130px;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+}

@@ -1,0 +1,48 @@
+// @flow
+
+import React from 'react';
+import type { Node } from 'react';
+import cx from 'classnames';
+import { type Option } from 'helpers/types/option';
+
+import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
+
+type PropTypes = {
+  title: string,
+  subtitle: string,
+  description: string,
+  ctaButtonText: string,
+  productImage: Node,
+  link: string,
+  offer?: Option<string>,
+  isFeature?: Option<boolean>
+}
+
+const SubscriptionsProduct = ({
+  productImage, isFeature, ...props
+}: PropTypes) => (
+  <div className={cx('subscriptions__product', { 'subscriptions__product--feature': isFeature })}>
+
+    <div className={cx('subscriptions__image-container', { 'subscriptions__product--feature': isFeature })}>
+      <div className={isFeature ? 'subscriptions__feature-image-wrapper' : 'subscriptions-packshot'}>
+        {productImage}
+      </div>
+    </div>
+
+    <div className={cx('subscriptions__copy-container', { 'subscriptions__product--feature': isFeature })} >
+      <div className="subscriptions__copy-wrapper">
+        <SubscriptionsProductDescription
+          {...props}
+          isFeature
+        />
+      </div>
+    </div>
+  </div>
+);
+
+SubscriptionsProduct.defaultProps = {
+  offer: null,
+  isFeature: false,
+};
+
+export default SubscriptionsProduct;
