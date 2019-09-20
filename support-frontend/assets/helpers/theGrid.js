@@ -83,6 +83,14 @@ export const imageCatalogue: {
   showcaseUKChris: 'd80f77ff8069d1f39071a00a752cb2e8728d082a/381_0_2004_2004',
   showcaseUKFloods: 'cb8d5002ec1ac03e64da32d87fe7f804fc900dfb/163_1119_3136_789',
   showcaseUKWindrushGroup: '2ec9dab8f39d1e9b12b9c7625b5ad2b058f3420b/1175_287_3335_3335',
+  subscriptionsFeature: 'a8198673f053c0151298dd25e159d04a27a41ce8/0_0_771_1593',
+  subscriptionsFeatureTwo: 'c807c44751dc2da5cbeee860abfdd225101bee8c/0_0_636_1377',
+  subscriptionsFeatureTwoCropped: 'c807c44751dc2da5cbeee860abfdd225101bee8c/0_0_147_1377',
+  subscriptionPackshot2: '12480250459e3e986d605f61ad1ef22f29dd7ec2/0_0_801_840',
+  subscriptionPackshot3: 'd72bdce2c96e259939b33cc8a9c43e43d0129f7f/0_0_798_675',
+  subscriptionFeast: '4fac3988229d109512b4dfa0930b126e36985a2c/0_0_660_636',
+  subscriptionPrint: 'f0b716809c5a3592ea38ce1ca86f52eacf4f5b13/0_0_1038_852',
+  subscriptionG2: 'f1cafef5a6bda2835f050042b9336645a24228ff/0_0_756_645',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
