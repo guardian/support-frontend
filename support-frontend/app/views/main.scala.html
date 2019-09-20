@@ -12,6 +12,7 @@
   canonicalLink: Option[String] = None,
   hrefLangLinks: Map[String, String] = Map(),
   csrf: Option[String] = None,
+  shareImageUrl: Option[String] = None,
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
@@ -29,10 +30,16 @@
         }
       </script>
     }
-    
+
     @description.map { definedDescription =>
       <meta name="description" content="@definedDescription" />
       <meta property="og:description" content="@definedDescription" />
+    }
+
+    @shareImageUrl.map { imageUrl =>
+      <meta property="twitter:image" content="@imageUrl" />
+      <meta property="og:image" content="@imageUrl" />
+      <meta property="og:image:secure_url" content="@imageUrl" />
     }
 
     @canonicalLink.map { definedCanonicalLink =>
