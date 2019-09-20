@@ -83,7 +83,7 @@ const BILLING_PERIOD = {
         :
         <span>
           <span className="product-option__price">{display(displayPrice)}</span>
-          <span className="product-option__price-detail">equivalent of {display(displayPrice / 12)}/month</span>
+          <span className="product-option__price-detail">{display(displayPrice / 12)}/month</span>
         </span>;
     },
     offer: 'Save an additional 21%',
