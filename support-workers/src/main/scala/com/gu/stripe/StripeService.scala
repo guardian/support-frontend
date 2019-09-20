@@ -2,9 +2,11 @@ package com.gu.stripe
 
 import com.gu.helpers.WebServiceHelper
 import com.gu.i18n.Currency
+import com.gu.i18n.Currency.AUD
 import com.gu.okhttp.RequestRunners._
 import com.gu.stripe.Stripe._
 import com.gu.support.config.StripeConfig
+import com.gu.support.zuora.api.{PaymentGateway, StripeGatewayAUD, StripeGatewayDefault, StripeGatewayPaymentIntentsAUD, StripeGatewayPaymentIntentsDefault}
 import io.circe.Decoder
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -18,6 +20,14 @@ class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl:
   val httpClient: FutureHttpClient = client
 
   def withCurrency(currency: Currency): StripeServiceForCurrency = new StripeServiceForCurrency(this, currency)
+
+}
+
+object StripeServiceForCurrency {
+
+  def chargeGateway(currency: Currency): PaymentGateway = if (currency == AUD) StripeGatewayAUD else StripeGatewayDefault
+
+  def paymentIntentGateway(currency: Currency): PaymentGateway = if (currency == AUD) StripeGatewayPaymentIntentsAUD else StripeGatewayPaymentIntentsDefault
 
 }
 
