@@ -236,4 +236,5 @@ export {
   getFlashSaleActiveOverride,
   countdownTimerIsActive,
   showCountdownTimer,
+  dpSale,
 };
