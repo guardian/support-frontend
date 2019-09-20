@@ -1,16 +1,18 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.i18n.CountryGroup
+import com.gu.i18n.Currency.AUD
+import com.gu.i18n.{CountryGroup, Currency}
 import com.gu.monitoring.SafeLogger
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.stripe.{Stripe, StripeServiceForCurrency}
+import com.gu.stripe.StripeService
 import com.gu.support.workers._
+import com.gu.support.workers.lambdas.CreatePaymentMethod._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
-import com.gu.support.zuora.api.PaymentGateway
+import com.gu.support.zuora.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,7 +40,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ) =
     state.paymentFields match {
       case stripe: StripePaymentFields =>
-        createStripePaymentMethod(stripe, services.stripeService.withCurrency(state.product.currency), StripeServiceForCurrency.gateway(state.product.currency))
+        createStripePaymentMethod(stripe, services.stripeService, state.product.currency)
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
@@ -61,30 +63,43 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   def createStripePaymentMethod(
     stripe: StripePaymentFields,
-    stripeService: StripeServiceForCurrency,
-    gateway: PaymentGateway
+    stripeService: StripeService,
+    currency: Currency
   ): Future[CreditCardReferenceTransaction] = {
-    createCustomer(stripeService, stripe)
-      .map { stripeCustomer =>
-        val card = stripeCustomer.source
-        CreditCardReferenceTransaction(
-          card.id,
-          stripeCustomer.id,
-          card.last4,
-          CountryGroup.countryByCode(card.country),
-          card.exp_month,
-          card.exp_year,
-          card.zuoraCardType,
-          paymentGateway = gateway
-        )
-      }
-  }
-
-  private def createCustomer(stripeService: StripeServiceForCurrency, stripe: StripePaymentFields): Future[Stripe.Customer] = {
-    stripe match {
-      case StripeSourcePaymentFields(source) => stripeService.createCustomerFromToken(source)
-      case StripePaymentMethodPaymentFields(paymentMethod) => stripeService.createCustomerFromPaymentMethod(paymentMethod)
-    }
+    val stripeServiceForCurrency = stripeService.withCurrency(currency)
+    (stripe match {
+      case StripeSourcePaymentFields(source) =>
+        stripeServiceForCurrency.createCustomerFromToken(source).map { customer =>
+          val card = customer.source
+          CreditCardReferenceTransaction(
+            card.id,
+            customer.id,
+            card.last4,
+            CountryGroup.countryByCode(card.country),
+            card.exp_month,
+            card.exp_year,
+            card.brand.zuoraCreditCardType.getOrElse(""),
+            paymentGateway = chargeGateway(currency)
+          )
+        }
+      case StripePaymentMethodPaymentFields(paymentMethod) =>
+        for {
+          stripeCustomer <- stripeServiceForCurrency.createCustomerFromPaymentMethod(paymentMethod)
+          stripePaymentMethod <- stripeServiceForCurrency.getPaymentMethod(paymentMethod)
+        } yield {
+          val card = stripePaymentMethod.card
+          CreditCardReferenceTransaction(
+            paymentMethod.value,
+            stripeCustomer.id,
+            card.last4,
+            CountryGroup.countryByCode(card.country),
+            card.exp_month,
+            card.exp_year,
+            card.brand.zuoraCreditCardType.getOrElse(""),
+            paymentGateway = paymentIntentGateway(currency)
+          )
+        }
+    })
   }
 
   def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =
@@ -109,5 +124,21 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       streetNumber = addressLine.flatMap(_.streetNumber)
     ))
   }
+
+}
+
+object CreatePaymentMethod {
+
+  def paymentIntentGateway(currency: Currency): PaymentGateway =
+    currency match {
+      case AUD => StripeGatewayPaymentIntentsAUD
+      case _ => StripeGatewayPaymentIntentsDefault
+    }
+
+  def chargeGateway(currency: Currency): PaymentGateway =
+    currency match {
+      case AUD => StripeGatewayAUD
+      case _ => StripeGatewayDefault
+    }
 
 }

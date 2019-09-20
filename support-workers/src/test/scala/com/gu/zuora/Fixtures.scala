@@ -3,11 +3,11 @@ package com.gu.zuora
 import com.gu.config.Configuration
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.stripe.StripeServiceForCurrency
 import com.gu.support.catalog
-import com.gu.support.catalog.{Everyday, HomeDelivery, Product, ProductRatePlan}
+import com.gu.support.catalog.{Everyday, HomeDelivery}
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, Monthly, PayPalReferenceTransaction}
+import com.gu.support.workers._
+import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
 
@@ -98,7 +98,7 @@ object Fixtures {
         account(currency),
         contactDetails,
         None,
-        creditCardPaymentMethod(StripeServiceForCurrency.gateway(currency)),
+        creditCardPaymentMethod(CreatePaymentMethod.paymentIntentGateway(currency)),
         monthlySubscriptionData,
         SubscribeOptions()
       )

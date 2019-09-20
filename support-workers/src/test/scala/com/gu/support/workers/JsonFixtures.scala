@@ -173,7 +173,7 @@ object JsonFixtures {
     """
 
   val stripeToken = "tok_visa"
-  val stripePaymentMethodToken = "tok_visa"
+  val stripePaymentMethodToken = PaymentMethodId("pm_card_visa").get
   val stripeJson =
     s"""
       {
@@ -184,7 +184,7 @@ object JsonFixtures {
   val stripePaymentMethodJson =
     s"""
       {
-        "paymentMethod": "$stripePaymentMethodToken"
+        "paymentMethod": "${stripePaymentMethodToken.value}"
       }
     """
 
