@@ -114,7 +114,7 @@ const Sales: Sale[] = [
           },
           landingPage: {
             heading: 'Print',
-            subHeading: 'Save up to 52% on The Guardian and The Observer for a year',
+            subHeading: 'Save up to 52% for a year on The Guardian and The Observer',
           },
           bundle: {
             heading: 'Paper',
