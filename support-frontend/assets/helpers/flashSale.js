@@ -55,6 +55,22 @@ const dpSale = {
   promoCode: 'DK0NT24WG',
   intcmp: '',
   price: 0,
+  saleCopy: {
+    featuredProduct: {
+      heading: 'Digital Pack',
+      subHeading: 'Save 25% for a year',
+      description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
+    },
+    landingPage: {
+      heading: 'Digital Pack subscriptions',
+      subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
+    },
+    bundle: {
+      heading: 'Digital Pack',
+      subHeading: 'Save 25% for a year',
+      description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
+    },
+  },
 };
 
 const Sales: Sale[] = [
@@ -236,4 +252,5 @@ export {
   getFlashSaleActiveOverride,
   countdownTimerIsActive,
   showCountdownTimer,
+  dpSale,
 };
