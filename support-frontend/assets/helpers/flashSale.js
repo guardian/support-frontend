@@ -58,16 +58,16 @@ const dpSale = {
   saleCopy: {
     featuredProduct: {
       heading: 'Digital Pack',
-      subHeading: 'Save 25% for a year',
+      subHeading: '50% off for 3 months',
       description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
     },
     landingPage: {
       heading: 'Digital Pack subscriptions',
-      subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
+      subHeading: 'Save 50% for 3 months on award-winning, independent journalism, ad-free on all of your devices',
     },
     bundle: {
       heading: 'Digital Pack',
-      subHeading: 'Save 25% for a year',
+      subHeading: '50% off for 3 months',
       description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
     },
   },
