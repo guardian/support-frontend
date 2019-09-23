@@ -116,24 +116,38 @@ $content-padding: 10px;
 }
 
 .product-block__right-content {
+  position: relative;
   padding:0 $content-padding 30px $content-padding;
-  max-width: 32.5rem;
 
-  @include mq($from: tablet) {
-    padding-right: 80px;
+  @include mq($from: phablet) {
+    max-width: 32.5rem;
   }
+  @include mq($from: desktop) {
+    padding-right: 80px;
+    max-width: 50%;
+  }
+  @include mq($from: wide) {
+    max-width: 32.5rem;
+  }
+
 }
 
 .product-block__left-content {
   display: flex;
   flex-wrap: wrap;
-  width: 32.5rem;
   padding: 0 $content-padding 30px;
 
-  @include mq($from: tablet) {
+  @include mq($from: phablet) {
+    max-width: 32.5rem;
+  }
+  @include mq($from: desktop) {
+    max-width: 50%;
     .component-list-ul {
       padding-right: 80px;
     }
+  }
+  @include mq($from: wide) {
+    max-width: 32.5rem;
   }
 }
 
@@ -148,16 +162,49 @@ $content-padding: 10px;
   margin-top: 2px;
 }
 
-// This is a override for "#digital-subscription-landing-page-int .product-block .component-grid-image"
-#digital-subscription-landing-page-int
-.product-block #product-block__right-content
-img.component-grid-image {
+.product-block #product-block__right-content img.component-grid-image {
   width: 100%;
 }
 
 .component-left-margin-section__content {
   width: 100px;
 }
+
+.product-block__roundel {
+  position: absolute;
+  top: -1.5rem;
+  right: -0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 110px;
+  background: gu-colour(highlight-main);
+  border-radius: 50%;
+  padding: 10px;
+  
+  @include mq($from: phablet) {
+    top: -2.2rem;
+    right: -1rem;
+    width: 125px;
+    height: 125px;
+  }
+  @include mq($from: desktop) {
+    right: 2.2rem;
+  }
+}
+
+.product-block__roundel p {
+  font-family: $gu-headline;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  line-height: 1.2;
+
+  @include mq($from: phablet) {
+    font-size: 18px;
+  }
+} 
 
 // this is a hack to override the left border on the .component-left-margin-section__content because the new design calls this to start at desktop instead of the leftCol breakpoint
 #digital-subscription-landing-page-int,

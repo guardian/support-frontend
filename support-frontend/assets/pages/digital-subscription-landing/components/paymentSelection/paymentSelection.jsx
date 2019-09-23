@@ -26,16 +26,14 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
     {
         (paymentOptions.map(paymentOption => (
           <div className="payment-selection__card">
-            <ProductOption
-              href={paymentOption.href}
-              onClick={paymentOption.onClick}
-            >
+            <span className="product-option__label">{paymentOption.label}</span>
+            <ProductOption>
               <ProductOptionContent>
                 <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
                 <ProductOptionOffer
-                  hidden={paymentOption.title === 'Monthly'}
+                  hidden={!paymentOption.offer}
                 >
-                    Save {paymentOption.offer}
+                  {paymentOption.offer}
                 </ProductOptionOffer>
               </ProductOptionContent>
               <ProductOptionButton
@@ -50,7 +48,6 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
           </div>
         )))
       }
-    <p className="payment-selection_cancel-text">You can cancel your subscription at any time</p>
   </div>
 );
 
