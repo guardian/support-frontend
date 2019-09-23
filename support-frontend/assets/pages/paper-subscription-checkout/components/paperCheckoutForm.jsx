@@ -71,6 +71,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
+import GeneralErrorMessage
+  from 'components/generalErrorMessage/generalErrorMessage';
 
 // ----- Types ----- //
 
@@ -160,6 +162,8 @@ class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
     const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
     const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : 'Voucher booklet';
     const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : 'Where should we deliver your vouchers?';
+    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
+      'Payment Attempt Failed';
 
     return (
       <StripeProvider stripe={this.state.stripe}>
@@ -307,7 +311,6 @@ class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
                   setPaymentMethod={props.setPaymentMethod}
                   onPaymentAuthorised={props.onPaymentAuthorised}
                   validationError={firstError('paymentMethod', props.formErrors)}
-                  submissionError={props.submissionError}
                 />
                 <SubscriptionSubmitButton
                   paymentMethod={props.paymentMethod}
@@ -330,6 +333,10 @@ class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
                     buttonText="Pay now"
                   />
                 </FormSectionHiddenUntilSelected>
+                <GeneralErrorMessage
+                  errorReason={props.submissionError}
+                  errorHeading={submissionErrorHeading}
+                />
                 <CancellationSection />
               </Form>
             </Layout>

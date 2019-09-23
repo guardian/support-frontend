@@ -73,6 +73,8 @@ import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import { StripeProvider, Elements } from 'react-stripe-elements';
+import GeneralErrorMessage
+  from 'components/generalErrorMessage/generalErrorMessage';
 
 // ----- Types ----- //
 
@@ -170,6 +172,8 @@ class WeeklyCheckoutForm extends Component<PropTypes, StateTypes> {
     const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
     const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
     const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
+    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
+      'Payment Attempt Failed';
 
     const setBillingAddressIsSameHandler = () => {
       props.setBillingAddressIsSame(true);
@@ -348,7 +352,6 @@ class WeeklyCheckoutForm extends Component<PropTypes, StateTypes> {
                   setPaymentMethod={props.setPaymentMethod}
                   onPaymentAuthorised={props.onPaymentAuthorised}
                   validationError={firstError('paymentMethod', props.formErrors)}
-                  submissionError={props.submissionError}
                 />
                 <SubscriptionSubmitButton
                   paymentMethod={props.paymentMethod}
@@ -371,6 +374,10 @@ class WeeklyCheckoutForm extends Component<PropTypes, StateTypes> {
                     buttonText="Pay now"
                   />
                 </FormSectionHiddenUntilSelected>
+                <GeneralErrorMessage
+                  errorReason={props.submissionError}
+                  errorHeading={submissionErrorHeading}
+                />
                 <CancellationSection />
               </Form>
             </Layout>

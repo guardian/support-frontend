@@ -68,6 +68,8 @@ import {
 } from 'helpers/productPrice/priceDescriptions';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
+import GeneralErrorMessage
+  from 'components/generalErrorMessage/generalErrorMessage';
 
 
 // ----- Types ----- //
@@ -182,6 +184,8 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
     const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
     const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
     const priceSummary = `${offerOnSelected || 'Enjoy your digital pack free for 14 days, then'} ${helperSelected}.`;
+    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
+      'Payment Attempt Failed';
 
     const PriceSummary = () =>
       <p className="component-credit-card-price">{priceSummary}</p>;
@@ -243,7 +247,6 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
                   setPaymentMethod={props.setPaymentMethod}
                   onPaymentAuthorised={props.onPaymentAuthorised}
                   validationError={firstError('paymentMethod', props.formErrors)}
-                  submissionError={props.submissionError}
                 />
                 <PayPalSubmitButton
                   paymentMethod={props.paymentMethod}
@@ -282,6 +285,10 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
                     buttonText="Start your free trial now"
                   />
                 </FormSectionHiddenUntilSelected>
+                <GeneralErrorMessage
+                  errorReason={props.submissionError}
+                  errorHeading={submissionErrorHeading}
+                />
                 <CancellationSection />
               </Form>
             </CheckoutLayout>
