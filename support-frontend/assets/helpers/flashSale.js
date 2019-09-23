@@ -7,6 +7,8 @@ import { type BillingPeriod } from 'helpers/billingPeriods';
 
 import { type SubscriptionProduct } from './subscriptions';
 import { AUDCountries, GBPCountries, EURCountries, Canada, International, UnitedStates, NZDCountries } from './internationalisation/countryGroup';
+import { type FulfilmentOptions } from './productPrice/fulfilmentOptions';
+import { type Option } from 'helpers/types/option';
 
 export type SaleCopy = {
   featuredProduct: {
@@ -35,6 +37,7 @@ type SaleDetails = {
     annualPrice?: number,
     discountPercentage?: number,
     saleCopy?: SaleCopy,
+    fulfilmentOption?: Option<FulfilmentOptions>
   },
 };
 
@@ -89,6 +92,39 @@ const Sales: Sale[] = [
       AUDCountries: dpSale,
     },
   },
+  {
+    subscriptionProduct: 'Paper',
+    activeRegions: [GBPCountries],
+    startTime: new Date(2019, 8, 23).getTime(), // 23 Sep 2019
+    endTime: new Date(2020, 9, 6).getTime(), // 6 Oct 2019
+    duration: '12 months',
+    saleDetails: {
+      GBPCountries: {
+        promoCode: 'SEP2512VHD',
+        annualPlanPromoCode: '',
+        intcmp: '',
+        price: 8.09,
+        annualPrice: 0,
+        discountPercentage: 0.52,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Paper',
+            subHeading: 'Save up to 52% for a year',
+            description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
+          },
+          landingPage: {
+            heading: 'Print',
+            subHeading: 'Save up to 52% on The Guardian and The Observer for a year',
+          },
+          bundle: {
+            heading: 'Paper',
+            subHeading: 'Save up to 52% for a year',
+            description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
+          },
+        },
+      },
+    },
+  },
 ];
 
 function getTimeTravelDaysOverride() {
@@ -103,8 +139,10 @@ function sortSalesByStartTimesDescending(a: Sale, b: Sale) {
   return b.startTime - a.startTime;
 }
 
-function getActiveFlashSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
-
+function getActiveFlashSales(
+  product: SubscriptionProduct,
+  countryGroupId: CountryGroupId = detect(),
+): Sale[] {
   const timeTravelDays = getTimeTravelDaysOverride();
   const now = timeTravelDays ? Date.now() + (timeTravelDays * 86400000) : Date.now();
 
@@ -129,7 +167,6 @@ function getDuration(product: SubscriptionProduct, countryGroupId: CountryGroupI
 
 function flashSaleIsActive(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): boolean {
   const sales = getActiveFlashSales(product, countryGroupId);
-
   return sales.length > 0;
 }
 

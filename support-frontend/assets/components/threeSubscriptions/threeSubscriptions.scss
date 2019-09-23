@@ -1,3 +1,5 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
 .component-three-subscriptions {
   padding-bottom: $gu-v-spacing * 3;
 
@@ -20,6 +22,14 @@
       display: flex;
       flex-direction: column;
     }
+  }
+
+  .component-subscription-bundle--space-below {
+    margin-bottom: $gu-v-spacing;
+  }
+
+  .component-subscription-bundle--yellow {
+    background-color: #ffe500;
   }
 
   .component-subscription-bundle__content {

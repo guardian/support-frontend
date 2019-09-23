@@ -83,6 +83,7 @@ export const imageCatalogue: {
   showcaseUKChris: 'd80f77ff8069d1f39071a00a752cb2e8728d082a/381_0_2004_2004',
   showcaseUKFloods: 'cb8d5002ec1ac03e64da32d87fe7f804fc900dfb/163_1119_3136_789',
   showcaseUKWindrushGroup: '2ec9dab8f39d1e9b12b9c7625b5ad2b058f3420b/1175_287_3335_3335',
+  printShowcase: '311c4a9dd0e8030b734dd54b71fcd0d4cb2a303b/0_0_1486_750',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

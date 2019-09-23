@@ -56,6 +56,7 @@ const newsstandPrices: {[PaperProductOptions]: number} = {
   Sunday: weekendNewsstandPrice,
   Everyday: (dailyNewsstandPrice * 5) + (weekendNewsstandPrice * 2),
   Weekend: weekendNewsstandPrice * 2,
+  Sixday: (dailyNewsstandPrice * 5) + weekendNewsstandPrice,
 };
 
 // ----- Config ----- //
@@ -182,6 +183,9 @@ const getMonthlyNewsStandPrice = (newsstand: number) => ((newsstand) * 52) / 12;
 const getNewsstandSaving = (subscriptionMonthlyCost: number, newsstandWeeklyCost: number) =>
   fixDecimals(getMonthlyNewsStandPrice(newsstandWeeklyCost) - subscriptionMonthlyCost);
 
+const getNewsstandSavingPercentage = (subscriptionMonthlyCost: number, newsstandWeeklyCost: number) =>
+  Math.round(100 - ((subscriptionMonthlyCost / getMonthlyNewsStandPrice(newsstandWeeklyCost)) * 100));
+
 const getNewsstandPrice = (productOption: PaperProductOptions) =>
   newsstandPrices[productOption];
 
@@ -197,6 +201,7 @@ export {
   displayPrice,
   getProductPrice,
   getNewsstandSaving,
+  getNewsstandSavingPercentage,
   getNewsstandPrice,
   fixDecimals,
   paperHasDeliveryEnabled,
