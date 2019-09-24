@@ -177,7 +177,7 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
       return products.GuardianWeekly;
     default:
       if (
-        (countryGroupId === GBPCountries || countryGroupId === International) &&
+        (countryGroupId === GBPCountries) &&
         flashSaleIsActive('DigitalPack', countryGroupId)
       ) {
         return products.DigitalPack;
