@@ -51,6 +51,7 @@ export type FormState = {|
   isTestUser: boolean,
   productPrices: ProductPrices,
   payPalHasLoaded: boolean,
+  stripeToken: Option<string>,
 |};
 
 function getFormFields(state: AnyCheckoutState): FormFields {

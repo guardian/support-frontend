@@ -272,8 +272,9 @@ function CampaignHeader(props: PropTypes) {
 
         <div className="payment-selection__title-container" >
           <h2 className="payment-selection__title">
-            The Premium App and the Daily Edition iPad app in one pack, plus ad-free reading on all your devices
+          Choose one of our special offers and subscribe today
           </h2>
+          <p className="payment-selection_cancel-text">After your 14-day free trial, your subscription will begin automatically and you can cancel any time</p>
         </div>
 
         {showCountdownTimer(product, props.countryGroupId) &&

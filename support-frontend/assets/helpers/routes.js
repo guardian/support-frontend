@@ -7,6 +7,7 @@ import { countryGroups } from './internationalisation/countryGroup';
 import { getOrigin } from './url';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import { type Option } from 'helpers/types/option';
 
 const routes: {
   [string]: string,
@@ -46,8 +47,14 @@ function paperSubsUrl(withDelivery: boolean = false): string {
   return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
 }
 
-function paperCheckoutUrl(fulfilmentOption: FulfilmentOptions, productOptions: ProductOptions) {
-  return `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}`;
+function paperCheckoutUrl(
+  fulfilmentOption: FulfilmentOptions,
+  productOptions: ProductOptions,
+  promoCode?: Option<string>,
+) {
+  return promoCode ?
+    `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}&promoCode=${promoCode}`
+    : `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}`;
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.

@@ -52,7 +52,7 @@ trait WebServiceHelper[Error <: Throwable] {
    * @param req The request
    * @return The modified request
    */
-  def wsPreExecute(req: Request.Builder): Request.Builder = req
+  def wsPreExecute(req: Request.Builder): Future[Request.Builder] = Future.successful(req)
 
   /**
    * Send a request to the web service and attempt to convert the response to an A
@@ -64,9 +64,9 @@ trait WebServiceHelper[Error <: Throwable] {
    * @return
    */
   private def request[A](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
-    val req = wsPreExecute(rb).build()
-    SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
     for {
+      req <- wsPreExecute(rb).map(_.build())
+      _ = SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
       response <- httpClient(req)
       codeBody <- Future.fromTry(getJsonBody(response))
       decodedResponse <- Future.fromTry(decodeBody[A](codeBody))

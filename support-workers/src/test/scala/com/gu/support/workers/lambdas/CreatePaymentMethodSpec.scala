@@ -32,17 +32,19 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequest(wrapFixture(createPayPalPaymentMethodContributionJson()), outStream, context)
+    createPaymentMethod.handleRequestFuture(
+      wrapFixture(createPayPalPaymentMethodContributionJson()), outStream, context).map { _ =>
 
-    //Check the output
-    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
+      //Check the output
+      val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
 
-    createSalesforceContactState.isSuccess should be(true)
-    createSalesforceContactState.get._1.paymentMethod match {
-      case payPal: PayPalReferenceTransaction =>
-        payPal.paypalBaid should be(validBaid)
-        payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
-      case _ => fail()
+      createSalesforceContactState.isSuccess should be(true)
+      createSalesforceContactState.get._1.paymentMethod match {
+        case payPal: PayPalReferenceTransaction =>
+          payPal.paypalBaid should be(validBaid)
+          payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
+        case _ => fail()
+      }
     }
   }
 
@@ -52,30 +54,33 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    createPaymentMethod.handleRequest(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
+    createPaymentMethod.handleRequestFuture(
+      wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context).map { _ =>
 
-    //Check the output
-    val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
+      //Check the output
+      val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
 
-    createSalesforceContactState.isSuccess should be(true)
-    createSalesforceContactState.get._1.paymentMethod match {
-      case stripe: CreditCardReferenceTransaction =>
-        stripe.tokenId should be("1234")
-      case _ => fail()
+      createSalesforceContactState.isSuccess should be(true)
+      createSalesforceContactState.get._1.paymentMethod match {
+        case stripe: CreditCardReferenceTransaction =>
+          stripe.tokenId should be("1234")
+        case _ => fail()
+      }
     }
   }
 
   it should "fail when passed invalid json" in {
-    a[RetryNone] should be thrownBy {
+    recoverToSucceededIf[RetryNone] {
       val createPaymentMethod = new CreatePaymentMethod()
 
       val outStream = new ByteArrayOutputStream()
 
       val inStream = "Test user".asInputStream
 
-      createPaymentMethod.handleRequest(inStream, outStream, mock[Context])
+      createPaymentMethod.handleRequestFuture(inStream, outStream, mock[Context]).map { _ =>
 
-      val p = outStream.toClass[PaymentMethod](encrypted = false)
+        val p = outStream.toClass[PaymentMethod](encrypted = false)
+      }
     }
   }
 

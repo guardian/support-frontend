@@ -12,19 +12,18 @@ import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
 import com.gu.support.workers.lambdas.PreparePaymentMethodForReuse
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
-import com.gu.support.workers.{CreditCardReferenceTransaction, LambdaSpec}
-import com.gu.support.zuora.api.{PaymentGateway, StripeGatewayDefault}
+import com.gu.support.workers.{AsyncLambdaSpec, CreditCardReferenceTransaction, MockContext}
+import com.gu.support.zuora.api.StripeGatewayDefault
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.ZuoraService
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 @IntegrationTest
-class PreparePaymentMethodForReuseSpec extends LambdaSpec with MockServicesCreator {
+class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
 
   "ClonePaymentMethod lambda" should "clone CreditCard Payment Method" in {
     val addZuoraSubscription = new PreparePaymentMethodForReuse(mockServiceProvider)
@@ -34,20 +33,22 @@ class PreparePaymentMethodForReuseSpec extends LambdaSpec with MockServicesCreat
     val in = wrapFixture(getPaymentMethodJson(billingAccountId = cardAccount, userId = "100004131"))
 
 
-    addZuoraSubscription.handleRequest(in, outStream, context)
+    addZuoraSubscription.handleRequestFuture(in, outStream, context).map { _ =>
 
-    val response = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream).get
+      val response = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream).get
 
-    response._1.paymentMethod shouldBe CreditCardReferenceTransaction(
-      tokenId = "card_EdajV2eXkZPrVV",
-      secondTokenId = "cus_EdajoRmjUSlef9",
-      creditCardNumber = "4242",
-      creditCardCountry = Some(Country.US),
-      creditCardExpirationMonth = 2,
-      creditCardExpirationYear = 2022,
-      creditCardType = "Visa",
-      paymentGateway = StripeGatewayDefault
-    )
+      response._1.paymentMethod shouldBe CreditCardReferenceTransaction(
+        tokenId = "card_EdajV2eXkZPrVV",
+        secondTokenId = "cus_EdajoRmjUSlef9",
+        creditCardNumber = "4242",
+        creditCardCountry = Some(Country.US),
+        creditCardExpirationMonth = 2,
+        creditCardExpirationYear = 2022,
+        creditCardType = "Visa",
+        paymentGateway = StripeGatewayDefault
+      )
+    }
+
   }
 
   val realZuoraService = new ZuoraService(zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))

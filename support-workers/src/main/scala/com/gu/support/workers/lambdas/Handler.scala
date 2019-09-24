@@ -3,50 +3,54 @@ package com.gu.support.workers.lambdas
 import java.io.{InputStream, OutputStream}
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
+import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.exceptions.ErrorHandler
 import com.gu.support.workers.{ExecutionError, RequestInfo}
 import io.circe.{Decoder, Encoder}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.util.control.NonFatal
 
-abstract class Handler[T, R](implicit decoder: Decoder[T], encoder: Encoder[R]) extends RequestStreamHandler {
+abstract class Handler[IN, OUT](
+  implicit
+  decoder: Decoder[IN],
+  encoder: Encoder[OUT],
+  ec: ExecutionContext
+) extends RequestStreamHandler {
 
   import com.gu.support.workers.encoding.Encoding._
 
-  type HandlerResult = (R, RequestInfo)
+  type FutureHandlerResult = Future[HandlerResult[OUT]]
 
-  def HandlerResult(r: R, ri: RequestInfo): HandlerResult = (r, ri) // scalastyle:ignore method.name
-
-  protected def handler(input: T, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): HandlerResult
-
-  def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
+  override def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
     try {
-      in(is).flatMap {
-        case (i, error, requestInfo) =>
-          val result = handler(i, error, requestInfo, context)
-          out(result._1, result._2, os)
-      }.get
-    } catch ErrorHandler.handleException
+      Await.result(
+        handleRequestFuture(is, os, context),
+        Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS)
+      )
+    } catch {
+      case n: Throwable if NonFatal(n) => throw n
+      // this is to handle our of memory errors etc. and aim for a retry
+      case t: Throwable => ErrorHandler.handleException(t)
+    }
+
+  def handleRequestFuture(is: InputStream, os: OutputStream, context: Context): Future[Unit] = {
+    val eventualUnit: Future[Unit] = for {
+      inputData <- Future.fromTry(in(is))
+      _ = SafeLogger.info(s"START  ${this.getClass} with $inputData")
+      (input, error, requestInfo) = inputData
+      result <- handlerFuture(input, error, requestInfo, context)
+      _ = SafeLogger.info(s"FINISH ${this.getClass} with $result")
+      _ <- Future.fromTry(out(result, os))
+    } yield ()
+    eventualUnit.recover {
+      case t => ErrorHandler.handleException(t)
+    }
+  }
+
+  protected def handlerFuture(input: IN, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): FutureHandlerResult
+
 }
 
-abstract class FutureHandler[T, R](d: Option[Duration] = None)(
-    implicit
-    decoder: Decoder[T],
-    encoder: Encoder[R],
-    ec: ExecutionContext
-) extends Handler[T, R] {
-
-  type FutureHandlerResult = Future[(R, RequestInfo)]
-
-  def FutureHandlerResult(r: R, ri: RequestInfo): FutureHandlerResult = Future.successful((r, ri)) // scalastyle:ignore method.name
-
-  protected def handlerFuture(input: T, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): FutureHandlerResult
-
-  override protected def handler(input: T, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): HandlerResult =
-    Await.result(
-      handlerFuture(input, error, requestInfo, context),
-      d.getOrElse(Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS))
-    )
-}
-
+case class HandlerResult[RESULT](value: RESULT, requestInfo: RequestInfo)

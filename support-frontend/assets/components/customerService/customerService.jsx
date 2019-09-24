@@ -2,12 +2,13 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import * as React from 'react';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { AUDCountries, GBPCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
+import { promotionTermsUrl } from 'helpers/externalLinks';
 
 // ----- Props ----- //
 
@@ -15,6 +16,7 @@ type PropTypes = {|
   selectedCountryGroup: CountryGroupId,
   subscriptionProduct: SubscriptionProduct,
   paperFulfilmentOptions: Option<PaperFulfilmentOptions>,
+  promoCode?: Option<string>,
 |};
 
 // ----- Functions ----- //
@@ -59,45 +61,64 @@ function CustomerService(props: PropTypes) {
     props.subscriptionProduct,
     props.paperFulfilmentOptions,
   );
+  const promotionTerms = props.promoCode ?
+    (
+      <div>
+        <h2>Promotion terms and conditions</h2>
+        <div className="component-customer-service__text">
+          <p>
+            Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;)
+            reserves the right to withdraw this promotion at any time.
+            For full promotion terms and conditions see <a href={promotionTermsUrl(props.promoCode)}>here</a>
+          </p>
+        </div>
+      </div>
+    )
+    : null;
+
+
+  const Faqs = ({ children }: { children: React.Node }) =>
+    (
+      <div className="component-customer-service">
+        {promotionTerms}
+        <h2>FAQs and Help</h2>
+        <div className="component-customer-service__text">
+          {children}
+        </div>
+      </div>
+    );
+
   switch (props.selectedCountryGroup) {
     case UnitedStates:
       return (
-        <div className="component-customer-service">
-          <div className="component-customer-service__text">
-            For help with Guardian and Observer subscription services please email <Email email={email} /> or
-            call 1-844-632-2010 (toll free); 917-900-4663 (direct line).
-            Lines are open 9:15am-6pm, Monday to Friday (EST/EDT).
-          </div>
-        </div>
+        <Faqs>
+          For help with Guardian and Observer subscription services please email <Email email={email} /> or
+          call 1-844-632-2010 (toll free); 917-900-4663 (direct line).
+          Lines are open 9:15am-6pm, Monday to Friday (EST/EDT).
+        </Faqs>
       );
     case GBPCountries:
       return (
-        <div className="component-customer-service">
-          <div className="component-customer-service__text">
+        <Faqs>
             For help with Guardian and Observer subscription services please email <Email email={email} /> or
             call 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays, 8am-6pm at weekends (GMT/BST).
-          </div>
-        </div>
+        </Faqs>
       );
     case AUDCountries:
       return (
-        <div className="component-customer-service">
-          <div className="component-customer-service__text">
+        <Faqs>
             For help with Guardian and Observer subscription services please
             email <Email email={email} /> or
             call 1800 773 766 (within Australia) or +61 2 8076 8599 (outside Australia).
             Lines are open 9am-5pm Monday-Friday (AEDT).
-          </div>
-        </div>
+        </Faqs>
       );
     default:
       return (
-        <div className="component-customer-service">
-          <div className="component-customer-service__text">
+        <Faqs>
             For help with Guardian and Observer subscription services please email <Email email={email} /> or
             call +44 (0) 330 333 6767. Lines are open 8am-8pm on weekdays, 8am-6pm at weekends (GMT/BST).
-          </div>
-        </div>
+        </Faqs>
       );
   }
 }
@@ -106,6 +127,7 @@ CustomerService.defaultProps = {
   selectedCountryGroup: 'GBPCountries',
   subscriptionProduct: 'DigitalPack',
   paperFulfilmentOptions: null,
+  promoCode: null,
 };
 
 // ----- Exports ----- //

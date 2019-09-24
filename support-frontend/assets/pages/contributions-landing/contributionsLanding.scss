@@ -573,15 +573,18 @@ form {
 .form__radio-group--pills .form__radio-group-list {
   display: flex;
   flex-wrap: flex-wrap;
+  max-width: 320px;
 }
 
 .form__radio-group--pills .form__radio-group-item {
   width: 50px;
   height: 50px;
+  margin-right: $gu-v-spacing / 2;
+  margin-bottom: $gu-v-spacing / 2;
 }
 
-.form__radio-group--pills .form__radio-group-item + .form__radio-group-item {
-  margin-left: 10px;
+.form__radio-group--pills .form__radio-group-item:last-child {
+  margin-right: 0;
 }
 
 .form__radio-group--pills .form__radio-group-input + .form__radio-group-label {
@@ -1137,4 +1140,44 @@ form {
 
 .amount-per-week-breakdown:empty {
   display: none;
+}
+
+//////////////////////////
+// Styles for form labels
+//////////////////////////
+
+.form--with-labels {
+  .form__radio-group--tabs {
+    margin-top: $gu-v-spacing;
+  }
+
+  .form__radio-group--contribution-amount {
+    margin-top: 18px;
+  }
+
+  .form__legend {
+    @include gu-typeface(headline, 18);
+    font-weight: 700;
+    margin-bottom: $gu-v-spacing;
+  }
+
+  .form__radio-group-list--border {
+    margin: 0;
+    border: 1px solid gu-colour(neutral-86);
+  }
+
+  .form__radio-group--tabs .form__radio-group-input + .form__radio-group-label,
+  .form__radio-group-list--border li label {
+    @include gu-typeface(textSans, 16);
+    padding: 4px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+  }
+
+  .form--content {
+    @include mq($until: tablet) {
+      padding-top: 0;
+    }
+  }
 }

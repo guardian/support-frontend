@@ -64,6 +64,12 @@ const ProductBlockRightContent = ({ children }: ChildProps) => (
   </div>
 );
 
+const ProductBlockRoundel = ({ children }: ChildProps) => (
+  <div className="product-block__roundel">
+    { children }
+  </div>
+);
+
 function ProductBlockB() {
   return (
     <div className="product-block product-block--margin">
@@ -126,6 +132,7 @@ function ProductBlockB() {
           </ProductBlockSubTitleText>
 
           <ProductBlockRightContent>
+            <ProductBlockRoundel><p>Available soon on all devices</p></ProductBlockRoundel>
             <GridImage
               gridId="editionsProductBlock"
               srcSizes={[1000, 500, 140]}

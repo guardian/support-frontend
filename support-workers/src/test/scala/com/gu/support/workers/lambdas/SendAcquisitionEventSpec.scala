@@ -12,6 +12,9 @@ import com.gu.test.tags.objects.IntegrationTest
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
+import cats.implicits._
+
+import scala.concurrent.Future
 
 class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
@@ -20,12 +23,13 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    sendAcquisitionEvent.handleRequest(sendAcquisitionEventJson, outStream, context)
+    sendAcquisitionEvent.handleRequestFuture(sendAcquisitionEventJson, outStream, context).map { _ =>
 
-    //Check the output
-    val out = Encoding.in[Unit](outStream.toInputStream)
+      //Check the output
+      val out = Encoding.in[Unit](outStream.toInputStream)
 
-    out.isSuccess should be(true)
+      out.isSuccess should be(true)
+    }
   }
 
 }

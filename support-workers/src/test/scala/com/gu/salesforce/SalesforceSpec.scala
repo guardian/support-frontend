@@ -16,8 +16,6 @@ import scala.concurrent.duration._
 @IntegrationTest
 class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
-  implicit override def executionContext = scala.concurrent.ExecutionContext.Implicits.global
-
   val customer = NewContact(
     IdentityID__c = idId,
     Email = emailAddress,

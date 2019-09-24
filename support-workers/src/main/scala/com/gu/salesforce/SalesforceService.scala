@@ -1,7 +1,7 @@
 package com.gu.salesforce
 
 import com.gu.config.Configuration
-import com.gu.helpers.{Retry, WebServiceHelper}
+import com.gu.helpers.WebServiceHelper
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
@@ -26,12 +26,12 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   val httpClient: FutureHttpClient = client
   val upsertEndpoint = "services/apexrest/RegisterCustomer/v1/"
 
-  override def wsPreExecute(req: Request.Builder): Request.Builder =
-    Await.result( //We have to wait for an authentication token before we can send any requests
-      AuthService.getAuth(config).map(
+  override def wsPreExecute(req: Request.Builder): Future[Request.Builder] = {
+    SafeLogger.info(s"Issuing request to wsPreExecute: $config")
+    AuthService.getAuth(config).map(
         auth => addAuthenticationToRequest(auth, req)
-      ), 30.seconds
     )
+  }
 
   def addAuthenticationToRequest(auth: Authentication, req: Request.Builder): Request.Builder = {
     req.url(s"${auth.instance_url}/$upsertEndpoint") //We need to set the base url to the instance_url value returned in the authentication response
@@ -177,9 +177,7 @@ class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
         "grant_type" -> Seq("password")
       ))
 
-    Retry(3) {
-      postAuthRequest
-    }
+    postAuthRequest
   }
 }
 

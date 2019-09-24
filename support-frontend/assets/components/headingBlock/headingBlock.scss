@@ -35,6 +35,7 @@
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
 
  .component-product-page-hero-heading--campaign & {
+   background-color: #ffffff;
     @supports(transform:translateY(-100%)) {
       transform: translateY(-100%);
       position: absolute;

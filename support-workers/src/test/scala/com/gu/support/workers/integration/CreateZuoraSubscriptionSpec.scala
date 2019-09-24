@@ -6,7 +6,6 @@ import java.time.OffsetDateTime
 import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvider}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.catalog.GuardianWeekly
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
@@ -19,17 +18,15 @@ import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.ZuoraService
-import io.circe.generic.auto._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
 @IntegrationTest
-class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
+class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
 
   "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
     createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
@@ -76,10 +73,11 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
 
     val outStream = new ByteArrayOutputStream()
 
-    createZuora.handleRequest(wrapFixture(json), outStream, context)
+    createZuora.handleRequestFuture(wrapFixture(json), outStream, context).map { _ =>
 
-    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.subscriptionNumber.length should be > 0
+      val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
+      sendThankYouEmail._1.subscriptionNumber.length should be > 0
+    }
   }
 
   val realZuoraService = new ZuoraService(zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))

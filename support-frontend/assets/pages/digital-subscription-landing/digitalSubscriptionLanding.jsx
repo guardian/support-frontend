@@ -31,6 +31,8 @@ import './components/theMoment.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
 import { isPostDeployUser } from 'helpers/user/user';
+import { dpSale, flashSaleIsActive } from 'helpers/flashSale';
+import { DigitalPack } from 'helpers/subscriptions';
 
 // ----- Redux Store ----- //
 
@@ -93,9 +95,9 @@ type State = {
 // ----- Render ----- //
 class LandingPage extends Component<Props, State> {
   state = {
-    showPage: this.props.optimizeHasLoaded,
+    showPage: true, // this.props.optimizeHasLoaded,
     pageReadyChecks: 0,
-  }
+  };
 
   checkOptimizeIsReady = (interval: number) => {
     const maxNumberOfChecks = OPTIMIZE_CHECK_TIMEOUT / interval;
@@ -115,7 +117,7 @@ class LandingPage extends Component<Props, State> {
         this.checkOptimizeIsReady(interval);
       }, interval);
     }
-  }
+  };
 
   render() {
     const { dailyEditionsVariant } = this.props;
@@ -124,6 +126,9 @@ class LandingPage extends Component<Props, State> {
     if (pageReadyChecks === 0 && showPage === false) {
       this.checkOptimizeIsReady(interval);
     }
+    // We can't cope with multiple promo codes in the current design
+
+    const promoCode = flashSaleIsActive(DigitalPack, countryGroupId) ? dpSale.promoCode : null;
 
     return (
       <div>
@@ -132,7 +137,10 @@ class LandingPage extends Component<Props, State> {
           header={<CountrySwitcherHeader />}
           footer={
             <Footer>
-              <CustomerService selectedCountryGroup={countryGroupId} />
+              <CustomerService
+                selectedCountryGroup={countryGroupId}
+                promoCode={promoCode}
+              />
               <SubscriptionFaq subscriptionProduct="DigitalPack" />
             </Footer>}
         >

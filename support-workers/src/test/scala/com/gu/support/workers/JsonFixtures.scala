@@ -6,11 +6,9 @@ import java.util.UUID
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
-import io.circe.generic.auto._
 import io.circe.syntax._
 import org.joda.time.{DateTimeZone, LocalDate}
 

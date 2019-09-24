@@ -17,6 +17,7 @@ import { setTab } from '../../paperSubscriptionLandingPageActions';
 import Form from './form';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 
 // Types
@@ -46,9 +47,9 @@ const DiscountCalloutMaybe = () => {
     getDuration('Paper', 'GBPCountries'),
   ];
   if (discount && duration) {
-    return <Callout>Save an extra {Math.round(discount * 100)}% for {duration}</Callout>;
+    return <Callout>Save up to {Math.round(discount * 100)}% for {duration}</Callout>;
   } else if (discount) {
-    return <Callout>Save an extra {Math.round(discount * 100)}% </Callout>;
+    return <Callout>Save up to {Math.round(discount * 100)}% </Callout>;
   }
   return null;
 
@@ -63,6 +64,13 @@ const ContentHelpBlock = ({
   telephoneLink: Element<string>
 |}) => (
   <Content appearance="feature" modifierClasses={['faqs']}>
+    {flashSaleIsActive('Paper', GBPCountries) &&
+      <Text title="Promotion terms and conditions">
+        <SansParagraph>
+          Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href="https://subscribe.theguardian.com/p/SEP2512VHD/terms">here</a>.
+        </SansParagraph>
+      </Text>
+    }
     <Text title="FAQ and help">
       <SansParagraph>
         If you’ve got any more questions, you might well find the answers in the {faqLink}.
@@ -98,7 +106,7 @@ const ContentForm = ({
   title: string,
   text?: Option<string>,
   selectedTab: ActiveTabState,
-  setTabAction: typeof setTab
+  setTabAction: typeof setTab,
 |}) => (
   <Content appearance="feature" id="subscribe">
     <Text

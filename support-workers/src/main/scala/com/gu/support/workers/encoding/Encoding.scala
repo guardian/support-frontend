@@ -6,6 +6,7 @@ import java.util.Base64
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.encoding.Encryption._
 import com.gu.support.workers.encoding.Wrapper._
+import com.gu.support.workers.lambdas.HandlerResult
 import com.gu.support.workers.{ExecutionError, RequestInfo}
 import io.circe.generic.auto._
 
@@ -25,8 +26,8 @@ object Encoding {
       result <- decode[T](decrypted).toTry
     } yield (result, wrapper.error, wrapper.requestInfo)
 
-  def out[T](value: T, requestInfo: RequestInfo, os: OutputStream)(implicit encoder: Encoder[T]): Try[Unit] = {
-    val t = Try(os.write(wrap(value, requestInfo).asJson.noSpaces.getBytes()))
+  def out[T](handlerResult: HandlerResult[T], os: OutputStream)(implicit encoder: Encoder[T]): Try[Unit] = {
+    val t = Try(os.write(wrap(handlerResult).asJson.noSpaces.getBytes()))
     os.close()
     t
   }

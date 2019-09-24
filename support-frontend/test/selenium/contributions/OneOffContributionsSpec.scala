@@ -1,9 +1,10 @@
 package selenium.contributions
 
+import org.openqa.selenium.JavascriptExecutor
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.contributions.pages.{ContributionsLanding, ContributionThankYou}
+import selenium.contributions.pages.{ContributionThankYou, ContributionsLanding}
 import selenium.util._
 
 class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
@@ -13,7 +14,14 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
 
   override implicit val patienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
 
-  before { driverConfig.reset() }
+  before {
+    driverConfig.reset()
+    // TODO - change tests to support new Stripe Elements UI
+    webDriver.asInstanceOf[JavascriptExecutor].executeScript(
+      """window.localStorage.setItem('gu.support.abTests',""" +
+        """'{"stripeElements":"control"}')"""
+    )
+  }
 
   override def beforeAll(): Unit = {
     Config.printSummary(driverConfig.sessionId)

@@ -91,6 +91,7 @@ export const imageCatalogue: {
   subscriptionFeast: '4fac3988229d109512b4dfa0930b126e36985a2c/0_0_660_636',
   subscriptionPrint: 'f0b716809c5a3592ea38ce1ca86f52eacf4f5b13/0_0_1038_852',
   subscriptionG2: 'f1cafef5a6bda2835f050042b9336645a24228ff/0_0_756_645',
+  printShowcase: '311c4a9dd0e8030b734dd54b71fcd0d4cb2a303b/0_0_1486_750',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

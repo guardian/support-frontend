@@ -1,5 +1,5 @@
 // @flow
-
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { logException } from 'helpers/logger';
 
@@ -50,7 +50,15 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
   if (element) {
     delete element.dataset.notHydrated;
     try {
-      ReactDOM.render(content, element, callBack);
+      if (process.env.NODE_ENV === 'DEV') {
+        import('react-axe').then((axe) => {
+          console.log('Loading react-axe for accessibility analysis');
+          axe.default(React, ReactDOM, 1000);
+          ReactDOM.render(content, element, callBack);
+        });
+      } else {
+        ReactDOM.render(content, element, callBack);
+      }
     } catch (e) {
       renderError(e, id);
     }

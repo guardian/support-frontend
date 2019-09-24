@@ -103,7 +103,7 @@ export type RegularPaymentRequest = {|
   deliveryInstructions?: Option<string>,
 |};
 
-export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton';
+export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
 export type StripeCheckoutAuthorisation = {|

@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 import DoubleHeading from 'components/doubleHeading/doubleHeading';
 import FeatureList from 'components/featureList/featureList';
@@ -14,7 +14,9 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import type { HeadingSize } from 'components/heading/heading';
 import type { ListItem } from 'components/featureList/featureList';
 import type { GridImg } from 'components/gridImage/gridImage';
-import type { Node } from 'react';
+import { type Option } from 'helpers/types/option';
+
+import 'components/threeSubscriptions/threeSubscriptions.scss';
 
 
 // ----- Props ----- //
@@ -43,13 +45,13 @@ type PropTypes = {|
   gridImage: GridImg,
   headingSize: HeadingSize,
   ctas: BundleCta[],
+  highlightSavings?: Option<string>,
 |};
 
 
 // ----- Component ----- //
 
 export default function SubscriptionBundle(props: PropTypes) {
-
   return (
     <div className={classNameWithModifiers('component-subscription-bundle', [props.modifierClass])}>
       {
@@ -64,6 +66,9 @@ export default function SubscriptionBundle(props: PropTypes) {
           subheading={props.subheading}
           headingSize={props.headingSize}
         />
+        <p className="component-subscription-bundle--space-below">
+          <span className="component-subscription-bundle--yellow">{props.highlightSavings}</span>
+        </p>
         {props.benefits.list ?
           <FeatureList listItems={props.benefits.benefits} modifierClass={props.modifierClass} /> :
           <p className="component-subscription-bundle__description">{props.benefits.copy}</p>
@@ -80,4 +85,5 @@ export default function SubscriptionBundle(props: PropTypes) {
 
 SubscriptionBundle.defaultProps = {
   modifierClass: '',
+  highlightSavings: null,
 };

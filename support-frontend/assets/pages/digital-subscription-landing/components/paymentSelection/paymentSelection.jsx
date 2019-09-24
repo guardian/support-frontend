@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import cx from 'classnames';
 
 // components
 import ProductOption, {
@@ -19,48 +18,37 @@ import { mapStateToProps } from './helpers/paymentSelection';
 import { type PaymentOption } from './helpers/paymentSelection';
 
 type PropTypes = {
-  paymentOptions: Array<PaymentOption>;
-  dailyEditionsVariant: boolean,
+  paymentOptions: Array<PaymentOption>,
 }
 
-const PaymentSelection = ({ paymentOptions, dailyEditionsVariant }: PropTypes) => {
-  const variantCopy = dailyEditionsVariant ? 'variantA' : 'control';
-
-  return (
-    <div className="payment-selection">
-      {
+const PaymentSelection = ({ paymentOptions }: PropTypes) => (
+  <div className="payment-selection">
+    {
         (paymentOptions.map(paymentOption => (
-          <div className={cx('payment-selection__card', { 'payment-selection__card--variantA-width': dailyEditionsVariant })}>
-            <ProductOption
-              href={paymentOption.href}
-              onClick={paymentOption.onClick}
-              dailyEditionsVariant={dailyEditionsVariant}
-            >
+          <div className="payment-selection__card">
+            <span className="product-option__label">{paymentOption.label}</span>
+            <ProductOption>
               <ProductOptionContent>
                 <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
                 <ProductOptionOffer
-                  dailyEditionsVariant={dailyEditionsVariant}
-                  hidden={paymentOption.title === 'Monthly'}
+                  hidden={!paymentOption.offer}
                 >
-                    Save {paymentOption.offer}
+                  {paymentOption.offer}
                 </ProductOptionOffer>
               </ProductOptionContent>
               <ProductOptionButton
                 href={paymentOption.href}
                 onClick={paymentOption.onClick}
                 aria-label="Subscribe-button"
-                salesCopy={paymentOption.salesCopy[variantCopy]()}
-                dailyEditionsVariant={dailyEditionsVariant}
+                salesCopy={paymentOption.salesCopy}
               >
-                {dailyEditionsVariant ? 'Start free trial now' : 'Subscribe now' }
+                {'Start free trial now'}
               </ProductOptionButton>
             </ProductOption>
           </div>
         )))
       }
-      <p className="payment-selection_cancel-text">You can cancel your subscription at any time</p>
-    </div>
-  );
-};
+  </div>
+);
 
 export default connect(mapStateToProps)(PaymentSelection);

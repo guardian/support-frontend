@@ -53,7 +53,8 @@ class DigitalSubscription(
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
-    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+    val september2019SalePromo = "DK0NT24WG"
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) :+ september2019SalePromo
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),
@@ -118,9 +119,9 @@ class DigitalSubscription(
       idUser,
       uatMode,
       priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCodes),
-      stripeConfigProvider.get(false),
+      stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
-      payPalConfigProvider.get(false),
+      payPalConfigProvider.get(),
       payPalConfigProvider.get(true)
     )
   }

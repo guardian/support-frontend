@@ -98,3 +98,14 @@
 	position: absolute !important;
 	width: 1px;
 }
+
+// ----- Global hide helper ----- //
+
+.is-hidden,
+[hidden] {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+}
