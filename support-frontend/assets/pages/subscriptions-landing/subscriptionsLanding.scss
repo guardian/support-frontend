@@ -88,12 +88,16 @@
   border: 1px solid gu-colour(neutral-86);
   border-top: none;
 
-  @include mq($until: tablet) {
-    border: none;
+  @include mq($from: desktop) {
+    min-height: 350px;
   }
 
   @include mq($from: tablet) {
-    min-height: 350px;
+    min-height: 320px;
+  }
+
+  @include mq($until: tablet) {
+    border: none;
   }
 }
 
@@ -243,23 +247,22 @@
 }
 
 .subscriptions__product-subtitle {
-  font-size: 28px;
-  line-height: 30px;
+  font-size: 26px;
   line-height: 1.2;
   font-weight: 300;
   font-family: $gu-headline;
 
   @include mq($until: desktop) {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   @include mq($until: tablet) {
-    font-size: 28px;
+    font-size: 24px;
     line-height: 30px;
   }
 
   @include mq($until: mobileLandscape) {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
   }
 }
