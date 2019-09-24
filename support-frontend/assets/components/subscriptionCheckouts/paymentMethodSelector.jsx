@@ -13,8 +13,6 @@ import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import type { ErrorReason } from 'helpers/errorReasons';
 import { withError } from 'hocs/withError';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
@@ -27,20 +25,12 @@ type PropTypes = {|
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
   validationError: Option<string>,
-  submissionError: Option<ErrorReason>,
 |}
 
 const FieldsetWithError = withError(Fieldset);
 
 function PaymentMethodSelector(props: PropTypes) {
-  const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
-    'Payment Attempt Failed';
-  const errorState = props.submissionError ?
-    <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
-    null;
-
   const paymentMethods = supportedPaymentMethods(props.country, props.product);
-
 
   return (paymentMethods.length > 1 ?
     <FormSection title="How would you like to pay?">
@@ -79,7 +69,6 @@ function PaymentMethodSelector(props: PropTypes) {
             />}
           </FieldsetWithError>
         </div>
-        {errorState}
       </Rows>
       <DirectDebitPopUpForm
         buttonText="Subscribe with Direct Debit"
