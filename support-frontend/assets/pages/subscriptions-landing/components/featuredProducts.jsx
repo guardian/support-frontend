@@ -6,7 +6,10 @@ import React, { type Node } from 'react';
 import { type SubsUrls } from 'helpers/externalLinks';
 import { getQueryParameter } from 'helpers/url';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+  type CountryGroupId,
+  International,
+} from 'helpers/internationalisation/countryGroup';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
@@ -173,7 +176,10 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
     case 'GuardianWeekly':
       return products.GuardianWeekly;
     default:
-      if (flashSaleIsActive('DigitalPack', countryGroupId)) {
+      if (
+        (countryGroupId === GBPCountries || countryGroupId === International) &&
+        flashSaleIsActive('DigitalPack', countryGroupId)
+      ) {
         return products.DigitalPack;
       }
       return products.GuardianWeekly;
