@@ -8,7 +8,6 @@ import { getQueryParameter } from 'helpers/url';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import {
   type CountryGroupId,
-  International,
 } from 'helpers/internationalisation/countryGroup';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
