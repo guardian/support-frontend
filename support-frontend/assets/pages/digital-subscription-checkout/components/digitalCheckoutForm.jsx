@@ -184,8 +184,8 @@ class DigitalCheckoutForm extends Component<PropTypes, StateTypes> {
     const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
     const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
     const priceSummary = `${offerOnSelected || 'Enjoy your digital pack free for 14 days, then'} ${helperSelected}.`;
-    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
-      'Payment Attempt Failed';
+    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
+      'Sorry we could not process your payment';
 
     const PriceSummary = () =>
       <p className="component-credit-card-price">{priceSummary}</p>;

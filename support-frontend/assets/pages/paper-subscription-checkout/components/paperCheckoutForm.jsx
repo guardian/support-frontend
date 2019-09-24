@@ -162,8 +162,8 @@ class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
     const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
     const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : 'Voucher booklet';
     const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : 'Where should we deliver your vouchers?';
-    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
-      'Payment Attempt Failed';
+    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
+      'Sorry we could not process your payment';
 
     return (
       <StripeProvider stripe={this.state.stripe}>

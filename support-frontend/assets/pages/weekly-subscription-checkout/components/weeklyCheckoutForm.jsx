@@ -172,8 +172,8 @@ class WeeklyCheckoutForm extends Component<PropTypes, StateTypes> {
     const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
     const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
     const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
-    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
-      'Payment Attempt Failed';
+    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
+      'Sorry we could not process your payment';
 
     const setBillingAddressIsSameHandler = () => {
       props.setBillingAddressIsSame(true);
