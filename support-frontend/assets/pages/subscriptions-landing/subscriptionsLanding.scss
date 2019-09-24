@@ -183,6 +183,12 @@
   @include mq($from: tablet) {
     width: 50%;
   }
+
+  .subscriptions__copy-wrapper {
+    @include mq($until: desktop) {
+      padding: 0 30px 30px;
+    }
+  }
 }
 
 /****************** Copy ********************/
@@ -191,14 +197,18 @@
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  padding: 0 90px;
+  padding: 0 80px;
+
+  @include mq($until: leftCol) {
+    padding: 0 50px;
+  }
 
   @include mq($until: desktop) {
     padding: 0 30px;
   }
 
   @include mq($until: tablet) {
-    padding: 30px 0 30px 10px;
+    padding: 10px 0 20px 10px;
     position: static;
     transform: none;
   }
@@ -209,52 +219,89 @@
 }
 
 .subscriptions__product-title {
-  font-size: 36px;
+  font-size: 42px;
+  line-height: 30px;
   font-weight: bold;
   font-family: $gu-headline;
   margin: 0;
   border-top: 1px solid gu-colour(neutral-86);
   line-height: 1.2;
 
+  @include mq($until: desktop) {
+    font-size: 32px;
+  }
+
   @include mq($until: tablet) {
-    font-size: 30px;
+    font-size: 34px;
+    line-height: 34px;
   }
 
   @include mq($until: mobileLandscape) {
     font-size: 24px;
+    line-height: 28px;
   }
 }
 
 .subscriptions__product-subtitle {
-  font-size: 30px;
+  font-size: 28px;
+  line-height: 30px;
   line-height: 1.2;
   font-weight: 300;
   font-family: $gu-headline;
 
-  @include mq($until: tablet) {
+  @include mq($until: desktop) {
     font-size: 26px;
   }
 
+  @include mq($until: tablet) {
+    font-size: 28px;
+    line-height: 30px;
+  }
+
   @include mq($until: mobileLandscape) {
-    font-size: 24px;
+    font-size: 20px;
+    line-height: 24px;
   }
 }
 
 .subscriptions__description {
-  margin: 30px 0;
-}
+  @include gu-fontset-heading;
+  font-weight: 400;
+  margin: 23px 20px 25px 0;
+  font-size: 18px !important;
+  line-height: 20px !important;
 
-.subscriptions__sales {
-  font-size: 26px;
-  display: inline;
-  background-color: gu-colour('highlight-main');
-
-  @include mq($until: tablet) {
-    font-size: 30px;
+  @include mq($until: desktop) {
+    margin: 27px 20px 25px 0;
+    font-size: 16px !important;
+    line-height: 18px !important;
   }
 
   @include mq($until: mobileLandscape) {
-    font-size: 24px;
+    font-size: 14px !important;
+    line-height: 16px !important;
+    margin: 16px 20px 18px 0;
+  }
+
+  @include mq($until: mobileMedium) {
+    margin: 16px 10px 18px 0;
+  }
+
+}
+
+.subscriptions__sales {
+  font-size: 24px;
+  line-height: 30px;
+  display: inline;
+  background-color: gu-colour('highlight-main');
+
+  @include mq($until: desktop) {
+    font-size: 20px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 18px;
+    line-height: 24px;
   }
 
 }
@@ -300,7 +347,7 @@
     width: 100%;
     margin: 0;
     transform: translateX(0);
-    padding: 30px 0 0 10px;
+    padding: 10px 0 0 10px;
   }
 }
 
@@ -380,6 +427,8 @@
   background-color: gu-colour(neutral-7);
   color: gu-colour(neutral-100);
   margin: 0 20px 20px 0;
+
+  
 }
 
 /****************** premium app ********************/
