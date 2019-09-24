@@ -8,8 +8,11 @@ import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.stripe.Stripe.{Customer, StripeError, StripeList}
-import com.gu.stripe.{Stripe, StripeService, StripeServiceForCurrency}
+import com.gu.stripe.Stripe.{StripeError, StripeList}
+import com.gu.stripe.createCustomerFromPaymentMethod
+import com.gu.stripe.createCustomerFromToken
+import com.gu.stripe.getPaymentMethod
+import com.gu.stripe.{Stripe, StripeBrand, StripeService, StripeServiceForCurrency}
 import com.gu.support.workers.JsonFixtures.{validBaid, _}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
@@ -17,13 +20,11 @@ import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.states.CreateSalesforceContactState
 import com.gu.test.tags.objects.IntegrationTest
-import io.circe.Decoder
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.reflect.ClassTag
 
 class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
@@ -98,10 +99,14 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
     val services = mock[Services]
     val stripe = mock[StripeService]
     val stripeWithCurrency = mock[StripeServiceForCurrency]
-    val card = Stripe.Source("1234", "visa", "1234", 1, 2099, "GB")
-    val customer = Stripe.Customer("12345", StripeList(1, Seq(card)))
-    when(stripeWithCurrency.createCustomerFromPaymentMethod(any[String])).thenReturn(Future(customer))
-    when(stripeWithCurrency.createCustomerFromToken(any[String])).thenReturn(Future(customer))
+    val card1 = getPaymentMethod.StripeCard(StripeBrand.Visa, "1234", 1, 2099, "GB")
+    val paymentMethod = getPaymentMethod.StripePaymentMethod(card1)
+    when(stripeWithCurrency.getPaymentMethod).thenReturn(Function.const(Future(paymentMethod))_)
+    val customer1 = createCustomerFromPaymentMethod.Customer("12345")
+    when(stripeWithCurrency.createCustomerFromPaymentMethod).thenReturn(Function.const(Future(customer1))_)
+    val card2 = createCustomerFromToken.Customer.StripeCard("1234", StripeBrand.Visa, "1234", 1, 2099, "GB")
+    val customer2 = createCustomerFromToken.Customer("12345", StripeList(1, Seq(card2)))
+    when(stripeWithCurrency.createCustomerFromToken).thenReturn(Function.const(Future(customer2))_)
     when(services.stripeService).thenReturn(stripe)
     when(stripe.withCurrency(any[Currency])).thenReturn(stripeWithCurrency)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)

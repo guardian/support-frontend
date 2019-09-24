@@ -99,11 +99,6 @@ class DigitalPackValidationTest extends FlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingPostcode) shouldBe true
   }
 
-  it should "fail if the payment method payment field received is an empty string" in {
-    val requestMissingState = validDigitalPackRequest.copy(paymentFields = StripePaymentMethodPaymentFields(""))
-    DigitalPackValidation.passes(requestMissingState) shouldBe false
-  }
-
   it should "fail if the source payment field received is an empty string" in {
     val requestMissingState = validDigitalPackRequest.copy(paymentFields = StripeSourcePaymentFields(""))
     DigitalPackValidation.passes(requestMissingState) shouldBe false
@@ -187,7 +182,7 @@ object TestData {
     lastName = "hopper",
     product = DigitalPack(Currency.USD, Monthly),
     firstDeliveryDate = None,
-    paymentFields = StripePaymentMethodPaymentFields("test-token"),
+    paymentFields = StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
@@ -225,7 +220,7 @@ object TestData {
     lastName = "hopper",
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields = StripePaymentMethodPaymentFields("test-token"),
+    paymentFields = StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),

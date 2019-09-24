@@ -9,8 +9,6 @@ import io.circe.{Decoder, Encoder, Json}
 
 object Stripe {
 
-  sealed trait StripeObject
-
   object StripeError {
     private val encoder = deriveEncoder[StripeError].mapJson { json => Json.fromFields(List("error" -> json)) }
 
@@ -26,7 +24,7 @@ object Stripe {
       code: Option[String] = None, //For card errors, a short string from amongst those listed on the right describing the kind of card error that occurred.
       decline_code: Option[String] = None, //For card errors resulting from a bank decline, a short string indicating the bank's reason for the decline.
       param: Option[String] = None //The parameter the error relates to if the error is parameter-specific..
-  ) extends Throwable with StripeObject {
+  ) extends Throwable {
 
     override def getMessage: String =
       s"message: $message; type: ${`type`}; code: ${code.getOrElse("")}; decline_code: ${decline_code.getOrElse("")}; param: ${param.getOrElse("")}"
@@ -39,40 +37,16 @@ object Stripe {
   }
 
   object StripeList {
-    implicit def codec[T](implicit encoder: Encoder[T], decoder: Decoder[T]): Codec[StripeList[T]] = deriveCodec[StripeList[T]]
+    implicit def decoder[T](implicit decoder: Decoder[T]): Decoder[StripeList[T]] = deriveDecoder[StripeList[T]]
   }
 
-  case class StripeList[T](total_count: Int, data: Seq[T]) extends StripeObject
-
-  object Source {
-    implicit val codec: Codec[Source] = deriveCodec
-  }
-
-  case class Source(id: String, brand: String, last4: String, exp_month: Int, exp_year: Int, country: String) extends StripeObject {
-    val issuer = brand.toLowerCase
-    // Zuora requires 'AmericanExpress' not 'American Express'
-    // See CreditCardType at https://www.zuora.com/developer/api-reference/#operation/Object_POSTPaymentMethod
-    val zuoraCardType = brand.replaceAll(" ", "")
-  }
-
-  object Customer {
-    implicit val codec: Codec[Customer] = deriveCodec
-  }
-
-  case class Customer(id: String, sources: StripeList[Source]) extends StripeObject {
-    // customers should always have a card
-    if (sources.total_count != 1) {
-      throw StripeError("internal", s"Customer $id has ${sources.total_count} cards, should have exactly one")
-    }
-
-    val source = sources.data.head
-  }
+  case class StripeList[T](total_count: Int, data: Seq[T])
 
   object BalanceTransaction {
     implicit val codec: Codec[BalanceTransaction] = deriveCodec
   }
 
-  case class BalanceTransaction(id: String, source: String, amount: Int) extends StripeObject
+  case class BalanceTransaction(id: String, source: String, amount: Int)
 
 }
 

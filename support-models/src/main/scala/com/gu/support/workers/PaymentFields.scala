@@ -1,18 +1,40 @@
 package com.gu.support.workers
 
+import cats.syntax.functor._
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
-import io.circe.{Decoder, Encoder}
+import io.circe.{Encoder, _}
 import io.circe.syntax._
-import cats.syntax.functor._
 
 sealed trait PaymentFields
 
+
 case class PayPalPaymentFields(baid: String) extends PaymentFields
+
 
 sealed trait StripePaymentFields extends PaymentFields
 case class StripeSourcePaymentFields(stripeToken: String) extends StripePaymentFields // pre SCA compatibility
-case class StripePaymentMethodPaymentFields(paymentMethod: String) extends StripePaymentFields
+case class StripePaymentMethodPaymentFields(paymentMethod: PaymentMethodId) extends StripePaymentFields
+
+object PaymentMethodId {
+
+  def apply(value: String): Option[PaymentMethodId] =
+    if (value.nonEmpty &&
+      value.forall { char =>
+        (char >= 'a' && char <= 'z') ||
+          (char >= 'A' && char <= 'Z') ||
+          (char >= '0' && char <= '9') ||
+          char == '_'
+      }) Some(new PaymentMethodId(value)) else None
+
+  implicit val decoder: Decoder[PaymentMethodId] = Decoder.decodeString.emap { str =>
+    apply(str).toRight(s"PaymentMethodId $str had invalid characters")
+  }
+  implicit val encoder: Encoder[PaymentMethodId] = Encoder.encodeString.contramap[PaymentMethodId](_.value)
+
+}
+case class PaymentMethodId private (value: String) extends AnyVal
+
 
 case class DirectDebitPaymentFields(
   accountHolderName: String,
@@ -45,6 +67,15 @@ object PaymentFields {
       Decoder[StripePaymentMethodPaymentFields].widen,
       Decoder[DirectDebitPaymentFields].widen,
       Decoder[ExistingPaymentFields].widen
-    ).reduceLeft(_ or _)
+    ).reduceLeft(or(_,_))
+
+  final def or[A, AA >: A](a: Decoder[A], d: => Decoder[AA]): Decoder[AA] = new Decoder[AA] {
+    final def apply(c: HCursor): Decoder.Result[AA] = a(c) match {
+      case r @ Right(_) => r
+      case Left(err)      => d(c).left.map { (decodingFailure: DecodingFailure) =>
+        DecodingFailure(err.message + " OR " + decodingFailure.message, err.history ++ decodingFailure.history)
+      }
+    }
+  }
 
 }
