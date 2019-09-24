@@ -7,13 +7,17 @@ import { type Option } from 'helpers/types/option';
 
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 
+type ProductButton = {
+  ctaButtonText: string,
+  link: string,
+}
+
 type PropTypes = {
   title: string,
   subtitle: string,
   description: string,
-  ctaButtonText: string,
+  buttons: ProductButton[],
   productImage: Node,
-  link: string,
   offer?: Option<string>,
   isFeature?: Option<boolean>
 }
@@ -33,7 +37,7 @@ const SubscriptionsProduct = ({
       <div className="subscriptions__copy-wrapper">
         <SubscriptionsProductDescription
           {...props}
-          isFeature
+          isFeature={isFeature}
         />
       </div>
     </div>

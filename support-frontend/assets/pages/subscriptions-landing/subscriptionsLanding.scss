@@ -47,15 +47,22 @@
 }
 
 .subscriptions__feature {
+  padding: 70px 10px;
   width: 100%;
-  height: 200px;
   background-color: gu-colour('highlight-main');
+}
+
+.subscriptions__feature-text {
+  font-size: 42px;
+  font-family: $gu-titlepiece;
+  font-weight: bold;
 }
 
 /****************** subscriptions product-container ********************/
 
 .subscriptions__product-container {
   position: relative;
+  margin-bottom: 40px;
 }
 
 .subscriptions__product-container::after {
@@ -94,10 +101,6 @@
   @include mq($from: tablet) {
     flex-direction: row-reverse
   }
-}
-
-.subscriptions__product:last-child {
-  border-bottom: none;
 }
 
 .subscriptions__product::before {
@@ -376,6 +379,7 @@
 .component-button--subscriptions__product-button {
   background-color: gu-colour(neutral-7);
   color: gu-colour(neutral-100);
+  margin: 0 20px 20px 0;
 }
 
 /****************** premium app ********************/
@@ -397,3 +401,5 @@
     left: 50%;
     transform: translate(-50%);
 }
+
+

@@ -45,10 +45,12 @@ const SubscriptionsLandingContent = ({
     optimizeExperiments,
   );
 
-  console.log(subsLinks);
   return (
     <div className="subscriptions-landing-page">
-      <div className="subscriptions__feature" />
+      <div className="subscriptions__feature">
+        <h2 className="subscriptions__feature-text">A beautiful way to read it.</h2>
+        <h2 className="subscriptions__feature-text">A poweful way to fund it.</h2>
+      </div>
 
       <div className="subscriptions__product-container">
 
@@ -56,9 +58,11 @@ const SubscriptionsLandingContent = ({
           title="Digital Subscription"
           subtitle={`from ${displayPrice('DigitalPack', countryGroupId)}`}
           description="The Daily Edition app and Premium app in one pack, plus ad-free reading on all your devices"
-          ctaButtonText="Find out more"
           productImage={<FeaturePackshot />}
-          link={subsLinks.DigitalPack}
+          buttons={[{
+            ctaButtonText: 'Find out more',
+            link: subsLinks.DigitalPack,
+          }]}
           isFeature
         />
 
@@ -66,9 +70,11 @@ const SubscriptionsLandingContent = ({
           title="Guardian Weekly"
           subtitle={`${displayPrice('GuardianWeekly', countryGroupId)}`}
           description="A weekly, global magazine from The Guardian, with delivery worldwide"
-          ctaButtonText="Find out more"
+          buttons={[{
+            ctaButtonText: 'Find out more',
+            link: subsLinks.GuardianWeekly,
+          }]}
           productImage={<GuardianWeeklyPackShot />}
-          link={subsLinks.GuardianWeekly}
         />
 
         {countryGroupId === 'GBPCountries' && (
@@ -77,28 +83,37 @@ const SubscriptionsLandingContent = ({
             title="Paper"
             subtitle={`from ${displayPrice('Paper', countryGroupId)}`}
             description="Save on The Guardian and The Observer's newspaper retail price all year round"
-            ctaButtonText="Find out more"
+            buttons={[{
+              ctaButtonText: 'Find out more',
+              link: subsLinks.Paper,
+            }]}
             productImage={<PaperPackshot />}
             offer="Up to 52% off for a year"
-            link={subsLinks.Paper}
           />
           <SubscriptionsProduct
             title="Paper+Digital"
             subtitle={`from ${displayPrice('PaperAndDigital', countryGroupId)}`}
             description="Save on The Guardian and The Observer's newspaper retail price all year round"
-            ctaButtonText="Find out more"
+            buttons={[{
+              ctaButtonText: 'Find out more',
+              link: subsLinks.PaperAndDigital,
+            }]}
             productImage={<PaperPackshot />}
             offer="Up to 52% off for a year"
-            link={subsLinks.PaperAndDigital}
           />
           <div className="subscriptions__premuim-app">
             <SubscriptionsProduct
               title="Premium App"
               subtitle={`from ${displayPrice('PremiumTier', countryGroupId)}`}
               description="Save on The Guardian and The Observer's newspaper retail price all year round"
-              ctaButtonText="Find out more"
+              buttons={[{
+                ctaButtonText: 'Buy in App Store',
+                link: subsLinks.PaperAndDigital,
+              }, {
+                ctaButtonText: 'Buy on Google Play',
+                link: subsLinks.PaperAndDigital,
+              }]}
               productImage={<PremiumAppPackshot />}
-              link="#"
             />
           </div>
         </div>

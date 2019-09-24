@@ -7,30 +7,36 @@ import AnchorButton from 'components/button/anchorButton';
 // types
 import { type Option } from 'helpers/types/option';
 
+type ProductButton = {
+  ctaButtonText: string,
+  link: string,
+};
+
 type PropTypes = {
   title: string,
   subtitle: string,
   description: string,
-  ctaButtonText: string,
-  isFeature: boolean,
+  isFeature: Option<boolean>,
   offer?: Option<string>,
-  link: string,
+  buttons: ProductButton[],
 };
 
 const SubscriptionsProductDescription = ({
-  title, subtitle, description, ctaButtonText, offer, isFeature, link,
+  title, subtitle, description, offer, isFeature, buttons,
 }: PropTypes) => (
   <div>
     <h2 className="subscriptions__product-title">{title}</h2>
     <h3 className="subscriptions__product-subtitle">{subtitle}</h3>
     {offer && <h4 className="subscriptions__sales">Up to 52% off for a year</h4>}
     <p className="subscriptions__description">{description}</p>
-    <AnchorButton
-      href={link}
-      modifierClasses={(!isFeature) ? ['subscriptions__product-button'] : []}
-    >
-      {ctaButtonText}
-    </AnchorButton>
+    {buttons.map(button => (
+      <AnchorButton
+        href={button.link}
+        modifierClasses={(!isFeature) ? ['subscriptions__product-button'] : []}
+      >
+        {button.ctaButtonText}
+      </AnchorButton>
+    ))}
   </div>
 );
 
