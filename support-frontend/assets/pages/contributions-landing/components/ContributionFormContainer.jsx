@@ -154,7 +154,7 @@ function withProps(props: PropTypes) {
         </div>
         }
       </div>
-      {campaign && campaign.extraComponent && campaign.extraComponent}
+      {campaign && campaign.extraComponent}
       <DirectDebitPopUpForm
         buttonText="Contribute with Direct Debit"
         onPaymentAuthorisation={onPaymentAuthorisation}

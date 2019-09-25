@@ -1,0 +1,21 @@
+.gu-content--environment-moment {
+  background-color: gu-colour(highlight-main);
+
+  .gu-content__main {
+    position: relative;
+    background-color: transparent;
+  }
+
+  .environment-moment_image-container {
+    position: absolute;
+    right: 0;
+    bottom: 20%;
+  }
+
+  .environment-moment_image {
+    transform: scaleX(-1);
+    mix-blend-mode: multiply;
+    height: auto;
+    width: 410px;
+  }
+}

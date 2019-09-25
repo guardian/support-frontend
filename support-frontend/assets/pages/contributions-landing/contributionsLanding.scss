@@ -12,6 +12,7 @@
 @import '~components/socialShare/socialShare';
 @import '~pages/contributions-landing/components/ContributionThankYou/ContributionThankYou';
 @import '~pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
+@import './contributionsLandingEnvironmentMoment';
 
 $content-left-margin-leftCol: calc(50% - 480px);
 
@@ -35,6 +36,7 @@ body {
 
 .gu-content--contribution-thankyou {
   background: gu-colour(highlight-main);
+
   .gu-content__main {
     position: relative;
     background-color: transparent;
@@ -934,8 +936,7 @@ form {
 //***************************
 // Campaign styles:
 //***************************
-
-.gu-content--yellow-background {
+.gu-content--toxic-america {
   background-color: gu-colour(highlight-main);
 
   .gu-content__main {

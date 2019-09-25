@@ -25,14 +25,13 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = 'toxicamerica';
+const currentCampaignName = 'environmentpledge';
 
 export const campaigns: Campaigns = {
-  toxicamerica: {
+  environmentpledge: {
     formMessage: (
       <div>
         <div className="form-message__headline">Make a contribution</div>
-        <div className="form-message__body">to lorem ipsum</div>
       </div>
     ),
     headerCopy: (
@@ -81,10 +80,15 @@ export const campaigns: Campaigns = {
     ),
     goalReachedCopy: null,
     tickerType: 'unlimited',
-    cssModifiers: ['yellow-background'],
-    localCurrencySymbol: null,
+    cssModifiers: ['environment-moment'],
+    localCurrencySymbol: '£',
     extraComponent: (
-      <div>Hello world</div>
+      <div className="environment-moment_image-container">
+        <img className="environment-moment_image"
+             src="https://media.guim.co.uk/8fe60bf9d30df8481fcbccb91816a3c995279007/0_0_577_840/577.png"
+             alt="Support the Guardian's pledge on climate change"
+        />
+      </div>
     )
   },
 };
