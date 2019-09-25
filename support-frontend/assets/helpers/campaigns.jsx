@@ -32,52 +32,18 @@ export const campaigns: Campaigns = {
     formMessage: (
       <div>
         <div className="form-message__headline">Make a contribution</div>
-        <div className="form-message__body">to our dedicated series ‘Toxic America’</div>
+        <div className="form-message__body">to lorem ipsum</div>
       </div>
     ),
     headerCopy: (
-      <span>Toxic America: Help us fight for <br className="responsive-break" />a cleaner world</span>
+      <span>We will not stay quiet <br className="responsive-break" />on the climate crisis</span>
     ),
     contributeCopy: (
       <div>
         <p>
-          We’re asking our readers to support a six-month Guardian series about the health implications
-          of living in an environment that may expose us to chemical contamination on a daily basis
-          through the air we breathe, the food we eat, the products we use and the water we drink.
-          The project will:
+        <span className="">The climate emergency is the defining issue of our times.</span> This is The Guardian’s pledge: we will be truthful, resolute and undeterred in pursuing our journalism on the environment. Support from our readers makes this work possible.
         </p>
-        <ul>
-          <li className="blurb-list-item">
-            Hold politicians, the Trump administration, the EPA and the FDA accountable for any
-            regulatory rollbacks and failures keep dangerous chemicals out of products and off of
-            store shelves
-          </li>
-          <li className="blurb-list-item">
-            Offer advice on how to navigate the supermarket and make food choices to reduce your
-            exposure
-          </li>
-          <li className="blurb-list-item">
-            Look at potential everyday dangers in our homes, from flame retardants in the sofa to
-            carcinogens in dry cleaning
-          </li>
-          <li className="blurb-list-item">
-            Explore how plastic pollution is impacting human health
-          </li>
-          <li className="blurb-list-item">
-            Report on threats to our drinking water supply
-          </li>
-          <li className="blurb-list-item">
-            Deliver rigorous, accessible, scientific reporting that explains what we know about
-            how the chemicals in our environment are impacting our health and raises public awareness
-            about this issue
-          </li>
-        </ul>
-        <p>
-          Reader support protects The Guardian’s independence and ensures our in-depth
-          environmental journalism remains open to all. Our editorial independence allows us
-          to fight for transparency and accountability – and deliver the facts with
-          clarity. <span className="bold">Please help us reach our goal by contributing today.</span>
-        </p>
+
       </div>
     ),
     termsAndConditions: (contributionsTermsLink: string) => (
@@ -114,16 +80,11 @@ export const campaigns: Campaigns = {
       </div>
     ),
     goalReachedCopy: null,
-    tickerJsonUrl: '/ticker.json',
     tickerType: 'unlimited',
     cssModifiers: ['yellow-background'],
-    contributionTypes: generateContributionTypes([
-      { contributionType: 'ONE_OFF', isDefault: true },
-    ]),
-    // backgroundImage: 'https://media.guim.co.uk/de76ba8d8823325d02ff93376cfe0c39962b215d/0_0_2000_577/2000.jpg',
-    localCurrencySymbol: '$',
+    localCurrencySymbol: null,
     extraComponent: (
-      <div></div>
+      <div>Hello world</div>
     )
   },
 };

@@ -936,7 +936,7 @@ form {
 //***************************
 
 .gu-content--yellow-background {
-  background-color: yellow;
+  background-color: gu-colour(highlight-main);
 
   .gu-content__main {
     position: relative;
@@ -1076,7 +1076,6 @@ form {
   animation-timing-function: ease-in;
   animation-duration: 3s;
 }
-
 
 .fade-in-message .component-animated-dots__bounce1 {
   animation-delay: 2.68s;
