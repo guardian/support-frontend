@@ -24,7 +24,6 @@ import play.api.test.Helpers._
 import play.api.test._
 import play.core.DefaultWebCommands
 import router.Routes
-import services.CloudWatchService
 import util.RequestBasedProvider
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -63,13 +62,8 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val processRefundHookFailure: EitherT[Future, BackendError, Unit] =
     EitherT.leftT[Future, Unit](BackendError.fromStripeApiError(StripeApiError.fromString("Error response")))
 
-  val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
-
   val stripeController: StripeController =
-    new StripeController(
-      controllerComponents,
-      mockStripeRequestBasedProvider,
-      mockCloudWatchService)(DefaultThreadPool(ec), List("https://cors.com"))
+    new StripeController(controllerComponents, mockStripeRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
     mock[RequestBasedProvider[PaypalBackend]]

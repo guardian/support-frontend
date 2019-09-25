@@ -555,21 +555,3 @@ Resources:
       Statistic: Sum
       TreatMissingData: notBreaching
 
-  StripeRateLimitingAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: CreateProdResources
-    Properties:
-      AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub ${App} ${Stage} One or more requests have exceeded the rate limit for Stripe one-off contributions via payment-api in the last 15 mins
-      MetricName: stripe-rate-limit-exceeded
-      Namespace: support-payment-api-PROD
-      Dimensions:
-        - Name: payment-provider
-          Value: Stripe
-      ComparisonOperator: GreaterThanThreshold
-      Threshold: 0
-      Period: 900
-      EvaluationPeriods: 1
-      Statistic: Sum
-      TreatMissingData: notBreaching
