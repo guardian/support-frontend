@@ -25,6 +25,7 @@ import util.RequestBasedProvider
 
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json.Json._
+import services.CloudWatchService
 
 import scala.collection.JavaConverters._
 
@@ -71,10 +72,12 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
     mock[RequestBasedProvider[SubscribeWithGoogleBackend]]
 
+  val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
+
   override def router: Router = new Routes(
     httpErrorHandler,
     new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),
-    new StripeController(controllerComponents, stripeBackendProvider)(DefaultThreadPool(ec), List.empty),
+    new StripeController(controllerComponents, stripeBackendProvider, mockCloudWatchService)(DefaultThreadPool(ec), List.empty),
     payPalController,
     new GoCardlessController(controllerComponents, goCardlessBackendProvider)(DefaultThreadPool(ec), List.empty),
   )

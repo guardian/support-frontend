@@ -22,6 +22,7 @@ import play.api.test.Helpers._
 import play.api.test._
 import play.core.DefaultWebCommands
 import router.Routes
+import services.CloudWatchService
 import util.RequestBasedProvider
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -62,10 +63,12 @@ class GoCardlessControllerFixture(implicit ec: ExecutionContext, context: Applic
   val subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
     mock[RequestBasedProvider[SubscribeWithGoogleBackend]]
 
+  val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
+
   override def router: Router = new Routes(
     httpErrorHandler,
     new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),
-    new StripeController(controllerComponents, stripeBackendProvider)(DefaultThreadPool(ec), List.empty),
+    new StripeController(controllerComponents, stripeBackendProvider, mockCloudWatchService)(DefaultThreadPool(ec), List.empty),
     new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty),
     goCardlessController,
   )
