@@ -153,11 +153,20 @@
   @include mq($until: tablet) {
     z-index: 1;
   }
+
+  @include mq($until: mobileMedium) {
+    width: 65%;
+  }
 }
 
 .subscriptions__image-container {
   position: relative;
   width: 30%;
+
+  @include mq($until: mobileMedium) {
+    width: 35%;
+  }
+
 }
 
 .subscriptions__copy-container,
@@ -177,6 +186,10 @@
   @include mq($from: tablet) {
     width: 50%;
   }
+
+  @include mq($until: tablet) {
+    height: 300px;
+  }  
 }
 
 .subscriptions__copy-container.subscriptions__product--feature {
@@ -212,6 +225,10 @@
   }
 
   @include mq($until: tablet) {
+    padding: 10px 20px 20px;
+  }
+
+  @include mq($until: phablet) {
     padding: 10px 0 20px 10px;
     position: static;
     transform: none;
@@ -243,6 +260,11 @@
   @include mq($until: mobileLandscape) {
     font-size: 24px;
     line-height: 28px;
+  }
+
+  @include mq($until: mobileMedium) {
+    font-size: 22px;
+    line-height: 22px;
   }
 }
 
@@ -307,6 +329,11 @@
     line-height: 24px;
   }
 
+  @include mq($until: mobileMedium) {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
 }
 
 /****************** feature-image ********************/
@@ -320,16 +347,27 @@
 .component-grid-image--subscriptions-feature-image:nth-child(1) {
   width: 260px;
   left: 0;
+  @include mq($until: tablet) {
+    width: 100px;
+  }
 }
 
 .component-grid-image--subscriptions-feature-image:nth-child(2) {
   width: 215px;
   left: 290px;
+  @include mq($until: tablet) {
+    width: 100px;
+    left: 105px;
+  }
 }
 
 .component-grid-image--subscriptions-feature-image:nth-child(3) {
   width: 215px;
   left: 540px;
+  @include mq($until: tablet) {
+    width: 100px;
+    left: 210px;
+  }
 }
 
 /****************** product-image ********************/
@@ -337,12 +375,21 @@
 .subscriptions-packshot {
   position: absolute;
   bottom: 0;
-  margin-left: 50%;
+  margin-left: 82%;
   transform: translateX(-50%);
-  width: 430px;
+  width: 800px;
+
+  @include mq($until: wide) {
+    margin-left: 85%;
+  }
+
+  @include mq($until: leftCol) {
+    margin-left: 93%;
+  }
 
   @include mq($until: desktop) {
     width: 355px;
+    margin-left: 50%;
   }
 
   @include mq($until: tablet) {
