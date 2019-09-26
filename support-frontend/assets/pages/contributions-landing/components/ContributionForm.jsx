@@ -48,7 +48,6 @@ import {
 } from 'pages/contributions-landing/contributionsLandingActions';
 
 import ContributionErrorMessage from './ContributionErrorMessage';
-import BraintreeButton from './Braintree/BraintreeButton';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -284,10 +283,6 @@ function withProps(props: PropTypes) {
           checkOtherAmount={checkAmount}
         />
       </div>
-      <BraintreeButton
-        setBraintreeHasLoaded={props.setBraintreeHasLoaded}
-        braintreeHasLoaded={props.braintreeHasLoaded}
-      />
       <StripePaymentRequestButtonContainer
         setStripeHasLoaded={props.setStripeV3HasLoaded}
         stripeHasLoaded={props.stripeV3HasLoaded}
