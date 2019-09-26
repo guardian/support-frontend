@@ -277,6 +277,7 @@ const venmoChargeDataFromAuthorisation = (
     ),
     paymentNonce: authorisation.paymentNonce,
     deviceData,
+    email: state.page.form.formData.email,
   },
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,
