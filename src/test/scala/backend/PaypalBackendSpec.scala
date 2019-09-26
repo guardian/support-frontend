@@ -27,7 +27,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
   val capturePaypalPaymentData = CapturePaypalPaymentData(CapturePaymentData("paymentId"), acquisitionData, Some("email@email.com"))
   val countrySubdivisionCode = Some("NY")
-  val clientBrowserInfo =  ClientBrowserInfo("","",None,"",countrySubdivisionCode)
+  val clientBrowserInfo =  ClientBrowserInfo("","",None,None,countrySubdivisionCode)
   val executePaypalPaymentData = ExecutePaypalPaymentData(
     ExecutePaymentData("paymentId", "payerId"), acquisitionData, "email@email.com"
   )
@@ -129,7 +129,7 @@ class PaypalBackendSpec
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val clientBrowserInfo =  ClientBrowserInfo("","",None,"",None)
+  val clientBrowserInfo =  ClientBrowserInfo("","",None,None,None)
 
   "Paypal Backend" when {
 
