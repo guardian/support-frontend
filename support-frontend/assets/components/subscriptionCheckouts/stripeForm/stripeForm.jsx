@@ -16,7 +16,7 @@ import './stripeForm.scss';
 
 // Types
 
-type PropTypes = {
+export type StripeFormPropTypes = {
   component: Node,
   stripe: Object,
   allErrors: FormError<FormField>[],
@@ -54,7 +54,7 @@ const CardNumberWithError = compose(withError, withLabel)(CardNumberElement);
 const CardExpiryWithError = compose(withError, withLabel)(CardExpiryElement);
 const CardCvcWithError = compose(withError, withLabel)(CardCvcElement);
 
-class StripeForm extends Component<PropTypes, StateTypes> {
+class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   constructor(props) {
     super(props);
     this.state = {
