@@ -27,7 +27,7 @@ function StripeProviderForCountry(props: PropTypes) {
           setStripeToken={props.setStripeToken}
           name={props.name}
           validateForm={props.validateForm}
-          buttonText="Start your free trial now"
+          buttonText={props.buttonText}
         />
       </Elements>
     </StripeProvider>

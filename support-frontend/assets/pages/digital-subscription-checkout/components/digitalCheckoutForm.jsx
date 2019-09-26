@@ -250,6 +250,7 @@ function DigitalCheckoutForm(props: PropTypes) {
               setStripeToken={props.setStripeToken}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
+              buttonText="Start your free trial now"
             />
           </FormSectionHiddenUntilSelected>
           <GeneralErrorMessage
