@@ -37,7 +37,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val confirmPaymentIntent = ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
 
   val countrySubdivisionCode = Some("NY")
-  val clientBrowserInfo =  ClientBrowserInfo("","",None,"",countrySubdivisionCode)
+  val clientBrowserInfo =  ClientBrowserInfo("","",None,None,countrySubdivisionCode)
   val stripeHookObject = StripeHookObject("id", "GBP")
   val stripeHookData = StripeHookData(stripeHookObject)
   val stripeHook = StripeRefundHook("id", PaymentStatus.Paid, stripeHookData)
@@ -143,7 +143,7 @@ class StripeBackendSpec
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val clientBrowserInfo =  ClientBrowserInfo("","",None,"",None)
+  val clientBrowserInfo =  ClientBrowserInfo("","",None,None,None)
 
   "Stripe Backend" when {
 
