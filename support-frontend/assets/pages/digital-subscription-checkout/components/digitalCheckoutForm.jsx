@@ -66,7 +66,7 @@ import {
 } from 'helpers/productPrice/priceDescriptions';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
-import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeFormForCountry';
+import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 
 
 // ----- Types ----- //

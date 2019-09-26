@@ -71,7 +71,7 @@ import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
-import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeFormForCountry';
+import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 
 // ----- Types ----- //
 
