@@ -6,8 +6,8 @@ const PremiumAppPackshot = () => (
   <div>
     <GridImage
       classModifiers={['subscriptions-premium-image']}
-      gridId="subscriptionsFeature"
-      srcSizes={[771, 484, 242]}
+      gridId="subscriptionIphone"
+      srcSizes={[578, 527, 264]}
       sizes="(max-width: 480px) 100px,
               (max-width: 740px) 200px,
               300px"

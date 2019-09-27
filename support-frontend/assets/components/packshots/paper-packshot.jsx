@@ -2,9 +2,8 @@ import React from 'react';
 import GridImage from 'components/gridImage/gridImage';
 
 const PaperPackshot = () => (
-  <div>
+  <div className="subscriptions__paper-packshot">
     <GridImage
-      classModifiers={['subscriptions-product-image--reverse']}
       gridId="subscriptionFeast"
       srcSizes={[660, 500, 140]}
       sizes="(max-width: 980px) 165px,
@@ -12,7 +11,6 @@ const PaperPackshot = () => (
       imgType="png"
     />
     <GridImage
-      classModifiers={['subscriptions-product-image--reverse']}
       gridId="subscriptionPrint"
       srcSizes={[1000, 500, 140]}
       sizes="(max-width: 740px) 100%,
@@ -21,7 +19,6 @@ const PaperPackshot = () => (
       imgType="png"
     />
     <GridImage
-      classModifiers={['subscriptions-product-image--reverse']}
       gridId="subscriptionG2"
       srcSizes={[756, 500, 140]}
       sizes="(max-width: 980px) 195px,

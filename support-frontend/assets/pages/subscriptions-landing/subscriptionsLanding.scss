@@ -52,6 +52,12 @@
   background-color: gu-colour('highlight-main');
 }
 
+.subscriptions__feature-container {
+  max-width: 1290px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 .subscriptions__feature-text {
   font-size: 42px;
   font-family: $gu-titlepiece;
@@ -84,7 +90,7 @@
   width: 100%;
   margin: 0 auto;
   flex-wrap: wrap;
-  max-width: 1180px;
+  max-width: 1290px;
   border: 1px solid gu-colour(neutral-86);
   border-top: none;
 
@@ -132,7 +138,7 @@
 
 .subscriptions__product.subscriptions__product--feature {
   color: gu-colour('neutral-100');
-  min-height: 500px;
+  // min-height: 500px;
   border: none;
 }
 
@@ -142,6 +148,7 @@
 
 .subscriptions__feature-image-wrapper {
   overflow: hidden;
+  display: initial;
 }
 
 /****************** subscriptions copy-container / image-container ********************/
@@ -161,6 +168,7 @@
 
 .subscriptions__image-container {
   position: relative;
+  overflow: hidden;
   width: 30%;
 
   @include mq($until: mobileMedium) {
@@ -177,19 +185,32 @@
 }
 
 .subscriptions__image-container.subscriptions__product--feature {
-  overflow: hidden;
-  height: 540px;
-  position: relative;
-  width: 100%;
   background-color: gu-colour('brand-main');
+  width: 50%;
 
-  @include mq($from: tablet) {
-    width: 50%;
+  @media (min-width: 740px) and (max-width: 1067px) {
+    padding: 22% 0;
+  }
+  @media (min-width: 1067px) {
+    height: 500px;
+  }
+  @include mq($until: tablet) {
+    position: relative;
+    width: 100%;
+    bottom: -80px;
   }
 
-  @include mq($until: tablet) {
-    height: 300px;
-  }  
+  @include mq($until: mobileLandscape) {
+    position: relative;
+    width: 100%;
+    bottom: -50px;
+  }
+
+  @include mq($until: mobile) {
+    position: relative;
+    width: 100%;
+    bottom: -50px;
+  }
 }
 
 .subscriptions__copy-container.subscriptions__product--feature {
@@ -269,8 +290,8 @@
 }
 
 .subscriptions__product-subtitle {
-  font-size: 26px;
-  line-height: 1.2;
+  font-size: 28px;
+  line-height: 30px;
   font-weight: 300;
   font-family: $gu-headline;
 
@@ -336,138 +357,21 @@
 
 }
 
-/****************** feature-image ********************/
-
-.component-grid-image--subscriptions-feature-image {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%),
-}
-
-.component-grid-image--subscriptions-feature-image:nth-child(1) {
-  width: 260px;
-  left: 0;
-  @include mq($until: tablet) {
-    width: 100px;
-  }
-}
-
-.component-grid-image--subscriptions-feature-image:nth-child(2) {
-  width: 215px;
-  left: 290px;
-  @include mq($until: tablet) {
-    width: 100px;
-    left: 105px;
-  }
-}
-
-.component-grid-image--subscriptions-feature-image:nth-child(3) {
-  width: 215px;
-  left: 540px;
-  @include mq($until: tablet) {
-    width: 100px;
-    left: 210px;
-  }
-}
-
 /****************** product-image ********************/
 
 .subscriptions-packshot {
   position: absolute;
   bottom: 0;
-  margin-left: 82%;
+  left: 50%;
   transform: translateX(-50%);
-  width: 800px;
-
-  @include mq($until: wide) {
-    margin-left: 85%;
-  }
-
-  @include mq($until: leftCol) {
-    margin-left: 93%;
-  }
-
-  @include mq($until: desktop) {
-    width: 355px;
-    margin-left: 50%;
-  }
-
-  @include mq($until: tablet) {
-    top: 0;
-    width: 100%;
-    margin: 0;
-    transform: translateX(0);
-    padding: 10px 0 0 10px;
-  }
-}
-
-.component-grid-image--subscriptions-product-image,
-.component-grid-image--subscriptions-product-image--reverse {
-  position: absolute;
-  bottom: 0;
 
   @include mq($until: tablet) {
     position: static;
-  }
-}
-
-.component-grid-image--subscriptions-product-image:nth-child(1) {
-  @include mq($until: tablet) {
-    display: none;
-  }
-}
-
-.component-grid-image--subscriptions-product-image:nth-child(2) {
-  left: 95px;
-  @include mq($until: tablet) {
-    width: 100%;
     top: 0;
-    left: 0;
-  }
-}
-
-.component-grid-image--subscriptions-product-image:nth-child(3) {
-  left: 180px;
-  @include mq($until: tablet) {
-    display: none;
-  }
-}
-
-/****************** product image reverse ********************/
-
-.component-grid-image--subscriptions-product-image--reverse:nth-child(1) {
-  z-index: 3;
-
-  @include mq($until: tablet) {
-    display: none;
-  }
-}
-
-.component-grid-image--subscriptions-product-image--reverse:nth-child(2) {
-  z-index: 2;
-  left: 60px;
-
-  @include mq($until: desktop) {
-    left: 20px;
-  }
-
-  @include mq($until: tablet) {
     width: 100%;
-    top: 0;
-    left: 0;
-  }
-}
-
-.component-grid-image--subscriptions-product-image--reverse:nth-child(3) {
-  z-index: 1;
-  left: 200px;
-
-  @include mq($until: desktop) {
-    left: 165px;
-  }
-
-  @include mq($until: tablet) {
-    display: none;
+    // margin: 0;
+    transform: translateX(0);
+    padding: 10px 0 0 10px;
   }
 }
 
@@ -478,7 +382,7 @@
   color: gu-colour(neutral-100);
   margin: 0 20px 20px 0;
 
-  
+
 }
 
 /****************** premium app ********************/
@@ -501,4 +405,167 @@
     transform: translate(-50%);
 }
 
+/****************** packshots ********************/
 
+.subscriptions__guardian-weekly-packshot {
+  width: 429px;
+
+  @include mq($until: desktop) {
+    width: 354px;
+  }
+
+  @include mq($until: tablet) {
+    position: static;
+    width: 100%;
+  }
+
+  img {
+    position: absolute;
+    bottom: 0;
+  }
+
+  img:nth-child(1) {
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+  img:nth-child(2) {
+    left: 95px;
+
+    @include mq($until: tablet) {
+      position: static;
+      width: 100%;
+    }
+  }
+
+  img:nth-child(3) {
+    left: 180px;
+
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+}
+
+.subscriptions__paper-packshot {
+  width: 382px;
+
+  @include mq($until: desktop) {
+    width: 357px;
+  }
+
+  @include mq($until: tablet) {
+    position: static;
+    width: 100%;
+  }
+
+  img {
+    position: absolute;
+    bottom: 0;
+  }
+
+  img:nth-child(1) {
+    z-index: 2;
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+  img:nth-child(2) {
+    z-index: 1;
+    left: 32px;
+
+    @include mq($until: tablet) {
+      position: static;
+      width: 100%;
+    }
+  }
+
+  img:nth-child(3) {
+    left: 166px;
+
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+}
+
+.paper-and-digital-packshot {
+  width: 370px;
+
+  @include mq($until: desktop) {
+    width: 357px;
+  }
+
+  @include mq($until: tablet) {
+    position: static;
+    width: 100%;
+  }
+
+  img {
+    position: absolute;
+    bottom: 0;
+  }
+
+  img:nth-child(1) {
+    bottom: -37px;
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+  img:nth-child(2) {
+    left: 55px;
+
+    @include mq($until: tablet) {
+      position: static;
+      width: 100%;
+      display: none;
+    }
+  }
+
+  img:nth-child(3) {
+    left: 272px;
+    bottom: -40px;
+
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+  img:nth-child(4) {
+    display: none;
+    top: 0;
+    width: 100%;
+    padding-top: 9px;
+
+    @include mq($until: tablet) {
+      display: block;
+    }
+  }
+}
+
+.subscriptions-feature-packshot {
+  position: absolute;
+  bottom: -40px;
+  right: -250px;
+
+  @media (max-width: 1067px) {
+    width: 150%;
+    right: initial;
+  }
+
+  @include mq($until: tablet) {
+    position: relative;
+    width: 100%;
+    bottom: initial;
+    padding: 20px 10% 0;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}

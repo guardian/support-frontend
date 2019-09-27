@@ -6,17 +6,21 @@ import { connect } from 'react-redux';
 
 // components
 import SubscriptionsProduct from './subscriptionsProduct';
+import FeatureHeader from './featureHeader';
 
 // images
 import FeaturePackshot from 'components/packshots/feature-packshot';
 import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
 import PaperPackshot from 'components/packshots/paper-packshot';
 import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
+import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-packshot';
 
 // helpers
-import { displayPrice } from 'helpers/subscriptions';
+import { displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getCampaign } from 'helpers/tracking/acquisitions';
 import { getSubsLinks } from 'helpers/externalLinks';
+import { androidAppUrl, getIosAppUrl } from 'helpers/externalLinks';
+import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
 
 // types
 import { type CommonState } from 'helpers/page/commonReducer';
@@ -44,13 +48,11 @@ const SubscriptionsLandingContent = ({
     abParticipations,
     optimizeExperiments,
   );
+  const abTest = null;
 
   return (
     <div className="subscriptions-landing-page">
-      <div className="subscriptions__feature">
-        <h2 className="subscriptions__feature-text">A beautiful way to read it.</h2>
-        <h2 className="subscriptions__feature-text">A poweful way to fund it.</h2>
-      </div>
+      <FeatureHeader />
 
       <div className="subscriptions__product-container">
 
@@ -63,6 +65,7 @@ const SubscriptionsLandingContent = ({
             ctaButtonText: 'Find out more',
             link: subsLinks.DigitalPack,
           }]}
+          analyticsTracking={() => sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription')}
           isFeature
         />
 
@@ -75,6 +78,7 @@ const SubscriptionsLandingContent = ({
             link: subsLinks.GuardianWeekly,
           }]}
           productImage={<GuardianWeeklyPackShot />}
+          analyticsTracking={() => sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest)}
         />
 
         {countryGroupId === 'GBPCountries' && (
@@ -89,6 +93,7 @@ const SubscriptionsLandingContent = ({
             }]}
             productImage={<PaperPackshot />}
             offer="Up to 52% off for a year"
+            analyticsTracking={sendTrackingEventsOnClick('paper_cta', 'Paper', abTest, 'paper-subscription')}
           />
           <SubscriptionsProduct
             title="Paper+Digital"
@@ -98,8 +103,9 @@ const SubscriptionsLandingContent = ({
               ctaButtonText: 'Find out more',
               link: subsLinks.PaperAndDigital,
             }]}
-            productImage={<PaperPackshot />}
+            productImage={<PaperAndDigitalPackshot />}
             offer="Up to 52% off for a year"
+            analyticsTracking={sendTrackingEventsOnClick('paper_digital_cta', 'PaperAndDigital', abTest, 'paper-and-digital-subscription')}
           />
           <div className="subscriptions__premuim-app">
             <SubscriptionsProduct
@@ -108,10 +114,13 @@ const SubscriptionsLandingContent = ({
               description="Save on The Guardian and The Observer's newspaper retail price all year round"
               buttons={[{
                 ctaButtonText: 'Buy in App Store',
-                link: subsLinks.PaperAndDigital,
+                link: getIosAppUrl(countryGroupId),
+                onClick: trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', abTest),
+                // these buttons need a change there css so the text fits at 320px width
               }, {
                 ctaButtonText: 'Buy on Google Play',
-                link: subsLinks.PaperAndDigital,
+                link: androidAppUrl,
+                onClick: trackAppStoreLink('premium_tier_android_cta', 'PremiumTier', abTest),
               }]}
               productImage={<PremiumAppPackshot />}
             />

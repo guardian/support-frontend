@@ -2,19 +2,27 @@ import React from 'react';
 
 import GridImage from 'components/gridImage/gridImage';
 
+/** NOTE about packshot images
+ * ------
+ * because these images are absolute positioned and thus provide
+ * no width or height information to rest of the DOM
+ * these packshots must have a width applied to allow the
+ * container CSS to center the pack shot as a single image
+ * this is applied using the "subscriptions__guardian-weekly-packshot" class in this instance
+ *  */
+
+
 const GuardianWeeklyPackShot = () => (
-  <div>
+  <div className="subscriptions__guardian-weekly-packshot">
     <GridImage
-      classModifiers={['subscriptions-product-image']}
-      gridId="subscriptionPackshot3"
+      gridId="subscriptionWeekly3"
       srcSizes={[798, 500, 140]}
       sizes="(max-width: 980px) 175px,
             250px"
       imgType="png"
     />
     <GridImage
-      classModifiers={['subscriptions-product-image']}
-      gridId="subscriptionPackshot2"
+      gridId="subscriptionWeekly2"
       srcSizes={[801, 477]}
       sizes="(max-width: 740px) 100%,
             (max-width: 980px) 175px,
@@ -22,8 +30,7 @@ const GuardianWeeklyPackShot = () => (
       imgType="png"
     />
     <GridImage
-      classModifiers={['subscriptions-product-image']}
-      gridId="subscriptionPackshot3"
+      gridId="subscriptionWeekly3"
       srcSizes={[798, 500, 140]}
       sizes="(max-width: 980px) 175px,
             250px"
