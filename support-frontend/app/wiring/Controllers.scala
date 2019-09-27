@@ -24,6 +24,7 @@ trait Controllers {
     assetsResolver,
     identityService,
     controllerComponents,
+    appConfig.braintreeConfigProvider,
     appConfig.oneOffStripeConfigProvider,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,

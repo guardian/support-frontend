@@ -10,6 +10,7 @@ import io.circe.Decoder
 import io.circe.parser.decode
 import com.gu.monitoring.SafeLogger
 import cats.implicits._
+import com.gu.support.config.{BraintreeConfig, PayPalConfig, StripeConfig}
 import io.circe.generic.semiauto.deriveDecoder
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -50,6 +51,18 @@ case class ExecutePaymentBody(
 object ExecutePaymentBody {
   implicit val jf: OFormat[ExecutePaymentBody] = Json.format[ExecutePaymentBody]
 }
+
+
+case class PaymentProviderConfigs(
+ braintreeDefaultConfig: BraintreeConfig,
+ braintreeUatConfig: BraintreeConfig,
+ oneOffDefaultStripeConfig: StripeConfig,
+ oneOffUatStripeConfig: StripeConfig,
+ regularDefaultStripeConfig: StripeConfig,
+ regularUatStripeConfig: StripeConfig,
+ regularDefaultPayPalConfig: PayPalConfig,
+ regularUatPayPalConfig: PayPalConfig,
+)
 
 class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: ExecutionContext) {
 

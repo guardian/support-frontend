@@ -2,11 +2,12 @@
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import com.gu.i18n.Currency.AUD
 @import com.gu.identity.model.{User => IdUser}
-@import com.gu.support.config.{PayPalConfig, StripeConfig}
+@import com.gu.support.config.{PayPalConfig, StripeConfig, BraintreeConfig}
 @import helper.CSRF
 @import views.{Preload, SSRContent, ReactDiv}
 @import models.GeoData
 @import services.PaymentApiEndpoints
+@import services.PaymentProviderConfigs
 @(
   title: String,
   id: String,
@@ -14,12 +15,7 @@
   js: Either[RefPath, StyleContent],
   css: Either[RefPath, StyleContent],
   description: Option[String],
-  oneOffDefaultStripeConfig: StripeConfig,
-  oneOffUatStripeConfig: StripeConfig,
-  regularDefaultStripeConfig: StripeConfig,
-  regularUatStripeConfig: StripeConfig,
-  regularDefaultPayPalConfig: PayPalConfig,
-  regularUatPayPalConfig: PayPalConfig,
+  paymentProviderConfigs: PaymentProviderConfigs,
   paymentApiEndpoints: PaymentApiEndpoints,
   existingPaymentOptionsEndpoint: String,
   idUser: Option[IdUser],
@@ -38,26 +34,26 @@
       @user.publicFields.displayName.map { displayName =>
         displayName: "@displayName",
       }
-      @for(firstName <- user.privateFields.firstName; lastName <- user.privateFields.secondName) {
+    @for(firstName <- user.privateFields.firstName; lastName <- user.privateFields.secondName) {
         firstName: "@firstName",
         lastName: "@lastName",
       }
-      @for(address4 <- user.privateFields.billingAddress4 orElse user.privateFields.address4) {
+    @for(address4 <- user.privateFields.billingAddress4 orElse user.privateFields.address4) {
         address4: "@address4",
       }
-      @for(country <- user.privateFields.billingCountry orElse user.privateFields.country) {
+    @for(country <- user.privateFields.billingCountry orElse user.privateFields.country) {
         country: "@country",
       }
     };
   }
   window.guardian.stripeKeyDefaultCurrencies = {
     ONE_OFF: {
-      default: "@oneOffDefaultStripeConfig.forCurrency(None).publicKey",
-      uat: "@oneOffUatStripeConfig.forCurrency(None).publicKey"
+      default: "@paymentProviderConfigs.oneOffDefaultStripeConfig.forCurrency(None).publicKey",
+      uat: "@paymentProviderConfigs.oneOffUatStripeConfig.forCurrency(None).publicKey"
     },
     REGULAR: {
-      default: "@regularDefaultStripeConfig.forCurrency(None).publicKey",
-      uat: "@regularUatStripeConfig.forCurrency(None).publicKey"
+      default: "@paymentProviderConfigs.regularDefaultStripeConfig.forCurrency(None).publicKey",
+      uat: "@paymentProviderConfigs.regularUatStripeConfig.forCurrency(None).publicKey"
     }
   };
   window.guardian.geoip = {
@@ -67,17 +63,18 @@
   };
   window.guardian.stripeKeyAustralia = {
     ONE_OFF: {
-      default: "@oneOffDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
-      uat: "@oneOffUatStripeConfig.forCurrency(Some(AUD)).publicKey"
+      default: "@paymentProviderConfigs.oneOffDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+      uat: "@paymentProviderConfigs.oneOffUatStripeConfig.forCurrency(Some(AUD)).publicKey"
     },
     REGULAR: {
-      default: "@regularDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
-      uat: "@regularUatStripeConfig.forCurrency(Some(AUD)).publicKey"
+      default: "@paymentProviderConfigs.regularDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+      uat: "@paymentProviderConfigs.regularUatStripeConfig.forCurrency(Some(AUD)).publicKey"
     }
   };
+
   window.guardian.payPalEnvironment = {
-    default: "@regularDefaultPayPalConfig.payPalEnvironment",
-    uat: "@regularUatPayPalConfig.payPalEnvironment"
+    default: "@paymentProviderConfigs.regularDefaultPayPalConfig.payPalEnvironment",
+    uat: "@paymentProviderConfigs.regularUatPayPalConfig.payPalEnvironment"
   };
   window.guardian.paymentApiStripeEndpoint = "@paymentApiEndpoints.paymentApiStripeEndpoint";
   window.guardian.paymentApiPayPalEndpoint = "@paymentApiEndpoints.paymentApiPayPalEndpoint";
