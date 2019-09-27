@@ -119,7 +119,6 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
-  braintreeHasLoaded: state.page.form.braintreeHasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
   landingPageChoiceArchitectureAmountsFirstTestVariant:
     state.common.abParticipations.landingPageChoiceArchitectureAmountsFirst,
@@ -132,10 +131,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
   setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded); },
-  setBraintreeHasLoaded: () => {
-    console.log('Heredd');
-    dispatch(setBraintreeHasLoaded);
-  },
 });
 
 // ----- Functions ----- //
