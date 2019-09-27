@@ -78,7 +78,9 @@ object StripeJsonDecoder {
 }
 
 // Private because it should only be constructed using the accompanying Decoder
-class NonEmptyString private(val value: String) extends AnyVal
+class NonEmptyString private(val value: String) extends AnyVal {
+  override def toString(): String = value
+}
 
 object NonEmptyString {
   implicit val decoder: Decoder[NonEmptyString] = Decoder.decodeString

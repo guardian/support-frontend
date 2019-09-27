@@ -14,6 +14,7 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import conf.{ConfigLoader, PlayConfigUpdater}
 import com.typesafe.scalalogging.StrictLogging
+import services.CloudWatchService
 
 class MyApplicationLoader extends ApplicationLoader with StrictLogging {
   def load(context: Context): Application = {
@@ -85,11 +86,15 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
 
   implicit val allowedCorsUrl = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
 
+  // Usually the cloudWatchService is determined based on the request (live vs test). But inside the controllers
+  // we may not know the environment, so we just use live. Note - in DEV/CODE, there is no difference between test/live
+  val liveCloudWatchService = new CloudWatchService(cloudWatchClient, requestEnvironments.live)
+
   override val router =
     new Routes(
       httpErrorHandler,
       new AppController(controllerComponents),
-      new StripeController(controllerComponents, stripeBackendProvider),
+      new StripeController(controllerComponents, stripeBackendProvider, liveCloudWatchService),
       new PaypalController(controllerComponents, paypalBackendProvider),
       new GoCardlessController(controllerComponents, goCardlessBackendProvider),
     )
