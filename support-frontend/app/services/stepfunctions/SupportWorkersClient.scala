@@ -120,7 +120,6 @@ class SupportWorkersClient(
     requestId: UUID,
     promoCode: Option[PromoCode] = None
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {
-    SafeLogger.info(s"$requestId: debug info ${request.body.debugInfo}")
 
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
