@@ -23,7 +23,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection
   from './components/independentJournalismSection';
-import ProductBlockB from './components/productBlockB/productBlockB';
+import ProductBlockC from './components/productBlockC';
 import PromotionPopUp from './components/promotionPopUp';
 
 import './digitalSubscriptionLanding.scss';
@@ -33,6 +33,7 @@ import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReduc
 import { isPostDeployUser } from 'helpers/user/user';
 import { dpSale, flashSaleIsActive } from 'helpers/flashSale';
 import { DigitalPack } from 'helpers/subscriptions';
+import CallToAction from './components/cta';
 
 // ----- Redux Store ----- //
 
@@ -144,12 +145,10 @@ class LandingPage extends Component<Props, State> {
               <SubscriptionFaq subscriptionProduct="DigitalPack" />
             </Footer>}
         >
-          <CampaignHeader
-            countryGroupId={countryGroupId}
-            dailyEditionsVariant={dailyEditionsVariant}
-          />
-          <ProductBlockB />
+          <CampaignHeader countryGroupId={countryGroupId} />
+          <ProductBlockC />
           <AdFreeSectionB />
+          <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
           <IndependentJournalismSection />
           <PromotionPopUp />
           <ConsentBanner />

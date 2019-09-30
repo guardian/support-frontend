@@ -1,91 +1,185 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 
-.component-product-page-hero.component-product-page-hero--digital-campaign {
+.hope-is-power-hero--wrapper {
+  display: flex;
+  flex-direction: column;
   background: #ffe500;
   box-sizing: border-box;
   height: auto;
-  min-height: 200px;
-  
-}
 
-.the-moment-hero {
-  display: flex;
-  align-items: center;
-  padding: $gu-v-spacing*2 0 $gu-v-spacing*3;
-  
-  @include mq($from: tablet) {
-    padding: $gu-v-spacing*2 0 $gu-v-spacing*4;
+  @include mq($until: tablet) {
+    height: 150px;
   }
 
+  @include mq($from: tablet) {
+    height: 200px;
+  }
+
+  @include mq($from: desktop) {
+    height: 310px;
+  }
+
+  @include mq($from: wide) {
+    height: 330px;
+  }
+  
 }
 
-.the-moment-hero__copy {
+.hope-is-power-hero__copy {
     line-height: 1;
-    
+    padding-top: $gu-v-spacing * 1.5;
+    padding-bottom: $gu-v-spacing * 2.5;
+
     h2 {
       font-family: $gu-titlepiece;
-      font-size: 28px;
+      font-size: 24px;
     }
 
-    @include mq($until: mobileLandscape) {
-      display: none;
-    }
-
-    
     @include mq($from: mobileLandscape) {
-      max-width: 70%;
-      
-      h2 {
-        font-size: 38px;
-      }
+      padding-top: $gu-v-spacing * 2;
+      padding-bottom: $gu-v-spacing * 3;
     }
     
     @include mq($from: phablet) {
+      margin: 0;
+
       h2 {
-        font-size: 38px;
+        font-size: 32px;
       }
     }
     
-    @include mq($from: tablet) {      
-      h2 {
-        font-size: 44px;
-      }
+    @include mq($from: tablet) {
+      margin: 10px 0;  
     }
 
     @include mq($from: desktop) {
       h2 {
+        font-size: 40px;
+        margin: 35px 0 25px;
+      }
+    }
+
+    @include mq($from: wide) {
+      h2 {
         font-size: 50px;
+        margin: 35px 0 25px;
       }
     }
 }
 
-.the-moment-hero__marketing-message {
+.hope-is-power--centered {
+    align-self: flex-start;
+    padding-left: 10px;
+    width: calc(100% - 10px);
+
+  @include mq($from: mobileMedium) {
+    padding-left: 20px;
+    width: calc(100% - 20px);
+  }
+
+  @include mq($from: phablet) {
+    padding-left: 50px;
+    align-self: center;
+    width: calc(100% - 50px);
+  }
+
+  @include mq($from: tablet) {
+    padding-left: 40px;
+    width: calc(100% - 140px);
+    max-width: 600px;
+  }
+
+  @include mq($from: desktop) {
+    padding-left: 50px;
+    width: calc(100% - 140px);
+    max-width: 1080px;
+  }
+
+  @include mq($from: leftCol) {
+    max-width: 1130px;
+  }
+}
+
+.hope-is-power-hero__marketing-message {
   position: relative;
   z-index: 20;
-  display: inline-block;
-  padding: 5px 5px 45px 80px;
-  margin-left: -80px;
-  margin-bottom: -45px;
   background-color: gu-colour(neutral-7);
   @include gu-fontset-heading;
   color: gu-colour(neutral-100);
-  width: 1080px;
+  height: 100px;
+  margin-bottom: 30px;
+  padding-top: $gu-v-spacing / 3;
+  padding-bottom: $gu-v-spacing / 3;
 
   h2 {
-    font-size: 42px;
+    font-size: 20px;
     font-weight: 600;
-    line-height: 58px;
+    line-height: 28px;
   }
 
   h3 {
-    font-size: 28px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 32px;
+    line-height: 22px;
   }
-  
+
   @include mq($from: mobileLandscape) {
-    font-size: 22px;
+    height: 120px;
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 36px;
+    }
+  
+    h3 {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 28px;
+    }
+  }
+
+  @include mq($from: desktop) {
+    height: 135px;
+    margin-bottom: -45px;
+
+    h2 {
+      font-size: 42px;
+      font-weight: 600;
+      line-height: 48px;
+    }
+  
+    h3 {
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 42px;
+    }
+  }
+}
+
+.hope-is-power__products {
+  display: flex;
+  flex-direction: column;
+  background-color: #f6f6f6;
+
+  .product-block__container {
+    margin-top: 20px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    border: 1px solid gu-colour(neutral-86);
+
+    @include mq($from: desktop) {
+      margin-top: 50px;
+    }
+  }
+
+  .product-block__container:first-of-type {
+    margin-top: 45px;
+
+    @include mq($from: desktop) {
+      margin-top: 90px;
+    }
   }
 }
 
