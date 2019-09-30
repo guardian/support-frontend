@@ -52,7 +52,7 @@ case class CreateSupportWorkersRequest(
   email: String,
   telephoneNumber: Option[String],
   deliveryInstructions: Option[String],
-  debugInfo: Option[String]
+  debugInfo: Option[String] = None
 )
 
 object SupportWorkersClient {
