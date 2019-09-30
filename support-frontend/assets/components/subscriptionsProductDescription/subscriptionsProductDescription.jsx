@@ -28,7 +28,7 @@ const SubscriptionsProductDescription = ({
   <div>
     <h2 className="subscriptions__product-title">{title}</h2>
     <h3 className="subscriptions__product-subtitle">{subtitle}</h3>
-    {offer && <h4 className="subscriptions__sales">Up to 52% off for a year</h4>}
+    {offer && <h4 className="subscriptions__sales">{offer}</h4>}
     <p className="subscriptions__description">{description}</p>
     {buttons.map(button => (
       <AnchorButton

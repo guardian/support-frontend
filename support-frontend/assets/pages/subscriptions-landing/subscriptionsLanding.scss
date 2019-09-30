@@ -47,9 +47,13 @@
 }
 
 .subscriptions__feature {
-  padding: 70px 10px;
+  padding: 50px 10px 55px;
   width: 100%;
   background-color: gu-colour('highlight-main');
+
+  @include mq($until: tablet) {
+    padding: 30px;
+  }
 }
 
 .subscriptions__feature-container {
@@ -59,9 +63,24 @@
 }
 
 .subscriptions__feature-text {
-  font-size: 42px;
+  font-size: 50px;
   font-family: $gu-titlepiece;
   font-weight: bold;
+  max-width: 700px;
+  line-height: 55px;
+  margin-left: 80px;
+
+  @include mq($until: desktop) {
+    font-size: 42px;
+    line-height: 45px;
+  }
+
+  @include mq($until: tablet) {
+    margin-left: 0;
+    font-size: 28px;
+    line-height: 30px;
+    max-width: 80%;
+  }
 }
 
 /****************** subscriptions product-container ********************/
@@ -69,6 +88,10 @@
 .subscriptions__product-container {
   position: relative;
   margin-bottom: 40px;
+
+  @include mq($until: tablet) {
+    margin: 0 20px 40px;
+  }
 }
 
 .subscriptions__product-container::after {
@@ -95,7 +118,6 @@
   border-top: none;
 
   @include mq($from: desktop) {
-    min-height: 350px;
   }
 
   @include mq($from: tablet) {
@@ -103,6 +125,7 @@
   }
 
   @include mq($until: tablet) {
+    // min-height: 320px;
     border: none;
   }
 }
@@ -140,6 +163,12 @@
   color: gu-colour('neutral-100');
   // min-height: 500px;
   border: none;
+  padding-top: 70px;
+  background-color: gu-colour('brand-main');
+
+  @include mq($until: tablet) {
+    padding-top: 0;
+  }
 }
 
 .subscriptions__product.subscriptions__product--feature::before{
@@ -192,12 +221,12 @@
     padding: 22% 0;
   }
   @media (min-width: 1067px) {
-    height: 500px;
+    height: 447px;
   }
   @include mq($until: tablet) {
     position: relative;
     width: 100%;
-    bottom: -80px;
+    // bottom: -80px;
   }
 
   @include mq($until: mobileLandscape) {
@@ -227,9 +256,19 @@
       padding: 0 30px 30px;
     }
   }
+
+  @include mq($until: tablet) {
+    position: relative;
+    width: 100%;
+  }
 }
 
 /****************** Copy ********************/
+.subscriptions__product--feature .subscriptions__copy-wrapper {
+  top: 0;
+  transform: none;
+  // margin-top: 80px;
+}
 
 .subscriptions__copy-wrapper {
   position: relative;
@@ -257,17 +296,35 @@
 }
 
 .subscriptions__copy-container.subscriptions__product--feature .subscriptions__product-title {
-  border-top: solid white 1px;
+  font-size: 42px;
+  border-top: solid gu-colour('brand-pastel') 1px;
+
+  @include mq($until: tablet) {
+    font-size: 34px;
+    line-height: 34px;
+    padding-top: 15px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  @include mq($until: mobileMedium) {
+    font-size: 22px;
+    line-height: 22px;
+  }
 }
 
 .subscriptions__product-title {
-  font-size: 42px;
+  font-size: 34px;
   line-height: 30px;
   font-weight: bold;
   font-family: $gu-headline;
   margin: 0;
   border-top: 1px solid gu-colour(neutral-86);
   line-height: 1.2;
+  vertical-align: middle;
 
   @include mq($until: desktop) {
     font-size: 32px;
@@ -276,6 +333,7 @@
   @include mq($until: tablet) {
     font-size: 34px;
     line-height: 34px;
+    padding-top: 15px;
   }
 
   @include mq($until: mobileLandscape) {
@@ -305,27 +363,27 @@
   }
 
   @include mq($until: mobileLandscape) {
-    font-size: 18px;
+    font-size: 20px;
     line-height: 24px;
   }
 }
 
 .subscriptions__description {
-  @include gu-fontset-heading;
   font-weight: 400;
+  max-width: 350px;
   margin: 23px 20px 25px 0;
-  font-size: 18px !important;
-  line-height: 20px !important;
+  font-size: 17px;
+  line-height: 21px;
 
   @include mq($until: desktop) {
     margin: 27px 20px 25px 0;
-    font-size: 16px !important;
-    line-height: 18px !important;
+    font-size: 16px;
+    line-height: 18px;
   }
 
   @include mq($until: mobileLandscape) {
-    font-size: 14px !important;
-    line-height: 16px !important;
+    font-size: 14px;
+    line-height: 16px;
     margin: 16px 20px 18px 0;
   }
 
@@ -337,9 +395,10 @@
 
 .subscriptions__sales {
   font-size: 24px;
-  line-height: 30px;
+  line-height: 27px;
   display: inline;
   background-color: gu-colour('highlight-main');
+  vertical-align: middle;
 
   @include mq($until: desktop) {
     font-size: 20px;
@@ -357,6 +416,13 @@
 
 }
 
+.subscriptions__product--feature .subscriptions__sales {
+  color: gu-colour(neutral-7);
+  line-height: px;
+  display: inline-block;
+  padding: 0px 7px 5px;
+  margin-top: 10px;
+}
 /****************** product-image ********************/
 
 .subscriptions-packshot {
@@ -371,7 +437,7 @@
     width: 100%;
     // margin: 0;
     transform: translateX(0);
-    padding: 10px 0 0 10px;
+    padding: 10px 0 0 0;
   }
 }
 
@@ -391,9 +457,8 @@
   display: none;
 
   @include mq($until: tablet) {
-    display: block;
+    display: flex;
   }
-  padding-bottom: 30px;
 }
 
 .component-grid-image--subscriptions-premium-image {
@@ -406,6 +471,29 @@
 }
 
 /****************** packshots ********************/
+.subscriptions-feature-packshot {
+  position: absolute;
+  bottom: -40px;
+  right: -210px;
+
+  @media (max-width: 1067px) {
+    width: 150%;
+    right: initial;
+  }
+
+  @include mq($until: tablet) {
+    position: relative;
+    width: 100%;
+    bottom: initial;
+    padding: 20px 10% 0;
+    margin-bottom: -50px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
 
 .subscriptions__guardian-weekly-packshot {
   width: 429px;
@@ -476,6 +564,7 @@
   img:nth-child(2) {
     z-index: 1;
     left: 32px;
+    bottom: -120px;
 
     @include mq($until: tablet) {
       position: static;
@@ -547,25 +636,19 @@
   }
 }
 
-.subscriptions-feature-packshot {
+.subscriptions-int-feature-packshot {
   position: absolute;
-  bottom: -40px;
-  right: -250px;
-
-  @media (max-width: 1067px) {
-    width: 150%;
-    right: initial;
-  }
-
-  @include mq($until: tablet) {
-    position: relative;
-    width: 100%;
-    bottom: initial;
-    padding: 20px 10% 0;
-  }
+  bottom: -30px;
+  right: -184px;
+  width: 377px;
 
   img {
     width: 100%;
-    height: 100%;
+  }
+
+  @include mq($until: tablet) {
+    position: static;
+    bottom: 0;
+    width: 100%;
   }
 }

@@ -23,9 +23,9 @@ type PropTypes = {
 }
 
 const SubscriptionsProduct = ({
-  productImage, isFeature, ...props
+  classModifier, productImage, isFeature, ...props
 }: PropTypes) => (
-  <div className={cx('subscriptions__product', { 'subscriptions__product--feature': isFeature })}>
+  <div className={cx('subscriptions__product', { 'subscriptions__product--feature': isFeature }, classModifier)}>
 
     <div className={cx('subscriptions__image-container', { 'subscriptions__product--feature': isFeature })}>
       <div className={isFeature ? 'subscriptions__feature-image-wrapper' : 'subscriptions-packshot'}>
