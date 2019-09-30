@@ -2,10 +2,12 @@
 import type { Tests } from './abtest';
 import { get as getCookie } from 'helpers/cookie';
 import { SetOne, SetTwo, SetThree } from 'helpers/abTests/data/testAmountsData';
+import { getCampaignName } from 'helpers/campaigns';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 export type StripeElementsTestVariants = 'control' | 'stripeCardElement' | 'notintest';
+export type LandingPageMomentBackgroundColourTestVariants = 'control' | 'yellow' | 'notintest';
 
 export const tests: Tests = {
   landingPageCopyReturningSingles: {
@@ -84,5 +86,27 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 4,
+  },
+
+  landingPageMomentBackgroundColour: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'yellow',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 7,
+    canRun: () => !!getCampaignName(),
   },
 };

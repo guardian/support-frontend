@@ -1,21 +1,108 @@
-.gu-content--environment-moment {
+.gu-content--environment-moment.gu-content--yellow-background {
   background-color: gu-colour(highlight-main);
+}
 
+.gu-content--environment-moment {
   .gu-content__main {
-    position: relative;
     background-color: transparent;
   }
 
+  .gu-content__content {
+    flex-direction: column;
+
+    @include mq($from: tablet) {
+      flex-direction: row-reverse;
+    }
+  }
+
+  .responsive-break {
+    display: none;
+
+    @include mq($from: tablet) {
+      display: block;
+    }
+  }
+
+  .gu-content__blurb {
+    display: block;
+  }
+
+  .gu-content__blurb-header {
+    font-family: $gu-titlepiece;
+    margin: 0;
+    font-size: 30px;
+    line-height: 1;
+
+    @include mq($from: tablet) {
+      margin: 0 -10px;
+      font-size: 36px;
+    }
+
+    @include mq($from: desktop) {
+      font-size: 44px;
+    }
+  }
+
+  .gu-content__blurb-blurb {
+    display: none;
+
+    @include mq($from: tablet) {
+      display: block;
+    }
+  }
+
+  .form-message {
+    display: none;
+  }
+
+  .moment-title-blue {
+    color: gu-colour(sport-main)
+  }
+
+  .gu-content__blurb {
+    border-top: 0;
+  }
+
+  .gu-content__blurb-blurb {
+    border-bottom: 0;
+  }
+
+  .component-terms-privacy--campaign-landing p {
+    margin-bottom: $gu-v-spacing / 4;
+  }
+
+  // Styles related to moment asset placement:
+  .gu-content__content-contributions {
+    position: relative;
+    overflow: visible;
+  }
+
   .environment-moment_image-container {
-    position: absolute;
-    right: 0;
-    bottom: 20%;
+    display: none;
+
+    @include mq($from: tablet) {
+      display: block;
+      position: absolute;
+      width: 45%;
+      right: -15%;
+      top: 300px;
+    }
+
+    @include mq($from: desktop) {
+      right: -30%;
+      top: 180px;
+    }
+
+    @include mq($from: wide) {
+      right: -35%;
+      top: 120px;
+    }
   }
 
   .environment-moment_image {
     transform: scaleX(-1);
     mix-blend-mode: multiply;
     height: auto;
-    width: 410px;
+    width: 100%;
   }
 }
