@@ -87,11 +87,12 @@ export const imageCatalogue: {
   subscriptionWeekly2: '12480250459e3e986d605f61ad1ef22f29dd7ec2/0_0_801_840',
   subscriptionWeekly3: 'd72bdce2c96e259939b33cc8a9c43e43d0129f7f/0_0_798_675',
   subscriptionFeast: '4fac3988229d109512b4dfa0930b126e36985a2c/0_0_660_636',
-  subscriptionPrint: 'f0b716809c5a3592ea38ce1ca86f52eacf4f5b13/0_0_1038_852',
+  subscriptionPrint: 'b17efac8423cddc02301b0b80dd8ca71acc20968/0_0_599_739',
   subscriptionG2: 'f1cafef5a6bda2835f050042b9336645a24228ff/0_0_756_645',
   subscriptionIpad: 'c2843d4ec6bc7644c62c8691b6c7e83e76c93e0e/0_0_1302_998',
   subscriptionIphone: '8850945f0003d2a7204050644db446d827dead95/0_0_578_1096',
   subscriptionPrintDigital: '476a8aadac1f3a971b9b1a9a023b04cb72c8f7ca/0_0_1366_1510',
+  subscriptionGuardianWeeklyPackShot: '299d99cb5dc2d98607e9333d5e1e15c9f7d4860f/0_0_1552_921',
   printShowcase: '311c4a9dd0e8030b734dd54b71fcd0d4cb2a303b/0_0_1486_750',
 };
 
