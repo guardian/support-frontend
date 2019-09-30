@@ -16,7 +16,7 @@ import headerWithCountrySwitcherContainer
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
-import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
+import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
 
 import 'stylesheets/skeleton/skeleton.scss';
 
@@ -147,7 +147,7 @@ class LandingPage extends Component<Props, State> {
         >
           <CampaignHeader countryGroupId={countryGroupId} />
           <ProductBlockC />
-          <AdFreeSectionB />
+          <AdFreeSectionC />
           <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
           <IndependentJournalismSection />
           <PromotionPopUp />
