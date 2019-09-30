@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.ad-free-section {
+.ad-free-section, .ad-free-section-c {
   width: 100%;
   
   @include mq($from: phablet) {
@@ -31,8 +31,15 @@
 .ad-free-section-c__content {
   display: flex;
   justify-content: center;
+  background-color: #f6f6f6;
   padding-top: 49px;
   padding-bottom: 51px;
+
+  .hope-is-power--centered {
+    border: 1px solid gu-colour(neutral-86);
+    padding-top: 49px;
+    padding-bottom: 51px;
+  }
 }
 
 .ad-free-section-b__sub-header {

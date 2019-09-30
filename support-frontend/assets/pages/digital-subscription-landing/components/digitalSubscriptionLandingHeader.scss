@@ -27,6 +27,7 @@
 }
 
 .hope-is-power-hero__copy {
+    background-color: #ffe500 !important;
     line-height: 1;
     padding-top: $gu-v-spacing * 1.5;
     padding-bottom: $gu-v-spacing * 2.5;
@@ -72,6 +73,7 @@
     align-self: flex-start;
     padding-left: 10px;
     width: calc(100% - 10px);
+    background-color: #ffffff;
 
   @include mq($from: mobileMedium) {
     padding-left: 20px;
