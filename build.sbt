@@ -12,8 +12,7 @@ addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.fu
 
 val circeVersion = "0.11.1"
 val AWSJavaSDKVersion = "1.11.568"
-val jacksonVersion = "2.9.9"
-val jacksonDatabindVersion = "2.9.9.1"
+val jacksonVersion = "2.10.0"
 val stripeVersion = "10.12.0" // Supports API version 2019-05-16
 
 libraryDependencies ++= Seq(
@@ -41,7 +40,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % "0.9.0",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
   // This is required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
