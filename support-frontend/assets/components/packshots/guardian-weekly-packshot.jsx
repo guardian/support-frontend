@@ -15,7 +15,7 @@ import GridImage from 'components/gridImage/gridImage';
 const GuardianWeeklyPackShot = () => (
   <div className="subscriptions__guardian-weekly-packshot">
     <GridImage
-      gridId="subscriptionWeekly3"
+      gridId="subscriptionWeekly1"
       srcSizes={[798, 500, 140]}
       sizes="(max-width: 980px) 175px,
             250px"

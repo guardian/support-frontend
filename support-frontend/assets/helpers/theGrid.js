@@ -84,6 +84,7 @@ export const imageCatalogue: {
   showcaseUKFloods: 'cb8d5002ec1ac03e64da32d87fe7f804fc900dfb/163_1119_3136_789',
   showcaseUKWindrushGroup: '2ec9dab8f39d1e9b12b9c7625b5ad2b058f3420b/1175_287_3335_3335',
   subscriptionFeature: '432b55d4401dde2b58f6ce61e7c9ddf50958962a/0_0_1584_954',
+  subscriptionWeekly1: 'cf47a92149f2b347fcd43e825e6e48c6601820f5/0_0_798_675',
   subscriptionWeekly2: '67d8da6245b1436aa767a5b5eaf853dddf1ce8ad/0_0_2035_2598',
   subscriptionWeekly3: 'd72bdce2c96e259939b33cc8a9c43e43d0129f7f/0_0_798_675',
   subscriptionFeast: '4fac3988229d109512b4dfa0930b126e36985a2c/0_0_660_636',
