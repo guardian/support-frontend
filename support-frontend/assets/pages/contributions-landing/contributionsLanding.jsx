@@ -85,10 +85,28 @@ const setOneOffContributionCookie = () => {
 };
 
 const campaignName = getCampaignName();
-const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
-  campaigns[campaignName].cssModifiers : [];
+// JTL - TBD - Uncomment this after Moment is done running
+// const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
+//   campaigns[campaignName].cssModifiers : [];
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
+
+// JTL - TBD - Delete after Moment is done running
+const createCssModifiers = () => {
+  const cssModifiers = [];
+
+  if (campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers) {
+    cssModifiers.push(...campaigns[campaignName].cssModifiers);
+  }
+
+  if (store.getState().common.abParticipations.landingPageMomentBackgroundColour === 'yellow') {
+    cssModifiers.push('yellow-background');
+  }
+
+  return cssModifiers;
+};
+// JTL - TBD - Delete after Moment is done running
+const cssModifiers = createCssModifiers();
 
 function contributionsLandingPage(campaignCodeParameter: ?string) {
   return (

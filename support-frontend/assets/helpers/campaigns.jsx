@@ -2,108 +2,67 @@
 
 import React from 'react';
 import type { ContributionTypes } from 'helpers/contributions';
-import { generateContributionTypes } from 'helpers/contributions';
 
 export type TickerType = 'unlimited' | 'hardstop';
+
+export type TickerSettings = {
+  goalReachedCopy: React$Element<string> | null,
+  tickerJsonUrl: string,
+  tickerType: TickerType,
+  localCurrencySymbol: string
+}
 
 export type CampaignSettings = {
   headerCopy?: string | React$Element<string>,
   contributeCopy?: React$Element<string>,
   formMessage?: React$Element<string>,
   termsAndConditions?: (contributionsTermsLink: string) => React$Element<string>,
-  tickerJsonUrl?: string,
   cssModifiers?: string[],
-  tickerType: TickerType,
   contributionTypes?: ContributionTypes,
   backgroundImage?: string,
-  goalReachedCopy: React$Element<string> | null,
-  localCurrencySymbol: string,
+  extraComponent?: React$Element<string>,
+  tickerSettings?: TickerSettings,
 };
 
 export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = null;
+const currentCampaignName = 'environmentpledge';
 
 export const campaigns: Campaigns = {
-  toxicamerica: {
-    formMessage: (
-      <div>
-        <div className="form-message__headline">Make a contribution</div>
-        <div className="form-message__body">to our dedicated series ‘Toxic America’</div>
-      </div>
+  environmentpledge: {
+    formMessage: (<div />
     ),
     headerCopy: (
-      <span>Toxic America: Help us fight for <br className="responsive-break" />a cleaner world</span>
+      <span>
+        We will not<br />
+        stay quiet <br />
+        <span className="moment-title-blue">
+          on the <br className="responsive-break" />
+          climate crisis
+        </span>
+      </span>
     ),
     contributeCopy: (
       <div>
         <p>
-          We’re asking our readers to support a six-month Guardian series about the health implications
-          of living in an environment that may expose us to chemical contamination on a daily basis
-          through the air we breathe, the food we eat, the products we use and the water we drink.
-          The project will:
-        </p>
-        <ul>
-          <li className="blurb-list-item">
-            Hold politicians, the Trump administration, the EPA and the FDA accountable for any
-            regulatory rollbacks and failures keep dangerous chemicals out of products and off of
-            store shelves
-          </li>
-          <li className="blurb-list-item">
-            Offer advice on how to navigate the supermarket and make food choices to reduce your
-            exposure
-          </li>
-          <li className="blurb-list-item">
-            Look at potential everyday dangers in our homes, from flame retardants in the sofa to
-            carcinogens in dry cleaning
-          </li>
-          <li className="blurb-list-item">
-            Explore how plastic pollution is impacting human health
-          </li>
-          <li className="blurb-list-item">
-            Report on threats to our drinking water supply
-          </li>
-          <li className="blurb-list-item">
-            Deliver rigorous, accessible, scientific reporting that explains what we know about
-            how the chemicals in our environment are impacting our health and raises public awareness
-            about this issue
-          </li>
-        </ul>
-        <p>
-          Reader support protects The Guardian’s independence and ensures our in-depth
-          environmental journalism remains open to all. Our editorial independence allows us
-          to fight for transparency and accountability – and deliver the facts with
-          clarity. <span className="bold">Please help us reach our goal by contributing today.</span>
+          <span className="bold">The climate emergency is the defining issue of our times.</span> This is
+          The Guardian’s pledge: we will be truthful, resolute and undeterred in pursuing our journalism
+          on the environment. Support from our readers makes this work possible. <a className="underline" href="https://theguardian.com">Read our pledge in full</a>.
         </p>
       </div>
     ),
     termsAndConditions: (contributionsTermsLink: string) => (
       <div className="component-terms-privacy component-terms-privacy--campaign-landing">
         <p>
-          By proceeding, you’re agreeing to our Terms and Conditions. If we hit our goal of
-          $150,000, The Guardian will allocate this amount to its core operations which will
-          help fund the completion of Toxic America series, including
-          editing, reporting, graphics, and new commissions. If we exceed our goal, additional
-          funds will be directed to The Guardian’s core operations and newsroom to support
-          The Guardian’s independent journalism. Contributions will fund news, investigative
-          reporting, commentary, and general operations. If we fall short of the goal, The Guardian
-          will allocate the funds for a scaled-back project on the impact of toxins in America.
-          Contributions will not be returned. Your contribution is also governed by our
-          standard <a href={contributionsTermsLink}>contribution terms and conditions</a>.
+          Monthly contributions are billed each month and annual contributions are billed
+          once a year. You can change how much you give or cancel your contributions at any time.
         </p>
         <p>
-          The ultimate owner of The Guardian is the Scott Trust Limited, whose role is to secure the
-          editorial and financial independence of The Guardian in perpetuity. Reader contributions
-          support The Guardian’s journalism.
-        </p>
-        <p>
-          Please note that The Guardian is not a charity, will not use your support for charitable
-          programs, and your support of The Guardian’s journalism does not constitute a charitable
-          donation. As far as The Guardian is aware, your contribution is not eligible to be treated as
-          a charitable deduction for tax purposes in the US or elsewhere. If you have any questions
-          about contributing to The Guardian, please <a href="mailto:apac.help@theguardian.com">contact us</a>.
+          By proceeding, you are agreeing to our <a href={contributionsTermsLink}>Terms and Conditions</a>.
+          To find out what personal data we collect and how we use it, please visit
+          our <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.
         </p>
         <p>
           We’re also seeking larger contributions to support The Guardian’s reporting from companies,
@@ -112,15 +71,16 @@ export const campaigns: Campaigns = {
         </p>
       </div>
     ),
-    goalReachedCopy: null,
-    tickerJsonUrl: '/ticker.json',
-    tickerType: 'unlimited',
-    cssModifiers: ['campaign-landing'],
-    contributionTypes: generateContributionTypes([
-      { contributionType: 'ONE_OFF', isDefault: true },
-    ]),
-    backgroundImage: 'https://media.guim.co.uk/de76ba8d8823325d02ff93376cfe0c39962b215d/0_0_2000_577/2000.jpg',
-    localCurrencySymbol: '$',
+    cssModifiers: ['environment-moment'],
+    extraComponent: (
+      <div className="environment-moment_image-container">
+        <img
+          className="environment-moment_image"
+          src="https://media.guim.co.uk/8fe60bf9d30df8481fcbccb91816a3c995279007/0_0_577_840/577.png"
+          alt="Support the Guardian's pledge on climate change"
+        />
+      </div>
+    ),
   },
 };
 
