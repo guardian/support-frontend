@@ -88,7 +88,7 @@ export const imageCatalogue: {
   subscriptionWeekly2: '67d8da6245b1436aa767a5b5eaf853dddf1ce8ad/0_0_2035_2598',
   subscriptionWeekly3: 'd72bdce2c96e259939b33cc8a9c43e43d0129f7f/0_0_798_675',
   subscriptionFeast: '4fac3988229d109512b4dfa0930b126e36985a2c/0_0_660_636',
-  subscriptionPrint: 'b17efac8423cddc02301b0b80dd8ca71acc20968/0_0_599_739',
+  subscriptionPrint: '/0575f214ad20536c7731172e36f349778df168c7/0_0_877_1090',
   subscriptionG2: 'f1cafef5a6bda2835f050042b9336645a24228ff/0_0_756_645',
   subscriptionIpad: 'c2843d4ec6bc7644c62c8691b6c7e83e76c93e0e/0_0_1302_998',
   subscriptionIphone: '8850945f0003d2a7204050644db446d827dead95/0_0_578_1096',

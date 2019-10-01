@@ -14,7 +14,7 @@ const PaperAndDigitalPackshot = () => (
     />
     <GridImage
       gridId="subscriptionPrint"
-      srcSizes={[1000, 500, 140]}
+      srcSizes={[805, 402]}
       sizes="(max-width: 740px) 100%,
             (max-width: 980px) 275px,
             300px"

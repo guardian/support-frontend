@@ -12,11 +12,11 @@ const PaperPackshot = () => (
     />
     <GridImage
       gridId="subscriptionPrint"
-      srcSizes={[599, 405]}
+      srcSizes={[805, 402]}
       sizes="(max-width: 740px) 100%,
             (max-width: 980px) 275px,
             300px"
-      imgType="jpg"
+      imgType="png"
     />
     <GridImage
       gridId="subscriptionG2"
