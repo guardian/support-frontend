@@ -49,6 +49,14 @@
     @include mq($from: tablet) {
       display: block;
     }
+
+    .bold {
+      font-weight: 700;
+    }
+
+    a.underline {
+      color: gu-colour(neutral-7)
+    }
   }
 
   .form-message {

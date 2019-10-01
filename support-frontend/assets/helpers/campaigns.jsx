@@ -43,7 +43,9 @@ export const campaigns: Campaigns = {
     contributeCopy: (
       <div>
         <p>
-          <span className="">The climate emergency is the defining issue of our times.</span> This is The Guardian’s pledge: we will be truthful, resolute and undeterred in pursuing our journalism on the environment. Support from our readers makes this work possible.
+          <span className="bold">The climate emergency is the defining issue of our times.</span> This is
+          The Guardian’s pledge: we will be truthful, resolute and undeterred in pursuing our journalism
+          on the environment. Support from our readers makes this work possible. <a className="underline" href="https://theguardian.com">Read our pledge in full</a>.
         </p>
       </div>
     ),
