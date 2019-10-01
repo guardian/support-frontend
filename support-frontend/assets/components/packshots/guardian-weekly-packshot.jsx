@@ -23,7 +23,7 @@ const GuardianWeeklyPackShot = () => (
     />
     <GridImage
       gridId="subscriptionWeekly2"
-      srcSizes={[801, 477]}
+      srcSizes={[783, 392]}
       sizes="(max-width: 740px) 100%,
             (max-width: 980px) 175px,
             250px"
