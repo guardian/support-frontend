@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
 
 // styles
 import './digitalSubscriptionLandingHeader.scss';
@@ -7,11 +8,8 @@ import './digitalSubscriptionLandingHeader.scss';
 const ProductBlockC = () => (
   <div className="hope-is-power__products">
     <div className="product-block__container hope-is-power--centered">
-      The Daily - to come!
-    </div>
-
-    <div className="product-block__container hope-is-power--centered">
-      Premium App - to come!
+      DP products, to come!
+      <AdFreeSectionC />
     </div>
   </div>
 

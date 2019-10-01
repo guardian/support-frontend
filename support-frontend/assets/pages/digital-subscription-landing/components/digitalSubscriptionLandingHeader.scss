@@ -4,69 +4,11 @@
 .hope-is-power-hero--wrapper {
   display: flex;
   flex-direction: column;
-  background: #ffe500;
+  background: #ffffff;
   box-sizing: border-box;
-  height: auto;
-
-  @include mq($until: tablet) {
-    height: 150px;
-  }
-
-  @include mq($from: tablet) {
-    height: 200px;
-  }
-
-  @include mq($from: desktop) {
-    height: 310px;
-  }
-
-  @include mq($from: wide) {
-    height: 330px;
-  }
+  height: 95px;
+  padding-top: 40px;
   
-}
-
-.hope-is-power-hero__copy {
-    background-color: #ffe500 !important;
-    line-height: 1;
-    padding-top: $gu-v-spacing * 1.5;
-    padding-bottom: $gu-v-spacing * 2.5;
-
-    h2 {
-      font-family: $gu-titlepiece;
-      font-size: 24px;
-    }
-
-    @include mq($from: mobileLandscape) {
-      padding-top: $gu-v-spacing * 2;
-      padding-bottom: $gu-v-spacing * 3;
-    }
-    
-    @include mq($from: phablet) {
-      margin: 0;
-
-      h2 {
-        font-size: 32px;
-      }
-    }
-    
-    @include mq($from: tablet) {
-      margin: 10px 0;  
-    }
-
-    @include mq($from: desktop) {
-      h2 {
-        font-size: 40px;
-        margin: 35px 0 25px;
-      }
-    }
-
-    @include mq($from: wide) {
-      h2 {
-        font-size: 50px;
-        margin: 35px 0 25px;
-      }
-    }
 }
 
 .hope-is-power--centered {
@@ -103,16 +45,21 @@
   }
 }
 
+.hope-is-power--heavy-text {
+  font-weight: 600;
+}
+
 .hope-is-power-hero__marketing-message {
   position: relative;
   z-index: 20;
-  background-color: gu-colour(neutral-7);
+  display: inline-flex;
+  background-color: #ffe500;
   @include gu-fontset-heading;
-  color: gu-colour(neutral-100);
-  height: 100px;
+  color: gu-colour(neutral-7);
+  height: 165px;
   margin-bottom: 30px;
   padding-top: $gu-v-spacing / 3;
-  padding-bottom: $gu-v-spacing / 3;
+  padding-bottom: 22px;
 
   h2 {
     font-size: 20px;
@@ -149,21 +96,58 @@
     h2 {
       font-size: 42px;
       font-weight: 600;
-      line-height: 48px;
+      line-height: 56px;
+      margin-bottom: 15px;
     }
   
     h3 {
-      font-size: 28px;
+      font-size: 20px;
       font-weight: 400;
-      line-height: 42px;
+      line-height: 26px;
+      max-width: gu-span(8); 
     }
+  }
+
+  .hope-is-power__circle {
+    display: none;
+
+    @include mq($from: desktop) {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 120px;
+      width: 120px;
+      border-radius: 50%;
+      background-color: #00b2ff;
+      margin-top: 10px;
+      margin-left: 50px;
+    }
+
+    @include mq($from: leftCol) {
+      margin-left: 150px;
+    }
+
+    @include mq($from: wide) {
+      margin-left: 260px;
+    }
+  }
+
+  .hope-is-power__circle-text {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .hope-is-power__circle-text--large {
+    font-size: 34px;
+    line-height: 40px;
   }
 }
 
 .hope-is-power__products {
   display: flex;
   flex-direction: column;
-  background-color: #f6f6f6;
+  background-color: #ededed;
 
   .product-block__container {
     margin-top: 20px;
@@ -180,7 +164,7 @@
     margin-top: 45px;
 
     @include mq($from: desktop) {
-      margin-top: 90px;
+      margin-top: 140px;
     }
   }
 }
@@ -387,7 +371,7 @@
 .call-to-action__container {
   padding-top: 70px;
   padding-bottom: 50px;
-  background-color: #052962;
+  background-color: #041f4a;
 }
 
 div.call-to-action__container.hope-is-power--centered {

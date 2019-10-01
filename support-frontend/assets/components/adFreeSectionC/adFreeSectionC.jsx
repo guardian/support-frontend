@@ -8,12 +8,10 @@ import '../../pages/digital-subscription-landing/components/digitalSubscriptionL
 
 const AdFreeSectionC = () => (
   <div className="ad-free-section-c__content">
-    <div className="hope-is-power--centered">
-      <h2 className="ad-free-section-b__sub-header">Ad-free experience</h2>
-      <p className="ad-free-section__copy">
-        Avoid the adverts and read without interruptions when you&apos;re signed in on your apps and theguardian.com
-      </p>
-    </div>
+    <h2 className="ad-free-section-b__sub-header">Ad-free experience</h2>
+    <p className="ad-free-section__copy">
+      No adverts and no interruptions across all your devices
+    </p>
   </div>
 );
 

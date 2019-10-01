@@ -30,21 +30,10 @@
 
 .ad-free-section-c__content {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  background-color: #f6f6f6;
-  padding-top: 20px;
-  padding-bottom: 20px;
-
-  @include mq($from: desktop) {
-    padding-top: 49px;
-    padding-bottom: 51px;
-  }
-
-  .hope-is-power--centered {
-    border: 1px solid gu-colour(neutral-86);
-    padding-top: 49px;
-    padding-bottom: 51px;
-  }
+  padding: 5px 0 30px 20px;
+  border: 1px solid gu-colour(neutral-86);
 }
 
 .ad-free-section-b__sub-header {
