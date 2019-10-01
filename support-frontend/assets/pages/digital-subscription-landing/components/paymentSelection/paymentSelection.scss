@@ -3,7 +3,6 @@
 .payment-selection {
   display: flex;
   flex-wrap: wrap;
-  margin: -80px 0 24px;
 
   @include mq($from: phablet) {
     justify-content: left;
@@ -30,6 +29,11 @@
     margin: 0;
     max-width: 30rem;
     width: 320px;
+  }
+
+  .product-option__label {
+    background-color: #ffe500;
+    color: gu-colour(neutral-7);
   }
 }
 

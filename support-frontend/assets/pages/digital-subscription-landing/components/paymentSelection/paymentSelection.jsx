@@ -10,12 +10,11 @@ import ProductOption, {
   ProductOptionOffer,
   ProductOptionButton,
 } from 'components/productOption/productOption';
+import { mapStateToProps } from './helpers/paymentSelection';
+import { type PaymentOption } from './helpers/paymentSelection';
 
 // styles
 import './paymentSelection.scss';
-
-import { mapStateToProps } from './helpers/paymentSelection';
-import { type PaymentOption } from './helpers/paymentSelection';
 
 type PropTypes = {
   paymentOptions: Array<PaymentOption>,
@@ -50,5 +49,6 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
       }
   </div>
 );
+
 
 export default connect(mapStateToProps)(PaymentSelection);

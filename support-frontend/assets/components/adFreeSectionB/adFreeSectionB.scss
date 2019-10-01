@@ -32,8 +32,13 @@
   display: flex;
   justify-content: center;
   background-color: #f6f6f6;
-  padding-top: 49px;
-  padding-bottom: 51px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  @include mq($from: desktop) {
+    padding-top: 49px;
+    padding-bottom: 51px;
+  }
 
   .hope-is-power--centered {
     border: 1px solid gu-colour(neutral-86);
