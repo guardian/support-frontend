@@ -120,6 +120,7 @@ class SupportWorkersClient(
     requestId: UUID,
     promoCode: Option[PromoCode] = None
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {
+    SafeLogger.info(s"$requestId: debug info ${request.body.debugInfo}")
 
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
@@ -133,8 +134,7 @@ class SupportWorkersClient(
         supportAbTests = request.body.supportAbTests
       )),
       promoCode = request.body.promoCode,
-      firstDeliveryDate = request.body.firstDeliveryDate,
-      debugInfo = request.body.debugInfo
+      firstDeliveryDate = request.body.firstDeliveryDate
     )
     val isExistingAccount = createPaymentMethodState.paymentFields.isInstanceOf[ExistingPaymentFields]
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(

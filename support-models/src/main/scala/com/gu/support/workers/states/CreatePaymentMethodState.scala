@@ -15,8 +15,7 @@ case class CreatePaymentMethodState(
   paymentFields: PaymentFields,
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
-  acquisitionData: Option[AcquisitionData],
-  debugInfo: Option[String]
+  acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
 
 import com.gu.support.encoding.Codec
