@@ -18,8 +18,10 @@ type PropTypes = {
   description: string,
   buttons: ProductButton[],
   productImage: Node,
+  analyticsTracking: Function,
   offer?: Option<string>,
-  isFeature?: Option<boolean>
+  isFeature?: Option<boolean>,
+  classModifier: string[],
 }
 
 const SubscriptionsProduct = ({
