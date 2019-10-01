@@ -5,19 +5,23 @@ import type { ContributionTypes } from 'helpers/contributions';
 
 export type TickerType = 'unlimited' | 'hardstop';
 
+export type TickerSettings = {
+  goalReachedCopy: React$Element<string> | null,
+  tickerJsonUrl: string,
+  tickerType: TickerType,
+  localCurrencySymbol: string
+}
+
 export type CampaignSettings = {
   headerCopy?: string | React$Element<string>,
   contributeCopy?: React$Element<string>,
   formMessage?: React$Element<string>,
   termsAndConditions?: (contributionsTermsLink: string) => React$Element<string>,
-  tickerJsonUrl?: string,
   cssModifiers?: string[],
-  tickerType: TickerType,
   contributionTypes?: ContributionTypes,
   backgroundImage?: string,
-  goalReachedCopy: React$Element<string> | null,
-  localCurrencySymbol: string,
   extraComponent?: React$Element<string>,
+  tickerSettings?: TickerSettings,
 };
 
 export type Campaigns = {
@@ -67,10 +71,7 @@ export const campaigns: Campaigns = {
         </p>
       </div>
     ),
-    goalReachedCopy: null,
-    tickerType: 'unlimited',
     cssModifiers: ['environment-moment'],
-    localCurrencySymbol: '£',
     extraComponent: (
       <div className="environment-moment_image-container">
         <img
