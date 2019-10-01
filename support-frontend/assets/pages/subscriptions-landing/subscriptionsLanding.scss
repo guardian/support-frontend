@@ -445,9 +445,10 @@
 .component-button--subscriptions__product-button {
   background-color: gu-colour(neutral-7);
   color: gu-colour(neutral-100);
-  margin: 0 20px 20px 0;
 
-
+  @include mq($until: mobileMedium) {
+    font-size: 12px;
+  }
 }
 
 /****************** premium app ********************/
@@ -458,6 +459,10 @@
   @include mq($until: tablet) {
     display: flex;
   }
+}
+
+.subscriptions__premuim-app .component-button--subscriptions__product-button:first-of-type {
+  margin: 0 20px 20px 0;
 }
 
 .component-grid-image--subscriptions-premium-image {
