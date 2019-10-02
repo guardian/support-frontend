@@ -75,8 +75,8 @@ const digital = {
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.DigitalPack,
+    analyticsTracking: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription'),
   }],
-  analyticsTracking: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription'),
   isFeature: true,
 };
 
@@ -87,9 +87,9 @@ const guardianWeekly = {
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.GuardianWeekly,
+    analyticsTracking: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
   }],
   productImage: chooseImage([<GuardianWeeklyPackShot />, <FullGuardianWeeklyPackShot />]),
-  analyticsTracking: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
 };
 
 const paper = {
@@ -99,10 +99,10 @@ const paper = {
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.Paper,
+    analyticsTracking: sendTrackingEventsOnClick('paper_cta', Paper, abTest, 'paper-subscription'),
   }],
   productImage: <PaperPackshot />,
   offer: 'Save up to 52% for a year',
-  analyticsTracking: sendTrackingEventsOnClick('paper_cta', Paper, abTest, 'paper-subscription'),
 };
 
 const paperAndDigital = {
@@ -112,9 +112,9 @@ const paperAndDigital = {
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.PaperAndDigital,
+    analyticsTracking: sendTrackingEventsOnClick('paper_digital_cta', PaperAndDigital, abTest, 'paper-and-digital-subscription'),
   }],
   productImage: <PaperAndDigitalPackshot />,
-  analyticsTracking: sendTrackingEventsOnClick('paper_digital_cta', PaperAndDigital, abTest, 'paper-and-digital-subscription'),
 };
 
 const premiumApp = {
@@ -124,12 +124,12 @@ const premiumApp = {
   buttons: [{
     ctaButtonText: 'Buy in App Store',
     link: getIosAppUrl(countryGroupId),
-    onClick: trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', abTest),
+    analyticsTracking: trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', abTest),
     // these buttons need a change there css so the text fits at 320px width
   }, {
     ctaButtonText: 'Buy on Google Play',
     link: androidAppUrl,
-    onClick: () => trackAppStoreLink('premium_tier_android_cta', 'PremiumTier', abTest),
+    analyticsTracking: trackAppStoreLink('premium_tier_android_cta', 'PremiumTier', abTest),
   }],
   productImage: <PremiumAppPackshot />,
   classModifier: ['subscriptions__premuim-app'],

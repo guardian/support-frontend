@@ -19,11 +19,10 @@ type PropTypes = {
   isFeature: Option<boolean>,
   offer?: Option<string>,
   buttons: ProductButton[],
-  analyticsTracking: () => {}
 };
 
 const SubscriptionsProductDescription = ({
-  title, subtitle, description, offer, isFeature, buttons, analyticsTracking,
+  title, subtitle, description, offer, isFeature, buttons,
 }: PropTypes) => (
   <div>
     <h2 className="subscriptions__product-title">{title}</h2>
@@ -34,7 +33,7 @@ const SubscriptionsProductDescription = ({
       <AnchorButton
         href={button.link}
         modifierClasses={(!isFeature) ? ['subscriptions__product-button'] : []}
-        onClick={analyticsTracking}
+        onClick={button.analyticsTracking}
       >
         {button.ctaButtonText}
       </AnchorButton>
