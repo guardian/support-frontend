@@ -388,6 +388,10 @@
     line-height: 18px;
   }
 
+  @include mq($until: tablet) {
+    max-width: 100%;
+  }
+
   @include mq($until: mobileLandscape) {
     font-size: 14px;
     line-height: 16px;
