@@ -399,18 +399,23 @@
   }
 }
 
-.call-to-action__container {
-  padding-top: 70px;
-  padding-bottom: 50px;
-  background-color: #041f4a;
-}
-
 div.call-to-action__container {
   max-width: 100%;
   margin-right: 0;
+  display: flex;
+  padding-top: 70px;
+  padding-bottom: 50px;
+  background-color: #041f4a;
+  @include mq($from: wide) {
+    justify-content: center;
+  }
   
   .hope-is-power--centered {
     background-color: #041f4a;
+
+    @include mq($from: wide) {
+      padding-left: 0;
+    }
   }
 
   .payment-selection__card {
@@ -436,27 +441,15 @@ div.call-to-action__container {
       margin-left: 10px;
       width: calc(100% - 30px);
     }
-
-    
-
-    
-
-    // @include mq($from: desktop) {
-    //   width: calc(100% - 650px);
-    // }
-
-    // @include mq($from: leftCol) {
-    //   width: calc(100% - 800px);
-    // }
-
-    // @include mq($from: wide) {
-    //   width: 25%;
-    // }
   }
 
   .payment-selection__card:first-of-type {
     @include mq($from: tablet) {
       margin-left: 50px;
+    }
+
+    @include mq($from: wide) {
+      margin-left: 30px;
     }
   }
 

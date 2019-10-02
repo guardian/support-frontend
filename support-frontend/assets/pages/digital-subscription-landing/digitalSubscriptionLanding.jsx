@@ -99,7 +99,7 @@ type State = {
 }
 
 // This is a temporary variant controller for the A/B tests
-const pageType = 'A';
+const pageType = process.env.NODE_ENV === 'DEV' ? 'A' : 'B';
 
 // ----- Render ----- //
 class LandingPage extends Component<Props, State> {
