@@ -28,7 +28,6 @@ type PropTypes = {|
   content?: Option<Node>,
   hasCampaign: boolean,
   showProductPageHeroHeader?: boolean,
-  center?: Option<boolean>,
 |};
 
 type ProductPageHeroHeaderTypes = {
@@ -49,7 +48,6 @@ const HeroWrapper = ({
     </LeftMarginSection>
   </div>
 );
-
 HeroWrapper.defaultProps = {
   modifierClasses: [],
   appearance: 'grey',
@@ -75,7 +73,7 @@ const HeroHeading = ({
   <div className={classNameWithModifiers('component-product-page-hero-heading', [hasCampaign ? 'campaign' : null])}>
     <LeftMarginSection>
       {children}
-    </LeftMarginSection>)
+    </LeftMarginSection>
   </div>
 );
 
@@ -113,5 +111,4 @@ ProductPageHeroHeader.defaultProps = {
 };
 
 export { HeroHanger, HeroWrapper, HeroHeading, ProductPageHeroHeader };
-
 export default ProductPageHero;

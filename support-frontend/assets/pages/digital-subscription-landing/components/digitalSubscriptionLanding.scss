@@ -408,18 +408,8 @@ div.call-to-action__container {
   .hope-is-power--centered {
     background-color: #041f4a;
   }
-  // @include mq($from: tablet) {
-  //   width: calc(100%);
-  //   max-width: calc(100% - 10px);
-  // }
-
-  // @include mq($from: desktop) {
-    // display: flex;
-    // justify-content: center;
-  // }
 
   .payment-selection__card {
-
     @include mq($until: desktop) {
       width: 40%;
     }
