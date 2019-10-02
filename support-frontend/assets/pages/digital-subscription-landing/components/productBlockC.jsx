@@ -3,12 +3,17 @@ import React from 'react';
 import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
 
 // styles
-import './digitalSubscriptionLandingHeader.scss';
+import './digitalSubscriptionLanding.scss';
 
 const ProductBlockC = () => (
   <div className="hope-is-power__products">
     <div className="product-block__container hope-is-power--centered">
-      DP products, to come!
+      <div className="product-block__item">
+        <div className="product-block__item__title">The Guardian Daily</div>
+      </div>
+      <div className="product-block__item">
+        <div className="product-block__item__title">Premium access to the Live app</div>
+      </div>
       <AdFreeSectionC />
     </div>
   </div>

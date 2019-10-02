@@ -26,13 +26,15 @@ import ProductBlockC from './components/productBlockC';
 import PromotionPopUp from './components/promotionPopUp';
 
 import './digitalSubscriptionLanding.scss';
-import './components/theMoment.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
 import { isPostDeployUser } from 'helpers/user/user';
 import { dpSale, flashSaleIsActive } from 'helpers/flashSale';
 import { DigitalPack } from 'helpers/subscriptions';
 import CallToAction from './components/cta';
+
+// ----- Styles ----- //
+import './components/digitalSubscriptionLanding.scss';
 
 // ----- Redux Store ----- //
 

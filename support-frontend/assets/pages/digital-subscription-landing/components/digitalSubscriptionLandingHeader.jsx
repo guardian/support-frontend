@@ -26,7 +26,7 @@ import { type GridImg } from 'components/gridImage/gridImage';
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 import { showCountdownTimer } from '../../../helpers/flashSale';
 
-import './digitalSubscriptionLandingHeader.scss';
+import './digitalSubscriptionLanding.scss';
 
 
 // ----- Types ----- //

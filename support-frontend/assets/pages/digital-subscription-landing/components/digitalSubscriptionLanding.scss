@@ -2,12 +2,16 @@
 
 
 .hope-is-power-hero--wrapper {
-  display: flex;
-  flex-direction: column;
-  background: #ffffff;
-  box-sizing: border-box;
-  height: 95px;
-  padding-top: 40px;
+  height: 80px;
+
+  @include mq($from: tablet) {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    box-sizing: border-box;
+    height: 95px;
+    padding-top: 40px;
+  }
   
 }
 
@@ -23,9 +27,9 @@
   }
 
   @include mq($from: phablet) {
-    padding-left: 50px;
+    padding-left: 25px;
     align-self: center;
-    width: calc(100% - 50px);
+    width: calc(100% - 25px);
   }
 
   @include mq($from: tablet) {
@@ -56,8 +60,7 @@
   background-color: #ffe500;
   @include gu-fontset-heading;
   color: gu-colour(neutral-7);
-  height: 165px;
-  margin-bottom: 30px;
+  height: 110px;
   padding-top: $gu-v-spacing / 3;
   padding-bottom: 22px;
 
@@ -71,11 +74,10 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 22px;
+    max-width: gu-span(4);
   }
 
   @include mq($from: mobileLandscape) {
-    height: 120px;
-
     h2 {
       font-size: 24px;
       font-weight: 600;
@@ -86,6 +88,13 @@
       font-size: 18px;
       font-weight: 400;
       line-height: 28px;
+      max-width: gu-span(6);
+    }
+  }
+
+  @include mq($from: tablet) {
+    h3 {
+      max-width: gu-span(7);
     }
   }
 
@@ -150,13 +159,31 @@
   background-color: #ededed;
 
   .product-block__container {
-    margin-top: 20px;
     padding-top: 50px;
     padding-bottom: 50px;
     border: 1px solid gu-colour(neutral-86);
 
-    @include mq($from: desktop) {
-      margin-top: 50px;
+    .product-block__item {
+      border: 1px solid gu-colour(neutral-86);
+      width: calc(100% - 50px);
+      padding-top: 10px;
+      padding-bottom: 50px;
+      margin-bottom: 25px;
+
+      .product-block__item__title {
+        margin-bottom: 8px;
+        margin-left: 20px;
+        font: 600 22px $gu-headline;
+        max-width: gu-span(4);
+
+        @include mq($from: tablet) {
+          font-size: 26px;
+        }
+
+        @include mq($from: desktop) {
+          font-size: 32px;
+        }
+      }
     }
   }
 
@@ -374,19 +401,22 @@
   background-color: #041f4a;
 }
 
-div.call-to-action__container.hope-is-power--centered {
+div.call-to-action__container {
   max-width: 100%;
   margin-right: 0;
   
-
-  @include mq($from: tablet) {
-    width: 100%;
+  .hope-is-power--centered {
+    background-color: #041f4a;
   }
+  // @include mq($from: tablet) {
+  //   width: calc(100%);
+  //   max-width: calc(100% - 10px);
+  // }
 
-  @include mq($from: desktop) {
+  // @include mq($from: desktop) {
     // display: flex;
     // justify-content: center;
-  }
+  // }
 
   .payment-selection__card {
 
