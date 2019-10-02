@@ -1,0 +1,279 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+
+.component-product-page-hero.component-product-page-hero--digital-campaign {
+  background: #FCF8F2;
+  box-sizing: border-box;
+  height: auto;
+  min-height: 200px;
+  border-bottom: 1px solid gu-colour(neutral-86);
+  & * {
+    box-sizing: border-box;
+  }
+}
+
+.the-moment-hero {
+  display: flex;
+  align-items: center;
+  padding: $gu-v-spacing*2 0 $gu-v-spacing*3;
+  
+  @include mq($from: tablet) {
+    padding: $gu-v-spacing*2 0 $gu-v-spacing*4;
+  }
+
+}
+
+.the-moment-hero__copy {
+    line-height: 1;
+    max-width: gu-span(6);
+    padding-left: $gu-v-spacing;
+    
+    h2 {
+      font-family: $gu-titlepiece;
+      max-width: gu-span(6);
+      color: #EF7D21;
+      font-size: 28px;
+      span {
+        color: #0084C6
+      }
+    }
+
+    @include mq($until: mobileLandscape) {
+      display: none;
+    }
+
+    
+    @include mq($from: mobileLandscape) {
+      max-width: 50%;
+      
+      h2 {
+        font-size: 38px;
+      }
+    }
+    
+    @include mq($from: phablet) {
+      max-width: 50%;
+      h2 {
+        font-size: 38px;
+      }
+    }
+    
+    @include mq($from: tablet) {      
+      h2 {
+        font-size: 44px;
+      }
+    }
+
+    @include mq($from: desktop) {
+      h2 {
+        font-size: 50px;
+        max-width: gu-span(6);
+      }
+    }
+    
+    @include mq($from: leftCol) {
+      h2 {
+        font-size: 56px;
+      }
+    }
+    
+}
+
+.the-moment-hero__graphic-outer {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  max-width: gu-span(8);
+  
+  @include mq($from: mobileMedium) {
+    padding-top: $gu-v-spacing*1;
+  }
+  
+  @include mq($from: tablet) {
+    padding-top: $gu-v-spacing*2;
+    padding-right: $gu-v-spacing*2;
+  }
+
+}
+
+.the-moment-hero__graphic-inner {
+  position: relative;
+}
+
+.the-moment-hero__graphic {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+
+  img {
+    max-height: 200px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @include mq($from: mobileMedium) {
+    img {
+      max-height: 250px;
+    }
+  }
+
+  @include mq($from: tablet) {
+    img {
+      max-height: 275px;
+    }
+  }
+  @include mq($from: desktop) {
+    img {
+      max-height: 300px;
+    }
+  }
+  @include mq($from: leftCol) {
+    img {
+      max-height: 380px;
+    }
+  }
+}
+
+.the-moment-hero__graphic-slider,
+.the-moment-hero__graphic-slider-inner,
+.the-moment-hero__graphic-slider-1,
+.the-moment-hero__graphic-slider-2,
+.the-moment-hero__graphic-slider-3 {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@keyframes gallery {
+  1% {
+    display: block;
+  }
+  100% {
+    display: none;
+  }
+}
+
+.the-moment-hero__graphic-slider-1,
+.the-moment-hero__graphic-slider-2,
+.the-moment-hero__graphic-slider-3 {
+  animation: fling-minislide 6s infinite;
+  opacity: 0; 
+} 
+
+@keyframes fling-minislide {
+  0% {opacity:1;}
+  33.33% {opacity:1;} 
+  33.34% {opacity:0;} 
+  50% {opacity:0;}
+  100% {opacity:0;}
+} 
+
+.the-moment-hero__graphic-slider-1 {
+  animation-delay: 0s;
+}
+
+.the-moment-hero__graphic-slider-2 {
+  animation-delay: 2s;
+}
+
+.the-moment-hero__graphic-slider-3 {
+  animation-delay: 4s;
+}
+
+@media (prefers-reduced-motion) {
+  .the-moment-hero__graphic {
+    opacity: 1;
+  }
+  .the-moment-hero__graphic-slider {
+    display: none;
+  }
+}
+
+.the-moment-hero__badge {
+  position: absolute;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: gu-colour(neutral-100);
+  text-align: center;
+  line-height: 1;
+  font-family: $gu-headline;
+  font-size: 1rem;
+  font-weight: 700;
+  z-index: 10;
+  width: 100%;
+  top: 1.4rem;
+  
+  span {
+    display: block;
+    line-height: 1; 
+  }
+  
+  .the-moment-hero__badge-lgeCopy {
+    font-family: $gu-titlepiece;
+    position: relative;
+    font-size: 1.6rem;
+    font-variant-numeric: lining-nums;
+    -moz-font-feature-settings: "lnum";
+    -webkit-font-feature-settings: "lnum";
+    font-feature-settings: "lnum";
+  }
+  
+  @include mq($from: mobileMedium) {
+    top: 1.8rem;
+    font-size: 1rem;
+
+    .the-moment-hero__badge-lgeCopy {
+      font-size: 2.2rem;
+    }
+  }
+  
+  @include mq($from: tablet) {
+    top: 2.2rem;
+    font-size: 1.2rem;
+  }
+  
+  @include mq($from: leftCol) {
+    top: 3.25rem;
+
+    .the-moment-hero__badge-lgeCopy {
+      font-size: 2.8rem;
+    }
+  }
+}
+
+.payment-selection__title-container {
+  text-align: left;
+  padding: 0 10px;
+
+  max-width: 38.5rem;
+  margin-bottom: 115px;
+
+  @include mq($from: leftCol) {
+    padding-left: 0;
+  }
+}
+
+.payment-selection__title {
+  font-family: $gu-headline;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.3;
+
+  @include mq($from: tablet) {
+    font-size: 24px;
+    line-height: 28px;
+  }
+}

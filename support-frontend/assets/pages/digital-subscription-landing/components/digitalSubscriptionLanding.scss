@@ -154,6 +154,10 @@
 }
 
 .hope-is-power__products {
+  [class^="product-block"] {
+    box-sizing: content-box;
+  }
+  
   display: flex;
   flex-direction: column;
   background-color: #ededed;

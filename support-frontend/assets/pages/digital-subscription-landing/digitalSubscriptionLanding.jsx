@@ -20,9 +20,10 @@ import Footer from 'components/footer/footer';
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
+import { CampaignHeaderB } from './componentsB/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection
   from './components/independentJournalismSection';
-import ProductBlockC from './components/productBlockC';
+import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
 
 import './digitalSubscriptionLanding.scss';
@@ -32,9 +33,12 @@ import { isPostDeployUser } from 'helpers/user/user';
 import { dpSale, flashSaleIsActive } from 'helpers/flashSale';
 import { DigitalPack } from 'helpers/subscriptions';
 import CallToAction from './components/cta';
+import ProductBlockB from './componentsB/productBlockB/productBlockB';
+import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 
 // ----- Styles ----- //
 import './components/digitalSubscriptionLanding.scss';
+import './componentsB/theMoment.scss';
 
 // ----- Redux Store ----- //
 
@@ -94,6 +98,9 @@ type State = {
   pageReadyChecks: number,
 }
 
+// This is a temporary variant controller for the A/B tests
+const pageType = 'A';
+
 // ----- Render ----- //
 class LandingPage extends Component<Props, State> {
   state = {
@@ -132,28 +139,55 @@ class LandingPage extends Component<Props, State> {
 
     const promoCode = flashSaleIsActive(DigitalPack, countryGroupId) ? dpSale.promoCode : null;
 
+    const pageTypeA = (
+      <Page
+        header={<CountrySwitcherHeader />}
+        footer={
+          <Footer>
+            <CustomerService
+              selectedCountryGroup={countryGroupId}
+              promoCode={promoCode}
+            />
+            <SubscriptionFaq subscriptionProduct="DigitalPack" />
+          </Footer>}
+      >
+        <CampaignHeader countryGroupId={countryGroupId} />
+        <ProductBlock />
+        <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
+        <IndependentJournalismSection />
+        <PromotionPopUp />
+        <ConsentBanner />
+      </Page>
+    );
+
+    const pageTypeB = (
+      <Page
+        header={<CountrySwitcherHeader />}
+        footer={
+          <Footer>
+            <CustomerService
+              selectedCountryGroup={countryGroupId}
+              promoCode={promoCode}
+            />
+            <SubscriptionFaq subscriptionProduct="DigitalPack" />
+          </Footer>}
+      >
+        <CampaignHeaderB
+          countryGroupId={countryGroupId}
+          dailyEditionsVariant={dailyEditionsVariant}
+        />
+        <ProductBlockB />
+        <AdFreeSectionB />
+        <IndependentJournalismSection />
+        <PromotionPopUp />
+        <ConsentBanner />
+      </Page>
+    );
+
     return (
       <div>
-        {showPage && (
-        <Page
-          header={<CountrySwitcherHeader />}
-          footer={
-            <Footer>
-              <CustomerService
-                selectedCountryGroup={countryGroupId}
-                promoCode={promoCode}
-              />
-              <SubscriptionFaq subscriptionProduct="DigitalPack" />
-            </Footer>}
-        >
-          <CampaignHeader countryGroupId={countryGroupId} />
-          <ProductBlockC />
-          <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
-          <IndependentJournalismSection />
-          <PromotionPopUp />
-          <ConsentBanner />
-        </Page>)
-    }
+        {showPage && pageType === 'A' && pageTypeA}
+        {showPage && pageType === 'B' && pageTypeB}
       </div>
     );
 

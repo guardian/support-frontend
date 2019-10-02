@@ -1,0 +1,48 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.payment-selection {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -80px 0 24px;
+
+  @include mq($from: phablet) {
+    justify-content: left;
+  }
+
+  @include mq($from: tablet) {
+    margin-top: 0;
+    padding-left: 0;
+  }
+  
+  @include mq($from: leftCol) {
+    padding-left: 0;
+  }
+}
+
+.payment-selection__card {
+  position: relative;
+  width: 100%;
+  max-width: 32.5rem;
+  display: flex;
+  margin: 10px;
+
+  @include mq($from: tablet) {
+    margin: 0;
+    max-width: 30rem;
+    width: 320px;
+  }
+}
+
+.payment-selection__card:last-of-type {
+  margin: 30px 10px 20px 10px;
+
+  @include mq($from: tablet) {
+    margin: 0 0 0 20px;
+  }
+}
+
+.payment-selection_cancel-text {
+  @include gu-fontset-body-sans;
+  width: 100%;
+  margin: 10px 0 0 0;
+}

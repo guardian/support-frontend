@@ -2,7 +2,7 @@
 import React from 'react';
 
 // styles
-import '../adFreeSectionB/adFreeSectionB.scss';
+import './adFreeSectionC.scss';
 import '../../pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
 
 

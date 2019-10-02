@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.ad-free-section {
+.ad-free-section, .ad-free-section-c {
   width: 100%;
   
   @include mq($from: phablet) {
@@ -15,21 +15,26 @@
 }
 
 .ad-free-section__content {
-  padding: 10px;
-  
-  @include mq($from: phablet) {
-    width: 190%;
-  }
+  padding-left: 10px;
 
   @include mq($from: phablet) {
+    width: 190%;
     padding-bottom: 40px;
   }
 
   @include mq($from: desktop) {
-    padding-bottom: 80px;
     width: 100%;
+    padding-bottom: 80px;
   }
+}
 
+.ad-free-section-c__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px 20px 30px;
+  border: 1px solid gu-colour(neutral-86);
+  width: calc(100% - 50px);
 }
 
 .ad-free-section-b__sub-header {
