@@ -33,10 +33,13 @@ type PropTypes = {|
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   paymentWaiting: (isWaiting: boolean) => Action,
   setStripeCardFormComplete: (isComplete: boolean) => Action,
+  checkoutFormHasBeenSubmitted: boolean,
+
 |};
 
 const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -169,10 +172,26 @@ class CardForm extends Component<PropTypes, StateTypes> {
     this.state.CVC.name === 'Complete';
 
   render() {
-    const errorMessage: ?string =
+    const fieldError: ?string =
       errorMessageFromState(this.state.CardNumber) ||
       errorMessageFromState(this.state.Expiry) ||
       errorMessageFromState(this.state.CVC);
+
+    const incompleteMessage = (): ?string => {
+      if (
+        this.props.checkoutFormHasBeenSubmitted &&
+        (
+          this.state.CardNumber.name === 'Incomplete' ||
+          this.state.Expiry.name === 'Incomplete' ||
+          this.state.CVC.name === 'Incomplete'
+        )
+      ) {
+        return 'Please complete your card details';
+      }
+      return undefined;
+    };
+
+    const errorMessage: ?string = fieldError || incompleteMessage();
 
     const getClasses = (fieldName: CardFieldName): string =>
       `form__input ${this.getFieldBorderClass(fieldName)}`;
@@ -180,7 +199,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
     return (
       <div className="form__fields">
         <legend className="form__legend">Your card details</legend>
-
         <div className="form__field">
           <label className="form__label" htmlFor="stripeCardNumberElement">
             <span>Card number</span>
@@ -195,7 +213,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
             />
           </span>
         </div>
-
         <div className="stripe-card-element-container__inline-fields">
           <div className="form__field">
             <label className="form__label" htmlFor="stripeCardExpiryElement">
@@ -211,7 +228,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
               />
             </span>
           </div>
-
           <div className="form__field">
             <label className="form__label" htmlFor="stripeCardCVCElement">
               <span>CVC</span>
@@ -228,7 +244,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
             </span>
           </div>
         </div>
-
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
       </div>
     );
