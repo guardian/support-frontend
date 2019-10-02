@@ -4,7 +4,6 @@ import { init as pageInit } from 'helpers/page/page';
 
 // type
 import { type SubscriptionProduct } from 'helpers/subscriptions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // images
 import FeaturePackshot from 'components/packshots/feature-packshot';
@@ -28,7 +27,7 @@ import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from
 // store
 const store = pageInit();
 const commonStore = store.getState().common;
-const { countryGroupId }: CountryGroupId = commonStore.internationalisation;
+const { countryGroupId } = commonStore.internationalisation;
 const { referrerAcquisitionData, abParticipations, optimizeExperiments } = commonStore;
 
 const abTest = null;
@@ -69,7 +68,7 @@ const chooseImage = images =>
 
 const digital = {
   title: 'Digital Pack',
-  subtitle: formatPrice(DigitalPack, hasPrice(DigitalPack, null)),
+  subtitle: formatPrice(DigitalPack, hasPrice(DigitalPack, '')),
   description: 'The Daily Edition app and Premium app in one pack, plus ad-free reading on all your devices',
   productImage: chooseImage([<FeaturePackshot />, <IntFeaturePackshot />]),
   offer: '50% off for 3 months',
@@ -83,7 +82,7 @@ const digital = {
 
 const guardianWeekly = {
   title: 'Guardian Weekly',
-  subtitle: hasPrice(GuardianWeekly, null),
+  subtitle: hasPrice(GuardianWeekly, ''),
   description: 'A weekly, global magazine from The Guardian, with delivery worldwide',
   buttons: [{
     ctaButtonText: 'Find out more',
