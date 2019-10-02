@@ -19,7 +19,6 @@ import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
-import type { StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
 import Button from 'components/button/button';
 
 // ----- Types ----- //
@@ -62,7 +61,7 @@ function mapStateToProps(state: State) {
       state.page.form.formData.otherAmounts,
       contributionType,
     ),
-    billingPeriod: billingPeriodFromContrib(contributionType)
+    billingPeriod: billingPeriodFromContrib(contributionType),
   });
 }
 
@@ -83,7 +82,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 function withProps(props: PropTypes) {
 
- if (props.paymentMethod !== 'None') {
+  if (props.paymentMethod !== 'None') {
     // if all payment methods are switched off, do not display the button
     const formClassName = 'form--contribution';
     const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';

@@ -159,7 +159,7 @@ function buildRegularPaymentRequest(
     ),
     promoCode,
     deliveryInstructions,
-    debugInfo
+    debugInfo,
   };
 }
 
