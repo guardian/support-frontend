@@ -77,7 +77,7 @@ const digital = {
     ctaButtonText: 'Find out more',
     link: subsLinks.DigitalPack,
   }],
-  analyticsTracking: () => sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription'),
+  analyticsTracking: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription'),
   isFeature: true,
 };
 
@@ -90,7 +90,7 @@ const guardianWeekly = {
     link: subsLinks.GuardianWeekly,
   }],
   productImage: chooseImage([<GuardianWeeklyPackShot />, <FullGuardianWeeklyPackShot />]),
-  analyticsTracking: () => sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
+  analyticsTracking: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
 };
 
 const paper = {
@@ -102,7 +102,8 @@ const paper = {
     link: subsLinks.Paper,
   }],
   productImage: <PaperPackshot />,
-  analyticsTracking: () => sendTrackingEventsOnClick('paper_cta', Paper, abTest, 'paper-subscription'),
+  offer: 'Save up to 52% for a year',
+  analyticsTracking: sendTrackingEventsOnClick('paper_cta', Paper, abTest, 'paper-subscription'),
 };
 
 const paperAndDigital = {
@@ -114,7 +115,7 @@ const paperAndDigital = {
     link: subsLinks.PaperAndDigital,
   }],
   productImage: <PaperAndDigitalPackshot />,
-  analyticsTracking: () => sendTrackingEventsOnClick('paper_digital_cta', PaperAndDigital, abTest, 'paper-and-digital-subscription'),
+  analyticsTracking: sendTrackingEventsOnClick('paper_digital_cta', PaperAndDigital, abTest, 'paper-and-digital-subscription'),
 };
 
 const premiumApp = {
@@ -124,7 +125,7 @@ const premiumApp = {
   buttons: [{
     ctaButtonText: 'Buy in App Store',
     link: getIosAppUrl(countryGroupId),
-    onClick: () => trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', abTest),
+    onClick: trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', abTest),
     // these buttons need a change there css so the text fits at 320px width
   }, {
     ctaButtonText: 'Buy on Google Play',
