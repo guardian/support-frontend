@@ -47,12 +47,12 @@
 }
 
 .subscriptions__feature {
-  padding: 50px 10px 55px;
+  padding: 50px 0 55px;
   width: 100%;
   background-color: gu-colour('highlight-main');
 
   @include mq($until: tablet) {
-    padding: 30px;
+    padding: 30px 0 30px 50px;
   }
 }
 
@@ -60,6 +60,7 @@
   max-width: 1290px;
   margin: 0 auto;
   width: 100%;
+  max-width: 1290px;
 }
 
 .subscriptions__feature-text {
@@ -70,9 +71,14 @@
   line-height: 55px;
   margin-left: 80px;
 
+  @include mq($until: leftCol) {
+    margin-left: 50px;
+  }
+
   @include mq($until: desktop) {
     font-size: 42px;
     line-height: 45px;
+    margin-left: 30px;
   }
 
   @include mq($until: tablet) {
@@ -88,10 +94,6 @@
 .subscriptions__product-container {
   position: relative;
   margin-bottom: 40px;
-
-  @include mq($until: tablet) {
-    margin: 0 20px 40px;
-  }
 }
 
 .subscriptions__product-container::after {
@@ -116,17 +118,21 @@
   max-width: 1290px;
   border: 1px solid gu-colour(neutral-86);
   border-top: none;
+  min-height: 320px;
 
-  @include mq($from: desktop) {
-  }
-
-  @include mq($from: tablet) {
-    min-height: 320px;
+  @include mq($until: desktop) {
+    min-height: 250px;
   }
 
   @include mq($until: tablet) {
-    // min-height: 320px;
+    margin: 0 auto;
+    width: calc(100% - 40px);
+    min-height: 0;
     border: none;
+  }
+
+  @include mq($until: mobileLandscape) {
+    width: calc(100% - 20px);
   }
 }
 
@@ -280,7 +286,7 @@
   }
 
   @include mq($until: desktop) {
-    padding: 0 30px;
+    padding: 30px;
   }
 
   @include mq($until: tablet) {
@@ -397,9 +403,11 @@
 .subscriptions__sales {
   font-size: 24px;
   line-height: 27px;
-  display: inline;
+  display: inline-block;
   background-color: gu-colour('highlight-main');
   vertical-align: middle;
+  padding: 0px 7px 5px;
+  margin-top: 10px;
 
   @include mq($until: desktop) {
     font-size: 20px;
@@ -419,10 +427,6 @@
 
 .subscriptions__product--feature .subscriptions__sales {
   color: gu-colour(neutral-7);
-  line-height: px;
-  display: inline-block;
-  padding: 0px 7px 5px;
-  margin-top: 10px;
 }
 /****************** product-image ********************/
 
@@ -651,16 +655,51 @@
 .subscriptions-int-feature-packshot {
   position: absolute;
   bottom: -30px;
-  right: -184px;
-  width: 377px;
+  // right: -184px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 450px;
 
-  img {
-    width: 100%;
+  @include mq($until: desktop) {
+    width: 377px;
+    left: 45%;
+    transform: translateX(-45%);
   }
 
   @include mq($until: tablet) {
     position: static;
     bottom: 0;
     width: 100%;
+    left: 0;
+    transform: translateX(0);
+  }
+
+  img {
+    width: 450px;
+
+    @include mq($until: desktop) {
+      width: 90%;
+    }
+
+    @include mq($until: tablet) {
+      width: 100%;
+    }
+  }
+}
+
+/**** FOOTER HACK ****/
+#subscriptions-landing-page {
+  .component-left-margin-section:before {
+    content: none;
+  }
+
+  .component-content.component-content--feature,
+  .component-left-margin-section__content {
+    margin: 0 auto;
+    max-width: 1290px;
+  }
+
+  .component-footer {
+    background-color: gu-colour('brand-main');
   }
 }
