@@ -2,6 +2,10 @@
 import React from 'react';
 import { init as pageInit } from 'helpers/page/page';
 
+// type
+import { type SubscriptionProduct } from 'helpers/subscriptions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
 // images
 import FeaturePackshot from 'components/packshots/feature-packshot';
 import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
@@ -12,16 +16,19 @@ import IntFeaturePackshot from 'components/packshots/int-feature-packshot';
 import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
 
 // helpers
-import { displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { displayPrice, sendTrackingEventsOnClick, subscriptionPricesForDefaultBillingPeriod } from 'helpers/subscriptions';
 import { getCampaign } from 'helpers/tracking/acquisitions';
 import { getSubsLinks } from 'helpers/externalLinks';
 import { androidAppUrl, getIosAppUrl } from 'helpers/externalLinks';
 import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
 
+// constants
+import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
+
 // store
 const store = pageInit();
 const commonStore = store.getState().common;
-const { countryGroupId } = commonStore.internationalisation;
+const { countryGroupId }: CountryGroupId = commonStore.internationalisation;
 const { referrerAcquisitionData, abParticipations, optimizeExperiments } = commonStore;
 
 const abTest = null;
@@ -35,6 +42,25 @@ const subsLinks = getSubsLinks(
   optimizeExperiments,
 );
 
+const PREMIUM_APP_ALT_TEXT = '7-day free Trial';
+
+const hasPrice = (product: SubscriptionProduct, alternativeText: string) => { // add Flow types
+
+  if (subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]) {
+    return `${displayPrice(product, countryGroupId)}`;
+  }
+
+  return alternativeText;
+};
+
+const formatPrice = (product, price) => {
+  if (subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]) {
+    return `from ${price}`;
+  }
+
+  return price;
+};
+
 const isUkProduct = product =>
   countryGroupId === 'GBPCountries' && `from ${displayPrice(product, countryGroupId)}`;
 
@@ -43,7 +69,7 @@ const chooseImage = images =>
 
 const digital = {
   title: 'Digital Pack',
-  subtitle: `from ${displayPrice('DigitalPack', countryGroupId)}`,
+  subtitle: formatPrice(DigitalPack, hasPrice(DigitalPack, null)),
   description: 'The Daily Edition app and Premium app in one pack, plus ad-free reading on all your devices',
   productImage: chooseImage([<FeaturePackshot />, <IntFeaturePackshot />]),
   offer: '50% off for 3 months',
@@ -57,7 +83,7 @@ const digital = {
 
 const guardianWeekly = {
   title: 'Guardian Weekly',
-  subtitle: `${displayPrice('GuardianWeekly', countryGroupId)}`,
+  subtitle: hasPrice(GuardianWeekly, null),
   description: 'A weekly, global magazine from The Guardian, with delivery worldwide',
   buttons: [{
     ctaButtonText: 'Find out more',
@@ -69,41 +95,41 @@ const guardianWeekly = {
 
 const paper = {
   title: 'Paper',
-  subtitle: isUkProduct('Paper'),
+  subtitle: isUkProduct(Paper),
   description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.Paper,
   }],
   productImage: <PaperPackshot />,
-  analyticsTracking: sendTrackingEventsOnClick('paper_cta', 'Paper', abTest, 'paper-subscription'),
+  analyticsTracking: () => sendTrackingEventsOnClick('paper_cta', Paper, abTest, 'paper-subscription'),
 };
 
 const paperAndDigital = {
   title: 'Paper+Digital',
-  subtitle: isUkProduct('PaperAndDigital'),
-  description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
+  subtitle: isUkProduct(PaperAndDigital),
+  description: 'All the benefits of a paper subscription, plus access to the digital pack',
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.PaperAndDigital,
   }],
   productImage: <PaperAndDigitalPackshot />,
-  analyticsTracking: sendTrackingEventsOnClick('paper_digital_cta', 'PaperAndDigital', abTest, 'paper-and-digital-subscription'),
+  analyticsTracking: () => sendTrackingEventsOnClick('paper_digital_cta', PaperAndDigital, abTest, 'paper-and-digital-subscription'),
 };
 
 const premiumApp = {
   title: 'Premium App',
-  subtitle: isUkProduct('PremiumTier'),
-  description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
+  subtitle: hasPrice(PremiumTier, PREMIUM_APP_ALT_TEXT),
+  description: 'The ad-free, Premium App, designed especially for your smartphone and tablet',
   buttons: [{
     ctaButtonText: 'Buy in App Store',
     link: getIosAppUrl(countryGroupId),
-    onClick: trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', abTest),
+    onClick: () => trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', abTest),
     // these buttons need a change there css so the text fits at 320px width
   }, {
     ctaButtonText: 'Buy on Google Play',
     link: androidAppUrl,
-    onClick: trackAppStoreLink('premium_tier_android_cta', 'PremiumTier', abTest),
+    onClick: () => trackAppStoreLink('premium_tier_android_cta', 'PremiumTier', abTest),
   }],
   productImage: <PremiumAppPackshot />,
   classModifier: ['subscriptions__premuim-app'],
@@ -120,26 +146,32 @@ const orderedProducts = {
   UnitedStates: [
     guardianWeekly,
     digital,
+    premiumApp,
   ],
   International: [
     guardianWeekly,
     digital,
+    premiumApp,
   ],
   AUDCountries: [
     guardianWeekly,
     digital,
+    premiumApp,
   ],
   EURCountries: [
     guardianWeekly,
     digital,
+    premiumApp,
   ],
   NZDCountries: [
     guardianWeekly,
     digital,
+    premiumApp,
   ],
   Canada: [
     guardianWeekly,
     digital,
+    premiumApp,
   ],
 };
 
