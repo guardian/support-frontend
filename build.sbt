@@ -6,7 +6,7 @@ val commonSettings: Seq[SettingsDefinition] = Seq(
   libraryDependencies := Seq(
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "com.github.mpilquist" %% "simulacrum" % "0.10.0",
-    "com.gu" %% "fezziwig" % "0.8",
+    "com.gu" %% "fezziwig" % "1.3",
     "com.gu" %% "ophan-event-model" % "0.0.11" excludeAll ExclusionRule(organization = "com.typesafe.play"),
     "com.gu" %% "acquisitions-value-calculator-client" % "2.0.4",
     "com.squareup.okhttp3" % "okhttp" % "3.9.0",
