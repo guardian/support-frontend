@@ -9,6 +9,9 @@ import { type SubscriptionProduct } from './subscriptions';
 import { AUDCountries, GBPCountries, EURCountries, Canada, International, UnitedStates, NZDCountries } from './internationalisation/countryGroup';
 import { type FulfilmentOptions } from './productPrice/fulfilmentOptions';
 import { type Option } from 'helpers/types/option';
+import {
+  fromCountryGroupId, glyph,
+} from 'helpers/internationalisation/currency';
 
 export type SaleCopy = {
   featuredProduct: {
@@ -57,7 +60,7 @@ type Sale = {
 const dpSale = {
   promoCode: 'DK0NT24WG',
   intcmp: '',
-  price: 0,
+  price: 5.99,
   saleCopy: {
     featuredProduct: {
       heading: 'Digital Pack',
@@ -255,6 +258,16 @@ function getFormattedFlashSalePrice(
   return fixDecimals(sale.saleDetails[countryGroupId].price);
 }
 
+function getDisplayFlashSalePrice(
+  product: SubscriptionProduct,
+  countryGroupId: CountryGroupId,
+  period: BillingPeriod,
+): string {
+  const currency = glyph(fromCountryGroupId(countryGroupId) || 'GBP');
+  const price = getFormattedFlashSalePrice(product, countryGroupId, period);
+  return `${currency}${price}/${period}`;
+}
+
 function countdownTimerIsActive(flashSaleActive: boolean, showForHowManyDays: number, endTime: number): boolean {
   if (flashSaleActive) {
     const timeTravelDays = getTimeTravelDaysOverride();
@@ -277,6 +290,7 @@ function showCountdownTimer(product: SubscriptionProduct, countryGroupId: Countr
 
 export {
   flashSaleIsActive,
+  getDisplayFlashSalePrice,
   getPromoCode,
   getAnnualPlanPromoCode,
   getIntcmp,
