@@ -52,14 +52,6 @@ const hasPrice = (product: SubscriptionProduct, alternativeText: string) => { //
   return alternativeText;
 };
 
-const formatPrice = (product, price) => {
-  if (subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]) {
-    return `from ${price}`;
-  }
-
-  return price;
-};
-
 const isUkProduct = product =>
   countryGroupId === 'GBPCountries' && `from ${displayPrice(product, countryGroupId)}`;
 
@@ -68,7 +60,7 @@ const chooseImage = images =>
 
 const digital = {
   title: 'Digital Pack',
-  subtitle: formatPrice(DigitalPack, hasPrice(DigitalPack, '')),
+  subtitle: hasPrice(DigitalPack, ''),
   description: 'The Daily Edition app and Premium app in one pack, plus ad-free reading on all your devices',
   productImage: chooseImage([<FeaturePackshot />, <IntFeaturePackshot />]),
   offer: '50% off for 3 months',
