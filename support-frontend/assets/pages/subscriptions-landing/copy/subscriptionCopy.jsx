@@ -138,7 +138,6 @@ const premiumApp: ProductCopy = {
     ctaButtonText: 'Buy in App Store',
     link: getIosAppUrl(countryGroupId),
     analyticsTracking: trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', abTest),
-    // these buttons need a change there css so the text fits at 320px width
   }, {
     ctaButtonText: 'Buy on Google Play',
     link: androidAppUrl,

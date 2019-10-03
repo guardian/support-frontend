@@ -8,12 +8,10 @@ import { Provider } from 'react-redux';
 import Page from 'components/page/page';
 import FooterContainer from 'components/footer/footerContainer';
 import { detect, type CountryGroupId, AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
-// import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-// import FeaturedProductAb from './components/featuredProductAb';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 import './subscriptionsLanding.scss';
 
@@ -49,12 +47,6 @@ const content = (
       footer={<FooterContainer disclaimer privacyPolicy />}
     >
       <SubscriptionLandingContent />
-      {/*
-        <FeaturedProductAb
-          headingSize={3}
-        />
-        <SubscriptionsByCountryGroup headingSize={3} appMedium="subscribe_landing_page" />
-      */}
       <ConsentBanner />
     </Page>
   </Provider>
