@@ -61,7 +61,7 @@ const newsstandPrices: {[PaperProductOptions]: number} = {
 
 // ----- Config ----- //
 
-export const subscriptionPricesForDefaultBillingPeriod: {
+const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
     [CountryGroupId]: number,
   }
