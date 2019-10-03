@@ -11,7 +11,7 @@ import { subscriptionCopy } from '../copy/subscriptionCopy'; // make the first c
 const isFeature = index => index === 0;
 
 const SubscriptionsLandingContent = () => (
-  <div className="subscriptions-landing-page">
+  <div className="subscriptions-landing-page" id="qa-subscriptions-landing-page">
     <FeatureHeader />
     <div className="subscriptions__product-container">
       {subscriptionCopy.map((product, index) => (
