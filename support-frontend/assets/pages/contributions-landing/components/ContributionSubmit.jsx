@@ -19,8 +19,6 @@ import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
-import type { StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
-import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 import Button from 'components/button/button';
 
 // ----- Types ----- //
@@ -41,9 +39,7 @@ type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   formIsSubmittable: boolean,
   amount: number,
-  billingPeriod: BillingPeriod,
-  stripeCardFormComplete: boolean,
-  stripeElementsTestVariant: StripeElementsTestVariants,
+  billingPeriod: BillingPeriod
 |};
 
 function mapStateToProps(state: State) {
@@ -66,8 +62,6 @@ function mapStateToProps(state: State) {
       contributionType,
     ),
     billingPeriod: billingPeriodFromContrib(contributionType),
-    stripeCardFormComplete: state.page.form.stripeCardFormData.formComplete,
-    stripeElementsTestVariant: state.common.abParticipations.stripeElements,
   });
 }
 
@@ -87,15 +81,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 
 function withProps(props: PropTypes) {
-
-  const buttonDisabled = (): boolean =>
-    props.isWaiting ||
-    stripeCardFormIsIncomplete(
-      props.contributionType,
-      props.paymentMethod,
-      props.stripeElementsTestVariant,
-      props.stripeCardFormComplete,
-    );
 
   if (props.paymentMethod !== 'None') {
     // if all payment methods are switched off, do not display the button
@@ -137,7 +122,7 @@ function withProps(props: PropTypes) {
           <Button
             type="submit"
             aria-label={submitButtonCopy}
-            disabled={buttonDisabled()}
+            disabled={props.isWaiting}
             postDeploymentTestID="contributions-landing-submit-contribution-button"
           >
             {submitButtonCopy}
