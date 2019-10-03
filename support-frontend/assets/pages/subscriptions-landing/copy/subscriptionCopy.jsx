@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { init as pageInit } from 'helpers/page/page';
 
 // type
@@ -23,6 +23,26 @@ import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
 
 // constants
 import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { Option } from 'helpers/types/option';
+
+// types
+
+export type ProductButton = {
+  ctaButtonText: string,
+  link: string,
+  analyticsTracking: Function,
+}
+
+export type ProductCopy = {
+  title: string,
+  subtitle: Option<string>,
+  description: string,
+  productImage: React.Node,
+  offer?: string,
+  buttons: ProductButton[],
+  isFeature?: boolean,
+}
 
 // store
 const store = pageInit();
@@ -53,12 +73,12 @@ const hasPrice = (product: SubscriptionProduct, alternativeText: string) => { //
 };
 
 const isUkProduct = product =>
-  countryGroupId === 'GBPCountries' && `from ${displayPrice(product, countryGroupId)}`;
+  (countryGroupId === 'GBPCountries' ? `from ${displayPrice(product, countryGroupId)}` : null);
 
 const chooseImage = images =>
   (countryGroupId === 'GBPCountries' ? images[0] : images[1]);
 
-const digital = {
+const digital: ProductCopy = {
   title: 'Digital Pack',
   subtitle: hasPrice(DigitalPack, ''),
   description: 'The Daily Edition app and Premium app in one pack, plus ad-free reading on all your devices',
@@ -72,7 +92,7 @@ const digital = {
   isFeature: true,
 };
 
-const guardianWeekly = {
+const guardianWeekly: ProductCopy = {
   title: 'Guardian Weekly',
   subtitle: hasPrice(GuardianWeekly, ''),
   description: 'A weekly, global magazine from The Guardian, with delivery worldwide',
@@ -84,7 +104,7 @@ const guardianWeekly = {
   productImage: chooseImage([<GuardianWeeklyPackShot />, <FullGuardianWeeklyPackShot />]),
 };
 
-const paper = {
+const paper: ProductCopy = {
   title: 'Paper',
   subtitle: isUkProduct(Paper),
   description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
@@ -97,7 +117,7 @@ const paper = {
   offer: 'Save up to 52% for a year',
 };
 
-const paperAndDigital = {
+const paperAndDigital: ProductCopy = {
   title: 'Paper+Digital',
   subtitle: isUkProduct(PaperAndDigital),
   description: 'All the benefits of a paper subscription, plus access to the digital pack',
@@ -109,7 +129,7 @@ const paperAndDigital = {
   productImage: <PaperAndDigitalPackshot />,
 };
 
-const premiumApp = {
+const premiumApp: ProductCopy = {
   title: 'Premium App',
   subtitle: hasPrice(PremiumTier, PREMIUM_APP_ALT_TEXT),
   description: 'The ad-free, Premium App, designed especially for your smartphone and tablet',
@@ -127,7 +147,7 @@ const premiumApp = {
   classModifier: ['subscriptions__premuim-app'],
 };
 
-const orderedProducts = {
+const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
   GBPCountries: [
     digital,
     guardianWeekly,

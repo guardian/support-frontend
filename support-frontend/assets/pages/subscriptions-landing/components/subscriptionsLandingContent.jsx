@@ -22,7 +22,6 @@ const SubscriptionsLandingContent = () => (
           productImage={product.productImage}
           buttons={product.buttons}
           offer={product.offer || null}
-          analyticsTracking={product.analyticsTracking}
           isFeature={isFeature(index)}
           classModifier={product.classModifier}
         />

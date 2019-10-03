@@ -6,11 +6,7 @@ import cx from 'classnames';
 import { type Option } from 'helpers/types/option';
 
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
-
-type ProductButton = {
-  ctaButtonText: string,
-  link: string,
-}
+import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
 type PropTypes = {
   title: string,
@@ -18,7 +14,6 @@ type PropTypes = {
   description: string,
   buttons: ProductButton[],
   productImage: Node,
-  analyticsTracking: Function,
   offer?: Option<string>,
   isFeature?: Option<boolean>,
   classModifier: string[],

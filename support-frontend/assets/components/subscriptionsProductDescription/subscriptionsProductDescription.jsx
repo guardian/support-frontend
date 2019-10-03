@@ -6,11 +6,7 @@ import AnchorButton from 'components/button/anchorButton';
 
 // types
 import { type Option } from 'helpers/types/option';
-
-type ProductButton = {
-  ctaButtonText: string,
-  link: string,
-};
+import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
 type PropTypes = {
   title: string,
