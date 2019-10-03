@@ -11,7 +11,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ContributionType } from 'helpers/contributions';
 import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
 import { setupStripe } from 'helpers/stripe';
-import type { StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
 import AnimatedDots from 'components/spinners/animatedDots';
 import './stripeCardForm.scss';
 
@@ -24,7 +23,6 @@ type PropTypes = {|
   isTestUser: boolean,
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
-  stripeElementsTestVariant: StripeElementsTestVariants,
   setStripeHasLoaded: () => void,
   stripeHasLoaded: boolean,
 |};
@@ -37,8 +35,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
 
   render() {
     if (this.props.contributionType === 'ONE_OFF' &&
-      this.props.paymentMethod === Stripe &&
-      this.props.stripeElementsTestVariant === 'stripeCardElement') {
+      this.props.paymentMethod === Stripe) {
 
       if (this.props.stripeHasLoaded) {
 

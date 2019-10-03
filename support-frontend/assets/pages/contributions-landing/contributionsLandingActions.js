@@ -14,8 +14,7 @@ import {
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type {
-  RegularPaymentRequest,
-  StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
+  RegularPaymentRequest, StripePaymentIntentAuthorisation, StripePaymentMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -278,15 +277,6 @@ const buildStripeChargeDataFromAuthorisation = (
   ),
 });
 
-const stripeChargeDataFromCheckoutAuthorisation = (
-  authorisation: StripeCheckoutAuthorisation,
-  state: State,
-): StripeChargeData => buildStripeChargeDataFromAuthorisation(
-  authorisation.stripePaymentMethod,
-  authorisation.token,
-  state,
-);
-
 const stripeChargeDataFromPaymentIntentAuthorisation = (
   authorisation: StripePaymentIntentAuthorisation,
   state: State,
@@ -397,14 +387,6 @@ const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
     dispatch(onCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
   };
 
-const executeStripeOneOffPayment = (
-  data: StripeChargeData,
-  setGuestToken: (string) => void,
-  setThankYouPage: (ThankYouPageStage) => void,
-) =>
-  (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage)));
-
 const makeCreateStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,
   setGuestToken: (string) => void,
@@ -464,14 +446,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
       if (paymentAuthorisation.paymentMethod === Stripe) {
-        if (paymentAuthorisation.token) {
-          return dispatch(executeStripeOneOffPayment(
-            stripeChargeDataFromCheckoutAuthorisation(paymentAuthorisation, state),
-            (token: string) => dispatch(setGuestAccountCreationToken(token)),
-            (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-          ));
-        }
-
         if (paymentAuthorisation.paymentMethodId) {
           const { handle3DS } = state.page.form.stripeCardFormData;
           if (handle3DS) {
