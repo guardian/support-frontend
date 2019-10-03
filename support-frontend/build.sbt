@@ -8,7 +8,7 @@ testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
 
 testOptions in Test := Seq(Tests.Filter(unitTestFilter))
 
-import LibraryVersions.{circeVersion, awsClientVersion, jacksonDatabindVersion, jacksonVersion}
+import LibraryVersions.{circeVersion, awsClientVersion, jacksonVersion}
 
 resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
 
@@ -45,7 +45,7 @@ libraryDependencies ++= Seq(
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   // This is required to force aws libraries to use the latest version of jackson
   // jackson-databind versioning is out of sync with other jackson libraries
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   filters,
   ws
