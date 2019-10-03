@@ -37,3 +37,673 @@
   }
 
 }
+
+[class^="subscriptions"] {
+  box-sizing: border-box;
+}
+
+.subscriptions-landing-page {
+  width: 100%;
+}
+
+.subscriptions__feature {
+  padding: 50px 0 55px;
+  width: 100%;
+  background-color: gu-colour('highlight-main');
+
+  @include mq($until: tablet) {
+    padding: 30px 0 30px 50px;
+  }
+}
+
+.subscriptions__feature-container {
+  max-width: 1290px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1290px;
+}
+
+.subscriptions__feature-text {
+  font-size: 50px;
+  font-family: $gu-titlepiece;
+  font-weight: bold;
+  max-width: 700px;
+  line-height: 55px;
+  margin-left: 80px;
+
+  @include mq($until: leftCol) {
+    margin-left: 50px;
+  }
+
+  @include mq($until: desktop) {
+    font-size: 42px;
+    line-height: 45px;
+    margin-left: 30px;
+  }
+
+  @include mq($until: tablet) {
+    margin-left: 0;
+    font-size: 28px;
+    line-height: 30px;
+    max-width: 80%;
+  }
+}
+
+/****************** subscriptions product-container ********************/
+
+.subscriptions__product-container {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.subscriptions__product-container::after {
+  content: ' ';
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  background-color: gu-colour('highlight-main');
+  display: block;
+  z-index: -1;
+  top: 0;
+}
+
+/****************** subscriptions product ********************/
+.subscriptions__product {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  max-width: 1290px;
+  border: 1px solid gu-colour(neutral-86);
+  border-top: none;
+  min-height: 320px;
+
+  @include mq($until: desktop) {
+    min-height: 250px;
+  }
+
+  @include mq($until: tablet) {
+    margin: 0 auto;
+    width: calc(100% - 40px);
+    min-height: 0;
+    border: none;
+  }
+
+  @include mq($until: mobileLandscape) {
+    width: calc(100% - 20px);
+  }
+}
+
+.subscriptions__product:nth-child(odd) {
+  @include mq($from: tablet) {
+    flex-direction: row-reverse
+  }
+}
+
+.subscriptions__product::before {
+  content: ' ';
+  position: absolute;
+  width: 1px;
+  height: calc(100% - 24px);
+  top: 12px;
+  left: 50%;
+  z-index: 4;
+  background-color: gu-colour(neutral-86);
+
+  @include mq($until: tablet) {
+    content: none;
+    z-index: 1;
+  }
+}
+
+.subscriptions__product--reverse {
+  @include mq($until: tablet) {
+    padding-bottom: 30px;
+  }
+}
+/****************** subscriptions product--feature ********************/
+
+.subscriptions__product.subscriptions__product--feature {
+  color: gu-colour('neutral-100');
+  // min-height: 500px;
+  border: none;
+  padding-top: 70px;
+  background-color: gu-colour('brand-main');
+
+  @include mq($until: tablet) {
+    padding-top: 0;
+  }
+}
+
+.subscriptions__product.subscriptions__product--feature::before{
+  content: none;
+}
+
+.subscriptions__feature-image-wrapper {
+  overflow: hidden;
+  display: initial;
+}
+
+/****************** subscriptions copy-container / image-container ********************/
+
+.subscriptions__copy-container {
+  position: relative;
+  width: 70%;
+
+  @include mq($until: tablet) {
+    z-index: 1;
+  }
+
+  @include mq($until: mobileMedium) {
+    width: 65%;
+  }
+}
+
+.subscriptions__image-container {
+  position: relative;
+  overflow: hidden;
+  width: 30%;
+
+  @include mq($until: mobileMedium) {
+    width: 35%;
+  }
+
+}
+
+.subscriptions__copy-container,
+.subscriptions__image-container {
+  @include mq($from: tablet) {
+    width: 50%;
+  }
+}
+
+.subscriptions__image-container.subscriptions__product--feature {
+  background-color: gu-colour('brand-main');
+  width: 50%;
+
+  @media (min-width: 740px) and (max-width: 1067px) {
+    padding: 22% 0;
+  }
+  @media (min-width: 1067px) {
+    height: 447px;
+  }
+  @include mq($until: tablet) {
+    position: relative;
+    width: 100%;
+    // bottom: -80px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    position: relative;
+    width: 100%;
+  }
+
+  @include mq($until: mobile) {
+    position: relative;
+    width: 100%;
+    bottom: -50px;
+  }
+}
+
+.subscriptions__copy-container.subscriptions__product--feature {
+  position: relative;
+  width: 100%;
+  background-color: gu-colour('brand-main');
+
+  @include mq($from: tablet) {
+    width: 50%;
+  }
+
+  .subscriptions__copy-wrapper {
+    @include mq($until: desktop) {
+      padding: 0 30px 30px;
+    }
+  }
+
+  @include mq($until: tablet) {
+    position: relative;
+    width: 100%;
+  }
+}
+
+/****************** Copy ********************/
+.subscriptions__product--feature .subscriptions__copy-wrapper {
+  top: 0;
+  transform: none;
+  // margin-top: 80px;
+}
+
+.subscriptions__copy-wrapper {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 80px;
+
+  @include mq($until: leftCol) {
+    padding: 0 50px;
+  }
+
+  @include mq($until: desktop) {
+    padding: 30px;
+  }
+
+  @include mq($until: tablet) {
+    padding: 10px 20px 20px;
+    top: 0;
+    transform: translateY(0);
+  }
+
+  @include mq($until: phablet) {
+    padding: 10px 0 20px 10px;
+    position: static;
+    transform: none;
+  }
+}
+
+.subscriptions__copy-container.subscriptions__product--feature .subscriptions__product-title {
+  font-size: 42px;
+  border-top: solid gu-colour('brand-pastel') 1px;
+
+  @include mq($until: tablet) {
+    font-size: 34px;
+    line-height: 34px;
+    padding-top: 15px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  @include mq($until: mobileMedium) {
+    font-size: 22px;
+    line-height: 22px;
+  }
+}
+
+.subscriptions__product-title {
+  font-size: 34px;
+  line-height: 30px;
+  font-weight: bold;
+  font-family: $gu-headline;
+  margin: 0;
+  border-top: 1px solid gu-colour(neutral-86);
+  line-height: 1.2;
+  vertical-align: middle;
+
+  @include mq($until: desktop) {
+    font-size: 32px;
+  }
+
+  @include mq($until: tablet) {
+    font-size: 34px;
+    line-height: 34px;
+    padding-top: 15px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  @include mq($until: mobileMedium) {
+    font-size: 22px;
+    line-height: 22px;
+  }
+}
+
+.subscriptions__product-subtitle {
+  font-size: 28px;
+  line-height: 30px;
+  font-weight: 300;
+  font-family: $gu-headline;
+
+  @include mq($until: desktop) {
+    font-size: 24px;
+  }
+
+  @include mq($until: tablet) {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+
+.subscriptions__description {
+  font-weight: 400;
+  max-width: 350px;
+  margin: 23px 20px 25px 0;
+  font-size: 17px;
+  line-height: 21px;
+
+  @include mq($until: desktop) {
+    margin: 27px 20px 25px 0;
+    font-size: 16px;
+    line-height: 18px;
+  }
+
+  @include mq($until: tablet) {
+    max-width: 100%;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 14px;
+    line-height: 16px;
+    margin: 16px 20px 18px 0;
+  }
+
+  @include mq($until: mobileMedium) {
+    margin: 16px 10px 18px 0;
+  }
+
+}
+
+.subscriptions__sales {
+  font-size: 24px;
+  line-height: 27px;
+  display: inline-block;
+  background-color: gu-colour('highlight-main');
+  vertical-align: middle;
+  padding: 0px 7px 5px;
+  margin-top: 10px;
+
+  @include mq($until: desktop) {
+    font-size: 20px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  @include mq($until: mobileMedium) {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+}
+
+.subscriptions__product--feature .subscriptions__sales {
+  color: gu-colour(neutral-7);
+}
+/****************** product-image ********************/
+
+.subscriptions-packshot {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  @include mq($until: tablet) {
+    position: static;
+    top: 0;
+    width: 100%;
+    // margin: 0;
+    transform: translateX(0);
+    padding: 10px 0 0 0;
+  }
+}
+
+/****************** subscriptions__product-button ********************/
+
+.component-button--subscriptions__product-button {
+  background-color: gu-colour(neutral-7);
+  color: gu-colour(neutral-100);
+
+  @include mq($until: mobileMedium) {
+    font-size: 12px;
+  }
+}
+
+/****************** premium app ********************/
+
+.subscriptions__premuim-app {
+  display: none;
+
+  @include mq($until: tablet) {
+    display: flex;
+  }
+}
+
+.subscriptions__premuim-app .component-button--subscriptions__product-button:first-of-type {
+  margin: 0 20px 20px 0;
+}
+
+.component-grid-image--subscriptions-premium-image {
+    position: relative;
+    width: 100%;
+    max-width: 130px;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+/****************** packshots ********************/
+.subscriptions-feature-packshot {
+  position: absolute;
+  bottom: -40px;
+  right: -210px;
+
+  @media (max-width: 1067px) {
+    width: 150%;
+    right: initial;
+  }
+
+  @include mq($until: tablet) {
+    position: relative;
+    width: 100%;
+    bottom: initial;
+    padding: 20px 10% 0;
+    margin-bottom: -50px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    margin-bottom: -40px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.subscriptions__guardian-weekly-packshot {
+  width: 429px;
+
+  @include mq($until: desktop) {
+    width: 354px;
+  }
+
+  @include mq($until: tablet) {
+    position: static;
+    width: 100%;
+  }
+
+  img {
+    position: absolute;
+    bottom: 0;
+  }
+
+  img:nth-child(1) {
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+  img:nth-child(2) {
+    left: 95px;
+    bottom: -60px;
+
+    @include mq($until: tablet) {
+      position: static;
+      width: 100%;
+    }
+  }
+
+  img:nth-child(3) {
+    left: 180px;
+
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+}
+
+.subscriptions__paper-packshot {
+  width: 382px;
+
+  @include mq($until: desktop) {
+    width: 357px;
+  }
+
+  @include mq($until: tablet) {
+    position: static;
+    width: 100%;
+  }
+
+  img {
+    position: absolute;
+    bottom: 0;
+  }
+
+  img:nth-child(1) {
+    z-index: 2;
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+  img:nth-child(2) {
+    z-index: 1;
+    left: 32px;
+    bottom: -120px;
+
+    @include mq($until: tablet) {
+      position: static;
+      width: 100%;
+    }
+  }
+
+  img:nth-child(3) {
+    left: 166px;
+
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+}
+
+.paper-and-digital-packshot {
+  width: 370px;
+
+  @include mq($until: desktop) {
+    width: 357px;
+  }
+
+  @include mq($until: tablet) {
+    position: static;
+    width: 100%;
+  }
+
+  img {
+    position: absolute;
+    bottom: 0;
+  }
+
+  img:nth-child(1) {
+    bottom: -37px;
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+  img:nth-child(2) {
+    left: 55px;
+    bottom: -130px;
+
+    @include mq($until: tablet) {
+      position: static;
+      width: 100%;
+      display: none;
+    }
+  }
+
+  img:nth-child(3) {
+    left: 272px;
+    bottom: -40px;
+
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
+  img:nth-child(4) {
+    display: none;
+    top: 0;
+    width: 100%;
+    padding-top: 9px;
+
+    @include mq($until: tablet) {
+      display: block;
+    }
+  }
+}
+
+.subscriptions-int-feature-packshot {
+  position: absolute;
+  bottom: -30px;
+  // right: -184px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 450px;
+
+  @include mq($until: desktop) {
+    width: 377px;
+    left: 45%;
+    transform: translateX(-45%);
+  }
+
+  @include mq($until: tablet) {
+    position: static;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    transform: translateX(0);
+  }
+
+  img {
+    width: 450px;
+
+    @include mq($until: desktop) {
+      width: 90%;
+    }
+
+    @include mq($until: tablet) {
+      width: 100%;
+    }
+  }
+}
+
+/**** FOOTER HACK ****/
+#subscriptions-landing-page {
+  .component-left-margin-section:before {
+    content: none;
+  }
+
+  .component-content.component-content--feature,
+  .component-left-margin-section__content {
+    margin: 0 auto;
+    max-width: 1290px;
+  }
+
+  .component-footer {
+    background-color: gu-colour('brand-main');
+  }
+}
