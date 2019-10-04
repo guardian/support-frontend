@@ -25,7 +25,6 @@ import {
 import { getDiscountCopy } from '../hero/discountCopy';
 import './joyOfPrint.scss';
 
-const discountParam = getQueryParameter('heroCopy');
 
 function getHeading(): string {
   if (flashSaleIsActive('Paper', GBPCountries)) {
@@ -33,7 +32,7 @@ function getHeading(): string {
     return saleCopy.landingPage.subHeading;
   }
 
-  return getDiscountCopy(discountParam).heading;
+  return getDiscountCopy().heading;
 
 }
 
@@ -119,7 +118,7 @@ const CampaignHeader = () => (
     <div className="sale-joy-of-print-graphic-outer">
       <div className="sale-joy-of-print-graphic-inner">
         <div className="sale-joy-of-print-badge">
-          <Discount discountCopy={getDiscountCopy(discountParam).roundel} />
+          <Discount discountCopy={getDiscountCopy().roundel} />
         </div>
         <div className="sale-joy-of-print-graphic">
           <GridImage
