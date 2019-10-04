@@ -25,7 +25,7 @@ addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.3")
 addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.2.0")
 
 // dependency tracker plugin - needed for snyk cli integration
-addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.0")
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.10.0-RC1")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.4.1")
 

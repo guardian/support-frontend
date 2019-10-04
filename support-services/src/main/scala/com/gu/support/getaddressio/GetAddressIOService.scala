@@ -1,9 +1,9 @@
 package com.gu.support.getaddressio
 
-import com.gu.helpers.WebServiceHelper
 import com.gu.i18n.{Country, PostalCode}
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.rest.WebServiceHelper
 import com.gu.support.config.GetAddressIOConfig
 import com.typesafe.scalalogging.LazyLogging
 import com.gu.support.encoding.Codec

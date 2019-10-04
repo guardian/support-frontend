@@ -1,10 +1,10 @@
 package com.gu.salesforce
 
 import com.gu.config.Configuration
-import com.gu.helpers.WebServiceHelper
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.rest.WebServiceHelper
 import com.gu.salesforce.AddressLine.getAddressLine
 import com.gu.salesforce.Salesforce._
 import com.gu.support.encoding.CustomCodecs._

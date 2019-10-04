@@ -5,8 +5,7 @@ import java.io.ByteArrayOutputStream
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
-import com.gu.stripe.Stripe.StripeError
-import com.gu.stripe.{Stripe, StripeService}
+import com.gu.stripe.{StripeError, StripeService}
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.JsonFixtures.{createStripeSourcePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
@@ -48,7 +47,7 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
   }
 
   "402s from Stripe" should "throw a FatalException" in {
-    val errorJson = Stripe.StripeError("card_error", "The card has expired", Some("expired_card")).asJson.noSpaces
+    val errorJson = StripeError("card_error", "The card has expired", Some("expired_card")).asJson.noSpaces
     val server = createMockServer(402, errorJson)
     val baseUrl = server.url("/v1")
 

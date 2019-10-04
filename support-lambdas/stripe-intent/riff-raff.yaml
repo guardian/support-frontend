@@ -1,0 +1,21 @@
+stacks:
+- membership
+regions:
+- eu-west-1
+deployments:
+
+  cfn:
+    type: cloud-formation
+    app: stripe-intent
+    parameters:
+      templatePath: cfn.yaml
+
+  stripe-intent:
+    type: aws-lambda
+    parameters:
+      fileName: stripe-intent.jar
+      bucket: support-workers-dist
+      prefixStack: false
+      functionNames:
+      - stripe-intent-
+    dependencies: [cfn]

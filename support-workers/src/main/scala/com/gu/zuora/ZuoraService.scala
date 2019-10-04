@@ -5,8 +5,8 @@ import java.time.{LocalDate, OffsetDateTime}
 
 import cats.data.OptionT
 import cats.implicits._
-import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.rest.WebServiceHelper
 import com.gu.support.config.ZuoraConfig
 import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._

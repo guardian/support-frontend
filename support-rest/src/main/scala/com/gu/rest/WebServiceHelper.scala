@@ -1,4 +1,4 @@
-package com.gu.helpers
+package com.gu.rest
 
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.FutureHttpClient

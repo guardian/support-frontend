@@ -1,6 +1,6 @@
 package com.gu.stripe
 
-import com.gu.stripe.Stripe.{StripeError, StripeList}
+import com.gu.stripe.Stripe.StripeList
 import com.gu.stripe.createCustomerFromToken.Customer.StripeCard
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder

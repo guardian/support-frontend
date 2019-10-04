@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.emailservices._
 import com.gu.helpers.FutureExtensions._
 import com.gu.monitoring.SafeLogger
-import com.gu.stripe.Stripe.StripeError
+import com.gu.stripe.StripeError
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.CheckoutFailureReasons._
