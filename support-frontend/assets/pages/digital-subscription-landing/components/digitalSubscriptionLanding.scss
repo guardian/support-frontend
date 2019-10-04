@@ -198,8 +198,12 @@
   flex-direction: column;
   background-color: #ededed;
 
+  @include mq($from: tablet) {
+    margin-bottom: -40px;
+  }
+
   .product-block__container {
-    padding-bottom: 50px;
+    padding-bottom: 30px;
     
     @include mq($from: tablet) {
       border: 1px solid gu-colour(neutral-86);
@@ -503,18 +507,67 @@ div.call-to-action__container {
   max-width: 100%;
   margin-right: 0;
   display: flex;
-  padding-top: 70px;
+  padding-top: 10px;
   padding-bottom: 50px;
   background-color: #041f4a;
+
+  @include mq($from: tablet) {
+    padding-top: 70px;
+  }
+
   @include mq($from: wide) {
     justify-content: center;
   }
   
   .hope-is-power--centered {
     background-color: #041f4a;
+    color: #ffffff;
 
     @include mq($from: wide) {
       padding-left: 0;
+    }
+
+    h2 {
+      margin-bottom: 12px;
+      padding-left: 0;
+      max-width: gu-span(4);
+      @include gu-fontset-heading;
+      font-size: 24px;
+      line-height: 30px;
+
+      @include mq($from: mobileLandscape) {
+        padding-left: 15px;
+        max-width: gu-span(5);
+      }
+
+      @include mq($from: tablet) {
+        padding-left: 25px;
+        font-size: 34px;
+        line-height: 34px;
+        max-width: gu-span(8);
+      }
+
+      @include mq($from: desktop) {
+        font-size: 34px;
+        line-height: 38px;
+      }
+    }
+
+    h3 {
+      margin-bottom: 20px;
+      padding-left: 0;
+
+      @include mq($from: mobileLandscape) {
+        padding-left: 15px;
+      }
+
+      @include mq($from: tablet) {
+        padding-left: 25px;
+        margin-bottom: 40px;
+      }
+
+      @include gu-fontset-body-sans;
+      font-size: 17px;
     }
   }
 
