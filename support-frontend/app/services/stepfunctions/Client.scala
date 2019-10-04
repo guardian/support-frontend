@@ -11,6 +11,7 @@ import com.amazonaws.services.stepfunctions.model._
 import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
 import io.circe.Encoder
 import cats.implicits._
+import com.gu.monitoring.SafeLogger
 import services.stepfunctions.StateMachineErrors.Fail
 
 import scala.collection.JavaConversions._
@@ -35,6 +36,10 @@ class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) {
 
   private def startExecution(arn: String, input: String)(implicit ec: ExecutionContext): Response[StartExecutionResult] = convertErrors {
     AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
+      .transform { theTry =>
+        SafeLogger.info(s"state machine result: $theTry")
+        theTry
+      }
   }
 
   def triggerExecution[T](input: T, isTestUser: Boolean, isExistingAccount: Boolean = false)(

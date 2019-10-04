@@ -8,7 +8,7 @@ class SubsLandingPage(implicit val webDriver: WebDriver) extends Page with Brows
 
   val url = s"${Config.supportFrontendUrl}/uk/subscribe"
 
-  private val header = cssSelector("#qa-component-subscriptions-by-country-group")
+  private val header = cssSelector("#qa-subscriptions-landing-page")
 
   def pageHasLoaded: Boolean = {
     pageHasElement(header) && pageHasUrl(s"/uk/subscribe")

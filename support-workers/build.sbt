@@ -26,7 +26,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   // This is required to force aws libraries to use the latest version of jackson
   // jackson-databind versioning is out of sync with other jackson libraries
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "org.mockito" % "mockito-core" % "3.0.0" % "it,test",
@@ -53,6 +53,7 @@ assemblyJarName := s"${name.value}.jar"
 assemblyMergeStrategy in assembly := {
   case PathList("models", xs@_*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
+  case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case y =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(y)

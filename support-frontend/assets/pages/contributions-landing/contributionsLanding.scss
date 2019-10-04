@@ -12,6 +12,7 @@
 @import '~components/socialShare/socialShare';
 @import '~pages/contributions-landing/components/ContributionThankYou/ContributionThankYou';
 @import '~pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
+@import './contributionsLandingEnvironmentMoment';
 
 $content-left-margin-leftCol: calc(50% - 480px);
 
@@ -35,6 +36,7 @@ body {
 
 .gu-content--contribution-thankyou {
   background: gu-colour(highlight-main);
+
   .gu-content__main {
     position: relative;
     background-color: transparent;
@@ -240,6 +242,7 @@ header[role="banner"] {
   margin: 0 auto;
   border: none;
   max-width: gu-span(9) + $gu-h-spacing;
+
   @include mq($from: tablet) {
     margin: 30px auto 10px;
     padding: 0 $gu-h-spacing;
@@ -338,12 +341,11 @@ header[role="banner"] {
 }
 
 .gu-content__blurb-blurb {
-  font-size: 16px;
-  line-height: 20px;
-  font-family: $gu-headline;
+  @include gu-fontset-body;
+  font-size: 17px;
+  line-height: 21px;
   padding-bottom: $gu-v-spacing;
   border-bottom: 1px solid gu-colour(highlight-main);
-  font-weight: 300;
   @include mq($from: tablet) {
     margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
   }
@@ -934,8 +936,17 @@ form {
 //***************************
 // Campaign styles:
 //***************************
+.gu-content--toxic-america {
+  background-color: gu-colour(highlight-main);
+
+  .gu-content__main {
+    position: relative;
+    background-color: transparent;
+  }
+}
+
 .gu-content--campaign-landing {
-  background-color: gu-colour(sport-faded);
+  //background-color: gu-colour(sport-faded);
 
   .gu-content__main {
     position: relative;
@@ -1066,7 +1077,6 @@ form {
   animation-timing-function: ease-in;
   animation-duration: 3s;
 }
-
 
 .fade-in-message .component-animated-dots__bounce1 {
   animation-delay: 2.68s;

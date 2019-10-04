@@ -52,6 +52,7 @@ export type FormState = {|
   productPrices: ProductPrices,
   payPalHasLoaded: boolean,
   stripeToken: Option<string>,
+  debugInfo: string,
 |};
 
 function getFormFields(state: AnyCheckoutState): FormFields {

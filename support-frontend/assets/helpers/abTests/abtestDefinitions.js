@@ -1,11 +1,12 @@
 // @flow
 import type { Tests } from './abtest';
 import { get as getCookie } from 'helpers/cookie';
-import { SetOne, SetTwo, SetThree } from 'helpers/abTests/data/testAmountsData';
+import { getCampaignName } from 'helpers/campaigns';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 export type StripeElementsTestVariants = 'control' | 'stripeCardElement' | 'notintest';
+export type LandingPageMomentBackgroundColourTestVariants = 'control' | 'yellow' | 'notintest';
 
 export const tests: Tests = {
   landingPageCopyReturningSingles: {
@@ -51,28 +52,14 @@ export const tests: Tests = {
     seed: 3,
   },
 
-  // JTL - 5 August 2019 - Ab-test: landingPageChoiceArchitectureAmountsFirst
-  // file used for this test: abTestContributionsLandingChoiceArchitecture.scss
-  // if a variant is successful, we will need to integrate the styles from the test stylesheet
-  // into the main stylesheet: contributionsLanding.scss
-  // This test also involves hardcoded amounts, which will need to be discussed moving forward
-  LandingPageChoiceArchitectureStaticAmounts: {
-    type: 'AMOUNTS',
+  landingPageMomentBackgroundColour: {
+    type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'setOne',
-        amountsRegions: SetOne,
-      },
-      {
-        id: 'setTwo',
-        amountsRegions: SetTwo,
-      },
-      {
-        id: 'setThree',
-        amountsRegions: SetThree,
+        id: 'yellow',
       },
     ],
     audiences: {
@@ -83,6 +70,7 @@ export const tests: Tests = {
     },
     isActive: true,
     independent: true,
-    seed: 4,
+    seed: 7,
+    canRun: () => !!getCampaignName(),
   },
 };

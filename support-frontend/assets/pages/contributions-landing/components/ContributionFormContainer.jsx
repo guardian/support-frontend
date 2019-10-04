@@ -135,25 +135,27 @@ function withProps(props: PropTypes) {
       </div>
 
       <div className="gu-content__form">
-        {campaign && campaign.tickerJsonUrl ?
+        {campaign && campaign.tickerSettings && campaign.tickerSettings.tickerJsonUrl ?
           <ContributionTicker
-            tickerJsonUrl={campaign.tickerJsonUrl}
+            tickerJsonUrl={campaign.tickerSettings.tickerJsonUrl}
             onGoalReached={props.setTickerGoalReached}
-            tickerType={campaign.tickerType}
-            currencySymbol={campaign.localCurrencySymbol}
+            tickerType={campaign.tickerSettings.tickerType}
+            currencySymbol={campaign.tickerSettings.localCurrencySymbol}
           /> : null
         }
-        {props.tickerGoalReached && campaign && campaign.goalReachedCopy ? campaign.goalReachedCopy :
-        <div>
-          {countryGroupDetails.formMessage ?
-            <div className="form-message">{countryGroupDetails.formMessage}</div> : null
+        {props.tickerGoalReached && campaign && campaign.tickerSettings && campaign.tickerSettings.goalReachedCopy ?
+          campaign.tickerSettings.goalReachedCopy :
+          <div>
+            {countryGroupDetails.formMessage ?
+              <div className="form-message">{countryGroupDetails.formMessage}</div> : null
             }
-          <ContributionForm
-            onPaymentAuthorisation={onPaymentAuthorisation}
-          />
-        </div>
+            <ContributionForm
+              onPaymentAuthorisation={onPaymentAuthorisation}
+            />
+          </div>
         }
       </div>
+      {campaign && campaign.extraComponent}
       <DirectDebitPopUpForm
         buttonText="Contribute with Direct Debit"
         onPaymentAuthorisation={onPaymentAuthorisation}

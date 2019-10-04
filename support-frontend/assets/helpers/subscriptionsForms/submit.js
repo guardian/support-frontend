@@ -117,6 +117,7 @@ function buildRegularPaymentRequest(
     productOption,
     productPrices,
     deliveryInstructions,
+    debugInfo,
   } = state.page.checkout;
 
   const price = getProductPrice(
@@ -158,6 +159,7 @@ function buildRegularPaymentRequest(
     ),
     promoCode,
     deliveryInstructions,
+    debugInfo,
   };
 }
 

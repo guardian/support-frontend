@@ -58,12 +58,15 @@ function createFormReducer(
     orderIsAGift: false,
     stripeToken: null,
     deliveryInstructions: null,
+    debugInfo: '',
   };
 
   const getFulfilmentOption = (action, currentOption) =>
     (action.scope === 'delivery' ? getWeeklyFulfilmentOption(action.country) : currentOption);
 
-  return (state: FormState = initialState, action: Action): FormState => {
+  return (originalState: FormState = initialState, action: Action): FormState => {
+
+    const state = { ...originalState, debugInfo: `${originalState.debugInfo}${JSON.stringify(action)}\n` };
 
     switch (action.type) {
 
