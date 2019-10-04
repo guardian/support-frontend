@@ -22,6 +22,8 @@ import {
 import { getDiscountCopy } from '../hero/discountCopy';
 import './joyOfPrint.scss';
 
+const discountCopy = getDiscountCopy();
+
 const Discount = (props: { discountCopy: string[] }) => (
   <div>
     {props.discountCopy.map(copy => <span>{ copy }</span>)}
@@ -67,7 +69,7 @@ const Footer = () => (
 
 const Heading = () => (
   <HeroHeading hasCampaign={false}>
-    <HeadingBlock overheading="The Guardian newspaper subscriptions">{getDiscountCopy().heading}</HeadingBlock>
+    <HeadingBlock overheading="The Guardian newspaper subscriptions">{discountCopy.heading}</HeadingBlock>
   </HeroHeading>
 );
 
@@ -89,7 +91,7 @@ const CampaignHeader = () => (
   <ProductPagehero
     appearance="campaign"
     overheading="The Guardian newspaper subscriptions"
-    heading={getDiscountCopy().heading}
+    heading={discountCopy.heading}
     modifierClasses={['paper-sale']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
@@ -104,7 +106,7 @@ const CampaignHeader = () => (
     <div className="sale-joy-of-print-graphic-outer">
       <div className="sale-joy-of-print-graphic-inner">
         <div className="sale-joy-of-print-badge">
-          <Discount discountCopy={getDiscountCopy().roundel} />
+          <Discount discountCopy={discountCopy.roundel} />
         </div>
         <div className="sale-joy-of-print-graphic">
           <GridImage
