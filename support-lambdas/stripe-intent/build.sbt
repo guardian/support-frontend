@@ -11,6 +11,8 @@ riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffManifestProjectName := "support:lambdas:Stripe Intent"
 riffRaffArtifactResources += (file("support-lambdas/stripe-intent/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch")
+riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV")
 
 libraryDependencies ++= Seq(
   "io.circe" %% "circe-core",

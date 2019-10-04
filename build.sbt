@@ -50,7 +50,8 @@ lazy val commonSettings = Seq(
   )),
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
   updateOptions := updateOptions.value.withCachedResolution(true),
-  dependencyStats / aggregate := false
+  dependencyStats / aggregate := false,
+  dependencyTree / aggregate := false
 )
 
 lazy val commonDependencies = Seq(
