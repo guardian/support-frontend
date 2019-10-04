@@ -36,6 +36,7 @@ import CallToAction from './components/cta';
 import ProductBlockB from './componentsB/productBlockB/productBlockB';
 import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 import TermsAndConditions from './components/termsAndConditions';
+import FaqsAndHelp from './components/faqsAndHelp';
 
 // ----- Styles ----- //
 import './components/digitalSubscriptionLanding.scss';
@@ -146,7 +147,7 @@ class LandingPage extends Component<Props, State> {
         header={<CountrySwitcherHeader />}
         footer={
           <Footer>
-            <CustomerService
+            <FaqsAndHelp
               selectedCountryGroup={countryGroupId}
               promoCode={promoCode}
             />
@@ -157,7 +158,6 @@ class LandingPage extends Component<Props, State> {
         <ProductBlock />
         <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
         <TermsAndConditions />
-        <PromotionPopUp />
         <ConsentBanner />
       </Page>
     );
