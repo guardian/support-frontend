@@ -16,25 +16,11 @@ import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSal
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { getQueryParameter } from 'helpers/url';
 import {
-  flashSaleIsActive,
-  getSaleCopy,
   showCountdownTimer,
 } from 'helpers/flashSale';
 import { getDiscountCopy } from '../hero/discountCopy';
 import './joyOfPrint.scss';
-
-
-function getHeading(): string {
-  if (flashSaleIsActive('Paper', GBPCountries)) {
-    const saleCopy = getSaleCopy('Paper', GBPCountries);
-    return saleCopy.landingPage.subHeading;
-  }
-
-  return getDiscountCopy().heading;
-
-}
 
 const Discount = (props: { discountCopy: string[] }) => (
   <div>
@@ -81,7 +67,7 @@ const Footer = () => (
 
 const Heading = () => (
   <HeroHeading hasCampaign={false}>
-    <HeadingBlock overheading="The Guardian newspaper subscriptions">{getHeading()}</HeadingBlock>
+    <HeadingBlock overheading="The Guardian newspaper subscriptions">{getDiscountCopy().heading}</HeadingBlock>
   </HeroHeading>
 );
 
@@ -103,7 +89,7 @@ const CampaignHeader = () => (
   <ProductPagehero
     appearance="campaign"
     overheading="The Guardian newspaper subscriptions"
-    heading={getHeading()}
+    heading={getDiscountCopy().heading}
     modifierClasses={['paper-sale']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign

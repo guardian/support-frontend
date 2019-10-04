@@ -23,6 +23,7 @@ export type SaleCopy = {
     heading: string,
     subHeading: string,
     standfirst?: string,
+    roundel?: string[],
   },
   bundle: {
     heading: string,
@@ -116,8 +117,9 @@ const Sales: Sale[] = [
             description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
           },
           landingPage: {
-            heading: 'Print',
-            subHeading: 'Save up to 52% for a year on The Guardian and The Observer',
+            roundel: ['Save up to', '52%', 'for a year'],
+            heading: 'Save up to 52% for a year on The Guardian and The Observer',
+            subHeading: '',
           },
           bundle: {
             heading: 'Paper',

@@ -1,14 +1,11 @@
 // @flow
 
+import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+
 const discountCopy: DiscountCopy =  {
-    roundel: ['Save up to', '52%', 'for a year'],
-    heading: 'Save up to 52% for a year on The Guardian and The Observer',
-    offer: [
-      'Save 37% a month on retail price',
-      'Save 33% a month on retail price',
-      'Save 25% a month on retail price',
-      'Save 22% a month on retail price',
-    ],
+    roundel: ['Save up to', '37%', 'for a year'],
+    heading: 'Save up to 37% for a year on The Guardian and The Observer',
   };
 
 type DiscountCopy = {|
@@ -17,4 +14,10 @@ type DiscountCopy = {|
   offer: string[],
 |}
 
-export const getDiscountCopy = (): DiscountCopy => discountCopy;
+export const getDiscountCopy = (): DiscountCopy => {
+  if (flashSaleIsActive('Paper', GBPCountries)) {
+    const saleCopy = getSaleCopy('Paper', GBPCountries);
+    return saleCopy.landingPage;
+  }
+  return discountCopy;
+};
