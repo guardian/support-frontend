@@ -11,10 +11,10 @@ import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptio
 type PropTypes = {
   title: string,
   subtitle: string,
-  description: string,
+  description: Option<string>,
   isFeature: Option<boolean>,
   offer?: Option<string>,
-  buttons: ProductButton[],
+  buttons: Option<ProductButton[]>,
 };
 
 const SubscriptionsProductDescription = ({
