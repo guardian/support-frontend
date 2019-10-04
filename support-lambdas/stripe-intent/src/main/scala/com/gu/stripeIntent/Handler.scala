@@ -21,7 +21,7 @@ import scala.concurrent.duration._
 
 // DTOs for http req/resp bodies
 case class RequestBody(publicKey: String)
-case class ResponseBody(intentToken: String)
+case class ResponseBody(client_secret: String)
 
 object RequestBody {
   implicit val decoder: Decoder[RequestBody] = deriveDecoder
@@ -49,12 +49,12 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
         stripeService = new StripeService(privateKey, handlerEffects.futureHttpClient)
         getIntent = getStripeSetupIntent(stripeService) _
         intent <- EitherT.right(getIntent())
-      } yield okSetupIntent(intent.id)
+      } yield okSetupIntent(intent.client_secret)
     result.value.map(_.fold(identity, identity))
   }
 
-  def okSetupIntent(intent: String): ApiGatewayResponse = ApiGatewayResponse(Ok, intent)
-  val badRequestPublicKey: ApiGatewayResponse = ApiGatewayResponse(BadRequest, "public key not known")
+  def okSetupIntent(client_secret: String): ApiGatewayResponse = ApiGatewayResponse(Ok, ResponseBody(client_secret))
+  val badRequestPublicKey: ApiGatewayResponse = ApiGatewayResponse(BadRequest, """{"error": "public key not known"""")
 
   override def minimalEnvironment(): StripeIntentEnv = {
     val stage = Stage.fromString(Option(System.getenv("Stage")).filter(_ != "").getOrElse("DEV")).getOrElse(Stages.DEV)

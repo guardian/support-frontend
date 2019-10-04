@@ -1,6 +1,6 @@
 import LibraryVersions.{awsClientVersion, catsVersion, circeVersion, okhttpVersion}
 
-name := "stripe-lambdas"
+name := "stripe-intent"
 description:= "Returns a stripe setup intent token so we can get authorisation of a recurring payment on the client side"
 
 scalacOptions += "-Ypartial-unification"
