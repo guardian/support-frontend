@@ -8,6 +8,7 @@ import './digitalSubscriptionLanding.scss';
 const ProductBlock = () => (
   <div className="hope-is-power__products">
     <div className="product-block__container hope-is-power--centered">
+      <div className="product-block__container__label--top">What&apos;s included?</div>
       <div className="product-block__item">
         <div className="product-block__item__title">The Guardian Daily</div>
       </div>

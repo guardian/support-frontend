@@ -61,7 +61,7 @@
   background-color: #ffe500;
   @include gu-fontset-heading;
   color: gu-colour(neutral-7);
-  height: 145px;
+  height: 150px;
   padding-top: $gu-v-spacing / 3;
   padding-bottom: 22px;
 
@@ -199,9 +199,37 @@
   background-color: #ededed;
 
   .product-block__container {
-    padding-top: 50px;
     padding-bottom: 50px;
     border: 1px solid gu-colour(neutral-86);
+
+    .product-block__container__label--top {
+      @include gu-fontset-heading;
+      font-size: 20px;
+      color: #ffffff;
+      background-color: #121212;
+      width: 167px;
+      padding: 5px;
+      margin: 45px 0 15px;
+
+      @include mq($from: phablet) {
+        margin: 20px 0;
+      }
+
+      @include mq($from: tablet) {
+        position: relative;
+        top: -38px;
+        left: -39px;
+        margin: 0;
+        width: 200px;
+      }
+
+      @include mq($from: desktop) {
+        left: -49px;
+        font-size: 26px;
+        width: 220px;
+      }
+
+    }
 
     .product-block__item {
       border: 1px solid gu-colour(neutral-86);
@@ -235,11 +263,11 @@
     }
 
     @include mq($from: tablet) {
-      margin-top: 130px;
+      margin-top: 170px;
     }
 
     @include mq($from: desktop) {
-      margin-top: 140px;
+      margin-top: 180px;
     }
   }
 }
