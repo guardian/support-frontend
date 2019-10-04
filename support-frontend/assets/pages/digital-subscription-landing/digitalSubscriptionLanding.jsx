@@ -22,9 +22,9 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import { CampaignHeaderB } from './componentsB/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection
-  from './components/independentJournalismSection';
+  from './componentsB/independentJournalismSection';
 import ProductBlock from './components/productBlock';
-import PromotionPopUp from './components/promotionPopUp';
+import PromotionPopUp from './componentsB/promotionPopUp';
 
 import './digitalSubscriptionLanding.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
@@ -35,6 +35,7 @@ import { DigitalPack } from 'helpers/subscriptions';
 import CallToAction from './components/cta';
 import ProductBlockB from './componentsB/productBlockB/productBlockB';
 import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
+import TermsAndConditions from './components/termsAndConditions';
 
 // ----- Styles ----- //
 import './components/digitalSubscriptionLanding.scss';
@@ -155,7 +156,7 @@ class LandingPage extends Component<Props, State> {
         <CampaignHeader countryGroupId={countryGroupId} />
         <ProductBlock />
         <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
-        <IndependentJournalismSection />
+        <TermsAndConditions />
         <PromotionPopUp />
         <ConsentBanner />
       </Page>

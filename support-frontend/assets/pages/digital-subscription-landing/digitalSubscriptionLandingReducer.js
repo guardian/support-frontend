@@ -5,7 +5,7 @@
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import promotionPopUpReducer, { type FindOutMoreState } from './components/promotionPopUpReducer';
+import promotionPopUpReducer, { type FindOutMoreState } from './componentsB/promotionPopUpReducer';
 import { getProductPrices } from 'helpers/globals';
 
 export type State = {
