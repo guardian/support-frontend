@@ -334,6 +334,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
             title="Your card details"
           >
             <StripeProviderForCountry
+              key={props.country} // this is necessary to force the component to use the correct Stripe account, see https://reactjs.org/docs/lists-and-keys.html#keys
               country={props.country}
               isTestUser={props.isTestUser}
               submitForm={props.submitForm}

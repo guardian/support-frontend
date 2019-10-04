@@ -242,6 +242,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             title="Your card details"
           >
             <StripeProviderForCountry
+              key={props.country}
               country={props.country}
               isTestUser={props.isTestUser}
               component={<PriceSummary />}

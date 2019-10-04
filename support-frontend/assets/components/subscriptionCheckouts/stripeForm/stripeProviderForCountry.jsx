@@ -1,11 +1,11 @@
 // @flow
 
-import * as React from 'react';
+import React from 'react';
+import { Elements, StripeProvider } from 'react-stripe-elements';
+import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { type StripeFormPropTypes } from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import StripeProviderWrapper
-  from 'components/subscriptionCheckouts/stripeForm/stripeProviderWrapper';
 
 // Types
 
@@ -15,36 +15,23 @@ type PropTypes = {
   isTestUser: boolean,
 };
 
-type StateType = {
-  stripeKey: string,
-  [string]: React.Node,
-}
-
-class StripeProviderForCountry extends React.Component<PropTypes, StateType> {
-
-  componentDidMount() {
-    const props = this.props;
-    const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
-    this.state = {
-      stripeKey: stripeKey,
-      [stripeKey]: (<StripeProviderWrapper {...props} stripeKey={stripeKey} key={stripeKey} />),
-    };
-  }
-
-  render() {
-    const props = this.props;
-    const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
-    if(!this.state[stripeKey]){
-      console.log(`stripe provider not found for ${stripeKey} creating it now`);
-      this.setState({
-        stripeKey: stripeKey,
-        [stripeKey]: (<StripeProviderWrapper {...props} stripeKey={stripeKey} key={stripeKey} />),
-      });
-    }
-
-    console.log(`rendering with stripeKey ${stripeKey}`);
-    return this.state[stripeKey];
-  }
+function StripeProviderForCountry(props: PropTypes) {
+  const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
+  return (
+    <StripeProvider apiKey={stripeKey}>
+      <Elements>
+        <StripeForm
+          component={props.component}
+          submitForm={props.submitForm}
+          allErrors={props.allErrors}
+          setStripeToken={props.setStripeToken}
+          name={props.name}
+          validateForm={props.validateForm}
+          buttonText={props.buttonText}
+        />
+      </Elements>
+    </StripeProvider>
+  );
 }
 
 export { StripeProviderForCountry };
