@@ -99,6 +99,7 @@ type State = {
 }
 
 // This is a temporary variant controller for the A/B tests
+// So if the environment is DEV, we see the new version but in prodction we see the old version
 const pageType = process.env.NODE_ENV === 'DEV' ? 'A' : 'B';
 
 // ----- Render ----- //

@@ -22,8 +22,8 @@
     background-color: #ffffff;
 
   @include mq($from: mobileMedium) {
-    padding-left: 20px;
-    width: calc(100% - 20px);
+    padding-left: 15px;
+    width: calc(100% - 15px);
   }
 
   @include mq($from: phablet) {
@@ -57,56 +57,71 @@
   position: relative;
   z-index: 20;
   display: inline-flex;
+  flex-direction: column;
   background-color: #ffe500;
   @include gu-fontset-heading;
   color: gu-colour(neutral-7);
-  height: 110px;
+  height: 145px;
   padding-top: $gu-v-spacing / 3;
   padding-bottom: 22px;
 
   h2 {
-    font-size: 20px;
+    font-size: 28px;
     font-weight: 600;
-    line-height: 28px;
+    line-height: 32px;
+    max-width: gu-span(3);
+    margin: 20px 0 !important;
   }
 
   h3 {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 22px;
+    line-height: 18px;
     max-width: gu-span(4);
   }
 
+  @include mq($from: mobileMedium) {
+    h3 {
+      max-width: gu-span(5);
+    }
+  }
+
   @include mq($from: mobileLandscape) {
+    height: 165px;
     h2 {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 600;
       line-height: 36px;
     }
   
     h3 {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 400;
-      line-height: 28px;
+      line-height: 21px;
       max-width: gu-span(6);
     }
   }
 
-  @include mq($from: tablet) {
-    h3 {
-      max-width: gu-span(7);
+  @include mq($from: phablet) {
+    margin-bottom: -45px;
+
+    h2 {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 36px;
+      max-width: gu-span(4);
     }
   }
 
   @include mq($from: desktop) {
-    height: 135px;
+    height: 170px;
     margin-bottom: -45px;
 
     h2 {
       font-size: 42px;
       font-weight: 600;
       line-height: 56px;
-      margin-bottom: 15px;
+      max-width: gu-span(8);
     }
   
     h3 {
@@ -118,38 +133,48 @@
   }
 
   .hope-is-power__circle {
-    display: none;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 90px;
+    width: 90px;
+    border-radius: 50%;
+    background-color: #00b2ff;
+    margin-top: 0px;
+    margin-left: 5px;
 
-    @include mq($from: desktop) {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    @include mq($from: mobileLandscape) {
+      margin-left: 30px;
+    }
+
+    @include mq($from: phablet) {
       height: 120px;
       width: 120px;
-      border-radius: 50%;
-      background-color: #00b2ff;
-      margin-top: 10px;
-      margin-left: 50px;
-    }
-
-    @include mq($from: leftCol) {
-      margin-left: 150px;
-    }
-
-    @include mq($from: wide) {
-      margin-left: 260px;
+      right: 40px;
+      top: 30px;
     }
   }
 
   .hope-is-power__circle-text {
-    font-size: 22px;
-    line-height: 28px;
+      font-size: 16px;
+      line-height: 22px;
+    @include mq($from: phablet) {
+      font-size: 22px;
+      line-height: 28px;
+    }
   }
 
   .hope-is-power__circle-text--large {
-    font-size: 34px;
-    line-height: 40px;
+    font-size: 24px;
+    line-height: 32px;
+    @include mq($from: phablet) {
+      font-size: 34px;
+      line-height: 40px;
+    }
   }
 }
 
@@ -192,7 +217,11 @@
   }
 
   .product-block__container:first-of-type {
-    margin-top: 45px;
+    margin-top: 65px;
+
+    @include mq($from: mobileLandscape) {
+      margin-top: 85px;
+    }
 
     @include mq($from: desktop) {
       margin-top: 140px;
