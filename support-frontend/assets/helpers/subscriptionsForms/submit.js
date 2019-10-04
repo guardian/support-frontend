@@ -119,9 +119,11 @@ function buildRegularPaymentRequest(
     deliveryInstructions,
   } = state.page.checkout;
 
+  const addresses = getAddresses(state);
+
   const price = getProductPrice(
     productPrices,
-    state.page.billingAddress.fields.country,
+    addresses.billingAddress.country,
     billingPeriod,
     fulfilmentOption,
     productOption,
@@ -140,7 +142,7 @@ function buildRegularPaymentRequest(
     title,
     firstName,
     lastName,
-    ...getAddresses(state),
+    ...addresses,
     email,
     titleGiftRecipient,
     firstNameGiftRecipient,
@@ -254,7 +256,8 @@ function submitForm(
   dispatch: Dispatch<Action>,
   state: AnyCheckoutState,
 ) {
-  const billingCountry = state.page.billingAddress.fields.country;
+  const addresses = getAddresses(state);
+  const billingCountry = addresses.billingAddress.country;
 
   const {
     paymentMethod, product, isTestUser,
@@ -274,7 +277,7 @@ function submitForm(
   if (state.page.checkout.billingPeriod === Quarterly && priceDetails.price === 6) {
     priceDetails = getProductPrice(
       state.page.checkout.productPrices,
-      state.page.billingAddress.fields.country,
+      billingCountry,
       state.page.checkout.billingPeriod,
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
@@ -282,7 +285,7 @@ function submitForm(
   }
 
   const { price, currency } = priceDetails;
-  const currencyId = getCurrency(state.page.billingAddress.fields.country);
+  const currencyId = getCurrency(billingCountry);
   const stripeToken = paymentMethod === Stripe ? state.page.checkout.stripeToken : null;
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
