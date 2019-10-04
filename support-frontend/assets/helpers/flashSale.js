@@ -22,8 +22,7 @@ export type SaleCopy = {
   landingPage: {
     heading: string,
     subHeading: string,
-    standfirst?: string,
-    roundel?: string[],
+    roundel: string[],
   },
   bundle: {
     heading: string,
@@ -71,6 +70,7 @@ const dpSale = {
     landingPage: {
       heading: 'Digital Pack subscriptions',
       subHeading: 'Save 50% for 3 months on award-winning, independent journalism, ad-free on all of your devices',
+      roundel: [''],
     },
     bundle: {
       heading: 'Digital Pack',
@@ -229,6 +229,7 @@ function getSaleCopy(product: SubscriptionProduct, countryGroupId: CountryGroupI
     landingPage: {
       heading: '',
       subHeading: '',
+      roundel: [''],
     },
     bundle: {
       heading: '',

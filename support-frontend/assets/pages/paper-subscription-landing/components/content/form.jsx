@@ -13,8 +13,6 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
-import { flashSaleIsActive, getDuration, getPromoCode } from 'helpers/flashSale';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -23,21 +21,17 @@ import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { paperCheckoutUrl } from 'helpers/routes';
 import { getTitle } from '../../helpers/products';
 import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
-import { showPrice } from 'helpers/productPrice/productPrices';
+import { getAppliedPromo, showPrice } from 'helpers/productPrice/productPrices';
 
 // ---- Helpers ----- //
 
-
-// TODO: We will need to make this work for flash sales
 const getRegularPriceStr = (price: ProductPrice): string => `You pay ${showPrice(price)} a month`;
 
 const getPriceStr = (price: ProductPrice): string => {
-  if (flashSaleIsActive('Paper', GBPCountries)) {
-    const duration = getDuration('Paper', GBPCountries);
-    if (duration) {
-      return `You pay ${showPrice(price)} a month for ${duration}`;
-    }
-    return getRegularPriceStr(price);
+  const promotion = getAppliedPromo(price.promotions);
+  if (promotion && promotion.numberOfDiscountedPeriods) {
+    // $FlowIgnore - we have checked numberOfDiscountedPeriods is not null above
+    return `You pay ${showPrice(price)} a month for ${promotion.numberOfDiscountedPeriods} months`;
   }
   return getRegularPriceStr(price);
 };
@@ -50,7 +44,8 @@ const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): O
 };
 
 const getSavingStr = (price: ProductPrice): Option<string> => {
-  if (flashSaleIsActive('Paper', GBPCountries) && getDuration('Paper', GBPCountries)) {
+  const promotionApplied = getAppliedPromo(price.promotions);
+  if (promotionApplied) {
     return `${showPrice(price)} a month thereafter`;
   }
   return null;
@@ -82,7 +77,8 @@ const getPlans = (
 ) =>
   ActivePaperProductTypes.reduce((products, productOption) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
-    const promoCode = getPromoCode('Paper', GBPCountries, '');
+    const promotion = getAppliedPromo(price.promotions);
+    const promoCode = promotion ? promotion.promoCode : null;
     return {
       ...products,
       [productOption]: {

@@ -13,8 +13,6 @@ import Text, { LargeParagraph } from 'components/text/text';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { CampaignHeader } from './components/hero/hero';
@@ -41,16 +39,6 @@ const store = pageInit(() => reducer(fulfilment), true);
 
 // ----- Render ----- //
 
-function getStandfirst(): string {
-  const defaultWording = 'We offer two different subscription types: voucher booklets and home delivery.';
-  if (flashSaleIsActive('Paper', GBPCountries)) {
-    const saleCopy = getSaleCopy('Paper', GBPCountries);
-    return saleCopy.landingPage.standfirst || defaultWording;
-  }
-
-  return defaultWording;
-}
-
 const content = (
   <Provider store={store}>
     <Page
@@ -62,7 +50,7 @@ const content = (
         <Content needsHigherZindex>
           <Text>
             <LargeParagraph>
-              {getStandfirst()}
+              We offer two different subscription types: voucher booklets and home delivery.
             </LargeParagraph>
           </Text>
           <Tabs />
