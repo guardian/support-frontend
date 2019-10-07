@@ -50,8 +50,8 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   }
 
   private object CardDetailsFields {
-    case class StripeCardField(containerClass: String, inputName: String) {
-      def iframeSelector: CssSelectorQuery = cssSelector(s"#$containerClass iframe")
+    case class StripeCardField(containerId: String, inputName: String) {
+      def iframeSelector: CssSelectorQuery = cssSelector(s"#$containerId iframe")
       def inputSelector: CssSelectorQuery = cssSelector(s"input[name='$inputName']")
 
       def set(value: String): Unit = {
