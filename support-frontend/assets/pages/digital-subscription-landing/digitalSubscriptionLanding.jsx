@@ -15,7 +15,7 @@ import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
-import Footer from 'components/footer/footer';
+import Footer, { FooterCentered } from 'components/footer/footer';
 
 import 'stylesheets/skeleton/skeleton.scss';
 
@@ -146,13 +146,13 @@ class LandingPage extends Component<Props, State> {
       <Page
         header={<CountrySwitcherHeader />}
         footer={
-          <Footer>
+          <FooterCentered>
             <FaqsAndHelp
               selectedCountryGroup={countryGroupId}
               promoCode={promoCode}
             />
             <SubscriptionFaq subscriptionProduct="DigitalPack" />
-          </Footer>}
+          </FooterCentered>}
       >
         <CampaignHeader countryGroupId={countryGroupId} />
         <ProductBlock />

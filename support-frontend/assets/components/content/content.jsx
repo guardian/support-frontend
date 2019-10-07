@@ -74,6 +74,43 @@ Content.defaultProps = {
   border: null,
 };
 
+export const ContentCentered = ({
+  appearance, children, id, modifierClasses, image, needsHigherZindex, border,
+}: PropTypes) => (
+  <div
+    id={id}
+    className={classNameWithModifiers(
+      'component-content',
+      [
+        appearance,
+        image ? 'overflow-hidden' : null,
+        needsHigherZindex ? 'higher' : null,
+        border === false ? 'no-border' : null,
+        border === true ? 'force-border' : null,
+        ...modifierClasses,
+      ],
+  )}
+  >
+    <div className="component-content__content--centered">
+      <div className="hope-is-power--centered">
+        {children}
+        {image &&
+          <div className="component-content__image">{image}</div>
+        }
+      </div>
+    </div>
+  </div>
+);
+
+ContentCentered.defaultProps = {
+  appearance: 'white',
+  id: null,
+  image: null,
+  modifierClasses: [],
+  needsHigherZindex: false,
+  border: null,
+};
+
 
 // ---- Children ----- //
 
