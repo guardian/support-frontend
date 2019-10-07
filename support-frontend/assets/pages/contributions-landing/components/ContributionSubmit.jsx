@@ -40,6 +40,7 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   amount: number,
   billingPeriod: BillingPeriod
+  billingPeriod: BillingPeriod,
 |};
 
 function mapStateToProps(state: State) {
