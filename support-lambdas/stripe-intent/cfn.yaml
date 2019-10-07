@@ -17,7 +17,7 @@ Mappings:
       DomainName: stripe-intent-code.support.guardianapis.com
       StripeConfig: test
     PROD:
-      DomainName: stripe-intent-prod.support.guardianapis.com
+      DomainName: stripe-intent.support.guardianapis.com
       StripeConfig: live
   Constants:
     Alarm:
