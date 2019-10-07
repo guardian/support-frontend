@@ -39,7 +39,6 @@ type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   formIsSubmittable: boolean,
   amount: number,
-  billingPeriod: BillingPeriod
   billingPeriod: BillingPeriod,
 |};
 
