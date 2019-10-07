@@ -4,18 +4,15 @@ import java.io.{InputStream, OutputStream}
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import io.circe.Decoder
 import io.circe.parser.decode
-import com.gu.monitoring.SafeLogger._
+import io.circe.syntax._
 
 import scala.concurrent.duration.{Duration, MILLISECONDS}
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.io.Source
 import scala.util.Try
-import io.circe.parser._
-import io.circe.syntax._
-import cats.data.EitherT
-import cats.implicits._
 
 abstract class JsonLambda[Request: Decoder, Environment](implicit executionContext: ExecutionContext) extends RequestStreamHandler with LogImplicit {
 
@@ -46,7 +43,6 @@ abstract class JsonLambda[Request: Decoder, Environment](implicit executionConte
       SafeLogger.error(scrub"Lambda failed with exception", t)
       throw t
     }
-//    System.exit(0)
   }
 
 }

@@ -7,6 +7,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.lambda.runtime._
 import com.gu.handler._
+import com.gu.handler.impure.S3Loader
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.config.{Stage, Stages}
@@ -37,7 +38,7 @@ object ErrorBody {
 // simplest possible data structure to minimise external dependencies/side effects and be easy to mock
 case class StripeIntentEnv(
   mappings: Map[StripePublicKey, StripePrivateKey],
-  futureHttpClient: FutureHttpClient // would be easier to mock a function `Req => Future[Resp]`
+  futureHttpClient: FutureHttpClient // would be easier to mock a function that didn't use OKHttp types
 )
 
 case class StripePublicKey(value: String)
@@ -63,7 +64,7 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
   override def minimalEnvironment(): StripeIntentEnv = {
     val stage = Stage.fromString(Option(System.getenv("Stage")).filter(_ != "").getOrElse("DEV")).getOrElse(Stages.DEV)
     val config = S3Loader
-      .load(StripeConfigPath(stage), ConfigFactory.load())
+      .load(StripeConfigPath.apply(stage))
     val stripeKeys = config.getObject("mappings").entrySet().asScala.toSet.map { entry: JavaMap.Entry[String, ConfigValue] =>
       (StripePublicKey(entry.getKey), StripePrivateKey(entry.getValue.unwrapped().asInstanceOf[String]))
     }.toMap

@@ -1,4 +1,4 @@
-package com.gu.handler
+package com.gu.handler.impure
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{AWSCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider}
@@ -6,7 +6,6 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.model.S3Object
 import com.amazonaws.services.s3.{AmazonS3ClientBuilder, AmazonS3URI}
 import com.gu.monitoring.SafeLogger
-import com.gu.support.config.{Stage, Stages}
 import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.io.{BufferedSource, Source}
@@ -23,18 +22,8 @@ object Aws {
 
 }
 
-object StripeConfigPath {
-  def pathForStage(stage: Stage): String = stage match {
-    case Stages.DEV => "test"
-    case Stages.CODE => "test"
-    case Stages.PROD => "live"
-  }
-  def apply(stage: Stage): AmazonS3URI =
-    new AmazonS3URI(s"s3://gu-reader-revenue-private/stripe/${pathForStage(stage)}-stripe-regular.private.conf")
-}
-
 object S3Loader {
-  def load(uri: AmazonS3URI, public: Config): Config = {
+  def load(uri: AmazonS3URI): Config = {
     SafeLogger.info(s"Loading config from S3 from $uri")
     val s3Client = AmazonS3ClientBuilder
       .standard()
@@ -47,7 +36,7 @@ object S3Loader {
     val source: BufferedSource = Source.fromInputStream(s3Object.getObjectContent)
     try {
       val conf = source.mkString
-      ConfigFactory.parseString(conf).withFallback(public)
+      ConfigFactory.parseString(conf).withFallback(ConfigFactory.load())
     } finally {
       source.close()
     }

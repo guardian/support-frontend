@@ -1,12 +1,9 @@
 package com.gu.stripeIntent
 
-import com.gu.i18n.Currency
-import com.gu.i18n.Currency.AUD
 import com.gu.okhttp.RequestRunners._
 import com.gu.rest.WebServiceHelper
 import com.gu.support.encoding.Codec
 import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
-import com.gu.support.zuora.api._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Json}

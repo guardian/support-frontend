@@ -88,7 +88,7 @@ Resources:
     Properties:
       HostedZoneName: support.guardianapis.com.
       Name: !FindInMap [ StageMap, !Ref Stage, DomainName ]
-      Comment: !Sub CNAME for metric-push-api API ${Stage}
+      Comment: !Sub CNAME for strip-intent API ${Stage}
       Type: CNAME
       TTL: '120'
       ResourceRecords:
