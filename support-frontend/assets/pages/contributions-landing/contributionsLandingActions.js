@@ -28,7 +28,6 @@ import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
-  postOneOffStripeExecutePaymentRequest,
   processStripePaymentIntentRequest,
 } from 'helpers/paymentIntegrations/oneOffContributions';
 import { routes } from 'helpers/routes';
