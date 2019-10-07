@@ -263,12 +263,20 @@
 
     }
 
+    .product-block__item, .product-block__dropdown {
+      display: flex;
+      flex-direction: column;
+      width: calc(100% - 12px);
+
+      @include mq($from: tablet) {
+        width: calc(100% - 50px);
+      }
+    }
+
     .product-block__item {
-      border: 1px solid gu-colour(neutral-86);
-      width: calc(100% - 50px);
       padding-top: 10px;
       padding-bottom: 50px;
-      margin-bottom: 22px;
+      border: 1px solid gu-colour(neutral-86);
 
       .product-block__item__title {
         margin-bottom: 8px;
@@ -282,6 +290,85 @@
 
         @include mq($from: desktop) {
           font-size: 32px;
+        }
+      }
+
+
+    }
+
+    .product-block__dropdown {
+      margin-bottom: 22px;
+      background-color: #f6f6f6;
+      border-left: 1px solid gu-colour(neutral-86);
+      border-right: 1px solid gu-colour(neutral-86);
+    }
+
+    .product-block__dropdown__title {
+      margin: 8px 0 15px 5px;
+      @include gu-fontset-heading;
+      font-size: 20px;
+      line-height: 30px;
+
+      @include mq($from: tablet) {
+        font-size: 28px;
+        margin: 8px 0 26px 18px;
+      }
+    }
+
+    .product-block__ul-handler {
+      display: flex;
+      flex-direction: column;
+
+      @include mq($from: leftCol) {
+        display: inline-flex;
+        flex-direction: row;
+      }
+    }
+
+    ul:nth-of-type(2) {
+      @include mq($from: leftCol) {
+        margin-left: 50px;
+      }
+
+      @include mq($from: wide) {
+        margin-left: 100px;
+      }
+    }
+
+    li {
+      margin: 0 10px 15px 5px;
+      font-size: 15px;
+      line-height: 20px;
+
+      @include mq($from: tablet) {
+        margin-left: 18px;
+        font-size: 17px;
+      }
+
+      .product-block__list-item--bold {
+        font-weight: 600;
+        margin-left: 8px;
+      }
+  
+      .product-block__list-item__explainer {
+        margin-left: 23px;
+        font-size: 14px;
+
+        @include mq($from: tablet) {
+          font-size: 16px;
+        }
+      }
+  
+      .product-block__list-item__bullet {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background-color: #ffe500;
+        display: inline-block;
+
+        @include mq($from: tablet) {
+          width: 15px;
+        height: 15px;
         }
       }
     }
