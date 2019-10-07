@@ -22,7 +22,7 @@ export type SaleCopy = {
   landingPage: {
     heading: string,
     subHeading: string,
-    standfirst?: string,
+    roundel: string[],
   },
   bundle: {
     heading: string,
@@ -70,6 +70,7 @@ const dpSale = {
     landingPage: {
       heading: 'Digital Pack subscriptions',
       subHeading: 'Save 50% for 3 months on award-winning, independent journalism, ad-free on all of your devices',
+      roundel: [''],
     },
     bundle: {
       heading: 'Digital Pack',
@@ -99,7 +100,7 @@ const Sales: Sale[] = [
     subscriptionProduct: 'Paper',
     activeRegions: [GBPCountries],
     startTime: new Date(2019, 8, 23).getTime(), // 23 Sep 2019
-    endTime: new Date(2020, 9, 6).getTime(), // 6 Oct 2019
+    endTime: new Date(2019, 9, 7).getTime(), // 7 Oct 2019
     duration: '12 months',
     saleDetails: {
       GBPCountries: {
@@ -116,8 +117,9 @@ const Sales: Sale[] = [
             description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
           },
           landingPage: {
-            heading: 'Print',
-            subHeading: 'Save up to 52% for a year on The Guardian and The Observer',
+            roundel: ['Save up to', '52%', 'for a year'],
+            heading: 'Save up to 52% for a year on The Guardian and The Observer',
+            subHeading: '',
           },
           bundle: {
             heading: 'Paper',
@@ -227,6 +229,7 @@ function getSaleCopy(product: SubscriptionProduct, countryGroupId: CountryGroupI
     landingPage: {
       heading: '',
       subHeading: '',
+      roundel: [''],
     },
     bundle: {
       heading: '',
