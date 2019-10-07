@@ -49,6 +49,32 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
     }
   }
 
+  private object CardDetailsFields {
+    case class StripeCardField(containerClass: String, inputName: String) {
+      def iframeSelector: CssSelectorQuery = cssSelector(s"#$containerClass iframe")
+      def inputSelector: CssSelectorQuery = cssSelector(s"input[name='$inputName']")
+
+      def set(value: String): Unit = {
+        switchToParentFrame
+
+        switchFrame(iframeSelector)
+        setValueSlowly(inputSelector, value)
+
+        switchToParentFrame
+      }
+    }
+
+    val cardNumber = StripeCardField("stripeCardNumberElement", "cardnumber")
+    val expiryDate = StripeCardField("stripeCardExpiryElement", "exp-date")
+    val cvc = StripeCardField("stripeCardCVCElement", "cvc")
+
+    def fillIn: Unit = {
+      cardNumber.set("4242424242424242")
+      expiryDate.set("0150")
+      cvc.set("111")
+    }
+  }
+
   def fillInPersonalDetails(hasNameFields: Boolean) { RegisterFields.fillIn(hasNameFields) }
 
   def clearForm(hasNameFields: Boolean): Unit = RegisterFields.clear(hasNameFields)
@@ -56,6 +82,8 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   def selectState: Unit = setSingleSelectionValue(stateSelector, "NY")
 
   def selectStripePayment(): Unit = clickOn(stripeSelector)
+
+  def fillInCardDetails(): Unit = CardDetailsFields.fillIn
 
   def selectPayPalPayment(): Unit = clickOn(payPalSelector)
 

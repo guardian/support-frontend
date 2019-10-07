@@ -211,7 +211,8 @@ function onSubmit(props: PropTypes): Event => void {
     const flowPrefix = 'npf';
     const form = event.target;
 
-    if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe) {
+    // Only recurring uses stripe checkout
+    if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe && props.contributionType !== 'ONE_OFF') {
       props.onPaymentAuthorisation({ paymentMethod: Stripe, token: 'tok_visa', stripePaymentMethod: 'StripeCheckout' });
     } else {
       const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
