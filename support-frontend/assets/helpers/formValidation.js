@@ -13,7 +13,10 @@ import { Canada, UnitedStates } from './internationalisation/countryGroup';
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
 export const isNotEmpty: (string | null) => boolean = input => !!input && input.trim() !== '';
-export const isEmpty: (string | null) => boolean = input => input.trim().length === 0;
+
+export const isEmpty: (string | null) => boolean = input =>
+  typeof input === 'undefined' || input == null || input.trim().length === 0;
+
 export const isValidEmail: (string | null) => boolean = input => !!input && new RegExp(emailRegexPattern).test(input);
 export const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
 export const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
@@ -25,7 +28,9 @@ export const checkState: (string | null) => boolean = s => typeof s === 'string'
 export const checkEmail: (string | null) => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 export const checkOptionalEmail: (string | null) => boolean = input => {
-  isEmpty(input) || isValidEmail(input);
+  let output = isEmpty(input) || isValidEmail(input);
+  console.log("Email is valid or empty" +  input + " status:" + output);
+  return output
 };
 
 export const checkAmount: (string, CountryGroupId, ContributionType) =>

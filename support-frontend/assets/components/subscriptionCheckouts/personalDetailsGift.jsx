@@ -49,8 +49,6 @@ export default function PersonalDetailsGift(props: PropTypes) {
         type="emailGiftRecipient"
         value={props.emailGiftRecipient}
         setValue={props.setEmailGift}
-        isValid={checkOptionalEmail(props.emailGiftRecipient)}
-        pattern={emailRegexPattern}
         optional
         error={firstError('emailGiftRecipient', props.formErrors)}
       />
