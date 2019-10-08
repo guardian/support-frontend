@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
 
 // styles
@@ -7,21 +7,64 @@ import './digitalSubscriptionLanding.scss';
 
 const Plus = () => <div className="product-block__plus">+ Plus</div>;
 
-type ListItemPropTypes = {
-  boldText: string,
-  explainer: string,
+type ListPropTypes = {
+  items: Array<Object>,
 }
 
-const ListItem = ({ boldText, explainer }: ListItemPropTypes) => (
-  <li>
-    <div className="product-block__list-item__bullet" />
-    <span className="product-block__list-item--bold">{boldText}</span><br />
-    <div className="product-block__list-item__explainer">{explainer}</div>
-  </li>
+const List = ({ items }: ListPropTypes) => (
+  <ul>
+    {items.map(item => (
+      <li>
+        <div className="product-block__list-item__bullet" />
+        <span className="product-block__list-item--bold">{item.boldText}</span><br />
+        <div className="product-block__list-item__explainer">{item.explainer}</div>
+      </li>
+    ))}
+  </ul>
+);
+
+type DropdownPropTypes = {
+  children: Node,
+  showDropDown: boolean,
+  title: string,
+}
+
+const Dropdown = ({ children, showDropDown, title }: DropdownPropTypes) => (
+  <div id="product-details" className={`product-block__dropdown${showDropDown ? '--show' : '--hide'}`}>
+    <div className="product-block__dropdown__title">{title}</div>
+    <span className="product-block__ul-handler">
+      {children}
+    </span>
+  </div>
+);
+
+type ButtonPropTypes = {
+  showDropDown: boolean,
+  handleClick: Function,
+  product: 'Guardian Daily' | 'Premium App',
+}
+
+const Button = ({ showDropDown, handleClick, product }: ButtonPropTypes) => (
+  <button
+    aria-controls="product-details"
+    aria-expanded={showDropDown ? 'true' : 'false'}
+    onClick={handleClick}
+    className={`product-block__button${showDropDown ? '--show' : '--hide'}`}
+  >
+    <span className="product-block__button__text">
+      <div className={`product-block__arrow__container--${showDropDown ? 'up' : 'down'}`}>
+        <div className={showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'} />
+      </div>
+      <span className="product-block__button__text--bold">
+        {showDropDown ? `Less about the ${product}` : `More about the ${product}`}
+      </span>
+    </span>
+  </button>
 );
 
 type StateTypes = {
-  showDropDown: boolean,
+  showDropDownDaily: boolean,
+  showDropDownApp: boolean,
 }
 
 // This is an empty declaration because there were errors without it being passed in
@@ -31,13 +74,14 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
   constructor(props: PropTypes) {
     super(props);
     this.state = {
-      showDropDown: false,
+      showDropDownDaily: false,
+      showDropDownApp: false,
     };
   }
 
-  handleClick = () => (
+  handleClick = (product: string): void => (
     this.setState({
-      showDropDown: !this.state.showDropDown,
+      [`showDropDown${product}`]: !this.state[`showDropDown${product}`],
     })
   )
 
@@ -50,40 +94,51 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__item">
             <div className="product-block__item__title">The Guardian Daily</div>
           </div>
-          <div id="product-details" className={`product-block__dropdown${state.showDropDown ? '--show' : '--hide'}`}>
-            <div className="product-block__dropdown__title">The Guardian Daily in detail</div>
-            <span className="product-block__ul-handler">
-              <ul>
-                <ListItem boldText="A new way to read" explainer="The newspaper, reimagined for mobile and tablet" />
-                <ListItem boldText="Updated daily" explainer="Each edition available to read by 6am, 7 days a week" />
-                <ListItem boldText="A new way to navigate" explainer="Read cover to cover, or swipe to sections" />
-              </ul>
-              <ul>
-                <ListItem boldText="Multiple devices" explainer="Designed for your mobile or tablet on iOS or Android" />
-                <ListItem boldText="Read offline" explainer="Schedule a download and read whenever it suits you" />
-                <ListItem boldText="Ad free" explainer="Enjoy our journalism without adverts" />
-              </ul>
-            </span>
-          </div>
-          <button
-            aria-controls="product-details"
-            aria-expanded={state.showDropDown ? 'true' : 'false'}
-            onClick={this.handleClick}
-            className={`product-block__button${state.showDropDown ? '--show' : '--hide'}`}
-          >
-            <span className="product-block__button__text">
-              <div className={`product-block__arrow__container--${state.showDropDown ? 'up' : 'down'}`}>
-                <div className={state.showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'} />
-              </div>
-              <span className="product-block__button__text--bold">
-                {state.showDropDown ? 'Less about the Guardian Daily' : 'More about the Guardian Daily'}
-              </span>
-            </span>
-          </button>
+          <Dropdown showDropDown={state.showDropDownDaily} title="The Guardian Daily in detail">
+            <List
+              items={[
+                { boldText: 'A new way to read', explainer: 'The newspaper, reimagined for mobile and tablet' },
+                { boldText: 'Updated daily', explainer: 'Each edition available to read by 6am, 7 days a week' },
+                { boldText: 'A new way to navigate', explainer: 'Read cover to cover, or swipe to sections' },
+              ]}
+            />
+            <List
+              items={[
+                { boldText: 'Multiple devices', explainer: 'Designed for your mobile or tablet on iOS or Android' },
+                { boldText: 'Read offline', explainer: 'Schedule a download and read whenever it suits you' },
+                { boldText: 'Ad free', explainer: 'Enjoy our journalism without adverts' },
+              ]}
+            />
+          </Dropdown>
+          <Button
+            showDropDown={state.showDropDownDaily}
+            handleClick={() => this.handleClick('Daily')}
+            product="Guardian Daily"
+          />
           <Plus />
           <div className="product-block__item">
             <div className="product-block__item__title">Premium access to the Live app</div>
           </div>
+          <Dropdown showDropDown={state.showDropDownApp} title="Premium access to the Live app in detail">
+            <List
+              items={[
+                { boldText: 'Live', explainer: 'Follow a live feed of breaking news and sport, as it happens' },
+                { boldText: 'Discover', explainer: 'Explore stories you might have missed, tailored to you' },
+                { boldText: 'Enhanced offline reading', explainer: 'Download the day\'s news whever it suits you' },
+              ]}
+            />
+            <List
+              items={[
+                { boldText: 'Daily Crossword', explainer: 'Play the daily crossword wherever you are' },
+                { boldText: 'Ad-free', explainer: 'Enjoy our journalism without adverts' },
+              ]}
+            />
+          </Dropdown>
+          <Button
+            showDropDown={state.showDropDownApp}
+            handleClick={() => this.handleClick('App')}
+            product="Premium App"
+          />
           <Plus />
           <AdFreeSectionC />
         </div>
