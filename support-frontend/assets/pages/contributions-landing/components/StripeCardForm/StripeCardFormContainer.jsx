@@ -47,7 +47,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
           <div className="stripe-card-element-container">
             <StripeProvider apiKey={key}>
               <Elements>
-                <StripeCardForm />
+                <StripeCardForm stripeKey={key}/>
               </Elements>
             </StripeProvider>
           </div>

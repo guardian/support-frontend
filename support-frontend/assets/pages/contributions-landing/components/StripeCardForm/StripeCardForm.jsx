@@ -35,7 +35,7 @@ type PropTypes = {|
   paymentWaiting: (isWaiting: boolean) => Action,
   setStripeCardFormComplete: (isComplete: boolean) => Action,
   checkoutFormHasBeenSubmitted: boolean,
-
+  stripeKey: string,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -146,7 +146,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
       fetchJson(
         window.guardian.stripeSetupIntentEndpoint,
-        requestOptions(data, 'omit', 'POST', null)
+        requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null)
       ).then(result => {
         debugger
         this.props.stripe.handleCardSetup(result.client_secret).then((result) => {

@@ -174,7 +174,7 @@ class Application(
       paymentApiStripeUrl = paymentAPIService.stripeUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
-      stripeSetupIntentEndpoint = "https://stripe-intent.support.guardianapis.com/stripe-intent",
+      stripeSetupIntentEndpoint = "https://stripe-intent-code.support.guardianapis.com/stripe-intent",
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
