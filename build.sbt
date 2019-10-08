@@ -77,7 +77,6 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     scalastyleFailOnError := true,
-    fork in run := true,
     testScalastyle := scalastyle.in(Compile).toTask("").value,
     (test in Test) := ((test in Test) dependsOn testScalastyle).value,
     (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
