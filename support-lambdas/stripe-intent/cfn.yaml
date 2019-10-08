@@ -35,8 +35,9 @@ Conditions:
 Globals:
   Api:
     Cors:
-      AllowOrigin: !FindInMap [ CorsOrigins, !Ref Stage, Origin ]
+      AllowOrigin: "'*'"
       AllowHeaders: "'*'"
+      AllowMethods: "'*'"
 
 Resources:
   LambdaFunctionOverHttps:
