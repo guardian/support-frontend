@@ -88,12 +88,12 @@ const Sales: Sale[] = [
     endTime: new Date(2020, 8, 23).getTime(), // 23 Sept 2020 - we don't have an end date yet
     saleDetails: {
       GBPCountries: dpSale,
-      UnitedStates: dpSale,
-      International: dpSale,
-      Canada: dpSale,
-      NZDCountries: dpSale,
-      EURCountries: dpSale,
-      AUDCountries: dpSale,
+      UnitedStates: { ...dpSale, price: 9.99 },
+      International: { ...dpSale, price: 9.99 },
+      Canada: { ...dpSale, price: 10.97 },
+      NZDCountries: { ...dpSale, price: 11.75 },
+      EURCountries: { ...dpSale, price: 7.49 },
+      AUDCountries: { ...dpSale, price: 10.75 },
     },
   },
   {
