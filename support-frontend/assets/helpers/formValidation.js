@@ -15,23 +15,25 @@ export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-
 export const isEmpty: (string | null) => boolean = input =>
   typeof input === 'undefined' || input == null || input.trim().length === 0;
 
+export const isNotEmpty: (string | null) => boolean = input => !isEmpty(input);
+
 export const isValidEmail: (string | null) => boolean = input => !!input && new RegExp(emailRegexPattern).test(input);
 export const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
 export const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
 export const maxTwoDecimals: string => boolean = input => new RegExp('^\\d+\\.?\\d{0,2}$').test(input);
 
-export const checkFirstName: (string | null) => boolean = !isEmpty;
-export const checkLastName: (string | null) => boolean = !isEmpty;
-export const checkState: (string | null) => boolean = s => typeof s === 'string' && (!isEmpty(s));
-export const checkEmail: (string | null) => boolean = input => !isEmpty(input) && isValidEmail(input);
+export const checkFirstName: (string | null) => boolean = isNotEmpty;
+export const checkLastName: (string | null) => boolean = isNotEmpty;
+export const checkState: (string | null) => boolean = s => typeof s === 'string' && isNotEmpty(s);
+export const checkEmail: (string | null) => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 export const checkOptionalEmail: (string | null) => boolean = input => {
-  isEmpty(input) || isValidEmail(input);
+ isEmpty(input) || isValidEmail(input);
 };
 
 export const checkAmount: (string, CountryGroupId, ContributionType) =>
   boolean = (input: string, countryGroupId: CountryGroupId, contributionType: ContributionType) =>
-    !isEmpty(input)
+    isNotEmpty(input)
     && isLargerOrEqual(config[countryGroupId][contributionType].min, input)
     && isSmallerOrEqual(config[countryGroupId][contributionType].max, input)
     && maxTwoDecimals(input);
