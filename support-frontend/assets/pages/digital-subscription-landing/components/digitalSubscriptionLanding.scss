@@ -297,13 +297,28 @@
     }
 
     .product-block__dropdown--hide {
-      display: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 400ms;
+      
+      & > * {
+        opacity: 0;
+        transition: opacity 400ms;
+      }
     }
 
     .product-block__dropdown--show {
       background-color: #f6f6f6;
       border-left: 1px solid gu-colour(neutral-86);
       border-right: 1px solid gu-colour(neutral-86);
+      max-height: 600px;
+      overflow: visible;
+      transition: max-height 400ms;
+      
+      & > * {
+        transition: opacity 300ms 200ms;
+        opacity: 1;
+      }
     }
 
     .product-block__dropdown__title {
@@ -396,7 +411,8 @@
   button {
     display: inline-block;
     border: 1px solid gu-colour(neutral-86);
-    padding: 1rem 0;
+    background-color: #ffffff;
+    padding: 0.5rem 0 1rem;
     margin: 0;
     margin-bottom: 20px;
     text-decoration: none;
@@ -410,27 +426,66 @@
     transform 150ms ease;
     -webkit-appearance: none;
     -moz-appearance: none;
-  }
-  .product-block__button--hide {
-    background-color: #ffffff;
-    border-top: none;
-    button:hover,
-    button:focus {
-      background: #f6f6f6;
+    max-height: 60px;
+
+    .product-block__button__text {
+      display: inline-block;
     }
+
+    .product-block__arrow__container--down, .product-block__arrow__container--up {
+      position: relative;
+    }
+
+    .product-block__arrow__container--down {
+      top: 11px;
+      left: -20px;
+    }
+
+    .product-block__arrow__container--up {
+      top: 17px;
+      left: -20px;
+    }
+
+    .product-block__arrow--up, .product-block__arrow--down {
+      border: 2px solid transparent;
+      border-top-color: #333333;
+      border-right-color: #333333;
+      width: 7px;
+      height: 7px;
+    }
+
+    .product-block__arrow--up {
+      transform: rotate(-45deg);
+      transition: transform 400ms 200ms;
+    }
+
+    .product-block__arrow--down {
+      transform: rotate(135deg);
+      transition: transform 400ms 200ms;
+    }
+  }
+
+  button:hover {
+      background-color: #f6f6f6;
+    }
+
+  .product-block__button--hide {
+    border-top: none;
+    background-color: #ffffff;
+  }
+
+  .product-block__button--show {
+    background-color: #ffffff;
   }
   
   button:active {
     transform: scale(0.99);
   }
 
-  .product-block__button--show {
-    background-color: #ffffff;
-    button:hover,
-    button:focus {
-      background: #f6f6f6;
-    }
+  .product-block__button__text--bold {
+    font-weight: 600;
   }
+
 }
 
 .the-moment-hero__graphic-outer {

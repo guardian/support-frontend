@@ -50,7 +50,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__item">
             <div className="product-block__item__title">The Guardian Daily</div>
           </div>
-          <div className={`product-block__dropdown${state.showDropDown ? '--show' : '--hide'}`}>
+          <div id="product-details" className={`product-block__dropdown${state.showDropDown ? '--show' : '--hide'}`}>
             <div className="product-block__dropdown__title">The Guardian Daily in detail</div>
             <span className="product-block__ul-handler">
               <ul>
@@ -65,7 +65,21 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
               </ul>
             </span>
           </div>
-          <button onClick={this.handleClick} className={state.showDropDown ? 'product-block__button--show' : 'product-block__button--hide'}>{state.showDropDown ? 'See Less' : 'See more'}</button>
+          <button
+            aria-controls="product-details"
+            aria-expanded={state.showDropDown ? 'true' : 'false'}
+            onClick={this.handleClick}
+            className={`product-block__button${state.showDropDown ? '--show' : '--hide'}`}
+          >
+            <span className="product-block__button__text">
+              <div className={`product-block__arrow__container--${state.showDropDown ? 'up' : 'down'}`}>
+                <div className={state.showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'} />
+              </div>
+              <span className="product-block__button__text--bold">
+                {state.showDropDown ? 'Less about the Guardian Daily' : 'More about the Guardian Daily'}
+              </span>
+            </span>
+          </button>
           <Plus />
           <div className="product-block__item">
             <div className="product-block__item__title">Premium access to the Live app</div>
