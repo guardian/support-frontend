@@ -38,20 +38,16 @@
 }
 
 .ad-free-section-b__sub-header {
-    margin-bottom: 8px;
-    font: 600 22px $gu-headline;
+  margin-bottom: 8px;
+  font: 600 22px $gu-headline;
 
-    @include mq($from: tablet) {
-      font-size: 26px;
-    }
+  @include mq($from: tablet) {
+    font-size: 26px;
+  }
 
-    @include mq($from: desktop) {
-      font-size: 32px;
-    }
-}
-
-.ad-free-section__copy {
-    font-size: 17px;
+  @include mq($from: desktop) {
+    font-size: 32px;
+  }
 }
 
 .ad-free-section__image-container {

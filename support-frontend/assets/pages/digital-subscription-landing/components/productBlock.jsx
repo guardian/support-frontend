@@ -93,6 +93,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <div className="product-block__item">
             <div className="product-block__item__title">The Guardian Daily</div>
+            <div className="product-block__item__subtitle">Each day&apos;s edition in one simple, elegant app</div>
           </div>
           <Dropdown showDropDown={state.showDropDownDaily} title="The Guardian Daily in detail">
             <List
@@ -118,6 +119,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Plus />
           <div className="product-block__item">
             <div className="product-block__item__title">Premium access to the Live app</div>
+            <div className="product-block__item__subtitle">Live news, as it happens</div>
           </div>
           <Dropdown showDropDown={state.showDropDownApp} title="Premium access to the Live app in detail">
             <List

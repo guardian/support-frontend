@@ -263,7 +263,7 @@
 
     }
 
-    .product-block__item, .product-block__dropdown--show, button {
+    .product-block__item, .product-block__dropdown--show, button, .ad-free-section-c__content {
       display: flex;
       flex-direction: column;
       width: calc(100% - 12px);
@@ -278,22 +278,75 @@
       padding-bottom: 50px;
       border: 1px solid gu-colour(neutral-86);
 
-      .product-block__item__title {
-        margin-bottom: 8px;
+      .product-block__item__title, .product-block__item__subtitle {
         margin-left: 10px;
-        font: 600 22px $gu-headline;
-        max-width: gu-span(4);
+      }
+
+      .product-block__item__title, .ad-free-section-c__sub-header {
+        margin-bottom: 8px;
+        @include gu-fontset-heading;
+        font-weight: 600;
+        font-size: 22px;
+        max-width: gu-span(2.5);
+
+        @include mq($from: mobileMedium) {
+          max-width: gu-span(3);
+        }
+
+        @include mq($from: mobileLandscape) {
+          max-width: gu-span(3.5);
+        }
+
+        @include mq($from: phablet) {
+          max-width: gu-span(5);
+        }
 
         @include mq($from: tablet) {
           font-size: 26px;
+          max-width: gu-span(4);
         }
 
         @include mq($from: desktop) {
+          margin-bottom: 15px;
           font-size: 32px;
         }
       }
+    }
 
+    .product-block__item__subtitle, .ad-free-section__copy {
+      @include gu-fontset-heading;
+      font-size: 16px;
+      line-height: 21px;
+      font-weight: 400;
+      max-width: gu-span(2.5);
 
+      @include mq($from: mobileMedium) {
+        max-width: gu-span(3);
+      }
+
+      @include mq($from: mobileLandscape) {
+        max-width: gu-span(4);
+      }
+
+      @include mq($from: phablet) {
+        max-width: gu-span(5);
+      }
+
+      @include mq($from: tablet) {
+        font-size: 20px;
+      }
+
+      @include mq($from: desktop) {
+        font-size: 22px;
+        line-height: 32px;
+        max-width: gu-span(7);
+      }
+    }
+
+    .ad-free-section__copy {
+      @include mq($from: desktop) {
+        max-width: gu-span(8);
+      }
     }
 
     .product-block__dropdown--hide {
@@ -417,7 +470,7 @@
     margin-bottom: 20px;
     text-decoration: none;
     font-family: sans-serif;
-    font-size: 1rem;
+    font-size: 14px;
     cursor: pointer;
     outline: none;
     text-align: center !important;
@@ -427,6 +480,10 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     max-height: 60px;
+
+    @include mq($from: tablet) {
+      font-size: 17px;
+    }
 
     .product-block__button__text {
       display: inline-block;
