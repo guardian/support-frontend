@@ -29,7 +29,7 @@ Conditions:
 
 Globals:
   Api:
-    Cors: "'support.theguardian.com'"
+    Cors: "'https://support.thegulocal.com'"
 
 Resources:
   LambdaFunctionOverHttps:
