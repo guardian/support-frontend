@@ -8,8 +8,6 @@ import { withLabel } from 'hocs/withLabel';
 import { Input } from 'components/forms/input';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
-import ContributionTextInput from "../../pages/contributions-landing/components/ContributionTextInput";
-import {checkOptionalEmail, emailRegexPattern} from 'helpers/formValidation';
 
 export type PropTypes = {
   firstNameGiftRecipient: string,
