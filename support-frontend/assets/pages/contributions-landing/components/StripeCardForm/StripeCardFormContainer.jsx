@@ -5,7 +5,7 @@
 import React from 'react';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import StripeCardForm from './StripeCardForm';
-import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
+import { getStripeKey, stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ContributionType } from 'helpers/contributions';
@@ -34,12 +34,14 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
   }
 
   render() {
-    if (this.props.contributionType === 'ONE_OFF' &&
-      this.props.paymentMethod === Stripe) {
-
+    if (this.props.paymentMethod === Stripe) {
       if (this.props.stripeHasLoaded) {
 
-        const key = getStripeKey('ONE_OFF', this.props.country, this.props.isTestUser);
+        const key = getStripeKey(
+          stripeAccountForContributionType[this.props.contributionType],
+          this.props.country,
+          this.props.isTestUser
+        );
 
         return (
           <div className="stripe-card-element-container">

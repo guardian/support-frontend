@@ -19,6 +19,7 @@
   paymentApiStripeUrl: String,
   paymentApiPayPalEndpoint: String,
   existingPaymentOptionsEndpoint: String,
+  stripeSetupIntentEndpoint: String,
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent],
@@ -93,8 +94,9 @@
     uat: "@paymentMethodConfigs.regularUatPayPalConfig.payPalEnvironment"
   };
   window.guardian.paymentApiStripeUrl = "@paymentApiStripeUrl";
-window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
+  window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
   window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
+  window.guardian.stripeSetupIntentEndpoint = "@stripeSetupIntentEndpoint";
   window.guardian.csrf = { token: "@CSRF.getToken.value" };
 
   @guestAccountCreationToken.map { guestAccountCreationToken =>

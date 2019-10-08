@@ -151,7 +151,13 @@ const formHandlersForRecurring = {
     // we don't get an onSubmit event for PayPal recurring, so there
     // is no need to handle anything here
   },
-  Stripe: openStripePopup,
+  // Stripe: openStripePopup,
+  Stripe: (props: PropTypes) => {
+    debugger
+    if (props.createStripePaymentMethod) {
+      props.createStripePaymentMethod();
+    }
+  },
   DirectDebit: (props: PropTypes) => {
     props.openDirectDebitPopUp();
   },

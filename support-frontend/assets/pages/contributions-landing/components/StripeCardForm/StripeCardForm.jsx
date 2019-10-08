@@ -97,6 +97,14 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   componentDidMount(): void {
+    if (this.props.contributionType === 'ONE_OFF') {
+      this.setupOneOffHandlers();
+    } else {
+      this.setupRecurringHandlers();
+    }
+  }
+
+  setupOneOffHandlers(): void {
     this.props.setCreateStripePaymentMethod(() => {
       this.props.paymentWaiting(true);
 
@@ -127,6 +135,38 @@ class CardForm extends Component<PropTypes, StateTypes> {
     this.props.setHandleStripe3DS((clientSecret: string) => {
       trackComponentLoad('stripe-3ds');
       return this.props.stripe.handleCardAction(clientSecret);
+    });
+  }
+
+  setupRecurringHandlers(): void {
+    this.props.setCreateStripePaymentMethod(() => {
+      this.props.paymentWaiting(true);
+      const clientSecret = 'seti_0FRELgItVxyc3Q6noCUABMZQ_secret_Fx8co3tzM1CroCdU99Yq6o41ahcP8hq';
+
+      this.props.stripe.handleCardSetup(clientSecret).then((result) => {
+        debugger
+
+        if (result.error) {
+          this.props.paymentWaiting(false);
+
+          logException(`Error creating Payment Method: ${result.error}`);
+
+          if (result.error.type === 'validation_error') {
+            // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
+            // happen then display a generic error about card details
+            this.props.paymentFailure('payment_details_incorrect');
+          } else {
+            // This is probably a Stripe or network problem
+            this.props.paymentFailure('payment_provider_unavailable');
+          }
+        } else {
+          this.props.onPaymentAuthorised({
+            paymentMethod: Stripe,
+            stripePaymentMethod: 'StripeCheckout',
+            paymentMethodId: result.setupIntent.payment_method,
+          });
+        }
+      })
     });
   }
 

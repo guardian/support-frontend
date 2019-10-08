@@ -118,22 +118,22 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
 
 
   if (getQueryParameter('stripe-checkout-js') !== 'no') {
-    loadStripe().then(() => {
-      contributionTypes[countryGroupId].forEach((contributionTypeSetting) => {
-        const validPayments = getValidPaymentMethods(contributionTypeSetting.contributionType, switches, countryId);
-        // Stripe Payment Intents is currently only for one-offs, so always initialise Stripe Checkout for now
-        if (validPayments.includes(Stripe)) {
-          initialiseStripeCheckout(
-            onPaymentAuthorisation,
-            contributionTypeSetting.contributionType,
-            currencyId,
-            countryId,
-            !!isTestUser,
-            dispatch,
-          );
-        }
-      });
-    });
+    // loadStripe().then(() => {
+    //   contributionTypes[countryGroupId].forEach((contributionTypeSetting) => {
+    //     const validPayments = getValidPaymentMethods(contributionTypeSetting.contributionType, switches, countryId);
+    //     // Stripe Payment Intents is currently only for one-offs, so always initialise Stripe Checkout for now
+    //     if (validPayments.includes(Stripe)) {
+    //       initialiseStripeCheckout(
+    //         onPaymentAuthorisation,
+    //         contributionTypeSetting.contributionType,
+    //         currencyId,
+    //         countryId,
+    //         !!isTestUser,
+    //         dispatch,
+    //       );
+    //     }
+    //   });
+    // });
 
     // initiate fetch of existing payment methods
     const userAppearsLoggedIn = doesUserAppearToBeSignedIn();

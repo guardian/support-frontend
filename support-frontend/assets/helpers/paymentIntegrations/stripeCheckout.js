@@ -54,6 +54,7 @@ function loadStripe(): Promise<void> {
 
 }
 
+//TODO - move this into another file?
 function getStripeKey(stripeAccount: StripeAccount, country: IsoCountry, isTestUser: boolean): string {
   switch (country) {
     case 'AU':
