@@ -6,7 +6,7 @@ import io.circe.syntax._
 import org.scalatest.{Assertion, Matchers}
 
 trait SerialisationTestHelpers extends Matchers {
-  def testDecoding[T](fixture: String, objectChecks: T => Assertion = (_: T) => succeed)(implicit decoder: Decoder[T]): Assertion = {
+  def testDecoding[T : Decoder](fixture: String, objectChecks: T => Assertion = (_: T) => succeed): Assertion = {
     val decodeResult = decode[T](fixture)
     assertDecodingSucceeded(decodeResult, objectChecks)
   }
