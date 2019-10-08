@@ -178,7 +178,7 @@ class Application(
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
       geoData = geoData,
-      shareImageUrl = "https://media.guim.co.uk/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/2000.png"
+      shareImageUrl = "https://media.guim.co.uk/661978f14a1cbdd64361e429f058e9b20c8db5bb/0_0_2400_1260/1000.png"
     )
   }
 
