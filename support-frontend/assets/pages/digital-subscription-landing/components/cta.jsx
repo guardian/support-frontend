@@ -15,7 +15,7 @@ const CallToAction = (props: PropTypes) => (
     <div className="hope-is-power--centered">
       <h2>Choose one of our special offers and subscribe today</h2>
       <h3>After your 14-day free trial, your subscription will begin automatically and you can cancel any time</h3>
-      <PaymentSelection dailyEditionsVariant={props.dailyEditionsVariant} />
+      <PaymentSelection dailyEditionsVariant={props.dailyEditionsVariant} pageType="A" />
     </div>
   </div>
 );
