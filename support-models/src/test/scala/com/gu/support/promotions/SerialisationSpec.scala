@@ -96,4 +96,15 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
       }
     )
   }
+
+  it should "be able to decode a landing page" in {
+    testDecoding[Promotion](Fixtures.doubleWithIncentive,
+      promotion => {
+        val landingPage = promotion.landingPage.get
+        landingPage.title shouldBe Some("Get 50% off the Guardian Digital Pack for 3 months")
+        landingPage.description shouldBe Some("Enjoy the digital pack for half price.\n\nSubscribe before 22nd December 2016 and get the Digital Pack for just £5.99 for the first 3 months (standard price of £11.99 a month will apply after). \n\nNew UK digital pack subscribers also receive a £10 M&S e-gift card. Terms and conditions apply.")
+        landingPage.roundel shouldBe Some("### 50% off for 3 months")
+      }
+    )
+  }
 }

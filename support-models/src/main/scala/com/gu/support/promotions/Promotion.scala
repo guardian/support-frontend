@@ -20,7 +20,8 @@ case class Promotion(
   incentive: Option[IncentiveBenefit] = None,
   introductoryPrice: Option[IntroductoryPriceBenefit] = None,
   renewalOnly: Boolean = false,
-  tracking: Boolean = false
+  tracking: Boolean = false,
+  landingPage: Option[LandingPage] = None
 ) {
   def promoCodes: Iterable[PromoCode] = channelCodes.values.flatten
 }
