@@ -18,8 +18,15 @@ case class ApiGatewayHeaders(contentType: String = "application/json")
 case class ApiGatewayResponse private (statusCode: String, body: String, headers: Map[String, String])
 
 object ApiGatewayResponse {
+  private val headers = Map(
+    "Content-Type" -> "application/json",
+    "Access-Control-Allow-Origin" -> "*",
+    "Access-Control-Allow-Headers" -> "*",
+    "Access-Control-Allow-Methods" -> "*"
+  )
+
   def apply[Response: Encoder](httpResponseCode: HttpResponseCode, response: Response): ApiGatewayResponse =
-    new ApiGatewayResponse(httpResponseCode.value, response.asJson.noSpaces, Map("contentType" -> "application/json"))
+    new ApiGatewayResponse(httpResponseCode.value, response.asJson.noSpaces, headers)
   implicit val encoder: Encoder[ApiGatewayResponse] = deriveEncoder
 }
 
