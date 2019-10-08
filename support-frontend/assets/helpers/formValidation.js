@@ -28,9 +28,7 @@ export const checkState: (string | null) => boolean = s => typeof s === 'string'
 export const checkEmail: (string | null) => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 export const checkOptionalEmail: (string | null) => boolean = input => {
-  let output = isEmpty(input) || isValidEmail(input);
-  console.log("Email is valid or empty" +  input + " status:" + output);
-  return output
+  isEmpty(input) || isValidEmail(input);
 };
 
 export const checkAmount: (string, CountryGroupId, ContributionType) =>
