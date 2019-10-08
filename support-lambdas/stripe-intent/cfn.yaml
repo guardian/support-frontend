@@ -27,6 +27,10 @@ Mappings:
 Conditions:
   CreateProdMonitoring: !Equals [ !Ref Stage, PROD ]
 
+Globals:
+  Api:
+    Cors: "'support.theguardian.com'"
+
 Resources:
   LambdaFunctionOverHttps:
     Type: AWS::Serverless::Function
