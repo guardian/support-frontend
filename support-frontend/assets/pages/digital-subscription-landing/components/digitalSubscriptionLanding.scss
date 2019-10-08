@@ -524,9 +524,11 @@
     }
   }
 
-  button:hover {
+  @include mq($from: desktop) {
+    button:hover {
       background-color: #f6f6f6;
     }
+  }
 
   .product-block__button--hide {
     border-top: none;
