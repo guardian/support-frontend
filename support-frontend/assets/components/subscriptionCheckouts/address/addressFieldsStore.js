@@ -103,7 +103,7 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
   },
   {
     rule: checkpostCodeLength(fields.postCode),
-    error: formError('postCode', `Postcode for ${addressType} should not be longer than 20 characters.`),
+    error: formError('postCode', `Please enter a ${addressType} postcode not be longer than 20 characters.`),
   },
   {
     rule: notNull(fields.country),
