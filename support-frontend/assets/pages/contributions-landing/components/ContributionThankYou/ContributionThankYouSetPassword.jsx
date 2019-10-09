@@ -10,6 +10,7 @@ import SetPasswordForm from '../SetPasswordForm';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit } from 'helpers/paymentMethods';
 import type { ContributionType } from 'helpers/contributions';
+import ContributionsReminder from 'components/contributionsReminder/contributionsReminder';
 
 // ----- Types ----- //
 
@@ -80,6 +81,7 @@ function ContributionThankYouSetPassword(props: PropTypes) {
       <div className="gu-content__form gu-content__form--thank-you gu-content__form--set-password">
         { props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy ?
             renderDirectDebit() : null }
+        {props.contributionType === 'ONE_OFF' && <ContributionsReminder /> }
         <section className="set-password">
           <h3 className="set-password__title">{setPasswordCopy[props.contributionType].title}</h3>
           <p className="set-password__message">
