@@ -59,7 +59,7 @@ export type StripeChargeData = {|
   paymentData: {
     currency: IsoCurrency,
     amount: number,
-    token: string,
+    token: string, // TODO - remove this field once it has been removed from payment-api
     email: string,
     stripePaymentMethod: StripePaymentMethod,
   },
@@ -134,19 +134,6 @@ function paymentResultFromObject(
   return Promise.resolve(PaymentSuccess);
 }
 
-// Sends a one-off payment request to the payment API and standardises the result
-// https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
-function postOneOffStripeExecutePaymentRequest(
-  data: StripeChargeData,
-  setGuestAccountCreationToken: (string) => void,
-  setThankYouPageStage: (ThankYouPageStage) => void,
-): Promise<PaymentResult> {
-  return logPromise(fetchJson(
-    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/execute-payment`),
-    requestOptions(data, 'omit', 'POST', null),
-  ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
-}
-
 function postStripeCreatePaymentIntentRequest(data: CreateStripePaymentIntentRequest): Promise<Object> {
   return fetchJson(
     paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
@@ -210,7 +197,6 @@ function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Pr
 }
 
 export {
-  postOneOffStripeExecutePaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
   processStripePaymentIntentRequest,
 };
