@@ -52,7 +52,6 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { StripeElementsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -84,7 +83,6 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
-  stripeElementsTestVariant: StripeElementsTestVariants,
   createStripePaymentMethod: () => void,
 |};
 
@@ -117,7 +115,6 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
-  stripeElementsTestVariant: state.common.abParticipations.stripeElements,
 });
 
 
@@ -174,9 +171,7 @@ const formHandlersForRecurring = {
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
     Stripe: (props: PropTypes) => {
-      if (props.stripeElementsTestVariant !== 'stripeCardElement') {
-        openStripePopup(props);
-      } else if (props.createStripePaymentMethod) {
+      if (props.createStripePaymentMethod) {
         props.createStripePaymentMethod();
       }
     },
@@ -216,7 +211,8 @@ function onSubmit(props: PropTypes): Event => void {
     const flowPrefix = 'npf';
     const form = event.target;
 
-    if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe) {
+    // Only recurring uses stripe checkout
+    if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe && props.contributionType !== 'ONE_OFF') {
       props.onPaymentAuthorisation({ paymentMethod: Stripe, token: 'tok_visa', stripePaymentMethod: 'StripeCheckout' });
     } else {
       const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
@@ -266,7 +262,6 @@ function withProps(props: PropTypes) {
           currency={props.currency}
           contributionType={props.contributionType}
           paymentMethod={props.paymentMethod}
-          stripeElementsTestVariant={props.stripeElementsTestVariant}
           isTestUser={props.isTestUser}
           country={props.country}
         />

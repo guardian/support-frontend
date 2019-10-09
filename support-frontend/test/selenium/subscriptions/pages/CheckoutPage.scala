@@ -6,6 +6,7 @@ import selenium.util.Browser
 trait CheckoutPage extends Page with Browser {
   private val stripeRadioButton = id("qa-credit-card")
   private val submitButton = id("qa-submit-button")
+  private val stripeSubmitButton = id("qa-stripe-submit-button")
   private val directDebitButton = id("qa-direct-debit")
   private val personalDetails = id("qa-personal-details")
   private val cardNumber = name("cardnumber")
@@ -42,6 +43,8 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def clickSubmit: Unit = clickOn(submitButton)
+
+  def clickStripeSubmit: Unit = clickOn(stripeSubmitButton)
 
   def fillForm: Unit
 }
