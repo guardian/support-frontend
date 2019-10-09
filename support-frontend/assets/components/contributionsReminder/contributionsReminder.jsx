@@ -81,9 +81,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
         'Csrf-Token': csrf.token || '',
       },
       body: {
-        ReminderCreatedEvent: {
-          email,
-        },
+        email,
       },
     };
 
@@ -115,7 +113,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 this.requestIsPending();
 
                 trackComponentClick('reminder-test-link-clicked');
-                
+
                 fetch(routes.createReminder, {
                   method: requestParams.method,
                   headers: requestParams.headers,
