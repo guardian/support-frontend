@@ -178,7 +178,8 @@ class Application(
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
       geoData = geoData,
-      shareImageUrl = "https://media.guim.co.uk/661978f14a1cbdd64361e429f058e9b20c8db5bb/0_0_2400_1260/1000.png"
+      shareImageUrl = "https://media.guim.co.uk/661978f14a1cbdd64361e429f058e9b20c8db5bb/0_0_2400_1260/1000.png",
+      url = "https://support.theguardian.com/contribute/climate-pledge-2019"
     )
   }
 
