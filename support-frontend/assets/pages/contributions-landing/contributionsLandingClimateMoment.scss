@@ -1,8 +1,8 @@
-.gu-content--environment-moment.gu-content--yellow-background {
+.gu-content--climate-moment.gu-content--yellow-background {
   background-color: gu-colour(highlight-main);
 }
 
-.gu-content--environment-moment {
+.gu-content--climate-moment {
   background-color: gu-colour(sport-faded);
 
   .gu-content__main {
@@ -87,7 +87,7 @@
     overflow: visible;
   }
 
-  .environment-moment_image-container {
+  .climate-moment_image-container {
     display: none;
 
     @include mq($from: tablet) {
@@ -109,7 +109,7 @@
     }
   }
 
-  .environment-moment_image {
+  .climate-moment_image {
     transform: scaleX(-1);
     mix-blend-mode: multiply;
     height: auto;
