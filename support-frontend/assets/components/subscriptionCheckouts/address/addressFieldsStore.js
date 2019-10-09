@@ -102,6 +102,10 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
     error: formError('postCode', `Please enter a ${addressType} postcode.`),
   },
   {
+    rule: checkpostCodeLength(fields.postCode),
+    error: formError('postCode', `Postcode for ${addressType} should not be longer than 20 characters.`),
+  },
+  {
     rule: notNull(fields.country),
     error: formError('country', `Please select a ${addressType} country.`),
   },
@@ -111,10 +115,6 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
       'state',
       fields.country === 'CA' ? `Please select a ${addressType} province/territory.` : `Please select a ${addressType} state.`,
     ),
-  },
-  {
-    rule: checkpostCodeLength(fields.postCode),
-    error: formError('postCode', `Postcode for ${addressType} should not be longer than 20 characters.`),
   },
 ]);
 
