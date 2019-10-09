@@ -76,7 +76,7 @@ const getFormFields = (state: State): FormFields => ({
 const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
   country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
 
-const checkpostCodeLength = (input: String): boolean => input.length <= 20;
+const checkpostCodeLength = (input: string | null) : boolean => input.length <= 20;
 
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
@@ -114,8 +114,8 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
   },
   {
     rule: checkpostCodeLength(fields.postCode),
-    error: formError('postCode', `Postcode should not be longer than 20 characters.`),
-  }
+    error: formError('postCode', `Postcode for ${addressType} should not be longer than 20 characters.`),
+  },
 ]);
 
 const applyDeliveryAddressRules = (
