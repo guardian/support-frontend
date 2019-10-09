@@ -14,8 +14,16 @@
     display: flex;
     flex-direction: column;
     background: #ffffff;
-    height: 95px;
+    height: 80px;
     padding-top: 40px;
+
+    @include mq($from: tablet) {
+      padding-top: 35px;
+    }
+  }
+
+  @include mq($from: tablet) {
+    height: 95px;
   }
 
 }
@@ -105,7 +113,6 @@
   }
 
   @include mq($from: phablet) {
-    margin-bottom: -45px;
     height: 140px;
     width: 100%;
 
@@ -124,21 +131,28 @@
 
   @include mq($from: desktop) {
     height: 170px;
-    margin-bottom: -45px;
+    max-width: calc(100% - 70px);
 
     h2 {
       font-size: 42px;
       font-weight: 600;
       line-height: 56px;
       max-width: gu-span(8);
+      margin-left: 40px !important;
     }
   
     h3 {
       font-size: 20px;
       font-weight: 400;
       line-height: 26px;
-      max-width: gu-span(8); 
+      max-width: gu-span(8);
+      margin-left: 40px !important;
     }
+  }
+
+  @include mq($from: wide) {
+    width: calc(100% - 110px);
+    max-width: 1170px;
   }
 
   .hope-is-power__circle {
@@ -170,6 +184,11 @@
     @include mq($from: desktop) {
       right: 40px;
       top: 30px;
+    }
+
+    @include mq($from: leftCol) {
+      right: 80px;
+      top: 25px;
     }
   }
 
@@ -467,11 +486,11 @@
     }
 
     @include mq($from: tablet) {
-      margin-top: 170px;
+      margin-top: 120px;
     }
 
     @include mq($from: desktop) {
-      margin-top: 180px;
+      margin-top: 140px;
     }
   }
 
@@ -833,6 +852,7 @@ div.call-to-action__container {
       @include mq($from: tablet) {
         padding-left: 25px;
         margin-bottom: 40px;
+        max-width: gu-span(7);
       }
 
       @include gu-fontset-body-sans;
@@ -912,7 +932,7 @@ div.call-to-action__container {
     }
 
     @include mq($from: desktop) {
-      padding-left: 55px;
+      padding-left: 45px;
     }
 
     @include mq($from: leftCol) {
