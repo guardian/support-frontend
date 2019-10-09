@@ -82,7 +82,7 @@ const formActionCreators = {
   setTitleGift: (titleGiftRecipient: string): Action => ({ type: 'SET_TITLE_GIFT', titleGiftRecipient }),
   setFirstNameGift: (firstNameGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient }))),
   setLastNameGift: (lastNameGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME_GIFT', lastNameGiftRecipient }))),
-  setEmailGift: (emailGiftRecipient: string): Action => ({ type: 'SET_EMAIL_GIFT', emailGiftRecipient }),
+  setEmailGift: (emailGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_EMAIL_GIFT', emailGiftRecipient }))),
   setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
   setBillingPeriod: (billingPeriod: BillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {

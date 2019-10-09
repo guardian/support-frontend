@@ -3,6 +3,7 @@
 import { formError, nonEmptyString, notNull, validate } from './validation';
 import type { FormField, FormFields } from './formFields';
 import type { FormError } from './validation';
+import { checkOptionalEmail } from 'helpers/formValidation';
 
 function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
   const { orderIsAGift } = fields;
@@ -28,6 +29,10 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
     {
       rule: nonEmptyString(fields.lastNameGiftRecipient),
       error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
+    },
+    {
+      rule: checkOptionalEmail(fields.emailGiftRecipient),
+      error: formError('emailGiftRecipient', 'Please use a valid email address for the recipient.'),
     },
   ];
   const formFieldsToCheck = orderIsAGift ?
