@@ -18,10 +18,10 @@ type PropTypes = {
   csrf: CsrfState,
 }
 
+type ButtonState = 'initial' | 'pending' | 'success' | 'fail';
+
 type StateTypes = {
-  clicked: boolean,
-  pending: boolean,
-  successful: boolean,
+  buttonState: ButtonState;
 }
 
 const mapStateToProps = state => ({
@@ -36,56 +36,40 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
   }
 
   state = {
-    clicked: false,
-    pending: false,
-    successful: false,
+    buttonState: 'initial',
   }
 
-  setButtonClickedState = (): void => {
+  requestIsPending = (): void => {
     this.setState({
-      clicked: true,
-      pending: true,
+      buttonState: 'pending',
     });
   }
 
-  setSuccessfulState = (): void => {
+  requestHasSucceeded = (): void => {
     this.setState({
-      pending: false,
-      successful: true,
+      buttonState: 'success',
     });
   }
 
-  setFailedState = (): void => {
+  requestHasFailed = (): void => {
     this.setState({
-      pending: false,
-      successful: false,
+      buttonState: 'fail',
     });
   }
 
-  renderButtonCopy = (): string => {
-    const { clicked, pending, successful } = this.state;
-    const defaultState = !clicked && !pending && !successful;
-    const pendingState = clicked && pending && !successful;
-    const failedState = clicked && !pending && !successful;
-    const successState = clicked && !pending && successful;
-
-    if (defaultState) {
-      return 'Remind me in December';
+  renderButtonCopy = (buttonState: ButtonState): string => {
+    switch (buttonState) {
+      case 'initial':
+        return 'Remind me in December';
+      case 'pending':
+        return 'Pending...';
+      case 'success':
+        return 'Signed up';
+      case 'fail':
+        return 'Sorry, something went wrong';
+      default:
+        return 'Remind me in December';
     }
-
-    if (pendingState) {
-      return 'Pending...';
-    }
-
-    if (failedState) {
-      return 'Sorry, something went wrong.';
-    }
-
-    if (successState) {
-      return 'Signed up';
-    }
-
-    return 'Remind me in December';
   }
 
   render() {
@@ -104,6 +88,9 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
     };
 
     if (email && csrf.token) {
+      const isSuccess = this.state.buttonState === 'success';
+      const isClicked = this.state.buttonState !== 'initial';
+
       return (
         <section className="contribution-thank-you-block">
           <h3 className="contribution-thank-you-block__title">
@@ -114,10 +101,10 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
           </p>
 
           <TrackableButton
-            icon={this.state.successful ? <SvgSubscribed /> : <SvgSubscribe />}
-            aria-label={this.renderButtonCopy()}
-            appearance={this.state.clicked ? 'disabled' : 'primary'}
-            disabled={!!this.state.clicked}
+            icon={isSuccess ? <SvgSubscribed /> : <SvgSubscribe />}
+            aria-label={this.renderButtonCopy(this.state.buttonState)}
+            appearance={isClicked ? 'disabled' : 'primary'}
+            disabled={isClicked}
             trackingEvent={
               () => {
                 trackComponentLoad('reminder-test-link-loaded');
@@ -125,7 +112,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
             }
             onClick={
               () => {
-                this.setButtonClickedState();
+                this.requestIsPending();
 
                 trackComponentClick('reminder-test-link-clicked');
 
@@ -136,18 +123,17 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                   body: JSON.stringify(requestParams.body),
                 }).then((response) => {
                   if (response.ok) {
-                    this.setSuccessfulState();
+                    this.requestHasSucceeded();
                   } else {
-                    this.setFailedState();
+                    this.requestHasFailed();
                     logException('Reminder sign up failed at the point of request');
                   }
                 });
               }
             }
           >
-            { this.renderButtonCopy() }
+            { this.renderButtonCopy(this.state.buttonState) }
           </TrackableButton>
-
         </section>
       );
     }
