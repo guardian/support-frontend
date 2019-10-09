@@ -64,55 +64,18 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
 
   override def minimalEnvironment(): StripeIntentEnv = {
     val stage = Stage.fromString(Option(System.getenv("Stage")).filter(_ != "").getOrElse("DEV")).getOrElse(Stages.DEV)
+    val stripeKeys = getRealConfig(stage)
+
+    StripeIntentEnv(stage, stripeKeys, RequestRunners.configurableFutureRunner(30.seconds))
+  }
+
+  def getRealConfig(stage: Stage): Map[StripePublicKey, StripePrivateKey] = {
     val config = S3Loader
       .load(StripeConfigPath.apply(stage))
     val stripeKeys = config.getObject("mappings").entrySet().asScala.toSet.map { entry: JavaMap.Entry[String, ConfigValue] =>
       (StripePublicKey(entry.getKey), StripePrivateKey(entry.getValue.unwrapped().asInstanceOf[String]))
     }.toMap
 
-    StripeIntentEnv(stage, stripeKeys, RequestRunners.configurableFutureRunner(30.seconds))
+    stripeKeys
   }
-
 }
-
-
-
-
-
-
-
-
-
-object ManualTest {
-  // just a handy way to invoke the lambda locally
-  def main(args: Array[String]): Unit = {
-    val publicKey = args.headOption.getOrElse("invalidkey")
-    val jsonRequest = s"""{"body": "{ \\"publicKey\\": \\"${publicKey}\\" }"}"""
-    Handler.handleRequest(new ByteArrayInputStream(jsonRequest.getBytes("UTF-8")),
-      System.out, new Context {
-        override def getAwsRequestId: String = ???
-
-        override def getLogGroupName: String = ???
-
-        override def getLogStreamName: String = ???
-
-        override def getFunctionName: String = ???
-
-        override def getFunctionVersion: String = ???
-
-        override def getInvokedFunctionArn: String = ???
-
-        override def getIdentity: CognitoIdentity = ???
-
-        override def getClientContext: ClientContext = ???
-
-        override def getRemainingTimeInMillis: Int = 30000
-
-        override def getMemoryLimitInMB: Int = ???
-
-        override def getLogger: LambdaLogger = ???
-      })
-  }
-
-}
-

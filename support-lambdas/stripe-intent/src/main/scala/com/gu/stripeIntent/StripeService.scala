@@ -3,11 +3,7 @@ package com.gu.stripeIntent
 import com.gu.okhttp.RequestRunners._
 import com.gu.rest.WebServiceHelper
 import com.gu.stripe.StripeError
-import com.gu.support.encoding.Codec
-import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.syntax._
-import io.circe.{Decoder, Json}
+import io.circe.Decoder
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect.ClassTag

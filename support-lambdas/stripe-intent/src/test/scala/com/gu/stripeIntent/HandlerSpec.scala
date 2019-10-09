@@ -14,12 +14,13 @@ import scala.concurrent.Future
 class HandlerSpec extends AsyncFlatSpec with Matchers {
 
 
-  it should "work" in {
+  it should "make the right call to stripe" in {
 
     val publicKeyToPrivateKey = Map(StripePublicKey("pub") -> StripePrivateKey("priv"))
     val stripeResponse = """{"client_secret": "theSecret", "id": "theID"}"""
 
     var requests: List[(String, String)] = Nil
+    // this is a bit over complicated because we are using okhttp objects which are much more flexible than we need
     val httpOp = {
       req: Request =>
         val reqBuf = new Buffer()
@@ -55,7 +56,10 @@ class HandlerSpec extends AsyncFlatSpec with Matchers {
     )
 
     result.map{ resp =>
-      (requests, resp) should be((List(("Bearer priv","usage=off_session")), ApiGatewayResponse(Ok, ResponseBody("theSecret"), Stages.DEV)))
+      (requests, resp) should be((
+        List(("Bearer priv","usage=off_session")),
+        ApiGatewayResponse(Ok, ResponseBody("theSecret"), Stages.DEV)
+      ))
     }
   }
 
