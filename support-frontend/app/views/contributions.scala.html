@@ -24,11 +24,11 @@
   fontLoaderBundle: Either[RefPath, StyleContent],
   geoData: GeoData,
   shareImageUrl: String,
-  url: String,
+  shareUrl: String,
 
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
-@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), url=Some(url)) {
+@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl)) {
   <script type="text/javascript">
   window.guardian = window.guardian || {};
   @idUser.map { user =>

@@ -13,7 +13,7 @@
   hrefLangLinks: Map[String, String] = Map(),
   csrf: Option[String] = None,
   shareImageUrl: Option[String] = None,
-  url: Option[String] = None,
+  shareUrl: Option[String] = None,
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
@@ -43,8 +43,8 @@
       <meta property="og:image:secure_url" content="@imageUrl" />
     }
 
-    @url.map { url =>
-      <meta property="og:url" content="@url" />
+    @shareUrl.map { shareUrl =>
+      <meta property="og:url" content="@shareUrl" />
     }
 
     @canonicalLink.map { definedCanonicalLink =>
