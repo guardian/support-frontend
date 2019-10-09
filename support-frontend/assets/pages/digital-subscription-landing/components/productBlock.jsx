@@ -2,6 +2,7 @@
 import React, { Component, type Node } from 'react';
 import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import GridPicture from 'components/gridPicture/gridPicture';
 
 // styles
 import './digitalSubscriptionLanding.scss';
@@ -63,6 +64,30 @@ const Button = ({ showDropDown, handleClick, product }: ButtonPropTypes) => (
   </button>
 );
 
+const dpImage = (
+  <GridPicture
+    sources={[
+      {
+        gridId: 'digitalPackFlashSaleMobile',
+        srcSizes: [140, 500],
+        imgType: 'png',
+        sizes: '90vw',
+        media: '(max-width: 739px)',
+      },
+      {
+        gridId: 'digitalPackFlashSaleDesktop',
+        srcSizes: [140, 500, 1000, 1388],
+        imgType: 'png',
+        sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
+        media: '(min-width: 740px)',
+      },
+    ]}
+    fallback="digitalPackFlashSaleDesktop"
+    fallbackSize={500}
+    altText=""
+    fallbackImgType="png"
+  />);
+
 type StateTypes = {
   showDropDownDaily: boolean,
   showDropDownApp: boolean,
@@ -96,6 +121,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__item">
             <div className="product-block__item__title">The Guardian Daily</div>
             <div className="product-block__item__subtitle">Each day&apos;s edition in one simple, elegant app</div>
+            <span className="product-block__item__image">{dpImage}</span>
           </div>
           <Dropdown showDropDown={state.showDropDownDaily} title="The Guardian Daily in detail">
             <List

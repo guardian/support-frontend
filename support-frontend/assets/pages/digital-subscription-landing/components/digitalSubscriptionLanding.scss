@@ -225,6 +225,7 @@
   }
 
   .product-block__container {
+    padding-top: 30px;
     padding-bottom: 30px;
     
     @include mq($from: tablet) {
@@ -278,7 +279,7 @@
       }
 
       @include mq($from: desktop) {
-        top: -32px;
+        top: -62px;
         left: -40px;
         width: 220px;
       }
@@ -301,7 +302,6 @@
 
     .product-block__item {
       padding-top: 10px;
-      padding-bottom: 50px;
       border-top: 1px solid gu-colour(neutral-86);
       border-bottom: 1px solid gu-colour(neutral-86);
 
@@ -340,6 +340,18 @@
         @include mq($from: desktop) {
           margin-bottom: 15px;
           font-size: 32px;
+        }
+      }
+
+      .product-block__item__image {
+        display: flex;
+        align-self: flex-end;
+        align-items: flex-end;
+        margin-right: 50px;
+        margin-top: -125px;
+
+        img {
+          width: 350px;
         }
       }
     }
