@@ -33,8 +33,13 @@
   flex-direction: column;
   justify-content: center;
   padding: 5px 20px 30px 10px;
-  border: 1px solid gu-colour(neutral-86);
+  border-top: 1px solid gu-colour(neutral-86);
+  border-bottom: 1px solid gu-colour(neutral-86);
   width: calc(100% - 50px);
+
+  @include mq($from: phablet) {
+    border: 1px solid gu-colour(neutral-86);
+  }
 }
 
 .ad-free-section-b__sub-header {

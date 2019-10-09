@@ -1,5 +1,11 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+.component-product-page-hero {
+  box-sizing: border-box;
+  & * {
+    box-sizing: border-box;
+  }
+}
 
 .hope-is-power-hero--wrapper {
   height: 80px;
@@ -8,28 +14,27 @@
     display: flex;
     flex-direction: column;
     background: #ffffff;
-    box-sizing: border-box;
     height: 95px;
     padding-top: 40px;
   }
-  
+
 }
 
 .hope-is-power--centered {
-    align-self: flex-start;
-    padding-left: 10px;
-    width: calc(100% - 10px);
-    background-color: #ffffff;
+  align-self: flex-start;
+  padding-left: 0px;
+  width: 100%;
+  background-color: #ffffff;
 
-  @include mq($from: mobileMedium) {
-    padding-left: 15px;
-    width: calc(100% - 15px);
+
+  @include mq($from: mobileLandscape) {
+    padding-left: 0px;
   }
 
   @include mq($from: phablet) {
-    padding-left: 25px;
+    padding-left: 10px;
     align-self: center;
-    width: calc(100% - 25px);
+    width: calc(100% - 10px);
   }
 
   @include mq($from: tablet) {
@@ -62,15 +67,15 @@
   @include gu-fontset-heading;
   color: gu-colour(neutral-7);
   height: 150px;
-  padding-top: $gu-v-spacing / 3;
-  padding-bottom: 22px;
+  padding: $gu-v-spacing / 3 0 22px;
+  
 
   h2 {
     font-size: 28px;
     font-weight: 600;
     line-height: 32px;
     max-width: gu-span(3);
-    margin: 20px 0 !important;
+    margin: 15px 0 25px 10px !important;
   }
 
   h3 {
@@ -78,12 +83,7 @@
     font-weight: 400;
     line-height: 18px;
     max-width: gu-span(4);
-  }
-
-  @include mq($from: mobileMedium) {
-    h3 {
-      max-width: gu-span(5);
-    }
+    margin-left: 10px !important;
   }
 
   @include mq($from: mobileLandscape) {
@@ -92,6 +92,7 @@
       font-size: 28px;
       font-weight: 600;
       line-height: 36px;
+      margin-left: 0;
     }
   
     h3 {
@@ -99,18 +100,21 @@
       font-weight: 400;
       line-height: 21px;
       max-width: gu-span(6);
+      margin-left: 0;
     }
   }
 
   @include mq($from: phablet) {
     margin-bottom: -45px;
     height: 140px;
+    width: 100%;
 
     h2 {
       font-size: 32px;
       font-weight: 600;
       line-height: 36px;
       max-width: gu-span(5);
+      margin-top: 20px;
     }
 
     h3 {
@@ -153,8 +157,7 @@
     margin-left: 5px;
 
     @include mq($from: mobileLandscape) {
-      // Check this - is it doing anything?
-      margin-left: 30px;
+      right: 40px;
     }
 
     @include mq($from: phablet) {
@@ -266,7 +269,11 @@
     .product-block__item, .product-block__dropdown--show, button, .ad-free-section-c__content {
       display: flex;
       flex-direction: column;
-      width: calc(100% - 12px);
+      width: 100%;
+
+      @include mq($from: phablet) {
+        width: calc(100% - 20px);
+      }
 
       @include mq($from: tablet) {
         width: calc(100% - 50px);
@@ -276,7 +283,12 @@
     .product-block__item {
       padding-top: 10px;
       padding-bottom: 50px;
-      border: 1px solid gu-colour(neutral-86);
+      border-top: 1px solid gu-colour(neutral-86);
+      border-bottom: 1px solid gu-colour(neutral-86);
+
+      @include mq($from: phablet) {
+        border: 1px solid gu-colour(neutral-86);
+      }
 
       .product-block__item__title, .product-block__item__subtitle {
         margin-left: 10px;
@@ -465,7 +477,8 @@
 
   button {
     display: inline-block;
-    border: 1px solid gu-colour(neutral-86);
+    border-top: 1px solid gu-colour(neutral-86);
+    border-bottom: 1px solid gu-colour(neutral-86);
     background-color: #ffffff;
     padding: 0.5rem 0 1rem;
     margin: 0;
@@ -532,7 +545,14 @@
 
   .product-block__button--hide {
     border-top: none;
+    border-left: none;
+    border-right: none;
     background-color: #ffffff;
+
+    @include mq($from: phablet) {
+      border-left: 1px solid gu-colour(neutral-86);
+      border-right: 1px solid gu-colour(neutral-86);
+    }
   }
 
   .product-block__button--show {
@@ -749,12 +769,16 @@
 }
 
 div.call-to-action__container {
-  max-width: 100%;
   margin-right: 0;
   display: flex;
-  padding-top: 10px;
-  padding-bottom: 50px;
+  padding: 10px 0 50px 10px;
   background-color: #041f4a;
+  max-width: calc(100%-10px);
+  width: calc(100%-10px);
+
+  @include mq($from: mobileLandscape) {
+    padding-left: 0px;
+  }
 
   @include mq($from: tablet) {
     padding-top: 70px;
@@ -777,7 +801,7 @@ div.call-to-action__container {
       padding-left: 0;
       max-width: gu-span(4);
       @include gu-fontset-heading;
-      font-size: 24px;
+      font-size: 22px;
       line-height: 30px;
 
       @include mq($from: mobileLandscape) {
@@ -812,7 +836,7 @@ div.call-to-action__container {
       }
 
       @include gu-fontset-body-sans;
-      font-size: 17px;
+      font-size: 15px;
     }
   }
 
@@ -861,25 +885,21 @@ div.call-to-action__container {
 .hope-is-power__terms {
   @include gu-fontset-body-sans;
   font-size: 14px;
-  padding-top: 26px;
-  padding-bottom: 33px;
+  padding: 26px 0 33px 10px;
 
   h3 {
     font-weight: 600;
   }
 
   h3, p {
-    padding-left: 5px;
-    max-width: gu-span(4);
+    max-width: calc(100% - 20px);
 
     @include mq($from: mobileMedium) {
-      max-width: gu-span(5);
-      padding-left: 0px;
+      max-width: gu-span(4);
     }
 
     @include mq($from: mobileLandscape) {
-      max-width: gu-span(6);
-      padding-left: 10px;
+      max-width: gu-span(5);
     }
 
     @include mq($from: phablet) {
