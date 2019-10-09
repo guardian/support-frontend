@@ -64,6 +64,7 @@ export const campaigns: Campaigns = {
           To find out what personal data we collect and how we use it, please visit
           our <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.
         </p>
+        
         {isUK ? (
           <span>
             <p>
