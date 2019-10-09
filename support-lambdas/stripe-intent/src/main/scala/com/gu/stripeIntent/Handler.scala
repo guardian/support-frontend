@@ -37,6 +37,7 @@ object ErrorBody {
 
 // simplest possible data structure to minimise external dependencies/side effects and be easy to mock
 case class StripeIntentEnv(
+  stage: Stage,
   mappings: Map[StripePublicKey, StripePrivateKey],
   futureHttpClient: FutureHttpClient // would be easier to mock a function that didn't use OKHttp types
 )
@@ -50,16 +51,16 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
     val stripePublicKey = StripePublicKey(input.publicKey)
     val result: EitherT[Future, ApiGatewayResponse, ApiGatewayResponse] =
       for {
-        privateKey <- handlerEffects.mappings.get(stripePublicKey).toRight(badRequestPublicKey).toEitherT[Future]
+        privateKey <- handlerEffects.mappings.get(stripePublicKey).toRight(badRequestPublicKey(handlerEffects.stage)).toEitherT[Future]
         stripeService = new StripeService(privateKey, handlerEffects.futureHttpClient)
         getIntent = getStripeSetupIntent(stripeService) _
         intent <- EitherT.right(getIntent())
-      } yield okSetupIntent(intent.client_secret)
+      } yield okSetupIntent(intent.client_secret, handlerEffects.stage)
     result.value.map(_.fold(identity, identity))
   }
 
-  def okSetupIntent(client_secret: String): ApiGatewayResponse = ApiGatewayResponse(Ok, ResponseBody(client_secret))
-  val badRequestPublicKey: ApiGatewayResponse = ApiGatewayResponse(BadRequest, ErrorBody("public key not known"))
+  def okSetupIntent(client_secret: String, stage: Stage): ApiGatewayResponse = ApiGatewayResponse(Ok, ResponseBody(client_secret), stage)
+  def badRequestPublicKey(stage: Stage): ApiGatewayResponse = ApiGatewayResponse(BadRequest, ErrorBody("public key not known"), stage)
 
   override def minimalEnvironment(): StripeIntentEnv = {
     val stage = Stage.fromString(Option(System.getenv("Stage")).filter(_ != "").getOrElse("DEV")).getOrElse(Stages.DEV)
@@ -69,7 +70,7 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
       (StripePublicKey(entry.getKey), StripePrivateKey(entry.getValue.unwrapped().asInstanceOf[String]))
     }.toMap
 
-    StripeIntentEnv(stripeKeys, RequestRunners.configurableFutureRunner(30.seconds))
+    StripeIntentEnv(stage, stripeKeys, RequestRunners.configurableFutureRunner(30.seconds))
   }
 
 }

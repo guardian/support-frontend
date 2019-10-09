@@ -1,5 +1,6 @@
 package com.gu.handler
 
+import com.gu.support.config.{Stage, Stages}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.parser.decode
 import io.circe.syntax._
@@ -18,15 +19,15 @@ case class ApiGatewayHeaders(contentType: String = "application/json")
 case class ApiGatewayResponse private (statusCode: String, body: String, headers: Map[String, String])
 
 object ApiGatewayResponse {
-  private val headers = Map(
+  private def headers(stage: Stage) = Map(
     "Content-Type" -> "application/json",
-    "Access-Control-Allow-Origin" -> "*",
+    "Access-Control-Allow-Origin" -> (if (stage == Stages.PROD) "https://support.theguardian.com" else "*"),
     "Access-Control-Allow-Headers" -> "*",
     "Access-Control-Allow-Methods" -> "*"
   )
 
-  def apply[Response: Encoder](httpResponseCode: HttpResponseCode, response: Response): ApiGatewayResponse =
-    new ApiGatewayResponse(httpResponseCode.value, response.asJson.noSpaces, headers)
+  def apply[Response: Encoder](httpResponseCode: HttpResponseCode, response: Response, stage: Stage): ApiGatewayResponse =
+    new ApiGatewayResponse(httpResponseCode.value, response.asJson.noSpaces, headers(stage))
   implicit val encoder: Encoder[ApiGatewayResponse] = deriveEncoder
 }
 

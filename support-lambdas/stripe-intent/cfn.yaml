@@ -16,18 +16,15 @@ Mappings:
     CODE:
       DomainName: stripe-intent-code.support.guardianapis.com
       StripeConfig: test
+      CorsOrigin: "'*'"
     PROD:
       DomainName: stripe-intent.support.guardianapis.com
       StripeConfig: live
+      CorsOrigin: "'https://support.theguardian.com'"
   Constants:
     Alarm:
       Process: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
       Urgent: URGENT 9-5 -
-  CorsOrigins:
-    CODE:
-      Origin: "'*'"
-    PROD:
-      Origin: "'https://support.theguardian.com'"
 
 Conditions:
   CreateProdMonitoring: !Equals [ !Ref Stage, PROD ]
@@ -35,7 +32,7 @@ Conditions:
 Globals:
   Api:
     Cors:
-      AllowOrigin: "'*'"
+      AllowOrigin: !FindInMap [ StageMap, !Ref Stage, StripeConfig ]
       AllowHeaders: "'*'"
       AllowMethods: "'*'"
 
