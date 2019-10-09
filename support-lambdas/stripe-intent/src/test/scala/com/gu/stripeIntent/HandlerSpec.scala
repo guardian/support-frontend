@@ -3,9 +3,11 @@ package com.gu.stripeIntent
 import java.nio.charset.Charset
 
 import com.gu.handler.{ApiGatewayResponse, Ok}
+import com.gu.support.config.Stages
 import okhttp3.{MediaType, Protocol, Request, Response}
 import okio.{Buffer, BufferedSource}
 import org.scalatest.{AsyncFlatSpec, Matchers}
+
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
@@ -48,12 +50,12 @@ class HandlerSpec extends AsyncFlatSpec with Matchers {
     }
 
     val result = Handler.lambdaBody(
-      StripeIntentEnv(publicKeyToPrivateKey, httpOp),
+      StripeIntentEnv(Stages.DEV, publicKeyToPrivateKey, httpOp),
       RequestBody("pub")
     )
 
     result.map{ resp =>
-      (requests, resp) should be((List(("Bearer priv","usage=off_session")), ApiGatewayResponse(Ok, ResponseBody("theSecret"))))
+      (requests, resp) should be((List(("Bearer priv","usage=off_session")), ApiGatewayResponse(Ok, ResponseBody("theSecret"), Stages.DEV)))
     }
   }
 
