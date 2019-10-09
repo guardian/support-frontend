@@ -115,9 +115,8 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 this.requestIsPending();
 
                 trackComponentClick('reminder-test-link-clicked');
-
-                // JTL - TBD - UPDATE THIS ROUTE:
-                fetch(routes.contributionsSendMarketing, {
+                
+                fetch(routes.createReminder, {
                   method: requestParams.method,
                   headers: requestParams.headers,
                   body: JSON.stringify(requestParams.body),
