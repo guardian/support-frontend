@@ -11,7 +11,7 @@ import views.EmptyDiv
 import views.ViewHelpers.outputJson
 
 class Promotions(
-  promotionServerProvider: PromotionServiceProvider,
+  promotionServiceProvider: PromotionServiceProvider,
   val assets: AssetsResolver,
   val actionRefiners: CustomActionBuilders,
   testUsers: TestUserService,  //Remove?
@@ -29,7 +29,7 @@ class Promotions(
     val mainElement = EmptyDiv("promotion-terms")
     val js = Left(RefPath("promotionTerms.js"))
     val css = Left(RefPath("promotionTerms.css"))
-    val promotionService = promotionServerProvider.forUser(false)
+    val promotionService = promotionServiceProvider.forUser(false)
     val maybePromotion = promotionService.findPromotion(promoCode)
 
     Ok(views.html.main(
