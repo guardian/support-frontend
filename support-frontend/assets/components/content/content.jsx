@@ -91,12 +91,14 @@ export const ContentCentered = ({
       ],
   )}
   >
-    <div className="component-content__content--centered">
-      <div className="hope-is-power--centered">
-        {children}
-        {image &&
-          <div className="component-content__image">{image}</div>
-        }
+    <div className="component-content__container--full-width">
+      <div className="component-content__content--centered">
+        <div className="hope-is-power--centered">
+          {children}
+          {image &&
+            <div className="component-content__image">{image}</div>
+          }
+        </div>
       </div>
     </div>
   </div>
