@@ -27,9 +27,7 @@ export const checkLastName: (string | null) => boolean = isNotEmpty;
 export const checkState: (string | null) => boolean = s => typeof s === 'string' && isNotEmpty(s);
 export const checkEmail: (string | null) => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
-export const checkOptionalEmail: (string | null) => boolean = input => {
- isEmpty(input) || isValidEmail(input);
-};
+export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(input) || isValidEmail(input);
 
 export const checkAmount: (string, CountryGroupId, ContributionType) =>
   boolean = (input: string, countryGroupId: CountryGroupId, contributionType: ContributionType) =>
