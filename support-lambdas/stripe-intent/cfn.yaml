@@ -32,7 +32,7 @@ Conditions:
 Globals:
   Api:
     Cors:
-      AllowOrigin: !FindInMap [ StageMap, !Ref Stage, StripeConfig ]
+      AllowOrigin: !FindInMap [ StageMap, !Ref Stage, CorsOrigin ]
       AllowHeaders: "'*'"
       AllowMethods: "'*'"
 
