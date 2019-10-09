@@ -142,13 +142,11 @@ class CardForm extends Component<PropTypes, StateTypes> {
   setupRecurringHandlers(): void {
     this.props.setCreateStripePaymentMethod(() => {
       this.props.paymentWaiting(true);
-      // const clientSecret = 'seti_0FRELgItVxyc3Q6noCUABMZQ_secret_Fx8co3tzM1CroCdU99Yq6o41ahcP8hq';
 
       fetchJson(
         window.guardian.stripeSetupIntentEndpoint,
         requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null)
       ).then(result => {
-        debugger
         this.props.stripe.handleCardSetup(result.client_secret).then((result) => {
           debugger
 
