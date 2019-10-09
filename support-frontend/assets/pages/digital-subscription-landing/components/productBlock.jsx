@@ -1,6 +1,7 @@
 // @flow
 import React, { Component, type Node } from 'react';
 import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 // styles
 import './digitalSubscriptionLanding.scss';
@@ -79,11 +80,12 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
     };
   }
 
-  handleClick = (product: string): void => (
+  handleClick = (product: string): void => {
     this.setState({
       [`showDropDown${product}`]: !this.state[`showDropDown${product}`],
-    })
-  )
+    });
+    trackComponentClick(`digital-subscriptions-landing-page--accordion--${product}`);
+  }
 
   render() {
     const { state } = this;
