@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { privacyLink, contributionsTermsLinks } from 'helpers/legal';
+import { privacyLink, contributionsTermsLinks, philanthropyContactEmail } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import type { ContributionType } from 'helpers/contributions';
@@ -24,9 +24,14 @@ type PropTypes = {|
 function TermsPrivacy(props: PropTypes) {
   const terms = <a href={contributionsTermsLinks[props.countryGroupId]}>Terms and Conditions</a>;
   const privacy = <a href={privacyLink}>Privacy Policy</a>;
+  const isUK = props.countryGroupId === 'GBPCountries';
 
   if (props.campaignName && campaigns[props.campaignName] && campaigns[props.campaignName].termsAndConditions) {
-    return campaigns[props.campaignName].termsAndConditions(contributionsTermsLinks[props.countryGroupId]);
+    return campaigns[props.campaignName].termsAndConditions(
+      contributionsTermsLinks[props.countryGroupId],
+      philanthropyContactEmail[props.countryGroupId],
+      isUK,
+    );
   }
 
   return (

@@ -65,16 +65,22 @@ export const campaigns: Campaigns = {
           our <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.
         </p>
         {isUK ? (
-          <p>
-            If you would like to make a larger contribution, we have a Patron programme with three levels of
-            support, which brings you closer to our work. For more information, please visit
-            our <a class="underline" href="https://patrons.theguardian.com?INTCMP=environment-pledge-2019-patrons-link">Patrons site</a>.
-          </p>
+          <span>
+            <p>
+              If you would like to make a larger contribution, we have a Patron programme with three levels of
+              support, which brings you closer to our work. For more information, please visit
+              our <a className="underline" href="https://patrons.theguardian.com?INTCMP=environment-pledge-2019-patrons-link">Patrons site</a>.
+            </p>
+            <p>
+              We also accept contributions in support of The Guardian’s journalism from companies and
+              foundations. Please <a href={`mailto:${contactEmail || ''}`}>contact us</a>.
+            </p>
+          </span>
         ) : (
           <p>
             We’re also seeking larger contributions to support The Guardian’s reporting from companies,
             foundations and individuals. If you would like to get involved with this project or provide
-            matching funds, please <a href="mailto:apac.help@theguardian.com">contact us</a>.
+            matching funds, please <a href={`mailto:${contactEmail || ''}`}>contact us</a>.
           </p>
         )}
       </div>
