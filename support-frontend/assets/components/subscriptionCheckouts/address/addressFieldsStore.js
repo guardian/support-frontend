@@ -76,7 +76,7 @@ const getFormFields = (state: State): FormFields => ({
 const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
   country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
 
-const checkpostCodeLength = (input: string | null): boolean => (input != null && input.length <= 20);
+const checkpostCodeLength = (input: string | null): boolean => ((input == null) || (input.length <= 20));
 
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
