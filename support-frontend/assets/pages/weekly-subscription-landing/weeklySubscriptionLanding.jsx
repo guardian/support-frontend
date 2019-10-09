@@ -41,6 +41,12 @@ import reducer from './weeklySubscriptionLandingReducer';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 
 import './weeklySubscriptionLanding.scss';
+import type { State } from './weeklySubscriptionLandingReducer';
+
+type PageCopy = {|
+  title: string,
+  firstParagraph: string
+|};
 
 // ----- Redux Store ----- //
 
@@ -80,7 +86,20 @@ const Header = headerWithCountrySwitcherContainer({
   trackProduct: 'GuardianWeekly',
 });
 
+const getCopy = (state: State): PageCopy => {
+  const promo = null; // TODO: get the promotion
+  return {
+    title: promo && promo.title ? promo.title : 'Pause for thought with The Guardian\'s essential news magazine',
+    firstParagraph: promo && promo.description ? promo.description : `The Guardian Weekly magazine is a round-up of the world news,
+            opinion and long reads that have shaped the week. Inside, the past seven days'
+            most memorable stories are reframed with striking photography and insightful companion
+            pieces, all handpicked from The Guardian and The Observer.`,
+  };
+};
+
 // ----- Render ----- //
+
+const copy = getCopy(store.getState());
 
 const content = (
   <Provider store={store}>
@@ -88,13 +107,11 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <CampaignHeader />
+      <CampaignHeader heading={copy.title} />
       <Content>
         <Text title="Catch up on the issues that matter">
-          <LargeParagraph>The Guardian Weekly magazine is a round-up of the world news,&#32;
-            opinion and long reads that have shaped the week. Inside, the past seven days&apos;&#32;
-            most memorable stories are reframed with striking photography and insightful companion&#32;
-            pieces, all handpicked from The Guardian and The Observer.
+          <LargeParagraph>
+            {copy.firstParagraph}
           </LargeParagraph>
         </Text>
       </Content>

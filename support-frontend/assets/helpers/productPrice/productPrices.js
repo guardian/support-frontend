@@ -39,6 +39,12 @@ export type IntroductoryPriceBenefit = {
   periodType: IntroductoryPeriodType,
 }
 
+export type LandingPage = {
+  title?: string,
+  description?: string,
+  roundel?: string,
+}
+
 export type Promotion =
   {
     name: string,
@@ -48,6 +54,7 @@ export type Promotion =
     numberOfDiscountedPeriods?: number,
     discount?: DiscountBenefit,
     introductoryPrice?: IntroductoryPriceBenefit,
+    landingPage?: LandingPage,
   }
 
 export type ProductPrice = {
