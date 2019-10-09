@@ -153,7 +153,6 @@ const formHandlersForRecurring = {
   },
   // Stripe: openStripePopup,
   Stripe: (props: PropTypes) => {
-    debugger
     if (props.createStripePaymentMethod) {
       props.createStripePaymentMethod();
     }
