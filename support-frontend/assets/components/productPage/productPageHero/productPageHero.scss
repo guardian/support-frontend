@@ -83,7 +83,14 @@
   position: relative;
   margin: 0;
 
-  @include mq($from: tablet) {
+  @include mq($from: desktop) {
     margin-top: -60px;
+  }
+}
+
+ // This is here to fix a layout issue cased by the new and old pages sharing the same payment cards panel but in differnt contexts
+ .component-left-margin-section__content > .payment-selection {
+  @include mq($until: desktop) {
+    margin: -5rem 0 1.5rem;
   }
 }

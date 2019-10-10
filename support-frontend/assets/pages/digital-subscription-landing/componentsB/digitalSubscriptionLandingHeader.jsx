@@ -214,8 +214,8 @@ function CampaignHeaderB(props: PropTypes) {
       >
         <div className="the-moment-hero">
           <div className="the-moment-hero__copy">
-            <h2>A better way to fund journalism <br />
-              <span>A better way to read it
+            <h2>A beautiful way to read it  <br />
+              <span>A powerful way to fund it
               </span>
             </h2>
           </div>

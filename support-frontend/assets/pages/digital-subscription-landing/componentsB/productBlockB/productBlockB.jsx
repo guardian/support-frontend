@@ -97,13 +97,13 @@ function ProductBlockB() {
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Updated daily</span>
+                  <span className="product-block__feature-title">Published daily</span>
                   <Text>Each edition available to read by 6am, 7 days a week</Text>
                 </div>
               ), (
                 <div>
                   <span className="product-block__feature-title">Easy to navigate</span>
-                  <Text>Read cover to cover, or swipe to the sections you care about</Text>
+                  <Text>Read the complete edition, or swipe to the sections you care about</Text>
                 </div>
               ), (
                 <div>
@@ -113,7 +113,7 @@ function ProductBlockB() {
               ), (
                 <div>
                   <span className="product-block__feature-title">Read offline</span>
-                  <Text>Schedule a download and read whenever it suits you</Text>
+                  <Text>Download and read whenever it suits</Text>
                 </div>
               ), (
                 <div>
