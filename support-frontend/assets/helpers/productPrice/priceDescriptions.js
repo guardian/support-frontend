@@ -8,15 +8,14 @@ import {
   SixWeekly,
 } from 'helpers/billingPeriods';
 import type {
-  IntroductoryPriceBenefit,
   ProductPrice,
 } from 'helpers/productPrice/productPrices';
-import {
-  getAppliedPromo,
-  hasDiscount,
-  hasIntroductoryPrice,
-} from 'helpers/productPrice/productPrices';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
+import {
+  getAppliedPromo, hasDiscount,
+  hasIntroductoryPrice,
+} from 'helpers/productPrice/promotions';
+import type { IntroductoryPriceBenefit } from 'helpers/productPrice/promotions';
 
 const displayPrice = (glyph: string, price: number) => `${glyph}${fixDecimals(price)}`;
 

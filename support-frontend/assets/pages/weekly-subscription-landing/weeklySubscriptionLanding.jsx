@@ -87,13 +87,17 @@ const Header = headerWithCountrySwitcherContainer({
 });
 
 const getCopy = (state: State): PageCopy => {
-  const promo = null; // TODO: get the promotion
-  return {
-    title: promo && promo.title ? promo.title : 'Pause for thought with The Guardian\'s essential news magazine',
-    firstParagraph: promo && promo.description ? promo.description : `The Guardian Weekly magazine is a round-up of the world news,
+  const { promotionCopy } = state.page;
+  const defaultCopy = {
+    title: 'Pause for thought with The Guardian\'s essential news magazine',
+    firstParagraph: `The Guardian Weekly magazine is a round-up of the world news,
             opinion and long reads that have shaped the week. Inside, the past seven days'
             most memorable stories are reframed with striking photography and insightful companion
             pieces, all handpicked from The Guardian and The Observer.`,
+  };
+  return {
+    title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultCopy.title,
+    firstParagraph: promotionCopy && promotionCopy.description ? promotionCopy.description : defaultCopy.firstParagraph,
   };
 };
 

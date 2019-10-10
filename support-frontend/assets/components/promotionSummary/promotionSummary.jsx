@@ -12,7 +12,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fixDecimals } from 'helpers/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { getPromotion, getProductPrice } from 'helpers/productPrice/productPrices';
+import { getProductPrice } from 'helpers/productPrice/productPrices';
+import { getPromotion } from 'helpers/productPrice/promotions';
 
 export type PropTypes = {
   productPrices: ProductPrices,

@@ -2,10 +2,8 @@
 
 import React, { Component } from 'react';
 import {
-  getAppliedPromo,
-  hasDiscount,
   type ProductPrice,
-  type Promotion,
+
 } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import styles from './summary.module.scss';
@@ -14,6 +12,8 @@ import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
+import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
+import type { Promotion } from 'helpers/productPrice/promotions';
 
 // Types
 
