@@ -7,7 +7,7 @@
 import React from 'react';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
+ import { getStripeKey, stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
@@ -43,11 +43,11 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
     const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
 
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
-      const key = getStripeKey('ONE_OFF', this.props.country, this.props.isTestUser);
+      const key = getStripeKey(stripeAccountForContributionType[this.props.contributionType], this.props.country, this.props.isTestUser);
       const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
 
       return (
-        <div className={hiddenIf(this.props.contributionType !== 'ONE_OFF', 'stripe-payment-request-button')}>
+        <div className="stripe-payment-request-button" amount={amount}>
           <StripeProvider apiKey={key}>
             <Elements>
               <StripePaymentRequestButton

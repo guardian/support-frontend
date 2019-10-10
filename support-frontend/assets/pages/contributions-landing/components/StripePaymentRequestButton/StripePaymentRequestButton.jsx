@@ -24,7 +24,7 @@ import {
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestObject,
-  onStripePaymentRequestApiPaymentAuthorised,
+  onThirdPartyPaymentAuthorised,
   updateEmail,
 } from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -71,7 +71,7 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
     (paymentAuthorisation: PaymentAuthorisation) =>
-      dispatch(onStripePaymentRequestApiPaymentAuthorised(paymentAuthorisation)),
+      dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
   setPaymentRequestButtonPaymentMethod:
     (paymentMethod: StripePaymentRequestButtonMethod) => {
       dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod));
@@ -177,7 +177,7 @@ function initialisePaymentRequest(props: PropTypes) {
     currency: props.currency.toLowerCase(),
     total: {
       label: 'The Guardian',
-      amount: props.amount,
+      amount: props.amount * 100,
     },
     requestPayerEmail: true,
   });
