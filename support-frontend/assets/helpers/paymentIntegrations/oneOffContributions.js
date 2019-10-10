@@ -59,7 +59,7 @@ export type StripeChargeData = {|
   paymentData: {
     currency: IsoCurrency,
     amount: number,
-    token: string,
+    token: string, // TODO - remove this field once it has been removed from payment-api
     email: string,
     stripePaymentMethod: StripePaymentMethod,
   },

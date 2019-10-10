@@ -22,9 +22,7 @@ export const setupStripe = (setStripeHasLoaded: () => void) => {
 export const stripeCardFormIsIncomplete = (
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
-  stripeElementsTestVariant: string,
   stripeCardFormComplete: boolean,
 ): boolean => contributionType === 'ONE_OFF' &&
     paymentMethod === Stripe &&
-    stripeElementsTestVariant === 'stripeCardElement' &&
     !(stripeCardFormComplete);

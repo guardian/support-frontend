@@ -95,7 +95,7 @@ function createFormReducer(
         return { ...state, lastNameGiftRecipient: action.lastNameGiftRecipient, formErrors: removeError('lastNameGiftRecipient', state.formErrors) };
 
       case 'SET_EMAIL_GIFT':
-        return { ...state, emailGiftRecipient: action.emailGiftRecipient };
+        return { ...state, emailGiftRecipient: action.emailGiftRecipient, formErrors: removeError('emailGiftRecipient', state.formErrors) };
 
       case 'SET_START_DATE':
         return { ...state, startDate: action.startDate };
