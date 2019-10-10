@@ -123,7 +123,7 @@ $content-padding: 10px;
     max-width: 32.5rem;
   }
   @include mq($from: desktop) {
-    padding-right: 80px;
+    padding-right: 50px;
     max-width: 50%;
   }
   @include mq($from: wide) {
@@ -143,7 +143,7 @@ $content-padding: 10px;
   @include mq($from: desktop) {
     max-width: 50%;
     .component-list-ul {
-      padding-right: 80px;
+      padding-right: 50px;
     }
   }
   @include mq($from: wide) {
