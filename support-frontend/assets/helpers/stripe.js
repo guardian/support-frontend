@@ -19,6 +19,15 @@ export const setupStripe = (setStripeHasLoaded: () => void) => {
   }
 };
 
+export const createStripeSetupIntent = (setStripeSetupIntent: (clientSecret: string) => void) => {
+  fetchJson(
+    window.guardian.stripeSetupIntentEndpoint,
+    requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null)
+  ).then(result => {
+    setStripeSetupIntent(result.client_secret)
+  })
+};
+
 export const stripeCardFormIsIncomplete = (
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,

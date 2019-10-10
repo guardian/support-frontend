@@ -36,6 +36,7 @@ type PropTypes = {|
   setStripeCardFormComplete: (isComplete: boolean) => Action,
   checkoutFormHasBeenSubmitted: boolean,
   stripeKey: string,
+  setSetupIntentClientSecret: string | null,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -56,6 +57,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setStripeCardFormComplete(isComplete)),
   paymentWaiting: (isWaiting: boolean) =>
     dispatch(paymentWaiting(isWaiting)),
+  setSetupIntentClientSecret: string | null 
 });
 
 type CardFieldState =
@@ -147,7 +149,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
         window.guardian.stripeSetupIntentEndpoint,
         requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null)
       ).then(result => {
-        this.props.stripe.handleCardSetup(result.client_secret).then((result) => {
+        // this.props.stripe.handleCardSetup(result.client_secret).then((result) => {
           debugger
 
           if (result.error) {
@@ -170,7 +172,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
               paymentMethodId: result.setupIntent.payment_method,
             });
           }
-        })
+        // })
       });
     });
   }
