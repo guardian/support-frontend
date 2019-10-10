@@ -425,9 +425,7 @@ function recurringPaymentAuthorisationHandler(
     state.common.abParticipations,
     state.page.csrf,
     (token: string) => dispatch(setGuestAccountCreationToken(token)),
-    (thankYouPageStage: ThankYouPageStage) => {
-      dispatch(setThankYouPageStage(thankYouPageStage))
-    },
+    (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
   )));
 }
 
