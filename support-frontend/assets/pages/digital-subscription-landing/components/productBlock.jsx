@@ -46,10 +46,13 @@ const Dropdown = ({
 type ButtonPropTypes = {
   showDropDown: boolean,
   handleClick: Function,
-  product: 'Guardian Daily' | 'Premium App',
+  product: 'daily' | 'app',
+  productCopy: 'The Guardian Daily' | 'Premium access to the Live app',
 }
 
-const Button = ({ showDropDown, handleClick, product }: ButtonPropTypes) => (
+const Button = ({
+  showDropDown, handleClick, product, productCopy,
+}: ButtonPropTypes) => (
   <button
     aria-controls={`product-details-${product}`}
     aria-expanded={showDropDown ? 'true' : 'false'}
@@ -61,7 +64,7 @@ const Button = ({ showDropDown, handleClick, product }: ButtonPropTypes) => (
         <div className={showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'} />
       </div>
       <span className="product-block__button__text--bold">
-        {showDropDown ? `Less about the ${product}` : `More about the ${product}`}
+        {showDropDown ? `Less about ${productCopy}` : `More about ${productCopy}`}
       </span>
     </span>
   </button>
@@ -189,7 +192,8 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Button
             showDropDown={state.showDropDownDaily}
             handleClick={() => this.handleClick('Daily')}
-            product="Guardian Daily"
+            productCopy="The Guardian Daily"
+            product="daily"
           />
           <Plus />
           <ProductCard
@@ -219,7 +223,8 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Button
             showDropDown={state.showDropDownApp}
             handleClick={() => this.handleClick('App')}
-            product="Premium App"
+            productCopy="Premium access to the Live app"
+            product="app"
           />
           <Plus />
           <AdFreeSectionC />

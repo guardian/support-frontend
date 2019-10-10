@@ -606,7 +606,7 @@
     margin-bottom: 16px;
     text-decoration: none;
     font-family: sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     outline: none;
     text-align: center !important;
@@ -616,6 +616,10 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     max-height: 60px;
+
+    @include mq($from: mobileMedium) {
+      font-size: 14px;
+    }
 
     @include mq($from: mobileLandscape) {
       margin-bottom: 24px;
