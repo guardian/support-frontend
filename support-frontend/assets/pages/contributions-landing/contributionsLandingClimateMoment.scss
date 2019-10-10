@@ -81,6 +81,13 @@
     margin-bottom: $gu-v-spacing / 4;
   }
 
+  .component-terms-privacy__divider {
+    display: inline-block;
+    margin: ($gu-v-spacing / 2) -10px 0;
+    padding: ($gu-v-spacing / 2) 10px 0;
+    border-top: 1px solid gu-colour(neutral-86);
+  }
+
   // Styles related to moment asset placement:
   .gu-content__content-contributions {
     position: relative;
