@@ -5,13 +5,13 @@
 import type { CommonState } from 'helpers/page/commonReducer';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrices, getPromotionCopy } from 'helpers/globals';
-import type { LandingPage } from 'helpers/productPrice/promotions';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
 export type State = {
   common: CommonState,
   page: {
     productPrices: ?ProductPrices,
-    promotionCopy: ?LandingPage,
+    promotionCopy: ?PromotionCopy,
   }
 };
 

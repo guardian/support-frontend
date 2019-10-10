@@ -21,7 +21,7 @@ case class Promotion(
   introductoryPrice: Option[IntroductoryPriceBenefit] = None,
   renewalOnly: Boolean = false,
   tracking: Boolean = false,
-  landingPage: Option[LandingPage] = None
+  landingPage: Option[PromotionCopy] = None
 ) {
   def promoCodes: Iterable[PromoCode] = channelCodes.values.flatten
 }

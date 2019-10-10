@@ -73,8 +73,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       discount = promotion.discount,
       freeTrialBenefit = promotion.freeTrial,
       incentive = promotion.incentive,
-      introductoryPrice = promotion.introductoryPrice,
-      landingPage = promotion.landingPage
+      introductoryPrice = promotion.introductoryPrice
     )
   }
 

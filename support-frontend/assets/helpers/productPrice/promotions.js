@@ -22,7 +22,7 @@ export type IntroductoryPriceBenefit = {
   periodLength: number,
   periodType: IntroductoryPeriodType,
 }
-export type LandingPage = {
+export type PromotionCopy = {
   title?: string,
   description?: string,
   roundel?: string,
@@ -36,7 +36,6 @@ export type Promotion =
     numberOfDiscountedPeriods?: number,
     discount?: DiscountBenefit,
     introductoryPrice?: IntroductoryPriceBenefit,
-    landingPage?: LandingPage,
   }
 const hasDiscount = (promotion: ?Promotion): boolean %checks =>
   promotion !== null &&
