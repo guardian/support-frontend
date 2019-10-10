@@ -47,7 +47,7 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
       const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
 
       return (
-        <div className="stripe-payment-request-button" amount={amount}>
+        <div className="stripe-payment-request-button">
           <StripeProvider apiKey={key}>
             <Elements>
               <StripePaymentRequestButton
