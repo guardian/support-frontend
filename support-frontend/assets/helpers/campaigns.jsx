@@ -16,7 +16,7 @@ export type CampaignSettings = {
   headerCopy?: string | React$Element<string>,
   contributeCopy?: React$Element<string>,
   formMessage?: React$Element<string>,
-  termsAndConditions?: (contributionsTermsLink: string) => React$Element<string>,
+  termsAndConditions?: (contributionsTermsLink: string, contactEmail: string, isUK: boolean) => React$Element<string>,
   cssModifiers?: string[],
   contributionTypes?: ContributionTypes,
   backgroundImage?: string,
@@ -28,10 +28,10 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = 'environmentpledge';
+const currentCampaignName = 'climate-pledge-2019';
 
 export const campaigns: Campaigns = {
-  environmentpledge: {
+  [currentCampaignName]: {
     formMessage: (<div />
     ),
     headerCopy: (
@@ -53,7 +53,7 @@ export const campaigns: Campaigns = {
         </p>
       </div>
     ),
-    termsAndConditions: (contributionsTermsLink: string) => (
+    termsAndConditions: (contributionsTermsLink: string, contactEmail: string, isUK: boolean) => (
       <div className="component-terms-privacy component-terms-privacy--campaign-landing">
         <p>
           Monthly contributions are billed each month and annual contributions are billed
@@ -64,18 +64,32 @@ export const campaigns: Campaigns = {
           To find out what personal data we collect and how we use it, please visit
           our <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.
         </p>
-        <p>
-          We’re also seeking larger contributions to support The Guardian’s reporting from companies,
-          foundations and individuals. If you would like to get involved with this project or provide
-          matching funds, please <a href="mailto:apac.help@theguardian.com">contact us</a>.
-        </p>
+        {isUK ? (
+          <span>
+            <p>
+              If you would like to make a larger contribution, we have a Patron programme with three levels of
+              support, which brings you closer to our work. For more information, please visit
+              our <a className="underline" href="https://patrons.theguardian.com?INTCMP=environment-pledge-2019-patrons-link">Patrons site</a>.
+            </p>
+            <p>
+              We also accept contributions in support of The Guardian’s journalism from companies and
+              foundations. Please <a href={`mailto:${contactEmail || ''}`}>contact us</a>.
+            </p>
+          </span>
+        ) : (
+          <p>
+            We’re also seeking larger contributions to support The Guardian’s reporting from companies,
+            foundations and individuals. If you would like to get involved with this project or provide
+            matching funds, please <a href={`mailto:${contactEmail || ''}`}>contact us</a>.
+          </p>
+        )}
       </div>
     ),
-    cssModifiers: ['environment-moment'],
+    cssModifiers: ['climate-moment'],
     extraComponent: (
-      <div className="environment-moment_image-container">
+      <div className="climate-moment_image-container">
         <img
-          className="environment-moment_image"
+          className="climate-moment_image"
           src="https://media.guim.co.uk/8fe60bf9d30df8481fcbccb91816a3c995279007/0_0_577_840/577.png"
           alt="Support the Guardian's pledge on climate change"
         />
