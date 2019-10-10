@@ -205,8 +205,6 @@ function checkRegularStatus(
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
-    console.log('handleCompletion', json);
-
     switch (json.status) {
       case 'success':
       case 'pending':
@@ -230,8 +228,6 @@ function checkRegularStatus(
   };
 
   return (json) => {
-    console.log('checkRegularStatus', json);
-
     if (json.guestAccountCreationToken) {
       setGuestAccountCreationToken(json.guestAccountCreationToken);
       setThankYouPageStage('thankYouSetPassword');

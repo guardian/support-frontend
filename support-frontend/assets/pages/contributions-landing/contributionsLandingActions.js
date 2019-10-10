@@ -341,8 +341,6 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
       switch (result.paymentStatus) {
         case 'success':
           trackConversion(state.common.abParticipations, '/contribute/thankyou');
-          console.log('onPaymentResult', result);
-
           dispatch(paymentSuccess());
           break;
 
@@ -428,7 +426,6 @@ function recurringPaymentAuthorisationHandler(
     state.page.csrf,
     (token: string) => dispatch(setGuestAccountCreationToken(token)),
     (thankYouPageStage: ThankYouPageStage) => {
-      console.log('recurringPaymentAuthorisationHandler', thankYouPageStage);
       dispatch(setThankYouPageStage(thankYouPageStage))
     },
   )));
