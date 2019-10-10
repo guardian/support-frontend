@@ -29,10 +29,13 @@ type DropdownPropTypes = {
   children: Node,
   showDropDown: boolean,
   title: string,
+  product: string,
 }
 
-const Dropdown = ({ children, showDropDown, title }: DropdownPropTypes) => (
-  <div id="product-details" className={`product-block__dropdown${showDropDown ? '--show' : '--hide'}`}>
+const Dropdown = ({
+  children, showDropDown, title, product,
+}: DropdownPropTypes) => (
+  <div id={`product-details-${product}`} className={`product-block__dropdown${showDropDown ? '--show' : '--hide'}`}>
     <div className="product-block__dropdown__title">{title}</div>
     <span className="product-block__ul-handler">
       {children}
@@ -48,7 +51,7 @@ type ButtonPropTypes = {
 
 const Button = ({ showDropDown, handleClick, product }: ButtonPropTypes) => (
   <button
-    aria-controls="product-details"
+    aria-controls={`product-details-${product}`}
     aria-expanded={showDropDown ? 'true' : 'false'}
     onClick={handleClick}
     className={`product-block__button${showDropDown ? '--show' : '--hide'}`}
@@ -163,7 +166,11 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             subtitle={<span className="product-block__item__subtitle--short-first">Each day&apos;s edition in one simple, elegant app</span>}
             image={dailyImage}
           />
-          <Dropdown showDropDown={state.showDropDownDaily} title="The Guardian Daily in detail">
+          <Dropdown
+            showDropDown={state.showDropDownDaily}
+            title="The Guardian Daily in detail"
+            product="daily"
+          >
             <List
               items={[
                 { boldText: 'A new way to read', explainer: 'The newspaper, reimagined for mobile and tablet' },
@@ -190,7 +197,11 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             subtitle={<span className="product-block__item__subtitle--short-second">Live news, as it happens</span>}
             image={appImage}
           />
-          <Dropdown showDropDown={state.showDropDownApp} title="Premium access to the Live app in detail">
+          <Dropdown
+            showDropDown={state.showDropDownApp}
+            title="Premium access to the Live app in detail"
+            product="app"
+          >
             <List
               items={[
                 { boldText: 'Live', explainer: 'Follow a live feed of breaking news and sport, as it happens' },

@@ -78,7 +78,7 @@
   padding: $gu-v-spacing / 3 0 22px;
   
 
-  h2 {
+  h1 {
     font-size: 28px;
     font-weight: 600;
     line-height: 32px;
@@ -86,7 +86,7 @@
     margin: 15px 0 25px 10px !important;
   }
 
-  h3 {
+  h2 {
     font-size: 14px;
     font-weight: 400;
     line-height: 18px;
@@ -96,14 +96,14 @@
 
   @include mq($from: mobileLandscape) {
     height: 165px;
-    h2 {
+    h1 {
       font-size: 28px;
       font-weight: 600;
       line-height: 36px;
       margin-left: 0;
     }
   
-    h3 {
+    h2 {
       font-size: 17px;
       font-weight: 400;
       line-height: 21px;
@@ -116,7 +116,7 @@
     height: 140px;
     width: 100%;
 
-    h2 {
+    h1 {
       font-size: 32px;
       font-weight: 600;
       line-height: 36px;
@@ -124,7 +124,7 @@
       margin-top: 20px;
     }
 
-    h3 {
+    h2 {
       max-width: gu-span(6);
     }
   }
@@ -133,7 +133,7 @@
     height: 170px;
     max-width: calc(100% - 70px);
 
-    h2 {
+    h1 {
       font-size: 42px;
       font-weight: 600;
       line-height: 56px;
@@ -141,7 +141,7 @@
       margin-left: 40px !important;
     }
   
-    h3 {
+    h2 {
       font-size: 20px;
       font-weight: 400;
       line-height: 26px;
@@ -271,11 +271,11 @@
       margin: 15px 0;
 
       @include mq($from: mobileLandscape) {
-        margin: 45px 0 15px;
+        margin: 25px 0 15px;
       }
 
       @include mq($from: phablet) {
-        margin: 20px 0;
+        margin: 0 0 20px;
       }
 
       @include mq($from: tablet) {
