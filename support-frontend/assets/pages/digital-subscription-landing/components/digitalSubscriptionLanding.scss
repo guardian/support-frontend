@@ -521,13 +521,17 @@
       display: flex;
       flex-direction: column;
 
-      @include mq($from: leftCol) {
+      @include mq($from: desktop) {
         display: inline-flex;
         flex-direction: row;
       }
     }
 
     ul:nth-of-type(2) {
+      @include mq($from: desktop) {
+        margin-left: 30px;
+      }
+
       @include mq($from: leftCol) {
         margin-left: 50px;
       }

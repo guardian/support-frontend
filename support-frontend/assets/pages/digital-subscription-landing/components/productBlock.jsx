@@ -167,15 +167,15 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             <List
               items={[
                 { boldText: 'A new way to read', explainer: 'The newspaper, reimagined for mobile and tablet' },
-                { boldText: 'Updated daily', explainer: 'Each edition available to read by 6am, 7 days a week' },
-                { boldText: 'A new way to navigate', explainer: 'Read cover to cover, or swipe to sections' },
+                { boldText: 'Published daily', explainer: 'Each edition available to read by 6am (GMT), 7 days a week' },
+                { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
               ]}
             />
             <List
               items={[
-                { boldText: 'Multiple devices', explainer: 'Designed for your mobile or tablet on iOS or Android' },
-                { boldText: 'Read offline', explainer: 'Schedule a download and read whenever it suits you' },
-                { boldText: 'Ad free', explainer: 'Enjoy our journalism without adverts' },
+                { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
+                { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
+                { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
               ]}
             />
           </Dropdown>
@@ -201,7 +201,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             <List
               items={[
                 { boldText: 'Daily Crossword', explainer: 'Play the daily crossword wherever you are' },
-                { boldText: 'Ad-free', explainer: 'Enjoy our journalism without adverts' },
+                { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
               ]}
             />
           </Dropdown>
