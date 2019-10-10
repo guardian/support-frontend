@@ -99,7 +99,7 @@ trait WebServiceHelper[Error <: Throwable] {
       case "2xx" =>
         decode[A](responseBody).left.map { err =>
           decodeError(responseBody).right.getOrElse(
-            WebServiceHelperError[A](codeBody, s"failed to parse response: $err")
+            WebServiceHelperError[A](codeBody, s"failed to parse response: $err", err)
           )
         }.toTry
       case "4xx" =>
