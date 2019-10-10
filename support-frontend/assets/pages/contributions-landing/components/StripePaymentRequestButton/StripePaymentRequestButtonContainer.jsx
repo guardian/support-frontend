@@ -12,7 +12,6 @@ import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/co
 import { getAmount } from 'helpers/contributions';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { hiddenIf } from 'helpers/utilities';
 import { setupStripe } from 'helpers/stripe';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 
@@ -43,7 +42,8 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
     const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
 
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
-      const key = getStripeKey(stripeAccountForContributionType[this.props.contributionType], this.props.country, this.props.isTestUser);
+      const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
+      const key = getStripeKey(stripeAccount, this.props.country, this.props.isTestUser);
       const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
 
       return (
