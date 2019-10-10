@@ -250,8 +250,12 @@
     }
 
     .product-block__plus {
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       width: 60px;
+
+      @include mq($from: mobileLandscape) {
+        margin-bottom: 24px;
+      }
 
       @include mq($from: tablet) {
         width: 65px;
@@ -264,7 +268,11 @@
 
     .product-block__container__label--top {
       width: 150px;
-      margin: 45px 0 15px;
+      margin: 15px 0;
+
+      @include mq($from: mobileLandscape) {
+        margin: 45px 0 15px;
+      }
 
       @include mq($from: phablet) {
         margin: 20px 0;
@@ -272,7 +280,7 @@
 
       @include mq($from: tablet) {
         position: relative;
-        top: -28px;
+        top: -58px;
         left: -19px;
         margin: 0;
         width: 175px;
@@ -295,7 +303,7 @@
         width: calc(100% - 20px);
       }
 
-      @include mq($from: tablet) {
+      @include mq($from: desktop) {
         width: calc(100% - 50px);
       }
     }
@@ -317,11 +325,12 @@
         margin-bottom: 8px;
         @include gu-fontset-heading;
         font-weight: 600;
-        font-size: 22px;
+        font-size: 20px;
         max-width: gu-span(2.5);
 
         @include mq($from: mobileMedium) {
           max-width: gu-span(3);
+          font-size: 22px;
         }
 
         @include mq($from: mobileLandscape) {
@@ -347,24 +356,65 @@
         display: flex;
         align-self: flex-end;
         align-items: flex-end;
-        margin-right: 50px;
-        margin-top: -125px;
+        margin-right: 0px;
+        margin-top: -90px;
 
         img {
-          width: 350px;
+          width: 150px;
+        }
+
+        @include mq($from: mobileLandscape) {
+          margin-top: -110px;
+
+          img {
+            width: 210px;
+          }
+        }
+
+        @include mq($from: phablet) {
+          margin-top: -125px;
+          margin-right: 0px;
+          img {
+            width: 250px;
+          }
+        }
+
+        @include mq($from: tablet) {
+          margin-right: 20px;
+
+          img {
+            width: 250px;
+          }
+        }
+
+        @include mq($from: desktop) {
+          margin-right: 30px;
+
+          img {
+            width: 300px;
+          }
+        }
+
+        @include mq($from: leftCol) {
+          margin-right: 50px;
+
+          img {
+            width: 400px;
+          }
         }
       }
     }
 
     .product-block__item__subtitle, .ad-free-section__copy {
       @include gu-fontset-heading;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 400;
       line-height: 18px;
-      max-width: gu-span(2.5);
+      max-width: gu-span(2);
 
       @include mq($from: mobileMedium) {
-        max-width: gu-span(3);
+        font-size: 14px;
+        max-width: gu-span(2.5);
       }
 
       @include mq($from: mobileLandscape) {
@@ -374,7 +424,7 @@
       }
 
       @include mq($from: phablet) {
-        max-width: gu-span(5);
+        max-width: gu-span(4.5);
       }
 
       @include mq($from: tablet) {
@@ -389,6 +439,13 @@
     }
 
     .ad-free-section__copy {
+      @include mq($from: mobileMedium) {
+        max-width: gu-span(4);
+      }
+
+      @include mq($from: tablet) {
+        max-width: gu-span(7);
+      }
       @include mq($from: desktop) {
         max-width: gu-span(8);
       }
@@ -513,7 +570,7 @@
     background-color: #ffffff;
     padding: 0.5rem 0 1rem;
     margin: 0;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     text-decoration: none;
     font-family: sans-serif;
     font-size: 14px;
@@ -526,6 +583,10 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     max-height: 60px;
+
+    @include mq($from: mobileLandscape) {
+      margin-bottom: 24px;
+    }
 
     @include mq($from: tablet) {
       font-size: 17px;

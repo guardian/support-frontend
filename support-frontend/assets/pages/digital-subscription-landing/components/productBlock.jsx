@@ -86,7 +86,22 @@ const dpImage = (
     fallbackSize={500}
     altText=""
     fallbackImgType="png"
-  />);
+  />
+);
+
+type ProductCardPropTypes = {
+  title: string,
+  subtitle: string,
+  image: Node,
+}
+
+const ProductCard = ({ title, subtitle, image }: ProductCardPropTypes) => (
+  <div className="product-block__item">
+    <div className="product-block__item__title">{title}</div>
+    <div className="product-block__item__subtitle">{subtitle}</div>
+    <span className="product-block__item__image">{image}</span>
+  </div>
+);
 
 type StateTypes = {
   showDropDownDaily: boolean,
@@ -118,11 +133,11 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
       <div className="hope-is-power__products">
         <div className="product-block__container hope-is-power--centered">
           <div className="product-block__container__label--top">What&apos;s included?</div>
-          <div className="product-block__item">
-            <div className="product-block__item__title">The Guardian Daily</div>
-            <div className="product-block__item__subtitle">Each day&apos;s edition in one simple, elegant app</div>
-            <span className="product-block__item__image">{dpImage}</span>
-          </div>
+          <ProductCard
+            title="The Guardian Daily"
+            subtitle="Each day's edition in one simple, elegant app"
+            image={dpImage}
+          />
           <Dropdown showDropDown={state.showDropDownDaily} title="The Guardian Daily in detail">
             <List
               items={[
@@ -145,10 +160,11 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             product="Guardian Daily"
           />
           <Plus />
-          <div className="product-block__item">
-            <div className="product-block__item__title">Premium access to the Live app</div>
-            <div className="product-block__item__subtitle">Live news, as it happens</div>
-          </div>
+          <ProductCard
+            title="Premium access to the Live app"
+            subtitle="Live news, as it happens"
+            image={dpImage}
+          />
           <Dropdown showDropDown={state.showDropDownApp} title="Premium access to the Live app in detail">
             <List
               items={[
