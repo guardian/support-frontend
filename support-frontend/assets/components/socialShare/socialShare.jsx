@@ -40,13 +40,13 @@ const socialMedia: {
   [SharePlatform]: SocialMedia,
 } = {
   facebook: {
-    link: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%2Fclimate-pledge-2019?acquisitionData=%7B%22source%22%3A%22SOCIAL%22%2C%22campaignCode%22%3A%22component-social-facebook%22%2C%22componentId%22%3A%22component-social-facebook%22%7D&INTCMP=component-social-facebook',
+    link: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%2Fclimate-pledge-2019%3FacquisitionData%3D%7B%22source%22%3A%22SOCIAL%22%2C%22campaignCode%22%3A%22climate_pledge_2019_component_social_facebook%22%2C%22componentId%22%3A%22component-social-facebook%22%7D%26INTCMP%3Dclimate_pledge_2019_component_social_facebook',
     svg: <SvgFacebook />,
     a11yHint: 'Share on facebook',
     windowFeatures: SocialWindowFeatures,
   },
   twitter: {
-    link: 'https://twitter.com/intent/tweet?url=https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%2Fclimate-pledge-2019?INTCMP=component-social-twitter&text=Join%20me%20in%20supporting%20The%20Guardian%E2%80%99s%20pledge%20to%20be%20a%20truthful%20voice%20on%20the%20climate%20crisis',
+    link: 'https://twitter.com/intent/tweet?text=Join%20me%20in%20supporting%20The%20Guardian%E2%80%99s%20pledge%20to%20be%20a%20truthful%20voice%20on%20the%20climate%20crisis&url=https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%2Fclimate-pledge-2019%3FINTCMP%3Dclimate_pledge_2019_component_social_twitter',
     svg: <SvgTwitter />,
     a11yHint: 'Share on twitter',
     windowFeatures: SocialWindowFeatures,
@@ -58,7 +58,7 @@ const socialMedia: {
     windowFeatures: SocialWindowFeatures,
   },
   email: {
-    link: 'mailto:?subject=Join%20me%20in%20supporting%20The%20Guardian%E2%80%99s%20pledge%20to%20be%20a%20truthful%20voice%20on%20the%20climate%20crisis&body=The%20Guardian%20recognises%20the%20climate%20emergency%20as%20the%20defining%20issue%20of%20our%20lifetimes%20%E2%80%93%20and%20pledges%20to%20be%20truthful%2C%20resolute%20and%20undeterred%20in%20pursuing%20their%20reporting%20on%20the%20environment.%20Support%20from%20readers%20makes%20this%20work%20possible%20and%20protects%20The%20Guardian%E2%80%99s%20independence%3A%20https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%2Fclimate-pledge-2019?INTCMP=component-social-email',
+    link: 'mailto:?subject=Join%20me%20in%20supporting%20The%20Guardian%E2%80%99s%20pledge%20to%20be%20a%20truthful%20voice%20on%20the%20climate%20crisis&body=The%20Guardian%20recognises%20the%20climate%20emergency%20as%20the%20defining%20issue%20of%20our%20lifetimes%20%E2%80%93%20and%20pledges%20to%20be%20truthful%2C%20resolute%20and%20undeterred%20in%20pursuing%20their%20reporting%20on%20the%20environment.%20Support%20from%20readers%20makes%20this%20work%20possible%20and%20protects%20The%20Guardian%E2%80%99s%20independence%3A%20https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%2Fclimate-pledge-2019?INTCMP=climate_pledge_2019_component_social_email',
     svg: <SvgEmail />,
     a11yHint: 'Share by email',
     windowFeatures: '',
