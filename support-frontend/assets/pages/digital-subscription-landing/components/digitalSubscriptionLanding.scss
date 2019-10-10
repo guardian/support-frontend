@@ -326,7 +326,7 @@
         @include gu-fontset-heading;
         font-weight: 600;
         font-size: 20px;
-        max-width: gu-span(2.5);
+        max-width: gu-span(2.25);
 
         @include mq($from: mobileMedium) {
           max-width: gu-span(3);
@@ -338,12 +338,11 @@
         }
 
         @include mq($from: phablet) {
-          max-width: gu-span(5);
+          max-width: gu-span(4);
         }
 
         @include mq($from: tablet) {
           font-size: 26px;
-          max-width: gu-span(4);
         }
 
         @include mq($from: desktop) {
@@ -357,10 +356,14 @@
         align-self: flex-end;
         align-items: flex-end;
         margin-right: 0px;
-        margin-top: -90px;
+        margin-top: -120px;
 
         img {
-          width: 150px;
+          width: 130px;
+        }
+
+        @include mq($from: mobileMedium) {
+          margin-top: -100px;
         }
 
         @include mq($from: mobileLandscape) {
@@ -381,6 +384,7 @@
 
         @include mq($from: tablet) {
           margin-right: 20px;
+          margin-top: -115px;
 
           img {
             width: 250px;
@@ -389,6 +393,7 @@
 
         @include mq($from: desktop) {
           margin-right: 30px;
+          margin-top: -125px;
 
           img {
             width: 300px;
@@ -397,12 +402,14 @@
 
         @include mq($from: leftCol) {
           margin-right: 50px;
+          margin-top: -130px;
 
           img {
-            width: 400px;
+            width: 450px;
           }
         }
       }
+
     }
 
     .product-block__item__subtitle, .ad-free-section__copy {
@@ -436,11 +443,33 @@
         line-height: 26px;
         max-width: gu-span(7);
       }
+
+      .product-block__item__subtitle--short-first {
+        @include mq($from: desktop) {
+          display: block;
+          max-width: gu-span(3);
+        }
+
+        @include mq($from: leftCol) {
+          max-width: gu-span(4);
+        }
+      }
+
+      .product-block__item__subtitle--short-second {
+        display: block;
+        max-width: gu-span(1.5);
+
+        @include mq($from: mobileMedium) {
+          display: inline;
+        }
+      }
     }
 
     .ad-free-section__copy {
-      @include mq($from: mobileMedium) {
-        max-width: gu-span(4);
+      max-width: gu-span(4);
+
+      @include mq($from: mobileLandscape) {
+        max-width: gu-span(6);
       }
 
       @include mq($from: tablet) {

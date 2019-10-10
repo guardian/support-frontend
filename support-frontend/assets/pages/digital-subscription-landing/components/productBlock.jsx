@@ -64,25 +64,50 @@ const Button = ({ showDropDown, handleClick, product }: ButtonPropTypes) => (
   </button>
 );
 
-const dpImage = (
+const dailyImage = (
   <GridPicture
     sources={[
       {
-        gridId: 'digitalPackFlashSaleMobile',
+        gridId: 'digitalSubsDailyMob',
         srcSizes: [140, 500],
         imgType: 'png',
         sizes: '90vw',
         media: '(max-width: 739px)',
       },
       {
-        gridId: 'digitalPackFlashSaleDesktop',
+        gridId: 'digitalSubsDaily',
         srcSizes: [140, 500, 1000, 1388],
         imgType: 'png',
         sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
         media: '(min-width: 740px)',
       },
     ]}
-    fallback="digitalPackFlashSaleDesktop"
+    fallback="digitalSubsDaily"
+    fallbackSize={500}
+    altText=""
+    fallbackImgType="png"
+  />
+);
+
+const appImage = (
+  <GridPicture
+    sources={[
+      {
+        gridId: 'digitalSubsAppMob',
+        srcSizes: [140, 500],
+        imgType: 'png',
+        sizes: '90vw',
+        media: '(max-width: 739px)',
+      },
+      {
+        gridId: 'digitalSubsApp',
+        srcSizes: [140, 500, 1000, 1388],
+        imgType: 'png',
+        sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
+        media: '(min-width: 740px)',
+      },
+    ]}
+    fallback="digitalSubsApp"
     fallbackSize={500}
     altText=""
     fallbackImgType="png"
@@ -91,7 +116,7 @@ const dpImage = (
 
 type ProductCardPropTypes = {
   title: string,
-  subtitle: string,
+  subtitle: Node,
   image: Node,
 }
 
@@ -135,8 +160,8 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
             title="The Guardian Daily"
-            subtitle="Each day's edition in one simple, elegant app"
-            image={dpImage}
+            subtitle={<span className="product-block__item__subtitle--short-first">Each day&apos;s edition in one simple, elegant app</span>}
+            image={dailyImage}
           />
           <Dropdown showDropDown={state.showDropDownDaily} title="The Guardian Daily in detail">
             <List
@@ -162,8 +187,8 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Plus />
           <ProductCard
             title="Premium access to the Live app"
-            subtitle="Live news, as it happens"
-            image={dpImage}
+            subtitle={<span className="product-block__item__subtitle--short-second">Live news, as it happens</span>}
+            image={appImage}
           />
           <Dropdown showDropDown={state.showDropDownApp} title="Premium access to the Live app in detail">
             <List
