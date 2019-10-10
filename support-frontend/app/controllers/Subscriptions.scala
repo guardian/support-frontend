@@ -30,7 +30,7 @@ class Subscriptions(
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
     fontLoaderBundle: Either[RefPath, StyleContent],
-    stage: Stage,
+    stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
