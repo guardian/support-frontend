@@ -64,26 +64,76 @@ const ProductBlockRightContent = ({ children }: ChildProps) => (
   </div>
 );
 
-const ProductBlockRoundel = ({ children }: ChildProps) => (
-  <div className="product-block__roundel">
-    { children }
-  </div>
-);
-
 function ProductBlockB() {
   return (
     <div className="product-block product-block--margin">
       <LeftMarginSection>
-        <ProductBlockHeader>The Digital Pack Subscription</ProductBlockHeader>
+        <ProductBlockHeader>The Digital Subscription</ProductBlockHeader>
         <ProductBlockGreyLines />
 
-        <ProductBlockSubTitle>App premium tier</ProductBlockSubTitle>
+        <ProductBlockSubTitle>The Guardian Daily</ProductBlockSubTitle>
 
         <ProductBlockSubTitleText>
-          Your enhanced experience of The Guardian for mobile and tablet, with exclusive features and ad-free reading
+          Each day&apos;s edition in one simple, elegant app
         </ProductBlockSubTitleText>
 
         <ProductBlockContent>
+
+          <ProductBlockRightContent>
+            <GridImage
+              gridId="editionsProductBlock"
+              srcSizes={[1000, 500, 140]}
+              sizes="(min-width: 480px) 100%, (max-width: 660px) 100%, 100%"
+              imgType="png"
+            />
+          </ProductBlockRightContent>
+
+          <ProductBlockLeftContent>
+            <Text>
+              <UnorderedList items={[(
+                <div>
+                  <span className="product-block__feature-title">A new way to read</span>
+                  <Text>The newspaper, reimagined for mobile and tablet</Text>
+                </div>
+              ), (
+                <div>
+                  <span className="product-block__feature-title">Updated daily</span>
+                  <Text>Each edition available to read by 6am, 7 days a week</Text>
+                </div>
+              ), (
+                <div>
+                  <span className="product-block__feature-title">Easy to navigate</span>
+                  <Text>Read cover to cover, or swipe to the sections you care about</Text>
+                </div>
+              ), (
+                <div>
+                  <span className="product-block__feature-title">Multiple devices</span>
+                  <Text>Beautifully designed for your mobile or tablet on iOS and Android</Text>
+                </div>
+              ), (
+                <div>
+                  <span className="product-block__feature-title">Read offline</span>
+                  <Text>Schedule a download and read whenever it suits you</Text>
+                </div>
+              ), (
+                <div>
+                  <span className="product-block__feature-title">Ad-free</span>
+                  <Text>Enjoy our journalism uninterrupted, without adverts</Text>
+                </div>
+              )]}
+              />
+            </Text>
+          </ProductBlockLeftContent>
+
+        </ProductBlockContent>
+
+        {/* Second Section */}
+
+        <ProductBlockContent>
+          <ProductBlockSubTitle>Premium access to the Live app</ProductBlockSubTitle>
+          <ProductBlockSubTitleText>
+            Live news, as it happens
+          </ProductBlockSubTitleText>
 
           <ProductBlockRightContent>
             <GridImage
@@ -98,70 +148,28 @@ function ProductBlockB() {
             <Text>
               <UnorderedList items={[(
                 <div>
-                  <h1 className="product-block__feature-title">Live</h1>
-                  <p>Catch up on every news story as it breaks</p>
+                  <span className="product-block__feature-title">Live</span>
+                  <Text>Follow a live feed of breaking news and sport, as it happens</Text>
                 </div>
               ), (
                 <div>
-                  <h1 className="product-block__feature-title">Discover</h1>
-                  <Text>Explore a beautifully curated feed of features, reviews and opinion</Text>
+                  <span className="product-block__feature-title">Discover</span>
+                  <Text>Explore stories you might have missed, tailored to you</Text>
                 </div>
               ), (
                 <div>
-                  <h1 className="product-block__feature-title">Enhanced offline reading</h1>
-                  <Text>Quality journalism on your schedule - download the day&apos;s news before you travel</Text>
+                  <span className="product-block__feature-title">Enhanced offline reading</span>
+                  <Text>Download the day&apos;s news whenever it suits you</Text>
                 </div>
               ), (
                 <div>
-                  <h1 className="product-block__feature-title">Complete the daily crossword</h1>
-                  <Text>Get our daily crossword wherever you are</Text>
-                </div>
-              )]}
-              />
-            </Text>
-          </ProductBlockLeftContent>
-
-        </ProductBlockContent>
-
-        {/* Second Section */}
-
-        <ProductBlockContent>
-          <ProductBlockSubTitle>iPad daily edition</ProductBlockSubTitle>
-          <ProductBlockSubTitleText>
-            Every issue of The Guardian and Observer UK newspapers, designed for your iPad and available offline
-          </ProductBlockSubTitleText>
-
-          <ProductBlockRightContent>
-            <ProductBlockRoundel><p>Available soon on all devices</p></ProductBlockRoundel>
-            <GridImage
-              gridId="editionsProductBlock"
-              srcSizes={[1000, 500, 140]}
-              sizes="(min-width: 480px) 100%, (max-width: 660px) 100%, 100%"
-              imgType="png"
-            />
-          </ProductBlockRightContent>
-
-          <ProductBlockLeftContent>
-            <Text>
-              <UnorderedList items={[(
-                <div>
-                  <h1 className="product-block__feature-title">On-the-go reading</h1>
-                  <Text>Your complete daily newspaper, beautifully designed for your iPad</Text>
+                  <span className="product-block__feature-title">Daily crossword</span>
+                  <Text>Play the daily crossword wherever you are</Text>
                 </div>
               ), (
                 <div>
-                  <h1 className="product-block__feature-title">Journalism at your own pace</h1>
-                  <Text>Access a month of issues in your 30-day archive</Text>
-                </div>
-              ), (
-                <div>
-                  <h1 className="product-block__feature-title">The news when you need it</h1>
-                  <Text>Downloads automatically every day, ready for you to read offline</Text>
-                </div>
-              ), (
-                <div>
-                  <h1 className="product-block__feature-title">Every supplement</h1>
-                  <Text>Including Weekend, Review, Feast and Observer Food Monthly</Text>
+                  <span className="product-block__feature-title">Ad-free</span>
+                  <Text>Enjoy our journalism uninterrupted, without adverts</Text>
                 </div>
               )]}
               />
