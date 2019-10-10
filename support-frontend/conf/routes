@@ -140,9 +140,6 @@ GET  /paypal/rest/error                                            controllers.P
 
 POST /direct-debit/check-account                                   controllers.DirectDebit.checkAccount
 
-# ----- Promotions ----- #
-GET /p/:promoCode/terms                                           controllers.Promotions.terms(promoCode)
-
 # ----- Verification ----- #
 
 GET  /.well-known/*file                                            controllers.Assets.at(path="/public", file)
