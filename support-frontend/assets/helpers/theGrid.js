@@ -63,7 +63,7 @@ export const imageCatalogue: {
   paperLandingSale: '6179a30718dab98e96230e39195f3aa2a2784a1d/0_0_800_858',
   theMomentDigiHero: 'd9d6da2b77bd9051456cb34ca5af9f79a2d55ae4/0_0_486_772',
   theMomentDigiHero2: '2f3d5a93ea03070a31db9d4a5f7d643fee718d99/0_0_486_772',
-  theMomentDigiHero3: '5220bee0c7657bc4f0813fd44df3e75ae64b74ef/0_0_486_772',
+  theMomentDigiHero3: 'ffb39dac4ca084c49e547dc55367575671d28d23/0_0_486_772',
   weeklyCampaignHeroImg: '3d4bf412afdf3c91faed55c9507a6d741575e3c5/0_0_1358_954',
   checkoutPackshotPaperGraunVoucher: '5aa8702d1de22589ec5dd1a20a6cf4bc4b7c9674/0_0_696_400',
   checkoutPackshotDigitalPack: 'd68d6e6f276eae28d18851548e59bd7918a23ffc/0_0_1392_800',
