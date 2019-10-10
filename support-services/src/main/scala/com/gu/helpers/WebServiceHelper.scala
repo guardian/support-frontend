@@ -132,7 +132,12 @@ trait WebServiceHelper[Error <: Throwable] {
     request[A](buildRequest(endpoint, headers, params).post(body))
   }
 
-  def postForm[A](endpoint: String, data: Map[String, Seq[String]], headers: ParamMap = empty, params: ParamMap = empty)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def postForm[A](
+    endpoint: String,
+    data: Map[String, Seq[String]],
+    headers: ParamMap = empty,
+    params: ParamMap = empty
+  )(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val postParams = data.foldLeft(new FormBody.Builder()) {
       case (p, (name, values)) =>
         val paramName = if (values.size > 1) s"$name[]" else name
@@ -142,7 +147,7 @@ trait WebServiceHelper[Error <: Throwable] {
   }
   // scalastyle:on line.size.limit
 
-  private def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap) =
+  private def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap): Request.Builder =
     new Request.Builder()
       .url(endpointUrl(endpoint, params))
       .headers(buildHeaders(headers))
@@ -153,8 +158,7 @@ trait WebServiceHelper[Error <: Throwable] {
         url.addEncodedPathSegment(segment)
     }
     params.foldLeft(withSegments) {
-      case (url, (k, v)) =>
-        url.addQueryParameter(k, v)
+      case (url, (k, v)) => url.addQueryParameter(k, v)
     }.build()
   }
 
