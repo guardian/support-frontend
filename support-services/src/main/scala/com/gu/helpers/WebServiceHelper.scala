@@ -13,16 +13,20 @@ import scala.concurrent.Future
 import scala.reflect.{ClassTag, classTag}
 import scala.util.{Failure, Success, Try}
 
-sealed abstract class WebServiceHelperErrorBase() extends Throwable
+sealed abstract class WebServiceHelperErrorBase(
+  message: String,
+  cause: Throwable = None.orNull
+) extends Throwable(message, cause)
 
 case class WebServiceHelperError[T: ClassTag](
   codeBody: CodeBody,
-  message: String
-) extends WebServiceHelperErrorBase {
+  message: String,
+  cause: Throwable = None.orNull
+) extends WebServiceHelperErrorBase(message, cause) {
   override def getMessage: String = s"${classTag[T]} - $message: ${codeBody.getMessage}"
 }
 
-case class WebServiceClientError(codeBody: CodeBody) extends WebServiceHelperErrorBase {
+case class WebServiceClientError(codeBody: CodeBody) extends WebServiceHelperErrorBase(codeBody.getMessage) {
   override def getMessage: String = codeBody.getMessage
 }
 
@@ -156,8 +160,7 @@ trait WebServiceHelper[Error <: Throwable] {
 
   private def buildHeaders(headers: ParamMap) =
     headers.foldLeft(new Headers.Builder()) {
-      case (h, (k, v)) =>
-        h.add(k, v)
+      case (h, (k, v)) => h.add(k, v)
     }.build()
 
 }

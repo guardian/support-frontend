@@ -146,7 +146,17 @@ object Salesforce {
     implicit val codec: Codec[SalesforceContactRecords] = deriveCodec
   }
 
-  case class SalesforceContactResponse(Success: Boolean, ErrorString: Option[String], ContactRecord: SalesforceContactRecord) extends SalesforceResponse
+  case class SalesforceContactResponse(
+    Success: Boolean,
+    ErrorString: Option[String],
+    ContactRecord: SalesforceContactRecord
+  ) extends SalesforceResponse
+
+
+  case class SalesforceContactError(
+    Success: Boolean,
+    ErrorString: Option[String]
+  )
 
   case class SalesforceContactRecords(buyer: SalesforceContactRecord, giftRecipient: Option[SalesforceContactRecord]){
     def recipient: SalesforceContactRecord = giftRecipient.getOrElse(buyer)

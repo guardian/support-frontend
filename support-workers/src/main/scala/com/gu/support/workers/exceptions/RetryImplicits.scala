@@ -13,10 +13,12 @@ object RetryImplicits {
   implicit class RetryConversions(val throwable: Throwable) {
     def asRetryException: RetryException = throwable match {
       //Timeouts/connection issues and 500s
-      case e @ (_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) => new RetryUnlimited(message = e.getMessage, cause = throwable)
+      case e @ (_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) =>
+        new RetryUnlimited(message = e.getMessage, cause = throwable)
 
       //Invalid Json or http client error (4xx)
-      case e @ (_: ParsingFailure | _: MatchError | _: WebServiceClientError) => new RetryNone(message = e.getMessage, cause = throwable)
+      case e @ (_: ParsingFailure | _: MatchError | _: WebServiceClientError) =>
+        new RetryNone(message = e.getMessage, cause = throwable)
 
       //Any Exception that we haven't specifically handled
       case e: Throwable => new RetryLimited(message = e.getMessage, cause = throwable)
