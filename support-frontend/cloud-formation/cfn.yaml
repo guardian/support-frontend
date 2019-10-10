@@ -186,6 +186,14 @@ Resources:
                 - kms:Encrypt
                 - kms:Decrypt
                 Resource: !FindInMap [ StageVariables, !Ref Stage, AwsKeyARN ]
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: arn:aws:lambda:eu-west-1:865473395570:function:contributions-reminders-lambda-${Stage}
         - PolicyName: DynamoPromotions
           PolicyDocument:
             Statement:
