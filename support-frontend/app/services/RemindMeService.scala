@@ -21,6 +21,8 @@ class RemindMeService(stage: Stage) {
     case _ => "contributions-reminders-lambda-CODE"
   }
 
+  private val expectedResponse = """{"statusCode":200,"body":"\"OK\""}"""
+
   def apply(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
     val payload = s"""{"ReminderCreatedEvent": {"email": "$email"}}"""
 
@@ -30,13 +32,11 @@ class RemindMeService(stage: Stage) {
 
     val res = lambdaClient.invoke(request)
     val responseBody = new String(res.getPayload.array())
-    if (!isSuccessResponse(responseBody)) SafeLogger.warn(s"Got ${responseBody} for ${res.getSdkHttpMetadata}")
+    val isSuccessResponse = responseBody == expectedResponse
 
-    Future(isSuccessResponse(responseBody))
+    if (!isSuccessResponse) SafeLogger.warn(s"Got ${responseBody} for ${res.getSdkHttpMetadata}")
+
+    Future(isSuccessResponse)
   }
 
-  private def isSuccessResponse(responseBody: String) = {
-    val successResponse = """{"statusCode":200,"body":"\"OK\""}"""
-    responseBody == successResponse
-  }
 }
