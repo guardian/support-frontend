@@ -78,7 +78,7 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 const mapStateToProps = (state) => {
   const { optimizeExperiments } = state.common;
-  const dailyEditionsExperimentId = 'wEirukCSRkKyneyREe1Jew';
+  const dailyEditionsExperimentId = 'emQ5nZJCS5mZkhtwwqfx5Q';
   const dailyEditionsVariant = optimizeExperiments
     .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0
     && !isPostDeployUser();
@@ -100,14 +100,28 @@ type State = {
   pageReadyChecks: number,
 }
 
-// This is a temporary variant controller for the A/B tests
-// So if the environment is DEV, we see the new version but in prodction we see the old version
-const pageType = process.env.NODE_ENV === 'DEV' ? 'A' : 'B';
+const getQueryParam = (param: string) => {
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  return params.get(param);
+};
+
+const showVariantA = (dailyEditionsVariant): boolean => {
+  const variantParam = getQueryParam('variant');
+
+  if (variantParam === 'A') {
+    return true;
+  } else if (variantParam === 'B') {
+    return false;
+  }
+
+  return dailyEditionsVariant;
+};
 
 // ----- Render ----- //
 class LandingPage extends Component<Props, State> {
   state = {
-    showPage: true, // this.props.optimizeHasLoaded,
+    showPage: false, // this.props.optimizeHasLoaded,
     pageReadyChecks: 0,
   };
 
@@ -188,8 +202,7 @@ class LandingPage extends Component<Props, State> {
 
     return (
       <div>
-        {showPage && pageType === 'A' && pageTypeA}
-        {showPage && pageType === 'B' && pageTypeB}
+        { showPage && (showVariantA(dailyEditionsVariant) ? pageTypeA : pageTypeB) }
       </div>
     );
 
