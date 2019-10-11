@@ -3,7 +3,8 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.support.promotions.PromotionServiceProvider
+import com.gu.support.config.Stage
+import com.gu.support.promotions.{PromotionServiceProvider, PromotionTerms}
 import play.api.mvc.{AbstractController, ControllerComponents}
 import play.twirl.api.Html
 import services.TestUserService
@@ -18,6 +19,7 @@ class Promotions(
   components: ControllerComponents,
   fontLoaderBundle: Either[RefPath, StyleContent],
   settingsProvider: AllSettingsProvider,
+  stage: Stage
 ) extends AbstractController(components){
   import actionRefiners._
 
@@ -30,12 +32,15 @@ class Promotions(
     val js = Left(RefPath("promotionTerms.js"))
     val css = Left(RefPath("promotionTerms.css"))
     val promotionService = promotionServiceProvider.forUser(false)
-    val maybePromotion = promotionService.findPromotion(promoCode)
+    val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
 
     Ok(views.html.main(
       title, mainElement, js, css, fontLoaderBundle
     ){
-      Html(s"""<script type="text/javascript">window.guardian.promotion = ${maybePromotion.map(outputJson(_))}</script>""")
+      Html(
+        s"""<script type="text/javascript">
+              window.guardian.promotionTerms = ${outputJson(maybePromotionTerms)}
+            </script>""")
     })
   }
 
