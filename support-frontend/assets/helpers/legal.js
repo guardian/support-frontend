@@ -22,15 +22,15 @@ const contributionsTermsLinks: {
 };
 
 
-// TBD update before moment launch
-const defaultPhilanthropyContactEmail: string = 'australia.philanthropy@theguardian.com';
+// TBD update these before or early in the moment launch
+const defaultPhilanthropyContactEmail: string = 'us.philanthropy@theguardian.com';
 
 const philanthropyContactEmail: {
   [CountryGroupId]: string,
 } = {
   GBPCountries: defaultPhilanthropyContactEmail,
   UnitedStates: defaultPhilanthropyContactEmail,
-  AUDCountries: defaultPhilanthropyContactEmail,
+  AUDCountries: 'australia.philanthropy@theguardian.com',
   EURCountries: defaultPhilanthropyContactEmail,
   International: defaultPhilanthropyContactEmail,
   NZDCountries: defaultPhilanthropyContactEmail,
