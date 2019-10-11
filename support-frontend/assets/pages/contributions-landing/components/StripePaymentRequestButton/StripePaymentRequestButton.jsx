@@ -134,7 +134,7 @@ const onComplete = (complete: Function) => (res: PaymentResult) => {
 };
 
 
-function updatePaymentRequest(amount: number, paymentRequest: Object | null, contributionType: ContributionType) {
+function updatePaymentRequest(amount: number, paymentRequest: Object | null) {
   // When the other tab is clicked, the value of amount is NaN
   if (!Number.isNaN(amount) && paymentRequest) {
     paymentRequest.update({
