@@ -22,3 +22,8 @@ Run `sbt run`. No integration test provided so far.
 ### Testing manually
 
 You can import API calls into POSTMAN from [here](postman) or get request/response examples form the unit test controllers.
+
+### SSH
+You must ssh via the bastion, e.g. using [ssm-scala](https://github.com/guardian/ssm-scala):
+
+`ssm ssh --profile membership --bastion-tags contributions-store-bastion,support,PROD --tags payment-api,support,CODE -a -x --newest`

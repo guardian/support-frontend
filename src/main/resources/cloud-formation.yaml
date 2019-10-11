@@ -25,7 +25,7 @@ Metadata:
           - SiteDomain
           - VpcId
           - Subnets
-          - KingsPlaceIpRange
+          - BastionSecurityGroup
       - Label:
           default: "AWS Resources"
         Parameters:
@@ -45,8 +45,8 @@ Parameters:
   PublicVpcSubnets:
     Description: Public subnets to use for the ELB
     Type: List<AWS::EC2::Subnet::Id>
-  KingsPlaceIpRange:
-    Description: CIDR description of the IP range of the Guardian office at Kings Place
+  BastionSecurityGroup:
+    Description: The SG for the bastion to enable ssh tunnelling
     Type: String
   Stack:
     Description: Should never change
@@ -339,13 +339,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: !Ref KingsPlaceIpRange
-          # the below rule is for debug purposes, allowing us to make
-          # requests from Guardian IPs directly to an app running on an instance
-        - IpProtocol: tcp
-          FromPort: 9000
-          ToPort: 9000
-          CidrIp: !Ref KingsPlaceIpRange
+          SourceSecurityGroupId: !Ref BastionSecurityGroup
         - IpProtocol: tcp
           FromPort: 9000
           ToPort: 9000
