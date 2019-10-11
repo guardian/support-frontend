@@ -134,7 +134,7 @@ const onComplete = (complete: Function) => (res: PaymentResult) => {
 };
 
 
-function updateAmount(amount: number, paymentRequest: Object | null) {
+function updatePaymentRequest(amount: number, paymentRequest: Object | null, contributionType: ContributionType) {
   // When the other tab is clicked, the value of amount is NaN
   if (!Number.isNaN(amount) && paymentRequest) {
     paymentRequest.update({
@@ -142,7 +142,7 @@ function updateAmount(amount: number, paymentRequest: Object | null) {
         label: 'The Guardian',
         amount: amount * 100,
       },
-      requestPayerName: (props.contributionType !== 'ONE_OFF'),
+      requestPayerName: (contributionType !== 'ONE_OFF'),
     });
   }
 }
@@ -152,7 +152,7 @@ function updateAmount(amount: number, paymentRequest: Object | null) {
 function onClick(event, props: PropTypes) {
   event.preventDefault();
   trackComponentClick('apple-pay-clicked');
-  updateAmount(props.amount, props.stripePaymentRequestObject);
+  updatePaymentRequest(props.amount, props.stripePaymentRequestObject, props.contributionType);
   props.setAssociatedPaymentMethod();
   props.setStripePaymentRequestButtonClicked();
   const amountIsValid =
@@ -208,8 +208,7 @@ function initialisePaymentRequest(props: PropTypes) {
       label: 'The Guardian',
       amount: props.amount * 100,
     },
-    requestPayerEmail: true,
-    requestPayerName: (props.contributionType !== 'ONE_OFF'),
+    requestPayerEmail: true
   });
 
   paymentRequest.canMakePayment().then((result) => {
