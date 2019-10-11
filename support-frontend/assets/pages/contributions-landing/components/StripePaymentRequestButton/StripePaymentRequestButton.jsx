@@ -26,6 +26,7 @@ import {
   setStripePaymentRequestObject,
   onThirdPartyPaymentAuthorised,
   updateEmail,
+  updatePaymentMethod,
 } from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
@@ -53,6 +54,7 @@ type PropTypes = {|
   toggleOtherPaymentMethods: () => void,
   updateEmail: string => void,
   paymentMethod: PaymentMethod,
+  setAssociatedPaymentMethod: () => (Function) => void,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -80,6 +82,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
     (paymentRequest: Object) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
   setStripePaymentRequestButtonClicked: () => { dispatch(setStripePaymentRequestButtonClicked()); },
+  setAssociatedPaymentMethod: () => { dispatch(updatePaymentMethod(Stripe)); },
 });
 
 
@@ -128,6 +131,7 @@ function onClick(event, props: PropTypes) {
   event.preventDefault();
   trackComponentClick('apple-pay-clicked');
   updateAmount(props.amount, props.stripePaymentRequestObject);
+  props.setAssociatedPaymentMethod();
   props.setStripePaymentRequestButtonClicked();
   const amountIsValid =
     checkAmountOrOtherAmount(
