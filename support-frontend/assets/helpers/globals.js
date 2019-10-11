@@ -1,7 +1,10 @@
 // @flow
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Settings } from 'helpers/settings';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import type {
+  PromotionCopy,
+  PromotionTerms,
+} from 'helpers/productPrice/promotions';
 
 function getGlobal<T>(path: string = ''): ?T {
 
@@ -66,5 +69,11 @@ const isTestSwitchedOn = (testName: string): boolean => {
   return false;
 };
 
-
-export { getProductPrices, getPromotionCopy, getGlobal, isTestSwitchedOn, getSettings, isSwitchOn };
+export {
+  getProductPrices,
+  getPromotionCopy,
+  getGlobal,
+  isTestSwitchedOn,
+  getSettings,
+  isSwitchOn,
+};
