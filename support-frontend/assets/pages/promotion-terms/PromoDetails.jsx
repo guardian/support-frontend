@@ -5,7 +5,7 @@ import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { connect } from 'react-redux';
 import type { State } from 'pages/promotion-terms/promotionTermsReducer';
 import { LargeParagraph, Title } from 'components/text/text';
-import Content from 'components/content/content';
+import Content, { Divider } from 'components/content/content';
 import { formatUserDate } from 'helpers/dateConversions';
 import UnorderedList from 'components/list/unorderedList';
 
@@ -19,7 +19,7 @@ const PromoDetails = (props: PromotionTerms) => {
 
   return (
     <Content>
-      <Title>Promotional code: {props.promoCode}</Title>
+      <Title size={1}>Promotional code: {props.promoCode}</Title>
       <LargeParagraph>
         <strong>Promotion details:</strong> {props.description}
       </LargeParagraph>
@@ -28,6 +28,8 @@ const PromoDetails = (props: PromotionTerms) => {
         <strong>Applies to products:</strong>
         <UnorderedList items={props.productRatePlans}/>
       </LargeParagraph>
+      <Divider />
+      <Title size={1}>Promotion terms and conditions</Title>
     </Content>
   );
 };

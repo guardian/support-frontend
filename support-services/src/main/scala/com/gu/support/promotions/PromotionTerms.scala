@@ -13,29 +13,31 @@ object PromotionTerms {
 
   implicit val codec: Codec[PromotionTerms] = Codec.deriveCodec
 
-  def fromPromoCode(promotionService: PromotionService, stage: Stage, promoCode: PromoCode): Option[PromotionTerms] = {
-    promotionService.findPromotion(promoCode).map { promotion =>
-      val environment = TouchPointEnvironments.fromStage(stage)
-      val includedProductRatePlanIds = promotion.promotion.appliesTo.productRatePlanIds
+  def fromPromoCode(promotionService: PromotionService, stage: Stage, promoCode: PromoCode): Option[PromotionTerms] =
+    promotionService.findPromotion(promoCode).map(promotionTermsFromPromotion(stage))
 
-      val product = Product.allProducts.find (_
-        .getProductRatePlanIds(environment).toSet
-        .intersect(includedProductRatePlanIds)
-        .nonEmpty
-      ).getOrElse(DigitalPack)
 
-      val productRatePlans = product
-        .getProductRatePlans(environment)
-        .filter(productRatePlan => includedProductRatePlanIds.contains(productRatePlan.id))
-        .map(_.description)
+  def promotionTermsFromPromotion(stage: Stage)(promotion: PromotionWithCode): PromotionTerms = {
+    val environment = TouchPointEnvironments.fromStage(stage)
+    val includedProductRatePlanIds = promotion.promotion.appliesTo.productRatePlanIds
 
-      PromotionTerms(
-        promoCode,
-        promotion.promotion.description,
-        promotion.promotion.expires,
-        product,
-        productRatePlans
-      )
-    }
+    val product = Product.allProducts.find(_
+      .getProductRatePlanIds(environment).toSet
+      .intersect(includedProductRatePlanIds)
+      .nonEmpty
+    ).getOrElse(DigitalPack)
+
+    val productRatePlans = product
+      .getProductRatePlans(environment)
+      .filter(productRatePlan => includedProductRatePlanIds.contains(productRatePlan.id))
+      .map(_.description)
+
+    PromotionTerms(
+      promotion.promoCode,
+      promotion.promotion.description,
+      promotion.promotion.expires,
+      product,
+      productRatePlans
+    )
   }
 }

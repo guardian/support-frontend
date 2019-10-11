@@ -8,6 +8,14 @@
 
 @import '~stylesheets/skeleton/skeleton.scss';
 
-.promotion-terms {
+.component-text__heading{
+  margin-top: $gu-v-spacing;
+}
 
+.component-text__large {
+  margin-top: $gu-v-spacing / 2;
+}
+
+.component-list-ul {
+  margin-top: $gu-v-spacing / 2;
 }

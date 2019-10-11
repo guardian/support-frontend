@@ -16,7 +16,8 @@ export type State = {
 // ----- Export ----- //
 export default () => {
   const terms = getGlobal('promotionTerms');
+  const expires = terms && terms.expires ? new Date(terms.expires) : null;
   return {
-    promotionTerms: { ...terms, expires: new Date(terms.expires) },
+    promotionTerms: { ...terms, expires },
   };
 };
