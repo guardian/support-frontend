@@ -134,7 +134,7 @@ const onComplete = (complete: Function) => (res: PaymentResult) => {
 };
 
 
-function updatePaymentRequest(amount: number, paymentRequest: Object | null) {
+function updateAmount(amount: number, paymentRequest: Object | null) {
   // When the other tab is clicked, the value of amount is NaN
   if (!Number.isNaN(amount) && paymentRequest) {
     paymentRequest.update({
@@ -151,7 +151,7 @@ function updatePaymentRequest(amount: number, paymentRequest: Object | null) {
 function onClick(event, props: PropTypes) {
   event.preventDefault();
   trackComponentClick('apple-pay-clicked');
-  updatePaymentRequest(props.amount, props.stripePaymentRequestObject, props.contributionType);
+  updateAmount(props.amount, props.stripePaymentRequestObject);
   props.setAssociatedPaymentMethod();
   props.setStripePaymentRequestButtonClicked();
   const amountIsValid =
