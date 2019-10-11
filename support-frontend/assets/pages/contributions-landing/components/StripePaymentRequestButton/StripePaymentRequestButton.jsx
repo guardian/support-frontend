@@ -142,6 +142,7 @@ function updateAmount(amount: number, paymentRequest: Object | null) {
         label: 'The Guardian',
         amount: amount * 100,
       },
+      requestPayerName: (props.contributionType !== 'ONE_OFF'),
     });
   }
 }
