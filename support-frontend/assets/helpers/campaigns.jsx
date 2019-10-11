@@ -99,7 +99,9 @@ export type CampaignName = $Keys<typeof campaigns>
 
 export function getCampaignName(): ?CampaignName {
   if (currentCampaignName) {
-    return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
+    return window.guardian.forceCampaign || window.location.pathname.endsWith(`/${currentCampaignName}`) ?
+      currentCampaignName :
+      undefined;
   }
   return undefined;
 }
