@@ -19,13 +19,11 @@ val commonSettings: Seq[SettingsDefinition] = Seq(
     "com.gu" %% "thrift-serializer" % "4.0.2",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
   ),
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases" at nexus + "service/local/staging/deploy/maven2")
-  },
+  publishTo := Some(
+    if (isSnapshot.value) Opts.resolver.sonatypeSnapshots
+    else Opts.resolver.sonatypeStaging
+  )
+  ,
   licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
   organization := "com.gu",
   bintrayOrganization := Some("guardian"),
