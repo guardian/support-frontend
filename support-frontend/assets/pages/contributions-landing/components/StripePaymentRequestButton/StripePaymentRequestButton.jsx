@@ -27,6 +27,8 @@ import {
   onThirdPartyPaymentAuthorised,
   updateEmail,
   updatePaymentMethod,
+  updateFirstName,
+  updateLastName,
 } from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
@@ -53,6 +55,8 @@ type PropTypes = {|
   setStripePaymentRequestButtonClicked: () => void,
   toggleOtherPaymentMethods: () => void,
   updateEmail: string => void,
+  updateFirstName: string => void,
+  updateLastName: string => void,
   paymentMethod: PaymentMethod,
   setAssociatedPaymentMethod: () => (Function) => void,
 |};
@@ -81,6 +85,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setStripePaymentRequestObject:
     (paymentRequest: Object) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
+  updateFirstName: (firstName: string) => { dispatch(updateFirstName(firstName)); },
+  updateLastName: (lastName: string) => { dispatch(updateLastName(lastName)); },
   setStripePaymentRequestButtonClicked: () => { dispatch(setStripePaymentRequestButtonClicked()); },
   setAssociatedPaymentMethod: () => { dispatch(updatePaymentMethod(Stripe)); },
 });
@@ -89,7 +95,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 // ----- Functions -----//
 
 
-function updateUserEmail(data: Object, setEmail: string => void) {
+function updatePayerEmail(data: Object, setEmail: string => void) {
   const email = data.payerEmail;
   if (email) {
     if (isValidEmail(email)) {
@@ -99,6 +105,21 @@ function updateUserEmail(data: Object, setEmail: string => void) {
     }
   } else {
     logException('Failed to set email: no email in data object');
+  }
+}
+
+function updatePayerName(data: Object, setFirstName: string => void, setLastName: string => void) {
+  const nameParts = data.payerName.split(' ');
+  if (nameParts.length > 2) {
+    setFirstName(nameParts[0]);
+    setLastName(nameParts.slice(1).join(' '));
+  } else if (nameParts.length === 2) {
+    setFirstName(nameParts[0]);
+    setLastName(nameParts[1]);
+  } else if (nameParts.length === 1) {
+    logException('Failed to set name: no spaces in data object: ' + nameParts.join(''));
+  } else {
+    logException('Failed to set name: no name in data object');
   }
 }
 
@@ -161,7 +182,10 @@ const availablePaymentRequestButtonPaymentMethod = (result: Object): StripePayme
 function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentMethod: StripePaymentMethod) {
   paymentRequest.on('token', ({ complete, token, ...data }) => {
     // We need to do this so that we can offer marketing permissions on the thank you page
-    updateUserEmail(data, props.updateEmail);
+    updatePayerEmail(data, props.updateEmail);
+    if (props.contributionType !== 'ONE_OFF') {
+      updatePayerName(data, props.updateFirstName, props.updateLastName);
+    }
     const tokenId = props.isTestUser ? 'tok_visa' : token.id;
     if (data.methodName) {
       // https://stripe.com/docs/stripe-js/reference#payment-response-object
@@ -184,6 +208,7 @@ function initialisePaymentRequest(props: PropTypes) {
       amount: props.amount * 100,
     },
     requestPayerEmail: true,
+    requestPayerName: (props.contributionType !== 'ONE_OFF'),
   });
 
   paymentRequest.canMakePayment().then((result) => {
