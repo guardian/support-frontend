@@ -47,4 +47,6 @@ trait Services {
     new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider)
 
   lazy val getAddressIOService: GetAddressIOService = new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
+
+  lazy val sendReminderEmailService = new RemindMeService(appConfig.stage)
 }

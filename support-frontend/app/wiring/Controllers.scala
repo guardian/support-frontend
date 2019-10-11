@@ -183,4 +183,6 @@ trait Controllers {
     getAddressIOService,
     actionRefiners
   )
+
+  lazy val reminderController = new ReminderController(controllerComponents, actionRefiners, sendReminderEmailService)
 }
