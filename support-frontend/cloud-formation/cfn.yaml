@@ -25,6 +25,10 @@ Parameters:
     Description: AMI ID (may be replaced by RiffRaff for latest baked AMI)
     Type: String
     Default: ami-0eb88168
+  BastionSecurityGroup:
+      Description: Bastion's security group for SSH
+      Type: String
+
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
@@ -285,11 +289,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 77.91.248.0/21
-        - IpProtocol: tcp
-          FromPort: 9000
-          ToPort: 9000
-          CidrIp: 77.91.248.0/21
+          SourceSecurityGroupId: !Ref BastionSecurityGroup
         - IpProtocol: tcp
           FromPort: 9000
           ToPort: 9000
