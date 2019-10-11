@@ -32,7 +32,9 @@ import {
 } from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
-
+import {
+  toHumanReadableContributionType,
+} from 'helpers/checkouts';
 
 // ----- Types -----//
 
@@ -134,13 +136,13 @@ const onComplete = (complete: Function) => (res: PaymentResult) => {
 };
 
 
-function updateAmount(amount: number, paymentRequest: Object | null) {
+function updateTotal(props: PropTypes) {
   // When the other tab is clicked, the value of amount is NaN
-  if (!Number.isNaN(amount) && paymentRequest) {
-    paymentRequest.update({
+  if (!Number.isNaN(props.amount) && props.stripePaymentRequestObject) {
+    props.stripePaymentRequestObject.update({
       total: {
-        label: 'The Guardian',
-        amount: amount * 100,
+        label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
+        amount: props.amount * 100,
       },
     });
   }
@@ -151,7 +153,7 @@ function updateAmount(amount: number, paymentRequest: Object | null) {
 function onClick(event, props: PropTypes) {
   event.preventDefault();
   trackComponentClick('apple-pay-clicked');
-  updateAmount(props.amount, props.stripePaymentRequestObject);
+  updateTotal(props);
   props.setAssociatedPaymentMethod();
   props.setStripePaymentRequestButtonClicked();
   const amountIsValid =
@@ -204,7 +206,7 @@ function initialisePaymentRequest(props: PropTypes) {
     country: props.country,
     currency: props.currency.toLowerCase(),
     total: {
-      label: 'The Guardian',
+      label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
       amount: props.amount * 100,
     },
     requestPayerEmail: true,
