@@ -142,7 +142,6 @@ function updatePaymentRequest(amount: number, paymentRequest: Object | null, con
         label: 'The Guardian',
         amount: amount * 100,
       },
-      requestPayerName: (contributionType !== 'ONE_OFF'),
     });
   }
 }
@@ -208,7 +207,8 @@ function initialisePaymentRequest(props: PropTypes) {
       label: 'The Guardian',
       amount: props.amount * 100,
     },
-    requestPayerEmail: true
+    requestPayerEmail: true,
+    requestPayerName: true,
   });
 
   paymentRequest.canMakePayment().then((result) => {
