@@ -1,7 +1,7 @@
 import sbt.Keys.organization
 
 val commonSettings: Seq[SettingsDefinition] = Seq(
-  scalaVersion := "2.12.4",
+  scalaVersion := "2.12.10",
 
   libraryDependencies := Seq(
     "ch.qos.logback" % "logback-classic" % "1.2.3",
