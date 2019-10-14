@@ -74,7 +74,7 @@ function ProductBlockB() {
         <ProductBlockSubTitle>The Guardian Daily</ProductBlockSubTitle>
 
         <ProductBlockSubTitleText>
-          Each day&apos;s edition in one simple, elegant app
+          Each day&apos;s edition, in one simple, elegant app
         </ProductBlockSubTitleText>
 
         <ProductBlockContent>
@@ -92,33 +92,33 @@ function ProductBlockB() {
             <Text>
               <UnorderedList items={[(
                 <div>
-                  <span className="product-block__feature-title">A new way to read</span>
-                  <Text>The newspaper, reimagined for mobile and tablet</Text>
+                  <strong className="product-block__feature-title">A new way to read</strong>
+                  The newspaper, reimagined for mobile and tablet
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Published daily</span>
-                  <Text>Each edition available to read by 6am, 7 days a week</Text>
+                  <strong className="product-block__feature-title">Published daily</strong>
+                  Each edition available to read by 6am (GMT), 7 days a week
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Easy to navigate</span>
-                  <Text>Read the complete edition, or swipe to the sections you care about</Text>
+                  <strong className="product-block__feature-title">Easy to navigate</strong>
+                  Read the complete edition, or swipe to the sections you care about
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Multiple devices</span>
-                  <Text>Beautifully designed for your mobile or tablet on iOS and Android</Text>
+                  <strong className="product-block__feature-title">Multiple devices</strong>
+                  Beautifully designed for your mobile or tablet on iOS and Android
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Read offline</span>
-                  <Text>Download and read whenever it suits</Text>
+                  <strong className="product-block__feature-title">Read offline</strong>
+                  Download and read whenever it suits you
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Ad-free</span>
-                  <Text>Enjoy our journalism uninterrupted, without adverts</Text>
+                  <strong className="product-block__feature-title">Ad-free</strong>
+                  Enjoy our journalism uninterrupted, without adverts
                 </div>
               )]}
               />
@@ -130,7 +130,7 @@ function ProductBlockB() {
         {/* Second Section */}
 
         <ProductBlockContent>
-          <ProductBlockSubTitle>Premium access to the Live app</ProductBlockSubTitle>
+          <ProductBlockSubTitle>Premium access to The Guardian Live app</ProductBlockSubTitle>
           <ProductBlockSubTitleText>
             Live news, as it happens
           </ProductBlockSubTitleText>
@@ -148,28 +148,28 @@ function ProductBlockB() {
             <Text>
               <UnorderedList items={[(
                 <div>
-                  <span className="product-block__feature-title">Live</span>
-                  <Text>Follow a live feed of breaking news and sport, as it happens</Text>
+                  <strong className="product-block__feature-title">Live</strong>
+                  Follow a live feed of breaking news and sport, as it happens
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Discover</span>
-                  <Text>Explore stories you might have missed, tailored to you</Text>
+                  <strong className="product-block__feature-title">Discover</strong>
+                  Explore stories you might have missed, tailored to you
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Enhanced offline reading</span>
-                  <Text>Download the day&apos;s news whenever it suits you</Text>
+                  <strong className="product-block__feature-title">Enhanced offline reading</strong>
+                  Download the day&apos;s news whenever it suits you
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Daily crossword</span>
-                  <Text>Play the daily crossword wherever you are</Text>
+                  <strong className="product-block__feature-title">Daily crossword</strong>
+                  Play the daily crossword wherever you are
                 </div>
               ), (
                 <div>
-                  <span className="product-block__feature-title">Ad-free</span>
-                  <Text>Enjoy our journalism uninterrupted, without adverts</Text>
+                  <strong className="product-block__feature-title">Ad-free</strong>
+                  Enjoy our journalism uninterrupted, without adverts
                 </div>
               )]}
               />
