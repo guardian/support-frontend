@@ -42,20 +42,32 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
     const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
 
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
-      const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
-      const key = getStripeKey(stripeAccount, this.props.country, this.props.isTestUser);
+      const singleKey = getStripeKey('ONE_OFF', this.props.country, this.props.isTestUser);
+      const recurringKey =  getStripeKey('REGULAR', this.props.country, this.props.isTestUser);
       const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
 
       return (
         <div className="stripe-payment-request-button">
-          <StripeProvider apiKey={key}>
-            <Elements>
-              <StripePaymentRequestButton
-                amount={amount}
-              />
-            </Elements>
-          </StripeProvider>
+          {
+            this.props.contributionType === 'ONE_OFF' ?
+              <StripeProvider apiKey={singleKey}>
+                <Elements>
+                  <StripePaymentRequestButton
+                    amount={amount}
+                  />
+                </Elements>
+              </StripeProvider>
+            :
+              <StripeProvider apiKey={recurringKey}>
+                <Elements>
+                  <StripePaymentRequestButton
+                    amount={amount}
+                  />
+                </Elements>
+              </StripeProvider>
+          }
         </div>
+
       );
     }
     return null;

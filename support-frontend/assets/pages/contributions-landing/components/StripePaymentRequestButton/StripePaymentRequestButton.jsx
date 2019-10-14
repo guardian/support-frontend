@@ -210,7 +210,7 @@ function initialisePaymentRequest(props: PropTypes) {
       amount: props.amount * 100,
     },
     requestPayerEmail: true,
-    requestPayerName: true,
+    requestPayerName: props.contributionType !== 'ONE_OFF',
   });
 
   paymentRequest.canMakePayment().then((result) => {
@@ -249,7 +249,7 @@ function PaymentRequestButton(props: PropTypes) {
   }
 
   return (
-    <div className="stripe-payment-request-button__container">
+    <div className="stripe-payment-request-button__container" data-for-contribution-type={props.contributionType}>
       <PaymentRequestButtonElement
         paymentRequest={props.stripePaymentRequestObject}
         className="stripe-payment-request-button__button"
