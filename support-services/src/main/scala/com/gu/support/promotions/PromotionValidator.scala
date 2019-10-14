@@ -5,6 +5,7 @@ import com.gu.support.catalog.ProductRatePlanId
 import org.joda.time.DateTime
 
 object PromotionValidator {
+
   implicit class PromotionExtensions(promotion: Promotion) {
     def validateFor(productRatePlanId: ProductRatePlanId, country: Country, isRenewal: Boolean, now: DateTime = DateTime.now()) =
       validateAll(Some(productRatePlanId), country, isRenewal, now)
@@ -31,7 +32,7 @@ object PromotionValidator {
       else
         None
 
-    def validateCountry(country: Country): Option[PromoError]=
+    def validateCountry(country: Country): Option[PromoError] =
       if (promotion.appliesTo.countries.contains(country))
         None
       else
@@ -44,7 +45,22 @@ object PromotionValidator {
         Some(ExpiredPromotion)
       else
         None
+
+    def validForAnyProductRatePlan(
+      productRatePlanIds: List[ProductRatePlanId],
+      country: Country,
+      isRenewal: Boolean,
+      now: DateTime = DateTime.now()
+    ): List[ProductRatePlanId] = {
+      val errors = productRatePlanIds.map(productRatePlanId => validateAll(Some(productRatePlanId), country, isRenewal))
+
+      productRatePlanIds
+        .zip(errors)
+        .filter { case (_, errors) => errors.isEmpty }
+        .map { case (productRatePlanId, _) => productRatePlanId }
+    }
   }
+
 }
 
 

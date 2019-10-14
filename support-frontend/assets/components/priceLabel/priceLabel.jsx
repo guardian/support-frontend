@@ -4,13 +4,12 @@
 
 import React from 'react';
 import {
-  getAppliedPromo,
-  hasDiscount,
   type ProductPrice,
   showPrice,
 } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
+import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 
 export type PropTypes = {
   productPrice: ProductPrice,

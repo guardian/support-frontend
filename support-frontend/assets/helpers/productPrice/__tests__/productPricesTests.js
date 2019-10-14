@@ -1,7 +1,8 @@
 // @flow
 
 // ----- Imports ----- //
-import { hasDiscount, isNumeric } from 'helpers/productPrice/productPrices';
+import { isNumeric } from 'helpers/productPrice/productPrices';
+import { hasDiscount } from 'helpers/productPrice/promotions';
 
 // ----- Tests ----- //
 

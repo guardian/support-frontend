@@ -22,6 +22,8 @@ sealed trait Product {
         prp.productOptions == productOptions
     )
 
+  def getProductRatePlanIds(environment: TouchPointEnvironment) = ratePlans(environment).map(_.id)
+
   def supportedCountries(environment: TouchPointEnvironment): List[CountryGroup] =
     ratePlans(environment)
       .flatMap(productRatePlan => productRatePlan.supportedTerritories)

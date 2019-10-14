@@ -21,7 +21,8 @@ import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { paperCheckoutUrl } from 'helpers/routes';
 import { getTitle } from '../../helpers/products';
 import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
-import { getAppliedPromo, showPrice } from 'helpers/productPrice/productPrices';
+import { showPrice } from 'helpers/productPrice/productPrices';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 
 // ---- Helpers ----- //
 
