@@ -96,19 +96,20 @@
   }
 
   @include mq($from: mobileLandscape) {
-    height: 165px;
+    height: 140px;
     h1 {
       font-size: 28px;
       font-weight: 600;
       line-height: 36px;
       margin-left: 0;
+      max-width: gu-span(5);
     }
   
     h2 {
       font-size: 17px;
       font-weight: 400;
       line-height: 21px;
-      max-width: gu-span(6);
+      max-width: gu-span(5);
       margin-left: 0;
     }
   }
@@ -117,16 +118,19 @@
     height: 140px;
     width: 100%;
 
+
     h1 {
       font-size: 32px;
       font-weight: 600;
       line-height: 36px;
       max-width: gu-span(5);
-      margin-top: 0 !important;
+      margin-top: 10px;
+      margin-left: 20px !important;
     }
 
     h2 {
       max-width: gu-span(6);
+      margin-left: 20px !important;
     }
   }
 
@@ -184,7 +188,8 @@
     margin-left: 5px;
 
     @include mq($from: mobileLandscape) {
-      right: 40px;
+      right: 20px;
+      top: 30px;
     }
 
     @include mq($from: phablet) {
@@ -194,18 +199,12 @@
       top: 20px;
     }
 
-    @include mq($from: tablet) {
-      top: 10px;
-    }
-
     @include mq($from: desktop) {
       right: 40px;
-      top: 20px;
     }
 
     @include mq($from: leftCol) {
       right: 80px;
-      top: 20px;
     }
   }
 
@@ -265,20 +264,21 @@
 
     .product-block__plus {
       margin-bottom: 16px;
-      margin-top: 14px;
+      margin-top: 10px;
       width: 90px !important;
 
-      @include mq($from: mobileLandscape) {
+      @include mq($from: phablet) {
+        margin-top: 14px;
         margin-bottom: 24px;
       }
 
       @include mq($from: tablet) {
         width: 65px;
+        margin-bottom: 0;
       }
 
       @include mq($from: desktop) {
         width: 80px;
-        margin-bottom: 0;
       }
     }
 
@@ -305,13 +305,8 @@
       @include mq($from: desktop) {
         top: -62px;
         left: -40px;
-        width: 220px;
-      }
-
-      @include mq($from: wide) {
         width: 230px;
       }
-
     }
 
     .product-block__item, .product-block__dropdown--show, button, .ad-free-section-c__content {
@@ -619,6 +614,10 @@
     margin-top: 65px;
 
     @include mq($from: mobileLandscape) {
+      margin-top: 60px;
+    }
+
+    @include mq($from: phablet) {
       margin-top: 85px;
     }
 
@@ -1030,6 +1029,14 @@ div.call-to-action__container {
   .payment-selection__card:nth-of-type(2) {
     @include mq($until: tablet) {
       margin-top: 40px;
+    }
+
+    @include mq($until: phablet) {
+      margin-left: 20px;
+    }
+
+    @include mq($until: mobileLandscape) {
+      margin-left: 0px;
     }
   }
 }
