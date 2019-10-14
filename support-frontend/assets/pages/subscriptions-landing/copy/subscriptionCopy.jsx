@@ -38,7 +38,7 @@ export type ProductButton = {
   analyticsTracking: Function,
 }
 
-export type ProductCopy = {
+type ProductCopy = {
   title: string,
   subtitle: Option<string>,
   description: string,
