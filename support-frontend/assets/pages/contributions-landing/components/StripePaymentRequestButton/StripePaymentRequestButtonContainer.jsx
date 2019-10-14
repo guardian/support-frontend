@@ -7,7 +7,7 @@
 import React from 'react';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
- import { getStripeKey, stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
+import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
