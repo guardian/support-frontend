@@ -78,4 +78,25 @@ export const tests: Tests = {
     seed: 7,
     canRun: () => !!getCampaignName(),
   },
+
+  nativeVariantAllocationTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: '0',
+      },
+      {
+        id: '1',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 9,
+  },
 };
