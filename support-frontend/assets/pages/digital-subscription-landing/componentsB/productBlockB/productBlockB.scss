@@ -14,7 +14,11 @@ $content-padding: 10px;
 }
 
 .product-block--margin {
-  margin-top: 40px;
+	margin-top: 20px;
+
+	@include mq($from: desktop) {
+		margin-top: 40px;
+  }
 }
 
 .product-block__header {
@@ -113,6 +117,7 @@ $content-padding: 10px;
 
 .product-block__feature-title {
   font-weight: 600;
+  display: block;
 }
 
 .product-block__right-content {
