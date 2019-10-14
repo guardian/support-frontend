@@ -91,9 +91,9 @@ const chooseImage = images =>
   (countryGroupId === 'GBPCountries' ? images[0] : images[1]);
 
 const digital: ProductCopy = {
-  title: 'Digital Pack',
+  title: 'Digital Subscription',
   subtitle: getPrice(DigitalPack, ''),
-  description: 'The Daily Edition app and Premium app in one pack, plus ad-free reading on all your devices',
+  description: 'The Guardian Daily app and Premium app in one pack, plus ad-free reading on all your devices',
   productImage: chooseImage([<FeaturePackshot />, <IntFeaturePackshot />]),
   offer: getSaleCopy(DigitalPack, countryGroupId).bundle.subHeading,
   buttons: [{
@@ -133,7 +133,7 @@ const paper: ProductCopy = {
 const paperAndDigital: ProductCopy = {
   title: 'Paper+Digital',
   subtitle: `from ${getPrice(PaperAndDigital, '')}`,
-  description: 'All the benefits of a paper subscription, plus access to the digital pack',
+  description: 'All the benefits of a paper subscription, plus access to the digital subscription',
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.PaperAndDigital,
