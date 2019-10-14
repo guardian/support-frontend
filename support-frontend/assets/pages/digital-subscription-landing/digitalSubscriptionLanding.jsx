@@ -68,10 +68,26 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
+const trackOptimizeExperiment = (variant: string) => {
+  const dailyEditionsExperimentId = 'eA8AlzuTTJqe8lm2DXfe1w';
+  gaEvent(
+    {
+      category: 'ab-test-tracking',
+      action: dailyEditionsExperimentId,
+      label: variant,
+    },
+    { // these map to dataLayer variables in GTM
+      experimentId: dailyEditionsExperimentId,
+      experimentVariant: variant,
+    },
+  );
+};
+
+
 const mapStateToProps = (state) => {
   const { nativeVariantAllocationTest } = state.common.abParticipations;
 
-  const dailyEditionsVariant = nativeVariantAllocationTest === "1"
+  const dailyEditionsVariant = nativeVariantAllocationTest === '1'
     && !isPostDeployUser();
 
   trackOptimizeExperiment(nativeVariantAllocationTest);
@@ -79,20 +95,6 @@ const mapStateToProps = (state) => {
   return {
     dailyEditionsVariant,
   };
-};
-
-const trackOptimizeExperiment = (variant: string) => {
-  const dailyEditionsExperimentId = 'eA8AlzuTTJqe8lm2DXfe1w';
-  gaEvent(
-    {
-    category: 'ab-test-tracking',
-    action: dailyEditionsExperimentId,
-    label: variant
-  },
-    { //these map to dataLayer variables in GTM
-      experimentId: dailyEditionsExperimentId,
-      experimentVariant: variant
-    });
 };
 
 type Props = {

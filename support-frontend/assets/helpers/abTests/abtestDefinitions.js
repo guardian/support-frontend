@@ -98,5 +98,5 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 9,
-  }
+  },
 };

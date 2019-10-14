@@ -65,7 +65,7 @@ export const campaigns: Campaigns = {
           our <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.
         </p>
         {isUK ? (
-          <span className={`component-terms-privacy__divider`}>
+          <span className="component-terms-privacy__divider">
             <p>
               If you would like to make a larger contribution, we have a Patron programme with three levels of
               support, which brings you closer to our work. For more information, please visit
@@ -73,7 +73,7 @@ export const campaigns: Campaigns = {
             </p>
           </span>
         ) : (
-          <span className={`component-terms-privacy__divider`}>
+          <span className="component-terms-privacy__divider">
             <p>
               We also accept larger contributions to support The Guardian’s reporting from companies, foundations and
               individuals. Please  <a href={`mailto:${contactEmail || ''}`}>contact us</a>.
