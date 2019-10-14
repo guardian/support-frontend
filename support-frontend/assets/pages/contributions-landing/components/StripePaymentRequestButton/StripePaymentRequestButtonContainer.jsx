@@ -48,15 +48,25 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
 
       return (
         <div className="stripe-payment-request-button">
-          <StripeProvider apiKey={this.props.contributionType === 'ONE_OFF' ? singleKey : recurringKey}>
-            <Elements>
-              <StripePaymentRequestButton
-                amount={amount}
-              />
-            </Elements>
-          </StripeProvider>
+          {
+            this.props.contributionType === 'ONE_OFF' ?
+              <StripeProvider apiKey={singleKey}>
+                <Elements>
+                  <StripePaymentRequestButton
+                    amount={amount}
+                  />
+                </Elements>
+              </StripeProvider>
+            :
+              <StripeProvider apiKey={recurringKey}>
+                <Elements>
+                  <StripePaymentRequestButton
+                    amount={amount}
+                  />
+                </Elements>
+              </StripeProvider>
+          }
         </div>
-
       );
     }
     return null;
