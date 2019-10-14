@@ -25,6 +25,10 @@ import {
   getSaleCopy,
 } from 'helpers/flashSale';
 import { Monthly } from 'helpers/billingPeriods';
+import {
+  fromCountryGroupId,
+  glyph,
+} from 'helpers/internationalisation/currency';
 
 // types
 
@@ -74,6 +78,15 @@ const getPrice = (product: SubscriptionProduct, alternativeText: string) => {
   return alternativeText;
 };
 
+function getGuardianWeeklyOfferCopy() {
+  const copy = getSaleCopy(GuardianWeekly, countryGroupId).bundle.subHeading;
+  if (copy !== '') {
+    return copy;
+  }
+  const currency = glyph(fromCountryGroupId(countryGroupId) || 'GBP');
+  return `6 issues for ${currency}6`;
+}
+
 const chooseImage = images =>
   (countryGroupId === 'GBPCountries' ? images[0] : images[1]);
 
@@ -92,10 +105,10 @@ const digital: ProductCopy = {
 };
 
 const guardianWeekly: ProductCopy = {
-  title: 'Guardian Weekly',
+  title: 'The Guardian Weekly',
   subtitle: getPrice(GuardianWeekly, ''),
   description: 'A weekly, global magazine from The Guardian, with delivery worldwide',
-  offer: getSaleCopy(GuardianWeekly, countryGroupId).bundle.subHeading,
+  offer: getGuardianWeeklyOfferCopy(),
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.GuardianWeekly,
