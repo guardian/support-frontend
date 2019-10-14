@@ -213,64 +213,19 @@ function CampaignHeaderB(props: PropTypes) {
         showProductPageHeroHeader={false}
       >
         <div className="the-moment-hero">
-          <div className="the-moment-hero__copy">
-            <h2>A beautiful way to read it  <br />
-              <span>A powerful way to fund it
-              </span>
-            </h2>
-          </div>
-
-          <div className="the-moment-hero__graphic-outer">
-            <div className="the-moment-hero__graphic-inner">
-              <div className="the-moment-hero__badge">
-                <span className="the-moment-hero__badge-lgeCopy">14 Day</span>
-                <span>Free trial</span>
-              </div>
-              <div className="the-moment-hero__graphic">
-                <GridImage
-                  gridId="theMomentDigiHero"
-                  srcSizes={[486]}
-                  sizes="(max-width: 740px) 315px, 486px"
-                  imgType="png"
-                  altText="A mobile device"
-                />
-              </div>
-              <div className="the-moment-hero__graphic-slider">
-                <div className="the-moment-hero__graphic-slider-inner">
-                  <div className="the-moment-hero__graphic-slider-1">
-                    <GridImage
-                      gridId="theMomentDigiHero"
-                      srcSizes={[486]}
-                      sizes="(max-width: 740px) 315px, 486px"
-                      imgType="png"
-                      altText="A mobile device"
-                    />
-                  </div>
-                  <div className="the-moment-hero__graphic-slider-2">
-                    <GridImage
-                      gridId="theMomentDigiHero2"
-                      srcSizes={[486]}
-                      sizes="(max-width: 740px) 315px, 486px"
-                      imgType="png"
-                      altText="A mobile device"
-                    />
-                  </div>
-                  <div className="the-moment-hero__graphic-slider-3">
-                    <GridImage
-                      gridId="theMomentDigiHero3"
-                      srcSizes={[486]}
-                      sizes="(max-width: 740px) 315px, 486px"
-                      imgType="png"
-                      altText="A mobile device"
-                    />
-                  </div>
-                </div>
+          <div className="hope-is-power-hero--wrapper">
+            <div className="hope-is-power-hero__marketing-message hope-is-power--centered">
+              <h1>The Digital Subscription</h1>
+              <h2><strong>Two innovative apps and ad-free reading</strong> on theguardian.com. The complete digital experience from The Guardian.</h2>
+              <div className="hope-is-power__circle">
+                <span className="hope-is-power__circle-text--large">14 day</span>
+                <span className="hope-is-power__circle-text">free trial</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="payment-selection__title-container" >
+        <div className="payment-selection__title-container">
           <h2 className="payment-selection__title">
           Choose one of our special offers and subscribe today
           </h2>
