@@ -152,7 +152,7 @@ function DigitalCheckoutForm(props: PropTypes) {
   );
   const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
   const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
-  const priceSummary = `${offerOnSelected || 'Enjoy your digital pack free for 14 days, then'} ${helperSelected}.`;
+  const priceSummary = `${offerOnSelected || 'Enjoy your digital subscription free for 14 days, then'} ${helperSelected}.`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 

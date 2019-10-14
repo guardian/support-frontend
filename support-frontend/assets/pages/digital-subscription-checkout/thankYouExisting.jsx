@@ -49,7 +49,7 @@ const content = (
         <HeroWrapper appearance="custom">
           <ThankYouContent countryGroupId={countryGroupId} />
           <HeadingBlock>
-            Your Digital Pack subscription is already live
+            Your Digital Subscription is already live
           </HeadingBlock>
         </HeroWrapper>
         <ThankYouExistingContent countryGroupId={countryGroupId} />

@@ -111,7 +111,7 @@ const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId:
 
   if (product === 'DigitalPack') {
     return {
-      headingText: 'Digital Pack',
+      headingText: 'Digital Subscription',
       subheadingText: 'Screen time well spent',
       bodyText: (countryGroupId === GBPCountries) ?
         'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper.' :

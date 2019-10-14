@@ -24,13 +24,13 @@ function ThankYouPendingContent(props: {countryGroupId: CountryGroupId}) {
       />
       <HeroWrapper appearance="custom">
         <HeadingBlock>
-          Your Digital Pack subscription is being processed
+          Your Digital Subscription is being processed
         </HeadingBlock>
       </HeroWrapper>
       <Content>
         <Text>
           <LargeParagraph>
-            Thank you for subscribing to the Digital Pack.
+            Thank you for subscribing to the Digital Subscription.
             Your subscription is being processed and you will
             receive an email when your account is live.
           </LargeParagraph>
