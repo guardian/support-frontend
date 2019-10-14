@@ -9,6 +9,12 @@ import './digitalSubscriptionLanding.scss';
 
 const Plus = () => <div className="product-block__plus">+ Plus</div>;
 
+const arrowSvg = (
+  <svg width="18" height="10" xmlns="http://www.w3.org/2000/svg">
+    <defs><path d="M16 0l1.427 1.428-7.035 7.036.035.035L9 9.927l-.035-.035-.036.035L7.5 8.5l.036-.035L.5 1.428 1.928 0l7.036 7.036L15.999 0z" id="a" /></defs>
+    <use fill="#121212" xlinkHref="#a" fillRule="evenodd" />
+  </svg>);
+
 type ListPropTypes = {
   items: Array<Object>,
 }
@@ -60,9 +66,7 @@ const Button = ({
     className={`product-block__button${showDropDown ? '--show' : '--hide'}`}
   >
     <span className="product-block__button__text">
-      <div className={`product-block__arrow__container--${showDropDown ? 'up' : 'down'}`}>
-        <div className={showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'} />
-      </div>
+      <div className={showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'}>{arrowSvg}</div>
       <span className="product-block__button__text--bold">
         {showDropDown ? `Less about ${productCopy}` : `More about ${productCopy}`}
       </span>

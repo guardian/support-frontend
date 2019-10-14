@@ -43,16 +43,49 @@
   }
 }
 
-.ad-free-section-b__sub-header {
+.ad-free-section-b__sub-header, .ad-free-section-C__sub-header {
   margin-bottom: 8px;
   font: 600 22px $gu-headline;
+}
 
+.ad-free-section-b__sub-header {
   @include mq($from: tablet) {
     font-size: 26px;
   }
 
   @include mq($from: desktop) {
     font-size: 32px;
+  }
+}
+
+.ad-free-section-c__sub-header {
+  margin-bottom: 8px;
+  @include gu-fontset-heading;
+  font-weight: 600;
+  font-size: 20px;
+  max-width: gu-span(2.25);
+
+  @include mq($from: mobileMedium) {
+    max-width: gu-span(3);
+    font-size: 22px;
+  }
+
+  @include mq($from: mobileLandscape) {
+    max-width: gu-span(3.5);
+  }
+
+  @include mq($from: phablet) {
+    max-width: gu-span(4);
+  }
+
+  @include mq($from: tablet) {
+    font-size: 26px;
+  }
+
+  @include mq($from: desktop) {
+    margin-bottom: 15px;
+    font-size: 38px !important;
+    line-height: 42px;
   }
 }
 
