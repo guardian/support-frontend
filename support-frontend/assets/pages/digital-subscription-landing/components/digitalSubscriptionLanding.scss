@@ -40,7 +40,7 @@
   }
 
   @include mq($from: phablet) {
-    padding-left: 10px;
+    padding-left: 20px;
     align-self: center;
     width: 100%;
   }
@@ -194,6 +194,10 @@
       top: 20px;
     }
 
+    @include mq($from: tablet) {
+      top: 10px;
+    }
+
     @include mq($from: desktop) {
       right: 40px;
       top: 20px;
@@ -261,6 +265,7 @@
 
     .product-block__plus {
       margin-bottom: 16px;
+      margin-top: 14px;
       width: 90px !important;
 
       @include mq($from: mobileLandscape) {
@@ -277,8 +282,8 @@
       }
     }
 
-    .product-block__container__label--top {
-      width: 235px !important;
+    div.product-block__container__label--top {
+      width: 160px;
       margin: 15px 0;
 
       @include mq($from: mobileLandscape) {
@@ -294,13 +299,17 @@
         top: -58px;
         left: -19px;
         margin: 0;
-        width: 175px;
+        width: 180px;
       }
 
       @include mq($from: desktop) {
         top: -62px;
         left: -40px;
         width: 220px;
+      }
+
+      @include mq($from: wide) {
+        width: 230px;
       }
 
     }
@@ -691,10 +700,6 @@
   .product-block__button--show {
     background-color: #ffffff;
   }
-  
-  button:active {
-    transform: scale(0.99);
-  }
 
   .product-block__button__text--bold {
     font-weight: 600;
@@ -942,6 +947,10 @@ div.call-to-action__container {
         max-width: gu-span(5);
       }
 
+      @include mq($from: phablet) {
+        padding-left: 5px;
+      }
+
       @include mq($from: tablet) {
         padding-left: 25px;
         font-size: 34px;
@@ -964,10 +973,14 @@ div.call-to-action__container {
         padding-left: 15px;
       }
 
+      @include mq($from: phablet) {
+        padding-left: 5px;
+        max-width: gu-span(7);
+      }
+
       @include mq($from: tablet) {
         padding-left: 25px;
         margin-bottom: 40px;
-        max-width: gu-span(7);
       }
 
       @include gu-fontset-body-sans;
@@ -1008,11 +1021,15 @@ div.call-to-action__container {
     @include mq($from: wide) {
       margin-left: 30px;
     }
+
+    @include mq($from: 1396px) {
+      margin-left: 50px;
+    }
   }
 
   .payment-selection__card:nth-of-type(2) {
     @include mq($until: tablet) {
-      margin-top: 50px;
+      margin-top: 40px;
     }
   }
 }
@@ -1023,6 +1040,10 @@ div.call-to-action__container {
   @include gu-fontset-body-sans;
   font-size: 14px;
   padding: 26px 0 33px 10px;
+
+  @include mq($from: phablet) {
+    padding-left: 0px;
+  }
 
   h3 {
     font-weight: 600;

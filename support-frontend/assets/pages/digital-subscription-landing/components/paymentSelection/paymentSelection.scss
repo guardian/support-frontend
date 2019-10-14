@@ -34,14 +34,37 @@
   .product-option__label--A {
     background-color: #ffe500;
     color: gu-colour(neutral-7);
+    border-radius: 3px 3px 0 0;
   }
 }
 
-.payment-selection__card:last-of-type {
-  margin: 30px 10px 20px 10px;
+.hope-is-power--centered {
+  .payment-selection {
+    @include mq($from:tablet) {
+      margin-left: -20px;
+    }
 
-  @include mq($from: tablet) {
-    margin: 0 0 0 20px;
+    @include mq($from:wide) {
+      margin-left: 0px;
+    }
+
+    @include mq($from: 1396px) {
+      margin-left: -20px;
+    }
+  }
+
+  div.payment-selection__card {
+    @include mq($from: phablet) {
+      margin-left: 5px;
+    }
+  }
+
+  .payment-selection__card:last-of-type {
+    margin: 30px 10px 20px 10px;
+  
+    @include mq($from: tablet) {
+      margin: 0 0 0 20px;
+    }
   }
 }
 
