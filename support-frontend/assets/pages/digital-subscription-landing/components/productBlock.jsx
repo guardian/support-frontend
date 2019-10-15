@@ -53,7 +53,7 @@ type ButtonPropTypes = {
   showDropDown: boolean,
   handleClick: Function,
   product: 'daily' | 'app',
-  productCopy: 'The Guardian Daily' | 'Premium access to the Live app',
+  productCopy: 'The Guardian Daily' | 'Premium access to The Guardian Live app',
 }
 
 const Button = ({
@@ -170,7 +170,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
             title="The Guardian Daily"
-            subtitle={<span className="product-block__item__subtitle--short-first">Each day&apos;s edition in one simple, elegant app</span>}
+            subtitle={<span className="product-block__item__subtitle--short-first">Each day&apos;s edition, in one simple, elegant app</span>}
             image={dailyImage}
           />
           <Dropdown
@@ -201,20 +201,20 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           />
           <Plus />
           <ProductCard
-            title="Premium access to the Live app"
+            title="Premium access to The Guardian Live app"
             subtitle={<span className="product-block__item__subtitle--short-second">Live news, as it happens</span>}
             image={appImage}
           />
           <Dropdown
             showDropDown={state.showDropDownApp}
-            title="Premium access to the Live app in detail"
+            title="Premium access to The Guardian Live app in detail"
             product="app"
           >
             <List
               items={[
                 { boldText: 'Live', explainer: 'Follow a live feed of breaking news and sport, as it happens' },
                 { boldText: 'Discover', explainer: 'Explore stories you might have missed, tailored to you' },
-                { boldText: 'Enhanced offline reading', explainer: 'Download the day\'s news whever it suits you' },
+                { boldText: 'Enhanced offline reading', explainer: 'Download the news whever it suits you' },
               ]}
             />
             <List
@@ -227,7 +227,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Button
             showDropDown={state.showDropDownApp}
             handleClick={() => this.handleClick('App')}
-            productCopy="Premium access to the Live app"
+            productCopy="Premium access to The Guardian Live app"
             product="app"
           />
           <Plus />

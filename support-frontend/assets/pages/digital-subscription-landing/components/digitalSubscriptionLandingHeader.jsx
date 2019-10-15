@@ -180,7 +180,7 @@ function CampaignHeader() {
       <div className="hope-is-power-hero__marketing-message hope-is-power--centered">
         <h1>The Digital Subscription</h1>
         <h2>
-          The complete digital subscription from The Guardian including <span className="hope-is-power--heavy-text">two innovative apps, plus ad-free reading</span> on theguardian.com
+          <span className="hope-is-power--heavy-text">Two innovative apps and ad-free reading</span> on theguardian.com. The complete digital experience from The Guardian.
         </h2>
         <div className="hope-is-power__circle">
           <span className="hope-is-power__circle-text--large">14 day</span>
