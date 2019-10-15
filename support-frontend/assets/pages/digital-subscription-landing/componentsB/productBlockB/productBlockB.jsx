@@ -159,7 +159,7 @@ function ProductBlockB() {
               ), (
                 <div>
                   <strong className="product-block__feature-title">Enhanced offline reading</strong>
-                  Download the news wherever it suits you
+                  Download the news whenever it suits you
                 </div>
               ), (
                 <div>
