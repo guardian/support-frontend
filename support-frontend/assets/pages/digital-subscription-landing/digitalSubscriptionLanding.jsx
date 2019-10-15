@@ -114,65 +114,64 @@ type Props = {
 const pageType = process.env.NODE_ENV === 'DEV' ? 'A' : 'B';
 
 // ----- Render ----- //
-function LandingPage () {
-    const { dailyEditionsVariant } = this.props;
+function LandingPage(props: Props) {
+  const { dailyEditionsVariant } = props;
 
-    // We can't cope with multiple promo codes in the current design
+  // We can't cope with multiple promo codes in the current design
 
-    const promoCode = flashSaleIsActive(DigitalPack, countryGroupId) ? dpSale.promoCode : null;
+  const promoCode = flashSaleIsActive(DigitalPack, countryGroupId) ? dpSale.promoCode : null;
 
-    const pageTypeA = (
-      <Page
-        header={<CountrySwitcherHeader />}
-        footer={
-          <FooterCentered>
-            <FaqsAndHelp
-              selectedCountryGroup={countryGroupId}
-              promoCode={promoCode}
-            />
-            <SubscriptionFaq subscriptionProduct="DigitalPack" />
-          </FooterCentered>}
-      >
-        <CampaignHeader countryGroupId={countryGroupId} />
-        <ProductBlock />
-        <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
-        <TermsAndConditions />
-        <ConsentBanner />
-      </Page>
-    );
+  const pageTypeA = (
+    <Page
+      header={<CountrySwitcherHeader />}
+      footer={
+        <FooterCentered>
+          <FaqsAndHelp
+            selectedCountryGroup={countryGroupId}
+            promoCode={promoCode}
+          />
+          <SubscriptionFaq subscriptionProduct="DigitalPack" />
+        </FooterCentered>}
+    >
+      <CampaignHeader countryGroupId={countryGroupId} />
+      <ProductBlock />
+      <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
+      <TermsAndConditions />
+      <ConsentBanner />
+    </Page>
+  );
 
-    const pageTypeB = (
-      <Page
-        header={<CountrySwitcherHeader />}
-        footer={
-          <Footer>
-            <CustomerService
-              selectedCountryGroup={countryGroupId}
-              promoCode={promoCode}
-            />
-            <SubscriptionFaq subscriptionProduct="DigitalPack" />
-          </Footer>}
-      >
-        <CampaignHeaderB
-          countryGroupId={countryGroupId}
-          dailyEditionsVariant={dailyEditionsVariant}
-        />
-        <ProductBlockB />
-        <AdFreeSectionB />
-        <IndependentJournalismSection />
-        <PromotionPopUp />
-        <ConsentBanner />
-      </Page>
-    );
+  const pageTypeB = (
+    <Page
+      header={<CountrySwitcherHeader />}
+      footer={
+        <Footer>
+          <CustomerService
+            selectedCountryGroup={countryGroupId}
+            promoCode={promoCode}
+          />
+          <SubscriptionFaq subscriptionProduct="DigitalPack" />
+        </Footer>}
+    >
+      <CampaignHeaderB
+        countryGroupId={countryGroupId}
+        dailyEditionsVariant={dailyEditionsVariant}
+      />
+      <ProductBlockB />
+      <AdFreeSectionB />
+      <IndependentJournalismSection />
+      <PromotionPopUp />
+      <ConsentBanner />
+    </Page>
+  );
 
-    return (
-      <div>
-        {pageType === 'A' && pageTypeA}
-        {pageType === 'B' && pageTypeB}
-      </div>
-    );
+  return (
+    <div>
+      {pageType === 'A' && pageTypeA}
+      {pageType === 'B' && pageTypeB}
+    </div>
+  );
 
-  }
 }
 
 const ConnectedLandingPage = connect(mapStateToProps)(LandingPage);
