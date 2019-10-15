@@ -26,7 +26,7 @@ const PaymentSelection = ({ paymentOptions, pageType }: PropTypes) => (
   <div className="payment-selection">
     {
         (paymentOptions.map(paymentOption => (
-          <div className="payment-selection__card">
+          <div className={pageType === 'A' ? 'payment-selection__card payment-selection__card--A' : 'payment-selection__card'}>
             <span className={pageType === 'A' ? 'product-option__label product-option__label--A' : 'product-option__label'}>
               {paymentOption.label}
             </span>
