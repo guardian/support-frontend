@@ -207,8 +207,13 @@
       top: 20px;
     }
 
+    @include mq($from: tablet) {
+      top: 25px;
+    }
+
     @include mq($from: desktop) {
       right: 40px;
+      top: 28px;
     }
 
     @include mq($from: leftCol) {
@@ -270,10 +275,10 @@
       }
     }
 
-    .product-block__plus {
+    div.product-block__plus {
       margin-bottom: 16px;
       margin-top: 10px;
-      width: 90px !important;
+      width: 70px;
 
       @include mq($from: phablet) {
         margin-top: 14px;
@@ -281,12 +286,12 @@
       }
 
       @include mq($from: tablet) {
-        width: 65px;
+        width: 80px;
         margin-bottom: 0;
       }
 
       @include mq($from: desktop) {
-        width: 80px;
+        width: 95px;
       }
     }
 
@@ -376,7 +381,7 @@
         }
 
         @include mq($from: leftCol) {
-          max-width: gu-span(5);
+          max-width: gu-span(6);
         }
       }
 
@@ -421,7 +426,6 @@
         }
 
         @include mq($from: desktop) {
-          margin-right: 20px;
           margin-top: -170px;
 
           img {
@@ -430,21 +434,7 @@
         }
 
         @include mq($from: leftCol) {
-          margin-right: 30px;
-          margin-top: -160px;
-
-          img {
-            width: 500px;
-          }
-        }
-
-        @include mq($from: wide) {
-          margin-right: 30px;
-          margin-top: -160px;
-
-          img {
-            width: 550px;
-          }
+          margin-top: -150px;
         }
       }
 
@@ -495,7 +485,7 @@
 
       .product-block__item__subtitle--short-second {
         display: block;
-        max-width: gu-span(1.5);
+        max-width: gu-span(2);
 
         @include mq($from: mobileMedium) {
           display: inline;
@@ -1033,6 +1023,8 @@ div.call-to-action__container {
   }
 
   .payment-selection__card:first-of-type {
+    margin-left: 0;
+    
     @include mq($from: tablet) {
       margin-left: 50px;
     }
