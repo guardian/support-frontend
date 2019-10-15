@@ -1,9 +1,10 @@
 package com.gu.emailservices
 
 import io.circe.parser._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class EmailFieldsSpec extends FlatSpec with Matchers {
+class EmailFieldsSpec extends AnyFlatSpec with Matchers {
   "EmailPayload" should "serialize to json" in {
     val Right(expectedJson) = parse(
       s"""
