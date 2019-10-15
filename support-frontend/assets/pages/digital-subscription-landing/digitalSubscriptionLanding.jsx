@@ -76,29 +76,11 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
-const trackOptimizeExperiment = (variant: string) => {
-  const dailyEditionsExperimentId = 'eA8AlzuTTJqe8lm2DXfe1w';
-  gaEvent(
-    {
-      category: 'ab-test-tracking',
-      action: dailyEditionsExperimentId,
-      label: variant,
-    },
-    { // these map to dataLayer variables in GTM
-      experimentId: dailyEditionsExperimentId,
-      experimentVariant: variant,
-    },
-  );
-};
-
-
 const mapStateToProps = (state) => {
-  const { nativeVariantAllocationTest } = state.common.abParticipations;
+  const { digitalPackProductPageTest } = state.common.abParticipations;
 
-  const dailyEditionsVariant = nativeVariantAllocationTest === '1'
+  const dailyEditionsVariant = digitalPackProductPageTest === 'newPage'
     && !isPostDeployUser();
-
-  trackOptimizeExperiment(nativeVariantAllocationTest);
 
   return {
     dailyEditionsVariant,
@@ -109,16 +91,11 @@ type Props = {
   dailyEditionsVariant: boolean,
 }
 
-// This is a temporary variant controller for the A/B tests
-// So if the environment is DEV, we see the new version but in prodction we see the old version
-const pageType = process.env.NODE_ENV === 'DEV' ? 'A' : 'B';
-
 // ----- Render ----- //
 function LandingPage(props: Props) {
   const { dailyEditionsVariant } = props;
 
   // We can't cope with multiple promo codes in the current design
-
   const promoCode = flashSaleIsActive(DigitalPack, countryGroupId) ? dpSale.promoCode : null;
 
   const pageTypeA = (
