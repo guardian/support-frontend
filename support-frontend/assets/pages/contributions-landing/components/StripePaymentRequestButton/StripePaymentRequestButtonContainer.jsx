@@ -46,6 +46,13 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
       const apiKey = getStripeKey(stripeAccount, this.props.country, this.props.isTestUser);
       const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
 
+      /**
+       * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
+       * Instead, we must create separate instances for ONE_OFF and REGULAR.
+       *
+       * This means that e.g. switching from monthly to one-off would cause it to create a new ONE_OFF StripeProvider
+       * with new children. However, switching back to monthly/annual would not then re-create the REGULAR instance.
+       */
       return (
         <div className="stripe-payment-request-button">
           <StripeProvider apiKey={apiKey} key={stripeAccount}>
