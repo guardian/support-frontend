@@ -1090,6 +1090,7 @@ div.call-to-action__container {
 
 .the-moment-hero {
 	padding-top: 0 !important;
+	padding-bottom: 1.5rem !important;
 	
 	@include mq($from: tablet) {
 		padding: 1.5rem 0 !important;
