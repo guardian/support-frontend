@@ -46,11 +46,11 @@ function productAndCountrySpecificEmail(
     return 'apac.help@theguardian.com';
   }
 
-  return 'digitalpack@theguardian.com';
+  return 'customer.help@theguardian.com';
 }
 
 Email.defaultProps = {
-  email: 'digitalpack@theguardian.com',
+  email: 'customer.help@theguardian.com',
 };
 
 // ----- Component ----- //
