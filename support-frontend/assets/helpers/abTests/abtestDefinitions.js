@@ -79,14 +79,14 @@ export const tests: Tests = {
     canRun: () => !!getCampaignName(),
   },
 
-  nativeVariantAllocationTest: {
+  digitalPackProductPageTest: {
     type: 'OTHER',
     variants: [
       {
-        id: '0',
+        id: 'control',
       },
       {
-        id: '1',
+        id: 'newPage',
       },
     ],
     audiences: {
@@ -98,5 +98,7 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 9,
+    targetPage: '/(uk|us|eu|au|ca|nz|int)/subscribe/digital$',
+    optimizeId: 'emQ5nZJCS5mZkhtwwqfx5Q',
   },
 };
