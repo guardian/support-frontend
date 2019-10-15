@@ -54,7 +54,7 @@ type SetPasswordData = {
   passwordError: boolean,
 }
 
-type StripePaymentRequestButtonData = {
+export type StripePaymentRequestButtonData = {
   paymentMethod: 'none' | StripePaymentMethod | null,
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,

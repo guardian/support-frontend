@@ -54,7 +54,7 @@ type PropTypes = {|
   setPaymentRequestButtonPaymentMethod: (StripePaymentRequestButtonMethod, StripeAccount) => void,
   setStripePaymentRequestObject: (paymentRequest: Object, stripeAccount: StripeAccount) => void,
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
-  setStripePaymentRequestButtonClicked: () => void,
+  setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) => void,
   toggleOtherPaymentMethods: () => void,
   updateEmail: string => void,
   updateFirstName: string => void,
@@ -91,7 +91,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
   updateFirstName: (firstName: string) => { dispatch(updateFirstName(firstName)); },
   updateLastName: (lastName: string) => { dispatch(updateLastName(lastName)); },
-  setStripePaymentRequestButtonClicked: () => { dispatch(setStripePaymentRequestButtonClicked()); },
+  setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) => { dispatch(setStripePaymentRequestButtonClicked(stripeAccount)); },
   setAssociatedPaymentMethod: () => { dispatch(updatePaymentMethod(Stripe)); },
 });
 
@@ -157,7 +157,7 @@ function onClick(event, props: PropTypes) {
   trackComponentClick('apple-pay-clicked');
   updateTotal(props);
   props.setAssociatedPaymentMethod();
-  props.setStripePaymentRequestButtonClicked();
+  props.setStripePaymentRequestButtonClicked(props.stripeAccount);
   const amountIsValid =
     checkAmountOrOtherAmount(
       props.selectedAmounts,
