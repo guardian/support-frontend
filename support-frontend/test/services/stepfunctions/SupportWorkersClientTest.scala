@@ -20,7 +20,7 @@ object StatusResults {
 
 class SupportWorkersClientTest extends FlatSpec with Matchers with MockitoSugar {
 
-  val mockStateWrapper = mock[StateWrapper]
+  val mockStateWrapper: StateWrapper = mock[StateWrapper]
 
   val fillerState = new StateExitedEventDetails
   fillerState.setName("CreatePaymentMethodLambda")
