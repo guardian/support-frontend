@@ -15,7 +15,7 @@ resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/pla
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2",
   "com.gu" %% "simple-configuration-ssm" % "1.5.1",
-  "org.scalatest" %% "scalatest" % "3.0.8" % "test",
+  "org.scalatest" %% "scalatest" % "3.2.0-M1" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "1.7.5",
@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.dripower" %% "play-circe" % "2609.1",
-  "com.gu" %% "fezziwig" % "1.3",
+  "com.gu" %% "fezziwig" % "1.2",
   "com.typesafe.akka" %% "akka-agent" % "2.5.21",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
