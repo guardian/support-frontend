@@ -36,7 +36,7 @@ import ProductBlockB from './componentsB/productBlockB/productBlockB';
 import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
-// es-lint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // ----- Styles ----- //
