@@ -40,7 +40,7 @@ const socialMedia: {
   [SharePlatform]: SocialMedia,
 } = {
   facebook: {
-    link: 'https://www.facebook.com/sharer/sharer.php?u=https://support.theguardian.com/uk/contribute/climate-pledge-2019?acquisitionData=%7B%22source%22%3A%22SOCIAL%22%2C%22componentType%22%3A%22ACQUISITIONS_OTHER%22%2C%22campaignCode%22%3A%22climate_pledge_2019%22%2C%22componentId%22%3A%22climate_pledge_2019_social_facebook%22%7D&INTCMP=climate_pledge_2019',
+    link: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fcontribute%2Fclimate-pledge-2019%3FacquisitionData%3D%7B%22source%22%3A%22SOCIAL%22%2C%22componentType%22%3A%22ACQUISITIONS_OTHER%22%2C%22campaignCode%22%3A%22climate_pledge_2019%22%2C%22componentId%22%3A%22climate_pledge_2019_social_facebook%22%7D&INTCMP=climate_pledge_2019',
     svg: <SvgFacebook />,
     a11yHint: 'Share on facebook',
     windowFeatures: SocialWindowFeatures,
