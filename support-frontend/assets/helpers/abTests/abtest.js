@@ -69,7 +69,7 @@ export type Test = {|
   // An optional regex that will be tested against the path of the current page
   // before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
   targetPage?: string,
-  optimizeId?: string, // The id of the Optimize test which this test maps to
+  optimizeId?: string, // The id of the Optimize experiment which this test maps to
 |};
 
 export type Tests = { [testId: string]: Test }
@@ -201,7 +201,7 @@ function assignUserToVariant(
 function targetPageMatches(targetPage: ?string) {
   if (!targetPage) { return true; }
 
-  return new URL(window.location).pathname.match(targetPage) != null;
+  return window.location.pathname.match(targetPage) != null;
 }
 
 function getParticipations(
