@@ -276,13 +276,13 @@
     }
 
     div.product-block__plus {
-      margin-bottom: 16px;
-      margin-top: 10px;
+      margin-bottom: 0;
+      margin-top: 15px;
       width: 70px;
 
       @include mq($from: phablet) {
         margin-top: 14px;
-        margin-bottom: 24px;
+        margin-bottom: 0;
       }
 
       @include mq($from: tablet) {
