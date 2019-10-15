@@ -10,7 +10,7 @@ import com.gu.salesforce.{AuthService, SalesforceConfig, SalesforceService}
 import com.gu.support.workers.AsyncLambdaSpec
 import com.gu.test.tags.annotations.IntegrationTest
 import okhttp3.Request
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.duration._
 

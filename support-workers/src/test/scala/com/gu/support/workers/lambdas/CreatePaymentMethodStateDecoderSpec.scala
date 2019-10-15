@@ -10,10 +10,14 @@ import io.circe.Json
 import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.{FlatSpec, Matchers}
 
-class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
+class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
+  with Matchers
+  with MockitoSugar
+  with LazyLogging {
 
   "Monthly Contribution Product" should "be decodable" in {
     val product: ProductType = Contribution(5, GBP, Monthly)

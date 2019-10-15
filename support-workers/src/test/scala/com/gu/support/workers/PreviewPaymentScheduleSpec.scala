@@ -2,9 +2,10 @@ package com.gu.support.workers
 
 import com.gu.support.zuora.api.response.Charge
 import org.joda.time.LocalDate
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class PreviewPaymentScheduleSpec extends FlatSpec with Matchers {
+class PreviewPaymentScheduleSpec extends AnyFlatSpec with Matchers {
 
   val firstPaymentDate = new LocalDate(2019, 1, 14)
 
