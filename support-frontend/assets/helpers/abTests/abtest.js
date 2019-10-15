@@ -13,6 +13,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type AmountsRegions } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // ----- Types ----- //
 
@@ -68,6 +69,7 @@ export type Test = {|
   // An optional regex that will be tested against the path of the current page
   // before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
   targetPage?: string,
+  optimizeId?: string, // The id of the Optimize test which this test maps to
 |};
 
 export type Tests = { [testId: string]: Test }
@@ -173,12 +175,27 @@ function randomNumber(mvtId: number, independent: boolean, seed: number): number
   return Math.abs(rng.int32());
 }
 
-function assignUserToVariant(mvtId: number, test: Test): string {
+const trackOptimizeExperiment = (optimizeId: string, variants: Variant[], variantIndex: number) => {
+  gaEvent(
+    {
+      category: 'ab-test-tracking',
+      action: optimizeId,
+      label: variants[variantIndex].id,
+    },
+    { // these map to dataLayer variables in GTM
+      experimentId: optimizeId,
+      experimentVariant: variantIndex,
+    },
+  );
+};
+
+function assignUserToVariant(
+  mvtId: number,
+  test: Test,
+): number {
   const { independent, seed } = test;
 
-  const variantIndex = randomNumber(mvtId, independent, seed) % test.variants.length;
-
-  return test.variants[variantIndex].id;
+  return randomNumber(mvtId, independent, seed) % test.variants.length;
 }
 
 function targetPageMatches(targetPage: ?string) {
@@ -216,7 +233,12 @@ function getParticipations(
     if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
     } else if (userInTest(test.audiences, mvtId, country, countryGroupId)) {
-      participations[testId] = assignUserToVariant(mvtId, test);
+      const variantIndex = assignUserToVariant(mvtId, test);
+      participations[testId] = test.variants[variantIndex].id;
+
+      if (test.optimizeId) {
+        trackOptimizeExperiment(test.optimizeId, test.variants, variantIndex);
+      }
     } else {
       participations[testId] = notintest;
     }
