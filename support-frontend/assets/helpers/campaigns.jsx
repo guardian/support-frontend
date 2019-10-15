@@ -30,6 +30,8 @@ export type Campaigns = {
 
 const currentCampaignName = 'climate-pledge-2019';
 
+const climatePledgeUrl = 'https://www.theguardian.com/global/ng-interactive/2019/oct/15/the-guardians-climate-pledge-2019?acquisitionData=%7B%22source%22%3A%22GUARDIAN_WEB%22%2C%22componentType%22%3A%22ACQUISITIONS_EDITORIAL_LINK%22%2C%22campaignCode%22%3A%22climate_pledge_2019%22%2C%22componentId%22%3A%22climate_pledge_2019_landing_page%22%7D&INTCMP=climate_pledge_2019';
+
 export const campaigns: Campaigns = {
   [currentCampaignName]: {
     formMessage: (<div />
@@ -49,7 +51,7 @@ export const campaigns: Campaigns = {
         <p>
           <span className="bold">The climate emergency is the defining issue of our times.</span> This is
           The Guardian’s pledge: we will be truthful, resolute and undeterred in pursuing our journalism
-          on the environment. Support from our readers makes this work possible. <a className="underline" href="https://www.theguardian.com/p/cfm63">Read our pledge in full</a>.
+          on the environment. Support from our readers makes this work possible. <a className="underline" href={climatePledgeUrl}>Read our pledge in full</a>.
         </p>
       </div>
     ),
