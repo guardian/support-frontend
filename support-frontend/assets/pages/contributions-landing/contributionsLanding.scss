@@ -12,7 +12,7 @@
 @import '~components/socialShare/socialShare';
 @import '~pages/contributions-landing/components/ContributionThankYou/ContributionThankYou';
 @import '~pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
-@import './contributionsLandingEnvironmentMoment';
+@import 'contributionsLandingClimateMoment';
 
 $content-left-margin-leftCol: calc(50% - 480px);
 

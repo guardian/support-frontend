@@ -3,12 +3,11 @@
 // ----- Imports ----- //
 
 import { renderPage } from 'helpers/render';
-import React, { Component } from 'react';
+import React from 'react';
 import { Provider, connect } from 'react-redux';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
-import { OPTIMIZE_CHECK_TIMEOUT } from 'helpers/optimize/optimize';
 
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
@@ -37,6 +36,7 @@ import ProductBlockB from './componentsB/productBlockB/productBlockB';
 import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // ----- Styles ----- //
 import './components/digitalSubscriptionLanding.scss';
@@ -76,28 +76,37 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
+const trackOptimizeExperiment = (variant: string) => {
+  const dailyEditionsExperimentId = 'eA8AlzuTTJqe8lm2DXfe1w';
+  gaEvent(
+    {
+      category: 'ab-test-tracking',
+      action: dailyEditionsExperimentId,
+      label: variant,
+    },
+    { // these map to dataLayer variables in GTM
+      experimentId: dailyEditionsExperimentId,
+      experimentVariant: variant,
+    },
+  );
+};
+
+
 const mapStateToProps = (state) => {
-  const { optimizeExperiments } = state.common;
-  const dailyEditionsExperimentId = 'wEirukCSRkKyneyREe1Jew';
-  const dailyEditionsVariant = optimizeExperiments
-    .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0
+  const { nativeVariantAllocationTest } = state.common.abParticipations;
+
+  const dailyEditionsVariant = nativeVariantAllocationTest === '1'
     && !isPostDeployUser();
 
+  trackOptimizeExperiment(nativeVariantAllocationTest);
 
   return {
     dailyEditionsVariant,
-    optimizeHasLoaded: optimizeExperiments.length > 0,
   };
 };
 
 type Props = {
   dailyEditionsVariant: boolean,
-  optimizeHasLoaded: boolean,
-}
-
-type State = {
-  showPage: boolean,
-  pageReadyChecks: number,
 }
 
 // This is a temporary variant controller for the A/B tests
@@ -105,39 +114,9 @@ type State = {
 const pageType = process.env.NODE_ENV === 'DEV' ? 'A' : 'B';
 
 // ----- Render ----- //
-class LandingPage extends Component<Props, State> {
-  state = {
-    showPage: true, // this.props.optimizeHasLoaded,
-    pageReadyChecks: 0,
-  };
-
-  checkOptimizeIsReady = (interval: number) => {
-    const maxNumberOfChecks = OPTIMIZE_CHECK_TIMEOUT / interval;
-    const { pageReadyChecks } = this.state;
-    const { optimizeHasLoaded } = this.props;
-
-    if (optimizeHasLoaded || pageReadyChecks > maxNumberOfChecks) {
-      this.setState(() => ({
-        showPage: true,
-      }));
-    } else {
-      this.setState(prevState => ({
-        pageReadyChecks: prevState.pageReadyChecks + 1,
-      }));
-
-      setTimeout(() => {
-        this.checkOptimizeIsReady(interval);
-      }, interval);
-    }
-  };
-
-  render() {
+function LandingPage () {
     const { dailyEditionsVariant } = this.props;
-    const { pageReadyChecks, showPage } = this.state;
-    const interval = 250;
-    if (pageReadyChecks === 0 && showPage === false) {
-      this.checkOptimizeIsReady(interval);
-    }
+
     // We can't cope with multiple promo codes in the current design
 
     const promoCode = flashSaleIsActive(DigitalPack, countryGroupId) ? dpSale.promoCode : null;
@@ -188,8 +167,8 @@ class LandingPage extends Component<Props, State> {
 
     return (
       <div>
-        {showPage && pageType === 'A' && pageTypeA}
-        {showPage && pageType === 'B' && pageTypeB}
+        {pageType === 'A' && pageTypeA}
+        {pageType === 'B' && pageTypeB}
       </div>
     );
 

@@ -38,47 +38,12 @@ const HeroImage = () => (
   />
 );
 
-const DefaultHeader = () => (
-  <header>
-    <ProductPagehero
-      appearance="feature"
-      overheading="Guardian Weekly subscriptions"
-      heading="Get a clearer, global perspective on the issues that matter, in one magazine."
-      modifierClasses={['weekly']}
-      content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
-      hasCampaign={false}
-    >
-      <GridPicture
-        sources={[
-            {
-              gridId: 'weeklyLandingHero',
-              srcSizes: [500, 1000],
-              imgType: 'png',
-              sizes: '100vw',
-              media: '(max-width: 739px)',
-            },
-            {
-              gridId: 'weeklyLandingHero',
-              srcSizes: [1000, 2000],
-              imgType: 'png',
-              sizes: '(min-width: 1000px) 2000px, 1000px',
-              media: '(min-width: 740px)',
-            },
-          ]}
-        fallback="weeklyLandingHero"
-        fallbackSize={1000}
-        altText="A collection of Guardian Weekly magazines"
-        fallbackImgType="png"
-      />
-    </ProductPagehero>
-  </header>
-);
+const CampaignHeader = (props: {heading: string}) => (
 
-const CampaignHeader = () => (
   <ProductPagehero
     appearance="campaign"
     overheading="Guardian Weekly subscriptions"
-    heading="Pause for thought with The Guardian's essential news magazine"
+    heading={props.heading}
     modifierClasses={['weekly-campaign']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
@@ -106,4 +71,4 @@ const CampaignHeader = () => (
 );
 
 
-export { DefaultHeader, CampaignHeader, HeroImage };
+export { CampaignHeader, HeroImage };

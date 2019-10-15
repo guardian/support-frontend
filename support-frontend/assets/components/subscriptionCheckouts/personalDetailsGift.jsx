@@ -9,7 +9,6 @@ import { Input } from 'components/forms/input';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 
-
 export type PropTypes = {
   firstNameGiftRecipient: string,
   setFirstNameGift: Function,

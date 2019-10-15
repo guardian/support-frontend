@@ -489,8 +489,9 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
           // It shouldn't be possible to get this far without the handle3DS having been set
           logException('Stripe 3DS handler unavailable');
           return Promise.resolve(error);
-
         }
+        logException('Invalid payment authorisation: missing paymentMethodId or token for Stripe one-off contribution');
+        return Promise.resolve(error);
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
       return Promise.resolve(error);

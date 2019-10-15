@@ -48,6 +48,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val priceSummaryConfigProvider = new PriceSummaryConfigProvider(config, stage)
 
+  lazy val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
+
 }
 
 object Configuration {

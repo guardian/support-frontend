@@ -95,7 +95,6 @@ const formIsValidParameters = (state: State) => ({
   stripeCardFormOk: !stripeCardFormIsIncomplete(
     state.page.form.contributionType,
     state.page.form.paymentMethod,
-    state.common.abParticipations.stripeElements,
     state.page.form.stripeCardFormData.formComplete,
   ),
 });

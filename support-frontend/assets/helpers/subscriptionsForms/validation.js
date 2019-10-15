@@ -26,10 +26,8 @@ function notNull<A>(value: A): boolean {
 // ----- Functions ----- //
 
 function firstError<FieldType>(field: FieldType, errors: FormError<FieldType>[]): Option<string> {
-
   const msgs = errors.filter(err => err.field === field).map(err => err.message);
   return headOption(msgs);
-
 }
 
 function removeError<FieldType>(field: FieldType, formErrors: FormError<FieldType>[]): FormError<FieldType>[] {

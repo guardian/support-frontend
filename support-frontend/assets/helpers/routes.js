@@ -37,6 +37,7 @@ const routes: {
   guardianWeeklySubscriptionLanding: '/subscribe/weekly',
   postcodeLookup: '/postcode-lookup',
   createSignInUrl: '/identity/signin-url',
+  createReminder: '/contribute/remind-me',
 };
 
 function postcodeLookupUrl(postcode: string): string {
