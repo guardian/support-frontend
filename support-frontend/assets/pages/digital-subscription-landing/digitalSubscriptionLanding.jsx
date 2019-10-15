@@ -32,7 +32,6 @@ import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReduc
 import { isPostDeployUser } from 'helpers/user/user';
 import { dpSale, flashSaleIsActive } from 'helpers/flashSale';
 import { DigitalPack } from 'helpers/subscriptions';
-import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // ----- Redux Store ----- //
 
@@ -68,29 +67,11 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
-const trackOptimizeExperiment = (variant: string) => {
-  const dailyEditionsExperimentId = 'eA8AlzuTTJqe8lm2DXfe1w';
-  gaEvent(
-    {
-      category: 'ab-test-tracking',
-      action: dailyEditionsExperimentId,
-      label: variant,
-    },
-    { // these map to dataLayer variables in GTM
-      experimentId: dailyEditionsExperimentId,
-      experimentVariant: variant,
-    },
-  );
-};
-
-
 const mapStateToProps = (state) => {
-  const { nativeVariantAllocationTest } = state.common.abParticipations;
+  const { digitalPackProductPageTest } = state.common.abParticipations;
 
-  const dailyEditionsVariant = nativeVariantAllocationTest === '1'
+  const dailyEditionsVariant = digitalPackProductPageTest === 'newPage'
     && !isPostDeployUser();
-
-  trackOptimizeExperiment(nativeVariantAllocationTest);
 
   return {
     dailyEditionsVariant,
