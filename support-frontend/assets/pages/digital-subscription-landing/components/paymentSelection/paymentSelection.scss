@@ -34,7 +34,12 @@
   .product-option__label--A {
     background-color: #ffe500;
     color: gu-colour(neutral-7);
-    border-radius: 3px 3px 0 0;
+  }
+}
+
+.payment-selection__card--A:nth-of-type(2) {
+  .product-option {
+    border-radius: 0 3px 3px 3px;
   }
 }
 
