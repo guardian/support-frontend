@@ -4,7 +4,7 @@ import com.gu.i18n.Currency
 import com.gu.salesforce.AddressLine
 import com.gu.salesforce.AddressLineTransformer.combinedAddressLine
 import com.gu.salesforce.AddressLineTransformer.clipForZuoraStreetNameLimit
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
 
 class AddressLineTransformerTest extends FlatSpec with Matchers with MockitoSugar {

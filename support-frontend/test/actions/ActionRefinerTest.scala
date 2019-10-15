@@ -4,7 +4,7 @@ import config.Configuration.IdentityUrl
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.http.Status
 import play.api.mvc.Results._

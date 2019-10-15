@@ -10,7 +10,7 @@ import akka.util.Timeout
 import assets.{AssetsResolver, RefPath, StyleContent}
 import config.StringsConfig
 import fixtures.TestCSRFComponents
-import org.scalatest.mockito.MockitoSugar.mock
+import org.scalatestplus.mockito.MockitoSugar.mock
 import services._
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import config.Configuration.{GuardianDomain, IdentityUrl}

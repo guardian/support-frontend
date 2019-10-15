@@ -10,7 +10,7 @@ import io.circe.Json
 import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
 
 class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {

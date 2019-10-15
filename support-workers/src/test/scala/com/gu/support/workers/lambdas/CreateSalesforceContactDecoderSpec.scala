@@ -7,7 +7,7 @@ import com.gu.support.workers.{Contribution, PayPalReferenceTransaction, Payment
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.parser._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
 
 class CreateSalesforceContactDecoderSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {

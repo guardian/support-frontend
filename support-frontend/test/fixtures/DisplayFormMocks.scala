@@ -6,7 +6,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import cats.data.EitherT
 import cats.implicits._
-import org.scalatest.mockito.MockitoSugar._
+import org.scalatestplus.mockito.MockitoSugar._
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.{any, eq => argEq}
 import play.api.test.Helpers._

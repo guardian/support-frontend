@@ -20,7 +20,7 @@ import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.OptionValues._
-import org.scalatest.mockito.MockitoSugar.mock
+import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
