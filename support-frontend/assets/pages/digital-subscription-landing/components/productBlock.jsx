@@ -68,7 +68,8 @@ const Button = ({
     <span className="product-block__button__text">
       <div className={showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'}>{arrowSvg}</div>
       <span className="product-block__button__text--bold">
-        {showDropDown ? `Less about ${productCopy}` : `More about ${productCopy}`}
+        <span className="product-block__button__text--desktop">{showDropDown ? `Less about ${productCopy}` : `More about ${productCopy}`}</span>
+        <span className="product-block__button__text--mobile">{showDropDown ? 'Read Less' : 'Read more'}</span>
       </span>
     </span>
   </button>
