@@ -59,8 +59,8 @@ lazy val commonDependencies = Seq(
 
 lazy val root = (project in file("."))
   .settings(
-    name := "support-frontend",
-    moduleName := "support-frontend"
+    name := "support-frontend-root",
+    moduleName := "support-frontend-root"
   )
   .aggregate(
     `support-frontend`,
