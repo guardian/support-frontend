@@ -698,22 +698,6 @@
     font-weight: 600;
   }
 
-  .product-block__button__text--desktop {
-    display: none;
-
-    @include mq($from: phablet) {
-      display: inline-block;
-    }
-  }
-
-  .product-block__button__text--mobile {
-    display: inline-block;
-    
-    @include mq($from: phablet) {
-      display: none;
-    }
-  }
-
 }
 
 .the-moment-hero__graphic-outer {

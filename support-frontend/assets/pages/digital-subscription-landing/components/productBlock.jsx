@@ -53,11 +53,10 @@ type ButtonPropTypes = {
   showDropDown: boolean,
   handleClick: Function,
   product: 'daily' | 'app',
-  productCopy: 'The Guardian Daily' | 'Premium access to The Guardian Live app',
 }
 
 const Button = ({
-  showDropDown, handleClick, product, productCopy,
+  showDropDown, handleClick, product,
 }: ButtonPropTypes) => (
   <button
     aria-controls={`product-details-${product}`}
@@ -68,8 +67,7 @@ const Button = ({
     <span className="product-block__button__text">
       <div className={showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'}>{arrowSvg}</div>
       <span className="product-block__button__text--bold">
-        <span className="product-block__button__text--desktop">{showDropDown ? `Less about ${productCopy}` : `More about ${productCopy}`}</span>
-        <span className="product-block__button__text--mobile">{showDropDown ? 'Read Less' : 'Read more'}</span>
+        {showDropDown ? 'Read Less' : 'Read more'}
       </span>
     </span>
   </button>
@@ -197,7 +195,6 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Button
             showDropDown={state.showDropDownDaily}
             handleClick={() => this.handleClick('Daily')}
-            productCopy="The Guardian Daily"
             product="daily"
           />
           <Plus />
@@ -228,7 +225,6 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Button
             showDropDown={state.showDropDownApp}
             handleClick={() => this.handleClick('App')}
-            productCopy="Premium access to The Guardian Live app"
             product="app"
           />
           <Plus />
