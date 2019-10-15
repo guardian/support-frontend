@@ -2,18 +2,20 @@
 import * as React from 'react';
 import { init as pageInit } from 'helpers/page/page';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
-import FeaturePackshot from 'components/packshots/feature-packshot';
+import { displayPrice, sendTrackingEventsOnClick, subscriptionPricesForDefaultBillingPeriod } from 'helpers/subscriptions';
+import { getCampaign } from 'helpers/tracking/acquisitions';
+import { getSubsLinks } from 'helpers/externalLinks';
+import { androidAppUrl, getIosAppUrl } from 'helpers/externalLinks';
+import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
+
+// images
 import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
 import PaperPackshot from 'components/packshots/paper-packshot';
 import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
 import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-packshot';
 import IntFeaturePackshot from 'components/packshots/int-feature-packshot';
 import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
-import { displayPrice, sendTrackingEventsOnClick, subscriptionPricesForDefaultBillingPeriod } from 'helpers/subscriptions';
-import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getSubsLinks } from 'helpers/externalLinks';
-import { androidAppUrl, getIosAppUrl } from 'helpers/externalLinks';
-import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
+import SubscriptionDailyPackshot from 'components/packshots/subscription-daily-packshot';
 
 // constants
 import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
@@ -94,7 +96,7 @@ const digital: ProductCopy = {
   title: 'Digital Subscription',
   subtitle: getPrice(DigitalPack, ''),
   description: 'The Guardian Daily app and Premium app in one pack, plus ad-free reading on all your devices',
-  productImage: chooseImage([<FeaturePackshot />, <IntFeaturePackshot />]),
+  productImage: chooseImage([<SubscriptionDailyPackshot />, <IntFeaturePackshot />]),
   offer: getSaleCopy(DigitalPack, countryGroupId).bundle.subHeading,
   buttons: [{
     ctaButtonText: 'Find out more',

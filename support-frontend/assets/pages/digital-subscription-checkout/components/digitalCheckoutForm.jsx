@@ -165,7 +165,7 @@ function DigitalCheckoutForm(props: PropTypes) {
         <Summary
           image={
             <GridImage
-              gridId="checkoutPackshotDigitalPack"
+              gridId="subscriptionDailyPackshot"
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 50vw, 500"
               imgType="png"
