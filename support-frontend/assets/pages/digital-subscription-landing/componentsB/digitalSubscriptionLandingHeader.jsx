@@ -6,12 +6,6 @@ import React from 'react';
 
 import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSaleCountdown';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import GridPicture, {
-  type GridSlot,
-  type PropTypes as GridPictureProps,
-  type Source as GridSource,
-} from 'components/gridPicture/gridPicture';
-import { type ImageId as GridId } from 'helpers/theGrid';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 
 import SvgChevron from 'components/svgs/chevron';
