@@ -6,8 +6,9 @@ import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.CheckoutFailureState
 import com.gu.support.workers.{CheckoutFailureReasons, Status, User}
 import org.mockito.Mockito._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.{FlatSpec, Matchers}
 import services.stepfunctions.StepFunctionExecutionStatus._
 
 import scala.util.{Failure, Success}
@@ -18,7 +19,7 @@ object StatusResults {
   val pending = StatusResponse(Status.Pending, "tracking123", None)
 }
 
-class SupportWorkersClientTest extends FlatSpec with Matchers with MockitoSugar {
+class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSugar {
 
   val mockStateWrapper: StateWrapper = mock[StateWrapper]
 

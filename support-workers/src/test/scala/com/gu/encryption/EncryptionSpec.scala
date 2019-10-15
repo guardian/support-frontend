@@ -4,7 +4,8 @@ import com.gu.config.Configuration
 import com.gu.support.workers.encoding.AwsEncryptionProvider
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.{AsyncFlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 @IntegrationTest
 class EncryptionSpec extends AsyncFlatSpec with Matchers with LazyLogging {

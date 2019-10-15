@@ -4,9 +4,10 @@ import selenium.contributions.pages._
 import _root_.selenium.util._
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
+import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.time.{Minute, Seconds, Span}
 
-class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
+class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver = driverConfig.webDriver

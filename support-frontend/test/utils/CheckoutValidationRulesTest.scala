@@ -5,10 +5,11 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{Everyday, HomeDelivery}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import services.stepfunctions.CreateSupportWorkersRequest
 
-class SimpleCheckoutFormValidationTest extends FlatSpec with Matchers {
+class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
 
   import TestData.validDigitalPackRequest
 
@@ -33,7 +34,7 @@ class SimpleCheckoutFormValidationTest extends FlatSpec with Matchers {
 
 }
 
-class DigitalPackValidationTest extends FlatSpec with Matchers {
+class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
 
   import TestData.validDigitalPackRequest
 
@@ -135,7 +136,7 @@ class DigitalPackValidationTest extends FlatSpec with Matchers {
 
 }
 
-class PaperValidationTest extends FlatSpec with Matchers {
+class PaperValidationTest extends AnyFlatSpec with Matchers {
 
   import TestData.validPaperRequest
 
