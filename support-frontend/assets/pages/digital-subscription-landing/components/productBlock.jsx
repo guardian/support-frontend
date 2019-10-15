@@ -212,7 +212,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
               items={[
                 { boldText: 'Live', explainer: 'Follow a live feed of breaking news and sport, as it happens' },
                 { boldText: 'Discover', explainer: 'Explore stories you might have missed, tailored to you' },
-                { boldText: 'Enhanced offline reading', explainer: 'Download the news whever it suits you' },
+                { boldText: 'Enhanced offline reading', explainer: 'Download the news whenever it suits you' },
               ]}
             />
             <List
