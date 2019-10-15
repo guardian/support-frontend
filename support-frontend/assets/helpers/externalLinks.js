@@ -46,6 +46,7 @@ const manageUrl = `https://manage.${getBaseDomain()}`;
 const homeDeliveryUrl = `https://www.${getBaseDomain()}/help/2017/dec/11/help-with-delivery#nav1`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
+const androidDailyUrl = 'https://play.google.com/store/apps/details?id=com.guardian.editions';
 const myAccountUrl = `${profileUrl}/account/edit`;
 const manageSubsUrl = `${manageUrl}/subscriptions`;
 
@@ -248,7 +249,7 @@ function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
 
 function getAppleStoreUrl(product: string, countryGroupId: CountryGroupId) {
   const appStoreCountryCode = convertCountryGroupIdToAppStoreCountryCode(countryGroupId);
-  return `https://itunes.apple.com/${appStoreCountryCode}/app/${product}?mt=8`;
+  return `https://apps.apple.com/${appStoreCountryCode}/app/${product}`;
 }
 
 function getIosAppUrl(countryGroupId: CountryGroupId) {
@@ -256,7 +257,7 @@ function getIosAppUrl(countryGroupId: CountryGroupId) {
 }
 
 function getDailyEditionUrl(countryGroupId: CountryGroupId) {
-  return getAppleStoreUrl('guardian-observer-daily-edition/id452707806', countryGroupId);
+  return getAppleStoreUrl('the-guardian-daily-edition/id452707806', countryGroupId);
 }
 
 const getProfileUrl = (path: string) => (returnUrl: ?string) => {
@@ -277,6 +278,7 @@ export {
   getDigitalCheckout,
   getIosAppUrl,
   androidAppUrl,
+  androidDailyUrl,
   getDailyEditionUrl,
   getSignoutUrl,
   getReauthenticateUrl,
