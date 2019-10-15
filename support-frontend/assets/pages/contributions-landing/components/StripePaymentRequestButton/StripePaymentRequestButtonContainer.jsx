@@ -48,7 +48,7 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
 
       return (
         <div className="stripe-payment-request-button">
-          <StripeProvider apiKey={apiKey} key={apiKey}>
+          <StripeProvider apiKey={apiKey} key={stripeAccount}>
             <Elements>
               <StripePaymentRequestButton
                 stripeAccount={stripeAccount}
