@@ -18,6 +18,7 @@ import ProductPagehero from 'components/productPage/productPageHero/productPageH
 
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 import { showCountdownTimer } from '../../../helpers/flashSale';
+import { CampaignHeader } from '../components/digitalSubscriptionLandingHeader';
 
 import './theMoment.scss';
 
@@ -84,18 +85,7 @@ function CampaignHeaderB(props: PropTypes) {
         showProductPageHeroHeader={false}
       >
         <div className="the-moment-hero">
-          <div className="hope-is-power-hero--wrapper">
-            <div className="hope-is-power-hero__marketing-message hope-is-power--centered">
-              <h1>The Digital Subscription</h1>
-              <h2><strong>Two innovative apps and ad-free reading</strong> on theguardian.com.
-              The complete digital experience from The Guardian.
-              </h2>
-              <div className="hope-is-power__circle">
-                <span className="hope-is-power__circle-text--large">14 day</span>
-                <span className="hope-is-power__circle-text">free trial</span>
-              </div>
-            </div>
-          </div>
+          <CampaignHeader />
         </div>
 
         <div className="payment-selection__title-container">
