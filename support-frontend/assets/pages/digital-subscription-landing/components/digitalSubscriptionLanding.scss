@@ -1111,3 +1111,71 @@ div.call-to-action__container {
     }
   }
 }
+
+
+//styles below are to override the page A merketing message
+.component-product-page-hero.component-product-page-hero--digital-campaign {
+	position: relative;
+	background: #EDEDED !important;
+	
+	&:before {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100px;
+		background: #fff;
+		border-bottom: 1px solid gu-colour(neutral-86);
+		content: '';
+	}
+
+	@include mq($from: phablet, $until: desktop) {
+		&:before {
+			height: 80px;
+		}
+	}
+}
+
+.the-moment-hero {
+	padding-top: 0 !important;
+	padding-bottom: 1.5rem !important;
+	
+	@include mq($from: tablet) {
+		padding: 1.5rem 0 !important;
+		margin-top: 20px;
+	}
+
+}
+
+.the-moment-hero .hope-is-power-hero--wrapper {
+	display: block;
+	width: 100%;
+	height: inherit !important;
+	padding-top: 0 !important;
+	background: #ffe500;
+}
+
+.the-moment-hero .hope-is-power-hero__marketing-message {
+	width: 100% !important;
+	height: auto !important;
+	
+	h1, h2 {
+		margin-left: 0.625rem !important;
+	}
+	
+	@include mq($from: leftCol) {
+		max-width: gu-span(12);
+
+		h2 {
+			padding-right: 20px;
+		}
+	}
+
+	@include mq($from:tablet, $until: leftCol) {
+		h2 {
+			max-width: 28.75rem;
+		}
+	}
+
+
+}
