@@ -56,10 +56,7 @@ type SetPasswordData = {
 
 type StripePaymentRequestButtonData = {
   paymentMethod: 'none' | StripePaymentMethod | null,
-  stripePaymentRequestObject: {
-    ONE_OFF: Object | null,
-    REGULAR: Object | null,
-  },
+  stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
 }
 
@@ -86,7 +83,10 @@ type FormState = {
   isWaiting: boolean,
   formData: FormData,
   stripeV3HasLoaded: boolean,
-  stripePaymentRequestButtonData: StripePaymentRequestButtonData,
+  stripePaymentRequestButtonData: {
+    ONE_OFF: StripePaymentRequestButtonData,
+    REGULAR: StripePaymentRequestButtonData,
+  },
   stripeCardFormData: StripeCardFormData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
@@ -150,12 +150,16 @@ function createFormReducer() {
     },
     stripeV3HasLoaded: false,
     stripePaymentRequestButtonData: {
-      paymentMethod: null,
-      stripePaymentRequestObject: {
-        ONE_OFF: null,
-        REGULAR: null,
+      ONE_OFF: {
+        paymentMethod: null,
+        stripePaymentRequestObject: null,
+        stripePaymentRequestButtonClicked: false,
       },
-      stripePaymentRequestButtonClicked: false,
+      REGULAR: {
+        paymentMethod: null,
+        stripePaymentRequestObject: null,
+        stripePaymentRequestButtonClicked: false,
+      },
     },
     stripeCardFormData: {
       formComplete: false,
@@ -273,30 +277,21 @@ function createFormReducer() {
           ...state,
           stripePaymentRequestButtonData: {
             ...state.stripePaymentRequestButtonData,
-            paymentMethod: action.paymentMethod,
-          },
-        };
-
-      case 'SET_STRIPE_PAYMENT_REQUEST_OBJECT_ONE_OFF':
-        return {
-          ...state,
-          stripePaymentRequestButtonData: {
-            ...state.stripePaymentRequestButtonData,
-            stripePaymentRequestObject: {
-              ...state.stripePaymentRequestButtonData.stripePaymentRequestObject,
-              ONE_OFF: action.stripePaymentRequestObject,
+            [action.stripeAccount]: {
+              ...state.stripePaymentRequestButtonData[action.stripeAccount],
+              paymentMethod: action.paymentMethod,
             },
           },
         };
 
-      case 'SET_STRIPE_PAYMENT_REQUEST_OBJECT_REGULAR':
+      case 'SET_STRIPE_PAYMENT_REQUEST_OBJECT':
         return {
           ...state,
           stripePaymentRequestButtonData: {
             ...state.stripePaymentRequestButtonData,
-            stripePaymentRequestObject: {
-              ...state.stripePaymentRequestButtonData.stripePaymentRequestObject,
-              REGULAR: action.stripePaymentRequestObject,
+            [action.stripeAccount]: {
+              ...state.stripePaymentRequestButtonData[action.stripeAccount],
+              stripePaymentRequestObject: action.stripePaymentRequestObject,
             },
           },
         };
@@ -306,7 +301,10 @@ function createFormReducer() {
           ...state,
           stripePaymentRequestButtonData: {
             ...state.stripePaymentRequestButtonData,
-            stripePaymentRequestButtonClicked: true,
+            [action.stripeAccount]: {
+              ...state.stripePaymentRequestButtonData[action.stripeAccount],
+              stripePaymentRequestButtonClicked: true,
+            },
           },
         };
 

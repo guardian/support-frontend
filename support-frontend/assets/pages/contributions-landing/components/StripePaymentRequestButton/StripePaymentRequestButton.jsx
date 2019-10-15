@@ -19,24 +19,23 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
-import type { State } from '../../contributionsLandingReducer';
+import type { State, StripePaymentRequestButtonData } from 'pages/contributions-landing/contributionsLandingReducer';
 import {
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
-  setStripePaymentRequestObjectOneOff,
-  setStripePaymentRequestObjectRegular,
+  setStripePaymentRequestObject,
   onThirdPartyPaymentAuthorised,
   updateEmail,
   updatePaymentMethod,
   updateFirstName,
   updateLastName,
-} from '../../contributionsLandingActions';
+} from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 import {
   toHumanReadableContributionType,
 } from 'helpers/checkouts';
-import type {StripeAccount} from "../../../../helpers/paymentIntegrations/stripeCheckout";
+import type {StripeAccount} from "helpers/paymentIntegrations/stripeCheckout";
 
 // ----- Types -----//
 
@@ -51,10 +50,9 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   isTestUser: boolean,
   amount: number,
-  stripePaymentRequestObject: Object | null,
-  paymentRequestButtonPaymentMethod: StripePaymentMethod,
-  setPaymentRequestButtonPaymentMethod: (StripePaymentRequestButtonMethod) => void,
-  setStripePaymentRequestObject: (Object, string) => void,
+  stripePaymentRequestButtonData: StripePaymentRequestButtonData,
+  setPaymentRequestButtonPaymentMethod: (StripePaymentRequestButtonMethod, StripeAccount) => void,
+  setStripePaymentRequestObject: (paymentRequest: Object, stripeAccount: StripeAccount) => void,
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   setStripePaymentRequestButtonClicked: () => void,
   toggleOtherPaymentMethods: () => void,
@@ -69,8 +67,7 @@ type PropTypes = {|
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
-  paymentRequestButtonPaymentMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
-  stripePaymentRequestObject: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestObject[ownProps.stripeAccount],
+  stripePaymentRequestButtonData: state.page.form.stripePaymentRequestButtonData[ownProps.stripeAccount],
   countryGroupId: state.common.internationalisation.countryGroupId,
   country: state.common.internationalisation.countryId,
   currency: state.common.internationalisation.currencyId,
@@ -84,15 +81,13 @@ const mapDispatchToProps = (dispatch: Function) => ({
     (paymentAuthorisation: PaymentAuthorisation) =>
       dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
   setPaymentRequestButtonPaymentMethod:
-    (paymentMethod: StripePaymentRequestButtonMethod) => {
-      dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod));
+    (paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount) => {
+      dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod, stripeAccount));
     },
   setStripePaymentRequestObject:
-    (paymentRequest: Object, stripeAccount: StripeAccount) => dispatch(
-      stripeAccount === 'ONE_OFF' ?
-      setStripePaymentRequestObjectOneOff(paymentRequest) :
-        setStripePaymentRequestObjectRegular(paymentRequest)
-    ),
+    (paymentRequest: Object, stripeAccount: StripeAccount) => {
+      dispatch(setStripePaymentRequestObject(paymentRequest, stripeAccount))
+    },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
   updateFirstName: (firstName: string) => { dispatch(updateFirstName(firstName)); },
   updateLastName: (lastName: string) => { dispatch(updateLastName(lastName)); },
@@ -145,8 +140,8 @@ const onComplete = (complete: Function) => (res: PaymentResult) => {
 
 function updateTotal(props: PropTypes) {
   // When the other tab is clicked, the value of amount is NaN
-  if (!Number.isNaN(props.amount) && props.stripePaymentRequestObject) {
-    props.stripePaymentRequestObject.update({
+  if (!Number.isNaN(props.amount) && props.stripePaymentRequestButtonData.stripePaymentRequestObject) {
+    props.stripePaymentRequestButtonData.stripePaymentRequestObject.update({
       total: {
         label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
         amount: props.amount * 100,
@@ -170,8 +165,8 @@ function onClick(event, props: PropTypes) {
       props.contributionType,
       props.countryGroupId,
     );
-  if (props.stripePaymentRequestObject && amountIsValid) {
-    props.stripePaymentRequestObject.show();
+  if (props.stripePaymentRequestButtonData.stripePaymentRequestObject && amountIsValid) {
+    props.stripePaymentRequestButtonData.stripePaymentRequestObject.show();
   }
 }
 
@@ -225,9 +220,9 @@ function initialisePaymentRequest(props: PropTypes) {
     if (paymentMethod !== null) {
       trackComponentClick(`${paymentMethod}-loaded`);
       setUpPaymentListener(props, paymentRequest, paymentMethod);
-      props.setPaymentRequestButtonPaymentMethod(paymentMethod);
+      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
     } else {
-      props.setPaymentRequestButtonPaymentMethod('none');
+      props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }
   });
   props.setStripePaymentRequestObject(paymentRequest, props.stripeAccount);
@@ -246,12 +241,16 @@ function PaymentRequestButton(props: PropTypes) {
 
   // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
   // until the async canMakePayment() function has been called on the stripePaymentRequestObject object.
-  if (!props.stripePaymentRequestObject) {
+  // debugger
+  if (!props.stripePaymentRequestButtonData.stripePaymentRequestObject) {
     initialisePaymentRequest({ ...props });
     return null;
   }
 
-  if (!props.paymentRequestButtonPaymentMethod || props.paymentRequestButtonPaymentMethod === 'none') {
+  if (
+    !props.stripePaymentRequestButtonData.paymentMethod ||
+    props.stripePaymentRequestButtonData.paymentMethod === 'none'
+  ) {
     return null;
   }
 
@@ -260,7 +259,7 @@ function PaymentRequestButton(props: PropTypes) {
          data-for-stripe-account={props.stripeAccount}
          data-for-contribution-type={props.contributionType}>
       <PaymentRequestButtonElement
-        paymentRequest={props.stripePaymentRequestObject}
+        paymentRequest={props.stripePaymentRequestButtonData.stripePaymentRequestObject}
         className="stripe-payment-request-button__button"
         style={paymentButtonStyle}
         onClick={(event) => {
