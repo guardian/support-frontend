@@ -98,5 +98,6 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 9,
+    targetPage: '/(uk|us|au|ca|nz)/subscribe$',
   },
 };

@@ -14,7 +14,6 @@ import { type AmountsRegions } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
 
-
 // ----- Types ----- //
 
 export type TestId = $Keys<typeof tests>;
@@ -66,6 +65,9 @@ export type Test = {|
   canRun?: () => boolean,
   independent: boolean,
   seed: number,
+  // An optional regex that will be tested against the path of the current page
+  // before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
+  targetPage?: string,
 |};
 
 export type Tests = { [testId: string]: Test }
@@ -179,6 +181,12 @@ function assignUserToVariant(mvtId: number, test: Test): string {
   return test.variants[variantIndex].id;
 }
 
+function targetPageMatches(targetPage: ?string) {
+  if (!targetPage) { return true; }
+
+  return new URL(window.location).pathname.match(targetPage) != null;
+}
+
 function getParticipations(
   abTests: Tests,
   mvtId: number,
@@ -198,6 +206,10 @@ function getParticipations(
     }
 
     if (test.canRun && !test.canRun()) {
+      return;
+    }
+
+    if (!targetPageMatches(test.targetPage)) {
       return;
     }
 
@@ -246,4 +258,5 @@ export {
   init,
   getVariantsAsString,
   getCurrentParticipations,
+  targetPageMatches,
 };
