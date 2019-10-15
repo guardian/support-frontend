@@ -6,15 +6,12 @@ import React from 'react';
 
 import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSaleCountdown';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import HeadingBlock from 'components/headingBlock/headingBlock';
 
 import SvgChevron from 'components/svgs/chevron';
-import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import AnchorButton from 'components/button/anchorButton';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
-import { HeroHanger } from 'components/productPage/productPageHero/productPageHero';
 import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
 
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
@@ -120,33 +117,4 @@ function CampaignHeaderB(props: PropTypes) {
   );
 }
 
-// ----- Component ----- //
-
-function DigitalSubscriptionLandingHeader(props: PropTypes) {
-  const product: SubscriptionProduct = 'DigitalPack';
-  const copy = getCopy(product, props.countryGroupId);
-  return (
-    <div className="digital-subscription-landing-header">
-      <LeftMarginSection modifierClasses={['header-block', 'grey']}>
-        <CirclesLeft />
-        <CirclesRight />
-        <div className="digital-subscription-landing-header__picture">
-          <GridPicture {...gridPicture(props.countryGroupId)} />
-        </div>
-        <HeadingBlock overheading={copy.heading}>{copy.subHeading}</HeadingBlock>
-        {showCountdownTimer(product, props.countryGroupId) &&
-          <FlashSaleCountdownInHero
-            product={product}
-            countryGroupId={props.countryGroupId}
-          />
-        }
-        <div className="digital-subscription-landing-header__cta" />
-      </LeftMarginSection>
-      <HeroHanger>
-        <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
-      </HeroHanger>
-    </div>
-  );
-}
-
-export { CampaignHeaderB, DigitalSubscriptionLandingHeader };
+export { CampaignHeaderB };
