@@ -14,7 +14,6 @@ import services._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.matchers.must.Matchers
 
 class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponents with MockitoSugar {

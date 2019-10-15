@@ -2,8 +2,6 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.AllSettingsProvider
-import org.scalatest.WordSpec
-import org.scalatest.MustMatchers
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
@@ -19,7 +17,10 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents {
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.must.Matchers
+
+class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
   implicit val timeout = Timeout(2.seconds)
 
