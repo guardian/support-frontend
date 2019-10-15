@@ -28,28 +28,28 @@ class ProductPagesSpec extends AnyFeatureSpec
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Paper product page") {
-    scenario("Basic loading") {
+  Feature("Paper product page") {
+    Scenario("Basic loading") {
       testPageLoads(new PaperProductPage())
 
     }
   }
 
-  feature("Weekly product page") {
-    scenario("Basic loading") {
+  Feature("Weekly product page") {
+    Scenario("Basic loading") {
       testPageLoads(new WeeklyProductPage())
 
     }
   }
 
-  feature("Subscriptions landing page") {
-    scenario("Basic loading") {
+  Feature("Subscriptions landing page") {
+    Scenario("Basic loading") {
       testPageLoads(new SubsLandingPage())
     }
   }
 
-  feature("Digital Pack product page") {
-    scenario("Basic loading") {
+  Feature("Digital Pack product page") {
+    Scenario("Basic loading") {
       val testUser = new PostDeployTestUser(driverConfig)
       testPageLoads(new DigitalPackProductPage())
     }
