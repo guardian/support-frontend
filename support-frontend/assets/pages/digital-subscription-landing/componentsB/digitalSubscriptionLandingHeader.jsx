@@ -24,7 +24,6 @@ import { HeroHanger } from 'components/productPage/productPageHero/productPageHe
 import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
 
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-import GridImage, { type GridImg } from 'components/gridImage/gridImage';
 
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 import { showCountdownTimer } from '../../../helpers/flashSale';
