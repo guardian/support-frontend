@@ -32,20 +32,20 @@ class CheckoutsSpec extends AnyFeatureSpec
     driverConfig.quit()
   }
 
-   feature("Digital Pack checkout") {
-     scenario("Stripe checkout") {
+   Feature("Digital Pack checkout") {
+     Scenario("Stripe checkout") {
        testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
      }
    }
 
-  feature("Paper checkout") {
-    scenario("Direct Debit checkout") {
+  Feature("Paper checkout") {
+    Scenario("Direct Debit checkout") {
       testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
     }
   }
 
-  feature("Guardian Weekly checkout") {
-    scenario("Direct Debit checkout") {
+  Feature("Guardian Weekly checkout") {
+    Scenario("Direct Debit checkout") {
       testCheckout("Guardian Weekly", new GuardianWeeklyCheckout, new WeeklyProductPage, payWithDirectDebit)
     }
   }

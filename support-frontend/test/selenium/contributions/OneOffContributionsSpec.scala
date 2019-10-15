@@ -36,9 +36,9 @@ class OneOffContributionsSpec extends AnyFeatureSpec
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a one-off contribution (New Contributions Flow)") {
+  Feature("Sign up for a one-off contribution (New Contributions Flow)") {
 
-    scenario("One-off contribution sign-up with Stripe - AUD") {
+    Scenario("One-off contribution sign-up with Stripe - AUD") {
 
       val stripePayment = 22.55
       val testUser = new PostDeployTestUser(driverConfig)
@@ -78,7 +78,7 @@ class OneOffContributionsSpec extends AnyFeatureSpec
       }
     }
 
-    scenario("Check browser navigates to paypal") {
+    Scenario("Check browser navigates to paypal") {
       val testUser = new TestUser {
         val username = "test-stripe-pop-up"
         driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium

@@ -23,9 +23,9 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a Recurring Contribution (New Contributions Flow)") {
+  Feature("Sign up for a Recurring Contribution (New Contributions Flow)") {
 
-    scenario("Monthly contribution sign-up with Stripe - GBP") {
+    Scenario("Monthly contribution sign-up with Stripe - GBP") {
 
       val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("uk", testUser)
@@ -59,7 +59,7 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
 
     }
 
-    scenario("Annual contribution sign-up with Stripe - USD") {
+    Scenario("Annual contribution sign-up with Stripe - USD") {
 
       val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("us", testUser)
