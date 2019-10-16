@@ -136,7 +136,6 @@ function LandingPage(props: Props) {
       />
       <ProductBlockB />
       <AdFreeSectionB />
-      <IndependentJournalismSection />
       <PromotionPopUp />
       <ConsentBanner />
     </Page>
