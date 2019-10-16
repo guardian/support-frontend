@@ -95,6 +95,7 @@ export const imageCatalogue: {
   subscriptionPrintDigital: '476a8aadac1f3a971b9b1a9a023b04cb72c8f7ca/0_0_1366_1510',
   subscriptionGuardianWeeklyPackShot: '299d99cb5dc2d98607e9333d5e1e15c9f7d4860f/0_0_1552_921',
   subscriptionDailyPackshot: '241d0d58656ffcd708bba7d2a42ec7b8df9ee25e/0_0_1584_898',
+  subscriptionDailyMobile: '9b650a7dcc33e30d228ddec7bd27a0594b4ece41/0_0_568_1174',
   printShowcase: '311c4a9dd0e8030b734dd54b71fcd0d4cb2a303b/0_0_1486_750',
   digitalSubsDaily: '801bed1ff522395d46276c1882ae3dcac6309a39/0_0_1694_1000',
   digitalSubsDailyMob: '93c8d64b7be3bf455f2f6f57d679c2fdc7df6bf3/0_0_1100_1100',

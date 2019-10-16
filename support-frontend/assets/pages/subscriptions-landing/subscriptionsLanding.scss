@@ -637,7 +637,12 @@
 
   img:nth-child(3) {
     left: 272px;
-    bottom: -40px;
+    bottom: -72px;
+
+    @include mq($until: desktop) {
+      left: 256px;
+      bottom: -40px;
+    }
 
     @include mq($until: tablet) {
       display: none;
