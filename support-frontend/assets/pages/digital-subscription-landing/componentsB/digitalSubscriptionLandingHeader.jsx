@@ -53,7 +53,7 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
 const PaymentSelectionContainer = ({ dailyEditionsVariant }: { dailyEditionsVariant: boolean }) => (
   <div className="payment-selection-container">
     <LeftMarginSection>
-      <PaymentSelection dailyEditionsVariant={dailyEditionsVariant} pageType="B" />
+      <PaymentSelection dailyEditionsVariant={dailyEditionsVariant} />
     </LeftMarginSection>
   </div>
 );

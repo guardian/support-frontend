@@ -36,7 +36,6 @@ import ProductBlockB from './componentsB/productBlockB/productBlockB';
 import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
-import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // ----- Styles ----- //
 import './components/digitalSubscriptionLanding.scss';
@@ -91,39 +90,35 @@ type Props = {
   dailyEditionsVariant: boolean,
 }
 
-// This is a temporary variant controller for the A/B tests
-// So if the environment is DEV, we see the new version but in prodction we see the old version
-const pageType = process.env.NODE_ENV === 'DEV' ? 'A' : 'B';
-
 // ----- Render ----- //
 function LandingPage(props: Props) {
   const { dailyEditionsVariant } = props;
 
   // We can't cope with multiple promo codes in the current design
-
   const promoCode = flashSaleIsActive(DigitalPack, countryGroupId) ? dpSale.promoCode : null;
 
-  const pageTypeA = (
-    <Page
-      header={<CountrySwitcherHeader />}
-      footer={
-        <FooterCentered>
-          <FaqsAndHelp
-            selectedCountryGroup={countryGroupId}
-            promoCode={promoCode}
-          />
-          <SubscriptionFaq subscriptionProduct="DigitalPack" />
-        </FooterCentered>}
-    >
-      <CampaignHeader countryGroupId={countryGroupId} />
-      <ProductBlock />
-      <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
-      <TermsAndConditions />
-      <ConsentBanner />
-    </Page>
-  );
-
-  const pageTypeB = (
+  if (dailyEditionsVariant) {
+    return (
+      <Page
+        header={<CountrySwitcherHeader />}
+        footer={
+          <FooterCentered>
+            <FaqsAndHelp
+              selectedCountryGroup={countryGroupId}
+              promoCode={promoCode}
+            />
+            <SubscriptionFaq subscriptionProduct="DigitalPack" />
+          </FooterCentered>}
+      >
+        <CampaignHeader countryGroupId={countryGroupId} />
+        <ProductBlock />
+        <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
+        <TermsAndConditions />
+        <ConsentBanner />
+      </Page>
+    );
+  }
+  return (
     <Page
       header={<CountrySwitcherHeader />}
       footer={
@@ -145,13 +140,6 @@ function LandingPage(props: Props) {
       <PromotionPopUp />
       <ConsentBanner />
     </Page>
-  );
-
-  return (
-    <div>
-      {pageType === 'A' && pageTypeA}
-      {pageType === 'B' && pageTypeB}
-    </div>
   );
 
 }

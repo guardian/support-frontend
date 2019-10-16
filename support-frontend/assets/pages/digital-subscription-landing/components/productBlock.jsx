@@ -34,15 +34,13 @@ const List = ({ items }: ListPropTypes) => (
 type DropdownPropTypes = {
   children: Node,
   showDropDown: boolean,
-  title: string,
   product: string,
 }
 
 const Dropdown = ({
-  children, showDropDown, title, product,
+  children, showDropDown, product,
 }: DropdownPropTypes) => (
   <div id={`product-details-${product}`} className={`product-block__dropdown${showDropDown ? '--show' : '--hide'}`}>
-    <div className="product-block__dropdown__title">{title}</div>
     <span className="product-block__ul-handler">
       {children}
     </span>
@@ -67,7 +65,7 @@ const Button = ({
     <span className="product-block__button__text">
       <div className={showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'}>{arrowSvg}</div>
       <span className="product-block__button__text--bold">
-        {showDropDown ? 'Read Less' : 'Read more'}
+        {showDropDown ? 'Less detail' : 'More detail'}
       </span>
     </span>
   </button>
@@ -174,7 +172,6 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           />
           <Dropdown
             showDropDown={state.showDropDownDaily}
-            title="The Guardian Daily in detail"
             product="daily"
           >
             <List
@@ -205,7 +202,6 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           />
           <Dropdown
             showDropDown={state.showDropDownApp}
-            title="Premium access to The Guardian Live app in detail"
             product="app"
           >
             <List
