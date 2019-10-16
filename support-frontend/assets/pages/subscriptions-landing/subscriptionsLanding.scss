@@ -696,6 +696,19 @@
   }
 }
 
+.subscriptions-int-daily-packshot {
+  width: 366px;
+
+  img {
+    display: block;
+    width: 100%;
+  }
+
+  @include mq($until: tablet) {
+    width: 100%;
+  }
+}
+
 /**** FOOTER HACK ****/
 #subscriptions-landing-page {
   .component-left-margin-section:before {

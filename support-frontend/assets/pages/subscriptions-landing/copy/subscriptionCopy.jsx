@@ -13,9 +13,9 @@ import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packsho
 import PaperPackshot from 'components/packshots/paper-packshot';
 import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
 import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-packshot';
-import IntFeaturePackshot from 'components/packshots/int-feature-packshot';
 import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
 import SubscriptionDailyPackshot from 'components/packshots/subscription-daily-packshot';
+import InternationalDailyPackshot from 'components/packshots/international-daily-packshot';
 
 // constants
 import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
@@ -90,13 +90,13 @@ function getGuardianWeeklyOfferCopy() {
 }
 
 const chooseImage = images =>
-  (countryGroupId === 'GBPCountries' ? images[0] : images[1]);
+  (countryGroupId === 'GBPCountries' || countryGroupId === 'EURCountries' || countryGroupId === 'International' ? images[0] : images[1]);
 
 const digital: ProductCopy = {
   title: 'Digital Subscription',
   subtitle: getPrice(DigitalPack, ''),
-  description: 'The Guardian Daily app and Premium app in one pack, plus ad-free reading on all your devices',
-  productImage: chooseImage([<SubscriptionDailyPackshot />, <IntFeaturePackshot />]),
+  description: 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
+  productImage: chooseImage([<SubscriptionDailyPackshot />, <InternationalDailyPackshot />]),
   offer: getSaleCopy(DigitalPack, countryGroupId).bundle.subHeading,
   buttons: [{
     ctaButtonText: 'Find out more',
@@ -176,8 +176,8 @@ const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
     premiumApp,
   ],
   International: [
-    guardianWeekly,
     digital,
+    guardianWeekly,
     premiumApp,
   ],
   AUDCountries: [
@@ -186,8 +186,8 @@ const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
     premiumApp,
   ],
   EURCountries: [
-    guardianWeekly,
     digital,
+    guardianWeekly,
     premiumApp,
   ],
   NZDCountries: [
