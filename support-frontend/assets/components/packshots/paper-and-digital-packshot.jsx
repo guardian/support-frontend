@@ -23,8 +23,8 @@ const PaperAndDigitalPackshot = () => (
       imgType="png"
     />
     <GridImage
-      gridId="subscriptionIphone"
-      srcSizes={[578, 527, 264]}
+      gridId="subscriptionDailyMobile"
+      srcSizes={[568, 484, 242]}
       sizes="(max-width: 740px) 100%,
             (max-width: 980px) 100px,
             125px"

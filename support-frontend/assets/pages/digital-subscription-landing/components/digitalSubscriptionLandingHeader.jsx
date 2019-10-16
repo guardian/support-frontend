@@ -157,7 +157,7 @@ function gridPicture(cgId: CountryGroupId): GridPictureProps {
 function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   if (showUpgradeMessage()) {
     return {
-      heading: 'Digital Pack',
+      heading: 'Digital Subscription',
       subHeading: 'Upgrade your subscription to Paper+Digital now',
     };
   }
@@ -169,12 +169,13 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
     };
   }
   return {
-    heading: 'Digital Pack subscriptions',
+    heading: 'Digital Subscriptions',
     subHeading: 'The premium Guardian experience, ad-free on all your devices',
   };
 }
 
 function CampaignHeader() {
+
   return (
     <div className="hope-is-power-hero--wrapper">
       <div className="hope-is-power-hero__marketing-message hope-is-power--centered">
@@ -214,7 +215,14 @@ function DigitalSubscriptionLandingHeader(props: PropTypes) {
         <div className="digital-subscription-landing-header__cta" />
       </LeftMarginSection>
       <HeroHanger>
-        <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
+        <AnchorButton
+          aria-label="See Subscription options for Digital Subscription"
+          onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)}
+          icon={<SvgChevron />}
+          href="#subscribe"
+        >
+            See Subscription options
+        </AnchorButton>
       </HeroHanger>
     </div>
   );

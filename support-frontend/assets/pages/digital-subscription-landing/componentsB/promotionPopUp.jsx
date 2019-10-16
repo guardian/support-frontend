@@ -86,17 +86,17 @@ function Options(props: {
     <ul>
       <OptionItem
         thisOption="Saturday"
-        description="Get the Saturday paper, plus a Digital Pack subscription for just £11.26 extra per month."
+        description="Get the Saturday paper, plus a Digital Subscription for just £11.26 extra per month."
         {...props}
       />
       <OptionItem
         thisOption="Sunday"
-        description="Get the Observer on Sunday, plus a Digital Pack subscription for just £11.27 extra per month"
+        description="Get the Observer on Sunday, plus a Digital Subscription for just £11.27 extra per month"
         {...props}
       />
       <OptionItem
         thisOption="Weekend"
-        description="Get the Saturday paper, the Observer on Sunday, plus a Digital Pack subscription for just £8.66 extra per month."
+        description="Get the Saturday paper, the Observer on Sunday, plus a Digital Subscription for just £8.66 extra per month."
         {...props}
       />
     </ul>
