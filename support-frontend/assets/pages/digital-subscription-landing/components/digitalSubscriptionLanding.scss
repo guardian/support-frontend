@@ -991,58 +991,60 @@ div.call-to-action__container {
     }
   }
 
-  .payment-selection__card {
-    @include mq($until: desktop) {
-      width: 40%;
+  div.hope-is-powered--centered {
+    .payment-selection__card {
+      @include mq($until: desktop) {
+        width: 40%;
+      }
+
+      @include mq($until: tablet) {
+        width: calc(100% - 200px);
+      }
+
+      @include mq($until: phablet) {
+        margin-left: 20px;
+        width: calc(100% - 150px);
+      }
+
+      @include mq($until: mobileLandscape) {
+        margin-left: 20px;
+        width: calc(100% - 50px);
+      }
+
+      @include mq($until: mobileMedium) {
+        margin-left: 0px;
+        width: calc(100% - 30px);
+      }
     }
 
-    @include mq($until: tablet) {
-      width: calc(100% - 200px);
-    }
-
-    @include mq($until: phablet) {
-      margin-left: 20px;
-      width: calc(100% - 150px);
-    }
-
-    @include mq($until: mobileLandscape) {
+    .payment-selection__card:first-of-type {
       margin-left: 0;
-      width: calc(100% - 50px);
+      
+      @include mq($from: tablet) {
+        margin-left: 50px;
+      }
+
+      @include mq($from: wide) {
+        margin-left: 30px;
+      }
+
+      @include mq($from: 1396px) {
+        margin-left: 50px;
+      }
     }
 
-    @include mq($until: mobileMedium) {
-      margin-left: 10px;
-      width: calc(100% - 30px);
-    }
-  }
+    .payment-selection__card:nth-of-type(2) {
+      @include mq($until: tablet) {
+        margin-top: 40px;
+      }
 
-  .payment-selection__card:first-of-type {
-    margin-left: 0;
-    
-    @include mq($from: tablet) {
-      margin-left: 50px;
-    }
+      @include mq($until: phablet) {
+        margin-left: 20px;
+      }
 
-    @include mq($from: wide) {
-      margin-left: 30px;
-    }
-
-    @include mq($from: 1396px) {
-      margin-left: 50px;
-    }
-  }
-
-  .payment-selection__card:nth-of-type(2) {
-    @include mq($until: tablet) {
-      margin-top: 40px;
-    }
-
-    @include mq($until: phablet) {
-      margin-left: 20px;
-    }
-
-    @include mq($until: mobileLandscape) {
-      margin-left: 0px;
+      @include mq($until: mobileLandscape) {
+        margin-left: 0px;
+      }
     }
   }
 }

@@ -37,7 +37,13 @@
   }
 }
 
-.payment-selection__card--A:nth-of-type(2) {
+div.payment-selection__card--A {
+  margin-left: 0;
+}
+
+div.payment-selection__card--A:nth-of-type(2) {
+  margin-left: 0;
+
   .product-option {
     border-radius: 0 3px 3px 3px;
   }
@@ -45,27 +51,21 @@
 
 .hope-is-power--centered {
   .payment-selection {
+    @include mq($from:mobileLandscape) {
+      margin-left: 10px;
+    }
+
     @include mq($from:tablet) {
-      margin-left: -20px;
+      margin-left: 20px;
     }
 
     @include mq($from:wide) {
-      margin-left: 0px;
-    }
-
-    @include mq($from: 1396px) {
-      margin-left: -20px;
-    }
-  }
-
-  div.payment-selection__card {
-    @include mq($from: phablet) {
-      margin-left: 5px;
+      margin-left: 30px;
     }
   }
 
   .payment-selection__card:last-of-type {
-    margin: 30px 10px 20px 10px;
+    margin: 30px 10px 20px 0px;
   
     @include mq($from: tablet) {
       margin: 0 0 0 20px;
