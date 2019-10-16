@@ -238,7 +238,6 @@ function PaymentRequestButton(props: PropTypes) {
 
   // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
   // until the async canMakePayment() function has been called on the stripePaymentRequestObject object.
-  // debugger
   if (!props.stripePaymentRequestButtonData.stripePaymentRequestObject) {
     initialisePaymentRequest({ ...props });
     return null;
