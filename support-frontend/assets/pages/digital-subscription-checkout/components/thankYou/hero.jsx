@@ -16,18 +16,18 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 const defaultHeroes: GridImages = {
   breakpoints: {
     mobile: {
-      gridId: 'digitalSubscriptionHeaderMobile',
-      srcSizes: [342, 684, 1200],
+      gridId: 'subscriptionDailyMobile',
+      srcSizes: [242, 484, 568],
       imgType: 'png',
     },
     tablet: {
-      gridId: 'digitalSubscriptionHeaderTablet',
-      srcSizes: [500, 1000, 2000],
+      gridId: 'subscriptionDailyPackshot',
+      srcSizes: [500, 1000, 1584],
       imgType: 'png',
     },
     desktop: {
-      gridId: 'digitalSubscriptionHeaderDesktop',
-      srcSizes: [500, 1000, 2000, 4045],
+      gridId: 'subscriptionDailyPackshot',
+      srcSizes: [500, 1000, 1584],
       imgType: 'png',
     },
   },
@@ -41,26 +41,7 @@ const heroesByCountry: ImagesByCountry = {
   EURCountries: defaultHeroes,
   NZDCountries: defaultHeroes,
   Canada: defaultHeroes,
-  AUDCountries: {
-    breakpoints: {
-      mobile: {
-        gridId: 'digitalSubscriptionHeaderMobileAU',
-        srcSizes: [310, 620, 1088],
-        imgType: 'png',
-      },
-      tablet: {
-        gridId: 'digitalSubscriptionHeaderTabletAU',
-        srcSizes: [500, 1000, 2000],
-        imgType: 'png',
-      },
-      desktop: {
-        gridId: 'digitalSubscriptionHeaderDesktopAU',
-        srcSizes: [500, 1000, 2000, 4045],
-        imgType: 'png',
-      },
-    },
-    fallback: 'digitalSubscriptionHeaderDesktopAU',
-  },
+  AUDCountries: defaultHeroes, // Until we have an AU specific product
 };
 
 const ThankYouHero = ({ countryGroupId }: {countryGroupId: CountryGroupId}) => (
