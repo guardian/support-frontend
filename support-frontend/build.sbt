@@ -15,7 +15,7 @@ resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/pla
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2",
   "com.gu" %% "simple-configuration-ssm" % "1.5.1",
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test",
+  "org.scalatest" %% "scalatest" % "3.2.0-M1" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "1.7.5",
@@ -39,6 +39,8 @@ libraryDependencies ++= Seq(
   "com.gu" %% "play-googleauth" % "0.7.6",
   "io.github.bonigarcia" % "webdrivermanager" % "3.3.0" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
+  "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
+  "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "3.10.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   "com.gu" %% "tip" % "0.6.1",

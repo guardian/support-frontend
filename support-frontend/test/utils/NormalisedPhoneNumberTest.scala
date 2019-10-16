@@ -1,9 +1,10 @@
 package utils
 
 import com.gu.i18n.Country
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class NormalisedPhoneNumberTest extends FlatSpec with Matchers {
+class NormalisedPhoneNumberTest extends AnyFlatSpec with Matchers {
 
   "fromStringAndCountry" should "return None when no number or country is provided" in {
     NormalisedTelephoneNumber.fromStringAndCountry(None, Country.UK) shouldBe None

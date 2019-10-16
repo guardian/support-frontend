@@ -11,7 +11,7 @@ import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
 import com.gu.test.tags.objects.IntegrationTest
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import cats.implicits._
 
 import scala.concurrent.Future

@@ -1,9 +1,10 @@
 package models.identity.requests
 
-import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.Json
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.should.Matchers
 
-class CreateGuestAccountRequestBodyTest extends WordSpec with Matchers {
+class CreateGuestAccountRequestBodyTest extends AnyWordSpec with Matchers {
 
   "CreateGuestAccountRequestBody" should {
 

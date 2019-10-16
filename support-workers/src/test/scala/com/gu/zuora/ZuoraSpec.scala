@@ -11,7 +11,8 @@ import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
-import org.scalatest.{AsyncFlatSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.flatspec.AsyncFlatSpec
 
 import scala.concurrent.duration._
 

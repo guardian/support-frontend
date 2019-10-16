@@ -1,12 +1,18 @@
 package selenium.subscriptions
 
 import org.scalatest.concurrent.Eventually
+import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.time.{Minute, Seconds, Span}
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen}
 import selenium.subscriptions.pages._
 import selenium.util._
 
-class ProductPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
+class ProductPagesSpec extends AnyFeatureSpec
+  with GivenWhenThen
+  with BeforeAndAfter
+  with BeforeAndAfterAll
+  with Browser
+  with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver = driverConfig.webDriver
@@ -22,28 +28,28 @@ class ProductPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Paper product page") {
-    scenario("Basic loading") {
+  Feature("Paper product page") {
+    Scenario("Basic loading") {
       testPageLoads(new PaperProductPage())
 
     }
   }
 
-  feature("Weekly product page") {
-    scenario("Basic loading") {
+  Feature("Weekly product page") {
+    Scenario("Basic loading") {
       testPageLoads(new WeeklyProductPage())
 
     }
   }
 
-  feature("Subscriptions landing page") {
-    scenario("Basic loading") {
+  Feature("Subscriptions landing page") {
+    Scenario("Basic loading") {
       testPageLoads(new SubsLandingPage())
     }
   }
 
-  feature("Digital Pack product page") {
-    scenario("Basic loading") {
+  Feature("Digital Pack product page") {
+    Scenario("Basic loading") {
       val testUser = new PostDeployTestUser(driverConfig)
       testPageLoads(new DigitalPackProductPage())
     }

@@ -1,12 +1,18 @@
 package selenium.subscriptions
 
 import org.scalatest.concurrent.Eventually
+import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.time.{Minute, Seconds, Span}
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen}
 import selenium.subscriptions.pages._
 import selenium.util._
 
-class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
+class CheckoutsSpec extends AnyFeatureSpec
+  with GivenWhenThen
+  with BeforeAndAfter
+  with BeforeAndAfterAll
+  with Browser
+  with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver = driverConfig.webDriver
@@ -26,20 +32,20 @@ class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter w
     driverConfig.quit()
   }
 
-   feature("Digital Pack checkout") {
-     scenario("Stripe checkout") {
+   Feature("Digital Pack checkout") {
+     Scenario("Stripe checkout") {
        testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
      }
    }
 
-  feature("Paper checkout") {
-    scenario("Direct Debit checkout") {
+  Feature("Paper checkout") {
+    Scenario("Direct Debit checkout") {
       testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
     }
   }
 
-  feature("Guardian Weekly checkout") {
-    scenario("Direct Debit checkout") {
+  Feature("Guardian Weekly checkout") {
+    Scenario("Direct Debit checkout") {
       testCheckout("Guardian Weekly", new GuardianWeeklyCheckout, new WeeklyProductPage, payWithDirectDebit)
     }
   }

@@ -27,7 +27,10 @@ class PaymentMethodEncoderSpec extends FlatSpec with Matchers with LazyLogging w
       "paymentGateway": "GoCardless"
     }"""
 
-    testDecoding[PaymentMethod](json, { case _ : DirectDebitPaymentMethod => succeed })
+    testDecoding[PaymentMethod](json, {
+      case _ : DirectDebitPaymentMethod => succeed
+      case x => fail(s"Expected DirectDebitPaymentMethod, got $x")
+    })
   }
 
   it should "decode ClonedDirectDebitPaymentMethod" in {
@@ -46,7 +49,10 @@ class PaymentMethodEncoderSpec extends FlatSpec with Matchers with LazyLogging w
       "paymentGateway": "GoCardless"
     }"""
 
-    testDecoding[PaymentMethod](json, { case _ : ClonedDirectDebitPaymentMethod => succeed })
+    testDecoding[PaymentMethod](json, {
+      case _ : ClonedDirectDebitPaymentMethod => succeed
+      case x => fail(s"Expected ClonedDirectDebitPaymentMethod, got $x")
+    })
   }
 
 }

@@ -2,10 +2,11 @@ package com.gu.support.workers
 
 import com.amazonaws.services.lambda.runtime.Context
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{AsyncFlatSpec, FlatSpec, Matchers}
+import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.mockito.MockitoSugar
 
-abstract class LambdaSpec extends FlatSpec with Matchers with MockContext
+abstract class LambdaSpec extends AnyFlatSpec with Matchers with MockContext
 
 abstract class AsyncLambdaSpec extends AsyncFlatSpec with Matchers
 
