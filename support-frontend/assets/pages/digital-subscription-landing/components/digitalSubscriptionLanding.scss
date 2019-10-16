@@ -1155,10 +1155,6 @@ div.call-to-action__container {
 	
 	@include mq($from: leftCol) {
 		max-width: gu-span(12);
-
-		h2 {
-			padding-right: 20px;
-		}
 	}
 
 	@include mq($from:tablet, $until: leftCol) {
