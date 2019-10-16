@@ -12,7 +12,6 @@ import {
   countryGroups,
 } from 'helpers/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/abtest';
-import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
 import {
   Annual,
@@ -185,12 +184,10 @@ function getSubsLinks(
   campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
 ): SubsUrls {
   const acquisitionData = deriveSubsAcquisitionData(
     referrerAcquisitionData,
     nativeAbParticipations,
-    optimizeExperiments,
   );
 
   if ((campaign && customPromos[campaign])) {

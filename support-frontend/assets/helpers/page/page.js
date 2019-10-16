@@ -39,17 +39,8 @@ import {
   type CountryGroupId,
   detect as detectCountryGroup,
 } from 'helpers/internationalisation/countryGroup';
-// import type { OptimizeExperiment } from 'helpers/optimize/optimize'; TODO: Maybe no longer needed
-// import {
-//   addOptimizeExperiments,
-//   readExperimentsFromSession,
-// } from 'helpers/optimize/optimize';
 import storeReferrer from 'helpers/tracking/awin';
-// import { setExperimentVariant } from 'helpers/page/commonActions'; TODO: Maybe no longer needed
-import {
-  trackAbTests,
-  // trackNewOptimizeExperiment, TODO: Maybe no longer needed
-} from 'helpers/tracking/ophan';
+import { trackAbTests } from 'helpers/tracking/ophan';
 import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
@@ -89,7 +80,6 @@ function buildInitialState(
   settings: Settings,
 ): CommonState {
   const acquisition = getReferrerAcquisitionData();
-  // const optimizeExperiments = readExperimentsFromSession(); TODO: Maybe no longer needed
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
   const internationalisation = {
@@ -111,7 +101,6 @@ function buildInitialState(
     internationalisation,
     abParticipations,
     settings: { ...settings, amounts: amountsWithParticipationOverrides },
-    optimizeExperiments: [], // TODO: Maybe no longer needed
     trackingConsent,
   };
 
@@ -123,8 +112,6 @@ function statelessInit() {
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
   analyticsInitialisation(participations);
-  // TODO: Maybe no longer needed
-  // addOptimizeExperiments((exp: OptimizeExperiment) => trackNewOptimizeExperiment(exp, participations));
 }
 
 // Enables redux devtools extension and optional redux-thunk.
@@ -170,11 +157,6 @@ function init<S, A>(
       combineReducers({ page: pageReducer ? pageReducer(initialState) : null, common: commonReducer }),
       storeEnhancer(thunk),
     );
-
-    // addOptimizeExperiments((exp: OptimizeExperiment) => { TODO: Maybe no longer needed
-    //   trackNewOptimizeExperiment(exp, participations);
-    //   store.dispatch(setExperimentVariant(exp));
-    // });
 
     return store;
   } catch (err) {
