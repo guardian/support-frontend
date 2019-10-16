@@ -8,7 +8,6 @@ import { type Option } from 'helpers/types/option';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { AUDCountries, GBPCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
-import { promotionTermsUrl } from 'helpers/externalLinks';
 
 // ----- Props ----- //
 
@@ -55,32 +54,16 @@ Email.defaultProps = {
 
 // ----- Component ----- //
 
-function CustomerService(props: PropTypes) {
+function FaqsAndHelp(props: PropTypes) {
   const email = productAndCountrySpecificEmail(
     props.selectedCountryGroup,
     props.subscriptionProduct,
     props.paperFulfilmentOptions,
   );
-  const promotionTerms = props.promoCode ?
-    (
-      <div>
-        <h2>Promotion terms and conditions</h2>
-        <div className="component-customer-service__text">
-          <p>
-            Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;)
-            reserves the right to withdraw this promotion at any time.
-            For full promotion  <a href={promotionTermsUrl(props.promoCode)}>terms and conditions</a>.
-          </p>
-        </div>
-      </div>
-    )
-    : null;
-
 
   const Faqs = ({ children }: { children: React.Node }) =>
     (
       <div className="component-customer-service">
-        {promotionTerms}
         <h2>FAQs and Help</h2>
         <div className="component-customer-service__text">
           {children}
@@ -123,7 +106,7 @@ function CustomerService(props: PropTypes) {
   }
 }
 
-CustomerService.defaultProps = {
+FaqsAndHelp.defaultProps = {
   selectedCountryGroup: 'GBPCountries',
   subscriptionProduct: 'DigitalPack',
   paperFulfilmentOptions: null,
@@ -132,4 +115,4 @@ CustomerService.defaultProps = {
 
 // ----- Exports ----- //
 
-export default CustomerService;
+export default FaqsAndHelp;
