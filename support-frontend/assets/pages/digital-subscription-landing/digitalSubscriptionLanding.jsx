@@ -20,8 +20,6 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import { CampaignHeaderB } from './componentsB/digitalSubscriptionLandingHeader';
-import IndependentJournalismSection
-  from './componentsB/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './componentsB/promotionPopUp';
 
