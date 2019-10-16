@@ -156,7 +156,8 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
     this.setState({
       [`showDropDown${product}`]: !this.state[`showDropDown${product}`],
     });
-    trackComponentClick(`digital-subscriptions-landing-page--accordion--${product}`);
+    const clickAction = this.state[`showDropDown${product}`] ? 'open' : 'close';
+    trackComponentClick(`digital-subscriptions-landing-page--accordion--${product}--${clickAction}`);
   }
 
   render() {
