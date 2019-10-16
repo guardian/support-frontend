@@ -1162,3 +1162,15 @@ div.call-to-action__container {
 		}
 	}
 }
+
+.dp-banner--original {
+
+  .payment-selection__card + .payment-selection__card {
+    margin: 40px 0 0 0.625rem;
+    
+    @include mq($from: tablet) {
+      margin: 0 0 0 20px;
+    }
+    
+  }
+}

@@ -74,7 +74,7 @@ function CampaignHeaderB(props: PropTypes) {
   const product: SubscriptionProduct = 'DigitalPack';
   const copy = getCopy(product, props.countryGroupId);
   return (
-    <div>
+    <div className="dp-banner--original">
       <ProductPagehero
         appearance="campaign"
         overheading={copy.heading}
