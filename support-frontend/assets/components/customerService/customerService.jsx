@@ -69,7 +69,7 @@ function CustomerService(props: PropTypes) {
           <p>
             Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;)
             reserves the right to withdraw this promotion at any time.
-            For full promotion terms and conditions see <a href={promotionTermsUrl(props.promoCode)}>here</a>
+            For full promotion  <a href={promotionTermsUrl(props.promoCode)}>terms and conditions</a>.
           </p>
         </div>
       </div>
