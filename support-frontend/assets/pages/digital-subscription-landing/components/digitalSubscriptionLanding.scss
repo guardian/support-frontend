@@ -297,21 +297,20 @@
 
     div.product-block__container__label--top {
       width: 160px;
-      margin: 15px 0;
+      margin: 20px 0 0;
 
       @include mq($from: mobileLandscape) {
-        margin: 25px 0 15px;
+        margin: 25px 0 0;
       }
 
       @include mq($from: phablet) {
-        margin: 0 0 20px;
+        margin: 0;
       }
 
       @include mq($from: tablet) {
         position: relative;
         top: -58px;
         left: -19px;
-        margin: 0;
         width: 180px;
       }
 
@@ -409,7 +408,7 @@
         }
 
         @include mq($from: phablet) {
-          margin-top: -125px;
+          margin-top: -115px;
           margin-right: 0px;
           img {
             width: 250px;
@@ -418,11 +417,6 @@
 
         @include mq($from: tablet) {
           margin-right: 20px;
-          margin-top: -115px;
-
-          img {
-            width: 250px;
-          }
         }
 
         @include mq($from: desktop) {
@@ -972,12 +966,18 @@ div.call-to-action__container {
     h3 {
       margin-bottom: 20px;
       padding-left: 0;
+      @include gu-fontset-body-sans;
+      font-size: 14px;
+      font-weight: 600;
+      max-width: gu-span(4);
 
       @include mq($from: mobileLandscape) {
         padding-left: 15px;
+        max-width: gu-span(5);
       }
 
       @include mq($from: phablet) {
+        font-size: 15px;
         padding-left: 5px;
         max-width: gu-span(7);
       }
@@ -985,10 +985,8 @@ div.call-to-action__container {
       @include mq($from: tablet) {
         padding-left: 25px;
         margin-bottom: 40px;
+        font-size: 16px;
       }
-
-      @include gu-fontset-body-sans;
-      font-size: 15px;
     }
   }
 
