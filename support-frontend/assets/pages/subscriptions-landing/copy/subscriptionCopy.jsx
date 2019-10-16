@@ -15,7 +15,7 @@ import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
 import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-packshot';
 import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
 import SubscriptionDailyPackshot from 'components/packshots/subscription-daily-packshot';
-import IntDailyPackshot from 'components/packshots/int-daily-packshot';
+import InternationalDailyPackshot from 'components/packshots/international-daily-packshot';
 
 // constants
 import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
@@ -96,7 +96,7 @@ const digital: ProductCopy = {
   title: 'Digital Subscription',
   subtitle: getPrice(DigitalPack, ''),
   description: 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
-  productImage: chooseImage([<SubscriptionDailyPackshot />, <IntDailyPackshot />]),
+  productImage: chooseImage([<SubscriptionDailyPackshot />, <InternationalDailyPackshot />]),
   offer: getSaleCopy(DigitalPack, countryGroupId).bundle.subHeading,
   buttons: [{
     ctaButtonText: 'Find out more',
