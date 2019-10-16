@@ -13,6 +13,7 @@
   hrefLangLinks: Map[String, String] = Map(),
   csrf: Option[String] = None,
   shareImageUrl: Option[String] = None,
+  shareUrl: Option[String] = None,
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
@@ -40,6 +41,10 @@
       <meta property="twitter:image" content="@imageUrl" />
       <meta property="og:image" content="@imageUrl" />
       <meta property="og:image:secure_url" content="@imageUrl" />
+    }
+
+    @shareUrl.map { shareUrl =>
+      <meta property="og:url" content="@shareUrl" />
     }
 
     @canonicalLink.map { definedCanonicalLink =>
