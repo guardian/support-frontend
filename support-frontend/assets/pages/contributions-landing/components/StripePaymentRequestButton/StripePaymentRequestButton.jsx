@@ -35,7 +35,7 @@ import { Stripe } from 'helpers/paymentMethods';
 import {
   toHumanReadableContributionType,
 } from 'helpers/checkouts';
-import type {StripeAccount} from "helpers/paymentIntegrations/stripeCheckout";
+import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 
 // ----- Types -----//
 
@@ -77,22 +77,19 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  onPaymentAuthorised:
-    (paymentAuthorisation: PaymentAuthorisation) =>
-      dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
+  onPaymentAuthorised: (paymentAuthorisation: PaymentAuthorisation) =>
+    dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
   setPaymentRequestButtonPaymentMethod:
-    (paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount) => {
-      dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod, stripeAccount));
-    },
-  setStripePaymentRequestObject:
-    (paymentRequest: Object, stripeAccount: StripeAccount) => {
-      dispatch(setStripePaymentRequestObject(paymentRequest, stripeAccount))
-    },
-  updateEmail: (email: string) => { dispatch(updateEmail(email)); },
-  updateFirstName: (firstName: string) => { dispatch(updateFirstName(firstName)); },
-  updateLastName: (lastName: string) => { dispatch(updateLastName(lastName)); },
-  setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) => { dispatch(setStripePaymentRequestButtonClicked(stripeAccount)); },
-  setAssociatedPaymentMethod: () => { dispatch(updatePaymentMethod(Stripe)); },
+    (paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount) =>
+      dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod, stripeAccount)),
+  setStripePaymentRequestObject: (paymentRequest: Object, stripeAccount: StripeAccount) =>
+    dispatch(setStripePaymentRequestObject(paymentRequest, stripeAccount)),
+  updateEmail: (email: string) => dispatch(updateEmail(email)),
+  updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
+  updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
+  setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
+    dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
+  setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
 });
 
 
@@ -121,7 +118,7 @@ function updatePayerName(data: Object, setFirstName: string => void, setLastName
     setFirstName(nameParts[0]);
     setLastName(nameParts[1]);
   } else if (nameParts.length === 1) {
-    logException('Failed to set name: no spaces in data object: ' + nameParts.join(''));
+    logException(`Failed to set name: no spaces in data object: ${nameParts.join('')}`);
   } else {
     logException('Failed to set name: no name in data object');
   }
@@ -255,9 +252,11 @@ function PaymentRequestButton(props: PropTypes) {
   }
 
   return (
-    <div className="stripe-payment-request-button__container"
-         data-for-stripe-account={props.stripeAccount}
-         data-for-contribution-type={props.contributionType}>
+    <div
+      className="stripe-payment-request-button__container"
+      data-for-stripe-account={props.stripeAccount}
+      data-for-contribution-type={props.contributionType}
+    >
       <PaymentRequestButtonElement
         paymentRequest={props.stripePaymentRequestButtonData.stripePaymentRequestObject}
         className="stripe-payment-request-button__button"
