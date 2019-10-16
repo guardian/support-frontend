@@ -30,7 +30,7 @@ export type Campaigns = {
 
 const currentCampaignName = 'climate-pledge-2019';
 
-const climatePledgeUrl = 'https://www.theguardian.com/global/ng-interactive/2019/oct/15/the-guardians-climate-pledge-2019?acquisitionData=%7B%22source%22%3A%22GUARDIAN_WEB%22%2C%22componentType%22%3A%22ACQUISITIONS_EDITORIAL_LINK%22%2C%22campaignCode%22%3A%22climate_pledge_2019%22%2C%22componentId%22%3A%22climate_pledge_2019_landing_page%22%7D&INTCMP=climate_pledge_2019';
+const climatePledgeUrl = 'https://www.theguardian.com/environment/ng-interactive/2019/oct/16/the-guardians-climate-pledge-2019?acquisitionData=%7B%22source%22%3A%22GUARDIAN_WEB%22%2C%22componentType%22%3A%22ACQUISITIONS_EDITORIAL_LINK%22%2C%22campaignCode%22%3A%22climate_pledge_2019%22%2C%22componentId%22%3A%22climate_pledge_2019_landing_page%22%7D&INTCMP=climate_pledge_2019';
 
 export const campaigns: Campaigns = {
   [currentCampaignName]: {
