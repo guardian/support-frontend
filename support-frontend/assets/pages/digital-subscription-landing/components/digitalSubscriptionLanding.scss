@@ -427,14 +427,15 @@
 
         @include mq($from: desktop) {
           margin-top: -170px;
-
+          
           img {
             width: 400px;
           }
         }
-
+        
         @include mq($from: leftCol) {
           margin-top: -150px;
+          margin-right: 60px;
         }
       }
 
