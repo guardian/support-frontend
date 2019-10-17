@@ -2,4 +2,4 @@
 
 yarn devrun &
 yarn storybook &
-cd ..; sbt "project support-frontend" devrun
+cd ..; sbt -mem 2048 "project support-frontend" devrun
