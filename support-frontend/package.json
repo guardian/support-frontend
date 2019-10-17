@@ -48,6 +48,9 @@
     "modulePaths": [
       "assets"
     ],
+    "modulePathIgnorePatterns": [
+      "target"
+    ],
     "moduleNameMapper": {
       "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
     },
