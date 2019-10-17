@@ -30,6 +30,8 @@ type PropTypes = {|
   otherAmounts: OtherAmounts,
 |};
 
+const enabledForRecurring = (): boolean => !!window.guardian.recurringStripePaymentRequestButton;
+
 // ----- Component ----- //
 
 class StripePaymentRequestButtonContainer extends React.Component<PropTypes, void> {
@@ -39,7 +41,9 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
   }
 
   render() {
-    const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
+    const showStripePaymentRequestButton =
+      isInStripePaymentRequestAllowedCountries(this.props.country) &&
+      (this.props.contributionType === 'ONE_OFF' || enabledForRecurring());
 
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
       const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
