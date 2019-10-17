@@ -31,7 +31,7 @@ export const tests: Tests = {
     canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
   },
 
-  landingPageAmountsRound4: {
+  landingPageAmountsRound4a: {
     type: 'AMOUNTS',
     variants: [
       {
@@ -40,10 +40,6 @@ export const tests: Tests = {
       {
         id: 'V1',
         amountsRegions: V1,
-      },
-      {
-        id: 'V2',
-        amountsRegions: V2,
       },
     ],
     audiences: {
