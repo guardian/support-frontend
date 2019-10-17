@@ -8,22 +8,35 @@
 }
 
 .hope-is-power-hero--wrapper {
-  height: 80px;
+  position: relative;
+  z-index: 5;
+  background: #ededed;
+  
+  &:before {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 90px;
+		background: #fff;
+		border-bottom: 1px solid gu-colour(neutral-86);
+		content: '';
+	}
+
+	@include mq($from: phablet, $until: desktop) {
+		&:before {
+			height: 80px;
+		}
+	}
 
   @include mq($from: tablet) {
     display: flex;
     flex-direction: column;
-    background: #ffffff;
-    height: 80px;
     padding-top: 40px;
 
     @include mq($from: tablet) {
       padding-top: 35px;
     }
-  }
-
-  @include mq($from: tablet) {
-    height: 95px;
   }
 
 }
@@ -49,7 +62,6 @@
   @include mq($from: tablet) {
     padding-left: 20px;
     width: calc(100% - 60px);
-    max-width: 700px;
   }
 
   @include mq($from: desktop) {
@@ -76,7 +88,6 @@
   background-color: #ffe500;
   @include gu-fontset-heading;
   color: gu-colour(neutral-7);
-  height: 150px;
   padding: $gu-v-spacing / 3 0 22px;
   
 
@@ -91,18 +102,18 @@
   h2 {
     font-size: 17px;
     font-weight: 400;
-    line-height: 18px;
+    line-height: 21px;
     max-width: gu-span(4);
     margin-left: 10px !important;
   }
 
   @include mq($from: mobileLandscape) {
-    height: 140px;
     h1 {
       font-size: 28px;
       font-weight: 600;
       line-height: 36px;
       margin-left: 0;
+      margin-top: 0 !important;
       max-width: gu-span(5);
     }
   
@@ -116,9 +127,7 @@
   }
 
   @include mq($from: phablet) {
-    height: 140px;
     width: 100%;
-
 
     h1 {
       font-size: 32px;
@@ -136,11 +145,10 @@
   }
 
   @include mq($from: tablet) {
-    width: calc(100% - 60px);
+    width: calc(100% - 40px);
   }
 
   @include mq($from: desktop) {
-    height: 170px;
     max-width: calc(100% - 110px);
 
     h1 {
@@ -152,9 +160,9 @@
     }
   
     h2 {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 400;
-      line-height: 26px;
+      line-height: 28px;
       max-width: gu-span(8);
       margin-left: 40px !important;
     }
@@ -164,7 +172,7 @@
     max-width: calc(100% - 80px);
 
     h2 {
-      max-width: gu-span(7.5);
+      max-width: gu-span(9);
     }
   }
 
@@ -174,10 +182,6 @@
 
     h1 {
       font-size: 50px;
-    }
-
-    h2 {
-      max-width: gu-span(7.5);
     }
   }
 
@@ -616,23 +620,7 @@
   }
 
   .product-block__container:first-of-type {
-    margin-top: 65px;
-
-    @include mq($from: mobileLandscape) {
-      margin-top: 60px;
-    }
-
-    @include mq($from: phablet) {
-      margin-top: 85px;
-    }
-
-    @include mq($from: tablet) {
-      margin-top: 120px;
-    }
-
-    @include mq($from: desktop) {
-      margin-top: 140px;
-    }
+    margin-top: 60px;
   }
 
   button {

@@ -318,6 +318,10 @@
 	height: inherit !important;
 	padding-top: 0 !important;
 	background: #ffe500;
+
+	&:before {
+		content: none !important;
+	}
 }
 
 .the-moment-hero .hope-is-power-hero__marketing-message {
@@ -335,7 +339,7 @@
 	}
 	
 	@include mq($from: leftCol) {
-		max-width: gu-span(12);
+		max-width: gu-span(14);
 	}
 
 	@include mq($from:tablet, $until: leftCol) {
