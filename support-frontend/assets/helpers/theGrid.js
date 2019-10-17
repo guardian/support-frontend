@@ -97,7 +97,7 @@ export const imageCatalogue: {
   subscriptionDailyPackshot: '241d0d58656ffcd708bba7d2a42ec7b8df9ee25e/0_0_1584_898',
   subscriptionDailyMobile: '9b650a7dcc33e30d228ddec7bd27a0594b4ece41/0_0_568_1174',
   printShowcase: '311c4a9dd0e8030b734dd54b71fcd0d4cb2a303b/0_0_1486_750',
-  digitalSubsDaily: '801bed1ff522395d46276c1882ae3dcac6309a39/0_0_1694_1000',
+  digitalSubsDaily: '38e76951e5fa76f9b3eb02ab84c5d745f6b123b8/0_0_1693_1000',
   digitalSubsDailyMob: '93c8d64b7be3bf455f2f6f57d679c2fdc7df6bf3/0_0_1100_1100',
   digitalSubsApp: '234f5889b07c7c5d088d8d977e9e717ea8f2e791/0_0_1714_1000',
   digitalSubsAppMob: '59d2d83d9c1ecf8b3c955c63bf94ef2fa80c7353/0_0_1100_1100',
