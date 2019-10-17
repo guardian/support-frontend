@@ -190,6 +190,7 @@ trait Controllers {
 
   lazy val promotionsController = new Promotions(
     promotionServiceProvider,
+    priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
     testUsers,

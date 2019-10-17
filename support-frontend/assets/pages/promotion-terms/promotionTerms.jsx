@@ -9,7 +9,9 @@ import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import Header from 'components/headers/header/header';
 import { Provider } from 'react-redux';
-import PromoDetails from 'pages/promotion-terms/PromoDetails';
+import PromoDetails from 'pages/promotion-terms/promoDetails';
+import LegalTerms from 'pages/promotion-terms/legalTerms';
+import type { State } from './promotionTermsReducer';
 
 // ----- Redux Store ----- //
 
@@ -18,16 +20,17 @@ const store = pageInit(() => reducer, true);
 
 // ----- Render ----- //
 
-const content = (
+const PromotionTermsPage = (props: State) => (
   <Provider store={store}>
     <Page
       header={<Header />}
       footer={<Footer />}
     >
-      <PromoDetails />
+      <PromoDetails {...props.page.promotionTerms} />
+      <LegalTerms {...props.page} />
     </Page>
   </Provider>
 );
 
-renderPage(content, 'promotion-terms');
+renderPage(PromotionTermsPage(store.getState()), 'promotion-terms');
 

@@ -3,7 +3,6 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Settings } from 'helpers/settings';
 import type {
   PromotionCopy,
-  PromotionTerms,
 } from 'helpers/productPrice/promotions';
 
 function getGlobal<T>(path: string = ''): ?T {

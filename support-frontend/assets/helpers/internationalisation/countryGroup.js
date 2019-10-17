@@ -179,6 +179,13 @@ function stringToCountryGroupId(countryGroupId: string): CountryGroupId {
   return fromString(countryGroupId) || GBPCountries;
 }
 
+function fromCountryGroupName(name: CountryGroupName): CountryGroup {
+  const groupId: ?CountryGroupId = Object
+    .keys(countryGroups)
+    .find(key => countryGroups[key].name === name);
+  return groupId ? countryGroups[groupId] : countryGroups.GBPCountries;
+}
+
 // ----- Exports ----- //
 
 export {
@@ -186,6 +193,7 @@ export {
   detect,
   stringToCountryGroupId,
   fromCountry,
+  fromCountryGroupName,
   GBPCountries,
   UnitedStates,
   AUDCountries,
