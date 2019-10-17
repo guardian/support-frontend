@@ -118,9 +118,7 @@
     }
   
     h2 {
-      font-size: 17px;
       font-weight: 400;
-      line-height: 21px;
       max-width: gu-span(5);
       margin-left: 0;
     }
@@ -140,12 +138,14 @@
 
     h2 {
       max-width: gu-span(6);
+      font-size: 20px;
+      line-height: 24px;
       margin-left: 20px !important;
     }
   }
 
   @include mq($from: tablet) {
-    width: calc(100% - 40px);
+    width: calc(100% - 60px);
   }
 
   @include mq($from: desktop) {
@@ -209,16 +209,12 @@
       height: 120px;
       width: 120px;
       right: 30px;
-      top: 20px;
-    }
-
-    @include mq($from: tablet) {
-      top: 25px;
+      top: 15px;
     }
 
     @include mq($from: desktop) {
       right: 40px;
-      top: 28px;
+      top: 20px;
     }
 
     @include mq($from: leftCol) {
@@ -620,7 +616,12 @@
   }
 
   .product-block__container:first-of-type {
-    margin-top: 60px;
+    margin-top: 0;
+
+    @include mq($from: tablet) {
+      margin-top: 60px;
+    }
+
   }
 
   button {
@@ -775,42 +776,6 @@
     display: block;
   }
   100% {
-    display: none;
-  }
-}
-
-.the-moment-hero__graphic-slider-1,
-.the-moment-hero__graphic-slider-2,
-.the-moment-hero__graphic-slider-3 {
-  animation: fling-minislide 6s infinite;
-  opacity: 0; 
-} 
-
-@keyframes fling-minislide {
-  0% {opacity:1;}
-  33.33% {opacity:1;} 
-  33.34% {opacity:0;} 
-  50% {opacity:0;}
-  100% {opacity:0;}
-} 
-
-.the-moment-hero__graphic-slider-1 {
-  animation-delay: 0s;
-}
-
-.the-moment-hero__graphic-slider-2 {
-  animation-delay: 2s;
-}
-
-.the-moment-hero__graphic-slider-3 {
-  animation-delay: 4s;
-}
-
-@media (prefers-reduced-motion) {
-  .the-moment-hero__graphic {
-    opacity: 1;
-  }
-  .the-moment-hero__graphic-slider {
     display: none;
   }
 }

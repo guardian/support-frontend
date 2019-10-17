@@ -337,12 +337,8 @@
 			margin-top: 0 !important;
 		}
 	}
-	
-	@include mq($from: leftCol) {
-		max-width: gu-span(14);
-	}
 
-	@include mq($from:tablet, $until: leftCol) {
+	@include mq($from:tablet, $until: desktop) {
 		h2 {
 			max-width: 28.75rem;
 		}
