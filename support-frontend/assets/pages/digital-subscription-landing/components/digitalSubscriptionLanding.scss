@@ -251,9 +251,12 @@
   }
 
   .product-block__container {
-    padding-top: 30px;
     padding-bottom: 30px;
     
+    @include mq($from:phablet, $until: tablet) {
+      padding-top: 30px;
+    }
+
     @include mq($from: tablet) {
       border: 1px solid gu-colour(neutral-86);
     }
@@ -309,14 +312,13 @@
       }
 
       @include mq($from: tablet) {
+        transform: translateY(-100%);
         position: relative;
-        top: -58px;
         left: -19px;
         width: 180px;
       }
 
       @include mq($from: desktop) {
-        top: -62px;
         left: -40px;
         width: 230px;
       }
@@ -354,11 +356,13 @@
         @include gu-fontset-heading;
         font-weight: 600;
         font-size: 20px;
+        line-height: 24px;
         max-width: gu-span(2.25);
 
         @include mq($from: mobileMedium) {
           max-width: gu-span(3);
           font-size: 22px;
+          line-height: 26px;
         }
 
         @include mq($from: mobileLandscape) {
@@ -371,12 +375,13 @@
 
         @include mq($from: tablet) {
           font-size: 26px;
+          line-height: 32px;
         }
 
         @include mq($from: desktop) {
           margin-bottom: 15px;
           font-size: 36px !important;
-          line-height: 38px;
+          line-height: 40px;
           max-width: gu-span(4);
         }
 
@@ -437,20 +442,17 @@
     }
 
     .product-block__item__subtitle, .ad-free-section__copy {
-      @include gu-fontset-heading;
-      font-size: 12px;
+      font-family: $gu-text-egyptian-web;
+      font-size: 16px;
       font-weight: 400;
-      line-height: 18px;
+      line-height: 21px;
       max-width: gu-span(2);
 
       @include mq($from: mobileMedium) {
-        font-size: 14px;
         max-width: gu-span(2.5);
       }
 
-      @include mq($from: mobileLandscape) {
-        font-size: 17px;
-        line-height: 21px;
+      @include mq($from: mobileLandscape) {;
         max-width: gu-span(4);
       }
 
@@ -464,7 +466,7 @@
 
       @include mq($from: desktop) {
         font-size: 20px;
-        line-height: 26px;
+        line-height: 24px;
         max-width: gu-span(7);
       }
 

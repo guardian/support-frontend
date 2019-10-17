@@ -128,11 +128,11 @@ type ProductCardPropTypes = {
 }
 
 const ProductCard = ({ title, subtitle, image }: ProductCardPropTypes) => (
-  <div className="product-block__item">
-    <div className="product-block__item__title">{title}</div>
-    <div className="product-block__item__subtitle">{subtitle}</div>
+  <section className="product-block__item">
+    <h2 className="product-block__item__title">{title}</h2>
+    <p className="product-block__item__subtitle">{subtitle}</p>
     <span className="product-block__item__image">{image}</span>
-  </div>
+  </section>
 );
 
 type StateTypes = {
