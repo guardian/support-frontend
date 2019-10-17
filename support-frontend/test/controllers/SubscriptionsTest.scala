@@ -62,7 +62,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     val amounts = Amounts(Nil,Nil,Nil)
     val allSettings = AllSettings(
-      Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty, On),
+      Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty),
       AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts),
       ContributionTypes(Nil,Nil,Nil,Nil,Nil,Nil,Nil),
       MetricUrl("http://localhost")

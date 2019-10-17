@@ -269,7 +269,6 @@ const buildStripeChargeDataFromAuthorisation = (
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,
     state.common.abParticipations,
-    state.common.optimizeExperiments,
   ),
   publicKey: getStripeKey(
     stripeAccountForContributionType[state.page.form.contributionType],
@@ -325,7 +324,7 @@ const regularPaymentRequestFromAuthorisation = (
   paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
   ophanIds: getOphanIds(),
   referrerAcquisitionData: state.common.referrerAcquisitionData,
-  supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
+  supportAbTests: getSupportAbTests(state.common.abParticipations),
   telephoneNumber: null,
 });
 
@@ -362,7 +361,6 @@ const onCreateOneOffPayPalPaymentResponse =
         const acquisitionData = derivePaymentApiAcquisitionData(
           state.common.referrerAcquisitionData,
           state.common.abParticipations,
-          state.common.optimizeExperiments,
         );
 
         // We've only created a payment at this point, and the user has to get through

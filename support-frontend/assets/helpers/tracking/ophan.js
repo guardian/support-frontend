@@ -3,9 +3,6 @@
 
 import * as ophan from 'ophan';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
-import { optimizeIdToTestName } from 'helpers/tracking/acquisitions';
-import type { OptimizeExperiment, OptimizeExperiments } from 'helpers/optimize/optimize';
-import { readExperimentsFromSession } from 'helpers/optimize/optimize';
 import { maybeTrack } from 'helpers/tracking/doNotTrack';
 
 // ----- Types ----- //
@@ -108,33 +105,13 @@ const buildOphanPayload = (participations: Participations): OphanABPayload =>
       return Object.assign({}, payload, { [participation]: ophanABEvent });
     }, {});
 
-const trackNativeABTests = (participations: Participations): void =>
+const trackAbTests = (participations: Participations): void =>
   maybeTrack(() => ophan.record({
     abTestRegister: buildOphanPayload(participations),
   }));
-
-const optimizeExperimentToParticipation = (exp: OptimizeExperiment) =>
-  ({ [optimizeIdToTestName(exp.id)]: exp.variant });
-
-function mergeTestTypes(participations: Participations, optimizeExperiments: OptimizeExperiments): Participations {
-  const reducer = (acc, exp) => (Object.assign(acc, optimizeExperimentToParticipation(exp)));
-  return optimizeExperiments.reduce(reducer, participations);
-}
-
-const trackAllABTests = (optimizeExperiments: OptimizeExperiments, participations: Participations) =>
-  trackNativeABTests(mergeTestTypes(participations, optimizeExperiments));
-
-const trackAbTests = (participations: Participations) => trackAllABTests(readExperimentsFromSession(), participations);
-
-function trackNewOptimizeExperiment(exp: OptimizeExperiment, participations: Participations) {
-  const allOptimizeExperiments = readExperimentsFromSession();
-  allOptimizeExperiments.push(exp);
-  trackAllABTests(allOptimizeExperiments, participations);
-}
 
 export {
   trackComponentEvents,
   pageView,
   trackAbTests,
-  trackNewOptimizeExperiment,
 };

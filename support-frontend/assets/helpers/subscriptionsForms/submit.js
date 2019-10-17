@@ -155,10 +155,7 @@ function buildRegularPaymentRequest(
     paymentFields,
     ophanIds: getOphanIds(),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
-    supportAbTests: getSupportAbTests(
-      state.common.abParticipations,
-      state.common.optimizeExperiments,
-    ),
+    supportAbTests: getSupportAbTests(state.common.abParticipations),
     promoCode,
     deliveryInstructions,
     debugInfo,

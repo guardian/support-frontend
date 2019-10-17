@@ -31,7 +31,6 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import { signOut } from 'helpers/user/user';
 import GridImage from 'components/gridImage/gridImage';
 
@@ -89,7 +88,6 @@ type PropTypes = {|
   setupRecurringPayPalPayment: Function,
   validateForm: () => Function,
   formIsValid: Function,
-  optimizeExperiments: OptimizeExperiments,
   addressErrors: Array<Object>,
 |};
 
@@ -113,7 +111,6 @@ function mapStateToProps(state: CheckoutState) {
       state.page.checkout.billingPeriod,
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
-    optimizeExperiments: state.common.optimizeExperiments,
     addressErrors: state.page.billingAddress.fields.formErrors,
   };
 }

@@ -14,7 +14,6 @@ import { getSubsLinks } from 'helpers/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { getAppReferrer } from 'helpers/tracking/appStores';
 import { type Participations } from 'helpers/abTests/abtest';
-import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import DigitalSection from './components/digitalSection';
 import PaperSection from './components/paperSection';
@@ -28,7 +27,6 @@ type PropTypes = {
   headingSize: HeadingSize,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
   appMedium: string,
 };
 
@@ -38,7 +36,6 @@ function mapStateToProps(state: { common: CommonState }) {
     countryGroupId: state.common.internationalisation.countryGroupId,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abParticipations: state.common.abParticipations,
-    optimizeExperiments: state.common.optimizeExperiments,
   };
 
 }
@@ -54,7 +51,6 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
     referrerAcquisitionData,
     appMedium,
     abParticipations,
-    optimizeExperiments,
     ...otherProps
   } = props;
 
@@ -64,7 +60,6 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
     getCampaign(referrerAcquisitionData),
     referrerAcquisitionData,
     abParticipations,
-    optimizeExperiments,
   );
 
   const className = classNameWithModifiers(
