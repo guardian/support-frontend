@@ -9,12 +9,43 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { Quarterly } from 'helpers/billingPeriods';
+import { Annual, Quarterly } from 'helpers/billingPeriods';
 import { glyph } from 'helpers/internationalisation/currency';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Divider } from 'components/content/content';
 import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
+
+const orderedCountryGroupNames = [
+  'United Kingdom',
+  'United States',
+  'Australia',
+  'Europe',
+  'International',
+  'New Zealand',
+  'Canada'];
+
+function CopyrightFooter() {
+  return (
+    <div className='component-weekly-terms-copyright-footer'>
+      <Divider />
+      <Text>
+        For full subscription terms and conditions visit{' '}
+        <a
+          href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          theguardian.com/guardian-weekly-subscription-terms-conditions
+        </a>
+      </Text>
+      <Text>
+        © Guardian News and Media Limited – a member of Guardian Media Group plc.
+        Registered office: Kings Place, 90 York Way, London, N1 9GU. Registered in England No. 908396
+      </Text>
+    </div>
+  );
+}
 
 export default function WeeklyTerms(props: PromotionTermsPropTypes) {
 
@@ -24,27 +55,60 @@ export default function WeeklyTerms(props: PromotionTermsPropTypes) {
   if (includes6For6) {
     return <SixForSix {...props} />;
   }
+  return <StandardTerms {...props} />;
+}
+
+function getCountryPrice(countryGroupName: CountryGroupName, prices: CountryGroupPrices) {
+  const { currency } = fromCountryGroupName(countryGroupName);
+  const currencyGlyph = glyph(currency);
+  const fulfilmentOption = countryGroupName === International ? RestOfWorld : Domestic;
+  const quarterlyPrice = prices[fulfilmentOption][NoProductOptions][Quarterly][currency];
+  const annualPrice = prices[fulfilmentOption][NoProductOptions][Annual][currency];
+  return {
+    currencyGlyph,
+    quarterlyPrice,
+    annualPrice,
+  };
+}
+
+function StandardCountryPrice(countryGroupName: CountryGroupName, prices: CountryGroupPrices) {
+  const { quarterlyPrice, annualPrice } = getCountryPrice(countryGroupName, prices);
+  return (
+    <SansParagraph>
+      <strong>{countryGroupName}:</strong>{' '}
+      Quarterly (13 weeks) subscription rate {showPrice(quarterlyPrice, false)},
+      or annual rate {showPrice(annualPrice, false)}, saving 35% off the cover price.
+    </SansParagraph>
+  );
+}
+
+function SixForSixCountryPrice(countryGroupName, prices: CountryGroupPrices) {
+  const { currencyGlyph, quarterlyPrice } = getCountryPrice(countryGroupName, prices);
+  return (
+    <SansParagraph>
+      <strong>{countryGroupName}:</strong>{' '}
+      Offer is {currencyGlyph}6 for the first 6 issues followed by quarterly (13 weeks)
+      subscription payments of {showPrice(quarterlyPrice, false)} thereafter,
+      saving 35% off the cover price.
+    </SansParagraph>
+  );
+}
+
+function StandardTerms(props: PromotionTermsPropTypes) {
   return (
     <div>
       <SansParagraph>
         Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;)
         reserves the right to withdraw this promotion at any time.
       </SansParagraph>
+      <SansParagraph>
+        You must be 18+ to be eligible for a Guardian Weekly subscription.
+      </SansParagraph>
+      {
+        orderedCountryGroupNames.map(name => StandardCountryPrice(name, props.productPrices[name]))
+      }
+      <CopyrightFooter />
     </div>
-  );
-}
-
-function CountryPricing(countryGroupName: CountryGroupName, prices: CountryGroupPrices) {
-  const { currency } = fromCountryGroupName(countryGroupName);
-  const currencyGlyph = glyph(currency);
-  const fulfilmentOption = countryGroupName === International ? RestOfWorld : Domestic;
-  const quarterly = prices[fulfilmentOption][NoProductOptions][Quarterly][currency];
-  return (
-    <SansParagraph>
-      <strong>{countryGroupName}:</strong> Offer is {currencyGlyph}6 for the first 6 issues followed
-      by quarterly (13 weeks) subscription payments of {showPrice(quarterly)} thereafter,
-      saving 35% off the cover price.
-    </SansParagraph>
   );
 }
 
@@ -61,24 +125,9 @@ function SixForSix(props: PromotionTermsPropTypes) {
         Guardian Weekly reserve the right to end this offer at any time.
       </SansParagraph>
       {
-        Object.keys(props.productPrices)
-        .map(name => CountryPricing(name, props.productPrices[name]))
+        orderedCountryGroupNames.map(name => SixForSixCountryPrice(name, props.productPrices[name]))
       }
-      <Divider />
-      <Text>
-        For full subscription terms and conditions visit
-        <a
-          href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          theguardian.com/guardian-weekly-subscription-terms-conditions
-        </a>
-      </Text>
-      <Text>
-        © Guardian News and Media Limited – a member of Guardian Media Group plc.
-        Registered office: Kings Place, 90 York Way, London, N1 9GU. Registered in England No. 908396
-      </Text>
+      <CopyrightFooter />
     </div>
   );
 }
