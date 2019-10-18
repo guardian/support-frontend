@@ -109,18 +109,22 @@ function updatePayerEmail(data: Object, setEmail: string => void) {
   }
 }
 
-function updatePayerName(data: Object, setFirstName: string => void, setLastName: string => void) {
+function updatePayerName(data: Object, setFirstName: string => void, setLastName: string => void): boolean {
   const nameParts = data.payerName.split(' ');
   if (nameParts.length > 2) {
     setFirstName(nameParts[0]);
     setLastName(nameParts.slice(1).join(' '));
+    return true;
   } else if (nameParts.length === 2) {
     setFirstName(nameParts[0]);
     setLastName(nameParts[1]);
+    return true;
   } else if (nameParts.length === 1) {
     logException(`Failed to set name: no spaces in data object: ${nameParts.join('')}`);
+    return false;
   } else {
     logException('Failed to set name: no name in data object');
+    return false;
   }
 }
 
@@ -184,19 +188,23 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
   paymentRequest.on('token', ({ complete, token, ...data }) => {
     // We need to do this so that we can offer marketing permissions on the thank you page
     updatePayerEmail(data, props.updateEmail);
-    if (props.stripeAccount !== 'ONE_OFF') {
-      updatePayerName(data, props.updateFirstName, props.updateLastName);
+    const updateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
+      updatePayerName(data, props.updateFirstName, props.updateLastName) : true;
+
+    if (updateOk) {
+      const tokenId = props.isTestUser ? 'tok_visa' : token.id;
+      if (data.methodName) {
+        // https://stripe.com/docs/stripe-js/reference#payment-response-object
+        // methodName:
+        // "The unique name of the payment handler the customer
+        // chose to authorize payment. For example, 'basic-card'."
+        trackComponentClick(`${data.methodName}-paymentAuthorised`);
+      }
+      props.onPaymentAuthorised({paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod})
+        .then(onComplete(complete));
+    } else {
+      complete('fail');
     }
-    const tokenId = props.isTestUser ? 'tok_visa' : token.id;
-    if (data.methodName) {
-      // https://stripe.com/docs/stripe-js/reference#payment-response-object
-      // methodName:
-      // "The unique name of the payment handler the customer
-      // chose to authorize payment. For example, 'basic-card'."
-      trackComponentClick(`${data.methodName}-paymentAuthorised`);
-    }
-    props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
-      .then(onComplete(complete));
   });
 }
 
