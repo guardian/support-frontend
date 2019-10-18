@@ -894,7 +894,7 @@ div.call-to-action__container {
       max-width: gu-span(4);
       @include gu-fontset-heading;
       font-size: 22px;
-      line-height: 30px;
+      line-height: 28px;
 
       @include mq($from: mobileLandscape) {
         padding-left: 15px;
@@ -908,13 +908,11 @@ div.call-to-action__container {
       @include mq($from: tablet) {
         padding-left: 25px;
         font-size: 34px;
-        line-height: 34px;
+        line-height: 38px;
         max-width: gu-span(8);
       }
 
       @include mq($from: desktop) {
-        font-size: 34px;
-        line-height: 38px;
         max-width: gu-span(12);
       }
     }
