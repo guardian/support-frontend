@@ -128,11 +128,11 @@ type ProductCardPropTypes = {
 }
 
 const ProductCard = ({ title, subtitle, image }: ProductCardPropTypes) => (
-  <div className="product-block__item">
-    <div className="product-block__item__title">{title}</div>
-    <div className="product-block__item__subtitle">{subtitle}</div>
+  <section className="product-block__item">
+    <h2 className="product-block__item__title">{title}</h2>
+    <p className="product-block__item__subtitle">{subtitle}</p>
     <span className="product-block__item__image">{image}</span>
-  </div>
+  </section>
 );
 
 type StateTypes = {
@@ -164,7 +164,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
     const { state } = this;
     return (
       <div className="hope-is-power__products">
-        <div className="product-block__container hope-is-power--centered">
+        <section className="product-block__container hope-is-power--centered">
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
             title="The Guardian Daily"
@@ -226,7 +226,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           />
           <Plus />
           <AdFreeSectionC />
-        </div>
+        </section>
       </div>
     );
 
