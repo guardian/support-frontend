@@ -5,7 +5,14 @@ import com.gu.support.config.{Stage, TouchPointEnvironments}
 import com.gu.support.encoding.Codec
 import org.joda.time.DateTime
 
-case class PromotionTerms(promoCode: PromoCode, description: String, expires: Option[DateTime], product: Product, productRatePlans: List[String])
+case class PromotionTerms(
+  promoCode: PromoCode,
+  description: String,
+  starts: DateTime,
+  expires: Option[DateTime],
+  product: Product,
+  productRatePlans: List[String]
+)
 
 object PromotionTerms {
 
@@ -35,6 +42,7 @@ object PromotionTerms {
     PromotionTerms(
       promotion.promoCode,
       promotion.promotion.description,
+      promotion.promotion.starts,
       promotion.promotion.expires,
       product,
       productRatePlans

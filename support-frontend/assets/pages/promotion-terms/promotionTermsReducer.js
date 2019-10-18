@@ -22,8 +22,10 @@ export default () => {
   const productPrices = getProductPrices();
   const terms = getGlobal('promotionTerms');
   const expires = terms && terms.expires ? new Date(terms.expires) : null;
+  const starts = terms ? new Date(terms.starts) : null;
+
   return {
     productPrices,
-    promotionTerms: { ...terms, expires },
+    promotionTerms: { ...terms, starts, expires },
   };
 };

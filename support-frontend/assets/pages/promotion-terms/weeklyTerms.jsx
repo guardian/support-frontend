@@ -15,6 +15,7 @@ import { showPrice } from 'helpers/productPrice/productPrices';
 import { Divider } from 'components/content/content';
 import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
+import CopyrightText from 'pages/promotion-terms/CopyrightText';
 
 const orderedCountryGroupNames = [
   'United Kingdom',
@@ -25,7 +26,7 @@ const orderedCountryGroupNames = [
   'New Zealand',
   'Canada'];
 
-function CopyrightFooter() {
+function FullTermsLink() {
   return (
     <div className='component-weekly-terms-copyright-footer'>
       <Divider />
@@ -39,10 +40,7 @@ function CopyrightFooter() {
           theguardian.com/guardian-weekly-subscription-terms-conditions
         </a>
       </Text>
-      <Text>
-        © Guardian News and Media Limited – a member of Guardian Media Group plc.
-        Registered office: Kings Place, 90 York Way, London, N1 9GU. Registered in England No. 908396
-      </Text>
+      <CopyrightText />
     </div>
   );
 }
@@ -107,7 +105,7 @@ function StandardTerms(props: PromotionTermsPropTypes) {
       {
         orderedCountryGroupNames.map(name => StandardCountryPrice(name, props.productPrices[name]))
       }
-      <CopyrightFooter />
+      <FullTermsLink />
     </div>
   );
 }
@@ -127,7 +125,7 @@ function SixForSix(props: PromotionTermsPropTypes) {
       {
         orderedCountryGroupNames.map(name => SixForSixCountryPrice(name, props.productPrices[name]))
       }
-      <CopyrightFooter />
+      <FullTermsLink />
     </div>
   );
 }

@@ -31,7 +31,8 @@ export type PromotionCopy = {
 
 export type PromotionTerms = {
   description: string,
-  expires: Date,
+  starts: Date,
+  expires: Option<Date>,
   product: SubscriptionProduct, // actually only GuardianWeekly, Paper or Digital Pack?
   productRatePlans: string[],
   promoCode: string,

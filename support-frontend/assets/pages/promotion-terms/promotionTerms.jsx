@@ -12,6 +12,8 @@ import { Provider } from 'react-redux';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import type { State } from './promotionTermsReducer';
+import Text from 'components/text/text';
+import Content from 'components/content/content';
 
 // ----- Redux Store ----- //
 
