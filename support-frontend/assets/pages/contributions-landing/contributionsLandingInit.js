@@ -9,7 +9,6 @@ import {
   loadStripe,
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/stripeCheckout';
-import { createStripeSetupIntent } from 'helpers/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import { getQueryParameter } from 'helpers/url';
@@ -34,7 +33,6 @@ import {
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
   setThankYouPageStage,
-  setSetupIntentClientSecret,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -120,7 +118,6 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
 
 
   if (getQueryParameter('stripe-checkout-js') !== 'no') {
-    createStripeSetupIntent(setSetupIntentClientSecret);
     // loadStripe().then(() => {
     //   contributionTypes[countryGroupId].forEach((contributionTypeSetting) => {
     //     const validPayments = getValidPaymentMethods(contributionTypeSetting.contributionType, switches, countryId);

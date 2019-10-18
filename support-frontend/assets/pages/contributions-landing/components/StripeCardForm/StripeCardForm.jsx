@@ -13,41 +13,52 @@ import { type PaymentResult } from 'helpers/paymentIntegrations/readerRevenueApi
 import { setCreateStripePaymentMethod,
   setHandleStripe3DS,
   setStripeCardFormComplete,
+  setSetupIntentClientSecret,
   onThirdPartyPaymentAuthorised,
   paymentFailure,
-  paymentWaiting,
+  paymentWaiting as setPaymentWaiting,
   type Action } from 'pages/contributions-landing/contributionsLandingActions';
 import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { createStripeSetupIntent } from 'helpers/stripe';
 
 // ----- Types -----//
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   stripe: Object, // Available through the injectStripe 'Higher-Order Component'
-  onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
+  onPaymentAuthorised: (paymentMethodId: string) => Promise<PaymentResult>,
   paymentFailure: (paymentError: ErrorReason) => Action,
   contributionType: ContributionType,
   setCreateStripePaymentMethod: ((email: string) => void) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
-  paymentWaiting: (isWaiting: boolean) => Action,
+  setPaymentWaiting: (isWaiting: boolean) => Action,
+  paymentWaiting: boolean,
   setStripeCardFormComplete: (isComplete: boolean) => Action,
   checkoutFormHasBeenSubmitted: boolean,
   stripeKey: string,
-  setSetupIntentClientSecret: string | null,
+  setupIntentClientSecret: string | null,
+  setSetupIntentClientSecret: (setupIntentClientSecret: string) => Action,
 |};
 
 const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
+  paymentWaiting: state.page.form.isWaiting,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  onPaymentAuthorised:
-    (paymentAuthorisation: PaymentAuthorisation) =>
-      dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
+  onPaymentAuthorised: (paymentMethodId: string) =>
+    dispatch(
+      onThirdPartyPaymentAuthorised({
+        paymentMethod: Stripe,
+        stripePaymentMethod: 'StripeCheckout',
+        paymentMethodId: paymentMethodId,
+      })
+    ),
   paymentFailure: (paymentError: ErrorReason) => dispatch(paymentFailure(paymentError)),
   setCreateStripePaymentMethod: (createStripePaymentMethod: (email: string) => void) =>
     dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
@@ -55,9 +66,10 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setHandleStripe3DS(handleStripe3DS)),
   setStripeCardFormComplete: (isComplete: boolean) =>
     dispatch(setStripeCardFormComplete(isComplete)),
-  paymentWaiting: (isWaiting: boolean) =>
-    dispatch(paymentWaiting(isWaiting)),
-  setSetupIntentClientSecret: string | null 
+  setPaymentWaiting: (isWaiting: boolean) =>
+    dispatch(setPaymentWaiting(isWaiting)),
+  setSetupIntentClientSecret: (setupIntentClientSecret: string) =>
+    dispatch(setSetupIntentClientSecret(setupIntentClientSecret))
 });
 
 type CardFieldState =
@@ -109,28 +121,13 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
   setupOneOffHandlers(): void {
     this.props.setCreateStripePaymentMethod(() => {
-      this.props.paymentWaiting(true);
+      this.props.setPaymentWaiting(true);
 
       this.props.stripe.createPaymentMethod('card').then((result) => {
         if (result.error) {
-          this.props.paymentWaiting(false);
-
-          logException(`Error creating Payment Method: ${result.error}`);
-
-          if (result.error.type === 'validation_error') {
-            // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
-            // happen then display a generic error about card details
-            this.props.paymentFailure('payment_details_incorrect');
-          } else {
-            // This is probably a Stripe or network problem
-            this.props.paymentFailure('payment_provider_unavailable');
-          }
+          this.handleStripeError(result.error);
         } else {
-          this.props.onPaymentAuthorised({
-            paymentMethod: Stripe,
-            stripePaymentMethod: 'StripeCheckout',
-            paymentMethodId: result.paymentMethod.id,
-          });
+          this.props.onPaymentAuthorised(result.paymentMethod.id);
         }
       });
     });
@@ -142,39 +139,56 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   setupRecurringHandlers(): void {
-    this.props.setCreateStripePaymentMethod(() => {
-      this.props.paymentWaiting(true);
-
-      fetchJson(
+    setTimeout(
+      () => fetchJson(
         window.guardian.stripeSetupIntentEndpoint,
         requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null)
       ).then(result => {
-        // this.props.stripe.handleCardSetup(result.client_secret).then((result) => {
-          debugger
+        console.log("got clientSecret")
+        this.props.setSetupIntentClientSecret(result.client_secret);
+        // If user has already clicked contribute then handle card setup now
+        if (this.props.paymentWaiting) {
+          console.log("paymentWaiting is true, calling handleCardSetupForRecurring")
+          this.handleCardSetupForRecurring(result.client_secret);
+        }
+      }),
+      20000
+    )
 
-          if (result.error) {
-            this.props.paymentWaiting(false);
+    this.props.setCreateStripePaymentMethod(() => {
+      this.props.setPaymentWaiting(true);
 
-            logException(`Error creating Payment Method: ${result.error}`);
-
-            if (result.error.type === 'validation_error') {
-              // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
-              // happen then display a generic error about card details
-              this.props.paymentFailure('payment_details_incorrect');
-            } else {
-              // This is probably a Stripe or network problem
-              this.props.paymentFailure('payment_provider_unavailable');
-            }
-          } else {
-            this.props.onPaymentAuthorised({
-              paymentMethod: Stripe,
-              stripePaymentMethod: 'StripeCheckout',
-              paymentMethodId: result.setupIntent.payment_method,
-            });
-          }
-        // })
-      });
+      // If clientSecret is not yet available then handleCardSetupForRecurring will be called when it is
+      if (this.props.setupIntentClientSecret) {
+        console.log("already have clientSecret, calling handleCardSetupForRecurring")
+        this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
+      }
     });
+  }
+
+  handleCardSetupForRecurring(clientSecret: string): void {
+    this.props.stripe.handleCardSetup(clientSecret).then((result) => {
+      if (result.error) {
+        this.handleStripeError(result.error);
+      } else {
+        this.props.onPaymentAuthorised(result.setupIntent.payment_method);
+      }
+    });
+  }
+
+  handleStripeError(errorData: any): void {
+    this.props.setPaymentWaiting(false);
+
+    logException(`Error creating Payment Method: ${errorData}`);
+
+    if (errorData.type === 'validation_error') {
+      // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
+      // happen then display a generic error about card details
+      this.props.paymentFailure('payment_details_incorrect');
+    } else {
+      // This is probably a Stripe or network problem
+      this.props.paymentFailure('payment_provider_unavailable');
+    }
   }
 
   onChange = (fieldName: CardFieldName) => (update) => {

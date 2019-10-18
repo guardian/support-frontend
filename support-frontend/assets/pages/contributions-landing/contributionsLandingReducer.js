@@ -69,10 +69,10 @@ export type Stripe3DSResult = {
 
 export type StripeCardFormData = {
   formComplete: boolean,
+  setupIntentClientSecret: string | null, // For recurring only
   // These callbacks must be initialised after the StripeCardForm component has been created
   createPaymentMethod: ((email: string) => void) | null,
   handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null,
-  setupIntentClientSecret: string | null,
 }
 
 type FormState = {
