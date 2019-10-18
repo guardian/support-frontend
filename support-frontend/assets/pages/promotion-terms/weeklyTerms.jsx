@@ -3,6 +3,7 @@
 import React from 'react';
 import Text, { SansParagraph } from 'components/text/text';
 import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';
+import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
 import {
   fromCountryGroupName,
   International,
@@ -11,10 +12,9 @@ import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { Annual, Quarterly } from 'helpers/billingPeriods';
 import { glyph } from 'helpers/internationalisation/currency';
+import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Divider } from 'components/content/content';
-import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
-import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
 import CopyrightText from 'pages/promotion-terms/CopyrightText';
 
 const orderedCountryGroupNames = [
@@ -28,7 +28,7 @@ const orderedCountryGroupNames = [
 
 function FullTermsLink() {
   return (
-    <div className='component-weekly-terms-copyright-footer'>
+    <div className="component-weekly-terms-copyright-footer">
       <Divider />
       <Text>
         For full subscription terms and conditions visit{' '}

@@ -3,31 +3,32 @@
 import React from 'react';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { formatUserDate } from 'helpers/dateConversions';
-import { digitalSubscriptionLanding } from 'helpers/routes';
+import { paperSubsUrl } from 'helpers/routes';
 import OrderedList from 'components/list/orderedList';
 import CopyrightText from 'pages/promotion-terms/CopyrightText';
 
-export default function DigitalPackTerms(props: PromotionTerms) {
+export default function PaperTerms(props: PromotionTerms) {
 
   const expiryCopy = props.expires ?
     `The closing date and time of the promotion is ${formatUserDate(props.expires)}. 
     Purchases after that date and time will not be eligible for the promotion.`
     : '';
   const copy = [
-    'The promotion (the “Promotion”) is open to new Digital Pack subscribers aged 18 and over ("you") subject to paragraph 2 below.',
+    'The promotion (the “Promotion”) is open to UK residents aged 18 and over ("you") subject to paragraph 2 below.',
     'By entering the promotion you are accepting these terms and conditions.',
     <div>To enter the promotion, you must: (i) either go to{' '}
-      <a href={digitalSubscriptionLanding()}>support.theguardian.com</a> or call
-      +44 (0) 330 333 6767 and quote promotion code {props.promoCode} (ii)
-      purchase a Digital Pack subscription and maintain that subscription for at
-      least three months.
+      <a href={paperSubsUrl()}>support.theguardian.com</a> or call
+      0330 333 6767 and quote promotion code {props.promoCode} (ii)
+      purchase a print or print + digital editions subscription package to
+      either the Guardian and Observer (excludes digital-only subscriptions) and
+      maintain that subscription for at least three months.
     </div>,
-    'Entry to this promotion is available only to new subscribers: this means that you must not already have a subscription to the Digital Pack to be eligible to participate in this Promotion.',
+    'Entry to this promotion is available only to new subscribers: this means that you must not already have a subscription to the Guardian and/or Observer to be eligible to participate in this Promotion.',
     <div>Please note that purchasing a subscription as referred to in paragraph
       4 above will also be subject to the terms and conditions for Guardian and
-      Observer Digital subscriptions available at{' '}
-      <a href="https://www.theguardian.com/digital-subscriptions-terms-conditions">
-        theguardian.com/digital-subscriptions-terms-conditions
+      Observer subscriptions available at{' '}
+      <a href="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions">
+        theguardian.com/subscriber-direct/subscription-terms-and-conditions
       </a>
     </div>,
     `The opening date and time of the Promotion is ${formatUserDate(props.starts)}. ${expiryCopy}`,
