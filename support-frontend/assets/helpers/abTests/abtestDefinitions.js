@@ -2,7 +2,7 @@
 import type { Tests } from './abtest';
 import { get as getCookie } from 'helpers/cookie';
 import { getCampaignName } from 'helpers/campaigns';
-import { V1, V2 } from 'helpers/abTests/data/testAmountsData';
+import { V1 } from 'helpers/abTests/data/testAmountsData';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
@@ -31,7 +31,7 @@ export const tests: Tests = {
     canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
   },
 
-  landingPageAmountsRound4: {
+  landingPageAmountsRound4a: {
     type: 'AMOUNTS',
     variants: [
       {
@@ -40,10 +40,6 @@ export const tests: Tests = {
       {
         id: 'V1',
         amountsRegions: V1,
-      },
-      {
-        id: 'V2',
-        amountsRegions: V2,
       },
     ],
     audiences: {
