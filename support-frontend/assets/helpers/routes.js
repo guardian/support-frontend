@@ -52,6 +52,8 @@ function digitalSubscriptionLanding() {
   return `${getOrigin()}${routes.digitalSubscriptionLanding}`;
 }
 
+const promotionTermsUrl = (promoCode: string) => `${getOrigin()}/p/${promoCode}/terms`;
+
 function paperCheckoutUrl(
   fulfilmentOption: FulfilmentOptions,
   productOptions: ProductOptions,
@@ -81,4 +83,5 @@ export {
   paperSubsUrl,
   paperCheckoutUrl,
   digitalSubscriptionLanding,
+  promotionTermsUrl,
 };

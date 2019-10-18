@@ -3,12 +3,16 @@
 // ----- Imports ----- //
 
 import * as React from 'react';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+  AUDCountries,
+  type CountryGroupId,
+  GBPCountries,
+  UnitedStates,
+} from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { AUDCountries, GBPCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
-import { promotionTermsUrl } from 'helpers/externalLinks';
+import { promotionTermsUrl } from 'helpers/routes';
 
 // ----- Props ----- //
 
