@@ -164,7 +164,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
     const { state } = this;
     return (
       <div className="hope-is-power__products">
-        <div className="product-block__container hope-is-power--centered">
+        <section className="product-block__container hope-is-power--centered">
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
             title="The Guardian Daily"
@@ -226,7 +226,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           />
           <Plus />
           <AdFreeSectionC />
-        </div>
+        </section>
       </div>
     );
 
