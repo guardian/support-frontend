@@ -48,7 +48,6 @@
   width: 100%;
   background-color: #ffffff;
 
-
   @include mq($from: mobileLandscape) {
     padding-left: 0px;
   }
@@ -65,7 +64,7 @@
   }
 
   @include mq($from: desktop) {
-    padding-left: 40px;
+    padding-left: 50px;
     max-width: calc(100% - 110px);
     max-width: 1100px;
   }
@@ -157,7 +156,7 @@
       font-weight: 600;
       line-height: 56px;
       max-width: gu-span(8);
-      margin-left: 40px !important;
+      margin-left: 50px !important;
     }
   
     h2 {
@@ -165,7 +164,7 @@
       font-weight: 400;
       line-height: 28px;
       max-width: gu-span(8);
-      margin-left: 40px !important;
+      margin-left: 50px !important;
     }
   }
 
@@ -254,7 +253,7 @@
   }
 
   .product-block__container {
-    padding-bottom: 30px;
+    padding-bottom: 50px;
     
     @include mq($from:phablet, $until: tablet) {
       padding-top: 30px;
@@ -322,7 +321,7 @@
       }
 
       @include mq($from: desktop) {
-        left: -40px;
+        left: -50px;
         width: 230px;
       }
     }
@@ -347,6 +346,13 @@
       border-top: 1px solid gu-colour(neutral-86);
       border-bottom: 1px solid gu-colour(neutral-86);
 
+      
+      @include mq($from: tablet) {
+          &:first-of-type {
+            margin-top: 15px;
+          }
+      }
+      
       @include mq($from: phablet) {
         border: 1px solid gu-colour(neutral-86);
       }
@@ -467,7 +473,7 @@
       }
      
       @include mq($from: mobileMedium) {
-        max-width: gu-span(2.5);
+        max-width:200px;
       }
 
       @include mq($from: mobileLandscape) {
@@ -491,7 +497,7 @@
       .product-block__item__subtitle--short-first {
         @include mq($from: desktop) {
           display: block;
-          max-width: gu-span(3);
+          max-width: 350px;
         }
 
         @include mq($from: leftCol) {
@@ -501,7 +507,6 @@
 
       .product-block__item__subtitle--short-second {
         display: block;
-        max-width: gu-span(2);
 
         @include mq($from: mobileMedium) {
           display: inline;
@@ -928,7 +933,7 @@ div.call-to-action__container {
       }
 
       @include mq($from: tablet) {
-        padding-left: 25px;
+        padding-left: 20px;
         font-size: 34px;
         line-height: 38px;
         max-width: gu-span(8);
@@ -937,14 +942,21 @@ div.call-to-action__container {
       @include mq($from: desktop) {
         max-width: gu-span(12);
       }
+
+      @include mq($from:leftCol) {
+        padding-left: 40px;
+      }
+
+      @include mq($from:wide) {
+        padding-left: 50px;
+      }
     }
 
     h3 {
       margin-bottom: 20px;
       padding-left: 0;
       @include gu-fontset-body-sans;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 17px;
       max-width: gu-span(4);
 
       @include mq($from: mobileLandscape) {
@@ -953,15 +965,22 @@ div.call-to-action__container {
       }
 
       @include mq($from: phablet) {
-        font-size: 15px;
         padding-left: 5px;
         max-width: gu-span(7);
       }
 
       @include mq($from: tablet) {
-        padding-left: 25px;
+        padding-left: 20px;
         margin-bottom: 40px;
         font-size: 16px;
+      }
+
+      @include mq($from:leftCol) {
+        padding-left: 40px;
+      }
+
+      @include mq($from:wide) {
+        padding-left: 50px;
       }
     }
   }
