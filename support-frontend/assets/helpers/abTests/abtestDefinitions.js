@@ -2,7 +2,7 @@
 import type { Tests } from './abtest';
 import { get as getCookie } from 'helpers/cookie';
 import { getCampaignName } from 'helpers/campaigns';
-import { V1, V2 } from 'helpers/abTests/data/testAmountsData';
+import { V1 } from 'helpers/abTests/data/testAmountsData';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
