@@ -14,15 +14,15 @@ export default function DigitalPackTerms(props: PromotionTerms) {
     Purchases after that date and time will not be eligible for the promotion.`
     : '';
   const copy = [
-    'The promotion (the “Promotion”) is open to new Digital Pack subscribers aged 18 and over ("you") subject to paragraph 2 below.',
+    'The promotion (the “Promotion”) is open to new Guardian Digital Subscription subscribers aged 18 and over ("you") subject to paragraph 2 below.',
     'By entering the promotion you are accepting these terms and conditions.',
     <div>To enter the promotion, you must: (i) either go to{' '}
       <a href={digitalSubscriptionLanding()}>support.theguardian.com</a> or call
       +44 (0) 330 333 6767 and quote promotion code {props.promoCode} (ii)
-      purchase a Digital Pack subscription and maintain that subscription for at
+      purchase a Guardian Digital Subscription and maintain that subscription for at
       least three months.
     </div>,
-    'Entry to this promotion is available only to new subscribers: this means that you must not already have a subscription to the Digital Pack to be eligible to participate in this Promotion.',
+    'Entry to this promotion is available only to new subscribers: this means that you must not already have a subscription to the Guardian Digital Subscription to be eligible to participate in this Promotion.',
     <div>Please note that purchasing a subscription as referred to in paragraph
       4 above will also be subject to the terms and conditions for Guardian and
       Observer Digital subscriptions available at{' '}
