@@ -220,12 +220,8 @@
     }
 
     @include mq($from: desktop) {
-      right: 40px;
+      right: 50px;
       top: 20px;
-    }
-
-    @include mq($from: leftCol) {
-      right: 80px;
     }
   }
 
