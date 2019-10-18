@@ -17,15 +17,21 @@
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 90px;
+		height: 80px;
 		background: #fff;
 		border-bottom: 1px solid gu-colour(neutral-86);
 		content: '';
 	}
 
-	@include mq($from: phablet, $until: desktop) {
+	@include mq($from: phablet) {
 		&:before {
-			height: 80px;
+			height: 75px;
+		}
+	}
+  
+  @include mq($from: desktop) {
+		&:before {
+			height:85px;
 		}
 	}
 
