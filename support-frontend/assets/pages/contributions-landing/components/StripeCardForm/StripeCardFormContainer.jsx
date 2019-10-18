@@ -43,6 +43,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
           this.props.isTestUser
         );
 
+        //TODO - handle different api keys
         return (
           <div className="stripe-card-element-container">
             <StripeProvider apiKey={key}>
