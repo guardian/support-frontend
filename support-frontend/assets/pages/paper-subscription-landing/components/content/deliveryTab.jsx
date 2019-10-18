@@ -12,10 +12,14 @@ import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 
-import { ContentHelpBlock, LinkTo, ContentForm, type ContentTabPropTypes } from './helpers';
+import {
+  ContentForm,
+  ContentHelpBlock,
+  type ContentTabPropTypes,
+  LinkTo,
+} from './helpers';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
-
 
 // ----- Content ----- //
 const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}) => (
@@ -47,7 +51,6 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
         'Your paper will arrive before 7am from Monday to Saturday and before 8.30am on Sunday',
         'We can’t deliver to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
         'You can pause your subscription for up to 36 days a year. So if you’re going away anywhere, you won’t have to pay for the papers that you miss',
-        'blah',
         ]}
       />
     </Text>

@@ -1,20 +1,17 @@
 package controllers
 
-import actions.{CacheControl, CustomActionBuilders}
+import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.Stage
-import com.gu.support.pricing.{PriceSummaryServiceProvider, ProductPrices}
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.{PromoCode, PromotionServiceProvider, PromotionTerms}
-import play.api.mvc.{AbstractController, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import play.twirl.api.Html
 import services.TestUserService
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
-import com.gu.support.encoding.CustomCodecs._
-import play.api.mvc.Results.NotFound
-import views.html.main
 
 class Promotions(
   promotionServiceProvider: PromotionServiceProvider,
@@ -31,7 +28,7 @@ class Promotions(
 
   implicit val a: AssetsResolver = assets
 
-  def terms(promoCode: String) = CachedAction() { implicit request =>
+  def terms(promoCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Pack Subscription"
     val mainElement = EmptyDiv("promotion-terms")
