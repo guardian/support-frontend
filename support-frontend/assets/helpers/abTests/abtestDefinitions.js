@@ -7,6 +7,7 @@ import { getCampaignName } from 'helpers/campaigns';
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 export type LandingPageMomentBackgroundColourTestVariants = 'control' | 'yellow' | 'notintest';
 export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
+export type PaymentSecurityDesignTestVariants = 'control' | 'V1_securetop' | 'V2_securemiddle' | 'V3_securebottom'
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 
@@ -98,5 +99,31 @@ export const tests: Tests = {
     seed: 9,
     targetPage: '/(uk|us|eu|au|ca|nz|int)/subscribe/digital$',
     optimizeId: 'emQ5nZJCS5mZkhtwwqfx5Q',
+  },
+  paymentSecurityDesignTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'V1_securetop',
+      },
+      {
+        id: 'V2_securemiddle',
+      },
+      {
+        id: 'V3_securebottom',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 10,
   },
 };

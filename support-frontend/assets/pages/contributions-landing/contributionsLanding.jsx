@@ -31,6 +31,8 @@ import ContributionThankYouContainer
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
+import SecureTransactionIndicator from '../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -108,6 +110,8 @@ const createCssModifiers = () => {
 // JTL - TBD - Delete after Moment is done running
 const cssModifiers = createCssModifiers();
 
+const secureTransactionText: string = 'All payments are secure and encrypted for your privacy';
+
 function contributionsLandingPage(campaignCodeParameter: ?string) {
   return (
     <Page
@@ -116,6 +120,7 @@ function contributionsLandingPage(campaignCodeParameter: ?string) {
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
       backgroundImageSrc={backgroundImageSrc}
     >
+      <SecureTransactionIndicator text={secureTransactionText} />
       <ContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
         campaignCodeParameter={campaignCodeParameter}

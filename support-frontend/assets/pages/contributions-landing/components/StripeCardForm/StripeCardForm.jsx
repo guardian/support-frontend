@@ -21,6 +21,9 @@ import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import SecureTransactionIndicator from '../../../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
+
 
 // ----- Types -----//
 
@@ -39,6 +42,7 @@ type PropTypes = {|
   stripeKey: string,
   setupIntentClientSecret: string | null,
   setSetupIntentClientSecret: (setupIntentClientSecret: string) => Action,
+  paymentSecurityDesignTestVariant: PaymentSecurityDesignTestVariants,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -46,6 +50,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
   paymentWaiting: state.page.form.isWaiting,
+  paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesign,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -258,9 +263,23 @@ class CardForm extends Component<PropTypes, StateTypes> {
     const getClasses = (fieldName: CardFieldName): string =>
       `form__input ${this.getFieldBorderClass(fieldName)}`;
 
+    const secureTransactionText: string = 'Secure transaction';
+
+    const legend = (
+      <legend className="form__legend">Your card details</legend>
+    );
+
+    const legendWithSecureTransaction = (
+      <div className="stripe-card-element-container__legend-secure">
+        {legend}
+        <SecureTransactionIndicator text={secureTransactionText} />
+      </div>
+    );
+
     return (
       <div className="form__fields">
-        <legend className="form__legend">Your card details</legend>
+        {/* {this.props.paymentSecurityDesignTestVariant === 'V2_securemiddle' ? legendWithSecureTransaction : legend} */}
+        {legendWithSecureTransaction}
         <div className="form__field">
           <label className="form__label" htmlFor="stripeCardNumberElement">
             <span>Card number</span>

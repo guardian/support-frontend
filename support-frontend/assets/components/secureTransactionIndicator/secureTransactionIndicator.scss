@@ -1,0 +1,20 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-secure-transaction {
+  margin: 10px auto 0;
+  display: flex;
+  align-items: center;
+
+  .component-secure-transaction__padlock {
+    margin-right: 5px;
+  }
+
+  .component-secure-transaction__text {
+    font-size: 14px;
+    color: gu-colour(neutral-60);
+    font-weight: 700;
+    line-height: 28px;
+    letter-spacing: 0.01em;
+  }
+
+}
