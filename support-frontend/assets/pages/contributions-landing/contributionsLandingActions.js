@@ -48,7 +48,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
-import { getStripeKey, stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
+import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -72,9 +72,9 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
-  | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object }
-  | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod }
-  | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
+  | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object, stripeAccount: StripeAccount }
+  | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount }
+  | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
   | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
@@ -128,14 +128,18 @@ const updateEmail = (email: string): ((Function) => void) =>
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
 const setPaymentRequestButtonPaymentMethod =
-  (paymentMethod: 'none' | StripePaymentMethod): Action => ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod });
+  (paymentMethod: 'none' | StripePaymentMethod, stripeAccount: StripeAccount): Action =>
+    ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod, stripeAccount });
+
 
 const setStripePaymentRequestObject =
-  (stripePaymentRequestObject: Object): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject });
+  (stripePaymentRequestObject: Object, stripeAccount: StripeAccount): Action =>
+    ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject, stripeAccount });
 
 const setStripeV3HasLoaded = (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
 
-const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
+const setStripePaymentRequestButtonClicked = (stripeAccount: StripeAccount): Action =>
+  ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount });
 
 const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -537,16 +541,6 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
     );
   };
 
-const onStripePaymentRequestApiPaymentAuthorised =
-  (paymentAuthorisation: PaymentAuthorisation) =>
-    (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
-      const state = getState();
-      return paymentAuthorisationHandlers.ONE_OFF.Stripe(
-        dispatch,
-        state,
-        paymentAuthorisation,
-      );
-    };
 
 export {
   updateContributionTypeAndPaymentMethod,
@@ -577,7 +571,6 @@ export {
   sendFormSubmitEventForPayPalRecurring,
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestObject,
-  onStripePaymentRequestApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,
   setStripeV3HasLoaded,
   setTickerGoalReached,

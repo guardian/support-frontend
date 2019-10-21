@@ -16,11 +16,11 @@ case class StripeConfig(defaultAccount: StripeAccountConfig,
   def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig = {
     maybeCurrency match {
       case Some(AUD) => {
-        SafeLogger.info(s"StripeConfig: getting AU stripe account for AUD")
+        SafeLogger.debug(s"StripeConfig: getting AU stripe account for AUD")
         australiaAccount
       }
       case _ => {
-        SafeLogger.info(s"StripeConfig: getting default stripe account for ${maybeCurrency.map(_.iso).mkString}")
+        SafeLogger.debug(s"StripeConfig: getting default stripe account for ${maybeCurrency.map(_.iso).mkString}")
         defaultAccount
       }
     }
@@ -29,15 +29,15 @@ case class StripeConfig(defaultAccount: StripeAccountConfig,
   def forCountry(maybeCountry: Option[Country]): StripeAccountConfig = {
     maybeCountry match {
       case Some(Country.Australia) => {
-        SafeLogger.info(s"StripeConfig: getting AU stripe account for Australia")
+        SafeLogger.debug(s"StripeConfig: getting AU stripe account for Australia")
         australiaAccount
       }
       case Some(Country.US) => {
-        SafeLogger.info(s"StripeConfig: getting US stripe account for United States")
+        SafeLogger.debug(s"StripeConfig: getting US stripe account for United States")
         unitedStatesAccount
       }
       case _ => {
-        SafeLogger.info(s"StripeConfig: getting default stripe account for ${maybeCountry.map(_.name).mkString}")
+        SafeLogger.debug(s"StripeConfig: getting default stripe account for ${maybeCountry.map(_.name).mkString}")
         defaultAccount
       }
     }
