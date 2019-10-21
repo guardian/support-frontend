@@ -893,8 +893,6 @@ div.call-to-action__container {
   display: flex;
   padding: 10px 0 50px 10px;
   background-color: #041f4a;
-  max-width: calc(100%-10px);
-  width: calc(100%-10px);
 
   @include mq($from: mobileLandscape) {
     padding-left: 0px;
