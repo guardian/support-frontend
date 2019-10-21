@@ -2,9 +2,10 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import * as React from 'react';
 import { Provider } from 'react-redux';
-
+import marked from 'marked';
+import DOMPurify from 'dompurify';
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
@@ -37,15 +38,16 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { CampaignHeader } from './components/hero/hero';
 
 import WeeklyForm from './components/weeklyForm';
+import type { State } from './weeklySubscriptionLandingReducer';
 import reducer from './weeklySubscriptionLandingReducer';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 
 import './weeklySubscriptionLanding.scss';
-import type { State } from './weeklySubscriptionLandingReducer';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
 type PageCopy = {|
   title: string,
-  firstParagraph: string
+  firstParagraph: React.Node
 |};
 
 // ----- Redux Store ----- //
@@ -86,18 +88,37 @@ const Header = headerWithCountrySwitcherContainer({
   trackProduct: 'GuardianWeekly',
 });
 
+const getSanitisedHtml = (description: string) =>
+  DOMPurify.sanitize(marked(description));
+
+const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
+  if (promotionCopy && promotionCopy.description) {
+    const sanitised = getSanitisedHtml(promotionCopy.description);
+    return (
+    /* eslint-disable react/no-danger */
+      <LargeParagraph>
+        <span dangerouslySetInnerHTML={
+          { __html: sanitised }
+        }
+        />
+      </LargeParagraph>);
+    /* eslint-enable react/no-danger */
+  }
+  return (
+    <LargeParagraph>
+      The Guardian Weekly magazine is a round-up of the world news,
+      opinion and long reads that have shaped the week. Inside, the past seven days&#39;
+      most memorable stories are reframed with striking photography and insightful companion
+      pieces, all handpicked from The Guardian and The Observer.
+    </LargeParagraph>);
+};
+
 const getCopy = (state: State): PageCopy => {
   const { promotionCopy } = state.page;
-  const defaultCopy = {
-    title: 'Pause for thought with The Guardian\'s essential news magazine',
-    firstParagraph: `The Guardian Weekly magazine is a round-up of the world news,
-            opinion and long reads that have shaped the week. Inside, the past seven days'
-            most memorable stories are reframed with striking photography and insightful companion
-            pieces, all handpicked from The Guardian and The Observer.`,
-  };
+  const defaultTitle = 'Pause for thought with The Guardian\'s essential news magazine';
   return {
-    title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultCopy.title,
-    firstParagraph: promotionCopy && promotionCopy.description ? promotionCopy.description : defaultCopy.firstParagraph,
+    title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,
+    firstParagraph: getFirstParagraph(promotionCopy),
   };
 };
 
@@ -114,9 +135,7 @@ const content = (
       <CampaignHeader heading={copy.title} />
       <Content>
         <Text title="Catch up on the issues that matter">
-          <LargeParagraph>
-            {copy.firstParagraph}
-          </LargeParagraph>
+          {copy.firstParagraph}
         </Text>
       </Content>
       <Content id="benefits">

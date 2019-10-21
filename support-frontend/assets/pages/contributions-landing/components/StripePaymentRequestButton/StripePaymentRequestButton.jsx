@@ -5,36 +5,44 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { PaymentRequestButtonElement, injectStripe } from 'react-stripe-elements';
+import {
+  injectStripe,
+  PaymentRequestButtonElement,
+} from 'react-stripe-elements';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type {
+  ContributionType,
+  OtherAmounts,
+  SelectedAmounts,
+} from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import {
   type PaymentResult,
   type StripePaymentMethod,
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
-import type { State, StripePaymentRequestButtonData } from 'pages/contributions-landing/contributionsLandingReducer';
+import type {
+  State,
+  StripePaymentRequestButtonData,
+} from 'pages/contributions-landing/contributionsLandingReducer';
 import {
+  onThirdPartyPaymentAuthorised,
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestObject,
-  onThirdPartyPaymentAuthorised,
   updateEmail,
-  updatePaymentMethod,
   updateFirstName,
   updateLastName,
+  updatePaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
-import {
-  toHumanReadableContributionType,
-} from 'helpers/checkouts';
+import { toHumanReadableContributionType } from 'helpers/checkouts';
 import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 
 // ----- Types -----//
@@ -122,10 +130,10 @@ function updatePayerName(data: Object, setFirstName: string => void, setLastName
   } else if (nameParts.length === 1) {
     logException(`Failed to set name: no spaces in data object: ${nameParts.join('')}`);
     return false;
-  } else {
-    logException('Failed to set name: no name in data object');
-    return false;
   }
+  logException('Failed to set name: no name in data object');
+  return false;
+
 }
 
 // Calling the complete function will close the pop up payment window
@@ -200,7 +208,7 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
         // chose to authorize payment. For example, 'basic-card'."
         trackComponentClick(`${data.methodName}-paymentAuthorised`);
       }
-      props.onPaymentAuthorised({paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod})
+      props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
         .then(onComplete(complete));
     } else {
       complete('fail');
