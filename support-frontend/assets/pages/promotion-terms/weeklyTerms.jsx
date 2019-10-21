@@ -11,7 +11,7 @@ import {
 import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { Annual, Quarterly } from 'helpers/billingPeriods';
-import { glyph } from 'helpers/internationalisation/currency';
+import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Divider } from 'components/content/content';
@@ -58,7 +58,7 @@ export default function WeeklyTerms(props: PromotionTermsPropTypes) {
 
 function getCountryPrice(countryGroupName: CountryGroupName, prices: CountryGroupPrices) {
   const { currency } = fromCountryGroupName(countryGroupName);
-  const currencyGlyph = glyph(currency);
+  const currencyGlyph = extendedGlyph(currency);
   const fulfilmentOption = countryGroupName === International ? RestOfWorld : Domestic;
   const quarterlyPrice = prices[fulfilmentOption][NoProductOptions][Quarterly][currency];
   const annualPrice = prices[fulfilmentOption][NoProductOptions][Annual][currency];
@@ -74,8 +74,8 @@ function StandardCountryPrice(countryGroupName: CountryGroupName, prices: Countr
   return (
     <SansParagraph>
       <strong>{countryGroupName}:</strong>{' '}
-      Quarterly (13 weeks) subscription rate {showPrice(quarterlyPrice, false)},
-      or annual rate {showPrice(annualPrice, false)}, saving 35% off the cover price.
+      Quarterly (13 weeks) subscription rate {showPrice(quarterlyPrice)},
+      or annual rate {showPrice(annualPrice)}, saving 35% off the cover price.
     </SansParagraph>
   );
 }
@@ -86,7 +86,7 @@ function SixForSixCountryPrice(countryGroupName, prices: CountryGroupPrices) {
     <SansParagraph>
       <strong>{countryGroupName}:</strong>{' '}
       Offer is {currencyGlyph}6 for the first 6 issues followed by quarterly (13 weeks)
-      subscription payments of {showPrice(quarterlyPrice, false)} thereafter,
+      subscription payments of {showPrice(quarterlyPrice)} thereafter,
       saving 35% off the cover price.
     </SansParagraph>
   );
