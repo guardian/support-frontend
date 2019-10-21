@@ -21,8 +21,8 @@ export type AcquisitionABTest = {
 };
 
 export type QueryParameter = {
-  name: String,
-  value: String,
+  name: string,
+  value: string,
 };
 
 export type AcquisitionQueryParameters = Array<QueryParameter>;
@@ -146,7 +146,7 @@ function readReferrerAcquisitionData(): ?Object {
 }
 
 const toAcquisitionQueryParameters
-  = (parameters: Array<[String, String]>): AcquisitionQueryParameters =>
+  = (parameters: Array<[string, string]>): AcquisitionQueryParameters =>
     parameters.reduce((array, item) => {
       array.push({
         name: item[0],
