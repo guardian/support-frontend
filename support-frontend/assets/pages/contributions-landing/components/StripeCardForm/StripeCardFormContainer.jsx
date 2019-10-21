@@ -37,18 +37,23 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
     if (this.props.paymentMethod === Stripe) {
       if (this.props.stripeHasLoaded) {
 
-        const key = getStripeKey(
-          stripeAccountForContributionType[this.props.contributionType],
+        const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
+
+        const stripeKey = getStripeKey(
+          stripeAccount,
           this.props.country,
           this.props.isTestUser
         );
 
-        //TODO - handle different api keys
+        /**
+         * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
+         * Instead, we must create separate instances for ONE_OFF and REGULAR.
+         */
         return (
           <div className="stripe-card-element-container">
-            <StripeProvider apiKey={key}>
+            <StripeProvider apiKey={stripeKey} key={stripeAccount}>
               <Elements>
-                <StripeCardForm stripeKey={key}/>
+                <StripeCardForm stripeKey={stripeKey}/>
               </Elements>
             </StripeProvider>
           </div>
