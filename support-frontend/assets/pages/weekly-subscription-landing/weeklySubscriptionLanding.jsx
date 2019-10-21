@@ -88,14 +88,23 @@ const Header = headerWithCountrySwitcherContainer({
   trackProduct: 'GuardianWeekly',
 });
 
+const getSanitisedHtml = (description: string) =>
+  // ensure we don't accidentally inject dangerous html into the page
+  DOMPurify.sanitize(
+    marked(description),
+    { ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a'] },
+  );
+
 const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
   if (promotionCopy && promotionCopy.description) {
-    const sanitisedHtml = DOMPurify.sanitize(marked(promotionCopy.description));
+    const sanitised = getSanitisedHtml(promotionCopy.description);
     return (
     /* eslint-disable react/no-danger */
       <LargeParagraph>
-        <span dangerouslySetInnerHTML={
-          { __html: sanitisedHtml }
+        <span
+          className="promotion-description"
+          dangerouslySetInnerHTML={
+          { __html: sanitised }
         }
         />
       </LargeParagraph>);
