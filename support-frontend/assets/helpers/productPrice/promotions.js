@@ -11,6 +11,7 @@ import type {
   ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 export type DiscountBenefit = {
   amount: number,
@@ -27,6 +28,16 @@ export type PromotionCopy = {
   description?: string,
   roundel?: string,
 }
+
+export type PromotionTerms = {
+  description: string,
+  starts: Date,
+  expires: Option<Date>,
+  product: SubscriptionProduct, // actually only GuardianWeekly, Paper or Digital Pack?
+  productRatePlans: string[],
+  promoCode: string,
+}
+
 export type Promotion =
   {
     name: string,

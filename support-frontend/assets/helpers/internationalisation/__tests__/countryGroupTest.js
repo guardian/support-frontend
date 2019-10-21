@@ -2,7 +2,15 @@
 
 // ----- Imports ----- //
 
-import { AUDCountries, detect, EURCountries, GBPCountries, International, UnitedStates } from '../countryGroup';
+import {
+  AUDCountries,
+  detect,
+  EURCountries,
+  fromCountryGroupName,
+  GBPCountries,
+  International,
+  UnitedStates,
+} from '../countryGroup';
 
 const { jsdom } = global;
 
@@ -140,6 +148,10 @@ describe('detect countryGroup', () => {
 
     expect(detect()).toEqual(GBPCountries);
 
+  });
+
+  it('should find the correct country group from the name', () => {
+    expect(fromCountryGroupName('United Kingdom').name).toEqual('United Kingdom');
   });
 
 });

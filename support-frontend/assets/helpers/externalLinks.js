@@ -264,8 +264,6 @@ const getProfileUrl = (path: string) => (returnUrl: ?string) => {
 const getSignoutUrl = getProfileUrl('signout');
 const getReauthenticateUrl = getProfileUrl('reauthenticate');
 
-const promotionTermsUrl = (promoCode: string) => `${subsUrl}/p/${promoCode}/terms`;
-
 // ----- Exports ----- //
 
 export {
@@ -282,5 +280,4 @@ export {
   myAccountUrl,
   manageSubsUrl,
   homeDeliveryUrl,
-  promotionTermsUrl,
 };

@@ -48,6 +48,12 @@ function paperSubsUrl(withDelivery: boolean = false): string {
   return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
 }
 
+function digitalSubscriptionLanding() {
+  return `${getOrigin()}${routes.digitalSubscriptionLanding}`;
+}
+
+const promotionTermsUrl = (promoCode: string) => `${getOrigin()}/p/${promoCode}/terms`;
+
 function paperCheckoutUrl(
   fulfilmentOption: FulfilmentOptions,
   productOptions: ProductOptions,
@@ -69,4 +75,13 @@ function payPalReturnUrl(cgId: CountryGroupId, email: string): string {
 
 // ----- Exports ----- //
 
-export { routes, postcodeLookupUrl, payPalCancelUrl, payPalReturnUrl, paperSubsUrl, paperCheckoutUrl };
+export {
+  routes,
+  postcodeLookupUrl,
+  payPalCancelUrl,
+  payPalReturnUrl,
+  paperSubsUrl,
+  paperCheckoutUrl,
+  digitalSubscriptionLanding,
+  promotionTermsUrl,
+};
