@@ -88,17 +88,14 @@ const Header = headerWithCountrySwitcherContainer({
   trackProduct: 'GuardianWeekly',
 });
 
-const getSanitisedHtml = (description: string) =>
-  DOMPurify.sanitize(marked(description));
-
 const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
   if (promotionCopy && promotionCopy.description) {
-    const sanitised = getSanitisedHtml(promotionCopy.description);
+    const sanitisedHtml = DOMPurify.sanitize(marked(promotionCopy.description));
     return (
     /* eslint-disable react/no-danger */
       <LargeParagraph>
         <span dangerouslySetInnerHTML={
-          { __html: sanitised }
+          { __html: sanitisedHtml }
         }
         />
       </LargeParagraph>);
