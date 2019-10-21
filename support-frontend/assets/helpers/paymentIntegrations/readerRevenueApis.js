@@ -56,7 +56,8 @@ type ProductFields = RegularContribution | DigitalSubscription | PaperSubscripti
 
 type RegularPayPalPaymentFields = {| baid: string |};
 
-type RegularStripePaymentFields = {| stripeToken: string |};
+type RegularStripePaymentIntentFields = {| paymentMethod: string |};
+type RegularStripeCheckoutPaymentFields = {| stripeToken: string |};
 
 type RegularDirectDebitPaymentFields = {|
   accountHolderName: string,
@@ -68,7 +69,8 @@ type RegularExistingPaymentFields = {| billingAccountId: string |};
 
 export type RegularPaymentFields =
   RegularPayPalPaymentFields |
-  RegularStripePaymentFields |
+  RegularStripePaymentIntentFields |
+  RegularStripeCheckoutPaymentFields |
   RegularDirectDebitPaymentFields |
   RegularExistingPaymentFields;
 

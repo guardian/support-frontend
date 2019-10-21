@@ -114,7 +114,6 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
-  stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
   stripeElementsRecurringTestVariant: state.common.abParticipations.stripeElementsRecurring,
 });
 

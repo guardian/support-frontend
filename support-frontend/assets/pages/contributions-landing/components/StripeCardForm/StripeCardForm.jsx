@@ -22,7 +22,6 @@ import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { createStripeSetupIntent } from 'helpers/stripe';
 
 // ----- Types -----//
 

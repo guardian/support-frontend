@@ -24,7 +24,7 @@ export const stripeCardFormIsIncomplete = (
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   stripeCardFormComplete: boolean,
-  stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants,
+  stripeElementsRecurringTestVariant: string,
 ): boolean =>
   (contributionType === 'ONE_OFF' || stripeElementsRecurringTestVariant === 'stripeElements') &&
   paymentMethod === Stripe &&
