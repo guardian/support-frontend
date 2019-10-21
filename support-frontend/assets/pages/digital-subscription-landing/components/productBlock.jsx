@@ -40,7 +40,11 @@ type DropdownPropTypes = {
 const Dropdown = ({
   children, showDropDown, product,
 }: DropdownPropTypes) => (
-  <div id={`product-details-${product}`} className={`product-block__dropdown${showDropDown ? '--show' : '--hide'}`}>
+  <div
+    id={`product-details-${product}`}
+    className={`product-block__dropdown${showDropDown ? '--show' : '--hide'}`}
+    aria-hidden={showDropDown ? 'false' : 'true'}
+  >
     <span className="product-block__ul-handler">
       {children}
     </span>
