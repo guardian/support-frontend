@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { OptimizeExperiment } from 'helpers/optimize/optimize';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { ContributionTypes } from 'helpers/contributions';
 import {
@@ -18,7 +17,6 @@ export type SetCountryAction = { type: 'SET_COUNTRY_INTERNATIONALISATION', count
 
 export type Action =
   | SetCountryAction
-  | { type: 'SET_OPTIMIZE_EXPERIMENT_VARIANT', experiment: OptimizeExperiment }
   | { type: 'SET_EXISTING_PAYMENT_METHODS', existingPaymentMethods: ExistingPaymentMethod[] }
   | { type: 'SET_TRACKING_CONSENT', trackingConsent: ThirdPartyTrackingConsent }
   | { type: 'SET_CONTRIBUTION_TYPES', contributionTypes: ContributionTypes };
@@ -28,10 +26,6 @@ export type Action =
 
 function setCountry(country: IsoCountry): SetCountryAction {
   return { type: 'SET_COUNTRY_INTERNATIONALISATION', country };
-}
-
-function setExperimentVariant(experiment: OptimizeExperiment): Action {
-  return { type: 'SET_OPTIMIZE_EXPERIMENT_VARIANT', experiment };
 }
 
 function setExistingPaymentMethods(existingPaymentMethods: ExistingPaymentMethod[]): Action {
@@ -51,7 +45,6 @@ function setContributionTypes(contributionTypes: ContributionTypes) {
 
 export {
   setCountry,
-  setExperimentVariant,
   setExistingPaymentMethods,
   setTrackingConsent,
   setContributionTypes,

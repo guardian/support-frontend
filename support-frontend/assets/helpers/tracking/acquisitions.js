@@ -10,8 +10,6 @@ import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
-import type { OptimizeExperiment, OptimizeExperiments } from 'helpers/optimize/optimize';
-import { OPTIMIZE_QUERY_PARAMETER } from 'helpers/optimize/optimize';
 import { getCampaignName } from 'helpers/campaigns';
 
 
@@ -170,19 +168,6 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
   return response;
 };
 
-// Prepends all the experiment names (the keys) with 'optimize$$' to be able to
-// differentiate from native tests, and returns as array of AB tests.
-const optimizeIdToTestName = (id: string) => `optimize$$${id}`;
-
-const optimizeExperimentToAcquisitionABTest = (exp: OptimizeExperiment) => ({
-  name: optimizeIdToTestName(exp.id),
-  variant: exp.variant,
-});
-
-function optimizeExperimentsToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
-  return opt.map(exp => optimizeExperimentToAcquisitionABTest(exp));
-}
-
 // Builds the acquisition object from data and other sources.
 function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcquisitionData {
 
@@ -195,7 +180,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     getCampaignName() || acquisitionData.campaignCode || getQueryParameter('INTCMP');
 
   const parameterExclusions =
-    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', OPTIMIZE_QUERY_PARAMETER];
+    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency'];
 
   const queryParameters =
     acquisitionData.queryParameters ||
@@ -219,20 +204,16 @@ const getOphanIds = (): OphanIds => ({
   visitId: getCookie('vsid'),
 });
 
-function getSupportAbTests(participations: Participations, experiments: OptimizeExperiments): AcquisitionABTest[] {
-  return [
-    ...participationsToAcquisitionABTest(participations),
-    ...optimizeExperimentsToAcquisitionABTest(experiments),
-  ];
+function getSupportAbTests(participations: Participations): AcquisitionABTest[] {
+  return participationsToAcquisitionABTest(participations);
 }
 
 const getAbTests = (
   referrerAcquisitionData: ReferrerAcquisitionData,
-  nativeAbParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
+  participations: Participations,
 ) => {
   const alltests = [
-    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
+    ...participationsToAcquisitionABTest(participations),
     ...(referrerAcquisitionData.abTests || []),
   ];
   return alltests.reduce((acc: AcquisitionABTest[], abTest: AcquisitionABTest) => (
@@ -243,11 +224,10 @@ const getAbTests = (
 function derivePaymentApiAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
-  const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
+  const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations);
 
   const campaignCodes = referrerAcquisitionData.campaignCode ?
     [referrerAcquisitionData.campaignCode] : [];
@@ -271,10 +251,9 @@ function derivePaymentApiAcquisitionData(
 function deriveSubsAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
 ): ReferrerAcquisitionData {
 
-  const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
+  const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations);
 
   return {
     ...referrerAcquisitionData,
@@ -303,9 +282,7 @@ export {
   getReferrerAcquisitionData,
   getOphanIds,
   participationsToAcquisitionABTest,
-  optimizeExperimentsToAcquisitionABTest,
   derivePaymentApiAcquisitionData,
   deriveSubsAcquisitionData,
   getSupportAbTests,
-  optimizeIdToTestName,
 };

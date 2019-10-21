@@ -54,7 +54,7 @@ type ProductCopy = {
 const store = pageInit();
 const commonStore = store.getState().common;
 const { countryGroupId } = commonStore.internationalisation;
-const { referrerAcquisitionData, abParticipations, optimizeExperiments } = commonStore;
+const { referrerAcquisitionData, abParticipations } = commonStore;
 
 const abTest = null;
 
@@ -64,7 +64,6 @@ const subsLinks = getSubsLinks(
   getCampaign(referrerAcquisitionData),
   referrerAcquisitionData,
   abParticipations,
-  optimizeExperiments,
 );
 
 const getPrice = (product: SubscriptionProduct, alternativeText: string) => {

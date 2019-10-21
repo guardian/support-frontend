@@ -1,5 +1,5 @@
-public/**/*.js
-target/**/*.js
+public/**/*
+target/**/*
 tools/**/*.js
 coverage/
 flow-typed/

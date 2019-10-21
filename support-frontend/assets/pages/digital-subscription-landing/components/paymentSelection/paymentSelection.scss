@@ -58,9 +58,13 @@ div.payment-selection__card--A:nth-of-type(2) {
     @include mq($from:tablet) {
       margin-left: 20px;
     }
-
+    
+    @include mq($from:leftCol) {
+      margin-left: 40px;
+    }
+    
     @include mq($from:wide) {
-      margin-left: 30px;
+      margin-left: 50px;
     }
   }
 

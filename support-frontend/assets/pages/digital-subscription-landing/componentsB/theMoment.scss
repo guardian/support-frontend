@@ -318,6 +318,10 @@
 	height: inherit !important;
 	padding-top: 0 !important;
 	background: #ffe500;
+
+	&:before {
+		content: none !important;
+	}
 }
 
 .the-moment-hero .hope-is-power-hero__marketing-message {
@@ -328,15 +332,32 @@
 		margin-left: 0.625rem !important;
 	}
 	
-	@include mq($from: leftCol) {
-		max-width: gu-span(12);
+	@include mq($from: mobileLandscape) {
+		h1 {
+			margin-top: 0 !important;
+		}
 	}
 
-	@include mq($from:tablet, $until: leftCol) {
+	@include mq($from:tablet, $until: desktop) {
 		h2 {
 			max-width: 28.75rem;
 		}
 	}
+
+	@include mq($from: desktop) {
+		max-width: 1100px !important;
+	}
+}
+
+.the-moment-hero .hope-is-power__circle {
+
+  @include mq($from: tablet) {
+    top: 15px;
+  }
+
+  @include mq($from: desktop) {
+    top: 20px;
+  }
 }
 
 .dp-banner--original {

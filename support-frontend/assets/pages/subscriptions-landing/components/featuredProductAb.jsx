@@ -12,7 +12,6 @@ import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acqu
 import { type ComponentAbTest } from 'helpers/subscriptions';
 import type { HeadingSize } from 'components/heading/heading';
 import { type Participations } from 'helpers/abTests/abtest';
-import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { type CommonState } from 'helpers/page/commonReducer';
 import FeaturedProductHero from 'components/featuredProductHero/featuredProductHero';
 import { getProduct, type Product } from './featuredProducts';
@@ -28,7 +27,6 @@ type PropTypes = {|
   abTest: ComponentAbTest | null,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
 |};
 
 
@@ -38,7 +36,6 @@ function mapStateToProps(state: { common: CommonState }) {
     countryGroupId: state.common.internationalisation.countryGroupId,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abParticipations: state.common.abParticipations,
-    optimizeExperiments: state.common.optimizeExperiments,
   };
 
 }
@@ -51,7 +48,6 @@ function FeaturedProductAb(props: PropTypes) {
     referrerAcquisitionData,
     abParticipations,
     abTest,
-    optimizeExperiments,
   } = props;
 
   const getCta = ({ link, name }: Product) => (
@@ -70,7 +66,6 @@ function FeaturedProductAb(props: PropTypes) {
     getCampaign(referrerAcquisitionData),
     referrerAcquisitionData,
     abParticipations,
-    optimizeExperiments,
   );
 
   const product = getProduct(subsLinks, countryGroupId);

@@ -29,7 +29,6 @@ import { checkAmount } from 'helpers/formValidation';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
-import type { StripePaymentRequestButtonMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import { ContributionFormFields, EmptyContributionFormFields } from './ContributionFormFields';
 import { ContributionTypeTabs, EmptyContributionTypeTabs } from './ContributionTypeTabs';
@@ -82,7 +81,6 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   isTestUser: boolean,
   country: IsoCountry,
-  stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
   createStripePaymentMethod: () => void,
 |};
 
@@ -114,7 +112,6 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
-  stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
 });
 
 

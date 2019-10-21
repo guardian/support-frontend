@@ -19,17 +19,23 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
-import type { State } from '../../contributionsLandingReducer';
+import type { State, StripePaymentRequestButtonData } from 'pages/contributions-landing/contributionsLandingReducer';
 import {
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestObject,
-  onStripePaymentRequestApiPaymentAuthorised,
+  onThirdPartyPaymentAuthorised,
   updateEmail,
-} from '../../contributionsLandingActions';
+  updatePaymentMethod,
+  updateFirstName,
+  updateLastName,
+} from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
-
+import {
+  toHumanReadableContributionType,
+} from 'helpers/checkouts';
+import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 
 // ----- Types -----//
 
@@ -44,22 +50,24 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   isTestUser: boolean,
   amount: number,
-  stripePaymentRequestObject: Object | null,
-  paymentRequestButtonPaymentMethod: StripePaymentMethod,
-  setPaymentRequestButtonPaymentMethod: (StripePaymentRequestButtonMethod) => void,
-  setStripePaymentRequestObject: (Object) => void,
+  stripePaymentRequestButtonData: StripePaymentRequestButtonData,
+  setPaymentRequestButtonPaymentMethod: (StripePaymentRequestButtonMethod, StripeAccount) => void,
+  setStripePaymentRequestObject: (paymentRequest: Object, stripeAccount: StripeAccount) => void,
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
-  setStripePaymentRequestButtonClicked: () => void,
+  setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) => void,
   toggleOtherPaymentMethods: () => void,
   updateEmail: string => void,
+  updateFirstName: string => void,
+  updateLastName: string => void,
   paymentMethod: PaymentMethod,
+  setAssociatedPaymentMethod: () => (Function) => void,
+  stripeAccount: StripeAccount,
 |};
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
-  paymentRequestButtonPaymentMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
-  stripePaymentRequestObject: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestObject,
+  stripePaymentRequestButtonData: state.page.form.stripePaymentRequestButtonData[ownProps.stripeAccount],
   countryGroupId: state.common.internationalisation.countryGroupId,
   country: state.common.internationalisation.countryId,
   currency: state.common.internationalisation.currencyId,
@@ -69,24 +77,26 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  onPaymentAuthorised:
-    (paymentAuthorisation: PaymentAuthorisation) =>
-      dispatch(onStripePaymentRequestApiPaymentAuthorised(paymentAuthorisation)),
+  onPaymentAuthorised: (paymentAuthorisation: PaymentAuthorisation) =>
+    dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
   setPaymentRequestButtonPaymentMethod:
-    (paymentMethod: StripePaymentRequestButtonMethod) => {
-      dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod));
-    },
-  setStripePaymentRequestObject:
-    (paymentRequest: Object) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
-  updateEmail: (email: string) => { dispatch(updateEmail(email)); },
-  setStripePaymentRequestButtonClicked: () => { dispatch(setStripePaymentRequestButtonClicked()); },
+    (paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount) =>
+      dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod, stripeAccount)),
+  setStripePaymentRequestObject: (paymentRequest: Object, stripeAccount: StripeAccount) =>
+    dispatch(setStripePaymentRequestObject(paymentRequest, stripeAccount)),
+  updateEmail: (email: string) => dispatch(updateEmail(email)),
+  updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
+  updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
+  setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
+    dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
+  setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
 });
 
 
 // ----- Functions -----//
 
 
-function updateUserEmail(data: Object, setEmail: string => void) {
+function updatePayerEmail(data: Object, setEmail: string => void) {
   const email = data.payerEmail;
   if (email) {
     if (isValidEmail(email)) {
@@ -96,6 +106,25 @@ function updateUserEmail(data: Object, setEmail: string => void) {
     }
   } else {
     logException('Failed to set email: no email in data object');
+  }
+}
+
+function updatePayerName(data: Object, setFirstName: string => void, setLastName: string => void): boolean {
+  const nameParts = data.payerName.split(' ');
+  if (nameParts.length > 2) {
+    setFirstName(nameParts[0]);
+    setLastName(nameParts.slice(1).join(' '));
+    return true;
+  } else if (nameParts.length === 2) {
+    setFirstName(nameParts[0]);
+    setLastName(nameParts[1]);
+    return true;
+  } else if (nameParts.length === 1) {
+    logException(`Failed to set name: no spaces in data object: ${nameParts.join('')}`);
+    return false;
+  } else {
+    logException('Failed to set name: no name in data object');
+    return false;
   }
 }
 
@@ -110,13 +139,13 @@ const onComplete = (complete: Function) => (res: PaymentResult) => {
 };
 
 
-function updateAmount(amount: number, paymentRequest: Object | null) {
+function updateTotal(props: PropTypes) {
   // When the other tab is clicked, the value of amount is NaN
-  if (!Number.isNaN(amount) && paymentRequest) {
-    paymentRequest.update({
+  if (!Number.isNaN(props.amount) && props.stripePaymentRequestButtonData.stripePaymentRequestObject) {
+    props.stripePaymentRequestButtonData.stripePaymentRequestObject.update({
       total: {
-        label: 'The Guardian',
-        amount: amount * 100,
+        label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
+        amount: props.amount * 100,
       },
     });
   }
@@ -127,8 +156,9 @@ function updateAmount(amount: number, paymentRequest: Object | null) {
 function onClick(event, props: PropTypes) {
   event.preventDefault();
   trackComponentClick('apple-pay-clicked');
-  updateAmount(props.amount, props.stripePaymentRequestObject);
-  props.setStripePaymentRequestButtonClicked();
+  updateTotal(props);
+  props.setAssociatedPaymentMethod();
+  props.setStripePaymentRequestButtonClicked(props.stripeAccount);
   const amountIsValid =
     checkAmountOrOtherAmount(
       props.selectedAmounts,
@@ -136,8 +166,8 @@ function onClick(event, props: PropTypes) {
       props.contributionType,
       props.countryGroupId,
     );
-  if (props.stripePaymentRequestObject && amountIsValid) {
-    props.stripePaymentRequestObject.show();
+  if (props.stripePaymentRequestButtonData.stripePaymentRequestObject && amountIsValid) {
+    props.stripePaymentRequestButtonData.stripePaymentRequestObject.show();
   }
 }
 
@@ -157,17 +187,24 @@ const availablePaymentRequestButtonPaymentMethod = (result: Object): StripePayme
 function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentMethod: StripePaymentMethod) {
   paymentRequest.on('token', ({ complete, token, ...data }) => {
     // We need to do this so that we can offer marketing permissions on the thank you page
-    updateUserEmail(data, props.updateEmail);
-    const tokenId = props.isTestUser ? 'tok_visa' : token.id;
-    if (data.methodName) {
-      // https://stripe.com/docs/stripe-js/reference#payment-response-object
-      // methodName:
-      // "The unique name of the payment handler the customer
-      // chose to authorize payment. For example, 'basic-card'."
-      trackComponentClick(`${data.methodName}-paymentAuthorised`);
+    updatePayerEmail(data, props.updateEmail);
+    const updateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
+      updatePayerName(data, props.updateFirstName, props.updateLastName) : true;
+
+    if (updateOk) {
+      const tokenId = props.isTestUser ? 'tok_visa' : token.id;
+      if (data.methodName) {
+        // https://stripe.com/docs/stripe-js/reference#payment-response-object
+        // methodName:
+        // "The unique name of the payment handler the customer
+        // chose to authorize payment. For example, 'basic-card'."
+        trackComponentClick(`${data.methodName}-paymentAuthorised`);
+      }
+      props.onPaymentAuthorised({paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod})
+        .then(onComplete(complete));
+    } else {
+      complete('fail');
     }
-    props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
-      .then(onComplete(complete));
   });
 }
 
@@ -176,10 +213,11 @@ function initialisePaymentRequest(props: PropTypes) {
     country: props.country,
     currency: props.currency.toLowerCase(),
     total: {
-      label: 'The Guardian',
-      amount: props.amount,
+      label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
+      amount: props.amount * 100,
     },
     requestPayerEmail: true,
+    requestPayerName: props.stripeAccount !== 'ONE_OFF',
   });
 
   paymentRequest.canMakePayment().then((result) => {
@@ -187,12 +225,12 @@ function initialisePaymentRequest(props: PropTypes) {
     if (paymentMethod !== null) {
       trackComponentClick(`${paymentMethod}-loaded`);
       setUpPaymentListener(props, paymentRequest, paymentMethod);
-      props.setPaymentRequestButtonPaymentMethod(paymentMethod);
+      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
     } else {
-      props.setPaymentRequestButtonPaymentMethod('none');
+      props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }
   });
-  props.setStripePaymentRequestObject(paymentRequest);
+  props.setStripePaymentRequestObject(paymentRequest, props.stripeAccount);
 }
 
 const paymentButtonStyle = {
@@ -208,19 +246,26 @@ function PaymentRequestButton(props: PropTypes) {
 
   // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
   // until the async canMakePayment() function has been called on the stripePaymentRequestObject object.
-  if (!props.stripePaymentRequestObject) {
+  if (!props.stripePaymentRequestButtonData.stripePaymentRequestObject) {
     initialisePaymentRequest({ ...props });
     return null;
   }
 
-  if (!props.paymentRequestButtonPaymentMethod || props.paymentRequestButtonPaymentMethod === 'none') {
+  if (
+    !props.stripePaymentRequestButtonData.paymentMethod ||
+    props.stripePaymentRequestButtonData.paymentMethod === 'none'
+  ) {
     return null;
   }
 
   return (
-    <div className="stripe-payment-request-button__container">
+    <div
+      className="stripe-payment-request-button__container"
+      data-for-stripe-account={props.stripeAccount}
+      data-for-contribution-type={props.contributionType}
+    >
       <PaymentRequestButtonElement
-        paymentRequest={props.stripePaymentRequestObject}
+        paymentRequest={props.stripePaymentRequestButtonData.stripePaymentRequestObject}
         className="stripe-payment-request-button__button"
         style={paymentButtonStyle}
         onClick={(event) => {

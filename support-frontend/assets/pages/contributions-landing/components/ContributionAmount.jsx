@@ -51,7 +51,9 @@ const mapStateToProps = state => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
-  stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
+  stripePaymentRequestButtonClicked:
+    state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
+    state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
