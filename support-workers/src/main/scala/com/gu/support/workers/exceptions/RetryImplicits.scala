@@ -6,12 +6,17 @@ import com.amazonaws.services.kms.model._
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.helpers.{WebServiceClientError, WebServiceHelperError}
-import io.circe.ParsingFailure
+import io.circe.{DecodingFailure, ParsingFailure}
 
 object RetryImplicits {
 
   implicit class RetryConversions(val throwable: Throwable) extends AnyVal {
     def asRetryException: RetryException = throwable match {
+      case wshe: WebServiceHelperError[_] if wshe.cause.isInstanceOf[DecodingFailure] =>
+        // if we fail to parse SalesForce response or any JSON response, it means something failed
+        // or we had malformed input, so we should not retry again.
+        new RetryNone(message = wshe.getMessage, cause = wshe.cause)
+
       //Timeouts/connection issues and 500s
       case e @ (_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) =>
         new RetryUnlimited(message = e.getMessage, cause = throwable)
