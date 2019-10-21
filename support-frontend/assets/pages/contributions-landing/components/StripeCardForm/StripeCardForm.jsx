@@ -21,8 +21,6 @@ import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import SecureTransactionIndicator from '../../../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
-import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types -----//
@@ -276,6 +274,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       </div>
     );
 
+    console.log('paymentsecurityprops', this.props.paymentSecurityDesignTestVariant);
     return (
       <div className="form__fields">
         {/* {this.props.paymentSecurityDesignTestVariant === 'V2_securemiddle' ? legendWithSecureTransaction : legend} */}
