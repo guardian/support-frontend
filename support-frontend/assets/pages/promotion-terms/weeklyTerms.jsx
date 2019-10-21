@@ -17,14 +17,17 @@ import { showPrice } from 'helpers/productPrice/productPrices';
 import { Divider } from 'components/content/content';
 import CopyrightText from 'pages/promotion-terms/CopyrightText';
 
-const orderedCountryGroupNames = [
-  'United Kingdom',
-  'United States',
-  'Australia',
-  'Europe',
-  'International',
-  'New Zealand',
-  'Canada'];
+type NameAndSaving = {name: CountryGroupName, saving: ?string};
+
+const orderedCountryGroupNames: NameAndSaving[] = [
+  { name: 'United Kingdom', saving: '35%' },
+  { name: 'United States', saving: '31%' },
+  { name: 'Australia', saving: '31%' },
+  { name: 'Europe', saving: '26%' },
+  { name: 'New Zealand', saving: '20%' },
+  { name: 'Canada', saving: '16%' },
+  { name: 'International', saving: null },
+];
 
 function FullTermsLink() {
   return (
@@ -69,25 +72,31 @@ function getCountryPrice(countryGroupName: CountryGroupName, prices: CountryGrou
   };
 }
 
-function StandardCountryPrice(countryGroupName: CountryGroupName, prices: CountryGroupPrices) {
-  const { quarterlyPrice, annualPrice } = getCountryPrice(countryGroupName, prices);
+function getSaving(saving: ?string) {
+  if (saving) {
+    return `, saving ${saving} off the cover price.`;
+  }
+  return '.';
+}
+
+function StandardCountryPrice(nameAndSaving: NameAndSaving, prices: CountryGroupPrices) {
+  const { quarterlyPrice, annualPrice } = getCountryPrice(nameAndSaving.name, prices);
   return (
     <SansParagraph>
-      <strong>{countryGroupName}:</strong>{' '}
+      <strong>{nameAndSaving.name}:</strong>{' '}
       Quarterly (13 weeks) subscription rate {showPrice(quarterlyPrice)},
-      or annual rate {showPrice(annualPrice)}, saving 35% off the cover price.
+      or annual rate {showPrice(annualPrice)}{getSaving(nameAndSaving.saving)}
     </SansParagraph>
   );
 }
 
-function SixForSixCountryPrice(countryGroupName, prices: CountryGroupPrices) {
-  const { currencyGlyph, quarterlyPrice } = getCountryPrice(countryGroupName, prices);
+function SixForSixCountryPrice(nameAndSaving: NameAndSaving, prices: CountryGroupPrices) {
+  const { currencyGlyph, quarterlyPrice } = getCountryPrice(nameAndSaving.name, prices);
   return (
     <SansParagraph>
-      <strong>{countryGroupName}:</strong>{' '}
+      <strong>{nameAndSaving.name}:</strong>{' '}
       Offer is {currencyGlyph}6 for the first 6 issues followed by quarterly (13 weeks)
-      subscription payments of {showPrice(quarterlyPrice)} thereafter,
-      saving 35% off the cover price.
+      subscription payments of {showPrice(quarterlyPrice)} thereafter{getSaving(nameAndSaving.saving)}
     </SansParagraph>
   );
 }
@@ -103,7 +112,8 @@ function StandardTerms(props: PromotionTermsPropTypes) {
         You must be 18+ to be eligible for a Guardian Weekly subscription.
       </SansParagraph>
       {
-        orderedCountryGroupNames.map(name => StandardCountryPrice(name, props.productPrices[name]))
+        orderedCountryGroupNames.map(nameAndSaving =>
+          StandardCountryPrice(nameAndSaving, props.productPrices[nameAndSaving.name]))
       }
       <FullTermsLink />
     </div>
@@ -123,7 +133,8 @@ function SixForSix(props: PromotionTermsPropTypes) {
         Guardian Weekly reserve the right to end this offer at any time.
       </SansParagraph>
       {
-        orderedCountryGroupNames.map(name => SixForSixCountryPrice(name, props.productPrices[name]))
+        orderedCountryGroupNames.map(nameAndSaving =>
+          SixForSixCountryPrice(nameAndSaving, props.productPrices[nameAndSaving.name]))
       }
       <FullTermsLink />
     </div>
