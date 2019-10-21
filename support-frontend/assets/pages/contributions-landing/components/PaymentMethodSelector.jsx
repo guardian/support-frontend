@@ -40,6 +40,8 @@ import {
   subscriptionsToExplainerList,
   subscriptionToExplainerPart,
 } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
+import SecureTransactionIndicator from '../../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -56,6 +58,7 @@ type PropTypes = {|
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   isTestUser: boolean,
   switches: Switches,
+  paymentSecurityDesignTestVariant: PaymentSecurityDesignTestVariants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -68,6 +71,7 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
+  paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesignTest,
 });
 
 const mapDispatchToProps = {
@@ -107,10 +111,20 @@ function withProps(props: PropTypes) {
   const fullExistingPaymentMethods: RecentlySignedInExistingPaymentMethod[] =
     ((props.existingPaymentMethods || []).filter(isUsableExistingPaymentMethod): any);
 
+  const legend = (
+    <legend className="form__legend">Payment method</legend>
+  );
+
+  const legendWithSecureTransaction = (
+    <div>
+    {legend} <SecureTransactionIndicator />
+    </div>
+  );
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
-      <legend className="form__legend">Payment method</legend>
-
+      {/* <legend className="form__legend">Payment method</legend> */}
+      {props.paymentSecurityDesignTestVariant === 'V2_securemiddle' ? legendWithSecureTransaction : legend}
       { paymentMethods.length ?
         <ul className="form__radio-group-list">
           {contributionTypeIsRecurring(props.contributionType) && !props.existingPaymentMethods && (

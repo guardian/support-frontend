@@ -119,7 +119,7 @@ const mapStateToProps = (state: State) => ({
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   stripeElementsRecurringTestVariant: state.common.abParticipations.stripeElementsRecurring,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
-  paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesign,
+  paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesignTest,
 });
 
 
@@ -247,9 +247,6 @@ function withProps(props: PropTypes) {
 
   const classModifiers = ['contribution', 'with-labels'];
 
-  const secureTransactionText: string = 'All payments are secure and encrypted for your privacy';
-
-
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
       <div className="contributions-form-selectors">
@@ -285,8 +282,9 @@ function withProps(props: PropTypes) {
 
         <ContributionErrorMessage />
         <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
+        {props.paymentSecurityDesignTestVariant === 'V3_securebottom' && <SecureTransactionIndicator />}
       </div>
-      <SecureTransactionIndicator text={secureTransactionText} />
+      
       <TermsPrivacy
         countryGroupId={props.countryGroupId}
         contributionType={props.contributionType}
