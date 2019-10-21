@@ -92,7 +92,12 @@ trait WebServiceHelper[Error <: Throwable] {
     } yield codeBody
   }
 
-  def decodeBody[A](codeBody: CodeBody)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Try[A] = {
+  def decodeBody[A](codeBody: CodeBody)(
+    implicit decoder: Decoder[A],
+    errorDecoder: Decoder[Error],
+    ctag: ClassTag[A]
+  ): Try[A] = {
+
     val CodeBody(code, responseBody) = codeBody
     val responseFamily = code(0) + "xx"
     responseFamily match {
@@ -106,8 +111,8 @@ trait WebServiceHelper[Error <: Throwable] {
         Failure((decodeError(responseBody).right.toOption).getOrElse(
           WebServiceClientError(codeBody))
         )
-      case _ =>
-        Failure(WebServiceHelperError[A](codeBody, "unrecognised response code"))
+      case statusCode =>
+        Failure(WebServiceHelperError[A](codeBody, s"unrecognised response code $statusCode"))
     }
 
   }
@@ -126,7 +131,12 @@ trait WebServiceHelper[Error <: Throwable] {
   def get[A](endpoint: String, headers: ParamMap = empty, params: ParamMap = empty)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request[A](buildRequest(endpoint, headers, params))
 
-  def postJson[A](endpoint: String, data: Json, headers: ParamMap = empty, params: ParamMap = empty)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def postJson[A](
+    endpoint: String,
+    data: Json,
+    headers: ParamMap = empty,
+    params: ParamMap = empty
+  )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.pretty(Printer.noSpaces.copy(dropNullValues = true))
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).post(body))

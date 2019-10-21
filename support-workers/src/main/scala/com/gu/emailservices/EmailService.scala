@@ -18,6 +18,7 @@ class EmailService(implicit val executionContext: ExecutionContext) {
     .withRegion(Regions.EU_WEST_1)
     .build()
 
+  Console.println(Configuration.contributionThanksQueueName)
   private val queueUrl = sqsClient.getQueueUrl(Configuration.contributionThanksQueueName).getQueueUrl
 
   def send(fields: EmailFields): Future[SendMessageResult] = {

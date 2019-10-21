@@ -20,7 +20,7 @@ object Salesforce {
   implicit val salesforceContactRecordCodec: Codec[SalesforceContactRecord] = deriveCodec
 
   object NewContact {
-    def forUser(user: User, giftRecipient: Option[GiftRecipient]) =
+    def forUser(user: User, giftRecipient: Option[GiftRecipient]): NewContact =
       giftRecipient.map(_ =>
         // If we have a gift recipient then don't update the delivery address
         NewContact(
@@ -176,7 +176,10 @@ object Salesforce {
     val rateLimitExceeded = "REQUEST_LIMIT_EXCEEDED"
   }
 
-  case class SalesforceErrorResponse(message: String, errorCode: String) extends Throwable {
+  case class SalesforceErrorResponse(
+    message: String,
+    errorCode: String
+  ) extends Throwable {
     def asRetryException: RetryException = if (errorCode == expiredAuthenticationCode || errorCode == rateLimitExceeded)
       new RetryUnlimited(message, cause = this)
     else

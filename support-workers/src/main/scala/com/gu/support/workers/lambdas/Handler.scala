@@ -49,7 +49,12 @@ abstract class Handler[IN, OUT](
     }
   }
 
-  protected def handlerFuture(input: IN, error: Option[ExecutionError], requestInfo: RequestInfo, context: Context): FutureHandlerResult
+  protected def handlerFuture(
+    input: IN,
+    error: Option[ExecutionError],
+    requestInfo: RequestInfo,
+    context: Context
+  ): FutureHandlerResult
 
 }
 
