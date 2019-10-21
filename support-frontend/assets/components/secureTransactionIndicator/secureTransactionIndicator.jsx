@@ -10,15 +10,16 @@ import SecurePadlock from './securePadlock.svg';
 // ----- Component ----- //
 
 type PropTypes = {
-  text: string,
   modifierClasses: Array<?string>,
 }
+
+const text = 'Secure transaction';
 
 export default function SecureTransactionIndicator(props: PropTypes) {
   return (
     <div className={classNameWithModifiers('component-secure-transaction', [...props.modifierClasses])}>
       <SecurePadlock className="component-secure-transaction__padlock" />
-      <div className="component-secure-transaction__text">{props.text}</div>
+      <div className="component-secure-transaction__text">{text}</div>
     </div>
   );
 }
