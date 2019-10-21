@@ -3,9 +3,12 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
+import com.gu.i18n.{Country, CountryGroup}
 import com.gu.support.catalog.GuardianWeekly
+import com.gu.support.config.Stage
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
+import com.gu.support.promotions.{ProductPromotionCopy, PromotionServiceProvider}
 import config.StringsConfig
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc._
@@ -20,12 +23,14 @@ class Subscriptions(
     val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    promotionServiceProvider: PromotionServiceProvider,
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
-    fontLoaderBundle: Either[RefPath, StyleContent]
+    fontLoaderBundle: Either[RefPath, StyleContent],
+    stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -66,9 +71,13 @@ class Subscriptions(
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
-    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++
-      List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
+    val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+    val promoCodes =  queryPromos ++ List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes)
+    val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
+      ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
+        .getCopyForPromoCode(promoCode, GuardianWeekly, CountryGroup.countryByCode(countryCode).getOrElse(Country.UK))
+    )
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
       "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk"),
@@ -79,7 +88,11 @@ class Subscriptions(
       "en" -> buildCanonicalWeeklySubscriptionLink("eu")
     )
     Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks){
-      Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
+      Html(
+        s"""<script type="text/javascript">
+              window.guardian.productPrices = ${outputJson(productPrices)}
+              window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
+            </script>""")
     }).withSettingsSurrogateKey
   }
 

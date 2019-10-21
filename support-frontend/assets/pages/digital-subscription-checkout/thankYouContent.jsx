@@ -36,7 +36,7 @@ function ThankYouContent(props: PropTypes) {
       />
       <HeroWrapper appearance="custom">
         <HeadingBlock>
-          Your Digital Pack subscription is now live
+          Your Digital Subscription is now live
         </HeadingBlock>
       </HeroWrapper>
       <Content>

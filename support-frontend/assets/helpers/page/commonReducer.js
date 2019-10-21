@@ -4,7 +4,6 @@
 
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Settings } from 'helpers/settings';
@@ -30,7 +29,6 @@ export type CommonState = {
   trackingConsent: ThirdPartyTrackingConsent,
   internationalisation: Internationalisation,
   existingPaymentMethods?: ExistingPaymentMethod[],
-  optimizeExperiments: OptimizeExperiments,
 };
 
 const getInternationalisationFromCountry = (countryId: IsoCountry, internationalisation: Internationalisation) => {
@@ -57,13 +55,7 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
             ...getInternationalisationFromCountry(action.country, state.internationalisation),
           },
         };
-      case 'SET_OPTIMIZE_EXPERIMENT_VARIANT': {
-        const optimizeExperiments = state.optimizeExperiments
-        // $FlowIgnore - Flow can't seem to recognise that action can have an experiment
-          .filter(exp => exp.id !== action.experiment.id)
-          .concat(action.experiment);
-        return { ...state, optimizeExperiments };
-      }
+
       case 'SET_EXISTING_PAYMENT_METHODS': {
         return { ...state, existingPaymentMethods: action.existingPaymentMethods };
       }

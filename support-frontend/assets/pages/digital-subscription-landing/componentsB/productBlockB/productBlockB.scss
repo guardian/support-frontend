@@ -14,7 +14,11 @@ $content-padding: 10px;
 }
 
 .product-block--margin {
-  margin-top: 20px;
+	margin-top: 20px;
+
+	@include mq($from: desktop) {
+		margin-top: 40px;
+  }
 }
 
 .product-block__header {
@@ -113,6 +117,7 @@ $content-padding: 10px;
 
 .product-block__feature-title {
   font-weight: 600;
+  display: block;
 }
 
 .product-block__right-content {
@@ -123,7 +128,7 @@ $content-padding: 10px;
     max-width: 32.5rem;
   }
   @include mq($from: desktop) {
-    padding-right: 80px;
+    padding-right: 50px;
     max-width: 50%;
   }
   @include mq($from: wide) {
@@ -143,7 +148,7 @@ $content-padding: 10px;
   @include mq($from: desktop) {
     max-width: 50%;
     .component-list-ul {
-      padding-right: 80px;
+      padding-right: 50px;
     }
   }
   @include mq($from: wide) {

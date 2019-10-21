@@ -54,10 +54,14 @@ lazy val commonSettings = Seq(
 
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "org.scalatest" %% "scalatest" % "3.0.5" % "it, test"
+  "org.scalatest" %% "scalatest" % "3.0.8" % "it, test"
 )
 
 lazy val root = (project in file("."))
+  .settings(
+    name := "support-frontend-root",
+    moduleName := "support-frontend-root"
+  )
   .aggregate(
     `support-frontend`,
     `support-workers`,

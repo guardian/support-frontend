@@ -7,9 +7,10 @@ import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.states.CreateSalesforceContactState
 import io.circe.generic.auto._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class WrapperSpec extends FlatSpec with Matchers {
+class WrapperSpec extends AnyFlatSpec with Matchers {
   "JsonWrapper" should "be able to round trip some json" in {
     val wrapped = wrapFixture(contribution())
 

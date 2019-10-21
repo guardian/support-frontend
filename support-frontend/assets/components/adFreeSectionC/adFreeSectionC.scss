@@ -1,0 +1,114 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+[class^="ad-free-section"] {
+  box-sizing: border-box;
+}
+
+.ad-free-section, .ad-free-section-c {
+  width: 100%;
+  
+  @include mq($from: phablet) {
+    display: flex;
+    max-width: gu-span(12);
+    border-left: 1px solid gu-colour(neutral-86);
+  }
+}
+
+.ad-free-section__content {
+  padding-left: 10px;
+
+  @include mq($from: phablet) {
+    width: 190%;
+    padding-bottom: 40px;
+  }
+
+  @include mq($from: desktop) {
+    width: 100%;
+    padding-bottom: 80px;
+  }
+}
+
+.ad-free-section-c__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px 20px 10px 10px;
+  border-top: 1px solid gu-colour(neutral-86);
+  border-bottom: 1px solid gu-colour(neutral-86);
+  width: calc(100% - 50px);
+
+  @include mq($from: phablet) {
+    padding: 5px 20px 30px 10px;
+    border: 1px solid gu-colour(neutral-86);
+  }
+}
+
+.ad-free-section-b__sub-header, .ad-free-section-C__sub-header {
+  margin-bottom: 8px;
+  font: 600 22px $gu-headline;
+}
+
+.ad-free-section-b__sub-header {
+  @include mq($from: tablet) {
+    font-size: 26px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 32px;
+  }
+}
+
+.ad-free-section-c__sub-header {
+  margin-bottom: 8px;
+  @include gu-fontset-heading;
+  font-weight: 600;
+  font-size: 20px;
+  max-width: gu-span(2.25);
+
+  @include mq($from: mobileMedium) {
+    max-width: gu-span(3);
+    font-size: 22px;
+  }
+
+  @include mq($from: mobileLandscape) {
+    max-width: gu-span(3.5);
+  }
+
+  @include mq($from: phablet) {
+    max-width: gu-span(4);
+  }
+
+  @include mq($from: tablet) {
+    font-size: 26px;
+  }
+
+  @include mq($from: desktop) {
+    margin-bottom: 15px;
+    font-size: 38px !important;
+    line-height: 42px;
+  }
+}
+
+.ad-free-section__image-container {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 100%;
+  padding: 0 10px 0 10px;
+
+  @include mq($from: phablet) {
+    padding-left: gu-span(1);
+  }
+}
+
+.ad-free-section__image-container img {
+  width: 100%;
+  width: 205px;
+
+  @include mq($from: phablet) {
+    width: 150px;
+  }
+
+  @include mq($from: desktop) {
+    width: 205px;
+  }
+}

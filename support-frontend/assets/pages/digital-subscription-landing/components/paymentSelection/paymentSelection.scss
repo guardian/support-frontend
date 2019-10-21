@@ -3,7 +3,6 @@
 .payment-selection {
   display: flex;
   flex-wrap: wrap;
-  margin: -80px 0 24px;
 
   @include mq($from: phablet) {
     justify-content: left;
@@ -31,13 +30,50 @@
     max-width: 30rem;
     width: 320px;
   }
+
+  .product-option__label--A {
+    background-color: #ffe500;
+    color: gu-colour(neutral-7);
+  }
 }
 
-.payment-selection__card:last-of-type {
-  margin: 30px 10px 20px 10px;
+div.payment-selection__card--A {
+  margin-left: 0;
+}
 
-  @include mq($from: tablet) {
-    margin: 0 0 0 20px;
+div.payment-selection__card--A:nth-of-type(2) {
+  margin-left: 0;
+
+  .product-option {
+    border-radius: 0 3px 3px 3px;
+  }
+}
+
+.hope-is-power--centered {
+  .payment-selection {
+    @include mq($from:mobileLandscape) {
+      margin-left: 10px;
+    }
+
+    @include mq($from:tablet) {
+      margin-left: 20px;
+    }
+    
+    @include mq($from:leftCol) {
+      margin-left: 40px;
+    }
+    
+    @include mq($from:wide) {
+      margin-left: 50px;
+    }
+  }
+
+  .payment-selection__card:last-of-type {
+    margin: 30px 10px 20px 0px;
+  
+    @include mq($from: tablet) {
+      margin: 0 0 0 20px;
+    }
   }
 }
 

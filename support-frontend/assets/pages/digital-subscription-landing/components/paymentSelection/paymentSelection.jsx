@@ -10,23 +10,25 @@ import ProductOption, {
   ProductOptionOffer,
   ProductOptionButton,
 } from 'components/productOption/productOption';
+import { mapStateToProps } from './helpers/paymentSelection';
+import { type PaymentOption } from './helpers/paymentSelection';
 
 // styles
 import './paymentSelection.scss';
 
-import { mapStateToProps } from './helpers/paymentSelection';
-import { type PaymentOption } from './helpers/paymentSelection';
-
 type PropTypes = {
   paymentOptions: Array<PaymentOption>,
+  dailyEditionsVariant: boolean,
 }
 
-const PaymentSelection = ({ paymentOptions }: PropTypes) => (
+const PaymentSelection = ({ paymentOptions, dailyEditionsVariant }: PropTypes) => (
   <div className="payment-selection">
     {
         (paymentOptions.map(paymentOption => (
-          <div className="payment-selection__card">
-            <span className="product-option__label">{paymentOption.label}</span>
+          <div className={dailyEditionsVariant ? 'payment-selection__card payment-selection__card--A' : 'payment-selection__card'}>
+            <span className={dailyEditionsVariant ? 'product-option__label product-option__label--A' : 'product-option__label'}>
+              {paymentOption.label}
+            </span>
             <ProductOption>
               <ProductOptionContent>
                 <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
@@ -50,5 +52,6 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
       }
   </div>
 );
+
 
 export default connect(mapStateToProps)(PaymentSelection);

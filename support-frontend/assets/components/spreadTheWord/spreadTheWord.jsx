@@ -9,8 +9,8 @@ import SocialShare from 'components/socialShare/socialShare';
 // ----- Component ----- //
 
 export default function SpreadTheWord() {
-  const title = 'Invite others to support The Guardian';
-  const message = 'To join you and over one million others in supporting a different model for open, independent journalism – so more people can access factual information for free';
+  const title = 'Help stretch the signal';
+  const message = 'Invite others to support us so that we can deliver truthful, independent reporting on the climate crisis – and keep it open for everyone around the world';
 
   return (
     <div className="contribution-thank-you-block">

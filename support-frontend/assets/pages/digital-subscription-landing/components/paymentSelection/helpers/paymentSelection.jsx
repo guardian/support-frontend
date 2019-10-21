@@ -22,7 +22,7 @@ import type {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
-import { getAppliedPromo } from 'helpers/productPrice/productPrices';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 
 export type PaymentOption = {
   title: string,

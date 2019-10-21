@@ -22,6 +22,7 @@ object ServicesFixtures {
 
   val validProductRatePlanIds = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
   val validProductRatePlanId = validProductRatePlanIds.head
+  val secondValidProductRatePlanId = validProductRatePlanIds.tail.head
   val invalidProductRatePlanId = "67890"
 
   val freeTrialBenefit = Some(FreeTrialBenefit(Days.days(5)))

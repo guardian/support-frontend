@@ -20,8 +20,7 @@ import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.OptionValues._
-import org.scalatest.mockito.MockitoSugar.mock
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
@@ -31,7 +30,10 @@ import services.{AccessCredentials, IdentityService, MembersDataService, TestUse
 
 import scala.concurrent.Future
 
-class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.must.Matchers
+
+class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponents {
   trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -60,7 +62,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     val amounts = Amounts(Nil,Nil,Nil)
     val allSettings = AllSettings(
-      Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty, On),
+      Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty),
       AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts),
       ContributionTypes(Nil,Nil,Nil,Nil,Nil,Nil,Nil),
       MetricUrl("http://localhost")

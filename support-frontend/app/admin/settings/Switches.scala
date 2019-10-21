@@ -6,8 +6,7 @@ import com.gu.support.encoding.Codec.deriveCodec
 case class Switches(
   oneOffPaymentMethods: PaymentMethodsSwitch,
   recurringPaymentMethods: PaymentMethodsSwitch,
-  experiments: Map[String, ExperimentSwitch],
-  optimize: SwitchState
+  experiments: Map[String, ExperimentSwitch]
 )
 
 object Switches {

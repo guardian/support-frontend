@@ -1,6 +1,6 @@
 package selenium.subscriptions.pages
 
-import org.scalatest.selenium.Page
+import org.scalatestplus.selenium.Page
 import selenium.util.Browser
 
 trait CheckoutPage extends Page with Browser {

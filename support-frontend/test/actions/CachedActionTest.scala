@@ -2,7 +2,8 @@ package actions
 
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{DateTime, Seconds}
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.mvc.Results.Ok
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -11,7 +12,7 @@ import utils.FastlyGEOIP
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class CachedActionTest extends WordSpec with MustMatchers {
+class CachedActionTest extends AnyWordSpec with Matchers {
 
   val cc = stubControllerComponents()
   val cachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)

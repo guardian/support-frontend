@@ -28,10 +28,8 @@ import {
   getBillingAddressFields,
   getDeliveryAddressFields,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { Promotion } from 'helpers/productPrice/productPrices';
 import {
   finalPrice,
-  getAppliedPromo,
   getCurrency,
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
@@ -59,6 +57,8 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 import type { IsoCountry } from '../internationalisation/country';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import type { Promotion } from 'helpers/productPrice/promotions';
 
 // ----- Functions ----- //
 
@@ -155,10 +155,7 @@ function buildRegularPaymentRequest(
     paymentFields,
     ophanIds: getOphanIds(),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
-    supportAbTests: getSupportAbTests(
-      state.common.abParticipations,
-      state.common.optimizeExperiments,
-    ),
+    supportAbTests: getSupportAbTests(state.common.abParticipations),
     promoCode,
     deliveryInstructions,
     debugInfo,

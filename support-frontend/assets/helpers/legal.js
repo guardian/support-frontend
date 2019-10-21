@@ -21,6 +21,23 @@ const contributionsTermsLinks: {
   Canada: defaultContributionTermsLink,
 };
 
+
+// TBD update these before or early in the moment launch
+const defaultPhilanthropyContactEmail: string = 'us.philanthropy@theguardian.com';
+
+const philanthropyContactEmail: {
+  [CountryGroupId]: string,
+} = {
+  GBPCountries: defaultPhilanthropyContactEmail,
+  UnitedStates: defaultPhilanthropyContactEmail,
+  AUDCountries: 'australia.philanthropy@theguardian.com',
+  EURCountries: defaultPhilanthropyContactEmail,
+  International: defaultPhilanthropyContactEmail,
+  NZDCountries: defaultPhilanthropyContactEmail,
+  Canada: defaultPhilanthropyContactEmail,
+};
+
+
 const subscriptionsTermsLinks: {
   [SubscriptionProduct]: string,
 } = {
@@ -59,4 +76,5 @@ export {
   privacyLink,
   copyrightNotice,
   contributionsEmail,
+  philanthropyContactEmail,
 };

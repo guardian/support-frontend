@@ -4,9 +4,10 @@ import selenium.contributions.pages._
 import _root_.selenium.util._
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
+import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.time.{Minute, Seconds, Span}
 
-class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
+class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver = driverConfig.webDriver
@@ -22,9 +23,9 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a Recurring Contribution (New Contributions Flow)") {
+  Feature("Sign up for a Recurring Contribution (New Contributions Flow)") {
 
-    scenario("Monthly contribution sign-up with Stripe - GBP") {
+    Scenario("Monthly contribution sign-up with Stripe - GBP") {
 
       val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("uk", testUser)
@@ -58,7 +59,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
     }
 
-    scenario("Annual contribution sign-up with Stripe - USD") {
+    Scenario("Annual contribution sign-up with Stripe - USD") {
 
       val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("us", testUser)

@@ -49,7 +49,7 @@ function DigitalPack(props: {
   return (
     <SubscriptionBundle
       modifierClass="digital"
-      heading="Digital Pack"
+      heading="Digital Subscription"
       subheading={copy.subHeading}
       headingSize={3}
       benefits={{

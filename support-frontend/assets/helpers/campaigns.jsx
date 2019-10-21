@@ -16,7 +16,7 @@ export type CampaignSettings = {
   headerCopy?: string | React$Element<string>,
   contributeCopy?: React$Element<string>,
   formMessage?: React$Element<string>,
-  termsAndConditions?: (contributionsTermsLink: string) => React$Element<string>,
+  termsAndConditions?: (contributionsTermsLink: string, contactEmail: string, isUK: boolean) => React$Element<string>,
   cssModifiers?: string[],
   contributionTypes?: ContributionTypes,
   backgroundImage?: string,
@@ -28,10 +28,12 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = 'environmentpledge';
+const currentCampaignName = 'climate-pledge-2019';
+
+const climatePledgeUrl = 'https://www.theguardian.com/environment/ng-interactive/2019/oct/16/the-guardians-climate-pledge-2019?acquisitionData=%7B%22source%22%3A%22GUARDIAN_WEB%22%2C%22componentType%22%3A%22ACQUISITIONS_EDITORIAL_LINK%22%2C%22campaignCode%22%3A%22climate_pledge_2019%22%2C%22componentId%22%3A%22climate_pledge_2019_landing_page%22%7D&INTCMP=climate_pledge_2019';
 
 export const campaigns: Campaigns = {
-  environmentpledge: {
+  [currentCampaignName]: {
     formMessage: (<div />
     ),
     headerCopy: (
@@ -49,11 +51,11 @@ export const campaigns: Campaigns = {
         <p>
           <span className="bold">The climate emergency is the defining issue of our times.</span> This is
           The Guardian’s pledge: we will be truthful, resolute and undeterred in pursuing our journalism
-          on the environment. Support from our readers makes this work possible. <a className="underline" href="https://theguardian.com">Read our pledge in full</a>.
+          on the environment. Support from our readers makes this work possible. <a className="underline" href={climatePledgeUrl}>Read our pledge in full</a>.
         </p>
       </div>
     ),
-    termsAndConditions: (contributionsTermsLink: string) => (
+    termsAndConditions: (contributionsTermsLink: string, contactEmail: string, isUK: boolean) => (
       <div className="component-terms-privacy component-terms-privacy--campaign-landing">
         <p>
           Monthly contributions are billed each month and annual contributions are billed
@@ -64,18 +66,29 @@ export const campaigns: Campaigns = {
           To find out what personal data we collect and how we use it, please visit
           our <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.
         </p>
-        <p>
-          We’re also seeking larger contributions to support The Guardian’s reporting from companies,
-          foundations and individuals. If you would like to get involved with this project or provide
-          matching funds, please <a href="mailto:apac.help@theguardian.com">contact us</a>.
-        </p>
+        {isUK ? (
+          <span className="component-terms-privacy__divider">
+            <p>
+              If you would like to make a larger contribution, we have a Patron programme with three levels of
+              support, which brings you closer to our work. For more information, please visit
+              our <a className="underline" href="https://patrons.theguardian.com?INTCMP=climate_pledge_2019-patrons-link">Patrons site</a>.
+            </p>
+          </span>
+        ) : (
+          <span className="component-terms-privacy__divider">
+            <p>
+              We also accept larger contributions to support The Guardian’s reporting from companies, foundations and
+              individuals. Please  <a href={`mailto:${contactEmail || ''}`}>contact us</a>.
+            </p>
+          </span>
+        )}
       </div>
     ),
-    cssModifiers: ['environment-moment'],
+    cssModifiers: ['climate-moment'],
     extraComponent: (
-      <div className="environment-moment_image-container">
+      <div className="climate-moment_image-container">
         <img
-          className="environment-moment_image"
+          className="climate-moment_image"
           src="https://media.guim.co.uk/8fe60bf9d30df8481fcbccb91816a3c995279007/0_0_577_840/577.png"
           alt="Support the Guardian's pledge on climate change"
         />
@@ -88,7 +101,9 @@ export type CampaignName = $Keys<typeof campaigns>
 
 export function getCampaignName(): ?CampaignName {
   if (currentCampaignName) {
-    return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
+    return window.guardian.forceCampaign || window.location.pathname.endsWith(`/${currentCampaignName}`) ?
+      currentCampaignName :
+      undefined;
   }
   return undefined;
 }

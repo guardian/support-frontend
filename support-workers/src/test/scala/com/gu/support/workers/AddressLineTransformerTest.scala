@@ -4,10 +4,11 @@ import com.gu.i18n.Currency
 import com.gu.salesforce.AddressLine
 import com.gu.salesforce.AddressLineTransformer.combinedAddressLine
 import com.gu.salesforce.AddressLineTransformer.clipForZuoraStreetNameLimit
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.mockito.MockitoSugar
 
-class AddressLineTransformerTest extends FlatSpec with Matchers with MockitoSugar {
+class AddressLineTransformerTest extends AnyFlatSpec with Matchers with MockitoSugar {
 
   val digitalPackProduct = DigitalPack(
     currency = Currency.USD,
