@@ -110,8 +110,6 @@ const createCssModifiers = () => {
 // JTL - TBD - Delete after Moment is done running
 const cssModifiers = createCssModifiers();
 
-const secureTransactionText: string = 'All payments are secure and encrypted for your privacy';
-
 function contributionsLandingPage(campaignCodeParameter: ?string) {
   return (
     <Page
@@ -120,7 +118,7 @@ function contributionsLandingPage(campaignCodeParameter: ?string) {
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
       backgroundImageSrc={backgroundImageSrc}
     >
-      <SecureTransactionIndicator text={secureTransactionText} />
+      {store.getState().common.abParticipations.paymentSecurityDesignTest === 'V1_securetop' && <SecureTransactionIndicator />}
       <ContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
         campaignCodeParameter={campaignCodeParameter}
