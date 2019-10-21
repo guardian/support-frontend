@@ -11,9 +11,10 @@ import com.gu.support.workers.exceptions.RetryImplicits._
 import com.gu.support.workers.exceptions._
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.ParsingFailure
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ErrorHandlerSpec extends FlatSpec with Matchers {
+class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
   "ErrorHandler" should "throw an RetryLimited when it handles an unknown error" in {
     an[RetryLimited] should be thrownBy {
       ErrorHandler.handleException(new ArithmeticException())

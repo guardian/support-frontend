@@ -51,6 +51,7 @@ trait AppComponents extends PlayComponents
     regularContributionsController,
     supportWorkersStatusController,
     identityController,
+    reminderController,
     subscriptionsController,
     digitalPackController,
     weeklyController,
@@ -62,6 +63,7 @@ trait AppComponents extends PlayComponents
     payPalRegularController,
     payPalOneOffController,
     directDebitController,
+    promotionsController,
     assetController,
     faviconController
   )

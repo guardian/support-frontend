@@ -30,7 +30,7 @@ function getCopy() {
   }
   return {
     subHeading: `from ${displayPrice('PaperAndDigital', GBPCountries)}`,
-    description: 'All the benefits of a paper subscription, plus access to the digital pack',
+    description: 'All the benefits of a paper subscription, plus access to the digital subscription',
   };
 }
 

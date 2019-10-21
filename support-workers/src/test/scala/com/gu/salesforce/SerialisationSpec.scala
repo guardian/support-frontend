@@ -7,9 +7,10 @@ import io.circe.Printer
 import io.circe.parser._
 import io.circe.syntax._
 import org.joda.time.DateTime
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
+class SerialisationSpec extends AnyFlatSpec with Matchers with LazyLogging {
 
   "UpsertData" should "serialise to correct UK json" in {
     newContactUK.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJson).right.get.noSpaces)

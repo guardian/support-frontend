@@ -39,17 +39,8 @@ import {
   type CountryGroupId,
   detect as detectCountryGroup,
 } from 'helpers/internationalisation/countryGroup';
-import type { OptimizeExperiment } from 'helpers/optimize/optimize';
-import {
-  addOptimizeExperiments,
-  readExperimentsFromSession,
-} from 'helpers/optimize/optimize';
 import storeReferrer from 'helpers/tracking/awin';
-import { setExperimentVariant } from 'helpers/page/commonActions';
-import {
-  trackAbTests,
-  trackNewOptimizeExperiment,
-} from 'helpers/tracking/ophan';
+import { trackAbTests } from 'helpers/tracking/ophan';
 import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
@@ -89,7 +80,6 @@ function buildInitialState(
   settings: Settings,
 ): CommonState {
   const acquisition = getReferrerAcquisitionData();
-  const optimizeExperiments = readExperimentsFromSession();
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
   const internationalisation = {
@@ -111,7 +101,6 @@ function buildInitialState(
     internationalisation,
     abParticipations,
     settings: { ...settings, amounts: amountsWithParticipationOverrides },
-    optimizeExperiments,
     trackingConsent,
   };
 
@@ -123,7 +112,6 @@ function statelessInit() {
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
   analyticsInitialisation(participations);
-  addOptimizeExperiments((exp: OptimizeExperiment) => trackNewOptimizeExperiment(exp, participations));
 }
 
 // Enables redux devtools extension and optional redux-thunk.
@@ -169,11 +157,6 @@ function init<S, A>(
       combineReducers({ page: pageReducer ? pageReducer(initialState) : null, common: commonReducer }),
       storeEnhancer(thunk),
     );
-
-    addOptimizeExperiments((exp: OptimizeExperiment) => {
-      trackNewOptimizeExperiment(exp, participations);
-      store.dispatch(setExperimentVariant(exp));
-    });
 
     return store;
   } catch (err) {

@@ -4,7 +4,7 @@ import com.typesafe.scalalogging.LazyLogging
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 import org.openqa.selenium.support.ui.{ExpectedCondition, ExpectedConditions, WebDriverWait}
-import org.scalatest.selenium.WebBrowser
+import org.scalatestplus.selenium.WebBrowser
 
 import scala.collection.JavaConverters.asScalaSetConverter
 import scala.util.Try

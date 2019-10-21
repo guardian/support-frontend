@@ -6,7 +6,6 @@ import org.scalatest.FlatSpec
 
 class CountryGroupTest extends FlatSpec {
 
-
   "A CountryGroup" should "be found by id" in {
     assert(CountryGroup.byId("ie") === None)
     assert(CountryGroup.byId("eu") === Some(CountryGroup.Europe))

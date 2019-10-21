@@ -1,13 +1,11 @@
 package controllers
 
-import org.scalatest.WordSpec
-import org.scalatest.MustMatchers
 import fixtures.TestCSRFComponents
 import actions.CustomActionBuilders
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, stubControllerComponents}
 import akka.util.Timeout
-import org.scalatest.mockito.MockitoSugar.mock
+import org.scalatestplus.mockito.MockitoSugar.mock
 import config.Configuration.IdentityUrl
 import services.AsyncAuthenticationService
 
@@ -15,7 +13,10 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SiteMapTest extends WordSpec with MustMatchers with TestCSRFComponents {
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.must.Matchers
+
+class SiteMapTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
   implicit val timeout = Timeout(2.seconds)
 

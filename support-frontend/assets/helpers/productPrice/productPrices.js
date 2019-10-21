@@ -21,34 +21,10 @@ import {
   type IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import { fixDecimals } from 'helpers/subscriptions';
-import type { Option } from 'helpers/types/option';
-import { getQueryParameter } from 'helpers/url';
+import type { Promotion } from 'helpers/productPrice/promotions';
+import { applyDiscount, getPromotion } from 'helpers/productPrice/promotions';
 
 // ----- Types ----- //
-
-export type DiscountBenefit = {
-  amount: number,
-  durationMonths?: number,
-}
-
-export type IntroductoryPeriodType = 'issue';
-
-export type IntroductoryPriceBenefit = {
-  price: number,
-  periodLength: number,
-  periodType: IntroductoryPeriodType,
-}
-
-export type Promotion =
-  {
-    name: string,
-    description: string,
-    promoCode: string,
-    discountedPrice?: number,
-    numberOfDiscountedPeriods?: number,
-    discount?: DiscountBenefit,
-    introductoryPrice?: IntroductoryPriceBenefit,
-  }
 
 export type ProductPrice = {
   price: number,
@@ -56,16 +32,18 @@ export type ProductPrice = {
   promotions?: Promotion[],
 }
 
-export type ProductPrices = {
-  [CountryGroupName]: {
-    [FulfilmentOptions]: {
-      [ProductOptions]: {
-        [BillingPeriod]: {
-          [IsoCurrency]: ProductPrice
-        }
+export type CountryGroupPrices = {
+  [FulfilmentOptions]: {
+    [ProductOptions]: {
+      [BillingPeriod]: {
+        [IsoCurrency]: ProductPrice
       }
     }
   }
+};
+
+export type ProductPrices = {
+  [CountryGroupName]: CountryGroupPrices,
 }
 
 export type BillingPeriods = {
@@ -78,32 +56,6 @@ const isNumeric = (num: ?number): boolean %checks =>
   num !== null &&
   num !== undefined &&
   !Number.isNaN(num);
-
-const hasDiscount = (promotion: ?Promotion): boolean %checks =>
-  promotion !== null &&
-  promotion !== undefined &&
-  isNumeric(promotion.discountedPrice);
-
-const hasIntroductoryPrice = (promotion: ?Promotion): boolean %checks =>
-  promotion !== null &&
-  promotion !== undefined &&
-  !!promotion.introductoryPrice;
-
-function applyDiscount(price: ProductPrice, promotion: ?Promotion) {
-  if (hasDiscount(promotion)) {
-    return {
-      ...price,
-      price: promotion.discountedPrice,
-    };
-  } else if (hasIntroductoryPrice(promotion)) {
-    return {
-      ...price,
-      // $FlowIgnore - we have checked this above
-      price: promotion.introductoryPrice.price,
-    };
-  }
-  return price;
-}
 
 function getCountryGroup(country: IsoCountry): CountryGroup {
   return countryGroups[fromCountry(country) || GBPCountries];
@@ -121,41 +73,6 @@ function getProductPrice(
   return productPrices[countryGroup.name][fulfilmentOption ||
   NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod ===
   SixWeekly ? Quarterly : billingPeriod][countryGroup.currency];
-}
-
-const matchesQueryParam = promotion =>
-  getQueryParameter('promoCode') === promotion.promoCode;
-
-const introductoryPrice = promotion =>
-  promotion.introductoryPrice !== null && promotion.introductoryPrice !==
-  undefined;
-
-function getAppliedPromo(promotions: ?Promotion[]): Option<Promotion> {
-  if (promotions && promotions.length > 0) {
-    if (promotions.length > 1) {
-      return promotions.find(introductoryPrice) ||
-        promotions.find(matchesQueryParam) ||
-        promotions[0];
-    }
-    return promotions[0];
-  }
-  return null;
-}
-
-function getPromotion(
-  productPrices: ProductPrices,
-  country: IsoCountry,
-  billingPeriod: BillingPeriod,
-  fulfilmentOption: ?FulfilmentOptions,
-  productOption: ?ProductOptions,
-): ?Promotion {
-  return getAppliedPromo(getProductPrice(
-    productPrices,
-    country,
-    billingPeriod,
-    fulfilmentOption,
-    productOption,
-  ).promotions);
 }
 
 function finalPrice(
@@ -208,16 +125,11 @@ function getCurrency(country: IsoCountry): IsoCurrency {
 }
 
 export {
-  getAppliedPromo,
   getProductPrice,
-  getPromotion,
   finalPrice,
   getCurrency,
   getCountryGroup,
   showPrice,
   displayPrice,
-  applyDiscount,
-  hasDiscount,
-  hasIntroductoryPrice,
   isNumeric,
 };

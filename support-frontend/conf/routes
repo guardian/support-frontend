@@ -66,6 +66,8 @@ GET  /support-workers/status                                       controllers.S
 # the need for a client token
 POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing
 
+POST  /contribute/remind-me                                        controllers.ReminderController.sendReminderCreatedEvent
+
 # ------ Identity ------ #
 PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest
 GET /identity/get-user-type                                        controllers.IdentityController.getUserType(maybeEmail: Option[String])
@@ -137,6 +139,9 @@ GET  /paypal/rest/error                                            controllers.P
 # ----- Direct Debit ----- #
 
 POST /direct-debit/check-account                                   controllers.DirectDebit.checkAccount
+
+# ----- Promotions ----- #
+GET /p/:promoCode/terms                                           controllers.Promotions.terms(promoCode)
 
 # ----- Verification ----- #
 

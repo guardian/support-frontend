@@ -3,9 +3,10 @@ package com.gu.support.workers
 import java.util.UUID
 
 import com.gu.support.zuora.domain.CreatedRequestId
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class IsSameRequestSpec extends FlatSpec with Matchers {
+class IsSameRequestSpec extends AnyFlatSpec with Matchers {
 
   it should "not allow access to unlabelled subscriptions" in {
     val uuid1 = UUID.randomUUID()

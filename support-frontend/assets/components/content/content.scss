@@ -101,6 +101,69 @@
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
 }
 
+.component-content__container--full-width {
+  @include mq($from: wide) {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    padding-left: 70px;
+  } 
+  
+  @include mq($from: 1395px) {
+    justify-content: center;
+    padding-left: 0;
+    margin-left: -35px;
+  }
+
+  .component-content__content--centered {
+    max-width: gu-span(4);
+    padding: $gu-v-spacing / 2 0 $gu-v-spacing * 3 10px;
+  
+    @include mq($from: mobileLandscape) {
+      padding-left: 10px;
+    }
+  
+    @include mq($from: phablet) {
+      max-width: gu-span(6);
+      padding-left: 22px;
+    }
+
+    @include mq($from: tablet) {
+      padding-left: 30px;
+    }
+  
+    @include mq($from: desktop) {
+      max-width: gu-span(8);
+      padding-left: 70px;
+    }
+
+    @include mq($from: leftCol) {
+      padding-left: 90px;
+    }
+  
+    @include mq($from: wide) {
+      padding-left: 20px;
+      max-width: 1170px;
+    }
+
+    @include mq($from: 1396px) {
+      padding-left: 50px;
+    }
+  
+    .component-content__content--centered-handler {
+      background-color: gu-colour(brand-main);
+      padding-left: 0;
+
+      .component-footer__content {
+        @include mq($from: wide) {
+          max-width: 75%;
+        }
+      }
+    }
+  }
+}
+
+
 .component-content__outset {
   @include outset;
 }

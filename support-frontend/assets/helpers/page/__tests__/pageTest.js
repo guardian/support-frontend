@@ -42,7 +42,6 @@ describe('reducer tests', () => {
         },
         amounts: {},
       },
-      optimizeExperiments: [],
     };
 
     global.reducer = createCommonReducer(initialState);

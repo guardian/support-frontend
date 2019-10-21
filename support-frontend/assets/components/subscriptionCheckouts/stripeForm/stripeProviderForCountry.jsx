@@ -18,7 +18,7 @@ type PropTypes = {
 function StripeProviderForCountry(props: PropTypes) {
   const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
   return (
-    <StripeProvider apiKey={stripeKey}>
+    <StripeProvider apiKey={stripeKey} key={stripeKey}>
       <Elements>
         <StripeForm
           component={props.component}

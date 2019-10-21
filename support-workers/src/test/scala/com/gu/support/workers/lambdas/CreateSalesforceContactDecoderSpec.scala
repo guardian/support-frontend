@@ -7,10 +7,11 @@ import com.gu.support.workers.{Contribution, PayPalReferenceTransaction, Payment
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.parser._
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.mockito.MockitoSugar
 
-class CreateSalesforceContactDecoderSpec extends FlatSpec with Matchers with MockitoSugar with LazyLogging {
+class CreateSalesforceContactDecoderSpec extends AnyFlatSpec with Matchers with MockitoSugar with LazyLogging {
 
   "CreateSalesforceContactDecoder" should "be able to decode a CreateSalesforceContactState" in {
     val state = decode[CreateSalesforceContactState](createSalesForceContactJson)

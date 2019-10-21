@@ -46,6 +46,11 @@ class PromotionValidatorSpec extends FlatSpec {
     activePromotion.copy(tracking = true).validateFor(invalidProductRatePlanId, UK, false) shouldBe NoErrors
     activePromotion.copy(tracking = true).validateFor(validProductRatePlanId, UK, false) shouldBe NoErrors
     expiredPromotion.copy(tracking = true).validateFor(invalidProductRatePlanId, US, false).head shouldBe InvalidCountry
+
+    // Check a promotion can validate against a list of productRatePlans
+    activePromotion.validForAnyProductRatePlan(List(invalidProductRatePlanId, validProductRatePlanId), UK, false).length shouldBe 1
+    activePromotion.validForAnyProductRatePlan(List(secondValidProductRatePlanId, validProductRatePlanId), UK, false).length shouldBe 2
+    activePromotion.validForAnyProductRatePlan(List(invalidProductRatePlanId), UK, false).length shouldBe 0
   }
 
   it should "handle renewal promotions correctly" in {

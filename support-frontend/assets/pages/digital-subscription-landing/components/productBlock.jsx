@@ -1,210 +1,242 @@
 // @flow
+import React, { Component, type Node } from 'react';
+import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import GridPicture from 'components/gridPicture/gridPicture';
+import cx from 'classnames';
 
-// ----- Imports ----- //
+// styles
+import './digitalSubscriptionLanding.scss';
 
-import React, { type Node } from 'react';
+const Plus = () => <div className="product-block__plus">+ Plus</div>;
 
-import { classNameWithModifiers } from 'helpers/utilities';
+const arrowSvg = (
+  <svg width="18" height="10" xmlns="http://www.w3.org/2000/svg">
+    <defs><path d="M16 0l1.427 1.428-7.035 7.036.035.035L9 9.927l-.035-.035-.036.035L7.5 8.5l.036-.035L.5 1.428 1.928 0l7.036 7.036L15.999 0z" id="a" /></defs>
+    <use fill="#121212" xlinkHref="#a" fillRule="evenodd" />
+  </svg>);
 
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import FeatureList, { type ListItem } from 'components/featureList/featureList';
-import GridImage, { type GridImg } from 'components/gridImage/gridImage';
-import SvgPennyFarthingCircles from 'components/svgs/pennyFarthingCircles';
-import { GBPCountries, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+type ListPropTypes = {
+  items: Array<Object>,
+}
 
-import CtaSwitch from './ctaSwitch';
+const List = ({ items }: ListPropTypes) => (
+  <ul>
+    {items.map(item => (
+      <li>
+        <div className="product-block__list-item__bullet" />
+        <span className="product-block__list-item--bold">{item.boldText}</span><br />
+        <div className="product-block__list-item__explainer">{item.explainer}</div>
+      </li>
+    ))}
+  </ul>
+);
 
-// ----- Types ----- //
+type DropdownPropTypes = {
+  children: Node,
+  showDropDown: boolean,
+  product: string,
+}
 
-type PropTypes = {|
-  countryGroupId: CountryGroupId,
-|};
+const Dropdown = ({
+  children, showDropDown, product,
+}: DropdownPropTypes) => (
+  <div
+    id={`product-details-${product}`}
+    className={cx('product-block__dropdown--hide', { 'product-block__dropdown--show': showDropDown })}
+    aria-hidden={showDropDown ? 'false' : 'true'}
+  >
+    <span className="product-block__ul-handler">
+      {children}
+    </span>
+  </div>
+);
 
+type ButtonPropTypes = {
+  showDropDown: boolean,
+  handleClick: Function,
+  product: 'daily' | 'app',
+}
 
-// ----- Setup ----- //
+const Button = ({
+  showDropDown, handleClick, product,
+}: ButtonPropTypes) => (
+  <button
+    aria-controls={`product-details-${product}`}
+    aria-expanded={showDropDown ? 'true' : 'false'}
+    onClick={handleClick}
+    className={cx('product-block__button--hide', { 'product-block__button--show': showDropDown })}
+  >
+    <span className="product-block__button__text">
+      <div className={showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'}>{arrowSvg}</div>
+      <span className="product-block__button__text--bold">
+        {showDropDown ? 'Less detail' : 'More detail'}
+      </span>
+    </span>
+  </button>
+);
 
-const imageSlot = '(max-width: 480px) 100vw, (max-width: 660px) 460px, 345px';
+const dailyImage = (
+  <GridPicture
+    sources={[
+      {
+        gridId: 'digitalSubsDailyMob',
+        srcSizes: [140, 500],
+        imgType: 'png',
+        sizes: '90vw',
+        media: '(max-width: 739px)',
+      },
+      {
+        gridId: 'digitalSubsDaily',
+        srcSizes: [140, 500, 1000],
+        imgType: 'png',
+        sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
+        media: '(min-width: 740px)',
+      },
+    ]}
+    fallback="digitalSubsDaily"
+    fallbackSize={500}
+    altText=""
+    fallbackImgType="png"
+  />
+);
 
-const defaultFeatures: ListItem[] = [
-  {
-    heading: ['Live ', <mark className="product-block__highlight">New</mark>],
-    text: 'Catch up on every news story as it breaks',
-  },
-  {
-    heading: ['Discover ', <mark className="product-block__highlight">New</mark>],
-    text: 'Explore a beautifully curated feed of features, reviews and opinion',
-  },
-  {
-    heading: 'Enhanced offline reading',
-    text: 'Quality journalism on your schedule - download the day\'s news before you travel',
-  },
-  {
-    heading: 'Complete the daily crossword',
-    text: 'Get our daily crossword wherever you are',
-  },
-];
+const appImage = (
+  <GridPicture
+    sources={[
+      {
+        gridId: 'digitalSubsAppMob',
+        srcSizes: [140, 500],
+        imgType: 'png',
+        sizes: '90vw',
+        media: '(max-width: 739px)',
+      },
+      {
+        gridId: 'digitalSubsApp',
+        srcSizes: [140, 500, 1000],
+        imgType: 'png',
+        sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
+        media: '(min-width: 740px)',
+      },
+    ]}
+    fallback="digitalSubsApp"
+    fallbackSize={500}
+    altText=""
+    fallbackImgType="png"
+  />
+);
 
-const appFeatures: {
-  [CountryGroupId]: ListItem[],
-} = {
-  GBPCountries: defaultFeatures,
-  UnitedStates: defaultFeatures,
-  International: defaultFeatures,
-  EURCountries: defaultFeatures,
-  NZDCountries: defaultFeatures,
-  Canada: defaultFeatures,
-  AUDCountries: [
-    {
-      heading: ['Live news and sport ', <mark className="product-block__highlight">New</mark>],
-      text: 'Catch up on every breaking story from Australia and the world, in real time',
-    },
-    {
-      heading: 'Enhanced offline reading',
-      text: 'Quality journalism on your schedule - download the day\'s news before you travel',
-    },
-    {
-      heading: 'Complete the daily crossword',
-      text: 'Get our daily crossword wherever you are',
-    },
-  ],
-};
+type ProductCardPropTypes = {
+  title: string,
+  subtitle: Node,
+  image: Node,
+}
 
-const defaultAppImage = {
-  gridId: 'premiumTier',
-  altText: 'the premium tier on the guardian app',
-  srcSizes: [644, 500, 140],
-  sizes: imageSlot,
-  imgType: 'png',
-};
+const ProductCard = ({ title, subtitle, image }: ProductCardPropTypes) => (
+  <section className="product-block__item">
+    <h2 className="product-block__item__title">{title}</h2>
+    <p className="product-block__item__subtitle">{subtitle}</p>
+    <span className="product-block__item__image">{image}</span>
+  </section>
+);
 
-const appImages: {
-  [CountryGroupId]: GridImg,
-} = {
-  GBPCountries: defaultAppImage,
-  UnitedStates: defaultAppImage,
-  International: defaultAppImage,
-  EURCountries: defaultAppImage,
-  NZDCountries: defaultAppImage,
-  Canada: defaultAppImage,
-  AUDCountries: {
-    ...defaultAppImage,
-    gridId: 'premiumTierAU',
-    srcSizes: [1000, 500, 140],
-  },
-};
+type StateTypes = {
+  showDropDownDaily: boolean,
+  showDropDownApp: boolean,
+}
 
-function getDailyEditionCopy(countryGroupId: CountryGroupId) {
-  if (countryGroupId === GBPCountries) {
-    return {
-      description: 'Every issue of The Guardian and Observer, designed for your iPad and available offline',
-      onTheGoText: 'Your complete daily newspaper, beautifully designed for your iPad',
+// This is an empty declaration because there were errors without it being passed in
+type PropTypes = {}
+
+class ProductBlock extends Component<PropTypes, StateTypes> {
+  constructor(props: PropTypes) {
+    super(props);
+    this.state = {
+      showDropDownDaily: false,
+      showDropDownApp: false,
     };
   }
-  return {
-    description: 'Every issue of The Guardian and Observer UK newspapers, designed for your iPad and available offline',
-    onTheGoText: 'Your complete daily UK newspaper, beautifully designed for your iPad',
-  };
 
-}
+  handleClick = (product: string): void => {
+    this.setState({
+      [`showDropDown${product}`]: !this.state[`showDropDown${product}`],
+    });
+    const clickAction = this.state[`showDropDown${product}`] ? 'open' : 'close';
+    trackComponentClick(`digital-subscriptions-landing-page--accordion--${product}--${clickAction}`);
+  }
 
-
-// ----- Component ----- //
-
-function ProductBlock(props: PropTypes) {
-  const dailyEditionCopy = getDailyEditionCopy(props.countryGroupId);
-  return (
-    <div className="product-block">
-      <LeftMarginSection>
-        <div className="product-block__heading-wrapper">
-          <h2 className="product-block__heading">
-            Read the Guardian ad-free on all your devices, plus get all the
-            benefits of the Premium App and Daily Edition iPad app
-          </h2>
-        </div>
-        <Product
-          modifierClass="premium-app"
-          imageProps={appImages[props.countryGroupId]}
-          companionSvg={null}
-          heading="App premium tier"
-          description="Your enhanced experience of The Guardian for mobile and tablet, with exclusive features and ad-free reading"
-          features={appFeatures[props.countryGroupId]}
-        />
-        <div className="product-block__ampersand">&</div>
-        <Product
-          modifierClass="daily-edition"
-          imageProps={{
-            gridId: 'dailyEdition',
-            altText: 'the guardian daily edition app',
-            srcSizes: [500, 140],
-            sizes: imageSlot,
-            imgType: 'png',
-          }}
-          companionSvg={<SvgPennyFarthingCircles />}
-          heading="iPad daily edition"
-          description={dailyEditionCopy.description}
-          features={[
-            {
-              heading: 'On-the-go reading',
-              text: dailyEditionCopy.onTheGoText,
-            },
-            {
-              heading: 'Every supplement',
-              text: 'Including Weekend, Review, Feast and Observer Food Monthly',
-            },
-            {
-              heading: 'Journalism at your own pace',
-              text: 'Access a month of issues in your 30-day archive',
-            },
-            {
-              heading: 'The news when you need it',
-              text: 'Downloads automatically every day, ready for you to read offline',
-            },
-          ]}
-        />
-        <CtaSwitch />
-      </LeftMarginSection>
-    </div>
-  );
-
-}
-
-// ----- Auxiliary Components ----- //
-
-function Product(props: {
-  modifierClass: string,
-  imageProps: GridImg,
-  companionSvg?: Node,
-  heading: string,
-  description: string,
-  features: ListItem[],
-}) {
-
-  return (
-    <div className={classNameWithModifiers('product-block__product', [props.modifierClass])}>
-      <div className="product-block__image">
-        <GridImage {...props.imageProps} />
-        {props.companionSvg}
+  render() {
+    const { state } = this;
+    return (
+      <div className="hope-is-power__products">
+        <section className="product-block__container hope-is-power--centered">
+          <div className="product-block__container__label--top">What&apos;s included?</div>
+          <ProductCard
+            title="The Guardian Daily"
+            subtitle={<span className="product-block__item__subtitle--short-first">Each day&apos;s edition, in one simple, elegant app</span>}
+            image={dailyImage}
+          />
+          <Dropdown
+            showDropDown={state.showDropDownDaily}
+            product="daily"
+          >
+            <List
+              items={[
+                { boldText: 'A new way to read', explainer: 'The newspaper, reimagined for mobile and tablet' },
+                { boldText: 'Published daily', explainer: 'Each edition available to read by 6am (GMT), 7 days a week' },
+                { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
+              ]}
+            />
+            <List
+              items={[
+                { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
+                { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
+                { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
+              ]}
+            />
+          </Dropdown>
+          <Button
+            showDropDown={state.showDropDownDaily}
+            handleClick={() => this.handleClick('Daily')}
+            product="daily"
+          />
+          <Plus />
+          <ProductCard
+            title="Premium access to The Guardian Live app"
+            subtitle={<span className="product-block__item__subtitle--short-second">Live news, as it happens</span>}
+            image={appImage}
+          />
+          <Dropdown
+            showDropDown={state.showDropDownApp}
+            product="app"
+          >
+            <List
+              items={[
+                { boldText: 'Live', explainer: 'Follow a live feed of breaking news and sport, as it happens' },
+                { boldText: 'Discover', explainer: 'Explore stories you might have missed, tailored to you' },
+                { boldText: 'Enhanced offline reading', explainer: 'Download the news whenever it suits you' },
+              ]}
+            />
+            <List
+              items={[
+                { boldText: 'Daily Crossword', explainer: 'Play the daily crossword wherever you are' },
+                { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
+              ]}
+            />
+          </Dropdown>
+          <Button
+            showDropDown={state.showDropDownApp}
+            handleClick={() => this.handleClick('App')}
+            product="app"
+          />
+          <Plus />
+          <AdFreeSectionC />
+        </section>
       </div>
-      <div className="product-block__copy">
-        <h3 className="product-block__product-heading">{props.heading}</h3>
-        <p className="product-block__product-description">{props.description}</p>
-        <FeatureList
-          listItems={props.features}
-        />
-      </div>
-    </div>
-  );
+    );
 
+  }
 }
 
-
-// ----- Default Props ----- //
-
-Product.defaultProps = {
-  companionSvg: null,
-};
-
-
-// ----- Exports ----- //
 
 export default ProductBlock;

@@ -3,11 +3,17 @@ package selenium.contributions
 import org.openqa.selenium.JavascriptExecutor
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen}
 import selenium.contributions.pages.{ContributionThankYou, ContributionsLanding}
 import selenium.util._
 
-class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
+import org.scalatest.featurespec.AnyFeatureSpec
+class OneOffContributionsSpec extends AnyFeatureSpec
+  with GivenWhenThen
+  with BeforeAndAfter
+  with BeforeAndAfterAll
+  with Browser
+  with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver = driverConfig.webDriver
@@ -30,9 +36,9 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a one-off contribution (New Contributions Flow)") {
+  Feature("Sign up for a one-off contribution (New Contributions Flow)") {
 
-    scenario("One-off contribution sign-up with Stripe - AUD") {
+    Scenario("One-off contribution sign-up with Stripe - AUD") {
 
       val stripePayment = 22.55
       val testUser = new PostDeployTestUser(driverConfig)
@@ -59,10 +65,11 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       When("they press the Stripe payment button")
       landingPage.selectStripePayment()
 
+      And("enter card details")
+      landingPage.fillInCardDetails
+
       When("they click contribute")
       landingPage.clickContribute
-
-      And("the mock calls the backend using a test Stripe token")
 
       Then("the thankyou page should display")
 
@@ -71,39 +78,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       }
     }
 
-    scenario("Check Stripe pop-up appears") {
-      val testUser = new TestUser {
-        val username = "test-stripe-pop-up"
-        driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
-      }
-
-      val landingPage = ContributionsLanding("au", testUser)
-
-      Given("that a test user goes to the contributions landing page")
-      goTo(landingPage)
-      assert(landingPage.pageHasLoaded)
-      landingPage.clearForm(hasNameFields = false)
-
-      When("the user selects the one-time option")
-      landingPage.clickOneOff
-
-      Given("The user fills in their details correctly")
-      landingPage.fillInPersonalDetails(hasNameFields = false)
-
-      Given("that the user selects to pay with Stripe")
-      When("they press the Stripe payment button")
-      landingPage.selectStripePayment()
-
-      When("they click contribute")
-      landingPage.clickContribute
-
-      Then("the overlay should appear")
-      eventually {
-        assert(landingPage.hasStripeOverlay)
-      }
-    }
-
-    scenario("Check browser navigates to paypal") {
+    Scenario("Check browser navigates to paypal") {
       val testUser = new TestUser {
         val username = "test-stripe-pop-up"
         driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium

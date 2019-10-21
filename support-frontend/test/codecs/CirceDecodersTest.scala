@@ -12,9 +12,10 @@ import io.circe.syntax._
 import models.CheckBankAccountDetails
 import ophan.thrift.event.AbTest
 import org.scalatest.EitherValues._
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.must.Matchers
 
-class CirceDecodersTest extends WordSpec with MustMatchers {
+class CirceDecodersTest extends AnyWordSpec with Matchers {
 
   "AbTestDecoder" should {
     "decode json" in {
@@ -112,8 +113,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |        "description": "Redesign of the payment flow UI",
           |        "state": "On"
           |      }
-          |    },
-          |    "optimize": "Off"
+          |    }
           |  },
           |  "amounts": {
           |    "GBPCountries": {
@@ -274,8 +274,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
               description = "Redesign of the payment flow UI",
               state = On
             )
-          ),
-          optimize = Off
+          )
         ),
         amountsRegions,
         contributionTypes,

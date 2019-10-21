@@ -31,7 +31,6 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import { signOut } from 'helpers/user/user';
 import GridImage from 'components/gridImage/gridImage';
 
@@ -89,7 +88,6 @@ type PropTypes = {|
   setupRecurringPayPalPayment: Function,
   validateForm: () => Function,
   formIsValid: Function,
-  optimizeExperiments: OptimizeExperiments,
   addressErrors: Array<Object>,
 |};
 
@@ -113,7 +111,6 @@ function mapStateToProps(state: CheckoutState) {
       state.page.checkout.billingPeriod,
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
-    optimizeExperiments: state.common.optimizeExperiments,
     addressErrors: state.page.billingAddress.fields.formErrors,
   };
 }
@@ -152,7 +149,7 @@ function DigitalCheckoutForm(props: PropTypes) {
   );
   const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
   const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
-  const priceSummary = `${offerOnSelected || 'Enjoy your digital pack free for 14 days, then'} ${helperSelected}.`;
+  const priceSummary = `${offerOnSelected || 'Enjoy your digital subscription free for 14 days, then'} ${helperSelected}.`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
@@ -165,15 +162,15 @@ function DigitalCheckoutForm(props: PropTypes) {
         <Summary
           image={
             <GridImage
-              gridId="checkoutPackshotDigitalPack"
+              gridId="subscriptionDailyPackshot"
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 50vw, 500"
               imgType="png"
               altText=""
             />
             }
-          title="Digital Pack"
-          description="Premium App + iPad daily edition + Ad-free"
+          title="Digital Subscription"
+          description="Premium App + The Guardian Daily + Ad-free"
           productPrice={productPrice}
           billingPeriod={props.billingPeriod}
           product={props.product}

@@ -23,10 +23,12 @@
   guestAccountCreationToken: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent],
   geoData: GeoData,
-  shareImageUrl: String
+  shareImageUrl: String,
+  shareUrl: String,
+
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
-@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl)) {
+@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl)) {
   <script type="text/javascript">
   window.guardian = window.guardian || {};
   @idUser.map { user =>
@@ -100,5 +102,7 @@ window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
   }
 
   window.guardian.stripeElements = @settings.switches.experiments.get("stripeElements").exists(_.isOn)
+  window.guardian.forceCampaign = @settings.switches.experiments.get("forceCampaign").exists(_.isOn)
+  window.guardian.recurringStripePaymentRequestButton = @settings.switches.experiments.get("recurringStripePaymentRequestButton").exists(_.isOn)
   </script>
 }

@@ -14,9 +14,9 @@ import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import services.stepfunctions.StateMachineErrors.Fail
 
-import scala.collection.JavaConversions._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
+import scala.collection.JavaConverters._
 
 object Client {
 
@@ -77,7 +77,7 @@ class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) {
   def history(jobId: String)(implicit ec: ExecutionContext, stateWrapper: StateWrapper): Response[List[HistoryEvent]] = {
     toEither(
       AwsAsync(client.getExecutionHistoryAsync, new GetExecutionHistoryRequest().withExecutionArn(arnFromJobId(jobId)).withReverseOrder(true))
-    ).map(_.getEvents.toList)
+    ).map(_.getEvents.asScala.toList)
   }
 
   private def toEither[T](result: Future[T])(implicit ec: ExecutionContext): Response[T] = EitherT {

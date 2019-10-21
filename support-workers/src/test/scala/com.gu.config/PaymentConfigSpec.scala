@@ -3,9 +3,10 @@ package com.gu.config
 import com.gu.i18n.Currency.AUD
 import com.gu.support.config.Stages
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class PaymentConfigSpec extends FlatSpec with Matchers with LazyLogging {
+class PaymentConfigSpec extends AnyFlatSpec with Matchers with LazyLogging {
 
   "Config" should "load correctly" in {
     Configuration.stage should be(Stages.DEV)

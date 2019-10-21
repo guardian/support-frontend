@@ -4,8 +4,7 @@ import config.Configuration.IdentityUrl
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.mvc.Results._
 import play.api.test.FakeRequest
@@ -14,8 +13,10 @@ import services._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.must.Matchers
 
-class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponents with MockitoSugar {
+class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponents with MockitoSugar {
 
   val idApiUrl = "https://id-api-url.local"
   val supportUrl = "https://support-url.local"

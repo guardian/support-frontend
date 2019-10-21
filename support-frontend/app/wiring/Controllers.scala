@@ -41,12 +41,14 @@ trait Controllers {
     actionRefiners,
     identityService,
     priceSummaryServiceProvider,
+    promotionServiceProvider,
     assetsResolver,
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
-    fontLoader
+    fontLoader,
+    appConfig.stage
   )
 
   lazy val digitalPackController = new DigitalSubscription(
@@ -183,4 +185,19 @@ trait Controllers {
     getAddressIOService,
     actionRefiners
   )
+
+  lazy val reminderController = new ReminderController(controllerComponents, actionRefiners, sendReminderEmailService)
+
+  lazy val promotionsController = new Promotions(
+    promotionServiceProvider,
+    priceSummaryServiceProvider,
+    assetsResolver,
+    actionRefiners,
+    testUsers,
+    controllerComponents,
+    fontLoader,
+    allSettingsProvider,
+    appConfig.stage
+  )
+
 }

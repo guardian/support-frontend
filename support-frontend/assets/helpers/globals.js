@@ -1,6 +1,9 @@
 // @flow
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Settings } from 'helpers/settings';
+import type {
+  PromotionCopy,
+} from 'helpers/productPrice/promotions';
 
 function getGlobal<T>(path: string = ''): ?T {
 
@@ -49,6 +52,8 @@ const getSettings = (): Settings => getGlobal('settings') || {
 
 const getProductPrices = (): ?ProductPrices => getGlobal('productPrices');
 
+const getPromotionCopy = (): ?PromotionCopy => getGlobal('promotionCopy');
+
 const isSwitchOn = (switchName: string): boolean => {
   const sw = getGlobal(`settings.switches.${switchName}`);
   return !!(sw && sw === 'On');
@@ -63,5 +68,11 @@ const isTestSwitchedOn = (testName: string): boolean => {
   return false;
 };
 
-
-export { getProductPrices, getGlobal, isTestSwitchedOn, getSettings, isSwitchOn };
+export {
+  getProductPrices,
+  getPromotionCopy,
+  getGlobal,
+  isTestSwitchedOn,
+  getSettings,
+  isSwitchOn,
+};

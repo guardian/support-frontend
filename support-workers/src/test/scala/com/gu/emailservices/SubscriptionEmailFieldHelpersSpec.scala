@@ -4,9 +4,10 @@ import com.gu.i18n.Currency.{EUR, GBP, USD}
 import com.gu.support.promotions.Promotions.SixForSixPromotion
 import com.gu.support.workers._
 import org.joda.time.LocalDate
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class SubscriptionEmailFieldHelpersSpec extends FlatSpec with Matchers {
+class SubscriptionEmailFieldHelpersSpec extends AnyFlatSpec with Matchers {
 
   def payments(original: Payment, subsequentMonths: List[Int]): List[Payment] = {
     val subsequentPayments = subsequentMonths.map {

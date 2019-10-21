@@ -1,9 +1,0 @@
-@import assets.AssetsResolver
-@import admin.settings.SwitchState
-@import admin.settings.AllSettings
-@()(implicit assets: AssetsResolver, settings: AllSettings)
-@if(settings.switches.optimize == SwitchState.On) {
-    <!--- Optimize scripts, see: https://support.google.com/optimize/answer/7359264 -->
-    <!-- Page-hiding snippet -->
-    <script async type="text/javascript" src="@assets("optimizeScript.js")"></script>
-}

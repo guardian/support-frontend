@@ -2,18 +2,20 @@
 import * as React from 'react';
 import { init as pageInit } from 'helpers/page/page';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
-import FeaturePackshot from 'components/packshots/feature-packshot';
-import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
-import PaperPackshot from 'components/packshots/paper-packshot';
-import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
-import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-packshot';
-import IntFeaturePackshot from 'components/packshots/int-feature-packshot';
-import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
 import { displayPrice, sendTrackingEventsOnClick, subscriptionPricesForDefaultBillingPeriod } from 'helpers/subscriptions';
 import { getCampaign } from 'helpers/tracking/acquisitions';
 import { getSubsLinks } from 'helpers/externalLinks';
 import { androidAppUrl, getIosAppUrl } from 'helpers/externalLinks';
 import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
+
+// images
+import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
+import PaperPackshot from 'components/packshots/paper-packshot';
+import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
+import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-packshot';
+import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
+import SubscriptionDailyPackshot from 'components/packshots/subscription-daily-packshot';
+import InternationalDailyPackshot from 'components/packshots/international-daily-packshot';
 
 // constants
 import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
@@ -25,6 +27,10 @@ import {
   getSaleCopy,
 } from 'helpers/flashSale';
 import { Monthly } from 'helpers/billingPeriods';
+import {
+  fromCountryGroupId,
+  glyph,
+} from 'helpers/internationalisation/currency';
 
 // types
 
@@ -34,7 +40,7 @@ export type ProductButton = {
   analyticsTracking: Function,
 }
 
-export type ProductCopy = {
+type ProductCopy = {
   title: string,
   subtitle: Option<string>,
   description: string,
@@ -48,7 +54,7 @@ export type ProductCopy = {
 const store = pageInit();
 const commonStore = store.getState().common;
 const { countryGroupId } = commonStore.internationalisation;
-const { referrerAcquisitionData, abParticipations, optimizeExperiments } = commonStore;
+const { referrerAcquisitionData, abParticipations } = commonStore;
 
 const abTest = null;
 
@@ -58,7 +64,6 @@ const subsLinks = getSubsLinks(
   getCampaign(referrerAcquisitionData),
   referrerAcquisitionData,
   abParticipations,
-  optimizeExperiments,
 );
 
 const getPrice = (product: SubscriptionProduct, alternativeText: string) => {
@@ -74,14 +79,23 @@ const getPrice = (product: SubscriptionProduct, alternativeText: string) => {
   return alternativeText;
 };
 
+function getGuardianWeeklyOfferCopy() {
+  const copy = getSaleCopy(GuardianWeekly, countryGroupId).bundle.subHeading;
+  if (copy !== '') {
+    return copy;
+  }
+  const currency = glyph(fromCountryGroupId(countryGroupId) || 'GBP');
+  return `6 issues for ${currency}6`;
+}
+
 const chooseImage = images =>
-  (countryGroupId === 'GBPCountries' ? images[0] : images[1]);
+  (countryGroupId === 'GBPCountries' || countryGroupId === 'EURCountries' || countryGroupId === 'International' ? images[0] : images[1]);
 
 const digital: ProductCopy = {
-  title: 'Digital Pack',
+  title: 'Digital Subscription',
   subtitle: getPrice(DigitalPack, ''),
-  description: 'The Daily Edition app and Premium app in one pack, plus ad-free reading on all your devices',
-  productImage: chooseImage([<FeaturePackshot />, <IntFeaturePackshot />]),
+  description: 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
+  productImage: chooseImage([<SubscriptionDailyPackshot />, <InternationalDailyPackshot />]),
   offer: getSaleCopy(DigitalPack, countryGroupId).bundle.subHeading,
   buttons: [{
     ctaButtonText: 'Find out more',
@@ -92,10 +106,10 @@ const digital: ProductCopy = {
 };
 
 const guardianWeekly: ProductCopy = {
-  title: 'Guardian Weekly',
+  title: 'The Guardian Weekly',
   subtitle: getPrice(GuardianWeekly, ''),
   description: 'A weekly, global magazine from The Guardian, with delivery worldwide',
-  offer: getSaleCopy(GuardianWeekly, countryGroupId).bundle.subHeading,
+  offer: getGuardianWeeklyOfferCopy(),
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.GuardianWeekly,
@@ -120,7 +134,7 @@ const paper: ProductCopy = {
 const paperAndDigital: ProductCopy = {
   title: 'Paper+Digital',
   subtitle: `from ${getPrice(PaperAndDigital, '')}`,
-  description: 'All the benefits of a paper subscription, plus access to the digital pack',
+  description: 'All the benefits of a paper subscription, plus access to the digital subscription',
   buttons: [{
     ctaButtonText: 'Find out more',
     link: subsLinks.PaperAndDigital,
@@ -161,8 +175,8 @@ const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
     premiumApp,
   ],
   International: [
-    guardianWeekly,
     digital,
+    guardianWeekly,
     premiumApp,
   ],
   AUDCountries: [
@@ -171,8 +185,8 @@ const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
     premiumApp,
   ],
   EURCountries: [
-    guardianWeekly,
     digital,
+    guardianWeekly,
     premiumApp,
   ],
   NZDCountries: [

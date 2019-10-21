@@ -55,8 +55,8 @@
   width: 100%;
   padding: 0 10px 0 10px;
 
-  @include mq($from: phablet) {
-    padding-left: gu-span(1);
+  @include mq($from: desktop) {
+    padding-left: gu-span(1.5);
   }
 }
 

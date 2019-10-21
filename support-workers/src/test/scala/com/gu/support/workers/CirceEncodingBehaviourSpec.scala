@@ -4,9 +4,10 @@ import com.gu.stripe.StripeError
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
 import io.circe.syntax._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class CirceEncodingBehaviourSpec extends FlatSpec with Matchers with LazyLogging {
+class CirceEncodingBehaviourSpec extends AnyFlatSpec with Matchers with LazyLogging {
   /**
    * The behaviour of circe with regard to encoding and decoding subclasses is rather specific.
    * If we have a PayPalReferenceTransaction typed as a PaymentMethod (its superclass) the json produced

@@ -1,0 +1,34 @@
+// -----  gu-sass ----- //
+@import '~stylesheets/gu-sass/gu-sass';
+
+// ----- Shared Components ----- //
+@import '~components/footer/footer';
+
+@import '~stylesheets/skeleton/skeleton.scss';
+
+@import '~stylesheets/skeleton/skeleton.scss';
+
+.component-text__heading{
+  margin-top: $gu-v-spacing;
+}
+
+.component-text__large {
+  margin-top: $gu-v-spacing;
+}
+
+.component-text__sans {
+  margin-top: $gu-v-spacing;
+}
+
+.component-list-ul {
+  margin-top: $gu-v-spacing;
+}
+
+.component-weekly-terms-copyright-footer {
+  margin-top: $gu-v-spacing;
+}
+
+.component-button {
+  margin-top: $gu-v-spacing * 2;
+  margin-bottom: $gu-v-spacing;
+}

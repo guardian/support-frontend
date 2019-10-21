@@ -16,7 +16,7 @@ import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.parser.decode
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.Future
 

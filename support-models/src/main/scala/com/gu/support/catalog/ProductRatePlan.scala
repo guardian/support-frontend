@@ -8,6 +8,7 @@ case class ProductRatePlan[+T <: Product](
   billingPeriod: BillingPeriod,
   fulfilmentOptions: FulfilmentOptions,
   productOptions: ProductOptions,
+  description: String,
   supportedTerritories: List[CountryGroup] = CountryGroup.allGroups,
   // productRatePlanChargeId is only needed for GW 6 for 6. If we implemented 6 for 6 in the same way as
   // we do discounts we wouldn't need this and we would be able to apply 6 for 6 to other products
