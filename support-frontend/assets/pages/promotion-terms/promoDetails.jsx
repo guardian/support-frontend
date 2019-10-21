@@ -43,7 +43,9 @@ export default function PromoDetails(props: PromotionTerms) {
         }
         />
       </LargeParagraph>
-      <AnchorButton href={landingPageForProduct(props.product)}>Get this offer</AnchorButton>
+      <AnchorButton href={landingPageForProduct(props.product) + '?promoCode=' + props.promoCode}>
+        Get this offer
+      </AnchorButton>
     </Content>
   );
 }
