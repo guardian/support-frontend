@@ -22,16 +22,10 @@ export type AcquisitionABTest = {
 
 export type QueryParameter = {
   name: string,
-  value: string,
+  value: String,
 };
 
 export type AcquisitionQueryParameters = Array<QueryParameter>;
-
-
-
-
-
-
 
 export type OphanIds = {|
   pageviewId: string,
