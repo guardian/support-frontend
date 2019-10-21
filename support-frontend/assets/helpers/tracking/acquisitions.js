@@ -25,7 +25,7 @@ export type QueryParameter = {
   value: string,
 };
 
-export type AcquisitionQueryParameters = Array<QueryParameter>
+export type AcquisitionQueryParameters = Array<QueryParameter>;
 
 export type OphanIds = {|
   pageviewId: string,
