@@ -139,28 +139,22 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   setupRecurringHandlers(): void {
-    setTimeout(
-      () => fetchJson(
-        window.guardian.stripeSetupIntentEndpoint,
-        requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null)
-      ).then(result => {
-        console.log("got clientSecret")
-        this.props.setSetupIntentClientSecret(result.client_secret);
-        // If user has already clicked contribute then handle card setup now
-        if (this.props.paymentWaiting) {
-          console.log("paymentWaiting is true, calling handleCardSetupForRecurring")
-          this.handleCardSetupForRecurring(result.client_secret);
-        }
-      }),
-      20000
-    )
+    fetchJson(
+      window.guardian.stripeSetupIntentEndpoint,
+      requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null)
+    ).then(result => {
+      this.props.setSetupIntentClientSecret(result.client_secret);
+      // If user has already clicked contribute then handle card setup now
+      if (this.props.paymentWaiting) {
+        this.handleCardSetupForRecurring(result.client_secret);
+      }
+    });
 
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
       // If clientSecret is not yet available then handleCardSetupForRecurring will be called when it is
       if (this.props.setupIntentClientSecret) {
-        console.log("already have clientSecret, calling handleCardSetupForRecurring")
         this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
       }
     });
