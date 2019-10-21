@@ -104,9 +104,15 @@ export type RegularPaymentRequest = {|
   debugInfo?: string,
 |};
 
-//TODO - can we change StripeCheckout here? Does it break ophan?
 export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
+
+// Stripe checkout is currently still used by Payment Request button and recurring
+export type StripeCheckoutAuthorisation = {|
+  paymentMethod: typeof Stripe,
+  stripePaymentMethod: StripePaymentMethod,
+  token: string,
+|};
 
 export type StripePaymentIntentAuthorisation = {|
   paymentMethod: typeof Stripe,
@@ -139,6 +145,7 @@ export type ExistingDirectDebitAuthorisation = {|
 // immediately executes the payment, and recurring, where it ultimately ends up in Zuora
 // which uses it to execute payments in the future.
 export type PaymentAuthorisation =
+  StripeCheckoutAuthorisation |
   StripePaymentIntentAuthorisation |
   PayPalAuthorisation |
   DirectDebitAuthorisation |
@@ -164,7 +171,12 @@ const MAX_POLLS = 10;
 function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
   switch (authorisation.paymentMethod) {
     case Stripe:
-      return { paymentMethod: authorisation.paymentMethodId };
+      if (authorisation.paymentMethodId) {
+        return { paymentMethod: authorisation.paymentMethodId };
+      } else if (authorisation.token) {
+        return { stripeToken: authorisation.token };
+      }
+      throw new Error('Neither token nor paymentMethod found in authorisation data for Stripe recurring contribution');
     case PayPal:
       return { baid: authorisation.token };
     case DirectDebit:
