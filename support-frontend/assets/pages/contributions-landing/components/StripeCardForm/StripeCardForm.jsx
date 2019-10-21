@@ -261,24 +261,9 @@ class CardForm extends Component<PropTypes, StateTypes> {
     const getClasses = (fieldName: CardFieldName): string =>
       `form__input ${this.getFieldBorderClass(fieldName)}`;
 
-    const secureTransactionText: string = 'Secure transaction';
-
-    const legend = (
-      <legend className="form__legend">Your card details</legend>
-    );
-
-    const legendWithSecureTransaction = (
-      <div className="stripe-card-element-container__legend-secure">
-        {legend}
-        <SecureTransactionIndicator text={secureTransactionText} />
-      </div>
-    );
-
-    console.log('paymentsecurityprops', this.props.paymentSecurityDesignTestVariant);
     return (
       <div className="form__fields">
-        {/* {this.props.paymentSecurityDesignTestVariant === 'V2_securemiddle' ? legendWithSecureTransaction : legend} */}
-        {legendWithSecureTransaction}
+        <legend className="form__legend">Your card details</legend>
         <div className="form__field">
           <label className="form__label" htmlFor="stripeCardNumberElement">
             <span>Card number</span>
