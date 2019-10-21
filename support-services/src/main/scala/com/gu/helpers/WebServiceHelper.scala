@@ -13,16 +13,20 @@ import scala.concurrent.Future
 import scala.reflect.{ClassTag, classTag}
 import scala.util.{Failure, Success, Try}
 
-sealed abstract class WebServiceHelperErrorBase() extends Throwable
+sealed abstract class WebServiceHelperErrorBase(
+  message: String,
+  cause: Throwable = None.orNull
+) extends Throwable(message, cause)
 
 case class WebServiceHelperError[T: ClassTag](
   codeBody: CodeBody,
-  message: String
-) extends WebServiceHelperErrorBase {
+  message: String,
+  cause: Throwable = None.orNull
+) extends WebServiceHelperErrorBase(message, cause) {
   override def getMessage: String = s"${classTag[T]} - $message: ${codeBody.getMessage}"
 }
 
-case class WebServiceClientError(codeBody: CodeBody) extends WebServiceHelperErrorBase {
+case class WebServiceClientError(codeBody: CodeBody) extends WebServiceHelperErrorBase(codeBody.getMessage) {
   override def getMessage: String = codeBody.getMessage
 }
 
@@ -88,22 +92,27 @@ trait WebServiceHelper[Error <: Throwable] {
     } yield codeBody
   }
 
-  def decodeBody[A](codeBody: CodeBody)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Try[A] = {
+  def decodeBody[A](codeBody: CodeBody)(
+    implicit decoder: Decoder[A],
+    errorDecoder: Decoder[Error],
+    ctag: ClassTag[A]
+  ): Try[A] = {
+
     val CodeBody(code, responseBody) = codeBody
     val responseFamily = code(0) + "xx"
     responseFamily match {
       case "2xx" =>
         decode[A](responseBody).left.map { err =>
           decodeError(responseBody).right.getOrElse(
-            WebServiceHelperError[A](codeBody, s"failed to parse response: $err")
+            WebServiceHelperError[A](codeBody, s"failed to parse response: $err", err)
           )
         }.toTry
       case "4xx" =>
         Failure((decodeError(responseBody).right.toOption).getOrElse(
           WebServiceClientError(codeBody))
         )
-      case _ =>
-        Failure(WebServiceHelperError[A](codeBody, "unrecognised response code"))
+      case statusCode =>
+        Failure(WebServiceHelperError[A](codeBody, s"unrecognised response code $statusCode"))
     }
 
   }
@@ -122,13 +131,23 @@ trait WebServiceHelper[Error <: Throwable] {
   def get[A](endpoint: String, headers: ParamMap = empty, params: ParamMap = empty)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request[A](buildRequest(endpoint, headers, params))
 
-  def postJson[A](endpoint: String, data: Json, headers: ParamMap = empty, params: ParamMap = empty)(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def postJson[A](
+    endpoint: String,
+    data: Json,
+    headers: ParamMap = empty,
+    params: ParamMap = empty
+  )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.pretty(Printer.noSpaces.copy(dropNullValues = true))
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).post(body))
   }
 
-  def postForm[A](endpoint: String, data: Map[String, Seq[String]], headers: ParamMap = empty, params: ParamMap = empty)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+  def postForm[A](
+    endpoint: String,
+    data: Map[String, Seq[String]],
+    headers: ParamMap = empty,
+    params: ParamMap = empty
+  )(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val postParams = data.foldLeft(new FormBody.Builder()) {
       case (p, (name, values)) =>
         val paramName = if (values.size > 1) s"$name[]" else name
@@ -138,7 +157,7 @@ trait WebServiceHelper[Error <: Throwable] {
   }
   // scalastyle:on line.size.limit
 
-  private def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap) =
+  private def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap): Request.Builder =
     new Request.Builder()
       .url(endpointUrl(endpoint, params))
       .headers(buildHeaders(headers))
@@ -149,15 +168,13 @@ trait WebServiceHelper[Error <: Throwable] {
         url.addEncodedPathSegment(segment)
     }
     params.foldLeft(withSegments) {
-      case (url, (k, v)) =>
-        url.addQueryParameter(k, v)
+      case (url, (k, v)) => url.addQueryParameter(k, v)
     }.build()
   }
 
   private def buildHeaders(headers: ParamMap) =
     headers.foldLeft(new Headers.Builder()) {
-      case (h, (k, v)) =>
-        h.add(k, v)
+      case (h, (k, v)) => h.add(k, v)
     }.build()
 
 }
