@@ -3,6 +3,7 @@ import React, { Component, type Node } from 'react';
 import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import GridPicture from 'components/gridPicture/gridPicture';
+import cx from 'classnames';
 
 // styles
 import './digitalSubscriptionLanding.scss';
@@ -42,7 +43,7 @@ const Dropdown = ({
 }: DropdownPropTypes) => (
   <div
     id={`product-details-${product}`}
-    className={`product-block__dropdown${showDropDown ? '--show' : '--hide'}`}
+    className={cx('product-block__dropdown--hide', { 'product-block__dropdown--show': showDropDown })}
     aria-hidden={showDropDown ? 'false' : 'true'}
   >
     <span className="product-block__ul-handler">
@@ -64,7 +65,7 @@ const Button = ({
     aria-controls={`product-details-${product}`}
     aria-expanded={showDropDown ? 'true' : 'false'}
     onClick={handleClick}
-    className={`product-block__button${showDropDown ? '--show' : '--hide'}`}
+    className={cx('product-block__button--hide', { 'product-block__button--show': showDropDown })}
   >
     <span className="product-block__button__text">
       <div className={showDropDown ? 'product-block__arrow--up' : 'product-block__arrow--down'}>{arrowSvg}</div>
