@@ -129,18 +129,25 @@
     }
 
     @include mq($from: tablet) {
-      padding-left: 45px;
+      padding-left: 30px;
     }
   
     @include mq($from: desktop) {
       max-width: gu-span(8);
       padding-left: 70px;
     }
+
+    @include mq($from: leftCol) {
+      padding-left: 90px;
+    }
   
     @include mq($from: wide) {
-      padding-left: 0px;
+      padding-left: 20px;
       max-width: 1170px;
-      margin-left: -10px;
+    }
+
+    @include mq($from: 1396px) {
+      padding-left: 50px;
     }
   
     .component-content__content--centered-handler {
