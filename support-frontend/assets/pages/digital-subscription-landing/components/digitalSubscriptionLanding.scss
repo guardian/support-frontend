@@ -1082,16 +1082,16 @@ div.call-to-action__container {
 
     @include mq($from: desktop) {
       padding-left: 0px;
-      margin-left: -5px;
+      margin-left: 20px;
     }
 
     @include mq($from: leftCol) {
-      padding-left: 10px;
+      padding-left: 25px;
       margin-left: 0;
     }
 
     @include mq($from: wide) {
-      padding-left: 0px;
+      padding-left: 25px;
     }
   }
 
