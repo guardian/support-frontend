@@ -47,7 +47,7 @@ class DigitalSubscription(
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = "Support the Guardian | Digital Pack Subscription"
+    val title = "Support the Guardian | The Guardian Digital Subscription"
     val mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode)
     val js = Left(RefPath("digitalSubscriptionLandingPage.js"))
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
@@ -101,7 +101,7 @@ class DigitalSubscription(
     }
 
   private def digitalSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
-    val title = "Support the Guardian | Digital Subscription"
+    val title = "Support the Guardian | The Guardian Digital Subscription"
     val id = EmptyDiv("digital-subscription-checkout-page")
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
@@ -129,7 +129,7 @@ class DigitalSubscription(
   def displayThankYouExisting(): Action[AnyContent] = CachedAction() { implicit request =>
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = "Support the Guardian | Digital Subscription"
+    val title = "Support the Guardian | The Guardian Digital Subscription"
     val mainElement = EmptyDiv("digital-subscription-checkout-page")
     val js = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.js"))
     val css = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.css"))

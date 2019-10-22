@@ -5,26 +5,32 @@ import java.net.{SocketException, SocketTimeoutException}
 import com.amazonaws.services.kms.model._
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.rest.{WebServiceClientError, WebServiceHelperError}
-import com.gu.stripe.StripeError
-import io.circe.ParsingFailure
+import com.gu.helpers.{WebServiceClientError, WebServiceHelperError}
+import io.circe.{DecodingFailure, ParsingFailure}
 
 object RetryImplicits {
 
-  implicit class RetryConversions(val throwable: Throwable) {
+  implicit class RetryConversions(val throwable: Throwable) extends AnyVal {
     def asRetryException: RetryException = throwable match {
+      case wshe: WebServiceHelperError[_] if wshe.cause.isInstanceOf[DecodingFailure] =>
+        // if we fail to parse SalesForce response or any JSON response, it means something failed
+        // or we had malformed input, so we should not retry again.
+        new RetryNone(message = wshe.getMessage, cause = wshe.cause)
+
       //Timeouts/connection issues and 500s
-      case e @ (_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) => new RetryUnlimited(message = e.getMessage, cause = throwable)
+      case e @ (_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) =>
+        new RetryUnlimited(message = e.getMessage, cause = throwable)
 
       //Invalid Json or http client error (4xx)
-      case e @ (_: ParsingFailure | _: MatchError | _: WebServiceClientError) => new RetryNone(message = e.getMessage, cause = throwable)
+      case e @ (_: ParsingFailure | _: MatchError | _: WebServiceClientError) =>
+        new RetryNone(message = e.getMessage, cause = throwable)
 
       //Any Exception that we haven't specifically handled
       case e: Throwable => new RetryLimited(message = e.getMessage, cause = throwable)
     }
   }
 
-  implicit class StripeConversions(val throwable: StripeError) {
+  implicit class StripeConversions(val throwable: StripeError) extends AnyVal {
     def asRetryException: RetryException = throwable.`type` match {
       case ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(throwable.getMessage, cause = throwable)
       case "authentication_error" => new RetryLimited(throwable.getMessage, cause = throwable)
@@ -32,7 +38,7 @@ object RetryImplicits {
     }
   }
 
-  implicit class AwsKmsConversions(val throwable: AWSKMSException) {
+  implicit class AwsKmsConversions(val throwable: AWSKMSException) extends AnyVal {
     def asRetryException: RetryException = throwable match {
       case e @ (_: KeyUnavailableException |
         _: DependencyTimeoutException |
@@ -46,22 +52,22 @@ object RetryImplicits {
     }
   }
 
-  implicit class AwsSQSConversions(val throwable: AmazonSQSException) {
+  implicit class AwsSQSConversions(val throwable: AmazonSQSException) extends AnyVal {
     def asRetryException: RetryException = throwable match {
       case e: InvalidMessageContentsException => new RetryNone(message = e.getMessage, cause = throwable)
       case e: QueueDoesNotExistException => new RetryLimited(message = e.getMessage, cause = throwable)
     }
   }
 
-  implicit class ZuoraCatalogConversions(val throwable: CatalogDataNotFoundException) {
+  implicit class ZuoraCatalogConversions(val throwable: CatalogDataNotFoundException) extends AnyVal {
     def asRetryException: RetryException = new RetryNone(message = throwable.getMessage, cause = throwable)
   }
 
-  implicit class BadRequestConversions(val throwable: BadRequestException) {
+  implicit class BadRequestConversions(val throwable: BadRequestException) extends AnyVal {
     def asRetryException: RetryException = new RetryNone(message = throwable.getMessage, cause = throwable)
   }
 
-  implicit class OphanServiceErrorConversions(val error: AnalyticsServiceError) {
+  implicit class OphanServiceErrorConversions(val error: AnalyticsServiceError) extends AnyVal {
     import AnalyticsServiceError._
 
     def asRetryException: RetryException =
