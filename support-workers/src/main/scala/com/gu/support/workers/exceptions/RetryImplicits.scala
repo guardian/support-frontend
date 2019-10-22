@@ -5,8 +5,9 @@ import java.net.{SocketException, SocketTimeoutException}
 import com.amazonaws.services.kms.model._
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.helpers.{WebServiceClientError, WebServiceHelperError}
 import io.circe.{DecodingFailure, ParsingFailure}
+import com.gu.rest.{WebServiceClientError, WebServiceHelperError}
+import com.gu.stripe.StripeError
 
 object RetryImplicits {
 
