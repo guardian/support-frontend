@@ -255,7 +255,7 @@ function createFormReducer() {
           ...state,
           stripeCardFormData: {
             ...state.stripeCardFormData,
-            setupIntentClientSecret: action.setupIntentClientSecret
+            setupIntentClientSecret: action.setupIntentClientSecret,
           },
         };
 

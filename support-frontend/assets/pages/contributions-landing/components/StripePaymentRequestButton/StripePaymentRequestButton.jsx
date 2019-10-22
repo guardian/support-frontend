@@ -122,10 +122,10 @@ function updatePayerName(data: Object, setFirstName: string => void, setLastName
   } else if (nameParts.length === 1) {
     logException(`Failed to set name: no spaces in data object: ${nameParts.join('')}`);
     return false;
-  } else {
-    logException('Failed to set name: no name in data object');
-    return false;
   }
+  logException('Failed to set name: no name in data object');
+  return false;
+
 }
 
 // Calling the complete function will close the pop up payment window
@@ -200,7 +200,7 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
         // chose to authorize payment. For example, 'basic-card'."
         trackComponentClick(`${data.methodName}-paymentAuthorised`);
       }
-      props.onPaymentAuthorised({paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod})
+      props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
         .then(onComplete(complete));
     } else {
       complete('fail');

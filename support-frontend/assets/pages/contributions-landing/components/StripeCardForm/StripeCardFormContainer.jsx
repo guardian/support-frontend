@@ -46,7 +46,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
         const stripeKey = getStripeKey(
           stripeAccount,
           this.props.country,
-          this.props.isTestUser
+          this.props.isTestUser,
         );
 
         /**
@@ -57,7 +57,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
           <div className="stripe-card-element-container">
             <StripeProvider apiKey={stripeKey} key={stripeAccount}>
               <Elements>
-                <StripeCardForm stripeKey={stripeKey}/>
+                <StripeCardForm stripeKey={stripeKey} />
               </Elements>
             </StripeProvider>
           </div>
