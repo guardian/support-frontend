@@ -459,10 +459,6 @@
 .subscriptions-packshot {
   width: 100%;
   padding: 6px;
-
-  // @include mq($until: tablet) {
-
-  // }
 }
 
 /****************** subscriptions__product-button ********************/
@@ -526,40 +522,13 @@
     }
 
     @include mq($from: tablet) {
-      // margin-bottom: -55px;
     }
   }
-
-  // position: absolute;
-  // bottom: -40px;
-  // right: -230px;
-
-  // @media (max-width: 1067px) {
-  //   width: 150%;
-  //   right: initial;
-  // }
-
-  // @include mq($until: tablet) {
-  //   position: relative;
-  //   bottom: initial;
-  //   padding: 20px 10% 0;
-  //   margin-bottom: -50px;
-  // }
-
-  // @include mq($until: mobileLandscape) {
-  //   margin-bottom: -40px;
-  // }
-
 
 }
 
 .subscriptions__guardian-weekly-packshot {
   width: 100%;
-  // height: 400px;
-
-  @include mq($until: desktop) {
-    // width: 354px;
-  }
 
   @include mq($until: tablet) {
     position: static;
