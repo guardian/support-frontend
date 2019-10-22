@@ -258,6 +258,7 @@ function withProps(props: PropTypes) {
         <ContributionAmount
           checkOtherAmount={checkAmount}
         />
+        <ContributionTransactionFeeOption />
       </div>
       <StripePaymentRequestButtonContainer
         setStripeHasLoaded={props.setStripeV3HasLoaded}
