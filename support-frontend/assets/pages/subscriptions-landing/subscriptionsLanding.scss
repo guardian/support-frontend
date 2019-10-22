@@ -78,7 +78,7 @@
   @include mq($from: leftCol, $until: 1400px) {
     margin-left: 100px;
   }
-  
+
   @include mq($until: leftCol) {
     margin-left: 70px;
   }
@@ -181,6 +181,7 @@
   border: none;
   padding-top: 10px;
   background-color: gu-colour('brand-main');
+  overflow: hidden;
 
   @include mq($until: tablet) {
     padding-top: 0;
@@ -232,30 +233,30 @@
 }
 
 .subscriptions__image-container.subscriptions__product--feature {
-  background-color: gu-colour('brand-main');
-  width: 50%;
+  padding: 10px 10px 0 10px;
+  width: 100%;
+  margin-bottom: -40px;
 
-  @media (min-width: 740px) and (max-width: 1067px) {
-    padding: 22% 0;
-  }
-  @media (min-width: 1067px) {
-    height: 447px;
-  }
-  @include mq($until: tablet) {
+  @include mq($from: tablet) {
     position: relative;
-    width: 100%;
+    // bottom: -56px;
+    right: -15px;
+    width: 50%;
+    padding: 0;
   }
 
-  @include mq($until: mobileLandscape) {
-    position: relative;
-    width: 100%;
+  @media (min-width: 881px) {
+    bottom: 0;
   }
 
-  @include mq($until: mobile) {
-    position: relative;
-    width: 100%;
-    bottom: -50px;
+  @include mq($from: desktop) {
+    right: -50px;
   }
+
+  @include mq($from: leftCol) {
+    right: -80px;
+  }
+
 }
 
 .subscriptions__copy-container.subscriptions__product--feature {
@@ -268,8 +269,9 @@
   }
 
   .subscriptions__copy-wrapper {
-    @include mq($until: desktop) {
-      padding: 0 30px 30px;
+    padding: 0 10px 10px;
+    @include mq($from: tablet) {
+      padding: 0 20px 20px 20px
     }
   }
 
@@ -455,19 +457,12 @@
 /****************** product-image ********************/
 
 .subscriptions-packshot {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
+  padding: 6px;
 
-  @include mq($until: tablet) {
-    position: static;
-    top: 0;
-    width: 100%;
-    // margin: 0;
-    transform: translateX(0);
-    padding: 6px;
-  }
+  // @include mq($until: tablet) {
+
+  // }
 }
 
 /****************** subscriptions__product-button ********************/
@@ -506,37 +501,64 @@
 
 /****************** packshots ********************/
 .subscriptions-feature-packshot {
-  position: absolute;
-  bottom: -40px;
-  right: -230px;
+  width: 100%;
 
-  @media (max-width: 1067px) {
-    width: 150%;
-    right: initial;
-  }
-
-  @include mq($until: tablet) {
-    position: relative;
-    bottom: initial;
-    padding: 20px 10% 0;
-    margin-bottom: -50px;
-  }
-
-  @include mq($until: mobileLandscape) {
-    margin-bottom: -40px;
+  @include mq($from: tablet) {
+    width: 600px;
   }
 
   img {
     width: 100%;
-    height: 100%;
+
+
+    @include mq($from: desktop) {
+      width: 600px;
+      right: -50px;
+    }
+
+    @include mq($from: leftCol) {
+      width: 700px;
+      right: -80px;
+    }
+
+    @include mq($from: wide) {
+      width: 800px;
+    }
+
+    @include mq($from: tablet) {
+      // margin-bottom: -55px;
+    }
   }
+
+  // position: absolute;
+  // bottom: -40px;
+  // right: -230px;
+
+  // @media (max-width: 1067px) {
+  //   width: 150%;
+  //   right: initial;
+  // }
+
+  // @include mq($until: tablet) {
+  //   position: relative;
+  //   bottom: initial;
+  //   padding: 20px 10% 0;
+  //   margin-bottom: -50px;
+  // }
+
+  // @include mq($until: mobileLandscape) {
+  //   margin-bottom: -40px;
+  // }
+
+
 }
 
 .subscriptions__guardian-weekly-packshot {
-  width: 429px;
+  width: 100%;
+  // height: 400px;
 
   @include mq($until: desktop) {
-    width: 354px;
+    // width: 354px;
   }
 
   @include mq($until: tablet) {
@@ -550,23 +572,44 @@
   }
 
   img:nth-child(1) {
+    left: 80px;
+
+    @include mq($until: leftCol) {
+      left: 50px;
+    }
+
+    @include mq($until: desktop) {
+      left: 20px;
+    }
+
     @include mq($until: tablet) {
       display: none;
     }
   }
 
   img:nth-child(2) {
-    left: 95px;
-    bottom: -60px;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
 
     @include mq($until: tablet) {
       position: static;
       width: 100%;
+      left: 0;
+      transform: none;
     }
   }
 
   img:nth-child(3) {
-    left: 180px;
+    right: 80px;
+
+    @include mq($until: leftCol) {
+      right: 50px;
+    }
+
+    @include mq($until: desktop) {
+      right: 20px;
+    }
 
     @include mq($until: tablet) {
       display: none;
@@ -594,6 +637,16 @@
 
   img:nth-child(1) {
     z-index: 2;
+    left: 80px;
+
+    @include mq($until: leftCol) {
+      left: 50px;
+    }
+
+    @include mq($until: desktop) {
+      left: 20px;
+    }
+
     @include mq($until: tablet) {
       display: none;
     }
@@ -601,17 +654,36 @@
 
   img:nth-child(2) {
     z-index: 1;
-    left: 32px;
-    bottom: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -150px;
+
+    @include mq($until: leftCol) {
+      bottom: -120px;
+    }
+
+    @include mq($until: desktop) {
+      bottom: -80px;
+    }
 
     @include mq($until: tablet) {
       position: static;
       width: 100%;
+      left: 0;
+      transform: none;
     }
   }
 
   img:nth-child(3) {
-    left: 166px;
+    right: 80px;
+
+    @include mq($until: leftCol) {
+      right: 50px;
+    }
+
+    @include mq($until: desktop) {
+      right: 20px;
+    }
 
     @include mq($until: tablet) {
       display: none;
@@ -638,14 +710,25 @@
 
   img:nth-child(1) {
     bottom: -37px;
+    left: 80px;
+
+    @include mq($until: leftCol) {
+      left: 50px;
+    }
+
+    @include mq($until: desktop) {
+      left: 20px;
+    }
+
     @include mq($until: tablet) {
       display: none;
     }
   }
 
   img:nth-child(2) {
-    left: 55px;
-    bottom: -130px;
+    bottom: -120px;
+    left: 50%;
+    transform: translateX(-50%);
 
     @include mq($until: tablet) {
       position: static;
@@ -655,12 +738,17 @@
   }
 
   img:nth-child(3) {
-    left: 272px;
     bottom: -72px;
+    right: 80px;
+
+    @include mq($until: leftCol) {
+      bottom: -86px;
+      right: 50px;
+    }
 
     @include mq($until: desktop) {
-      left: 256px;
-      bottom: -40px;
+      right: 20px;
+      bottom: -56px;
     }
 
     @include mq($until: tablet) {
@@ -715,16 +803,28 @@
 }
 
 .subscriptions-int-daily-packshot {
-  width: 366px;
+  position: relative;
+  width: 100%;
 
   img {
-    display: block;
+    bottom: -25px;
     width: 100%;
   }
 
-  @include mq($until: tablet) {
-    width: 100%;
+  @include mq($from: tablet) {
+    position: absolute;
+    bottom: -6px;
+    padding: 0 20px;
   }
+
+  @include mq($from: desktop) {
+    padding: 0 50px;
+  }
+
+  @include mq($from: leftCol) {
+    padding: 0 80px;
+  }
+
 }
 
 /**** FOOTER HACK ****/

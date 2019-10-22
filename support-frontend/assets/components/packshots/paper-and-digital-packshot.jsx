@@ -10,7 +10,8 @@ const PaperAndDigitalPackshot = () => (
       gridId="subscriptionIpad"
       srcSizes={[1000, 500, 140]}
       sizes="(max-width: 740px) 100%,
-            (max-width: 980px) 275px,
+            (max-width: 980px) 243px,
+            (max-width: 1140px) 270px,
             300px"
       imgType="png"
     />
@@ -18,8 +19,9 @@ const PaperAndDigitalPackshot = () => (
       gridId="subscriptionPrint"
       srcSizes={[805, 402]}
       sizes="(max-width: 740px) 100%,
-            (max-width: 980px) 275px,
-            300px"
+             (max-width: 980px) 253px,
+             (max-width: 1140px) 281px,
+             312px"
       imgType="png"
     />
     <GridImage
@@ -34,7 +36,8 @@ const PaperAndDigitalPackshot = () => (
       gridId="subscriptionPrintDigital"
       srcSizes={[452, 905, 1366]}
       sizes="(max-width: 740px) 100%,
-            (max-width: 980px) 100px,
+            (max-width: 980px) 102px,
+            (max-width: 1140px) 113px,
             125px"
       imgType="png"
     />
