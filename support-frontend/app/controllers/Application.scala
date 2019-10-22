@@ -156,6 +156,10 @@ class Application(
       classes = Some(classes)
     )
 
+    val stripeSetupIntentEndpoint =
+      if (stage == Stages.PROD) "https://stripe-intent.support.guardianapis.com/stripe-intent"
+      else "https://stripe-intent-code.support.guardianapis.com/stripe-intent"
+
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"contributions-landing-page-$countryCode",
@@ -174,7 +178,7 @@ class Application(
       paymentApiStripeUrl = paymentAPIService.stripeUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
-      stripeSetupIntentEndpoint = "https://stripe-intent-code.support.guardianapis.com/stripe-intent",
+      stripeSetupIntentEndpoint = stripeSetupIntentEndpoint,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
