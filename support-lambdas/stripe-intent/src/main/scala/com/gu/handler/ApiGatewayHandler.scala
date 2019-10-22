@@ -16,24 +16,20 @@ object ApiGatewayRequest {
 
 case class ApiGatewayHeaders(contentType: String = "application/json")
 
-case class ApiGatewayResponse private (statusCode: String, body: String, headers: Map[String, String])
+case class ApiGatewayResponse private (statusCode: Int, body: String, headers: Map[String, String])
 
 object ApiGatewayResponse {
-  private def headers(stage: Stage) = Map(
+  private def headers(stage: Stage): Map[String, String] = Map(
     "Content-Type" -> "application/json",
     "Access-Control-Allow-Origin" -> (if (stage == Stages.PROD) "https://support.theguardian.com" else "*"),
     "Access-Control-Allow-Headers" -> "*",
     "Access-Control-Allow-Methods" -> "*"
   )
 
-  def apply[Response: Encoder](httpResponseCode: HttpResponseCode, response: Response, stage: Stage): ApiGatewayResponse =
-    new ApiGatewayResponse(httpResponseCode.value, response.asJson.noSpaces, headers(stage))
+  def apply[Response: Encoder](httpResponseCode: Int, response: Response, stage: Stage): ApiGatewayResponse =
+    new ApiGatewayResponse(httpResponseCode, response.asJson.noSpaces, headers(stage))
   implicit val encoder: Encoder[ApiGatewayResponse] = deriveEncoder
 }
-
-sealed abstract class HttpResponseCode(val value: String)
-case object BadRequest extends HttpResponseCode("400")
-case object Ok extends HttpResponseCode("200")
 
 abstract class ApiGatewayHandler[Request: Decoder, Environment](
   implicit executionContext: ExecutionContext

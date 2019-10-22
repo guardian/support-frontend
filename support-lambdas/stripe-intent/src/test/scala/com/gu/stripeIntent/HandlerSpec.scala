@@ -25,7 +25,7 @@ class HandlerSpec extends AsyncFlatSpec with Matchers {
       req: Request =>
         val reqBuf = new Buffer()
         req.body().writeTo(reqBuf)
-        val authHeaderBodyString = (req.headers("Authorization").asScala.mkString(","), reqBuf.readString(Charset.forName("UTF-8")))
+        val authHeaderBodyString = req.headers("Authorization").asScala.mkString(",") -> reqBuf.readString(Charset.forName("UTF-8"))
         requests =  authHeaderBodyString :: requests // !
         println(s"GOT CALL! $authHeaderBodyString")
         Future.successful(

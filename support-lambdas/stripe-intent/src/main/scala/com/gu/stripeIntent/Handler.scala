@@ -59,8 +59,8 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
     result.value.map(_.fold(identity, identity))
   }
 
-  def okSetupIntent(client_secret: String, stage: Stage): ApiGatewayResponse = ApiGatewayResponse(Ok, ResponseBody(client_secret), stage)
-  def badRequestPublicKey(stage: Stage): ApiGatewayResponse = ApiGatewayResponse(BadRequest, ErrorBody("public key not known"), stage)
+  def okSetupIntent(client_secret: String, stage: Stage): ApiGatewayResponse = ApiGatewayResponse(200, ResponseBody(client_secret), stage)
+  def badRequestPublicKey(stage: Stage): ApiGatewayResponse = ApiGatewayResponse(400, ErrorBody("public key not known"), stage)
 
   override def minimalEnvironment(): StripeIntentEnv = {
     val stage = Stage.fromString(Option(System.getenv("Stage")).filter(_ != "").getOrElse("DEV")).getOrElse(Stages.DEV)
