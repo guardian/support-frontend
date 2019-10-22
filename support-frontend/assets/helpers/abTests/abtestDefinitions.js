@@ -72,7 +72,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: true,
+    isActive: !!window.guardian && !!window.guardian.stripeElementsRecurring,
     independent: true,
     seed: 3,
     targetPage: contributionsLandingPageMatch,
