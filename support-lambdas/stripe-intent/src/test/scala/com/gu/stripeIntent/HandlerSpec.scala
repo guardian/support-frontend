@@ -2,7 +2,7 @@ package com.gu.stripeIntent
 
 import java.nio.charset.Charset
 
-import com.gu.handler.{ApiGatewayResponse, Ok}
+import com.gu.handler.{ApiGatewayResponse}
 import com.gu.support.config.Stages
 import okhttp3.{MediaType, Protocol, Request, Response}
 import okio.{Buffer, BufferedSource}
@@ -12,7 +12,6 @@ import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
 class HandlerSpec extends AsyncFlatSpec with Matchers {
-
 
   it should "make the right call to stripe" in {
 
@@ -58,7 +57,7 @@ class HandlerSpec extends AsyncFlatSpec with Matchers {
     result.map{ resp =>
       (requests, resp) should be((
         List(("Bearer priv","usage=off_session")),
-        ApiGatewayResponse(Ok, ResponseBody("theSecret"), Stages.DEV)
+        ApiGatewayResponse(200, ResponseBody("theSecret"), Stages.DEV)
       ))
     }
   }
