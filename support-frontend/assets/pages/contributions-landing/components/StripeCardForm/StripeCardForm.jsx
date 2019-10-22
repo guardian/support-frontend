@@ -147,11 +147,18 @@ class CardForm extends Component<PropTypes, StateTypes> {
       window.guardian.stripeSetupIntentEndpoint,
       requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
     ).then((result) => {
-      this.props.setSetupIntentClientSecret(result.client_secret);
-      // If user has already clicked contribute then handle card setup now
-      if (this.props.paymentWaiting) {
-        this.handleCardSetupForRecurring(result.client_secret);
+      if (result.client_secret) {
+        this.props.setSetupIntentClientSecret(result.client_secret);
+        // If user has already clicked contribute then handle card setup now
+        if (this.props.paymentWaiting) {
+          this.handleCardSetupForRecurring(result.client_secret);
+        }
+      } else {
+        throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
       }
+    }).catch(error => {
+      logException(`Error getting Stripe client secret for recurring contribution: ${error}`)
+      this.props.paymentFailure('internal_error');
     });
 
     this.props.setCreateStripePaymentMethod(() => {
