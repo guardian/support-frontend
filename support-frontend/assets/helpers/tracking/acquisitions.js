@@ -11,6 +11,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import { getCampaignName } from 'helpers/campaigns';
+import {logInfo} from "helpers/logger";
 
 
 // ----- Types ----- //
@@ -25,7 +26,7 @@ export type QueryParameter = {
   value: string,
 };
 
-export type AcquisitionQueryParameters = Array<QueryParameter>
+export type AcquisitionQueryParameters = Array<QueryParameter>;
 
 export type OphanIds = {|
   pageviewId: string,
@@ -44,7 +45,7 @@ export type ReferrerAcquisitionData = {|
   abTests: ?AcquisitionABTest[],
   // these aren't in the referrer acquisition data model on frontend, but they're convenient to include
   // as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
-  queryParameters: ?AcquisitionQueryParameters,
+  queryParameters: AcquisitionQueryParameters,
 |};
 
 export type PaymentAPIAcquisitionData = {|
