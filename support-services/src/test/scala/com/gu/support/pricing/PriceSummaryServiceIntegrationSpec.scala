@@ -1,18 +1,28 @@
 package com.gu.support.pricing
 
-import com.gu.support.catalog.{CatalogService, GuardianWeekly}
+import com.gu.i18n.CountryGroup.{UK, US}
+import com.gu.support.catalog._
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionServiceSpec
+import com.gu.support.workers.Annual
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{FlatSpec, Matchers}
 
 @IntegrationTest
 class PriceSummaryServiceIntegrationSpec  extends FlatSpec with Matchers with LazyLogging {
+  val service = new PriceSummaryService(PromotionServiceSpec.serviceWithDynamo, CatalogService(TouchPointEnvironments.SANDBOX))
 
   "PriceSummaryService" should "return prices" in {
-    val service = new PriceSummaryService(PromotionServiceSpec.serviceWithDynamo, CatalogService(TouchPointEnvironments.SANDBOX))
     val result = service.getPrices(GuardianWeekly, List("WJW7OAJ3A"))
     result.size shouldBe 7
+    result(UK)(Domestic)(NoProductOptions).size shouldBe 3
+  }
+
+  it should "return fixed term prices" in {
+    val fixed = service.getPrices(GuardianWeekly, Nil, fixedTerm = true)
+    fixed.size shouldBe 7
+    fixed(US)(RestOfWorld)(NoProductOptions).size shouldBe 1
+    fixed(US)(RestOfWorld)(NoProductOptions).head._1 shouldBe Annual
   }
 }

@@ -152,14 +152,14 @@ case object GuardianWeekly extends Product {
           productRatePlanChargeId = Some("2c92a0086619bf8901661ab546091b23")),
         ProductRatePlan("2c92a0fe6619b4b601661ab300222651", Annual, RestOfWorld, NoProductOptions, "Guardian Weekly annual, rest of world delivery"),
         ProductRatePlan("2c92a0ff67cebd140167f0a2f66a12eb", Annual, RestOfWorld, NoProductOptions, "Guardian Weekly one year, rest of world delivery",
-          endDateCondition = FixedTerm),
+          fixedTerm = true),
         ProductRatePlan("2c92a0086619bf8901661ab02752722f", Quarterly, RestOfWorld, NoProductOptions, "Guardian Weekly quarterly, rest of world delivery"),
         ProductRatePlan("2c92a0086619bf8901661aaac94257fe", SixWeekly, Domestic, NoProductOptions, "Guardian Weekly 6 for 6, domestic delivery",
           productRatePlanChargeId = Some("2c92a0086619bf8901661aaac95d5800")
         ),
         ProductRatePlan("2c92a0fe6619b4b901661aa8e66c1692", Annual, Domestic, NoProductOptions, "Guardian Weekly annual, domestic delivery"),
         ProductRatePlan("2c92a0ff67cebd0d0167f0a1a834234e", Annual, Domestic, NoProductOptions, "Guardian Weekly one year, domestic delivery",
-          endDateCondition = FixedTerm),
+          fixedTerm = true),
         ProductRatePlan("2c92a0fe6619b4b301661aa494392ee2", Quarterly, Domestic, NoProductOptions, "Guardian Weekly quarterly, rest of world delivery")
       ),
       UAT -> List(
@@ -167,13 +167,13 @@ case object GuardianWeekly extends Product {
           productRatePlanChargeId = Some("2c92c0f9660fc4c70166109dfd17092e")),
         ProductRatePlan("2c92c0f9660fc4d70166109a2eb0607c", Annual, RestOfWorld, NoProductOptions, "Guardian Weekly annual, rest of world delivery"),
         ProductRatePlan("2c92c0f967caee360167f044cd0d4adc", Annual, RestOfWorld, NoProductOptions, "Guardian Weekly one year, rest of world delivery",
-          endDateCondition = FixedTerm),
+          fixedTerm = true),
         ProductRatePlan("2c92c0f9660fc4d70166109c01465f10", Quarterly, RestOfWorld, NoProductOptions, "Guardian Weekly quarterly, rest of world delivery"),
         ProductRatePlan("2c92c0f8660fb5dd016610858eb90658", SixWeekly, Domestic, NoProductOptions, "Guardian Weekly 6 for 6, domestic delivery",
           productRatePlanChargeId = Some("2c92c0f8660fb5dd016610858ed3065a")),
         ProductRatePlan("2c92c0f9660fc4d70166107fa5412641", Annual, Domestic, NoProductOptions, "Guardian Weekly annual, domestic delivery"),
         ProductRatePlan("2c92c0f867cae0700167f043870d6d0e", Annual, Domestic, NoProductOptions, "Guardian Weekly one year, domestic delivery",
-          endDateCondition = FixedTerm),
+          fixedTerm = true),
         ProductRatePlan("2c92c0f8660fb5d601661081ea010391", Quarterly, Domestic, NoProductOptions, "Guardian Weekly quarterly, rest of world delivery")
       ),
       SANDBOX -> List(
@@ -181,13 +181,13 @@ case object GuardianWeekly extends Product {
           productRatePlanChargeId = Some("2c92c0f965f2122101660fbc75ba6c3c")),
         ProductRatePlan("2c92c0f965f2122101660fb33ed24a45", Annual, RestOfWorld, NoProductOptions, "Guardian Weekly annual, rest of world delivery"),
         ProductRatePlan("2c92c0f967caee410167eff78e7b5244", Annual, RestOfWorld, NoProductOptions, "Guardian Weekly one year, rest of world delivery",
-          endDateCondition = FixedTerm),
+          fixedTerm = true),
         ProductRatePlan("2c92c0f965f2122101660fb81b745a06", Quarterly, RestOfWorld, NoProductOptions, "Guardian Weekly quarterly, rest of world delivery"),
         ProductRatePlan("2c92c0f965f212210165f69b94c92d66", SixWeekly, Domestic, NoProductOptions, "Guardian Weekly 6 for 6, domestic delivery",
           productRatePlanChargeId = Some("2c92c0f865f204440165f69f407d66f1")),
         ProductRatePlan("2c92c0f965d280590165f16b1b9946c2", Annual, Domestic, NoProductOptions, "Guardian Weekly annual, domestic delivery"),
         ProductRatePlan("2c92c0f867cae0700167eff921734f7b", Annual, Domestic, NoProductOptions, "Guardian Weekly one year, domestic delivery",
-          endDateCondition = FixedTerm),
+          fixedTerm = true),
         ProductRatePlan("2c92c0f965dc30640165f150c0956859", Quarterly, Domestic, NoProductOptions, "Guardian Weekly quarterly, rest of world delivery"),
       )
     )
