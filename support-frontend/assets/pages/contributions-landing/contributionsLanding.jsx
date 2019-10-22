@@ -118,7 +118,8 @@ function contributionsLandingPage(campaignCodeParameter: ?string) {
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
       backgroundImageSrc={backgroundImageSrc}
     >
-      {store.getState().common.abParticipations.paymentSecurityDesignTest === 'V1_securetop' && <SecureTransactionIndicator />}
+      {store.getState().common.abParticipations.paymentSecurityDesignTest === 'V1_securetop' &&
+      <SecureTransactionIndicator modifierClasses={['top']} />}
       <ContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
         campaignCodeParameter={campaignCodeParameter}

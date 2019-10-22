@@ -116,14 +116,13 @@ function withProps(props: PropTypes) {
   );
 
   const legendWithSecureTransaction = (
-    <div>
-    {legend} <SecureTransactionIndicator />
+    <div className="secure-transaction">
+      {legend} <SecureTransactionIndicator modifierClasses={['middle']} />
     </div>
   );
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
-      {/* <legend className="form__legend">Payment method</legend> */}
       {props.paymentSecurityDesignTestVariant === 'V2_securemiddle' ? legendWithSecureTransaction : legend}
       { paymentMethods.length ?
         <ul className="form__radio-group-list">

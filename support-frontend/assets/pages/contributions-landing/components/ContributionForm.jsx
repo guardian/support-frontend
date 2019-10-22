@@ -282,9 +282,11 @@ function withProps(props: PropTypes) {
 
         <ContributionErrorMessage />
         <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
-        {props.paymentSecurityDesignTestVariant === 'V3_securebottom' && <SecureTransactionIndicator />}
+        {props.paymentSecurityDesignTestVariant === 'V3_securebottom' &&
+          <SecureTransactionIndicator modifierClasses={['bottom']} />
+        }
       </div>
-      
+
       <TermsPrivacy
         countryGroupId={props.countryGroupId}
         contributionType={props.contributionType}

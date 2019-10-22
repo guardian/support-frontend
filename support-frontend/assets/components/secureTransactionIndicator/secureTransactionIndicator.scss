@@ -1,7 +1,39 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+.component-secure-transaction--top {
+  overflow: hidden;
+  flex-grow: 1;
+  margin: 0 auto -25px;
+  border: none;
+  max-width: gu-span(9) + $gu-h-spacing;
+  height: $gu-v-spacing*7;
+  padding: 0;
+
+  @include mq($from: tablet) {
+    margin: 30px auto -25px;
+    padding: 0 $gu-h-spacing;
+    height: auto;
+  }
+  @include mq($from: desktop) {
+    max-width: gu-span(10) + $gu-h-spacing;
+    height: auto;
+  }
+  @include mq($from: leftCol) {
+    max-width: gu-span(12) + $gu-h-spacing;
+    height: auto;
+  }
+}
+
+.component-secure-transaction--middle {
+  margin-top: -10px;
+}
+
+.component-secure-transaction--bottom {
+  justify-content: center;
+  margin: -20px auto 0;
+}
+
 .component-secure-transaction {
-  margin: 10px auto 0;
   display: flex;
   align-items: center;
 
@@ -11,10 +43,11 @@
 
   .component-secure-transaction__text {
     font-size: 14px;
-    color: gu-colour(neutral-60);
-    font-weight: 700;
+    color: gu-colour(neutral-46);
+    font-weight: 400;
     line-height: 28px;
     letter-spacing: 0.01em;
   }
+
 
 }
