@@ -19,23 +19,28 @@ const GuardianWeeklyPackShot = () => (
     <GridImage
       gridId="subscriptionWeekly1"
       srcSizes={[798, 500, 140]}
-      sizes="(max-width: 980px) 175px,
-            250px"
+      sizes="(max-width: 740px) 100%,
+             (max-width: 980px) 200px,
+             (max-width: 1140px) 240px,
+             266px"
       imgType="png"
     />
     <GridImage
       gridId="subscriptionWeekly2"
       srcSizes={[783, 392]}
       sizes="(max-width: 740px) 100%,
-            (max-width: 980px) 175px,
-            250px"
+             (max-width: 980px) 200px,
+             (max-width: 1140px) 240px,
+             267px"
       imgType="png"
     />
     <GridImage
       gridId="subscriptionWeekly3"
       srcSizes={[798, 500, 140]}
-      sizes="(max-width: 980px) 175px,
-            250px"
+      sizes="(max-width: 740px) 100%,
+             (max-width: 980px) 200px,
+             (max-width: 1140px) 240px,
+             266px"
       imgType="png"
     />
   </div>
