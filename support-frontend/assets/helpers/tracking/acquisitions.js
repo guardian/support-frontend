@@ -11,8 +11,6 @@ import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import { getCampaignName } from 'helpers/campaigns';
-import {logInfo} from "helpers/logger";
-
 
 // ----- Types ----- //
 
