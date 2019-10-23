@@ -12,10 +12,14 @@ import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 
-import { ContentHelpBlock, LinkTo, ContentForm, type ContentTabPropTypes } from './helpers';
+import {
+  ContentForm,
+  ContentHelpBlock,
+  type ContentTabPropTypes,
+  LinkTo,
+} from './helpers';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
-
 
 // ----- Content ----- //
 const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}) => (

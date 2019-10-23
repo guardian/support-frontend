@@ -32,16 +32,18 @@ export type ProductPrice = {
   promotions?: Promotion[],
 }
 
-export type ProductPrices = {
-  [CountryGroupName]: {
-    [FulfilmentOptions]: {
-      [ProductOptions]: {
-        [BillingPeriod]: {
-          [IsoCurrency]: ProductPrice
-        }
+export type CountryGroupPrices = {
+  [FulfilmentOptions]: {
+    [ProductOptions]: {
+      [BillingPeriod]: {
+        [IsoCurrency]: ProductPrice
       }
     }
   }
+};
+
+export type ProductPrices = {
+  [CountryGroupName]: CountryGroupPrices,
 }
 
 export type BillingPeriods = {

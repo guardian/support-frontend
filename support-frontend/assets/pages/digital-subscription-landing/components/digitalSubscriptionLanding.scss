@@ -893,8 +893,6 @@ div.call-to-action__container {
   display: flex;
   padding: 10px 0 50px 10px;
   background-color: #041f4a;
-  max-width: calc(100%-10px);
-  width: calc(100%-10px);
 
   @include mq($from: mobileLandscape) {
     padding-left: 0px;
@@ -1082,16 +1080,16 @@ div.call-to-action__container {
 
     @include mq($from: desktop) {
       padding-left: 0px;
-      margin-left: -5px;
+      margin-left: 20px;
     }
 
     @include mq($from: leftCol) {
-      padding-left: 10px;
+      padding-left: 25px;
       margin-left: 0;
     }
 
     @include mq($from: wide) {
-      padding-left: 0px;
+      padding-left: 25px;
     }
   }
 

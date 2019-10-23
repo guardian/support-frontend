@@ -13,9 +13,9 @@ import services.stepfunctions.SupportWorkersClient
 import scala.concurrent.ExecutionContext
 
 class SupportWorkersStatus(
-    client: SupportWorkersClient,
-    components: ControllerComponents,
-    actionRefiners: CustomActionBuilders
+  client: SupportWorkersClient,
+  components: ControllerComponents,
+  actionRefiners: CustomActionBuilders
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
   import actionRefiners._
   def status(jobId: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>

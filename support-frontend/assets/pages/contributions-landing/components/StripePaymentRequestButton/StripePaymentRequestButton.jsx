@@ -5,36 +5,44 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { PaymentRequestButtonElement, injectStripe } from 'react-stripe-elements';
+import {
+  injectStripe,
+  PaymentRequestButtonElement,
+} from 'react-stripe-elements';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type {
+  ContributionType,
+  OtherAmounts,
+  SelectedAmounts,
+} from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import {
   type PaymentResult,
   type StripePaymentMethod,
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
-import type { State, StripePaymentRequestButtonData } from 'pages/contributions-landing/contributionsLandingReducer';
+import type {
+  State,
+  StripePaymentRequestButtonData,
+} from 'pages/contributions-landing/contributionsLandingReducer';
 import {
+  onThirdPartyPaymentAuthorised,
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestObject,
-  onThirdPartyPaymentAuthorised,
   updateEmail,
-  updatePaymentMethod,
   updateFirstName,
   updateLastName,
+  updatePaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
-import {
-  toHumanReadableContributionType,
-} from 'helpers/checkouts';
+import { toHumanReadableContributionType } from 'helpers/checkouts';
 import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 
 // ----- Types -----//

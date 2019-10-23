@@ -36,7 +36,7 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
     val guardianWeekly = service.getPrices(GuardianWeekly, List(discountPromoCode, GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode))
 
     //Quarterly should have the 6 for 6 introductory promotion
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 2
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 3
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 37.50
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions

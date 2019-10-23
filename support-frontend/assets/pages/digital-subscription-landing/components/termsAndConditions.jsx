@@ -1,9 +1,8 @@
 // @flow
 import React from 'react';
-
 // styles
 import './digitalSubscriptionLanding.scss';
-import { promotionTermsUrl } from 'helpers/externalLinks';
+import { promotionTermsUrl } from 'helpers/routes';
 
 const TermsAndConditions = () => (
   <div className="hope-is-power__terms">
