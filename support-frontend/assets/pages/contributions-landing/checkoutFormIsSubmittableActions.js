@@ -96,7 +96,6 @@ const formIsValidParameters = (state: State) => ({
     state.page.form.contributionType,
     state.page.form.paymentMethod,
     state.page.form.stripeCardFormData.formComplete,
-    state.common.abParticipations.stripeElementsRecurring,
   ),
 });
 
