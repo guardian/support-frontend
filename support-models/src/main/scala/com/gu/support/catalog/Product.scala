@@ -191,7 +191,7 @@ case object GuardianWeekly extends Product {
         ProductRatePlan("2c92c0f967caee410167eff78e7b5244", Annual, RestOfWorld, NoProductOptions, "Guardian Weekly one year, rest of world delivery",
           fixedTerm = true),
         ProductRatePlan("2c92c0f965f2122101660fb81b745a06", Quarterly, RestOfWorld, NoProductOptions, "Guardian Weekly quarterly, rest of world delivery"),
-        ProductRatePlan("2c92c0f96ded216a016df491134d4091", Quarterly, RestOfWorld, NoProductOptions, "Guardian Weekly three months, rest of world delivery",
+        ProductRatePlan("2c92c0f96df75b5a016df81ba1c62609", Quarterly, RestOfWorld, NoProductOptions, "Guardian Weekly three months, rest of world delivery",
           fixedTerm = true),
         ProductRatePlan("2c92c0f965f212210165f69b94c92d66", SixWeekly, Domestic, NoProductOptions, "Guardian Weekly 6 for 6, domestic delivery",
           productRatePlanChargeId = Some("2c92c0f865f204440165f69f407d66f1")),
@@ -199,7 +199,7 @@ case object GuardianWeekly extends Product {
         ProductRatePlan("2c92c0f867cae0700167eff921734f7b", Annual, Domestic, NoProductOptions, "Guardian Weekly one year, domestic delivery",
           fixedTerm = true),
         ProductRatePlan("2c92c0f965dc30640165f150c0956859", Quarterly, Domestic, NoProductOptions, "Guardian Weekly quarterly, domestic delivery"),
-        ProductRatePlan("2c92c0f96df75b5a016df81ba1c62609", Quarterly, Domestic, NoProductOptions, "Guardian Weekly three months, domestic delivery",
+        ProductRatePlan("2c92c0f96ded216a016df491134d4091", Quarterly, Domestic, NoProductOptions, "Guardian Weekly three months, domestic delivery",
           fixedTerm = true),
       )
     )

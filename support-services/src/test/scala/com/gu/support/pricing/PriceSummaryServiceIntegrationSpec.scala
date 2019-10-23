@@ -4,7 +4,7 @@ import com.gu.i18n.CountryGroup.{UK, US}
 import com.gu.support.catalog._
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionServiceSpec
-import com.gu.support.workers.Annual
+import com.gu.support.workers.{Annual, Quarterly}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{FlatSpec, Matchers}
@@ -22,7 +22,8 @@ class PriceSummaryServiceIntegrationSpec  extends FlatSpec with Matchers with La
   it should "return fixed term prices" in {
     val fixed = service.getPrices(GuardianWeekly, Nil, fixedTerm = true)
     fixed.size shouldBe 7
-    fixed(US)(RestOfWorld)(NoProductOptions).size shouldBe 1
-    fixed(US)(RestOfWorld)(NoProductOptions).head._1 shouldBe Annual
+    fixed(US)(RestOfWorld)(NoProductOptions).size shouldBe 2 // Annual and three month
+    fixed(US)(RestOfWorld)(NoProductOptions).find(_._1 == Annual) shouldBe defined
+    fixed(US)(RestOfWorld)(NoProductOptions).find(_._1 == Quarterly) shouldBe defined
   }
 }
