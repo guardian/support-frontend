@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import * as ophan from 'ophan';
+import {viewId} from 'ophan';
 
 import { get as getCookie } from 'helpers/cookie';
 import { getQueryParameter } from 'helpers/url';
@@ -25,7 +25,7 @@ export type QueryParameter = {
   value: string,
 };
 
-export type AcquisitionQueryParameters = Array<QueryParameter>
+export type AcquisitionQueryParameters = Array<QueryParameter>;
 
 export type OphanIds = {|
   pageviewId: string,
@@ -199,7 +199,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
 }
 
 const getOphanIds = (): OphanIds => ({
-  pageviewId: ophan.viewId,
+  pageviewId: viewId,
   browserId: getCookie('bwid'),
   visitId: getCookie('vsid'),
 });
