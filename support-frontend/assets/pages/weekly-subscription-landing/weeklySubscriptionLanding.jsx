@@ -92,7 +92,7 @@ const getSanitisedHtml = (description: string) =>
   // ensure we don't accidentally inject dangerous html into the page
   DOMPurify.sanitize(
     marked(description),
-    { ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a'] },
+    { ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'] },
   );
 
 const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
