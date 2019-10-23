@@ -193,7 +193,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     componentType: acquisitionData.componentType,
     source: acquisitionData.source,
     abTests: acquisitionData.abTest ? [acquisitionData.abTest] : acquisitionData.abTests,
-    queryParameters: queryParameters.length > 0 ? queryParameters : undefined,
+    queryParameters: queryParameters.length > 0 ? queryParameters : [],
   };
 }
 
