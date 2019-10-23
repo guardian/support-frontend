@@ -51,7 +51,6 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { LandingPageStripeElementsRecurringTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -83,7 +82,6 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   createStripePaymentMethod: () => void,
-  stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -114,7 +112,6 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
-  stripeElementsRecurringTestVariant: state.common.abParticipations.stripeElementsRecurring,
 });
 
 
@@ -154,15 +151,7 @@ const formHandlersForRecurring = {
     // we don't get an onSubmit event for PayPal recurring, so there
     // is no need to handle anything here
   },
-  Stripe: (props: PropTypes) => {
-    if (props.stripeElementsRecurringTestVariant === 'stripeElements') {
-      if (props.createStripePaymentMethod) {
-        props.createStripePaymentMethod();
-      }
-    } else {
-      openStripePopup(props);
-    }
-  },
+  Stripe: openStripePopup,
   DirectDebit: (props: PropTypes) => {
     props.openDirectDebitPopUp();
   },
@@ -272,7 +261,6 @@ function withProps(props: PropTypes) {
           paymentMethod={props.paymentMethod}
           isTestUser={props.isTestUser}
           country={props.country}
-          stripeElementsRecurringTestVariant={props.stripeElementsRecurringTestVariant}
         />
 
         <ContributionErrorMessage />
