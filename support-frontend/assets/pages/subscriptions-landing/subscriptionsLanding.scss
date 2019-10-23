@@ -68,32 +68,37 @@
 }
 
 .subscriptions__feature-text {
-  font-size: 50px;
+  max-width: 400px;
+  font-size: 28px;
+  line-height: 30px;
+  padding-left: 10px;
   font-family: $gu-titlepiece;
   font-weight: bold;
-  max-width: 700px;
-  line-height: 55px;
-  margin-left: 80px;
+  padding-right: 10px;
 
-  @include mq($from: leftCol, $until: 1400px) {
-    margin-left: 100px;
+  @include mq($from: mobileLandscape) {
+    max-width: 500px;
+    font-size: 36px;
+    line-height: 38px;
+    padding-right: 20px;
   }
 
-  @include mq($until: leftCol) {
-    margin-left: 70px;
-  }
-
-  @include mq($until: desktop) {
+  @include mq($from: tablet) {
+    max-width: 700px;
+    padding-left: 40px;
     font-size: 42px;
     line-height: 45px;
-    margin-left: 30px;
   }
 
-  @include mq($until: tablet) {
-    margin-left: 0;
-    max-width: 400px;
-    font-size: 28px;
-    line-height: 30px;
+  @include mq($from: desktop) {
+    max-width: 800px;
+    padding-left: 70px;
+    font-size: 50px;
+    line-height: 55px;
+  }
+
+  @media (min-width: 1299px) {
+    padding-left: 50px;
   }
 }
 
@@ -156,16 +161,18 @@
 }
 
 .subscriptions__product:nth-child(odd) {
+
   @include mq($from: tablet) {
     flex-direction: row-reverse
   }
 
-  .subscriptions__description::before {
-    left: -80px;
+  .subscriptions__description {
+    position: relative;
+  }
 
-    @include mq($until: tablet) {
-      left: auto;
-    }
+  .subscriptions__description::before {
+    width: 200%;
+    right: 0;
   }
 }
 
@@ -239,7 +246,6 @@
 
   @include mq($from: tablet) {
     position: relative;
-    // bottom: -56px;
     right: -15px;
     width: 50%;
     padding: 0;
@@ -273,6 +279,10 @@
     @include mq($from: tablet) {
       padding: 0 20px 20px 20px
     }
+
+    @include mq($from: desktop) {
+      padding-left: 50px;
+    }
   }
 
   @include mq($until: tablet) {
@@ -285,7 +295,6 @@
 .subscriptions__product--feature .subscriptions__copy-wrapper {
   top: 0;
   transform: none;
-  // margin-top: 80px;
 }
 
 .subscriptions__copy-wrapper {
@@ -294,10 +303,6 @@
 
   @include mq($until: leftCol) {
     padding: 0 50px;
-  }
-
-  @include mq($until: desktop) {
-    // padding: 30px;
   }
 
   @include mq($until: desktop) {
@@ -497,7 +502,7 @@
 
 /****************** packshots ********************/
 .subscriptions-feature-packshot {
-  width: 100%;
+  width: 140%;
 
   @include mq($from: tablet) {
     width: 600px;
@@ -506,14 +511,12 @@
   img {
     width: 100%;
 
-
     @include mq($from: desktop) {
-      width: 600px;
+      width: 700px;
       right: -50px;
     }
 
     @include mq($from: leftCol) {
-      width: 700px;
       right: -80px;
     }
 
@@ -726,13 +729,11 @@
   }
 
   img:nth-child(4) {
-    display: none;
-    top: 0;
+    position: relative;
     width: 100%;
-    padding-top: 9px;
 
-    @include mq($until: tablet) {
-      display: block;
+    @include mq($from: tablet) {
+      display: none;
     }
   }
 }
