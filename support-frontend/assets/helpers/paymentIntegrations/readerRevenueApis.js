@@ -56,7 +56,8 @@ type ProductFields = RegularContribution | DigitalSubscription | PaperSubscripti
 
 type RegularPayPalPaymentFields = {| baid: string |};
 
-type RegularStripePaymentFields = {| stripeToken: string |};
+type RegularStripePaymentIntentFields = {| paymentMethod: string |};
+type RegularStripeCheckoutPaymentFields = {| stripeToken: string |};
 
 type RegularDirectDebitPaymentFields = {|
   accountHolderName: string,
@@ -68,7 +69,8 @@ type RegularExistingPaymentFields = {| billingAccountId: string |};
 
 export type RegularPaymentFields =
   RegularPayPalPaymentFields |
-  RegularStripePaymentFields |
+  RegularStripePaymentIntentFields |
+  RegularStripeCheckoutPaymentFields |
   RegularDirectDebitPaymentFields |
   RegularExistingPaymentFields;
 
@@ -107,11 +109,13 @@ export type RegularPaymentRequest = {|
 export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
+// Stripe checkout is currently still used by Payment Request button and recurring
 export type StripeCheckoutAuthorisation = {|
   paymentMethod: typeof Stripe,
   stripePaymentMethod: StripePaymentMethod,
   token: string,
 |};
+
 export type StripePaymentIntentAuthorisation = {|
   paymentMethod: typeof Stripe,
   stripePaymentMethod: StripePaymentMethod,
@@ -169,9 +173,12 @@ const MAX_POLLS = 10;
 function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
   switch (authorisation.paymentMethod) {
     case Stripe:
-      // Only Stripe checkout is currently supported for recurring
-      if (authorisation.token) { return { stripeToken: authorisation.token }; }
-      throw new Error('Stripe Payment Intents not currently supported for recurring contributions');
+      if (authorisation.paymentMethodId) {
+        return { paymentMethod: authorisation.paymentMethodId };
+      } else if (authorisation.token) {
+        return { stripeToken: authorisation.token };
+      }
+      throw new Error('Neither token nor paymentMethod found in authorisation data for Stripe recurring contribution');
     case PayPal:
       return { baid: authorisation.token };
     case DirectDebit:

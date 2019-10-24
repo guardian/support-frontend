@@ -6,6 +6,9 @@ import { getCampaignName } from 'helpers/campaigns';
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 export type LandingPageMomentBackgroundColourTestVariants = 'control' | 'yellow' | 'notintest';
+export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
+
+const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 
 export const tests: Tests = {
   landingPageCopyReturningSingles: {
