@@ -65,7 +65,7 @@ trait Controllers {
     allSettingsProvider,
     appConfig.supportUrl,
     fontLoader,
-    appConfig.stage,
+    appConfig.stage
   )
 
   lazy val paperController = new PaperSubscription(

@@ -8,9 +8,9 @@ import com.gu.support.encoding.{Codec, InternationalisationCodecs}
 case class AppliesTo(productRatePlanIds: Set[ProductRatePlanId], countries: Set[Country])
 
 object AppliesTo extends InternationalisationCodecs {
-  def ukOnly(productRatePlanIds: Set[ProductRatePlanId]) = AppliesTo(productRatePlanIds, Set(Country.UK))
+  def ukOnly(productRatePlanIds: Set[ProductRatePlanId]): AppliesTo = AppliesTo(productRatePlanIds, Set(Country.UK))
 
-  def all(productRatePlanIds: Set[ProductRatePlanId]) = AppliesTo(productRatePlanIds, CountryGroup.countries.toSet)
+  def all(productRatePlanIds: Set[ProductRatePlanId]): AppliesTo = AppliesTo(productRatePlanIds, CountryGroup.countries.toSet)
 
   implicit val codec: Codec[AppliesTo] = deriveCodec
 
