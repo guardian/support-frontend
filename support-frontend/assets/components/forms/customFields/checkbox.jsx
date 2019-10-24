@@ -9,7 +9,7 @@ import './checkbox.scss';
 // ----- Types ----- //
 
 type PropTypes = {
-  id?: string,
+  id: ?string,
   text: Node
 };
 

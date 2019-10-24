@@ -52,9 +52,9 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import type { LandingPageStripeElementsRecurringTestVariants } from 'helpers/abTests/abtestDefinitions';
-
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { ContributionTransactionFeeOption } from './ContributionTransactionFeeOption';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
