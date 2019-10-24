@@ -6,9 +6,6 @@ import { getCampaignName } from 'helpers/campaigns';
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 export type LandingPageMomentBackgroundColourTestVariants = 'control' | 'yellow' | 'notintest';
-export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
-
-const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 
 export const tests: Tests = {
   landingPageCopyReturningSingles: {
@@ -31,28 +28,6 @@ export const tests: Tests = {
     independent: true,
     seed: 1,
     canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
-  },
-
-  stripeElementsRecurring: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'stripeElements',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: !!window.guardian && !!window.guardian.stripeElementsRecurring,
-    independent: true,
-    seed: 3,
-    targetPage: contributionsLandingPageMatch,
   },
 
   landingPageMomentBackgroundColour: {
