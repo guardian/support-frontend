@@ -12,15 +12,15 @@ object Status {
   def fromString(s: String): Option[Status] = all.find(_.asString == s)
 
   case object Success extends Status {
-    override def asString = "success"
+    override def asString: String = "success"
   }
 
   case object Failure extends Status {
-    override def asString = "failure"
+    override def asString: String = "failure"
   }
 
   case object Pending extends Status {
-    override def asString = "pending"
+    override def asString: String = "pending"
   }
 
   implicit val encodeStatus: Encoder[Status] = Encoder.encodeString.contramap[Status](_.asString)
