@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import {viewId} from 'ophan';
+import { viewId } from 'ophan';
 
 import { get as getCookie } from 'helpers/cookie';
 import { getQueryParameter } from 'helpers/url';

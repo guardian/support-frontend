@@ -51,10 +51,13 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
     val stripePublicKey = StripePublicKey(input.publicKey)
     val result: EitherT[Future, ApiGatewayResponse, ApiGatewayResponse] =
       for {
-        privateKey <- handlerEffects.mappings.get(stripePublicKey).toRight(badRequestPublicKey(handlerEffects.stage)).toEitherT[Future]
+        privateKey <- handlerEffects.mappings
+          .get(stripePublicKey)
+          .toRight(badRequestPublicKey(handlerEffects.stage))
+          .toEitherT[Future]
         stripeService = new StripeService(privateKey, handlerEffects.futureHttpClient)
         getIntent = getStripeSetupIntent(stripeService) _
-        intent <- EitherT.right(getIntent())
+        intent <- EitherT.right(getIntent)
       } yield okSetupIntent(intent.client_secret, handlerEffects.stage)
     result.value.map(_.fold(identity, identity))
   }

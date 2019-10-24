@@ -4,20 +4,18 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
+import cats.implicits._
+import com.gu.monitoring.SafeLogger
+import com.gu.tip.Tip
+import monitoring.PathVerification._
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
-import services._
-import cats.data.EitherT
-import cats.implicits._
-import com.gu.monitoring.SafeLogger
-import monitoring.PathVerification.{OneOffContribution, PayPal, TipPath, monitoredRegion, verify}
-
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
-import services.{IdentityService, PaymentAPIService, TestUserService}
-import com.gu.tip.Tip
+import services.{IdentityService, PaymentAPIService, TestUserService, _}
 import views.EmptyDiv
+
+import scala.concurrent.ExecutionContext
+import scala.util.Try
 
 class PayPalOneOff(
     actionBuilders: CustomActionBuilders,

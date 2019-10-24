@@ -26,7 +26,8 @@
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
   defaultPayPalConfig: PayPalConfig,
-  uatPayPalConfig: PayPalConfig
+  uatPayPalConfig: PayPalConfig,
+  stripeIntent: StripeIntent
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {

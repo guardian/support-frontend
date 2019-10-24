@@ -14,7 +14,7 @@ object getStripeSetupIntent {
 
   case class SetupIntent(id: String, client_secret: String)
 
-  def apply(stripeService: StripeService)(): Future[SetupIntent] =
+  def apply(stripeService: StripeService): Future[SetupIntent] =
     stripeService.postForm[SetupIntent]("setup_intents", Map(
       "usage" -> Seq("off_session")
     ))
