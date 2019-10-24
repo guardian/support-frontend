@@ -1,7 +1,7 @@
 package com.gu.i18n
 
 // ISO 3166 alpha-2, up-to-date as of 23/09/2014
-
+//noinspection ScalaStyle
 case class Country(alpha2: String, name: String, statesByCode: Map[String, String] = Map.empty) {
   // Backwards compatibility, including using the 2/3-character codes for Australian states as the name
   val states: Seq[String] = if (alpha2 == "AU") statesByCode.keys.toSeq.sorted else statesByCode.values.toSeq.sorted
@@ -9,7 +9,9 @@ case class Country(alpha2: String, name: String, statesByCode: Map[String, Strin
 
 object Country {
 
-  val US = Country("US", "United States",
+  val US = Country(
+    alpha2 = "US",
+    name = "United States",
     statesByCode = Seq(
       "AK" -> "Alaska",
       "AL" -> "Alabama",
@@ -71,7 +73,9 @@ object Country {
     ).toMap
   )
 
-  val Canada = Country("CA", "Canada",
+  val Canada = Country(
+    alpha2 = "CA",
+    name = "Canada",
     statesByCode = Seq(
       "AB" -> "Alberta",
       "BC" -> "British Columbia",
@@ -91,7 +95,9 @@ object Country {
 
   val UK = Country("GB", "United Kingdom")
 
-  val Australia = Country("AU", "Australia",
+  val Australia = Country(
+    alpha2 = "AU",
+    name = "Australia",
     statesByCode = Seq(
       "SA" -> "South Australia",
       "TAS" -> "Tasmania",
