@@ -27,8 +27,18 @@ case class GuardianWeeklyEmailFields(
     paymentSchedule.payments.lift(1).map(payment => "date_of_second_payment" -> formatDate(payment.date))
   )
 
-  override val fields = PaperFieldsGenerator.fieldsFor(
-    subscriptionNumber, billingPeriod, user, paymentSchedule, firstDeliveryDate, currency, paymentMethod, sfContactId, directDebitMandateId, promotion, giftRecipient
+  override val fields: List[(String, String)] = PaperFieldsGenerator.fieldsFor(
+    subscriptionNumber,
+    billingPeriod,
+    user,
+    paymentSchedule,
+    firstDeliveryDate,
+    currency,
+    paymentMethod,
+    sfContactId,
+    directDebitMandateId,
+    promotion,
+    giftRecipient
   ) ++ additionalFields.flatten
 
   override def payload: String = super.payload(user.primaryEmailAddress, "guardian-weekly")

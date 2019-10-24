@@ -15,8 +15,7 @@ case class ZuoraConfig(
   password: String,
   monthlyContribution: ZuoraContributionConfig,
   annualContribution: ZuoraContributionConfig,
-  digitalPack: ZuoraDigitalPackConfig
-) extends TouchpointConfig {
+  digitalPack: ZuoraDigitalPackConfig) extends TouchpointConfig {
 
   def contributionConfig(billingPeriod: BillingPeriod): ZuoraContributionConfig =
     billingPeriod match {
