@@ -26,7 +26,12 @@
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
   defaultPayPalConfig: PayPalConfig,
+<<<<<<< HEAD
+  uatPayPalConfig: PayPalConfig,
+  stripeSetupIntentEndpoint: String
+=======
   uatPayPalConfig: PayPalConfig
+>>>>>>> 7c60c25625cd8966387655034aa13e64ddede603
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
