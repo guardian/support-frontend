@@ -43,7 +43,7 @@ export type ReferrerAcquisitionData = {|
   abTests: ?AcquisitionABTest[],
   // these aren't in the referrer acquisition data model on frontend, but they're convenient to include
   // as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
-  queryParameters: AcquisitionQueryParameters,
+  queryParameters: ?AcquisitionQueryParameters,
 |};
 
 export type PaymentAPIAcquisitionData = {|
