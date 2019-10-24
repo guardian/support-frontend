@@ -6,7 +6,7 @@ import com.amazonaws.services.kms.model._
 import com.gu.paypal.PayPalError
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
-import com.gu.stripe.Stripe
+import com.gu.stripe.StripeError
 import com.gu.support.workers.exceptions.RetryImplicits._
 import com.gu.support.workers.exceptions._
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
@@ -56,10 +56,10 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryNone]
 
     //Stripe
-    new Stripe.StripeError("card_error", "").asRetryException shouldBe a[RetryNone]
-    new Stripe.StripeError("invalid_request_error", "").asRetryException shouldBe a[RetryNone]
-    new Stripe.StripeError("api_error", "").asRetryException shouldBe a[RetryUnlimited]
-    new Stripe.StripeError("rate_limit_error", "").asRetryException shouldBe a[RetryUnlimited]
+    new StripeError("card_error", "").asRetryException shouldBe a[RetryNone]
+    new StripeError("invalid_request_error", "").asRetryException shouldBe a[RetryNone]
+    new StripeError("api_error", "").asRetryException shouldBe a[RetryUnlimited]
+    new StripeError("rate_limit_error", "").asRetryException shouldBe a[RetryUnlimited]
 
     //PayPal
     PayPalError(500, "").asRetryException shouldBe a[RetryUnlimited]

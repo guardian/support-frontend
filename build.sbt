@@ -49,7 +49,9 @@ lazy val commonSettings = Seq(
     "scm:git:git@github.com:guardian/support-frontend.git"
   )),
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
-  updateOptions := updateOptions.value.withCachedResolution(true)
+  updateOptions := updateOptions.value.withCachedResolution(true),
+  dependencyStats / aggregate := false,
+  dependencyTree / aggregate := false
 )
 
 lazy val commonDependencies = Seq(
@@ -68,7 +70,8 @@ lazy val root = (project in file("."))
     `support-models`,
     `support-config`,
     `support-internationalisation`,
-    `support-services`
+    `support-services`,
+    `stripe-intent`
   )
 
 lazy val `support-frontend` = (project in file("support-frontend"))
@@ -96,7 +99,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`)
-  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
+  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`)
 
 
 lazy val `support-models` = (project in file("support-models"))
@@ -123,8 +126,16 @@ lazy val `support-services` = (project in file("support-services"))
     commonSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-internationalisation`, `support-models`, `support-config`)
-  .aggregate(`support-internationalisation`, `support-models`, `support-config`)
+  ).dependsOn(`support-internationalisation`, `support-models`, `support-config`, `support-rest`)
+  .aggregate(`support-internationalisation`, `support-models`, `support-config`, `support-rest`)
+
+lazy val `support-rest` = (project in file("support-rest"))
+  .configs(IntegrationTest)
+  .settings(
+    commonSettings,
+    integrationTestSettings,
+    libraryDependencies ++= commonDependencies
+  )
 
 lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
@@ -133,3 +144,12 @@ lazy val `support-internationalisation` = (project in file("support-internationa
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   )
+
+lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
+  .enablePlugins(RiffRaffArtifact)
+  .configs(IntegrationTest)
+  .settings(
+    commonSettings,
+    integrationTestSettings,
+    libraryDependencies ++= commonDependencies,
+  ).dependsOn(`support-rest`, `support-config`)

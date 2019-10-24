@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import {viewId} from 'ophan';
+import { viewId } from 'ophan';
 
 import { get as getCookie } from 'helpers/cookie';
 import { getQueryParameter } from 'helpers/url';
@@ -11,7 +11,6 @@ import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import { getCampaignName } from 'helpers/campaigns';
-
 
 // ----- Types ----- //
 
@@ -194,7 +193,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     componentType: acquisitionData.componentType,
     source: acquisitionData.source,
     abTests: acquisitionData.abTest ? [acquisitionData.abTest] : acquisitionData.abTests,
-    queryParameters: queryParameters.length > 0 ? queryParameters : undefined,
+    queryParameters: queryParameters.length > 0 ? queryParameters : [],
   };
 }
 

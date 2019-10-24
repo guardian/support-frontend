@@ -5,8 +5,9 @@ import java.net.{SocketException, SocketTimeoutException}
 import com.amazonaws.services.kms.model._
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.helpers.{WebServiceClientError, WebServiceHelperError}
 import io.circe.{DecodingFailure, ParsingFailure}
+import com.gu.rest.{WebServiceClientError, WebServiceHelperError}
+import com.gu.stripe.StripeError
 
 object RetryImplicits {
 
@@ -27,6 +28,14 @@ object RetryImplicits {
 
       //Any Exception that we haven't specifically handled
       case e: Throwable => new RetryLimited(message = e.getMessage, cause = throwable)
+    }
+  }
+
+  implicit class StripeConversions(val throwable: StripeError) extends AnyVal {
+    def asRetryException: RetryException = throwable.`type` match {
+      case ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(throwable.getMessage, cause = throwable)
+      case "authentication_error" => new RetryLimited(throwable.getMessage, cause = throwable)
+      case ("card_error" | "invalid_request_error" | "validation_error") => new RetryNone(throwable.getMessage, cause = throwable)
     }
   }
 

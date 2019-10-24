@@ -8,11 +8,8 @@ import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.stripe.Stripe.{StripeError, StripeList}
-import com.gu.stripe.createCustomerFromPaymentMethod
-import com.gu.stripe.createCustomerFromToken
-import com.gu.stripe.getPaymentMethod
-import com.gu.stripe.{Stripe, StripeBrand, StripeService, StripeServiceForCurrency}
+import com.gu.stripe.Stripe.StripeList
+import com.gu.stripe._
 import com.gu.support.workers.JsonFixtures.{validBaid, _}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}

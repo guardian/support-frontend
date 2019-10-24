@@ -20,7 +20,6 @@ libraryDependencies ++= Seq(
   "io.symphonia" % "lambda-logging" % "1.0.1",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "com.netaporter" %% "scala-uri" % "0.4.16",
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,

@@ -1,19 +1,26 @@
 package com.gu.stripe
 
-import com.gu.helpers.WebServiceHelper
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.AUD
 import com.gu.okhttp.RequestRunners._
+import com.gu.rest.WebServiceHelper
 import com.gu.stripe.Stripe._
+import io.circe.syntax._
 import com.gu.support.config.StripeConfig
+import com.gu.support.encoding.Codec
+import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
 import com.gu.support.zuora.api.{PaymentGateway, StripeGatewayAUD, StripeGatewayDefault, StripeGatewayPaymentIntentsAUD, StripeGatewayPaymentIntentsDefault}
-import io.circe.Decoder
-
+import io.circe.{Decoder, Json}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.syntax._
+import io.circe.{Decoder, Encoder, Json}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect.ClassTag
 
 class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl: String = "https://api.stripe.com/v1")(implicit ec: ExecutionContext)
-    extends WebServiceHelper[Stripe.StripeError] {
+  extends WebServiceHelper[StripeError] {
 
   // Stripe URL is the same in all environments
   val wsUrl = baseUrl
@@ -59,3 +66,7 @@ class StripeServiceForCurrency(val stripeService: StripeService, currency: Curre
   val getPaymentMethod = com.gu.stripe.getPaymentMethod.apply(this)_
 
 }
+
+
+
+

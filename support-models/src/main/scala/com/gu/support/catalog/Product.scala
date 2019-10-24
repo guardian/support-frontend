@@ -1,7 +1,6 @@
 package com.gu.support.catalog
 
 import com.gu.i18n.CountryGroup
-import com.gu.i18n.CountryGroup._
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX, UAT}
 import com.gu.support.workers._

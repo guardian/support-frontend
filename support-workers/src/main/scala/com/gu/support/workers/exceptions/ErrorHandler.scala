@@ -6,7 +6,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.paypal.PayPalError
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
-import com.gu.stripe.Stripe
+import com.gu.stripe.StripeError
 import com.gu.support.workers.exceptions.RetryImplicits._
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
 /**
@@ -17,7 +17,7 @@ import com.gu.support.zuora.api.response.ZuoraErrorResponse
 object ErrorHandler {
   val handleException: Throwable => Nothing = {
     //Stripe
-    case e: Stripe.StripeError => logAndRethrow(e.asRetryException)
+    case e: StripeError => logAndRethrow(e.asRetryException)
     //PayPal
     case e: PayPalError => logAndRethrow(e.asRetryException)
     //AWS encryption SDK
