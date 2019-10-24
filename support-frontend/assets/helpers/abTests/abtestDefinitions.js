@@ -33,6 +33,28 @@ export const tests: Tests = {
     canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
   },
 
+  stripeElementsRecurring: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'stripeElements',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: !!window.guardian && !!window.guardian.stripeElementsRecurring,
+    independent: true,
+    seed: 3,
+    targetPage: contributionsLandingPageMatch,
+  },
+
   landingPageMomentBackgroundColour: {
     type: 'OTHER',
     variants: [
