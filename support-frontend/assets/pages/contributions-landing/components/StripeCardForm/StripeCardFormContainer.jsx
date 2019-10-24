@@ -27,6 +27,7 @@ type PropTypes = {|
   setStripeHasLoaded: () => void,
   stripeHasLoaded: boolean,
   stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants,
+  showSecureBackground: boolean,
 |};
 
 class StripeCardFormContainer extends React.Component<PropTypes, void> {
@@ -39,6 +40,11 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
     if (this.props.paymentMethod === Stripe &&
       (this.props.contributionType === 'ONE_OFF' || this.props.stripeElementsRecurringTestVariant === 'stripeElements')
     ) {
+    const classNames = this.props.showSecureBackground ? 'stripe-card-element-container stripe-card-element-container-secure' : 'stripe-card-element-container';
+
+    if (this.props.contributionType === 'ONE_OFF' &&
+      this.props.paymentMethod === Stripe) {
+
       if (this.props.stripeHasLoaded) {
 
         const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
@@ -54,7 +60,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
          * Instead, we must create separate instances for ONE_OFF and REGULAR.
          */
         return (
-          <div className="stripe-card-element-container">
+          <div className={classNames}>
             <StripeProvider apiKey={stripeKey} key={stripeAccount}>
               <Elements>
                 <StripeCardForm stripeKey={stripeKey} />

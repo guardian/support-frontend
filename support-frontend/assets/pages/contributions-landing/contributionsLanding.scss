@@ -842,6 +842,17 @@ form {
   width: 100%;
 }
 
+.form__submit--secure {
+  margin: -6px -10px 0;
+  padding: 6px 10px 40px;
+  background-color: gu-colour(neutral-97);
+  border-bottom: 1px solid gu-colour(neutral-86);
+}
+
+.form__submit--secure .component-button {
+  width: 100%;
+}
+
 .form__radio-group--contribution-amount {
   margin: 12px 0;
 }

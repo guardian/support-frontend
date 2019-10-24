@@ -40,6 +40,7 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   amount: number,
   billingPeriod: BillingPeriod,
+  showSecureBackground: boolean,
 |};
 
 function mapStateToProps(state: State) {
@@ -95,11 +96,13 @@ function withProps(props: PropTypes) {
       props.paymentMethod,
     );
 
+    const classNames = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
+
     // We have to show/hide PayPalExpressButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
     // See PayPalExpressButton for more info.
     return (
-      <div className="form__submit">
+      <div className={classNames}>
         <div
           id="component-paypal-button-checkout"
           className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}

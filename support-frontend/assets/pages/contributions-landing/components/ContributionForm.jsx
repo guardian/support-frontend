@@ -247,6 +247,9 @@ function withProps(props: PropTypes) {
 
   const classModifiers = ['contribution', 'with-labels'];
 
+  const showSecureStripeContainer: boolean = props.paymentSecurityDesignTestVariant !== 'control';
+  const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe;
+
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
       <div className="contributions-form-selectors">
@@ -278,10 +281,14 @@ function withProps(props: PropTypes) {
           isTestUser={props.isTestUser}
           country={props.country}
           stripeElementsRecurringTestVariant={props.stripeElementsRecurringTestVariant}
+          showSecureBackground={showSecureStripeContainer}
         />
 
         <ContributionErrorMessage />
-        <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
+        <ContributionSubmit
+          onPaymentAuthorisation={props.onPaymentAuthorisation}
+          showSecureBackground={showSecureButtonBg}
+        />
         {props.paymentSecurityDesignTestVariant === 'V3_securebottom' &&
           <SecureTransactionIndicator modifierClasses={['bottom']} />
         }
