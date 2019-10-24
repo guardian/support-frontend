@@ -50,6 +50,9 @@ Resources:
       MemorySize: 1536
       Runtime: java8
       Timeout: 300
+      Environment:
+        Variables:
+          Stage: !Ref Stage
       Policies:
         - Statement:
           - Effect: Allow
