@@ -28,9 +28,15 @@
   margin-top: -12px;
 }
 
-.component-secure-transaction--bottom {
+.component-secure-transaction--bottom-grey {
   justify-content: center;
   margin: -35px auto 0;
+  padding-bottom: 15px;
+}
+
+.component-secure-transaction--bottom-regular {
+  justify-content: center;
+  margin: -14px auto 0;
   padding-bottom: 15px;
 }
 
