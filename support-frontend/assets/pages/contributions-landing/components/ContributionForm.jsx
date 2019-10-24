@@ -250,7 +250,7 @@ function withProps(props: PropTypes) {
   const showSecureStripeContainer: boolean = props.paymentSecurityDesignTestVariant !== 'control';
   const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe && props.contributionType === 'ONE_OFF';
   const showSecureTransactionIndicator: boolean = props.paymentSecurityDesignTestVariant === 'V3_securebottom';
-  const secureTransactionIndicatorClassNames: string[] = showSecureButtonBg ? ['bottom-grey'] : ['bottom-regular'];
+  const secureTransactionIndicatorClassNames = showSecureButtonBg ? ['bottom-grey'] : ['bottom-regular'];
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
