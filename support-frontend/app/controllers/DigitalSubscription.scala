@@ -5,45 +5,50 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.DigitalPack
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.pricing.PriceSummaryServiceProvider
-import config.StringsConfig
-import io.circe.syntax._
-import lib.PlayImplicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.catalog.DigitalPack
+import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.pricing.PriceSummaryServiceProvider
+import config.StringsConfig
 import play.api.libs.circe.Circe
-import play.api.mvc.{request, _}
+import play.api.mvc._
 import play.twirl.api.Html
 import services._
-import views.html.subscriptionCheckout
-import views.html.helper.CSRF
-import views.ViewHelpers._
-import com.gu.support.encoding.CustomCodecs._
 import views.EmptyDiv
+import views.ViewHelpers._
+import views.html.helper.CSRF
+import views.html.subscriptionCheckout
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscription(
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    val assets: AssetsResolver,
-    val actionRefiners: CustomActionBuilders,
-    identityService: IdentityService,
-    testUsers: TestUserService,
-    membersDataService: MembersDataService,
-    stripeConfigProvider: StripeConfigProvider,
-    payPalConfigProvider: PayPalConfigProvider,
-    components: ControllerComponents,
-    stringsConfig: StringsConfig,
-    settingsProvider: AllSettingsProvider,
-    val supportUrl: String,
-    fontLoaderBundle: Either[RefPath, StyleContent])
-(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
+  priceSummaryServiceProvider: PriceSummaryServiceProvider,
+  val assets: AssetsResolver,
+  val actionRefiners: CustomActionBuilders,
+  identityService: IdentityService,
+  testUsers: TestUserService,
+  membersDataService: MembersDataService,
+  stripeConfigProvider: StripeConfigProvider,
+  payPalConfigProvider: PayPalConfigProvider,
+  components: ControllerComponents,
+  stringsConfig: StringsConfig,
+  settingsProvider: AllSettingsProvider,
+  val supportUrl: String,
+  fontLoaderBundle: Either[RefPath, StyleContent],
+  stage: Stage
+)(
+  implicit val ec: ExecutionContext
+) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+
+  val stripeSetupIntentEndpoint: String =
+    if (stage == Stages.PROD) "https://stripe-intent.support.guardianapis.com/stripe-intent"
+    else "https://stripe-intent-code.support.guardianapis.com/stripe-intent"
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -93,7 +98,7 @@ class DigitalSubscription(
         },
         user => {
           userHasDigipack(request.user) map {
-            case true =>  Redirect(routes.DigitalSubscription.displayThankYouExisting().url, request.queryString, status = FOUND)
+            case true => Redirect(routes.DigitalSubscription.displayThankYouExisting().url, request.queryString, status = FOUND)
             case _ => Ok(digitalSubscriptionFormHtml(user))
           }
         }
@@ -122,7 +127,8 @@ class DigitalSubscription(
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
-      payPalConfigProvider.get(true)
+      payPalConfigProvider.get(true),
+      stripeSetupIntentEndpoint
     )
   }
 

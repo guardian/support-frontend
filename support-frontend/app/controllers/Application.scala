@@ -21,7 +21,6 @@ import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.FastlyGEOIP._
-import views.{EmptyDiv, Preload}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,21 +34,21 @@ case class ContributionsPaymentMethodConfigs(
 )
 
 class Application(
-    actionRefiners: CustomActionBuilders,
-    val assets: AssetsResolver,
-    identityService: IdentityService,
-    components: ControllerComponents,
-    oneOffStripeConfigProvider: StripeConfigProvider,
-    regularStripeConfigProvider: StripeConfigProvider,
-    payPalConfigProvider: PayPalConfigProvider,
-    paymentAPIService: PaymentAPIService,
-    membersDataService: MembersDataService,
-    stringsConfig: StringsConfig,
-    settingsProvider: AllSettingsProvider,
-    guardianDomain: GuardianDomain,
-    stage: Stage,
-    val supportUrl: String,
-    fontLoaderBundle: Either[RefPath, StyleContent]
+  actionRefiners: CustomActionBuilders,
+  val assets: AssetsResolver,
+  identityService: IdentityService,
+  components: ControllerComponents,
+  oneOffStripeConfigProvider: StripeConfigProvider,
+  regularStripeConfigProvider: StripeConfigProvider,
+  payPalConfigProvider: PayPalConfigProvider,
+  paymentAPIService: PaymentAPIService,
+  membersDataService: MembersDataService,
+  stringsConfig: StringsConfig,
+  settingsProvider: AllSettingsProvider,
+  guardianDomain: GuardianDomain,
+  stage: Stage,
+  val supportUrl: String,
+  fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components)
   with SettingsSurrogateKeySyntax with CanonicalLinks with StrictLogging with ServersideAbTestCookie {
 
@@ -139,8 +138,8 @@ class Application(
   }
 
   private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],
-                                campaignCode: Option[String], guestAccountCreationToken: Option[String])
-                               (implicit request: RequestHeader, settings: AllSettings) = {
+    campaignCode: Option[String], guestAccountCreationToken: Option[String])
+    (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
     val css = elementForStage(RefPath("contributionsLandingPage.css"))
