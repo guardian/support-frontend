@@ -19,6 +19,7 @@
   paymentApiStripeUrl: String,
   paymentApiPayPalEndpoint: String,
   existingPaymentOptionsEndpoint: String,
+  stripeSetupIntentEndpoint: String,
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent],
@@ -93,15 +94,16 @@
     uat: "@paymentMethodConfigs.regularUatPayPalConfig.payPalEnvironment"
   };
   window.guardian.paymentApiStripeUrl = "@paymentApiStripeUrl";
-window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
+  window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
   window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
+  window.guardian.stripeSetupIntentEndpoint = "@stripeSetupIntentEndpoint";
   window.guardian.csrf = { token: "@CSRF.getToken.value" };
 
   @guestAccountCreationToken.map { guestAccountCreationToken =>
     window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
   }
 
-  window.guardian.stripeElements = @settings.switches.experiments.get("stripeElements").exists(_.isOn)
+  window.guardian.stripeElementsRecurring = @settings.switches.experiments.get("stripeElementsRecurring").exists(_.isOn)
   window.guardian.forceCampaign = @settings.switches.experiments.get("forceCampaign").exists(_.isOn)
   window.guardian.recurringStripePaymentRequestButton = @settings.switches.experiments.get("recurringStripePaymentRequestButton").exists(_.isOn)
   </script>
