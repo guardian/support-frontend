@@ -22,7 +22,6 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 
-
 // ----- Types -----//
 
 /* eslint-disable react/no-unused-prop-types */
