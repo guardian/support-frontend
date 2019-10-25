@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { getAmount } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
+  currencies, detect,
   type IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -43,21 +44,25 @@ const amountFormatted = (amount: number, currencyString: string, countryGroupId:
   return `${currencyString}${(amount).toFixed(2)}`;
 };
 
-const getTransactionFeeString = (amount: number, countryGroupId: CountryGroupId): string => {
+const calculateTransactionFee = (amount: number): number => {
   if (amount < 20 && amount > 0) {
     // Return a 9% transaction fee (made up number)
-    return amountFormatted(amount * 0.09, '$', countryGroupId);
+    return amount * 0.09;
   }
   // Return a 3% transaction fee (made up number)
-  return amountFormatted(amount * 0.09, '$', countryGroupId);
+  return amount * 0.03;
 };
 
 function withProps(props: PropTypes) {
+  const { amount, countryGroupId } = props;
+  const currencyString = currencies[detect(countryGroupId)].glyph;
+  const transactionFee = calculateTransactionFee(amount);
+
   return (
     <fieldset className={classNameWithModifiers('form__checkbox', ['contribution-transaction-fee'])}>
       <legend className="form__legend">Would you like to cover the transaction fee?</legend>
-      {props.amount && props.amount > 0 &&
-      <CheckboxInput text={`The transaction fee for ${props.amount} is ${getTransactionFeeString(props.amount, props.countryGroupId)}`} />
+      {amount && amount > 0 && transactionFee &&
+      <CheckboxInput text={`The transaction fee for ${currencyString}${props.amount} is ${amountFormatted(transactionFee, currencyString, countryGroupId)}`} />
       }
     </fieldset>
   );

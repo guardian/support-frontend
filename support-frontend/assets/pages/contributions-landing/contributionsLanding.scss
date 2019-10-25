@@ -523,7 +523,8 @@ form {
   height: 0;
 }
 
-.form__legend--radio-group {
+.form__legend--radio-group,
+.form__legend {
   @include accessibility-hint;
 }
 
