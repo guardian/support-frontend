@@ -40,7 +40,7 @@ import {
   subscriptionsToExplainerList,
   subscriptionToExplainerPart,
 } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
-import SecureTransactionIndicator from '../../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
