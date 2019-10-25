@@ -53,7 +53,7 @@ import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/
 import { getCampaignName } from 'helpers/campaigns';
 import type { LandingPageStripeElementsRecurringTestVariants } from 'helpers/abTests/abtestDefinitions';
 
-import SecureTransactionIndicator from '../../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
