@@ -142,6 +142,7 @@ POST /direct-debit/check-account                                   controllers.D
 
 # ----- Promotions ----- #
 GET /p/:promoCode/terms                                           controllers.Promotions.terms(promoCode)
+GET /p/:promoCode                                                 controllers.Promotions.promo(promoCode)
 
 # ----- Verification ----- #
 

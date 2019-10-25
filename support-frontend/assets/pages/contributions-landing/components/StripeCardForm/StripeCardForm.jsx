@@ -3,20 +3,30 @@
 // ----- Imports ----- //
 
 import React, { Component } from 'react';
-import { injectStripe, CardNumberElement, CardExpiryElement, CardCVCElement } from 'react-stripe-elements';
+import {
+  CardCVCElement,
+  CardExpiryElement,
+  CardNumberElement,
+  injectStripe,
+} from 'react-stripe-elements';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
-import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
+import type {
+  State,
+  Stripe3DSResult,
+} from 'pages/contributions-landing/contributionsLandingReducer';
 import { Stripe } from 'helpers/paymentMethods';
 import { type PaymentResult } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { setCreateStripePaymentMethod,
-  setHandleStripe3DS,
-  setStripeCardFormComplete,
-  setSetupIntentClientSecret,
+import {
+  type Action,
   onThirdPartyPaymentAuthorised,
   paymentFailure,
   paymentWaiting as setPaymentWaiting,
-  type Action } from 'pages/contributions-landing/contributionsLandingActions';
+  setCreateStripePaymentMethod,
+  setHandleStripe3DS,
+  setSetupIntentClientSecret,
+  setStripeCardFormComplete,
+} from 'pages/contributions-landing/contributionsLandingActions';
 import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
@@ -160,8 +170,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
       } else {
         throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
       }
-    }).catch(error => {
-      logException(`Error getting Stripe client secret for recurring contribution: ${error}`)
+    }).catch((error) => {
+      logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
       this.props.paymentFailure('internal_error');
     });
 

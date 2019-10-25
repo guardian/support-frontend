@@ -22,6 +22,7 @@ import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { getAnnualPlanPromoCode, getIntcmp, getPromoCode } from './flashSale';
 import { getOrigin } from './url';
 import { GBPCountries } from './internationalisation/countryGroup';
+import { promoQueryParam } from 'helpers/productPrice/promotions';
 
 // ----- Types ----- //
 
@@ -218,7 +219,7 @@ function getDigitalCheckout(
 ): string {
   const promoCode = getDigitalPackPromoCode(countryGroupId, billingPeriod);
   const params = new URLSearchParams(window.location.search);
-  params.set('promoCode', promoCode);
+  params.set(promoQueryParam, promoCode);
   if (billingPeriod === Annual) {
     params.set('period', Annual);
   }

@@ -15,7 +15,6 @@ import {
   AUDCountries,
   Canada,
   type CountryGroupId,
-  countryGroups,
   detect,
   EURCountries,
   GBPCountries,
@@ -44,6 +43,9 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 
 import './weeklySubscriptionLanding.scss';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import { promoQueryParam } from 'helpers/productPrice/promotions';
+import { promotionTermsUrl } from 'helpers/routes';
+import { getQueryParameter } from 'helpers/url';
 
 type PageCopy = {|
   title: string,
@@ -57,8 +59,6 @@ const store = pageInit(() => reducer, true);
 // ----- Internationalisation ----- //
 
 const countryGroupId: CountryGroupId = detect();
-const { supportInternationalisationId } = countryGroups[countryGroupId];
-const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supportInternationalisationId : 'gb').toUpperCase();
 
 const reactElementId: {
   [CountryGroupId]: string,
@@ -131,6 +131,7 @@ const getCopy = (state: State): PageCopy => {
 // ----- Render ----- //
 
 const copy = getCopy(store.getState());
+const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || '10ANNUAL');
 
 const content = (
   <Provider store={store}>
@@ -186,7 +187,7 @@ const content = (
       </Content>
       <Content>
         <Text title="Promotion terms and conditions">
-          <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full annual promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/10ANNUAL/terms?country=${subsCountry}`}>here</a>.
+          <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full annual promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTerms}>here</a>.
           </p>
         </Text>
         <Text title="Guardian Weekly terms and conditions">
