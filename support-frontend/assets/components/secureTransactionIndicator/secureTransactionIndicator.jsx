@@ -10,7 +10,7 @@ import SecurePadlock from './securePadlock.svg';
 // ----- Component ----- //
 
 type PropTypes = {
-  modifierClasses: Array<?string>,
+  modifierClasses: Array<string>,
 }
 
 const text = 'Secure transaction';

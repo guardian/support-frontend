@@ -96,7 +96,7 @@ function withProps(props: PropTypes) {
       props.paymentMethod,
     );
 
-    const classNames = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
+    const classNames: string = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
 
     // We have to show/hide PayPalExpressButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.

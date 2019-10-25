@@ -50,7 +50,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
           this.props.isTestUser,
         );
 
-        const classNames = this.props.showSecureBackground ? 'stripe-card-element-container stripe-card-element-container-secure' : 'stripe-card-element-container';
+        const classNames: string = this.props.showSecureBackground ? 'stripe-card-element-container stripe-card-element-container-secure' : 'stripe-card-element-container';
 
         /**
          * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
