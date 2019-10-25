@@ -43,7 +43,13 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
   }
 
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
-    val productRatePlanId = ProductSubscriptionBuilders.getProductRatePlanId(state.product.catalogType, state.product, Configuration.stage, state.user.isTestUser)
+    val productRatePlanId = ProductSubscriptionBuilders.getProductRatePlanId(
+      state.product.catalogType,
+      state.product,
+      Configuration.stage,
+      state.user.isTestUser,
+      state.giftRecipient.isDefined
+    )
     val maybePromotion = getAppliedPromotion(
       servicesProvider.forUser(state.user.isTestUser).promotionService,
       state.promoCode,

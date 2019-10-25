@@ -17,7 +17,7 @@ import scala.util.{Failure, Success, Try}
 
 object ProductSubscriptionBuilders {
 
-  def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT, stage: Stage, isTestUser: Boolean, fixedTerm: Boolean = false): ProductRatePlanId = {
+  def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT, stage: Stage, isTestUser: Boolean, fixedTerm: Boolean): ProductRatePlanId = {
     val touchpointEnvironment = if (isTestUser) UAT else TouchPointEnvironments.fromStage(stage)
 
     val ratePlans: Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
@@ -71,7 +71,7 @@ object ProductSubscriptionBuilders {
         .plusDays(config.digitalPack.paymentGracePeriod)
 
 
-      val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack, stage, isTestUser)
+      val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack, stage, isTestUser, fixedTerm = false)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -102,7 +102,7 @@ object ProductSubscriptionBuilders {
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
       }
 
-      val productRatePlanId = getProductRatePlanId(catalog.Paper, paper, stage, isTestUser)
+      val productRatePlanId = getProductRatePlanId(catalog.Paper, paper, stage, isTestUser, fixedTerm = false)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -161,11 +161,10 @@ trait ProductSubscriptionBuilder {
     readerType: ReaderType = ReaderType.Direct,
     initialTermMonths: Int = 12
   ) = {
-    val isGift = readerType == ReaderType.Gift
-    val (initialTerm, autoRenew, initialTermPeriodType) = if(isGift)
-      (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, "Day")
+    val (initialTerm, autoRenew, initialTermPeriodType) = if(readerType == ReaderType.Gift)
+      (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, Day)
     else
-      (12, true, "Month")
+      (12, true, Month)
 
     SubscriptionData(
       List(

@@ -8,7 +8,7 @@ import com.gu.support.catalog.Domestic
 import com.gu.support.config.Stages.DEV
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.{GuardianWeekly, Quarterly}
-import com.gu.support.zuora.api.ReaderType
+import com.gu.support.zuora.api.{Day, Month, ReaderType}
 import com.gu.zuora.ProductSubscriptionBuilders._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
@@ -43,7 +43,7 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
     subscription.contractAcceptanceDate shouldBe firstDeliveryDate
     subscription.termStartDate shouldBe saleDate
     subscription.initialTerm shouldBe 95
-    subscription.initialTermPeriodType shouldBe "Day"
+    subscription.initialTermPeriodType shouldBe Day
     ratePlanData.head.ratePlan.productRatePlanId shouldBe "2c92c0f96ded216a016df491134d4091"
   }
 
@@ -68,7 +68,7 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
     subscription.contractAcceptanceDate shouldBe firstDeliveryDate
     subscription.termStartDate shouldBe saleDate
     subscription.initialTerm shouldBe 12
-    subscription.initialTermPeriodType shouldBe "Month"
+    subscription.initialTermPeriodType shouldBe Month
     ratePlanData.head.ratePlan.productRatePlanId shouldBe "2c92c0f965dc30640165f150c0956859"
   }
 }

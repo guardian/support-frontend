@@ -80,6 +80,8 @@ case class IntroductoryPriceRatePlanCharge(
 
 sealed trait PeriodType
 
+case object Day extends PeriodType
+
 case object Month extends PeriodType
 
 case object Quarter extends PeriodType
@@ -92,6 +94,7 @@ object PeriodType {
 
   private def fromString(s: String) = {
     s.toLowerCase match {
+      case "day" => Day
       case "month" => Month
       case "quarter" => Quarter
       case "annual" => Annual
@@ -157,7 +160,7 @@ case class Subscription(
   termStartDate: LocalDate,
   createdRequestId__c: String,
   autoRenew: Boolean = true,
-  initialTermPeriodType: String = "Month",
+  initialTermPeriodType: PeriodType = Month,
   initialTerm: Int = 12,
   renewalTerm: Int = 12,
   termType: String = "TERMED",
