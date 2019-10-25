@@ -48,6 +48,9 @@ export type Promotion =
     discount?: DiscountBenefit,
     introductoryPrice?: IntroductoryPriceBenefit,
   }
+
+const promoQueryParam = 'promoCode';
+
 const hasDiscount = (promotion: ?Promotion): boolean %checks =>
   promotion !== null &&
   promotion !== undefined &&
@@ -74,7 +77,7 @@ function applyDiscount(price: ProductPrice, promotion: ?Promotion) {
 }
 
 const matchesQueryParam = promotion =>
-  getQueryParameter('promoCode') === promotion.promoCode;
+  getQueryParameter(promoQueryParam) === promotion.promoCode;
 const introductoryPrice = promotion =>
   promotion.introductoryPrice !== null && promotion.introductoryPrice !==
   undefined;
@@ -113,4 +116,5 @@ export {
   applyDiscount,
   hasIntroductoryPrice,
   hasDiscount,
+  promoQueryParam,
 };

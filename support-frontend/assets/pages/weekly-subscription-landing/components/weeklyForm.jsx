@@ -16,12 +16,16 @@ import {
   getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
-import { getOrigin } from 'helpers/url';
+import { getOrigin, getQueryParameter } from 'helpers/url';
+import { promoQueryParam } from 'helpers/productPrice/promotions';
 
 // ---- Plans ----- //
 
-const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod): string =>
-  `${getOrigin()}/subscribe/weekly/checkout?period=${billingPeriod.toString()}`;
+const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod): string => {
+  const promoCode = getQueryParameter(promoQueryParam, null);
+  const promoQuery = promoCode ? `&${promoQueryParam}=${promoCode}` : '';
+  return `${getOrigin()}/subscribe/weekly/checkout?period=${billingPeriod.toString()}${promoQuery}`;
+};
 
 // ----- State/Props Maps ----- //
 
