@@ -40,7 +40,6 @@ type PropTypes = {|
   stripeKey: string,
   setupIntentClientSecret: string | null,
   setSetupIntentClientSecret: (setupIntentClientSecret: string) => Action,
-  paymentSecurityDesignTestVariant: PaymentSecurityDesignTestVariants,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -48,7 +47,6 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
   paymentWaiting: state.page.form.isWaiting,
-  paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesign,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

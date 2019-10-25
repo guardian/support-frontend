@@ -111,19 +111,21 @@ function withProps(props: PropTypes) {
   const fullExistingPaymentMethods: RecentlySignedInExistingPaymentMethod[] =
     ((props.existingPaymentMethods || []).filter(isUsableExistingPaymentMethod): any);
 
-  const legend = (
+  const legendSimple = (
     <legend className="form__legend">Payment method</legend>
   );
 
-  const legendWithSecureTransaction = (
-    <div className="secure-transaction">
-      {legend} <SecureTransactionIndicator modifierClasses={['middle']} />
-    </div>
-  );
+  const legend = props.paymentSecurityDesignTestVariant === 'V2_securemiddle' ?
+    (
+      <div className="secure-transaction">
+        {legendSimple} <SecureTransactionIndicator modifierClasses={['middle']} />
+      </div>
+    ) :
+    legendSimple;
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
-      {props.paymentSecurityDesignTestVariant === 'V2_securemiddle' ? legendWithSecureTransaction : legend}
+      {legend}
       { paymentMethods.length ?
         <ul className="form__radio-group-list">
           {contributionTypeIsRecurring(props.contributionType) && !props.existingPaymentMethods && (
