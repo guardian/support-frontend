@@ -9,6 +9,6 @@ class PromotionTermsSpec extends FlatSpec with Matchers {
   "PromotionTerms object" should "be able to extract the promotion terms from a Promotion" in {
     val promotionTerms = PromotionTerms
       .promotionTermsFromPromotion(PROD)(PromotionWithCode(GuardianWeekly.AnnualPromoCode, guardianWeeklyAnnual))
-    promotionTerms.productRatePlans.length shouldBe (6)
+    promotionTerms.productRatePlans.length shouldBe 10
   }
 }

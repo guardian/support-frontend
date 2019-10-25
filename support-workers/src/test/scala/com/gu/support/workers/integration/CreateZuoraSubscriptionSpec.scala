@@ -45,7 +45,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   }
 
   it should "create a Digital Pack subscription with a discount and free trial" in {
-    createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
+     createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
   }
 
   it should "create an everyday paper subscription" in {

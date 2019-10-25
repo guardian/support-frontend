@@ -2,6 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.i18n.Country
 import com.gu.salesforce.Salesforce.SfContactId
@@ -42,7 +43,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
   }
 
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
-    val productRatePlanId = ProductSubscriptionBuilders.getProductRatePlanId(state.product.catalogType, state.product, state.user.isTestUser)
+    val productRatePlanId = ProductSubscriptionBuilders.getProductRatePlanId(state.product.catalogType, state.product, Configuration.stage, state.user.isTestUser)
     val maybePromotion = getAppliedPromotion(
       servicesProvider.forUser(state.user.isTestUser).promotionService,
       state.promoCode,

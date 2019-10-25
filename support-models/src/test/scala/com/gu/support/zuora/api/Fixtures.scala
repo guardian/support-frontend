@@ -3,7 +3,6 @@ package com.gu.support.zuora.api
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction}
-import com.gu.support.workers.{DirectDebitPaymentMethod, PayPalReferenceTransaction}
 import org.joda.time.LocalDate
 
 //noinspection TypeAnnotation
@@ -183,6 +182,7 @@ object Fixtures {
         "TermStartDate" : "2018-11-28",
         "AutoRenew" : true,
         "InitialTerm" : 12,
+        "initialTermPeriodType": "Month",
         "RenewalTerm" : 12,
         "TermType" : "TERMED",
         "InitialPromotionCode__c": "$promoCode",

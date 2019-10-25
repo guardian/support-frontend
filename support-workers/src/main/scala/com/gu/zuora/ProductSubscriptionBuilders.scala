@@ -2,24 +2,23 @@ package com.gu.zuora
 
 import java.util.UUID
 
-import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.support.catalog
 import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.UAT
-import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
+import com.gu.support.config.{Stage, TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
 import com.gu.support.zuora.api._
-import org.joda.time.{DateTimeZone, LocalDate}
+import org.joda.time.{DateTimeZone, Days, LocalDate}
 
 import scala.util.{Failure, Success, Try}
 
 object ProductSubscriptionBuilders {
 
-  def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT, isTestUser: Boolean, fixedTerm: Boolean = false): ProductRatePlanId = {
-    val touchpointEnvironment = if (isTestUser) UAT else TouchPointEnvironments.fromStage(Configuration.stage)
+  def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT, stage: Stage, isTestUser: Boolean, fixedTerm: Boolean = false): ProductRatePlanId = {
+    val touchpointEnvironment = if (isTestUser) UAT else TouchPointEnvironments.fromStage(stage)
 
     val ratePlans: Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
 
@@ -62,6 +61,7 @@ object ProductSubscriptionBuilders {
       country: Country,
       maybePromoCode: Option[PromoCode],
       promotionService: PromotionService,
+      stage: Stage,
       isTestUser: Boolean
     ): SubscriptionData = {
 
@@ -70,7 +70,8 @@ object ProductSubscriptionBuilders {
         .plusDays(config.digitalPack.defaultFreeTrialPeriod)
         .plusDays(config.digitalPack.paymentGracePeriod)
 
-      val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack, isTestUser)
+
+      val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack, stage, isTestUser)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -90,6 +91,7 @@ object ProductSubscriptionBuilders {
       maybePromoCode: Option[PromoCode],
       firstDeliveryDate: Option[LocalDate],
       promotionService: PromotionService,
+      stage: Stage,
       isTestUser: Boolean
     ): SubscriptionData = {
 
@@ -100,7 +102,7 @@ object ProductSubscriptionBuilders {
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
       }
 
-      val productRatePlanId = getProductRatePlanId(catalog.Paper, paper, isTestUser)
+      val productRatePlanId = getProductRatePlanId(catalog.Paper, paper, stage, isTestUser)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -121,27 +123,26 @@ object ProductSubscriptionBuilders {
       firstDeliveryDate: Option[LocalDate],
       promotionService: PromotionService,
       readerType: ReaderType,
+      stage: Stage,
       isTestUser: Boolean
     ): SubscriptionData = {
+
+      val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
       val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
         case Success(value) => value
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a Guardian Weekly subscription.", e)
       }
 
-      val isGift = readerType == ReaderType.Gift
-
-      // For gifts the contractEffectiveDate must be the same as the contractAcceptanceDate
-      val contractEffectiveDate = if (isGift) contractAcceptanceDate else LocalDate.now(DateTimeZone.UTC)
-
-      val productRatePlanId = getProductRatePlanId(catalog.GuardianWeekly, guardianWeekly, isTestUser, fixedTerm = isGift)
+      val productRatePlanId = getProductRatePlanId(catalog.GuardianWeekly, guardianWeekly, stage, isTestUser, fixedTerm = readerType == ReaderType.Gift)
 
       val subscriptionData = buildProductSubscription(
         requestId,
         productRatePlanId,
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate,
-        readerType = readerType
+        readerType = readerType,
+        initialTermMonths = guardianWeekly.billingPeriod.monthsInPeriod
       )
 
       applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
@@ -158,8 +159,15 @@ trait ProductSubscriptionBuilder {
     ratePlanCharges: List[RatePlanChargeData] = Nil,
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
     contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    readerType: ReaderType = ReaderType.Direct
-  ) =
+    readerType: ReaderType = ReaderType.Direct,
+    initialTermMonths: Int = 12
+  ) = {
+    val isGift = readerType == ReaderType.Gift
+    val (initialTerm, autoRenew, initialTermPeriodType) = if(isGift)
+      (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, "Day")
+    else
+      (12, true, "Month")
+
     SubscriptionData(
       List(
         RatePlanData(
@@ -169,14 +177,22 @@ trait ProductSubscriptionBuilder {
         )
       ),
       Subscription(
-        contractEffectiveDate,
-        contractAcceptanceDate,
-        contractEffectiveDate,
-        createdRequestId.toString,
+        contractEffectiveDate = contractEffectiveDate,
+        contractAcceptanceDate = contractAcceptanceDate,
+        termStartDate = contractEffectiveDate,
+        createdRequestId__c = createdRequestId.toString,
         readerType = readerType,
-        autoRenew = readerType != ReaderType.Gift
+        autoRenew = autoRenew,
+        initialTerm = initialTerm,
+        initialTermPeriodType = initialTermPeriodType,
       )
     )
+  }
+
+  def initialTermInDays(contractEffectiveDate: LocalDate, contractAcceptanceDate: LocalDate, termLengthMonths: Int): Int = {
+    val termEnd = contractAcceptanceDate.plusMonths(termLengthMonths)
+    Days.daysBetween(contractEffectiveDate, termEnd).getDays
+  }
 
   protected def applyPromoCode(
     promotionService: PromotionService,
