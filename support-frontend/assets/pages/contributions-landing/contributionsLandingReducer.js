@@ -75,6 +75,11 @@ export type StripeCardFormData = {
   handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null,
 }
 
+export type TransactionFee = {
+  fee?: number,
+  consent: boolean
+}
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
@@ -100,6 +105,7 @@ type FormState = {
   formIsValid: boolean,
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
+  transactionFee: TransactionFee
 };
 
 type PageState = {
@@ -186,6 +192,9 @@ function createFormReducer() {
     formIsValid: true,
     formIsSubmittable: true,
     tickerGoalReached: false,
+    transactionFee: {
+      consent: false,
+    }
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
