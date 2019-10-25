@@ -33,7 +33,6 @@ import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
 import SecureTransactionIndicator from '../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
 
-
 if (!isDetailsSupported) {
   polyfillDetails();
 }
