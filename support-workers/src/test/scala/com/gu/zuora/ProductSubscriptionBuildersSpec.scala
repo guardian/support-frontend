@@ -27,7 +27,15 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
     val saleDate = new LocalDate(2019, 10, 24)
     val firstDeliveryDate = saleDate.plusDays(3)
     val promotionService = mock[PromotionService]
-    val subscriptionData = weekly.build(UUID.randomUUID(), Country.UK, None, Some(firstDeliveryDate), promotionService, ReaderType.Gift, DEV, isTestUser = false)
+    val subscriptionData = weekly.build(
+      UUID.randomUUID(),
+      Country.UK, None,
+      Some(firstDeliveryDate),
+      promotionService,
+      ReaderType.Gift,
+      DEV,
+      isTestUser = false,
+      contractEffectiveDate = saleDate)
 
     import subscriptionData._
 
@@ -44,7 +52,15 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
     val saleDate = new LocalDate(2019, 10, 24)
     val firstDeliveryDate = saleDate.plusDays(3)
     val promotionService = mock[PromotionService]
-    val subscriptionData = weekly.build(UUID.randomUUID(), Country.UK, None, Some(firstDeliveryDate), promotionService, ReaderType.Direct, DEV, isTestUser = false)
+    val subscriptionData = weekly.build(
+      UUID.randomUUID(),
+      Country.UK, None,
+      Some(firstDeliveryDate),
+      promotionService,
+      ReaderType.Direct,
+      DEV,
+      isTestUser = false,
+      contractEffectiveDate = saleDate)
 
     import subscriptionData._
 

@@ -124,10 +124,9 @@ object ProductSubscriptionBuilders {
       promotionService: PromotionService,
       readerType: ReaderType,
       stage: Stage,
-      isTestUser: Boolean
+      isTestUser: Boolean,
+      contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
     ): SubscriptionData = {
-
-      val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
       val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
         case Success(value) => value
