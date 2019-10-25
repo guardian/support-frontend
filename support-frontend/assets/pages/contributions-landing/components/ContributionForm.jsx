@@ -247,7 +247,7 @@ function withProps(props: PropTypes) {
   const classModifiers = ['contribution', 'with-labels'];
 
   const showSecureStripeContainer: boolean = props.paymentSecurityDesignTestVariant !== 'control';
-  const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe && props.contributionType === 'ONE_OFF';
+  const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe;
   const showSecureTransactionIndicator: boolean = props.paymentSecurityDesignTestVariant === 'V3_securebottom';
   const secureTransactionIndicatorClassNames: string[] = showSecureButtonBg ? ['bottom-grey'] : ['bottom-regular'];
 
