@@ -22,7 +22,7 @@ import { promoQueryParam } from 'helpers/productPrice/promotions';
 // ---- Plans ----- //
 
 const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod): string => {
-  const promoCode = getQueryParameter(promoQueryParam, null);
+  const promoCode = getQueryParameter(promoQueryParam);
   const promoQuery = promoCode ? `&${promoQueryParam}=${promoCode}` : '';
   return `${getOrigin()}/subscribe/weekly/checkout?period=${billingPeriod.toString()}${promoQuery}`;
 };
