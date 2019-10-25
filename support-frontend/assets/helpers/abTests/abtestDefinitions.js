@@ -100,6 +100,7 @@ export const tests: Tests = {
     targetPage: '/(uk|us|eu|au|ca|nz|int)/subscribe/digital$',
     optimizeId: 'emQ5nZJCS5mZkhtwwqfx5Q',
   },
+
   paymentSecurityDesignTest: {
     type: 'OTHER',
     variants: [
@@ -128,6 +129,31 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 10,
+    targetPage: contributionsLandingPageMatch,
+  },
+
+  landingPageTransactionFeeCopy: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'pleaseAdd',
+      },
+      {
+        id: 'iAmHappyToAdd',
+      },
+      {
+        id: 'iAmHappyToAddAverage',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 2,
     targetPage: contributionsLandingPageMatch,
   },
 };
