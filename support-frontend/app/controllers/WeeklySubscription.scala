@@ -36,18 +36,12 @@ class WeeklySubscription(
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
-  stage: Stage
+  stripeSetupIntentUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-
-  val stripeSetupIntentEndpoint: String =
-    if (stage == Stages.PROD) "https://stripe-intent.support.guardianapis.com/stripe-intent"
-    else "https://stripe-intent-code.support.guardianapis.com/stripe-intent"
-
-
 
   def displayForm(): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()

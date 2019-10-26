@@ -37,7 +37,7 @@ class DigitalSubscription(
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
-  stage: Stage
+  stripeSetupIntentEndpoint: String
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
@@ -45,10 +45,6 @@ class DigitalSubscription(
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-
-  val stripeSetupIntentEndpoint: String =
-    if (stage == Stages.PROD) "https://stripe-intent.support.guardianapis.com/stripe-intent"
-    else "https://stripe-intent-code.support.guardianapis.com/stripe-intent"
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
