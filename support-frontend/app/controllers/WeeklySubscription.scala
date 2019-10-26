@@ -36,7 +36,7 @@ class WeeklySubscription(
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
-  stripeSetupIntentUrl: String
+  stripeSetupIntentEndpoint: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
