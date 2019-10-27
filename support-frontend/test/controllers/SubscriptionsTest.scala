@@ -14,6 +14,7 @@ import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummarySe
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.Monthly
 import com.gu.tip.Tip
+import com.typesafe.config.ConfigFactory
 import config.Configuration.{GuardianDomain, MetricUrl}
 import config.StringsConfig
 import fixtures.TestCSRFComponents
@@ -29,11 +30,13 @@ import services.stepfunctions.SupportWorkersClient
 import services.{AccessCredentials, IdentityService, MembersDataService, TestUserService}
 
 import scala.concurrent.Future
-
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.must.Matchers
+import play.api.ConfigLoader
 
 class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponents {
+
+  val appConf = ConfigFactory.load("application.conf")
 
   trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
 
@@ -100,20 +103,20 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
 
       new DigitalSubscription(
-        priceSummaryServiceProvider,
-        assetResolver,
-        actionRefiner,
-        identityService,
-        testUserService,
-        membersDataService,
-        stripe,
-        payPal,
-        stubControllerComponents(),
-        new StringsConfig(),
-        settingsProvider,
-        "support.thegulocal.com",
-        Left(RefPath("test")),
-        Stages.DEV
+        priceSummaryServiceProvider = priceSummaryServiceProvider,
+        assets = assetResolver,
+        actionRefiners = actionRefiner,
+        identityService = identityService,
+        testUsers = testUserService,
+        membersDataService = membersDataService,
+        stripeConfigProvider = stripe,
+        payPalConfigProvider = payPal,
+        components = stubControllerComponents(),
+        stringsConfig = new StringsConfig(),
+        settingsProvider = settingsProvider,
+        supportUrl = "support.thegulocal.com",
+        fontLoaderBundle = Left(RefPath("test")),
+        stripeSetupIntentEndpoint = appConf.getString("stripe.intent.url")
       )
     }
 
