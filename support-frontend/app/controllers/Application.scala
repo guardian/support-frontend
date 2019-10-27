@@ -17,6 +17,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
+import play.api.Configuration
 import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
@@ -47,6 +48,7 @@ class Application(
   settingsProvider: AllSettingsProvider,
   guardianDomain: GuardianDomain,
   stage: Stage,
+  conf: Configuration,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components)
@@ -155,10 +157,6 @@ class Application(
       classes = Some(classes)
     )
 
-    val stripeSetupIntentEndpoint =
-      if (stage == Stages.PROD) "https://stripe-intent.support.guardianapis.com/stripe-intent"
-      else "https://stripe-intent-code.support.guardianapis.com/stripe-intent"
-
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"contributions-landing-page-$countryCode",
@@ -177,7 +175,7 @@ class Application(
       paymentApiStripeUrl = paymentAPIService.stripeUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
-      stripeSetupIntentEndpoint = stripeSetupIntentEndpoint,
+      stripeSetupIntentEndpoint = conf.get[String]("stripe.intent.url"),
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
