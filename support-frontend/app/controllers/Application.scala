@@ -17,7 +17,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
-import play.api.Configuration
+import config.Configuration
 import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
@@ -175,7 +175,7 @@ class Application(
       paymentApiStripeUrl = paymentAPIService.stripeUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
-      stripeSetupIntentEndpoint = conf.get[String]("stripe.intent.url"),
+      stripeSetupIntentEndpoint = conf.stripeIntentUrl,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,

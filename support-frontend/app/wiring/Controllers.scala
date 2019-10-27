@@ -33,6 +33,7 @@ trait Controllers {
     allSettingsProvider,
     appConfig.guardianDomain,
     appConfig.stage,
+    appConfig,
     appConfig.supportUrl,
     fontLoader
   )

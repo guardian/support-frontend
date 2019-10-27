@@ -6,7 +6,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
 import assets.{AssetsResolver, RefPath, StyleContent}
-import config.StringsConfig
+import config.{Configuration, StringsConfig}
 import fixtures.TestCSRFComponents
 import org.scalatestplus.mockito.MockitoSugar.mock
 import services._
@@ -16,7 +16,6 @@ import config.Configuration.{GuardianDomain, IdentityUrl}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
-
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.must.Matchers
 
@@ -50,6 +49,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[AllSettingsProvider],
         mock[GuardianDomain],
         mock[Stage],
+        mock[Configuration],
         "support.thegulocal.com",
         mock[Either[RefPath, StyleContent]]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
@@ -71,6 +71,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[AllSettingsProvider],
         mock[GuardianDomain],
         mock[Stage],
+        mock[Configuration],
         "support.thegulocal.com",
         mock[Either[RefPath, StyleContent]]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
