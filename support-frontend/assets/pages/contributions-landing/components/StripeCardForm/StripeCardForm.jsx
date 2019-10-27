@@ -160,8 +160,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
       } else {
         throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
       }
-    }).catch(error => {
-      logException(`Error getting Stripe client secret for recurring contribution: ${error}`)
+    }).catch((error) => {
+      logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
       this.props.paymentFailure('internal_error');
     });
 

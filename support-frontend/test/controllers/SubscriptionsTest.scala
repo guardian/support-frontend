@@ -36,7 +36,7 @@ import play.api.ConfigLoader
 
 class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
-  val appConf = ConfigFactory.load("application.conf")
+  val appConf = ConfigFactory.load("DEV.public.conf")
 
   trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
 
