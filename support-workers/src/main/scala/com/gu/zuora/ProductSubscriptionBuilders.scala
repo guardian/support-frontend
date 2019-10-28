@@ -11,11 +11,14 @@ import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
 import com.gu.support.zuora.api._
+import com.gu.zuora.ProductSubscriptionBuilders.allowFixedTermSubs
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
 import scala.util.{Failure, Success, Try}
 
 object ProductSubscriptionBuilders {
+
+  val allowFixedTermSubs = false
 
   def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT, stage: Stage, isTestUser: Boolean, fixedTerm: Boolean): ProductRatePlanId = {
     val touchpointEnvironment = if (isTestUser) UAT else TouchPointEnvironments.fromStage(stage)
@@ -29,7 +32,8 @@ object ProductSubscriptionBuilders {
       case gw: GuardianWeekly => ratePlans.find(rp =>
         rp.billingPeriod == gw.billingPeriod &&
         rp.fulfilmentOptions == gw.fulfilmentOptions &&
-        rp.fixedTerm == fixedTerm).map(_.id)
+        rp.fixedTerm == (fixedTerm && allowFixedTermSubs)
+      ).map(_.id)
       case _ => None
     }
 
@@ -161,7 +165,7 @@ trait ProductSubscriptionBuilder {
     readerType: ReaderType = ReaderType.Direct,
     initialTermMonths: Int = 12
   ) = {
-    val (initialTerm, autoRenew, initialTermPeriodType) = if(readerType == ReaderType.Gift)
+    val (initialTerm, autoRenew, initialTermPeriodType) = if(readerType == ReaderType.Gift && allowFixedTermSubs)
       (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, Day)
     else
       (12, true, Month)

@@ -39,12 +39,14 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
 
     import subscriptionData._
 
-    subscription.autoRenew shouldBe false
-    subscription.contractAcceptanceDate shouldBe firstDeliveryDate
-    subscription.termStartDate shouldBe saleDate
-    subscription.initialTerm shouldBe 95
-    subscription.initialTermPeriodType shouldBe Day
-    ratePlanData.head.ratePlan.productRatePlanId shouldBe "2c92c0f96ded216a016df491134d4091"
+    if (ProductSubscriptionBuilders.allowFixedTermSubs) {
+      subscription.autoRenew shouldBe false
+      subscription.contractAcceptanceDate shouldBe firstDeliveryDate
+      subscription.termStartDate shouldBe saleDate
+      subscription.initialTerm shouldBe 95
+      subscription.initialTermPeriodType shouldBe Day
+      ratePlanData.head.ratePlan.productRatePlanId shouldBe "2c92c0f96ded216a016df491134d4091"
+    } else succeed
   }
 
   "GuardianWeeklySubscriptionBuilder" should "build a correct non-gift SubscriptionData" in {
