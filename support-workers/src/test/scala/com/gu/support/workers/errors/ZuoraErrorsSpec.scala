@@ -8,9 +8,9 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.JsonFixtures.{createContributionZuoraSubscriptionJson, wrapFixture}
+import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
-import com.gu.support.workers._
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures.{incorrectPaymentMethod, invalidSubscriptionRequest}
@@ -69,7 +69,7 @@ class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with M
     assertion
   }
 
-  "200s with success = false from Zuora and a trnasient error" should "throw a RetryUnlimited" in {
+  "200s with success = false from Zuora and a transient error" should "throw a RetryUnlimited" in {
 
     val zuoraSubscribeError: String =
       """
