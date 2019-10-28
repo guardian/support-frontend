@@ -33,7 +33,7 @@ trait Controllers {
     allSettingsProvider,
     appConfig.guardianDomain,
     appConfig.stage,
-    appConfig,
+    appConfig.stripeIntentUrl,
     appConfig.supportUrl,
     fontLoader
   )

@@ -49,7 +49,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[AllSettingsProvider],
         mock[GuardianDomain],
         mock[Stage],
-        mock[Configuration],
+        mock[String],
         "support.thegulocal.com",
         mock[Either[RefPath, StyleContent]]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
@@ -71,7 +71,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[AllSettingsProvider],
         mock[GuardianDomain],
         mock[Stage],
-        mock[Configuration],
+        mock[String],
         "support.thegulocal.com",
         mock[Either[RefPath, StyleContent]]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
