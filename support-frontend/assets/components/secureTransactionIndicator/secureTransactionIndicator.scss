@@ -1,0 +1,60 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-secure-transaction--top {
+  overflow: hidden;
+  flex-grow: 1;
+  margin: 0 auto -2px 10px;
+  border: none;
+  max-width: gu-span(9) + $gu-h-spacing;
+  height: $gu-v-spacing*3;
+  padding: 0;
+
+  @include mq($from: tablet) {
+    margin: 25px auto -25px;
+    padding: 0 $gu-h-spacing;
+    height: auto;
+  }
+  @include mq($from: desktop) {
+    max-width: gu-span(10) + $gu-h-spacing;
+    height: auto;
+  }
+  @include mq($from: leftCol) {
+    max-width: gu-span(12) + $gu-h-spacing;
+    height: auto;
+  }
+}
+
+.component-secure-transaction--middle {
+  margin-top: -12px;
+}
+
+.component-secure-transaction--bottom-grey {
+  justify-content: center;
+  margin: -35px auto 0;
+  padding-bottom: 15px;
+}
+
+.component-secure-transaction--bottom-regular {
+  justify-content: center;
+  margin: -14px auto 0;
+  padding-bottom: 15px;
+}
+
+.component-secure-transaction {
+  display: flex;
+  align-items: center;
+
+  .component-secure-transaction__padlock {
+    margin-right: 5px;
+  }
+
+  .component-secure-transaction__text {
+    font-size: 14px;
+    color: gu-colour(neutral-46);
+    font-weight: bold;
+    letter-spacing: 0.01em;
+    font-family: $gu-text-sans-web;
+  }
+
+
+}

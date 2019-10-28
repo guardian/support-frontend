@@ -27,6 +27,7 @@ type PropTypes = {|
   setStripeHasLoaded: () => void,
   stripeHasLoaded: boolean,
   stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants,
+  showSecureBackground: boolean,
 |};
 
 class StripeCardFormContainer extends React.Component<PropTypes, void> {
@@ -49,12 +50,14 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
           this.props.isTestUser,
         );
 
+        const classNames: string = this.props.showSecureBackground ? 'stripe-card-element-container stripe-card-element-container-secure' : 'stripe-card-element-container';
+
         /**
          * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
          * Instead, we must create separate instances for ONE_OFF and REGULAR.
          */
         return (
-          <div className="stripe-card-element-container">
+          <div className={classNames}>
             <StripeProvider apiKey={stripeKey} key={stripeAccount}>
               <Elements>
                 <StripeCardForm stripeKey={stripeKey} />
