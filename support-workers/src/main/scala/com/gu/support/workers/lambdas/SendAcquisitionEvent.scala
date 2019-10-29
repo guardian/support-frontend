@@ -103,7 +103,7 @@ object SendAcquisitionEvent {
       // Don't match on this as its not a valid billing period.
         (billingPeriod: @unchecked) match {
           case Monthly => thrift.PaymentFrequency.Monthly
-          case Quarterly => thrift.PaymentFrequency.Quarterly
+          case Quarterly | SixWeekly => thrift.PaymentFrequency.Quarterly
           case Annual => thrift.PaymentFrequency.Annually
         }
 
