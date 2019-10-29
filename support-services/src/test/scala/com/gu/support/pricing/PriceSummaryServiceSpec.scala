@@ -7,7 +7,7 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
 import com.gu.support.promotions.ServicesFixtures.discountPromoCode
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
-import com.gu.support.workers.{Annual, BillingPeriod, Monthly, Quarterly}
+import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
 import org.joda.time.Months
 import org.scalatest.{Assertion, FlatSpec, Matchers}
 
@@ -35,16 +35,14 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
 
     val guardianWeekly = service.getPrices(GuardianWeekly, List(discountPromoCode, GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode))
 
-    //Quarterly should have the 6 for 6 introductory promotion
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 3
+    // Quarterly should have the discount promotion only
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 1
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 37.50
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions
       .find(_.promoCode == discountPromoCode).get.discountedPrice shouldBe Some(26.25)
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions
-      .find(_.promoCode == GuardianWeekly.SixForSixPromoCode).get.introductoryPrice.get.price shouldBe 6
 
-    //Annual should have 2 discounts applied,
+    //Annual should have the discount promotion and the annual 10% discount applied,
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions.size shouldBe 2
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).price shouldBe 150
@@ -54,6 +52,11 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
       .find(_.promoCode == GuardianWeekly.AnnualPromoCode).get.discountedPrice shouldBe Some(135.00)
+
+    // SixWeekly should have the 6 for 6 promotion and the discount
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions.size shouldBe 2
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions
+      .find(_.promoCode == GuardianWeekly.SixForSixPromoCode).get.introductoryPrice.get.price shouldBe 6
 
   }
 
