@@ -16,7 +16,12 @@ object ProductTypeExtensions {
 
   implicit class GuardianWeeklyExtensions(guardianWeekly: GuardianWeekly) {
 
-    def productRatePlanPredicate(productRatePlan: ProductRatePlan[Product]): Boolean = {
+    def introductoryRatePlanPredicate(productRatePlan: ProductRatePlan[Product]): Boolean = {
+      productRatePlan.fulfilmentOptions == guardianWeekly.fulfilmentOptions &&
+        productRatePlan.billingPeriod == guardianWeekly.billingPeriod
+    }
+
+    def recurringRatePlanPredicate(productRatePlan: ProductRatePlan[Product]): Boolean = {
       // For 6 for 6 subscriptions we want to return the productRatePlanId for the recurring ie. non-introductory rate plan
       val postIntroductoryBillingPeriod = if (guardianWeekly.billingPeriod == SixWeekly) Quarterly else guardianWeekly.billingPeriod
 

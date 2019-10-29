@@ -53,7 +53,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     val maybeProductRatePlan: Option[ProductRatePlan[Product]] = product match {
       case d: DigitalPack => ratePlans.find(d.productRatePlanPredicate)
       case p: Paper => ratePlans.find(p.productRatePlanPredicate)
-      case g: GuardianWeekly => ratePlans.find(g.productRatePlanPredicate)
+      case g: GuardianWeekly => ratePlans.find(g.recurringRatePlanPredicate)
       case _ => None
     }
     maybeProductRatePlan.map(_.id).getOrElse("")

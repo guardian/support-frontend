@@ -128,18 +128,21 @@ object ProductSubscriptionBuilders {
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a Guardian Weekly subscription.", e)
       }
 
+      val recurringProductRatePlanId = getProductRatePlanId(catalog.GuardianWeekly, guardianWeekly.recurringRatePlanPredicate, isTestUser)
 
-      val productRatePlanId = getProductRatePlanId(catalog.GuardianWeekly, guardianWeekly.productRatePlanPredicate, isTestUser)
+      val promotionProductRatePlanId = if(maybePromoCode.contains(catalog.GuardianWeekly.SixForSixPromoCode) && guardianWeekly.billingPeriod == SixWeekly) {
+        getProductRatePlanId(catalog.GuardianWeekly, guardianWeekly.introductoryRatePlanPredicate, isTestUser)
+      } else recurringProductRatePlanId
 
       val subscriptionData = buildProductSubscription(
         requestId,
-        productRatePlanId,
+        recurringProductRatePlanId,
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate,
         readerType = readerType
       )
 
-      applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
+      applyPromoCode(promotionService, maybePromoCode, country, promotionProductRatePlanId, subscriptionData)
     }
   }
 
