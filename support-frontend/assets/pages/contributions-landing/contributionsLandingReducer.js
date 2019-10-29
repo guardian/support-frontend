@@ -73,12 +73,7 @@ export type StripeCardFormData = {
   // These callbacks must be initialised after the StripeCardForm component has been created
   createPaymentMethod: ((email: string) => void) | null,
   handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null,
-}
-
-export type TransactionFee = {
-  fee?: number,
-  consent: boolean
-}
+};
 
 type FormState = {
   contributionType: ContributionType,
@@ -105,7 +100,7 @@ type FormState = {
   formIsValid: boolean,
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
-  transactionFee: TransactionFee
+  transactionFeeConsent: boolean,
 };
 
 type PageState = {
@@ -192,9 +187,7 @@ function createFormReducer() {
     formIsValid: true,
     formIsSubmittable: true,
     tickerGoalReached: false,
-    transactionFee: {
-      consent: false,
-    }
+    transactionFeeConsent: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -333,6 +326,12 @@ function createFormReducer() {
         return {
           ...state,
           stripeV3HasLoaded: true,
+        };
+
+      case 'UPDATE_TRANSACTION_FEE_CONSENT':
+        return {
+          ...state,
+          transactionFeeConsent: action.transactionFeeConsent,
         };
 
       case 'UPDATE_USER_FORM_DATA':

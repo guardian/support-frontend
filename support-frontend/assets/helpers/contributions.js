@@ -91,7 +91,29 @@ export type OtherAmounts = {
 export type SelectedAmounts = { [ContributionType]: Amount | 'other' };
 
 
-const getAmount = (selectedAmounts: SelectedAmounts, otherAmounts: OtherAmounts, contributionType: ContributionType) =>
+const getAmount = (
+  selectedAmounts: SelectedAmounts,
+  otherAmounts: OtherAmounts,
+  contributionType: ContributionType,
+) =>
+  parseFloat(selectedAmounts[contributionType] === 'other'
+    ? otherAmounts[contributionType].amount
+    : selectedAmounts[contributionType].value);
+
+const getTransactionFee = (baseAmount: number): number => {
+  if (baseAmount < 20 && baseAmount > 0) {
+    // Return a 9% transaction fee (made up number)
+    return baseAmount * 0.09;
+  }
+  // Return a 3% transaction fee (made up number)
+  return baseAmount * 0.03;
+};
+
+const getAmountWithoutTransactionFee = (
+  selectedAmounts: SelectedAmounts,
+  otherAmounts: OtherAmounts,
+  contributionType: ContributionType,
+) =>
   parseFloat(selectedAmounts[contributionType] === 'other'
     ? otherAmounts[contributionType].amount
     : selectedAmounts[contributionType].value);
@@ -457,5 +479,7 @@ export {
   getContributionAmountRadios,
   parseRegularContributionType,
   getAmount,
+  getTransactionFee,
+  getAmountWithoutTransactionFee,
   contributionTypeAvailable,
 };

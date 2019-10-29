@@ -86,6 +86,7 @@ export type Action =
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
+  | { type: 'UPDATE_TRANSACTION_FEE_CONSENT', transactionFeeConsent: boolean }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -138,6 +139,9 @@ const setStripePaymentRequestObject =
     ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject, stripeAccount });
 
 const setStripeV3HasLoaded = (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
+
+// UPDATE_TRANSACTION_FEE_CONSENT
+const updateTransactionFeeConsent = (transactionFeeConsent: boolean): Action => ({ type: 'UPDATE_TRANSACTION_FEE_CONSENT', transactionFeeConsent });
 
 const setStripePaymentRequestButtonClicked = (stripeAccount: StripeAccount): Action =>
   ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount });
@@ -577,6 +581,7 @@ export {
   setStripePaymentRequestObject,
   setStripePaymentRequestButtonClicked,
   setStripeV3HasLoaded,
+  updateTransactionFeeConsent,
   setTickerGoalReached,
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
