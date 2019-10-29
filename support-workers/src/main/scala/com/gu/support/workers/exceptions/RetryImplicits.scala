@@ -6,6 +6,7 @@ import com.amazonaws.services.kms.model._
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import io.circe.{DecodingFailure, ParsingFailure}
+import io.circe.syntax._
 import com.gu.rest.{WebServiceClientError, WebServiceHelperError}
 import com.gu.stripe.StripeError
 
@@ -33,9 +34,9 @@ object RetryImplicits {
 
   implicit class StripeConversions(val throwable: StripeError) extends AnyVal {
     def asRetryException: RetryException = throwable.`type` match {
-      case ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(throwable.getMessage, cause = throwable)
-      case "authentication_error" => new RetryLimited(throwable.getMessage, cause = throwable)
-      case ("card_error" | "invalid_request_error" | "validation_error") => new RetryNone(throwable.getMessage, cause = throwable)
+      case ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(throwable.asJson.noSpaces, cause = throwable)
+      case "authentication_error" => new RetryLimited(throwable.asJson.noSpaces, cause = throwable)
+      case ("card_error" | "invalid_request_error" | "validation_error") => new RetryNone(throwable.asJson.noSpaces, cause = throwable)
     }
   }
 
