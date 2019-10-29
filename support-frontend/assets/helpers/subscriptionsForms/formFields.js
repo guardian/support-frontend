@@ -30,7 +30,7 @@ export type FormFields = {|
   billingPeriod: BillingPeriod,
   paymentMethod: Option<PaymentMethod>,
   startDate: Option<string>,
-  billingAddressIsSame: Option<boolean>,
+  billingAddressIsSame: boolean,
   fulfilmentOption: FulfilmentOptions,
   product: SubscriptionProduct,
   productOption: ProductOptions,

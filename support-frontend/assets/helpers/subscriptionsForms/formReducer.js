@@ -40,7 +40,7 @@ function createFormReducer(
     lastName: user.lastName || '',
     startDate,
     telephone: null,
-    billingAddressIsSame: null,
+    billingAddressIsSame: true,
     billingPeriod: initialBillingPeriod,
     titleGiftRecipient: null,
     firstNameGiftRecipient: null,
