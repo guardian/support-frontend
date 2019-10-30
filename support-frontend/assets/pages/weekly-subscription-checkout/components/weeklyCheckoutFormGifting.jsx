@@ -32,8 +32,14 @@ import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import type { FormField, FormFields } from 'helpers/subscriptionsForms/formFields';
+import type {
+  FormField as PersonalDetailsFormField,
+  FormField,
+  FormFields,
+} from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
+import PersonalDetailsGift
+  from 'components/subscriptionCheckouts/personalDetailsGift';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
@@ -57,6 +63,7 @@ import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { routes } from 'helpers/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
+import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import { addressActionCreatorsFor, type SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
 import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
@@ -132,7 +139,7 @@ const days = getWeeklyDays();
 
 // ----- Component ----- //
 
-function WeeklyCheckoutForm(props: PropTypes) {
+function WeeklyCheckoutFormGifting(props: PropTypes) {
   const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
   const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
   const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
@@ -201,9 +208,47 @@ function WeeklyCheckoutForm(props: PropTypes) {
             />
           </FormSection>
           <FormSection title="Where should we deliver your magazine?">
-            <DeliveryAddress />
+            <CheckboxInput
+              id="qa-gift-checkbox"
+              text="This is a gift"
+              checked={props.orderIsAGift}
+              onChange={() => props.setGiftStatus(!props.orderIsAGift)}
+            />
+            {!props.orderIsAGift ? <DeliveryAddress /> : null}
           </FormSection>
-          <FormSection title="Is the billing address the same as the delivery address?">
+          {props.orderIsAGift ? (
+            <span>
+              <FormSection title="Gift recipient's details">
+                <SelectWithLabel
+                  id="title"
+                  label="Title"
+                  optional
+                  value={props.titleGiftRecipient}
+                  setValue={props.setTitleGift}
+                >
+                  <option value="">--</option>
+                  {options(titles)}
+                </SelectWithLabel>
+                <PersonalDetailsGift
+                  firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
+                  setFirstNameGift={props.setFirstNameGift}
+                  lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
+                  setLastNameGift={props.setLastNameGift}
+                  emailGiftRecipient={props.emailGiftRecipient || ''}
+                  setEmailGift={props.setEmailGift}
+                  formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+                  isGiftRecipient
+                />
+              </FormSection>
+              <FormSection title="Gift recipient's address">
+                <DeliveryAddress />
+              </FormSection>
+            </span>)
+          : null}
+          <FormSection title={props.orderIsAGift ?
+            'Is the billing address the same as the recipient\'s address?'
+            : 'Is the billing address the same as the delivery address?'}
+          >
             <Rows>
               <FieldsetWithError
                 id="billingAddressIsSame"
@@ -313,4 +358,4 @@ function WeeklyCheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps())(WeeklyCheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(WeeklyCheckoutFormGifting);
