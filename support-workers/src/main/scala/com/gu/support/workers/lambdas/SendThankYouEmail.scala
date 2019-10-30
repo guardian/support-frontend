@@ -7,9 +7,8 @@ import com.gu.emailservices._
 import com.gu.i18n.Country
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
+import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.config.TouchPointEnvironments.UAT
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers.ProductTypeExtensions._
@@ -46,17 +45,13 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
   }
 
   def getProductRatePlanId(product: ProductType, isTestUser: Boolean) = {
-    val touchpointEnvironment = if (isTestUser) UAT else TouchPointEnvironments.fromStage(Configuration.stage)
-
-    val ratePlans: Seq[ProductRatePlan[Product]] = product.catalogType.ratePlans.getOrElse(touchpointEnvironment, Nil)
-
-    val maybeProductRatePlan: Option[ProductRatePlan[Product]] = product match {
-      case d: DigitalPack => ratePlans.find(d.productRatePlanPredicate)
-      case p: Paper => ratePlans.find(p.productRatePlanPredicate)
-      case g: GuardianWeekly => ratePlans.find(g.recurringRatePlanPredicate)
+    val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
+    (product match {
+      case d: DigitalPack => d.productRatePlan(touchpointEnvironment)
+      case p: Paper => p.productRatePlan(touchpointEnvironment)
+      case w: GuardianWeekly => w.productRatePlan(touchpointEnvironment)
       case _ => None
-    }
-    maybeProductRatePlan.map(_.id).getOrElse("")
+    }).map(_.id).getOrElse("")
   }
 
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {

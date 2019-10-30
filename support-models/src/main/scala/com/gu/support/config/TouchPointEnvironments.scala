@@ -16,12 +16,13 @@ object TouchPointEnvironments {
 
   case object PROD extends TouchPointEnvironment
 
-  def fromStage(stage: Stage): TouchPointEnvironment =
-    stage match {
-      case Stages.DEV => SANDBOX
-      case Stages.CODE => SANDBOX
-      case Stages.PROD => PROD
-    }
+  def fromStage(stage: Stage, isTestUser: Boolean = false): TouchPointEnvironment =
+    if (isTestUser) UAT else
+      stage match {
+        case Stages.DEV => SANDBOX
+        case Stages.CODE => SANDBOX
+        case Stages.PROD => PROD
+      }
 
   def fromString(string: String) =
     string match {

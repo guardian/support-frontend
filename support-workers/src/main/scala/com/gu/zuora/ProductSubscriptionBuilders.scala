@@ -5,8 +5,7 @@ import java.util.UUID
 import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.support.catalog
-import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
-import com.gu.support.config.TouchPointEnvironments.UAT
+import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers.ProductTypeExtensions._
@@ -19,22 +18,13 @@ import scala.util.{Failure, Success, Try}
 
 object ProductSubscriptionBuilders {
 
-  def getProductRatePlanId[P <: Product](
-    product: P,
-    ratePlanPredicate: ProductRatePlan[Product] => Boolean,
-    isTestUser: Boolean
-  ): ProductRatePlanId = {
-    val touchpointEnvironment = if (isTestUser) UAT else TouchPointEnvironments.fromStage(Configuration.stage)
+  private def getTouchPointEnvironment(isTestUser: Boolean) = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
 
-    val ratePlans: Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
-
-    val maybeProductRatePlanId: Option[ProductRatePlanId] = ratePlans.find(ratePlanPredicate).map(_.id)
-
-    Try(maybeProductRatePlanId.get) match {
+  def validateRatePlan(maybeProductRatePlan: Option[ProductRatePlan[catalog.Product]], productDescription: String): ProductRatePlanId =
+    Try(maybeProductRatePlan.map(_.id).get) match {
       case Success(value) => value
-      case Failure(e) => throw new CatalogDataNotFoundException(s"RatePlanId not found for ${product.toString}", e)
+      case Failure(e) => throw new CatalogDataNotFoundException(s"RatePlanId not found for $productDescription", e)
     }
-  }
 
   implicit class ContributionSubscriptionBuilder(val contribution: Contribution) extends ProductSubscriptionBuilder {
     def build(requestId: UUID, config: ZuoraConfig): SubscriptionData = {
@@ -67,7 +57,7 @@ object ProductSubscriptionBuilders {
         .plusDays(config.digitalPack.paymentGracePeriod)
 
 
-      val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack.productRatePlanPredicate, isTestUser)
+      val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(getTouchPointEnvironment(isTestUser)), digitalPack.describe)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -97,7 +87,7 @@ object ProductSubscriptionBuilders {
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
       }
 
-      val productRatePlanId = getProductRatePlanId(catalog.Paper, paper.productRatePlanPredicate, isTestUser)
+      val productRatePlanId = validateRatePlan(paper.productRatePlan(getTouchPointEnvironment(isTestUser)), paper.describe)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -128,10 +118,10 @@ object ProductSubscriptionBuilders {
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a Guardian Weekly subscription.", e)
       }
 
-      val recurringProductRatePlanId = getProductRatePlanId(catalog.GuardianWeekly, guardianWeekly.recurringRatePlanPredicate, isTestUser)
+      val recurringProductRatePlanId = validateRatePlan(guardianWeekly.productRatePlan(getTouchPointEnvironment(isTestUser)), guardianWeekly.describe)
 
       val promotionProductRatePlanId = if(maybePromoCode.contains(catalog.GuardianWeekly.SixForSixPromoCode) && guardianWeekly.billingPeriod == SixWeekly) {
-        getProductRatePlanId(catalog.GuardianWeekly, guardianWeekly.introductoryRatePlanPredicate, isTestUser)
+        guardianWeekly.introductoryRatePlan(getTouchPointEnvironment(isTestUser)).map(_.id).getOrElse(recurringProductRatePlanId)
       } else recurringProductRatePlanId
 
       val subscriptionData = buildProductSubscription(
