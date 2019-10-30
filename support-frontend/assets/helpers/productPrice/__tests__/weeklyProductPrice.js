@@ -17,9 +17,10 @@ const productPrices = {
   'United Kingdom': {
     RestOfWorld: {
       NoProductOptions: {
-        Quarterly: {
+        Quarterly: { GBP: { price: 60, currency: 'GBP', promotions: [] } },
+        SixWeekly: {
           GBP: {
-            price: 60,
+            price: 6,
             currency: 'GBP',
             promotions: [
               {
@@ -34,7 +35,6 @@ const productPrices = {
               }],
           },
         },
-        SixWeekly: { GBP: { price: 6, currency: 'GBP', promotions: [] } },
         Annual: { GBP: { price: 240, currency: 'GBP', promotions: [] } },
       },
     },
@@ -44,13 +44,6 @@ const productPrices = {
           GBP: {
             price: 6,
             currency: 'GBP',
-            promotions: [],
-          },
-        },
-        Quarterly: {
-          GBP: {
-            price: 37.5,
-            currency: 'GBP',
             promotions: [
               {
                 name: 'Six For Six',
@@ -62,6 +55,13 @@ const productPrices = {
                   periodType: 'issue',
                 },
               }],
+          },
+        },
+        Quarterly: {
+          GBP: {
+            price: 37.5,
+            currency: 'GBP',
+            promotions: [],
           },
         },
         Annual: {
@@ -89,17 +89,7 @@ const productPrices = {
           EUR: {
             price: 67.5,
             currency: 'EUR',
-            promotions: [
-              {
-                name: 'Six For Six',
-                description: 'Introductory offer',
-                promoCode: '6FOR6',
-                introductoryPrice: {
-                  price: 6,
-                  periodLength: 6,
-                  periodType: 'issue',
-                },
-              }],
+            promotions: [],
           },
         },
         Annual: { EUR: { price: 270, currency: 'EUR', promotions: [] } },
@@ -111,13 +101,6 @@ const productPrices = {
           EUR: {
             price: 6,
             currency: 'EUR',
-            promotions: [],
-          },
-        },
-        Quarterly: {
-          EUR: {
-            price: 61.3,
-            currency: 'EUR',
             promotions: [
               {
                 name: 'Six For Six',
@@ -129,6 +112,13 @@ const productPrices = {
                   periodType: 'issue',
                 },
               }],
+          },
+        },
+        Quarterly: {
+          EUR: {
+            price: 61.3,
+            currency: 'EUR',
+            promotions: [],
           },
         },
         Annual: {
@@ -156,17 +146,7 @@ const productPrices = {
           NZD: {
             price: 132.5,
             currency: 'NZD',
-            promotions: [
-              {
-                name: 'Six For Six',
-                description: 'Introductory offer',
-                promoCode: '6FOR6',
-                introductoryPrice: {
-                  price: 6,
-                  periodLength: 6,
-                  periodType: 'issue',
-                },
-              }],
+            promotions: [],
           },
         },
         Annual: { NZD: { price: 530, currency: 'NZD', promotions: [] } },
@@ -178,13 +158,6 @@ const productPrices = {
           NZD: {
             price: 6,
             currency: 'NZD',
-            promotions: [],
-          },
-        },
-        Quarterly: {
-          NZD: {
-            price: 123,
-            currency: 'NZD',
             promotions: [
               {
                 name: 'Six For Six',
@@ -196,6 +169,13 @@ const productPrices = {
                   periodType: 'issue',
                 },
               }],
+          },
+        },
+        Quarterly: {
+          NZD: {
+            price: 123,
+            currency: 'NZD',
+            promotions: [],
           },
         },
         Annual: {
@@ -223,17 +203,7 @@ const productPrices = {
           CAD: {
             price: 86.25,
             currency: 'CAD',
-            promotions: [
-              {
-                name: 'Six For Six',
-                description: 'Introductory offer',
-                promoCode: '6FOR6',
-                introductoryPrice: {
-                  price: 6,
-                  periodLength: 6,
-                  periodType: 'issue',
-                },
-              }],
+            promotions: [],
           },
         },
         Annual: { CAD: { price: 345, currency: 'CAD', promotions: [] } },
@@ -245,13 +215,6 @@ const productPrices = {
           CAD: {
             price: 6,
             currency: 'CAD',
-            promotions: [],
-          },
-        },
-        Quarterly: {
-          CAD: {
-            price: 80,
-            currency: 'CAD',
             promotions: [
               {
                 name: 'Six For Six',
@@ -263,6 +226,13 @@ const productPrices = {
                   periodType: 'issue',
                 },
               }],
+          },
+        },
+        Quarterly: {
+          CAD: {
+            price: 80,
+            currency: 'CAD',
+            promotions: [],
           },
         },
         Annual: {
@@ -290,17 +260,7 @@ const productPrices = {
           AUD: {
             price: 106,
             currency: 'AUD',
-            promotions: [
-              {
-                name: 'Six For Six',
-                description: 'Introductory offer',
-                promoCode: '6FOR6',
-                introductoryPrice: {
-                  price: 6,
-                  periodLength: 6,
-                  periodType: 'issue',
-                },
-              }],
+            promotions: [],
           },
         },
         Annual: { AUD: { price: 424, currency: 'AUD', promotions: [] } },
@@ -309,13 +269,6 @@ const productPrices = {
     Domestic: {
       NoProductOptions: {
         SixWeekly: {
-          AUD: {
-            price: 6,
-            currency: 'AUD',
-            promotions: [],
-          },
-        },
-        Quarterly: {
           AUD: {
             price: 97.5,
             currency: 'AUD',
@@ -330,6 +283,13 @@ const productPrices = {
                   periodType: 'issue',
                 },
               }],
+          },
+        },
+        Quarterly: {
+          AUD: {
+            price: 97.5,
+            currency: 'AUD',
+            promotions: [],
           },
         },
         Annual: {
@@ -357,53 +317,17 @@ const productPrices = {
           GBP: {
             price: 60,
             currency: 'GBP',
-            promotions: [
-              {
-                name: 'Six For Six',
-                description: 'Introductory offer',
-                promoCode: '6FOR6',
-                introductoryPrice: {
-                  price: 6,
-                  periodLength: 6,
-                  periodType: 'issue',
-                },
-              }],
+            promotions: [],
           },
           USD: {
             price: 81.3,
             currency: 'USD',
-            promotions: [
-              {
-                name: 'Six For Six',
-                description: 'Introductory offer',
-                promoCode: '6FOR6',
-                introductoryPrice: {
-                  price: 6,
-                  periodLength: 6,
-                  periodType: 'issue',
-                },
-              }],
+            promotions: [],
           },
         },
         SixWeekly: {
-          GBP: { price: 6, currency: 'GBP', promotions: [] },
-          USD: { price: 6, currency: 'USD', promotions: [] },
-        },
-        Annual: {
-          GBP: { price: 240, currency: 'GBP', promotions: [] },
-          USD: { price: 325.2, currency: 'USD', promotions: [] },
-        },
-      },
-    },
-    Domestic: {
-      NoProductOptions: {
-        SixWeekly: {
-          GBP: { price: 6, currency: 'GBP', promotions: [] },
-          USD: { price: 6, currency: 'USD', promotions: [] },
-        },
-        Quarterly: {
           GBP: {
-            price: 37.5,
+            price: 6,
             currency: 'GBP',
             promotions: [
               {
@@ -418,7 +342,7 @@ const productPrices = {
               }],
           },
           USD: {
-            price: 75,
+            price: 6,
             currency: 'USD',
             promotions: [
               {
@@ -431,6 +355,58 @@ const productPrices = {
                   periodType: 'issue',
                 },
               }],
+          },
+        },
+        Annual: {
+          GBP: { price: 240, currency: 'GBP', promotions: [] },
+          USD: { price: 325.2, currency: 'USD', promotions: [] },
+        },
+      },
+    },
+    Domestic: {
+      NoProductOptions: {
+        SixWeekly: {
+          GBP: {
+            price: 6,
+            currency: 'GBP',
+            promotions: [
+              {
+                name: 'Six For Six',
+                description: 'Introductory offer',
+                promoCode: '6FOR6',
+                introductoryPrice: {
+                  price: 6,
+                  periodLength: 6,
+                  periodType: 'issue',
+                },
+              }],
+          },
+          USD: {
+            price: 6,
+            currency: 'USD',
+            promotions: [
+              {
+                name: 'Six For Six',
+                description: 'Introductory offer',
+                promoCode: '6FOR6',
+                introductoryPrice: {
+                  price: 6,
+                  periodLength: 6,
+                  periodType: 'issue',
+                },
+              }],
+          },
+        },
+        Quarterly: {
+          GBP: {
+            price: 37.5,
+            currency: 'GBP',
+            promotions: [],
+          },
+          USD: {
+            price: 75,
+            currency: 'USD',
+            promotions: [],
           },
         },
         Annual: {
@@ -471,6 +447,13 @@ const productPrices = {
           USD: {
             price: 81.3,
             currency: 'USD',
+            promotions: [],
+          },
+        },
+        SixWeekly: {
+          USD: {
+            price: 6,
+            currency: 'USD',
             promotions: [
               {
                 name: 'Six For Six',
@@ -484,7 +467,6 @@ const productPrices = {
               }],
           },
         },
-        SixWeekly: { USD: { price: 6, currency: 'USD', promotions: [] } },
         Annual: { USD: { price: 325.2, currency: 'USD', promotions: [] } },
       },
     },
@@ -494,13 +476,6 @@ const productPrices = {
           USD: {
             price: 6,
             currency: 'USD',
-            promotions: [],
-          },
-        },
-        Quarterly: {
-          USD: {
-            price: 75,
-            currency: 'USD',
             promotions: [
               {
                 name: 'Six For Six',
@@ -512,6 +487,13 @@ const productPrices = {
                   periodType: 'issue',
                 },
               }],
+          },
+        },
+        Quarterly: {
+          USD: {
+            price: 75,
+            currency: 'USD',
+            promotions: [],
           },
         },
         Annual: {
@@ -544,13 +526,7 @@ describe('getPrice', () => {
       .toEqual({
         currency: 'EUR',
         price: 61.3,
-        promotions: [
-          {
-            description: 'Introductory offer',
-            introductoryPrice: { periodLength: 6, periodType: 'issue', price: 6 },
-            name: 'Six For Six',
-            promoCode: '6FOR6',
-          }],
+        promotions: [],
       });
 
     const audPriceSixForSix = getProductPrice(
