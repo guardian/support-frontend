@@ -14,6 +14,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { updateTransactionFeeConsent } from 'pages/contributions-landing/contributionsLandingActions';
+import type { LandingPageTransactionFeeCopyVariants } from 'helpers/abTests/abtestDefinitions';
 // import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 // ----- Types ----- //
@@ -26,6 +27,7 @@ type PropTypes = {|
   currency: IsoCurrency,
   countryGroupId: CountryGroupId,
   transactionFeeConsent: boolean => void,
+  landingPageTransactionFeeCopyVariant: LandingPageTransactionFeeCopyVariants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -35,6 +37,7 @@ const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
   currency: state.common.internationalisation.currencyId,
   countryGroupId: state.common.internationalisation.countryGroupId,
+  landingPageTransactionFeeCopyVariant: state.common.abParticipations.landingPageTransactionFeeCopy,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -54,7 +57,7 @@ const amountFormatted = (amount: number, currencyString: string, countryGroupId:
 
 function withProps(props: PropTypes) {
   const {
-    selectedAmounts, otherAmounts, contributionType, countryGroupId, transactionFeeConsent,
+    selectedAmounts, otherAmounts, contributionType, countryGroupId, transactionFeeConsent, landingPageTransactionFeeCopyVariant,
   } = props;
   const baseAmount = getAmountWithoutTransactionFee(
     selectedAmounts,
@@ -65,7 +68,13 @@ function withProps(props: PropTypes) {
   const transactionFee = getTransactionFee(baseAmount);
   const formattedTransactionFee = amountFormatted(transactionFee, currencyString, countryGroupId);
 
-  return (
+  const copyVariants = {
+    pleaseAdd: `Please add ${formattedTransactionFee} to my contribution to cover the transaction fees`,
+    iAmHappyToAdd: `Yes, I am happy to add ${formattedTransactionFee} to my contribution to cover the transaction fees`,
+    iAmHappyToAddAverage: `I’m happy to add the average transaction fees of ${formattedTransactionFee} to my contribution`,
+  };
+
+  return contributionType === 'ONE_OFF' && landingPageTransactionFeeCopyVariant !== 'control' ? (
     <fieldset className={classNameWithModifiers('form__checkbox', ['contribution-transaction-fee'])}>
       <legend className="form__legend">Would you like to cover the transaction fee?</legend>
       {baseAmount && baseAmount > 0 && transactionFee &&
@@ -75,8 +84,7 @@ function withProps(props: PropTypes) {
       />
       }
     </fieldset>
-  );
-
+  ) : null;
 }
 
 function withoutProps() {
