@@ -23,7 +23,7 @@ const countryGroupId: CountryGroupId = detect();
 const store = pageInit();
 
 const Header = headerWithCountrySwitcherContainer({
-  path: '/subscribe/weekly',
+  path: '/subscribe',
   countryGroupId,
   listOfCountryGroups: [
     GBPCountries,
