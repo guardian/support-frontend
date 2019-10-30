@@ -36,7 +36,9 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     val recentDays = 28 // the step functions only try for 1 day, so 28 would be ample to find subs already created in this execution
     val recently = now.minusDays(recentDays).format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
     // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
-    val queryData = QueryData(s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}' and UpdatedDate > '$recently'")
+    val queryData = QueryData(
+      s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}' and UpdatedDate > '$recently'"
+    )
     postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(DomainAccount.fromAccountRecord))
   }
 

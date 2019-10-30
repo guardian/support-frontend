@@ -9,7 +9,7 @@ import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.GuardianWeekly
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import config.StringsConfig
 import play.api.libs.circe.Circe
@@ -35,13 +35,13 @@ class WeeklySubscription(
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent]
+  fontLoaderBundle: Either[RefPath, StyleContent],
+  stripeSetupIntentEndpoint: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-
 
   def displayForm(): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -81,7 +81,8 @@ class WeeklySubscription(
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),
-      payPalConfigProvider.get(true)
+      payPalConfigProvider.get(true),
+      stripeSetupIntentEndpoint
     )
   }
 
