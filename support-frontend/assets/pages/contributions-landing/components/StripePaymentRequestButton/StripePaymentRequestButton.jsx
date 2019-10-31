@@ -213,7 +213,7 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
     // We need to do this so that we can offer marketing permissions on the thank you page
     updatePayerEmail(data, props.updateEmail);
 
-    const stateUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
+    const stateUpdateOk = props.stripeAccount !== 'ONE_OFF' && props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
       updatePayerState(token, props.updateState) : true;
 
     const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
