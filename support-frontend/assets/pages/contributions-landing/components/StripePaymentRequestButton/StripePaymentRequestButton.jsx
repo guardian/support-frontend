@@ -22,9 +22,9 @@ import {
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId, Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type {CaState, IsoCountry, UsState} from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type {
   State,
@@ -39,6 +39,7 @@ import {
   updateFirstName,
   updateLastName,
   updatePaymentMethod,
+  updateState,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
@@ -67,9 +68,11 @@ type PropTypes = {|
   updateEmail: string => void,
   updateFirstName: string => void,
   updateLastName: string => void,
+  updateState: (state: UsState | CaState | null) => void,
   paymentMethod: PaymentMethod,
   setAssociatedPaymentMethod: () => (Function) => void,
   stripeAccount: StripeAccount,
+  state: UsState | CaState | null,
 |};
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -82,6 +85,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
+  state: state.page.form.formData.state,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -95,6 +99,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateEmail: (email: string) => dispatch(updateEmail(email)),
   updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
   updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
+  updateState: (state: UsState | CaState | null) => dispatch(updateState(state)),
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
   setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
@@ -134,6 +139,17 @@ function updatePayerName(data: Object, setFirstName: string => void, setLastName
   logException('Failed to set name: no name in data object');
   return false;
 
+}
+
+function updatePayerState(token: Object, setState: (UsState | CaState | null) => void): boolean {
+  const state = token.card.address_state;
+  if (state) {
+    setState(state);
+    return true;
+  } else {
+    logException('Missing address_state in payment request token');
+    return false;
+  }
 }
 
 // Calling the complete function will close the pop up payment window
@@ -196,10 +212,14 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
   paymentRequest.on('token', ({ complete, token, ...data }) => {
     // We need to do this so that we can offer marketing permissions on the thank you page
     updatePayerEmail(data, props.updateEmail);
-    const updateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
+
+    const stateUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
+      updatePayerState(token, props.updateState) : true;
+
+    const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
       updatePayerName(data, props.updateFirstName, props.updateLastName) : true;
 
-    if (updateOk) {
+    if (nameUpdateOk && stateUpdateOk) {
       const tokenId = props.isTestUser ? 'tok_visa' : token.id;
       if (data.methodName) {
         // https://stripe.com/docs/stripe-js/reference#payment-response-object
