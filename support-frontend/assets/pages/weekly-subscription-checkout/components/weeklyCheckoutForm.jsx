@@ -256,7 +256,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
                 date you receive your first Guardian Weekly.
                 </p>
                 <p className="component-text__sans">
-                Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                Subscription start dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
             </Rows>

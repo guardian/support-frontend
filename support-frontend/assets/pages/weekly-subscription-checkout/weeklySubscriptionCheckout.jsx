@@ -57,7 +57,7 @@ const { countryGroupId } = store.getState().common.internationalisation;
 
 // Temporary var for gifting checkout
 
-const orderIsAGift = false;
+const orderIsAGift = true;
 
 // ----- Render ----- //
 
