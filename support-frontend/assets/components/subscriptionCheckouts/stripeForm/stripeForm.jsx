@@ -90,7 +90,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       cardErrors.push({ field: [field], message: this.state[field].error });
     }
     return cardErrors;
-  }, [])
+  }, []);
 
   handleCardErrors = () => {
     // eslint-disable-next-line array-callback-return
@@ -112,7 +112,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       }
       this.setState({ cardErrors: this.getAllCardErrors() });
     });
-  }
+  };
 
   handleChange = (event) => {
     if (this.state[event.elementType].error) {
@@ -131,7 +131,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
         },
       });
     }
-  }
+  };
 
   setupRecurringHandlers(): void {
     // Start by requesting the client_secret for a new Payment Method.
@@ -152,7 +152,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
         throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
       }
     }).catch(error => {
-      logException(`Error getting Stripe client secret for recurring contribution: ${error}`)
+      logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
       this.props.paymentFailure('internal_error');
     });
 
@@ -186,7 +186,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
         .then(({ token }) => this.props.setStripeToken(token.id))
         .then(() => this.props.submitForm());
     }
-  }
+  };
 
   componentDidMount() {
     this.setupRecurringHandlers();
