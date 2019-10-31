@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAmountWithoutTransactionFee, getTransactionFee } from 'helpers/contributions';
+import { getAmountWithoutTransactionFee, getFormattedAmount, getTransactionFee } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   currencies, detect,
@@ -48,12 +48,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 });
 
 // ----- Render ----- //
-const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
-  if (amount < 1 && countryGroupId === 'GBPCountries') {
-    return `${(amount * 100).toFixed(0)}p`;
-  }
-  return `${currencyString}${(amount).toFixed(2)}`;
-};
 
 function withProps(props: PropTypes) {
   const {
@@ -66,7 +60,7 @@ function withProps(props: PropTypes) {
   );
   const currencyString = currencies[detect(countryGroupId)].glyph;
   const transactionFee = getTransactionFee(baseAmount);
-  const formattedTransactionFee = amountFormatted(transactionFee, currencyString, countryGroupId);
+  const formattedTransactionFee = getFormattedAmount(transactionFee, currencyString, countryGroupId);
 
   const copyVariants = {
     pleaseAdd: `Please add ${formattedTransactionFee} to my contribution to cover the transaction fees`,

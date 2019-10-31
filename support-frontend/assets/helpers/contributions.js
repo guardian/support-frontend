@@ -118,6 +118,13 @@ const getAmountWithoutTransactionFee = (
     ? otherAmounts[contributionType].amount
     : selectedAmounts[contributionType].value);
 
+const getFormattedAmount = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
+  if (amount < 1 && countryGroupId === 'GBPCountries') {
+    return `${(amount * 100).toFixed(0)}p`;
+  }
+  return `${currencyString}${(amount).toFixed(2)}`;
+};
+
 // ----- Setup ----- //
 
 /* eslint-disable quote-props */
@@ -481,5 +488,6 @@ export {
   getAmount,
   getTransactionFee,
   getAmountWithoutTransactionFee,
+  getFormattedAmount,
   contributionTypeAvailable,
 };

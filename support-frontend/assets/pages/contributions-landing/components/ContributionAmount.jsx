@@ -5,7 +5,14 @@
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { config, type AmountsRegions, type Amount, type ContributionType, getAmount } from 'helpers/contributions';
+import {
+  config,
+  type AmountsRegions,
+  type Amount,
+  type ContributionType,
+  getAmount,
+  getFormattedAmount
+} from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
@@ -122,13 +129,6 @@ const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> =
   }
 };
 
-const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
-  if (amount < 1 && countryGroupId === 'GBPCountries') {
-    return `${(amount * 100).toFixed(0)}p`;
-  }
-  return `${currencyString}${(amount).toFixed(2)}`;
-};
-
 export const getAmountPerWeekBreakdown = (
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
@@ -146,7 +146,7 @@ export const getAmountPerWeekBreakdown = (
   }
 
   if (amount && weeklyAmount) {
-    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(weeklyAmount, currencyString, countryGroupId)} each week`;
+    return `Contributing ${currencyString}${amount} works out as ${getFormattedAmount(weeklyAmount, currencyString, countryGroupId)} each week`;
   }
 
   return '';
