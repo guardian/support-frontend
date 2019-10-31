@@ -9,6 +9,7 @@ import com.gu.support.promotions.ServicesFixtures.discountPromoCode
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
 import org.joda.time.Months
+import org.scalatest.OptionValues._
 import org.scalatest.{Assertion, FlatSpec, Matchers}
 
 class PriceSummaryServiceSpec extends FlatSpec with Matchers {
@@ -40,23 +41,23 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 37.50
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions
-      .find(_.promoCode == discountPromoCode).get.discountedPrice shouldBe Some(26.25)
+      .find(_.promoCode == discountPromoCode).value.discountedPrice shouldBe Some(26.25)
 
     //Annual should have the discount promotion and the annual 10% discount applied,
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions.size shouldBe 2
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).price shouldBe 150
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
-      .find(_.promoCode == discountPromoCode).get.discountedPrice shouldBe Some(138.75)
+      .find(_.promoCode == discountPromoCode).value.discountedPrice shouldBe Some(138.75)
     guardianWeekly(Europe)(RestOfWorld)(NoProductOptions)(Annual)(EUR).price shouldBe 270
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
-      .find(_.promoCode == GuardianWeekly.AnnualPromoCode).get.discountedPrice shouldBe Some(135.00)
+      .find(_.promoCode == GuardianWeekly.AnnualPromoCode).value.discountedPrice shouldBe Some(135.00)
 
     // SixWeekly should have the 6 for 6 promotion and the discount
     guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions.size shouldBe 2
     guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions
-      .find(_.promoCode == GuardianWeekly.SixForSixPromoCode).get.introductoryPrice.get.price shouldBe 6
+      .find(_.promoCode == GuardianWeekly.SixForSixPromoCode).value.introductoryPrice.value.price shouldBe 6
 
   }
 
@@ -65,7 +66,7 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
     // TODO: It seems that Paper & Paper+ round discounts differently on the
     // current subscribe site. For instance Everyday and Sixday+ have the same
     // original price but different discounted values - £35.71 & £35.72.
-    // We need to work out what they will actually get charged by Zuora
+    // We need to work out what they will actually value charged by Zuora
 
     checkPrice(discountBenefit, 47.62, 35.71, Monthly) //Everyday
     checkPrice(discountBenefit, 51.96, 38.97, Monthly) //Everyday+
