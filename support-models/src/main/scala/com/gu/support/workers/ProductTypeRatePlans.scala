@@ -51,7 +51,7 @@ object ProductTypeRatePlans {
 
 object GuardianWeeklyExtensions {
 
-  implicit class IntroductoryRatePlan(guardianWeekly: GuardianWeekly) {
+  implicit class IntroductoryRatePlan(val guardianWeekly: GuardianWeekly) extends AnyVal {
     /**
      * Return the productRatePlan for the introductory part of the subscription ie. 6 for 6
      */

@@ -15,10 +15,14 @@ object CatalogService {
 
 class CatalogService(val environment: TouchPointEnvironment, jsonProvider: CatalogJsonProvider) extends LazyLogging {
 
-  private def getRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions)
+  private[this] def getRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions)
     = getProductRatePlan(environment, billingPeriod,fulfilmentOptions, NoProductOptions).map(_.id).getOrElse("")
 
-  private def fetchQuarterlyPrice(quarterlyId: ProductRatePlanId, sixWeeklyPriceList: Pricelist, catalogPrices: List[Pricelist]) = {
+  private[this] def fetchQuarterlyPrice(
+    quarterlyId: ProductRatePlanId,
+    sixWeeklyPriceList: Pricelist,
+    catalogPrices: List[Pricelist]
+  ) = {
     Pricelist(sixWeeklyPriceList.productRatePlanId,
       catalogPrices.find(_.productRatePlanId == quarterlyId).map(_.prices).getOrElse(sixWeeklyPriceList.prices)
     )
