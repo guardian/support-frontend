@@ -4,11 +4,7 @@ import React from 'react';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInputWithHelper } from 'components/forms/customFields/radioInputWithHelper';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import {
-  billingPeriodTitle,
-  Quarterly,
-  SixWeekly,
-} from 'helpers/billingPeriods';
+import { billingPeriodTitle } from 'helpers/billingPeriods';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
@@ -38,7 +34,7 @@ function BillingPeriodSelector(props: PropTypes) {
           const productPrice = getProductPrice(
             props.productPrices,
             props.billingCountry,
-            billingPeriod === SixWeekly ? Quarterly : billingPeriod, // for 6 for 6 we need the quarterly pricing
+            billingPeriod,
             props.fulfilmentOption,
           );
           return (<RadioInputWithHelper

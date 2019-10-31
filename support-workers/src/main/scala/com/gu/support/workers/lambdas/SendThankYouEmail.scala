@@ -2,17 +2,20 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.i18n.Country
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.ProductRatePlanId
+import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.{PromoCode, Promotion, PromotionService}
+import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.threadpools.CustomPool.executionContext
-import com.gu.zuora.{ProductSubscriptionBuilders, ZuoraService}
+import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._
 import org.joda.time.DateTime
 
@@ -41,8 +44,13 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     case _ => Future.successful(None)
   }
 
+  def getProductRatePlanId(product: ProductType, isTestUser: Boolean): ProductRatePlanId = {
+    val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
+    product.productRatePlan(touchpointEnvironment).map(_.id).getOrElse("")
+  }
+
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
-    val productRatePlanId = ProductSubscriptionBuilders.getProductRatePlanId(state.product.catalogType, state.product, state.user.isTestUser)
+    val productRatePlanId =  getProductRatePlanId(state.product, state.user.isTestUser)
     val maybePromotion = getAppliedPromotion(
       servicesProvider.forUser(state.user.isTestUser).promotionService,
       state.promoCode,
