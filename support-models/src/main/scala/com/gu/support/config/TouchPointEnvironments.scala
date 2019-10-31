@@ -19,8 +19,7 @@ object TouchPointEnvironments {
   def fromStage(stage: Stage, isTestUser: Boolean = false): TouchPointEnvironment =
     if (isTestUser) UAT else
       stage match {
-        case Stages.DEV => SANDBOX
-        case Stages.CODE => SANDBOX
+        case Stages.DEV | Stages.CODE => SANDBOX
         case Stages.PROD => PROD
       }
 
