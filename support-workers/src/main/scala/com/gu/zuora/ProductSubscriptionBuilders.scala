@@ -22,9 +22,9 @@ object ProductSubscriptionBuilders {
   private def getTouchPointEnvironment(isTestUser: Boolean) = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
 
   def validateRatePlan(maybeProductRatePlan: Option[ProductRatePlan[catalog.Product]], productDescription: String): ProductRatePlanId =
-    Try(maybeProductRatePlan.map(_.id).get) match {
-      case Success(value) => value
-      case Failure(e) => throw new CatalogDataNotFoundException(s"RatePlanId not found for $productDescription", e)
+    maybeProductRatePlan.map(_.id) match {
+      case Some(value) => value
+      case None => throw new CatalogDataNotFoundException(s"RatePlanId not found for $productDescription")
     }
 
   implicit class ContributionSubscriptionBuilder(val contribution: Contribution) extends ProductSubscriptionBuilder {

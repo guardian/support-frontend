@@ -24,7 +24,7 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     )
   }
 
-  def adjustSixWeeklyPriceList(c: Catalog) = {
+  def adjustSixWeeklyPriceList(c: Catalog): Catalog = {
     // The price stored for the 6 weekly billing period in Zuora is £6 - the price of the
     // promotion. It is much more use from the point of view of the site to have the subscription
     // price, ie. the quarterly price as the £6 is available through the introductory promotion object
@@ -36,7 +36,7 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     Catalog(
       c.prices.map(priceList =>
         ratePlanIdsToSwap.get(priceList.productRatePlanId)
-          .map(quarterlyId => fetchQuarterlyPrice(quarterlyId, priceList, c.prices))
+          .map(fetchQuarterlyPrice(_, priceList, c.prices))
           .getOrElse(priceList)
       )
     )
