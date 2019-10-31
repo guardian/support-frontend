@@ -8,7 +8,7 @@ export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returning
 export type LandingPageMomentBackgroundColourTestVariants = 'control' | 'yellow' | 'notintest';
 export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
 export type PaymentSecurityDesignTestVariants = 'control' | 'V1_securetop' | 'V2_securemiddle' | 'V3_securebottom' | 'V4_grey'
-export type LandingPageTransactionFeeCopyVariants = 'control' | 'pleaseAdd' | 'iAmHappyToAdd' | 'iAmHappyToAddAverage' | 'notintest';
+export type LandingPageTransactionFeeCopyVariants = 'control' | 'pleaseAdd' | 'iAmHappyToAdd' | 'iWillCover' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 
@@ -146,7 +146,7 @@ export const tests: Tests = {
         id: 'iAmHappyToAdd',
       },
       {
-        id: 'iAmHappyToAddAverage',
+        id: 'iWillCover',
       },
     ],
     audiences: {

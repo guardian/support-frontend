@@ -70,16 +70,18 @@ function withProps(props: PropTypes) {
 
   const copyVariants = {
     pleaseAdd: `Please add ${formattedTransactionFee} to my contribution to cover the transaction fees`,
-    iAmHappyToAdd: `Yes, I am happy to add ${formattedTransactionFee} to my contribution to cover the transaction fees`,
-    iAmHappyToAddAverage: `I’m happy to add the average transaction fees of ${formattedTransactionFee} to my contribution`,
+    iAmHappyToAdd: `Yes, I am happy to cover the transaction fees for my contribution (+ ${formattedTransactionFee})`,
+    iWillCover: `I will cover the transaction fees so more of my contribution goes directly to The Guardian (+ ${formattedTransactionFee})`,
   };
 
-  return contributionType === 'ONE_OFF' && landingPageTransactionFeeCopyVariant !== 'control' ? (
+  return contributionType === 'ONE_OFF' &&
+    landingPageTransactionFeeCopyVariant !== 'control' &&
+    landingPageTransactionFeeCopyVariant !== 'notintest' ? (
     <fieldset className={classNameWithModifiers('form__checkbox', ['contribution-transaction-fee'])}>
       <legend className="form__legend">Would you like to cover the transaction fee?</legend>
       {baseAmount && baseAmount > 0 && transactionFee &&
       <CheckboxInput
-        text={`The transaction fee for ${currencyString}${baseAmount} is ${formattedTransactionFee}`}
+        text={copyVariants[landingPageTransactionFeeCopyVariant]}
         onChange={(event) => transactionFeeConsent(event.target.checked)}
       />
       }
