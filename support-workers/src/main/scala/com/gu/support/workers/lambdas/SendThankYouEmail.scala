@@ -11,7 +11,7 @@ import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.{PromoCode, Promotion, PromotionService}
-import com.gu.support.workers.ProductTypeExtensions._
+import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.threadpools.CustomPool.executionContext
@@ -44,18 +44,13 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     case _ => Future.successful(None)
   }
 
-  def getProductRatePlanId(product: ProductType, isTestUser: Boolean) = {
+  def getProductRatePlanId(product: ProductType, isTestUser: Boolean): ProductRatePlanId = {
     val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
-    (product match {
-      case d: DigitalPack => d.productRatePlan(touchpointEnvironment)
-      case p: Paper => p.productRatePlan(touchpointEnvironment)
-      case w: GuardianWeekly => w.productRatePlan(touchpointEnvironment)
-      case _ => None
-    }).map(_.id).getOrElse("")
+    product.productRatePlan(touchpointEnvironment).map(_.id).getOrElse("")
   }
 
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
-    val productRatePlanId = getProductRatePlanId(state.product, state.user.isTestUser)
+    val productRatePlanId =  getProductRatePlanId(state.product, state.user.isTestUser)
     val maybePromotion = getAppliedPromotion(
       servicesProvider.forUser(state.user.isTestUser).promotionService,
       state.promoCode,

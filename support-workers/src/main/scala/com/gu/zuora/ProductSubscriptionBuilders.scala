@@ -8,7 +8,8 @@ import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
-import com.gu.support.workers.ProductTypeExtensions._
+import com.gu.support.workers.GuardianWeeklyExtensions._
+import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
 import com.gu.support.zuora.api._
