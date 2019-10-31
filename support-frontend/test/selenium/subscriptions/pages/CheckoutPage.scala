@@ -26,7 +26,7 @@ trait CheckoutPage extends Page with Browser {
     pageHasElement(cardNumber)
   }
 
-  def fillStripeForm: Unit = {
+  def fillStripeForm(): Unit = {
     for (_ <- 1 to 8) setValue(cardNumber, "42")
     switchToParentFrame
     switchToFrame(1)
@@ -42,9 +42,9 @@ trait CheckoutPage extends Page with Browser {
     pageHasElement(className("thank-you-stage"))
   }
 
-  def clickSubmit: Unit = clickOn(submitButton)
+  def clickSubmit(): Unit = clickOn(submitButton)
 
-  def clickStripeSubmit: Unit = clickOn(stripeSubmitButton)
+  def clickStripeSubmit(): Unit = clickOn(stripeSubmitButton)
 
-  def fillForm: Unit
+  def fillForm(): Unit
 }

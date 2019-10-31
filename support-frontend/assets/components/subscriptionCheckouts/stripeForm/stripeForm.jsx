@@ -13,6 +13,8 @@ import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 
 import './stripeForm.scss';
+import {fetchJson, requestOptions} from "helpers/fetch";
+import {logException} from "helpers/logger";
 
 // Types
 
@@ -131,6 +133,49 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     }
   }
 
+  setupRecurringHandlers(): void {
+    // Start by requesting the client_secret for a new Payment Method.
+    // Note - because this value is requested asynchronously when the component loads,
+    // it's possible for it to arrive after the user clicks 'Contribute'. This eventuality
+    // is handled in the callback below by checking the value of paymentWaiting.
+    fetchJson(
+      window.guardian.stripeSetupIntentEndpoint,
+      requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
+    ).then((result) => {
+      if (result.client_secret) {
+        this.props.setSetupIntentClientSecret(result.client_secret);
+        // If user has already clicked contribute then handle card setup now
+        if (this.props.paymentWaiting) {
+          this.handleCardSetupForRecurring(result.client_secret);
+        }
+      } else {
+        throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
+      }
+    }).catch(error => {
+      logException(`Error getting Stripe client secret for recurring contribution: ${error}`)
+      this.props.paymentFailure('internal_error');
+    });
+
+    this.props.setCreateStripePaymentMethod(() => {
+      this.props.setPaymentWaiting(true);
+
+      // If clientSecret is not yet available then handleCardSetupForRecurring will be called when it is
+      if (this.props.setupIntentClientSecret) {
+        this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
+      }
+    });
+  }
+
+  handleCardSetupForRecurring(clientSecret: string): void {
+    this.props.stripe.handleCardSetup(clientSecret).then((result) => {
+      if (result.error) {
+        this.handleStripeError(result.error);
+      } else {
+        this.props.onPaymentAuthorised(result.setupIntent.payment_method);
+      }
+    });
+  }
+
   requestStripeToken = (event) => {
     event.preventDefault();
     this.props.validateForm();
@@ -141,6 +186,10 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
         .then(({ token }) => this.props.setStripeToken(token.id))
         .then(() => this.props.submitForm());
     }
+  }
+
+  componentDidMount() {
+    this.setupRecurringHandlers();
   }
 
   render() {
