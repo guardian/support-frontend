@@ -33,7 +33,7 @@ Globals:
   Api:
     Cors:
       AllowOrigin: !FindInMap [ StageMap, !Ref Stage, CorsOrigin ]
-      AllowHeaders: "'*'"
+      AllowHeaders: "'Content-Type'"
       AllowMethods: "'*'"
 
 Resources:

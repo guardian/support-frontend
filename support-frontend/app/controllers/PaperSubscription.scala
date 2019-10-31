@@ -5,7 +5,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.Paper
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
@@ -39,13 +39,13 @@ class PaperSubscription(
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent]
+  fontLoaderBundle: Either[RefPath, StyleContent],
+  stripeSetupIntentEndpoint: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-
 
   def paperMethodRedirect(withDelivery: Boolean = false): Action[AnyContent] = Action { implicit request =>
     Redirect(buildCanonicalPaperSubscriptionLink(withDelivery), request.queryString, status = FOUND)
@@ -103,7 +103,8 @@ class PaperSubscription(
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),
-      payPalConfigProvider.get(true)
+      payPalConfigProvider.get(true),
+      stripeSetupIntentEndpoint
     )
   }
 

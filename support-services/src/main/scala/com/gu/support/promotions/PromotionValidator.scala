@@ -7,10 +7,20 @@ import org.joda.time.DateTime
 object PromotionValidator {
 
   implicit class PromotionExtensions(promotion: Promotion) {
-    def validateFor(productRatePlanId: ProductRatePlanId, country: Country, isRenewal: Boolean, now: DateTime = DateTime.now()) =
+    def validateFor(
+      productRatePlanId: ProductRatePlanId,
+      country: Country,
+      isRenewal: Boolean,
+      now: DateTime = DateTime.now()
+    ): Seq[PromoError] =
       validateAll(Some(productRatePlanId), country, isRenewal, now)
 
-    private def validateAll(maybeProductRatePlanId: Option[ProductRatePlanId] = None, country: Country, isRenewal: Boolean, now: DateTime = DateTime.now()): List[PromoError] = {
+    private def validateAll(
+      maybeProductRatePlanId: Option[ProductRatePlanId] = None,
+      country: Country,
+      isRenewal: Boolean,
+      now: DateTime = DateTime.now()
+    ): List[PromoError] = {
       val errors = List(
         maybeProductRatePlanId.flatMap(validateProductRatePlan),
         validateRenewal(isRenewal),
@@ -26,7 +36,7 @@ object PromotionValidator {
       else
         Some(InvalidProductRatePlan)
 
-    def validateRenewal(isRenewal: Boolean) =
+    def validateRenewal(isRenewal: Boolean): Option[NotApplicable.type] =
       if (promotion.renewalOnly != isRenewal)
         Some(NotApplicable)
       else

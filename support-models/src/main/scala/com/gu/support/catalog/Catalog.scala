@@ -24,7 +24,7 @@ object Catalog {
 
 
   private def mapFields(c: ACursor) = c.withFocus { json =>
-    val allRatePlans: List[Json] = json.\\("productRatePlans").flattenJsonArrays
+    val allRatePlans: Seq[Json] = json.\\("productRatePlans").flattenJsonArrays
 
     val supportedRatePlans = allRatePlans
       .filter(_.getField("id")
@@ -55,7 +55,7 @@ object Catalog {
       .map({ case (_, price) => price.asJson }) //convert back to Json
   }
 
-  def sumPrices(currencyPrices: (Currency, List[Price])): (Currency, Price) = currencyPrices match {
+  def sumPrices(currencyPrices: (Currency, Seq[Price])): (Currency, Price) = currencyPrices match {
     case (currency, priceList) =>
       (currency, priceList.reduceLeft((p1, p2) => Price(p1.value + p2.value, currency)))
   }

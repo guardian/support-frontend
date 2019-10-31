@@ -24,7 +24,7 @@ object TouchPointEnvironments {
         case Stages.PROD => PROD
       }
 
-  def fromString(string: String) =
+  def fromString(string: String): TouchPointEnvironment =
     string match {
       case "PROD" => PROD
       case "UAT" => UAT

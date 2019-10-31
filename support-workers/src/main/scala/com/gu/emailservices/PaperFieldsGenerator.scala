@@ -63,7 +63,10 @@ object PaperFieldsGenerator {
     )
   }
 
-  protected def getPaymentFields(paymentMethod: PaymentMethod, directDebitMandateId: Option[String]) = paymentMethod match {
+  protected def getPaymentFields(
+    paymentMethod: PaymentMethod,
+    directDebitMandateId: Option[String]
+  ): Seq[(String, String)] = paymentMethod match {
     case dd: DirectDebitPaymentMethod => List(
       "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
       "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),

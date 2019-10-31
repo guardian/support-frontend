@@ -1,7 +1,7 @@
 package com.gu.support.workers
 
 case class RequestInfo(encrypted: Boolean, testUser: Boolean, failed: Boolean, messages: List[String], accountExists: Boolean){
-  def appendMessage(message: String) = copy(messages = messages :+ message)
+  def appendMessage(message: String): RequestInfo = copy(messages = messages :+ message)
 }
 
 import com.gu.support.encoding.Codec

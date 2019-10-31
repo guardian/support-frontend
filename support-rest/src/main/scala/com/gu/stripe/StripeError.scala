@@ -1,6 +1,7 @@
 package com.gu.stripe
 
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.Json
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 //See docs here: https://stripe.com/docs/api/curl#errors
 case class StripeError(
@@ -17,6 +18,8 @@ case class StripeError(
 }
 
 object StripeError {
+
+  implicit val encoder = deriveEncoder[StripeError].mapJson { json => Json.fromFields(List("error" -> json)) }
 
   implicit val decoder = deriveDecoder[StripeError].prepare { _.downField("error") }
 

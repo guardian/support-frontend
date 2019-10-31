@@ -14,6 +14,7 @@ import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummarySe
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.Monthly
 import com.gu.tip.Tip
+import com.typesafe.config.ConfigFactory
 import config.Configuration.{GuardianDomain, MetricUrl}
 import config.StringsConfig
 import fixtures.TestCSRFComponents
@@ -29,12 +30,16 @@ import services.stepfunctions.SupportWorkersClient
 import services.{AccessCredentials, IdentityService, MembersDataService, TestUserService}
 
 import scala.concurrent.Future
-
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.must.Matchers
+import play.api.ConfigLoader
 
 class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponents {
+
+  val appConf = ConfigFactory.load("DEV.public.conf")
+
   trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
+
     import scala.concurrent.ExecutionContext.Implicits.global
 
     def mockedMembersDataService(hasFailed: Boolean, hasDp: Boolean): MembersDataService = {
@@ -48,30 +53,30 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         recurringContributor = false,
         digitalPack = false
       ))
-        when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
-          if(hasFailed) {
-              EitherT.leftT[Future, UserAttributes](errorResponse)
-          } else if(hasDp) {
-              EitherT.rightT[Future, MembersDataServiceError](successResponseWithDp)
-          } else {
-              EitherT.rightT[Future, MembersDataServiceError](successResponseWithoutDp)
-          }
-        )
+      when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
+        if (hasFailed) {
+          EitherT.leftT[Future, UserAttributes](errorResponse)
+        } else if (hasDp) {
+          EitherT.rightT[Future, MembersDataServiceError](successResponseWithDp)
+        } else {
+          EitherT.rightT[Future, MembersDataServiceError](successResponseWithoutDp)
+        }
+      )
       membersDataService
     }
 
-    val amounts = Amounts(Nil,Nil,Nil)
+    val amounts = Amounts(Nil, Nil, Nil)
     val allSettings = AllSettings(
       Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty),
-      AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts),
-      ContributionTypes(Nil,Nil,Nil,Nil,Nil,Nil,Nil),
+      AmountsRegions(amounts, amounts, amounts, amounts, amounts, amounts, amounts),
+      ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
       MetricUrl("http://localhost")
     )
 
     def fakeDigitalPack(
-                         actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-                         identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
-                         membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
+      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
+      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
+      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): DigitalSubscription = {
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(allSettings)
@@ -98,26 +103,27 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
 
       new DigitalSubscription(
-        priceSummaryServiceProvider,
-        assetResolver,
-        actionRefiner,
-        identityService,
-        testUserService,
-        membersDataService,
-        stripe,
-        payPal,
-        stubControllerComponents(),
-        new StringsConfig(),
-        settingsProvider,
-        "support.thegulocal.com",
-        Left(RefPath("test"))
+        priceSummaryServiceProvider = priceSummaryServiceProvider,
+        assets = assetResolver,
+        actionRefiners = actionRefiner,
+        identityService = identityService,
+        testUsers = testUserService,
+        membersDataService = membersDataService,
+        stripeConfigProvider = stripe,
+        payPalConfigProvider = payPal,
+        components = stubControllerComponents(),
+        stringsConfig = new StringsConfig(),
+        settingsProvider = settingsProvider,
+        supportUrl = "support.thegulocal.com",
+        fontLoaderBundle = Left(RefPath("test")),
+        stripeSetupIntentEndpoint = appConf.getString("stripe.intent.url")
       )
     }
 
     def fakeRequestAuthenticatedWith(
-                                      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-                                      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
-                                      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
+      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
+      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
+      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): Future[Result] = {
       fakeDigitalPack(actionRefiner, identityService, membersDataService).displayForm()(FakeRequest())
     }

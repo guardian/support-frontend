@@ -10,7 +10,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.promotions.{PromoCode, PromotionService}
+import com.gu.support.promotions.{PromoCode, Promotion, PromotionService}
 import com.gu.support.workers.ProductTypeExtensions._
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState
@@ -122,7 +122,12 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     )
   }
 
-   private def getAppliedPromotion(promotionService: PromotionService, maybePromoCode: Option[PromoCode], country: Country, productRatePlanId: ProductRatePlanId) =
+   private def getAppliedPromotion(
+     promotionService: PromotionService,
+     maybePromoCode: Option[PromoCode],
+     country: Country,
+     productRatePlanId: ProductRatePlanId
+   ): Option[Promotion] =
     for {
       promoCode <- maybePromoCode
       promotionWithCode <- promotionService.findPromotion(promoCode)

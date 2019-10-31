@@ -13,32 +13,32 @@ object Currency {
   def fromString(s: String): Option[Currency] = all.find(_.iso == s)
 
   case object GBP extends Currency {
-    override def glyph = "£"
-    override def iso = "GBP"
+    override def glyph: String = "£"
+    override def iso: String = "GBP"
   }
   case object USD extends Currency {
-    override def glyph = "$"
-    override def prefix = Some("US")
-    override def iso = "USD"
+    override def glyph: String = "$"
+    override def prefix: Option[String] = Some("US")
+    override def iso: String = "USD"
   }
   case object AUD extends Currency {
-    override def glyph = "$"
-    override def prefix = Some("AU")
-    override def iso = "AUD"
+    override def glyph: String = "$"
+    override def prefix: Option[String] = Some("AU")
+    override def iso: String = "AUD"
   }
   case object CAD extends Currency {
-    override def glyph = "$"
-    override def prefix = Some("CA")
-    override def iso = "CAD"
+    override def glyph: String = "$"
+    override def prefix: Option[String] = Some("CA")
+    override def iso: String = "CAD"
   }
   case object EUR extends Currency {
-    override def glyph = "€"
-    override def iso = "EUR"
+    override def glyph: String = "€"
+    override def iso: String = "EUR"
   }
   case object NZD extends Currency {
-    override def glyph = "$"
-    override def prefix = Some("NZ")
-    override def iso = "NZD"
+    override def glyph: String = "$"
+    override def prefix: Option[String] = Some("NZ")
+    override def iso: String = "NZD"
   }
 
 }
