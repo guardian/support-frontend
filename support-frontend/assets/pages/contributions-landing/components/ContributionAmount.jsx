@@ -11,7 +11,7 @@ import {
   type Amount,
   type ContributionType,
   getAmount,
-  getFormattedAmount
+  getFormattedAmount,
 } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {

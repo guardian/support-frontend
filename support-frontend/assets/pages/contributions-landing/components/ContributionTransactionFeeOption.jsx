@@ -42,16 +42,20 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   transactionFeeConsent: (transactionFeeConsent: boolean) => {
-    dispatch(updateTransactionFeeConsent(transactionFeeConsent))
+    dispatch(updateTransactionFeeConsent(transactionFeeConsent));
   },
-
 });
 
 // ----- Render ----- //
 
 function withProps(props: PropTypes) {
   const {
-    selectedAmounts, otherAmounts, contributionType, countryGroupId, transactionFeeConsent, landingPageTransactionFeeCopyVariant,
+    selectedAmounts,
+    otherAmounts,
+    contributionType,
+    countryGroupId,
+    transactionFeeConsent,
+    landingPageTransactionFeeCopyVariant,
   } = props;
   const baseAmount = getAmountWithoutTransactionFee(
     selectedAmounts,
@@ -64,23 +68,23 @@ function withProps(props: PropTypes) {
 
   const copyVariants = {
     pleaseAdd: `Please add ${formattedTransactionFee} to my contribution to cover the transaction fees`,
-    iAmHappyToAdd: `Yes, I am happy to cover the transaction fees for my contribution (+ ${formattedTransactionFee})`,
+    iAmHappyToAdd: `Yes, I am happy to cover the transaction fees (+ ${formattedTransactionFee})`,
     iWillCover: `I will cover the transaction fees so more of my contribution goes directly to The Guardian (+ ${formattedTransactionFee})`,
   };
 
   return contributionType === 'ONE_OFF' &&
     landingPageTransactionFeeCopyVariant !== 'control' &&
     landingPageTransactionFeeCopyVariant !== 'notintest' ? (
-    <fieldset className={classNameWithModifiers('form__checkbox', ['contribution-transaction-fee'])}>
-      <legend className="form__legend">Would you like to cover the transaction fee?</legend>
-      {baseAmount && baseAmount > 0 && transactionFee &&
-      <CheckboxInput
-        text={copyVariants[landingPageTransactionFeeCopyVariant]}
-        onChange={(event) => transactionFeeConsent(event.target.checked)}
-      />
+      <fieldset className={classNameWithModifiers('form__checkbox', ['contribution-transaction-fee'])}>
+        <legend className="form__legend">Would you like to cover the transaction fee?</legend>
+        {baseAmount && baseAmount > 0 && transactionFee &&
+        <CheckboxInput
+          text={copyVariants[landingPageTransactionFeeCopyVariant]}
+          onChange={event => transactionFeeConsent(event.target.checked)}
+        />
       }
-    </fieldset>
-  ) : null;
+      </fieldset>
+    ) : null;
 }
 
 function withoutProps() {

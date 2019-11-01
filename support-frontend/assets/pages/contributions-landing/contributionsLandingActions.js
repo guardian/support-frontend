@@ -7,7 +7,7 @@ import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   type Amount,
   type ContributionType,
-  getAmount,
+  getAmount, getAmountWithoutTransactionFee,
   logInvalidCombination,
   type PaymentMatrix,
 } from 'helpers/contributions';
@@ -266,28 +266,43 @@ const buildStripeChargeDataFromAuthorisation = (
   stripePaymentMethod: StripePaymentMethod,
   token: string,
   state: State,
-): StripeChargeData => ({
-  paymentData: {
-    currency: state.common.internationalisation.currencyId,
-    amount: getAmount(
-      state.page.form.selectedAmounts,
-      state.page.form.formData.otherAmounts,
-      state.page.form.contributionType,
+): StripeChargeData => {
+  const { transactionFeeConsent } = state.page.form;
+
+  const amount = getAmount(
+    state.page.form.selectedAmounts,
+    state.page.form.formData.otherAmounts,
+    state.page.form.contributionType,
+    transactionFeeConsent,
+  );
+
+  const baseContributionAmount = getAmountWithoutTransactionFee(
+    state.page.form.selectedAmounts,
+    state.page.form.formData.otherAmounts,
+    state.page.form.contributionType,
+  );
+
+  return ({
+    paymentData: {
+      currency: state.common.internationalisation.currencyId,
+      amount,
+      token,
+      email: state.page.form.formData.email || '',
+      stripePaymentMethod,
+    },
+    acquisitionData: derivePaymentApiAcquisitionData(
+      state.common.referrerAcquisitionData,
+      state.common.abParticipations,
+      baseContributionAmount,
+      transactionFeeConsent,
     ),
-    token,
-    email: state.page.form.formData.email || '',
-    stripePaymentMethod,
-  },
-  acquisitionData: derivePaymentApiAcquisitionData(
-    state.common.referrerAcquisitionData,
-    state.common.abParticipations,
-  ),
-  publicKey: getStripeKey(
-    stripeAccountForContributionType[state.page.form.contributionType],
-    state.common.internationalisation.countryId,
-    state.page.user.isTestUser || false,
-  ),
-});
+    publicKey: getStripeKey(
+      stripeAccountForContributionType[state.page.form.contributionType],
+      state.common.internationalisation.countryId,
+      state.page.user.isTestUser || false,
+    ),
+  });
+};
 
 const stripeChargeDataFromCheckoutAuthorisation = (
   authorisation: StripeCheckoutAuthorisation,
@@ -370,9 +385,19 @@ const onCreateOneOffPayPalPaymentResponse =
       paymentResult.then((result: CreatePayPalPaymentResponse) => {
         const state = getState();
 
+        const baseAmount = getAmountWithoutTransactionFee(
+          state.page.form.selectedAmounts,
+          state.page.form.formData.otherAmounts,
+          state.page.form.contributionType,
+        );
+
+        const { transactionFeeConsent } = state.page.form;
+
         const acquisitionData = derivePaymentApiAcquisitionData(
           state.common.referrerAcquisitionData,
           state.common.abParticipations,
+          baseAmount,
+          transactionFeeConsent,
         );
 
         // We've only created a payment at this point, and the user has to get through

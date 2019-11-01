@@ -11,6 +11,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import { getCampaignName } from 'helpers/campaigns';
+import { getTransactionFee } from 'helpers/contributions';
 
 // ----- Types ----- //
 
@@ -59,6 +60,7 @@ export type PaymentAPIAcquisitionData = {|
   source: ?string,
   abTests: ?AcquisitionABTest[],
   gaId: ?string,
+  transactionFee?: number,
 |};
 
 // ----- Setup ----- //
@@ -223,6 +225,8 @@ const getAbTests = (
 function derivePaymentApiAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
+  baseContributionAmount?: number,
+  transactionFeeConsent?: boolean,
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
@@ -230,6 +234,9 @@ function derivePaymentApiAcquisitionData(
 
   const campaignCodes = referrerAcquisitionData.campaignCode ?
     [referrerAcquisitionData.campaignCode] : [];
+
+  const transactionFee =
+    baseContributionAmount && transactionFeeConsent ? getTransactionFee(baseContributionAmount) : undefined;
 
   return {
     platform: 'SUPPORT',
@@ -244,6 +251,7 @@ function derivePaymentApiAcquisitionData(
     source: referrerAcquisitionData.source,
     abTests,
     gaId: getCookie('_ga'),
+    transactionFee,
   };
 }
 

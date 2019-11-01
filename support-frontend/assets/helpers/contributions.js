@@ -90,16 +90,6 @@ export type OtherAmounts = {
 
 export type SelectedAmounts = { [ContributionType]: Amount | 'other' };
 
-
-const getAmount = (
-  selectedAmounts: SelectedAmounts,
-  otherAmounts: OtherAmounts,
-  contributionType: ContributionType,
-) =>
-  parseFloat(selectedAmounts[contributionType] === 'other'
-    ? otherAmounts[contributionType].amount
-    : selectedAmounts[contributionType].value);
-
 const getTransactionFee = (baseAmount: number): number => {
   if (baseAmount < 20 && baseAmount > 0) {
     // Return a 9% transaction fee (made up number)
@@ -117,6 +107,23 @@ const getAmountWithoutTransactionFee = (
   parseFloat(selectedAmounts[contributionType] === 'other'
     ? otherAmounts[contributionType].amount
     : selectedAmounts[contributionType].value);
+
+const getAmount = (
+  selectedAmounts: SelectedAmounts,
+  otherAmounts: OtherAmounts,
+  contributionType: ContributionType,
+  transactionFeeConsent?: boolean,
+) => {
+  const baseContributionAmount: number =
+    getAmountWithoutTransactionFee(selectedAmounts, otherAmounts, contributionType);
+
+  if (transactionFeeConsent) {
+    const transactionFee: number = getTransactionFee(baseContributionAmount);
+    return (baseContributionAmount + transactionFee);
+  }
+
+  return baseContributionAmount;
+};
 
 const getFormattedAmount = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
   if (amount < 1 && countryGroupId === 'GBPCountries') {

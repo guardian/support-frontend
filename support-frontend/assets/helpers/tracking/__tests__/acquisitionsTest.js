@@ -38,8 +38,10 @@ describe('acquisitions', () => {
         testId3: 'variant3',
       };
 
+      const baseAmount: number = 50;
+
       const paymentApiAcquisitionData =
-        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations, baseAmount, true);
 
       expect(paymentApiAcquisitionData).toMatchSnapshot();
 
