@@ -253,6 +253,7 @@ function withProps(props: PropTypes) {
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
+      <h2 className="hidden-heading">Make a contribution</h2>
       <div className="contributions-form-selectors">
         <ContributionTypeTabs />
         <ContributionAmount
