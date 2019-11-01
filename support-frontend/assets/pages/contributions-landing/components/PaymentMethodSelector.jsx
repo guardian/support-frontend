@@ -112,7 +112,7 @@ function withProps(props: PropTypes) {
     ((props.existingPaymentMethods || []).filter(isUsableExistingPaymentMethod): any);
 
   const legendSimple = (
-    <legend className="form__legend">Payment method</legend>
+    <legend id="payment_method" className="form__legend"><h3>Payment method</h3></legend>
   );
 
   const legend = props.paymentSecurityDesignTestVariant === 'V2_securemiddle' ?
@@ -151,6 +151,7 @@ function withProps(props: PropTypes) {
                     props.paymentMethod === mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod) &&
                     props.existingPaymentMethod === existingPaymentMethod
                   }
+                arial-labelledby="payment_method"
               />
               <label
                 htmlFor={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
