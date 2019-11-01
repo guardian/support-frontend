@@ -6,6 +6,7 @@ import {
   billingPeriodNoun as upperCaseNoun,
   Quarterly,
   SixWeekly,
+  Annual,
 } from 'helpers/billingPeriods';
 import type {
   ProductPrice,
@@ -16,6 +17,7 @@ import {
   hasIntroductoryPrice,
 } from 'helpers/productPrice/promotions';
 import type { IntroductoryPriceBenefit } from 'helpers/productPrice/promotions';
+import { type Option } from 'helpers/types/option';
 
 const displayPrice = (glyph: string, price: number) => `${glyph}${fixDecimals(price)}`;
 
@@ -28,7 +30,8 @@ const billingPeriodNoun = (billingPeriod: BillingPeriod) =>
   upperCaseNoun(billingPeriod).toLowerCase();
 
 const standardRate = (
-  glyph: string, price: number,
+  glyph: string,
+  price: number,
   billingPeriod: BillingPeriod,
   compact: boolean,
 ) =>
@@ -36,6 +39,13 @@ const standardRate = (
     `${displayPrice(glyph, price)}/${billingPeriodNoun(billingPeriod)}`
     :
     `${displayPrice(glyph, price)} every ${billingPeriodNoun(billingPeriod)}`);
+
+const standardRateGift = (
+  glyph: string,
+  price: number,
+  billingPeriod: BillingPeriod,
+) =>
+  `Fixed term of ${billingPeriod === Annual ? 'a year' : '3 months'} for ${displayPrice(glyph, price)}`;
 
 function getDiscountDescription(
   glyph: string,
@@ -86,9 +96,17 @@ const getIntroductoryPriceDescription = (
   return `${glyph}${introPrice.price}${separator}${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
 };
 
+const getIntroductoryGiftPriceDescription = (
+  glyph: string,
+  billingPeriod: BillingPeriod,
+  productPrice: ProductPrice,
+) =>
+  standardRateGift(glyph, productPrice.price, billingPeriod);
+
 function getPriceDescription(
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
+  orderIsAGift?: Option<boolean>,
   compact: boolean = false,
 ): string {
   const glyph = extendedGlyph(productPrice.currency);
@@ -101,6 +119,13 @@ function getPriceDescription(
       promotion.introductoryPrice,
       productPrice,
       compact,
+    );
+  }
+  if (orderIsAGift && (billingPeriod === Quarterly || billingPeriod === Annual)) {
+    return getIntroductoryGiftPriceDescription(
+      glyph,
+      billingPeriod,
+      productPrice,
     );
   }
   if (hasDiscount(promotion)) {

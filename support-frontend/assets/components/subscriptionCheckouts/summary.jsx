@@ -14,6 +14,7 @@ import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { type Option } from 'helpers/types/option';
 
 // Types
 
@@ -22,7 +23,7 @@ export type DataListItem = {
   value: string,
 }
 
-type PropTypes = {|
+type PropTypes = {
   billingPeriod: BillingPeriod,
   changeSubscription?: string | null,
   dataList: DataListItem[],
@@ -32,7 +33,9 @@ type PropTypes = {|
   title: string,
   // eslint-disable-next-line react/no-unused-prop-types
   product: SubscriptionProduct,
-|};
+  // eslint-disable-next-line react/no-unused-prop-types
+  orderIsAGift: Option<boolean>,
+};
 
 type StateTypes = {
   showDropDown: boolean,
@@ -104,9 +107,11 @@ const TabletAndDesktop = (props: PropTypes) => (
           className={styles.pricing}
           productPrice={props.productPrice}
           billingPeriod={props.billingPeriod}
+          orderIsAGift={props.orderIsAGift}
+          giftStyles={styles.gift}
         />
         <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions)} />
-        {props.dataList ?
+        {props.dataList && !props.orderIsAGift ?
           <DataList dataList={props.dataList} />
         : null}
       </div>
@@ -129,6 +134,7 @@ const HideDropDown = (props: {
   showDropDown: boolean,
   title: string,
   paper: boolean,
+  orderIsAGift: Option<boolean>,
 }) => (
   <div className={styles.content}>
     <h1 className={styles.header}>Order summary</h1>
@@ -141,6 +147,7 @@ const HideDropDown = (props: {
         className={styles.pricing}
         productPrice={props.productPrice}
         billingPeriod={props.billingPeriod}
+        orderIsAGift={props.orderIsAGift}
       />
       {props.paper ?
         <span className={styles.pricing}>
@@ -157,6 +164,10 @@ const ShowDropDown = (props: {
   deliveryMethod: string | null,
   onClick: Function,
   showDropDown: boolean,
+  productPrice: ProductPrice,
+  billingPeriod: BillingPeriod,
+  title: string,
+  orderIsAGift: Option<boolean>,
 }) => (
   <div className={styles.contentWrapper}>
     <h1 className={styles.headerShowDetails}>Order summary</h1>
@@ -172,6 +183,7 @@ const ShowDropDown = (props: {
         className={styles.data}
         productPrice={props.productPrice}
         billingPeriod={props.billingPeriod}
+        orderIsAGift={props.orderIsAGift}
       />
     </div>
     {props.deliveryMethod ?

@@ -10,7 +10,6 @@ import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
-import { weeklyBillingPeriods } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import { Select } from 'components/forms/select';
@@ -43,8 +42,6 @@ import PersonalDetailsGift
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import CancellationSection
-  from 'components/subscriptionCheckouts/cancellationSection';
 import { GuardianWeekly } from 'helpers/subscriptions';
 import { signOut } from 'helpers/user/user';
 import type {
@@ -61,7 +58,6 @@ import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/delive
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { routes } from 'helpers/routes';
-import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { addressActionCreatorsFor, type SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
@@ -179,6 +175,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           billingPeriod={props.billingPeriod}
           changeSubscription={routes.guardianWeeklySubscriptionLanding}
           product={props.product}
+          orderIsAGift
         />
       )}
       >
@@ -336,7 +333,6 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <CancellationSection />
         </Form>
       </Layout>
     </Content>
