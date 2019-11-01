@@ -145,6 +145,7 @@ function openStripePopup(props: PropTypes) {
         props.selectedAmounts,
         props.otherAmounts,
         props.contributionType,
+        props.transactionFeeConsent,
       ),
       props.email,
     );
@@ -197,6 +198,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
           props.selectedAmounts,
           props.otherAmounts,
           props.contributionType,
+          props.transactionFeeConsent,
         ),
         returnURL: payPalReturnUrl(props.countryGroupId, props.email),
         cancelURL: payPalCancelUrl(props.countryGroupId),

@@ -71,6 +71,7 @@ const setupRecurringPayPalPayment = (
       state.page.form.selectedAmounts,
       state.page.form.formData.otherAmounts,
       contributionType,
+      state.page.form.transactionFeeConsent,
     );
     const billingPeriod = billingPeriodFromContrib(contributionType);
     storage.setSession('selectedPaymentMethod', 'PayPal');

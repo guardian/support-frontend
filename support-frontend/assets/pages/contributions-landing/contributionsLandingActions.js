@@ -343,6 +343,7 @@ const regularPaymentRequestFromAuthorisation = (
       state.page.form.selectedAmounts,
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
+      state.page.form.transactionFeeConsent,
     ),
     currency: state.common.internationalisation.currencyId,
     billingPeriod: state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,

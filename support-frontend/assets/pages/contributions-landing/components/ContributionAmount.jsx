@@ -10,8 +10,7 @@ import {
   type AmountsRegions,
   type Amount,
   type ContributionType,
-  getAmount,
-  getFormattedAmount,
+  getFormattedAmount, getAmountWithoutTransactionFee,
 } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
@@ -136,7 +135,7 @@ export const getAmountPerWeekBreakdown = (
   otherAmounts: OtherAmounts,
 ): string => {
   const currencyString = currencies[detect(countryGroupId)].glyph;
-  const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
+  const amount = getAmountWithoutTransactionFee(selectedAmounts, otherAmounts, contributionType);
 
   let weeklyAmount: number;
   if (contributionType === 'ANNUAL') {
