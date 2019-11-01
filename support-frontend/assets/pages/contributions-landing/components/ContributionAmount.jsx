@@ -103,7 +103,7 @@ const renderAmount = (
           props.selectAmount(amount, props.countryGroupId, props.contributionType)
         }
       />
-      <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
+      <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount.value, true)}>
         {formatAmount(currency, spokenCurrency, amount.value, false)}
       </label>
     </li>

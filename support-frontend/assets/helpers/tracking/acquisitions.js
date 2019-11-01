@@ -225,8 +225,8 @@ const getAbTests = (
 function derivePaymentApiAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
-  baseContributionAmount?: number,
-  transactionFeeConsent?: boolean,
+  baseContributionAmount: number,
+  transactionFeeConsent: boolean,
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
