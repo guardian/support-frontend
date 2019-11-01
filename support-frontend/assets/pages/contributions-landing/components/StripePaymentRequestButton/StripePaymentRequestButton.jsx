@@ -72,7 +72,6 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   setAssociatedPaymentMethod: () => (Function) => void,
   stripeAccount: StripeAccount,
-  state: UsState | CaState | null,
 |};
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -85,7 +84,6 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
-  state: state.page.form.formData.state,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
