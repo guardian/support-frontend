@@ -41,7 +41,7 @@ describe('acquisitions', () => {
       const baseAmount: number = 50;
 
       const paymentApiAcquisitionData =
-        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations, baseAmount, true);
+        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations, baseAmount, false);
 
       expect(paymentApiAcquisitionData).toMatchSnapshot();
 

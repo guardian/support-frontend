@@ -104,7 +104,7 @@ const renderAmount = (
         }
       />
       <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
-        {formatAmount(currency, spokenCurrency, amount, false)}
+        {formatAmount(currency, spokenCurrency, amount.value, false)}
       </label>
     </li>
   );
@@ -158,9 +158,9 @@ function withProps(props: PropTypes) {
   const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
-    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], min.toString(), false);
   const maxAmount: string =
-    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], max.toString(), false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
   return (

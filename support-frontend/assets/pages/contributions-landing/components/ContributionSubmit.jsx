@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { billingPeriodFromContrib, type ContributionType, getAmount } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { SelectedAmounts } from 'helpers/contributions';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
 import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
@@ -28,8 +27,6 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
   isWaiting: boolean,
-  selectedAmounts: SelectedAmounts,
-  otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
   sendFormSubmitEventForPayPalRecurring: () => void,
@@ -50,8 +47,6 @@ function mapStateToProps(state: State) {
     contributionType,
     isWaiting: state.page.form.isWaiting,
     paymentMethod: state.page.form.paymentMethod,
-    selectedAmounts: state.page.form.selectedAmounts,
-    otherAmount: state.page.form.formData.otherAmounts[contributionType].amount,
     currencyId: state.common.internationalisation.currencyId,
     csrf: state.page.csrf,
     payPalHasLoaded: state.page.form.payPalHasLoaded,
@@ -61,6 +56,7 @@ function mapStateToProps(state: State) {
       state.page.form.selectedAmounts,
       state.page.form.formData.otherAmounts,
       contributionType,
+      state.page.form.transactionFeeConsent,
     ),
     billingPeriod: billingPeriodFromContrib(contributionType),
   });
@@ -90,8 +86,7 @@ function withProps(props: PropTypes) {
 
     const submitButtonCopy = getContributeButtonCopyWithPaymentType(
       props.contributionType,
-      props.otherAmount,
-      props.selectedAmounts,
+      props.amount,
       props.currency,
       props.paymentMethod,
     );

@@ -87,6 +87,7 @@ type PropTypes = {|
   createStripePaymentMethod: () => void,
   stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants,
   paymentSecurityDesignTestVariant: PaymentSecurityDesignTestVariants,
+  transactionFeeConsent: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -119,6 +120,7 @@ const mapStateToProps = (state: State) => ({
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   stripeElementsRecurringTestVariant: state.common.abParticipations.stripeElementsRecurring,
   paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesignTest,
+  transactionFeeConsent: state.page.form.transactionFeeConsent,
 });
 
 
@@ -269,6 +271,7 @@ function withProps(props: PropTypes) {
         country={props.country}
         otherAmounts={props.otherAmounts}
         selectedAmounts={props.selectedAmounts}
+        transactionFeeConsent={props.transactionFeeConsent}
       />
       <div className={classNameWithModifiers('form', ['content'])}>
         <ContributionFormFields />

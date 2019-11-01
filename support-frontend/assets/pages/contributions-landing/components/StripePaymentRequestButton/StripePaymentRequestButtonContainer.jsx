@@ -28,6 +28,7 @@ type PropTypes = {|
   stripeHasLoaded: boolean,
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
+  transactionFeeConsent: boolean,
 |};
 
 const enabledForRecurring = (): boolean => !!window.guardian.recurringStripePaymentRequestButton;
@@ -48,7 +49,12 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
       const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
       const apiKey = getStripeKey(stripeAccount, this.props.country, this.props.isTestUser);
-      const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
+      const amount = getAmount(
+        this.props.selectedAmounts,
+        this.props.otherAmounts,
+        this.props.contributionType,
+        this.props.transactionFeeConsent,
+      );
 
       /**
        * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.

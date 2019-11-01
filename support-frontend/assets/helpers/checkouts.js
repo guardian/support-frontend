@@ -14,7 +14,6 @@ import { type Switches } from 'helpers/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
-import type { Amount, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
@@ -122,31 +121,27 @@ function getPaymentDescription(contributionType: ContributionType, paymentMethod
   return '';
 }
 
-const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: Amount, verbose: boolean) =>
-  (verbose ?
-    `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
-    `${currency.glyph}${amount.value}`);
+const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: string, verbose: boolean) => {
+  const numericAmount = Number(amount);
+  return (verbose ?
+    `${numericAmount} ${numericAmount === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
+    `${currency.glyph}${numericAmount % 1 ? numericAmount.toFixed(2) : numericAmount}`);
+};
 
 
 const getContributeButtonCopy = (
   contributionType: ContributionType,
-  maybeOtherAmount: string | null,
-  selectedAmounts: SelectedAmounts,
+  amount: number,
   currency: IsoCurrency,
 ) => {
   const frequency = getFrequency(contributionType);
-  const otherAmount = maybeOtherAmount ? {
-    value: maybeOtherAmount,
-    spoken: '',
-    isDefault: false,
-  } : null;
-  const amount = selectedAmounts[contributionType] === 'other' ? otherAmount : selectedAmounts[contributionType];
+  const amountAsString = amount.toString();
 
   const amountCopy = amount ?
     formatAmount(
       currencies[currency],
       spokenCurrencies[currency],
-      amount,
+      amountAsString,
       false,
     ) : '';
   return `Contribute ${amountCopy} ${frequency}`;
@@ -154,13 +149,12 @@ const getContributeButtonCopy = (
 
 const getContributeButtonCopyWithPaymentType = (
   contributionType: ContributionType,
-  maybeOtherAmount: string | null,
-  selectedAmounts: SelectedAmounts,
+  amount: number,
   currency: IsoCurrency,
   paymentMethod: PaymentMethod,
 ) => {
   const paymentDescriptionCopy = getPaymentDescription(contributionType, paymentMethod);
-  const contributionButtonCopy = getContributeButtonCopy(contributionType, maybeOtherAmount, selectedAmounts, currency);
+  const contributionButtonCopy = getContributeButtonCopy(contributionType, amount, currency);
   return `${contributionButtonCopy} ${paymentDescriptionCopy}`;
 };
 
