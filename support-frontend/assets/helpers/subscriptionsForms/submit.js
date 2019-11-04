@@ -201,13 +201,23 @@ function checkStripeUserType(
   price: number,
   currency: IsoCurrency,
   stripeToken: Option<string>,
+  stripePaymentMethod: Option<string>,
 ) {
+
   if (isPostDeployUser()) {
-    onAuthorised({
-      paymentMethod: Stripe,
-      token: 'tok_visa',
-      stripePaymentMethod: 'StripeCheckout',
-    });
+    if (stripePaymentMethod) {
+      onAuthorised({
+        paymentMethod: Stripe,
+        stripePaymentMethod: 'StripeCheckout',
+        paymentMethodId: stripePaymentMethod,
+      });
+    } else {
+      onAuthorised({
+        paymentMethod: Stripe,
+        token: 'tok_visa',
+        stripePaymentMethod: 'StripeCheckout',
+      });
+    }
   } else {
     onAuthorised({
       paymentMethod: Stripe,
@@ -226,10 +236,11 @@ function showPaymentMethod(
   country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
   stripeToken: Option<string>,
+  stripePaymentMethod: Option<string>,
 ): void {
   switch (paymentMethod) {
     case Stripe:
-      checkStripeUserType(onAuthorised, isTestUser, price, currency, stripeToken);
+      checkStripeUserType(onAuthorised, isTestUser, price, currency, stripeToken, stripePaymentMethod);
       break;
     case DirectDebit:
       dispatch(openDirectDebitPopUp());
@@ -286,6 +297,7 @@ function submitForm(
   const { price, currency } = priceDetails;
   const currencyId = getCurrency(billingCountry);
   const stripeToken = paymentMethod === Stripe ? state.page.checkout.stripeToken : null;
+  const stripePaymentMethod = paymentMethod === Stripe ? state.page.checkout.stripePaymentMethod : null;
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
     onPaymentAuthorised(
@@ -304,6 +316,7 @@ function submitForm(
     billingCountry,
     paymentMethod,
     stripeToken,
+    stripePaymentMethod,
   );
 }
 
