@@ -16,7 +16,7 @@ import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import './stripeForm.scss';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import { logException } from 'helpers/logger';
-import type {IsoCountry} from "helpers/internationalisation/country";
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // Types
 
@@ -39,8 +39,8 @@ type StateTypes = {
   cardExpiry: Object,
   cardCvc: Object,
   cardErrors: Array<Object>,
-  setupIntentClientSecret: String | null,
-  paymentWaiting: Boolean
+  setupIntentClientSecret: string | null,
+  paymentWaiting: boolean
 }
 
 // Styles for stripe elements
@@ -89,7 +89,8 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
         errorIncomplete: 'Please enter a valid CVC number',
       },
       cardErrors: [],
-      setupIntentClientSecret: null
+      setupIntentClientSecret: null,
+      paymentWaiting: false,
     };
   }
 
@@ -118,8 +119,8 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       requestOptions({ publicKey: stripeKey }, 'omit', 'POST', null),
     ).then((result) => {
       if (result.client_secret) {
-        //this.setSetupIntentClientSecret(result.client_secret);
-        this.setState({setupIntentClientSecret: result.client_secret});
+        // this.setSetupIntentClientSecret(result.client_secret);
+        this.setState({ setupIntentClientSecret: result.client_secret });
 
         // If user has already clicked contribute then handle card setup now
         if (this.state.paymentWaiting) {
@@ -130,8 +131,12 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       }
     }).catch((error) => {
       logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
-      // TODO (flavian):
-      this.setState({ cardErrors: [...this.state.cardErrors, 'internal_error'] });
+
+      this.setState({
+        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'internal_error' }]
+      });
+
+
     });
   }
 
@@ -177,17 +182,21 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   };
 
   handleStripeError(errorData: any): void {
-    this.setState({paymentWaiting: false});
+    this.setState({ paymentWaiting: false });
 
     logException(`Error creating Payment Method: ${errorData}`);
 
     if (errorData.type === 'validation_error') {
       // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
       // happen then display a generic error about card details
-      this.setState({ cardErrors: [...this.state.cardErrors, 'payment_details_incorrect'] });
+      this.setState({
+        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'payment_details_incorrect' }]
+      });
     } else {
       // This is probably a Stripe or network problem
-      this.setState({ cardErrors: [...this.state.cardErrors, 'payment_provider_unavailable'] });
+      this.setState({
+        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'payment_provider_unavailable' }]
+      });
     }
   }
 
@@ -195,10 +204,10 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     this.props.stripe.handleCardSetup(clientSecret).then((result) => {
       if (result.error) {
         this.handleStripeError(result.error);
-        Promise.fail(result.error);
-      } else {
-        return result.setupIntent.payment_method;
+        return Promise.fail(result.error);
       }
+      return result.setupIntent.payment_method;
+
     });
   }
 
@@ -220,13 +229,12 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     this.handleCardErrors();
 
     if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
-      const { stripe } = this.props;
 
       this.handleCardSetup(this.state.setupIntentClientSecret)
-        .then((paymentMethod) => this.props.setStripePaymentMethod(paymentMethod))
+        .then(paymentMethod => this.props.setStripePaymentMethod(paymentMethod))
         .then(() => this.props.submitForm());
     }
-  }
+  };
 
   render() {
     if (this.props.stripe) {
