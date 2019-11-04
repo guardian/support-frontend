@@ -28,6 +28,8 @@ function StripeProviderForCountry(props: PropTypes) {
           name={props.name}
           validateForm={props.validateForm}
           buttonText={props.buttonText}
+          country={props.country}
+          isTestUser={props.isTestUser}
         />
       </Elements>
     </StripeProvider>

@@ -11,10 +11,12 @@ import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { CardNumberElement, CardExpiryElement, CardCvcElement } from 'react-stripe-elements';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
+import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 
 import './stripeForm.scss';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import { logException } from 'helpers/logger';
+import type {IsoCountry} from "helpers/internationalisation/country";
 
 // Types
 
@@ -23,10 +25,13 @@ export type StripeFormPropTypes = {
   stripe: Object,
   allErrors: FormError<FormField>[],
   setStripeToken: Function,
+  setPaymentMethod: Function,
   submitForm: Function,
   name: string,
   validateForm: Function,
   buttonText: string,
+  country: IsoCountry,
+  isTestUser: boolean,
 }
 
 type StateTypes = {
@@ -34,6 +39,8 @@ type StateTypes = {
   cardExpiry: Object,
   cardCvc: Object,
   cardErrors: Array<Object>,
+  setupIntentClientSecret: String | null,
+  paymentWaiting: Boolean
 }
 
 // Styles for stripe elements
@@ -82,13 +89,14 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
         errorIncomplete: 'Please enter a valid CVC number',
       },
       cardErrors: [],
+      setupIntentClientSecret: null
     };
   }
+
 
   componentDidMount() {
     this.setupRecurringHandlers();
   }
-
 
   getAllCardErrors = () => ['cardNumber', 'cardExpiry', 'cardCvc'].reduce((cardErrors, field) => {
     if (this.state[field].error.length > 0) {
@@ -102,30 +110,36 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     // Note - because this value is requested asynchronously when the component loads,
     // it's possible for it to arrive after the user clicks 'Contribute'. This eventuality
     // is handled in the callback below by checking the value of paymentWaiting.
+
+    const stripeKey = getStripeKey('REGULAR', this.props.country, this.props.isTestUser);
+
     fetchJson(
       window.guardian.stripeSetupIntentEndpoint,
-      requestOptions({ publicKey: this.props.stripe.stripeKey }, 'omit', 'POST', null),
+      requestOptions({ publicKey: stripeKey }, 'omit', 'POST', null),
     ).then((result) => {
       if (result.client_secret) {
-        this.props.stripe.setSetupIntentClientSecret(result.client_secret);
+        //this.setSetupIntentClientSecret(result.client_secret);
+        this.setState({setupIntentClientSecret: result.client_secret});
+
         // If user has already clicked contribute then handle card setup now
-        if (this.props.stripe.paymentWaiting) {
-          this.handleCardSetupForRecurring(result.client_secret);
+        if (this.state.paymentWaiting) {
+          this.handleCardSetup(result.client_secret);
         }
       } else {
         throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
       }
     }).catch((error) => {
       logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
-      this.props.stripe.paymentFailure('internal_error');
+      // TODO (flavian):
+      this.setState({ cardErrors: [...this.state.cardErrors, 'internal_error'] });
     });
 
-    this.props.stripe.setCreateStripePaymentMethod(() => {
-      this.props.stripe.stripe.setPaymentWaiting(true);
+    this.setCreateStripePaymentMethod(() => {
+      this.setState({paymentWaiting: true});
 
       // If clientSecret is not yet available then handleCardSetupForRecurring will be called when it is
-      if (this.props.stripe.setupIntentClientSecret) {
-        this.handleCardSetupForRecurring(this.props.stripe.setupIntentClientSecret);
+      if (this.state.setupIntentClientSecret) {
+        this.handleCardSetup(this.state.setupIntentClientSecret);
       }
     });
   }
@@ -172,26 +186,27 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   };
 
   handleStripeError(errorData: any): void {
-    this.props.stripe.setPaymentWaiting(false);
+    this.setState({paymentWaiting: false});
 
     logException(`Error creating Payment Method: ${errorData}`);
 
     if (errorData.type === 'validation_error') {
       // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
       // happen then display a generic error about card details
-      this.props.stripe.paymentFailure('payment_details_incorrect');
+      this.setState({ cardErrors: [...this.state.cardErrors, 'payment_details_incorrect'] });
     } else {
       // This is probably a Stripe or network problem
-      this.props.stripe.paymentFailure('payment_provider_unavailable');
+      this.setState({ cardErrors: [...this.state.cardErrors, 'payment_provider_unavailable'] });
     }
   }
 
-  handleCardSetupForRecurring(clientSecret: string): void {
+  handleCardSetup(clientSecret: string): Promise<string> {
     this.props.stripe.handleCardSetup(clientSecret).then((result) => {
       if (result.error) {
         this.handleStripeError(result.error);
+        Promise.fail(result.error);
       } else {
-        this.props.stripe.onPaymentAuthorised(result.setupIntent.payment_method);
+        return result.setupIntent.payment_method;
       }
     });
   }
@@ -208,14 +223,26 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     }
   };
 
+  requestSCAPaymentMethod = (event) => {
+    event.preventDefault();
+    this.props.validateForm();
+    this.handleCardErrors();
+
+    if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
+      const { stripe } = this.props;
+
+      this.handleCardSetup(this.state.setupIntentClientSecret)
+        .then(() => this.props.submitForm());
+    }
+  }
+
   render() {
-    const { stripe } = this.props;
-    if (stripe) {
-      stripe.elements();
+    if (this.props.stripe) {
+      this.props.stripe.elements();
     }
     return (
       <span>
-        {stripe && (
+        {this.props.stripe && (
           <fieldset>
             <CardNumberWithError
               id="card-number"
@@ -239,7 +266,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
               onChange={e => this.handleChange(e)}
             />
             <div className="component-stripe-submit-button">
-              <Button id="qa-stripe-submit-button" onClick={event => this.requestStripeToken(event)}>
+              <Button id="qa-stripe-submit-button" onClick={event => this.requestSCAPaymentMethod(event)}>
                 {this.props.buttonText}
               </Button>
             </div>

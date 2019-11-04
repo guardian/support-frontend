@@ -296,8 +296,14 @@ function submitForm(
     );
 
   showPaymentMethod(
-    dispatch, onAuthorised, isTestUser, price, currency, billingCountry,
-    paymentMethod, stripeToken,
+    dispatch,
+    onAuthorised,
+    isTestUser,
+    price,
+    currency,
+    billingCountry,
+    paymentMethod,
+    stripeToken,
   );
 }
 
