@@ -229,6 +229,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     this.handleCardErrors();
 
     if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
+      console.log(this.props.setStripePaymentMethod);
 
       this.handleCardSetup(this.state.setupIntentClientSecret)
         .then(paymentMethod => this.props.setStripePaymentMethod(paymentMethod))
