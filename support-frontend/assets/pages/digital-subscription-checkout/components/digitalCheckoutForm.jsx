@@ -75,6 +75,7 @@ type PropTypes = {|
   country: IsoCountry,
   signOut: typeof signOut,
   submitForm: Function,
+
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
@@ -245,6 +246,7 @@ function DigitalCheckoutForm(props: PropTypes) {
               submitForm={props.submitForm}
               allErrors={[...props.addressErrors]}
               setStripeToken={props.setStripeToken}
+              setStripePaymentMethod={props.setStripePaymentMethod}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Start your free trial now"

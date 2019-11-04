@@ -143,6 +143,10 @@ function createFormReducer(
 
       case 'SET_STRIPE_TOKEN':
         return { ...state, stripeToken: action.stripeToken };
+
+      case 'SET_STRIPE_PAYMENT_METHOD':
+        return { ...state, stripePaymentMethod: action.stripePaymentMethod };
+
       case 'SET_DELIVERY_INSTRUCTIONS':
         return { ...state, deliveryInstructions: action.instructions };
 

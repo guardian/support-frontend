@@ -45,6 +45,7 @@ export type Action =
   | { type: 'SET_ORDER_IS_GIFT', orderIsAGift: Option<boolean>}
   | { type: 'SET_STRIPE_TOKEN', stripeToken: Option<string> }
   | { type: 'SET_DELIVERY_INSTRUCTIONS', instructions: Option<string>}
+  | { type: 'SET_STRIPE_PAYMENT_METHOD', stripePaymentMethod: string}
   | AddressAction
   | PayPalAction
   | DDAction;
@@ -118,6 +119,10 @@ const formActionCreators = {
   setStripeToken: (stripeToken: Option<string>): Action => ({
     type: 'SET_STRIPE_TOKEN',
     stripeToken,
+  }),
+  setStripePaymentMethod: (stripePaymentMethod: string): Action => ({
+    type: 'SET_STRIPE_PAYMENT_METHOD',
+    stripePaymentMethod,
   }),
   setDeliveryInstructions: (instructions: string | null): Action => ({
     type: 'SET_DELIVERY_INSTRUCTIONS',

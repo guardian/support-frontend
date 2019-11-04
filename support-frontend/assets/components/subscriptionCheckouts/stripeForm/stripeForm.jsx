@@ -25,7 +25,7 @@ export type StripeFormPropTypes = {
   stripe: Object,
   allErrors: FormError<FormField>[],
   setStripeToken: Function,
-  setPaymentMethod: Function,
+  setStripePaymentMethod: Function,
   submitForm: Function,
   name: string,
   validateForm: Function,
@@ -133,15 +133,6 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       // TODO (flavian):
       this.setState({ cardErrors: [...this.state.cardErrors, 'internal_error'] });
     });
-
-    this.setCreateStripePaymentMethod(() => {
-      this.setState({paymentWaiting: true});
-
-      // If clientSecret is not yet available then handleCardSetupForRecurring will be called when it is
-      if (this.state.setupIntentClientSecret) {
-        this.handleCardSetup(this.state.setupIntentClientSecret);
-      }
-    });
   }
 
   handleCardErrors = () => {
@@ -232,6 +223,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       const { stripe } = this.props;
 
       this.handleCardSetup(this.state.setupIntentClientSecret)
+        .then((paymentMethod) => this.props.setStripePaymentMethod(paymentMethod))
         .then(() => this.props.submitForm());
     }
   }
