@@ -233,7 +233,6 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
 
       this.handleCardSetup(this.state.setupIntentClientSecret)
         .then((paymentMethod) => {
-            console.log("Payment method:", paymentMethod);
             this.props.setStripePaymentMethod(paymentMethod)
         }).then(() => this.props.submitForm());
     }

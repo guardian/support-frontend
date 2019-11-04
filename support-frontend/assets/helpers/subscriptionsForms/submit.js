@@ -204,8 +204,6 @@ function checkStripeUserType(
   stripePaymentMethodId: Option<string>,
 ) {
 
-  console.log("On deploy payment method: ", stripePaymentMethodId);
-
   if (isPostDeployUser()) {
     if (stripePaymentMethodId != null) {
       onAuthorised({
