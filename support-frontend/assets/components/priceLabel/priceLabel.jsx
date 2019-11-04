@@ -17,38 +17,42 @@ export type PropTypes = {
   billingPeriod: BillingPeriod,
   orderIsAGift: Option<boolean>,
   giftStyles?: Object,
+  tabletAndDesktop?: Object,
 }
 
 function PriceLabel({
-  productPrice, billingPeriod, orderIsAGift, giftStyles, ...props
+  productPrice,
+  billingPeriod,
+  orderIsAGift,
+  giftStyles,
+  tabletAndDesktop,
+  ...props
 }: PropTypes) {
   const description = getPriceDescription(productPrice, billingPeriod, orderIsAGift, true);
 
   const promotion = getAppliedPromo(productPrice.promotions);
-
-  if (hasDiscount(promotion)) {
-    return (
-      <span {...props}>
-        <del aria-hidden="true">{showPrice(productPrice)}</del>{' '}
-        {orderIsAGift && billingPeriod === Quarterly ?
-          <span>3 Months<br /></span> :
-          <span>A year<br /></span>
-        }
-        <span className={orderIsAGift && giftStyles}>{description}</span>
-      </span>);
-  }
   return (
     <span {...props}>
-      {orderIsAGift && billingPeriod === Quarterly ?
-        <span>3 Months<br /></span> :
-        <span>A year<br /></span>
-        }
+      {
+        hasDiscount(promotion) && (
+          <del aria-hidden="true">{showPrice(productPrice)}</del>
+        )
+      }
+      {orderIsAGift && (
+        <span className={tabletAndDesktop}>
+          {billingPeriod === Quarterly ?
+            <span>3 Months<br /></span> :
+            <span>A year<br /></span>
+          }
+        </span>)
+      }
       <span className={orderIsAGift && giftStyles}>{description}</span>
     </span>);
 }
 
 PriceLabel.defaultProps = {
   giftStyles: {},
+  tabletAndDesktop: {},
 };
 
 export { PriceLabel };

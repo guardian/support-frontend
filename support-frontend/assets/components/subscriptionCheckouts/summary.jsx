@@ -34,7 +34,7 @@ type PropTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   product: SubscriptionProduct,
   // eslint-disable-next-line react/no-unused-prop-types
-  orderIsAGift: Option<boolean>,
+  orderIsAGift?: Option<boolean> | null,
 };
 
 type StateTypes = {
@@ -107,8 +107,9 @@ const TabletAndDesktop = (props: PropTypes) => (
           className={styles.pricing}
           productPrice={props.productPrice}
           billingPeriod={props.billingPeriod}
-          orderIsAGift={props.orderIsAGift}
+          orderIsAGift={props.orderIsAGift ? props.orderIsAGift : null}
           giftStyles={styles.gift}
+          tabletAndDesktop={styles.tabletAndDesktop}
         />
         <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions)} />
         {props.dataList && !props.orderIsAGift ?
@@ -125,6 +126,7 @@ const TabletAndDesktop = (props: PropTypes) => (
 TabletAndDesktop.defaultProps = {
   changeSubscription: null,
   dataList: [],
+  orderIsAGift: false,
 };
 
 const HideDropDown = (props: {
@@ -148,6 +150,8 @@ const HideDropDown = (props: {
         productPrice={props.productPrice}
         billingPeriod={props.billingPeriod}
         orderIsAGift={props.orderIsAGift}
+        giftStyles={styles.gift}
+        tabletAndDesktop={styles.tabletAndDesktop}
       />
       {props.paper ?
         <span className={styles.pricing}>
@@ -184,6 +188,8 @@ const ShowDropDown = (props: {
         productPrice={props.productPrice}
         billingPeriod={props.billingPeriod}
         orderIsAGift={props.orderIsAGift}
+        giftStyles={styles.gift}
+        tabletAndDesktop={styles.tabletAndDesktop}
       />
     </div>
     {props.deliveryMethod ?
@@ -215,6 +221,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
   static defaultProps = {
     changeSubscription: null,
     dataList: [],
+    orderIsAGift: false,
   }
 
   constructor(props: PropTypes) {
