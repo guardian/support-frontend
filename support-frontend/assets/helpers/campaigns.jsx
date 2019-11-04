@@ -33,7 +33,7 @@ const currentCampaignName = null;
 const campaignEditorialLink = null;
 
 export const campaigns: Campaigns = {
-  [currentCampaignName]: {
+  [currentCampaignName || '']: {
     formMessage: (<div />
     ),
     headerCopy: (
