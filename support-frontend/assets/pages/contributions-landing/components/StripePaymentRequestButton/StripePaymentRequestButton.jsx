@@ -35,6 +35,7 @@ import {
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestObject,
+  paymentWaiting as setPaymentWaiting,
   updateEmail,
   updateFirstName,
   updateLastName,
@@ -45,6 +46,9 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 import { toHumanReadableContributionType } from 'helpers/checkouts';
 import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
+import type {Action} from "pages/contributions-landing/contributionsLandingActions";
+import type {ErrorReason} from "helpers/errorReasons";
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 // ----- Types -----//
 
@@ -72,6 +76,8 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   setAssociatedPaymentMethod: () => (Function) => void,
   stripeAccount: StripeAccount,
+  setPaymentWaiting: (isWaiting: boolean) => Action,
+  paymentError: ErrorReason | null,
 |};
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -84,6 +90,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
+  paymentError: state.page.form.paymentError,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -101,6 +108,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
   setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
+  setPaymentWaiting: (isWaiting: boolean) => dispatch(setPaymentWaiting(isWaiting)),
 });
 
 
@@ -150,13 +158,11 @@ function updatePayerState(token: Object, setState: (UsState | CaState | null) =>
   }
 }
 
-// Calling the complete function will close the pop up payment window
-const onComplete = (complete: Function) => (res: PaymentResult) => {
+const onComplete = () => (res: PaymentResult) => {
   if (res.paymentStatus === 'success') {
     trackComponentClick('apple-pay-payment-complete');
-    complete('success');
   } else if (res.paymentStatus === 'failure') {
-    complete('fail');
+    // TODO
   }
 };
 
@@ -227,9 +233,18 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
         // chose to authorize payment. For example, 'basic-card'."
         trackComponentClick(`${data.methodName}-paymentAuthorised`);
       }
+
+      // `complete` must be called within 30 seconds or the user will see an error.
+      // Our backend (support-workers) can in extreme cases take longer than this, so call complete now.
+      // This means that the browsers payment popup will be dismissed, and our own 'spinner' will be displayed until
+      // the backend job finishes.
+      complete('success');
+      props.setPaymentWaiting(true);
+
       props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
-        .then(onComplete(complete));
+        .then(onComplete());
     } else {
+      // TODO - if anything fails at this point, can we dismiss the popup and display the error our way instead?
       complete('fail');
     }
   });
@@ -299,6 +314,12 @@ function PaymentRequestButton(props: PropTypes) {
           onClick(event, props);
         }}
       />
+
+      {
+        props.paymentError &&
+        props.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked &&
+        <GeneralErrorMessage errorReason={props.paymentError} />
+      }
 
       <div className="stripe-payment-request-button__divider">
         or
