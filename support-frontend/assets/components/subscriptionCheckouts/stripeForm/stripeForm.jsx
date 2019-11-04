@@ -17,6 +17,7 @@ import './stripeForm.scss';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import { logException } from 'helpers/logger';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Option } from 'helpers/types/option';
 
 // Types
 
@@ -39,7 +40,7 @@ type StateTypes = {
   cardExpiry: Object,
   cardCvc: Object,
   cardErrors: Array<Object>,
-  setupIntentClientSecret: string | null,
+  setupIntentClientSecret: Option<string>,
   paymentWaiting: boolean
 }
 
@@ -133,7 +134,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
 
       this.setState({
-        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'internal_error' }]
+        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'internal_error' }],
       });
 
 
@@ -190,24 +191,23 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
       // happen then display a generic error about card details
       this.setState({
-        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'payment_details_incorrect' }]
+        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'payment_details_incorrect' }],
       });
     } else {
       // This is probably a Stripe or network problem
       this.setState({
-        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'payment_provider_unavailable' }]
+        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'payment_provider_unavailable' }],
       });
     }
   }
 
-  handleCardSetup(clientSecret: string): Promise<string> {
-    this.props.stripe.handleCardSetup(clientSecret).then((result) => {
+  handleCardSetup(clientSecret: Option<string>): Promise<string> {
+    return this.props.stripe.handleCardSetup(clientSecret).then((result) => {
       if (result.error) {
         this.handleStripeError(result.error);
-        return Promise.fail(result.error);
+        return Promise.resolve(result.error);
       }
       return result.setupIntent.payment_method;
-
     });
   }
 

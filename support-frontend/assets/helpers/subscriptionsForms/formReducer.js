@@ -57,6 +57,7 @@ function createFormReducer(
     payPalHasLoaded: false,
     orderIsAGift: false,
     stripeToken: null,
+    stripePaymentMethod: null,
     deliveryInstructions: null,
     debugInfo: '',
   };
