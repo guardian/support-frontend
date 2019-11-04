@@ -13,8 +13,8 @@ import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 
 import './stripeForm.scss';
-import {fetchJson, requestOptions} from "helpers/fetch";
-import {logException} from "helpers/logger";
+import { fetchJson, requestOptions } from 'helpers/fetch';
+import { logException } from 'helpers/logger';
 
 // Types
 
@@ -85,12 +85,50 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     };
   }
 
+  componentDidMount() {
+    this.setupRecurringHandlers();
+  }
+
+
   getAllCardErrors = () => ['cardNumber', 'cardExpiry', 'cardCvc'].reduce((cardErrors, field) => {
     if (this.state[field].error.length > 0) {
       cardErrors.push({ field: [field], message: this.state[field].error });
     }
     return cardErrors;
   }, []);
+
+  setupRecurringHandlers(): void {
+    // Start by requesting the client_secret for a new Payment Method.
+    // Note - because this value is requested asynchronously when the component loads,
+    // it's possible for it to arrive after the user clicks 'Contribute'. This eventuality
+    // is handled in the callback below by checking the value of paymentWaiting.
+    fetchJson(
+      window.guardian.stripeSetupIntentEndpoint,
+      requestOptions({ publicKey: this.props.stripe.stripeKey }, 'omit', 'POST', null),
+    ).then((result) => {
+      if (result.client_secret) {
+        this.props.stripe.setSetupIntentClientSecret(result.client_secret);
+        // If user has already clicked contribute then handle card setup now
+        if (this.props.stripe.paymentWaiting) {
+          this.handleCardSetupForRecurring(result.client_secret);
+        }
+      } else {
+        throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
+      }
+    }).catch((error) => {
+      logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
+      this.props.stripe.paymentFailure('internal_error');
+    });
+
+    this.props.stripe.setCreateStripePaymentMethod(() => {
+      this.props.stripe.stripe.setPaymentWaiting(true);
+
+      // If clientSecret is not yet available then handleCardSetupForRecurring will be called when it is
+      if (this.props.stripe.setupIntentClientSecret) {
+        this.handleCardSetupForRecurring(this.props.stripe.setupIntentClientSecret);
+      }
+    });
+  }
 
   handleCardErrors = () => {
     // eslint-disable-next-line array-callback-return
@@ -133,37 +171,19 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     }
   };
 
-  setupRecurringHandlers(): void {
-    // Start by requesting the client_secret for a new Payment Method.
-    // Note - because this value is requested asynchronously when the component loads,
-    // it's possible for it to arrive after the user clicks 'Contribute'. This eventuality
-    // is handled in the callback below by checking the value of paymentWaiting.
-    fetchJson(
-      window.guardian.stripeSetupIntentEndpoint,
-      requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
-    ).then((result) => {
-      if (result.client_secret) {
-        this.props.setSetupIntentClientSecret(result.client_secret);
-        // If user has already clicked contribute then handle card setup now
-        if (this.props.paymentWaiting) {
-          this.handleCardSetupForRecurring(result.client_secret);
-        }
-      } else {
-        throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
-      }
-    }).catch(error => {
-      logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
-      this.props.paymentFailure('internal_error');
-    });
+  handleStripeError(errorData: any): void {
+    this.props.stripe.setPaymentWaiting(false);
 
-    this.props.setCreateStripePaymentMethod(() => {
-      this.props.setPaymentWaiting(true);
+    logException(`Error creating Payment Method: ${errorData}`);
 
-      // If clientSecret is not yet available then handleCardSetupForRecurring will be called when it is
-      if (this.props.setupIntentClientSecret) {
-        this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
-      }
-    });
+    if (errorData.type === 'validation_error') {
+      // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
+      // happen then display a generic error about card details
+      this.props.stripe.paymentFailure('payment_details_incorrect');
+    } else {
+      // This is probably a Stripe or network problem
+      this.props.stripe.paymentFailure('payment_provider_unavailable');
+    }
   }
 
   handleCardSetupForRecurring(clientSecret: string): void {
@@ -171,7 +191,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       if (result.error) {
         this.handleStripeError(result.error);
       } else {
-        this.props.onPaymentAuthorised(result.setupIntent.payment_method);
+        this.props.stripe.onPaymentAuthorised(result.setupIntent.payment_method);
       }
     });
   }
@@ -187,10 +207,6 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
         .then(() => this.props.submitForm());
     }
   };
-
-  componentDidMount() {
-    this.setupRecurringHandlers();
-  }
 
   render() {
     const { stripe } = this.props;
