@@ -206,8 +206,9 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       if (result.error) {
         this.handleStripeError(result.error);
         return Promise.resolve(result.error);
+      } else {
+        return result.setupIntent.payment_method;
       }
-      return result.setupIntent.payment_method;
     });
   }
 
@@ -229,11 +230,12 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     this.handleCardErrors();
 
     if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
-      console.log(this.props.setStripePaymentMethod);
 
       this.handleCardSetup(this.state.setupIntentClientSecret)
-        .then(paymentMethod => this.props.setStripePaymentMethod(paymentMethod))
-        .then(() => this.props.submitForm());
+        .then((paymentMethod) => {
+            console.log("Payment method:", paymentMethod);
+            this.props.setStripePaymentMethod(paymentMethod)
+        }).then(() => this.props.submitForm());
     }
   };
 

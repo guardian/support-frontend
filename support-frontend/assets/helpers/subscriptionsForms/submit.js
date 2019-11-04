@@ -201,15 +201,17 @@ function checkStripeUserType(
   price: number,
   currency: IsoCurrency,
   stripeToken: Option<string>,
-  stripePaymentMethod: Option<string>,
+  stripePaymentMethodId: Option<string>,
 ) {
 
+  console.log("On deploy payment method: ", stripePaymentMethodId);
+
   if (isPostDeployUser()) {
-    if (stripePaymentMethod) {
+    if (stripePaymentMethodId != null) {
       onAuthorised({
         paymentMethod: Stripe,
-        stripePaymentMethod: 'StripeCheckout',
-        paymentMethodId: stripePaymentMethod,
+        stripePaymentMethod: 'StripeElements',
+        paymentMethodId: stripePaymentMethodId,
       });
     } else {
       onAuthorised({
@@ -219,11 +221,19 @@ function checkStripeUserType(
       });
     }
   } else {
-    onAuthorised({
-      paymentMethod: Stripe,
-      token: stripeToken || '',
-      stripePaymentMethod: 'StripeElements',
-    });
+    if (stripePaymentMethodId != null) {
+      onAuthorised({
+        paymentMethod: Stripe,
+        stripePaymentMethod: 'StripeElements',
+        paymentMethodId: stripePaymentMethodId,
+      });
+    } else {
+      onAuthorised({
+        paymentMethod: Stripe,
+        token: stripeToken || '',
+        stripePaymentMethod: 'StripeElements',
+      });
+    }
   }
 }
 
@@ -298,6 +308,8 @@ function submitForm(
   const currencyId = getCurrency(billingCountry);
   const stripeToken = paymentMethod === Stripe ? state.page.checkout.stripeToken : null;
   const stripePaymentMethod = paymentMethod === Stripe ? state.page.checkout.stripePaymentMethod : null;
+
+  console.log("On submission check tokens:", "Stripe Token:", stripeToken, "Stripe payment method", stripePaymentMethod);
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
     onPaymentAuthorised(
