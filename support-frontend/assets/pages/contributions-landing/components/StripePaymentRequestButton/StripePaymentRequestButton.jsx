@@ -42,7 +42,6 @@ import {
   updateLastName,
   updatePaymentMethod,
   updateState,
-  // paymentFailure as setPaymentFailure,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
@@ -79,7 +78,6 @@ type PropTypes = {|
   setAssociatedPaymentMethod: () => (Function) => void,
   stripeAccount: StripeAccount,
   setPaymentWaiting: (isWaiting: boolean) => Action,
-  // paymentError: ErrorReason | null,
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
 |};
 
@@ -93,7 +91,6 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
-  // paymentError: state.page.form.paymentError,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -166,8 +163,6 @@ function updatePayerState(token: Object, setState: (UsState | CaState | null) =>
 const onComplete = () => (res: PaymentResult) => {
   if (res.paymentStatus === 'success') {
     trackComponentClick('apple-pay-payment-complete');
-  } else if (res.paymentStatus === 'failure') {
-    // TODO
   }
 };
 
