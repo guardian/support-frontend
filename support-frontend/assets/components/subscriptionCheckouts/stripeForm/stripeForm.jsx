@@ -11,7 +11,6 @@ import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { CardNumberElement, CardExpiryElement, CardCvcElement } from 'react-stripe-elements';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
-import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 
 import './stripeForm.scss';
 import { fetchJson, requestOptions } from 'helpers/fetch';
@@ -25,14 +24,13 @@ export type StripeFormPropTypes = {
   component: Node,
   stripe: Object,
   allErrors: FormError<FormField>[],
+  stripeKey: string,
   setStripeToken: Function,
   setStripePaymentMethod: Function,
   submitForm: Function,
   name: string,
   validateForm: Function,
   buttonText: string,
-  country: IsoCountry,
-  isTestUser: boolean,
 }
 
 type StateTypes = {
@@ -112,12 +110,9 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     // Note - because this value is requested asynchronously when the component loads,
     // it's possible for it to arrive after the user clicks 'Contribute'. This eventuality
     // is handled in the callback below by checking the value of paymentWaiting.
-
-    const stripeKey = getStripeKey('REGULAR', this.props.country, this.props.isTestUser);
-
     fetchJson(
       window.guardian.stripeSetupIntentEndpoint,
-      requestOptions({ publicKey: stripeKey }, 'omit', 'POST', null),
+      requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
     ).then((result) => {
       if (result.client_secret) {
         // this.setSetupIntentClientSecret(result.client_secret);
