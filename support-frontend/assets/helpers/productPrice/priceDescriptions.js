@@ -25,8 +25,8 @@ const billingPeriodQuantifier = (numberOfBillingPeriods: number, noun: string) =
     `/${noun} for ${numberOfBillingPeriods} ${noun}s` :
     ` for 1 ${noun}`);
 
-const billingPeriodNoun = (billingPeriod: BillingPeriod) =>
-  upperCaseNoun(billingPeriod).toLowerCase();
+const billingPeriodNoun = (billingPeriod: BillingPeriod, orderIsAGift: boolean = false) =>
+  upperCaseNoun(billingPeriod, orderIsAGift).toLowerCase();
 
 const standardRate = (
   glyph: string,
@@ -44,7 +44,7 @@ const standardRateGift = (
   price: number,
   billingPeriod: BillingPeriod,
 ) =>
-  `Fixed term of ${billingPeriod === Annual ? 'a year' : '3 months'} for ${displayPrice(glyph, price)}`;
+  `Fixed term of ${billingPeriodNoun(billingPeriod, true)} for ${displayPrice(glyph, price)}`;
 
 function getDiscountDescription(
   glyph: string,
