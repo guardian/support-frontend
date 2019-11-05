@@ -146,8 +146,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
-  const setBillingAddressIsSameHandler = () => {
-    props.setBillingAddressIsSame(true);
+  const setBillingAddressIsSameHandler = (newState) => {
+    props.setBillingAddressIsSame(newState);
     props.setBillingCountry(props.deliveryCountry);
   };
 
@@ -259,14 +259,14 @@ function WeeklyCheckoutForm(props: PropTypes) {
                   text="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
-                  onChange={setBillingAddressIsSameHandler}
+                  onChange={() => setBillingAddressIsSameHandler(true)}
                 />
                 <RadioInput
                   inputId="qa-billing-address-different"
                   text="No"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
-                  onChange={() => props.setBillingAddressIsSame(false)}
+                  onChange={() => setBillingAddressIsSameHandler(false)}
                 />
               </FieldsetWithError>
             </Rows>

@@ -9,7 +9,6 @@ import {
   GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -71,8 +70,7 @@ function getProductPrice(
   const countryGroup = getCountryGroup(country);
   // eslint-disable-next-line max-len
   return productPrices[countryGroup.name][fulfilmentOption ||
-  NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod ===
-  SixWeekly ? Quarterly : billingPeriod][countryGroup.currency];
+  NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod][countryGroup.currency];
 }
 
 function finalPrice(

@@ -53,12 +53,11 @@ import {
   type SubscriptionProduct,
 } from 'helpers/subscriptions';
 import { isPostDeployUser } from 'helpers/user/user';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
+import { Quarterly } from 'helpers/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 import type { IsoCountry } from '../internationalisation/country';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 
 // ----- Functions ----- //
 
@@ -88,13 +87,9 @@ const getOptions = (
     ...(productOptions !== NoProductOptions ? { productOptions } : {}),
   });
 
-const getPromoCode = (billingPeriod: BillingPeriod, promotions: ?Promotion[]) => {
+const getPromoCode = (promotions: ?Promotion[]) => {
   const promotion = getAppliedPromo(promotions);
-  if (!promotion || (promotion.introductoryPrice && billingPeriod === Quarterly)) {
-    return null;
-  }
-
-  return promotion.promoCode;
+  return promotion ? promotion.promoCode : null;
 };
 
 function buildRegularPaymentRequest(
@@ -132,12 +127,12 @@ function buildRegularPaymentRequest(
 
   const product = {
     currency: currencyId || state.common.internationalisation.currencyId,
-    billingPeriod: billingPeriod === SixWeekly ? Quarterly : billingPeriod,
+    billingPeriod,
     ...getOptions(fulfilmentOption, productOption),
   };
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
-  const promoCode = getPromoCode(billingPeriod, price.promotions);
+  const promoCode = getPromoCode(price.promotions);
 
   return {
     title,

@@ -327,26 +327,27 @@ object CountryGroup {
 
   def byName(name: String): Option[CountryGroup] = allGroups.find(_.name == name)
 
-  def availableCurrency(currencies: Set[Currency])(country: Country) =
+  def availableCurrency(currencies: Set[Currency])(country: Country): Option[Currency] =
     byCountryCode(country.alpha2).map(_.currency).filter(currencies)
 
   def byOptimisticCountryNameOrCode(str: String): Option[Country] = {
-    if (str == null) return None
-    val clean = str.replace(".", "").trim
-    val name = clean.toLowerCase
-    val nameAnd = name.replace(" & ", " and ")
-    val nameAmpersand = name.replace(" and ", " & ")
+    if (str == null)  None else {
+      val clean = str.replace(".", "").trim
+      val name = clean.toLowerCase
+      val nameAnd = name.replace(" & ", " and ")
+      val nameAmpersand = name.replace(" and ", " & ")
 
-    countryByCode(clean) orElse countryByName(name) orElse countryByName(nameAnd) orElse countryByName(nameAmpersand) orElse (name match {
-      case _ if name equals "united states of america" => Some(Country.US)
-      case _ if name endsWith "of ireland" => Some(Country.Ireland)
-      case _ if name == "uk" => Some(Country.UK)
-      case _ if name == "great britain" => Some(Country.UK)
-      case _ if name == "viet nam" => countryByCode("VN")
-      case _ if name startsWith "the " => countryByName(name.replaceFirst("the ", ""))
-      case _ if name == "russian federation" => countryByCode("RU")
-      case _ => None
-    })
+      countryByCode(clean) orElse countryByName(name) orElse countryByName(nameAnd) orElse countryByName(nameAmpersand) orElse (name match {
+        case _ if name equals "united states of america" => Some(Country.US)
+        case _ if name endsWith "of ireland" => Some(Country.Ireland)
+        case _ if name == "uk" => Some(Country.UK)
+        case _ if name == "great britain" => Some(Country.UK)
+        case _ if name == "viet nam" => countryByCode("VN")
+        case _ if name startsWith "the " => countryByName(name.replaceFirst("the ", ""))
+        case _ if name == "russian federation" => countryByCode("RU")
+        case _ => None
+      })
+    }
   }
 
 }

@@ -216,7 +216,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
   handleStripeError(errorData: any): void {
     this.props.setPaymentWaiting(false);
 
-    logException(`Error creating Payment Method: ${errorData}`);
+    logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
 
     if (errorData.type === 'validation_error') {
       // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
@@ -270,7 +270,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
     return (
       <div className="form__fields">
-        <legend className="form__legend">Your card details</legend>
+        <legend className="form__legend"><h3>Your card details</h3></legend>
         <div className="form__field">
           <label className="form__label" htmlFor="stripeCardNumberElement">
             <span>Card number</span>

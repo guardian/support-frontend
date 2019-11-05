@@ -11,11 +11,11 @@ case class PromotionsDiscountConfig(productRatePlanId: ProductRatePlanId, produc
 
 class PromotionsConfigProvider(config: Config, defaultStage: Stage)
   extends TouchpointConfigProvider[PromotionsConfig](config, defaultStage) {
-  override protected def fromConfig(config: Config) = PromotionsConfig.fromConfig(config)
+  override protected def fromConfig(config: Config): PromotionsConfig = PromotionsConfig.fromConfig(config)
 }
 
 object PromotionsConfig {
-  def fromConfig(config: Config) =
+  def fromConfig(config: Config): PromotionsConfig =
     PromotionsConfig(
       PromotionsDiscountConfig(
         config.getString("promotions.discount.productRatePlanId"),

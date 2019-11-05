@@ -41,7 +41,7 @@ export type Action =
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
-  | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean> }
+  | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: boolean }
   | { type: 'SET_ORDER_IS_GIFT', orderIsAGift: Option<boolean>}
   | { type: 'SET_STRIPE_TOKEN', stripeToken: Option<string> }
   | { type: 'SET_DELIVERY_INSTRUCTIONS', instructions: Option<string>}
@@ -98,7 +98,7 @@ const formActionCreators = {
       country: state.common.internationalisation.countryId,
     });
   },
-  setBillingAddressIsSame: (isSame: boolean | null): Action => ({
+  setBillingAddressIsSame: (isSame: boolean): Action => ({
     type: 'SET_BILLING_ADDRESS_IS_SAME',
     isSame,
   }),

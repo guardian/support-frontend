@@ -9,8 +9,9 @@ sealed trait BillingPeriod {
 }
 
 object BillingPeriod {
-  def fromString(code: String) = List(Monthly, Annual, Quarterly, SixWeekly)
-    .find(_.getClass.getSimpleName == s"$code$$")
+  def fromString(code: String): Option[BillingPeriod] = {
+    List(Monthly, Annual, Quarterly, SixWeekly).find(_.getClass.getSimpleName == s"$code$$")
+  }
 
   implicit val decodePeriod: Decoder[BillingPeriod] =
     Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"unrecognised billing period '$code'"))

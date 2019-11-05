@@ -22,7 +22,7 @@ object SubscriptionEmailFieldHelpers {
 
   def firstPayment(paymentSchedule: PaymentSchedule): Payment = paymentSchedule.payments.minBy(_.date)
 
-  def pluralise(num: Int, thing: String) = if(num > 1) s"$num ${thing}s" else s"$num $thing"
+  def pluralise(num: Int, thing: String): String = if(num > 1) s"$num ${thing}s" else s"$num $thing"
 
   def introductoryPeriod(introductoryBillingPeriods: Int, billingPeriod: BillingPeriod): String =
     s"${pluralise(introductoryBillingPeriods, billingPeriod.noun)}"
@@ -34,7 +34,12 @@ object SubscriptionEmailFieldHelpers {
       .getOrElse(standardDescription(paymentSchedule, billingPeriod, currency))
   }
 
-  def introductoryPriceDescription(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency, benefit: IntroductoryPriceBenefit) =
+  def introductoryPriceDescription(
+    paymentSchedule: PaymentSchedule,
+    billingPeriod: BillingPeriod,
+    currency: Currency,
+    benefit: IntroductoryPriceBenefit
+  ): String =
     Try(paymentSchedule.payments.tail.head).fold(
       _ => "",
       payment => s"${priceWithCurrency(currency, benefit.price)} for ${pluralise(benefit.periodLength, benefit.periodType.toString.toLowerCase)}, " +

@@ -48,12 +48,12 @@ object Promotions {
     description = "Introductory offer",
     appliesTo = AppliesTo(
       Set(
-        "2c92a0086619bf8901661ab02752722f",
-        "2c92a0fe6619b4b301661aa494392ee2",
-        "2c92c0f9660fc4d70166109c01465f10",
-        "2c92c0f8660fb5d601661081ea010391",
-        "2c92c0f965f2122101660fb81b745a06",
-        "2c92c0f965dc30640165f150c0956859"
+        "2c92c0f965f2122101660fbc75a16c38",
+        "2c92c0f965f212210165f69b94c92d66",
+        "2c92c0f9660fc4c70166109dfd08092c",
+        "2c92c0f8660fb5dd016610858eb90658",
+        "2c92a0086619bf8901661ab545f51b21",
+        "2c92a0086619bf8901661aaac94257fe"
       ),
       CountryGroup.countries.toSet
     ),

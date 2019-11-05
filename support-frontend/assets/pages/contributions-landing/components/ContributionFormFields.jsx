@@ -91,6 +91,7 @@ function withProps(props: PropTypes) {
 
   return (
     <div className="form-fields">
+      <h3 className="hidden-heading">Your details</h3>
       <ContributionTextInput
         id="contributionEmail"
         name="contribution-email"

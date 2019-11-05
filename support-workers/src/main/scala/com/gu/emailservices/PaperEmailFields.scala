@@ -25,15 +25,26 @@ case class PaperEmailFields(
 
   val additionalFields = List("package" -> productOptions.toString)
 
-  val dataExtension = fulfilmentOptions match {
+  val dataExtension: String = fulfilmentOptions match {
     case HomeDelivery => "paper-delivery"
     case _ => "paper-voucher"
   }
 
-  override val fields = PaperFieldsGenerator.fieldsFor(
-    subscriptionNumber, billingPeriod, user, paymentSchedule, firstDeliveryDate, currency, paymentMethod, sfContactId, directDebitMandateId, promotion, giftRecipient
+  override val fields: List[(String, String)] = PaperFieldsGenerator.fieldsFor(
+    subscriptionNumber,
+    billingPeriod,
+    user,
+    paymentSchedule,
+    firstDeliveryDate,
+    currency,
+    paymentMethod,
+    sfContactId,
+    directDebitMandateId,
+    promotion,
+    giftRecipient
   ) ++ additionalFields
 
   override def payload: String = super.payload(user.primaryEmailAddress, dataExtension)
+
   override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
 }

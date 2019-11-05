@@ -44,7 +44,7 @@ function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMetho
 
 
 function getValidContributionTypesFromUrlOrElse(fallback: ContributionTypes): ContributionTypes {
-  const contributionTypesFromUrl = getQueryParameter('contributionTypes');
+  const contributionTypesFromUrl = getQueryParameter('contribution-types');
   if (contributionTypesFromUrl) {
     return generateContributionTypes(contributionTypesFromUrl
       .split(',')
@@ -66,11 +66,11 @@ function toHumanReadableContributionType(contributionType: ContributionType): 'S
 }
 
 function getContributionTypeFromSession(): ?ContributionType {
-  return toContributionType(storage.getSession('selectedContributionType'));
+  return toContributionType(storage.getSession('selected-contribution-type'));
 }
 
 function getContributionTypeFromUrl(): ?ContributionType {
-  return toContributionType(getQueryParameter('selectedContributionType'));
+  return toContributionType(getQueryParameter('selected-contribution-type'));
 }
 
 // Returns an array of Payment Methods, in the order of preference,
