@@ -16,7 +16,6 @@ import {
   hasDiscount,
   hasIntroductoryPrice,
 } from 'helpers/productPrice/promotions';
-import type { IntroductoryPriceBenefit } from 'helpers/productPrice/promotions';
 import { type Option } from 'helpers/types/option';
 
 const displayPrice = (glyph: string, price: number) => `${glyph}${fixDecimals(price)}`;
