@@ -206,9 +206,9 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       if (result.error) {
         this.handleStripeError(result.error);
         return Promise.resolve(result.error);
-      } else {
-        return result.setupIntent.payment_method;
       }
+      return result.setupIntent.payment_method;
+
     });
   }
 
@@ -231,20 +231,19 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
 
     if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
 
-      this.handleCardSetup(this.state.setupIntentClientSecret)
-        .then((paymentMethod) => {
-            this.props.setStripePaymentMethod(paymentMethod)
-        }).then(() => this.props.submitForm());
+      this.handleCardSetup(this.state.setupIntentClientSecret).then((paymentMethod) => {
+        this.props.setStripePaymentMethod(paymentMethod);
+      }).then(() => this.props.submitForm());
     }
   };
 
   requestStripePaymentAuthorisation = (event) => {
     if (window.guardian.stripeElementsSubscriptions) {
-      console.log("Stripe SCA payments experiment enabled, using Stripe SCA payments API");
-      this.requestSCAPaymentMethod(event)
+      console.log('Stripe SCA payments experiment enabled, using Stripe SCA payments API');
+      this.requestSCAPaymentMethod(event);
     } else {
-      console.log("Stripe SCA payments experiment disabled, using old Stripe Checkout API");
-      this.requestStripeToken(event)
+      console.log('Stripe SCA payments experiment disabled, using old Stripe Checkout API');
+      this.requestStripeToken(event);
     }
   };
 

@@ -218,20 +218,18 @@ function checkStripeUserType(
         stripePaymentMethod: 'StripeCheckout',
       });
     }
+  } else if (window.guardian.stripeElementsSubscriptions) {
+    onAuthorised({
+      paymentMethod: Stripe,
+      stripePaymentMethod: 'StripeElements',
+      paymentMethodId: stripePaymentMethodId,
+    });
   } else {
-    if (window.guardian.stripeElementsSubscriptions) {
-      onAuthorised({
-        paymentMethod: Stripe,
-        stripePaymentMethod: 'StripeElements',
-        paymentMethodId: stripePaymentMethodId,
-      });
-    } else {
-      onAuthorised({
-        paymentMethod: Stripe,
-        token: stripeToken || '',
-        stripePaymentMethod: 'StripeElements',
-      });
-    }
+    onAuthorised({
+      paymentMethod: Stripe,
+      token: stripeToken || '',
+      stripePaymentMethod: 'StripeElements',
+    });
   }
 }
 
@@ -307,7 +305,7 @@ function submitForm(
   const stripeToken = paymentMethod === Stripe ? state.page.checkout.stripeToken : null;
   const stripePaymentMethod = paymentMethod === Stripe ? state.page.checkout.stripePaymentMethod : null;
 
-  console.log("On submission check tokens:", "Stripe Token:", stripeToken, "Stripe payment method", stripePaymentMethod);
+  console.log('On submission check tokens:', 'Stripe Token:', stripeToken, 'Stripe payment method', stripePaymentMethod);
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
     onPaymentAuthorised(
