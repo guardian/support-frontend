@@ -31,6 +31,7 @@ export type StripeFormPropTypes = {
   name: string,
   validateForm: Function,
   buttonText: string,
+  stripeSetupIntentEndpoint: String,
 }
 
 type StateTypes = {
@@ -111,11 +112,10 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     // it's possible for it to arrive after the user clicks 'Contribute'. This eventuality
     // is handled in the callback below by checking the value of paymentWaiting.
     fetchJson(
-      window.guardian.stripeSetupIntentEndpoint,
+      this.props.stripeSetupIntentEndpoint,
       requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
     ).then((result) => {
       if (result.client_secret) {
-        // this.setSetupIntentClientSecret(result.client_secret);
         this.setState({ setupIntentClientSecret: result.client_secret });
 
         // If user has already clicked contribute then handle card setup now

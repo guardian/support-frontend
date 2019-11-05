@@ -305,8 +305,6 @@ function submitForm(
   const stripeToken = paymentMethod === Stripe ? state.page.checkout.stripeToken : null;
   const stripePaymentMethod = paymentMethod === Stripe ? state.page.checkout.stripePaymentMethod : null;
 
-  console.log('On submission check tokens:', 'Stripe Token:', stripeToken, 'Stripe payment method', stripePaymentMethod);
-
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
     onPaymentAuthorised(
       paymentAuthorisation,
