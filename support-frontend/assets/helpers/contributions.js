@@ -270,6 +270,8 @@ function toContributionType(s: ?string): ?ContributionType {
         return 'MONTHLY';
       case 'ONE_OFF':
         return 'ONE_OFF';
+      case 'SINGLE':
+        return 'ONE_OFF';
       default:
         return null;
     }

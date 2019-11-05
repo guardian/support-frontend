@@ -8,12 +8,12 @@ import {
   SixWeekly,
   Annual,
 } from 'helpers/billingPeriods';
-import type {
-  ProductPrice,
-} from 'helpers/productPrice/productPrices';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
+import type { IntroductoryPriceBenefit } from 'helpers/productPrice/promotions';
 import {
-  getAppliedPromo, hasDiscount,
+  getAppliedPromo,
+  hasDiscount,
   hasIntroductoryPrice,
 } from 'helpers/productPrice/promotions';
 import type { IntroductoryPriceBenefit } from 'helpers/productPrice/promotions';
@@ -112,7 +112,7 @@ function getPriceDescription(
   const glyph = extendedGlyph(productPrice.currency);
   const promotion = getAppliedPromo(productPrice.promotions);
 
-  if (hasIntroductoryPrice(promotion) && billingPeriod === SixWeekly) {
+  if (hasIntroductoryPrice(promotion)) {
     return getIntroductoryPriceDescription(
       glyph,
       // $FlowIgnore -- We have checked this in hasIntroductoryPrice
@@ -146,8 +146,7 @@ function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: 
   const appliedPromo = getAppliedPromo(productPrice.promotions);
   if (
     appliedPromo === null ||
-    billingPeriod === SixWeekly ||
-    (appliedPromo.introductoryPrice && billingPeriod === Quarterly)
+    billingPeriod === SixWeekly
   ) {
     return '';
   }
