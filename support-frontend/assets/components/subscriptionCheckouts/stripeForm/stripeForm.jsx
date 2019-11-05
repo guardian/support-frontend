@@ -233,14 +233,11 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
 
   requestStripePaymentAuthorisation = (event) => {
     if (window.guardian.stripeElementsSubscriptions) {
-      console.log('Stripe SCA payments experiment enabled, using Stripe SCA payments API');
       this.requestSCAPaymentMethod(event);
     } else {
-      console.log('Stripe SCA payments experiment disabled, using old Stripe Checkout API');
       this.requestStripeToken(event);
     }
   };
-
 
   render() {
     if (this.props.stripe) {
