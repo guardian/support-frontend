@@ -75,6 +75,7 @@ export type Action =
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object, stripeAccount: StripeAccount }
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount: StripeAccount }
+  | { type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR', paymentError: ErrorReason, stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
   | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
@@ -141,6 +142,9 @@ const setStripeV3HasLoaded = (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' }
 
 const setStripePaymentRequestButtonClicked = (stripeAccount: StripeAccount): Action =>
   ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount });
+
+const setStripePaymentRequestButtonError = (paymentError: ErrorReason, stripeAccount: StripeAccount): Action =>
+  ({ type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR', paymentError, stripeAccount });
 
 const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -340,7 +344,7 @@ const regularPaymentRequestFromAuthorisation = (
 // standardised across payment methods & contribution types.
 // This will execute at the end of every checkout, with the exception
 // of PayPal one-off where this happens on the backend after the user is redirected to our site.
-const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
+const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>
     paymentResult.then((result) => {
 
@@ -354,7 +358,22 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
 
         case 'failure':
         default:
-          dispatch(paymentFailure(result.error));
+          //TODO - one-off errors?
+          // Payment Request button has its own error message, separate from the form
+          const isPaymentRequestButton = paymentAuthorisation.stripePaymentMethod && (
+            paymentAuthorisation.stripePaymentMethod === 'StripePaymentRequestButton' ||
+            paymentAuthorisation.stripePaymentMethod === 'StripeApplePay'
+          );
+
+          if (isPaymentRequestButton) {
+            dispatch(setStripePaymentRequestButtonError(
+              result.error,
+              stripeAccountForContributionType[state.page.form.contributionType]
+            ));
+          } else {
+            dispatch(paymentFailure(result.error));
+          }
+
           dispatch(paymentWaiting(false));
       }
       return result;
@@ -427,14 +446,17 @@ function recurringPaymentAuthorisationHandler(
 ): Promise<PaymentResult> {
   const request = regularPaymentRequestFromAuthorisation(paymentAuthorisation, state);
 
-  return dispatch(onPaymentResult(postRegularPaymentRequest(
-    routes.recurringContribCreate,
-    request,
-    state.common.abParticipations,
-    state.page.csrf,
-    (token: string) => dispatch(setGuestAccountCreationToken(token)),
-    (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-  )));
+  return dispatch(onPaymentResult(
+    postRegularPaymentRequest(
+      routes.recurringContribCreate,
+      request,
+      state.common.abParticipations,
+      state.page.csrf,
+      (token: string) => dispatch(setGuestAccountCreationToken(token)),
+      (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+    ),
+    paymentAuthorisation
+  ));
 }
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -576,6 +598,7 @@ export {
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestObject,
   setStripePaymentRequestButtonClicked,
+  setStripePaymentRequestButtonError,
   setStripeV3HasLoaded,
   setTickerGoalReached,
   setCreateStripePaymentMethod,

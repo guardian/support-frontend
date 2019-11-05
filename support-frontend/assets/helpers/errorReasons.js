@@ -17,6 +17,7 @@ export type ErrorReason =
   'incompatible_payment_method_and_contribution_type' |
   'internal_error' |
   'card_authentication_error' |
+  'incomplete_payment_request_details' |
   'unknown';
 
 // ----- Functions ----- //
@@ -45,6 +46,8 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
       return 'Sorry, something has gone wrong. Please try again, or come back later.';
     case 'card_authentication_error':
       return 'You have not been charged. Please check your payment details and try again, or choose another payment method.';
+    case 'incomplete_payment_request_details':
+      return 'TODO - message about missing payment request details.';
     default:
       return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
   }

@@ -35,12 +35,14 @@ import {
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestObject,
+  setStripePaymentRequestButtonError,
   paymentWaiting as setPaymentWaiting,
   updateEmail,
   updateFirstName,
   updateLastName,
   updatePaymentMethod,
   updateState,
+  // paymentFailure as setPaymentFailure,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
@@ -77,7 +79,8 @@ type PropTypes = {|
   setAssociatedPaymentMethod: () => (Function) => void,
   stripeAccount: StripeAccount,
   setPaymentWaiting: (isWaiting: boolean) => Action,
-  paymentError: ErrorReason | null,
+  // paymentError: ErrorReason | null,
+  setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
 |};
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -90,7 +93,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
-  paymentError: state.page.form.paymentError,
+  // paymentError: state.page.form.paymentError,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -109,6 +112,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
   setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
   setPaymentWaiting: (isWaiting: boolean) => dispatch(setPaymentWaiting(isWaiting)),
+  setError: (error: ErrorReason, stripeAccount: StripeAccount) =>
+    dispatch(setStripePaymentRequestButtonError(error, stripeAccount)),
 });
 
 
@@ -214,12 +219,20 @@ const availablePaymentRequestButtonPaymentMethod = (result: Object): StripePayme
 
 function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentMethod: StripePaymentMethod) {
   paymentRequest.on('token', ({ complete, token, ...data }) => {
+
+    // Always dismiss the payment popup immediately - any pending/success/failure will be displayed on our own page.
+    // `complete` must be called within 30 seconds or the user will see an error.
+    // Our backend (support-workers) can in extreme cases take longer than this, so we must call complete now.
+    // This means that the browsers payment popup will be dismissed, and our own 'spinner' will be displayed until
+    // the backend job finishes.
+    complete('success');
+
     // We need to do this so that we can offer marketing permissions on the thank you page
     updatePayerEmail(data, props.updateEmail);
 
-    const stateUpdateOk =
-      props.stripeAccount !== 'ONE_OFF' && (props.countryGroupId === UnitedStates || props.countryGroupId === Canada) ?
-      updatePayerState(token, props.updateState) : true;
+    const stateUpdateOk =true
+      // props.stripeAccount !== 'ONE_OFF' && (props.countryGroupId === UnitedStates || props.countryGroupId === Canada) ?
+      // updatePayerState(token, props.updateState) : true;
 
     const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
       updatePayerName(data, props.updateFirstName, props.updateLastName) : true;
@@ -233,19 +246,13 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
         // chose to authorize payment. For example, 'basic-card'."
         trackComponentClick(`${data.methodName}-paymentAuthorised`);
       }
-
-      // `complete` must be called within 30 seconds or the user will see an error.
-      // Our backend (support-workers) can in extreme cases take longer than this, so call complete now.
-      // This means that the browsers payment popup will be dismissed, and our own 'spinner' will be displayed until
-      // the backend job finishes.
-      complete('success');
       props.setPaymentWaiting(true);
 
       props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
         .then(onComplete());
     } else {
       // TODO - if anything fails at this point, can we dismiss the popup and display the error our way instead?
-      complete('fail');
+      props.setError('incomplete_payment_request_details', props.stripeAccount)
     }
   });
 }
@@ -299,6 +306,7 @@ function PaymentRequestButton(props: PropTypes) {
   ) {
     return null;
   }
+  console.log(props.stripePaymentRequestButtonData.paymentError)
 
   return (
     <div
@@ -316,9 +324,8 @@ function PaymentRequestButton(props: PropTypes) {
       />
 
       {
-        props.paymentError &&
-        props.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked &&
-        <GeneralErrorMessage errorReason={props.paymentError} />
+        props.stripePaymentRequestButtonData.paymentError &&
+        <GeneralErrorMessage errorReason={props.stripePaymentRequestButtonData.paymentError} />
       }
 
       <div className="stripe-payment-request-button__divider">
