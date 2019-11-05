@@ -24,7 +24,7 @@ import {
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import { type CountryGroupId, Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import type {CaState, IsoCountry, UsState} from 'helpers/internationalisation/country';
+import type { CaState, IsoCountry, UsState } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type {
   State,
@@ -48,8 +48,8 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 import { toHumanReadableContributionType } from 'helpers/checkouts';
 import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
-import type {Action} from "pages/contributions-landing/contributionsLandingActions";
-import type {ErrorReason} from "helpers/errorReasons";
+import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
+import type { ErrorReason } from 'helpers/errorReasons';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 // ----- Types -----//
@@ -157,10 +157,10 @@ function updatePayerState(token: Object, setState: (UsState | CaState | null) =>
   if (state) {
     setState(state);
     return true;
-  } else {
-    logException('Missing address_state in payment request token');
-    return false;
   }
+  logException('Missing address_state in payment request token');
+  return false;
+
 }
 
 const onComplete = () => (res: PaymentResult) => {
@@ -250,7 +250,7 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
       props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
         .then(onComplete());
     } else {
-      props.setError('incomplete_payment_request_details', props.stripeAccount)
+      props.setError('incomplete_payment_request_details', props.stripeAccount);
     }
   });
 }
@@ -304,7 +304,6 @@ function PaymentRequestButton(props: PropTypes) {
   ) {
     return null;
   }
-  console.log(props.stripePaymentRequestButtonData.paymentError)
 
   return (
     <div

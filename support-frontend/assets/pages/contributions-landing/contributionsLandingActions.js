@@ -357,8 +357,7 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
           break;
 
         case 'failure':
-        default:
-          //TODO - one-off errors?
+        default: {
           // Payment Request button has its own error message, separate from the form
           const isPaymentRequestButton = paymentAuthorisation.stripePaymentMethod && (
             paymentAuthorisation.stripePaymentMethod === 'StripePaymentRequestButton' ||
@@ -368,13 +367,14 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
           if (isPaymentRequestButton) {
             dispatch(setStripePaymentRequestButtonError(
               result.error,
-              stripeAccountForContributionType[state.page.form.contributionType]
+              stripeAccountForContributionType[state.page.form.contributionType],
             ));
           } else {
             dispatch(paymentFailure(result.error));
           }
 
           dispatch(paymentWaiting(false));
+        }
       }
       return result;
     });
@@ -463,7 +463,7 @@ function recurringPaymentAuthorisationHandler(
       (token: string) => dispatch(setGuestAccountCreationToken(token)),
       (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
     ),
-    paymentAuthorisation
+    paymentAuthorisation,
   ));
 }
 
