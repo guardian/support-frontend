@@ -76,39 +76,40 @@ class PostcodeFinder extends Component<PropTypes> {
     const {
       id, postcode, results, isLoading, setPostcode, fetchResults, error, onPostcodeUpdate, onAddressUpdate,
     } = this.props;
-    return (
-      <div>
-        <ComposedInputWithButton
-          error={error}
-          label="Postcode"
-          onClick={() => { fetchResults(postcode); }}
-          id={id}
-          setValue={(val) => {
-            setPostcode(val);
-            onPostcodeUpdate(val);
-          }}
-          isLoading={isLoading}
-          value={postcode}
-        />
-        {(results.length > 0) &&
-          <ComposedSelect
-            onChange={(ev) => {
-              if (results[ev.currentTarget.value]) {
-                onAddressUpdate(results[ev.currentTarget.value]);
-              }
-            }}
-            forwardRef={(r) => { this.selectRef = r; }}
-            id="address"
-            label={`${results.length} addresses found`}
-          >
-            <option value={null}>Select an address</option>
-              {results.map((result, key) => (
-                <option value={key}>{[result.lineOne, result.lineTwo].join(', ')}</option>
-              ))}
-          </ComposedSelect>
-        }
-      </div>
-    );
+    return ("")
+    // (
+    //   <div>
+    //     <ComposedInputWithButton
+    //       error={error}
+    //       label="Postcode"
+    //       onClick={() => { fetchResults(postcode); }}
+    //       id={id}
+    //       setValue={(val) => {
+    //         setPostcode(val);
+    //         onPostcodeUpdate(val);
+    //       }}
+    //       isLoading={isLoading}
+    //       value={postcode}
+    //     />
+    //     {(results.length > 0) &&
+    //       <ComposedSelect
+    //         onChange={(ev) => {
+    //           if (results[ev.currentTarget.value]) {
+    //             onAddressUpdate(results[ev.currentTarget.value]);
+    //           }
+    //         }}
+    //         forwardRef={(r) => { this.selectRef = r; }}
+    //         id="address"
+    //         label={`${results.length} addresses found`}
+    //       >
+    //         <option value={null}>Select an address</option>
+    //           {results.map((result, key) => (
+    //             <option value={key}>{[result.lineOne, result.lineTwo].join(', ')}</option>
+    //           ))}
+    //       </ComposedSelect>
+    //     }
+    //   </div>
+    // );
   }
 }
 
