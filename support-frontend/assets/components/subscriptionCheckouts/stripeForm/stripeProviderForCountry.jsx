@@ -27,6 +27,7 @@ function StripeProviderForCountry(props: PropTypes) {
           stripeKey={stripeKey}
           setStripeToken={props.setStripeToken}
           setStripePaymentMethod={props.setStripePaymentMethod}
+          stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
           name={props.name}
           validateForm={props.validateForm}
           buttonText={props.buttonText}

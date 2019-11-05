@@ -31,7 +31,7 @@ export type StripeFormPropTypes = {
   name: string,
   validateForm: Function,
   buttonText: string,
-  stripeSetupIntentEndpoint: String,
+  stripeSetupIntentEndpoint: string,
 }
 
 type StateTypes = {
@@ -123,7 +123,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
           this.handleCardSetup(result.client_secret);
         }
       } else {
-        throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
+        throw new Error(`Missing client_secret field in response from ${this.props.stripeSetupIntentEndpoint}`);
       }
     }).catch((error) => {
       logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
