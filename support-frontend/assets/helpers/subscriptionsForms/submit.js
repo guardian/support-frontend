@@ -205,7 +205,7 @@ function checkStripeUserType(
 ) {
 
   if (isPostDeployUser()) {
-    if (stripePaymentMethodId != null) {
+    if (window.guardian.stripeElementsSubscriptions) {
       onAuthorised({
         paymentMethod: Stripe,
         stripePaymentMethod: 'StripeElements',
@@ -219,7 +219,7 @@ function checkStripeUserType(
       });
     }
   } else {
-    if (stripePaymentMethodId != null) {
+    if (window.guardian.stripeElementsSubscriptions) {
       onAuthorised({
         paymentMethod: Stripe,
         stripePaymentMethod: 'StripeElements',

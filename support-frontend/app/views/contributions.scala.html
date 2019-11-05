@@ -104,6 +104,7 @@
   }
 
   window.guardian.stripeElementsRecurring = @settings.switches.experiments.get("stripeElementsRecurring").exists(_.isOn)
+
   window.guardian.forceCampaign = @settings.switches.experiments.get("forceCampaign").exists(_.isOn)
   window.guardian.recurringStripePaymentRequestButton = @settings.switches.experiments.get("recurringStripePaymentRequestButton").exists(_.isOn)
   </script>

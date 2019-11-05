@@ -61,7 +61,7 @@
       };
       window.guardian.csrf = { token: "@CSRF.getToken.value" };
       window.guardian.stripeSetupIntentEndpoint = "@stripeSetupIntentEndpoint";
-      window.guardian.stripeElementsRecurring = @settings.switches.experiments.get("stripeElementsRecurring").exists(_.isOn);
+      window.guardian.stripeElementsSubscriptions = @settings.switches.experiments.get("stripeElementsSubscriptions").exists(_.isOn)
   </script>
 
   }
