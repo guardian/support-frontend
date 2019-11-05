@@ -15,7 +15,6 @@ import { withLabel } from 'hocs/withLabel';
 import './stripeForm.scss';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import { logException } from 'helpers/logger';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Option } from 'helpers/types/option';
 
 // Types

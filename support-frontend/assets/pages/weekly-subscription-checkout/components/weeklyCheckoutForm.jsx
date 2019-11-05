@@ -72,7 +72,7 @@ import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidat
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
-import {getGlobal} from "helpers/globals";
+import { getGlobal } from 'helpers/globals';
 
 // ----- Types ----- //
 
@@ -92,6 +92,7 @@ type PropTypes = {|
   country: IsoCountry,
   isTestUser: boolean,
   validateForm: () => Function,
+  stripeSetupIntentEndpoint: string
 |};
 
 // ----- Map State/Props ----- //
@@ -110,7 +111,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     billingAddressErrors: state.page.billingAddress.fields.formErrors,
     isTestUser: state.page.checkout.isTestUser,
     country: state.common.internationalisation.countryId,
-    stripeSetupIntentEndpoint: getGlobal("stripeSetupIntentEndpoint"),
+    stripeSetupIntentEndpoint: getGlobal('stripeSetupIntentEndpoint'),
   };
 }
 

@@ -205,7 +205,7 @@ function checkStripeUserType(
 ) {
 
   if (isPostDeployUser()) {
-    if (window.guardian.stripeElementsSubscriptions) {
+    if (window.guardian.stripeElementsSubscriptions && (stripePaymentMethodId != null)) {
       onAuthorised({
         paymentMethod: Stripe,
         stripePaymentMethod: 'StripeElements',
@@ -218,7 +218,7 @@ function checkStripeUserType(
         stripePaymentMethod: 'StripeCheckout',
       });
     }
-  } else if (window.guardian.stripeElementsSubscriptions) {
+  } else if (window.guardian.stripeElementsSubscriptions && (stripePaymentMethodId != null)) {
     onAuthorised({
       paymentMethod: Stripe,
       stripePaymentMethod: 'StripeElements',
