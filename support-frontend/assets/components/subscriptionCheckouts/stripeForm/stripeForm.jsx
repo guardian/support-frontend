@@ -240,12 +240,13 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   };
 
   render() {
-    if (this.props.stripe) {
-      this.props.stripe.elements();
-    }
+    const { stripe } = this.props;
+    if (stripe) {
+      stripe.elements();
+
     return (
       <span>
-        {this.props.stripe && (
+        {stripe && (
           <fieldset>
             <CardNumberWithError
               id="card-number"
