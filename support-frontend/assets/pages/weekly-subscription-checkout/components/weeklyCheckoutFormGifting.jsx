@@ -184,8 +184,8 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           props.submitForm();
         }}
         >
-          <FormSection border="none">
-            <Heading size={1} className="component-checkout-form-section__heading component-heading">
+          <FormSection border="none" id="weekly-checkout__heading-form-section">
+            <Heading size={1} className="component-checkout-form-section__heading component-heading--gift">
               Tell us about your gift
             </Heading>
           </FormSection>
@@ -230,7 +230,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
                 <p className="component-text__sans">
-                We will take payment on the date the recipeint receives the first Guardian Weekly.
+                We will take payment on the date the recipient receives the first Guardian Weekly.
                 </p>
                 <p className="component-text__sans">
                 Subscription start dates are automatically selected to be the earliest we can fulfil your order.
@@ -241,8 +241,8 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           <FormSection title="Gift recipient's address">
             <DeliveryAddress />
           </FormSection>
-          <FormSection border="top">
-            <Heading size={1} className="component-checkout-form-section__heading component-heading">
+          <FormSection border="top" id="weekly-checkout__heading-form-section--second">
+            <Heading size={2} className="component-checkout-form-section__heading component-heading--gift">
               Your information
             </Heading>
           </FormSection>

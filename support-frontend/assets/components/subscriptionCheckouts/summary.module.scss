@@ -173,6 +173,10 @@
   @include gu-fontset-body-sans;
   display: grid;
   grid-template-columns: minmax(max-content 1fr);
+
+  @include mq($from: tablet) {
+    grid-template-columns: max-content 1fr;
+  }
 }
 
 .data dt, .dataUnderline, .dataBold {
