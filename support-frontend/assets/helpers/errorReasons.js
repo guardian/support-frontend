@@ -47,7 +47,7 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
     case 'card_authentication_error':
       return 'You have not been charged. Please check your payment details and try again, or choose another payment method.';
     case 'incomplete_payment_request_details':
-      return 'Please complete all fields for your saved credit cards within your browser settings, and try your payment again. Alternatively, you can use the form below.';
+      return 'Please complete all fields for your saved credit cards within your browser settings and try your payment again. Alternatively, you can use the form below.';
     default:
       return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
   }
