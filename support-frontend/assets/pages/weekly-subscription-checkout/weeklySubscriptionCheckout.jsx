@@ -54,9 +54,7 @@ const store = pageInit(
 );
 
 const { countryGroupId } = store.getState().common.internationalisation;
-
-// Temporary setting to hide the gifting checkout in prod but show it in dev
-const orderIsAGift = process.env.NODE_ENV === 'DEV';
+const { orderIsAGift } = store.getState().page.checkout;
 
 // ----- Render ----- //
 

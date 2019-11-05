@@ -43,7 +43,7 @@ class WeeklySubscription(
 
   implicit val a: AssetsResolver = assets
 
-  def displayForm(): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async { implicit request =>
+  def displayForm(orderIsAGift: Boolean): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user.minimalUser).fold(
         error => {
@@ -53,12 +53,12 @@ class WeeklySubscription(
           Future.successful(InternalServerError)
         },
         user => {
-          Future.successful(Ok(paperSubscriptionFormHtml(user)))
+          Future.successful(Ok(paperSubscriptionFormHtml(user, orderIsAGift)))
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
 
-  private def paperSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
+  private def paperSubscriptionFormHtml(idUser: IdUser, orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Guardian Weekly Subscription"
     val id = EmptyDiv("weekly-subscription-checkout-page")
     val js = "weeklySubscriptionCheckoutPage.js"
@@ -82,7 +82,8 @@ class WeeklySubscription(
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),
       payPalConfigProvider.get(true),
-      stripeSetupIntentEndpoint
+      stripeSetupIntentEndpoint,
+      orderIsAGift
     )
   }
 

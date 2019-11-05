@@ -27,7 +27,8 @@
   uatStripeConfig: StripeConfig,
   defaultPayPalConfig: PayPalConfig,
   uatPayPalConfig: PayPalConfig,
-  stripeSetupIntentEndpoint: String
+  stripeSetupIntentEndpoint: String,
+  orderIsAGift: Boolean = false,
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
@@ -35,6 +36,8 @@
       window.guardian = window.guardian || {};
 
       window.guardian.productPrices = @{Html(outputJson(productPrices))}
+
+      window.guardian.orderIsAGift = @orderIsAGift
 
       window.guardian.user = {
         firstName: "@user.privateFields.firstName",
