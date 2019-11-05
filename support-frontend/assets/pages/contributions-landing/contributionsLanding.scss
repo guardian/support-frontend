@@ -765,6 +765,16 @@ form {
   display:none;
 }
 
+.form__label-with-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.form__credit-card-icons {
+  margin-bottom: $gu-h-spacing/4;
+}
+
 .form__label__required {
   font-family: $gu-text-sans-web;
   font-style: italic;

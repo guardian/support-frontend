@@ -31,6 +31,9 @@ import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import CreditCardsROW from './creditCardsROW.svg';
+import CreditCardsUS from './creditCardsUS.svg';
 
 // ----- Types -----//
 
@@ -49,6 +52,7 @@ type PropTypes = {|
   stripeKey: string,
   setupIntentClientSecret: string | null,
   setSetupIntentClientSecret: (setupIntentClientSecret: string) => Action,
+  country: IsoCountry,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -272,9 +276,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
       <div className="form__fields">
         <legend className="form__legend"><h3>Your card details</h3></legend>
         <div className="form__field">
-          <label className="form__label" htmlFor="stripeCardNumberElement">
-            <span>Card number</span>
-          </label>
+          <div className="form__label-with-icons">
+            <label className="form__label" htmlFor="stripeCardNumberElement">
+              <span>Card number</span>
+            </label>
+            {this.props.country === 'US' ? <CreditCardsUS className="form__credit-card-icons" /> : <CreditCardsROW className="form__credit-card-icons" />}
+          </div>
           <span className={getClasses('CardNumber')}>
             <CardNumberElement
               id="stripeCardNumberElement"
