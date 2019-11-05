@@ -221,18 +221,18 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
   paymentRequest.on('token', ({ complete, token, ...data }) => {
 
     // Always dismiss the payment popup immediately - any pending/success/failure will be displayed on our own page.
-    // `complete` must be called within 30 seconds or the user will see an error.
+    // This is because `complete` must be called within 30 seconds or the user will see an error.
     // Our backend (support-workers) can in extreme cases take longer than this, so we must call complete now.
-    // This means that the browsers payment popup will be dismissed, and our own 'spinner' will be displayed until
+    // This means that the browser's payment popup will be dismissed, and our own 'spinner' will be displayed until
     // the backend job finishes.
     complete('success');
 
     // We need to do this so that we can offer marketing permissions on the thank you page
     updatePayerEmail(data, props.updateEmail);
 
-    const stateUpdateOk =true
-      // props.stripeAccount !== 'ONE_OFF' && (props.countryGroupId === UnitedStates || props.countryGroupId === Canada) ?
-      // updatePayerState(token, props.updateState) : true;
+    const stateUpdateOk =
+      props.stripeAccount !== 'ONE_OFF' && (props.countryGroupId === UnitedStates || props.countryGroupId === Canada) ?
+      updatePayerState(token, props.updateState) : true;
 
     const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
       updatePayerName(data, props.updateFirstName, props.updateLastName) : true;
@@ -251,7 +251,6 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
       props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
         .then(onComplete());
     } else {
-      // TODO - if anything fails at this point, can we dismiss the popup and display the error our way instead?
       props.setError('incomplete_payment_request_details', props.stripeAccount)
     }
   });
