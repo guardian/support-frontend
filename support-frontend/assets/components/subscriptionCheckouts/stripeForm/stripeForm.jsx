@@ -243,46 +243,46 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     const { stripe } = this.props;
     if (stripe) {
       stripe.elements();
+    }
 
     return (
       <span>
         {stripe && (
-          <fieldset>
-            <CardNumberWithError
-              id="card-number"
-              error={this.state.cardNumber.error}
-              label="Card number"
-              style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-              onChange={e => this.handleChange(e)}
-            />
-            <CardExpiryWithError
-              id="card-expiry"
-              error={this.state.cardExpiry.error}
-              label="Expiry date"
-              style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-              onChange={e => this.handleChange(e)}
-            />
-            <CardCvcWithError
-              id="cvc"
-              error={this.state.cardCvc.error}
-              label="CVC"
-              style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-              onChange={e => this.handleChange(e)}
-            />
-            <div className="component-stripe-submit-button">
-              <Button id="qa-stripe-submit-button" onClick={event => this.requestStripePaymentAuthorisation(event)}>
-                {this.props.buttonText}
-              </Button>
-            </div>
-            <span>{this.props.component}</span>
-            {(this.state.cardErrors.length > 0 || this.props.allErrors.length > 0)
-              && <ErrorSummary errors={[...this.props.allErrors, ...this.state.cardErrors]} />}
-          </fieldset>
-        )}
+        <fieldset>
+          <CardNumberWithError
+            id="card-number"
+            error={this.state.cardNumber.error}
+            label="Card number"
+            style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+            onChange={e => this.handleChange(e)}
+          />
+          <CardExpiryWithError
+            id="card-expiry"
+            error={this.state.cardExpiry.error}
+            label="Expiry date"
+            style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+            onChange={e => this.handleChange(e)}
+          />
+          <CardCvcWithError
+            id="cvc"
+            error={this.state.cardCvc.error}
+            label="CVC"
+            style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+            onChange={e => this.handleChange(e)}
+          />
+          <div className="component-stripe-submit-button">
+            <Button id="qa-stripe-submit-button" onClick={event => this.requestStripePaymentAuthorisation(event)}>
+              {this.props.buttonText}
+            </Button>
+          </div>
+          <span>{this.props.component}</span>
+          {(this.state.cardErrors.length > 0 || this.props.allErrors.length > 0)
+          && <ErrorSummary errors={[...this.props.allErrors, ...this.state.cardErrors]} />}
+        </fieldset>
+      )}
       </span>
     );
   }
-
 }
 
 export default injectStripe(StripeForm);
