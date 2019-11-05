@@ -426,18 +426,26 @@ const executeStripeOneOffPayment = (
   data: StripeChargeData,
   setGuestToken: (string) => void,
   setThankYouPage: (ThankYouPageStage) => void,
+  paymentAuthorisation: PaymentAuthorisation,
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage)));
+    dispatch(onPaymentResult(
+      postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage),
+      paymentAuthorisation,
+    ));
 
 const makeCreateStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,
   setGuestToken: (string) => void,
   setThankYouPage: (ThankYouPageStage) => void,
   handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
+  paymentAuthorisation: PaymentAuthorisation,
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-    dispatch(onPaymentResult(processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS)));
+    dispatch(onPaymentResult(
+      processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS),
+      paymentAuthorisation,
+    ));
 
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
@@ -497,6 +505,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
             stripeChargeDataFromCheckoutAuthorisation(paymentAuthorisation, state),
             (token: string) => dispatch(setGuestAccountCreationToken(token)),
             (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+            paymentAuthorisation,
           ));
         }
 
@@ -512,6 +521,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
               (token: string) => dispatch(setGuestAccountCreationToken(token)),
               (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
               handle3DS,
+              paymentAuthorisation,
             ));
           }
           // It shouldn't be possible to get this far without the handle3DS having been set
