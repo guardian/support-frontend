@@ -11,14 +11,14 @@ class ProductTypeRatePlansSpec extends FlatSpec with Matchers{
 
   "ProductTypeRatePlans type class" should "return the correct product rate plan for a given product type" in {
     val weekly = GuardianWeekly(GBP, Annual, Domestic)
-    weekly.productRatePlan(SANDBOX).value.description shouldBe "Guardian Weekly annual, domestic delivery"
+    weekly.productRatePlan(SANDBOX, fixedTerm = false).value.description shouldBe "Guardian Weekly annual, domestic delivery"
 
     val paper = Paper(USD, Monthly, HomeDelivery, Everyday)
-    paper.productRatePlan(SANDBOX).value.id shouldBe "2c92c0f955c3cf0f0155c5d9e2493c43"
+    paper.productRatePlan(SANDBOX, fixedTerm = false).value.id shouldBe "2c92c0f955c3cf0f0155c5d9e2493c43"
 
     val product: ProductType = weekly
 
-    product.productRatePlan(SANDBOX).value.description shouldBe "Guardian Weekly annual, domestic delivery"
+    product.productRatePlan(SANDBOX, fixedTerm = true).value.description shouldBe "Guardian Weekly one year, domestic delivery"
   }
 
 }

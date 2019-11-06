@@ -2,24 +2,25 @@ package com.gu.zuora
 
 import java.util.UUID
 
-import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
-import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
+import com.gu.support.config.TouchPointEnvironments.fromStage
+import com.gu.support.config.{Stage, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
 import com.gu.support.zuora.api._
-import org.joda.time.{DateTimeZone, LocalDate}
+import com.gu.zuora.ProductSubscriptionBuilders.allowFixedTermSubs
+import org.joda.time.{DateTimeZone, Days, LocalDate}
 
 import scala.util.{Failure, Success, Try}
 
 object ProductSubscriptionBuilders {
 
-  private def getTouchPointEnvironment(isTestUser: Boolean) = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
+  val allowFixedTermSubs = false // Feature flag to allow us to merge without switching to the new behaviour
 
   def validateRatePlan(maybeProductRatePlan: Option[ProductRatePlan[catalog.Product]], productDescription: String): ProductRatePlanId =
     maybeProductRatePlan.map(_.id) match {
@@ -49,6 +50,7 @@ object ProductSubscriptionBuilders {
       country: Country,
       maybePromoCode: Option[PromoCode],
       promotionService: PromotionService,
+      stage: Stage,
       isTestUser: Boolean
     ): SubscriptionData = {
 
@@ -58,7 +60,7 @@ object ProductSubscriptionBuilders {
         .plusDays(config.digitalPack.paymentGracePeriod)
 
 
-      val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(getTouchPointEnvironment(isTestUser)), digitalPack.describe)
+      val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(fromStage(stage, isTestUser), fixedTerm = false), digitalPack.describe)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -78,6 +80,7 @@ object ProductSubscriptionBuilders {
       maybePromoCode: Option[PromoCode],
       firstDeliveryDate: Option[LocalDate],
       promotionService: PromotionService,
+      stage: Stage,
       isTestUser: Boolean
     ): SubscriptionData = {
 
@@ -88,7 +91,7 @@ object ProductSubscriptionBuilders {
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
       }
 
-      val productRatePlanId = validateRatePlan(paper.productRatePlan(getTouchPointEnvironment(isTestUser)), paper.describe)
+      val productRatePlanId = validateRatePlan(paper.productRatePlan(fromStage(stage, isTestUser), fixedTerm = false), paper.describe)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -109,20 +112,23 @@ object ProductSubscriptionBuilders {
       firstDeliveryDate: Option[LocalDate],
       promotionService: PromotionService,
       readerType: ReaderType,
-      isTestUser: Boolean
+      stage: Stage,
+      isTestUser: Boolean,
+      contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
     ): SubscriptionData = {
-
-      val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
       val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
         case Success(value) => value
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a Guardian Weekly subscription.", e)
       }
 
-      val recurringProductRatePlanId = validateRatePlan(guardianWeekly.productRatePlan(getTouchPointEnvironment(isTestUser)), guardianWeekly.describe)
+      val environment = fromStage(stage, isTestUser)
+      val gift = allowFixedTermSubs && readerType == ReaderType.Gift
 
-      val promotionProductRatePlanId = if(maybePromoCode.contains(catalog.GuardianWeekly.SixForSixPromoCode) && guardianWeekly.billingPeriod == SixWeekly) {
-        guardianWeekly.introductoryRatePlan(getTouchPointEnvironment(isTestUser)).map(_.id).getOrElse(recurringProductRatePlanId)
+      val recurringProductRatePlanId = validateRatePlan(guardianWeekly.productRatePlan(environment, fixedTerm = gift), guardianWeekly.describe)
+
+      val promotionProductRatePlanId = if(isIntroductoryPromotion(maybePromoCode)) {
+        guardianWeekly.introductoryRatePlan(environment).map(_.id).getOrElse(recurringProductRatePlanId)
       } else recurringProductRatePlanId
 
       val subscriptionData = buildProductSubscription(
@@ -130,11 +136,15 @@ object ProductSubscriptionBuilders {
         recurringProductRatePlanId,
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate,
-        readerType = readerType
+        readerType = readerType,
+        initialTermMonths = guardianWeekly.billingPeriod.monthsInPeriod
       )
 
       applyPromoCode(promotionService, maybePromoCode, country, promotionProductRatePlanId, subscriptionData)
     }
+
+    private[this] def isIntroductoryPromotion(maybePromoCode: Option[PromoCode]) =
+      maybePromoCode.contains(catalog.GuardianWeekly.SixForSixPromoCode) && guardianWeekly.billingPeriod == SixWeekly
   }
 
 }
@@ -147,8 +157,14 @@ trait ProductSubscriptionBuilder {
     ratePlanCharges: List[RatePlanChargeData] = Nil,
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
     contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    readerType: ReaderType = ReaderType.Direct
-  ) =
+    readerType: ReaderType = ReaderType.Direct,
+    initialTermMonths: Int = 12
+  ) = {
+    val (initialTerm, autoRenew, initialTermPeriodType) = if(allowFixedTermSubs && readerType == ReaderType.Gift)
+      (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, Day)
+    else
+      (12, true, Month)
+
     SubscriptionData(
       List(
         RatePlanData(
@@ -157,8 +173,23 @@ trait ProductSubscriptionBuilder {
           Nil
         )
       ),
-      Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate, createdRequestId.toString, readerType = readerType)
+      Subscription(
+        contractEffectiveDate = contractEffectiveDate,
+        contractAcceptanceDate = contractAcceptanceDate,
+        termStartDate = contractEffectiveDate,
+        createdRequestId__c = createdRequestId.toString,
+        readerType = readerType,
+        autoRenew = autoRenew,
+        initialTerm = initialTerm,
+        initialTermPeriodType = initialTermPeriodType,
+      )
     )
+  }
+
+  def initialTermInDays(contractEffectiveDate: LocalDate, contractAcceptanceDate: LocalDate, termLengthMonths: Int): Int = {
+    val termEnd = contractAcceptanceDate.plusMonths(termLengthMonths)
+    Days.daysBetween(contractEffectiveDate, termEnd).getDays
+  }
 
   protected def applyPromoCode(
     promotionService: PromotionService,
