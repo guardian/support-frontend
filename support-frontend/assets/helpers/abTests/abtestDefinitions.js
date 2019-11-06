@@ -9,7 +9,7 @@ import {
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
-export type PaymentSecurityDesignTestVariants = 'control' | 'V1_securetop' | 'V2_securemiddle' | 'V3_securebottom' | 'V4_grey' | 'notintest'
+export type PaymentSecurityR2CreditCardTestVariants = 'control' | 'showCards';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 
@@ -90,5 +90,26 @@ export const tests: Tests = {
     seed: 10,
     targetPage: contributionsLandingPageMatch,
     canRun: () => countryGroupId !== 'GBPCountries',
+  },
+  paymentSecurityR2CreditCardTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'showCards',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 10,
+    targetPage: contributionsLandingPageMatch,
   },
 };
