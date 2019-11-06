@@ -84,7 +84,7 @@ const links: HeaderNavLink[] = [
 
 function inferCurrencyCode(countryGroupId: ?CountryGroupId = null): ?string {
   switch (countryGroupId) {
-    case UnitedStates:
+    case UnitedStates | International:
       return 'us';
     case Canada:
       return 'ca';
@@ -96,8 +96,6 @@ function inferCurrencyCode(countryGroupId: ?CountryGroupId = null): ?string {
       return 'eu';
     case NZDCountries:
       return 'nz';
-    case International:
-      return 'ca';
     default:
       return null;
   }
