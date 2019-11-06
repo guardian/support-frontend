@@ -97,7 +97,7 @@ function inferCurrencyCode(countryGroupId: ?CountryGroupId = null): ?string {
     case NZDCountries:
       return 'nz';
     case International:
-      return "int";
+      return 'int';
     default:
       return null;
   }

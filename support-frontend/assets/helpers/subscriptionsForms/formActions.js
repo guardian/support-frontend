@@ -116,10 +116,6 @@ const formActionCreators = {
     type: 'SET_ORDER_IS_GIFT',
     orderIsAGift,
   }),
-  setStripeToken: (stripeToken: Option<string>): Action => ({
-    type: 'SET_STRIPE_TOKEN',
-    stripeToken,
-  }),
   setStripePaymentMethod: (stripePaymentMethod: Option<string>): Action => ({
     type: 'SET_STRIPE_PAYMENT_METHOD',
     stripePaymentMethod,
