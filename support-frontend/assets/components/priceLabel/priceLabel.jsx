@@ -7,7 +7,7 @@ import {
   type ProductPrice,
   showPrice,
 } from 'helpers/productPrice/productPrices';
-import { Quarterly, type BillingPeriod } from 'helpers/billingPeriods';
+import { billingPeriodNoun, Quarterly, type BillingPeriod } from 'helpers/billingPeriods';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import { type Option } from 'helpers/types/option';
@@ -40,10 +40,7 @@ function PriceLabel({
       }
       {orderIsAGift && (
         <span className={tabletAndDesktop}>
-          {billingPeriod === Quarterly ?
-            <span>3 Months<br /></span> :
-            <span>A year<br /></span>
-          }
+          <span>{billingPeriodNoun(billingPeriod, orderIsAGift)}<br /></span>
         </span>)
       }
       <span className={orderIsAGift && giftStyles}>{description}</span>
