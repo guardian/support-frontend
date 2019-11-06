@@ -246,9 +246,9 @@ function withProps(props: PropTypes) {
 
   const classModifiers = ['contribution', 'with-labels'];
 
-  const showSecureStripeContainer: boolean = props.paymentSecurityDesignTestVariant !== 'control';
+  const showSecureStripeContainer: boolean = props.paymentSecurityDesignTestVariant !== 'control' || props.countryGroupId === 'GBPCountries';
   const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe && (props.stripeElementsRecurringTestVariant === 'stripeElements' || props.contributionType === 'ONE_OFF');
-  const showSecureTransactionIndicator: boolean = props.paymentSecurityDesignTestVariant === 'V3_securebottom';
+  const showSecureTransactionIndicator: boolean = props.paymentSecurityDesignTestVariant === 'V3_securebottom' && props.countryGroupId !== 'GBPCountries';
   const secureTransactionIndicatorClassNames: string[] = showSecureButtonBg ? ['bottom-grey'] : ['bottom-regular'];
 
   return (
