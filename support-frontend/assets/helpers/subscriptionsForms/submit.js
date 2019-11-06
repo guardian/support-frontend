@@ -52,7 +52,6 @@ import {
   isPhysicalProduct,
   type SubscriptionProduct,
 } from 'helpers/subscriptions';
-import { isPostDeployUser } from 'helpers/user/user';
 import { Quarterly } from 'helpers/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 import type { IsoCountry } from '../internationalisation/country';
