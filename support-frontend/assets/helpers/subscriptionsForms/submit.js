@@ -194,13 +194,17 @@ function checkStripeUserType(
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
-  stripePaymentMethodId: Option<string>,
+  stripePaymentMethodId: ?string,
 ) {
-  onAuthorised({
-    paymentMethod: Stripe,
-    stripePaymentMethod: 'StripeElements',
-    paymentMethodId: stripePaymentMethodId,
-  });
+  if (stripePaymentMethodId != null) {
+    onAuthorised({
+      paymentMethod: Stripe,
+      stripePaymentMethod: 'StripeElements',
+      paymentMethodId: stripePaymentMethodId,
+    });
+  } else {
+    throw new Error('Attempting to process Stripe Payment, however Stripe Payment Method ID is missing.');
+  }
 }
 
 function showPaymentMethod(
@@ -211,7 +215,7 @@ function showPaymentMethod(
   currency: IsoCurrency,
   country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
-  stripePaymentMethod: Option<string>,
+  stripePaymentMethod: ?string,
 ): void {
   switch (paymentMethod) {
     case Stripe:

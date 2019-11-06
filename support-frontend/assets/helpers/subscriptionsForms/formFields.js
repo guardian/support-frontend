@@ -51,7 +51,6 @@ export type FormState = {|
   isTestUser: boolean,
   productPrices: ProductPrices,
   payPalHasLoaded: boolean,
-  stripeToken: Option<string>,
   stripePaymentMethod: Option<string>,
   debugInfo: string,
 |};
