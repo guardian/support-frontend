@@ -26,7 +26,6 @@ export type StripeFormPropTypes = {
   stripeKey: string,
   setStripePaymentMethod: Function,
   submitForm: Function,
-  name: string,
   validateForm: Function,
   buttonText: string,
   stripeSetupIntentEndpoint: string,
