@@ -111,9 +111,9 @@ const TabletAndDesktop = (props: PropTypes) => (
           tabletAndDesktop={styles.tabletAndDesktop}
         />
         <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions)} />
-        {props.dataList && !props.orderIsAGift ?
+        {props.dataList && !props.orderIsAGift &&
           <DataList dataList={props.dataList} />
-        : null}
+        }
       </div>
       {props.changeSubscription ?
         <ChangeSubscription route={props.changeSubscription} />
