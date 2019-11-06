@@ -14,7 +14,6 @@ import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { type Option } from 'helpers/types/option';
 
 // Types
 
@@ -34,7 +33,7 @@ type PropTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   product: SubscriptionProduct,
   // eslint-disable-next-line react/no-unused-prop-types
-  orderIsAGift?: Option<boolean> | null,
+  orderIsAGift?: boolean,
 };
 
 type StateTypes = {
@@ -136,7 +135,7 @@ const HideDropDown = (props: {
   showDropDown: boolean,
   title: string,
   paper: boolean,
-  orderIsAGift: Option<boolean>,
+  orderIsAGift: boolean,
 }) => (
   <div className={styles.content}>
     <h1 className={styles.header}>Order summary</h1>
@@ -171,7 +170,7 @@ const ShowDropDown = (props: {
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
   title: string,
-  orderIsAGift: Option<boolean>,
+  orderIsAGift: boolean,
 }) => (
   <div className={styles.contentWrapper}>
     <h1 className={styles.headerShowDetails}>Order summary</h1>
