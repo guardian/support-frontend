@@ -37,9 +37,16 @@ object ServicesFixtures {
   val tracking = PromotionWithCode(trackingPromoCode, promotion(validProductRatePlanIds, trackingPromoCode, tracking = true))
   val renewal = PromotionWithCode(renewalPromoCode, promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true))
   val guardianWeeklyAnnual = promotion(
-    GuardianWeekly.getProductRatePlans(TouchPointEnvironments.PROD).filter(_.billingPeriod == Annual).map(_.id),
+    GuardianWeekly.getProductRatePlans(TouchPointEnvironments.PROD).filter(ratePlan => ratePlan.billingPeriod == Annual && !ratePlan.fixedTerm).map(_.id),
     GuardianWeekly.AnnualPromoCode,
     Some(DiscountBenefit(10, Some(Months.TWELVE)))
+  )
+  val guardianWeeklyAnnualGift = guardianWeeklyAnnual.copy(
+    appliesTo = AppliesTo.ukOnly(
+      GuardianWeekly.getProductRatePlans(TouchPointEnvironments.PROD)
+        .filter(ratePlan => ratePlan.billingPeriod == Annual && ratePlan.fixedTerm)
+        .map(_.id).toSet
+    )
   )
   val guardianWeeklyWithCode = PromotionWithCode(GuardianWeekly.AnnualPromoCode, guardianWeeklyAnnual)
 

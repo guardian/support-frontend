@@ -11,7 +11,7 @@ class DigitalPackCheckout(implicit val webDriver: WebDriver) extends CheckoutPag
   private val city = id("billing-city")
   private val postcode = id("billing-postcode")
 
-  def fillForm {
+  def fillForm(): Unit = {
     setValue(addressLineOne, "Kings Place")
     setValue(city, "London")
     setValue(postcode, "N19GU")

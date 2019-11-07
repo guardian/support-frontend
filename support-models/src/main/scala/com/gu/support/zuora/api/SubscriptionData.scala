@@ -7,7 +7,6 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{decodeDateTime, encodeDateTime, monthDecoder, _}
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
-import com.gu.support.zuora.api.PeriodType.fromString
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
 import org.joda.time.{LocalDate, Months}
@@ -81,6 +80,8 @@ case class IntroductoryPriceRatePlanCharge(
 
 sealed trait PeriodType
 
+case object Day extends PeriodType
+
 case object Month extends PeriodType
 
 case object Quarter extends PeriodType
@@ -93,6 +94,7 @@ object PeriodType {
 
   private def fromString(s: String) = {
     s.toLowerCase match {
+      case "day" => Day
       case "month" => Month
       case "quarter" => Quarter
       case "annual" => Annual
@@ -158,6 +160,7 @@ case class Subscription(
   termStartDate: LocalDate,
   createdRequestId__c: String,
   autoRenew: Boolean = true,
+  initialTermPeriodType: PeriodType = Month,
   initialTerm: Int = 12,
   renewalTerm: Int = 12,
   termType: String = "TERMED",

@@ -24,7 +24,10 @@ function StripeProviderForCountry(props: PropTypes) {
           component={props.component}
           submitForm={props.submitForm}
           allErrors={props.allErrors}
+          stripeKey={stripeKey}
           setStripeToken={props.setStripeToken}
+          setStripePaymentMethod={props.setStripePaymentMethod}
+          stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
           name={props.name}
           validateForm={props.validateForm}
           buttonText={props.buttonText}

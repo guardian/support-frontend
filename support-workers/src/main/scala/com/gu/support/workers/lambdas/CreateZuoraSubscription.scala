@@ -3,6 +3,7 @@ package com.gu.support.workers.lambdas
 import java.time.OffsetDateTime
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.gu.config.Configuration
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
@@ -128,11 +129,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case _: Some[GiftRecipient] => ReaderType.Gift
       case _ => ReaderType.Direct
     }
+    val stage = Configuration.stage
 
     state.product match {
       case c: Contribution => c.build(state.requestId, config)
-      case d: DigitalPack => d.build(state.requestId, config, state.user.billingAddress.country, state.promoCode, promotionService, isTestUser)
-      case p: Paper => p.build(state.requestId, state.user.billingAddress.country, state.promoCode, state.firstDeliveryDate, promotionService, isTestUser)
+      case d: DigitalPack => d.build(state.requestId, config, state.user.billingAddress.country, state.promoCode, promotionService, stage, isTestUser)
+      case p: Paper => p.build(state.requestId, state.user.billingAddress.country, state.promoCode, state.firstDeliveryDate, promotionService, stage, isTestUser)
       case w: GuardianWeekly => w.build(
         state.requestId,
         state.user.billingAddress.country,
@@ -140,6 +142,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         state.firstDeliveryDate,
         promotionService,
         readerType,
+        stage,
         isTestUser
       )
     }
