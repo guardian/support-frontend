@@ -341,7 +341,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
               isTestUser={props.isTestUser}
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-              setStripeToken={props.setStripeToken}
               setStripePaymentMethod={props.setStripePaymentMethod}
               stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
               name={`${props.firstName} ${props.lastName}`}
