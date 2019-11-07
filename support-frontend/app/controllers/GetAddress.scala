@@ -25,7 +25,7 @@ class GetAddress(
         BadRequest //The postcode was invalid
       case error =>
         SafeLogger.error(scrub"Failed to complete postcode lookup via getAddress.io due to: $error")
-        InternalServerError
+
     }
   }
 }

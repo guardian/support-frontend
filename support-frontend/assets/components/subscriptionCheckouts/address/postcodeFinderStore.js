@@ -42,10 +42,10 @@ const postcodeFinderActionCreatorsFor = (scope: AddressType) => ({
             scope,
           });
         })
-        .catch(() => {
+        .catch((reason) => {
           dispatch({
             type: 'SET_POSTCODE_FINDER_ERROR',
-            error: 'We couldn\'t find this postcode, please check and try again or enter your address below.',
+            error: err.message,
             scope,
           });
         });
