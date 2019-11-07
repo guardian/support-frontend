@@ -1,0 +1,812 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-LODASH-73639:
+    - '@babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/traverse > @babel/helper-function-name > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - '@babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+  SNYK-JS-LODASH-73638:
+    - '@babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/traverse > @babel/helper-function-name > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - '@babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+  SNYK-JS-LODASH-450202:
+    - '@babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/traverse > @babel/helper-function-name > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.191Z'
+    - '@babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - '@babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - fast-sass-loader > async > lodash:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+  'npm:atob:20180429':
+    - braces > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - micromatch > nanomatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - micromatch > braces > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - micromatch > extglob > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - micromatch > extglob > expand-brackets > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > micromatch > extglob > expand-brackets > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > braces > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > micromatch > nanomatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - schema-utils > webpack > micromatch > extglob > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - schema-utils > webpack > micromatch > braces > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - schema-utils > webpack > micromatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > braces > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > micromatch > extglob > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > micromatch > braces > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > micromatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > nanomatch > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > extglob > expand-brackets > snapdragon > source-map-resolve > atob:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+  'npm:debug:20170905':
+    - braces > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > extglob > expand-brackets > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > braces > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > nanomatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > extglob > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > braces > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > extglob > expand-brackets > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > extglob > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > nanomatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > braces > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > braces > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > micromatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > nanomatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > braces > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > extglob > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > extglob > expand-brackets > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - node-pre-gyp > tar-pack > debug:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+  SNYK-JS-SETVALUE-450213:
+    - braces > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > extglob > expand-brackets > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > nanomatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > braces > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - micromatch > extglob > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > micromatch > braces > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > micromatch > extglob > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > micromatch > nanomatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > braces > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > micromatch > extglob > expand-brackets > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.195Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > braces > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > extglob > expand-brackets > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > nanomatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > extglob > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > braces > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > micromatch > snapdragon > base > cache-base > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - braces > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - micromatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - webpack > micromatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - micromatch > nanomatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - micromatch > braces > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - micromatch > extglob > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - webpack > micromatch > braces > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - webpack > micromatch > extglob > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - schema-utils > webpack > micromatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - webpack > micromatch > nanomatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - micromatch > extglob > expand-brackets > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - webpack > micromatch > extglob > expand-brackets > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - webpack > watchpack > chokidar > braces > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - schema-utils > webpack > micromatch > braces > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - schema-utils > webpack > micromatch > extglob > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - schema-utils > webpack > micromatch > nanomatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - schema-utils > webpack > watchpack > chokidar > braces > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - schema-utils > webpack > micromatch > extglob > expand-brackets > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > base > cache-base > union-value > set-value:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+  'npm:mixin-deep:20180215':
+    - braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+  SNYK-JS-MIXINDEEP-450212:
+    - braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > extglob > expand-brackets > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > nanomatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > extglob > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > braces > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > micromatch > snapdragon > base > mixin-deep:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+  SNYK-JS-JSYAML-173999:
+    - cssnano > cosmiconfig > js-yaml:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - cssnano > cssnano-preset-default > postcss-svgo > svgo > js-yaml:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+  SNYK-JS-JSYAML-174129:
+    - cssnano > cssnano-preset-default > postcss-svgo > svgo > js-yaml:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+    - cssnano > cosmiconfig > js-yaml:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.192Z'
+  'npm:hoek:20180212':
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > sntp > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.193Z'
+      node-pre-gyp > request > hawk > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T14:20:34.898Z'
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > boom > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+      node-pre-gyp > request > hawk > boom > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T14:20:34.898Z'
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+      node-pre-gyp > request > hawk > sntp > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T14:20:34.898Z'
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > cryptiles > boom > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+      node-pre-gyp > request > hawk > cryptiles > boom > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T14:20:34.898Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > boom > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > sntp > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > hawk > cryptiles > boom > hoek:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+  'npm:stringstream:20180511':
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > stringstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > stringstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - node-pre-gyp > request > stringstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+  SNYK-JS-FSTREAM-174725:
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > tar > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > tar > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - fstream-ignore > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - node-pre-gyp > tar > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - node-pre-gyp > tar-pack > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - node-pre-gyp > tar-pack > tar > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+    - node-pre-gyp > tar-pack > fstream-ignore > fstream:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+  'npm:sshpk:20180409':
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > http-signature > sshpk:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > http-signature > sshpk:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - node-pre-gyp > request > http-signature > sshpk:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+  'npm:extend:20180424':
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > extend:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > extend:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - node-pre-gyp > request > extend:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.199Z'
+  'npm:deep-extend:20180409':
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > rc > deep-extend:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > rc > deep-extend:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+    - node-pre-gyp > rc > deep-extend:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+  'npm:chownr:20180731':
+    - schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > cacache > chownr:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - uglifyjs-webpack-plugin > cacache > chownr:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+  'npm:braces:20180219':
+    - schema-utils > webpack > watchpack > chokidar > anymatch > micromatch > braces:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - schema-utils > webpack > watchpack > chokidar > braces:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.194Z'
+    - webpack > watchpack > chokidar > braces:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+    - webpack > watchpack > chokidar > anymatch > micromatch > braces:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.197Z'
+  SNYK-JS-TAR-174125:
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > tar:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > tar:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - node-pre-gyp > tar:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - node-pre-gyp > tar-pack > tar:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+  'npm:tough-cookie:20170905':
+    - schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.196Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.198Z'
+  'npm:cryptiles:20180710':
+    - node-pre-gyp > request > hawk > cryptiles:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+  'snyk:lic:npm:axe-core:MPL-2.0':
+    - react-axe > axe-core:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+  'snyk:lic:npm:mdn-data:MPL-2.0':
+    - cssnano > cssnano-preset-default > postcss-svgo > svgo > css-tree > mdn-data:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+    - cssnano > cssnano-preset-default > postcss-svgo > svgo > csso > css-tree > mdn-data:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+  'snyk:lic:npm:react-axe:MPL-2.0':
+    - react-axe:
+        reason: 'JTL: No upgrade available as of 5 November 2019'
+        expires: '2019-12-05T11:19:52.200Z'
+patch: {}
