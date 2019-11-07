@@ -6,3 +6,8 @@ case class FailedDigitalPackEmailFields(email: String, identityUserId: IdentityU
   override def userId: Either[SfContactId, IdentityUserId] = Right(identityUserId)
   override def payload: String = super.payload(email, "digipack-failed")
 }
+
+case class FailedPaperEmailFields(email: String, identityUserId: IdentityUserId) extends EmailFields {
+  override def userId: Either[SfContactId, IdentityUserId] = Right(identityUserId)
+  override def payload: String = super.payload(email, "print-failed")
+}
