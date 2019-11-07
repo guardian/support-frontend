@@ -42,6 +42,10 @@ import {
 } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
+import {
+  type CountryGroupId,
+  detect,
+} from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -111,11 +115,13 @@ function withProps(props: PropTypes) {
   const fullExistingPaymentMethods: RecentlySignedInExistingPaymentMethod[] =
     ((props.existingPaymentMethods || []).filter(isUsableExistingPaymentMethod): any);
 
+  const countryGroupId: CountryGroupId = detect();
+
   const legendSimple = (
     <legend id="payment_method" className="form__legend"><h3>Payment method</h3></legend>
   );
 
-  const legend = props.paymentSecurityDesignTestVariant === 'V2_securemiddle' ?
+  const legend = props.paymentSecurityDesignTestVariant === 'V2_securemiddle' && countryGroupId !== 'GBPCountries' ?
     (
       <div className="secure-transaction">
         {legendSimple} <SecureTransactionIndicator modifierClasses={['middle']} />
