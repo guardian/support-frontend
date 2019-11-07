@@ -30,7 +30,13 @@ type PropTypes = {|
   otherAmounts: OtherAmounts,
 |};
 
-const enabledForRecurring = (): boolean => !!window.guardian.recurringStripePaymentRequestButton;
+const enabledForRecurring = (): boolean => {
+  const hashUrl = (new URL(document.URL)).hash;
+  if (hashUrl === "#recurringStripePaymentRequestButton") {
+    return true
+  }
+  return !!window.guardian.recurringStripePaymentRequestButton;
+}
 
 // ----- Component ----- //
 
