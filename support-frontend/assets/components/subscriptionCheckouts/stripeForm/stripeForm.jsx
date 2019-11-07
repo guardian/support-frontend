@@ -24,10 +24,8 @@ export type StripeFormPropTypes = {
   stripe: Object,
   allErrors: FormError<FormField>[],
   stripeKey: string,
-  setStripeToken: Function,
   setStripePaymentMethod: Function,
   submitForm: Function,
-  name: string,
   validateForm: Function,
   buttonText: string,
   stripeSetupIntentEndpoint: string,
@@ -206,18 +204,6 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     });
   }
 
-  requestStripeToken = (event) => {
-    event.preventDefault();
-    this.props.validateForm();
-    this.handleCardErrors();
-    if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
-      const { stripe } = this.props;
-      stripe.createToken({ type: 'card', name: this.props.name })
-        .then(({ token }) => this.props.setStripeToken(token.id))
-        .then(() => this.props.submitForm());
-    }
-  };
-
   requestSCAPaymentMethod = (event) => {
     event.preventDefault();
     this.props.validateForm();
@@ -228,14 +214,6 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       this.handleCardSetup(this.state.setupIntentClientSecret).then((paymentMethod) => {
         this.props.setStripePaymentMethod(paymentMethod);
       }).then(() => this.props.submitForm());
-    }
-  };
-
-  requestStripePaymentAuthorisation = (event) => {
-    if (window.guardian.stripeElementsSubscriptions) {
-      this.requestSCAPaymentMethod(event);
-    } else {
-      this.requestStripeToken(event);
     }
   };
 
@@ -271,7 +249,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
             onChange={e => this.handleChange(e)}
           />
           <div className="component-stripe-submit-button">
-            <Button id="qa-stripe-submit-button" onClick={event => this.requestStripePaymentAuthorisation(event)}>
+            <Button id="qa-stripe-submit-button" onClick={event => this.requestSCAPaymentMethod(event)}>
               {this.props.buttonText}
             </Button>
           </div>

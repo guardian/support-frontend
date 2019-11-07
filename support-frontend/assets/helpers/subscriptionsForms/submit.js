@@ -52,7 +52,6 @@ import {
   isPhysicalProduct,
   type SubscriptionProduct,
 } from 'helpers/subscriptions';
-import { isPostDeployUser } from 'helpers/user/user';
 import { Quarterly } from 'helpers/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 import type { IsoCountry } from '../internationalisation/country';
@@ -195,36 +194,16 @@ function checkStripeUserType(
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
-  stripeToken: Option<string>,
   stripePaymentMethodId: Option<string>,
 ) {
-
-  if (isPostDeployUser()) {
-    if (window.guardian.stripeElementsSubscriptions && (stripePaymentMethodId != null)) {
-      onAuthorised({
-        paymentMethod: Stripe,
-        stripePaymentMethod: 'StripeElements',
-        paymentMethodId: stripePaymentMethodId,
-      });
-    } else {
-      onAuthorised({
-        paymentMethod: Stripe,
-        token: 'tok_visa',
-        stripePaymentMethod: 'StripeCheckout',
-      });
-    }
-  } else if (window.guardian.stripeElementsSubscriptions && (stripePaymentMethodId != null)) {
+  if (stripePaymentMethodId != null) {
     onAuthorised({
       paymentMethod: Stripe,
       stripePaymentMethod: 'StripeElements',
       paymentMethodId: stripePaymentMethodId,
     });
   } else {
-    onAuthorised({
-      paymentMethod: Stripe,
-      token: stripeToken || '',
-      stripePaymentMethod: 'StripeElements',
-    });
+    throw new Error('Attempting to process Stripe Payment, however Stripe Payment Method ID is missing.');
   }
 }
 
@@ -236,12 +215,11 @@ function showPaymentMethod(
   currency: IsoCurrency,
   country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
-  stripeToken: Option<string>,
   stripePaymentMethod: Option<string>,
 ): void {
   switch (paymentMethod) {
     case Stripe:
-      checkStripeUserType(onAuthorised, isTestUser, price, currency, stripeToken, stripePaymentMethod);
+      checkStripeUserType(onAuthorised, isTestUser, price, currency, stripePaymentMethod);
       break;
     case DirectDebit:
       dispatch(openDirectDebitPopUp());
@@ -297,7 +275,6 @@ function submitForm(
 
   const { price, currency } = priceDetails;
   const currencyId = getCurrency(billingCountry);
-  const stripeToken = paymentMethod === Stripe ? state.page.checkout.stripeToken : null;
   const stripePaymentMethod = paymentMethod === Stripe ? state.page.checkout.stripePaymentMethod : null;
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
@@ -316,7 +293,6 @@ function submitForm(
     currency,
     billingCountry,
     paymentMethod,
-    stripeToken,
     stripePaymentMethod,
   );
 }
