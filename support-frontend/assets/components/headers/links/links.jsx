@@ -8,12 +8,9 @@ import { type Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
-  AUDCountries,
-  Canada,
-  type CountryGroupId, EURCountries,
-  GBPCountries, International, NZDCountries,
-  UnitedStates,
+  type CountryGroupId, GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 // types
 type HeaderNavLink = {
@@ -82,25 +79,8 @@ const links: HeaderNavLink[] = [
 ];
 
 
-function inferCurrencyCode(countryGroupId: ?CountryGroupId = null): ?string {
-  switch (countryGroupId) {
-    case UnitedStates:
-      return 'us';
-    case Canada:
-      return 'ca';
-    case GBPCountries:
-      return 'uk';
-    case AUDCountries:
-      return 'au';
-    case EURCountries:
-      return 'eu';
-    case NZDCountries:
-      return 'nz';
-    case International:
-      return "int";
-    default:
-      return null;
-  }
+function internationalisationID(countryGroupId: ?CountryGroupId = null): ?string {
+  return countryGroups[countryGroupId].supportInternationalisationId;
 }
 
 // Export
@@ -123,13 +103,13 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
         // Otherwise return true.
         return true;
       }).map((link) => {
-        const currencyPrefix = inferCurrencyCode(countryGroupId);
+        const internationalisationIDValue = internationalisationID(countryGroupId);
 
-        if (currencyPrefix == null || !link.internal) {
+        if (internationalisationIDValue == null || !link.internal) {
           return link;
         }
 
-        return { ...link, href: `/${currencyPrefix}${link.href}` };
+        return { ...link, href: `/${internationalisationIDValue}${link.href}` };
       }).map(({
         href, text, trackAs, opensInNewWindow, additionalClasses,
       }) => (
