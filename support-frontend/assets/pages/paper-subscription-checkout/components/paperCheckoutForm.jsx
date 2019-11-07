@@ -70,6 +70,7 @@ import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidat
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
+import { getGlobal } from 'helpers/globals';
 
 // ----- Types ----- //
 
@@ -86,6 +87,7 @@ type PropTypes = {|
   country: IsoCountry,
   isTestUser: boolean,
   validateForm: () => Function,
+  stripeSetupIntentEndpoint: string,
 |};
 
 // ----- Map State/Props ----- //
@@ -100,6 +102,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     deliveryAddressErrors: state.page.billingAddress.fields.formErrors,
     isTestUser: state.page.checkout.isTestUser,
     country: state.common.internationalisation.countryId,
+    stripeSetupIntentEndpoint: getGlobal('stripeSetupIntentEndpoint'),
   };
 }
 
@@ -297,6 +300,8 @@ function PaperCheckoutForm(props: PropTypes) {
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
               setStripeToken={props.setStripeToken}
+              setStripePaymentMethod={props.setStripePaymentMethod}
+              stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Pay now"

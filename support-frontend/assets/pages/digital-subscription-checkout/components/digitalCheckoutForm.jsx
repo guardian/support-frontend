@@ -66,6 +66,7 @@ import {
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
+import { getGlobal } from 'helpers/globals';
 
 
 // ----- Types ----- //
@@ -75,6 +76,7 @@ type PropTypes = {|
   country: IsoCountry,
   signOut: typeof signOut,
   submitForm: Function,
+
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
@@ -89,6 +91,7 @@ type PropTypes = {|
   validateForm: () => Function,
   formIsValid: Function,
   addressErrors: Array<Object>,
+  stripeSetupIntentEndpoint: string,
 |};
 
 // ----- Map State/Props ----- //
@@ -112,6 +115,7 @@ function mapStateToProps(state: CheckoutState) {
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
     addressErrors: state.page.billingAddress.fields.formErrors,
+    stripeSetupIntentEndpoint: getGlobal('stripeSetupIntentEndpoint'),
   };
 }
 
@@ -245,6 +249,8 @@ function DigitalCheckoutForm(props: PropTypes) {
               submitForm={props.submitForm}
               allErrors={[...props.addressErrors]}
               setStripeToken={props.setStripeToken}
+              setStripePaymentMethod={props.setStripePaymentMethod}
+              stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Start your free trial now"

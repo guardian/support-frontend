@@ -44,13 +44,13 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     case _ => Future.successful(None)
   }
 
-  def getProductRatePlanId(product: ProductType, isTestUser: Boolean): ProductRatePlanId = {
+  def getProductRatePlanId(product: ProductType, isTestUser: Boolean, isGift: Boolean): ProductRatePlanId = {
     val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
-    product.productRatePlan(touchpointEnvironment).map(_.id).getOrElse("")
+    product.productRatePlan(touchpointEnvironment, isGift).map(_.id).getOrElse("")
   }
 
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
-    val productRatePlanId =  getProductRatePlanId(state.product, state.user.isTestUser)
+    val productRatePlanId =  getProductRatePlanId(state.product, state.user.isTestUser, state.giftRecipient.isDefined)
     val maybePromotion = getAppliedPromotion(
       servicesProvider.forUser(state.user.isTestUser).promotionService,
       state.promoCode,

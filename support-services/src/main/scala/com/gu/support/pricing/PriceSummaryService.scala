@@ -13,17 +13,23 @@ import scala.math.BigDecimal.RoundingMode
 class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
-  def getPrices[T <: Product](product: T, promoCodes: List[PromoCode]): ProductPrices = {
+  def getPrices[T <: Product](product: T, promoCodes: List[PromoCode], fixedTerm: Boolean = false): ProductPrices = {
     val promotions = promotionService.findPromotions(promoCodes)
     product.supportedCountries(catalogService.environment).map(
       countryGroup =>
-        countryGroup -> getPricesForCountryGroup(product, countryGroup, promotions)
+        countryGroup -> getPricesForCountryGroup(product, countryGroup, promotions, fixedTerm)
     ).toMap
   }
 
 
-  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, promotions: List[PromotionWithCode]): CountryGroupPrices = {
-    val grouped = product.ratePlans(catalogService.environment).groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
+  def getPricesForCountryGroup[T <: Product](
+    product: T,
+    countryGroup: CountryGroup,
+    promotions: List[PromotionWithCode],
+    fixedTerm: Boolean = false
+  ): CountryGroupPrices = {
+    val ratePlans = product.ratePlans(catalogService.environment).filter(_.fixedTerm == fixedTerm)
+    val grouped = ratePlans.groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
       case (keys, productRatePlans) =>
         val priceSummaries = for {
           productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)

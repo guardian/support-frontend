@@ -99,7 +99,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
                 Map(GBP -> PriceSummary(10, GBP, Nil))))))
       val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
       val priceSummaryService = mock[PriceSummaryService]
-      when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]])).thenReturn(prices)
+      when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[Boolean])).thenReturn(prices)
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
 
       new DigitalSubscription(
