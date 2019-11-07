@@ -5,7 +5,6 @@ import { getCampaignName } from 'helpers/campaigns';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
-export type LandingPageMomentBackgroundColourTestVariants = 'control' | 'yellow' | 'notintest';
 export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
 export type PaymentSecurityDesignTestVariants = 'control' | 'V1_securetop' | 'V2_securemiddle' | 'V3_securebottom' | 'V4_grey'
 
@@ -56,28 +55,6 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-  landingPageMomentBackgroundColour: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'yellow',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 7,
-    canRun: () => !!getCampaignName(),
-  },
-
   digitalPackProductPageTest: {
     type: 'OTHER',
     variants: [
@@ -100,6 +77,7 @@ export const tests: Tests = {
     targetPage: '/(uk|us|eu|au|ca|nz|int)/subscribe/digital$',
     optimizeId: 'emQ5nZJCS5mZkhtwwqfx5Q',
   },
+
   paymentSecurityDesignTest: {
     type: 'OTHER',
     variants: [
