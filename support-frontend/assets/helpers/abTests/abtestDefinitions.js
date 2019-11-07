@@ -1,7 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
 import { get as getCookie } from 'helpers/cookie';
-import { getCampaignName } from 'helpers/campaigns';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';

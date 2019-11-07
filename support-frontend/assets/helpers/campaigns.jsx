@@ -1,6 +1,7 @@
 // @flow
-
+/* eslint-disable no-unused-vars
 import React from 'react';
+ */
 import type { ContributionTypes } from 'helpers/contributions';
 
 export type TickerType = 'unlimited' | 'hardstop';
@@ -30,11 +31,9 @@ export type Campaigns = {
 
 const currentCampaignName = null;
 
-const campaignEditorialLink = null;
-
 export const campaigns: Campaigns = {
-  [currentCampaignName || '']: {}
-}
+  [currentCampaignName || '']: {},
+};
 
 export type CampaignName = $Keys<typeof campaigns>
 
