@@ -7,8 +7,14 @@ export type PostcodeFinderResult = {|
   city?: string,
 |};
 
-const getAddressesForPostcode = (postcode: string): Promise<PostcodeFinderResult[]> =>
-  fetch(postcodeLookupUrl(postcode))
-    .then(res => res.json());
+const getAddressesForPostcode = (postcode: string): Promise<PostcodeFinderResult[]> => {
+
+  if (window.guardian.checkoutPostcodeLookup) {
+    return fetch(postcodeLookupUrl(postcode))
+      .then(res => res.json());
+  }
+  return Promise.resolve([]);
+
+};
 
 export { getAddressesForPostcode };
