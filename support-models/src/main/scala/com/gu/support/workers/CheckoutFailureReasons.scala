@@ -13,6 +13,7 @@ object CheckoutFailureReasons {
     PaymentMethodUnacceptable,
     PaymentProviderUnavailable,
     PaymentRecentlyTaken,
+    AccountMismatch,
     Unknown
   )
 
@@ -44,6 +45,10 @@ object CheckoutFailureReasons {
 
   case object PaymentRecentlyTaken extends CheckoutFailureReason {
     override def asString: String = "payment_recently_taken"
+  }
+
+  case object AccountMismatch extends CheckoutFailureReason {
+    override def asString = "production_test_account_mismatch"
   }
 
   case object Unknown extends CheckoutFailureReason {
