@@ -24,7 +24,7 @@ import {
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import { type CountryGroupId, Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import type {CaState, IsoCountry, UsState} from 'helpers/internationalisation/country';
+import type { CaState, IsoCountry, UsState } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type {
   State,
@@ -144,10 +144,10 @@ function updatePayerState(token: Object, setState: (UsState | CaState | null) =>
   if (state) {
     setState(state);
     return true;
-  } else {
-    logException('Missing address_state in payment request token');
-    return false;
   }
+  logException('Missing address_state in payment request token');
+  return false;
+
 }
 
 // Calling the complete function will close the pop up payment window
@@ -213,7 +213,7 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
 
     const stateUpdateOk =
       props.stripeAccount !== 'ONE_OFF' && (props.countryGroupId === UnitedStates || props.countryGroupId === Canada) ?
-      updatePayerState(token, props.updateState) : true;
+        updatePayerState(token, props.updateState) : true;
 
     const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
       updatePayerName(data, props.updateFirstName, props.updateLastName) : true;
