@@ -83,13 +83,9 @@ function internationalisationID(countryGroupId: ?CountryGroupId = null): ?string
 
   if (countryGroupId != null) {
     const group = countryGroups[countryGroupId];
-
-    if (typeof group !== 'undefined' && group != null) {
-      return group.supportInternationalisationId;
-    }
-    return null;
-
+    return group ? group.supportInternationalisationId : null;
   }
+
   return null;
 
 }
