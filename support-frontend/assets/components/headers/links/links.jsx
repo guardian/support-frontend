@@ -80,7 +80,18 @@ const links: HeaderNavLink[] = [
 
 
 function internationalisationID(countryGroupId: ?CountryGroupId = null): ?string {
-  return countryGroups[countryGroupId].supportInternationalisationId;
+
+  if (countryGroupId != null) {
+    let group = countryGroups[countryGroupId];
+
+    if (typeof  group !== 'undefined' && group != null) {
+      return group.supportInternationalisationId
+    } else {
+      return null;
+    }
+  } else {
+    return null
+  }
 }
 
 // Export
