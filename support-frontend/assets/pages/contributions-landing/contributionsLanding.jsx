@@ -93,7 +93,7 @@ const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campai
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
 
-const showSecureTransactionIndicator = (store.getState().common.abParticipations.paymentSecurityDesignTest === 'V1_securetop' && countryGroupId !== 'GBPCountries')
+const showSecureTransactionIndicator = store.getState().common.abParticipations.paymentSecurityDesignTest === 'V1_securetop'
 || countryGroupId === 'GBPCountries' ? <SecureTransactionIndicator modifierClasses={['top']} /> : null;
 
 function contributionsLandingPage(campaignCodeParameter: ?string) {
