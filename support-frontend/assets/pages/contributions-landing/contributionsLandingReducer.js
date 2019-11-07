@@ -58,6 +58,7 @@ export type StripePaymentRequestButtonData = {
   paymentMethod: 'none' | StripePaymentMethod | null,
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
+  paymentError: ErrorReason | null,
 }
 
 export type Stripe3DSResult = {
@@ -155,11 +156,13 @@ function createFormReducer() {
         paymentMethod: null,
         stripePaymentRequestObject: null,
         stripePaymentRequestButtonClicked: false,
+        paymentError: null,
       },
       REGULAR: {
         paymentMethod: null,
         stripePaymentRequestObject: null,
         stripePaymentRequestButtonClicked: false,
+        paymentError: null,
       },
     },
     stripeCardFormData: {
@@ -315,6 +318,18 @@ function createFormReducer() {
             [action.stripeAccount]: {
               ...state.stripePaymentRequestButtonData[action.stripeAccount],
               stripePaymentRequestButtonClicked: true,
+            },
+          },
+        };
+
+      case 'SET_STRIPE_PAYMENT_REQUEST_ERROR':
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            [action.stripeAccount]: {
+              ...state.stripePaymentRequestButtonData[action.stripeAccount],
+              paymentError: action.paymentError,
             },
           },
         };

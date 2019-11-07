@@ -248,7 +248,6 @@ function DigitalCheckoutForm(props: PropTypes) {
               component={<PriceSummary />}
               submitForm={props.submitForm}
               allErrors={[...props.addressErrors]}
-              setStripeToken={props.setStripeToken}
               setStripePaymentMethod={props.setStripePaymentMethod}
               stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
               name={`${props.firstName} ${props.lastName}`}

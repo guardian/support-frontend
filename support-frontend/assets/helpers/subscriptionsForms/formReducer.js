@@ -55,8 +55,7 @@ function createFormReducer(
     productOption: productOption || NoProductOptions,
     fulfilmentOption: fulfilmentOption || NoFulfilmentOptions,
     payPalHasLoaded: false,
-    orderIsAGift,
-    stripeToken: null,
+    orderIsAGift: false,
     stripePaymentMethod: null,
     deliveryInstructions: null,
     debugInfo: '',
@@ -141,9 +140,6 @@ function createFormReducer(
 
       case 'SET_ORDER_IS_GIFT':
         return { ...state, orderIsAGift: action.orderIsAGift };
-
-      case 'SET_STRIPE_TOKEN':
-        return { ...state, stripeToken: action.stripeToken };
 
       case 'SET_STRIPE_PAYMENT_METHOD':
         return { ...state, stripePaymentMethod: action.stripePaymentMethod };
