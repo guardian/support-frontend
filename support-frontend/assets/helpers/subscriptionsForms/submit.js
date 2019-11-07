@@ -194,7 +194,7 @@ function checkStripeUserType(
   isTestUser: boolean,
   price: number,
   currency: IsoCurrency,
-  stripePaymentMethodId: ?string,
+  stripePaymentMethodId: Option<string>,
 ) {
   if (stripePaymentMethodId != null) {
     onAuthorised({
@@ -215,7 +215,7 @@ function showPaymentMethod(
   currency: IsoCurrency,
   country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
-  stripePaymentMethod: ?string,
+  stripePaymentMethod: Option<string>,
 ): void {
   switch (paymentMethod) {
     case Stripe:
