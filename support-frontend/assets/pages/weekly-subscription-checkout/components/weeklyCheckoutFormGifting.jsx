@@ -19,7 +19,10 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
-import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
+import Form, {
+  FormSection,
+  FormSectionHiddenUntilSelected,
+} from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -59,7 +62,10 @@ import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { routes } from 'helpers/routes';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
-import { addressActionCreatorsFor, type SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import {
+  addressActionCreatorsFor,
+  type SetCountryChangedAction,
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
 import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
@@ -68,10 +74,10 @@ import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Heading from 'components/heading/heading';
+import './weeklyCheckout.scss';
+import { getGlobal } from 'helpers/globals';
 
 // ----- Styles ----- //
-
-import './weeklyCheckout.scss';
 
 // ----- Types ----- //
 
@@ -91,6 +97,7 @@ type PropTypes = {|
   country: IsoCountry,
   isTestUser: boolean,
   validateForm: () => Function,
+  stripeSetupIntentEndpoint: string
 |};
 
 // ----- Map State/Props ----- //
@@ -109,6 +116,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     billingAddressErrors: state.page.billingAddress.fields.formErrors,
     isTestUser: state.page.checkout.isTestUser,
     country: state.common.internationalisation.countryId,
+    stripeSetupIntentEndpoint: getGlobal('stripeSetupIntentEndpoint'),
   };
 }
 
@@ -323,7 +331,8 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               isTestUser={props.isTestUser}
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-              setStripeToken={props.setStripeToken}
+              setStripePaymentMethod={props.setStripePaymentMethod}
+              stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Pay now"
