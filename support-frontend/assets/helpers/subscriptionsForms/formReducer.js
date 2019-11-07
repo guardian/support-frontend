@@ -55,7 +55,7 @@ function createFormReducer(
     productOption: productOption || NoProductOptions,
     fulfilmentOption: fulfilmentOption || NoFulfilmentOptions,
     payPalHasLoaded: false,
-    orderIsAGift: false,
+    orderIsAGift,
     stripePaymentMethod: null,
     deliveryInstructions: null,
     debugInfo: '',
