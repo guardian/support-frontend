@@ -4,40 +4,42 @@
 
 import { renderPage } from 'helpers/render';
 import React from 'react';
-import { Provider, connect } from 'react-redux';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
+import { Provider } from 'react-redux';
+import {
+  AUDCountries,
+  Canada,
+  type CountryGroupId,
+  detect,
+  EURCountries,
+  GBPCountries,
+  International,
+  NZDCountries,
+  UnitedStates,
+} from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
-import Footer, { FooterCentered } from 'components/footer/footer';
+import { FooterCentered } from 'components/footer/footer';
 
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
-import { CampaignHeaderB } from './componentsB/digitalSubscriptionLandingHeader';
 import ProductBlock from './components/productBlock';
-import PromotionPopUp from './componentsB/promotionPopUp';
 
 import './digitalSubscriptionLanding.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
-import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
-import { isPostDeployUser } from 'helpers/user/user';
+import digitalSubscriptionLandingReducer
+  from './digitalSubscriptionLandingReducer';
 import { dpSale, flashSaleIsActive } from 'helpers/flashSale';
 import { DigitalPack } from 'helpers/subscriptions';
 import CallToAction from './components/cta';
-import ProductBlockB from './componentsB/productBlockB/productBlockB';
-import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
-
 // ----- Styles ----- //
 import './components/digitalSubscriptionLanding.scss';
-import './componentsB/theMoment.scss';
 
 // ----- Redux Store ----- //
 
@@ -73,79 +75,37 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
-const mapStateToProps = (state) => {
-  const { digitalPackProductPageTest } = state.common.abParticipations;
-
-  const dailyEditionsVariant = digitalPackProductPageTest === 'newPage'
-    && !isPostDeployUser();
-
-  return {
-    dailyEditionsVariant,
-  };
-};
-
-type Props = {
-  dailyEditionsVariant: boolean,
-}
-
 // ----- Render ----- //
-function LandingPage(props: Props) {
-  const { dailyEditionsVariant } = props;
+function LandingPage() {
 
   // We can't cope with multiple promo codes in the current design
   const promoCode = flashSaleIsActive(DigitalPack, countryGroupId) ? dpSale.promoCode : null;
 
-  if (dailyEditionsVariant) {
-    return (
-      <Page
-        header={<CountrySwitcherHeader />}
-        footer={
-          <FooterCentered>
-            <FaqsAndHelp
-              selectedCountryGroup={countryGroupId}
-              promoCode={promoCode}
-            />
-            <SubscriptionFaq subscriptionProduct="DigitalPack" />
-          </FooterCentered>}
-      >
-        <CampaignHeader countryGroupId={countryGroupId} />
-        <ProductBlock />
-        <CallToAction dailyEditionsVariant={dailyEditionsVariant} />
-        <TermsAndConditions />
-        <ConsentBanner />
-      </Page>
-    );
-  }
   return (
     <Page
       header={<CountrySwitcherHeader />}
       footer={
-        <Footer>
-          <CustomerService
+        <FooterCentered>
+          <FaqsAndHelp
             selectedCountryGroup={countryGroupId}
             promoCode={promoCode}
           />
           <SubscriptionFaq subscriptionProduct="DigitalPack" />
-        </Footer>}
+        </FooterCentered>}
     >
-      <CampaignHeaderB
-        countryGroupId={countryGroupId}
-        dailyEditionsVariant={dailyEditionsVariant}
-      />
-      <ProductBlockB />
-      <AdFreeSectionB />
-      <PromotionPopUp />
+      <CampaignHeader countryGroupId={countryGroupId} />
+      <ProductBlock />
+      <CallToAction />
+      <TermsAndConditions />
       <ConsentBanner />
     </Page>
   );
 
 }
 
-const ConnectedLandingPage = connect(mapStateToProps)(LandingPage);
-
 const content = (
   <Provider store={store}>
-    <ConnectedLandingPage />
+    <LandingPage />
   </Provider>
 );
 

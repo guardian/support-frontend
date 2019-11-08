@@ -2,31 +2,30 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
 // components
 import ProductOption, {
-  ProductOptionContent,
-  ProductOptionTitle,
-  ProductOptionOffer,
   ProductOptionButton,
+  ProductOptionContent,
+  ProductOptionOffer,
+  ProductOptionTitle,
 } from 'components/productOption/productOption';
-import { mapStateToProps } from './helpers/paymentSelection';
-import { type PaymentOption } from './helpers/paymentSelection';
-
+import {
+  mapStateToProps,
+  type PaymentOption,
+} from './helpers/paymentSelection';
 // styles
 import './paymentSelection.scss';
 
 type PropTypes = {
   paymentOptions: Array<PaymentOption>,
-  dailyEditionsVariant: boolean,
 }
 
-const PaymentSelection = ({ paymentOptions, dailyEditionsVariant }: PropTypes) => (
+const PaymentSelection = ({ paymentOptions }: PropTypes) => (
   <div className="payment-selection">
     {
         (paymentOptions.map(paymentOption => (
-          <div className={dailyEditionsVariant ? 'payment-selection__card payment-selection__card--A' : 'payment-selection__card'}>
-            <span className={dailyEditionsVariant ? 'product-option__label product-option__label--A' : 'product-option__label'}>
+          <div className={'payment-selection__card payment-selection__card'}>
+            <span className={'product-option__label product-option__label'}>
               {paymentOption.label}
             </span>
             <ProductOption>

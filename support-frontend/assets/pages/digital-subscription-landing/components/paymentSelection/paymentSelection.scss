@@ -12,7 +12,7 @@
     margin-top: 0;
     padding-left: 0;
   }
-  
+
   @include mq($from: leftCol) {
     padding-left: 0;
   }
@@ -31,17 +31,17 @@
     width: 320px;
   }
 
-  .product-option__label--A {
+  .product-option__label {
     background-color: #ffe500;
     color: gu-colour(neutral-7);
   }
 }
 
-div.payment-selection__card--A {
+div.payment-selection__card {
   margin-left: 0;
 }
 
-div.payment-selection__card--A:nth-of-type(2) {
+div.payment-selection__card:nth-of-type(2) {
   margin-left: 0;
 
   .product-option {
@@ -58,19 +58,19 @@ div.payment-selection__card--A:nth-of-type(2) {
     @include mq($from:tablet) {
       margin-left: 20px;
     }
-    
+
     @include mq($from:leftCol) {
       margin-left: 40px;
     }
-    
+
     @include mq($from:wide) {
       margin-left: 50px;
     }
   }
 
   .payment-selection__card:last-of-type {
-    margin: 30px 10px 20px 0px;
-  
+    margin: 30px 10px 20px 0;
+
     @include mq($from: tablet) {
       margin: 0 0 0 20px;
     }
