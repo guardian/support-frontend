@@ -45,7 +45,7 @@ const postcodeFinderActionCreatorsFor = (scope: AddressType) => ({
         .catch((reason) => {
           dispatch({
             type: 'SET_POSTCODE_FINDER_ERROR',
-            error: err.message,
+            error: reason.message,
             scope,
           });
         });
