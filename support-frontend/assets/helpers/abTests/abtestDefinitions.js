@@ -60,29 +60,6 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-  digitalPackProductPageTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'newPage',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 9,
-    targetPage: '/(uk|us|eu|au|ca|nz|int)/subscribe/digital$',
-    optimizeId: 'emQ5nZJCS5mZkhtwwqfx5Q',
-  },
-
   paymentSecurityDesignTest: {
     type: 'OTHER',
     variants: [
