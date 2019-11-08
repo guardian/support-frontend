@@ -40,7 +40,6 @@ import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
 // ----- Styles ----- //
 import './components/digitalSubscriptionLanding.scss';
-import './componentsB/theMoment.scss';
 
 // ----- Redux Store ----- //
 
