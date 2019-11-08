@@ -50,6 +50,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) = {
     SafeLogger.info(s"Attempting to handle error $error")
+    val pattern = "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => exitHandler(
         state,
@@ -60,6 +61,11 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
         state,
         toCheckoutFailureReason(se),
         requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
+      )
+      case Some(StripeError("invalid_request_error", pattern(message), _, _, _)) => exitHandler(
+        state,
+        AccountMismatch,
+        requestInfo.appendMessage(message)
       )
       case _ => exitHandler(
         state,
