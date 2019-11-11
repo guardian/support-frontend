@@ -13,6 +13,7 @@ function handleErrors(response: Response) {
   if (response.ok) {
     return response;
   }
+
   if (response.status === 500) {
     throw new Error('External address service temporarily unavailable. Please proceed with checkout. We apologise for the inconvenience');
   } else if (response.status === 400) {
@@ -25,7 +26,9 @@ function handleErrors(response: Response) {
 
 const getAddressesForPostcode = (postcode: string): Promise<PostcodeFinderResult[]> => {
 
-  if (getGlobal('checkoutPostcodeLookup')) {
+  const postcodeLookup = getGlobal('checkoutPostcodeLookup');
+
+  if (postcodeLookup) {
     return fetch(postcodeLookupUrl(postcode))
       .then(handleErrors)
       .then(res => res.json());
