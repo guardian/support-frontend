@@ -22,21 +22,30 @@ import {
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
-import { type CountryGroupId, Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
+import {
+  Canada,
+  type CountryGroupId,
+  UnitedStates,
+} from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import type { CaState, IsoCountry, UsState } from 'helpers/internationalisation/country';
+import type {
+  CaState,
+  IsoCountry,
+  UsState,
+} from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type {
   State,
   StripePaymentRequestButtonData,
 } from 'pages/contributions-landing/contributionsLandingReducer';
+import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
   onThirdPartyPaymentAuthorised,
+  paymentWaiting as setPaymentWaiting,
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
-  setStripePaymentRequestObject,
   setStripePaymentRequestButtonError,
-  paymentWaiting as setPaymentWaiting,
+  setStripePaymentRequestObject,
   updateEmail,
   updateFirstName,
   updateLastName,
@@ -47,9 +56,9 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 import { toHumanReadableContributionType } from 'helpers/checkouts';
 import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import type { ErrorReason } from 'helpers/errorReasons';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import GeneralErrorMessage
+  from 'components/generalErrorMessage/generalErrorMessage';
 
 // ----- Types -----//
 
@@ -224,7 +233,7 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
 
     // We need to do this so that we can offer marketing permissions on the thank you page
     updatePayerEmail(data, props.updateEmail);
-    
+
     const stateUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
       updatePayerState(token, props.updateState) : true;
 
