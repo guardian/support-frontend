@@ -33,8 +33,6 @@ import './digitalSubscriptionLanding.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
-import { dpSale, flashSaleIsActive } from 'helpers/flashSale';
-import { DigitalPack } from 'helpers/subscriptions';
 import CallToAction from './components/cta';
 import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
@@ -78,9 +76,6 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 // ----- Render ----- //
 function LandingPage() {
 
-  // We can't cope with multiple promo codes in the current design
-  const promoCode = flashSaleIsActive(DigitalPack, countryGroupId) ? dpSale.promoCode : null;
-
   return (
     <Page
       header={<CountrySwitcherHeader />}
@@ -88,7 +83,6 @@ function LandingPage() {
         <FooterCentered>
           <FaqsAndHelp
             selectedCountryGroup={countryGroupId}
-            promoCode={promoCode}
           />
           <SubscriptionFaq subscriptionProduct="DigitalPack" />
         </FooterCentered>}

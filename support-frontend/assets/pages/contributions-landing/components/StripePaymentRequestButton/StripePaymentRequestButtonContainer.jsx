@@ -5,16 +5,22 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { StripeProvider, Elements } from 'react-stripe-elements';
+import { Elements, StripeProvider } from 'react-stripe-elements';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { getStripeKey, stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
-import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import {
+  getStripeKey,
+  stripeAccountForContributionType,
+} from 'helpers/paymentIntegrations/stripeCheckout';
+import type {
+  ContributionType,
+  OtherAmounts,
+  SelectedAmounts,
+} from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
-import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import { setupStripe } from 'helpers/stripe';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
-
 
 // ----- Types -----//
 
@@ -32,11 +38,11 @@ type PropTypes = {|
 
 const enabledForRecurring = (): boolean => {
   const hashUrl = (new URL(document.URL)).hash;
-  if (hashUrl === "#recurringStripePaymentRequestButton") {
-    return true
+  if (hashUrl === '#recurringStripePaymentRequestButton') {
+    return true;
   }
   return !!window.guardian.recurringStripePaymentRequestButton;
-}
+};
 
 // ----- Component ----- //
 

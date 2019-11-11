@@ -11,11 +11,12 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class GetAddress(
-        components: ControllerComponents,
-        getAddressService: GetAddressIOService,
-        actionRefiners: CustomActionBuilders
-      ) extends AbstractController(components) with Circe {
+  components: ControllerComponents,
+  getAddressService: GetAddressIOService,
+  actionRefiners: CustomActionBuilders
+) extends AbstractController(components) with Circe {
   import actionRefiners._
+
   def findAddress(postCode: String): Action[AnyContent] = NoCacheAction().async { implicit request =>
     getAddressService.find(postCode).map { result =>
       Ok(result.asJson)
