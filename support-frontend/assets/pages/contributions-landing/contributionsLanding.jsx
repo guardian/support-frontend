@@ -93,9 +93,6 @@ const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campai
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
 
-const showSecureTransactionIndicator = store.getState().common.abParticipations.paymentSecurityDesignTest === 'V1_securetop'
-|| countryGroupId === 'GBPCountries' ? <SecureTransactionIndicator modifierClasses={['top']} /> : null;
-
 function contributionsLandingPage(campaignCodeParameter: ?string) {
   return (
     <Page
@@ -104,7 +101,9 @@ function contributionsLandingPage(campaignCodeParameter: ?string) {
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
       backgroundImageSrc={backgroundImageSrc}
     >
-      {showSecureTransactionIndicator}
+      {countryGroupId === 'GBPCountries' &&
+        <SecureTransactionIndicator modifierClasses={['top']} />
+      }
       <ContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
         campaignCodeParameter={campaignCodeParameter}

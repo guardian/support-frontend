@@ -53,8 +53,6 @@ import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/
 import { getCampaignName } from 'helpers/campaigns';
 import type { LandingPageStripeElementsRecurringTestVariants } from 'helpers/abTests/abtestDefinitions';
 
-import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -86,7 +84,6 @@ type PropTypes = {|
   country: IsoCountry,
   createStripePaymentMethod: () => void,
   stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants,
-  paymentSecurityDesignTestVariant: PaymentSecurityDesignTestVariants,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -118,7 +115,6 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   stripeElementsRecurringTestVariant: state.common.abParticipations.stripeElementsRecurring,
-  paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesignTest,
 });
 
 
@@ -247,8 +243,6 @@ function withProps(props: PropTypes) {
   const classModifiers = ['contribution', 'with-labels'];
 
   const showSecureButtonBg: boolean = props.paymentMethod === Stripe && (props.stripeElementsRecurringTestVariant === 'stripeElements' || props.contributionType === 'ONE_OFF');
-  const showSecureTransactionIndicator: boolean = props.paymentSecurityDesignTestVariant === 'V3_securebottom';
-  const secureTransactionIndicatorClassNames: string[] = showSecureButtonBg ? ['bottom-grey'] : ['bottom-regular'];
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
@@ -289,9 +283,6 @@ function withProps(props: PropTypes) {
           onPaymentAuthorisation={props.onPaymentAuthorisation}
           showSecureBackground={showSecureButtonBg}
         />
-        {showSecureTransactionIndicator &&
-          <SecureTransactionIndicator modifierClasses={secureTransactionIndicatorClassNames} />
-        }
       </div>
 
       <TermsPrivacy
