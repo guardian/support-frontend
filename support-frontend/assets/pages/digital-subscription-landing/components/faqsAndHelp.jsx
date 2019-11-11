@@ -3,11 +3,15 @@
 // ----- Imports ----- //
 
 import * as React from 'react';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+  AUDCountries,
+  type CountryGroupId,
+  GBPCountries,
+  UnitedStates,
+} from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { AUDCountries, GBPCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 
 // ----- Props ----- //
 
@@ -15,7 +19,6 @@ type PropTypes = {|
   selectedCountryGroup: CountryGroupId,
   subscriptionProduct: SubscriptionProduct,
   paperFulfilmentOptions: Option<PaperFulfilmentOptions>,
-  promoCode?: Option<string>,
 |};
 
 // ----- Functions ----- //
@@ -110,7 +113,6 @@ FaqsAndHelp.defaultProps = {
   selectedCountryGroup: 'GBPCountries',
   subscriptionProduct: 'DigitalPack',
   paperFulfilmentOptions: null,
-  promoCode: null,
 };
 
 // ----- Exports ----- //
