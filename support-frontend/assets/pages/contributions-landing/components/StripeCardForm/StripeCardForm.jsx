@@ -34,6 +34,7 @@ import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
+import type { PaymentSecurityR2CreditCardTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types -----//
 
@@ -53,6 +54,7 @@ type PropTypes = {|
   setupIntentClientSecret: string | null,
   setSetupIntentClientSecret: (setupIntentClientSecret: string) => Action,
   country: IsoCountry,
+  paymentSecurityR2CreditCardTestVariant: PaymentSecurityR2CreditCardTestVariants,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -60,6 +62,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
   paymentWaiting: state.page.form.isWaiting,
+  paymentSecurityR2CreditCardTestVariant: state.common.abParticipations.paymentSecurityR2CreditCardTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -280,7 +283,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             <label className="form__label" htmlFor="stripeCardNumberElement">
               <span>Card number</span>
             </label>
-            {this.props.country === 'US' ? <CreditCardsUS className="form__credit-card-icons" /> : <CreditCardsROW className="form__credit-card-icons" />}
+            {this.props.paymentSecurityR2CreditCardTestVariant === 'showCards' && (this.props.country === 'US' ? <CreditCardsUS className="form__credit-card-icons" /> : <CreditCardsROW className="form__credit-card-icons" />)}
           </div>
           <span className={getClasses('CardNumber')}>
             <CardNumberElement
