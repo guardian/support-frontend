@@ -11,7 +11,7 @@
   position: relative;
   z-index: 5;
   background: #ededed;
-  
+
   &:before {
 		position: absolute;
 		top: 0;
@@ -28,7 +28,7 @@
 			height: 75px;
 		}
 	}
-  
+
   @include mq($from: desktop) {
 		&:before {
 			height:85px;
@@ -94,7 +94,7 @@
   @include gu-fontset-heading;
   color: gu-colour(neutral-7);
   padding: $gu-v-spacing / 3 0 22px;
-  
+
 
   h1 {
     font-size: 28px;
@@ -121,7 +121,7 @@
       margin-top: 0 !important;
       max-width: gu-span(5);
     }
-  
+
     h2 {
       font-weight: 400;
       max-width: gu-span(5);
@@ -164,7 +164,7 @@
       max-width: gu-span(8);
       margin-left: 50px !important;
     }
-  
+
     h2 {
       font-size: 24px;
       font-weight: 400;
@@ -244,7 +244,12 @@
   }
 }
 
-.hope-is-power__products {  
+.hope-is-power__products {
+  box-sizing: border-box;
+  & * {
+    box-sizing: border-box;
+  }
+
   display: flex;
   flex-direction: column;
   background-color: #ededed;
@@ -256,7 +261,7 @@
 
   .product-block__container {
     padding-bottom: 50px;
-    
+
     @include mq($from:phablet, $until: tablet) {
       padding-top: 30px;
     }
@@ -271,7 +276,7 @@
       color: #ffffff;
       background-color: #121212;
       padding: 0 3px 0 10px;
-      
+
       @include mq($from: tablet) {
         font-size: 20px;
         margin-top: 35px;
@@ -348,13 +353,13 @@
       border-top: 1px solid gu-colour(neutral-86);
       border-bottom: 1px solid gu-colour(neutral-86);
 
-      
+
       @include mq($from: tablet) {
           &:first-of-type {
             margin-top: 15px;
           }
       }
-      
+
       @include mq($from: phablet) {
         border: 1px solid gu-colour(neutral-86);
       }
@@ -422,7 +427,7 @@
             width: 140px;
           }
         }
-        
+
         @include mq($from: mobileMedium) {
           margin-top: -100px;
         }
@@ -449,12 +454,12 @@
 
         @include mq($from: desktop) {
           margin-top: -170px;
-          
+
           img {
             width: 400px;
           }
         }
-        
+
         @include mq($from: leftCol) {
           margin-top: -150px;
           margin-right: 80px;
@@ -469,11 +474,11 @@
       font-weight: 400;
       line-height: 21px;
       max-width: 150px;
-      
+
       @include mq($until: mobileLandscape) {
         padding-bottom: 20px;
       }
-     
+
       @include mq($from: mobileMedium) {
         max-width:200px;
       }
@@ -535,7 +540,7 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 400ms;
-      
+
       & > * {
         opacity: 0;
         transition: opacity 400ms;
@@ -547,12 +552,12 @@
       max-height: 600px;
       overflow: visible;
       transition: max-height 400ms;
-      
+
       & > * {
         transition: opacity 300ms 200ms;
         opacity: 1;
       }
-      
+
       @include mq($from: phablet) {
         border-left: 1px solid gu-colour(neutral-86);
         border-right: 1px solid gu-colour(neutral-86);
@@ -620,7 +625,7 @@
         font-weight: 600;
         margin-left: 8px;
       }
-  
+
       .product-block__list-item__explainer {
         margin-left: 23px;
         font-size: 14px;
@@ -629,7 +634,7 @@
           font-size: 16px;
         }
       }
-  
+
       .product-block__list-item__bullet {
         width: 13px;
         height: 13px;
@@ -667,7 +672,7 @@
     outline: none;
     text-align: center !important;
     align-items: center;
-    transition: background 250ms ease-in-out, 
+    transition: background 250ms ease-in-out,
     transform 150ms ease;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -732,11 +737,11 @@
   align-items: center;
   justify-content: center;
   max-width: gu-span(8);
-  
+
   @include mq($from: mobileMedium) {
     padding-top: $gu-v-spacing*1;
   }
-  
+
   @include mq($from: tablet) {
     padding-top: $gu-v-spacing*2;
     padding-right: $gu-v-spacing*2;
@@ -793,7 +798,7 @@
   width: 100%;
   height: 100%;
   z-index: 5;
-  
+
   img {
     position: absolute;
     width: 100%;
@@ -825,12 +830,12 @@
   z-index: 10;
   width: 100%;
   top: 1.4rem;
-  
+
   span {
     display: block;
-    line-height: 1; 
+    line-height: 1;
   }
-  
+
   .the-moment-hero__badge-lgeCopy {
     font-family: $gu-titlepiece;
     position: relative;
@@ -840,7 +845,7 @@
     -webkit-font-feature-settings: "lnum";
     font-feature-settings: "lnum";
   }
-  
+
   @include mq($from: mobileMedium) {
     top: 1.8rem;
     font-size: 1rem;
@@ -849,12 +854,12 @@
       font-size: 2.2rem;
     }
   }
-  
+
   @include mq($from: tablet) {
     top: 2.2rem;
     font-size: 1.2rem;
   }
-  
+
   @include mq($from: leftCol) {
     top: 3.25rem;
 
@@ -905,7 +910,7 @@ div.call-to-action__container {
   @include mq($from: wide) {
     justify-content: center;
   }
-  
+
   .hope-is-power--centered {
     background-color: #041f4a;
     color: #ffffff;
@@ -1013,7 +1018,7 @@ div.call-to-action__container {
 
     .payment-selection__card:first-of-type {
       margin-left: 0;
-      
+
       @include mq($from: tablet) {
         margin-left: 50px;
       }
