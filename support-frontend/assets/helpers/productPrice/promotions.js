@@ -47,6 +47,7 @@ export type Promotion =
     numberOfDiscountedPeriods?: number,
     discount?: DiscountBenefit,
     introductoryPrice?: IntroductoryPriceBenefit,
+    landingPage?: PromotionCopy,
   }
 
 const promoQueryParam = 'promoCode';
