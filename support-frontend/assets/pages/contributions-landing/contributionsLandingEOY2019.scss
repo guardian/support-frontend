@@ -1,7 +1,9 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+$campaign-red: #E94F3E;
+
 .gu-content--eoy2019 {
-  background-color: orangered;
+  background-color: $campaign-red;
 
   .gu-content__main {
     background-color: transparent;
@@ -16,7 +18,7 @@
     margin: 0;
     font-size: 30px;
     line-height: 1;
-    color: navy;
+    color: gu-colour(brand-dark);
 
     @include mq($from: tablet) {
       margin: 0 -10px;
@@ -29,6 +31,7 @@
   }
 
   .gu-content__blurb-blurb {
+    color: gu-colour(brand-dark);
     display: none;
 
     @include mq($from: tablet) {
