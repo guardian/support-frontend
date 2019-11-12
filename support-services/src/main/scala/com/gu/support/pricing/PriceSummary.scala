@@ -20,6 +20,7 @@ case class PromotionSummary(
   freeTrialBenefit: Option[FreeTrialBenefit],
   incentive: Option[IncentiveBenefit] = None,
   introductoryPrice: Option[IntroductoryPriceBenefit] = None,
+  landingPage: Option[PromotionCopy] = None
 )
 
 import com.gu.support.encoding.Codec

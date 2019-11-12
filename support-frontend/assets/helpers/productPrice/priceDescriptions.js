@@ -125,7 +125,7 @@ function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: 
     return '';
   }
 
-  return appliedPromo.description;
+  return appliedPromo.landingPage && appliedPromo.landingPage.roundel ? appliedPromo.landingPage.roundel : '';
 }
 
 export {
