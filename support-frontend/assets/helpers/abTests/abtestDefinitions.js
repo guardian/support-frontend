@@ -55,7 +55,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: !!window.guardian.recurringStripePaymentRequestButton,
+    isActive: window.guardian && !!window.guardian.recurringStripePaymentRequestButton,
     independent: true,
     seed: 2,
     targetPage: contributionsLandingPageMatch,
