@@ -10,6 +10,8 @@
 // Media agnostic heading styles
 
 .showcase-hero-heading svg {
+  // width: 100%;
+  // margin-top: $gu-v-spacing;
   margin-left: $gu-v-spacing;
 
   @include mq($from: tablet) {
@@ -33,7 +35,7 @@
   .showcase-hero__caption--italics {
     font-style: italic;
   }
-  
+
   > strong {
     font-weight: 600;
   }
@@ -50,12 +52,12 @@
   overflow: hidden;
   will-change: transform;
   opacity: 0;
-  
+
   .showcase-hero__image--fourth img {
     height: auto;
     width: 100%;
   }
-  
+
   img {
     position: absolute;
     display: block;
@@ -117,7 +119,7 @@
     @include mq($from: phablet) {
       padding: $gu-h-spacing;
     }
-    
+
   }
 
   .showcase-hero .component-left-margin-section__content {
@@ -232,7 +234,7 @@
     .showcase-hero__caption--mobile {
       display: none;
     }
-  
+
     .showcase-hero__caption--desktop {
       display: inline-block;
     }
@@ -259,7 +261,7 @@
     @include mq($from: wide) {
       margin-top: -330px;
     }
-      
+
     .showcase-hero__image--first {
       display: inline-flex;
       justify-content: space-between;
