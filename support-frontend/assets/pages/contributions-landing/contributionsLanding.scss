@@ -99,6 +99,10 @@ header[role="banner"] {
   }
 }
 
+.glogo-alt-text {
+  @include accessibility-hint;
+}
+
 .countryGroups {
   font-family: $gu-text-sans-web;
   max-width: 355px;
