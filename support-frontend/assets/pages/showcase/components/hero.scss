@@ -103,11 +103,12 @@
 
   .showcase-hero-heading {
     width: 100%;
+    height: auto;
 
     svg {
       width: 90%;
-      height: auto;
       max-width: 90%;
+      height: auto;
     }
 
     @include mq($from: mobileLandscape) {
@@ -116,6 +117,10 @@
 
     @include mq($from: phablet) {
       padding: $gu-h-spacing;
+    }
+
+    @include mq($from: tablet) {
+      padding-left: $gu-h-spacing / 2;
     }
 
   }
@@ -214,18 +219,11 @@
     }
 
     .showcase-hero-heading {
-      svg {
-        @include mq($from: tablet) {
-          padding-left: $gu-h-spacing / 2;
-        }
-
-        @include mq($from: desktop) {
-          display: flex;
-          align-items: flex-start;
-          justify-content: stretch;
-          margin: $gu-h-spacing;
-          padding-left: 0;
-      }
+      display: flex;
+      align-items: flex-start;
+      justify-content: stretch;
+      margin: $gu-h-spacing;
+      padding-left: 0;
     }
 
     .showcase-hero__caption {
@@ -324,6 +322,7 @@
     }
   }
 }
+
 
 // Everything relating to animations
 
