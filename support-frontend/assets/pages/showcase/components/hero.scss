@@ -10,6 +10,7 @@
 // Media agnostic heading styles
 
 .showcase-hero-heading {
+  box-sizing: border-box;
   @include mq($until: phablet) {
     width: 100%;
   }
@@ -17,8 +18,7 @@
 
 .showcase-hero-heading svg {
   object-fit: contain;
-  margin-top: $gu-v-spacing;
-  margin-left: $gu-v-spacing;
+  margin: $gu-v-spacing 0 $gu-v-spacing $gu-v-spacing;
 
   @include mq($from: tablet) {
     padding-left: $gu-h-spacing / 2;
@@ -115,6 +115,7 @@
   .showcase-hero-heading {
     svg {
       width: 90%;
+      max-width: 90%;
     }
 
     @include mq($from: mobileLandscape) {
