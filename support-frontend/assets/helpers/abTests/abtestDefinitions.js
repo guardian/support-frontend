@@ -10,6 +10,7 @@ import {
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
 export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
 export type PaymentSecurityDesignTestVariants = 'control' | 'V1_securetop' | 'V2_securemiddle' | 'V3_securebottom' | 'V4_grey' | 'notintest'
+export type RecurringStripePaymentRequestButtonTestVariants = 'contro' | 'paymentRequestButton' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 
@@ -36,6 +37,28 @@ export const tests: Tests = {
     independent: true,
     seed: 1,
     canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
+  },
+
+  recurringStripePaymentRequestButton: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'paymentRequestButton',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: window.guardian && !!window.guardian.recurringStripePaymentRequestButton,
+    independent: true,
+    seed: 2,
+    targetPage: contributionsLandingPageMatch,
   },
 
   stripeElementsRecurring: {

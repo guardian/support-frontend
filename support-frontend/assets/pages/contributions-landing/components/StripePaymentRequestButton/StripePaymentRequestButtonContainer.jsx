@@ -21,6 +21,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import { setupStripe } from 'helpers/stripe';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
+import type { RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types -----//
 
@@ -34,15 +35,11 @@ type PropTypes = {|
   stripeHasLoaded: boolean,
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
+  recurringTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
-const enabledForRecurring = (): boolean => {
-  const hashUrl = (new URL(document.URL)).hash;
-  if (hashUrl === '#recurringStripePaymentRequestButton') {
-    return true;
-  }
-  return !!window.guardian.recurringStripePaymentRequestButton;
-};
+const enabledForRecurring = (recurringTestVariant: RecurringStripePaymentRequestButtonTestVariants): boolean =>
+  recurringTestVariant === 'paymentRequestButton';
 
 // ----- Component ----- //
 
@@ -55,7 +52,7 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
   render() {
     const showStripePaymentRequestButton =
       isInStripePaymentRequestAllowedCountries(this.props.country) &&
-      (this.props.contributionType === 'ONE_OFF' || enabledForRecurring());
+      (this.props.contributionType === 'ONE_OFF' || enabledForRecurring(this.props.recurringTestVariant));
 
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
       const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
