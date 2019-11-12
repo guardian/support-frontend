@@ -15,15 +15,7 @@
 
 .showcase-hero-heading svg {
   object-fit: contain;
-  margin: $gu-v-spacing 0 $gu-v-spacing $gu-v-spacing;
-
-  @include mq($from: tablet) {
-    padding-left: $gu-h-spacing / 2;
-  }
-
-  @include mq($from: desktop) {
-    padding-left: 0;
-  }
+  margin: $gu-v-spacing 0 $gu-v-spacing * 2 $gu-v-spacing;
 }
 
 // Media agnostic caption styles
@@ -222,12 +214,17 @@
     }
 
     .showcase-hero-heading {
-      display: flex;
-      align-items: flex-start;
-      justify-content: stretch;
-      margin: $gu-h-spacing;
       svg {
-        max-width: gu-span(6);
+        @include mq($from: tablet) {
+          padding-left: $gu-h-spacing / 2;
+        }
+
+        @include mq($from: desktop) {
+          display: flex;
+          align-items: flex-start;
+          justify-content: stretch;
+          margin: $gu-h-spacing;
+          padding-left: 0;
       }
     }
 
