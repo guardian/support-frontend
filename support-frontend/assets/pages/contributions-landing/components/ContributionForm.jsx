@@ -54,7 +54,7 @@ import { getCampaignName } from 'helpers/campaigns';
 import type { LandingPageStripeElementsRecurringTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { PaymentSecurityDesignTestVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -87,6 +87,7 @@ type PropTypes = {|
   createStripePaymentMethod: () => void,
   stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants,
   paymentSecurityDesignTestVariant: PaymentSecurityDesignTestVariants,
+  recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -119,6 +120,7 @@ const mapStateToProps = (state: State) => ({
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   stripeElementsRecurringTestVariant: state.common.abParticipations.stripeElementsRecurring,
   paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesignTest,
+  recurringStripePaymentRequestButtonTestVariant: state.common.abParticipations.recurringStripePaymentRequestButton,
 });
 
 
@@ -269,6 +271,7 @@ function withProps(props: PropTypes) {
         country={props.country}
         otherAmounts={props.otherAmounts}
         selectedAmounts={props.selectedAmounts}
+        recurringTestVariant={props.recurringStripePaymentRequestButtonTestVariant}
       />
       <div className={classNameWithModifiers('form', ['content'])}>
         <ContributionFormFields />
