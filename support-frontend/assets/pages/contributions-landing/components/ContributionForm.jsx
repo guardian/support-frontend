@@ -52,9 +52,8 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import type { LandingPageStripeElementsRecurringTestVariants } from 'helpers/abTests/abtestDefinitions';
-
-import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import type { PaymentSecurityDesignTestVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -250,8 +249,6 @@ function withProps(props: PropTypes) {
 
   const showSecureStripeContainer: boolean = props.paymentSecurityDesignTestVariant !== 'control' || props.countryGroupId === 'GBPCountries';
   const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe && (props.stripeElementsRecurringTestVariant === 'stripeElements' || props.contributionType === 'ONE_OFF');
-  const showSecureTransactionIndicator: boolean = props.paymentSecurityDesignTestVariant === 'V3_securebottom' && props.countryGroupId !== 'GBPCountries';
-  const secureTransactionIndicatorClassNames: string[] = showSecureButtonBg ? ['bottom-grey'] : ['bottom-regular'];
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
@@ -294,9 +291,6 @@ function withProps(props: PropTypes) {
           onPaymentAuthorisation={props.onPaymentAuthorisation}
           showSecureBackground={showSecureButtonBg}
         />
-        {showSecureTransactionIndicator &&
-          <SecureTransactionIndicator modifierClasses={secureTransactionIndicatorClassNames} />
-        }
       </div>
 
       <TermsPrivacy
