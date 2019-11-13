@@ -10,15 +10,7 @@
 // Media agnostic heading styles
 
 .showcase-hero-heading svg {
-  margin-left: $gu-v-spacing;
-
-  @include mq($from: tablet) {
-    padding-left: $gu-h-spacing / 2;
-  }
-
-  @include mq($from: desktop) {
-    padding-left: 0;
-  }
+  margin: $gu-v-spacing 0 $gu-v-spacing * 2 $gu-v-spacing;
 }
 
 // Media agnostic caption styles
@@ -33,7 +25,7 @@
   .showcase-hero__caption--italics {
     font-style: italic;
   }
-  
+
   > strong {
     font-weight: 600;
   }
@@ -50,12 +42,12 @@
   overflow: hidden;
   will-change: transform;
   opacity: 0;
-  
+
   .showcase-hero__image--fourth img {
     height: auto;
     width: 100%;
   }
-  
+
   img {
     position: absolute;
     display: block;
@@ -105,19 +97,31 @@
   }
 
   .showcase-hero-heading {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 320px;
+
     svg {
       width: 90%;
-      max-width: gu-span(6);
+    }
+
+    @include mq($from: mobileMedium) {
+      max-width: 375px;
     }
 
     @include mq($from: mobileLandscape) {
       padding: $gu-v-spacing;
+      max-width: 100%;
     }
 
     @include mq($from: phablet) {
       padding: $gu-h-spacing;
     }
-    
+
+    @include mq($from: tablet) {
+      padding-left: $gu-h-spacing / 2;
+    }
+
   }
 
   .showcase-hero .component-left-margin-section__content {
@@ -218,9 +222,12 @@
       align-items: flex-start;
       justify-content: stretch;
       margin: $gu-h-spacing;
+      padding-left: 0;
+
       svg {
-        max-width: gu-span(6);
+        min-width: 460px;
       }
+
     }
 
     .showcase-hero__caption {
@@ -232,7 +239,7 @@
     .showcase-hero__caption--mobile {
       display: none;
     }
-  
+
     .showcase-hero__caption--desktop {
       display: inline-block;
     }
@@ -259,7 +266,7 @@
     @include mq($from: wide) {
       margin-top: -330px;
     }
-      
+
     .showcase-hero__image--first {
       display: inline-flex;
       justify-content: space-between;
@@ -319,6 +326,7 @@
     }
   }
 }
+
 
 // Everything relating to animations
 
