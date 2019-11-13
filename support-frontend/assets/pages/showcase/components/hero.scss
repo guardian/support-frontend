@@ -97,6 +97,7 @@
   }
 
   .showcase-hero-heading {
+    box-sizing: border-box;
     width: 100%;
     max-width: 320px;
 
@@ -222,6 +223,11 @@
       justify-content: stretch;
       margin: $gu-h-spacing;
       padding-left: 0;
+
+      svg {
+        min-width: 460px;
+      }
+
     }
 
     .showcase-hero__caption {
