@@ -9,7 +9,7 @@ import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.GuardianWeekly
-import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import config.StringsConfig
 import play.api.libs.circe.Circe
@@ -77,10 +77,10 @@ class WeeklySubscription(
       Some(csrf),
       idUser,
       uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(GuardianWeekly, promoCodes),
-      stripeConfigProvider.get(false),
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(GuardianWeekly, promoCodes, orderIsAGift),
+      stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
-      payPalConfigProvider.get(false),
+      payPalConfigProvider.get(),
       payPalConfigProvider.get(true),
       stripeSetupIntentEndpoint,
       orderIsAGift
