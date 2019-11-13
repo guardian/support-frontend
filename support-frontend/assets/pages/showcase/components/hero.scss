@@ -103,16 +103,20 @@
 
   .showcase-hero-heading {
     width: 100%;
-    height: auto;
+    max-width: 320px;
 
     svg {
       width: 90%;
-      max-width: 90%;
       height: auto;
+    }
+
+    @include mq($from: mobileMedium) {
+      max-width: 375px;
     }
 
     @include mq($from: mobileLandscape) {
       padding: $gu-v-spacing;
+      max-width: 100%;
     }
 
     @include mq($from: phablet) {
