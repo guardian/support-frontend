@@ -9,12 +9,7 @@
 
 // Media agnostic heading styles
 
-.showcase-hero-heading {
-  box-sizing: border-box;
-}
-
 .showcase-hero-heading svg {
-  object-fit: contain;
   margin: $gu-v-spacing 0 $gu-v-spacing * 2 $gu-v-spacing;
 }
 
@@ -107,7 +102,6 @@
 
     svg {
       width: 90%;
-      height: auto;
     }
 
     @include mq($from: mobileMedium) {
