@@ -64,6 +64,8 @@
       };
       window.guardian.csrf = { token: "@CSRF.getToken.value" };
       window.guardian.stripeSetupIntentEndpoint = "@stripeSetupIntentEndpoint";
+
+      window.guardian.checkoutPostcodeLookup = "@settings.switches.experiments.get("checkoutPostcodeLookup").exists(_.isOn)"
   </script>
 
   }

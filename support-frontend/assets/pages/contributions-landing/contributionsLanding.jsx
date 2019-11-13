@@ -86,28 +86,14 @@ const setOneOffContributionCookie = () => {
 };
 
 const campaignName = getCampaignName();
-// JTL - TBD - Uncomment this after Moment is done running
-// const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
-//   campaigns[campaignName].cssModifiers : [];
+
+const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
+  campaigns[campaignName].cssModifiers : [];
+
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
 
-// JTL - TBD - Delete after Moment is done running
-const createCssModifiers = () => {
-  const cssModifiers = [];
-
-  if (campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers) {
-    cssModifiers.push(...campaigns[campaignName].cssModifiers);
-  }
-
-  if (store.getState().common.abParticipations.landingPageMomentBackgroundColour === 'yellow') {
-    cssModifiers.push('yellow-background');
-  }
-
-  return cssModifiers;
-};
-// JTL - TBD - Delete after Moment is done running
-const cssModifiers = createCssModifiers();
+const showSecureTransactionIndicator = countryGroupId === 'GBPCountries' ? <SecureTransactionIndicator modifierClasses={['top']} /> : null;
 
 function contributionsLandingPage(campaignCodeParameter: ?string) {
   return (
@@ -117,8 +103,7 @@ function contributionsLandingPage(campaignCodeParameter: ?string) {
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
       backgroundImageSrc={backgroundImageSrc}
     >
-      {store.getState().common.abParticipations.paymentSecurityDesignTest === 'V1_securetop' &&
-      <SecureTransactionIndicator modifierClasses={['top']} />}
+      {showSecureTransactionIndicator}
       <ContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
         campaignCodeParameter={campaignCodeParameter}

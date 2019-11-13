@@ -5,6 +5,7 @@ import { type Option } from 'helpers/types/option';
 import { type Scoped } from 'helpers/scoped';
 import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import {
+
   getAddressesForPostcode,
   type PostcodeFinderResult,
 } from 'components/subscriptionCheckouts/address/postcodeLookup';
@@ -41,10 +42,10 @@ const postcodeFinderActionCreatorsFor = (scope: AddressType) => ({
             scope,
           });
         })
-        .catch(() => {
+        .catch((reason) => {
           dispatch({
             type: 'SET_POSTCODE_FINDER_ERROR',
-            error: 'We couldn\'t find this postcode, please check and try again or enter your address below.',
+            error: reason.message,
             scope,
           });
         });

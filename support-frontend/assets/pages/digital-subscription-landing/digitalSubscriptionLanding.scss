@@ -10,7 +10,6 @@
 @import '~components/adFreeSection/adFreeSection';
 @import '~components/flashSaleCountdown/flashSaleCountdown';
 @import 'components/independentJournalismSection';
-@import 'componentsB/promotionPopUp';
 
 // ----- Page-Specific Styles ----- //
 
@@ -411,7 +410,7 @@
     position: relative;
     margin-bottom: 50px;
     @include mq($from: tablet) {
-      margin-bottom: 0px;
+      margin-bottom: 0;
       margin-left: 450px;
     }
   }

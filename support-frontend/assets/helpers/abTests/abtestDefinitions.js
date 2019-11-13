@@ -1,15 +1,20 @@
 // @flow
 import type { Tests } from './abtest';
 import { get as getCookie } from 'helpers/cookie';
-import { getCampaignName } from 'helpers/campaigns';
+import {
+  type CountryGroupId,
+  detect,
+} from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
 export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
-export type LandingPageMomentBackgroundColourTestVariants = 'control' | 'yellow' | 'notintest';
 export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
-export type PaymentSecurityDesignTestVariants = 'control' | 'V1_securetop' | 'V2_securemiddle' | 'V3_securebottom' | 'V4_grey'
+export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'paymentRequestButton' | 'notintest';
+export type PaymentSecurityDesignTestVariants = 'control' | 'V2_securemiddle' | 'V4_grey' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
+
+const countryGroupId: CountryGroupId = detect();
 
 export const tests: Tests = {
   landingPageCopyReturningSingles: {
@@ -34,6 +39,28 @@ export const tests: Tests = {
     canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
   },
 
+  recurringStripePaymentRequestButton: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'paymentRequestButton',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: window.guardian && !!window.guardian.recurringStripePaymentRequestButton,
+    independent: true,
+    seed: 2,
+    targetPage: contributionsLandingPageMatch,
+  },
+
   stripeElementsRecurring: {
     type: 'OTHER',
     variants: [
@@ -56,50 +83,6 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-  landingPageMomentBackgroundColour: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'yellow',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 7,
-    canRun: () => !!getCampaignName(),
-  },
-
-  digitalPackProductPageTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'newPage',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 9,
-    targetPage: '/(uk|us|eu|au|ca|nz|int)/subscribe/digital$',
-    optimizeId: 'emQ5nZJCS5mZkhtwwqfx5Q',
-  },
   paymentSecurityDesignTest: {
     type: 'OTHER',
     variants: [
@@ -107,13 +90,7 @@ export const tests: Tests = {
         id: 'control',
       },
       {
-        id: 'V1_securetop',
-      },
-      {
         id: 'V2_securemiddle',
-      },
-      {
-        id: 'V3_securebottom',
       },
       {
         id: 'V4_grey',
@@ -129,5 +106,6 @@ export const tests: Tests = {
     independent: true,
     seed: 10,
     targetPage: contributionsLandingPageMatch,
+    canRun: () => countryGroupId !== 'GBPCountries',
   },
 };

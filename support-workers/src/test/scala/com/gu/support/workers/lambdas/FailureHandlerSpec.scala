@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields, IdentityUserId}
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.CheckoutFailureReasons.{PaymentMethodUnacceptable, Unknown}
+import com.gu.support.workers.CheckoutFailureReasons.{AccountMismatch, PaymentMethodUnacceptable, Unknown}
 import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
@@ -95,6 +95,24 @@ class FailureHandlerIT extends AsyncLambdaSpec with MockContext {
       checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
     }
 
+  }
+
+  it should "return a non failed JsonWrapper if we encounter the error caused by using a test token in PROD" in {
+    val failureHandler = new FailureHandler()
+
+    val outStream = new ByteArrayOutputStream()
+
+    failureHandler.handleRequestFuture(testTokenInProdJsonStripe.asInputStream, outStream, context).map { _ =>
+
+      val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
+      val requestInfo = outState.get._3
+      val checkoutFailureState = outState.get._1
+
+      SafeLogger.info(requestInfo.messages.head)
+
+      requestInfo.failed should be(false)
+      checkoutFailureState.checkoutFailureReason should be(AccountMismatch)
+    }
   }
 
   it should "send an email with FailedDigitalPackEmailFields when there are Stripe payment errors " in {

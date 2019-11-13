@@ -5,7 +5,6 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import {
   billingPeriodNoun as upperCaseNoun,
   Quarterly,
-  SixWeekly,
   Annual,
 } from 'helpers/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
@@ -143,14 +142,10 @@ function getPriceDescription(
 
 function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: ProductPrice) {
   const appliedPromo = getAppliedPromo(productPrice.promotions);
-  if (
-    appliedPromo === null ||
-    billingPeriod === SixWeekly
-  ) {
-    return '';
+  if (appliedPromo && appliedPromo.landingPage && appliedPromo.landingPage.roundel) {
+    return appliedPromo.landingPage.roundel;
   }
-
-  return appliedPromo.description;
+  return '';
 }
 
 export {
