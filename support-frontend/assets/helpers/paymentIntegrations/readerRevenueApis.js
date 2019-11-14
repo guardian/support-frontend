@@ -34,6 +34,9 @@ import type { Title } from 'helpers/user/details';
 
 // ----- Types ----- //
 
+export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
+export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
+
 type RegularContribution = {|
   amount: number,
   currency: string,
@@ -112,9 +115,6 @@ export type RegularPaymentRequest = {|
   deliveryInstructions?: Option<string>,
   debugInfo?: string,
 |};
-
-export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
-export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
 // Stripe checkout is currently still used by Payment Request button and recurring
 export type StripeCheckoutAuthorisation = {|
