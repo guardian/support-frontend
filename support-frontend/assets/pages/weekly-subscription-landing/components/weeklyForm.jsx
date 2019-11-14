@@ -1,7 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
 
-import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import { SixWeekly, type WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import {
   billingPeriodTitle,
   weeklyBillingPeriods,
@@ -29,33 +29,38 @@ const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod): string => {
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
-  plans: weeklyBillingPeriods.reduce((plans, billingPeriod) => {
-    const { countryId } = state.common.internationalisation;
-    const { productPrices } = state.page;
-    const productPrice = productPrices ? getProductPrice(
-      productPrices,
-      countryId,
-      billingPeriod,
-      getWeeklyFulfilmentOption(countryId),
-    ) : { price: 0, currency: 'GBP' };
-    return {
-      ...plans,
-      [billingPeriod]: {
-        title: billingPeriodTitle(billingPeriod),
-        copy: getPriceDescription(
-          productPrice,
-          billingPeriod,
-        ),
-        offer: getAppliedPromoDescription(billingPeriod, productPrice),
-        href: getCheckoutUrl(billingPeriod),
-        onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
-        price: null,
-        saving: null,
-      },
-    };
-  }, {}),
-});
+const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
+  // The code below removes 6 for 6 as an available billing period if the order is a gift
+  const billingPeriodsToUse = weeklyBillingPeriods.filter(billingPeriod =>
+    !(state.page.orderIsAGift && billingPeriod === SixWeekly));
+  return {
+    plans: billingPeriodsToUse.reduce((plans, billingPeriod) => {
+      const { countryId } = state.common.internationalisation;
+      const { productPrices } = state.page;
+      const productPrice = productPrices ? getProductPrice(
+        productPrices,
+        countryId,
+        billingPeriod,
+        getWeeklyFulfilmentOption(countryId),
+      ) : { price: 0, currency: 'GBP' };
+      return {
+        ...plans,
+        [billingPeriod]: {
+          title: billingPeriodTitle(billingPeriod),
+          copy: getPriceDescription(
+            productPrice,
+            billingPeriod,
+          ),
+          offer: getAppliedPromoDescription(billingPeriod, productPrice),
+          href: getCheckoutUrl(billingPeriod),
+          onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
+          price: null,
+          saving: null,
+        },
+      };
+    }, {}),
+  };
+};
 
 
 // ----- Exports ----- //

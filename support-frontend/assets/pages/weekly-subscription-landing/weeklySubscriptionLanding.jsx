@@ -132,6 +132,7 @@ const getCopy = (state: State): PageCopy => {
 
 const copy = getCopy(store.getState());
 const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || '10ANNUAL');
+const { orderIsAGift } = store.getState().page;
 
 const content = (
   <Provider store={store}>
@@ -139,7 +140,7 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <CampaignHeader heading={copy.title} />
+      <CampaignHeader heading={copy.title} orderIsAGift={orderIsAGift} />
       <Content>
         <Text title="Catch up on the issues that matter">
           {copy.firstParagraph}
