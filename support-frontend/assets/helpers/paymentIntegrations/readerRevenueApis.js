@@ -34,6 +34,9 @@ import type { Title } from 'helpers/user/details';
 
 // ----- Types ----- //
 
+export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
+export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
+
 type RegularContribution = {|
   amount: number,
   currency: string,
@@ -56,8 +59,14 @@ type ProductFields = RegularContribution | DigitalSubscription | PaperSubscripti
 
 type RegularPayPalPaymentFields = {| baid: string |};
 
-type RegularStripePaymentIntentFields = {| paymentMethod: string |};
-type RegularStripeCheckoutPaymentFields = {| stripeToken: string |};
+type RegularStripePaymentIntentFields = {|
+  paymentMethod: string,                  // The ID of the Stripe Payment Method
+  stripePaymentType: StripePaymentMethod, // The type of Stripe payment, e.g. Apple Pay
+|};
+type RegularStripeCheckoutPaymentFields = {|
+  stripeToken: string,
+  stripePaymentType: StripePaymentMethod,
+|};
 
 type RegularDirectDebitPaymentFields = {|
   accountHolderName: string,
@@ -83,6 +92,7 @@ export type RegularPaymentRequestAddress = {|
   city: Option<string>,
 |};
 
+// The model that is sent to support-workers
 export type RegularPaymentRequest = {|
   title?: Option<Title>,
   firstName: string,
@@ -105,9 +115,6 @@ export type RegularPaymentRequest = {|
   deliveryInstructions?: Option<string>,
   debugInfo?: string,
 |};
-
-export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
-export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
 // Stripe checkout is currently still used by Payment Request button and recurring
 export type StripeCheckoutAuthorisation = {|
@@ -174,9 +181,15 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
   switch (authorisation.paymentMethod) {
     case Stripe:
       if (authorisation.paymentMethodId) {
-        return { paymentMethod: authorisation.paymentMethodId };
+        return {
+          paymentMethod: authorisation.paymentMethodId,
+          stripePaymentType: authorisation.stripePaymentMethod
+        };
       } else if (authorisation.token) {
-        return { stripeToken: authorisation.token };
+        return {
+          stripeToken: authorisation.token,
+          stripePaymentType: authorisation.stripePaymentMethod
+        };
       }
       throw new Error('Neither token nor paymentMethod found in authorisation data for Stripe recurring contribution');
     case PayPal:
