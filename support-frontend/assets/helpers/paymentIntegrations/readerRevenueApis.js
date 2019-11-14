@@ -56,8 +56,14 @@ type ProductFields = RegularContribution | DigitalSubscription | PaperSubscripti
 
 type RegularPayPalPaymentFields = {| baid: string |};
 
-type RegularStripePaymentIntentFields = {| paymentMethod: string |};
-type RegularStripeCheckoutPaymentFields = {| stripeToken: string |};
+type RegularStripePaymentIntentFields = {|
+  paymentMethod: string,                  // The ID of the Stripe Payment Method
+  stripePaymentType: StripePaymentMethod, // The type of Stripe payment, e.g. Apple Pay
+|};
+type RegularStripeCheckoutPaymentFields = {|
+  stripeToken: string,
+  stripePaymentType: StripePaymentMethod,
+|};
 
 type RegularDirectDebitPaymentFields = {|
   accountHolderName: string,
@@ -83,6 +89,7 @@ export type RegularPaymentRequestAddress = {|
   city: Option<string>,
 |};
 
+// The model that is sent to support-workers
 export type RegularPaymentRequest = {|
   title?: Option<Title>,
   firstName: string,
@@ -174,9 +181,15 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
   switch (authorisation.paymentMethod) {
     case Stripe:
       if (authorisation.paymentMethodId) {
-        return { paymentMethod: authorisation.paymentMethodId };
+        return {
+          paymentMethod: authorisation.paymentMethodId,
+          stripePaymentType: authorisation.stripePaymentMethod
+        };
       } else if (authorisation.token) {
-        return { stripeToken: authorisation.token };
+        return {
+          stripeToken: authorisation.token,
+          stripePaymentType: authorisation.stripePaymentMethod
+        };
       }
       throw new Error('Neither token nor paymentMethod found in authorisation data for Stripe recurring contribution');
     case PayPal:
