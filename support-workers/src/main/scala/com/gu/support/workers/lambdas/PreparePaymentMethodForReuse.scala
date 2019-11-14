@@ -72,7 +72,8 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
           creditCardExpirationMonth = cardResponse.creditCardExpirationMonth,
           creditCardExpirationYear = cardResponse.creditCardExpirationYear,
           creditCardType = cardResponse.creditCardType,
-          paymentGateway = paymentGateway
+          paymentGateway = paymentGateway,
+          stripePaymentType = None
         )
       )
     case directDebitResponse: GetPaymentMethodDirectDebitResponse =>

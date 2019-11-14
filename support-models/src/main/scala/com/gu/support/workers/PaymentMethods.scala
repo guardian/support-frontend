@@ -3,7 +3,7 @@ package com.gu.support.workers
 import cats.syntax.functor._
 import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
-import com.gu.support.encoding.Codec.capitalizingCodec
+import com.gu.support.encoding.Codec.{capitalizingCodec, deriveCodec}
 import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -13,11 +13,14 @@ sealed trait PaymentMethod {
   def paymentGateway: PaymentGateway
 }
 
-object CreditCardReferenceTransaction {
-  sealed trait StripePaymentType
+sealed trait StripePaymentType
+
+object StripePaymentType {
   case object StripeCheckout extends StripePaymentType
   case object StripeApplePay extends StripePaymentType
   case object StripePaymentRequestButton extends StripePaymentType
+
+  implicit val stripePaymentTypeCodec: Codec[StripePaymentType] = deriveCodec
 }
 
 case class CreditCardReferenceTransaction(
@@ -30,7 +33,7 @@ case class CreditCardReferenceTransaction(
   creditCardType: String /*TODO: strip spaces?*/ ,
   paymentGateway: PaymentGateway,
   `type`: String = "CreditCardReferenceTransaction",
-  stripePaymentType: Option[CreditCardReferenceTransaction.StripePaymentType]
+  stripePaymentType: Option[StripePaymentType]
 ) extends PaymentMethod
 
 case class PayPalReferenceTransaction(

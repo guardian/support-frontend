@@ -16,12 +16,12 @@ sealed trait StripePaymentFields extends PaymentFields
 
 case class StripeSourcePaymentFields(
   stripeToken: String,
-  stripePaymentType: Option[CreditCardReferenceTransaction.StripePaymentType]
+  stripePaymentType: Option[StripePaymentType]
 ) extends StripePaymentFields // pre SCA compatibility
 
 case class StripePaymentMethodPaymentFields(
   paymentMethod: PaymentMethodId,
-  stripePaymentType: Option[CreditCardReferenceTransaction.StripePaymentType]
+  stripePaymentType: Option[StripePaymentType]
 ) extends StripePaymentFields
 
 object PaymentMethodId {
@@ -54,6 +54,7 @@ case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
 
 object PaymentFields {
   //Payment fields are input from support-frontend
+  import StripePaymentType.stripePaymentTypeCodec
   implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
   implicit val stripeSourcePaymentFieldsCodec: Codec[StripeSourcePaymentFields] = deriveCodec
   implicit val stripePaymentMethodPaymentFieldsCodec: Codec[StripePaymentMethodPaymentFields] = deriveCodec
