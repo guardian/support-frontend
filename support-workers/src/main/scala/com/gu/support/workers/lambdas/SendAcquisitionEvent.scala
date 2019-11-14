@@ -67,8 +67,12 @@ object SendAcquisitionEvent {
 
   def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): thrift.PaymentProvider =
     paymentMethod match {
-      case _: CreditCardReferenceTransaction => thrift.PaymentProvider.Stripe
-      //TODO - check for PRB/Apple
+      case creditCardPayment: CreditCardReferenceTransaction =>
+        creditCardPayment.stripePaymentType match {
+          case Some(StripePaymentType.StripeApplePay) => thrift.PaymentProvider.StripeApplePay
+          case Some(StripePaymentType.StripePaymentRequestButton) => thrift.PaymentProvider.StripePaymentRequestButton
+          case _ => thrift.PaymentProvider.Stripe
+        }
       case _: PayPalReferenceTransaction => thrift.PaymentProvider.Paypal
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
     }
