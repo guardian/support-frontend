@@ -13,8 +13,16 @@ case class PayPalPaymentFields(baid: String) extends PaymentFields
 
 
 sealed trait StripePaymentFields extends PaymentFields
-case class StripeSourcePaymentFields(stripeToken: String) extends StripePaymentFields // pre SCA compatibility
-case class StripePaymentMethodPaymentFields(paymentMethod: PaymentMethodId) extends StripePaymentFields
+
+case class StripeSourcePaymentFields(
+  stripeToken: String,
+  stripePaymentType: Option[CreditCardReferenceTransaction.StripePaymentType]
+) extends StripePaymentFields // pre SCA compatibility
+
+case class StripePaymentMethodPaymentFields(
+  paymentMethod: PaymentMethodId,
+  stripePaymentType: Option[CreditCardReferenceTransaction.StripePaymentType]
+) extends StripePaymentFields
 
 object PaymentMethodId {
 

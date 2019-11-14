@@ -13,6 +13,13 @@ sealed trait PaymentMethod {
   def paymentGateway: PaymentGateway
 }
 
+object CreditCardReferenceTransaction {
+  sealed trait StripePaymentType
+  case object StripeCheckout extends StripePaymentType
+  case object StripeApplePay extends StripePaymentType
+  case object StripePaymentRequestButton extends StripePaymentType
+}
+
 case class CreditCardReferenceTransaction(
   tokenId: String, //Stripe Card id
   secondTokenId: String, //Stripe Customer Id
@@ -22,7 +29,8 @@ case class CreditCardReferenceTransaction(
   creditCardExpirationYear: Int,
   creditCardType: String /*TODO: strip spaces?*/ ,
   paymentGateway: PaymentGateway,
-  `type`: String = "CreditCardReferenceTransaction"
+  `type`: String = "CreditCardReferenceTransaction",
+  stripePaymentType: Option[CreditCardReferenceTransaction.StripePaymentType]
 ) extends PaymentMethod
 
 case class PayPalReferenceTransaction(
