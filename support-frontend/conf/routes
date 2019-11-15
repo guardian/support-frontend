@@ -91,11 +91,13 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout controllers.A
 GET  /subscribe/digital/checkout                                   controllers.DigitalSubscription.displayForm()
 GET  /subscribe/digital/checkout/thankyou-existing                 controllers.DigitalSubscription.displayThankYouExisting()
 
-GET  /weekly                                                       controllers.Subscriptions.weeklyGeoRedirect()
-GET  /subscribe/weekly                                             controllers.Subscriptions.weeklyGeoRedirect()
+GET  /weekly                                                       controllers.Subscriptions.weeklyGeoRedirect(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly                                             controllers.Subscriptions.weeklyGeoRedirect(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly/gift                                        controllers.Subscriptions.weeklyGeoRedirect(orderIsAGift: Boolean = true)
 GET  /subscribe/weekly/checkout                                    controllers.WeeklySubscription.displayForm(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly/checkout/gift                               controllers.WeeklySubscription.displayForm(orderIsAGift: Boolean = true)
-GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.Subscriptions.weekly(country: String)
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.Subscriptions.weekly(country: String, orderIsAGift: Boolean = false)
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.Subscriptions.weekly(country: String, orderIsAGift: Boolean = true)
 
 GET  /paper                                                        controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
 GET  /subscribe/paper                                              controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
