@@ -131,4 +131,26 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
     canRun: () => countryGroupId !== 'UnitedStates',
   },
+  newLandingPageTemplateTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'new_template',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 11,
+    targetPage: contributionsLandingPageMatch,
+    canRun: () => countryGroupId === 'UnitedStates',
+  },
 };
