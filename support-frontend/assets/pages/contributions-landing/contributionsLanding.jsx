@@ -33,6 +33,8 @@ import ConsentBanner from '../../components/consentBanner/consentBanner';
 import SecureTransactionIndicator from '../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
 import './contributionsLanding.scss';
 import './contributionsLandingEOY2019.scss';
+import type { NewLandingPageTemplateTestVariants } from '../../../assets/helpers/abTests/abtestDefinitions';
+import './newTemplate.scss';
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -103,7 +105,45 @@ const showSecureTransactionIndicator = () => {
   return null;
 };
 
+const newTemplateVariant: NewLandingPageTemplateTestVariants =
+  store.getState().common.abParticipations.newLandingPageTemplateTest;
+
+
+const originalPage = (campaignCodeParameter: ?string) => (
+  <Page
+    classModifiers={['contribution-form', ...cssModifiers]}
+    header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+    footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+    backgroundImageSrc={backgroundImageSrc}
+  >
+    {showSecureTransactionIndicator}
+    <ContributionFormContainer
+      thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+      campaignCodeParameter={campaignCodeParameter}
+    />
+    <ConsentBanner />
+  </Page>
+);
+
+const newTemplagePage = (campaignCodeParameter: ?string) => (
+  <Page
+    classModifiers={['new-template']}
+    header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+    footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+    backgroundImageSrc={backgroundImageSrc}
+  >
+    {showSecureTransactionIndicator}
+    <ContributionFormContainer
+      thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+      campaignCodeParameter={campaignCodeParameter}
+    />
+    <ConsentBanner />
+  </Page>
+);
+
+
 function contributionsLandingPage(campaignCodeParameter: ?string) {
+<<<<<<< HEAD
   return (
     <Page
       classModifiers={['contribution-form', ...cssModifiers]}
@@ -119,6 +159,9 @@ function contributionsLandingPage(campaignCodeParameter: ?string) {
       <ConsentBanner />
     </Page>
   );
+=======
+  return newTemplateVariant === 'new_template' ? newTemplagePage(campaignCodeParameter) : originalPage(campaignCodeParameter);
+>>>>>>> set up test in landing page
 }
 
 const router = (
