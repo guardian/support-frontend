@@ -75,7 +75,7 @@ class Subscriptions(
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val promoCodes =  queryPromos ++ List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes)
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, orderIsAGift)
     val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
       ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
         .getCopyForPromoCode(promoCode, GuardianWeekly, CountryGroup.countryByCode(countryCode).getOrElse(Country.UK))
@@ -94,7 +94,7 @@ class Subscriptions(
         s"""<script type="text/javascript">
               window.guardian.productPrices = ${outputJson(productPrices)}
               window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
-              window.guardian.orderIsAGift = ${orderIsAGift}
+              window.guardian.orderIsAGift = $orderIsAGift
             </script>""")
     }).withSettingsSurrogateKey
   }
