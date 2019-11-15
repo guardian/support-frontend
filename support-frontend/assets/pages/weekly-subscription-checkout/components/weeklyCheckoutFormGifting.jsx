@@ -244,7 +244,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           </FormSection>
           <FormSection border="top" id="weekly-checkout__heading-form-section--second">
             <Heading size={2} className="component-checkout-form-section__heading component-heading--gift">
-              Your information
+              Payment information
             </Heading>
           </FormSection>
           <FormSection title="Your details" border="bottom">
