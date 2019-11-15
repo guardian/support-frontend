@@ -1,0 +1,32 @@
+@import '~stylesheets/skeleton/skeleton';
+@import '~stylesheets/gu-sass/gu-sass';
+
+
+.gu-content--new-template {
+
+  .gu-content__main {
+    background-color: gu-colour(sport-dark);
+    margin: 0;
+    padding: 0;
+  }
+
+  .gu-content__content {
+    max-width: 100%
+  }
+
+  .gu-content__blurb {
+    border: 0;
+    width: 60%
+  }
+
+  .gu-content__blurb-header {
+    color: white;
+    font-size: 70px;
+  }
+
+  .gu-content__blurb-blurb {
+    color: white;
+    font-size: 17px;
+    border: 0;
+  }
+}
