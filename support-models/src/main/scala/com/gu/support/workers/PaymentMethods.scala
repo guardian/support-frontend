@@ -3,7 +3,7 @@ package com.gu.support.workers
 import cats.syntax.functor._
 import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
-import com.gu.support.encoding.Codec.{capitalizingCodec, deriveCodec}
+import com.gu.support.encoding.Codec.capitalizingCodec
 import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -20,7 +20,16 @@ object StripePaymentType {
   case object StripeApplePay extends StripePaymentType
   case object StripePaymentRequestButton extends StripePaymentType
 
-  implicit val stripePaymentTypeCodec: Codec[StripePaymentType] = deriveCodec
+  implicit val stripePaymentTypeDecoder: Decoder[StripePaymentType] = Decoder.decodeString.map(code => fromString(code))
+  implicit val stripePaymentTypeEncoder: Encoder[StripePaymentType] = Encoder.encodeString.contramap[StripePaymentType](_.toString)
+
+  private def fromString(s: String) = {
+    s match {
+      case "StripePaymentRequestButton" => StripePaymentRequestButton
+      case "StripeApplePay" => StripeApplePay
+      case _ => StripeCheckout
+    }
+  }
 }
 
 case class CreditCardReferenceTransaction(
