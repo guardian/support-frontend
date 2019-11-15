@@ -41,8 +41,8 @@ export default function Hero(props: { countryGroupId: CountryGroupId }) {
     <div className="showcase-hero">
       <figure className="showcase-hero-wrapper">
         <div className="showcase-hero-heading">
-          <h1 className="accessibility-hint">Support the guardian</h1>
-          <h2 className="accessibility-hint">Help us support investigative independent journalism</h2>
+          <h1 className="visually-hidden">Support the guardian</h1>
+          <h2 className="visually-hidden">Help us support investigative independent journalism</h2>
           <HeroImg />
         </div>
         <div className="showcase-hero--left">

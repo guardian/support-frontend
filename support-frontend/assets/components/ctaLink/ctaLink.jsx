@@ -42,7 +42,7 @@ export default function CtaLink(props: PropTypes) {
     >
       <span className="component-cta-link__text">{props.text}</span>
       {props.svg}
-      <p id={accessibilityHintId} className="accessibility-hint">{props.accessibilityHint}</p>
+      <p id={accessibilityHintId} className="visually-hidden">{props.accessibilityHint}</p>
     </a>
   );
 

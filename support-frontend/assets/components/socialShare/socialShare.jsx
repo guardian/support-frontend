@@ -93,7 +93,7 @@ export default function SocialShare(props: PropTypes) {
       aria-labelledby={a11yId}
     >
       {socialMedia[props.name].svg}
-      <p id={a11yId} className="accessibility-hint">
+      <p id={a11yId} className="visually-hidden">
         {socialMedia[props.name].a11yHint}
       </p>
     </button>

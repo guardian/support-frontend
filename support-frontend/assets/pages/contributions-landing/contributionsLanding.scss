@@ -100,7 +100,7 @@ header[role="banner"] {
 }
 
 .glogo-alt-text {
-  @include accessibility-hint;
+  @include visually-hidden;
 }
 
 .countryGroups {
@@ -527,7 +527,7 @@ form {
 }
 
 .form__legend--radio-group {
-  @include accessibility-hint;
+  @include visually-hidden;
 }
 
 .form__radio-group-list {
@@ -1215,5 +1215,5 @@ form {
 ///////////////////
 
 .hidden-heading {
-  @include accessibility-hint
+  @include visually-hidden
 }
