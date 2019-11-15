@@ -116,7 +116,7 @@ const originalPage = (campaignCodeParameter: ?string) => (
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
   >
-    {showSecureTransactionIndicator}
+    {showSecureTransactionIndicator()}
     <ContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
       campaignCodeParameter={campaignCodeParameter}
@@ -132,7 +132,7 @@ const newTemplagePage = (campaignCodeParameter: ?string) => (
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
   >
-    {showSecureTransactionIndicator}
+    {showSecureTransactionIndicator()}
     <ContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
       campaignCodeParameter={campaignCodeParameter}
@@ -142,27 +142,7 @@ const newTemplagePage = (campaignCodeParameter: ?string) => (
 );
 
 
-function contributionsLandingPage(campaignCodeParameter: ?string) {
-<<<<<<< HEAD
-  return (
-    <Page
-      classModifiers={['contribution-form', ...cssModifiers]}
-      header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-      footer={<Footer disclaimer countryGroupId={countryGroupId} />}
-      backgroundImageSrc={backgroundImageSrc}
-    >
-      {showSecureTransactionIndicator()}
-      <ContributionFormContainer
-        thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-        campaignCodeParameter={campaignCodeParameter}
-      />
-      <ConsentBanner />
-    </Page>
-  );
-=======
-  return newTemplateVariant === 'new_template' ? newTemplagePage(campaignCodeParameter) : originalPage(campaignCodeParameter);
->>>>>>> set up test in landing page
-}
+const contributionsLandingPage = (campaignCodeParameter: ?string) => (newTemplateVariant === 'new_template' ? newTemplagePage(campaignCodeParameter) : originalPage(campaignCodeParameter));
 
 const router = (
   <BrowserRouter>
