@@ -14,6 +14,7 @@ import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { LandingPageCopyReturningSinglesTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -28,6 +29,7 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   landingPageCopyReturningSinglesTestVariant: LandingPageCopyReturningSinglesTestVariants,
+  countryId: IsoCountry,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -38,6 +40,7 @@ const mapStateToProps = (state: State) => ({
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
   landingPageCopyReturningSinglesTestVariant: state.common.abParticipations.landingPageCopyReturningSingles,
+  countryId: state.common.internationalisation.countryId,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -74,6 +77,12 @@ const returningSingleContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
+const usEoyAppealSingleContributeCopy = (
+  <span>
+    Your support helps protect the Guardian’s independence and it means we can keep delivering quality, journalism
+    that’s open for everyone around the world. Every contribution, big or small, is so valuable for our future.
+  </span>);
+
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
@@ -82,6 +91,11 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 const returningSingleHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: returningSingleHeaderCopy,
   contributeCopy: returningSingleContributeCopy,
+};
+
+const usEoyAppealCopyAndContributeCopy: CountryMetaData = {
+  headerCopy: defaultHeaderCopy,
+  contributeCopy: usEoyAppealSingleContributeCopy,
 };
 
 const campaignName = getCampaignName();
@@ -96,12 +110,20 @@ function withProps(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const landingPageCopy = props.isReturningContributor && props.landingPageCopyReturningSinglesTestVariant === 'returningSingle' ?
-    returningSingleHeaderCopyAndContributeCopy :
-    defaultHeaderCopyAndContributeCopy;
+  const landingPageCopy = (): CountryMetaData => {
+    if (props.isReturningContributor && props.landingPageCopyReturningSinglesTestVariant === 'returningSingle') {
+      return returningSingleHeaderCopyAndContributeCopy;
+    }
+
+    if (props.countryId === 'US') {
+      return usEoyAppealCopyAndContributeCopy;
+    }
+
+    return defaultHeaderCopyAndContributeCopy;
+  };
 
   const countryGroupDetails = {
-    ...landingPageCopy,
+    ...landingPageCopy(),
     ...campaign || {},
   };
 
