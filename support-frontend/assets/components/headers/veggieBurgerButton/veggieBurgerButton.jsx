@@ -25,7 +25,7 @@ const VeggieBurgerButton = ({
       ref={getRef}
       {...otherProps}
     >
-      <span className="accessibility-hint">{label}</span>
+      <span className="visually-hidden">{label}</span>
       {children}
     </button>
   );

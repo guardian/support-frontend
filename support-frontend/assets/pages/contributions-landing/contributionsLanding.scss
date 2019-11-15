@@ -99,6 +99,10 @@ header[role="banner"] {
   }
 }
 
+.glogo-alt-text {
+  @include visually-hidden;
+}
+
 .countryGroups {
   font-family: $gu-text-sans-web;
   max-width: 355px;
@@ -523,7 +527,7 @@ form {
 }
 
 .form__legend--radio-group {
-  @include accessibility-hint;
+  @include visually-hidden;
 }
 
 .form__radio-group-list {
@@ -1211,5 +1215,5 @@ form {
 ///////////////////
 
 .hidden-heading {
-  @include accessibility-hint
+  @include visually-hidden
 }

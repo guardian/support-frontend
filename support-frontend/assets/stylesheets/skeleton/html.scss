@@ -74,8 +74,8 @@ strong {
 /*
 Assistive technologies guidance (non-visible)
 */
-.accessibility-hint {
-  @include accessibility-hint;
+.visually-hidden {
+  @include visually-hidden;
 }
 
 

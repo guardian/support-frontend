@@ -9,7 +9,7 @@ const Item = ({
   isSelected, children, el: El, ...props
 }: {...itemProps, el: string}) => (
   <El {...props} className={styles.item} data-is-selected={isSelected}>
-    {children} {isSelected && [<SvgCheckmark />, <span className="accessibility-hint">Selected</span>]}
+    {children} {isSelected && [<SvgCheckmark />, <span className="visually-hidden">Selected</span>]}
   </El>);
 
 
