@@ -9,6 +9,7 @@ import {
 export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'paymentRequestButton' | 'notintest';
 export type paymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
 export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
+export type NewLandingPageTemplateTestVariants = 'control' | 'new_template';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
@@ -106,5 +107,28 @@ export const tests: Tests = {
     seed: 4,
     targetPage: subsShowcasePageMatch,
     optimizeId: 'sj4_I5OAT3SJpqgnxtJ6Xg',
+  },
+
+  newLandingPageTemplateTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'new_template',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 11,
+    targetPage: contributionsLandingPageMatch,
+    canRun: () => countryGroupId !== 'UnitedStates',
   },
 };
