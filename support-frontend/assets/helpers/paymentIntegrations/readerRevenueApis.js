@@ -60,7 +60,7 @@ type ProductFields = RegularContribution | DigitalSubscription | PaperSubscripti
 type RegularPayPalPaymentFields = {| baid: string |};
 
 type RegularStripePaymentIntentFields = {|
-  paymentMethod: string,                  // The ID of the Stripe Payment Method
+  paymentMethod: string, // The ID of the Stripe Payment Method
   stripePaymentType: StripePaymentMethod, // The type of Stripe payment, e.g. Apple Pay
 |};
 type RegularStripeCheckoutPaymentFields = {|
@@ -183,12 +183,12 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
       if (authorisation.paymentMethodId) {
         return {
           paymentMethod: authorisation.paymentMethodId,
-          stripePaymentType: authorisation.stripePaymentMethod
+          stripePaymentType: authorisation.stripePaymentMethod,
         };
       } else if (authorisation.token) {
         return {
           stripeToken: authorisation.token,
-          stripePaymentType: authorisation.stripePaymentMethod
+          stripePaymentType: authorisation.stripePaymentMethod,
         };
       }
       throw new Error('Neither token nor paymentMethod found in authorisation data for Stripe recurring contribution');
