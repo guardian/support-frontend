@@ -7,49 +7,30 @@ import {
   type ProductPrice,
   showPrice,
 } from 'helpers/productPrice/productPrices';
-import { billingPeriodNoun, type BillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/billingPeriods';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
-import { type Option } from 'helpers/types/option';
 
 export type PropTypes = {
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
-  orderIsAGift: Option<boolean>,
-  giftStyles?: Object,
-  tabletAndDesktop?: Object,
 }
 
 function PriceLabel({
-  productPrice,
-  billingPeriod,
-  orderIsAGift,
-  giftStyles,
-  tabletAndDesktop,
-  ...props
+  productPrice, billingPeriod, ...props
 }: PropTypes) {
-  const description = getPriceDescription(productPrice, billingPeriod, orderIsAGift, true);
+  const description = getPriceDescription(productPrice, billingPeriod, true);
 
   const promotion = getAppliedPromo(productPrice.promotions);
-  return (
-    <span {...props}>
-      {
-        hasDiscount(promotion) && (
-          <del aria-hidden="true">{showPrice(productPrice)}</del>
-        )
-      }
-      {orderIsAGift && (
-        <span className={tabletAndDesktop}>
-          <span>{billingPeriodNoun(billingPeriod, orderIsAGift)}<br /></span>
-        </span>)
-      }
-      <span className={orderIsAGift && giftStyles}>{description}</span>
-    </span>);
-}
 
-PriceLabel.defaultProps = {
-  giftStyles: {},
-  tabletAndDesktop: {},
-};
+  if (hasDiscount(promotion)) {
+    return (
+      <span {...props}>
+        <del aria-hidden="true">{showPrice(productPrice)}</del>{' '}
+        {description}
+      </span>);
+  }
+  return (<span {...props}>{description}</span>);
+}
 
 export { PriceLabel };

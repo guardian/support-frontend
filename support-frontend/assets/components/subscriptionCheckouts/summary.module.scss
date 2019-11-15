@@ -137,20 +137,6 @@
   }
 }
 
-.gift {
-  @include gu-fontset-body-sans;
-  font-size: 14px;
-  font-weight: 600;
-
-  @include mq($from: tablet) {
-    @include gu-fontset-heading;
-    display: block;
-    margin-bottom: 5px;
-    font-size: 20px !important;
-    font-weight: 400;
-  }
-}
-
 .dataList {
   @include mq($from: tablet) {
     margin-bottom: $gu-v-spacing;
@@ -205,6 +191,7 @@
 .promo {
   @include gu-fontset-body-sans;
   color: gu-colour(neutral-46);
+  margin-top: 4px;
 }
 
 .promoTitle {
