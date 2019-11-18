@@ -67,18 +67,12 @@ const defaultContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
-const returningSingleHeaderCopy = 'Thank you for considering another contribution';
-const returningSingleContributeCopy = (
+const usEoyHeaderCopy = 'Support our journalism with a year-end gift';
+const usEoyAppealContributeCopy = (
   <span>
-    Returning contributors, like you, make The Guardian’s work possible. We need your ongoing support to
-    keep delivering quality journalism, to maintain our openness and to safeguard our editorial independence.
-    <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
-  </span>);
-
-const usEoyAppealSingleContributeCopy = (
-  <span>
-    Your support helps protect the Guardian’s independence and it means we can keep delivering quality, journalism
-    that’s open for everyone around the world. Every contribution, big or small, is so valuable for our future.
+    The Guardian’s open, independent reporting has been supported by hundreds of thousands of US readers like you – we
+    have supporters in each of the fifty states. Thanks to your valuable contributions, tens of millions across America
+    read our quality, factual journalism at this critical time.
   </span>);
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
@@ -86,14 +80,9 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   contributeCopy: defaultContributeCopy,
 };
 
-const returningSingleHeaderCopyAndContributeCopy: CountryMetaData = {
-  headerCopy: returningSingleHeaderCopy,
-  contributeCopy: returningSingleContributeCopy,
-};
-
 const usEoyAppealCopyAndContributeCopy: CountryMetaData = {
-  headerCopy: defaultHeaderCopy,
-  contributeCopy: usEoyAppealSingleContributeCopy,
+  headerCopy: usEoyHeaderCopy,
+  contributeCopy: usEoyAppealContributeCopy,
 };
 
 const campaignName = getCampaignName();
@@ -109,10 +98,6 @@ function withProps(props: PropTypes) {
   };
 
   const landingPageCopy = (): CountryMetaData => {
-    if (props.isReturningContributor && props.landingPageCopyReturningSinglesTestVariant === 'returningSingle') {
-      return returningSingleHeaderCopyAndContributeCopy;
-    }
-
     if (props.countryId === 'US') {
       return usEoyAppealCopyAndContributeCopy;
     }
