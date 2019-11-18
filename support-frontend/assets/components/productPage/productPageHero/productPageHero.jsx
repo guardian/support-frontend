@@ -28,6 +28,7 @@ type PropTypes = {|
   content?: Option<Node>,
   hasCampaign: boolean,
   showProductPageHeroHeader?: boolean,
+  orderIsAGift?: boolean,
 |};
 
 type ProductPageHeroHeaderTypes = {
@@ -35,6 +36,7 @@ type ProductPageHeroHeaderTypes = {
   hasCampaign: boolean,
   heading: string,
   content?: Option<Node>,
+  orderIsAGift?: boolean,
 }
 
 // ----- Render ----- //
@@ -89,11 +91,11 @@ const ProductPageHero = ({
 );
 
 const ProductPageHeroHeader = ({
-  overheading, heading, content, hasCampaign,
+  overheading, heading, content, hasCampaign, orderIsAGift,
 }: ProductPageHeroHeaderTypes) => (
   <div>
     <HeroHeading {...{ hasCampaign }}>
-      <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
+      <HeadingBlock overheading={orderIsAGift ? null : overheading} >{heading}</HeadingBlock>
     </HeroHeading>
     {content && <HeroHanger>{content}</HeroHanger>}
   </div>
@@ -108,6 +110,7 @@ ProductPageHero.defaultProps = {
 
 ProductPageHeroHeader.defaultProps = {
   content: null,
+  orderIsAGift: false,
 };
 
 export { HeroHanger, HeroWrapper, HeroHeading, ProductPageHeroHeader };

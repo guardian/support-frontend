@@ -101,6 +101,7 @@ export const imageCatalogue: {
   digitalSubsDailyMob: '93c8d64b7be3bf455f2f6f57d679c2fdc7df6bf3/0_0_1100_1100',
   digitalSubsApp: '234f5889b07c7c5d088d8d977e9e717ea8f2e791/0_0_1714_1000',
   digitalSubsAppMob: '59d2d83d9c1ecf8b3c955c63bf94ef2fa80c7353/0_0_1100_1100',
+  gwGiftingPackshot: '867469f74afafe58f18ca6870a89b346d28e9e49/0_0_1300_538',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

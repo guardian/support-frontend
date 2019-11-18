@@ -1,11 +1,19 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-product-page-hero.component-product-page-hero--weekly-campaign {
-  position: relative;
-  box-sizing: border-box;
   background: #283942;
   color: #fff;
+}
 
+.component-product-page-hero.component-product-page-hero--weekly-gift {
+  background: #FBF6EF;
+  color: #333333;
+}
+
+.component-product-page-hero.component-product-page-hero--weekly-campaign,
+.component-product-page-hero.component-product-page-hero--weekly-gift {
+  position: relative;
+  box-sizing: border-box;
   max-height: 550px;
 
   & * {
@@ -22,13 +30,24 @@
 }
 
 .weekly-campaign-hero__copy {
+  h2 {
+    color: #fff;
+  }
+}
+
+.weekly-gifting-hero__copy {
+  h2 {
+    color: #333333;
+  }
+}
+
+.weekly-campaign-hero__copy, .weekly-gifting-hero__copy {
   display: block;
   max-width: 50%;
   padding: $gu-v-spacing*2 0 $gu-v-spacing*2 $gu-v-spacing;
-  margin-bottom: auto; 
-  
+  margin-bottom: auto;
+
   h2 {
-    color: #fff;
     font-family: $gu-titlepiece;
     font-size: 34px;
     line-height: 1;
@@ -37,19 +56,19 @@
   @include mq($from: mobileMedium) {
     max-width: 60%;
   }
-  
+
   @include mq($from: mobileLandscape) {
-    margin-bottom: 0; 
+    margin-bottom: 0;
     padding-top: 0;
   }
-  
+
   @include mq($from: phablet) {
-    max-width: gu-span(10);      
+    max-width: gu-span(10);
     h2 {
       font-size: 40px;
     }
   }
-  
+
   @include mq($from: tablet) {
     h2 {
       font-size: 44px;
@@ -61,7 +80,7 @@
       font-size: 50px;
     }
   }
-  
+
   @include mq($from: leftCol) {
     h2 {
       font-size: 56px;
@@ -77,7 +96,7 @@
   width: 100%;
   max-width: 80%;
   padding-top: $gu-v-spacing*2;
-  
+
   img {
     position: absolute;
     bottom: 0;
