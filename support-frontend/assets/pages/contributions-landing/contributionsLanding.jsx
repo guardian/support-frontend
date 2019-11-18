@@ -30,8 +30,9 @@ import ContributionThankYouContainer
   from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
-import './contributionsLanding.scss';
 import SecureTransactionIndicator from '../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+import './contributionsLanding.scss';
+import './contributionsLandingEOY2019.scss';
 
 if (!isDetailsSupported) {
   polyfillDetails();

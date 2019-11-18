@@ -14,6 +14,7 @@ import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { LandingPageCopyReturningSinglesTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -28,6 +29,7 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   landingPageCopyReturningSinglesTestVariant: LandingPageCopyReturningSinglesTestVariants,
+  countryId: IsoCountry,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -38,6 +40,7 @@ const mapStateToProps = (state: State) => ({
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
   landingPageCopyReturningSinglesTestVariant: state.common.abParticipations.landingPageCopyReturningSingles,
+  countryId: state.common.internationalisation.countryId,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -51,8 +54,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 export type CountryMetaData = {
   headerCopy: string,
   contributeCopy?: React$Element<string>,
-  // URL to fetch ticker data from. null/undefined implies no ticker
-  tickerJsonUrl?: string,
   // Optional message to display at the top of the form
   formMessage?: React$Element<string>,
 };
@@ -66,12 +67,12 @@ const defaultContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
-const returningSingleHeaderCopy = 'Thank you for considering another contribution';
-const returningSingleContributeCopy = (
+const usEoyHeaderCopy = 'Support our journalism with a year-end gift';
+const usEoyAppealContributeCopy = (
   <span>
-    Returning contributors, like you, make The Guardian’s work possible. We need your ongoing support to
-    keep delivering quality journalism, to maintain our openness and to safeguard our editorial independence.
-    <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
+    The Guardian’s open, independent reporting has been supported by hundreds of thousands of US readers like you – we
+    have supporters in each of the fifty states. Thanks to your valuable contributions, tens of millions across America
+    read our quality, factual journalism at this critical time.
   </span>);
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
@@ -79,9 +80,9 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   contributeCopy: defaultContributeCopy,
 };
 
-const returningSingleHeaderCopyAndContributeCopy: CountryMetaData = {
-  headerCopy: returningSingleHeaderCopy,
-  contributeCopy: returningSingleContributeCopy,
+const usEoyAppealCopyAndContributeCopy: CountryMetaData = {
+  headerCopy: usEoyHeaderCopy,
+  contributeCopy: usEoyAppealContributeCopy,
 };
 
 const campaignName = getCampaignName();
@@ -96,12 +97,16 @@ function withProps(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const landingPageCopy = props.isReturningContributor && props.landingPageCopyReturningSinglesTestVariant === 'returningSingle' ?
-    returningSingleHeaderCopyAndContributeCopy :
-    defaultHeaderCopyAndContributeCopy;
+  const landingPageCopy = (): CountryMetaData => {
+    if (props.countryId === 'US') {
+      return usEoyAppealCopyAndContributeCopy;
+    }
+
+    return defaultHeaderCopyAndContributeCopy;
+  };
 
   const countryGroupDetails = {
-    ...landingPageCopy,
+    ...landingPageCopy(),
     ...campaign || {},
   };
 
