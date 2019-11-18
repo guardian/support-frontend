@@ -70,7 +70,7 @@ const defaultContributeCopy = (
 const usEoyHeaderCopy = 'Support our journalism with a year-end gift';
 const usEoyAppealContributeCopy = (
   <span>
-    The Guardian’s open, independent reporting has been supported by hundreds of thousands of US readers like you – we
+    The Guardian’s open, independent reporting has been supported by hundreds of thousands of readers in the US like you – we
     have supporters in each of the fifty states. Thanks to your valuable contributions, tens of millions across America
     read our quality, factual journalism at this critical time.
   </span>);
