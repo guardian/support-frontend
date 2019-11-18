@@ -143,6 +143,12 @@
   }
 }
 
+.tabletAndDesktop {
+  @include mq($until: tablet) {
+    display: none;
+  }
+}
+
 .mobileOnly {
   @include mq($from: tablet) {
     display: none;
