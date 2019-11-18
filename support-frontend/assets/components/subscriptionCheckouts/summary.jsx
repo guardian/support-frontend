@@ -96,7 +96,9 @@ const TabletAndDesktop = (props: PropTypes) => (
     <div className={styles.content}>
       <h1 className={styles.header}>Order summary</h1>
       <header>
-        <h2 className={styles.title} title={`your subscription is ${props.title}`}>{props.title}</h2>
+        <h2 className={styles.title} title={`your subscription is ${props.title}`}>
+          {!props.orderIsAGift && 'The '}{props.title}{props.orderIsAGift && ' Gift Subscription'}
+        </h2>
         {props.description &&
           <h3 className={styles.titleDescription}>{props.description}</h3>
         }
@@ -188,7 +190,6 @@ const ShowDropDown = (props: {
         billingPeriod={props.billingPeriod}
         orderIsAGift={props.orderIsAGift}
         giftStyles={styles.gift}
-        tabletAndDesktop={styles.tabletAndDesktop}
       />
     </div>
     {props.deliveryMethod ?

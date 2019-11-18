@@ -99,7 +99,7 @@
     @include gu-typeface(headline, 18, $size-only: true);
   }
   @include mq($from:leftCol) {
-    @include gu-typeface(headline, 32, $size-only: true);
+    @include gu-typeface(headline, 24, $size-only: true);
   }
 }
 
@@ -154,12 +154,6 @@
 .dataList {
   @include mq($from: tablet) {
     margin-bottom: $gu-v-spacing;
-  }
-}
-
-.tabletAndDesktop {
-  @include mq($until: tablet) {
-    display: none;
   }
 }
 

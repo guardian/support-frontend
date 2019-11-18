@@ -27,6 +27,9 @@ const billingPeriodQuantifier = (numberOfBillingPeriods: number, noun: string) =
 const billingPeriodNoun = (billingPeriod: BillingPeriod, orderIsAGift: boolean = false) =>
   upperCaseNoun(billingPeriod, orderIsAGift).toLowerCase();
 
+const billingPeriodNounGift = (billingPeriod: BillingPeriod, orderIsAGift: boolean = false) =>
+  upperCaseNoun(billingPeriod, orderIsAGift);
+
 const standardRate = (
   glyph: string,
   price: number,
@@ -43,7 +46,7 @@ const standardRateGift = (
   price: number,
   billingPeriod: BillingPeriod,
 ) =>
-  `Fixed term of ${billingPeriodNoun(billingPeriod, true)} for ${displayPrice(glyph, price)}`;
+  `${billingPeriodNounGift(billingPeriod, true)} for ${displayPrice(glyph, price)}`;
 
 function getDiscountDescription(
   glyph: string,
