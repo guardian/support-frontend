@@ -1,10 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import {
-  type ProductPrice,
-
-} from 'helpers/productPrice/productPrices';
+import { type ProductPrice } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import styles from './summary.module.scss';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
@@ -12,8 +9,8 @@ import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
-import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 
 // Types
 
@@ -32,7 +29,7 @@ type PropTypes = {
   title: string,
   // eslint-disable-next-line react/no-unused-prop-types
   product: SubscriptionProduct,
-  // eslint-disable-next-line react/no-unused-prop-types
+  // eslint-disable-next-line react/require-default-props
   orderIsAGift?: boolean,
 };
 
@@ -108,12 +105,9 @@ const TabletAndDesktop = (props: PropTypes) => (
           className={styles.pricing}
           productPrice={props.productPrice}
           billingPeriod={props.billingPeriod}
-          orderIsAGift={props.orderIsAGift ? props.orderIsAGift : null}
-          giftStyles={styles.gift}
-          tabletAndDesktop={styles.tabletAndDesktop}
         />
         <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions)} />
-        {props.dataList && !props.orderIsAGift &&
+        {props.dataList &&
           <DataList dataList={props.dataList} />
         }
       </div>
@@ -127,7 +121,6 @@ const TabletAndDesktop = (props: PropTypes) => (
 TabletAndDesktop.defaultProps = {
   changeSubscription: null,
   dataList: [],
-  orderIsAGift: false,
 };
 
 const HideDropDown = (props: {
@@ -137,7 +130,6 @@ const HideDropDown = (props: {
   showDropDown: boolean,
   title: string,
   paper: boolean,
-  orderIsAGift: boolean,
 }) => (
   <div className={styles.content}>
     <h1 className={styles.header}>Order summary</h1>
@@ -150,9 +142,6 @@ const HideDropDown = (props: {
         className={styles.pricing}
         productPrice={props.productPrice}
         billingPeriod={props.billingPeriod}
-        orderIsAGift={props.orderIsAGift}
-        giftStyles={styles.gift}
-        tabletAndDesktop={styles.tabletAndDesktop}
       />
       {props.paper ?
         <span className={styles.pricing}>
@@ -171,8 +160,8 @@ const ShowDropDown = (props: {
   showDropDown: boolean,
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
-  title: string,
   orderIsAGift: boolean,
+  title: string,
 }) => (
   <div className={styles.contentWrapper}>
     <h1 className={styles.headerShowDetails}>Order summary</h1>
@@ -222,7 +211,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
     changeSubscription: null,
     dataList: [],
     orderIsAGift: false,
-  }
+  };
 
   constructor(props: PropTypes) {
     super(props);
@@ -232,11 +221,11 @@ export default class Summary extends Component<PropTypes, StateTypes> {
     };
   }
 
-  getDeliveryMethod = () => this.props.dataList.filter(item => item.title === 'Delivery method').pop().value
+  getDeliveryMethod = () => this.props.dataList.filter(item => item.title === 'Delivery method').pop().value;
 
   toggleDetails = () => {
     this.setState({ showDropDown: !this.state.showDropDown });
-  }
+  };
 
   render() {
     const { product } = this.props;

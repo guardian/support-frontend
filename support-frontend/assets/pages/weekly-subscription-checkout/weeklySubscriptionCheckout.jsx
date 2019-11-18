@@ -75,8 +75,8 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={orderIsAGift ? <WeeklyCheckoutFormGifting /> : <WeeklyCheckoutForm />}
-        thankYouContentPending={<ThankYouContent isPending />}
-        thankYouContent={<ThankYouContent isPending={false} />}
+        thankYouContentPending={<ThankYouContent isPending orderIsGift={orderIsAGift} />}
+        thankYouContent={<ThankYouContent isPending={false} orderIsGift={orderIsAGift} />}
         subscriptionProduct="GuardianWeekly"
       />
       <ConsentBanner />

@@ -10,12 +10,12 @@ export type DigitalBillingPeriod = typeof Monthly | typeof Annual;
 export type WeeklyBillingPeriod = typeof SixWeekly | typeof Quarterly | typeof Annual;
 export type ContributionBillingPeriod = typeof Monthly | typeof Annual;
 
-function billingPeriodNoun(billingPeriod: BillingPeriod, orderIsAGift: boolean = false) {
+function billingPeriodNoun(billingPeriod: BillingPeriod, fixedTerm: boolean = false) {
   switch (billingPeriod) {
     case Annual:
-      return orderIsAGift ? 'A year' : 'Year';
+      return fixedTerm ? 'One year' : 'Year';
     case Quarterly:
-      return orderIsAGift ? '3 months' : 'Quarter';
+      return fixedTerm ? '3 months' : 'Quarter';
     case SixWeekly:
       return 'Six issues';
     default:

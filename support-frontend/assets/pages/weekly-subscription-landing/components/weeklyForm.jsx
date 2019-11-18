@@ -1,9 +1,10 @@
 // @flow
 import { connect } from 'react-redux';
 
-import { SixWeekly, type WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import {
   billingPeriodTitle,
+  SixWeekly,
+  type WeeklyBillingPeriod,
   weeklyBillingPeriods,
 } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
@@ -21,28 +22,29 @@ import { promoQueryParam } from 'helpers/productPrice/promotions';
 
 // ---- Plans ----- //
 
-const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod): string => {
+const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean): string => {
   const promoCode = getQueryParameter(promoQueryParam);
   const promoQuery = promoCode ? `&${promoQueryParam}=${promoCode}` : '';
-  return `${getOrigin()}/subscribe/weekly/checkout?period=${billingPeriod.toString()}${promoQuery}`;
+  const gift = orderIsGift ? '/gift' : '';
+  return `${getOrigin()}/subscribe/weekly/checkout${gift}?period=${billingPeriod.toString()}${promoQuery}`;
 };
 
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
+  const { countryId } = state.common.internationalisation;
+  const { productPrices, orderIsAGift } = state.page;
   // The code below removes 6 for 6 as an available billing period if the order is a gift
   const billingPeriodsToUse = weeklyBillingPeriods.filter(billingPeriod =>
-    !(state.page.orderIsAGift && billingPeriod === SixWeekly));
+    !(orderIsAGift && billingPeriod === SixWeekly));
   return {
     plans: billingPeriodsToUse.reduce((plans, billingPeriod) => {
-      const { countryId } = state.common.internationalisation;
-      const { productPrices } = state.page;
       const productPrice = productPrices ? getProductPrice(
         productPrices,
         countryId,
         billingPeriod,
         getWeeklyFulfilmentOption(countryId),
-      ) : { price: 0, currency: 'GBP' };
+      ) : { price: 0, fixedTerm: false, currency: 'GBP' };
       return {
         ...plans,
         [billingPeriod]: {
@@ -52,7 +54,7 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
             billingPeriod,
           ),
           offer: getAppliedPromoDescription(billingPeriod, productPrice),
-          href: getCheckoutUrl(billingPeriod),
+          href: getCheckoutUrl(billingPeriod, orderIsAGift),
           onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
           price: null,
           saving: null,

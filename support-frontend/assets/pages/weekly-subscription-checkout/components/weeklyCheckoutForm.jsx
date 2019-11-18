@@ -171,12 +171,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
           title="Guardian Weekly"
           description=""
           productPrice={price}
-          dataList={[
-            {
-              title: 'Delivery method',
-              value: 'Home delivery',
-            },
-          ]}
           billingPeriod={props.billingPeriod}
           changeSubscription={routes.guardianWeeklySubscriptionLanding}
           product={props.product}

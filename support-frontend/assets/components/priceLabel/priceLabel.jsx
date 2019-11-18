@@ -7,10 +7,10 @@ import {
   type ProductPrice,
   showPrice,
 } from 'helpers/productPrice/productPrices';
-import { type BillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/billingPeriods';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
-import { type Option } from 'helpers/types/option';
+import type { Option } from 'helpers/types/option';
 
 export type PropTypes = {
   productPrice: ProductPrice,
@@ -26,7 +26,7 @@ function PriceLabel({
   giftStyles,
   ...props
 }: PropTypes) {
-  const description = getPriceDescription(productPrice, billingPeriod, orderIsAGift, true);
+  const description = getPriceDescription(productPrice, billingPeriod, true);
 
   const promotion = getAppliedPromo(productPrice.promotions);
   return (
