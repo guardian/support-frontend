@@ -1,6 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices._
 import com.gu.helpers.FutureExtensions._
 import com.gu.monitoring.SafeLogger
@@ -17,6 +18,7 @@ import io.circe.generic.auto._
 import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerState, CheckoutFailureState] {
 
@@ -36,10 +38,9 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     sendEmail(state).whenFinished(handleError(state, error, requestInfo))
   }
 
-  private def sendEmail(state: FailureHandlerState) = {
+  private def sendEmail(state: FailureHandlerState): Future[SendMessageResult] = {
     val emailFields = state.product match {
       case c: Contribution => FailedContributionEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
-      //TODO: Failure emails for subs products
       case d: DigitalPack => FailedDigitalPackEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case p: Paper => FailedPaperEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case g: GuardianWeekly => FailedGuardianWeeklyEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
