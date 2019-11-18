@@ -122,7 +122,9 @@ const numbersInWords = {
   '275': 'two hundred and seventy five',
   '500': 'five hundred',
   '750': 'seven hundred and fifty',
+  '800': 'eight hundred',
   '2000': 'two thousand',
+  '10000': 'ten thousand',
   '16000': 'sixteen thousand',
 };
 /* eslint-enable  quote-props */
@@ -182,15 +184,23 @@ const config: { [CountryGroupId]: Config } = {
     ONE_OFF: defaultConfig.ONE_OFF,
   },
   UnitedStates: {
-    ANNUAL: defaultConfig.ANNUAL,
+    ANNUAL: {
+      ...defaultConfig.ANNUAL,
+      max: 10000,
+      maxInWords: numbersInWords['10000'],
+    },
     MONTHLY: {
       min: 2,
       minInWords: numbersInWords['2'],
-      max: 166,
-      maxInWords: numbersInWords['166'],
+      max: 800,
+      maxInWords: numbersInWords['800'],
       default: 15,
     },
-    ONE_OFF: defaultConfig.ONE_OFF,
+    ONE_OFF: {
+      ...defaultConfig.ONE_OFF,
+      max: 10000,
+      maxInWords: numbersInWords['10000'],
+    }
   },
   International: {
     ANNUAL: defaultConfig.ANNUAL,
