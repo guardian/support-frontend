@@ -29,7 +29,6 @@ type PropTypes = {
   title: string,
   // eslint-disable-next-line react/no-unused-prop-types
   product: SubscriptionProduct,
-  // eslint-disable-next-line react/require-default-props
   orderIsAGift?: boolean,
 };
 
@@ -121,6 +120,7 @@ const TabletAndDesktop = (props: PropTypes) => (
 TabletAndDesktop.defaultProps = {
   changeSubscription: null,
   dataList: [],
+  orderIsAGift: false,
 };
 
 const HideDropDown = (props: {
@@ -177,7 +177,6 @@ const ShowDropDown = (props: {
         className={styles.data}
         productPrice={props.productPrice}
         billingPeriod={props.billingPeriod}
-        orderIsAGift={props.orderIsAGift}
         giftStyles={styles.gift}
       />
     </div>

@@ -177,6 +177,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           billingPeriod={props.billingPeriod}
           changeSubscription={routes.guardianWeeklySubscriptionLanding}
           product={props.product}
+          orderIsAGift
         />
       )}
       >
