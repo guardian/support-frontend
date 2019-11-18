@@ -13,7 +13,6 @@ import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
-import type { LandingPageCopyReturningSinglesTestVariants } from 'helpers/abTests/abtestDefinitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
@@ -28,7 +27,6 @@ type PropTypes = {|
   tickerGoalReached: boolean,
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
-  landingPageCopyReturningSinglesTestVariant: LandingPageCopyReturningSinglesTestVariants,
   countryId: IsoCountry,
 |};
 
@@ -39,7 +37,6 @@ const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
-  landingPageCopyReturningSinglesTestVariant: state.common.abParticipations.landingPageCopyReturningSingles,
   countryId: state.common.internationalisation.countryId,
 });
 
