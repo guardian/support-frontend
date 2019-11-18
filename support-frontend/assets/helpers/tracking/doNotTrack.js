@@ -9,6 +9,7 @@ function doNotTrack(): boolean {
 
 const maybeTrack = (trackingFunction: () => void) => {
   if (!doNotTrack()) {
+    console.log("Executing tracking function and Analytics Setup.");
     trackingFunction();
   }
 };

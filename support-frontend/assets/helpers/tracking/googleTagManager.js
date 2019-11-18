@@ -183,17 +183,21 @@ function sendData(
 
 function pushToDataLayer(event: EventType, participations: Participations) {
   try {
-    getPaymentAPIStatus()
+     getPaymentAPIStatus()
       .then((paymentRequestApiStatus) => {
+        console.log("Payment request API status", paymentRequestApiStatus);
         sendData(event, participations, paymentRequestApiStatus);
       })
-      .catch(() => {
+      .catch((reason) => {
+        console.log("Error while trying to fire Google DataLayerReady event", reason);
         sendData(event, participations, 'PromiseRejected');
       });
+
   } catch (e) {
+    console.log("Promise not support on this browser");
+    console.error(e);
     sendData(event, participations, 'PromiseNotSupported');
   }
-
 }
 
 function init(participations: Participations) {
