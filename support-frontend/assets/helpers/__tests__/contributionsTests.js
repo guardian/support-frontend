@@ -26,7 +26,7 @@ describe('contributions', () => {
 
     it('should return "TooMuch" for contributions above the maximum', () => {
       [
-        [200, 'MONTHLY', UnitedStates],
+        [2000, 'MONTHLY', UnitedStates],
         [2030, 'ANNUAL', International],
         [2030, 'ONE_OFF', Canada],
       ].forEach(a => expect(validateContribution(...a)).toBe('TooMuch'));
