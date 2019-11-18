@@ -97,7 +97,7 @@ const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[
 const showSecureTransactionIndicator = () => {
   if (countryGroupId === 'GBPCountries') {
     return <SecureTransactionIndicator modifierClasses={['top']} />;
-  } else if (store.getState().common.abParticipations.paymentSecurityDesignTest1B === 'V1_securemiddlegrey') { // in test
+  } else if (store.getState().common.abParticipations.paymentSecurityDesignTest1B === 'V1_securemiddlegrey') {
     return <SecureTransactionIndicator modifierClasses={['top', 'hideaftermobile']} />;
   }
   return null;
