@@ -94,7 +94,14 @@ const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campai
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
 
-const showSecureTransactionIndicator = countryGroupId === 'GBPCountries' ? <SecureTransactionIndicator modifierClasses={['top']} /> : null;
+const showSecureTransactionIndicator = () => {
+  if (countryGroupId === 'GBPCountries') {
+    return <SecureTransactionIndicator modifierClasses={['top']} />;
+  } else if (store.getState().common.abParticipations.paymentSecurityDesignTest1B === 'V1_securemiddlegrey') { // in test
+    return <SecureTransactionIndicator modifierClasses={['top', 'hideaftermobile']} />;
+  }
+  return null;
+};
 
 function contributionsLandingPage(campaignCodeParameter: ?string) {
   return (
@@ -104,7 +111,7 @@ function contributionsLandingPage(campaignCodeParameter: ?string) {
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
       backgroundImageSrc={backgroundImageSrc}
     >
-      {showSecureTransactionIndicator}
+      {showSecureTransactionIndicator()}
       <ContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
         campaignCodeParameter={campaignCodeParameter}

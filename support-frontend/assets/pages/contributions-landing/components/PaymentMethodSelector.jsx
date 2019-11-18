@@ -41,7 +41,7 @@ import {
   subscriptionToExplainerPart,
 } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type { PaymentSecurityDesignTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { PaymentSecurityDesignTest1BVariants } from 'helpers/abTests/abtestDefinitions';
 import {
   type CountryGroupId,
   detect,
@@ -62,7 +62,7 @@ type PropTypes = {|
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   isTestUser: boolean,
   switches: Switches,
-  paymentSecurityDesignTestVariant: PaymentSecurityDesignTestVariants,
+  paymentSecurityDesignTest1BVariant: PaymentSecurityDesignTest1BVariants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -75,7 +75,7 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
-  paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesignTest,
+  paymentSecurityDesignTest1BVariant: state.common.abParticipations.paymentSecurityDesignTest1B,
 });
 
 const mapDispatchToProps = {
@@ -121,10 +121,10 @@ function withProps(props: PropTypes) {
     <legend id="payment_method" className="form__legend"><h3>Payment method</h3></legend>
   );
 
-  const legend = props.paymentSecurityDesignTestVariant === 'V2_securemiddle' && countryGroupId !== 'GBPCountries' ?
+  const legend = props.paymentSecurityDesignTest1BVariant === 'V1_securemiddlegrey' && countryGroupId !== 'GBPCountries' ?
     (
       <div className="secure-transaction">
-        {legendSimple} <SecureTransactionIndicator modifierClasses={['middle']} />
+        {legendSimple} <SecureTransactionIndicator modifierClasses={['middle', 'showaftermobile']} />
       </div>
     ) :
     legendSimple;
