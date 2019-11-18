@@ -200,7 +200,7 @@ const config: { [CountryGroupId]: Config } = {
       ...defaultConfig.ONE_OFF,
       max: 10000,
       maxInWords: numbersInWords['10000'],
-    }
+    },
   },
   International: {
     ANNUAL: defaultConfig.ANNUAL,
