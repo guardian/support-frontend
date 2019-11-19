@@ -112,7 +112,7 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
     /* eslint-enable react/no-danger */
   }
   return (
-    <LargeParagraph>
+    <LargeParagraph modifierClasses={['mobile-text-resize']}>
       The Guardian Weekly magazine is a round-up of the world news,
       opinion and long reads that have shaped the week. Inside, the past seven days&#39;
       most memorable stories are reframed with striking photography and insightful companion
