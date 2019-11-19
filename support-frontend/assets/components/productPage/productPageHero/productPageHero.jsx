@@ -95,7 +95,12 @@ const ProductPageHeroHeader = ({
 }: ProductPageHeroHeaderTypes) => (
   <div>
     <HeroHeading {...{ hasCampaign }}>
-      <HeadingBlock overheading={orderIsAGift ? null : overheading} >{heading}</HeadingBlock>
+      <HeadingBlock
+        overheading={orderIsAGift ? 'The Guardian Weekly gift subscription' : overheading}
+        orderIsAGift={orderIsAGift}
+      >
+        {heading}
+      </HeadingBlock>
     </HeroHeading>
     {content && <HeroHanger>{content}</HeroHanger>}
   </div>

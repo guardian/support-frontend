@@ -37,7 +37,6 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { CampaignHeader } from './components/hero/hero';
 
 import WeeklyForm from './components/weeklyForm';
-import type { State } from './weeklySubscriptionLandingReducer';
 import reducer from './weeklySubscriptionLandingReducer';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 
@@ -119,9 +118,10 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
     </LargeParagraph>);
 };
 
-const getCopy = (state: State): PageCopy => {
-  const { promotionCopy } = state.page;
-  const defaultTitle = 'Pause for thought with The Guardian\'s essential news magazine';
+const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
+  const defaultTitle = orderIsAGift ?
+    'Give a gift that challenges the status quo'
+    : 'Pause for thought with The Guardian\'s essential news magazine';
   return {
     title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,
     firstParagraph: getFirstParagraph(promotionCopy),
@@ -130,9 +130,10 @@ const getCopy = (state: State): PageCopy => {
 
 // ----- Render ----- //
 
-const copy = getCopy(store.getState());
+const { promotionCopy, orderIsAGift } = store.getState().page;
+const copy = getCopy(promotionCopy, orderIsAGift);
 const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || '10ANNUAL');
-const { orderIsAGift } = store.getState().page;
+
 
 const content = (
   <Provider store={store}>
