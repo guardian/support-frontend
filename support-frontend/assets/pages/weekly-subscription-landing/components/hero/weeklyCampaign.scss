@@ -20,6 +20,53 @@
       max-height: 100%;
     }
   }
+
+  .weekly-gift-hero--desktop {
+    display: none;
+
+    @include mq($from: phablet) {
+      display: block;
+    }
+  }
+
+  .weekly-gift-hero--mobile {
+    display: block;
+    img {
+      max-height: calc(100% - 0.75rem);
+      @include mq($from: mobileMedium) {
+        max-height: calc(100% - 1rem);
+      }
+    }
+
+    @include mq($from: phablet) {
+      display: none;
+    }
+  }
+
+  .weekly-gifting-hero__copy {
+    @include mq($until: tablet) {
+      width: gu-span(3);
+      margin-bottom: 0;
+      h2 {
+        font-size: 34px;
+      }
+    }
+
+    @include mq($until: mobileLandscape) {
+      width: gu-span(3);
+      margin-bottom: 0;
+      h2 {
+        font-size: 30px;
+      }
+    }
+
+    @include mq($until: mobileMedium) {
+      width: gu-span(2);
+      h2 {
+        font-size: 28px;
+      }
+    }
+  }
 }
 
 .component-product-page-hero.component-product-page-hero--weekly-campaign,

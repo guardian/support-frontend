@@ -60,7 +60,7 @@ const CampaignHeader = (props: {heading: string, orderIsAGift: boolean}) => (
     <div className="weekly-campaign-hero">
       <div className={props.orderIsAGift ? 'weekly-gifting-hero__copy' : 'weekly-campaign-hero__copy'}>
         {props.orderIsAGift ? (
-          <h2>Give<br />The Guardian<br />Weekly</h2>
+          <h2>Give The Guardian Weekly</h2>
           ) : (
             <h2>The Guardian<br />Weekly</h2>
           )
@@ -80,11 +80,23 @@ const CampaignHeader = (props: {heading: string, orderIsAGift: boolean}) => (
       )}
 
       {props.orderIsAGift && (
-        <div className="weekly-campaign-hero__graphic">
+        <div className="weekly-campaign-hero__graphic weekly-gift-hero--desktop">
           <GridImage
             gridId="gwGiftingPackshot"
             srcSizes={[1000]}
             sizes="(max-width: 740px) 1000px"
+            imgType="png"
+            altText="A collection of Guardian Weekly magazines"
+          />
+        </div>
+      )}
+
+      {props.orderIsAGift && (
+        <div className="weekly-campaign-hero__graphic weekly-gift-hero--mobile">
+          <GridImage
+            gridId="gwGiftingPackshotMob"
+            srcSizes={[400]}
+            sizes="(max-width: 400px) 400px"
             imgType="png"
             altText="A collection of Guardian Weekly magazines"
           />
