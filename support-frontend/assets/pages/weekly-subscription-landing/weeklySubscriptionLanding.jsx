@@ -10,6 +10,7 @@ import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import Footer from 'components/footer/footer';
+import { List } from 'components/productPage/productPageList/productPageList';
 
 import {
   AUDCountries,
@@ -134,6 +135,14 @@ const { promotionCopy, orderIsAGift } = store.getState().page;
 const copy = getCopy(promotionCopy, orderIsAGift);
 const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || '10ANNUAL');
 
+type GiftHeadingPropTypes = {
+  text: string,
+}
+
+const GiftHeading = (props: GiftHeadingPropTypes) => (
+  <h2 className="component-text">{props.text}</h2>
+);
+
 
 const content = (
   <Provider store={store}>
@@ -147,45 +156,59 @@ const content = (
           {copy.firstParagraph}
         </Text>
       </Content>
-      <Content id="benefits">
-        <Text title="As a subscriber you’ll enjoy" />
-        <Outset>
-          <ProductPageFeatures features={[
-            { title: 'Every issue delivered with up to 35% off the cover price' },
-            { title: 'Access to the magazine\'s digital archive' },
-            { title: 'A weekly email newsletter from the editor' },
-            { title: 'The very best of The Guardian\'s puzzles' },
+      {!orderIsAGift &&
+        <Content id="benefits">
+          <Text title="As a subscriber you’ll enjoy" />
+          <Outset>
+            <ProductPageFeatures features={[
+              { title: 'Every issue delivered with up to 35% off the cover price' },
+              { title: 'Access to the magazine\'s digital archive' },
+              { title: 'A weekly email newsletter from the editor' },
+              { title: 'The very best of The Guardian\'s puzzles' },
+            ]}
+            />
+          </Outset>
+        </Content>
+      }
+      {orderIsAGift &&
+        <Content id="gift-benefits-them">
+          <GiftHeading text="What they'll get:" />
+          <List items={[
+            { explainer: 'The Guardian Weekly delivered, wherever they are in the world' },
+            { explainer: 'The Guardian\'s global journalism to keep them informed' },
+            { explainer: 'The very best of The Guardian\'s puzzles' },
           ]}
           />
-        </Outset>
-      </Content>
+        </Content>}
+      {orderIsAGift &&
+        <Content id="gift-benefits-you">
+          <GiftHeading text="What you'll get:" />
+          <List items={[
+            { explainer: 'Your gift supports The Guardian\'s indpenedent journalism' },
+            { explainer: 'Access to the magazine\'s digital archive' },
+            { explainer: '35% off the cover price' },
+          ]}
+          />
+        </Content>
+      }
       <Content appearance="feature" id="subscribe">
         <Text title="Subscribe to Guardian Weekly today">
           <p>Choose how you’d like to pay</p>
         </Text>
         <WeeklyForm />
-        <ProductPageInfoChip icon={<SvgGift />}>
-              Gifting is available
-        </ProductPageInfoChip>
+        {!orderIsAGift &&
+          <ProductPageInfoChip icon={<SvgGift />}>
+                Gifting is available
+          </ProductPageInfoChip>
+        }
         <ProductPageInfoChip icon={<SvgInformation />}>
               Delivery cost included. You can cancel your subscription at any time
         </ProductPageInfoChip>
       </Content>
       <Content>
-        <Text title="Gift subscriptions">
-          <LargeParagraph>A Guardian Weekly subscription makes a great gift.
-            To&nbsp;buy&nbsp;one, just select the gift option at checkout or get in touch with your local customer
-            service team:
-          </LargeParagraph>
+        <Text title={orderIsAGift ? 'Looking for a personal subscription?' : 'Gift subscriptions'}>
+          {!orderIsAGift && <LargeParagraph>A Guardian Weekly subscription makes a great gift.</LargeParagraph>}
         </Text>
-        <Outset>
-          <ProductPageFeatures features={[
-            { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
-            { title: 'Australia and New Zealand', copy: '+61 2 8076 8599' },
-            { title: 'USA and Canada', copy: '+1 917-900-4663' },
-          ]}
-          />
-        </Outset>
       </Content>
       <Content>
         <Text title="Promotion terms and conditions">
