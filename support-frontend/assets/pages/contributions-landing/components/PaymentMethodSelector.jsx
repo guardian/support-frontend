@@ -75,7 +75,8 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
-  paymentSecuritySecureTransactionGreyNonUKVariant: state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
+  paymentSecuritySecureTransactionGreyNonUKVariant:
+    state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
 });
 
 const mapDispatchToProps = {
