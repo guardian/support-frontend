@@ -8,7 +8,7 @@ import {
 // ----- Tests ----- //
 export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
 export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'paymentRequestButton' | 'notintest';
-export type PaymentSecurityDesignTest1BVariants = 'control' | 'V1_securemiddlegrey' | 'notintest';
+export type paymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 
@@ -59,14 +59,14 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-  paymentSecurityDesignTest1B: {
+  paymentSecuritySecureTransactionGreyNonUK: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'V1_securemiddlegrey',
+        id: 'V1_securetransactiongrey',
       },
     ],
     audiences: {
