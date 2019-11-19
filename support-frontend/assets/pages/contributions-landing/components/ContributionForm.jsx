@@ -52,7 +52,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import type { LandingPageStripeElementsRecurringTestVariants } from 'helpers/abTests/abtestDefinitions';
-import type { PaymentSecurityDesignTestVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { paymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -85,7 +85,7 @@ type PropTypes = {|
   country: IsoCountry,
   createStripePaymentMethod: () => void,
   stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants,
-  paymentSecurityDesignTestVariant: PaymentSecurityDesignTestVariants,
+  paymentSecuritySecureTransactionGreyNonUKVariant: paymentSecuritySecureTransactionGreyNonUKVariants,
   recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
@@ -118,7 +118,8 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   stripeElementsRecurringTestVariant: state.common.abParticipations.stripeElementsRecurring,
-  paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesignTest,
+  paymentSecuritySecureTransactionGreyNonUKVariant:
+    state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
   recurringStripePaymentRequestButtonTestVariant: state.common.abParticipations.recurringStripePaymentRequestButton,
 });
 
@@ -247,7 +248,7 @@ function withProps(props: PropTypes) {
 
   const classModifiers = ['contribution', 'with-labels'];
 
-  const showSecureStripeContainer: boolean = props.paymentSecurityDesignTestVariant !== 'control' || props.countryGroupId === 'GBPCountries';
+  const showSecureStripeContainer: boolean = props.paymentSecuritySecureTransactionGreyNonUKVariant !== 'control' || props.countryGroupId === 'GBPCountries';
   const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe && (props.stripeElementsRecurringTestVariant === 'stripeElements' || props.contributionType === 'ONE_OFF');
 
   return (
