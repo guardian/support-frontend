@@ -96,18 +96,9 @@ function setupStripeCheckout(
   });
 }
 
-function openDialogBox(stripeHandler: Object, amount: number, email: string) {
-  stripeHandler.open({
-    // Must be passed in pence.
-    amount: Math.round(amount * 100),
-    email,
-  });
-}
-
 export {
   loadStripe,
   setupStripeCheckout,
-  openDialogBox,
   getStripeKey,
   stripeAccountForContributionType,
 };

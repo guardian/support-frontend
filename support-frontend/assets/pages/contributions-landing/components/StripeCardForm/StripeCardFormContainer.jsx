@@ -13,7 +13,6 @@ import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
 import { setupStripe } from 'helpers/stripe';
 import AnimatedDots from 'components/spinners/animatedDots';
 import './stripeCardForm.scss';
-import type { LandingPageStripeElementsRecurringTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types -----//
 
@@ -26,7 +25,6 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   setStripeHasLoaded: () => void,
   stripeHasLoaded: boolean,
-  stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants,
   showSecureBackground: boolean,
 |};
 
@@ -37,9 +35,7 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
   }
 
   render() {
-    if (this.props.paymentMethod === Stripe &&
-      (this.props.contributionType === 'ONE_OFF' || this.props.stripeElementsRecurringTestVariant === 'stripeElements')
-    ) {
+    if (this.props.paymentMethod === Stripe) {
       if (this.props.stripeHasLoaded) {
 
         const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
