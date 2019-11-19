@@ -44,8 +44,9 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 import './weeklySubscriptionLanding.scss';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
-import { promotionTermsUrl } from 'helpers/routes';
+import { promotionTermsUrl, routes } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
+import AnchorButton from 'components/button/anchorButton';
 
 type PageCopy = {|
   title: string,
@@ -209,6 +210,13 @@ const content = (
         <Text title={orderIsAGift ? 'Looking for a personal subscription?' : 'Gift subscriptions'}>
           {!orderIsAGift && <LargeParagraph>A Guardian Weekly subscription makes a great gift.</LargeParagraph>}
         </Text>
+        <AnchorButton
+          modifierClasses={['with-margin-bottom']}
+          appearance="blue"
+          href={orderIsAGift ? routes.guardianWeeklySubscriptionLanding : routes.guardianWeeklySubscriptionLandingGift}
+        >
+          {orderIsAGift ? 'See all subscriptions' : 'See all gift subscriptions'}
+        </AnchorButton>
       </Content>
       <Content>
         <Text title="Promotion terms and conditions">
