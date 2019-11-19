@@ -13,7 +13,7 @@ export type ContributionBillingPeriod = typeof Monthly | typeof Annual;
 function billingPeriodNoun(billingPeriod: BillingPeriod, fixedTerm: boolean = false) {
   switch (billingPeriod) {
     case Annual:
-      return fixedTerm ? 'One year' : 'Year';
+      return fixedTerm ? '12 months' : 'Year';
     case Quarterly:
       return fixedTerm ? '3 months' : 'Quarter';
     case SixWeekly:

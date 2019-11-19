@@ -40,7 +40,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         .withLogging("identity id")
       maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
           .withLogging("GetSubscriptionWithCurrentRequestId")
-      previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
+      previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, state.giftRecipient.isDefined, services, checkSingleResponse)
           .withLogging("PreviewPaymentSchedule")
       thankYouState <- maybeDomainSubscription match {
         case Some(domainSubscription) => skipSubscribe(state, requestInfo, previewPaymentSchedule, domainSubscription)
