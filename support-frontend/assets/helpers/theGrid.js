@@ -102,7 +102,7 @@ export const imageCatalogue: {
   digitalSubsApp: '234f5889b07c7c5d088d8d977e9e717ea8f2e791/0_0_1714_1000',
   digitalSubsAppMob: '59d2d83d9c1ecf8b3c955c63bf94ef2fa80c7353/0_0_1100_1100',
   gwGiftingPackshot: '3d1cecfdc8c90b2005712e56669afe6e3b8c5e5a/762_0_4232_3184',
-  gwGiftingPackshotMob: '3d1cecfdc8c90b2005712e56669afe6e3b8c5e5a/682_90_2408_3011',
+  gwGiftingPackshotMob: '3d1cecfdc8c90b2005712e56669afe6e3b8c5e5a/688_87_2481_3102',
   giftingGlobe: '4a7ee6f430a29fc8ac8d9f0667cfafc67b6aba46/145_148_1203_1201',
 };
 

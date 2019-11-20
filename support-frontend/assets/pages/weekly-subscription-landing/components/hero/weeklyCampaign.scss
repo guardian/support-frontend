@@ -33,10 +33,7 @@
   .weekly-gift-hero--mobile {
     display: block;
     img {
-      max-height: calc(100% - 0.75rem);
-      @include mq($from: mobileMedium) {
-        max-height: calc(100% - 1rem);
-      }
+      max-height: calc(100% - 0.5rem);
     }
 
     @include mq($from: phablet) {
