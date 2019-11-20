@@ -6,7 +6,6 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
-export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
 export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'paymentRequestButton' | 'notintest';
 export type paymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
 
@@ -34,28 +33,6 @@ export const tests: Tests = {
     isActive: window.guardian && !!window.guardian.recurringStripePaymentRequestButton,
     independent: true,
     seed: 2,
-    targetPage: contributionsLandingPageMatch,
-  },
-
-  stripeElementsRecurring: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'stripeElements',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: !!window.guardian && !!window.guardian.stripeElementsRecurring,
-    independent: true,
-    seed: 3,
     targetPage: contributionsLandingPageMatch,
   },
 
