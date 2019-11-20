@@ -67,7 +67,7 @@ class Subscriptions(
 
   def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = "The Guardian Weekly Subscriptions | The Guardian"
+    val title = if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian" else "The Guardian Weekly Subscriptions | The Guardian"
     val mainElement = EmptyDiv("weekly-landing-page-" + countryCode)
     val js = Left(RefPath("weeklySubscriptionLandingPage.js"))
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
