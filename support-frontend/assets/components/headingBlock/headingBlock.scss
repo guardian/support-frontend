@@ -55,6 +55,16 @@
 .component-heading-block__gift {
   .component-heading-block__maxwidth {
     max-width: gu-span(7);
+
+    @include mq($until: mobileLandscape) {
+      font-size: 26px;
+      line-height: 30px;
+    }
+
+    @include mq($until: mobileMedium) {
+      font-size: 24px;
+      line-height: 28px;
+    }
   }
 }
 
