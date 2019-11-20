@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 
 import {
   billingPeriodTitle,
-  SixWeekly,
   type WeeklyBillingPeriod,
-  weeklyBillingPeriods,
+  weeklyGiftPeriods,
 } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
@@ -34,11 +33,9 @@ const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean
 const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
   const { countryId } = state.common.internationalisation;
   const { productPrices, orderIsAGift } = state.page;
-  // The code below removes 6 for 6 as an available billing period if the order is a gift
-  const billingPeriodsToUse = weeklyBillingPeriods.filter(billingPeriod =>
-    !(orderIsAGift && billingPeriod === SixWeekly));
+
   return {
-    plans: billingPeriodsToUse.reduce((plans, billingPeriod) => {
+    plans: weeklyGiftPeriods.reduce((plans, billingPeriod) => {
       const productPrice = productPrices ? getProductPrice(
         productPrices,
         countryId,
@@ -48,7 +45,7 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
       return {
         ...plans,
         [billingPeriod]: {
-          title: billingPeriodTitle(billingPeriod),
+          title: billingPeriodTitle(billingPeriod, orderIsAGift),
           copy: getPriceDescription(
             productPrice,
             billingPeriod,

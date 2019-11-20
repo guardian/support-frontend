@@ -73,8 +73,9 @@ class Subscriptions(
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
+    val defaultPromos = if (orderIsAGift) List("GW20GIFT1Y") else List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
-    val promoCodes =  queryPromos ++ List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
+    val promoCodes = defaultPromos ++ queryPromos
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, orderIsAGift)
     val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
       ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)

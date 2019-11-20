@@ -35,7 +35,7 @@ function PriceLabel({
           <del aria-hidden="true">{showPrice(productPrice)}</del>
         )
       }
-      <span className={orderIsAGift && giftStyles}>{description}</span>
+      <span className={orderIsAGift && giftStyles}>{` ${description}`}</span>
     </span>);
 }
 
