@@ -38,6 +38,18 @@ const HeroImage = () => (
   />
 );
 
+const HeroGlobe = () => (
+  <div className="weekly-gifting-hero__globe">
+    <GridImage
+      gridId="giftingGlobe"
+      srcSizes={[1000]}
+      sizes="(max-width: 740px) 1000px"
+      imgType="png"
+      altText=""
+    />
+  </div>
+);
+
 const CampaignHeader = (props: {heading: string, orderIsAGift: boolean}) => (
   <ProductPageHero
     appearance="campaign"
@@ -55,6 +67,7 @@ const CampaignHeader = (props: {heading: string, orderIsAGift: boolean}) => (
     }
     hasCampaign
     orderIsAGift={props.orderIsAGift}
+    giftImage={<HeroGlobe />}
   >
 
     <div className="weekly-campaign-hero">

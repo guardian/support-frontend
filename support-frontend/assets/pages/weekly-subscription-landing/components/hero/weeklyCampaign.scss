@@ -69,6 +69,34 @@
   }
 }
 
+.weekly-gifting-hero__globe {
+  display: none;
+
+  @include mq($from: desktop) {
+    display: block;
+    position: absolute;
+    bottom: 85px;
+    left: -80px;
+    width: 80px;
+    height: 80px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  @include mq($from: leftCol) {
+    bottom: 105px;
+  }
+
+  @include mq($from: wide) {
+    bottom: 85px;
+    width: 150px;
+    height: 150px;
+    left: -160px;
+  }
+}
+
 .component-product-page-hero.component-product-page-hero--weekly-campaign,
 .component-product-page-hero.component-product-page-hero--weekly-gift {
   position: relative;

@@ -29,6 +29,7 @@ type PropTypes = {|
   hasCampaign: boolean,
   showProductPageHeroHeader?: boolean,
   orderIsAGift?: boolean,
+  giftImage?: Node,
 |};
 
 type ProductPageHeroHeaderTypes = {
@@ -37,6 +38,7 @@ type ProductPageHeroHeaderTypes = {
   heading: string,
   content?: Option<Node>,
   orderIsAGift?: boolean,
+  giftImage?: Node,
 }
 
 // ----- Render ----- //
@@ -71,13 +73,21 @@ const HeroHanger = ({
 const HeroHeading = ({
   children,
   hasCampaign,
-}: {children: Node, hasCampaign: boolean}) => (
+  orderIsAGift,
+  giftImage,
+}: {children: Node, hasCampaign: boolean, orderIsAGift?: boolean, giftImage?: Node}) => (
   <div className={classNameWithModifiers('component-product-page-hero-heading', [hasCampaign ? 'campaign' : null])}>
     <LeftMarginSection>
+      {orderIsAGift && giftImage}
       {children}
     </LeftMarginSection>
   </div>
 );
+
+HeroHeading.defaultProps = {
+  orderIsAGift: false,
+  giftImage: null,
+};
 
 const ProductPageHero = ({
   modifierClasses, children, appearance, showProductPageHeroHeader, ...props
@@ -91,10 +101,10 @@ const ProductPageHero = ({
 );
 
 const ProductPageHeroHeader = ({
-  overheading, heading, content, hasCampaign, orderIsAGift,
+  overheading, heading, content, hasCampaign, orderIsAGift, giftImage,
 }: ProductPageHeroHeaderTypes) => (
   <div>
-    <HeroHeading {...{ hasCampaign }}>
+    <HeroHeading {...{ hasCampaign, orderIsAGift, giftImage }}>
       <HeadingBlock
         overheading={orderIsAGift ? 'The Guardian Weekly gift subscription' : overheading}
         orderIsAGift={orderIsAGift}
@@ -116,6 +126,7 @@ ProductPageHero.defaultProps = {
 ProductPageHeroHeader.defaultProps = {
   content: null,
   orderIsAGift: false,
+  giftImage: null,
 };
 
 export { HeroHanger, HeroWrapper, HeroHeading, ProductPageHeroHeader };
