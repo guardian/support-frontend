@@ -42,10 +42,10 @@
   }
 
   .weekly-gifting-hero__copy {
-    width: gu-span(3);
+    width: gu-span(12);
 
     @include mq($until: desktop) {
-      width: gu-span(2);
+      width: gu-span(8);
       margin-bottom: 0;
       h2 {
         font-size: 34px;
