@@ -185,7 +185,7 @@ const content = (
         <Content id="gift-benefits-you">
           <GiftHeading text="What you'll get:" />
           <List items={[
-            { explainer: 'Your gift supports The Guardian\'s indpenedent journalism' },
+            { explainer: 'Your gift supports The Guardian\'s independent journalism' },
             { explainer: 'Access to the magazine\'s digital archive' },
             { explainer: '35% off the cover price' },
           ]}
