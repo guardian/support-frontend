@@ -203,7 +203,7 @@ const content = (
           </ProductPageInfoChip>
         }
         <ProductPageInfoChip icon={<SvgInformation />}>
-              Delivery cost included. You can cancel your subscription at any time
+              Delivery cost included. {!orderIsAGift && 'You can cancel your subscription at any time'}
         </ProductPageInfoChip>
       </Content>
       <Content>

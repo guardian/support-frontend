@@ -101,8 +101,8 @@ export const imageCatalogue: {
   digitalSubsDailyMob: '93c8d64b7be3bf455f2f6f57d679c2fdc7df6bf3/0_0_1100_1100',
   digitalSubsApp: '234f5889b07c7c5d088d8d977e9e717ea8f2e791/0_0_1714_1000',
   digitalSubsAppMob: '59d2d83d9c1ecf8b3c955c63bf94ef2fa80c7353/0_0_1100_1100',
-  gwGiftingPackshot: '513dbb7783bafc3d6d12bbfbc8e88e4de9b25299/1120_0_1480_1076',
-  gwGiftingPackshotMob: '513dbb7783bafc3d6d12bbfbc8e88e4de9b25299/1123_39_798_998',
+  gwGiftingPackshot: '3d1cecfdc8c90b2005712e56669afe6e3b8c5e5a/762_0_4232_3184',
+  gwGiftingPackshotMob: '3d1cecfdc8c90b2005712e56669afe6e3b8c5e5a/682_90_2408_3011',
   giftingGlobe: '4a7ee6f430a29fc8ac8d9f0667cfafc67b6aba46/145_148_1203_1201',
 };
 
