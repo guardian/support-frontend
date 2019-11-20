@@ -94,6 +94,20 @@
     height: 150px;
     left: -160px;
   }
+
+  @include mq($from: 1410px) {
+    bottom: 70px;
+    width: 200px;
+    height: 200px;
+    left: -210px;
+  }
+
+  @include mq($from: 1530px) {
+    bottom: 67px;
+    width: 220px;
+    height: 220px;
+    left: -230px;
+  }
 }
 
 .component-product-page-hero.component-product-page-hero--weekly-campaign,
