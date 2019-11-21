@@ -6,7 +6,6 @@ import {
   type WeeklyBillingPeriod,
   weeklyBillingPeriods,
   weeklyGiftPeriods,
-  SixWeekly,
 } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
