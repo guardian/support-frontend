@@ -128,7 +128,7 @@ const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
   return {
     title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,
     firstParagraph: getFirstParagraph(promotionCopy),
-    priceCardSubHeading: orderIsAGift ? 'Select a subscription period' : 'Choose how you\'d like to pay',
+    priceCardSubHeading: orderIsAGift ? 'Select a gift period' : 'Choose how you\'d like to pay',
   };
 };
 
