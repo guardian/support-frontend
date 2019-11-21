@@ -1,0 +1,57 @@
+{
+  "entries": {
+    "cask": {
+      "adoptopenjdk/openjdk/adoptopenjdk8": {
+        "version": null
+      },
+      "gu-scala": {
+        "version": "0.0.1"
+      }
+    },
+    "tap": {
+      "guardian/devtools": {
+        "revision": "c6c2da19fc90d85360f07a640a76a86831718694"
+      }
+    },
+    "brew": {
+      "guardian/devtools/dev-nginx": null,
+      "awscli": {
+        "version": "1.16.280",
+        "bottle": {
+          "cellar": ":any_skip_relocation",
+          "prefix": "/usr/local",
+          "files": {
+            "catalina": {
+              "url": "https://homebrew.bintray.com/bottles/awscli-1.16.280.catalina.bottle.tar.gz",
+              "sha256": "5162365a8df04b98299dca8c6069b191fc3c12d1a5219689766a0cb37dafcabd"
+            },
+            "mojave": {
+              "url": "https://homebrew.bintray.com/bottles/awscli-1.16.280.mojave.bottle.tar.gz",
+              "sha256": "946a903b33ad429723fd606143699ebe34f501f8c56006a6aaeb2593134de96f"
+            },
+            "high_sierra": {
+              "url": "https://homebrew.bintray.com/bottles/awscli-1.16.280.high_sierra.bottle.tar.gz",
+              "sha256": "334f57c5c99b0932d2f5a8cfd0627b0816ccc9a000877f9c5a271c0c090dca1e"
+            }
+          }
+        }
+      },
+      "yarn": {
+        "version": "1.19.1",
+        "bottle": false
+      }
+    }
+  },
+  "system": {
+    "macos": {
+      "mojave": {
+        "HOMEBREW_VERSION": "2.1.16-99-gfb978a7",
+        "HOMEBREW_PREFIX": "/usr/local",
+        "Homebrew/homebrew-core": "446b8e06049feba89f3daf72aea2fff4f2ac46b3",
+        "CLT": "10.1.0.0.1.1539992718",
+        "Xcode": "10.2.1",
+        "macOS": "10.14.3"
+      }
+    }
+  }
+}
