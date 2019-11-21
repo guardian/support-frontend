@@ -220,7 +220,7 @@ function withProps(props: PropTypes) {
   const baseClass = 'form';
 
   const classModifiers = ['contribution', 'with-labels'];
-  
+
   const showSecureStripeContainer: boolean = props.paymentSecuritySecureTransactionGreyNonUKVariant !== 'control' || props.countryGroupId === 'GBPCountries';
   const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe;
 
