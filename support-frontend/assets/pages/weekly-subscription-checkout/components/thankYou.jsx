@@ -94,8 +94,8 @@ function ThankYouContent({
         We&apos;re unable to contact the gift recipient directly - make sure to let them know the gift is on its way.
       </span>,
       <span>
-        Each copy will be delivered to the gift recipient&apos;s door.
-        <a className="thank-you-link" href={homeDeliveryUrl}> Here&apos;s a reminder of how home delivery works</a>.
+        Each copy will be delivered to the gift recipient&apos;s door.{' '}
+        <a className="thank-you-link" href={homeDeliveryUrl}>Here&apos;s a reminder of how home delivery works</a>.
       </span>,
     ] :
     [
@@ -104,8 +104,8 @@ function ThankYouContent({
         It has everything you need to know about how to manage it in the future.
       </span>,
       <span>
-        Your magazine will be delivered to your door.
-        <a className="thank-you-link" href={homeDeliveryUrl}> Here&apos;s a reminder of how home delivery works</a>.
+        Your magazine will be delivered to your door.{' '}
+        <a className="thank-you-link" href={homeDeliveryUrl}>Here&apos;s a reminder of how home delivery works</a>.
       </span>,
     ];
 
