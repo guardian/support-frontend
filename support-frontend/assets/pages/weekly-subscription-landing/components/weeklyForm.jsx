@@ -2,10 +2,10 @@
 import { connect } from 'react-redux';
 
 import {
+  SixWeekly,
   billingPeriodTitle,
-  type WeeklyBillingPeriod,
   weeklyBillingPeriods,
-  weeklyGiftPeriods,
+  type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
@@ -34,7 +34,8 @@ const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean
 const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
   const { countryId } = state.common.internationalisation;
   const { productPrices, orderIsAGift } = state.page;
-  const billingPeriodsToUse = orderIsAGift ? weeklyGiftPeriods : weeklyBillingPeriods;
+  const billingPeriodsToUse = weeklyBillingPeriods.filter(billingPeriod =>
+    !(state.page.orderIsAGift && billingPeriod === SixWeekly));
 
   return {
     plans: billingPeriodsToUse.reduce((plans, billingPeriod) => {
