@@ -50,7 +50,8 @@ import AnchorButton from 'components/button/anchorButton';
 
 type PageCopy = {|
   title: string,
-  firstParagraph: React.Node
+  firstParagraph: React.Node,
+  priceCardSubHeading: string,
 |};
 
 // ----- Redux Store ----- //
@@ -127,6 +128,7 @@ const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
   return {
     title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,
     firstParagraph: getFirstParagraph(promotionCopy),
+    priceCardSubHeading: orderIsAGift ? 'Select a subscription period' : 'Choose how you\'d like to pay',
   };
 };
 
@@ -194,7 +196,7 @@ const content = (
       }
       <Content appearance="feature" id="subscribe">
         <Text title="Subscribe to Guardian Weekly today">
-          <p>Choose how you’d like to pay</p>
+          <p>{copy.priceCardSubHeading}</p>
         </Text>
         <WeeklyForm />
         {!orderIsAGift &&
