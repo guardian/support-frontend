@@ -175,7 +175,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           description=""
           productPrice={price}
           billingPeriod={props.billingPeriod}
-          changeSubscription={routes.guardianWeeklySubscriptionLanding}
+          changeSubscription={routes.guardianWeeklySubscriptionLandingGift}
           product={props.product}
           orderIsAGift
         />
