@@ -128,14 +128,13 @@ function createFormReducer() {
     thirdPartyPaymentLibraries: {
       ONE_OFF: {
         Stripe: null,
+        AmazonPay: null,
       },
       MONTHLY: {
         Stripe: null,
-        PayPal: null,
       },
       ANNUAL: {
         Stripe: null,
-        PayPal: null,
       },
     },
     formData: {

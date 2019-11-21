@@ -20,7 +20,8 @@ abstract class TouchpointConfigProvider[T <: TouchpointConfig](config: Config, d
 
   protected def fromConfig(config: Config): T
 
-  private def getTouchpointBackend(environment: TouchPointEnvironment) =
+  private def getTouchpointBackend(environment: TouchPointEnvironment) = {
     config.getConfig(s"touchpoint.backend.environments.${environment.toString}").withValue("environment", ConfigValueFactory.fromAnyRef(environment.toString))
+  }
 }
 

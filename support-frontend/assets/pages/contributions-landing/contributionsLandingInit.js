@@ -9,6 +9,7 @@ import {
   loadStripe,
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/stripeCheckout';
+import { setupAmazonPay } from 'helpers/paymentIntegrations/amazonPay';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import { getQueryParameter } from 'helpers/url';
@@ -135,6 +136,8 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
         }
       });
     });
+
+    setupAmazonPay("ONE_OFF", dispatch);
 
     // initiate fetch of existing payment methods
     const userAppearsLoggedIn = doesUserAppearToBeSignedIn();

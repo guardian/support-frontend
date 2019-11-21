@@ -93,6 +93,18 @@
     default: "@paymentMethodConfigs.regularDefaultPayPalConfig.payPalEnvironment",
     uat: "@paymentMethodConfigs.regularUatPayPalConfig.payPalEnvironment"
   };
+  window.guardian.amazonPaySellerId = {
+    ONE_OFF: {
+      default: "@paymentMethodConfigs.oneOffDefaultAmazonPayConfig.sellerId",
+      uat: "@paymentMethodConfigs.oneOffUatAmazonPayConfig.sellerId",
+    }
+  };
+  window.guardian.amazonPayClientId = {
+    ONE_OFF: {
+      default: "@paymentMethodConfigs.oneOffDefaultAmazonPayConfig.clientId",
+      uat: "@paymentMethodConfigs.oneOffUatAmazonPayConfig.clientId",
+    }
+  };
   window.guardian.paymentApiStripeUrl = "@paymentApiStripeUrl";
   window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
   window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
@@ -106,5 +118,45 @@
   window.guardian.stripeElementsRecurring = @settings.switches.experiments.get("stripeElementsRecurring").exists(_.isOn)
   window.guardian.forceCampaign = @settings.switches.experiments.get("forceCampaign").exists(_.isOn)
   window.guardian.recurringStripePaymentRequestButton = @settings.switches.experiments.get("recurringStripePaymentRequestButton").exists(_.isOn)
+
+  // The following logic is for handling amazon pay initialisation.
+  // We have to setup the handlers (onAmazonLoginReady + onAmazonPaymentsReady) before the amazon pay js is loaded.
+  // The react app also needs to know when amazon pay is ready, but these things could all happen in any order.
+  // The solution is for the react app to call window.setOnAmazonReady to provide a callback.
+
+  var onAmazonReady = null; // For storing a callback provided by the react app
+
+  var amazonStatus = {
+    amazonLoginReady: false,
+    amazonPaymentsReady: false
+  };
+  const amazonIsReady = () => amazonStatus.amazonLoginReady && amazonStatus.amazonPaymentsReady;
+
+  window.setOnAmazonReady = (callback) => {
+    console.log("window.setOnAmazonReady")
+    if (amazonIsReady()) {
+      callback(amazon, OffAmazonPayments);
+    } else {
+      onAmazonReady = callback;
+    }
+  };
+
+  window.onAmazonLoginReady = () => {
+    console.log("window.onAmazonLoginReady")
+    amazonStatus.amazonLoginReady = true;
+    if (amazonIsReady() && onAmazonReady) {
+      onAmazonReady(amazon, OffAmazonPayments);
+    }
+  };
+
+  window.onAmazonPaymentsReady = () => {
+    console.log("window.onAmazonPaymentsReady")
+    amazonStatus.amazonPaymentsReady = true;
+    if (amazonIsReady() && onAmazonReady) {
+      onAmazonReady(amazon, OffAmazonPayments);
+    }
+  };
   </script>
+
+  <script defer type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
 }

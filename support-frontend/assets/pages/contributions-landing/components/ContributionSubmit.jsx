@@ -18,8 +18,9 @@ import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpres
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { PayPal } from 'helpers/paymentMethods';
+import { PayPal, AmazonPay } from 'helpers/paymentMethods';
 import Button from 'components/button/button';
+import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 
 // ----- Types ----- //
 
@@ -98,6 +99,8 @@ function withProps(props: PropTypes) {
 
     const classNames: string = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
 
+    // TODO - show amazon buttons here
+
     // We have to show/hide PayPalExpressButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
     // See PayPalExpressButton for more info.
@@ -121,7 +124,7 @@ function withProps(props: PropTypes) {
             billingPeriod={props.billingPeriod}
           />
         </div>
-        {!showPayPalRecurringButton ?
+        {!showPayPalRecurringButton && props.paymentMethod !== AmazonPay ?
           <Button
             type="submit"
             aria-label={submitButtonCopy}
@@ -130,6 +133,7 @@ function withProps(props: PropTypes) {
           >
             {submitButtonCopy}
           </Button> : null }
+        { props.paymentMethod === AmazonPay && <AmazonPayLoginButton /> }
       </div>
     );
   }

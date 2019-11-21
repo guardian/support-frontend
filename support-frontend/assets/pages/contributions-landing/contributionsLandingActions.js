@@ -45,7 +45,7 @@ import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalA
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import {AmazonPay, DirectDebit, Stripe} from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
@@ -546,6 +546,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       logInvalidCombination('ONE_OFF', ExistingDirectDebit);
       return Promise.resolve(error);
     },
+    AmazonPay: () => {
+      //TODO
+      return Promise.resolve(error)
+    },
     None: () => {
       logInvalidCombination('ONE_OFF', 'None');
       return Promise.resolve(error);
@@ -553,6 +557,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   ANNUAL: {
     ...recurringPaymentAuthorisationHandlers,
+    AmazonPay: () => {
+      logInvalidCombination('ANNUAL', AmazonPay);
+      return Promise.resolve(error);
+    },
     None: () => {
       logInvalidCombination('ANNUAL', 'None');
       return Promise.resolve(error);
@@ -560,6 +568,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   MONTHLY: {
     ...recurringPaymentAuthorisationHandlers,
+    AmazonPay: () => {
+      logInvalidCombination('MONTHLY', AmazonPay);
+      return Promise.resolve(error);
+    },
     None: () => {
       logInvalidCombination('MONTHLY', 'None');
       return Promise.resolve(error);

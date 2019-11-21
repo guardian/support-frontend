@@ -48,7 +48,7 @@ import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/St
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import type { paymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 
@@ -153,6 +153,7 @@ const formHandlersForRecurring = {
     paymentMethod: 'ExistingDirectDebit',
     billingAccountId: props.existingPaymentMethod.billingAccountId,
   }),
+  AmazonPay: (props: PropTypes) => logInvalidCombination(props.contributionType, AmazonPay)
 };
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
@@ -178,6 +179,12 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
     DirectDebit: () => { logInvalidCombination('ONE_OFF', DirectDebit); },
     ExistingCard: () => { logInvalidCombination('ONE_OFF', ExistingCard); },
     ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
+    AmazonPay: (props: PropTypes) => {
+      console.log('Amazon Pay!');
+      props.setPaymentIsWaiting(true);
+
+      // TODO
+    },
     None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
   ANNUAL: {

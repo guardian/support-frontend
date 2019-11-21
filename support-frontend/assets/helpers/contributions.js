@@ -11,6 +11,7 @@ import type { Radio } from 'components/radioToggle/radioToggle';
 import { logException } from 'helpers/logger';
 import { Annual, type BillingPeriod, Monthly } from 'helpers/billingPeriods';
 import type { PaymentMethod, PaymentMethodMap } from 'helpers/paymentMethods';
+import type { ThirdPartyPaymentLibrary } from 'helpers/checkouts.js';
 
 // ----- Types ----- //
 
@@ -36,9 +37,9 @@ export const logInvalidCombination = (contributionType: ContributionType, paymen
 };
 
 export type ThirdPartyPaymentLibraries = {
-  ONE_OFF: { Stripe: Object | null },
-  MONTHLY: { Stripe: Object | null, PayPal: Object | null },
-  ANNUAL: { Stripe: Object | null, PayPal: Object | null },
+  ONE_OFF: { Stripe: ThirdPartyPaymentLibrary | null, AmazonPay: ThirdPartyPaymentLibrary | null },
+  MONTHLY: { Stripe: ThirdPartyPaymentLibrary | null },
+  ANNUAL: { Stripe: ThirdPartyPaymentLibrary | null },
 };
 
 export type Amount = {
