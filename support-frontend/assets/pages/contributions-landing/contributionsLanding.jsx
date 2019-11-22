@@ -108,6 +108,8 @@ const showSecureTransactionIndicator = () => {
 const newTemplateVariant: NewLandingPageTemplateTestVariants =
   store.getState().common.abParticipations.newLandingPageTemplateTest;
 
+const showSecureTransactionIndicator = countryGroupId === 'GBPCountries' && newTemplateVariant === 'control' ? <SecureTransactionIndicator modifierClasses={['top']} /> : null;
+
 
 const originalPage = (campaignCodeParameter: ?string) => (
   <Page
