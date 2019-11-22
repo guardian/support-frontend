@@ -4,29 +4,57 @@
 
 .gu-content--new-template {
 
+  /* Page component - contains ContributionFormContainer */
   .gu-content__main {
-    background-color: gu-colour(sport-dark);
+    background-color: white;
+  }
+  /* */
+
+  /* ContributionFormContainer - contains form and blurb */
+  .gu-content__content {
     margin: 0;
     padding: 0;
   }
 
-  .gu-content__content {
-    max-width: 100%
+  .gu-content__content-contributions {
+    max-width: 100%;
+  }
+  /* */
+
+  /* Text on right hand side of landing page */
+  .gu-content__blurb {
+    max-width: 60%;
+    background-color: gu-colour(sport-dark);
+    border: 0; // get rid of yellow border
+    padding-top: $gu-h-spacing * 4;
+    padding-left: $gu-v-spacing * 7;
+
+  @include mq($from: tablet) {
+    margin-left: auto;
   }
 
-  .gu-content__blurb {
-    border: 0;
-    width: 60%
+  @include mq($from: leftCol) {
+    margin-left: auto;
+  }
   }
 
   .gu-content__blurb-header {
     color: white;
     font-size: 70px;
+    max-width: $gu-v-spacing * 45;
   }
 
   .gu-content__blurb-blurb {
     color: white;
     font-size: 17px;
     border: 0;
+    max-width: $gu-v-spacing * 38;
+  }
+  /* */
+
+
+  .gu-content__form {
+    max-width: 40%;
+    padding: $gu-h-spacing * 2 $gu-v-spacing * 7.5 $gu-h-spacing;
   }
 }
