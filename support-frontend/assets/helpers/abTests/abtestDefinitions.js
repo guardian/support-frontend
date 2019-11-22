@@ -8,7 +8,7 @@ import {
 // ----- Tests ----- //
 export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'paymentRequestButton' | 'notintest';
 export type paymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
-export type paymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'reversedAmounts' | 'notintest';
+export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
