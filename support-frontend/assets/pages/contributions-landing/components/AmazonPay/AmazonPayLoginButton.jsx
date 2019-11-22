@@ -1,56 +1,68 @@
 // @flow
 
 import React from 'react';
-import type { AmazonPayObjects } from 'helpers/checkouts.js'
 import {connect} from "react-redux";
-import type {State} from "pages/contributions-landing/contributionsLandingReducer";
+import type {State, AmazonPayData} from "pages/contributions-landing/contributionsLandingReducer";
+import { setAmazonPayLoginButtonReady } from "pages/contributions-landing/contributionsLandingActions";
+import { getQueryParameter } from 'helpers/url';
+
+const canCreateWidget = (amazonPayData: AmazonPayData) =>
+  amazonPayData.amazonPayLibrary && !amazonPayData.loginButtonReady;
+
+const getAccessToken = (): ?string => getQueryParameter('access_token');
 
 type PropTypes = {|
-  amazonPayObjects: AmazonPayObjects,
+  amazonPayData: AmazonPayData,
+  setAmazonPayLoginButtonReady: () => Action,
 |}
 
 const mapStateToProps = (state: State) => ({
-  amazonPayObjects: state.page.form.thirdPartyPaymentLibraries.ONE_OFF.AmazonPay,
+  amazonPayData: state.page.form.amazonPayData,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
+  setAmazonPayLoginButtonReady: dispatch(setAmazonPayLoginButtonReady),
 });
 
 class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
   createWidget(): void {
     console.log("creating widget")
-    // TODO - get id properly
-    window.OffAmazonPayments.Button('AmazonLoginButton', window.guardian.amazonPaySellerId.ONE_OFF.uat, {
-      type: 'PwA',
-      color: 'DarkGray',
-      size: 'medium',
-      authorization: () => {
-        debugger;
-        // TODO - popup false?
-        const loginOptions = { scope: 'profile postal_code payments:widget payments:shipping_address', popup: true };
-        const authRequest = this.props.amazonPayObjects.amazon.Login.authorize(loginOptions, window.location.href);
-      },
-      onError: (error) => {
-        // something bad happened
-        debugger;
-      },
-    });
+    this.props.amazonPayData.amazonPayLibrary.amazonPaymentsObject.Button(
+      'AmazonLoginButton',
+      window.guardian.amazonPaySellerId.ONE_OFF.uat,  // TODO - get id properly
+      {
+        type: 'PwA',
+        color: 'DarkGray',
+        size: 'medium',
+        authorization: () => {
+          // TODO - popup false?
+          const loginOptions = { scope: 'profile postal_code payments:widget payments:shipping_address', popup: true };
+          const authRequest = this.props.amazonPayData.amazonPayLibrary.amazonLoginObject.authorize(loginOptions, window.location.href);
+        },
+        onError: (error) => {
+          // something bad happened
+          debugger;
+        },
+      }
+    );
+
+    this.props.setAmazonPayLoginButtonReady();
   }
 
   componentDidMount(): void {
-    if (this.props.amazonPayObjects) {
+    if (canCreateWidget(this.props.amazonPayData)) {
       this.createWidget();
     }
   }
 
   componentDidUpdate(): void {
-    if (this.props.amazonPayObjects) {
+    if (canCreateWidget(this.props.amazonPayData)) {
       this.createWidget();
     }
   }
 
   render() {
-    if (this.props.amazonPayObjects) {
+    if (this.props.amazonPayData.amazonPayLibrary) {
       return (
         <div>
           Amazon Pay!

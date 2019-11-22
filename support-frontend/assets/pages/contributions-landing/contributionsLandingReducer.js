@@ -76,9 +76,13 @@ export type StripeCardFormData = {
   handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null,
 }
 
-export type AmazonPayData = {
+export type AmazonPayLibrary = {
   amazonLoginObject: Object,
   amazonPaymentsObject: Object,
+}
+
+export type AmazonPayData = {
+  amazonPayLibrary: AmazonPayLibrary | null,
   loginButtonReady: boolean,
   walletWidgetReady: boolean,
 }
@@ -146,8 +150,7 @@ function createFormReducer() {
       },
     },
     amazonPayData: {
-      amazonLoginObject: null,
-      amazonPaymentsObject: null,
+      amazonPayLibrary: null,
       loginButtonReady: false,
       walletWidgetReady: false,
     },
@@ -237,6 +240,33 @@ function createFormReducer() {
               ...action.thirdPartyPaymentLibraryByContrib.ANNUAL,
             },
           },
+        };
+
+      case 'SET_AMAZON_PAY_LIBRARY':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            amazonPayLibrary: action.amazonPayLibrary,
+          }
+        };
+
+      case 'SET_AMAZON_PAY_LOGIN_BUTTON_READY':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            loginButtonReady: true,
+          }
+        };
+
+      case 'SET_AMAZON_PAY_WALLET_WIDGET_READY':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            walletWidgetReady: true,
+          }
         };
 
       case 'SET_CREATE_STRIPE_PAYMENT_METHOD':

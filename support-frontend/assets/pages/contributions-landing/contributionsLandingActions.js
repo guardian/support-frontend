@@ -49,6 +49,7 @@ import {AmazonPay, DirectDebit, Stripe} from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
+import type {AmazonPayLibrary} from "./contributionsLandingReducer";
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -61,6 +62,9 @@ export type Action =
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
+  | { type: 'SET_AMAZON_PAY_LIBRARY', amazonPayLibrary: AmazonPayLibrary }
+  | { type: 'SET_AMAZON_PAY_LOGIN_BUTTON_READY' }
+  | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -196,7 +200,13 @@ const setThirdPartyPaymentLibrary =
     thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
   });
 
-// const setAmazonPayData = ()
+const setAmazonPayLibrary = (amazonPayLibrary: AmazonPayLibrary): Action => ({
+  type: 'SET_AMAZON_PAY_LIBRARY',
+  amazonPayLibrary,
+});
+
+const setAmazonPayLoginButtonReady: Action = ({ type: 'SET_AMAZON_PAY_LOGIN_BUTTON_READY' });
+const setAmazonPayWalletWidgetReady: Action = ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' });
 
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
@@ -602,6 +612,9 @@ export {
   updateState,
   updateUserFormData,
   setThirdPartyPaymentLibrary,
+  setAmazonPayLibrary,
+  setAmazonPayLoginButtonReady,
+  setAmazonPayWalletWidgetReady,
   selectAmount,
   updateOtherAmount,
   paymentFailure,

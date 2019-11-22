@@ -27,9 +27,7 @@ export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe' | 'existin
 
 type StripeHandler = { open: Function, close: Function };
 
-type AmazonPayObjects = { amazon: Object, OffAmazonPayments: Object }
-
-export type ThirdPartyPaymentLibrary = StripeHandler | AmazonPayObjects;
+export type ThirdPartyPaymentLibrary = StripeHandler;
 
 // ----- Functions ----- //
 
