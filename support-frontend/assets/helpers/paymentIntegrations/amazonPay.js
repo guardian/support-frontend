@@ -4,12 +4,12 @@ import {setThirdPartyPaymentLibrary} from "pages/contributions-landing/contribut
 import type {ContributionType} from "helpers/contributions";
 
 function setupAmazonPay(contributionType: ContributionType, dispatch: Function) {
-  window.setOnAmazonReady((amazon, OffAmazonPayments) => {
+  window.setOnAmazonReady((amazonLoginObject, amazonPaymentsObject) => {
     console.log('ready!');
-    amazon.Login.setClientId(window.guardian.amazonPayClientId.ONE_OFF.uat);
+    amazonLoginObject.setClientId(window.guardian.amazonPayClientId.ONE_OFF.uat);
 
     dispatch(setThirdPartyPaymentLibrary({
-      [contributionType]: { AmazonPay: { amazon, OffAmazonPayments } }
+      [contributionType]: { AmazonPay: { amazonLoginObject, amazonPaymentsObject } }
     }))
   });
 }

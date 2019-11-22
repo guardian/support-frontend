@@ -196,6 +196,8 @@ const setThirdPartyPaymentLibrary =
     thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
   });
 
+// const setAmazonPayData = ()
+
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
     (dispatch: Function): void => {

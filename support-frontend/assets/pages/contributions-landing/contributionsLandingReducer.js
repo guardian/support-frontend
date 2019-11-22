@@ -76,11 +76,19 @@ export type StripeCardFormData = {
   handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null,
 }
 
+export type AmazonPayData = {
+  amazonLoginObject: Object,
+  amazonPaymentsObject: Object,
+  loginButtonReady: boolean,
+  walletWidgetReady: boolean,
+}
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
-  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
+  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,   // TODO clean up when rest of Stripe Checkout is removed
+  amazonPayData: AmazonPayData,
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
@@ -136,6 +144,12 @@ function createFormReducer() {
       ANNUAL: {
         Stripe: null,
       },
+    },
+    amazonPayData: {
+      amazonLoginObject: null,
+      amazonPaymentsObject: null,
+      loginButtonReady: false,
+      walletWidgetReady: false,
     },
     formData: {
       firstName: null,

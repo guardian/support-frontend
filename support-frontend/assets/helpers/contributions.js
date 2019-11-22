@@ -37,7 +37,7 @@ export const logInvalidCombination = (contributionType: ContributionType, paymen
 };
 
 export type ThirdPartyPaymentLibraries = {
-  ONE_OFF: { Stripe: ThirdPartyPaymentLibrary | null, AmazonPay: ThirdPartyPaymentLibrary | null },
+  ONE_OFF: { Stripe: ThirdPartyPaymentLibrary | null },
   MONTHLY: { Stripe: ThirdPartyPaymentLibrary | null },
   ANNUAL: { Stripe: ThirdPartyPaymentLibrary | null },
 };
