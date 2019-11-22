@@ -12,7 +12,7 @@ type PropTypes = {|
   id: string,
   name: string,
   label: string,
-  placeholder: boolean | string,
+  placeholder: boolean | string | null,
   icon: React$Element<*>,
   type?: string,
   value: string | null,
@@ -82,7 +82,7 @@ export default function ContributionTextInput(props: PropTypes) {
 
 ContributionTextInput.defaultProps = {
   type: 'text',
-  placeholder: false,
+  placeholder: null,
   required: false,
   onInput: undefined,
   onChange: () => {},
