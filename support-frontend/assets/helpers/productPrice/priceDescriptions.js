@@ -17,63 +17,33 @@ import {
 
 const displayPrice = (glyph: string, price: number) => `${glyph}${fixDecimals(price)}`;
 
-const billingPeriodQuantifier = (numberOfBillingPeriods: number, noun: string, fixedTerm: boolean) => {
-  if (fixedTerm) {
-    return ` for ${noun}`;
-  }
-  return numberOfBillingPeriods > 1 ?
+const billingPeriodQuantifier = (numberOfBillingPeriods: number, noun: string) =>
+  (numberOfBillingPeriods > 1 ?
     `/${noun} for ${numberOfBillingPeriods} ${noun}s` :
-    ` for 1 ${noun}`;
-};
+    ` for 1 ${noun}`);
 
-
-const billingPeriodNoun = (billingPeriod: BillingPeriod, fixedTerm: boolean = false) =>
-  upperCaseNoun(billingPeriod, fixedTerm).toLowerCase();
+const billingPeriodNoun = (billingPeriod: BillingPeriod) =>
+  upperCaseNoun(billingPeriod).toLowerCase();
 
 const standardRate = (
-  glyph: string,
-  price: number,
+  glyph: string, price: number,
   billingPeriod: BillingPeriod,
-  fixedTerm: boolean,
   compact: boolean,
-) => {
-  if (fixedTerm) {
-    return `${displayPrice(glyph, price)} for ${billingPeriodNoun(billingPeriod, fixedTerm)}`;
-  }
-  return compact ?
-    `${displayPrice(glyph, price)}/${billingPeriodNoun(billingPeriod, fixedTerm)}`
+) =>
+  (compact ?
+    `${displayPrice(glyph, price)}/${billingPeriodNoun(billingPeriod)}`
     :
-    `${displayPrice(glyph, price)} every ${billingPeriodNoun(billingPeriod, fixedTerm)}`;
-};
-
-const getStandardRateCopy = (
-  glyph: string,
-  price: number,
-  billingPeriod: BillingPeriod,
-  fixedTerm: boolean,
-  compact: boolean,
-) => {
-  if (fixedTerm) { return ''; }
-
-  const standard = standardRate(
-    glyph, price,
-    billingPeriod,
-    fixedTerm,
-    compact,
-  );
-  return compact ? `, then ${standard}` : `, then standard rate (${standard})`;
-};
+    `${displayPrice(glyph, price)} every ${billingPeriodNoun(billingPeriod)}`);
 
 function getDiscountDescription(
   glyph: string,
   price: number,
-  fixedTerm: boolean,
   discountedPrice: number,
   numberOfDiscountedPeriods: ?number,
   billingPeriod: BillingPeriod,
   compact: boolean,
 ) {
-  const noun = billingPeriodNoun(billingPeriod, fixedTerm);
+  const noun = billingPeriodNoun(billingPeriod);
 
   if (numberOfDiscountedPeriods) {
     const discountCopy = `${displayPrice(
@@ -82,18 +52,15 @@ function getDiscountDescription(
     )}${billingPeriodQuantifier(
       numberOfDiscountedPeriods,
       noun,
-      fixedTerm,
     )}`;
-
-    const standardCopy = getStandardRateCopy(
-      glyph,
-      price,
+    const standard = standardRate(
+      glyph, price,
       billingPeriod,
-      fixedTerm,
       compact,
     );
-
-    return `${discountCopy}${standardCopy}`;
+    const standardCopy = compact ? `then ${standard}`
+      : `then standard rate (${standard})`;
+    return `${discountCopy}, ${standardCopy}`;
   }
 
   return '';
@@ -102,13 +69,15 @@ function getDiscountDescription(
 const pluralizePeriodType = (numberOfPeriods: number, periodType: string) =>
   (numberOfPeriods > 1 ? `${periodType}s` : periodType);
 
+// This function requires the Quarterly price to be passed into it, we can
+// remove it completely once we make 6 for 6 a promotion
 const getIntroductoryPriceDescription = (
   glyph: string,
   introPrice: IntroductoryPriceBenefit,
   productPrice: ProductPrice,
   compact: boolean,
 ) => {
-  const standardCopy = standardRate(glyph, productPrice.price, Quarterly, productPrice.fixedTerm, compact);
+  const standardCopy = standardRate(glyph, productPrice.price, Quarterly, compact);
   const separator = compact ? '/' : ' for the first ';
   const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
 
@@ -136,7 +105,6 @@ function getPriceDescription(
     return getDiscountDescription(
       glyph,
       productPrice.price,
-      productPrice.fixedTerm,
       // $FlowIgnore -- We have checked this in hasDiscount
       promotion.discountedPrice,
       promotion.numberOfDiscountedPeriods,
@@ -144,7 +112,7 @@ function getPriceDescription(
       compact,
     );
   }
-  return standardRate(glyph, productPrice.price, billingPeriod, productPrice.fixedTerm, compact);
+  return standardRate(glyph, productPrice.price, billingPeriod, compact);
 }
 
 function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: ProductPrice) {

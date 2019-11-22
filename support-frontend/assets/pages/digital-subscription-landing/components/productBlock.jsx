@@ -4,7 +4,6 @@ import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import GridPicture from 'components/gridPicture/gridPicture';
 import cx from 'classnames';
-import { ListHeading } from 'components/productPage/productPageList/productPageList';
 
 // styles
 import './digitalSubscriptionLanding.scss';
@@ -16,6 +15,22 @@ const arrowSvg = (
     <defs><path d="M16 0l1.427 1.428-7.035 7.036.035.035L9 9.927l-.035-.035-.036.035L7.5 8.5l.036-.035L.5 1.428 1.928 0l7.036 7.036L15.999 0z" id="a" /></defs>
     <use fill="#121212" xlinkHref="#a" fillRule="evenodd" />
   </svg>);
+
+type ListPropTypes = {
+  items: Array<Object>,
+}
+
+const List = ({ items }: ListPropTypes) => (
+  <ul>
+    {items.map(item => (
+      <li>
+        <div className="product-block__list-item__bullet" />
+        <span className="product-block__list-item--bold">{item.boldText}</span><br />
+        <div className="product-block__list-item__explainer">{item.explainer}</div>
+      </li>
+    ))}
+  </ul>
+);
 
 type DropdownPropTypes = {
   children: Node,
@@ -165,14 +180,14 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             showDropDown={state.showDropDownDaily}
             product="daily"
           >
-            <ListHeading
+            <List
               items={[
                 { boldText: 'A new way to read', explainer: 'The newspaper, reimagined for mobile and tablet' },
                 { boldText: 'Published daily', explainer: 'Each edition available to read by 6am (GMT), 7 days a week' },
                 { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
               ]}
             />
-            <ListHeading
+            <List
               items={[
                 { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
                 { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
@@ -195,14 +210,14 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             showDropDown={state.showDropDownApp}
             product="app"
           >
-            <ListHeading
+            <List
               items={[
                 { boldText: 'Live', explainer: 'Follow a live feed of breaking news and sport, as it happens' },
                 { boldText: 'Discover', explainer: 'Explore stories you might have missed, tailored to you' },
                 { boldText: 'Enhanced offline reading', explainer: 'Download the news whenever it suits you' },
               ]}
             />
-            <ListHeading
+            <List
               items={[
                 { boldText: 'Daily Crossword', explainer: 'Play the daily crossword wherever you are' },
                 { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },

@@ -26,10 +26,7 @@ object PreviewSubscribeRequest {
           subscribeItem.account.copy(autoPay = false), //this is to work-around bug in Zuora where duplicate mandate would be created in GoCardless
           subscribeItem.billToContact,
           // This hack allows us to preview invoices further into the future (required to get a helpful payment schedule)
-          if (numberOfBillingPeriodsToPreview > 1)
-            subscribeItem.subscriptionData.copy(subscription = subscribeItem.subscriptionData.subscription.copy(initialTerm = 24))
-          else
-            subscribeItem.subscriptionData,
+          subscribeItem.subscriptionData.copy(subscription = subscribeItem.subscriptionData.subscription.copy(initialTerm = 24)),
           subscribeItem.subscribeOptions,
           PreviewOptions(numberOfPeriods = numberOfBillingPeriodsToPreview)
         )

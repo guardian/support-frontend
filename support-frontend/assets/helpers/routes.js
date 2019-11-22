@@ -35,7 +35,6 @@ const routes: {
   paperSubscriptionLanding: '/subscribe/paper',
   paperSubscriptionProductChoices: '/subscribe/paper#subscribe',
   guardianWeeklySubscriptionLanding: '/subscribe/weekly',
-  guardianWeeklySubscriptionLandingGift: '/subscribe/weekly/gift',
   postcodeLookup: '/postcode-lookup',
   createSignInUrl: '/identity/signin-url',
   createReminder: '/contribute/remind-me',

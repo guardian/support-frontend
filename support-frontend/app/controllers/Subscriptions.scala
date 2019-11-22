@@ -61,22 +61,19 @@ class Subscriptions(
 
   }
 
-  def weeklyGeoRedirect(orderIsAGift: Boolean = false): Action[AnyContent] = geoRedirect(
-    if (orderIsAGift) "subscribe/weekly/gift" else "subscribe/weekly"
-  )
+  def weeklyGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/weekly")
 
-  def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
+  def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian" else "The Guardian Weekly Subscriptions | The Guardian"
+    val title = "The Guardian Weekly Subscriptions | The Guardian"
     val mainElement = EmptyDiv("weekly-landing-page-" + countryCode)
     val js = Left(RefPath("weeklySubscriptionLandingPage.js"))
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
-    val defaultPromos = if (orderIsAGift) List("GW20GIFT1Y") else List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
-    val promoCodes = defaultPromos ++ queryPromos
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, orderIsAGift)
+    val promoCodes =  queryPromos ++ List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes)
     val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
       ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
         .getCopyForPromoCode(promoCode, GuardianWeekly, CountryGroup.countryByCode(countryCode).getOrElse(Country.UK))
@@ -95,7 +92,6 @@ class Subscriptions(
         s"""<script type="text/javascript">
               window.guardian.productPrices = ${outputJson(productPrices)}
               window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
-              window.guardian.orderIsAGift = $orderIsAGift
             </script>""")
     }).withSettingsSurrogateKey
   }

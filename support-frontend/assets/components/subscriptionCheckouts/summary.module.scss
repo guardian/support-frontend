@@ -99,7 +99,7 @@
     @include gu-typeface(headline, 18, $size-only: true);
   }
   @include mq($from:leftCol) {
-    @include gu-typeface(headline, 24, $size-only: true);
+    @include gu-typeface(headline, 32, $size-only: true);
   }
 }
 
@@ -117,7 +117,6 @@
   border: none;
   padding: 0;
   text-align: left;
-  align-self: end;
 }
 
 .changeSub, :visited {
@@ -130,7 +129,6 @@
   @include gu-fontset-body-sans;
   font-size: 14px;
   font-weight: 600;
-
   @include mq($from: tablet) {
     @include gu-fontset-heading;
     font-weight: 400;
@@ -158,11 +156,7 @@
 .data {
   @include gu-fontset-body-sans;
   display: grid;
-  grid-template-columns: minmax(max-content 1fr);
-
-  @include mq($from: tablet) {
-    grid-template-columns: max-content 1fr;
-  }
+  grid-template-columns: max-content 1fr;
 }
 
 .data dt, .dataUnderline, .dataBold {
@@ -191,7 +185,6 @@
 .promo {
   @include gu-fontset-body-sans;
   color: gu-colour(neutral-46);
-  margin-top: 4px;
 }
 
 .promoTitle {

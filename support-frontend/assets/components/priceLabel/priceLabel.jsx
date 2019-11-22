@@ -14,34 +14,23 @@ import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 export type PropTypes = {
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
-  orderIsAGift?: boolean,
-  giftStyles?: Object,
 }
 
 function PriceLabel({
-  productPrice,
-  billingPeriod,
-  orderIsAGift,
-  giftStyles,
-  ...props
+  productPrice, billingPeriod, ...props
 }: PropTypes) {
   const description = getPriceDescription(productPrice, billingPeriod, true);
 
   const promotion = getAppliedPromo(productPrice.promotions);
-  return (
-    <span {...props}>
-      {
-        hasDiscount(promotion) && (
-          <del aria-hidden="true">{showPrice(productPrice)}</del>
-        )
-      }
-      <span className={orderIsAGift && giftStyles}>{` ${description}`}</span>
-    </span>);
-}
 
-PriceLabel.defaultProps = {
-  giftStyles: {},
-  orderIsAGift: false,
-};
+  if (hasDiscount(promotion)) {
+    return (
+      <span {...props}>
+        <del aria-hidden="true">{showPrice(productPrice)}</del>{' '}
+        {description}
+      </span>);
+  }
+  return (<span {...props}>{description}</span>);
+}
 
 export { PriceLabel };

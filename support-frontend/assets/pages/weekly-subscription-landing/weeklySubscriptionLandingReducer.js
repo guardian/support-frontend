@@ -12,15 +12,11 @@ export type State = {
   page: {
     productPrices: ?ProductPrices,
     promotionCopy: ?PromotionCopy,
-    orderIsAGift: boolean,
   }
 };
-
-const { orderIsAGift } = window.guardian;
 
 // ----- Export ----- //
 export default () => ({
   productPrices: getProductPrices(),
   promotionCopy: getPromotionCopy(),
-  orderIsAGift,
 });

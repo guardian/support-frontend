@@ -8,15 +8,14 @@ const weeklyBillingPeriods = [SixWeekly, Quarterly, Annual];
 export type BillingPeriod = typeof SixWeekly | typeof Annual | typeof Monthly | typeof Quarterly;
 export type DigitalBillingPeriod = typeof Monthly | typeof Annual;
 export type WeeklyBillingPeriod = typeof SixWeekly | typeof Quarterly | typeof Annual;
-
 export type ContributionBillingPeriod = typeof Monthly | typeof Annual;
 
-function billingPeriodNoun(billingPeriod: BillingPeriod, fixedTerm: boolean = false) {
+function billingPeriodNoun(billingPeriod: BillingPeriod) {
   switch (billingPeriod) {
     case Annual:
-      return fixedTerm ? '12 months' : 'Year';
+      return 'Year';
     case Quarterly:
-      return fixedTerm ? '3 months' : 'Quarter';
+      return 'Quarter';
     case SixWeekly:
       return 'Six issues';
     default:
@@ -24,25 +23,9 @@ function billingPeriodNoun(billingPeriod: BillingPeriod, fixedTerm: boolean = fa
   }
 }
 
-function billingPeriodTitle(billingPeriod: BillingPeriod, fixedTerm: boolean = false) {
-  switch (billingPeriod) {
-    case Annual:
-      return fixedTerm ? '12 months' : billingPeriod;
-    case Quarterly:
-      return fixedTerm ? '3 months' : billingPeriod;
-    case SixWeekly:
-      return '6 for 6';
-    default:
-      return billingPeriod;
-  }
+function billingPeriodTitle(billingPeriod: BillingPeriod) {
+  if (billingPeriod === SixWeekly) { return '6 for 6'; }
+  return billingPeriod;
 }
 
-export {
-  Annual,
-  Monthly,
-  Quarterly,
-  SixWeekly,
-  billingPeriodNoun,
-  billingPeriodTitle,
-  weeklyBillingPeriods,
-};
+export { Annual, Monthly, Quarterly, SixWeekly, billingPeriodNoun, billingPeriodTitle, weeklyBillingPeriods };
