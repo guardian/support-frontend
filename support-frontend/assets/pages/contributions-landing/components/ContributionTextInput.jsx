@@ -12,7 +12,7 @@ type PropTypes = {|
   id: string,
   name: string,
   label: string,
-  placeholder: boolean | string | null,
+  placeholder: string | null,
   icon: React$Element<*>,
   type?: string,
   value: string | null,
