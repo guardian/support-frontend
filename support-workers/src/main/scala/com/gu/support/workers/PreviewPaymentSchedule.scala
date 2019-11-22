@@ -5,18 +5,19 @@ import com.gu.support.zuora.api.response.{Charge, PreviewSubscribeResponse}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeItem}
 import org.joda.time.LocalDate
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object PreviewPaymentSchedule {
 
   def apply(
     subscribeItem: SubscribeItem,
     billingPeriod: BillingPeriod,
+    isGift: Boolean,
     services: Services,
     singleResponseCheck: Future[List[PreviewSubscribeResponse]] => Future[PreviewSubscribeResponse]
   ): Future[PaymentSchedule] = {
-    val numberOfInvoicesToPreview: Int = billingPeriod match {
+    val numberOfInvoicesToPreview: Int = if(isGift) 1 else billingPeriod match {
       case Monthly => 13
       case Quarterly => 5
       case com.gu.support.workers.Annual => 2

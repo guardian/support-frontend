@@ -1,10 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import {
-  type ProductPrice,
-
-} from 'helpers/productPrice/productPrices';
+import { type ProductPrice } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import styles from './summary.module.scss';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
@@ -12,8 +9,8 @@ import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
-import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 
 // Types
 
@@ -22,7 +19,7 @@ export type DataListItem = {
   value: string,
 }
 
-type PropTypes = {|
+type PropTypes = {
   billingPeriod: BillingPeriod,
   changeSubscription?: string | null,
   dataList: DataListItem[],
@@ -32,7 +29,8 @@ type PropTypes = {|
   title: string,
   // eslint-disable-next-line react/no-unused-prop-types
   product: SubscriptionProduct,
-|};
+  orderIsAGift?: boolean,
+};
 
 type StateTypes = {
   showDropDown: boolean,
@@ -94,7 +92,9 @@ const TabletAndDesktop = (props: PropTypes) => (
     <div className={styles.content}>
       <h1 className={styles.header}>Order summary</h1>
       <header>
-        <h2 className={styles.title} title={`your subscription is ${props.title}`}>{props.title}</h2>
+        <h2 className={styles.title} title={`your subscription is ${props.title}`}>
+          {!props.orderIsAGift && 'The '}{props.title}{props.orderIsAGift && ' Gift Subscription'}
+        </h2>
         {props.description &&
           <h3 className={styles.titleDescription}>{props.description}</h3>
         }
@@ -106,9 +106,9 @@ const TabletAndDesktop = (props: PropTypes) => (
           billingPeriod={props.billingPeriod}
         />
         <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions)} />
-        {props.dataList ?
+        {props.dataList &&
           <DataList dataList={props.dataList} />
-        : null}
+        }
       </div>
       {props.changeSubscription ?
         <ChangeSubscription route={props.changeSubscription} />
@@ -120,6 +120,7 @@ const TabletAndDesktop = (props: PropTypes) => (
 TabletAndDesktop.defaultProps = {
   changeSubscription: null,
   dataList: [],
+  orderIsAGift: false,
 };
 
 const HideDropDown = (props: {
@@ -157,6 +158,10 @@ const ShowDropDown = (props: {
   deliveryMethod: string | null,
   onClick: Function,
   showDropDown: boolean,
+  productPrice: ProductPrice,
+  billingPeriod: BillingPeriod,
+  orderIsAGift: boolean,
+  title: string,
 }) => (
   <div className={styles.contentWrapper}>
     <h1 className={styles.headerShowDetails}>Order summary</h1>
@@ -172,6 +177,7 @@ const ShowDropDown = (props: {
         className={styles.data}
         productPrice={props.productPrice}
         billingPeriod={props.billingPeriod}
+        giftStyles={styles.gift}
       />
     </div>
     {props.deliveryMethod ?
@@ -203,7 +209,8 @@ export default class Summary extends Component<PropTypes, StateTypes> {
   static defaultProps = {
     changeSubscription: null,
     dataList: [],
-  }
+    orderIsAGift: false,
+  };
 
   constructor(props: PropTypes) {
     super(props);
@@ -213,11 +220,11 @@ export default class Summary extends Component<PropTypes, StateTypes> {
     };
   }
 
-  getDeliveryMethod = () => this.props.dataList.filter(item => item.title === 'Delivery method').pop().value
+  getDeliveryMethod = () => this.props.dataList.filter(item => item.title === 'Delivery method').pop().value;
 
   toggleDetails = () => {
     this.setState({ showDropDown: !this.state.showDropDown });
-  }
+  };
 
   render() {
     const { product } = this.props;
