@@ -60,6 +60,7 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
     } else {
       //TODO - spinner?
       console.log("amazon not ready")
+      return null;
     }
   }
 }
