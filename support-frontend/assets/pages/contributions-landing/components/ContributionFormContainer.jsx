@@ -14,6 +14,9 @@ import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { LandingPageCopyReturningSinglesTestVariants, NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
+import SecureTransactionIndicator from '../../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -28,6 +31,8 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   countryId: IsoCountry,
+  landingPageCopyReturningSinglesTestVariant: LandingPageCopyReturningSinglesTestVariants,
+  newTemplateVariant: NewLandingPageTemplateTestVariants,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -38,6 +43,8 @@ const mapStateToProps = (state: State) => ({
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
   countryId: state.common.internationalisation.countryId,
+  landingPageCopyReturningSinglesTestVariant: state.common.abParticipations.landingPageCopyReturningSingles,
+  newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -107,6 +114,11 @@ function withProps(props: PropTypes) {
     ...campaign || {},
   };
 
+
+  const showSecureTransactionIndicator = props.countryGroupId === 'GBPCountries'
+    && props.newTemplateVariant === 'new_template' ?
+      <SecureTransactionIndicator modifierClasses={['new-template']} /> : null;
+
   if (props.paymentComplete) {
     // We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
     // This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
@@ -137,6 +149,8 @@ function withProps(props: PropTypes) {
       </div>
 
       <div className="gu-content__form">
+        {showSecureTransactionIndicator}
+
         {campaign && campaign.tickerSettings && campaign.tickerSettings.tickerJsonUrl ?
           <ContributionTicker
             tickerJsonUrl={campaign.tickerSettings.tickerJsonUrl}
