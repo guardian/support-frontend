@@ -21,7 +21,7 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  setAmazonPayLoginButtonReady: dispatch(setAmazonPayLoginButtonReady),
+  setAmazonPayLoginButtonReady: () => dispatch(setAmazonPayLoginButtonReady),
 });
 
 class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
@@ -35,7 +35,8 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
         color: 'DarkGray',
         size: 'medium',
         authorization: () => {
-          // TODO - popup false?
+          // Note - popup=true means it opens in a separate window. If we set it to false then the redirect url must be whitelisted
+          // in Seller Central, which would be a nightmare because we have custom urls for campaigns
           const loginOptions = { scope: 'profile postal_code payments:widget payments:shipping_address', popup: true };
           const authRequest = this.props.amazonPayData.amazonPayLibrary.amazonLoginObject.authorize(loginOptions, window.location.href);
         },
