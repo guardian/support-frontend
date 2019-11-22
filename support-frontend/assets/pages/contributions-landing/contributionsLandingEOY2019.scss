@@ -49,15 +49,34 @@
     border-bottom: 0;
   }
 
+  .component-terms-privacy--campaign-landing,
+  .component-terms-privacy__philo-ask {
+    margin: ($gu-v-spacing / 2) -10px 0;
+    padding: ($gu-v-spacing / 2) 10px 0;
+    border-top: 1px solid gu-colour(neutral-86);
+  }
+
   .component-terms-privacy--campaign-landing p {
     margin-bottom: $gu-v-spacing / 4;
   }
 
-  .component-terms-privacy__divider {
+  .component-terms-privacy__philo-ask {
     display: inline-block;
-    margin: ($gu-v-spacing / 2) -10px 0;
-    padding: ($gu-v-spacing / 2) 10px 0;
-    border-top: 1px solid gu-colour(neutral-86);
+    color: gu-colour(neutral-7);
+  }
+
+  .component-terms-privacy__philo-ask-header {
+    @include gu-typeface(headline, 16);
+    font-weight: bold;
+  }
+
+  .component-terms-privacy__philo-ask-body {
+    @include gu-typeface(textSans, 14);
+    margin-top: $gu-v-spacing / 2;
+
+    a {
+      color: gu-colour(neutral-7);
+    }
   }
 
   .gu-content__blurb {
