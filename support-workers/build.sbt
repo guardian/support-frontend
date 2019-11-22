@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "io.symphonia" % "lambda-logging" % "1.0.1",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
-  "com.netaporter" %% "scala-uri" % "0.4.16",
+  "io.lemonlabs" %% "scala-uri" % "1.5.1",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
