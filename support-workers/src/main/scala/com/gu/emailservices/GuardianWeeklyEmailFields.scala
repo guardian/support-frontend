@@ -8,8 +8,6 @@ import com.gu.support.promotions.Promotion
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 
-import scala.collection.immutable
-
 case class GuardianWeeklyEmailFields(
   subscriptionNumber: String,
   fulfilmentOptions: FulfilmentOptions,
@@ -25,9 +23,9 @@ case class GuardianWeeklyEmailFields(
   giftRecipient: Option[GiftRecipient] = None
 ) extends EmailFields {
 
-  val additionalFields: immutable.Seq[(String, String)] = paymentSchedule.payments.lift(1).map(
-    payment => List("date_of_second_payment" -> formatDate(payment.date))
-  ).getOrElse(Nil)
+  val additionalFields = List(
+    paymentSchedule.payments.lift(1).map(payment => "date_of_second_payment" -> formatDate(payment.date))
+  )
 
   override val fields: List[(String, String)] = PaperFieldsGenerator.fieldsFor(
     subscriptionNumber,
@@ -41,7 +39,7 @@ case class GuardianWeeklyEmailFields(
     directDebitMandateId,
     promotion,
     giftRecipient
-  ) ++ additionalFields
+  ) ++ additionalFields.flatten
 
   override def payload: String = super.payload(user.primaryEmailAddress, "guardian-weekly")
   override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)

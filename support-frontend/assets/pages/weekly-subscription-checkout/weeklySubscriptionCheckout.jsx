@@ -17,8 +17,7 @@ import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import ThankYouContent from './components/thankYou';
-import WeeklyCheckoutForm from './components/weeklyCheckoutForm';
-import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
+import CheckoutForm from './components/weeklyCheckoutForm';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -54,7 +53,6 @@ const store = pageInit(
 );
 
 const { countryGroupId } = store.getState().common.internationalisation;
-const { orderIsAGift } = store.getState().page.checkout;
 
 // ----- Render ----- //
 
@@ -74,9 +72,9 @@ const content = (
       }
     >
       <CheckoutStage
-        checkoutForm={orderIsAGift ? <WeeklyCheckoutFormGifting /> : <WeeklyCheckoutForm />}
-        thankYouContentPending={<ThankYouContent isPending orderIsGift={orderIsAGift} />}
-        thankYouContent={<ThankYouContent isPending={false} orderIsGift={orderIsAGift} />}
+        checkoutForm={<CheckoutForm />}
+        thankYouContentPending={<ThankYouContent isPending />}
+        thankYouContent={<ThankYouContent isPending={false} />}
         subscriptionProduct="GuardianWeekly"
       />
       <ConsentBanner />

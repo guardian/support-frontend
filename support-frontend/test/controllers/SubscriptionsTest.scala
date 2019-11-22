@@ -1,8 +1,8 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.SwitchState.On
 import admin.settings._
+import admin.settings.SwitchState.On
 import assets.RefPath
 import cats.data.EitherT
 import cats.implicits._
@@ -15,14 +15,12 @@ import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.Monthly
 import com.gu.tip.Tip
 import com.typesafe.config.ConfigFactory
-import config.Configuration.MetricUrl
+import config.Configuration.{GuardianDomain, MetricUrl}
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.OptionValues._
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.mvc.Result
 import play.api.test.FakeRequest
@@ -32,6 +30,9 @@ import services.stepfunctions.SupportWorkersClient
 import services.{AccessCredentials, IdentityService, MembersDataService, TestUserService}
 
 import scala.concurrent.Future
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.ConfigLoader
 
 class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
@@ -95,7 +96,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
           Map(NoFulfilmentOptions ->
             Map(NoProductOptions ->
               Map(Monthly ->
-                Map(GBP -> PriceSummary(10, GBP, fixedTerm = false, Nil))))))
+                Map(GBP -> PriceSummary(10, GBP, Nil))))))
       val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
       val priceSummaryService = mock[PriceSummaryService]
       when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[Boolean])).thenReturn(prices)

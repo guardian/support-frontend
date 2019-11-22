@@ -29,11 +29,9 @@ const getPrice = (productPrices: ProductPrices, period: DigitalBillingPeriod, co
   const countryGroupId = fromCountry(country);
 
   if (countryGroupId && flashSaleIsActive('DigitalPack', countryGroupId)) {
-    // TODO: this should be using promotions not hard coded prices
     const price: number = Number(getFormattedFlashSalePrice('DigitalPack', countryGroupId, period));
     return {
       price,
-      fixedTerm: false,
       currency: getCurrency(country),
     };
   }

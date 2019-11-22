@@ -30,14 +30,12 @@ import {
   type FormFields,
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
-import type { Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 
 type PropTypes = {
     ...FormFields,
     isPending: boolean,
-    orderIsGift: boolean,
 };
 
 
@@ -56,66 +54,22 @@ const getPackageTitle = (billingPeriod) => {
   }
 };
 
-const getHeading = (billingPeriod, isPending, orderIsGift) => {
-  if (orderIsGift) {
-    return isPending ?
-      'Your Guardian Weekly gift subscription is being processed' :
-      'Your purchase of a Guardian Weekly gift subscription is now complete';
-  }
-  const packageTitle = getPackageTitle(billingPeriod);
-  return isPending ?
-    `Your subscription to the Guardian Weekly ${packageTitle} is being processed` :
-    `You have now subscribed to the Guardian Weekly ${packageTitle}`;
-};
-
-const StartDateCopy = ({ startDate, orderIsGift }: {startDate: Option<string>, orderIsGift: boolean}) => {
-  if (startDate) {
-    const title = orderIsGift ?
-      'The gift recipient will receive their first issue on' :
-      'You will receive your first issue on';
-    return (
-      <Text title={title}>
-        <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
-      </Text>);
-  }
-  return null;
-};
 
 function ThankYouContent({
-  billingPeriod, startDate, isPending, orderIsGift,
+  billingPeriod, startDate, isPending,
 }: PropTypes) {
-
-  const whatHappensNextItems = orderIsGift ?
-    [
-      <span>
-        Look out for an email from us confirming your subscription.
-      </span>,
-      <span>
-        We&apos;re unable to contact the gift recipient directly - make sure to let them know the gift is on its way.
-      </span>,
-      <span>
-        Each copy will be delivered to the gift recipient&apos;s door.{' '}
-        <a className="thank-you-link" href={homeDeliveryUrl}>Here&apos;s a reminder of how home delivery works</a>.
-      </span>,
-    ] :
-    [
-      <span>
-        Look out for an email from us confirming your subscription.
-        It has everything you need to know about how to manage it in the future.
-      </span>,
-      <span>
-        Your magazine will be delivered to your door.{' '}
-        <a className="thank-you-link" href={homeDeliveryUrl}>Here&apos;s a reminder of how home delivery works</a>.
-      </span>,
-    ];
-
-
+  const packageTitle = getPackageTitle(billingPeriod);
   return (
     <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
         <HeroImage />
-        <HeadingBlock overheading="Thank you for supporting our journalism!">
-          {getHeading(billingPeriod, isPending, orderIsGift)}
+        <HeadingBlock
+          overheading="Thank you for supporting our journalism!"
+        >
+          {isPending ?
+          `Your subscription to the Guardian Weekly ${packageTitle} is being processed` :
+          `You have now subscribed to the Guardian Weekly ${packageTitle}`
+  }
         </HeadingBlock>
       </HeroWrapper>
       <Content>
@@ -129,9 +83,22 @@ function ThankYouContent({
             </Text>
           )
         }
-        <StartDateCopy orderIsGift={orderIsGift} startDate={startDate} />
+        {startDate &&
+          <Text title="You will receive your first issue on">
+            <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
+          </Text>
+        }
         <Text title="What happens next?">
-          <OrderedList items={whatHappensNextItems} />
+          <OrderedList items={[
+            <span>
+              Look out for an email from us confirming your subscription.
+              It has everything you need to know about how to manage it in the future.
+            </span>,
+            <span>
+              Your magazine will be delivered to your door. <a className="thank-you-link" href={homeDeliveryUrl}>Here&apos;s a reminder of how home delivery works</a>.
+            </span>,
+            ]}
+          />
         </Text>
       </Content>
       <Content>

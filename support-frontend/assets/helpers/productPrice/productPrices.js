@@ -28,7 +28,6 @@ import { applyDiscount, getPromotion } from 'helpers/productPrice/promotions';
 export type ProductPrice = {
   price: number,
   currency: IsoCurrency,
-  fixedTerm: boolean,
   promotions?: Promotion[],
 }
 
