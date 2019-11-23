@@ -8,7 +8,6 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers._
-import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -47,10 +46,10 @@ case class LambdaExecutionResult(
   errorMessage: Option[String],
 )
 
-object LambdaExecutionResult extends LazyLogging{
+object LambdaExecutionResult {
 
-  def logResult(lambdaExecutionResult: LambdaExecutionResult) = {
-    logger.info(s"LambdaExecutionResult: ${lambdaExecutionResult.asJson}")
+  def logResult(lambdaExecutionResult: LambdaExecutionResult): Unit = {
+    SafeLogger.info(s"LambdaExecutionResult: ${lambdaExecutionResult.asJson}")
   }
 
   type PaymentProvider = Either[PaymentFields, PaymentMethod]
@@ -74,6 +73,7 @@ object LambdaExecutionResult extends LazyLogging{
   implicit val encoder: Encoder[LambdaExecutionResult] = deriveEncoder[LambdaExecutionResult]
     .mapJsonObject(
       _.unNest("product", "amount")
+        .unNest("product", "productType")
         .unNest("product", "currency")
         .unNest("product", "billingPeriod")
         .unNest("product", "fulfilmentOptions")

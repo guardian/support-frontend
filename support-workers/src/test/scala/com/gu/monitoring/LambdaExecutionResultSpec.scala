@@ -10,8 +10,8 @@ import io.circe.syntax._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class LambdaExecutionResultSpec extends AnyFlatSpec with Matchers{
-  "LambdaExecutionResult" should "create a correct log message" in {
+class LambdaExecutionResultSpec extends AnyFlatSpec with Matchers {
+  "LambdaExecutionResult" should "serialise correctly" in {
     val requestId = UUID.fromString("e18f6418-45f2-11e7-8bfa-8faac2182601")
     val success = LambdaExecutionResult(
       requestId, Success, false,

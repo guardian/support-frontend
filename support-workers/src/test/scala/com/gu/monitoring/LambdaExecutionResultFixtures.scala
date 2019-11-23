@@ -9,6 +9,7 @@ object LambdaExecutionResultFixtures {
         "isTestUser" : false,
         "paymentDetails" : "PayPal",
         "firstDeliveryDate" : null,
+        "productType" : "Contribution",
         "isGift" : false,
         "promoCode" : null,
         "billingCountry" : "GB",
