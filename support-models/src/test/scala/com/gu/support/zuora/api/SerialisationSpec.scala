@@ -134,6 +134,10 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
     testDecoding[List[SubscribeResponseAccount]](subscribeResponseAnnual)
   }
 
+  "PreviewSubscribeResponse" should "deserialise correctly when there is no invoice data" in {
+    testDecoding[List[PreviewSubscribeResponse]](previewSubscribeResponseAnnual)
+  }
+
   "GetAccountResponse" should "deserialise from json" in {
     testDecoding[GetAccountResponse](
       Fixtures.getAccountResponse,
