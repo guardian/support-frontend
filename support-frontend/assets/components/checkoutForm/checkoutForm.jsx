@@ -12,16 +12,17 @@ Form "blocks". you need at least one of these.
 */
 
 type FormSectionPropTypes = {|
+  id?: string,
   title: Option<string>,
   children: Node,
   headingSize: HeadingSize,
-  noBorder: boolean,
+  border: 'full' | 'bottom' | 'top' | 'none',
 |};
 
 const FormSection = ({
-  children, title, headingSize, noBorder,
+  children, title, headingSize, border, id,
 }: FormSectionPropTypes) => (
-  <div className={`component-checkout-form-section ${noBorder ? 'component-checkout-form-section--no-border' : ''}`}>
+  <div id={id} className={`component-checkout-form-section component-checkout-form-section--${border}`}>
     <div className="component-checkout-form-section__wrap">
       {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
       {children}
@@ -32,7 +33,8 @@ const FormSection = ({
 FormSection.defaultProps = {
   headingSize: 2,
   title: null,
-  noBorder: false,
+  border: 'full',
+  id: '',
 };
 
 // Hidden version of form section
