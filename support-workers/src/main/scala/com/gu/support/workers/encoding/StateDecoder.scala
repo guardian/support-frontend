@@ -38,7 +38,7 @@ object StateDecoder extends App with LazyLogging {
   })
 
   def print(output: String): Unit = {
-    val formattedOutput = parse(output).map(_.printWith(Printer.indented(" "))).getOrElse(output)
+    val formattedOutput = parse(output).map(_.pretty(Printer.indented(" "))).getOrElse(output)
     println(s"\n\n$formattedOutput\n\n")
   } // scalastyle:ignore
 }
