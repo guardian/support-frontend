@@ -13,11 +13,10 @@ object PreviewPaymentSchedule {
   def apply(
     subscribeItem: SubscribeItem,
     billingPeriod: BillingPeriod,
-    isGift: Boolean,
     services: Services,
     singleResponseCheck: Future[List[PreviewSubscribeResponse]] => Future[PreviewSubscribeResponse]
   ): Future[PaymentSchedule] = {
-    val numberOfInvoicesToPreview: Int = if(isGift) 1 else billingPeriod match {
+    val numberOfInvoicesToPreview: Int = billingPeriod match {
       case Monthly => 13
       case Quarterly => 5
       case com.gu.support.workers.Annual => 2
