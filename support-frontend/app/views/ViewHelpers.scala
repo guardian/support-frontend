@@ -9,5 +9,5 @@ object ViewHelpers {
   def outputJson[T : Encoder](value: T): String =
     value
       .asJson
-      .printWith(Printer.noSpaces.copy(dropNullValues = true))
+      .pretty(Printer.noSpaces.copy(dropNullValues = true))
 }
