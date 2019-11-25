@@ -13,29 +13,29 @@ import org.scalatest.matchers.should.Matchers
 class SerialisationSpec extends AnyFlatSpec with Matchers with LazyLogging {
 
   "UpsertData" should "serialise to correct UK json" in {
-    newContactUK.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJson).right.get.noSpaces)
+    newContactUK.asJson.printWith(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJson).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct US json" in {
-    newContactUS.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithState).right.get.noSpaces)
+    newContactUS.asJson.printWith(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithState).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct json when telephoneNumber provided" in {
     val newContactWithTelephone = newContactUK.copy(Phone = Some(telephoneNumber))
-    newContactWithTelephone.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithTelephoneNumber).right.get.noSpaces)
+    newContactWithTelephone.asJson.printWith(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithTelephoneNumber).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct json when billing address provided" in {
-    newContactUKWithBillingAddress.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAddress).right.get.noSpaces)
+    newContactUKWithBillingAddress.asJson.printWith(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAddress).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct json when billing address and delivery address provided" in {
     newContactUKWithBothAddressesAndTelephone.asJson.
-      pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAndDeliveryAddresses).right.get.noSpaces)
+      printWith(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAndDeliveryAddresses).right.get.noSpaces)
   }
 
   "Gift recipient upsert data" should "serialise to correct json" in {
-    giftRecipientUpsert.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(giftRecipientUpsertJson).right.get.noSpaces)
+    giftRecipientUpsert.asJson.printWith(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(giftRecipientUpsertJson).right.get.noSpaces)
   }
 
   "Authentication" should "deserialize correctly" in {

@@ -6,6 +6,7 @@
 *.sublime-workspace
 .vscode
 .metals
+.bloop
 
 node_modules
 npm-debug.log

@@ -13,6 +13,12 @@ riffRaffManifestProjectName := "support:lambdas:Stripe Intent"
 riffRaffArtifactResources += (file("support-lambdas/stripe-intent/cfn.yaml"), "cfn/cfn.yaml")
 riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch")
 riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV")
+assemblyMergeStrategy in assembly := {
+  case x if x.endsWith("module-info.class") => MergeStrategy.discard
+  case y =>
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(y)
+}
 
 libraryDependencies ++= Seq(
   "io.circe" %% "circe-core",
