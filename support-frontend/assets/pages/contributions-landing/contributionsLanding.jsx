@@ -21,6 +21,7 @@ import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
+import { SlimRoundelHeader } from 'components/headers/slimRoundelHeader/slimRoundelHeader';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
@@ -30,10 +31,9 @@ import ContributionThankYouContainer
   from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
-import SecureTransactionIndicator from '../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import './contributionsLanding.scss';
 import './contributionsLandingEOY2019.scss';
-import type { NewLandingPageTemplateTestVariants } from '../../../assets/helpers/abTests/abtestDefinitions';
 import './newTemplate.scss';
 
 if (!isDetailsSupported) {
@@ -97,19 +97,15 @@ const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[
   campaigns[campaignName].backgroundImage : null;
 
 const showSecureTransactionIndicator = () => {
-  if (countryGroupId === 'GBPCountries') {
-    return <SecureTransactionIndicator modifierClasses={['top']} />;
-  } else if (store.getState().common.abParticipations.paymentSecuritySecureTransactionGreyNonUK === 'V1_securetransactiongrey') {
-    return <SecureTransactionIndicator modifierClasses={['top', 'hideaftermobile']} />;
+  if (store.getState().common.abParticipations.newLandingPageTemplateTest === 'control') {
+    if (countryGroupId === 'GBPCountries') {
+      return <SecureTransactionIndicator modifierClasses={['top']} />;
+    } else if (store.getState().common.abParticipations.paymentSecuritySecureTransactionGreyNonUK === 'V1_securetransactiongrey') {
+      return <SecureTransactionIndicator modifierClasses={['top', 'hideaftermobile']} />;
+    }
   }
   return null;
 };
-
-const newTemplateVariant: NewLandingPageTemplateTestVariants =
-  store.getState().common.abParticipations.newLandingPageTemplateTest;
-
-const showSecureTransactionIndicator = countryGroupId === 'GBPCountries' && newTemplateVariant === 'control' ? <SecureTransactionIndicator modifierClasses={['top']} /> : null;
-
 
 const originalPage = (campaignCodeParameter: ?string) => (
   <Page
@@ -130,7 +126,7 @@ const originalPage = (campaignCodeParameter: ?string) => (
 const newTemplagePage = (campaignCodeParameter: ?string) => (
   <Page
     classModifiers={['new-template']}
-    header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+    header={<SlimRoundelHeader selectedCountryGroup={selectedCountryGroup} />}
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
   >
@@ -144,7 +140,7 @@ const newTemplagePage = (campaignCodeParameter: ?string) => (
 );
 
 
-const contributionsLandingPage = (campaignCodeParameter: ?string) => (newTemplateVariant === 'new_template' ? newTemplagePage(campaignCodeParameter) : originalPage(campaignCodeParameter));
+const contributionsLandingPage = (campaignCodeParameter: ?string) => (store.getState().common.abParticipations.newLandingPageTemplateTest === 'new_template' ? newTemplagePage(campaignCodeParameter) : originalPage(campaignCodeParameter));
 
 const router = (
   <BrowserRouter>
