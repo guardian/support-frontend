@@ -7,6 +7,7 @@ import com.gu.monitoring.LambdaExecutionResult.PaymentProvider
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
+import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers._
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
@@ -21,9 +22,11 @@ case object PaymentFailure extends LambdaExecutionStatus
 
 case object Error extends LambdaExecutionStatus
 
+case object IgnoredError extends LambdaExecutionStatus
+
 object LambdaExecutionStatus {
   def fromString(code: String): Option[LambdaExecutionStatus] = {
-    List(Success, PaymentFailure, Error).find(_.getClass.getSimpleName == s"$code$$")
+    List(Success, PaymentFailure, Error, IgnoredError).find(_.getClass.getSimpleName == s"$code$$")
   }
 
   implicit val decoder: Decoder[LambdaExecutionStatus] =
@@ -37,13 +40,14 @@ case class LambdaExecutionResult(
   status: LambdaExecutionStatus,
   isTestUser: Boolean,
   product: ProductType,
-  paymentDetails: PaymentProvider,
+  paymentDetails: Option[PaymentProvider],
   firstDeliveryDate: Option[LocalDate],
   isGift: Boolean,
   promoCode: Option[PromoCode],
   billingCountry: Country,
   deliveryCountry: Option[Country],
-  errorMessage: Option[String],
+  checkoutFailureReason: Option[CheckoutFailureReason],
+  error: Option[ExecutionError],
 )
 
 object LambdaExecutionResult {

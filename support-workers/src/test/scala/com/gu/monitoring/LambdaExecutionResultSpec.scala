@@ -14,11 +14,11 @@ class LambdaExecutionResultSpec extends AnyFlatSpec with Matchers {
   "LambdaExecutionResult" should "serialise correctly" in {
     val requestId = UUID.fromString("e18f6418-45f2-11e7-8bfa-8faac2182601")
     val success = LambdaExecutionResult(
-      requestId, Success, false,
+      requestId, Success, isTestUser = false,
       Contribution(20, GBP, Monthly),
-      Left(PayPalPaymentFields("1234")),
-      None, false, None,
-      Country.UK, None, None
+      Some(Left(PayPalPaymentFields("1234"))),
+      None, isGift = false, None,
+      Country.UK, None, None, None
     )
 
     success.asJson shouldBe parse(LambdaExecutionResultFixtures.successfulContribution).right.get

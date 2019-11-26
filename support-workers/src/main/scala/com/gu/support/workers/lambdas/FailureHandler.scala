@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices._
 import com.gu.helpers.FutureExtensions._
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.{Error, IgnoredError, LambdaExecutionResult, LambdaExecutionStatus, PaymentFailure, SafeLogger}
 import com.gu.stripe.StripeError
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
@@ -53,27 +53,62 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     SafeLogger.info(s"Attempting to handle error $error")
     val pattern = "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
     error.flatMap(extractUnderlyingError) match {
-      case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => exitHandler(
-        state,
-        toCheckoutFailureReason(ze),
-        requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
-      )
-      case Some(se @ StripeError("card_error", _, _, _, _)) => exitHandler(
-        state,
-        toCheckoutFailureReason(se),
-        requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
-      )
-      case Some(StripeError("invalid_request_error", pattern(message), _, _, _)) => exitHandler(
-        state,
-        AccountMismatch,
-        requestInfo.appendMessage(message)
-      )
-      case _ => exitHandler(
-        state,
-        Unknown,
-        requestInfo.copy(failed = true)
-      )
+      case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) =>
+        val checkoutFailureReason = toCheckoutFailureReason(ze)
+        logLambdaResult(state, PaymentFailure, checkoutFailureReason, error)
+        exitHandler(
+          state,
+          checkoutFailureReason,
+          requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
+        )
+      case Some(se @ StripeError("card_error", _, _, _, _)) =>
+        val checkoutFailureReason = toCheckoutFailureReason(se)
+        logLambdaResult(state, PaymentFailure, checkoutFailureReason, error)
+        exitHandler(
+          state,
+          checkoutFailureReason,
+          requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
+        )
+      case Some(StripeError("invalid_request_error", pattern(message), _, _, _)) =>
+        logLambdaResult(state, IgnoredError, AccountMismatch, error)
+        exitHandler(
+          state,
+          AccountMismatch,
+          requestInfo.appendMessage(message)
+        )
+      case _ =>
+        logLambdaResult(state, Error, Unknown, error)
+        exitHandler(
+          state,
+          Unknown,
+          requestInfo.copy(failed = true)
+        )
     }
+  }
+
+  private def logLambdaResult(
+    state: FailureHandlerState,
+    status: LambdaExecutionStatus,
+    checkoutFailureReason: CheckoutFailureReason,
+    error: Option[ExecutionError]
+  ): Unit = {
+    val paymentDetails = state.paymentMethod.map(Right(_)).orElse(state.paymentFields.map(Left(_)))
+    LambdaExecutionResult.logResult(
+      LambdaExecutionResult(
+        state.requestId,
+        status,
+        state.user.isTestUser,
+        state.product,
+        paymentDetails,
+        state.firstDeliveryDate,
+        state.giftRecipient.isDefined,
+        state.promoCode,
+        state.user.billingAddress.country,
+        state.user.deliveryAddress.map(_.country),
+        Some(checkoutFailureReason),
+        error
+      )
+    )
   }
 
   private def exitHandler(
