@@ -93,6 +93,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     error: Option[ExecutionError]
   ): Unit = {
     val paymentDetails = state.paymentMethod.map(Right(_)).orElse(state.paymentFields.map(Left(_)))
+    // Log the result of this execution to Elasticsearch
     LambdaExecutionResult.logResult(
       LambdaExecutionResult(
         state.requestId,

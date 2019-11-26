@@ -10,7 +10,7 @@ import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client, paymentSuccessRequest}
 import com.gu.config.Configuration
 import com.gu.i18n.Country
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{GuardianWeekly, Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.encoding.CustomCodecs._
@@ -38,6 +38,24 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     services: Services
   ): FutureHandlerResult = {
     SafeLogger.info(s"Sending acquisition event to ophan: ${state.toString}")
+
+    // Log the result of this execution to Elasticsearch
+    LambdaExecutionResult.logResult(
+      LambdaExecutionResult(
+        state.requestId,
+        Success,
+        state.user.isTestUser,
+        state.product,
+        Some(Right(state.paymentMethod)),
+        state.firstDeliveryDate,
+        state.giftRecipient.isDefined,
+        state.promoCode,
+        state.user.billingAddress.country,
+        state.user.deliveryAddress.map(_.country),
+        None,
+        None
+      )
+    )
 
     // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
     val result: Future[HandlerResult[Unit]] = services.acquisitionService.submit(
