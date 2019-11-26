@@ -194,7 +194,7 @@ case class Charge(serviceStartDate: LocalDate, serviceEndDate: LocalDate, taxAmo
 
 object PreviewSubscribeResponse {
   implicit val decoder: Decoder[PreviewSubscribeResponse] = decapitalizingDecoder[PreviewSubscribeResponse].prepare(_.withFocus(
-    _.mapObject(_.checkKeyExists("invoiceData", Json.fromValues(Vector[Json]())))
+    _.mapObject(_.checkKeyExists("InvoiceData", Json.fromValues(Vector[Json]())))
   ))
   implicit val encoder: Encoder[PreviewSubscribeResponse] = capitalizingEncoder
 }
