@@ -3,7 +3,8 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.i18n.{Country, CountryGroup}
+import com.gu.i18n.Country.UK
+import com.gu.i18n.CountryGroup
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.Stage
 import com.gu.support.encoding.CustomCodecs._
@@ -77,9 +78,18 @@ class Subscriptions(
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val promoCodes = defaultPromos ++ queryPromos
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, orderIsAGift)
+    // To see if there is any promotional copy in place for this page we need to get a country in the current region (country group)
+    // this is because promotions apply to countries not regions. We can use any country however because the promo tool UI only deals
+    // with regions and then adds all the countries for that region to the promotion
+    val country = (for {
+      countryGroup <- CountryGroup.byId(countryCode)
+      country <- countryGroup.countries.headOption
+    } yield country).getOrElse(UK)
+
     val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
-      ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
-        .getCopyForPromoCode(promoCode, GuardianWeekly, CountryGroup.countryByCode(countryCode).getOrElse(Country.UK))
+      ProductPromotionCopy(promotionServiceProvider
+        .forUser(false), stage)
+        .getCopyForPromoCode(promoCode, GuardianWeekly, country)
     )
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
