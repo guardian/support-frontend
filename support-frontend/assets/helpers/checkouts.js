@@ -67,7 +67,7 @@ function toHumanReadableContributionType(contributionType: ContributionType): 'S
 }
 
 function getContributionTypeFromSession(): ?ContributionType {
-  return toContributionType(storage.getSession('selected-contribution-type'));
+  return toContributionType(storage.getSession('selectedContributionType'));
 }
 
 function getContributionTypeFromUrl(): ?ContributionType {

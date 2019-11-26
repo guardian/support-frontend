@@ -16,7 +16,7 @@ export type CampaignSettings = {
   headerCopy?: string | React$Element<string>,
   contributeCopy?: React$Element<string>,
   formMessage?: React$Element<string>,
-  termsAndConditions?: (contributionsTermsLink: string, contactEmail: string, isUK: boolean) => React$Element<string>,
+  termsAndConditions?: (contributionsTermsLink: string, contactEmail: string) => React$Element<string>,
   cssModifiers?: string[],
   contributionTypes?: ContributionTypes,
   backgroundImage?: string,
@@ -32,7 +32,7 @@ const currentCampaignName = 'us/contribute';
 
 export const campaigns: Campaigns = {
   [currentCampaignName]: {
-    termsAndConditions: (contributionsTermsLink: string, contactEmail: string, isUK: boolean) => (
+    termsAndConditions: (contributionsTermsLink: string, contactEmail: string) => (
       <div className="component-terms-privacy component-terms-privacy--campaign-landing">
         <p>
           Monthly contributions are billed each month and annual contributions are billed
@@ -43,22 +43,16 @@ export const campaigns: Campaigns = {
           To find out what personal data we collect and how we use it, please visit
           our <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.
         </p>
-        {isUK ? (
-          <span className="component-terms-privacy__divider">
-            <p>
-              If you would like to make a larger contribution, we have a Patron programme with three levels of
-              support, which brings you closer to our work. For more information, please visit
-              our <a className="underline" href="https://patrons.theguardian.com?INTCMP=climate_pledge_2019-patrons-link">Patrons site</a>.
-            </p>
-          </span>
-        ) : (
-          <span className="component-terms-privacy__divider">
-            <p>
-              We also accept larger contributions to support The Guardian’s reporting from companies, foundations and
-              individuals. Please  <a href={`mailto:${contactEmail || ''}`}>contact us</a>.
-            </p>
-          </span>
-        )}
+        <span className="component-terms-privacy__philo-ask">
+          <p className="component-terms-privacy__philo-ask-header">
+            Contribute another way
+          </p>
+          <p className="component-terms-privacy__philo-ask-body">
+            Please <a href={`mailto:${contactEmail || ''}`}>contact us</a> if you would like to: make a
+            larger contribution as an individual, contribute as a company or foundation, or would
+            like to discuss legacy gifting. Thank you for your generous support.
+          </p>
+        </span>
       </div>
     ),
     cssModifiers: ['eoy2019'],
