@@ -349,39 +349,23 @@ object Fixtures {
       ]
    """
 
-  val previewSubscribeResponse =
+  val previewSubscribeResponseJson =
     """
       [
         {
             "Success": true,
-            "TotalMrr": 0,
             "InvoiceData": [
                 {
                     "InvoiceItem": [
                         {
-                            "ProductId": "2c92a0ff6619bf8901661aa3247c4b1d",
                             "ServiceEndDate": "2020-04-02",
                             "ServiceStartDate": "2020-01-03",
-                            "ChargeDate": "2019-11-25T16:58:01.322+00:00",
-                            "AccountingCode": "Deferred Revenue - Guardian Weekly",
                             "TaxAmount": 0,
-                            "ChargeName": "GW Oct 18 - 3 Month - Domestic",
-                            "UnitPrice": 37.5,
-                            "TaxExemptAmount": 0,
-                            "Quantity": 1,
-                            "ProductRatePlanChargeId": "2c92a00e6dd988e2016df853875d74c6",
                             "ChargeAmount": 37.5
                         }
-                    ],
-                    "Invoice": {
-                        "AccountId": "2c92a0fe6e88007b016ea37fa1fc315a",
-                        "Amount": 37.5,
-                        "TaxAmount": 0,
-                        "AmountWithoutTax": 37.5
-                    }
+                    ]
                 }
-            ],
-            "TotalTcv": 37.5
+            ]
         }
     ]
     """

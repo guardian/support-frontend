@@ -85,7 +85,7 @@ trait WebServiceHelper[Error <: Throwable] {
       contentType <- Option(body.contentType()).toRight(WebServiceHelperError(CodeBody(code, ""), "no content type")).toTry
       responseBody <- Try(body.string())
       codeBody = CodeBody(code, responseBody)
-      _ = SafeLogger.info(s"response $code body: ${responseBody.length} bytes")
+      _ = SafeLogger.info(s"response $code body: ${responseBody}")
       _ <-
         if ((contentType.`type`(), contentType.subtype()) == ("application", "json")) Success(())
         else Failure(WebServiceHelperError(codeBody, s"wrong content type"))
