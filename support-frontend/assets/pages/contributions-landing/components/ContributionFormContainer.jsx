@@ -14,7 +14,7 @@ import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { LandingPageCopyReturningSinglesTestVariants, NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
 import SecureTransactionIndicator from '../../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
 
 
@@ -31,7 +31,6 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   countryId: IsoCountry,
-  landingPageCopyReturningSinglesTestVariant: LandingPageCopyReturningSinglesTestVariants,
   newTemplateVariant: NewLandingPageTemplateTestVariants,
 |};
 
@@ -43,7 +42,6 @@ const mapStateToProps = (state: State) => ({
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
   countryId: state.common.internationalisation.countryId,
-  landingPageCopyReturningSinglesTestVariant: state.common.abParticipations.landingPageCopyReturningSingles,
   newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTest,
 });
 
