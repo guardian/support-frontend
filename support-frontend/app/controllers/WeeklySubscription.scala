@@ -9,7 +9,7 @@ import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.GuardianWeekly
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import config.StringsConfig
 import play.api.libs.circe.Circe
@@ -43,7 +43,7 @@ class WeeklySubscription(
 
   implicit val a: AssetsResolver = assets
 
-  def displayForm(orderIsAGift: Boolean): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async { implicit request =>
+  def displayForm(): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user.minimalUser).fold(
         error => {
@@ -53,20 +53,20 @@ class WeeklySubscription(
           Future.successful(InternalServerError)
         },
         user => {
-          Future.successful(Ok(paperSubscriptionFormHtml(user, orderIsAGift)))
+          Future.successful(Ok(paperSubscriptionFormHtml(user)))
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
 
-  private def paperSubscriptionFormHtml(idUser: IdUser, orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
+  private def paperSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Guardian Weekly Subscription"
     val id = EmptyDiv("weekly-subscription-checkout-page")
     val js = "weeklySubscriptionCheckoutPage.js"
     val css = "weeklySubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
-    val defaultPromos = if (orderIsAGift) List("GW20GIFT1Y") else List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
-    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ defaultPromos
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++
+      List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
 
     subscriptionCheckout(
       title,
@@ -77,13 +77,12 @@ class WeeklySubscription(
       Some(csrf),
       idUser,
       uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(GuardianWeekly, promoCodes, orderIsAGift),
-      stripeConfigProvider.get(),
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(GuardianWeekly, promoCodes),
+      stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
-      payPalConfigProvider.get(),
+      payPalConfigProvider.get(false),
       payPalConfigProvider.get(true),
-      stripeSetupIntentEndpoint,
-      orderIsAGift
+      stripeSetupIntentEndpoint
     )
   }
 

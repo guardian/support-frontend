@@ -5,8 +5,8 @@ import com.gu.support.zuora.api.response.{Charge, PreviewSubscribeResponse}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeItem}
 import org.joda.time.LocalDate
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object PreviewPaymentSchedule {
 

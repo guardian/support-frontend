@@ -13,16 +13,15 @@ import './headingBlock.scss';
 type PropTypes = {|
   overheading: Option<string>,
   children?: Node,
-  orderIsAGift?: boolean,
 |};
 
 
 // ----- Component ----- //
 
 function HeadingBlock(props: PropTypes) {
-  const giftOrder = props.orderIsAGift ? '__gift' : '';
+
   return (
-    <div className={`component-heading-block${giftOrder}`}>
+    <div className="component-heading-block">
       <div className="component-heading-block__content">
         {props.overheading ?
         [
@@ -49,7 +48,6 @@ function HeadingBlock(props: PropTypes) {
 HeadingBlock.defaultProps = {
   children: null,
   overheading: null,
-  orderIsAGift: false,
 };
 
 

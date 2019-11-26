@@ -586,6 +586,14 @@
       }
     }
 
+    ul {
+      margin-top: 15px;
+
+      @include mq($from: desktop) {
+        margin-top: 20px;
+      }
+    }
+
     ul:nth-of-type(2) {
       margin-top: 0;
 
@@ -600,6 +608,44 @@
 
       @include mq($from: wide) {
         margin-left: 100px;
+      }
+    }
+
+    li {
+      margin: 0 10px 15px 5px;
+      font-size: 15px;
+      line-height: 20px;
+
+      @include mq($from: tablet) {
+        margin-left: 18px;
+        font-size: 17px;
+      }
+
+      .product-block__list-item--bold {
+        font-weight: 600;
+        margin-left: 8px;
+      }
+
+      .product-block__list-item__explainer {
+        margin-left: 23px;
+        font-size: 14px;
+
+        @include mq($from: tablet) {
+          font-size: 16px;
+        }
+      }
+
+      .product-block__list-item__bullet {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background-color: #ffe500;
+        display: inline-block;
+
+        @include mq($from: tablet) {
+          width: 15px;
+        height: 15px;
+        }
       }
     }
   }

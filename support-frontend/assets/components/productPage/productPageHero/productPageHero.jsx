@@ -28,8 +28,6 @@ type PropTypes = {|
   content?: Option<Node>,
   hasCampaign: boolean,
   showProductPageHeroHeader?: boolean,
-  orderIsAGift?: boolean,
-  giftImage?: Node,
 |};
 
 type ProductPageHeroHeaderTypes = {
@@ -37,8 +35,6 @@ type ProductPageHeroHeaderTypes = {
   hasCampaign: boolean,
   heading: string,
   content?: Option<Node>,
-  orderIsAGift?: boolean,
-  giftImage?: Node,
 }
 
 // ----- Render ----- //
@@ -73,21 +69,13 @@ const HeroHanger = ({
 const HeroHeading = ({
   children,
   hasCampaign,
-  orderIsAGift,
-  giftImage,
-}: {children: Node, hasCampaign: boolean, orderIsAGift?: boolean, giftImage?: Node}) => (
+}: {children: Node, hasCampaign: boolean}) => (
   <div className={classNameWithModifiers('component-product-page-hero-heading', [hasCampaign ? 'campaign' : null])}>
     <LeftMarginSection>
-      {orderIsAGift && giftImage}
       {children}
     </LeftMarginSection>
   </div>
 );
-
-HeroHeading.defaultProps = {
-  orderIsAGift: false,
-  giftImage: null,
-};
 
 const ProductPageHero = ({
   modifierClasses, children, appearance, showProductPageHeroHeader, ...props
@@ -101,16 +89,11 @@ const ProductPageHero = ({
 );
 
 const ProductPageHeroHeader = ({
-  overheading, heading, content, hasCampaign, orderIsAGift, giftImage,
+  overheading, heading, content, hasCampaign,
 }: ProductPageHeroHeaderTypes) => (
   <div>
-    <HeroHeading {...{ hasCampaign, orderIsAGift, giftImage }}>
-      <HeadingBlock
-        overheading={orderIsAGift ? 'The Guardian Weekly gift subscription' : overheading}
-        orderIsAGift={orderIsAGift}
-      >
-        {heading}
-      </HeadingBlock>
+    <HeroHeading {...{ hasCampaign }}>
+      <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
     </HeroHeading>
     {content && <HeroHanger>{content}</HeroHanger>}
   </div>
@@ -125,8 +108,6 @@ ProductPageHero.defaultProps = {
 
 ProductPageHeroHeader.defaultProps = {
   content: null,
-  orderIsAGift: false,
-  giftImage: null,
 };
 
 export { HeroHanger, HeroWrapper, HeroHeading, ProductPageHeroHeader };

@@ -90,18 +90,3 @@
     }
   }
 }
-
-#gift-benefits-them, #gift-benefits-you {
-  .component-text {
-    @include gu-fontset-heading;
-    overflow-wrap: break-word;
-    margin-bottom: 10px;
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 28px;
-  }
-}
-
-.component-button--with-margin-bottom {
-  margin-bottom: 20px;
-}
