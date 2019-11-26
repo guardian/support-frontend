@@ -1,10 +1,11 @@
 // @flow
 import { connect } from 'react-redux';
 
-import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import {
+  SixWeekly,
   billingPeriodTitle,
   weeklyBillingPeriods,
+  type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
@@ -21,41 +22,47 @@ import { promoQueryParam } from 'helpers/productPrice/promotions';
 
 // ---- Plans ----- //
 
-const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod): string => {
+const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean): string => {
   const promoCode = getQueryParameter(promoQueryParam);
   const promoQuery = promoCode ? `&${promoQueryParam}=${promoCode}` : '';
-  return `${getOrigin()}/subscribe/weekly/checkout?period=${billingPeriod.toString()}${promoQuery}`;
+  const gift = orderIsGift ? '/gift' : '';
+  return `${getOrigin()}/subscribe/weekly/checkout${gift}?period=${billingPeriod.toString()}${promoQuery}`;
 };
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
-  plans: weeklyBillingPeriods.reduce((plans, billingPeriod) => {
-    const { countryId } = state.common.internationalisation;
-    const { productPrices } = state.page;
-    const productPrice = productPrices ? getProductPrice(
-      productPrices,
-      countryId,
-      billingPeriod,
-      getWeeklyFulfilmentOption(countryId),
-    ) : { price: 0, currency: 'GBP' };
-    return {
-      ...plans,
-      [billingPeriod]: {
-        title: billingPeriodTitle(billingPeriod),
-        copy: getPriceDescription(
-          productPrice,
-          billingPeriod,
-        ),
-        offer: getAppliedPromoDescription(billingPeriod, productPrice),
-        href: getCheckoutUrl(billingPeriod),
-        onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
-        price: null,
-        saving: null,
-      },
-    };
-  }, {}),
-});
+const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
+  const { countryId } = state.common.internationalisation;
+  const { productPrices, orderIsAGift } = state.page;
+  const billingPeriodsToUse = weeklyBillingPeriods.filter(billingPeriod =>
+    !(state.page.orderIsAGift && billingPeriod === SixWeekly));
+
+  return {
+    plans: billingPeriodsToUse.reduce((plans, billingPeriod) => {
+      const productPrice = productPrices ? getProductPrice(
+        productPrices,
+        countryId,
+        billingPeriod,
+        getWeeklyFulfilmentOption(countryId),
+      ) : { price: 0, fixedTerm: false, currency: 'GBP' };
+      return {
+        ...plans,
+        [billingPeriod]: {
+          title: billingPeriodTitle(billingPeriod, orderIsAGift),
+          copy: getPriceDescription(
+            productPrice,
+            billingPeriod,
+          ),
+          offer: getAppliedPromoDescription(billingPeriod, productPrice),
+          href: getCheckoutUrl(billingPeriod, orderIsAGift),
+          onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
+          price: null,
+          saving: null,
+        },
+      };
+    }, {}),
+  };
+};
 
 
 // ----- Exports ----- //
