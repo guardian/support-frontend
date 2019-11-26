@@ -136,7 +136,8 @@ const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
 
 const { promotionCopy, orderIsAGift } = store.getState().page;
 const copy = getCopy(promotionCopy, orderIsAGift);
-const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || '10ANNUAL');
+const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
+const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
 
 type GiftHeadingPropTypes = {
   text: string,
