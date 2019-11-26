@@ -104,11 +104,11 @@ trait WebServiceHelper[Error <: Throwable] {
       case "2xx" =>
         decode[A](responseBody).left.map { err =>
           decodeError(responseBody).right.getOrElse(
-            WebServiceHelperError[A](codeBody, s"failed to parse response. Error was: $err, Response was: $responseBody", err)
+            WebServiceHelperError[A](codeBody, s"failed to parse response: $err", err)
           )
         }.toTry
       case "4xx" =>
-        Failure(decodeError(responseBody).right.toOption.getOrElse(
+        Failure((decodeError(responseBody).right.toOption).getOrElse(
           WebServiceClientError(codeBody))
         )
       case statusCode =>
@@ -138,7 +138,6 @@ trait WebServiceHelper[Error <: Throwable] {
     params: ParamMap = empty
   )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.pretty(Printer.noSpaces.copy(dropNullValues = true))
-    SafeLogger.info(s"Issuing request POST $endpoint $json")
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).post(body))
   }

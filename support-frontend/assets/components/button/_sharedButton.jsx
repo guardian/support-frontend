@@ -15,7 +15,6 @@ export const Appearances = {
   primary: 'primary',
   secondary: 'secondary',
   green: 'green',
-  blue: 'blue',
   greenHollow: 'greenHollow',
   greyHollow: 'greyHollow',
   disabled: 'disabled',

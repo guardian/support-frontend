@@ -29,17 +29,8 @@
   border-top: 1px solid gu-colour(neutral-86);
 }
 
-div .component-checkout-form-section.component-checkout-form-section--bottom {
+div .component-checkout-form-section.component-checkout-form-section--no-border {
   border-top: none;
-}
-
-div .component-checkout-form-section.component-checkout-form-section--top {
-  border-bottom: none;
-}
-
-div .component-checkout-form-section.component-checkout-form-section--none {
-  border-top: none;
-  border-bottom: none;
 }
 
 div .component-checkout-form-section.component-checkout-form-section--hidden {
