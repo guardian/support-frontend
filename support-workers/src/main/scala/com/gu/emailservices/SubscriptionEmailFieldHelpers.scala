@@ -28,10 +28,16 @@ object SubscriptionEmailFieldHelpers {
     s"${pluralise(introductoryBillingPeriods, billingPeriod.noun)}"
 
 
-  def describe(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency, promotion: Option[Promotion]): String = {
+  def describe(
+    paymentSchedule: PaymentSchedule,
+    billingPeriod: BillingPeriod,
+    currency: Currency,
+    promotion: Option[Promotion],
+    isGift: Boolean = false
+  ): String = {
     promotion.flatMap(_.introductoryPrice)
       .map(introductoryPrice => introductoryPriceDescription(paymentSchedule, billingPeriod, currency, introductoryPrice))
-      .getOrElse(standardDescription(paymentSchedule, billingPeriod, currency))
+      .getOrElse(standardDescription(paymentSchedule, billingPeriod, currency, isGift))
   }
 
   def introductoryPriceDescription(
@@ -46,11 +52,20 @@ object SubscriptionEmailFieldHelpers {
         s"then ${priceWithCurrency(currency, payment.amount)} every ${billingPeriod.noun}"
     )
 
-  def standardDescription(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency): String = {
+  def giftNoun(billingPeriod: BillingPeriod): String = billingPeriod match {
+    case Quarterly => "3 months"
+    case Annual => "12 months"
+    case _ => billingPeriod.noun
+  }
+
+  def standardDescription(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency, isGift: Boolean): String = {
     val initialPrice = firstPayment(paymentSchedule).amount
     val (paymentsWithInitialPrice, paymentsWithDifferentPrice) = paymentSchedule.payments.partition(_.amount == initialPrice)
 
-    if (paymentSchedule.payments.size == 1) {
+    if (isGift){
+      s"${priceWithCurrency(currency, initialPrice)} for ${giftNoun(billingPeriod)}"
+    }
+    else if (paymentSchedule.payments.size == 1) {
       s"${priceWithCurrency(currency, initialPrice)} for the first ${billingPeriod.noun}"
     }
     else if (paymentsWithDifferentPrice.isEmpty) {

@@ -1,11 +1,119 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-product-page-hero.component-product-page-hero--weekly-campaign {
-  position: relative;
-  box-sizing: border-box;
   background: #283942;
   color: #fff;
+}
 
+.component-product-page-hero.component-product-page-hero--weekly-gift {
+  background: #FBF6EF;
+  color: #333333;
+
+  .weekly-campaign-hero__graphic {
+    padding-top: 0;
+    position: relative;
+    max-height: 100%;
+    height: 100%;
+    max-width: 100%;
+
+    img {
+      height: 100%;
+      max-height: 100%;
+    }
+  }
+
+  .weekly-gift-hero--desktop {
+    display: none;
+
+    @include mq($from: phablet) {
+      display: block;
+    }
+  }
+
+  .weekly-gift-hero--mobile {
+    display: block;
+    img {
+      max-height: calc(100% - 0.5rem);
+    }
+
+    @include mq($from: phablet) {
+      display: none;
+    }
+  }
+
+  .weekly-gifting-hero__copy {
+    width: gu-span(12);
+
+    @include mq($until: desktop) {
+      width: gu-span(8);
+      margin-bottom: 0;
+      h2 {
+        font-size: 34px;
+      }
+    }
+
+    @include mq($until: mobileLandscape) {
+      width: gu-span(1.5);
+      margin-bottom: 0;
+      h2 {
+        font-size: 30px;
+      }
+    }
+
+    @include mq($until: mobileMedium) {
+      h2 {
+        font-size: 22px;
+      }
+    }
+  }
+}
+
+.weekly-gifting-hero__globe {
+  display: none;
+
+  @include mq($from: desktop) {
+    display: block;
+    position: absolute;
+    bottom: 85px;
+    left: -80px;
+    width: 80px;
+    height: 80px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  @include mq($from: leftCol) {
+    bottom: 105px;
+  }
+
+  @include mq($from: wide) {
+    bottom: 85px;
+    width: 150px;
+    height: 150px;
+    left: -160px;
+  }
+
+  @include mq($from: 1410px) {
+    bottom: 70px;
+    width: 200px;
+    height: 200px;
+    left: -210px;
+  }
+
+  @include mq($from: 1530px) {
+    bottom: 67px;
+    width: 220px;
+    height: 220px;
+    left: -230px;
+  }
+}
+
+.component-product-page-hero.component-product-page-hero--weekly-campaign,
+.component-product-page-hero.component-product-page-hero--weekly-gift {
+  position: relative;
+  box-sizing: border-box;
   max-height: 550px;
 
   & * {
@@ -22,13 +130,24 @@
 }
 
 .weekly-campaign-hero__copy {
+  h2 {
+    color: #fff;
+  }
+}
+
+.weekly-gifting-hero__copy {
+  h2 {
+    color: #333333;
+  }
+}
+
+.weekly-campaign-hero__copy, .weekly-gifting-hero__copy {
   display: block;
   max-width: 50%;
   padding: $gu-v-spacing*2 0 $gu-v-spacing*2 $gu-v-spacing;
-  margin-bottom: auto; 
-  
+  margin-bottom: auto;
+
   h2 {
-    color: #fff;
     font-family: $gu-titlepiece;
     font-size: 34px;
     line-height: 1;
@@ -37,19 +156,19 @@
   @include mq($from: mobileMedium) {
     max-width: 60%;
   }
-  
+
   @include mq($from: mobileLandscape) {
-    margin-bottom: 0; 
+    margin-bottom: 0;
     padding-top: 0;
   }
-  
+
   @include mq($from: phablet) {
-    max-width: gu-span(10);      
+    max-width: gu-span(10);
     h2 {
       font-size: 40px;
     }
   }
-  
+
   @include mq($from: tablet) {
     h2 {
       font-size: 44px;
@@ -61,7 +180,7 @@
       font-size: 50px;
     }
   }
-  
+
   @include mq($from: leftCol) {
     h2 {
       font-size: 56px;
@@ -77,7 +196,7 @@
   width: 100%;
   max-width: 80%;
   padding-top: $gu-v-spacing*2;
-  
+
   img {
     position: absolute;
     bottom: 0;
