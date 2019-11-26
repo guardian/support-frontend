@@ -8,11 +8,14 @@ import { getQueryParameter } from 'helpers/url';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import {
   type CountryGroupId,
+  GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { showPrice, type ProductPrice } from 'helpers/productPrice/productPrices';
+import {
+  type ProductPrice,
+  showPrice,
+} from 'helpers/productPrice/productPrices';
 import { fromCountryGroupId } from '../../../helpers/internationalisation/currency';
 
 // ----- Types ----- //
@@ -130,6 +133,7 @@ const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId:
   const maybeCurrency = fromCountryGroupId(countryGroupId);
   const sixPrice: ProductPrice = {
     price: 6,
+    fixedTerm: false,
     currency: maybeCurrency !== null && maybeCurrency !== undefined ? maybeCurrency : 'GBP',
   };
   // if (product === 'GuardianWeekly') {

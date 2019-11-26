@@ -341,6 +341,35 @@ object Fixtures {
         }
       ]
    """
+
+  val previewSubscribeResponseNoInvoice =
+    """
+      [
+        {"Success":true,"TotalMrr":0,"TotalTcv":37.5}
+      ]
+   """
+
+  val previewSubscribeResponseJson =
+    """
+      [
+        {
+            "Success": true,
+            "InvoiceData": [
+                {
+                    "InvoiceItem": [
+                        {
+                            "ServiceEndDate": "2020-04-02",
+                            "ServiceStartDate": "2020-01-03",
+                            "TaxAmount": 0,
+                            "ChargeAmount": 37.5
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+    """
+
   val error =
     """
       {

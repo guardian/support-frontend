@@ -29,7 +29,7 @@ function createFormReducer(
   fulfilmentOption: Option<FulfilmentOptions>,
 ) {
   const user = getUser(); // TODO: Is this unnecessary? It could use the user reducer
-  const { productPrices } = window.guardian;
+  const { productPrices, orderIsAGift } = window.guardian;
 
   const initialState = {
     stage: 'checkout',
@@ -55,7 +55,7 @@ function createFormReducer(
     productOption: productOption || NoProductOptions,
     fulfilmentOption: fulfilmentOption || NoFulfilmentOptions,
     payPalHasLoaded: false,
-    orderIsAGift: false,
+    orderIsAGift,
     stripePaymentMethod: null,
     deliveryInstructions: null,
     debugInfo: '',
