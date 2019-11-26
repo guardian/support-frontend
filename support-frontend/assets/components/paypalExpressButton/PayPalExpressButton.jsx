@@ -44,11 +44,54 @@ type PropTypes = {|
 // 2. We don't want to have to re-bind handlers which interact with the iframe
 //    (e.g. the handler bound in getPayPalOptions)
 export class PayPalExpressButton extends React.Component<PropTypes> {
-  shouldComponentUpdate(nextProps: PropTypes) {
-    return (this.props.hasLoaded !== nextProps.hasLoaded);
+  constructor(props: PropTypes) {
+    super(props);
+    this.tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
+      paymentMethod: PayPal,
+      token,
+    });
+    this.onPaymentAuthorisationCaller = (token: string): void => {
+      this.props.onPaymentAuthorisation(this.tokenToAuthorisation(token));
+    };
   }
 
+  componentDidMount() {
+    this.updatePayPalButton();
+  }
+
+  shouldComponentUpdate(nextProps: PropTypes) {
+    return (this.props !== nextProps);
+  }
+
+  componentWillUpdate() {
+    this.updatePayPalButton();
+  }
+
+  onPaymentAuthorisationCaller: Function;
+  tokenToAuthorisation: Function;
+  // TO RESOLVE:
+  payPalButton: any;
   props: PropTypes;
+
+  updatePayPalButton = () => {
+    if (window.paypal) {
+      this.payPalButton = React.createElement(
+        window.paypal.Button.driver('react', { React, ReactDOM }),
+        getPayPalOptions(
+          this.props.currencyId,
+          this.props.csrf,
+          this.onPaymentAuthorisationCaller,
+          this.props.canOpen,
+          this.props.onClick,
+          this.props.formClassName,
+          this.props.isTestUser,
+          this.props.amount,
+          this.props.billingPeriod,
+          this.props.setupRecurringPayPalPayment,
+        ),
+      );
+    }
+  }
 
   render() {
     // hasLoaded determines whether window.paypal is available
@@ -56,30 +99,7 @@ export class PayPalExpressButton extends React.Component<PropTypes> {
       return null;
     }
 
-    const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
-      paymentMethod: PayPal,
-      token,
-    });
-
-    const onPaymentAuthorisation = (token: string): void => {
-      this.props.onPaymentAuthorisation(tokenToAuthorisation(token));
-    };
-
-    // This element contains an iframe which contains the actual button
-    return React.createElement(
-      window.paypal.Button.driver('react', { React, ReactDOM }),
-      getPayPalOptions(
-        this.props.currencyId,
-        this.props.csrf,
-        onPaymentAuthorisation,
-        this.props.canOpen,
-        this.props.onClick,
-        this.props.formClassName,
-        this.props.isTestUser,
-        this.props.amount,
-        this.props.billingPeriod,
-        this.props.setupRecurringPayPalPayment,
-      ),
-    );
+    // Return iframe containing the PayPal button
+    return this.payPalButton;
   }
 }
