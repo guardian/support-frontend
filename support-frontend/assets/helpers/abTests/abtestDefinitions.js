@@ -7,7 +7,7 @@ import {
 
 // ----- Tests ----- //
 export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'paymentRequestButton' | 'notintest';
-export type paymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
+export type PaymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
 export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
 export type NewLandingPageTemplateTestVariants = 'control' | 'new_template' | 'notintest';
 
