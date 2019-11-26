@@ -45,7 +45,7 @@ object PaperFieldsGenerator {
       "last_name" -> user.lastName,
       "date_of_first_paper" -> SubscriptionEmailFieldHelpers.formatDate(firstDeliveryDate.getOrElse(firstPaymentDate)),
       "date_of_first_payment" -> SubscriptionEmailFieldHelpers.formatDate(firstPaymentDate),
-      "subscription_rate" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
+      "subscription_rate" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion, giftRecipient.isDefined)
     ) ++ paymentFields ++ deliveryAddressFields ++ giftRecipientFields
 
     fields

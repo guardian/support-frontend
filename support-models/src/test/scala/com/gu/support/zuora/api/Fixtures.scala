@@ -341,6 +341,14 @@ object Fixtures {
         }
       ]
    """
+
+  val previewSubscribeResponseAnnual =
+    """
+      [
+        {"Success":true,"TotalMrr":0,"TotalTcv":37.5}
+      ]
+   """
+
   val error =
     """
       {
