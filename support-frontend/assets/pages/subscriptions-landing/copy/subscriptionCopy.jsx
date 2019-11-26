@@ -94,7 +94,9 @@ const chooseImage = images =>
 const digital: ProductCopy = {
   title: 'Digital Subscription',
   subtitle: getPrice(DigitalPack, ''),
-  description: 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
+  description: countryGroupId === 'AUDCountries'
+    ? 'The UK Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
+    : 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
   productImage: chooseImage([<SubscriptionDailyPackshot />, <InternationalDailyPackshot />]),
   offer: getSaleCopy(DigitalPack, countryGroupId).bundle.subHeading,
   buttons: [{

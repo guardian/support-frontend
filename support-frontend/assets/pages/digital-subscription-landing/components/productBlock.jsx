@@ -1,9 +1,11 @@
+/* eslint-disable react/no-unused-prop-types */
 // @flow
 import React, { Component, type Node } from 'react';
 import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import GridPicture from 'components/gridPicture/gridPicture';
 import cx from 'classnames';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // styles
 import './digitalSubscriptionLanding.scss';
@@ -145,8 +147,11 @@ type StateTypes = {
   showDropDownApp: boolean,
 }
 
-// This is an empty declaration because there were errors without it being passed in
-type PropTypes = {}
+
+type PropTypes = {
+  // eslint-ignore no-unused-prop-types
+  countryGroupId: CountryGroupId,
+}
 
 class ProductBlock extends Component<PropTypes, StateTypes> {
   constructor(props: PropTypes) {
@@ -166,13 +171,13 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const { state } = this;
+    const { state, props } = this;
     return (
       <div className="hope-is-power__products">
         <section className="product-block__container hope-is-power--centered">
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
-            title="The Guardian Daily"
+            title={props.countryGroupId === 'AUDCountries' ? 'The UK Guardian Daily' : 'The Guardian Daily'}
             subtitle={<span className="product-block__item__subtitle--short-first">Each day&apos;s edition, in one simple, elegant app</span>}
             image={dailyImage}
           />
@@ -182,7 +187,12 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           >
             <List
               items={[
-                { boldText: 'A new way to read', explainer: 'The newspaper, reimagined for mobile and tablet' },
+                {
+                  boldText: 'A new way to read',
+                  explainer: props.countryGroupId === 'AUDCountries'
+                    ? 'The UK newspaper, reimagined for mobile and tablet'
+                    : 'The newspaper, reimagined for mobile and tablet',
+                },
                 { boldText: 'Published daily', explainer: 'Each edition available to read by 6am (GMT), 7 days a week' },
                 { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
               ]}
