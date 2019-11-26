@@ -54,6 +54,8 @@
     visibility: hidden;
     display: none;
   }
+}
+
 .component-secure-transaction--new-template {
   margin-bottom: $gu-v-spacing * 0.5;
 }
@@ -73,6 +75,4 @@
     letter-spacing: 0.01em;
     font-family: $gu-text-sans-web;
   }
-
-
 }
