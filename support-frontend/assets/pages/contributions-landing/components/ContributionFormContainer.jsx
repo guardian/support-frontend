@@ -14,7 +14,7 @@ import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { PaymentSecuritySecureTransactionGreyNonUKVariants, NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
 import SecureTransactionIndicator from '../../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
 
 
@@ -31,6 +31,7 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   countryId: IsoCountry,
+  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariant,
   newTemplateVariant: NewLandingPageTemplateTestVariants,
 |};
 
@@ -43,6 +44,7 @@ const mapStateToProps = (state: State) => ({
   isReturningContributor: state.page.user.isReturningContributor,
   countryId: state.common.internationalisation.countryId,
   newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTest,
+  paymentSecuritySecureTransactionGreyNonUKVariant: state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -112,10 +114,16 @@ function withProps(props: PropTypes) {
     ...campaign || {},
   };
 
-
-  const showSecureTransactionIndicator = props.countryGroupId === 'GBPCountries'
-    && props.newTemplateVariant === 'new_template' ?
-      <SecureTransactionIndicator modifierClasses={['new-template']} /> : null;
+  const showSecureTransactionIndicator = () => {
+    if (props.newTemplateVariant === 'new_template') {
+      if (props.countryGroupId === 'GBPCountries') {
+        return <SecureTransactionIndicator modifierClasses={['new-template']} />;
+      } else if (props.paymentSecuritySecureTransactionGreyNonUKVariant === 'V1_securetransactiongrey') {
+        return <SecureTransactionIndicator modifierClasses={['new-template', 'hideaftermobile']} />;
+      }
+    }
+    return null;
+  };
 
   if (props.paymentComplete) {
     // We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
@@ -147,7 +155,7 @@ function withProps(props: PropTypes) {
       </div>
 
       <div className="gu-content__form">
-        {showSecureTransactionIndicator}
+        {showSecureTransactionIndicator()}
 
         {campaign && campaign.tickerSettings && campaign.tickerSettings.tickerJsonUrl ?
           <ContributionTicker
