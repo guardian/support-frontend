@@ -77,6 +77,16 @@ export type ConfirmStripePaymentIntentRequest = {
   paymentIntentId: string,
 };
 
+export type AmazonPayData = {|
+  paymentData: {
+    currency: IsoCurrency,
+    amount: number,
+    orderReferenceId: string,
+    email: string,
+  },
+  acquisitionData: PaymentAPIAcquisitionData,
+|};
+
 
 // Data that should be posted to the payment API to get a url for the PayPal UI
 // where the user is redirected to so that they can authorize the payment.
@@ -132,6 +142,19 @@ function paymentResultFromObject(
   }
 
   return Promise.resolve(PaymentSuccess);
+}
+
+//TODO - duplication
+function postOneOffAmazonPayExecutePaymentRequest(
+  data: AmazonPayData,
+  setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
+): Promise<PaymentResult> {
+  return logPromise(fetchJson(
+    //TODO - remove 'Stripe' from name
+    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/amazon-pay/execute-payment`),
+    requestOptions(data, 'omit', 'POST', null),
+  ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
 }
 
 // Sends a one-off payment request to the payment API and standardises the result
@@ -213,4 +236,5 @@ export {
   postOneOffStripeExecutePaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
   processStripePaymentIntentRequest,
+  postOneOffAmazonPayExecutePaymentRequest,
 };

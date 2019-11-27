@@ -24,13 +24,14 @@ import {
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { StripeChargeData, CreateStripePaymentIntentRequest } from 'helpers/paymentIntegrations/oneOffContributions';
+import type { StripeChargeData, CreateStripePaymentIntentRequest, AmazonPayData } from 'helpers/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
   processStripePaymentIntentRequest,
+  postOneOffAmazonPayExecutePaymentRequest,
 } from 'helpers/paymentIntegrations/oneOffContributions';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
@@ -466,6 +467,18 @@ const makeCreateStripePaymentIntentRequest = (
       paymentAuthorisation,
     ));
 
+const executeAmazonPayOneOffPayment = (
+  data: AmazonPayData,
+  setGuestToken: (string) => void,
+  setThankYouPage: (ThankYouPageStage) => void,
+  paymentAuthorisation: PaymentAuthorisation,
+) =>
+  (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
+    dispatch(onPaymentResult(
+      postOneOffAmazonPayExecutePaymentRequest(data, setGuestToken, setThankYouPage),
+      paymentAuthorisation
+    ));
+
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
   state: State,
@@ -485,14 +498,6 @@ function recurringPaymentAuthorisationHandler(
     paymentAuthorisation,
   ));
 }
-
-//TODO - implement
-function executeAmazonPayOneOffPayment = (
-  data: StripeChargeData,
-  setGuestToken: (string) => void,
-  setThankYouPage: (ThankYouPageStage) => void,
-  paymentAuthorisation: PaymentAuthorisation,
-) => ...
 
 // Bizarrely, adding a type to this object means the type-checking on the
 // paymentAuthorisationHandlers is no longer accurate.
@@ -573,9 +578,35 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       logInvalidCombination('ONE_OFF', ExistingDirectDebit);
       return Promise.resolve(error);
     },
-    AmazonPay: () => {
-      //TODO
-      return Promise.resolve(error)
+    AmazonPay: (
+      dispatch: Dispatch<Action>,
+      state: State,
+      paymentAuthorisation: PaymentAuthorisation,
+    ): Promise<PaymentResult> => {
+      //TODO - share code
+      console.log("AmazonPay payment auth", paymentAuthorisation)
+      return dispatch(
+        executeAmazonPayOneOffPayment(
+          {
+            paymentData: {
+              currency: state.common.internationalisation.currencyId,
+              amount: getAmount(
+                state.page.form.selectedAmounts,
+                state.page.form.formData.otherAmounts,
+                state.page.form.contributionType,
+              ),
+              orderReferenceId: paymentAuthorisation.orderReferenceId,
+              email: state.page.form.formData.email || '',
+            },
+            acquisitionData: derivePaymentApiAcquisitionData(
+              state.common.referrerAcquisitionData,
+              state.common.abParticipations,
+            )
+          },
+          (token: string) => dispatch(setGuestAccountCreationToken(token)),
+          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+          paymentAuthorisation
+      ));
     },
     None: () => {
       logInvalidCombination('ONE_OFF', 'None');

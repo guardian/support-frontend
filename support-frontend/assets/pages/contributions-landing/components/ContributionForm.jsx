@@ -42,6 +42,7 @@ import {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
   setStripeV3HasLoaded,
+  onThirdPartyPaymentAuthorised,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
@@ -84,6 +85,7 @@ type PropTypes = {|
   createStripePaymentMethod: () => void,
   paymentSecuritySecureTransactionGreyNonUKVariant: paymentSecuritySecureTransactionGreyNonUKVariants,
   recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
+  amazonPayOrderReferenceId: string | null,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -117,6 +119,7 @@ const mapStateToProps = (state: State) => ({
   paymentSecuritySecureTransactionGreyNonUKVariant:
     state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
   recurringStripePaymentRequestButtonTestVariant: state.common.abParticipations.recurringStripePaymentRequestButton,
+  amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
 });
 
 
@@ -180,10 +183,10 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
     ExistingCard: () => { logInvalidCombination('ONE_OFF', ExistingCard); },
     ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
     AmazonPay: (props: PropTypes) => {
-      console.log('Amazon Pay!');
+      console.log('Amazon Pay!', props.amazonPayOrderReferenceId);
       props.setPaymentIsWaiting(true);
 
-      // TODO
+      props.onPaymentAuthorisation({ orderReferenceId: props.amazonPayOrderReferenceId });
     },
     None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
