@@ -38,9 +38,6 @@ type PropTypes = {|
   recurringTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
-const enabledForRecurring = (recurringTestVariant: RecurringStripePaymentRequestButtonTestVariants): boolean =>
-  recurringTestVariant === 'paymentRequestButton';
-
 // ----- Component ----- //
 
 class StripePaymentRequestButtonContainer extends React.Component<PropTypes, void> {
@@ -50,9 +47,7 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
   }
 
   render() {
-    const showStripePaymentRequestButton =
-      isInStripePaymentRequestAllowedCountries(this.props.country) &&
-      (this.props.contributionType === 'ONE_OFF' || enabledForRecurring(this.props.recurringTestVariant));
+    const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
 
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
       const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
@@ -73,6 +68,7 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
               <StripePaymentRequestButton
                 stripeAccount={stripeAccount}
                 amount={amount}
+                recurringTestVariant={this.props.recurringTestVariant}
               />
             </Elements>
           </StripeProvider>
