@@ -486,6 +486,14 @@ function recurringPaymentAuthorisationHandler(
   ));
 }
 
+//TODO - implement
+function executeAmazonPayOneOffPayment = (
+  data: StripeChargeData,
+  setGuestToken: (string) => void,
+  setThankYouPage: (ThankYouPageStage) => void,
+  paymentAuthorisation: PaymentAuthorisation,
+) => ...
+
 // Bizarrely, adding a type to this object means the type-checking on the
 // paymentAuthorisationHandlers is no longer accurate.
 // (Flow thinks it's OK when it's missing required properties).
