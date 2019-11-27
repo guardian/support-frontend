@@ -31,7 +31,7 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   countryId: IsoCountry,
-  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariant,
+  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   newTemplateVariant: NewLandingPageTemplateTestVariants,
 |};
 
@@ -44,7 +44,8 @@ const mapStateToProps = (state: State) => ({
   isReturningContributor: state.page.user.isReturningContributor,
   countryId: state.common.internationalisation.countryId,
   newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTest,
-  paymentSecuritySecureTransactionGreyNonUKVariant: state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
+  paymentSecuritySecureTransactionGreyNonUKVariant:
+    state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
