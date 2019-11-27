@@ -4,6 +4,8 @@
 
 .gu-content--new-template {
 
+  overflow: initial;
+
   /* Page component - contains ContributionFormContainer */
   .gu-content__main {
     background-color: white;
@@ -14,6 +16,11 @@
   .gu-content__content {
     margin: 0;
     padding: 0;
+    overflow: initial;
+  }
+
+  .gu-content__content--flex {
+    align-items: flex-end;
   }
 
   .gu-content__content-contributions {
@@ -28,13 +35,18 @@
     border: 0; // get rid of yellow border
     padding-top: $gu-h-spacing * 4;
     padding-left: $gu-v-spacing * 7;
+    top: 0;
+    position: -webkit-sticky;
+    position: sticky;
+    align-self: flex-start;
+    height: calc(100vh - 100px);
 
-  @include mq($from: tablet) {
-    margin-left: auto;
-  }
+    @include mq($from: tablet) {
+      margin-left: auto;
+    }
 
-  @include mq($from: leftCol) {
-    margin-left: auto;
+    @include mq($from: leftCol) {
+      margin-left: auto;
   }
   }
 
@@ -52,9 +64,9 @@
   }
   /* */
 
-
   .gu-content__form {
     max-width: 40%;
     padding: $gu-h-spacing * 2 $gu-v-spacing * 7.5 $gu-h-spacing;
+    border: 0;
   }
 }
