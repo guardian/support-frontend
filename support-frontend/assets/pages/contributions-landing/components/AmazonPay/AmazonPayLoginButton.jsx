@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
   createWidget(): void {
-    console.log("creating widget")
+    console.log("creating login button")
     this.props.amazonPayData.amazonPayLibrary.amazonPaymentsObject.Button(
       'AmazonLoginButton',
       window.guardian.amazonPaySellerId.ONE_OFF.uat,  // TODO - get id properly
@@ -38,11 +38,15 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
           // Note - popup=true means it opens in a separate window. If we set it to false then the redirect url must be whitelisted
           // in Seller Central, which would be a nightmare because we have custom urls for campaigns
           const loginOptions = { scope: 'profile postal_code payments:widget payments:shipping_address', popup: true };
-          const authRequest = this.props.amazonPayData.amazonPayLibrary.amazonLoginObject.authorize(loginOptions, window.location.href);
+          const authRequest = this.props.amazonPayData.amazonPayLibrary.amazonLoginObject.authorize(loginOptions, "https://support.thegulocal.com/uk/contribute");
         },
         onError: (error) => {
+          console.log(" window.location.href")
+          console.log(window.location.href)
+          console.log("login button error")
+          debugger
+          error.getErrorMessage();
           // something bad happened
-          debugger;
         },
       }
     );
@@ -72,7 +76,7 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
       );
     } else {
       //TODO - spinner?
-      console.log("amazon not ready")
+      console.log("amazon login button not ready")
       return null;
     }
   }

@@ -21,6 +21,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal, AmazonPay } from 'helpers/paymentMethods';
 import Button from 'components/button/button';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
+import AmazonPayWallet from "./AmazonPay/AmazonPayWallet";
 
 // ----- Types ----- //
 
@@ -134,6 +135,7 @@ function withProps(props: PropTypes) {
             {submitButtonCopy}
           </Button> : null }
         { props.paymentMethod === AmazonPay && <AmazonPayLoginButton /> }
+        { props.paymentMethod === AmazonPay && <AmazonPayWallet/> }
       </div>
     );
   }
