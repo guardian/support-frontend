@@ -184,7 +184,7 @@ const getNewsstandSaving = (subscriptionMonthlyCost: number, newsstandWeeklyCost
   fixDecimals(getMonthlyNewsStandPrice(newsstandWeeklyCost) - subscriptionMonthlyCost);
 
 const getNewsstandSavingPercentage = (subscriptionMonthlyCost: number, newsstandWeeklyCost: number) =>
-  Math.round(100 - ((subscriptionMonthlyCost / getMonthlyNewsStandPrice(newsstandWeeklyCost)) * 100));
+  Math.floor(100 - ((subscriptionMonthlyCost / getMonthlyNewsStandPrice(newsstandWeeklyCost)) * 100));
 
 const getNewsstandPrice = (productOption: PaperProductOptions) =>
   newsstandPrices[productOption];
