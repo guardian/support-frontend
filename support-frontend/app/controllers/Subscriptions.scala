@@ -3,7 +3,8 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.i18n.{Country, CountryGroup}
+import com.gu.i18n.Country.UK
+import com.gu.i18n.CountryGroup
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.Stage
 import com.gu.support.encoding.CustomCodecs._
@@ -61,22 +62,34 @@ class Subscriptions(
 
   }
 
-  def weeklyGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/weekly")
+  def weeklyGeoRedirect(orderIsAGift: Boolean = false): Action[AnyContent] = geoRedirect(
+    if (orderIsAGift) "subscribe/weekly/gift" else "subscribe/weekly"
+  )
 
-  def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = "The Guardian Weekly Subscriptions | The Guardian"
+    val title = if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian" else "The Guardian Weekly Subscriptions | The Guardian"
     val mainElement = EmptyDiv("weekly-landing-page-" + countryCode)
     val js = Left(RefPath("weeklySubscriptionLandingPage.js"))
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
+    val defaultPromos = if (orderIsAGift) List("GW20GIFT1Y") else List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
-    val promoCodes =  queryPromos ++ List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes)
+    val promoCodes = defaultPromos ++ queryPromos
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, orderIsAGift)
+    // To see if there is any promotional copy in place for this page we need to get a country in the current region (country group)
+    // this is because promotions apply to countries not regions. We can use any country however because the promo tool UI only deals
+    // with regions and then adds all the countries for that region to the promotion
+    val country = (for {
+      countryGroup <- CountryGroup.byId(countryCode)
+      country <- countryGroup.countries.headOption
+    } yield country).getOrElse(UK)
+
     val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
-      ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
-        .getCopyForPromoCode(promoCode, GuardianWeekly, CountryGroup.countryByCode(countryCode).getOrElse(Country.UK))
+      ProductPromotionCopy(promotionServiceProvider
+        .forUser(false), stage)
+        .getCopyForPromoCode(promoCode, GuardianWeekly, country)
     )
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
@@ -92,6 +105,7 @@ class Subscriptions(
         s"""<script type="text/javascript">
               window.guardian.productPrices = ${outputJson(productPrices)}
               window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
+              window.guardian.orderIsAGift = $orderIsAGift
             </script>""")
     }).withSettingsSurrogateKey
   }
