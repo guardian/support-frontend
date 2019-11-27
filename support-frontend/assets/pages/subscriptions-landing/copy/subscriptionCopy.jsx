@@ -10,7 +10,7 @@ import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
 
 // images
 import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
-import PaperPackshot from 'components/packshots/paper-packshot';
+// import PaperPackshot from 'components/packshots/paper-packshot';
 import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
 import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-packshot';
 import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
