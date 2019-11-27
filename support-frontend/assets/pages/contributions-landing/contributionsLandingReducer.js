@@ -85,6 +85,8 @@ export type AmazonPayData = {
   amazonPayLibrary: AmazonPayLibrary | null,
   loginButtonReady: boolean,
   walletWidgetReady: boolean,
+  orderReferenceId: string | null,
+  paymentSelected: boolean,
 }
 
 type FormState = {
@@ -153,6 +155,8 @@ function createFormReducer() {
       amazonPayLibrary: null,
       loginButtonReady: false,
       walletWidgetReady: false,
+      orderReferenceId: null,
+      paymentSelected: false,
     },
     formData: {
       firstName: null,
@@ -266,6 +270,24 @@ function createFormReducer() {
           amazonPayData: {
             ...state.amazonPayData,
             walletWidgetReady: true,
+          }
+        };
+
+      case 'SET_AMAZON_PAY_ORDER_REFERENCE_ID':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            orderReferenceId: action.orderReferenceId
+          }
+        };
+
+      case 'SET_AMAZON_PAY_PAYMENT_SELECTED':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            paymentSelected: action.paymentSelected,
           }
         };
 

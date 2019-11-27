@@ -22,6 +22,8 @@ import { PayPal, AmazonPay } from 'helpers/paymentMethods';
 import Button from 'components/button/button';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import AmazonPayWallet from "./AmazonPay/AmazonPayWallet";
+import type {AmazonPayData} from "../contributionsLandingReducer";
+import {getQueryParameter} from "helpers/url";
 
 // ----- Types ----- //
 
@@ -43,6 +45,7 @@ type PropTypes = {|
   amount: number,
   billingPeriod: BillingPeriod,
   showSecureBackground: boolean,
+  amazonPayData: AmazonPayData,
 |};
 
 function mapStateToProps(state: State) {
@@ -65,6 +68,7 @@ function mapStateToProps(state: State) {
       contributionType,
     ),
     billingPeriod: billingPeriodFromContrib(contributionType),
+    amazonPayData: state.page.form.amazonPayData,
   });
 }
 
@@ -80,6 +84,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
 });
 
+const urlHasAmazonAccessToken = (): ?string => getQueryParameter('access_token');
+
 // ----- Render ----- //
 
 
@@ -89,6 +95,7 @@ function withProps(props: PropTypes) {
     // if all payment methods are switched off, do not display the button
     const formClassName = 'form--contribution';
     const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
+    const amazonPaymentReady = () => props.amazonPayData.orderReferenceId && props.amazonPayData.paymentSelected;
 
     const submitButtonCopy = getContributeButtonCopyWithPaymentType(
       props.contributionType,
@@ -99,8 +106,6 @@ function withProps(props: PropTypes) {
     );
 
     const classNames: string = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
-
-    // TODO - show amazon buttons here
 
     // We have to show/hide PayPalExpressButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
@@ -125,7 +130,11 @@ function withProps(props: PropTypes) {
             billingPeriod={props.billingPeriod}
           />
         </div>
-        {!showPayPalRecurringButton && props.paymentMethod !== AmazonPay ?
+
+        { props.paymentMethod === AmazonPay && !urlHasAmazonAccessToken() && <AmazonPayLoginButton /> }
+        { props.paymentMethod === AmazonPay && urlHasAmazonAccessToken() && <AmazonPayWallet/> }
+
+        {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
           <Button
             type="submit"
             aria-label={submitButtonCopy}
@@ -134,8 +143,6 @@ function withProps(props: PropTypes) {
           >
             {submitButtonCopy}
           </Button> : null }
-        { props.paymentMethod === AmazonPay && <AmazonPayLoginButton /> }
-        { props.paymentMethod === AmazonPay && <AmazonPayWallet/> }
       </div>
     );
   }

@@ -65,6 +65,8 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_LIBRARY', amazonPayLibrary: AmazonPayLibrary }
   | { type: 'SET_AMAZON_PAY_LOGIN_BUTTON_READY' }
   | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' }
+  | { type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId: string }
+  | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -207,6 +209,11 @@ const setAmazonPayLibrary = (amazonPayLibrary: AmazonPayLibrary): Action => ({
 
 const setAmazonPayLoginButtonReady: Action = ({ type: 'SET_AMAZON_PAY_LOGIN_BUTTON_READY' });
 const setAmazonPayWalletWidgetReady: Action = ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' });
+const setAmazonPayPaymentSelected = (paymentSelected: boolean): Action =>
+  ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected });
+
+const setAmazonPayOrderReferenceId = (orderReferenceId: string): Action =>
+  ({ type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId });
 
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
@@ -615,6 +622,8 @@ export {
   setAmazonPayLibrary,
   setAmazonPayLoginButtonReady,
   setAmazonPayWalletWidgetReady,
+  setAmazonPayOrderReferenceId,
+  setAmazonPayPaymentSelected,
   selectAmount,
   updateOtherAmount,
   paymentFailure,
