@@ -19,11 +19,6 @@ val commonSettings: Seq[SettingsDefinition] = Seq(
     "com.gu" %% "thrift-serializer" % "4.0.2",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
   ),
-  publishTo := Some(
-    if (isSnapshot.value) Opts.resolver.sonatypeSnapshots
-    else Opts.resolver.sonatypeStaging
-  )
-  ,
   licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
   organization := "com.gu",
   bintrayOrganization := Some("guardian"),
