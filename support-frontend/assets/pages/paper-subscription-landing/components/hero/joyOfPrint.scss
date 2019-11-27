@@ -1,9 +1,10 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-// "Joy of Print Sale" specific styles below! 
+// "Joy of Print Sale" specific styles below!
 
 .component-product-page-hero--campaign.component-product-page-hero--paper-sale {
-  background: #ffe500;
+  background: gu-colour(news-faded);
+  // background: gu-colour(highlight-main);
   height: auto;
   border-bottom: 1px solid gu-colour(neutral-86);
   min-height: auto;
@@ -23,45 +24,44 @@
   @include mq($from: leftCol) {
     margin-top: $gu-v-spacing * 6;
   }
-  
+
   @include mq($from: phablet) {
     font-size: 35px;
     line-height: 1;
     display: block;
     padding-left: $gu-v-spacing;
-    
-    h2 {
-      font-family: $gu-titlepiece;
-      margin: $gu-v-spacing * 2 0;
-      span {
-        padding: 0 $gu-h-spacing / 2;
-        padding-right: $gu-h-spacing / 2;
-        @include mq($from: desktop) {
-          line-height: 50px;
-        }
-        background-color: black;
-        color: #ffffff;
-        padding-bottom: $gu-v-spacing / 2;
-      }
-      span:first-of-type {
-        position: relative;
-        z-index: 5;
-      }
-    }
-    p {
-      @include gu-fontset-heading;
-      padding-left: $gu-h-spacing / 3;
-    }
   }
+
   @include mq($from: desktop) {
     font-size: 45px;
+  }
+}
+
+
+.sale-joy-of-print__copy-text {
+  font-family: $gu-titlepiece;
+  margin: $gu-v-spacing * 2 0;
+  span {
+    padding: 0 $gu-h-spacing / 2;
+    padding-right: $gu-h-spacing / 2;
+    @include mq($from: desktop) {
+      line-height: 50px;
+    }
+    background-color: black;
+    color: #ffffff;
+    padding-bottom: $gu-v-spacing / 2;
+  }
+  span:first-of-type {
+    position: relative;
+    z-index: 5;
   }
 }
 
 .sale-joy-of-print-graphic-outer {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  max-width: 1040px;
+  // margin-top: 2rem;
 
   @include mq($from: phablet) {
     justify-content: flex-end;
@@ -70,11 +70,11 @@
 
   @include mq($from: desktop) {
     margin-top: -12rem;
-  }  
+  }
 
   @include mq($from: leftCol) {
     margin-top: -15rem;
-  }  
+  }
 }
 
 .sale-joy-of-print-graphic-inner {
@@ -85,21 +85,24 @@
 
 .sale-joy-of-print-graphic {
   line-height: 0 !important;
+
   img {
     max-height: 180px;
-  }
 
-  @include mq($from: leftCol) {
-    img {
+    @include mq($from: phablet) {
+      max-height: 230px;
+    }
+
+    @include mq($from: leftCol) {
       max-height: 280px;
     }
   }
 }
 
 .sale-joy-of-print-badge {
-  margin-bottom: -3rem;
-  margin-left: -4rem;
-  position: relative;
+  position: absolute;
+  // margin-bottom: -3rem;
+  margin-left: -44px;
   z-index: 1;
   flex-direction: column;
   display: flex;
@@ -118,9 +121,9 @@
 
   span {
     display: block;
-    line-height: 1; 
+    line-height: 1;
   }
-  
+
   span:nth-child(2) {
     font-family: $gu-titlepiece;
     position: relative;

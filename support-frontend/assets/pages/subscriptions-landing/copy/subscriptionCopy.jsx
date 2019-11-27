@@ -16,6 +16,7 @@ import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-pack
 import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
 import SubscriptionDailyPackshot from 'components/packshots/subscription-daily-packshot';
 import InternationalDailyPackshot from 'components/packshots/international-daily-packshot';
+import PrintFeaturePackshot from 'components/packshots/print-feature-packshot';
 
 // constants
 import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
@@ -66,6 +67,10 @@ const subsLinks = getSubsLinks(
   abParticipations,
 );
 
+const isUK = () => countryGroupId === 'GBPCountries';
+const isEU = () => countryGroupId === 'EURCountries';
+const isInternational = () => countryGroupId === 'International';
+
 const getPrice = (product: SubscriptionProduct, alternativeText: string) => {
 
   if (flashSaleIsActive(product, countryGroupId)) {
@@ -89,7 +94,7 @@ function getGuardianWeeklyOfferCopy() {
 }
 
 const chooseImage = images =>
-  (countryGroupId === 'GBPCountries' || countryGroupId === 'EURCountries' || countryGroupId === 'International' ? images[0] : images[1]);
+  (countryGroupId === 'EURCountries' || countryGroupId === 'International' ? images[0] : images[1]);
 
 const digital: ProductCopy = {
   title: 'Digital Subscription',
@@ -117,7 +122,7 @@ const guardianWeekly: ProductCopy = {
     link: subsLinks.GuardianWeekly,
     analyticsTracking: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
   }],
-  productImage: chooseImage([<GuardianWeeklyPackShot />, <FullGuardianWeeklyPackShot />]),
+  productImage: isUK() || isEU() || isInternational() ? <GuardianWeeklyPackShot /> : <FullGuardianWeeklyPackShot />,
 };
 
 const paper: ProductCopy = {
@@ -129,7 +134,7 @@ const paper: ProductCopy = {
     link: subsLinks.Paper,
     analyticsTracking: sendTrackingEventsOnClick('paper_cta', Paper, abTest, 'paper-subscription'),
   }],
-  productImage: <PaperPackshot />,
+  productImage: <PrintFeaturePackshot />,
   offer: getSaleCopy(Paper, countryGroupId).bundle.subHeading,
 };
 
@@ -165,9 +170,9 @@ const premiumApp: ProductCopy = {
 
 const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
   GBPCountries: [
+    paper,
     digital,
     guardianWeekly,
-    paper,
     paperAndDigital,
     premiumApp,
   ],

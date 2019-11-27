@@ -99,12 +99,12 @@ const Sales: Sale[] = [
   {
     subscriptionProduct: 'Paper',
     activeRegions: [GBPCountries],
-    startTime: new Date(2019, 8, 23).getTime(), // 23 Sep 2019
-    endTime: new Date(2019, 9, 7).getTime(), // 7 Oct 2019
+    startTime: new Date(2019, 9, 29).getTime(), // 29 Sep 2019
+    endTime: new Date(2019, 12, 16).getTime(), // 16 Dec 2019
     duration: '12 months',
     saleDetails: {
       GBPCountries: {
-        promoCode: 'SEP2512VHD',
+        promoCode: 'GE19SUBS',
         annualPlanPromoCode: '',
         intcmp: '',
         price: 8.09,
