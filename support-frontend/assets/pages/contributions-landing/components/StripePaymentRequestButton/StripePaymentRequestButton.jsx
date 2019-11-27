@@ -59,6 +59,7 @@ import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { ErrorReason } from 'helpers/errorReasons';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
+import type {RecurringStripePaymentRequestButtonTestVariants} from "helpers/abTests/abtestDefinitions";
 
 // ----- Types -----//
 
@@ -88,6 +89,7 @@ type PropTypes = {|
   stripeAccount: StripeAccount,
   setPaymentWaiting: (isWaiting: boolean) => Action,
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
+  recurringTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
