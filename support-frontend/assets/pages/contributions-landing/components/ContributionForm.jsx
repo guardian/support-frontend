@@ -84,6 +84,7 @@ type PropTypes = {|
   createStripePaymentMethod: () => void,
   paymentSecuritySecureTransactionGreyNonUKVariant: paymentSecuritySecureTransactionGreyNonUKVariants,
   recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
+  recurringTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,

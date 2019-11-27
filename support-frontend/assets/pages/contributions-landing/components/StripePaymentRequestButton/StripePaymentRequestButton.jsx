@@ -275,8 +275,11 @@ function initialisePaymentRequest(props: PropTypes) {
     const paymentMethod = availablePaymentRequestButtonPaymentMethod(result);
     if (paymentMethod !== null) {
       trackComponentClick(`${paymentMethod}-loaded`);
-      setUpPaymentListener(props, paymentRequest, paymentMethod);
-      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
+
+      if (props.contributionType === 'ONE_OFF' || props.recurringTestVariant === 'paymentRequestButton') {
+        setUpPaymentListener(props, paymentRequest, paymentMethod);
+        props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
+      }
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }
