@@ -97,7 +97,7 @@ case class LambdaExecutionResult(
 object LambdaExecutionResult {
 
   def logResult(lambdaExecutionResult: LambdaExecutionResult): Unit = {
-    SafeLogger.info(s"LambdaExecutionResult: ${lambdaExecutionResult.asJson}")
+    SafeLogger.info(s"LambdaExecutionResult: ${lambdaExecutionResult.asJson.noSpaces}")
   }
 
   implicit val encoder: Encoder[LambdaExecutionResult] = deriveEncoder[LambdaExecutionResult]
