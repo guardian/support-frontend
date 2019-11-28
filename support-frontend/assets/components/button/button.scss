@@ -50,7 +50,7 @@
 
 .component-button--tertiary {
   color: gu-colour(neutral-20);
-  background-color: gu-colour(neutral-100);
+  background-color: transparent;
   border: solid 1px gu-colour(neutral-20);
 
   &:hover, &:focus {
