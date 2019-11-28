@@ -25,6 +25,15 @@ object JsonHelpers {
         .remove(key)
         .add(key, json)
 
+    def unNest(parentKey: String, childKey: String): JsonObject = {
+      val newObject = for {
+        parent <- jsonObject(parentKey)
+        parentObject <- parent.asObject
+        child <- parentObject(childKey)
+      } yield jsonObject.add(childKey, child)
+      newObject.getOrElse(jsonObject)
+    }
+
     def removeIfNull(key: String): JsonObject =
       jsonObject(key)
         .filter(_ == Json.Null)

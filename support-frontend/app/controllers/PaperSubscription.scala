@@ -59,7 +59,7 @@ class PaperSubscription(
     val css = Left(RefPath("paperSubscriptionLandingPage.css"))
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
     val description = stringsConfig.paperLandingDescription
-    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) :+ "SEP2512VHD"
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) :+ "GE19SUBS"
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(Paper, promoCodes)
 
     Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink){

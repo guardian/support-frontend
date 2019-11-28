@@ -548,6 +548,13 @@
     transform: translate(-50%);
 }
 
+.component-grid-image--subscriptions-print-feature-image {
+  width: 100%;
+
+  @include mq($from: tablet) {
+    width: 566px;
+  }
+}
 /****************** packshots ********************/
 .subscriptions-feature-packshot {
   width: 140%;
