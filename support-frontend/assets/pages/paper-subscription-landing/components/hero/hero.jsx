@@ -116,6 +116,7 @@ const CampaignHeader = () => (
           <GridImage
             gridId="printRainbowElection"
             srcSizes={[728, 364]}
+            sizes="(max-width: 740px) 100vw, 800px"
             imgType="png"
             altText="Election rainbow"
           />
