@@ -26,6 +26,7 @@
     pointer-events: none;
   }
 }
+
 .component-button--non-interactive {
   pointer-events: none;
 }
@@ -41,6 +42,26 @@
 .component-button--secondary {
   color: gu-colour(neutral-100);
   background-color: gu-colour( neutral-20);
+
+  &:hover, &:focus {
+    background-color: gu-colour(neutral-7);
+  }
+}
+
+.component-button--tertiary {
+  color: gu-colour(neutral-20);
+  background-color: gu-colour(neutral-100);
+  border: solid 1px gu-colour(neutral-20);
+
+  &:hover, &:focus {
+    background-color: gu-colour(neutral-97);
+  }
+}
+
+.component-button--tertiaryFeature {
+  color: #FFE500;
+  background-color: transparent;
+  border: solid 1.5px #FFE500;
 
   &:hover, &:focus {
     background-color: gu-colour(neutral-7);
