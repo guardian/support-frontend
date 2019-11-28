@@ -98,8 +98,6 @@ const CampaignHeader = () => (
   >
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
-        {/* <h2><span>Challenge the</span><br /><span>writing on the wall.</span></h2>
-          <p>Become a Guardian and<br />Observer subscriber</p> */}
         <h2 className="sale-joy-of-print__copy-text">
           The easiest<br />
           decision<br />
@@ -118,24 +116,10 @@ const CampaignHeader = () => (
           <GridImage
             gridId="printRainbowElection"
             srcSizes={[728, 364]}
-            sizes="(max-width: 740px) 100vw, 800px"
             imgType="png"
             altText="Election rainbow"
           />
         </div>
-
-        {/* <div className="sale-joy-of-print-badge">
-          <Discount discountCopy={discountCopy.roundel} />
-        </div>
-        <div className="sale-joy-of-print-graphic">
-          <GridImage
-            gridId="printShowcase"
-            srcSizes={[1000, 500]}
-            sizes="(max-width: 740px) 100vw, 800px"
-            imgType="jpg"
-            altText="Newspapers"
-          />
-        </div> */}
       </div>
     </div>
   </ProductPagehero>

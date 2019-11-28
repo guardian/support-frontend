@@ -17,6 +17,7 @@ import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekl
 import SubscriptionDailyPackshot from 'components/packshots/subscription-daily-packshot';
 import InternationalDailyPackshot from 'components/packshots/international-daily-packshot';
 import PrintFeaturePackshot from 'components/packshots/print-feature-packshot';
+import { GBPCountries, EURCountries, International, AUDCountries } from 'helpers/internationalisation/countryGroup';
 
 // constants
 import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
@@ -67,9 +68,10 @@ const subsLinks = getSubsLinks(
   abParticipations,
 );
 
-const isUK = () => countryGroupId === 'GBPCountries';
-const isEU = () => countryGroupId === 'EURCountries';
-const isInternational = () => countryGroupId === 'International';
+const isUK = () => countryGroupId === GBPCountries;
+const isEU = () => countryGroupId === EURCountries;
+const isInternational = () => countryGroupId === International;
+const isAUS = () => countryGroupId === AUDCountries;
 
 const getPrice = (product: SubscriptionProduct, alternativeText: string) => {
 
@@ -93,16 +95,13 @@ function getGuardianWeeklyOfferCopy() {
   return `6 issues for ${currency}6`;
 }
 
-const chooseImage = images =>
-  (countryGroupId === 'EURCountries' || countryGroupId === 'International' ? images[0] : images[1]);
-
 const digital: ProductCopy = {
   title: 'Digital Subscription',
   subtitle: getPrice(DigitalPack, ''),
-  description: countryGroupId === 'AUDCountries'
+  description: isAUS()
     ? 'The UK Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
     : 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
-  productImage: chooseImage([<SubscriptionDailyPackshot />, <InternationalDailyPackshot />]),
+  productImage: isEU() || isInternational() ? <SubscriptionDailyPackshot /> : <InternationalDailyPackshot />,
   offer: getSaleCopy(DigitalPack, countryGroupId).bundle.subHeading,
   buttons: [{
     ctaButtonText: 'Find out more',

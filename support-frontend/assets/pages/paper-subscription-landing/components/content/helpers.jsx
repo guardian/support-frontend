@@ -34,7 +34,7 @@ export type ContentTabPropTypes = {|
   getRef: (?HTMLElement)=> void
 |};
 
-const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || getPromoCode('Paper', GBPCountries, 'GE19SUBS'));
+const promoTermsUrl = promotionTermsUrl(getQueryParameter(promoQueryParam) || getPromoCode('Paper', GBPCountries, 'GE19SUBS'));
 
 // Helper functions
 const getPageInfoChip = (): string => {
@@ -71,7 +71,7 @@ const ContentHelpBlock = ({
     {flashSaleIsActive('Paper', GBPCountries) &&
       <Text title="Promotion terms and conditions">
         <SansParagraph>
-          Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTerms}>here</a>.
+          Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTermsUrl}>here</a>.
         </SansParagraph>
       </Text>
     }
