@@ -19,10 +19,10 @@
   display: none;
   position: relative;
   z-index: 10;
-  margin-top: $gu-v-spacing * 2;
+  // margin-top: $gu-v-spacing * 2;
 
   @include mq($from: leftCol) {
-    margin-top: $gu-v-spacing * 6;
+    // margin-top: $gu-v-spacing * 6;
   }
 
   @include mq($from: phablet) {
@@ -39,18 +39,32 @@
 
 
 .sale-joy-of-print__copy-text {
+  margin: 0;
+  font-size: 16px;
   font-family: $gu-titlepiece;
-  margin: $gu-v-spacing * 2 0;
+
+  @include mq($from: phablet) {
+    font-size: 50px;
+    margin-top: 30px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 50px;
+    margin-top: 50px;
+  }
+
   span {
     padding: 0 $gu-h-spacing / 2;
     padding-right: $gu-h-spacing / 2;
-    @include mq($from: desktop) {
-      line-height: 50px;
-    }
     background-color: black;
     color: #ffffff;
     padding-bottom: $gu-v-spacing / 2;
+
+    @include mq($from: desktop) {
+      line-height: 50px;
+    }
   }
+
   span:first-of-type {
     position: relative;
     z-index: 5;
@@ -65,15 +79,17 @@
 
   @include mq($from: phablet) {
     justify-content: flex-end;
-    margin-top: -11rem;
+    margin-top: -230px;
+    // margin-top: -11rem;
   }
 
   @include mq($from: desktop) {
-    margin-top: -12rem;
+    margin-top: -250px;
+    // margin-top: -12rem;
   }
 
   @include mq($from: leftCol) {
-    margin-top: -15rem;
+    // margin-top: -280px;
   }
 }
 
@@ -87,14 +103,18 @@
   line-height: 0 !important;
 
   img {
-    max-height: 180px;
+    max-height: 240px;
 
     @include mq($from: phablet) {
-      max-height: 230px;
+      max-height: 330px;
+    }
+
+    @include mq($from: desktop) {
+      max-height: 380px;
     }
 
     @include mq($from: leftCol) {
-      max-height: 280px;
+      max-height: 380px;
     }
   }
 }
@@ -102,7 +122,8 @@
 .sale-joy-of-print-badge {
   position: absolute;
   // margin-bottom: -3rem;
-  margin-left: -44px;
+  margin-left: -40px;
+  margin-top: 20px;
   z-index: 1;
   flex-direction: column;
   display: flex;
@@ -135,9 +156,16 @@
     font-feature-settings: "lnum";
   }
 
+  @include mq($from: phablet) {
+    margin-left: -20px;
+    margin-top: 30px;
+  }
+
   @include mq($from: desktop) {
     width: 8.6rem;
     height: 8.6rem;
+    margin-top: 50px;
+    margin-left: -50px;
     span:nth-child(2) {
       font-size: 3.3rem;
       top: -0.3rem;
