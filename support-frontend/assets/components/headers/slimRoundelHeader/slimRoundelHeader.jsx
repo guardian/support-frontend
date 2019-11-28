@@ -6,12 +6,10 @@ import React from 'react';
 
 import { countryGroups, type CountryGroup } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-
 import SvgCheckmark from 'components/svgs/checkmark';
 import SvgChevron from 'components/svgs/chevron';
 import SvgGlobe from 'components/svgs/globe';
-// import SvgGuardianLogo from 'components/svgs/guardianLogo';
-import Roundel from 'components/consentBanner/roundel.svg';
+import SvgGuardianRoundel from 'components/svgs/guardianRoundel';
 import './slimRoundelHeader.scss';
 
 // ----- Types ----- //
@@ -37,9 +35,9 @@ const renderCountryGroup = (selectedCountryGroup: CountryGroup) => (countryGroup
 
 function SlimRoundelHeader(props: PropTypes) {
   return (
-    <header role="banner" className="gu-content__header">
+    <header role="banner" className="slim-roundel-header">
       <a className="glogo" href="https://www.theguardian.com">
-        <Roundel />
+        <SvgGuardianRoundel className="slim-header-roundel" />
         <h2 className="glogo-alt-text">Return to The Guardian</h2>
       </a>
       { props.selectedCountryGroup ? (
