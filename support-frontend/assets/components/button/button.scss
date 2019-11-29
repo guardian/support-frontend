@@ -56,6 +56,16 @@
   }
 }
 
+.component-button--blue {
+  color:#052962;
+  background-color:#C1D8FC;
+
+  &:hover, &:focus {
+    color:#fff;
+    background-color: #4e77bd;
+  }
+}
+
 .component-button--greenHollow {
   color: gu-colour(green-main);
   border: 1px solid gu-colour(neutral-86);

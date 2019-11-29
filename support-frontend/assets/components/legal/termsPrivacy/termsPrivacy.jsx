@@ -24,13 +24,11 @@ type PropTypes = {|
 function TermsPrivacy(props: PropTypes) {
   const terms = <a href={contributionsTermsLinks[props.countryGroupId]}>Terms and Conditions</a>;
   const privacy = <a href={privacyLink}>Privacy Policy</a>;
-  const isUK = props.countryGroupId === 'GBPCountries';
 
   if (props.campaignName && campaigns[props.campaignName] && campaigns[props.campaignName].termsAndConditions) {
     return campaigns[props.campaignName].termsAndConditions(
       contributionsTermsLinks[props.countryGroupId],
       philanthropyContactEmail[props.countryGroupId],
-      isUK,
     );
   }
 
@@ -49,7 +47,6 @@ function TermsPrivacy(props: PropTypes) {
       </div>
     </div>
   );
-
 }
 
 

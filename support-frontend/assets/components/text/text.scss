@@ -36,7 +36,14 @@
 }
 
 .component-text__large {
-  @include gu-fontset-body-large;
+  @include gu-fontset-heading;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 24px;
+
+  @include mq($from: tablet) {
+    @include gu-fontset-body-large;
+  }
 }
 
 .component-text__sans {

@@ -20,7 +20,10 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
-import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
+import Form, {
+  FormSection,
+  FormSectionHiddenUntilSelected,
+} from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -33,13 +36,10 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import type {
-  FormField as PersonalDetailsFormField,
   FormField,
   FormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import PersonalDetailsGift
-  from 'components/subscriptionCheckouts/personalDetailsGift';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
@@ -63,8 +63,10 @@ import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { routes } from 'helpers/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
-import { CheckboxInput } from 'components/forms/customFields/checkbox';
-import { addressActionCreatorsFor, type SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import {
+  addressActionCreatorsFor,
+  type SetCountryChangedAction,
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
 import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
@@ -145,7 +147,6 @@ const days = getWeeklyDays();
 function WeeklyCheckoutForm(props: PropTypes) {
   const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
   const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
-  const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
@@ -170,12 +171,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
           title="Guardian Weekly"
           description=""
           productPrice={price}
-          dataList={[
-            {
-              title: 'Delivery method',
-              value: 'Home delivery',
-            },
-          ]}
           billingPeriod={props.billingPeriod}
           changeSubscription={routes.guardianWeeklySubscriptionLanding}
           product={props.product}
@@ -211,47 +206,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
             />
           </FormSection>
           <FormSection title="Where should we deliver your magazine?">
-            <CheckboxInput
-              id="qa-gift-checkbox"
-              text="This is a gift"
-              checked={props.orderIsAGift}
-              onChange={() => props.setGiftStatus(!props.orderIsAGift)}
-            />
-            {!props.orderIsAGift ? <DeliveryAddress /> : null}
+            <DeliveryAddress />
           </FormSection>
-          {props.orderIsAGift ? (
-            <span>
-              <FormSection title="Gift recipient's details">
-                <SelectWithLabel
-                  id="title"
-                  label="Title"
-                  optional
-                  value={props.titleGiftRecipient}
-                  setValue={props.setTitleGift}
-                >
-                  <option value="">--</option>
-                  {options(titles)}
-                </SelectWithLabel>
-                <PersonalDetailsGift
-                  firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
-                  setFirstNameGift={props.setFirstNameGift}
-                  lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
-                  setLastNameGift={props.setLastNameGift}
-                  emailGiftRecipient={props.emailGiftRecipient || ''}
-                  setEmailGift={props.setEmailGift}
-                  formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
-                  isGiftRecipient
-                />
-              </FormSection>
-              <FormSection title="Gift recipient's address">
-                <DeliveryAddress />
-              </FormSection>
-            </span>)
-          : null}
-          <FormSection title={props.orderIsAGift ?
-            'Is the billing address the same as the recipient\'s address?'
-            : 'Is the billing address the same as the delivery address?'}
-          >
+          <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
               <FieldsetWithError
                 id="billingAddressIsSame"
@@ -281,9 +238,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
               </FormSection>
             : null
           }
-          <FormSection title={subscriptionStart}>
+          <FormSection title="When would you like your subscription to start?">
             <Rows>
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend={subscriptionStart}>
+              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
                 {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
@@ -304,7 +261,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
                 date you receive your first Guardian Weekly.
                 </p>
                 <p className="component-text__sans">
-                Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                Subscription start dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
             </Rows>

@@ -10,12 +10,14 @@ import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
 
 // images
 import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
-import PaperPackshot from 'components/packshots/paper-packshot';
+// import PaperPackshot from 'components/packshots/paper-packshot';
 import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
 import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-packshot';
 import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
 import SubscriptionDailyPackshot from 'components/packshots/subscription-daily-packshot';
 import InternationalDailyPackshot from 'components/packshots/international-daily-packshot';
+import PrintFeaturePackshot from 'components/packshots/print-feature-packshot';
+import { GBPCountries, EURCountries, International, AUDCountries } from 'helpers/internationalisation/countryGroup';
 
 // constants
 import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
@@ -66,6 +68,11 @@ const subsLinks = getSubsLinks(
   abParticipations,
 );
 
+const isUK = () => countryGroupId === GBPCountries;
+const isEU = () => countryGroupId === EURCountries;
+const isInternational = () => countryGroupId === International;
+const isAUS = () => countryGroupId === AUDCountries;
+
 const getPrice = (product: SubscriptionProduct, alternativeText: string) => {
 
   if (flashSaleIsActive(product, countryGroupId)) {
@@ -88,14 +95,13 @@ function getGuardianWeeklyOfferCopy() {
   return `6 issues for ${currency}6`;
 }
 
-const chooseImage = images =>
-  (countryGroupId === 'GBPCountries' || countryGroupId === 'EURCountries' || countryGroupId === 'International' ? images[0] : images[1]);
-
 const digital: ProductCopy = {
   title: 'Digital Subscription',
   subtitle: getPrice(DigitalPack, ''),
-  description: 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
-  productImage: chooseImage([<SubscriptionDailyPackshot />, <InternationalDailyPackshot />]),
+  description: isAUS()
+    ? 'The UK Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
+    : 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
+  productImage: isEU() || isInternational() ? <SubscriptionDailyPackshot /> : <InternationalDailyPackshot />,
   offer: getSaleCopy(DigitalPack, countryGroupId).bundle.subHeading,
   buttons: [{
     ctaButtonText: 'Find out more',
@@ -115,7 +121,7 @@ const guardianWeekly: ProductCopy = {
     link: subsLinks.GuardianWeekly,
     analyticsTracking: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
   }],
-  productImage: chooseImage([<GuardianWeeklyPackShot />, <FullGuardianWeeklyPackShot />]),
+  productImage: isUK() || isEU() || isInternational() ? <GuardianWeeklyPackShot /> : <FullGuardianWeeklyPackShot />,
 };
 
 const paper: ProductCopy = {
@@ -127,7 +133,7 @@ const paper: ProductCopy = {
     link: subsLinks.Paper,
     analyticsTracking: sendTrackingEventsOnClick('paper_cta', Paper, abTest, 'paper-subscription'),
   }],
-  productImage: <PaperPackshot />,
+  productImage: <PrintFeaturePackshot />,
   offer: getSaleCopy(Paper, countryGroupId).bundle.subHeading,
 };
 
@@ -163,9 +169,9 @@ const premiumApp: ProductCopy = {
 
 const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
   GBPCountries: [
+    paper,
     digital,
     guardianWeekly,
-    paper,
     paperAndDigital,
     premiumApp,
   ],

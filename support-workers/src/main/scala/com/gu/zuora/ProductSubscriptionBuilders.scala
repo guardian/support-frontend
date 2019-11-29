@@ -20,7 +20,7 @@ import scala.util.{Failure, Success, Try}
 
 object ProductSubscriptionBuilders {
 
-  val allowFixedTermSubs = false // Feature flag to allow us to merge without switching to the new behaviour
+  val allowFixedTermSubs = true // TODO: remove this flag once we're live
 
   def validateRatePlan(maybeProductRatePlan: Option[ProductRatePlan[catalog.Product]], productDescription: String): ProductRatePlanId =
     maybeProductRatePlan.map(_.id) match {

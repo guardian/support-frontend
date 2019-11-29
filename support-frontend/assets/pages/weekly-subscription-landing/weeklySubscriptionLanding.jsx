@@ -10,6 +10,7 @@ import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import Footer from 'components/footer/footer';
+import { List } from 'components/productPage/productPageList/productPageList';
 
 import {
   AUDCountries,
@@ -37,19 +38,20 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { CampaignHeader } from './components/hero/hero';
 
 import WeeklyForm from './components/weeklyForm';
-import type { State } from './weeklySubscriptionLandingReducer';
 import reducer from './weeklySubscriptionLandingReducer';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 
 import './weeklySubscriptionLanding.scss';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
-import { promotionTermsUrl } from 'helpers/routes';
+import { promotionTermsUrl, routes } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
+import AnchorButton from 'components/button/anchorButton';
 
 type PageCopy = {|
   title: string,
-  firstParagraph: React.Node
+  firstParagraph: React.Node,
+  priceCardSubHeading: string,
 |};
 
 // ----- Redux Store ----- //
@@ -111,7 +113,7 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
     /* eslint-enable react/no-danger */
   }
   return (
-    <LargeParagraph>
+    <LargeParagraph modifierClasses={['mobile-text-resize']}>
       The Guardian Weekly magazine is a round-up of the world news,
       opinion and long reads that have shaped the week. Inside, the past seven days&#39;
       most memorable stories are reframed with striking photography and insightful companion
@@ -119,19 +121,32 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
     </LargeParagraph>);
 };
 
-const getCopy = (state: State): PageCopy => {
-  const { promotionCopy } = state.page;
-  const defaultTitle = 'Pause for thought with The Guardian\'s essential news magazine';
+const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
+  const defaultTitle = orderIsAGift ?
+    'Give a gift that challenges the status quo'
+    : 'Pause for thought with The Guardian\'s essential news magazine';
   return {
     title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,
     firstParagraph: getFirstParagraph(promotionCopy),
+    priceCardSubHeading: orderIsAGift ? 'Select a gift period' : 'Choose how you\'d like to pay',
   };
 };
 
 // ----- Render ----- //
 
-const copy = getCopy(store.getState());
-const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || '10ANNUAL');
+const { promotionCopy, orderIsAGift } = store.getState().page;
+const copy = getCopy(promotionCopy, orderIsAGift);
+const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
+const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
+
+type GiftHeadingPropTypes = {
+  text: string,
+}
+
+const GiftHeading = (props: GiftHeadingPropTypes) => (
+  <h2 className="component-text">{props.text}</h2>
+);
+
 
 const content = (
   <Provider store={store}>
@@ -139,51 +154,72 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <CampaignHeader heading={copy.title} />
+      <CampaignHeader heading={copy.title} orderIsAGift={orderIsAGift} />
       <Content>
         <Text title="Catch up on the issues that matter">
           {copy.firstParagraph}
         </Text>
       </Content>
-      <Content id="benefits">
-        <Text title="As a subscriber you’ll enjoy" />
-        <Outset>
-          <ProductPageFeatures features={[
-            { title: 'Every issue delivered with up to 35% off the cover price' },
-            { title: 'Access to the magazine\'s digital archive' },
-            { title: 'A weekly email newsletter from the editor' },
-            { title: 'The very best of The Guardian\'s puzzles' },
+      {!orderIsAGift &&
+        <Content id="benefits">
+          <Text title="As a subscriber you’ll enjoy" />
+          <Outset>
+            <ProductPageFeatures features={[
+              { title: 'Every issue delivered with up to 35% off the cover price' },
+              { title: 'Access to the magazine\'s digital archive' },
+              { title: 'A weekly email newsletter from the editor' },
+              { title: 'The very best of The Guardian\'s puzzles' },
+            ]}
+            />
+          </Outset>
+        </Content>
+      }
+      {orderIsAGift &&
+        <Content id="gift-benefits-them">
+          <GiftHeading text="What they'll get:" />
+          <List items={[
+            { explainer: 'The Guardian Weekly delivered, wherever they are in the world' },
+            { explainer: 'The Guardian\'s global journalism to keep them informed' },
+            { explainer: 'The very best of The Guardian\'s puzzles' },
           ]}
           />
-        </Outset>
-      </Content>
+        </Content>}
+      {orderIsAGift &&
+        <Content id="gift-benefits-you">
+          <GiftHeading text="What you'll get:" />
+          <List items={[
+            { explainer: 'Your gift supports The Guardian\'s independent journalism' },
+            { explainer: 'Access to the magazine\'s digital archive' },
+            { explainer: '35% off the cover price' },
+          ]}
+          />
+        </Content>
+      }
       <Content appearance="feature" id="subscribe">
         <Text title="Subscribe to Guardian Weekly today">
-          <p>Choose how you’d like to pay</p>
+          <p>{copy.priceCardSubHeading}</p>
         </Text>
         <WeeklyForm />
-        <ProductPageInfoChip icon={<SvgGift />}>
-              Gifting is available
-        </ProductPageInfoChip>
+        {!orderIsAGift &&
+          <ProductPageInfoChip icon={<SvgGift />}>
+                Gifting is available
+          </ProductPageInfoChip>
+        }
         <ProductPageInfoChip icon={<SvgInformation />}>
-              Delivery cost included. You can cancel your subscription at any time
+              Delivery cost included. {!orderIsAGift && 'You can cancel your subscription at any time'}
         </ProductPageInfoChip>
       </Content>
       <Content>
-        <Text title="Gift subscriptions">
-          <LargeParagraph>A Guardian Weekly subscription makes a great gift.
-            To&nbsp;buy&nbsp;one, just select the gift option at checkout or get in touch with your local customer
-            service team:
-          </LargeParagraph>
+        <Text title={orderIsAGift ? 'Looking for a personal subscription?' : 'Gift subscriptions'}>
+          {!orderIsAGift && <LargeParagraph>A Guardian Weekly subscription makes a great gift.</LargeParagraph>}
         </Text>
-        <Outset>
-          <ProductPageFeatures features={[
-            { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
-            { title: 'Australia and New Zealand', copy: '+61 2 8076 8599' },
-            { title: 'USA and Canada', copy: '+1 917-900-4663' },
-          ]}
-          />
-        </Outset>
+        <AnchorButton
+          modifierClasses={['with-margin-bottom']}
+          appearance="blue"
+          href={orderIsAGift ? routes.guardianWeeklySubscriptionLanding : routes.guardianWeeklySubscriptionLandingGift}
+        >
+          {orderIsAGift ? 'See all subscriptions' : 'See all gift subscriptions'}
+        </AnchorButton>
       </Content>
       <Content>
         <Text title="Promotion terms and conditions">
