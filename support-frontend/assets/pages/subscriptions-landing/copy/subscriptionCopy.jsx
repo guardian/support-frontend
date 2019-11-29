@@ -218,8 +218,16 @@ const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
     premiumApp,
   ],
   EURCountries: testOrdering,
-  NZDCountries: testOrdering,
-  Canada: testOrdering,
+  NZDCountries: [
+    guardianWeekly,
+    digital,
+    premiumApp,
+  ],
+  Canada: [
+    guardianWeekly,
+    digital,
+    premiumApp,
+  ],
 };
 
 const subscriptionCopy = orderedProducts[countryGroupId];
