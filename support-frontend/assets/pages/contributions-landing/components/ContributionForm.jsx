@@ -52,6 +52,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import type { paymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+import {logException} from "helpers/logger";
 
 
 // ----- Types ----- //
@@ -184,9 +185,15 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
     ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
     AmazonPay: (props: PropTypes) => {
       console.log('Amazon Pay!', props.amazonPayOrderReferenceId);
-      props.setPaymentIsWaiting(true);
+      if (props.amazonPayOrderReferenceId) {
+        props.setPaymentIsWaiting(true);
 
-      props.onPaymentAuthorisation({ orderReferenceId: props.amazonPayOrderReferenceId });
+        // No intermediate step for amazon pay - execute payment now
+        props.onPaymentAuthorisation({orderReferenceId: props.amazonPayOrderReferenceId});
+      } else {
+        logException('Missing orderReferenceId for amazon pay')
+      }
+
     },
     None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },

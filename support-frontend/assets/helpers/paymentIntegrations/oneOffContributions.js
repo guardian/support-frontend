@@ -144,69 +144,49 @@ function paymentResultFromObject(
   return Promise.resolve(PaymentSuccess);
 }
 
-//TODO - duplication
-function postOneOffAmazonPayExecutePaymentRequest(
-  data: AmazonPayData,
-  setGuestAccountCreationToken: (string) => void,
-  setThankYouPageStage: (ThankYouPageStage) => void,
-): Promise<PaymentResult> {
-  return logPromise(fetchJson(
-    //TODO - remove 'Stripe' from name
-    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/amazon-pay/execute-payment`),
-    requestOptions(data, 'omit', 'POST', null),
-  ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
-}
+const postToPaymentApi = (data: Object, path: string): Promise<Object> => fetchJson(
+  paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}${path}`),
+  requestOptions(data, 'omit', 'POST', null),
+);
 
 // Sends a one-off payment request to the payment API and standardises the result
 // https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
-function postOneOffStripeExecutePaymentRequest(
-  data: StripeChargeData,
+const handleOneOffExecution = (result: Promise<Object>) => (
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
-): Promise<PaymentResult> {
-  return logPromise(fetchJson(
-    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/execute-payment`),
-    requestOptions(data, 'omit', 'POST', null),
-  ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
-}
+): Promise<PaymentResult> => {
+  return logPromise(result)
+    .then(r => paymentResultFromObject(r, setGuestAccountCreationToken, setThankYouPageStage));
+};
 
-function postStripeCreatePaymentIntentRequest(data: CreateStripePaymentIntentRequest): Promise<Object> {
-  return fetchJson(
-    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/create-payment`),
-    requestOptions(data, 'omit', 'POST', null),
-  );
-}
+const postOneOffAmazonPayExecutePaymentRequest = (data: AmazonPayData) =>
+  handleOneOffExecution(postToPaymentApi(data,'/contribute/one-off/amazon-pay/execute-payment'));
 
-function postStripeConfirmPaymentIntentRequest(data: ConfirmStripePaymentIntentRequest): Promise<Object> {
-  return fetchJson(
-    paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}/contribute/one-off/stripe/confirm-payment`),
-    requestOptions(data, 'omit', 'POST', null),
-  );
-}
+const postOneOffStripeExecutePaymentRequest = (data: StripeChargeData) =>
+  handleOneOffExecution(postToPaymentApi(data,'/contribute/one-off/stripe/execute-payment'));
 
 // Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
-function processStripePaymentIntentRequest(
+const processStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,
-  setGuestAccountCreationToken: (string) => void,
-  setThankYouPageStage: (ThankYouPageStage) => void,
   handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
-): Promise<PaymentResult> {
-  return logPromise(postStripeCreatePaymentIntentRequest(data).then((createIntentResponse) => {
+) => handleOneOffExecution(
+  postToPaymentApi(data,'/contribute/one-off/stripe/create-payment').then((createIntentResponse) => {
     if (createIntentResponse.type === 'requiresaction') {
       // Do 3DS auth and then send back to payment-api for payment confirmation
       return handleStripe3DS(createIntentResponse.data.clientSecret).then((authResult: Stripe3DSResult) => {
         if (authResult.error) {
           return { type: 'error', error: { failureReason: 'card_authentication_error' } };
         }
-        return postStripeConfirmPaymentIntentRequest({ ...data, paymentIntentId: authResult.paymentIntent.id });
+        return postToPaymentApi(
+          { ...data, paymentIntentId: authResult.paymentIntent.id },
+          '/contribute/one-off/stripe/confirm-payment')
 
       });
     }
     // No 3DS auth required
     return createIntentResponse;
-
-  }).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
-}
+  })
+);
 
 // Object is expected to have structure:
 // { type: "error", error: PayPalApiError }, or

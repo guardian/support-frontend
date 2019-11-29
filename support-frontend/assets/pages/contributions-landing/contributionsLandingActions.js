@@ -360,6 +360,26 @@ const regularPaymentRequestFromAuthorisation = (
   telephoneNumber: null,
 });
 
+const amazonPayDataFromAuthorisation = (
+  authorisation: AmazonPayData,
+  state: State,
+): AmazonPayData => ({
+  paymentData: {
+    currency: state.common.internationalisation.currencyId,
+    amount: getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    ),
+    orderReferenceId: authorisation.orderReferenceId,
+    email: state.page.form.formData.email || '',
+  },
+  acquisitionData: derivePaymentApiAcquisitionData(
+    state.common.referrerAcquisitionData,
+    state.common.abParticipations,
+  )
+});
+
 // A PaymentResult represents the end state of the checkout process,
 // standardised across payment methods & contribution types.
 // This will execute at the end of every checkout, with the exception
@@ -450,7 +470,7 @@ const executeStripeOneOffPayment = (
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(
-      postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage),
+      postOneOffStripeExecutePaymentRequest(data)(setGuestToken, setThankYouPage),
       paymentAuthorisation,
     ));
 
@@ -463,7 +483,7 @@ const makeCreateStripePaymentIntentRequest = (
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(
-      processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS),
+      processStripePaymentIntentRequest(data, handleStripe3DS)(setGuestToken, setThankYouPage),
       paymentAuthorisation,
     ));
 
@@ -475,7 +495,7 @@ const executeAmazonPayOneOffPayment = (
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(
-      postOneOffAmazonPayExecutePaymentRequest(data, setGuestToken, setThankYouPage),
+      postOneOffAmazonPayExecutePaymentRequest(data)(setGuestToken, setThankYouPage),
       paymentAuthorisation
     ));
 
@@ -583,26 +603,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       state: State,
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
-      //TODO - share code
       console.log("AmazonPay payment auth", paymentAuthorisation)
       return dispatch(
         executeAmazonPayOneOffPayment(
-          {
-            paymentData: {
-              currency: state.common.internationalisation.currencyId,
-              amount: getAmount(
-                state.page.form.selectedAmounts,
-                state.page.form.formData.otherAmounts,
-                state.page.form.contributionType,
-              ),
-              orderReferenceId: paymentAuthorisation.orderReferenceId,
-              email: state.page.form.formData.email || '',
-            },
-            acquisitionData: derivePaymentApiAcquisitionData(
-              state.common.referrerAcquisitionData,
-              state.common.abParticipations,
-            )
-          },
+          amazonPayDataFromAuthorisation(paymentAuthorisation, state),
           (token: string) => dispatch(setGuestAccountCreationToken(token)),
           (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
           paymentAuthorisation
