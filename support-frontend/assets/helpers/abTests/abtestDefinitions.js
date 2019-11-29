@@ -12,7 +12,7 @@ export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts'
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
-const subsShowcasePageMatch = '/(eu|ca|nz|int)/subscribe(/.*)?$';
+const subsShowcasePageMatch = '/(eu|int)/subscribe(/.*)?$';
 
 const countryGroupId: CountryGroupId = detect();
 
