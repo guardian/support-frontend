@@ -36,6 +36,7 @@ export const logInvalidCombination = (contributionType: ContributionType, paymen
   logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
 };
 
+// Legacy type, only used by stripe checkout. Can be cleaned up after stripe checkout fully removed
 export type ThirdPartyPaymentLibraries = {
   ONE_OFF: { Stripe: ThirdPartyPaymentLibrary | null },
   MONTHLY: { Stripe: ThirdPartyPaymentLibrary | null },
