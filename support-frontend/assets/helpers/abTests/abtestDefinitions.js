@@ -12,6 +12,7 @@ export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts'
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
+const subsShowcasePageMatch = '/(eu|ca|nz|int)/subscribe(/.*)?$';
 
 const countryGroupId: CountryGroupId = detect();
 
@@ -82,5 +83,28 @@ export const tests: Tests = {
     seed: 3,
     targetPage: usContributionsLandingPageMatch,
     canRun: () => countryGroupId === 'UnitedStates',
+  },
+
+  subsShowcaseOrderingTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'weeklyTop',
+      },
+      {
+        id: 'digitalTop',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 4,
+    targetPage: subsShowcasePageMatch,
+    optimizeId: 'sj4_I5OAT3SJpqgnxtJ6Xg',
   },
 };

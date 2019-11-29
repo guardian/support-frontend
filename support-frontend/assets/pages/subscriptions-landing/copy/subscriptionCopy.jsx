@@ -1,27 +1,46 @@
 // @flow
 import * as React from 'react';
 import { init as pageInit } from 'helpers/page/page';
-import { type SubscriptionProduct } from 'helpers/subscriptions';
-import { displayPrice, sendTrackingEventsOnClick, subscriptionPricesForDefaultBillingPeriod } from 'helpers/subscriptions';
+// constants
+import {
+  DigitalPack,
+  displayPrice,
+  GuardianWeekly,
+  Paper,
+  PaperAndDigital,
+  PremiumTier,
+  sendTrackingEventsOnClick,
+  subscriptionPricesForDefaultBillingPeriod,
+  type SubscriptionProduct,
+} from 'helpers/subscriptions';
 import { getCampaign } from 'helpers/tracking/acquisitions';
-import { getSubsLinks } from 'helpers/externalLinks';
-import { androidAppUrl, getIosAppUrl } from 'helpers/externalLinks';
+import {
+  androidAppUrl,
+  getIosAppUrl,
+  getSubsLinks,
+} from 'helpers/externalLinks';
 import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
-
 // images
-import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
+import GuardianWeeklyPackShot
+  from 'components/packshots/guardian-weekly-packshot';
 // import PaperPackshot from 'components/packshots/paper-packshot';
 import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
-import PaperAndDigitalPackshot from 'components/packshots/paper-and-digital-packshot';
-import FullGuardianWeeklyPackShot from 'components/packshots/full-guardian-weekly-packshot';
-import SubscriptionDailyPackshot from 'components/packshots/subscription-daily-packshot';
-import InternationalDailyPackshot from 'components/packshots/international-daily-packshot';
+import PaperAndDigitalPackshot
+  from 'components/packshots/paper-and-digital-packshot';
+import FullGuardianWeeklyPackShot
+  from 'components/packshots/full-guardian-weekly-packshot';
+import SubscriptionDailyPackshot
+  from 'components/packshots/subscription-daily-packshot';
+import InternationalDailyPackshot
+  from 'components/packshots/international-daily-packshot';
 import PrintFeaturePackshot from 'components/packshots/print-feature-packshot';
-import { GBPCountries, EURCountries, International, AUDCountries } from 'helpers/internationalisation/countryGroup';
-
-// constants
-import { DigitalPack, PremiumTier, GuardianWeekly, Paper, PaperAndDigital } from 'helpers/subscriptions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+  AUDCountries,
+  EURCountries,
+  GBPCountries,
+  International,
+} from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
 import {
   flashSaleIsActive,
@@ -167,6 +186,18 @@ const premiumApp: ProductCopy = {
   classModifier: ['subscriptions__premuim-app'],
 };
 
+const testOrdering = abParticipations.subsShowcaseOrderingTest === 'weeklyTop' ?
+  [
+    guardianWeekly,
+    digital,
+    premiumApp,
+  ] :
+  [
+    digital,
+    guardianWeekly,
+    premiumApp,
+  ];
+
 const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
   GBPCountries: [
     paper,
@@ -180,31 +211,15 @@ const orderedProducts: { [CountryGroupId]: ProductCopy[] } = {
     digital,
     premiumApp,
   ],
-  International: [
-    digital,
-    guardianWeekly,
-    premiumApp,
-  ],
+  International: testOrdering,
   AUDCountries: [
     guardianWeekly,
     digital,
     premiumApp,
   ],
-  EURCountries: [
-    digital,
-    guardianWeekly,
-    premiumApp,
-  ],
-  NZDCountries: [
-    guardianWeekly,
-    digital,
-    premiumApp,
-  ],
-  Canada: [
-    guardianWeekly,
-    digital,
-    premiumApp,
-  ],
+  EURCountries: testOrdering,
+  NZDCountries: testOrdering,
+  Canada: testOrdering,
 };
 
 const subscriptionCopy = orderedProducts[countryGroupId];
