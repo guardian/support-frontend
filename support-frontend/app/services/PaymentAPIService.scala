@@ -56,7 +56,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
 
   val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$paypalCreatePaymentPath"
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
-  val stripeUrl: String = s"$paymentAPIUrl"
+  val paymentAPIUrl: String = s"$paymentAPIUrl"
 
   private def postPaypalData[A](
     data: ExecutePaymentBody,

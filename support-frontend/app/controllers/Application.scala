@@ -177,7 +177,7 @@ class Application(
         oneOffDefaultAmazonPayConfig = amazonPayConfigProvider.get(false),
         oneOffUatAmazonPayConfig = amazonPayConfigProvider.get(true)
       ),
-      paymentApiStripeUrl = paymentAPIService.stripeUrl,
+      paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       stripeSetupIntentEndpoint = stripeIntentUrl,

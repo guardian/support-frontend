@@ -16,7 +16,7 @@
   css: Either[RefPath, StyleContent],
   description: Option[String],
   paymentMethodConfigs: ContributionsPaymentMethodConfigs,
-  paymentApiStripeUrl: String,
+  paymentApiUrl: String,
   paymentApiPayPalEndpoint: String,
   existingPaymentOptionsEndpoint: String,
   stripeSetupIntentEndpoint: String,
@@ -105,7 +105,7 @@
       uat: "@paymentMethodConfigs.oneOffUatAmazonPayConfig.clientId",
     }
   };
-  window.guardian.paymentApiStripeUrl = "@paymentApiStripeUrl";
+  window.guardian.paymentApiUrl = "@paymentApiUrl";
   window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
   window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
   window.guardian.stripeSetupIntentEndpoint = "@stripeSetupIntentEndpoint";

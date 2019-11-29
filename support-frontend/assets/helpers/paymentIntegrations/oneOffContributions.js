@@ -145,7 +145,7 @@ function paymentResultFromObject(
 }
 
 const postToPaymentApi = (data: Object, path: string): Promise<Object> => fetchJson(
-  paymentApiEndpointWithMode(`${window.guardian.paymentApiStripeUrl}${path}`),
+  paymentApiEndpointWithMode(`${window.guardian.paymentApiUrl}${path}`),
   requestOptions(data, 'omit', 'POST', null),
 );
 
