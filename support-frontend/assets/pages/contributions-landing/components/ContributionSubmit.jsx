@@ -23,7 +23,7 @@ import Button from 'components/button/button';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import AmazonPayWallet from "./AmazonPay/AmazonPayWallet";
 import type {AmazonPayData} from "../contributionsLandingReducer";
-import {getQueryParameter} from "helpers/url";
+import { get as getCookie } from 'helpers/cookie';
 
 // ----- Types ----- //
 
@@ -84,7 +84,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
 });
 
-const urlHasAmazonAccessToken = (): ?string => getQueryParameter('access_token');
+const urlHasAmazonAccessToken = (): ?string => !!getCookie('amazon_Login_state_cache');
 
 // ----- Render ----- //
 
