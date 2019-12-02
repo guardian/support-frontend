@@ -128,7 +128,6 @@ const guardianWeekly: ProductCopy = {
       link: subsLinks.GuardianWeeklyGift,
       analyticsTracking: sendTrackingEventsOnClick('weekly_cta_gift', 'GuardianWeekly', abTest),
       modifierClasses: '',
-      hierarchy: 'second',
     },
   ],
   productImage: isUK() || isEU() || isInternational() ? <GuardianWeeklyPackShot /> : <FullGuardianWeeklyPackShot />,

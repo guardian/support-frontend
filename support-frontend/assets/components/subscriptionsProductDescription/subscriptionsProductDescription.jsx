@@ -17,7 +17,7 @@ type PropTypes = {
   buttons: ProductButton[],
 };
 
-const getAppearance = (isFeature, index, hierarchy) => {
+const getButtonAppearance = (isFeature, index, hierarchy) => {
   if (isFeature && index === 0) {
     return 'primary';
   } else if (isFeature && index > 0) {
@@ -41,7 +41,7 @@ const SubscriptionsProductDescription = ({
         <AnchorButton
           href={button.link}
           onClick={button.analyticsTracking}
-          appearance={getAppearance(isFeature, index, button.hierarchy)}
+          appearance={getButtonAppearance(isFeature, index, button.hierarchy)}
           modifierClasses={['subscriptions__product-button']}
         >
           {button.ctaButtonText}

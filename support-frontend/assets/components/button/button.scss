@@ -59,13 +59,9 @@
 }
 
 .component-button--tertiaryFeature {
-  color: #FFE500;
+  color: gu-colour(highlight-main);
   background-color: transparent;
-  border: solid 1.5px #FFE500;
-
-  &:hover, &:focus {
-    background-color: gu-colour(neutral-7);
-  }
+  border: solid 1.5px gu-colour(highlight-main);
 }
 
 .component-button--green {
