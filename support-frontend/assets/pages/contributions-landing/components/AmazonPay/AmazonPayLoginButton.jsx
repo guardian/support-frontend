@@ -4,7 +4,6 @@ import React from 'react';
 import {connect} from "react-redux";
 import type {State, AmazonPayData} from "pages/contributions-landing/contributionsLandingReducer";
 import { setAmazonPayLoginButtonReady } from "pages/contributions-landing/contributionsLandingActions";
-import { getQueryParameter } from 'helpers/url';
 
 const canCreateWidget = (amazonPayData: AmazonPayData) =>
   amazonPayData.amazonPayLibrary && !amazonPayData.loginButtonReady;

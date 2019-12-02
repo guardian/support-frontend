@@ -137,7 +137,7 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
       });
     });
 
-    setupAmazonPay("ONE_OFF", dispatch);
+    setupAmazonPay("ONE_OFF", dispatch, isTestUser);
 
     // initiate fetch of existing payment methods
     const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
