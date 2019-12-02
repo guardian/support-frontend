@@ -14,7 +14,7 @@ import GridImage from 'components/gridImage/gridImage';
  *  */
 
 
-const FullGuardianWeeklyPackShot = () => (
+const GuardianWeeklyPackShotHero = () => (
   <div className="subscriptions-feature-packshot">
     <GridImage
       gridId="subscriptionGuardianWeeklyPackShot"
@@ -28,4 +28,4 @@ const FullGuardianWeeklyPackShot = () => (
   </div>
 );
 
-export default FullGuardianWeeklyPackShot;
+export default GuardianWeeklyPackShotHero;
