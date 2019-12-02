@@ -23,7 +23,6 @@ import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
 // images
 import GuardianWeeklyPackShot
   from 'components/packshots/guardian-weekly-packshot';
-// import PaperPackshot from 'components/packshots/paper-packshot';
 import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
 import PaperAndDigitalPackshot
   from 'components/packshots/paper-and-digital-packshot';
@@ -78,6 +77,8 @@ const commonStore = store.getState().common;
 const { countryGroupId } = commonStore.internationalisation;
 const { referrerAcquisitionData, abParticipations } = commonStore;
 
+const digitalIsTop = abParticipations.subsShowcaseOrderingTest !== 'weeklyTop';
+
 const abTest = null;
 
 const subsLinks = getSubsLinks(
@@ -115,13 +116,20 @@ function getGuardianWeeklyOfferCopy() {
   return `6 issues for ${currency}6`;
 }
 
+const getDigitalImage = () => {
+  if (digitalIsTop && (isEU() || isInternational())) {
+    return <SubscriptionDailyPackshot />;
+  }
+  return <InternationalDailyPackshot />;
+};
+
 const digital: ProductCopy = {
   title: 'Digital Subscription',
   subtitle: getPrice(DigitalPack, ''),
   description: isAUS()
     ? 'The UK Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
     : 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
-  productImage: isEU() || isInternational() ? <SubscriptionDailyPackshot /> : <InternationalDailyPackshot />,
+  productImage: getDigitalImage(),
   offer: getSaleCopy(DigitalPack, countryGroupId).bundle.subHeading,
   buttons: [{
     ctaButtonText: 'Find out more',
@@ -129,6 +137,13 @@ const digital: ProductCopy = {
     analyticsTracking: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription'),
   }],
   isFeature: true,
+};
+
+const getWeeklyImage = () => {
+  if (isUK() || (digitalIsTop && (isEU() || isInternational()))) {
+    return <GuardianWeeklyPackShot />;
+  }
+  return <FullGuardianWeeklyPackShot />;
 };
 
 const guardianWeekly: ProductCopy = {
@@ -149,7 +164,7 @@ const guardianWeekly: ProductCopy = {
       modifierClasses: '',
     },
   ],
-  productImage: isUK() || isEU() || isInternational() ? <GuardianWeeklyPackShot /> : <FullGuardianWeeklyPackShot />,
+    productImage: getWeeklyImage(),
 };
 
 const paper: ProductCopy = {
