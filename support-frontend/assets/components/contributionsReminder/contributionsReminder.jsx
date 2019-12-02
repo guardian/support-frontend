@@ -60,7 +60,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
   renderButtonCopy = (buttonState: ButtonState): string => {
     switch (buttonState) {
       case 'initial':
-        return 'Remind me in December';
+        return 'Remind me in March';
       case 'pending':
         return 'Pending...';
       case 'success':
@@ -68,7 +68,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
       case 'fail':
         return 'Sorry, something went wrong';
       default:
-        return 'Remind me in December';
+        return 'Remind me in March';
     }
   }
 
@@ -95,7 +95,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
             Set up a reminder for the end of the year
           </h3>
           <p className="contribution-thank-you-block__message">
-            {'Lots of readers choose to make single contributions at various points in the year. Opt in to receive a reminder in December, in case you would like to support our journalism again. This will be a single email, with no obligation. Thank you.'}
+            {'Lots of readers choose to make single contributions at various points in the year. Opt in to receive a reminder in case you would like to support our journalism again. This will be a single email, with no obligation.'}
           </p>
 
           <TrackableButton

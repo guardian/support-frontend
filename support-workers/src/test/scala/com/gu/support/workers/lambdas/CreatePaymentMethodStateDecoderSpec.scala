@@ -67,7 +67,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      StripeSourcePaymentFields(stripeToken)
+      StripeSourcePaymentFields(stripeToken, Some(StripePaymentType.StripeCheckout))
     ))
   }
 
@@ -77,7 +77,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      StripePaymentMethodPaymentFields(stripePaymentMethodToken)
+      StripePaymentMethodPaymentFields(stripePaymentMethodToken, Some(StripePaymentType.StripeCheckout))
     ))
   }
 

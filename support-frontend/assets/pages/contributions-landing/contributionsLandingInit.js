@@ -85,6 +85,7 @@ function getInitialContributionType(
     contributionTypes[countryGroupId][0].contributionType;
 }
 
+// Stripe checkout is currently still used by the Payment Request button only
 function initialiseStripeCheckout(
   onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void,
   contributionType: ContributionType,

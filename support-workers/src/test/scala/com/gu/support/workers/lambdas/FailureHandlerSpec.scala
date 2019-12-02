@@ -3,7 +3,7 @@ package com.gu.support.workers.lambdas
 import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields, IdentityUserId}
+import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields, FailedGuardianWeeklyEmailFields, FailedPaperEmailFields, IdentityUserId}
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.CheckoutFailureReasons.{AccountMismatch, PaymentMethodUnacceptable, Unknown}
 import com.gu.support.workers.JsonFixtures._
@@ -199,6 +199,49 @@ object DigiPackFailureHandlerManualTest extends Matchers {
         sys.exit(0)
       }
   }
-
 }
+
+object GuardianWeeklyFailureHandlerTest extends Matchers {
+
+  implicit val ex = scala.concurrent.ExecutionContext.Implicits.global
+
+  def main(args: Array[String]): Unit = {
+    sendFailureEmail()
+  }
+
+  def sendFailureEmail() {
+    //This test will send a failure email to the address below - useful for quickly testing changes
+    val service = new EmailService
+    val email = "flavian.alexandru.freelancer@guardian.co.uk"
+    service
+      .send(FailedGuardianWeeklyEmailFields(email, IdentityUserId("identityId")))
+      .map { result =>
+        result.getMessageId should not be ""
+        sys.exit(0)
+      }
+  }
+}
+
+
+object PrintFailureHandlerTest extends Matchers {
+
+  implicit val ex = scala.concurrent.ExecutionContext.Implicits.global
+
+  def main(args: Array[String]): Unit = {
+    sendFailureEmail()
+  }
+
+  def sendFailureEmail() {
+    //This test will send a failure email to the address below - useful for quickly testing changes
+    val service = new EmailService
+    val email = "flavian.alexandru.freelancer@guardian.co.uk"
+    service
+      .send(FailedPaperEmailFields(email, IdentityUserId("identityId")))
+      .map { result =>
+        result.getMessageId should not be ""
+        sys.exit(0)
+      }
+  }
+}
+
 

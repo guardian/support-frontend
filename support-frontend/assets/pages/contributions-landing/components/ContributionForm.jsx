@@ -15,7 +15,6 @@ import {
 } from 'helpers/contributions';
 import { type ErrorReason } from 'helpers/errorReasons';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { openDialogBox } from 'helpers/paymentIntegrations/stripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -51,8 +50,7 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { LandingPageStripeElementsRecurringTestVariants } from 'helpers/abTests/abtestDefinitions';
-import type { PaymentSecurityDesignTestVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { paymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -84,8 +82,7 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   createStripePaymentMethod: () => void,
-  stripeElementsRecurringTestVariant: LandingPageStripeElementsRecurringTestVariants,
-  paymentSecurityDesignTestVariant: PaymentSecurityDesignTestVariants,
+  paymentSecuritySecureTransactionGreyNonUKVariant: paymentSecuritySecureTransactionGreyNonUKVariants,
   recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
@@ -117,8 +114,8 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
-  stripeElementsRecurringTestVariant: state.common.abParticipations.stripeElementsRecurring,
-  paymentSecurityDesignTestVariant: state.common.abParticipations.paymentSecurityDesignTest,
+  paymentSecuritySecureTransactionGreyNonUKVariant:
+    state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
   recurringStripePaymentRequestButtonTestVariant: state.common.abParticipations.recurringStripePaymentRequestButton,
 });
 
@@ -131,25 +128,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded()); },
 });
 
-// ----- Functions ----- //
-
-// ----- Event handlers ----- //
-
-function openStripePopup(props: PropTypes) {
-  const paymentLibraries = props.thirdPartyPaymentLibraries[props.contributionType];
-  if (paymentLibraries && paymentLibraries.Stripe) {
-    openDialogBox(
-      paymentLibraries.Stripe,
-      getAmount(
-        props.selectedAmounts,
-        props.otherAmounts,
-        props.contributionType,
-      ),
-      props.email,
-    );
-  }
-}
-
 // Bizarrely, adding a type to this object means the type-checking on the
 // formHandlers is no longer accurate.
 // (Flow thinks it's OK when it's missing required properties).
@@ -160,12 +138,8 @@ const formHandlersForRecurring = {
     // is no need to handle anything here
   },
   Stripe: (props: PropTypes) => {
-    if (props.stripeElementsRecurringTestVariant === 'stripeElements') {
-      if (props.createStripePaymentMethod) {
-        props.createStripePaymentMethod();
-      }
-    } else {
-      openStripePopup(props);
+    if (props.createStripePaymentMethod) {
+      props.createStripePaymentMethod();
     }
   },
   DirectDebit: (props: PropTypes) => {
@@ -247,8 +221,8 @@ function withProps(props: PropTypes) {
 
   const classModifiers = ['contribution', 'with-labels'];
 
-  const showSecureStripeContainer: boolean = props.paymentSecurityDesignTestVariant !== 'control' || props.countryGroupId === 'GBPCountries';
-  const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe && (props.stripeElementsRecurringTestVariant === 'stripeElements' || props.contributionType === 'ONE_OFF');
+  const showSecureStripeContainer: boolean = props.paymentSecuritySecureTransactionGreyNonUKVariant !== 'control' || props.countryGroupId === 'GBPCountries';
+  const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe;
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
@@ -282,7 +256,6 @@ function withProps(props: PropTypes) {
           paymentMethod={props.paymentMethod}
           isTestUser={props.isTestUser}
           country={props.country}
-          stripeElementsRecurringTestVariant={props.stripeElementsRecurringTestVariant}
           showSecureBackground={showSecureStripeContainer}
         />
 

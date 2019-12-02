@@ -30,8 +30,9 @@ import ContributionThankYouContainer
   from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
-import './contributionsLanding.scss';
 import SecureTransactionIndicator from '../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+import './contributionsLanding.scss';
+import './contributionsLandingEOY2019.scss';
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -93,7 +94,14 @@ const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campai
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
 
-const showSecureTransactionIndicator = countryGroupId === 'GBPCountries' ? <SecureTransactionIndicator modifierClasses={['top']} /> : null;
+const showSecureTransactionIndicator = () => {
+  if (countryGroupId === 'GBPCountries') {
+    return <SecureTransactionIndicator modifierClasses={['top']} />;
+  } else if (store.getState().common.abParticipations.paymentSecuritySecureTransactionGreyNonUK === 'V1_securetransactiongrey') {
+    return <SecureTransactionIndicator modifierClasses={['top', 'hideaftermobile']} />;
+  }
+  return null;
+};
 
 function contributionsLandingPage(campaignCodeParameter: ?string) {
   return (
@@ -103,7 +111,7 @@ function contributionsLandingPage(campaignCodeParameter: ?string) {
       footer={<Footer disclaimer countryGroupId={countryGroupId} />}
       backgroundImageSrc={backgroundImageSrc}
     >
-      {showSecureTransactionIndicator}
+      {showSecureTransactionIndicator()}
       <ContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
         campaignCodeParameter={campaignCodeParameter}

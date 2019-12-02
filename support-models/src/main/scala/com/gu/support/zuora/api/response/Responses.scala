@@ -1,15 +1,15 @@
 package com.gu.support.zuora.api.response
 
-import com.gu.support.encoding.Codec
-import io.circe.parser._
-import io.circe.syntax._
 import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
-import com.gu.support.encoding.ErrorJson
+import com.gu.support.encoding.JsonHelpers._
+import com.gu.support.encoding.{Codec, ErrorJson}
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
 import com.gu.support.zuora.api.PaymentGateway
 import io.circe.Decoder.Result
-import io.circe.{Decoder, HCursor}
+import io.circe.parser._
+import io.circe.syntax._
+import io.circe.{Decoder, Encoder, HCursor, Json}
 import org.joda.time.LocalDate
 
 sealed trait ZuoraResponse {
@@ -193,7 +193,10 @@ object Charge {
 case class Charge(serviceStartDate: LocalDate, serviceEndDate: LocalDate, taxAmount: Double, chargeAmount: Double)
 
 object PreviewSubscribeResponse {
-  implicit val codec: Codec[PreviewSubscribeResponse] = capitalizingCodec
+  implicit val decoder: Decoder[PreviewSubscribeResponse] = decapitalizingDecoder[PreviewSubscribeResponse].prepare(_.withFocus(
+    _.mapObject(_.checkKeyExists("InvoiceData", Json.fromValues(Vector[Json]())))
+  ))
+  implicit val encoder: Encoder[PreviewSubscribeResponse] = capitalizingEncoder
 }
 
 case class PreviewSubscribeResponse(invoiceData: List[InvoiceDataItem], success: Boolean) extends ZuoraResponse

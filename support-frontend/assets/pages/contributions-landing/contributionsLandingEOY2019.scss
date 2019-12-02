@@ -1,0 +1,90 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+//$campaign-red: #E94F3E;
+
+.gu-content--eoy2019 {
+  .gu-content__blurb-header {
+    font-family: $gu-titlepiece;
+    margin: 0;
+    font-size: 30px;
+    line-height: 1;
+    color: gu-colour(brand-dark);
+
+    @include mq($from: tablet) {
+      margin: 0 -10px;
+      font-size: 36px;
+    }
+
+    @include mq($from: desktop) {
+      font-size: 44px;
+    }
+  }
+
+  .gu-content__blurb-blurb {
+    color: gu-colour(brand-dark);
+    display: none;
+
+    @include mq($from: tablet) {
+      display: block;
+    }
+
+    .bold {
+      font-weight: 700;
+    }
+
+    a.underline {
+      color: gu-colour(neutral-7)
+    }
+  }
+
+  .form-message {
+    display: none;
+  }
+
+  .gu-content__blurb {
+    border-top: 0;
+  }
+
+  .gu-content__blurb-blurb {
+    border-bottom: 0;
+  }
+
+  .component-terms-privacy--campaign-landing,
+  .component-terms-privacy__philo-ask {
+    margin: ($gu-v-spacing / 2) -10px 0;
+    padding: ($gu-v-spacing / 2) 10px 0;
+    border-top: 1px solid gu-colour(neutral-86);
+  }
+
+  .component-terms-privacy--campaign-landing p {
+    margin-bottom: $gu-v-spacing / 4;
+  }
+
+  .component-terms-privacy__philo-ask {
+    display: inline-block;
+    color: gu-colour(neutral-7);
+  }
+
+  .component-terms-privacy__philo-ask-header {
+    @include gu-typeface(headline, 16);
+    font-weight: bold;
+  }
+
+  .component-terms-privacy__philo-ask-body {
+    @include gu-typeface(textSans, 14);
+    margin-top: $gu-v-spacing / 2;
+
+    a {
+      color: gu-colour(neutral-7);
+    }
+  }
+
+  .gu-content__blurb {
+    border-top: 0;
+  }
+
+  .gu-content__blurb-blurb {
+    border-bottom: 0;
+  }
+}
+

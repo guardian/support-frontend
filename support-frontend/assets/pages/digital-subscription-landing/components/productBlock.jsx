@@ -1,9 +1,12 @@
+/* eslint-disable react/no-unused-prop-types */
 // @flow
 import React, { Component, type Node } from 'react';
 import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import GridPicture from 'components/gridPicture/gridPicture';
 import cx from 'classnames';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { ListHeading } from 'components/productPage/productPageList/productPageList';
 
 // styles
 import './digitalSubscriptionLanding.scss';
@@ -15,22 +18,6 @@ const arrowSvg = (
     <defs><path d="M16 0l1.427 1.428-7.035 7.036.035.035L9 9.927l-.035-.035-.036.035L7.5 8.5l.036-.035L.5 1.428 1.928 0l7.036 7.036L15.999 0z" id="a" /></defs>
     <use fill="#121212" xlinkHref="#a" fillRule="evenodd" />
   </svg>);
-
-type ListPropTypes = {
-  items: Array<Object>,
-}
-
-const List = ({ items }: ListPropTypes) => (
-  <ul>
-    {items.map(item => (
-      <li>
-        <div className="product-block__list-item__bullet" />
-        <span className="product-block__list-item--bold">{item.boldText}</span><br />
-        <div className="product-block__list-item__explainer">{item.explainer}</div>
-      </li>
-    ))}
-  </ul>
-);
 
 type DropdownPropTypes = {
   children: Node,
@@ -145,8 +132,11 @@ type StateTypes = {
   showDropDownApp: boolean,
 }
 
-// This is an empty declaration because there were errors without it being passed in
-type PropTypes = {}
+
+type PropTypes = {
+  // eslint-ignore no-unused-prop-types
+  countryGroupId: CountryGroupId,
+}
 
 class ProductBlock extends Component<PropTypes, StateTypes> {
   constructor(props: PropTypes) {
@@ -166,13 +156,13 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const { state } = this;
+    const { state, props } = this;
     return (
       <div className="hope-is-power__products">
         <section className="product-block__container hope-is-power--centered">
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
-            title="The Guardian Daily"
+            title={props.countryGroupId === 'AUDCountries' ? 'The UK Guardian Daily' : 'The Guardian Daily'}
             subtitle={<span className="product-block__item__subtitle--short-first">Each day&apos;s edition, in one simple, elegant app</span>}
             image={dailyImage}
           />
@@ -180,14 +170,19 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             showDropDown={state.showDropDownDaily}
             product="daily"
           >
-            <List
+            <ListHeading
               items={[
-                { boldText: 'A new way to read', explainer: 'The newspaper, reimagined for mobile and tablet' },
+                {
+                  boldText: 'A new way to read',
+                  explainer: props.countryGroupId === 'AUDCountries'
+                    ? 'The UK newspaper, reimagined for mobile and tablet'
+                    : 'The newspaper, reimagined for mobile and tablet',
+                },
                 { boldText: 'Published daily', explainer: 'Each edition available to read by 6am (GMT), 7 days a week' },
                 { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
               ]}
             />
-            <List
+            <ListHeading
               items={[
                 { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
                 { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
@@ -210,14 +205,14 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             showDropDown={state.showDropDownApp}
             product="app"
           >
-            <List
+            <ListHeading
               items={[
                 { boldText: 'Live', explainer: 'Follow a live feed of breaking news and sport, as it happens' },
                 { boldText: 'Discover', explainer: 'Explore stories you might have missed, tailored to you' },
                 { boldText: 'Enhanced offline reading', explainer: 'Download the news whenever it suits you' },
               ]}
             />
-            <List
+            <ListHeading
               items={[
                 { boldText: 'Daily Crossword', explainer: 'Play the daily crossword wherever you are' },
                 { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },

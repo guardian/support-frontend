@@ -91,7 +91,7 @@ class CountryGroupSwitcher extends Component<PropTypes, {menuOpen: boolean, boun
                 ))
             }
             <button
-              className="accessibility-hint"
+              className="visually-hidden"
               onClick={() => {
                 this.setState({ menuOpen: false });
               }}

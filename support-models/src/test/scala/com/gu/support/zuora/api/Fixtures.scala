@@ -2,7 +2,7 @@ package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction}
+import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction, StripePaymentType}
 import org.joda.time.LocalDate
 
 //noinspection TypeAnnotation
@@ -126,7 +126,8 @@ object Fixtures {
     Some(Country.UK),
     12, 22,
     "AmericanExpress",
-    StripeGatewayDefault)
+    StripeGatewayDefault,
+    stripePaymentType = Some(StripePaymentType.StripeCheckout))
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   val directDebitPaymentMethod = DirectDebitPaymentMethod(
     firstName = "Barry",
@@ -340,6 +341,35 @@ object Fixtures {
         }
       ]
    """
+
+  val previewSubscribeResponseNoInvoice =
+    """
+      [
+        {"Success":true,"TotalMrr":0,"TotalTcv":37.5}
+      ]
+   """
+
+  val previewSubscribeResponseJson =
+    """
+      [
+        {
+            "Success": true,
+            "InvoiceData": [
+                {
+                    "InvoiceItem": [
+                        {
+                            "ServiceEndDate": "2020-04-02",
+                            "ServiceStartDate": "2020-01-03",
+                            "TaxAmount": 0,
+                            "ChargeAmount": 37.5
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+    """
+
   val error =
     """
       {

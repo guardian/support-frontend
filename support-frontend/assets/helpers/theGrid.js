@@ -101,6 +101,11 @@ export const imageCatalogue: {
   digitalSubsDailyMob: '93c8d64b7be3bf455f2f6f57d679c2fdc7df6bf3/0_0_1100_1100',
   digitalSubsApp: '234f5889b07c7c5d088d8d977e9e717ea8f2e791/0_0_1714_1000',
   digitalSubsAppMob: '59d2d83d9c1ecf8b3c955c63bf94ef2fa80c7353/0_0_1100_1100',
+  gwGiftingPackshot: '3d1cecfdc8c90b2005712e56669afe6e3b8c5e5a/762_0_4232_3184',
+  gwGiftingPackshotMob: '3d1cecfdc8c90b2005712e56669afe6e3b8c5e5a/688_87_2481_3102',
+  giftingGlobe: '4a7ee6f430a29fc8ac8d9f0667cfafc67b6aba46/145_148_1203_1201',
+  printFeaturePackshot: '017a2f5c27394635b53c414962bbb775ce9b131d/5_39_1572_861',
+  printRainbowElection: 'd1fe7341c596e2be4436a93be808f2122b0da469/0_0_732_1006',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

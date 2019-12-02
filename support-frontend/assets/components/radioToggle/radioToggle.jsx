@@ -92,7 +92,7 @@ export default function RadioToggle(props: PropTypes) {
   return (
     <div className="component-radio-toggle" aria-describedby={radioGroupId}>
       {radioButtons}
-      <p id={radioGroupId} className="accessibility-hint">{props.accessibilityHint}</p>
+      <p id={radioGroupId} className="visually-hidden">{props.accessibilityHint}</p>
     </div>
   );
 
@@ -104,7 +104,7 @@ export default function RadioToggle(props: PropTypes) {
 function A11yHint(props: {id: string, hint: ?string}) {
 
   return (
-    <p id={props.id} className="accessibility-hint">
+    <p id={props.id} className="visually-hidden">
       {props.hint}
     </p>
   );

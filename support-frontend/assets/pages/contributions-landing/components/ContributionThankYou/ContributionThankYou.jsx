@@ -24,6 +24,7 @@ import {
   trackComponentLoad,
 } from 'helpers/tracking/behaviour';
 import TrackableButton from 'components/button/trackableButton';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 
@@ -38,6 +39,7 @@ type PropTypes = {|
   csrf: string,
   emailValidated: boolean,
   paymentComplete: boolean,
+  countryId: IsoCountry
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -50,6 +52,7 @@ const mapStateToProps = state => ({
   csrf: state.page.csrf.token,
   emailValidated: state.page.user.emailValidated,
   paymentComplete: state.page.form.paymentComplete,
+  countryId: state.common.internationalisation.countryId,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -201,7 +204,7 @@ function ContributionThankYou(props: PropTypes) {
         </div>
       </div>
 
-      <ContributionThankYouBlurb />
+      <ContributionThankYouBlurb countryId={props.countryId} />
     </div>
   );
 }

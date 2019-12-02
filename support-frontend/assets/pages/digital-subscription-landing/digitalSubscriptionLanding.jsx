@@ -88,7 +88,7 @@ function LandingPage() {
         </FooterCentered>}
     >
       <CampaignHeader countryGroupId={countryGroupId} />
-      <ProductBlock />
+      <ProductBlock countryGroupId={countryGroupId} />
       <CallToAction />
       <TermsAndConditions />
       <ConsentBanner />

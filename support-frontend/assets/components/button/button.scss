@@ -26,6 +26,7 @@
     pointer-events: none;
   }
 }
+
 .component-button--non-interactive {
   pointer-events: none;
 }
@@ -47,12 +48,38 @@
   }
 }
 
+.component-button--tertiary {
+  color: gu-colour(neutral-20);
+  background-color: transparent;
+  border: solid 1px gu-colour(neutral-20);
+
+  &:hover, &:focus {
+    background-color: gu-colour(neutral-97);
+  }
+}
+
+.component-button--tertiaryFeature {
+  color: gu-colour(highlight-main);
+  background-color: transparent;
+  border: solid 1.5px gu-colour(highlight-main);
+}
+
 .component-button--green {
   color: gu-colour(neutral-100);
   background-color: gu-colour(green-main);
 
   &:hover, &:focus {
     background-color: gu-colour(green-dark);
+  }
+}
+
+.component-button--blue {
+  color:#052962;
+  background-color:#C1D8FC;
+
+  &:hover, &:focus {
+    color:#fff;
+    background-color: #4e77bd;
   }
 }
 

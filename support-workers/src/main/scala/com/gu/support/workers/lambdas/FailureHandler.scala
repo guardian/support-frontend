@@ -1,9 +1,11 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices._
 import com.gu.helpers.FutureExtensions._
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.PaymentProvider.{fromPaymentFields, fromPaymentMethod}
+import com.gu.monitoring.{Error, IgnoredError, LambdaExecutionResult, LambdaExecutionStatus, PaymentFailure, SafeLogger}
 import com.gu.stripe.StripeError
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
@@ -17,6 +19,7 @@ import io.circe.generic.auto._
 import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerState, CheckoutFailureState] {
 
@@ -36,10 +39,9 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     sendEmail(state).whenFinished(handleError(state, error, requestInfo))
   }
 
-  private def sendEmail(state: FailureHandlerState) = {
+  private def sendEmail(state: FailureHandlerState): Future[SendMessageResult] = {
     val emailFields = state.product match {
       case c: Contribution => FailedContributionEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
-      //TODO: Failure emails for subs products
       case d: DigitalPack => FailedDigitalPackEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case p: Paper => FailedPaperEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case g: GuardianWeekly => FailedGuardianWeeklyEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
@@ -52,27 +54,65 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     SafeLogger.info(s"Attempting to handle error $error")
     val pattern = "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
     error.flatMap(extractUnderlyingError) match {
-      case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) => exitHandler(
-        state,
-        toCheckoutFailureReason(ze),
-        requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
-      )
-      case Some(se @ StripeError("card_error", _, _, _, _)) => exitHandler(
-        state,
-        toCheckoutFailureReason(se),
-        requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
-      )
-      case Some(StripeError("invalid_request_error", pattern(message), _, _, _)) => exitHandler(
-        state,
-        AccountMismatch,
-        requestInfo.appendMessage(message)
-      )
-      case _ => exitHandler(
-        state,
-        Unknown,
-        requestInfo.copy(failed = true)
-      )
+      case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) =>
+        val checkoutFailureReason = toCheckoutFailureReason(ze)
+        logLambdaResult(state, PaymentFailure, checkoutFailureReason, error)
+        exitHandler(
+          state,
+          checkoutFailureReason,
+          requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
+        )
+      case Some(se @ StripeError("card_error", _, _, _, _)) =>
+        val checkoutFailureReason = toCheckoutFailureReason(se)
+        logLambdaResult(state, PaymentFailure, checkoutFailureReason, error)
+        exitHandler(
+          state,
+          checkoutFailureReason,
+          requestInfo.appendMessage(s"Stripe reported a payment failure: ${se.getMessage}")
+        )
+      case Some(StripeError("invalid_request_error", pattern(message), _, _, _)) =>
+        logLambdaResult(state, IgnoredError, AccountMismatch, error)
+        exitHandler(
+          state,
+          AccountMismatch,
+          requestInfo.appendMessage(message)
+        )
+      case _ =>
+        logLambdaResult(state, Error, Unknown, error)
+        exitHandler(
+          state,
+          Unknown,
+          requestInfo.copy(failed = true)
+        )
     }
+  }
+
+  private def logLambdaResult(
+    state: FailureHandlerState,
+    status: LambdaExecutionStatus,
+    checkoutFailureReason: CheckoutFailureReason,
+    error: Option[ExecutionError]
+  ): Unit = {
+    val maybePaymentProvider = state.paymentMethod.map(fromPaymentMethod)
+      .orElse(state.paymentFields.map(fromPaymentFields))
+
+    // Log the result of this execution to Elasticsearch
+    LambdaExecutionResult.logResult(
+      LambdaExecutionResult(
+        state.requestId,
+        status,
+        state.user.isTestUser,
+        state.product,
+        maybePaymentProvider,
+        state.firstDeliveryDate,
+        state.giftRecipient.isDefined,
+        state.promoCode,
+        state.user.billingAddress.country,
+        state.user.deliveryAddress.map(_.country),
+        Some(checkoutFailureReason),
+        error
+      )
+    )
   }
 
   private def exitHandler(

@@ -66,7 +66,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ): Future[CreditCardReferenceTransaction] = {
     val stripeServiceForCurrency = stripeService.withCurrency(currency)
     (stripe match {
-      case StripeSourcePaymentFields(source) =>
+      case StripeSourcePaymentFields(source, stripePaymentType) =>
         stripeServiceForCurrency.createCustomerFromToken(source).map { customer =>
           val card = customer.source
           CreditCardReferenceTransaction(
@@ -77,10 +77,11 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             card.exp_month,
             card.exp_year,
             card.brand.zuoraCreditCardType.getOrElse(""),
-            paymentGateway = chargeGateway(currency)
+            paymentGateway = chargeGateway(currency),
+            stripePaymentType = stripePaymentType
           )
         }
-      case StripePaymentMethodPaymentFields(paymentMethod) =>
+      case StripePaymentMethodPaymentFields(paymentMethod, stripePaymentType) =>
         for {
           stripeCustomer <- stripeServiceForCurrency.createCustomerFromPaymentMethod(paymentMethod)
           stripePaymentMethod <- stripeServiceForCurrency.getPaymentMethod(paymentMethod)
@@ -94,7 +95,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             card.exp_month,
             card.exp_year,
             card.brand.zuoraCreditCardType.getOrElse(""),
-            paymentGateway = paymentIntentGateway(currency)
+            paymentGateway = paymentIntentGateway(currency),
+            stripePaymentType = stripePaymentType
           )
         }
     })

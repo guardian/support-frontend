@@ -13,6 +13,25 @@ sealed trait PaymentMethod {
   def paymentGateway: PaymentGateway
 }
 
+sealed trait StripePaymentType
+
+object StripePaymentType {
+  case object StripeCheckout extends StripePaymentType
+  case object StripeApplePay extends StripePaymentType
+  case object StripePaymentRequestButton extends StripePaymentType
+
+  implicit val stripePaymentTypeDecoder: Decoder[StripePaymentType] = Decoder.decodeString.map(code => fromString(code))
+  implicit val stripePaymentTypeEncoder: Encoder[StripePaymentType] = Encoder.encodeString.contramap[StripePaymentType](_.toString)
+
+  private def fromString(s: String) = {
+    s match {
+      case "StripePaymentRequestButton" => StripePaymentRequestButton
+      case "StripeApplePay" => StripeApplePay
+      case _ => StripeCheckout
+    }
+  }
+}
+
 case class CreditCardReferenceTransaction(
   tokenId: String, //Stripe Card id
   secondTokenId: String, //Stripe Customer Id
@@ -22,7 +41,8 @@ case class CreditCardReferenceTransaction(
   creditCardExpirationYear: Int,
   creditCardType: String /*TODO: strip spaces?*/ ,
   paymentGateway: PaymentGateway,
-  `type`: String = "CreditCardReferenceTransaction"
+  `type`: String = "CreditCardReferenceTransaction",
+  stripePaymentType: Option[StripePaymentType]
 ) extends PaymentMethod
 
 case class PayPalReferenceTransaction(

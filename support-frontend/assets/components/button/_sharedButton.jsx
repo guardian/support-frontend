@@ -14,7 +14,10 @@ import './button.scss';
 export const Appearances = {
   primary: 'primary',
   secondary: 'secondary',
+  tertiary: 'tertiary',
+  tertiaryFeature: 'tertiary-feature',
   green: 'green',
+  blue: 'blue',
   greenHollow: 'greenHollow',
   greyHollow: 'greyHollow',
   disabled: 'disabled',

@@ -1,44 +1,22 @@
 // @flow
 import type { Tests } from './abtest';
-import { get as getCookie } from 'helpers/cookie';
 import {
   type CountryGroupId,
   detect,
 } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
-export type LandingPageCopyReturningSinglesTestVariants = 'control' | 'returningSingle' | 'notintest';
-export type LandingPageStripeElementsRecurringTestVariants = 'control' | 'stripeElements' | 'notintest';
 export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'paymentRequestButton' | 'notintest';
-export type PaymentSecurityDesignTestVariants = 'control' | 'V2_securemiddle' | 'V4_grey' | 'notintest';
+export type paymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
+export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
+const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
+const subsShowcasePageMatch = '/(eu|int)/subscribe(/.*)?$';
 
 const countryGroupId: CountryGroupId = detect();
 
 export const tests: Tests = {
-  landingPageCopyReturningSingles: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'returningSingle',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 1,
-    canRun: () => !!getCookie('gu.contributions.contrib-timestamp'),
-  },
-
   recurringStripePaymentRequestButton: {
     type: 'OTHER',
     variants: [
@@ -61,39 +39,14 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-  stripeElementsRecurring: {
+  paymentSecuritySecureTransactionGreyNonUK: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'stripeElements',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: !!window.guardian && !!window.guardian.stripeElementsRecurring,
-    independent: true,
-    seed: 3,
-    targetPage: contributionsLandingPageMatch,
-  },
-
-  paymentSecurityDesignTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V2_securemiddle',
-      },
-      {
-        id: 'V4_grey',
+        id: 'V1_securetransactiongrey',
       },
     ],
     audiences: {
@@ -107,5 +60,51 @@ export const tests: Tests = {
     seed: 10,
     targetPage: contributionsLandingPageMatch,
     canRun: () => countryGroupId !== 'GBPCountries',
+  },
+
+  landingPageReverseAmounts: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'reversedAmounts',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 3,
+    targetPage: usContributionsLandingPageMatch,
+    canRun: () => countryGroupId === 'UnitedStates',
+  },
+
+  subsShowcaseOrderingTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'weeklyTop',
+      },
+      {
+        id: 'digitalTop',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 4,
+    targetPage: subsShowcasePageMatch,
+    optimizeId: 'sj4_I5OAT3SJpqgnxtJ6Xg',
   },
 };

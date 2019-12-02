@@ -6,8 +6,8 @@ import com.gu.config.Configuration
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.config.{PayPalConfig, Stages}
-import com.netaporter.uri.QueryString
-import com.netaporter.uri.Uri.parseQuery
+import io.lemonlabs.uri.QueryString
+import io.lemonlabs.uri.parsing.UrlParser.parseQuery
 import okhttp3.{FormBody, Request, Response}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -51,13 +51,13 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) {
 
     val parsedResponse = parseQuery(responseBody)
 
-    logNVPResponse(parsedResponse)
+    parsedResponse.map(logNVPResponse)
     parsedResponse
 
   }
 
   // Takes a series of parameters, send a request to PayPal, returns response.
-  private def nvpRequest(params: Map[String, String]) = {
+  private def nvpRequest(params: Map[String, String]): Future[QueryString] = {
 
     val reqBody = new FormBody.Builder()
     for ((param, value) <- defaultNVPParams) reqBody.add(param, value)
@@ -68,7 +68,7 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) {
       .post(reqBody.build())
       .build()
 
-    client.apply(request).map(extractResponse)
+    client.apply(request).flatMap(response => Future.fromTry(extractResponse(response)))
   }
 
   // Takes an NVP response and retrieves a given parameter as a string.

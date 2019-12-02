@@ -7,7 +7,7 @@ import com.gu.support.catalog.{FulfilmentOptions, ProductOptions}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, Json}
 
 
 sealed trait ProductType {
@@ -63,10 +63,10 @@ object ProductType {
   implicit val codecGuardianWeekly: Codec[GuardianWeekly] = deriveCodec
 
   implicit val encodeProduct: Encoder[ProductType] = Encoder.instance {
-    case d: DigitalPack => d.asJson
-    case c: Contribution => c.asJson
-    case p: Paper => p.asJson
-    case g: GuardianWeekly => g.asJson
+    case d: DigitalPack => d.asJson.asObject.map(_.add("productType", Json.fromString("DigitalPack"))).asJson
+    case c: Contribution => c.asJson.asObject.map( _.add("productType", Json.fromString("Contribution"))).asJson
+    case p: Paper => p.asJson.asObject.map(_.add("productType", Json.fromString("Paper"))).asJson
+    case g: GuardianWeekly => g.asJson.asObject.map(_.add("productType", Json.fromString("GuardianWeekly"))).asJson
   }
 
   implicit val decodeProduct: Decoder[ProductType] =

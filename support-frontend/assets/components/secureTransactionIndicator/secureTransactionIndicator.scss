@@ -40,6 +40,22 @@
   padding-bottom: 15px;
 }
 
+.component-secure-transaction--hideaftermobile {
+  @include mq($from: phablet) {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+  }
+}
+
+.component-secure-transaction--showaftermobile {
+  @include mq($until: phablet) {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+  }
+}
+
 .component-secure-transaction {
   display: flex;
   align-items: center;

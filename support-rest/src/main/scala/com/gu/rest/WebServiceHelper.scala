@@ -85,7 +85,7 @@ trait WebServiceHelper[Error <: Throwable] {
       contentType <- Option(body.contentType()).toRight(WebServiceHelperError(CodeBody(code, ""), "no content type")).toTry
       responseBody <- Try(body.string())
       codeBody = CodeBody(code, responseBody)
-      _ = SafeLogger.info(s"response $code body: ${responseBody.length} bytes")
+      _ = SafeLogger.info(s"response $code body: ${responseBody}")
       _ <-
         if ((contentType.`type`(), contentType.subtype()) == ("application", "json")) Success(())
         else Failure(WebServiceHelperError(codeBody, s"wrong content type"))
@@ -104,11 +104,11 @@ trait WebServiceHelper[Error <: Throwable] {
       case "2xx" =>
         decode[A](responseBody).left.map { err =>
           decodeError(responseBody).right.getOrElse(
-            WebServiceHelperError[A](codeBody, s"failed to parse response: $err", err)
+            WebServiceHelperError[A](codeBody, s"failed to parse response. Error was: $err, Response was: $responseBody", err)
           )
         }.toTry
       case "4xx" =>
-        Failure((decodeError(responseBody).right.toOption).getOrElse(
+        Failure(decodeError(responseBody).right.toOption.getOrElse(
           WebServiceClientError(codeBody))
         )
       case statusCode =>
@@ -138,6 +138,7 @@ trait WebServiceHelper[Error <: Throwable] {
     params: ParamMap = empty
   )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.pretty(Printer.noSpaces.copy(dropNullValues = true))
+    SafeLogger.info(s"Issuing request POST $endpoint $json")
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).post(body))
   }

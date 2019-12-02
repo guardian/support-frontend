@@ -39,6 +39,6 @@
   }
 
   .component-select-input__label {
-    @include accessibility-hint;
+    @include visually-hidden;
   }
 }
