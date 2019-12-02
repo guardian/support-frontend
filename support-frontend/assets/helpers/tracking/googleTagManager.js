@@ -183,17 +183,17 @@ function sendData(
 
 function pushToDataLayer(event: EventType, participations: Participations) {
   try {
-     getPaymentAPIStatus()
+    getPaymentAPIStatus()
       .then((paymentRequestApiStatus) => {
         sendData(event, participations, paymentRequestApiStatus);
       })
-      .catch((reason) => {
+      .catch(() => {
         sendData(event, participations, 'PromiseRejected');
       });
-
   } catch (e) {
     sendData(event, participations, 'PromiseNotSupported');
   }
+
 }
 
 function init(participations: Participations) {

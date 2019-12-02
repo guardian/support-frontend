@@ -59,7 +59,7 @@ import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { ErrorReason } from 'helpers/errorReasons';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
-import type {RecurringStripePaymentRequestButtonTestVariants} from "helpers/abTests/abtestDefinitions";
+import type { RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types -----//
 
