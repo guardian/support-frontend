@@ -2,7 +2,7 @@ import React from 'react';
 
 import GridImage from 'components/gridImage/gridImage';
 
-const IntDailyPackshot = () => (
+const DigitalPackshot = () => (
   <div className="subscriptions-int-daily-packshot">
     <GridImage
       classModifiers={['']}
@@ -17,4 +17,4 @@ const IntDailyPackshot = () => (
   </div>
 );
 
-export default IntDailyPackshot;
+export default DigitalPackshot;

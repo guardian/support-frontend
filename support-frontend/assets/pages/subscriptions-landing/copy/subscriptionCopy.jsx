@@ -26,12 +26,12 @@ import GuardianWeeklyPackShot
 import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
 import PaperAndDigitalPackshot
   from 'components/packshots/paper-and-digital-packshot';
-import FullGuardianWeeklyPackShot
-  from 'components/packshots/full-guardian-weekly-packshot';
-import SubscriptionDailyPackshot
-  from 'components/packshots/subscription-daily-packshot';
-import InternationalDailyPackshot
-  from 'components/packshots/international-daily-packshot';
+import GuardianWeeklyPackShotHero
+  from 'components/packshots/guardian-weekly-packshot-hero';
+import DigitalPackshotHero
+  from 'components/packshots/digital-packshot-hero';
+import DigitalPackshot
+  from 'components/packshots/digital-packshot';
 import PrintFeaturePackshot from 'components/packshots/print-feature-packshot';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
@@ -118,9 +118,9 @@ function getGuardianWeeklyOfferCopy() {
 
 const getDigitalImage = () => {
   if (digitalIsTop && (isEU() || isInternational())) {
-    return <SubscriptionDailyPackshot />;
+    return <DigitalPackshotHero />;
   }
-  return <InternationalDailyPackshot />;
+  return <DigitalPackshot />;
 };
 
 const digital: ProductCopy = {
@@ -143,7 +143,7 @@ const getWeeklyImage = () => {
   if (isUK() || (digitalIsTop && (isEU() || isInternational()))) {
     return <GuardianWeeklyPackShot />;
   }
-  return <FullGuardianWeeklyPackShot />;
+  return <GuardianWeeklyPackShotHero />;
 };
 
 const guardianWeekly: ProductCopy = {
@@ -164,7 +164,7 @@ const guardianWeekly: ProductCopy = {
       modifierClasses: '',
     },
   ],
-    productImage: getWeeklyImage(),
+  productImage: getWeeklyImage(),
 };
 
 const paper: ProductCopy = {
