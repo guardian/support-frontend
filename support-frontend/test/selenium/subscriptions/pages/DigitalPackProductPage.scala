@@ -8,6 +8,6 @@ class DigitalPackProductPage(implicit val webDriver: WebDriver) extends Page wit
 
   override def path = "/uk/subscribe/digital"
 
-  override def headerClassName = "component-footer"
+  override def elementQuery = className("component-footer")
 
 }

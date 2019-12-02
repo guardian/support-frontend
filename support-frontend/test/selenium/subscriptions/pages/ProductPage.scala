@@ -5,9 +5,9 @@ import selenium.util.{Browser, Config}
 
 trait ProductPage extends Page with Browser {
   def path: String
-  def headerClassName: String
+  def elementQuery: Query
   def pageHasLoaded: Boolean = {
-    pageHasElement(className(headerClassName)) && pageHasUrl(path)
+    pageHasElement(elementQuery) && pageHasUrl(path)
   }
-  val url = s"${Config.supportFrontendUrl}${path}"
+  val url = s"${Config.supportFrontendUrl}$path"
 }

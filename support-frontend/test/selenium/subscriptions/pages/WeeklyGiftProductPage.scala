@@ -7,6 +7,6 @@ class WeeklyGiftProductPage(implicit val webDriver: WebDriver) extends Browser w
 
   override def path = "/uk/subscribe/weekly/gift"
 
-  override def headerClassName = "component-heading-block"
+  override def elementQuery = className("weekly-campaign-hero")
 
 }

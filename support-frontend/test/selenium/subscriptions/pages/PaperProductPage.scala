@@ -7,6 +7,6 @@ class PaperProductPage(implicit val webDriver: WebDriver) extends Browser with P
 
   override def path = s"/uk/subscribe/paper"
 
-  override def headerClassName = "component-heading-block"
+  override def elementQuery = className("component-heading-block")
 
 }
