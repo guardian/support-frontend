@@ -59,6 +59,7 @@ export type ProductButton = {
   ctaButtonText: string,
   link: string,
   analyticsTracking: Function,
+  hierarchy?: string,
 }
 
 type ProductCopy = {
@@ -135,11 +136,19 @@ const guardianWeekly: ProductCopy = {
   subtitle: getPrice(GuardianWeekly, ''),
   description: 'A weekly, global magazine from The Guardian, with delivery worldwide',
   offer: getGuardianWeeklyOfferCopy(),
-  buttons: [{
-    ctaButtonText: 'Find out more',
-    link: subsLinks.GuardianWeekly,
-    analyticsTracking: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
-  }],
+  buttons: [
+    {
+      ctaButtonText: 'Find out more',
+      link: subsLinks.GuardianWeekly,
+      analyticsTracking: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
+    },
+    {
+      ctaButtonText: 'See gift options',
+      link: subsLinks.GuardianWeeklyGift,
+      analyticsTracking: sendTrackingEventsOnClick('weekly_cta_gift', 'GuardianWeekly', abTest),
+      modifierClasses: '',
+    },
+  ],
   productImage: isUK() || isEU() || isInternational() ? <GuardianWeeklyPackShot /> : <FullGuardianWeeklyPackShot />,
 };
 
@@ -181,6 +190,7 @@ const premiumApp: ProductCopy = {
     ctaButtonText: 'Buy on Google Play',
     link: androidAppUrl,
     analyticsTracking: trackAppStoreLink('premium_tier_android_cta', 'PremiumTier', abTest),
+    hierarchy: 'first',
   }],
   productImage: <PremiumAppPackshot />,
   classModifier: ['subscriptions__premuim-app'],
