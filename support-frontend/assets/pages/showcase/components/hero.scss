@@ -129,6 +129,14 @@
     border-right: 1px solid rgba(0, 0, 0, .1);
   }
 
+  .showcase-hero__caption {
+    display: block;
+    text-align: left;
+    @include gu-fontset-explainer;
+    margin: $gu-h-spacing $gu-h-spacing $gu-h-spacing / 2;
+    font-size: 14px;
+  }
+
   .showcase-hero__image {
     height: 37vw;
     width: 47%;
@@ -224,6 +232,10 @@
       margin: $gu-h-spacing;
       padding-left: 0;
 
+      .showcase-hero-heading__image-wrapper {
+        max-width: 480px;
+      }
+
       svg {
         min-width: 460px;
       }
@@ -231,6 +243,7 @@
     }
 
     .showcase-hero__caption {
+      @include gu-fontset-explainer;
       width: gu-span(3);
       margin-top: 0;
       margin-left: 0;
