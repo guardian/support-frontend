@@ -46,13 +46,13 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
   }
 
   componentDidMount(): void {
-    if (canCreateWidget(this.props.amazonPayData)) {
+    if (this.props.amazonPayData.amazonPayLibrary) {
       this.createWidget();
     }
   }
 
   componentDidUpdate(): void {
-    if (canCreateWidget(this.props.amazonPayData)) {
+    if (this.props.amazonPayData.amazonPayLibrary && !this.props.amazonPayData.loginButtonReady) {
       this.createWidget();
     }
   }
