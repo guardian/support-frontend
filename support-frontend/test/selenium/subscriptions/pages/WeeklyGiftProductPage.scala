@@ -3,9 +3,9 @@ package selenium.subscriptions.pages
 import org.openqa.selenium.WebDriver
 import selenium.util.Browser
 
-class PaperProductPage(implicit val webDriver: WebDriver) extends Browser with ProductPage {
+class WeeklyGiftProductPage(implicit val webDriver: WebDriver) extends Browser with ProductPage {
 
-  override def path = s"/uk/subscribe/paper"
+  override def path = "/uk/subscribe/weekly/gift"
 
   override def headerClassName = "component-heading-block"
 

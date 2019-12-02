@@ -1,5 +1,6 @@
 package selenium.subscriptions
 
+import org.openqa.selenium.WebDriver
 import org.scalatest.concurrent.Eventually
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.time.{Minute, Seconds, Span}
@@ -15,9 +16,9 @@ class ProductPagesSpec extends AnyFeatureSpec
   with Eventually {
 
   val driverConfig = new DriverConfig
-  override implicit val webDriver = driverConfig.webDriver
+  override implicit val webDriver: WebDriver = driverConfig.webDriver
 
-  override implicit val patienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
 
   before { driverConfig.reset() }
 
@@ -38,6 +39,13 @@ class ProductPagesSpec extends AnyFeatureSpec
   Feature("Weekly product page") {
     Scenario("Basic loading") {
       testPageLoads(new WeeklyProductPage())
+
+    }
+  }
+
+  Feature("Weekly gift product page") {
+    Scenario("Basic loading") {
+      testPageLoads(new WeeklyGiftProductPage())
 
     }
   }
