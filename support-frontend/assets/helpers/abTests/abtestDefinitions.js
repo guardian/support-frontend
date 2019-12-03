@@ -129,6 +129,5 @@ export const tests: Tests = {
     independent: true,
     seed: 11,
     targetPage: contributionsLandingPageMatch,
-    canRun: () => countryGroupId !== 'UnitedStates',
   },
 };
