@@ -15,7 +15,7 @@ import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { PaymentSecuritySecureTransactionGreyNonUKVariants, NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
-import SecureTransactionIndicator from 'assets/components/secureTransactionIndicator/secureTransactionIndicator';
+import SecureTransactionIndicator from components/secureTransactionIndicator/secureTransactionIndicator';
 
 
 // ----- Types ----- //
