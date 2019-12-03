@@ -30,7 +30,7 @@ import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouContainer
   from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
-import ConsentBanner from 'components/consentBanner/consentBanner';
+import ConsentBanner from '../../components/consentBanner/consentBanner';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import './contributionsLanding.scss';
 import './contributionsLandingEOY2019.scss';
