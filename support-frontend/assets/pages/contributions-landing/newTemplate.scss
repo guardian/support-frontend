@@ -1,0 +1,106 @@
+@import '~stylesheets/skeleton/skeleton';
+@import '~stylesheets/gu-sass/gu-sass';
+
+
+.gu-content--new-template {
+
+  overflow: initial;
+
+  /* Page component - contains ContributionFormContainer */
+  .gu-content__main {
+    background-color: white;
+  }
+  /* */
+
+  /* ContributionFormContainer - contains form and blurb */
+  .gu-content__content {
+    margin: 0;
+    padding: 0;
+    overflow: initial;
+  }
+
+  .gu-content__content--flex {
+    align-items: flex-start;
+  }
+
+  .gu-content__content-contributions {
+    max-width: 100%;
+  }
+  /* */
+
+  /* Text on right hand side of landing page */
+  .gu-content__blurb {
+    @include mq($from: tablet) {
+      background-color: gu-colour(sport-dark);
+      border: 0; // get rid of yellow top border
+      margin-left: 0;
+      padding-top: $gu-v-spacing * 5;
+      padding-left: $gu-h-spacing * 1.75;
+      /* sticky positioning */
+      top: 0;
+      position: -webkit-sticky;
+      position: sticky;
+      align-self: flex-start;
+      height: calc(100vh - 50px);
+      /* */
+    }
+
+    @include mq($from: desktop) {
+      padding-left: $gu-h-spacing * 2.5;
+    }
+
+    @include mq($from: leftCol) {
+      padding-left: $gu-h-spacing * 4.5;
+    }
+  }
+
+  .gu-content__blurb-header {
+    @include mq($from: tablet) {
+      color: white;
+      font-size: 34px;
+      max-width: $gu-h-spacing * 13;
+    }
+
+    @include mq($from: desktop) {
+      font-size: 50px;
+      max-width: $gu-h-spacing * 22;
+    }
+
+    @include mq($from: leftCol) {
+      font-size: 70px;
+      max-width: $gu-h-spacing * 26.75;
+    }
+  }
+
+  .gu-content__blurb-blurb {
+    border: 0; // get rid of yellow bottom border
+    color: white;
+    font-size: 16px;
+    max-width: $gu-h-spacing * 13;
+
+    @include mq($from: desktop) {
+      font-size: 17px;
+      max-width: $gu-h-spacing * 23;
+    }
+  }
+  /* */
+
+  .gu-content__form {
+    border: 0;
+    padding-top: ($gu-v-spacing * 2);
+
+    @include mq($from: tablet) {
+      max-width: $gu-h-spacing * 19.25;
+      padding: ($gu-v-spacing * 1.5) ($gu-h-spacing * 1.25) 0;
+    }
+
+    @include mq($from: desktop) {
+      max-width: $gu-h-spacing * 21;
+    }
+
+    @include mq($from: leftCol) {
+      max-width: $gu-h-spacing * 32;
+      padding: ($gu-v-spacing * 1.5) ($gu-h-spacing * 4.25) 0;
+    }
+  }
+}

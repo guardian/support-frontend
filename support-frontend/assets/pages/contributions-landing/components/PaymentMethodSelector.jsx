@@ -41,7 +41,7 @@ import {
   subscriptionToExplainerPart,
 } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type { paymentSecuritySecureTransactionGreyNonUKVariants } from 'helpers/abTests/abtestDefinitions';
+import type { PaymentSecuritySecureTransactionGreyNonUKVariants } from 'helpers/abTests/abtestDefinitions';
 import {
   type CountryGroupId,
   detect,
@@ -62,7 +62,7 @@ type PropTypes = {|
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   isTestUser: boolean,
   switches: Switches,
-  paymentSecuritySecureTransactionGreyNonUKVariant: paymentSecuritySecureTransactionGreyNonUKVariants,
+  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
