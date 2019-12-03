@@ -29,8 +29,6 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
       if (response.error) {
         console.log("error", response.error)
       } else {
-        const accessToken = response.access_token;
-        console.log("Access token", accessToken);
         this.props.setAmazonPayHasAccessToken();
       }
     })
