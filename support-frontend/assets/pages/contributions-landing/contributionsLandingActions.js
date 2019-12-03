@@ -64,10 +64,10 @@ export type Action =
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SET_AMAZON_PAY_LIBRARY', amazonPayLibrary: AmazonPayLibrary }
-  | { type: 'SET_AMAZON_PAY_LOGIN_BUTTON_READY' }
   | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' }
   | { type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId: string }
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
+  | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -208,8 +208,9 @@ const setAmazonPayLibrary = (amazonPayLibrary: AmazonPayLibrary): Action => ({
   amazonPayLibrary,
 });
 
-const setAmazonPayLoginButtonReady: Action = ({ type: 'SET_AMAZON_PAY_LOGIN_BUTTON_READY' });
 const setAmazonPayWalletWidgetReady: Action = ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' });
+const setAmazonPayHasAccessToken: Action = ({ type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' });
+
 const setAmazonPayPaymentSelected = (paymentSelected: boolean): Action =>
   ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected });
 
@@ -663,8 +664,8 @@ export {
   updateUserFormData,
   setThirdPartyPaymentLibrary,
   setAmazonPayLibrary,
-  setAmazonPayLoginButtonReady,
   setAmazonPayWalletWidgetReady,
+  setAmazonPayHasAccessToken,
   setAmazonPayOrderReferenceId,
   setAmazonPayPaymentSelected,
   selectAmount,

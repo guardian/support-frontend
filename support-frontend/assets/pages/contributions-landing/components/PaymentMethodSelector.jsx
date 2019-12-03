@@ -33,7 +33,7 @@ import type {
 } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { getReauthenticateUrl } from 'helpers/externalLinks';
 import AnimatedDots from 'components/spinners/animatedDots';
-import { ExistingCard, ExistingDirectDebit, Stripe } from '../../../helpers/paymentMethods';
+import { ExistingCard, ExistingDirectDebit, Stripe, AmazonPay } from '../../../helpers/paymentMethods';
 import {
   getExistingPaymentMethodLabel,
   mapExistingPaymentMethodToPaymentMethod,
@@ -94,7 +94,7 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
     case DirectDebit:
     case ExistingDirectDebit:
       return <SvgDirectDebitSymbol />;
-    case "AmazonPay":
+    case AmazonPay:
       return <SvgAmazonPayLogo/>;
     case Stripe:
     case ExistingCard:

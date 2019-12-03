@@ -131,8 +131,8 @@ function withProps(props: PropTypes) {
           />
         </div>
 
-        { props.paymentMethod === AmazonPay && !urlHasAmazonAccessToken() && <AmazonPayLoginButton /> }
-        { props.paymentMethod === AmazonPay && urlHasAmazonAccessToken() && <AmazonPayWallet/> }
+        { props.paymentMethod === AmazonPay && !props.amazonPayData.hasAccessToken && <AmazonPayLoginButton /> }
+        { props.paymentMethod === AmazonPay && props.amazonPayData.hasAccessToken && <AmazonPayWallet/> }
 
         {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
           <Button

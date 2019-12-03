@@ -6,7 +6,7 @@ import React from 'react';
 export default function SvgAmazonPayLogo() {
 
   return (
-    <svg width="23px" height="18px" viewBox="0 0 23 18">
+    <svg className="svg-amazon-pay" width="23px" height="18px" viewBox="0 0 23 18">
       <title>Group 6</title>
       <desc>Created with Sketch.</desc>
       <defs>
