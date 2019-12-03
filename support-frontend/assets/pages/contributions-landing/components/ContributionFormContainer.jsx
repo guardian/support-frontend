@@ -71,12 +71,12 @@ const defaultContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
-const usEoyHeaderCopy = 'Offset\xa0fake\nnews\xa0this\nGiving\xa0Tuesday';
+const usEoyHeaderCopy = 'Support our journalism with a year-end gift';
 const usEoyAppealContributeCopy = (
   <span>
-    Help the truth triumph in 2020. Amid a tsunami of disinformation and “alternative facts,” the
-    need for truth has never been greater. Thanks to your valuable contributions, tens of millions
-    across America read our quality, factual journalism at this critical time. Help us reach our year-end goal.
+    The Guardian’s open, independent reporting has been supported by hundreds of thousands of readers in the
+    US like you – we have supporters in each of the fifty states. Thanks to your valuable contributions, tens
+    of millions across America read our quality, factual journalism at this critical time.
   </span>);
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
