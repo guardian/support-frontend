@@ -107,6 +107,10 @@ function withProps(props: PropTypes) {
 
     const classNames: string = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
 
+    const getAmazonPayComponent = () => props.amazonPayData.hasAccessToken ?
+      <AmazonPayWallet contributionType={props.contributionType} isTestUser={props.isTestUser}/> :
+      <AmazonPayLoginButton />;
+
     // We have to show/hide PayPalExpressButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
     // See PayPalExpressButton for more info.
@@ -131,8 +135,7 @@ function withProps(props: PropTypes) {
           />
         </div>
 
-        { props.paymentMethod === AmazonPay && !props.amazonPayData.hasAccessToken && <AmazonPayLoginButton /> }
-        { props.paymentMethod === AmazonPay && props.amazonPayData.hasAccessToken && <AmazonPayWallet/> }
+        { props.paymentMethod === AmazonPay && getAmazonPayComponent() }
 
         {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
           <Button

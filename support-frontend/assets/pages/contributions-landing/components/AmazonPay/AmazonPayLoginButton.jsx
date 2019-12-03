@@ -23,7 +23,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
 
   loginPopup = (): void  => {
-    this.props.amazonPayData.amazonPayLibrary.amazonLoginObject.setSandboxMode(true);
     const loginOptions = { scope: 'profile postal_code payments:widget payments:shipping_address', popup: true };
     this.props.amazonPayData.amazonPayLibrary.amazonLoginObject.authorize(loginOptions, response => {
       if (response.error) {

@@ -111,7 +111,7 @@ function initialiseStripeCheckout(
 function initialisePaymentMethods(state: State, dispatch: Function, contributionTypes: ContributionTypes) {
   const { countryId, currencyId, countryGroupId } = state.common.internationalisation;
   const { switches } = state.common.settings;
-  const { isTestUser } = state.page.user;
+  const isTestUser = !!state.page.user.isTestUser;
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     dispatch(paymentWaiting(true));
@@ -130,7 +130,7 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
             contributionTypeSetting.contributionType,
             currencyId,
             countryId,
-            !!isTestUser,
+            isTestUser,
             dispatch,
           );
         }
