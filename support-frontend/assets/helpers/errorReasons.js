@@ -2,13 +2,8 @@
 
 // ----- Types ----- //
 
-export type AmazonPayErrorReason =
-  'amazon_pay_try_other_card' |
-  'amazon_pay_try_again' |
-  'amazon_pay_fatal';
-
 // See https://github.com/guardian/support-models/blob/master/src/main/scala/com/gu/support/workers/model/CheckoutFailureReasons.scala
-export type ErrorReason = AmazonPayErrorReason &
+export type ErrorReason =
   'insufficient_funds' |
   'payment_details_incorrect' |
   'personal_details_incorrect' |
@@ -23,6 +18,9 @@ export type ErrorReason = AmazonPayErrorReason &
   'internal_error' |
   'card_authentication_error' |
   'incomplete_payment_request_details' |
+  'amazon_pay_try_other_card' |
+  'amazon_pay_try_again' |
+  'amazon_pay_fatal' |
   'unknown';
 
 // ----- Functions ----- //
