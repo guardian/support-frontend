@@ -5,6 +5,7 @@ import type { AmazonPayData, State } from 'pages/contributions-landing/contribut
 import { setAmazonPayWalletWidgetReady, setAmazonPayOrderReferenceId, setAmazonPayPaymentSelected } from 'pages/contributions-landing/contributionsLandingActions';
 import { connect } from 'react-redux';
 import './AmazonPay.scss';
+import { logException } from 'helpers/logger';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
@@ -57,7 +58,8 @@ class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
         this.props.setAmazonPayPaymentSelected(true);
       },
       onError: (error) => {
-        console.log('wallet error: ', error.getErrorMessage());
+        // The widget UI will display an error to the user, so we can just log it
+        logException(`Amazon Pay wallet error: ${error.getErrorMessage()}`)
       },
     }).bind('WalletWidgetDiv');
 
@@ -72,8 +74,6 @@ class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
         </div>
       );
     }
-    // TODO - spinner?
-    console.log('amazon wallet widget not ready');
     return null;
   }
 }
