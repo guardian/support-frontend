@@ -29,6 +29,7 @@ import {
   ExistingDirectDebit,
   PayPal,
   Stripe,
+  AmazonPay
 } from 'helpers/paymentMethods';
 import type { Title } from 'helpers/user/details';
 
@@ -148,6 +149,7 @@ export type ExistingDirectDebitAuthorisation = {|
   billingAccountId: string
 |};
 export type AmazonPayAuthorisation = {|
+  paymentMethod: typeof AmazonPay,
   orderReferenceId: string
 |}
 

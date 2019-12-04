@@ -604,13 +604,16 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       state: State,
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
-      console.log('AmazonPay payment auth', paymentAuthorisation);
-      return dispatch(executeAmazonPayOneOffPayment(
-        amazonPayDataFromAuthorisation(paymentAuthorisation, state),
-        (token: string) => dispatch(setGuestAccountCreationToken(token)),
-        (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-        paymentAuthorisation,
-      ));
+      if (paymentAuthorisation.paymentMethod === AmazonPay) {
+        return dispatch(executeAmazonPayOneOffPayment(
+          amazonPayDataFromAuthorisation(paymentAuthorisation, state),
+          (token: string) => dispatch(setGuestAccountCreationToken(token)),
+          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+          paymentAuthorisation,
+        ));
+      } else {
+        return Promise.resolve(error);
+      }
     },
     None: () => {
       logInvalidCombination('ONE_OFF', 'None');
