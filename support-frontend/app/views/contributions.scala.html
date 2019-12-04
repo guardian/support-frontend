@@ -94,16 +94,12 @@
     uat: "@paymentMethodConfigs.regularUatPayPalConfig.payPalEnvironment"
   };
   window.guardian.amazonPaySellerId = {
-    ONE_OFF: {
-      default: "@paymentMethodConfigs.oneOffDefaultAmazonPayConfig.sellerId",
-      uat: "@paymentMethodConfigs.oneOffUatAmazonPayConfig.sellerId",
-    }
+    default: "@paymentMethodConfigs.defaultAmazonPayConfig.sellerId",
+    uat: "@paymentMethodConfigs.uatAmazonPayConfig.sellerId"
   };
   window.guardian.amazonPayClientId = {
-    ONE_OFF: {
-      default: "@paymentMethodConfigs.oneOffDefaultAmazonPayConfig.clientId",
-      uat: "@paymentMethodConfigs.oneOffUatAmazonPayConfig.clientId",
-    }
+    default: "@paymentMethodConfigs.defaultAmazonPayConfig.clientId",
+    uat: "@paymentMethodConfigs.uatAmazonPayConfig.clientId",
   };
   window.guardian.paymentApiUrl = "@paymentApiUrl";
   window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";

@@ -108,7 +108,7 @@ function withProps(props: PropTypes) {
     const classNames: string = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
 
     const getAmazonPayComponent = () => props.amazonPayData.hasAccessToken ?
-      <AmazonPayWallet contributionType={props.contributionType} isTestUser={props.isTestUser}/> :
+      <AmazonPayWallet isTestUser={props.isTestUser}/> :
       <AmazonPayLoginButton />;
 
     // We have to show/hide PayPalExpressButton rather than conditionally rendering it

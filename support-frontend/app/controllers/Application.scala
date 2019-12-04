@@ -32,8 +32,8 @@ case class ContributionsPaymentMethodConfigs(
   regularUatStripeConfig: StripeConfig,
   regularDefaultPayPalConfig: PayPalConfig,
   regularUatPayPalConfig: PayPalConfig,
-  oneOffDefaultAmazonPayConfig: AmazonPayConfig,
-  oneOffUatAmazonPayConfig: AmazonPayConfig
+  defaultAmazonPayConfig: AmazonPayConfig,
+  uatAmazonPayConfig: AmazonPayConfig
 )
 
 class Application(
@@ -174,8 +174,8 @@ class Application(
         regularUatStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
         regularUatPayPalConfig = payPalConfigProvider.get(true),
-        oneOffDefaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-        oneOffUatAmazonPayConfig = amazonPayConfigProvider.get(true)
+        defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+        uatAmazonPayConfig = amazonPayConfigProvider.get(true)
       ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,

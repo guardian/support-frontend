@@ -39,14 +39,14 @@ import {
   mapExistingPaymentMethodToPaymentMethod,
   subscriptionsToExplainerList,
   subscriptionToExplainerPart,
-} from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
+} from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import type { paymentSecuritySecureTransactionGreyNonUKVariants } from 'helpers/abTests/abtestDefinitions';
 import {
   type CountryGroupId,
   detect,
 } from 'helpers/internationalisation/countryGroup';
-import SvgAmazonPayLogo from "../../../components/svgs/amazonPayLogo";
+import SvgAmazonPayLogo from "components/svgs/amazonPayLogo";
 
 
 // ----- Types ----- //

@@ -1,29 +1,43 @@
 // @flow
 
 import {setAmazonPayLibrary} from 'pages/contributions-landing/contributionsLandingActions';
-import type {ContributionType} from 'helpers/contributions';
 import { isProd } from 'helpers/url';
+import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
 
-const setupAmazonPay = (contributionType: ContributionType, dispatch: Function, isTestUser: boolean): void => {
-  window.setOnAmazonReady((amazonLoginObject, amazonPaymentsObject) => {
-    const clientId = getAmazonPayClientId(contributionType, isTestUser);
-    amazonLoginObject.setClientId(clientId);
-
-    if (isTestUser || !isProd()) {
-      amazonLoginObject.setSandboxMode(true);
-    }
-
-    dispatch(setAmazonPayLibrary({ amazonLoginObject, amazonPaymentsObject }));
-  });
+const getAmazonRegion = (countryGroupId: CountryGroupId, amazonLoginObject: Object): ?string => {
+  switch(countryGroupId) {
+    case 'UnitedStates':
+      return amazonLoginObject.Region.NorthAmerica;
+    default:
+      // Currently only US is supported
+      return undefined;
+  }
 };
 
-const getAmazonPayClientId = (contributionType: ContributionType, isTestUser: boolean): string => {
+const getAmazonPayClientId = (isTestUser: boolean): string => {
   return isTestUser ?
-    window.guardian.amazonPayClientId[contributionType].uat :
-    window.guardian.amazonPayClientId[contributionType].default;
+    window.guardian.amazonPayClientId.uat :
+    window.guardian.amazonPayClientId.default;
+};
+
+const setupAmazonPay = (countryGroupId: CountryGroupId, dispatch: Function, isTestUser: boolean): void => {
+  window.setOnAmazonReady((amazonLoginObject, amazonPaymentsObject) => {
+    const amazonRegion = getAmazonRegion(countryGroupId, amazonLoginObject);
+    if (amazonRegion) {
+      const clientId = getAmazonPayClientId(isTestUser);
+      amazonLoginObject.setClientId(clientId);
+
+      if (isTestUser || !isProd()) {
+        amazonLoginObject.setSandboxMode(true);
+      }
+
+      amazonLoginObject.setRegion(amazon.Login.Region.NorthAmerica);
+
+      dispatch(setAmazonPayLibrary({amazonLoginObject, amazonPaymentsObject}));
+    }
+  });
 };
 
 export {
   setupAmazonPay,
-  getAmazonPayClientId,
 };

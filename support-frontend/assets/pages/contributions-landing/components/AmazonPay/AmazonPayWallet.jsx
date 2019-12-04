@@ -5,14 +5,12 @@ import type {AmazonPayData, State} from "pages/contributions-landing/contributio
 import {setAmazonPayWalletWidgetReady, setAmazonPayOrderReferenceId, setAmazonPayPaymentSelected} from "pages/contributions-landing/contributionsLandingActions";
 import {connect} from "react-redux";
 import './AmazonPay.scss';
-import type {ContributionType} from "helpers/contributions";
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
   setAmazonPayWalletWidgetReady: () => Action,
   setAmazonPayOrderReferenceId: string => Action,
   setAmazonPayPaymentSelected: boolean => Action,
-  contributionType: ContributionType,
   isTestUser: boolean,
 |}
 
@@ -28,16 +26,16 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setAmazonPayPaymentSelected(paymentSelected)),
 });
 
-const getSellerId = (contributionType: ContributionType, isTestUser: boolean): string => isTestUser ?
-  window.guardian.amazonPaySellerId[contributionType].uat :
-  window.guardian.amazonPaySellerId[contributionType].default;
+const getSellerId = (isTestUser: boolean): string => isTestUser ?
+  window.guardian.amazonPaySellerId.uat :
+  window.guardian.amazonPaySellerId.default;
 
 class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
   createWidget(): void {
     this.props.setAmazonPayPaymentSelected(false);  //in case we've previously created a wallet
 
     new this.props.amazonPayData.amazonPayLibrary.amazonPaymentsObject.Widgets.Wallet({
-      sellerId: getSellerId(this.props.contributionType, this.props.isTestUser),
+      sellerId: getSellerId(this.props.isTestUser),
       design: {designMode: 'responsive'},
       onOrderReferenceCreate: (orderReference) => {
         this.props.setAmazonPayOrderReferenceId(orderReference.getAmazonOrderReferenceId())
