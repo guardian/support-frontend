@@ -71,7 +71,7 @@ const defaultContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
-const usEoyHeaderCopy = 'Support our journalism with a year-end gift';
+const usEoyHeaderCopy = 'Offset\xa0fake\nnews\xa0this\nholiday\xa0season';
 const usEoyAppealContributeCopy = (
   <span>
     The Guardian’s open, independent reporting has been supported by hundreds of thousands of readers in the
