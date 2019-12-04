@@ -1,11 +1,11 @@
 // @flow
 
-import {setAmazonPayLibrary} from 'pages/contributions-landing/contributionsLandingActions';
+import { setAmazonPayLibrary } from 'pages/contributions-landing/contributionsLandingActions';
 import { isProd } from 'helpers/url';
-import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 const getAmazonRegion = (countryGroupId: CountryGroupId, amazonLoginObject: Object): ?string => {
-  switch(countryGroupId) {
+  switch (countryGroupId) {
     case 'UnitedStates':
       return amazonLoginObject.Region.NorthAmerica;
     default:
@@ -14,11 +14,9 @@ const getAmazonRegion = (countryGroupId: CountryGroupId, amazonLoginObject: Obje
   }
 };
 
-const getAmazonPayClientId = (isTestUser: boolean): string => {
-  return isTestUser ?
-    window.guardian.amazonPayClientId.uat :
-    window.guardian.amazonPayClientId.default;
-};
+const getAmazonPayClientId = (isTestUser: boolean): string => (isTestUser ?
+  window.guardian.amazonPayClientId.uat :
+  window.guardian.amazonPayClientId.default);
 
 const setupAmazonPay = (countryGroupId: CountryGroupId, dispatch: Function, isTestUser: boolean): void => {
   window.setOnAmazonReady((amazonLoginObject, amazonPaymentsObject) => {
@@ -31,9 +29,9 @@ const setupAmazonPay = (countryGroupId: CountryGroupId, dispatch: Function, isTe
         amazonLoginObject.setSandboxMode(true);
       }
 
-      amazonLoginObject.setRegion(amazon.Login.Region.NorthAmerica);
+      amazonLoginObject.setRegion(amazonLoginObject.Region.NorthAmerica);
 
-      dispatch(setAmazonPayLibrary({amazonLoginObject, amazonPaymentsObject}));
+      dispatch(setAmazonPayLibrary({ amazonLoginObject, amazonPaymentsObject }));
     }
   });
 };

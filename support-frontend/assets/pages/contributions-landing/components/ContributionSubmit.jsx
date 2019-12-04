@@ -21,9 +21,8 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal, AmazonPay } from 'helpers/paymentMethods';
 import Button from 'components/button/button';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
-import AmazonPayWallet from "./AmazonPay/AmazonPayWallet";
-import type {AmazonPayData} from "../contributionsLandingReducer";
-import { get as getCookie } from 'helpers/cookie';
+import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
+import type { AmazonPayData } from '../contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -84,8 +83,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
 });
 
-const urlHasAmazonAccessToken = (): ?string => !!getCookie('amazon_Login_state_cache');
-
 // ----- Render ----- //
 
 
@@ -107,9 +104,9 @@ function withProps(props: PropTypes) {
 
     const classNames: string = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
 
-    const getAmazonPayComponent = () => props.amazonPayData.hasAccessToken ?
-      <AmazonPayWallet isTestUser={props.isTestUser}/> :
-      <AmazonPayLoginButton />;
+    const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?
+      <AmazonPayWallet isTestUser={props.isTestUser} /> :
+      <AmazonPayLoginButton />);
 
     // We have to show/hide PayPalExpressButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.

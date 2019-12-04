@@ -46,7 +46,7 @@ import {
   type CountryGroupId,
   detect,
 } from 'helpers/internationalisation/countryGroup';
-import SvgAmazonPayLogo from "components/svgs/amazonPayLogo";
+import SvgAmazonPayLogo from 'components/svgs/amazonPayLogo';
 
 
 // ----- Types ----- //
@@ -95,7 +95,7 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
     case ExistingDirectDebit:
       return <SvgDirectDebitSymbol />;
     case AmazonPay:
-      return <SvgAmazonPayLogo/>;
+      return <SvgAmazonPayLogo />;
     case Stripe:
     case ExistingCard:
     default:

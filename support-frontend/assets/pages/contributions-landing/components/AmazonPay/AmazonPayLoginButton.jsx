@@ -1,14 +1,13 @@
 // @flow
 
 import React from 'react';
-import {connect} from "react-redux";
-import type {State, AmazonPayData} from "pages/contributions-landing/contributionsLandingReducer";
-import { setAmazonPayHasAccessToken} from "pages/contributions-landing/contributionsLandingActions";
+import { connect } from 'react-redux';
+import type { State, AmazonPayData } from 'pages/contributions-landing/contributionsLandingReducer';
+import { setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
 import Button from 'components/button/button';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
-  setAmazonPayLoginButtonReady: () => Action,
   setAmazonPayHasAccessToken: () => Action,
 |}
 
@@ -22,15 +21,15 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
 
-  loginPopup = (): void  => {
+  loginPopup = (): void => {
     const loginOptions = { scope: 'profile postal_code payments:widget payments:shipping_address', popup: true };
-    this.props.amazonPayData.amazonPayLibrary.amazonLoginObject.authorize(loginOptions, response => {
+    this.props.amazonPayData.amazonPayLibrary.amazonLoginObject.authorize(loginOptions, (response) => {
       if (response.error) {
-        console.log("error", response.error)
+        console.log('error', response.error);
       } else {
         this.props.setAmazonPayHasAccessToken();
       }
-    })
+    });
   };
 
   render() {
@@ -43,13 +42,13 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
           </Button>
         </div>
       );
-    } else {
-      //TODO - spinner?
-      console.log("amazon login button not ready")
-      return null;
     }
+    // TODO - spinner?
+    console.log('amazon login button not ready');
+    return null;
+
   }
 }
 
 const AmazonPayLoginButton = connect(mapStateToProps, mapDispatchToProps)(AmazonPayLoginButtonComponent);
-export default AmazonPayLoginButton
+export default AmazonPayLoginButton;

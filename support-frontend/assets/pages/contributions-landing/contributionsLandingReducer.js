@@ -93,7 +93,7 @@ type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
-  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,   // TODO clean up when rest of Stripe Checkout is removed
+  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries, // TODO clean up when rest of Stripe Checkout is removed
   amazonPayData: AmazonPayData,
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
@@ -253,7 +253,7 @@ function createFormReducer() {
           amazonPayData: {
             ...state.amazonPayData,
             amazonPayLibrary: action.amazonPayLibrary,
-          }
+          },
         };
 
       case 'SET_AMAZON_PAY_WALLET_WIDGET_READY':
@@ -262,7 +262,7 @@ function createFormReducer() {
           amazonPayData: {
             ...state.amazonPayData,
             walletWidgetReady: true,
-          }
+          },
         };
 
       case 'SET_AMAZON_PAY_ORDER_REFERENCE_ID':
@@ -270,8 +270,8 @@ function createFormReducer() {
           ...state,
           amazonPayData: {
             ...state.amazonPayData,
-            orderReferenceId: action.orderReferenceId
-          }
+            orderReferenceId: action.orderReferenceId,
+          },
         };
 
       case 'SET_AMAZON_PAY_PAYMENT_SELECTED':
@@ -280,7 +280,7 @@ function createFormReducer() {
           amazonPayData: {
             ...state.amazonPayData,
             paymentSelected: action.paymentSelected,
-          }
+          },
         };
 
       case 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN':
@@ -289,7 +289,7 @@ function createFormReducer() {
           amazonPayData: {
             ...state.amazonPayData,
             hasAccessToken: true,
-          }
+          },
         };
 
       case 'SET_CREATE_STRIPE_PAYMENT_METHOD':

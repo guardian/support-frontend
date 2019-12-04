@@ -100,7 +100,7 @@ function getPathAfterRoute(route: string): string[] {
 }
 
 function isProd(): boolean {
-  return getOrigin().includes(DOMAINS.PROD)
+  return getOrigin().includes(DOMAINS.PROD);
 }
 
 // ----- Exports ----- //

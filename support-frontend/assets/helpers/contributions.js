@@ -11,7 +11,7 @@ import type { Radio } from 'components/radioToggle/radioToggle';
 import { logException } from 'helpers/logger';
 import { Annual, type BillingPeriod, Monthly } from 'helpers/billingPeriods';
 import type { PaymentMethod, PaymentMethodMap } from 'helpers/paymentMethods';
-import type { ThirdPartyPaymentLibrary } from 'helpers/checkouts.js';
+import type { ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 
 // ----- Types ----- //
 

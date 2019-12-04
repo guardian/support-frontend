@@ -77,9 +77,8 @@ function getContributionTypeFromUrl(): ?ContributionType {
 // Returns an array of Payment Methods, in the order of preference,
 // i.e the first element in the array will be the default option
 function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry): PaymentMethod[] {
-  if (contributionType !== 'ONE_OFF' && countryId === 'GB') return [DirectDebit, Stripe, PayPal];
-  else if (contributionType === 'ONE_OFF' && countryId === 'US') return [Stripe, PayPal, AmazonPay];
-  else return [Stripe, PayPal];
+  if (contributionType !== 'ONE_OFF' && countryId === 'GB') { return [DirectDebit, Stripe, PayPal]; } else if (contributionType === 'ONE_OFF' && countryId === 'US') { return [Stripe, PayPal, AmazonPay]; }
+  return [Stripe, PayPal];
 }
 
 function getValidPaymentMethods(

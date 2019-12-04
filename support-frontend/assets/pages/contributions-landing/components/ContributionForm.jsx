@@ -42,7 +42,6 @@ import {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
   setStripeV3HasLoaded,
-  onThirdPartyPaymentAuthorised,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
@@ -52,7 +51,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import type { paymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
-import {logException} from "helpers/logger";
+import { logException } from 'helpers/logger';
 
 
 // ----- Types ----- //
@@ -157,7 +156,7 @@ const formHandlersForRecurring = {
     paymentMethod: 'ExistingDirectDebit',
     billingAccountId: props.existingPaymentMethod.billingAccountId,
   }),
-  AmazonPay: (props: PropTypes) => logInvalidCombination(props.contributionType, AmazonPay)
+  AmazonPay: (props: PropTypes) => logInvalidCombination(props.contributionType, AmazonPay),
 };
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
@@ -189,9 +188,9 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
         props.setPaymentIsWaiting(true);
 
         // No intermediate step for amazon pay - execute payment now
-        props.onPaymentAuthorisation({orderReferenceId: props.amazonPayOrderReferenceId});
+        props.onPaymentAuthorisation({ orderReferenceId: props.amazonPayOrderReferenceId });
       } else {
-        logException('Missing orderReferenceId for amazon pay')
+        logException('Missing orderReferenceId for amazon pay');
       }
 
     },

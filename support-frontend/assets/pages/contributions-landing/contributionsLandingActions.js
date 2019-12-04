@@ -46,11 +46,11 @@ import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalA
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import {AmazonPay, DirectDebit, Stripe} from 'helpers/paymentMethods';
+import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
-import type {AmazonPayLibrary} from "./contributionsLandingReducer";
+import type { AmazonPayLibrary } from './contributionsLandingReducer';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -378,7 +378,7 @@ const amazonPayDataFromAuthorisation = (
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,
     state.common.abParticipations,
-  )
+  ),
 });
 
 // A PaymentResult represents the end state of the checkout process,
@@ -497,7 +497,7 @@ const executeAmazonPayOneOffPayment = (
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(
       postOneOffAmazonPayExecutePaymentRequest(data)(setGuestToken, setThankYouPage),
-      paymentAuthorisation
+      paymentAuthorisation,
     ));
 
 function recurringPaymentAuthorisationHandler(
@@ -604,13 +604,12 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       state: State,
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
-      console.log("AmazonPay payment auth", paymentAuthorisation)
-      return dispatch(
-        executeAmazonPayOneOffPayment(
-          amazonPayDataFromAuthorisation(paymentAuthorisation, state),
-          (token: string) => dispatch(setGuestAccountCreationToken(token)),
-          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-          paymentAuthorisation
+      console.log('AmazonPay payment auth', paymentAuthorisation);
+      return dispatch(executeAmazonPayOneOffPayment(
+        amazonPayDataFromAuthorisation(paymentAuthorisation, state),
+        (token: string) => dispatch(setGuestAccountCreationToken(token)),
+        (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+        paymentAuthorisation,
       ));
     },
     None: () => {
