@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import type { State, AmazonPayData } from 'pages/contributions-landing/contributionsLandingReducer';
 import { setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
 import Button from 'components/button/button';
+import { logException } from 'helpers/logger';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
@@ -25,7 +26,7 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
     const loginOptions = { scope: 'profile postal_code payments:widget payments:shipping_address', popup: true };
     this.props.amazonPayData.amazonPayLibrary.amazonLoginObject.authorize(loginOptions, (response) => {
       if (response.error) {
-        console.log('error', response.error);
+        logException(`Error from Amazon login: ${response.error}`);
       } else {
         this.props.setAmazonPayHasAccessToken();
       }
