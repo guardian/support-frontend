@@ -74,7 +74,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
 
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
     digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.jsx',
-    digitalSubscriptionCheckoutPageThankYouExisting: 'pages/digital-subscription-checkout/thankyou/thankYouContent.jsx',
+    digitalSubscriptionCheckoutPageThankYouExisting: 'pages/digital-subscription-checkout/thankYouExisting.jsx',
 
     paperSubscriptionLandingPage: 'pages/paper-subscription-landing/paperSubscriptionLandingPage.jsx',
     paperSubscriptionCheckoutPage: 'pages/paper-subscription-checkout/paperSubscriptionCheckout.jsx',
