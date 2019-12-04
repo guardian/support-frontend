@@ -73,7 +73,7 @@ const CampaignHeader = (props: {heading: string, orderIsAGift: boolean}) => (
     <div className="weekly-campaign-hero">
       <div className={props.orderIsAGift ? 'weekly-gifting-hero__copy' : 'weekly-campaign-hero__copy'}>
         {props.orderIsAGift ? (
-          <h2>Give The Guardian Weekly</h2>
+          <h2>Give<br />The Guardian Weekly</h2>
           ) : (
             <h2>The Guardian<br />Weekly</h2>
           )

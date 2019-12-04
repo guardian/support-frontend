@@ -14,6 +14,9 @@ import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { PaymentSecuritySecureTransactionGreyNonUKVariants, NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
+import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -28,6 +31,8 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   countryId: IsoCountry,
+  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
+  newTemplateVariant: NewLandingPageTemplateTestVariants,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -38,6 +43,9 @@ const mapStateToProps = (state: State) => ({
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
   countryId: state.common.internationalisation.countryId,
+  newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTest,
+  paymentSecuritySecureTransactionGreyNonUKVariant:
+    state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -58,18 +66,17 @@ export type CountryMetaData = {
 const defaultHeaderCopy = 'Support\xa0our\njournalism\xa0with\na\xa0contribution\nof\xa0any\xa0size';
 const defaultContributeCopy = (
   <span>
-    Readers from around the world, like you, make The Guardian’s work possible. We need your support to
-    deliver quality, investigative journalism – and to keep it open for everyone. At a time when factual,
-    honest reporting is critical, your support is essential in protecting our editorial independence.
+    Your support helps protect the Guardian’s independence and it means we can keep delivering quality,
+    journalism that’s open for everyone around the world.
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
-const usEoyHeaderCopy = 'Support our journalism with a year-end gift';
+const usEoyHeaderCopy = 'Offset\xa0fake\nnews\xa0this\nGiving\xa0Tuesday';
 const usEoyAppealContributeCopy = (
   <span>
-    The Guardian’s open, independent reporting has been supported by hundreds of thousands of readers in the
-    US like you – we have supporters in each of the fifty states. Thanks to your valuable contributions, tens
-    of millions across America read our quality, factual journalism at this critical time.
+    Help the truth triumph in 2020. Amid a tsunami of disinformation and “alternative facts,” the
+    need for truth has never been greater. Thanks to your valuable contributions, tens of millions
+    across America read our quality, factual journalism at this critical time. Help us reach our year-end goal.
   </span>);
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
@@ -107,6 +114,17 @@ function withProps(props: PropTypes) {
     ...campaign || {},
   };
 
+  const showSecureTransactionIndicator = () => {
+    if (props.newTemplateVariant === 'new_template') {
+      if (props.countryGroupId === 'GBPCountries') {
+        return <SecureTransactionIndicator modifierClasses={['new-template']} />;
+      } else if (props.paymentSecuritySecureTransactionGreyNonUKVariant === 'V1_securetransactiongrey') {
+        return <SecureTransactionIndicator modifierClasses={['new-template', 'hideaftermobile']} />;
+      }
+    }
+    return null;
+  };
+
   if (props.paymentComplete) {
     // We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
     // This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
@@ -137,6 +155,8 @@ function withProps(props: PropTypes) {
       </div>
 
       <div className="gu-content__form">
+        {showSecureTransactionIndicator()}
+
         {campaign && campaign.tickerSettings && campaign.tickerSettings.tickerJsonUrl ?
           <ContributionTicker
             tickerJsonUrl={campaign.tickerSettings.tickerJsonUrl}

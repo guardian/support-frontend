@@ -1,0 +1,16 @@
+@import '~stylesheets/skeleton/skeleton';
+@import '~stylesheets/gu-sass/gu-sass';
+
+.slim-roundel-header[role="banner"] {
+  height: 50px;
+  border: 0;
+  padding: 0 $gu-v-spacing * 1.25;
+
+  @include mq($from: leftCol){
+    padding: 0 ($gu-h-spacing * 4);
+   }
+}
+
+svg {
+  margin-top: 3px;
+}

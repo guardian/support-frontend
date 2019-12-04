@@ -11,8 +11,6 @@ import {
   type GridSlot,
   type Source as GridSource,
 } from 'components/gridPicture/gridPicture';
-import SvgCirclesLeft from 'components/svgs/circlesLeft';
-import SvgCirclesRight from 'components/svgs/circlesRight';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ImageId as GridId, type ImageType } from 'helpers/theGrid';
@@ -80,8 +78,6 @@ function ProductHero(props: PropTypes) {
   return (
     <div className="component-product-hero">
       <LeftMarginSection>
-        <SvgCirclesLeft />
-        <SvgCirclesRight />
         <GridPicture
           sources={sources}
           fallback={gridImages.fallback}

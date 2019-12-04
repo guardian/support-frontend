@@ -50,7 +50,7 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { paymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { PaymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -82,7 +82,7 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   createStripePaymentMethod: () => void,
-  paymentSecuritySecureTransactionGreyNonUKVariant: paymentSecuritySecureTransactionGreyNonUKVariants,
+  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
