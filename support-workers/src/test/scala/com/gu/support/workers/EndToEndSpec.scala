@@ -18,9 +18,11 @@ import scala.io.Source
 @IntegrationTest
 class EndToEndSpec extends AsyncLambdaSpec with MockContext {
 
-  "The monthly contribution lambdas" should "chain successfully" in runSignupWithCurrency(GBP)
+  //This takes a long time to run so we probably don't want to run it on every test run
 
-  they should "work with other currencies" in runSignupWithCurrency(EUR)
+  ignore should "chain successfully" in runSignupWithCurrency(GBP)
+
+  ignore should "work with other currencies" in runSignupWithCurrency(EUR)
 
   def runSignupWithCurrency(currency: Currency): Future[Assertion] = {
     val json = createStripeSourcePaymentMethodContributionJson(currency = currency)
