@@ -186,13 +186,9 @@
 .subscriptions__product.subscriptions__product--feature {
   color: gu-colour('neutral-100');
   border: none;
-  padding-top: 10px;
   background-color: gu-colour('brand-main');
   overflow: hidden;
-
-  @include mq($until: tablet) {
-    padding-top: 0;
-  }
+  padding-top: 0;
 }
 
 .subscriptions__product.subscriptions__product--feature::before{
@@ -240,7 +236,6 @@
 }
 
 .subscriptions__image-container.subscriptions__product--feature {
-  padding: 10px 10px 0 10px;
   width: 100%;
   margin-bottom: -40px;
 
@@ -255,12 +250,8 @@
     bottom: 0;
   }
 
-  @include mq($from: desktop) {
-    right: -50px;
-  }
-
   @include mq($from: leftCol) {
-    right: -80px;
+    right: -20px;
   }
 
 }
@@ -552,7 +543,22 @@
   width: 100%;
 
   @include mq($from: tablet) {
-    width: 566px;
+    width: 350px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+  @include mq($from: desktop) {
+    width: 460px;
+  }
+
+  @include mq($from: leftCol) {
+    width: 540px;
+  }
+
+  @include mq($from: wide) {
+    width: 600px;
   }
 }
 /****************** packshots ********************/
@@ -843,11 +849,11 @@
   }
 
   @include mq($from: desktop) {
-    padding: 0 50px;
+    padding: 0 30px;
   }
 
   @include mq($from: leftCol) {
-    padding: 0 80px;
+    padding: 0 60px;
   }
 
 }
