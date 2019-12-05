@@ -126,9 +126,11 @@ trait WebServiceHelper[Error <: Throwable] {
    */
   def decodeError(responseBody: String)(implicit errorDecoder: Decoder[Error]): Either[circe.Error, Error] = decode[Error](responseBody)
 
-  //Scalariform won't let you add a line break in method signatures, but then scalaStyle freaks out because they're too long
-  // scalastyle:off line.size.limit
-  def get[A](endpoint: String, headers: ParamMap = empty, params: ParamMap = empty)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
+  def get[A](
+    endpoint: String,
+    headers: ParamMap = empty,
+    params: ParamMap = empty
+  )(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request[A](buildRequest(endpoint, headers, params))
 
   def postJson[A](
