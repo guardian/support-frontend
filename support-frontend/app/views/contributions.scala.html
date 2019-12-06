@@ -129,7 +129,6 @@
   const amazonIsReady = () => amazonStatus.amazonLoginReady && amazonStatus.amazonPaymentsReady;
 
   window.setOnAmazonReady = (callback) => {
-    console.log("window.setOnAmazonReady")
     if (amazonIsReady()) {
       callback(amazon.Login, OffAmazonPayments);
     } else {
@@ -138,7 +137,6 @@
   };
 
   window.onAmazonLoginReady = () => {
-    console.log("window.onAmazonLoginReady")
     amazonStatus.amazonLoginReady = true;
     if (amazonIsReady() && onAmazonReady) {
       onAmazonReady(amazon.Login, OffAmazonPayments);
@@ -146,7 +144,6 @@
   };
 
   window.onAmazonPaymentsReady = () => {
-    console.log("window.onAmazonPaymentsReady")
     amazonStatus.amazonPaymentsReady = true;
     if (amazonIsReady() && onAmazonReady) {
       onAmazonReady(amazon.Login, OffAmazonPayments);

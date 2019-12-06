@@ -31,7 +31,7 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
       return 'The transaction was declined due to insufficient funds in your account. Please use a different card or contact your bank.';
     case 'payment_details_incorrect':
     case 'amazon_pay_try_again':
-      return 'An error occurred while trying to process your payment. Please double check your card details and try again. Alternatively, try another card or payment method.';
+      return 'An error occurred while trying to process your payment. You have not been charged. Please try again.';
     case 'personal_details_incorrect':
       return 'Please double check the name and contact details you provided and try again.';
     case 'payment_method_temporarily_declined':
@@ -41,7 +41,7 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
       return 'The transaction was unsuccessful and you have not been charged. Please use a different card or choose another payment method.';
     case 'payment_provider_unavailable':
     case 'amazon_pay_fatal':
-      return 'The transaction was unsuccessful. This does not mean there’s anything wrong with your card, and you have not been charged. Please try using an alternative payment method.';
+      return 'The transaction was unsuccessful and you have not been charged. Please try using an alternative payment method.';
     case 'all_payment_methods_unavailable':
       return 'Sorry, our payment methods are unavailable at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your contribution or consider another type of contribution from the tabs above. Thank you.';
     case 'invalid_form_mobile':
