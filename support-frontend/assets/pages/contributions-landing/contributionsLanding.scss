@@ -423,6 +423,7 @@ button {
 }
 
 .form__field {
+  position: relative;
   align-items: stretch;
   display: flex;
   flex-direction: column;
@@ -767,6 +768,17 @@ form {
 
 .form-fields__required-explainer summary::-webkit-details-marker {
   display:none;
+}
+
+.form__label-with-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.form__credit-card-icons {
+  margin-bottom: $gu-h-spacing/4;
+  float: right;
 }
 
 .form__label__required {

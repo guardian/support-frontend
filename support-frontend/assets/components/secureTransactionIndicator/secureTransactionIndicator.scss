@@ -1,5 +1,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+$security-green: #058b00;
+
 .component-secure-transaction--top {
   overflow: hidden;
   flex-grow: 1;
@@ -66,6 +68,10 @@
 
   .component-secure-transaction__padlock {
     margin-right: 5px;
+
+    path {
+      fill: $security-green;
+    }
   }
 
   .component-secure-transaction__text {
@@ -76,3 +82,10 @@
     font-family: $gu-text-sans-web;
   }
 }
+
+.form__credit-card-icons {
+  position: absolute;
+  right: 0;
+  top: -7px;
+}
+
