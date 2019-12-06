@@ -20,9 +20,10 @@ type PropTypes = {|
 |};
 
 export default function ContributionsSurvey(props: PropTypes) {
-  const surveyLink = 'https://www.surveymonkey.co.uk/r/Y8JNRKN';
+  const surveyLink = 'https://www.surveymonkey.co.uk/r/RLGSQ87';
+  const isUsOrUk = null;
 
-  return props.isRunning && surveyLink ? (
+  return props.isRunning && isUsOrUk && surveyLink ? (
     <div className="contribution-thank-you-block">
       <h3 className="contribution-thank-you-block__title">Tell us about your contribution</h3>
       <p className="contribution-thank-you-block__message">
