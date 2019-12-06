@@ -66,12 +66,12 @@ export type CountryMetaData = {
 const defaultHeaderCopy = 'Support\xa0our\njournalism\xa0with\na\xa0contribution\nof\xa0any\xa0size';
 const defaultContributeCopy = (
   <span>
-    Your support helps protect the Guardian’s independence and it means we can keep delivering quality,
-    journalism that’s open for everyone around the world.
+    Your support helps protect the Guardian’s independence and it means we
+    can keep delivering quality journalism that’s open for everyone around the world.
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
-const usEoyHeaderCopy = 'Offset\xa0fake\nnews\xa0this\nholiday\xa0season';
+const usEoyHeaderCopy = 'Support our journalism with a year-end gift';
 const usEoyAppealContributeCopy = (
   <span>
     The Guardian’s open, independent reporting has been supported by hundreds of thousands of readers in the

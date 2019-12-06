@@ -423,6 +423,7 @@ button {
 }
 
 .form__field {
+  position: relative;
   align-items: stretch;
   display: flex;
   flex-direction: column;
@@ -777,6 +778,7 @@ form {
 
 .form__credit-card-icons {
   margin-bottom: $gu-h-spacing/4;
+  float: right;
 }
 
 .form__label__required {
