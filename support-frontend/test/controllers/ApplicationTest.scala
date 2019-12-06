@@ -10,7 +10,7 @@ import config.{Configuration, StringsConfig}
 import fixtures.TestCSRFComponents
 import org.scalatestplus.mockito.MockitoSugar.mock
 import services._
-import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
+import com.gu.support.config.{AmazonPayConfigProvider, PayPalConfigProvider, Stage, StripeConfigProvider}
 import config.Configuration.{GuardianDomain, IdentityUrl}
 
 import scala.concurrent.ExecutionContext
@@ -43,6 +43,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StripeConfigProvider],
         mock[StripeConfigProvider],
         mock[PayPalConfigProvider],
+        mock[AmazonPayConfigProvider],
         mock[PaymentAPIService],
         mock[MembersDataService],
         mock[StringsConfig],
@@ -51,7 +52,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[Stage],
         "stripe.intent.url",
         "support.thegulocal.com",
-        mock[Either[RefPath, StyleContent]]
+        mock[Either[RefPath, StyleContent]],
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
@@ -65,6 +66,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StripeConfigProvider],
         mock[StripeConfigProvider],
         mock[PayPalConfigProvider],
+        mock[AmazonPayConfigProvider],
         mock[PaymentAPIService],
         mock[MembersDataService],
         mock[StringsConfig],

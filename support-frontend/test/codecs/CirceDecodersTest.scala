@@ -259,14 +259,16 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
             payPal = On,
             directDebit = None,
             existingCard = None,
-            existingDirectDebit = None
+            existingDirectDebit = None,
+            amazonPay = None
           ),
           recurringPaymentMethods = PaymentMethodsSwitch(
             stripe = On,
             payPal = On,
             directDebit = Some(On),
             existingCard = Some(On),
-            existingDirectDebit = Some(On)
+            existingDirectDebit = Some(On),
+            amazonPay = None
           ),
           experiments = Map(
             "newFlow" -> ExperimentSwitch(
