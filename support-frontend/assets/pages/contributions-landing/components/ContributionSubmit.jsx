@@ -142,7 +142,7 @@ function withProps(props: PropTypes) {
             disabled={props.isWaiting}
             postDeploymentTestID="contributions-landing-submit-contribution-button"
           >
-            {props.paymentMethod}
+            {submitButtonCopy}
           </Button> : null }
       </div>
     );
