@@ -29,7 +29,7 @@ import {
   ExistingDirectDebit,
   PayPal,
   Stripe,
-  AmazonPay
+  AmazonPay,
 } from 'helpers/paymentMethods';
 import type { Title } from 'helpers/user/details';
 

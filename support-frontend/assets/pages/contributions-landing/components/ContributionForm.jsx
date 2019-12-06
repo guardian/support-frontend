@@ -183,12 +183,11 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
     ExistingCard: () => { logInvalidCombination('ONE_OFF', ExistingCard); },
     ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
     AmazonPay: (props: PropTypes) => {
-      console.log('Amazon Pay!', props.amazonPayOrderReferenceId);
       if (props.amazonPayOrderReferenceId) {
         props.setPaymentIsWaiting(true);
-
-        // No intermediate step for amazon pay - execute payment now
-        props.onPaymentAuthorisation({ orderReferenceId: props.amazonPayOrderReferenceId });
+        if (props.amazonPayOrderReferenceId) {
+          props.onPaymentAuthorisation({ paymentMethod: AmazonPay, orderReferenceId: props.amazonPayOrderReferenceId });
+        }
       } else {
         logException('Missing orderReferenceId for amazon pay');
       }
@@ -213,12 +212,13 @@ function onSubmit(props: PropTypes): Event => void {
     event.preventDefault();
     const flowPrefix = 'npf';
     const form = event.target;
-
     // Only recurring uses stripe checkout
     if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe && props.contributionType !== 'ONE_OFF') {
       props.onPaymentAuthorisation({ paymentMethod: Stripe, token: 'tok_visa', stripePaymentMethod: 'StripeCheckout' });
     } else {
-      const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
+      const handlePayment = () => {
+        formHandlers[props.contributionType][props.paymentMethod](props);
+      }
       onFormSubmit({
         ...props,
         flowPrefix,

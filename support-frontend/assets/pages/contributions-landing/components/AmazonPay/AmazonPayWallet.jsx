@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { AmazonPayData, State } from 'pages/contributions-landing/contributionsLandingReducer';
-import { setAmazonPayWalletWidgetReady, setAmazonPayOrderReferenceId, setAmazonPayPaymentSelected } from 'pages/contributions-landing/contributionsLandingActions';
+import { type Action, setAmazonPayWalletWidgetReady, setAmazonPayOrderReferenceId, setAmazonPayPaymentSelected } from 'pages/contributions-landing/contributionsLandingActions';
 import { connect } from 'react-redux';
 import './AmazonPay.scss';
 import { logException } from 'helpers/logger';
@@ -48,22 +48,24 @@ class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
   createWidget(): void {
     this.props.setAmazonPayPaymentSelected(false); // in case we've previously created a wallet
 
-    new this.props.amazonPayData.amazonPayLibrary.amazonPaymentsObject.Widgets.Wallet({
-      sellerId: getSellerId(this.props.isTestUser),
-      design: { designMode: 'responsive' },
-      onOrderReferenceCreate: (orderReference) => {
-        this.props.setAmazonPayOrderReferenceId(orderReference.getAmazonOrderReferenceId());
-      },
-      onPaymentSelect: () => {
-        this.props.setAmazonPayPaymentSelected(true);
-      },
-      onError: (error) => {
-        // The widget UI will display an error to the user, so we can just log it
-        logException(`Amazon Pay wallet error: ${error.getErrorMessage()}`)
-      },
-    }).bind('WalletWidgetDiv');
+    if (this.props.amazonPayData.amazonPayLibrary) {
+      new this.props.amazonPayData.amazonPayLibrary.amazonPaymentsObject.Widgets.Wallet({
+        sellerId: getSellerId(this.props.isTestUser),
+        design: {designMode: 'responsive'},
+        onOrderReferenceCreate: (orderReference) => {
+          this.props.setAmazonPayOrderReferenceId(orderReference.getAmazonOrderReferenceId());
+        },
+        onPaymentSelect: () => {
+          this.props.setAmazonPayPaymentSelected(true);
+        },
+        onError: (error) => {
+          // The widget UI will display an error to the user, so we can just log it
+          logException(`Amazon Pay wallet error: ${error.getErrorMessage()}`);
+        },
+      }).bind('WalletWidgetDiv');
 
-    this.props.setAmazonPayWalletWidgetReady();
+      this.props.setAmazonPayWalletWidgetReady();
+    }
   }
 
   render() {

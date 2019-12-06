@@ -112,7 +112,8 @@ function withProps(props: PropTypes) {
     // because we don't want to destroy and replace the iframe each time.
     // See PayPalExpressButton for more info.
     return (
-      <div className={classNames}>
+      <div
+        className={classNames}>
         <div
           id="component-paypal-button-checkout"
           className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
@@ -141,7 +142,7 @@ function withProps(props: PropTypes) {
             disabled={props.isWaiting}
             postDeploymentTestID="contributions-landing-submit-contribution-button"
           >
-            {submitButtonCopy}
+            {props.paymentMethod}
           </Button> : null }
       </div>
     );

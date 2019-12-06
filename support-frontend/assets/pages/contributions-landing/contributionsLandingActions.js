@@ -18,6 +18,7 @@ import type {
   StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
+  type AmazonPayAuthorisation,
   type PaymentAuthorisation,
   type PaymentResult,
   type StripePaymentRequestButtonMethod,
@@ -362,7 +363,7 @@ const regularPaymentRequestFromAuthorisation = (
 });
 
 const amazonPayDataFromAuthorisation = (
-  authorisation: AmazonPayData,
+  authorisation: AmazonPayAuthorisation,
   state: State,
 ): AmazonPayData => ({
   paymentData: {
