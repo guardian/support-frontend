@@ -35,37 +35,35 @@ class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
 
   componentDidMount(): void {
     if (this.props.amazonPayData.amazonPayLibrary) {
-      this.createWidget();
+      this.createWidget(this.props.amazonPayData.amazonPayLibrary);
     }
   }
 
   componentDidUpdate(): void {
     if (this.props.amazonPayData.amazonPayLibrary && !this.props.amazonPayData.walletWidgetReady) {
-      this.createWidget();
+      this.createWidget(this.props.amazonPayData.amazonPayLibrary);
     }
   }
 
-  createWidget(): void {
+  createWidget(amazonPayLibrary: Object): void {
     this.props.setAmazonPayPaymentSelected(false); // in case we've previously created a wallet
 
-    if (this.props.amazonPayData.amazonPayLibrary) {
-      new this.props.amazonPayData.amazonPayLibrary.amazonPaymentsObject.Widgets.Wallet({
-        sellerId: getSellerId(this.props.isTestUser),
-        design: {designMode: 'responsive'},
-        onOrderReferenceCreate: (orderReference) => {
-          this.props.setAmazonPayOrderReferenceId(orderReference.getAmazonOrderReferenceId());
-        },
-        onPaymentSelect: () => {
-          this.props.setAmazonPayPaymentSelected(true);
-        },
-        onError: (error) => {
-          // The widget UI will display an error to the user, so we can just log it
-          logException(`Amazon Pay wallet error: ${error.getErrorMessage()}`);
-        },
-      }).bind('WalletWidgetDiv');
+    amazonPayLibrary.amazonPaymentsObject.Widgets.Wallet({
+      sellerId: getSellerId(this.props.isTestUser),
+      design: { designMode: 'responsive' },
+      onOrderReferenceCreate: (orderReference) => {
+        this.props.setAmazonPayOrderReferenceId(orderReference.getAmazonOrderReferenceId());
+      },
+      onPaymentSelect: () => {
+        this.props.setAmazonPayPaymentSelected(true);
+      },
+      onError: (error) => {
+        // The widget UI will display an error to the user, so we can just log it
+        logException(`Amazon Pay wallet error: ${error.getErrorMessage()}`);
+      },
+    }).bind('WalletWidgetDiv');
 
-      this.props.setAmazonPayWalletWidgetReady();
-    }
+    this.props.setAmazonPayWalletWidgetReady();
   }
 
   render() {

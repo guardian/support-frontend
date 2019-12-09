@@ -183,11 +183,10 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
     ExistingCard: () => { logInvalidCombination('ONE_OFF', ExistingCard); },
     ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
     AmazonPay: (props: PropTypes) => {
-      if (props.amazonPayOrderReferenceId) {
+      const { amazonPayOrderReferenceId } = props;
+      if (amazonPayOrderReferenceId) {
         props.setPaymentIsWaiting(true);
-        if (props.amazonPayOrderReferenceId) {
-          props.onPaymentAuthorisation({ paymentMethod: AmazonPay, orderReferenceId: props.amazonPayOrderReferenceId });
-        }
+        props.onPaymentAuthorisation({ paymentMethod: AmazonPay, orderReferenceId: amazonPayOrderReferenceId });
       } else {
         logException('Missing orderReferenceId for amazon pay');
       }
@@ -218,7 +217,7 @@ function onSubmit(props: PropTypes): Event => void {
     } else {
       const handlePayment = () => {
         formHandlers[props.contributionType][props.paymentMethod](props);
-      }
+      };
       onFormSubmit({
         ...props,
         flowPrefix,
