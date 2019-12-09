@@ -25,17 +25,20 @@
   }
 }
 
-.component-heading-block__overheading,
-.component-heading-block__overheading--thankyou {
+.component-heading-block__overheading {
   @include gu-typeface(headline, 16);
   display: inline-block;
   line-height: 1;
   font-weight: bold;
+  // background-color: gu-colour(highlight-main);
   color: gu-colour(neutral-7);
+  // color: gu-colour(neutral-97);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
 
  .component-product-page-hero-heading--campaign & {
+  //  background-color: gu-colour(neutral-7);;
    background-color: #ffffff;
+  //  top: -25px;
     @supports(transform:translateY(-100%)) {
       transform: translateY(-100%);
       position: absolute;
@@ -46,10 +49,6 @@
     @include gu-typeface(headline, 22, $size-only: true);
     line-height: 1;
   }
-}
-
-.component-heading-block__overheading--thankyou {
-  background-color: gu-colour(highlight-main);
 }
 
 .component-heading-block__maxwidth {

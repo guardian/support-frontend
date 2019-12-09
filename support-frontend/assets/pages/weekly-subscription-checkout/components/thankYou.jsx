@@ -114,7 +114,7 @@ function ThankYouContent({
     <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
         <HeroImage />
-        <HeadingBlock overheadingClass="--thankyou" overheading="Thank you for supporting our journalism!">
+        <HeadingBlock overheading="Thank you for supporting our journalism!">
           {getHeading(billingPeriod, isPending, orderIsGift)}
         </HeadingBlock>
       </HeroWrapper>
@@ -153,11 +153,6 @@ function ThankYouContent({
             />)
           }
         </Asyncronously>
-        <Text>
-          This is the option to choose if you want to hear about how to make the most of your
-          Guardian Weekly subscription, receive a weekly email from our editor and get more information
-          on ways to support The Guardian.
-        </Text>
       </Content>
     </div>
   );

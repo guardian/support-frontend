@@ -8,7 +8,7 @@ import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import AppsSection from './appsSection';
+import AppsSection from './components/thankYou/appsSection';
 
 // ----- Types ----- //
 
@@ -18,7 +18,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-function ThankYouProducts({ countryGroupId }: PropTypes) {
+function ThankYouExistingContent({ countryGroupId }: PropTypes) {
 
   return (
     <div>
@@ -37,4 +37,4 @@ function ThankYouProducts({ countryGroupId }: PropTypes) {
 
 // ----- Export ----- //
 
-export default ThankYouProducts;
+export default ThankYouExistingContent;
