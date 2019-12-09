@@ -14,8 +14,7 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy
   from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
-import ThankYouContent from './thankYouContent';
-import ThankYouPendingContent from './thankYouPendingContent';
+import ThankYouContent from './components/thankYou/thankYouContent';
 import CheckoutForm
   from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
 import 'stylesheets/skeleton/skeleton.scss';
@@ -66,8 +65,8 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={<CheckoutForm />}
-        thankYouContentPending={<ThankYouPendingContent countryGroupId={countryGroupId} />}
-        thankYouContent={<ThankYouContent countryGroupId={countryGroupId} />}
+        thankYouContentPending={<ThankYouContent isPending countryGroupId={countryGroupId} />}
+        thankYouContent={<ThankYouContent isPending={false} countryGroupId={countryGroupId} />}
         subscriptionProduct="DigitalPack"
       />
       <ConsentBanner />
