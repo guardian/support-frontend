@@ -612,9 +612,9 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
           (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
           paymentAuthorisation,
         ));
-      } else {
-        return Promise.resolve(error);
       }
+      return Promise.resolve(error);
+
     },
     None: () => {
       logInvalidCombination('ONE_OFF', 'None');

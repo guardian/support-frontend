@@ -218,7 +218,7 @@ function onSubmit(props: PropTypes): Event => void {
     } else {
       const handlePayment = () => {
         formHandlers[props.contributionType][props.paymentMethod](props);
-      }
+      };
       onFormSubmit({
         ...props,
         flowPrefix,

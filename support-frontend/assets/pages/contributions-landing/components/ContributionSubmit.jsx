@@ -113,7 +113,8 @@ function withProps(props: PropTypes) {
     // See PayPalExpressButton for more info.
     return (
       <div
-        className={classNames}>
+        className={classNames}
+      >
         <div
           id="component-paypal-button-checkout"
           className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
