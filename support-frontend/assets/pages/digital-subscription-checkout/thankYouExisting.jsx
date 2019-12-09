@@ -17,8 +17,12 @@ import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
 
+import HeadingBlock from 'components/headingBlock/headingBlock';
+import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+
 import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
-import ThankYouContent from './components/thankYou/thankYouContent';
+import ThankYouExistingContent from './thankYouExistingContent';
+import ThankYouContent from './components/thankYou/hero';
 
 import './digitalSubscriptionCheckout.scss';
 
@@ -41,8 +45,16 @@ const content = (
           <SubscriptionFaq subscriptionProduct="DigitalPack" />
         </Footer>}
     >
-      <ThankYouContent countryGroupId={countryGroupId} />
-      <ReturnSection subscriptionProduct="DigitalPack" />
+      <div className="thank-you-stage">
+        <HeroWrapper appearance="custom">
+          <ThankYouContent countryGroupId={countryGroupId} />
+          <HeadingBlock>
+            Your Digital Subscription is already live
+          </HeadingBlock>
+        </HeroWrapper>
+        <ThankYouExistingContent countryGroupId={countryGroupId} />
+        <ReturnSection subscriptionProduct="DigitalPack" />
+      </div>
     </Page>
   </Provider>
 );
