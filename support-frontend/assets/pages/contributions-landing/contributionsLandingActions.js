@@ -415,7 +415,7 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
             ));
           } else {
             if (result.error === 'amazon_pay_fatal') {
-              dispatch(setAmazonPayFatalError)
+              dispatch(setAmazonPayFatalError);
             }
             dispatch(paymentFailure(result.error));
           }
