@@ -28,7 +28,7 @@ const getWeeklyDays = (today: ?number): Date[] => {
 
   const nonChrismassy = allDeliveryDays.filter(d => !isChrismassy(d));
 
-  if (allDeliveryDays.length > nonChrismassy.length){
+  if (allDeliveryDays.length > nonChrismassy.length) {
     nonChrismassy.push(getNextDeliveryDay(nonChrismassy[nonChrismassy.length - 1]));
   }
 
