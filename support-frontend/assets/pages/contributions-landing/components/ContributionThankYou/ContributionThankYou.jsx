@@ -188,7 +188,7 @@ function ContributionThankYou(props: PropTypes) {
           </section>
         ) : null}
         { renderIdentityCTA() }
-        <ContributionSurvey isRunning={false} />
+        <ContributionSurvey isRunning={true} />
         <MarketingConsent />
         <SpreadTheWord />
         <div className="gu-content__return-link">
