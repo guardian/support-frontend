@@ -30,6 +30,7 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
     case 'insufficient_funds':
       return 'The transaction was declined due to insufficient funds in your account. Please use a different card or contact your bank.';
     case 'payment_details_incorrect':
+      return 'An error occurred while trying to process your payment. Please double check your card details and try again. Alternatively, try another card or payment method.';
     case 'amazon_pay_try_again':
       return 'An error occurred while trying to process your payment. You have not been charged. Please try again.';
     case 'personal_details_incorrect':
