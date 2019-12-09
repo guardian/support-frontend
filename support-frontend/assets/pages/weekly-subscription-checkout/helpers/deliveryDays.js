@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  getDeliveryDays,
+  getDeliveryDays, getNextDeliveryDay,
   numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
 import { formatUserDate } from 'helpers/dateConversions';
@@ -28,9 +28,11 @@ const getWeeklyDays = (today: ?number): Date[] => {
 
   const nonChrismassy = allDeliveryDays.filter(d => !isChrismassy(d));
 
-  const numberOfChrismassyDays = allDeliveryDays.length - nonChrismassy.length;
+  if (allDeliveryDays.length > nonChrismassy.length){
+    nonChrismassy.push(getNextDeliveryDay(nonChrismassy[nonChrismassy.length - 1]));
+  }
 
-  return nonChrismassy.splice(weeksToAdd - numberOfChrismassyDays);
+  return nonChrismassy.splice(weeksToAdd);
 };
 
 function getDisplayDays(): string[] {

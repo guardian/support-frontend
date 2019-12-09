@@ -27,15 +27,19 @@ const getDateOfDeliveryDayInCurrentWeek = (today: number, day: Day): Date => {
 
 const getDeliveryDays = (today: number, day: Day, length: number = numberOfWeeksWeDeliverTo): Date[] => {
   const initial = getDateOfDeliveryDayInCurrentWeek(today, day);
-  const rt = [initial];
+  const deliveryDays = [initial];
   for (let i = 1; i <= length; i += 1) {
-    rt.push(new Date(rt[i - 1].getTime() + (7 * milsInADay)));
+    deliveryDays.push(getNextDeliveryDay(deliveryDays[i - 1]));
   }
-  return rt;
+  return deliveryDays;
 };
+
+const getNextDeliveryDay = (previousDeliveryDay: Date) =>
+  new Date(previousDeliveryDay.getTime()  + (7 * milsInADay));
 
 export {
   jsDayToFulfilmentDay,
   getDeliveryDays,
+  getNextDeliveryDay,
   DeliveryDays,
 };
