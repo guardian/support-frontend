@@ -21,6 +21,7 @@ import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
+import { SlimRoundelHeader } from 'components/headers/slimRoundelHeader/slimRoundelHeader';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
@@ -29,10 +30,11 @@ import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouContainer
   from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
-import ConsentBanner from '../../components/consentBanner/consentBanner';
-import SecureTransactionIndicator from '../../../assets/components/secureTransactionIndicator/secureTransactionIndicator';
+import ConsentBanner from 'components/consentBanner/consentBanner';
+import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import './contributionsLanding.scss';
 import './contributionsLandingEOY2019.scss';
+import './newTemplate.scss';
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -95,31 +97,50 @@ const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[
   campaigns[campaignName].backgroundImage : null;
 
 const showSecureTransactionIndicator = () => {
-  if (countryGroupId === 'GBPCountries') {
-    return <SecureTransactionIndicator modifierClasses={['top']} />;
-  } else if (store.getState().common.abParticipations.paymentSecuritySecureTransactionGreyNonUK === 'V1_securetransactiongrey') {
-    return <SecureTransactionIndicator modifierClasses={['top', 'hideaftermobile']} />;
+  if (store.getState().common.abParticipations.newLandingPageTemplateTest === 'control') {
+    if (countryGroupId === 'GBPCountries') {
+      return <SecureTransactionIndicator modifierClasses={['top']} />;
+    } else if (store.getState().common.abParticipations.paymentSecuritySecureTransactionGreyNonUK === 'V1_securetransactiongrey') {
+      return <SecureTransactionIndicator modifierClasses={['top', 'hideaftermobile']} />;
+    }
   }
   return null;
 };
 
-function contributionsLandingPage(campaignCodeParameter: ?string) {
-  return (
-    <Page
-      classModifiers={['contribution-form', ...cssModifiers]}
-      header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-      footer={<Footer disclaimer countryGroupId={countryGroupId} />}
-      backgroundImageSrc={backgroundImageSrc}
-    >
-      {showSecureTransactionIndicator()}
-      <ContributionFormContainer
-        thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-        campaignCodeParameter={campaignCodeParameter}
-      />
-      <ConsentBanner />
-    </Page>
-  );
-}
+const originalPage = (campaignCodeParameter: ?string) => (
+  <Page
+    classModifiers={['contribution-form', ...cssModifiers]}
+    header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+    footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+    backgroundImageSrc={backgroundImageSrc}
+  >
+    {showSecureTransactionIndicator()}
+    <ContributionFormContainer
+      thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+      campaignCodeParameter={campaignCodeParameter}
+    />
+    <ConsentBanner />
+  </Page>
+);
+
+const newTemplagePage = (campaignCodeParameter: ?string) => (
+  <Page
+    classModifiers={['new-template']}
+    header={<SlimRoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+    footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+    backgroundImageSrc={backgroundImageSrc}
+  >
+    {showSecureTransactionIndicator()}
+    <ContributionFormContainer
+      thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+      campaignCodeParameter={campaignCodeParameter}
+    />
+    <ConsentBanner />
+  </Page>
+);
+
+
+const contributionsLandingPage = (campaignCodeParameter: ?string) => (store.getState().common.abParticipations.newLandingPageTemplateTest === 'new_template' ? newTemplagePage(campaignCodeParameter) : originalPage(campaignCodeParameter));
 
 const router = (
   <BrowserRouter>

@@ -26,6 +26,7 @@
     pointer-events: none;
   }
 }
+
 .component-button--non-interactive {
   pointer-events: none;
 }
@@ -45,6 +46,22 @@
   &:hover, &:focus {
     background-color: gu-colour(neutral-7);
   }
+}
+
+.component-button--tertiary {
+  color: gu-colour(neutral-20);
+  background-color: transparent;
+  border: solid 1px gu-colour(neutral-20);
+
+  &:hover, &:focus {
+    background-color: gu-colour(neutral-97);
+  }
+}
+
+.component-button--tertiaryFeature {
+  color: gu-colour(highlight-main);
+  background-color: transparent;
+  border: solid 1.5px gu-colour(highlight-main);
 }
 
 .component-button--green {

@@ -50,7 +50,7 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { paymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { PaymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { logException } from 'helpers/logger';
 
 
@@ -83,7 +83,7 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   createStripePaymentMethod: () => void,
-  paymentSecuritySecureTransactionGreyNonUKVariant: paymentSecuritySecureTransactionGreyNonUKVariants,
+  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
   amazonPayOrderReferenceId: string | null,
 |};
@@ -215,9 +215,7 @@ function onSubmit(props: PropTypes): Event => void {
     if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe && props.contributionType !== 'ONE_OFF') {
       props.onPaymentAuthorisation({ paymentMethod: Stripe, token: 'tok_visa', stripePaymentMethod: 'StripeCheckout' });
     } else {
-      const handlePayment = () => {
-        formHandlers[props.contributionType][props.paymentMethod](props);
-      };
+      const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
       onFormSubmit({
         ...props,
         flowPrefix,

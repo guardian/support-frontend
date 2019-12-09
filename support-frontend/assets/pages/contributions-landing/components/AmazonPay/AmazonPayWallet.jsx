@@ -48,7 +48,7 @@ class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
   createWidget(amazonPayLibrary: Object): void {
     this.props.setAmazonPayPaymentSelected(false); // in case we've previously created a wallet
 
-    amazonPayLibrary.amazonPaymentsObject.Widgets.Wallet({
+    new amazonPayLibrary.amazonPaymentsObject.Widgets.Wallet({
       sellerId: getSellerId(this.props.isTestUser),
       design: { designMode: 'responsive' },
       onOrderReferenceCreate: (orderReference) => {

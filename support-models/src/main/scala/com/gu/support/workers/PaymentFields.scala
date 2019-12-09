@@ -3,8 +3,8 @@ package com.gu.support.workers
 import cats.syntax.functor._
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
-import io.circe.{Encoder, _}
 import io.circe.syntax._
+import io.circe.{Encoder, _}
 
 sealed trait PaymentFields
 
@@ -12,7 +12,9 @@ sealed trait PaymentFields
 case class PayPalPaymentFields(baid: String) extends PaymentFields
 
 
-sealed trait StripePaymentFields extends PaymentFields
+sealed trait StripePaymentFields extends PaymentFields {
+  val stripePaymentType: Option[StripePaymentType]
+}
 
 case class StripeSourcePaymentFields(
   stripeToken: String,
@@ -80,7 +82,7 @@ object PaymentFields {
   final def or[A, AA >: A](a: Decoder[A], d: => Decoder[AA]): Decoder[AA] = new Decoder[AA] {
     final def apply(c: HCursor): Decoder.Result[AA] = a(c) match {
       case r @ Right(_) => r
-      case Left(err)      => d(c).left.map { (decodingFailure: DecodingFailure) =>
+      case Left(err)      => d(c).left.map { decodingFailure: DecodingFailure =>
         DecodingFailure(err.message + " OR " + decodingFailure.message, err.history ++ decodingFailure.history)
       }
     }

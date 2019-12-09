@@ -31,6 +31,10 @@ import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { logException } from 'helpers/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import CreditCardsROW from './creditCardsROW.svg';
+import CreditCardsUS from './creditCardsUS.svg';
+import type { PaymentSecuritySecureTransactionGreyNonUKVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types -----//
 
@@ -49,6 +53,8 @@ type PropTypes = {|
   stripeKey: string,
   setupIntentClientSecret: string | null,
   setSetupIntentClientSecret: (setupIntentClientSecret: string) => Action,
+  country: IsoCountry,
+  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -56,6 +62,9 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
   paymentWaiting: state.page.form.isWaiting,
+  country: state.common.internationalisation.countryId,
+  paymentSecuritySecureTransactionGreyNonUKVariant:
+    state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -268,6 +277,16 @@ class CardForm extends Component<PropTypes, StateTypes> {
     const getClasses = (fieldName: CardFieldName): string =>
       `form__input ${this.getFieldBorderClass(fieldName)}`;
 
+    const showCards = (securityTestVariant: PaymentSecuritySecureTransactionGreyNonUKVariants, country: IsoCountry) => {
+      if (securityTestVariant === 'V1_securetransactiongrey') {
+        if (country === 'US') {
+          return <CreditCardsUS className="form__credit-card-icons" />;
+        }
+        return <CreditCardsROW className="form__credit-card-icons" />;
+      }
+      return null;
+    };
+
     return (
       <div className="form__fields">
         <legend className="form__legend"><h3>Your card details</h3></legend>
@@ -275,6 +294,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
           <label className="form__label" htmlFor="stripeCardNumberElement">
             <span>Card number</span>
           </label>
+          {showCards(this.props.paymentSecuritySecureTransactionGreyNonUKVariant, this.props.country)}
           <span className={getClasses('CardNumber')}>
             <CardNumberElement
               id="stripeCardNumberElement"

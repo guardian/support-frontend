@@ -1,5 +1,6 @@
 package selenium.subscriptions
 
+import org.openqa.selenium.WebDriver
 import org.scalatest.concurrent.Eventually
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.time.{Minute, Seconds, Span}
@@ -15,9 +16,9 @@ class CheckoutsSpec extends AnyFeatureSpec
   with Eventually {
 
   val driverConfig = new DriverConfig
-  override implicit val webDriver = driverConfig.webDriver
+  override implicit val webDriver: WebDriver = driverConfig.webDriver
 
-  override implicit val patienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
 
   before {
     driverConfig.reset()
@@ -47,6 +48,12 @@ class CheckoutsSpec extends AnyFeatureSpec
   Feature("Guardian Weekly checkout") {
     Scenario("Direct Debit checkout") {
       testCheckout("Guardian Weekly", new GuardianWeeklyCheckout, new WeeklyProductPage, payWithDirectDebit)
+    }
+  }
+
+  Feature("Guardian Weekly gift checkout") {
+    Scenario("Stripe checkout") {
+      testCheckout("Guardian Weekly gift", new GuardianWeeklyGiftCheckout, new WeeklyGiftProductPage, payWithStripe)
     }
   }
 
@@ -82,7 +89,7 @@ class CheckoutsSpec extends AnyFeatureSpec
     assert(checkoutPage.pageHasLoaded)
 
     Given("The user fills in their details correctly")
-    checkoutPage.fillForm
+    checkoutPage.fillForm()
 
     paymentFunction(checkoutPage)
   }
@@ -96,10 +103,10 @@ class CheckoutsSpec extends AnyFeatureSpec
     assert(checkoutPage.stripeFormHasLoaded)
 
     Given("they fill in the stripe form")
-    checkoutPage.fillStripeForm
+    checkoutPage.fillStripeForm()
 
     When("they click to process payment")
-    checkoutPage.clickStripeSubmit
+    checkoutPage.clickStripeSubmit()
 
     And("the mock calls the backend using a test Stripe token")
     thankYouPage(checkoutPage)
@@ -113,7 +120,7 @@ class CheckoutsSpec extends AnyFeatureSpec
     checkoutPage.selectDirectDebitPaymentMethod()
 
     When("they click continue to payment")
-    checkoutPage.clickSubmit
+    checkoutPage.clickSubmit()
 
     Then("the direct debit form loads")
 

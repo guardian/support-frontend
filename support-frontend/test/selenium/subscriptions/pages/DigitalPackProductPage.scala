@@ -2,16 +2,12 @@ package selenium.subscriptions.pages
 
 import org.openqa.selenium.WebDriver
 import org.scalatestplus.selenium.Page
-import selenium.util.{Browser, Config}
+import selenium.util.Browser
 
 class DigitalPackProductPage(implicit val webDriver: WebDriver) extends Page with Browser with ProductPage {
 
-  val url = s"${Config.supportFrontendUrl}/uk/subscribe/digital"
+  override def path = "/uk/subscribe/digital"
 
-  private val header = className("component-footer")
-
-  def pageHasLoaded: Boolean = {
-    pageHasElement(header) && pageHasUrl(s"/uk/subscribe/digital")
-  }
+  override def elementQuery = className("component-footer")
 
 }

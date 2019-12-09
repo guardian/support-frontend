@@ -12,8 +12,8 @@ describe('Delivery Check', () => {
     });
 
     it('should return false if postcode is outside delivery area', () => {
-      expect(postcodeIsWithinDeliveryArea('DA11 2HL')).toBeFalsy();
-      expect(postcodeIsWithinDeliveryArea('DA12 2HL')).toBeFalsy();
+      expect(postcodeIsWithinDeliveryArea('DA19 2HL')).toBeFalsy();
+      expect(postcodeIsWithinDeliveryArea('DA20 2HL')).toBeFalsy();
     });
 
     it('should false if input is not a valid postcode prefix', () => {

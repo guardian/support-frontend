@@ -468,10 +468,62 @@
 
 /****************** subscriptions__product-button ********************/
 
-.component-button--subscriptions__product-button {
-  background-color: gu-colour(neutral-7);
-  color: gu-colour(neutral-100);
+.subscriptions__button-container,
+.subscriptions__button-container--feature {
+  display: block;
 
+  @include mq($from: phablet) {
+    width: 80%;
+    padding-bottom: 20px;
+  }
+
+  @include mq($from: tablet) {
+    display: inline-block;
+    padding-bottom: 0;
+  }
+
+  @include mq($from: desktop) {
+    width: 100%;
+    padding-bottom: 20px;
+  }
+
+  .component-button:nth-of-type(2) {
+    margin-top: 10px;
+
+    @include mq($from: desktop) {
+      margin-top: 0;
+      margin-left: 5px;
+    }
+
+    @include mq($from: leftCol) {
+      margin-left: 10px;
+    }
+  }
+}
+
+.subscriptions__button-container--feature {
+  @include mq($until: phablet) {
+    padding-bottom: 10px;
+  }
+
+  .component-button:nth-of-type(2) {
+    @include mq($from: mobileLandscape) {
+      margin-left: 10px;
+      margin-top: 0;
+    }
+
+    @include mq($from: tablet) {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+
+    @include mq($from: desktop) {
+      margin: 0 0 0 10px;
+    }
+  }
+}
+
+.component-button--subscriptions__product-button {
   @include mq($until: mobileMedium) {
     font-size: 12px;
   }
@@ -487,10 +539,6 @@
   }
 }
 
-.subscriptions__premuim-app .component-button--subscriptions__product-button:first-of-type {
-  margin: 0 20px 10px 0;
-}
-
 .component-grid-image--subscriptions-premium-image {
     position: relative;
     width: 100%;
@@ -500,6 +548,13 @@
     transform: translate(-50%);
 }
 
+.component-grid-image--subscriptions-print-feature-image {
+  width: 100%;
+
+  @include mq($from: tablet) {
+    width: 566px;
+  }
+}
 /****************** packshots ********************/
 .subscriptions-feature-packshot {
   width: 140%;

@@ -5,7 +5,7 @@ import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.RestOfWorld
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures._
-import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState, CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import org.scalatest.FlatSpec
@@ -44,6 +44,15 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
 
   "SendThankYouEmailState" should "deserialise correctly" in {
     testDecoding[SendThankYouEmailState](thankYouEmailJson())
+  }
+
+  "FailureHandlerState" should "deserialise correctly from any lambda" in {
+    testDecoding[FailureHandlerState](createPayPalPaymentMethodDigitalPackJson,
+      state => state.paymentFields.isDefined shouldBe true
+    )
+    testDecoding[FailureHandlerState](createContributionZuoraSubscriptionJson(Annual),
+      state => state.paymentMethod.isDefined shouldBe true
+    )
   }
 
 }

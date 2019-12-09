@@ -9,7 +9,7 @@ import Content from 'components/content/content';
 import Text, { SansParagraph, Callout } from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import { paperSubsUrl } from 'helpers/routes';
-import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
+import { flashSaleIsActive, getDiscount, getDuration, getPromoCode } from 'helpers/flashSale';
 
 import { type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
@@ -19,6 +19,9 @@ import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
+import { promoQueryParam } from 'helpers/productPrice/promotions';
+import { promotionTermsUrl } from 'helpers/routes';
+import { getQueryParameter } from 'helpers/url';
 
 // Types
 export type ContentPropTypes = {|
@@ -31,6 +34,7 @@ export type ContentTabPropTypes = {|
   getRef: (?HTMLElement)=> void
 |};
 
+const promoTermsUrl = promotionTermsUrl(getQueryParameter(promoQueryParam) || getPromoCode('Paper', GBPCountries, 'GE19SUBS'));
 
 // Helper functions
 const getPageInfoChip = (): string => {
@@ -67,7 +71,7 @@ const ContentHelpBlock = ({
     {flashSaleIsActive('Paper', GBPCountries) &&
       <Text title="Promotion terms and conditions">
         <SansParagraph>
-          Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href="https://subscribe.theguardian.com/p/SEP2512VHD/terms">here</a>.
+          Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTermsUrl}>here</a>.
         </SansParagraph>
       </Text>
     }
