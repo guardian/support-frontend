@@ -69,6 +69,7 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId: string }
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
+  | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -211,6 +212,7 @@ const setAmazonPayLibrary = (amazonPayLibrary: AmazonPayLibrary): Action => ({
 
 const setAmazonPayWalletWidgetReady: Action = ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' });
 const setAmazonPayHasAccessToken: Action = ({ type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' });
+const setAmazonPayFatalError: Action = ({ type: 'SET_AMAZON_PAY_FATAL_ERROR' });
 
 const setAmazonPayPaymentSelected = (paymentSelected: boolean): Action =>
   ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected });
@@ -412,6 +414,9 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
               stripeAccountForContributionType[state.page.form.contributionType],
             ));
           } else {
+            if (result.error === 'amazon_pay_fatal') {
+              dispatch(setAmazonPayFatalError)
+            }
             dispatch(paymentFailure(result.error));
           }
 
@@ -669,6 +674,7 @@ export {
   setAmazonPayLibrary,
   setAmazonPayWalletWidgetReady,
   setAmazonPayHasAccessToken,
+  setAmazonPayFatalError,
   setAmazonPayOrderReferenceId,
   setAmazonPayPaymentSelected,
   selectAmount,

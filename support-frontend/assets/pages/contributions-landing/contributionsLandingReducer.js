@@ -87,6 +87,7 @@ export type AmazonPayData = {
   orderReferenceId: string | null,
   paymentSelected: boolean,
   hasAccessToken: boolean,
+  fatalError: boolean,
 }
 
 type FormState = {
@@ -158,6 +159,7 @@ function createFormReducer() {
       orderReferenceId: null,
       paymentSelected: false,
       hasAccessToken: false,
+      fatalError: false,
     },
     formData: {
       firstName: null,
@@ -289,6 +291,15 @@ function createFormReducer() {
           amazonPayData: {
             ...state.amazonPayData,
             hasAccessToken: true,
+          },
+        };
+
+      case 'SET_AMAZON_PAY_FATAL_ERROR':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            fatalError: true,
           },
         };
 

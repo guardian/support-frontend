@@ -92,7 +92,7 @@ function withProps(props: PropTypes) {
     // if all payment methods are switched off, do not display the button
     const formClassName = 'form--contribution';
     const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
-    const amazonPaymentReady = () => props.amazonPayData.orderReferenceId && props.amazonPayData.paymentSelected;
+    const amazonPaymentReady = () => !props.amazonPayData.fatalError && props.amazonPayData.orderReferenceId && props.amazonPayData.paymentSelected;
 
     const submitButtonCopy = getContributeButtonCopyWithPaymentType(
       props.contributionType,
@@ -133,7 +133,7 @@ function withProps(props: PropTypes) {
           />
         </div>
 
-        { props.paymentMethod === AmazonPay && getAmazonPayComponent() }
+        { !props.amazonPayData.fatalError && props.paymentMethod === AmazonPay && getAmazonPayComponent() }
 
         {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
           <Button
