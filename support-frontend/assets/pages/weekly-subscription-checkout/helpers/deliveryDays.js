@@ -13,16 +13,24 @@ const extraDelayWeeks = 2;
 const getWeeklyDays = (today: ?number): Date[] => {
   const now = new Date(today || new Date().getTime());
   const currentWeekday = now.getDay();
+  const isChrismassy = (d: Date) => d.getDate() === 27 && d.getMonth() === 11;
   const weeksToAdd =
       currentWeekday > extraDelayCutoffWeekday ||
       currentWeekday === 0 // Sunday is considered the last day of the week
         ? extraDelayWeeks
         : normalDelayWeeks;
-  return getDeliveryDays(
+
+  const allDeliveryDays = getDeliveryDays(
     now.getTime(),
     5,
     numberOfWeeksWeDeliverTo + weeksToAdd,
-  ).splice(weeksToAdd);
+  );
+
+  const nonChrismassy = allDeliveryDays.filter(d => !isChrismassy(d));
+
+  const numberOfChrismassyDays = allDeliveryDays.length - nonChrismassy.length;
+
+  return nonChrismassy.splice(weeksToAdd - numberOfChrismassyDays);
 };
 
 function getDisplayDays(): string[] {

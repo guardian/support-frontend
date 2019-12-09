@@ -11,6 +11,7 @@ const tuesday = 1551175752198; /* 2019-02-26 */
 const friday = 1551399618000; /* 2019-03-01 */
 const thursday = 1551918018000; /* 2019-03-07 */
 const sunday = 1552176000000; /* 2019-03-10 */
+const ninthOfDecember = 1575891520247; /* 2019-12-09 */
 
 describe('deliveryDays', () => {
 
@@ -36,6 +37,11 @@ describe('deliveryDays', () => {
     it('if you order on a Sunday, it delivers the Weekly on Friday week', () => {
       const days = getWeeklyDays(sunday);
       expect(formatMachineDate(days[0])).toEqual('2019-03-22');
+    });
+    it('should not offer the 27th of December as a possible delivery date', () => {
+      const days = getWeeklyDays(ninthOfDecember);
+      expect(days.find(d => d.getDate() === 27 && d.getMonth === 1)).toEqual(undefined);
+      expect(days.length).toEqual(5)
     });
   });
 
