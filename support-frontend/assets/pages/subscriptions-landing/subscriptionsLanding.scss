@@ -548,6 +548,16 @@
     transform: translate(-50%);
 }
 
+.subscriptions-print-feature--packshot {
+  @include mq($from: tablet) {
+    margin-top: 45px;
+  }
+
+  @include mq($from: leftCol) {
+    margin-top: 20px;
+  }
+}
+
 .component-grid-image--subscriptions-print-feature-image {
   width: 100%;
 

@@ -5,7 +5,7 @@ import React from 'react';
 import GridImage from 'components/gridImage/gridImage';
 
 const PrintFeaturePackshot = () => (
-  <div>
+  <div className="subscriptions-print-feature--packshot">
     <GridImage
       classModifiers={['subscriptions-print-feature-image']}
       gridId="printFeaturePackshot"
