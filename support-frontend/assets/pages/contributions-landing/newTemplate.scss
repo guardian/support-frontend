@@ -3,42 +3,29 @@
 .gu-content--new-template {
   overflow: initial;
 
-  /* Page component - contains ContributionFormContainer */
-  .gu-content__main {
-    background-color: white;
-  }
-  /* */
-
   /* ContributionFormContainer - contains form and blurb */
   .gu-content__content {
     margin: 0;
     padding: 0;
     overflow: initial;
   }
-
-  .gu-content__content--flex {
-    align-items: flex-start;
-  }
-
-  .gu-content__content-contributions {
-    max-width: 100%;
-  }
   /* */
 
   /* Text on right hand side of landing page */
   .gu-content__blurb {
+    // Magic number alert: copied from 'standard template' calculated width
+    max-width: 388px;
+
     @include mq($from: tablet) {
-      background-color: gu-colour(sport-dark);
-      border: 0; // get rid of yellow top border
+      border: 0; // removes top border from text
       margin-left: 0;
       padding-top: $gu-v-spacing * 5;
       padding-left: $gu-h-spacing * 1.75;
       /* sticky positioning */
       top: 0;
-      position: -webkit-sticky;
       position: sticky;
       align-self: flex-start;
-      height: calc(100vh - 50px);
+      height: auto;
       /* */
     }
 
@@ -51,34 +38,8 @@
     }
   }
 
-  .gu-content__blurb-header {
-    @include mq($from: tablet) {
-      color: white;
-      font-size: 34px;
-      max-width: $gu-h-spacing * 13;
-    }
-
-    @include mq($from: desktop) {
-      font-size: 50px;
-      max-width: $gu-h-spacing * 22;
-    }
-
-    @include mq($from: leftCol) {
-      font-size: 70px;
-      max-width: $gu-h-spacing * 26.75;
-    }
-  }
-
   .gu-content__blurb-blurb {
-    border: 0; // get rid of yellow bottom border
-    color: white;
-    font-size: 16px;
-    max-width: $gu-h-spacing * 13;
-
-    @include mq($from: desktop) {
-      font-size: 17px;
-      max-width: $gu-h-spacing * 23;
-    }
+    border: 0; // removes bottom border from text
   }
   /* */
 
@@ -99,5 +60,19 @@
       max-width: $gu-h-spacing * 32;
       padding: ($gu-v-spacing * 1.5) ($gu-h-spacing * 4.25) 0;
     }
+  }
+}
+
+// Modified header for new template
+.gu-content--new-template .gu-content__header {
+  @include mq($from: leftCol) {
+    padding: 0 85px; // Magic number alert: align the currency selector with the form
+  }
+}
+
+// Modified footer for new template
+.gu-content--new-template .component-footer {
+  .component-left-margin-section::before {
+    max-width: 75px; // Magic number alert: align the footer with the form
   }
 }

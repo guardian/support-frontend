@@ -109,7 +109,7 @@ export const tests: Tests = {
     optimizeId: 'sj4_I5OAT3SJpqgnxtJ6Xg',
   },
 
-  newLandingPageTemplateTest: {
+  newLandingPageTemplateTestR2: {
     type: 'OTHER',
     variants: [
       {
