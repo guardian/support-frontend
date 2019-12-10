@@ -21,7 +21,6 @@ import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
-import { SlimRoundelHeader } from 'components/headers/slimRoundelHeader/slimRoundelHeader';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
@@ -97,7 +96,7 @@ const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[
   campaigns[campaignName].backgroundImage : null;
 
 const showSecureTransactionIndicator = () => {
-  if (store.getState().common.abParticipations.newLandingPageTemplateTest === 'control') {
+  if (store.getState().common.abParticipations.newLandingPageTemplateTestR2 === 'control') {
     if (countryGroupId === 'GBPCountries') {
       return <SecureTransactionIndicator modifierClasses={['top']} />;
     } else if (store.getState().common.abParticipations.paymentSecuritySecureTransactionGreyNonUK === 'V1_securetransactiongrey') {
@@ -126,7 +125,7 @@ const originalPage = (campaignCodeParameter: ?string) => (
 const newTemplagePage = (campaignCodeParameter: ?string) => (
   <Page
     classModifiers={['new-template']}
-    header={<SlimRoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+    header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
   >
@@ -140,7 +139,7 @@ const newTemplagePage = (campaignCodeParameter: ?string) => (
 );
 
 
-const contributionsLandingPage = (campaignCodeParameter: ?string) => (store.getState().common.abParticipations.newLandingPageTemplateTest === 'new_template' ? newTemplagePage(campaignCodeParameter) : originalPage(campaignCodeParameter));
+const contributionsLandingPage = (campaignCodeParameter: ?string) => (store.getState().common.abParticipations.newLandingPageTemplateTestR2 === 'new_template' ? newTemplagePage(campaignCodeParameter) : originalPage(campaignCodeParameter));
 
 const router = (
   <BrowserRouter>

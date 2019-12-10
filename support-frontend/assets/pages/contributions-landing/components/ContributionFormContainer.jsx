@@ -43,7 +43,7 @@ const mapStateToProps = (state: State) => ({
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
   countryId: state.common.internationalisation.countryId,
-  newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTest,
+  newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTestR2,
   paymentSecuritySecureTransactionGreyNonUKVariant:
     state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
 });
