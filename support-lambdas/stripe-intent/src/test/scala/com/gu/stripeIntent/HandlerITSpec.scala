@@ -3,7 +3,8 @@ package com.gu.stripeIntent
 import com.gu.handler.{ApiGatewayRequest, ApiGatewayResponse}
 import com.gu.support.config.Stages
 import com.gu.test.tags.annotations.IntegrationTest
-import org.scalatest.{AsyncFlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 @IntegrationTest
 class HandlerITSpec extends AsyncFlatSpec with Matchers {

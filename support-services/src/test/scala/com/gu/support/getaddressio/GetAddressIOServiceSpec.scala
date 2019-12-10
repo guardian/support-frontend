@@ -5,7 +5,8 @@ import com.gu.okhttp.RequestRunners
 import com.gu.support.config.GetAddressIOConfig
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.config.ConfigFactory
-import org.scalatest.{AsyncFlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 @IntegrationTest
 class GetAddressIOServiceSpec extends AsyncFlatSpec with Matchers {

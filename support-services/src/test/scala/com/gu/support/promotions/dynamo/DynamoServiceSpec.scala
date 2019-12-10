@@ -6,10 +6,12 @@ import com.gu.support.config.Stages.PROD
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
+
 
 @IntegrationTest
-class DynamoServiceSpec extends FlatSpec with Matchers with LazyLogging {
+class DynamoServiceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   "DynamoService" should "work" ignore {
     val config = new PromotionsConfigProvider(ConfigFactory.load(), PROD).get()

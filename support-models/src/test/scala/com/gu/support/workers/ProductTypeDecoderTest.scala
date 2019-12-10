@@ -4,9 +4,9 @@ import com.gu.i18n.Currency
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.{Collection, RestOfWorld, Sunday}
 import com.gu.support.workers.ProductType._
-import org.scalatest.WordSpec
+import org.scalatest.wordspec.AnyWordSpec
 
-class ProductTypeDecoderTest extends WordSpec with SerialisationTestHelpers {
+class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
 
   "ProductTypeDecoder" should {
     "decode a contribution" in {

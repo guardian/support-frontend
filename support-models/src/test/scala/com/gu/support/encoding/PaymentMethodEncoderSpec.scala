@@ -5,9 +5,11 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.workers.{ClonedDirectDebitPaymentMethod, DirectDebitPaymentMethod, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class PaymentMethodEncoderSpec extends FlatSpec with Matchers with LazyLogging with SerialisationTestHelpers {
+
+class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogging with SerialisationTestHelpers {
 
   it should "correctly decode DirectDebitPaymentMethod" in {
     val json = s"""{

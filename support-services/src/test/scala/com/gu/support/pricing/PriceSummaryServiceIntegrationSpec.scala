@@ -7,10 +7,12 @@ import com.gu.support.promotions.PromotionServiceSpec
 import com.gu.support.workers.{Annual, Quarterly}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
+
 
 @IntegrationTest
-class PriceSummaryServiceIntegrationSpec  extends FlatSpec with Matchers with LazyLogging {
+class PriceSummaryServiceIntegrationSpec  extends AsyncFlatSpec with Matchers with LazyLogging {
   val service = new PriceSummaryService(PromotionServiceSpec.serviceWithDynamo, CatalogService(TouchPointEnvironments.SANDBOX))
 
   "PriceSummaryService" should "return prices" in {

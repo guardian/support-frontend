@@ -3,7 +3,8 @@ package com.gu.aws
 import com.gu.aws.AwsCloudWatchMetricPut.{catalogFailureRequest, client}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.test.tags.annotations.IntegrationTest
-import org.scalatest.{AsyncFlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 @IntegrationTest
 class AwsCloudWatchMetricPutSpec extends AsyncFlatSpec with Matchers {

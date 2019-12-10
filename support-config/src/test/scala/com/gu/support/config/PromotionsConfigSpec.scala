@@ -1,9 +1,11 @@
 package com.gu.support.config
 
 import com.typesafe.config.ConfigFactory
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class PromotionsConfigSpec extends FlatSpec with Matchers{
+
+class PromotionsConfigSpec extends AsyncFlatSpec with Matchers{
   "PromotionsTablesConfigProvider" should "load successfully" in {
     val devConfig = new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get()
     devConfig.tables.promotions shouldBe "MembershipSub-Promotions-DEV"

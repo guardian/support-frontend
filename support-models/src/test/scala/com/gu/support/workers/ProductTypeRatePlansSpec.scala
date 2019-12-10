@@ -5,9 +5,11 @@ import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery}
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.workers.ProductTypeRatePlans._
 import org.scalatest.OptionValues._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ProductTypeRatePlansSpec extends FlatSpec with Matchers{
+
+class ProductTypeRatePlansSpec extends AsyncFlatSpec with Matchers{
 
   "ProductTypeRatePlans type class" should "return the correct product rate plan for a given product type" in {
     val weekly = GuardianWeekly(GBP, Annual, Domestic)

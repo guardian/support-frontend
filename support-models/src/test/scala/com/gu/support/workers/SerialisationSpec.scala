@@ -8,9 +8,10 @@ import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AsyncFlatSpec
 
-class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with LazyLogging {
+
+class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging {
 
   "Contribution JSON with a billing period set" should "be decoded correctly" in {
     val input = contribution(billingPeriod = Annual)

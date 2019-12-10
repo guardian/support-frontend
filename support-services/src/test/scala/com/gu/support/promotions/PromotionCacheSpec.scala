@@ -1,9 +1,11 @@
 package com.gu.support.promotions
 
 import org.joda.time.DateTime
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class PromotionCacheSpec extends FlatSpec with Matchers {
+
+class PromotionCacheSpec extends AsyncFlatSpec with Matchers {
 
   "PromotionCache" should "return cached promotions when they are fresh" in {
     PromotionCache.set(Nil)

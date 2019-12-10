@@ -1,14 +1,14 @@
 package com.gu.support.promotions
 
 import com.gu.i18n.Country.{UK, US}
-import com.gu.support.promotions.ServicesFixtures.{promotion, _}
 import com.gu.support.promotions.PromotionValidator.PromotionExtensions
+import com.gu.support.promotions.ServicesFixtures.{promotion, _}
 import org.joda.time.DateTime
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers._
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 //noinspection NameBooleanParameters
-class PromotionValidatorSpec extends FlatSpec {
+class PromotionValidatorSpec extends AsyncFlatSpec with Matchers {
   val NoErrors = Nil
 
   val thisMorning = DateTime.now().withTimeAtStartOfDay()
