@@ -7,7 +7,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { HeroImage } from 'pages/weekly-subscription-landing/components/hero/hero';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick, GuardianWeekly } from 'helpers/subscriptions';
 
 import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
@@ -31,6 +31,7 @@ import {
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
+import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 
 // ----- Types ----- //
 
@@ -114,7 +115,7 @@ function ThankYouContent({
     <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
         <HeroImage />
-        <HeadingBlock overheading="Thank you for supporting our journalism!">
+        <HeadingBlock overheadingClass="--thankyou" overheading="Thank you for supporting our journalism!">
           {getHeading(billingPeriod, isPending, orderIsGift)}
         </HeadingBlock>
       </HeroWrapper>
@@ -153,6 +154,7 @@ function ThankYouContent({
             />)
           }
         </Asyncronously>
+        <OptInCopy subscriptionProduct={GuardianWeekly} />
       </Content>
     </div>
   );

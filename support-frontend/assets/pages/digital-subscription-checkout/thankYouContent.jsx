@@ -16,6 +16,8 @@ import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 import { DirectDebit } from 'helpers/paymentMethods';
+import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
+import { DigitalPack } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
@@ -63,6 +65,7 @@ function ThankYouContent(props: PropTypes) {
           <Text title={title}>{message}</Text>
         )}
         />
+        <OptInCopy subscriptionProduct={DigitalPack} />
       </Content>
     </div>
   );

@@ -21,6 +21,8 @@ import { manageSubsUrl, myAccountUrl } from 'helpers/externalLinks';
 import typeof MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import { formatUserDate } from 'helpers/dateConversions';
+import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
+import { Paper } from 'helpers/subscriptions';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
@@ -83,6 +85,7 @@ function ThankYouContent({
         <HeroPicture />
         <HeadingBlock
           overheading="Thank you for supporting our journalism!"
+          overheadingClass="--thankyou"
         >
           {isPending ?
           `Your subscription to the ${productOption} package is being processed` :
@@ -127,6 +130,7 @@ function ThankYouContent({
             />)
           }
         </Asyncronously>
+        <OptInCopy subscriptionProduct={Paper} />
       </Content>
     </div>
   );

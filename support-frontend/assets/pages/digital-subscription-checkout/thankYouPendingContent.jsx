@@ -11,6 +11,9 @@ import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
+import { DigitalPack } from 'helpers/subscriptions';
 
 
 // ----- Component ----- //
@@ -53,6 +56,13 @@ function ThankYouPendingContent(props: {countryGroupId: CountryGroupId}) {
             )} for customer support.
           </p>
         </Text>
+      </Content>
+      <Content>
+        <MarketingConsent render={({ title, message }) => (
+          <Text title={title}>{message}</Text>
+        )}
+        />
+        <OptInCopy subscriptionProduct={DigitalPack} />
       </Content>
     </div>
   );
