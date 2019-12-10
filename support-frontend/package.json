@@ -141,5 +141,10 @@
     "webpack-manifest-plugin": "2.0.3",
     "webpack-merge": "^4.1.3",
     "webpack-stats-plugin": "^0.2.1"
+  },
+  "resolutions": {
+    "cssnano/cosmiconfig/js-yaml": "3.13.1",
+    "optimize-css-assets-webpack-plugin/**/js-yaml": "3.13.1",
+    "postcss-load-config/cosmiconfig/js-yaml": "3.13.1"
   }
 }
