@@ -11,6 +11,7 @@ import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 
 
 // ----- Component ----- //
@@ -52,6 +53,17 @@ function ThankYouPendingContent(props: {countryGroupId: CountryGroupId}) {
               </a>
             )} for customer support.
           </p>
+        </Text>
+      </Content>
+      <Content>
+        <MarketingConsent render={({ title, message }) => (
+          <Text title={title}>{message}</Text>
+        )}
+        />
+        <Text >
+          This is the option to choose if you want to hear about how to make the most of your digital
+          subscription, receive a dedicated weekly email from our membership editor and get more information
+          on ways to support The Guardian.
         </Text>
       </Content>
     </div>
