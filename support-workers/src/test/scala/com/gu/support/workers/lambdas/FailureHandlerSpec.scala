@@ -3,7 +3,7 @@ package com.gu.support.workers.lambdas
 import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields, FailedGuardianWeeklyEmailFields, FailedPaperEmailFields, IdentityUserId}
+import com.gu.emailservices._
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.CheckoutFailureReasons.{AccountMismatch, PaymentMethodUnacceptable, Unknown}
 import com.gu.support.workers.JsonFixtures._
@@ -18,7 +18,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.matchers.should.Matchers
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @IntegrationTest
 class FailureHandlerIT extends AsyncLambdaSpec with MockContext {
@@ -163,7 +163,7 @@ class FailureHandlerSpec extends AsyncLambdaSpec with MockContext {
 
 object FailureHandlerManualTest extends Matchers {
 
-  implicit val ex = scala.concurrent.ExecutionContext.Implicits.global
+  implicit val ex: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   def main(args: Array[String]): Unit = {
     sendFailureEmail()
@@ -182,7 +182,7 @@ object FailureHandlerManualTest extends Matchers {
 
 object DigiPackFailureHandlerManualTest extends Matchers {
 
-  implicit val ex = scala.concurrent.ExecutionContext.Implicits.global
+  implicit val ex: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   def main(args: Array[String]): Unit = {
     sendFailureEmail()
@@ -203,7 +203,7 @@ object DigiPackFailureHandlerManualTest extends Matchers {
 
 object GuardianWeeklyFailureHandlerTest extends Matchers {
 
-  implicit val ex = scala.concurrent.ExecutionContext.Implicits.global
+  implicit val ex: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   def main(args: Array[String]): Unit = {
     sendFailureEmail()
@@ -225,7 +225,7 @@ object GuardianWeeklyFailureHandlerTest extends Matchers {
 
 object PrintFailureHandlerTest extends Matchers {
 
-  implicit val ex = scala.concurrent.ExecutionContext.Implicits.global
+  implicit val ex: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   def main(args: Array[String]): Unit = {
     sendFailureEmail()

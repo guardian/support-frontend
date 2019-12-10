@@ -1,6 +1,7 @@
 import sbt.Keys.{publishTo, resolvers, scalaVersion}
 import SeleniumTestConfig.{SeleniumTest, seleniumTestFilter, unitTestFilter}
 import sbtrelease.ReleaseStateTransformations._
+import scala.sys.process._
 
 skip in publish := true
 
@@ -10,8 +11,6 @@ lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ S
   resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
   testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
 )
-
-lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
 lazy val release = Seq[ReleaseStep](
   checkSnapshotDependencies,
@@ -74,6 +73,10 @@ lazy val root = (project in file("."))
     `stripe-intent`
   )
 
+lazy val testScalastyle = taskKey[Unit]("testScalastyle")
+
+lazy val setupGitHook = taskKey[Unit]("Set up a pre-push git hook to run the integration tests")
+
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .configs(SeleniumTest)
@@ -84,6 +87,8 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     scalastyleFailOnError := true,
+    setupGitHook := {"ln -s ../../pre-push .git/hooks/pre-push" !},
+    (run in Compile) := ((run in Compile) dependsOn setupGitHook).evaluated,
     testScalastyle := scalastyle.in(Compile).toTask("").value,
     (test in Test) := ((test in Test) dependsOn testScalastyle).value,
     (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,

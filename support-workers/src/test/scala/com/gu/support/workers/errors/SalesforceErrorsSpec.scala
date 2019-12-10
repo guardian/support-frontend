@@ -64,9 +64,11 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
         req.url(s"${auth.instance_url}/$upsertEndpoint") //We still need to set the base url
     }
 
-    recoverToSucceededIf[SalesforceAuthenticationErrorResponse] {
+    service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
+
+    recoverToExceptionIf[SalesforceErrorResponse] {
       service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
-    }
+    }.map(_.message shouldBe "Session expired or invalid")
   }
 
 }
