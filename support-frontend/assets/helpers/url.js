@@ -100,7 +100,6 @@ function getPathAfterRoute(route: string): string[] {
 }
 
 function isProd(): boolean {
-  console.log(getBaseDomain())
   return getBaseDomain() === 'theguardian.com';
 }
 
