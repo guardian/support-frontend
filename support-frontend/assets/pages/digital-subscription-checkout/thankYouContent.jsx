@@ -16,6 +16,8 @@ import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 import { DirectDebit } from 'helpers/paymentMethods';
+import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
+import { DigitalPack } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
@@ -63,11 +65,7 @@ function ThankYouContent(props: PropTypes) {
           <Text title={title}>{message}</Text>
         )}
         />
-        <Text >
-          This is the option to choose if you want to hear about how to make the most of your digital
-          subscription, receive a dedicated weekly email from our membership editor and get more information
-          on ways to support The Guardian.
-        </Text>
+        <OptInCopy subscriptionProduct={DigitalPack} />
       </Content>
     </div>
   );

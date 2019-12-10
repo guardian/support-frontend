@@ -12,6 +12,8 @@ import { HeroWrapper } from 'components/productPage/productPageHero/productPageH
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
+import { DigitalPack } from 'helpers/subscriptions';
 
 
 // ----- Component ----- //
@@ -60,11 +62,7 @@ function ThankYouPendingContent(props: {countryGroupId: CountryGroupId}) {
           <Text title={title}>{message}</Text>
         )}
         />
-        <Text >
-          This is the option to choose if you want to hear about how to make the most of your digital
-          subscription, receive a dedicated weekly email from our membership editor and get more information
-          on ways to support The Guardian.
-        </Text>
+        <OptInCopy subscriptionProduct={DigitalPack} />
       </Content>
     </div>
   );

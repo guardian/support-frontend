@@ -21,6 +21,8 @@ import { manageSubsUrl, myAccountUrl } from 'helpers/externalLinks';
 import typeof MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import { formatUserDate } from 'helpers/dateConversions';
+import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
+import { Paper } from 'helpers/subscriptions';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
@@ -128,11 +130,7 @@ function ThankYouContent({
             />)
           }
         </Asyncronously>
-        <Text>
-          This is the option to choose if you want to hear about how to make the most of your print
-          subscription, receive a dedicated weekly email from our membership editor and get more
-          information on ways to support The Guardian.
-        </Text>
+        <OptInCopy subscriptionProduct={Paper} />
       </Content>
     </div>
   );
