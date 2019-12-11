@@ -20,7 +20,6 @@ import { DirectDebit, PayPal, Stripe, AmazonPay } from 'helpers/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
 import { isSwitchOn } from 'helpers/globals';
 
-
 // ----- Types ----- //
 
 export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe' | 'existingCard' | 'existingDirectDebit' | 'amazonPay';
@@ -77,27 +76,35 @@ function getContributionTypeFromUrl(): ?ContributionType {
 // Returns an array of Payment Methods, in the order of preference,
 // i.e the first element in the array will be the default option
 function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry): PaymentMethod[] {
-  if (contributionType !== 'ONE_OFF' && countryId === 'GB') { return [DirectDebit, Stripe, PayPal]; } else if (contributionType === 'ONE_OFF' && countryId === 'US') { return [Stripe, PayPal, AmazonPay]; }
+  if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
+    return [DirectDebit, Stripe, PayPal];
+  } else if (contributionType === 'ONE_OFF' && countryId === 'US') {
+    return [Stripe, PayPal, AmazonPay];
+  }
   return [Stripe, PayPal];
+
 }
 
 function getValidPaymentMethods(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
+  inAmazonPayTest: boolean,
 ): PaymentMethod[] {
   const switchKey = (contributionType === 'ONE_OFF') ? 'oneOffPaymentMethods' : 'recurringPaymentMethods';
   return getPaymentMethods(contributionType, countryId)
     .filter(paymentMethod =>
-      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
+      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`) &&
+      (paymentMethod !== 'AmazonPay' || inAmazonPayTest));
 }
 
 function getPaymentMethodToSelect(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
+  inAmazonPayTest: boolean,
 ) {
-  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId, inAmazonPayTest);
   return validPaymentMethods[0] || 'None';
 }
 
