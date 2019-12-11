@@ -1,7 +1,6 @@
 // @flow
 
 import { setAmazonPayLoginObject, setAmazonPayPaymentsObject } from 'pages/contributions-landing/contributionsLandingActions';
-import { type AmazonPayData } from 'pages/contributions-landing/contributionsLandingReducer';
 import { isProd } from 'helpers/url';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { logException } from 'helpers/logger';
@@ -64,8 +63,8 @@ const loadAmazonPayScript = (isSandbox: boolean): void => {
     if (document.head) {
       document.head.appendChild(script);
     }
-  }).catch(error => {
-    logException(`Error loading ${widgetsUrl}`, error)
+  }).catch((error) => {
+    logException(`Error loading ${widgetsUrl}`, error);
   });
 };
 
