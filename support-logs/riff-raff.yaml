@@ -1,8 +1,8 @@
 stacks: [support]
 regions: [eu-west-1]
 deployments:
-  elasticsearch:
-    app: elk
+  support-logs:
+    app: support-logs
     type: cloud-formation
     parameters:
       templatePath: cfn.yaml
