@@ -8,6 +8,10 @@
     margin: 0;
     padding: 0;
     overflow: initial;
+
+    @include mq($from: leftCol) {
+      max-width: 1070px; // magic number for fixing the width of the page as it's no longer on the grid
+    }
   }
   /* */
 
@@ -46,6 +50,7 @@
   .gu-content__form {
     border: 0;
     padding-top: ($gu-v-spacing * 2);
+    margin: 0;
 
     @include mq($from: tablet) {
       max-width: $gu-h-spacing * 19.25;
