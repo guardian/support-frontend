@@ -6,6 +6,7 @@ import type { State, AmazonPayData } from 'pages/contributions-landing/contribut
 import { type Action, setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
 import Button from 'components/button/button';
 import { logException } from 'helpers/logger';
+import AnimatedDots from 'components/spinners/animatedDots';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
@@ -46,7 +47,7 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
       );
     }
     // TODO - spinner?
-    return null;
+    return <AnimatedDots appearance='dark'/>;
 
   }
 }
