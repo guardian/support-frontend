@@ -77,12 +77,12 @@ export type StripeCardFormData = {
 }
 
 export type AmazonPayLibrary = {
-  amazonLoginObject: Object,
-  amazonPaymentsObject: Object,
+  amazonLoginObject: Object | null,
+  amazonPaymentsObject: Object | null,
 }
 
 export type AmazonPayData = {
-  amazonPayLibrary: AmazonPayLibrary | null,
+  amazonPayLibrary: AmazonPayLibrary,
   walletWidgetReady: boolean,
   orderReferenceId: string | null,
   paymentSelected: boolean,
@@ -153,7 +153,10 @@ function createFormReducer() {
       },
     },
     amazonPayData: {
-      amazonPayLibrary: null,
+      amazonPayLibrary: {
+        amazonLoginObject: null,
+        amazonPaymentsObject: null,
+      },
       loginButtonReady: false,
       walletWidgetReady: false,
       orderReferenceId: null,
@@ -249,12 +252,27 @@ function createFormReducer() {
           },
         };
 
-      case 'SET_AMAZON_PAY_LIBRARY':
+      case 'SET_AMAZON_PAY_LOGIN_OBJECT':
         return {
           ...state,
           amazonPayData: {
             ...state.amazonPayData,
-            amazonPayLibrary: action.amazonPayLibrary,
+            amazonPayLibrary: {
+              ...state.amazonPayData.amazonPayLibrary,
+              amazonLoginObject: action.amazonLoginObject,
+            },
+          },
+        };
+
+      case 'SET_AMAZON_PAY_PAYMENTS_OBJECT':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            amazonPayLibrary: {
+              ...state.amazonPayData.amazonPayLibrary,
+              amazonPaymentsObject: action.amazonPaymentsObject,
+            },
           },
         };
 

@@ -1,9 +1,11 @@
 // @flow
 
-import { setAmazonPayLibrary } from 'pages/contributions-landing/contributionsLandingActions';
+import { setAmazonPayLoginObject, setAmazonPayPaymentsObject } from 'pages/contributions-landing/contributionsLandingActions';
 import { isProd } from 'helpers/url';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { logException } from 'helpers/logger';
+
+const amazonPaySupportedCountryGroups = ['UnitedStates'];
 
 const getAmazonRegion = (countryGroupId: CountryGroupId, amazonLoginObject: Object): ?string => {
   switch (countryGroupId) {
@@ -15,31 +17,36 @@ const getAmazonRegion = (countryGroupId: CountryGroupId, amazonLoginObject: Obje
   }
 };
 
-const getAmazonPayClientId = (isTestUser: boolean): string => (isTestUser ?
+const getAmazonPayClientId = (isSandbox: boolean): string => (isSandbox ?
   window.guardian.amazonPayClientId.uat :
   window.guardian.amazonPayClientId.default);
 
-const setupAmazonPay = (countryGroupId: CountryGroupId, dispatch: Function, isTestUser: boolean): void => {
-  const isSandbox = !isProd();
+// Amazon Pay callbacks - called after Widgets.js has loaded
+const setupAmazonPayCallbacks = (countryGroupId: CountryGroupId, dispatch: Function, isSandbox: boolean): void => {
+  window.onAmazonLoginReady = () => {
+    const amazonLoginObject = amazon.Login;
 
-  window.setOnAmazonReady((amazonLoginObject, amazonPaymentsObject) => {
     const amazonRegion = getAmazonRegion(countryGroupId, amazonLoginObject);
     if (amazonRegion) {
-      const clientId = getAmazonPayClientId(isTestUser);
+      const clientId = getAmazonPayClientId(isSandbox);
       amazonLoginObject.setClientId(clientId);
 
-      if (isTestUser || isSandbox) {
+      if (isSandbox) {
         amazonLoginObject.setSandboxMode(true);
       }
 
-      amazonLoginObject.setRegion(amazonLoginObject.Region.NorthAmerica);
-
-      dispatch(setAmazonPayLibrary({ amazonLoginObject, amazonPaymentsObject }));
+      dispatch(setAmazonPayLoginObject(amazon.Login));
     }
-  });
+  };
 
+  window.onAmazonPaymentsReady = () => {
+    dispatch(setAmazonPayPaymentsObject(OffAmazonPayments));
+  };
+};
+
+const loadAmazonPayScript = (isSandbox: boolean): void => {
   // Amazon pay requires us to use a different script for sandbox mode
-  const widgetsUrl = isTestUser || isSandbox ?
+  const widgetsUrl = isSandbox ?
     'https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js' :
     'https://static-na.payments-amazon.com/OffAmazonPayments/us/js/Widgets.js';
 
@@ -55,6 +62,16 @@ const setupAmazonPay = (countryGroupId: CountryGroupId, dispatch: Function, isTe
   }).catch(error => {
     logException(`Error loading ${widgetsUrl}`, error)
   });
+};
+
+const setupAmazonPay = (countryGroupId: CountryGroupId, dispatch: Function, isTestUser: boolean): void => {
+  const isSandbox = isTestUser || !isProd();
+
+  if (amazonPaySupportedCountryGroups.includes(countryGroupId)) {
+    setupAmazonPayCallbacks(countryGroupId, dispatch, isSandbox);
+
+    loadAmazonPayScript(isSandbox);
+  }
 };
 
 export {

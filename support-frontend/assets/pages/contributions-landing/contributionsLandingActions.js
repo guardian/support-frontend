@@ -64,7 +64,8 @@ export type Action =
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
-  | { type: 'SET_AMAZON_PAY_LIBRARY', amazonPayLibrary: AmazonPayLibrary }
+  | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
+  | { type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT', amazonPaymentsObject: Object }
   | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' }
   | { type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId: string }
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
@@ -205,9 +206,14 @@ const setThirdPartyPaymentLibrary =
     thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
   });
 
-const setAmazonPayLibrary = (amazonPayLibrary: AmazonPayLibrary): Action => ({
-  type: 'SET_AMAZON_PAY_LIBRARY',
-  amazonPayLibrary,
+const setAmazonPayLoginObject = (amazonPayLoginObject: Object): Action => ({
+  type: 'SET_AMAZON_PAY_LOGIN_OBJECT',
+  amazonPayLoginObject,
+});
+
+const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
+  type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT',
+  amazonPaymentsObject,
 });
 
 const setAmazonPayWalletWidgetReady: Action = ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' });
@@ -671,7 +677,8 @@ export {
   updateState,
   updateUserFormData,
   setThirdPartyPaymentLibrary,
-  setAmazonPayLibrary,
+  setAmazonPayLoginObject,
+  setAmazonPayPaymentsObject,
   setAmazonPayWalletWidgetReady,
   setAmazonPayHasAccessToken,
   setAmazonPayFatalError,

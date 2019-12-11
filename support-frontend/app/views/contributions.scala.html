@@ -115,39 +115,5 @@
   window.guardian.forceCampaign = @settings.switches.experiments.get("forceCampaign").exists(_.isOn)
   window.guardian.recurringStripePaymentRequestButton = @settings.switches.experiments.get("recurringStripePaymentRequestButton").exists(_.isOn)
 
-  // The following logic is for handling amazon pay initialisation.
-  // We have to setup the handlers (onAmazonLoginReady + onAmazonPaymentsReady) before the amazon pay js is loaded.
-  // The react app also needs to know when amazon pay is ready, but these things could all happen in any order.
-  // The solution is for the react app to call window.setOnAmazonReady to provide a callback.
-
-  var onAmazonReady = null; // For storing a callback provided by the react app
-
-  var amazonStatus = {
-    amazonLoginReady: false,
-    amazonPaymentsReady: false
-  };
-  const amazonIsReady = () => amazonStatus.amazonLoginReady && amazonStatus.amazonPaymentsReady;
-
-  window.setOnAmazonReady = (callback) => {
-    if (amazonIsReady()) {
-      callback(amazon.Login, OffAmazonPayments);
-    } else {
-      onAmazonReady = callback;
-    }
-  };
-
-  window.onAmazonLoginReady = () => {
-    amazonStatus.amazonLoginReady = true;
-    if (amazonIsReady() && onAmazonReady) {
-      onAmazonReady(amazon.Login, OffAmazonPayments);
-    }
-  };
-
-  window.onAmazonPaymentsReady = () => {
-    amazonStatus.amazonPaymentsReady = true;
-    if (amazonIsReady() && onAmazonReady) {
-      onAmazonReady(amazon.Login, OffAmazonPayments);
-    }
-  };
   </script>
 }
