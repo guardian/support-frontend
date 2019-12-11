@@ -32,7 +32,7 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
     case 'payment_details_incorrect':
       return 'An error occurred while trying to process your payment. Please double check your card details and try again. Alternatively, try another card or payment method.';
     case 'amazon_pay_try_again':
-      return 'An error occurred while trying to process your payment. You have not been charged. Please try again.';
+      return 'An error occurred while trying to process your payment. You have not been charged. Please try entering your payment details again.';
     case 'personal_details_incorrect':
       return 'Please double check the name and contact details you provided and try again.';
     case 'payment_method_temporarily_declined':
@@ -41,6 +41,7 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
     case 'amazon_pay_try_other_card':
       return 'The transaction was unsuccessful and you have not been charged. Please use a different card or choose another payment method.';
     case 'payment_provider_unavailable':
+      return 'The transaction was unsuccessful. This does not mean there’s anything wrong with your card, and you have not been charged. Please try using an alternative payment method.';
     case 'amazon_pay_fatal':
       return 'The transaction was unsuccessful and you have not been charged. Please try using an alternative payment method.';
     case 'all_payment_methods_unavailable':
