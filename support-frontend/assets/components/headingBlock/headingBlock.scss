@@ -31,11 +31,12 @@
   display: inline-block;
   line-height: 1;
   font-weight: bold;
-  color: gu-colour(neutral-7);
+  background-color: gu-colour(highlight-main);
+  color: gu-colour(neutral-97);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
 
  .component-product-page-hero-heading--campaign & {
-   background-color: #ffffff;
+  background-color: gu-colour(neutral-7);
     @supports(transform:translateY(-100%)) {
       transform: translateY(-100%);
       position: absolute;

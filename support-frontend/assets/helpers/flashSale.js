@@ -100,7 +100,7 @@ const Sales: Sale[] = [
     subscriptionProduct: 'Paper',
     activeRegions: [GBPCountries],
     startTime: new Date(2019, 10, 28).getTime(), // 28 Nov 2019
-    endTime: new Date(2019, 11, 16).getTime(), // 16 Dec 2019
+    endTime: new Date(2019, 10, 16).getTime(), // 16 Dec 2019
     duration: '12 months',
     saleDetails: {
       GBPCountries: {
@@ -109,7 +109,7 @@ const Sales: Sale[] = [
         intcmp: '',
         price: 8.09,
         annualPrice: 0,
-        discountPercentage: 0.52,
+        discountPercentage: 0.37,
         saleCopy: {
           featuredProduct: {
             heading: 'Paper',

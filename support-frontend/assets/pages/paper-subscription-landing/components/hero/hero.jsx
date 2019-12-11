@@ -90,7 +90,7 @@ const DefaultHeader = () => (
 const CampaignHeader = () => (
   <ProductPagehero
     appearance="campaign"
-    overheading="Become a Guardian and Observer Subscriber"
+    overheading="The Guardian newspaper subscriptions"
     heading={discountCopy.heading}
     modifierClasses={['paper-sale']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
@@ -98,27 +98,22 @@ const CampaignHeader = () => (
   >
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
-        <h2 className="sale-joy-of-print__copy-text">
-          The easiest<br />
-          decision<br />
-          you’ll make<br />
-          this election
-        </h2>
+        <h2><span>Challenge the</span><br /><span>writing on the wall.</span></h2>
+        <p>Become a Guardian and<br />Observer subscriber</p>
       </div>
     </div>
     <div className="sale-joy-of-print-graphic-outer">
       <div className="sale-joy-of-print-graphic-inner">
-
+        <div className="sale-joy-of-print-badge">
+          <Discount discountCopy={discountCopy.roundel} />
+        </div>
         <div className="sale-joy-of-print-graphic">
-          <div className="sale-joy-of-print-badge">
-            <Discount discountCopy={discountCopy.roundel} />
-          </div>
           <GridImage
-            gridId="printRainbowElection"
-            srcSizes={[728, 364]}
+            gridId="printShowcase"
+            srcSizes={[1000, 500]}
             sizes="(max-width: 740px) 100vw, 800px"
-            imgType="png"
-            altText="Election rainbow"
+            imgType="jpg"
+            altText="Newspapers"
           />
         </div>
       </div>
