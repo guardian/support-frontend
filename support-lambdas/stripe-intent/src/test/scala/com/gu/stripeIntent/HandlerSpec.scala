@@ -2,11 +2,12 @@ package com.gu.stripeIntent
 
 import java.nio.charset.Charset
 
-import com.gu.handler.{ApiGatewayResponse}
+import com.gu.handler.ApiGatewayResponse
 import com.gu.support.config.Stages
 import okhttp3.{MediaType, Protocol, Request, Response}
 import okio.{Buffer, BufferedSource}
-import org.scalatest.{AsyncFlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.collection.JavaConverters._
 import scala.concurrent.Future

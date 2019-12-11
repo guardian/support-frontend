@@ -7,10 +7,12 @@ import com.gu.support.config.{PromotionsConfigProvider, Stages}
 import com.gu.support.promotions.PromotionServiceSpec._
 import com.gu.support.promotions.ServicesFixtures.{freeTrialPromoCode, _}
 import com.typesafe.config.ConfigFactory
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
+
 
 //noinspection NameBooleanParameters
-class PromotionServiceSpec extends FlatSpec with Matchers {
+class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
 
   "PromotionService" should "find a PromoCode" in {
     serviceWithFixtures.findPromotion(freeTrialPromoCode) should be(Some(freeTrialWithCode))

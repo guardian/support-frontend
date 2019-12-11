@@ -1,11 +1,13 @@
 package com.gu.support.encoding
 
 import io.circe.{Json, JsonObject}
-import org.scalatest.{FlatSpec, Matchers}
+
 import JsonHelpers._
 import io.circe.parser._
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class JsonHelpersSpec extends FlatSpec with Matchers {
+class JsonHelpersSpec extends AsyncFlatSpec with Matchers {
 
   "JsonHelper" should "be able to wrap a JsonObject" in {
     val initialObject = JsonObject(("name", Json.fromString("Bill")))

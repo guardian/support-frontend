@@ -1,49 +1,49 @@
 package com.gu.i18n
 
 
-import Currency._
-import org.scalatest.FlatSpec
+import com.gu.i18n.Currency._
+import org.scalatest.Inspectors
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class CountryGroupTest extends FlatSpec {
+
+class CountryGroupTest extends AsyncFlatSpec with Matchers with Inspectors {
 
   "A CountryGroup" should "be found by id" in {
-    assert(CountryGroup.byId("ie") === None)
-    assert(CountryGroup.byId("eu") === Some(CountryGroup.Europe))
-    assert(CountryGroup.byId("int") === Some(CountryGroup.RestOfTheWorld))
+    CountryGroup.byId("ie") shouldBe None
+    CountryGroup.byId("eu") shouldBe Some(CountryGroup.Europe)
+    CountryGroup.byId("int") shouldBe Some(CountryGroup.RestOfTheWorld)
   }
 
   it should "be found by its countries names and codes" in {
-    assert(CountryGroup.byCountryNameOrCode(Country.Australia.alpha2) === Some(CountryGroup.Australia))
-    assert(CountryGroup.byCountryNameOrCode(Country.Australia.name) === Some(CountryGroup.Australia))
-    assert(CountryGroup.byCountryNameOrCode(Country.US.alpha2) === Some(CountryGroup.US))
-    assert(CountryGroup.byCountryNameOrCode(Country.US.name) === Some(CountryGroup.US))
-    assert(CountryGroup.byCountryNameOrCode("Italy") === Some(CountryGroup.Europe))
-    assert(CountryGroup.byCountryNameOrCode("IT") === Some(CountryGroup.Europe))
-    assert(CountryGroup.byCountryNameOrCode("AF") === Some(CountryGroup.RestOfTheWorld))
-    assert(CountryGroup.byCountryNameOrCode("Afghanistan") === Some(CountryGroup.RestOfTheWorld))
-    assert(CountryGroup.byCountryNameOrCode("IE") === Some(CountryGroup.Europe))
+    CountryGroup.byCountryNameOrCode(Country.Australia.alpha2) shouldBe Some(CountryGroup.Australia)
+    CountryGroup.byCountryNameOrCode(Country.Australia.name) shouldBe Some(CountryGroup.Australia)
+    CountryGroup.byCountryNameOrCode(Country.US.alpha2) shouldBe Some(CountryGroup.US)
+    CountryGroup.byCountryNameOrCode(Country.US.name) shouldBe Some(CountryGroup.US)
+    CountryGroup.byCountryNameOrCode("Italy") shouldBe Some(CountryGroup.Europe)
+    CountryGroup.byCountryNameOrCode("IT") shouldBe Some(CountryGroup.Europe)
+    CountryGroup.byCountryNameOrCode("AF") shouldBe Some(CountryGroup.RestOfTheWorld)
+    CountryGroup.byCountryNameOrCode("Afghanistan") shouldBe Some(CountryGroup.RestOfTheWorld)
+    CountryGroup.byCountryNameOrCode("IE") shouldBe Some(CountryGroup.Europe)
   }
 
   it should "correctly identify its currencies" in {
-    assert(CountryGroup.availableCurrency(Set.empty)(Country.UK) === None)
-    assert(CountryGroup.availableCurrency(Set(GBP, AUD))(Country.US) === None)
-    assert(CountryGroup.availableCurrency(Set(GBP, AUD))(Country.UK) === Some(GBP))
-    assert(CountryGroup.availableCurrency(Set(GBP, AUD))(Country.Australia) === Some(AUD))
+    CountryGroup.availableCurrency(Set.empty)(Country.UK) shouldBe None
+    CountryGroup.availableCurrency(Set(GBP, AUD))(Country.US) shouldBe None
+    CountryGroup.availableCurrency(Set(GBP, AUD))(Country.UK) shouldBe Some(GBP)
+    CountryGroup.availableCurrency(Set(GBP, AUD))(Country.Australia) shouldBe Some(AUD)
   }
 
   it should "identify countries correctly" in {
-    CountryGroup.countries.map { c =>
-      assert(
-        CountryGroup.byOptimisticCountryNameOrCode(c.name) === Some(c)
-      )
-      assert(
-        CountryGroup.byOptimisticCountryNameOrCode(c.alpha2) === Some(c)
-      )
+    forAll(CountryGroup.countries) { c =>
+        CountryGroup.byOptimisticCountryNameOrCode(c.name) shouldBe Some(c)
+        CountryGroup.byOptimisticCountryNameOrCode(c.alpha2) shouldBe Some(c)
     }
   }
 
   it should "handle null and return None" in {
-    CountryGroup.byOptimisticCountryNameOrCode(null) === None
+    //noinspection ScalaStyle
+    CountryGroup.byOptimisticCountryNameOrCode(null) shouldBe None
   }
 
   it should "identify countries from common alternatives" in {
@@ -61,7 +61,10 @@ class CountryGroupTest extends FlatSpec {
       "united states of america" -> Country.US,
       "trinidad and tobago" -> CountryGroup.countryByCode("TT").get
     )
-    tests.map { case (name: String, country: Country) => assert(CountryGroup.byOptimisticCountryNameOrCode(name) === Some(country)) }
+    forAll(tests){
+      case (name: String, country: Country) =>
+        CountryGroup.byOptimisticCountryNameOrCode(name) shouldBe Some(country)
+    }
   }
 
 

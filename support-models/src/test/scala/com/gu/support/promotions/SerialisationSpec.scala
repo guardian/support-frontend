@@ -6,10 +6,11 @@ import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.DateTime
 import org.joda.time.Days.days
 import org.joda.time.Months.months
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AsyncFlatSpec
+
 
 //noinspection ScalaStyle
-class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with LazyLogging {
+class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging {
 
   "Circe" should "be able to decode a discount Promotion" in {
     testDecoding[Promotion](Fixtures.discountPromotion,

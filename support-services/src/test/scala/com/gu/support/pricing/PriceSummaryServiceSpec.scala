@@ -10,9 +10,11 @@ import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
 import org.joda.time.Months
 import org.scalatest.OptionValues._
-import org.scalatest.{Assertion, FlatSpec, Matchers}
+import org.scalatest.Assertion
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class PriceSummaryServiceSpec extends FlatSpec with Matchers {
+class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
   "PriceSummaryService" should "return prices" in {
 

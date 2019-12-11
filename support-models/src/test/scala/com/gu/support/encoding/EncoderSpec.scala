@@ -6,10 +6,12 @@ import com.gu.support.zuora.api.response.{Invoice, InvoiceResult}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe._
 import io.circe.syntax._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class EncoderSpec extends FlatSpec with Matchers with LazyLogging with SerialisationTestHelpers {
-  implicit val encoder: ObjectEncoder[TestClass] = capitalizingEncoder[TestClass]
+
+class EncoderSpec extends AsyncFlatSpec with Matchers with LazyLogging with SerialisationTestHelpers {
+  implicit val encoder: Encoder[TestClass] = capitalizingEncoder[TestClass]
   implicit val decoderTestClass: Decoder[TestClass] = decapitalizingDecoder[TestClass]
   implicit val decoderOuterClass: Decoder[OuterClass] = decapitalizingDecoder[OuterClass]
   implicit val decodeInvoice: Decoder[Invoice] = decapitalizingDecoder[Invoice]

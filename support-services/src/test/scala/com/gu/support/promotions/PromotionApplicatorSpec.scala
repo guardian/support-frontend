@@ -2,9 +2,11 @@ package com.gu.support.promotions
 
 import com.gu.support.config.PromotionsDiscountConfig
 import com.gu.support.promotions.ServicesFixtures._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class PromotionApplicatorSpec extends FlatSpec with Matchers {
+
+class PromotionApplicatorSpec extends AsyncFlatSpec with Matchers {
   val config = PromotionsDiscountConfig(validProductRatePlanId, "112233")
   val correctDate = subscriptionData.subscription.contractEffectiveDate.plusDays(freeTrial.freeTrial.get.duration.getDays)
 

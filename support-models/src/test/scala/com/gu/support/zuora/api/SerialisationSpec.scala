@@ -12,9 +12,11 @@ import io.circe.parser._
 import io.circe.syntax._
 import org.joda.time.LocalDate
 import org.joda.time.Months.months
-import org.scalatest.FlatSpec
+import org.scalatest.{Inspectors, Succeeded}
+import org.scalatest.flatspec.AsyncFlatSpec
 
-class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with LazyLogging {
+
+class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging with Inspectors {
 
   "Account" should "serialise to correct json" in {
     val json = account(GBP).asJson
@@ -124,6 +126,7 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
     val encoded = subscription.asJson
     (encoded \\ "InitialPromotionCode__c").map(_ shouldBe Json.fromString(promoCode))
     (encoded \\ "PromotionCode__c").map(_ shouldBe Json.fromString(promoCode))
+    succeed
   }
 
   "SubscribeResponseAccount" should "deserialise correctly" in {

@@ -3,7 +3,8 @@ package com.gu.support
 import io.circe.{Decoder, Encoder, Error}
 import io.circe.parser.decode
 import io.circe.syntax._
-import org.scalatest.{Assertion, Matchers}
+import org.scalatest.Assertion
+import org.scalatest.matchers.should.Matchers
 
 trait SerialisationTestHelpers extends Matchers {
   def testDecoding[T : Decoder](fixture: String, objectChecks: T => Assertion = (_: T) => succeed): Assertion = {

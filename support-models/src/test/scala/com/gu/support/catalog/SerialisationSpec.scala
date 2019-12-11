@@ -3,12 +3,13 @@ package com.gu.support.catalog
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.support.SerialisationTestHelpers
-import com.gu.support.encoding.CustomCodecs.decodeCurrency
 import com.gu.support.config.TouchPointEnvironments.PROD
+import com.gu.support.encoding.CustomCodecs.decodeCurrency
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.FlatSpec
+import org.scalatest.Assertion
+import org.scalatest.flatspec.AsyncFlatSpec
 
-class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with LazyLogging {
+class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging {
 
   "The full Catalog" should "decode successfully" in {
     val digitalPackId = "2c92a0fb4edd70c8014edeaa4eae220a"
@@ -23,7 +24,7 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
       })
   }
 
-  def checkPrice(catalog: Catalog, productRatePlanId: ProductRatePlanId, currency: Currency, value: BigDecimal)={
+  def checkPrice(catalog: Catalog, productRatePlanId: ProductRatePlanId, currency: Currency, value: BigDecimal): Assertion ={
     catalog.prices
       .find(_.productRatePlanId == productRatePlanId)
       .getOrElse(fail())
