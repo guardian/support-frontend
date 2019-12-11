@@ -206,9 +206,9 @@ const setThirdPartyPaymentLibrary =
     thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
   });
 
-const setAmazonPayLoginObject = (amazonPayLoginObject: Object): Action => ({
+const setAmazonPayLoginObject = (amazonLoginObject: Object): Action => ({
   type: 'SET_AMAZON_PAY_LOGIN_OBJECT',
-  amazonPayLoginObject,
+  amazonLoginObject,
 });
 
 const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({

@@ -22,9 +22,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
 
-  loginPopup = (amazonPayLibrary: Object) => (): void => {
+  loginPopup = (amazonLoginObject: Object) => (): void => {
     const loginOptions = { scope: 'profile postal_code payments:widget payments:shipping_address', popup: true };
-    amazonPayLibrary.amazonLoginObject.authorize(loginOptions, (response) => {
+    amazonLoginObject.authorize(loginOptions, (response) => {
       if (response.error) {
         logException(`Error from Amazon login: ${response.error}`);
       } else {
@@ -34,11 +34,12 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
   };
 
   render() {
-    if (this.props.amazonPayData.amazonPayLibrary) {
+    const { amazonLoginObject, amazonPaymentsObject } = this.props.amazonPayData.amazonPayLibrary;
+    if (amazonLoginObject && amazonPaymentsObject) {
       return (
         <div>
           <div id="AmazonLoginButton" />
-          <Button type="button" onclick={this.loginPopup(this.props.amazonPayData.amazonPayLibrary)} aria-label="Submit contribution">
+          <Button type="button" onclick={this.loginPopup(amazonLoginObject)} aria-label="Submit contribution">
             Proceed with Amazon Pay
           </Button>
         </div>

@@ -34,21 +34,23 @@ const getSellerId = (isTestUser: boolean): string => (isTestUser ?
 class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
 
   componentDidMount(): void {
-    if (this.props.amazonPayData.amazonPayLibrary) {
-      this.createWidget(this.props.amazonPayData.amazonPayLibrary);
+    const { amazonLoginObject, amazonPaymentsObject } = this.props.amazonPayData.amazonPayLibrary;
+    if (amazonLoginObject && amazonPaymentsObject) {
+      this.createWidget(amazonPaymentsObject);
     }
   }
 
   componentDidUpdate(): void {
-    if (this.props.amazonPayData.amazonPayLibrary && !this.props.amazonPayData.walletWidgetReady) {
-      this.createWidget(this.props.amazonPayData.amazonPayLibrary);
+    const { amazonLoginObject, amazonPaymentsObject } = this.props.amazonPayData.amazonPayLibrary;
+    if (amazonLoginObject && amazonPaymentsObject && !this.props.amazonPayData.walletWidgetReady) {
+      this.createWidget(amazonPaymentsObject);
     }
   }
 
-  createWidget(amazonPayLibrary: Object): void {
+  createWidget(amazonPaymentsObject: Object): void {
     this.props.setAmazonPayPaymentSelected(false); // in case we've previously created a wallet
 
-    new amazonPayLibrary.amazonPaymentsObject.Widgets.Wallet({
+    new amazonPaymentsObject.Widgets.Wallet({
       sellerId: getSellerId(this.props.isTestUser),
       design: { designMode: 'responsive' },
       onOrderReferenceCreate: (orderReference) => {
@@ -67,7 +69,8 @@ class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
   }
 
   render() {
-    if (this.props.amazonPayData.amazonPayLibrary) {
+    const { amazonLoginObject, amazonPaymentsObject } = this.props.amazonPayData.amazonPayLibrary;
+    if (amazonLoginObject && amazonPaymentsObject) {
       return (
         <div>
           <div className="walletWidgetDiv" id="WalletWidgetDiv" />

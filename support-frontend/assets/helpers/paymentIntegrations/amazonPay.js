@@ -1,6 +1,7 @@
 // @flow
 
 import { setAmazonPayLoginObject, setAmazonPayPaymentsObject } from 'pages/contributions-landing/contributionsLandingActions';
+import { type AmazonPayData } from 'pages/contributions-landing/contributionsLandingReducer';
 import { isProd } from 'helpers/url';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { logException } from 'helpers/logger';
@@ -24,23 +25,27 @@ const getAmazonPayClientId = (isSandbox: boolean): string => (isSandbox ?
 // Amazon Pay callbacks - called after Widgets.js has loaded
 const setupAmazonPayCallbacks = (countryGroupId: CountryGroupId, dispatch: Function, isSandbox: boolean): void => {
   window.onAmazonLoginReady = () => {
-    const amazonLoginObject = amazon.Login;
+    if (window.amazon && window.amazon.Login) {
+      const amazonLoginObject = window.amazon.Login;
 
-    const amazonRegion = getAmazonRegion(countryGroupId, amazonLoginObject);
-    if (amazonRegion) {
-      const clientId = getAmazonPayClientId(isSandbox);
-      amazonLoginObject.setClientId(clientId);
+      const amazonRegion = getAmazonRegion(countryGroupId, amazonLoginObject);
+      if (amazonRegion) {
+        const clientId = getAmazonPayClientId(isSandbox);
+        amazonLoginObject.setClientId(clientId);
 
-      if (isSandbox) {
-        amazonLoginObject.setSandboxMode(true);
+        if (isSandbox) {
+          amazonLoginObject.setSandboxMode(true);
+        }
+
+        dispatch(setAmazonPayLoginObject(window.amazon.Login));
       }
-
-      dispatch(setAmazonPayLoginObject(amazon.Login));
     }
   };
 
   window.onAmazonPaymentsReady = () => {
-    dispatch(setAmazonPayPaymentsObject(OffAmazonPayments));
+    if (window.OffAmazonPayments) {
+      dispatch(setAmazonPayPaymentsObject(window.OffAmazonPayments));
+    }
   };
 };
 
