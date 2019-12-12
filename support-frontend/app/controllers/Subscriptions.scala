@@ -86,7 +86,6 @@ class Subscriptions(
     val mainElement = EmptyDiv("subscriptions-landing-page")
     val js = "subscriptionsLandingPage.js"
     val pricingCopy = CountryGroup.byId(countryCode).map(getLandingPrices)
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(Paper, List("GE19SUBS"))
 
     Ok(views.html.main(
       title,
@@ -98,7 +97,6 @@ class Subscriptions(
     ){
       Html(
         s"""<script type="text/javascript">
-              window.guardian.productPrices = ${outputJson(productPrices)}
               window.guardian.pricingCopy = ${outputJson(pricingCopy)}
             </script>""")
     }).withSettingsSurrogateKey
