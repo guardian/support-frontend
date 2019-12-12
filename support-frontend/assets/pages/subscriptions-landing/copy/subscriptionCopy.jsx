@@ -188,7 +188,7 @@ const paperAndDigital = (
     getCampaign(referrerAcquisitionData),
     referrerAcquisitionData,
     abParticipations,
-  );
+  ).PaperAndDigital;
   return {
     title: 'Paper+Digital',
     subtitle: `from ${getPrice(countryGroupId, PaperAndDigital, '')}`,
