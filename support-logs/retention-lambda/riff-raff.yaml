@@ -6,7 +6,7 @@ deployments:
     app: support-logs-retention-lambda
     parameters:
       templatePath: cfn.yaml
-  support-logs-retention-lambda-files:
+  support-logs-retention-lambda-code:
     app: support-logs-retention-lambda
     type: aws-lambda
     parameters:
