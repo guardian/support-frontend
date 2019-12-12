@@ -3,7 +3,7 @@ Description: Proxy instance for kibana
 
 Parameters:
   NginxAMI:
-    Description: AMI ID
+    Description: AMI ID (may be replaced by RiffRaff for latest baked AMI)
     Type: String
     Default: ami-0a15b21aee4d9a317
   VpcId:
