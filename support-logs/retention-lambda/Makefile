@@ -1,2 +1,2 @@
 all:
-	zip -r ../retention-lambda.zip . > /dev/null
+	zip -r ../support-logs-retention-lambda.zip . > /dev/null

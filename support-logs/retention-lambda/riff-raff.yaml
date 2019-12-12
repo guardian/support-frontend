@@ -2,9 +2,14 @@ stacks: [support]
 regions: [eu-west-1]
 deployments:
   support-logs-retention-lambda-files:
+    type: cloud-formation
+    app: support-logs-retention-lambda
+    parameters:
+      templatePath: cfn.yaml
+  support-logs-retention-lambda-files:
     app: support-logs-retention-lambda
     type: aws-lambda
     parameters:
       bucket: subscriptions-dist
-      fileName: retention-lambda.zip
+      fileName: support-logs-retention-lambda.zip
       functionNames: [supports-logs-retention-lambda-]
