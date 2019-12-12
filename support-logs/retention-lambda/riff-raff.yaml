@@ -1,7 +1,7 @@
 stacks: [support]
 regions: [eu-west-1]
 deployments:
-  support-logs-retention-lambda-files:
+  support-logs-retention-lambda-cfn:
     type: cloud-formation
     app: support-logs-retention-lambda
     parameters:
