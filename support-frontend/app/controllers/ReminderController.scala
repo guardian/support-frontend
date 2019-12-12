@@ -43,7 +43,7 @@ class ReminderController(components: ControllerComponents,
   }
 }
 
-case class ReminderEventRequest(email: String)
+case class ReminderEventRequest(email: String, reminderDate: String)
 object ReminderEventRequest {
   implicit val decoder: Decoder[ReminderEventRequest] = deriveDecoder
 }
