@@ -13,3 +13,4 @@ deployments:
       bucket: subscriptions-dist
       fileName: support-logs-retention-lambda.zip
       functionNames: [supports-logs-retention-lambda-]
+      prefixStack: false
