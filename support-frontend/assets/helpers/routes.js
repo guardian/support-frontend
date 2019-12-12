@@ -53,6 +53,10 @@ function digitalSubscriptionLanding() {
   return `${getOrigin()}${routes.digitalSubscriptionLanding}`;
 }
 
+function guardianWeeklyLanding(gift: boolean) {
+  return `${getOrigin()}${gift ? routes.guardianWeeklySubscriptionLandingGift : routes.guardianWeeklySubscriptionLanding}`;
+}
+
 const promotionTermsUrl = (promoCode: string) => `${getOrigin()}/p/${promoCode}/terms`;
 
 function paperCheckoutUrl(
@@ -84,5 +88,6 @@ export {
   paperSubsUrl,
   paperCheckoutUrl,
   digitalSubscriptionLanding,
+  guardianWeeklyLanding,
   promotionTermsUrl,
 };
