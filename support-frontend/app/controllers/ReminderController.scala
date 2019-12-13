@@ -22,9 +22,10 @@ class ReminderController(components: ControllerComponents,
   def sendReminderCreatedEvent(): Action[ReminderEventRequest] = PrivateAction.async(circe.json[ReminderEventRequest]) { implicit request =>
 
     val email = request.body.email
+    val reminderDate = request.body.reminderDate
 
     ValidateEmail(email) match {
-      case ValidEmail(ve) => sendToLambda(ve)
+      case ValidEmail(ve) => sendToLambda(ve, reminderDate)
       case InvalidEmail => respondWithBadRequest(s"Bad Request: Regex match failed for email: $email")
     }
   }
@@ -34,8 +35,8 @@ class ReminderController(components: ControllerComponents,
     Future.successful(BadRequest(message))
   }
 
-  private def sendToLambda(email: String) =
-    sendReminderEmail(email).map(res => if (res) Ok else internalServerError(s"Internal Server Error: Request failed for: $email"))
+  private def sendToLambda(email: String, reminderDate: String) =
+    sendReminderEmail(email, reminderDate).map(res => if (res) Ok else internalServerError(s"Internal Server Error: Request failed for: $email"))
 
   private def internalServerError(message: String) = {
     SafeLogger.warn(message)

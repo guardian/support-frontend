@@ -24,10 +24,10 @@ class RemindMeService(stage: Stage) {
 
   private val expectedResponse = """{"statusCode":200,"body":"\"OK\""}"""
 
-  def apply(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
+  def apply(email: String, reminderDate: String)(implicit ec: ExecutionContext): Future[Boolean] = {
 
-    val emailJson = Json.obj("email" -> email)
-    val payload = Json.obj("ReminderCreatedEvent" -> emailJson)
+    val payloadBody = Json.obj("email" -> email, "reminderDate" -> reminderDate)
+    val payload = Json.obj("ReminderCreatedEvent" -> payloadBody)
 
     val request = new InvokeRequest()
       .withFunctionName(functionName)
