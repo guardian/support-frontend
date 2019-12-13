@@ -75,7 +75,8 @@ class Subscriptions(
 
     val weekly = service.getPrices(GuardianWeekly, Nil)(countryGroup)(Domestic)(NoProductOptions)(Quarterly)(countryGroup.currency)
 
-    val digitalSubscription = service.getPrices(DigitalPack, List("DK0NT24WG"))(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
+    val digitalSubscription = service
+      .getPrices(DigitalPack, List("DK0NT24WG"))(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
 
     Map(GuardianWeekly.toString -> pricingCopy(weekly), DigitalPack.toString -> pricingCopy(digitalSubscription)) ++ paperMap
   }
