@@ -24,7 +24,7 @@ def lambda_handler(event, context):
     index_list = curator.IndexList(es)
 
     # Filters by age, anything with a time stamp older than 30 days in the index name.
-    index_list.filter_by_age(source='name', direction='older', timestring='%Y.%m.%d', unit='days', unit_count=24)
+    index_list.filter_by_age(source='name', direction='older', timestring='%Y.%m.%d', unit='days', unit_count=90)
 
     print("Found %s indices to delete" % len(index_list.indices))
 
