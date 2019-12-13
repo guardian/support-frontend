@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.AWSLambdaClientBuilder
 import com.amazonaws.services.lambda.model.InvokeRequest
 import com.gu.monitoring.SafeLogger
 import com.gu.support.config.{Stage, Stages}
+import controllers.ReminderEventRequest
 import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -24,14 +25,10 @@ class RemindMeService(stage: Stage) {
 
   private val expectedResponse = """{"statusCode":200,"body":"\"OK\""}"""
 
-  def apply(email: String, reminderDate: String)(implicit ec: ExecutionContext): Future[Boolean] = {
-
-    val payloadBody = Json.obj("email" -> email, "reminderDate" -> reminderDate)
-    val payload = Json.obj("ReminderCreatedEvent" -> payloadBody)
-
+  def apply(reminderEventRequest: ReminderEventRequest)(implicit ec: ExecutionContext): Future[Boolean] = {
     val request = new InvokeRequest()
       .withFunctionName(functionName)
-      .withPayload(payload.toString)
+      .withPayload(contructPayload(reminderEventRequest))
 
     val res = lambdaClient.invoke(request)
     val responseBody = new String(res.getPayload.array())
@@ -42,4 +39,8 @@ class RemindMeService(stage: Stage) {
     Future(isSuccessResponse)
   }
 
+  def contructPayload(reminderEventRequest: ReminderEventRequest): String = {
+    val payloadBody = Json.obj("email" -> reminderEventRequest.email, "reminderDate" -> reminderEventRequest.reminderDate)
+    Json.obj("ReminderCreatedEvent" -> payloadBody).toString
+  }
 }
