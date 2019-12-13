@@ -52,7 +52,7 @@ import {
   glyph,
 } from 'helpers/internationalisation/currency';
 
-import {State} from '../subscriptionsLandingReducer';
+import type { State } from '../subscriptionsLandingReducer';
 import type { PriceCopy } from '../subscriptionsLandingReducer';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import {
@@ -79,6 +79,7 @@ export type ProductCopy = {
   offer?: string,
   buttons: ProductButton[],
   isFeature?: boolean,
+  classModifier?: string[],
 }
 
 const abTest = null;
@@ -138,12 +139,12 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
 
 const getWeeklyImage = (isTop: boolean) => {
   if (isTop) {
-    return <GuardianWeeklyPackShotHero/>;
+    return <GuardianWeeklyPackShotHero />;
   }
   return <GuardianWeeklyPackShot />;
 };
 
-const guardianWeekly = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: boolean) : ProductCopy => ({
+const guardianWeekly = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: boolean): ProductCopy => ({
   title: 'The Guardian Weekly',
   subtitle: getDisplayPrice(countryGroupId, priceCopy.price, Quarterly),
   description: 'A weekly, global magazine from The Guardian, with delivery worldwide',
@@ -164,7 +165,7 @@ const guardianWeekly = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, is
   productImage: getWeeklyImage(isTop),
 });
 
-const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy) : ProductCopy => ({
+const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy): ProductCopy => ({
   title: 'Paper',
   subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
   description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
@@ -181,7 +182,7 @@ const paperAndDigital = (
   countryGroupId: CountryGroupId,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
-) : ProductCopy => {
+): ProductCopy => {
   const link = getSubsLinks(
     countryGroupId,
     referrerAcquisitionData.campaignCode,
@@ -200,10 +201,10 @@ const paperAndDigital = (
     }],
     productImage: <PaperAndDigitalPackshot />,
     offer: getSaleCopy(PaperAndDigital, countryGroupId).bundle.subHeading,
-  }
+  };
 };
 
-const premiumApp = (countryGroupId: CountryGroupId) : ProductCopy => ({
+const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
   title: 'Premium App',
   subtitle: getPrice(countryGroupId, PremiumTier, '7-day free Trial'),
   description: 'The ad-free, Premium App, designed especially for your smartphone and tablet',
@@ -221,8 +222,13 @@ const premiumApp = (countryGroupId: CountryGroupId) : ProductCopy => ({
   classModifier: ['subscriptions__premuim-app'],
 });
 
-const testOrdering = (state: State) => {
-  const { countryGroupId } = state.common.internationalisation;
+const weeklyInternational = (countryGroupId: CountryGroupId, state: State) => [
+  guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
+  digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
+  premiumApp(countryGroupId),
+];
+
+const testOrdering = (countryGroupId: CountryGroupId, state: State) => {
   const weeklyTop = state.common.abParticipations.subsShowcaseOrderingTest === 'weeklyTop';
   if (weeklyTop) {
     return weeklyInternational(countryGroupId, state);
@@ -234,36 +240,28 @@ const testOrdering = (state: State) => {
   ];
 };
 
-const weeklyInternational = (state: State) => {
-  const { countryGroupId } = state.common.internationalisation;
-  return [
-    guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
-    digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
-    premiumApp(countryGroupId),
-  ]
-};
-
 const orderedProducts = (state: State): ProductCopy[] => {
   const { countryGroupId } = state.common.internationalisation;
-    switch (countryGroupId) {
-      case GBPCountries:
-        return [
-          paper(countryGroupId, state.page.pricingCopy[Paper]),
-          digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
-          guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], false),
-          paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
-          premiumApp(countryGroupId),
-        ];
-      case EURCountries:
-      case International:
-        return testOrdering(state);
-      case NZDCountries:
-      case AUDCountries:
-      case Canada:
-      case UnitedStates:
-        return weeklyInternational(state);
-    }
-  };
+  switch (countryGroupId) {
+    case GBPCountries:
+      return [
+        paper(countryGroupId, state.page.pricingCopy[Paper]),
+        digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
+        guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], false),
+        paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
+        premiumApp(countryGroupId),
+      ];
+    case EURCountries:
+    case International:
+      return testOrdering(countryGroupId, state);
+    case NZDCountries:
+    case AUDCountries:
+    case Canada:
+    case UnitedStates:
+    default:
+      return weeklyInternational(countryGroupId, state);
+  }
+};
 
 const getSubscriptionCopy = (state: State) =>
   orderedProducts(state);

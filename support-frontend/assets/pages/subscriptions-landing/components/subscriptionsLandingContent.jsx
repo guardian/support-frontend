@@ -5,7 +5,7 @@ import React from 'react';
 // components
 import SubscriptionsProduct from './subscriptionsProduct';
 import FeatureHeader from './featureHeader';
-import State from '../subscriptionsLandingReducer';
+import type { State } from '../subscriptionsLandingReducer';
 
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { ProductCopy } from '../copy/subscriptionCopy';
@@ -26,13 +26,13 @@ const SubscriptionsLandingContent = (props: PropTypes) => (
       {props.subscriptionCopy.map((product, index) => (
         <SubscriptionsProduct
           title={product.title}
-          subtitle={product.subtitle}
+          subtitle={product.subtitle || ''}
           description={product.description}
           productImage={product.productImage}
           buttons={product.buttons}
           offer={product.offer || null}
           isFeature={isFeature(index)}
-          classModifier={product.classModifier}
+          classModifier={product.classModifier || []}
         />
       ))}
     </div>
