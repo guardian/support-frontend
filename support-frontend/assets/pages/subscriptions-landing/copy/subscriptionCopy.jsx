@@ -131,7 +131,7 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
   offer: priceCopy.discountCopy,
   buttons: [{
     ctaButtonText: 'Find out more',
-    link: digitalSubscriptionLanding(),
+    link: digitalSubscriptionLanding(countryGroupId),
     analyticsTracking: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription'),
   }],
   isFeature: true,
@@ -152,12 +152,12 @@ const guardianWeekly = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, is
   buttons: [
     {
       ctaButtonText: 'Find out more',
-      link: guardianWeeklyLanding(false),
+      link: guardianWeeklyLanding(countryGroupId, false),
       analyticsTracking: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
     },
     {
       ctaButtonText: 'See gift options',
-      link: guardianWeeklyLanding(true),
+      link: guardianWeeklyLanding(countryGroupId, true),
       analyticsTracking: sendTrackingEventsOnClick('weekly_cta_gift', 'GuardianWeekly', abTest),
       modifierClasses: '',
     },

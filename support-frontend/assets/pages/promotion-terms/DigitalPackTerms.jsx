@@ -1,13 +1,21 @@
 // @flow
 
 import React from 'react';
-import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { formatUserDate } from 'helpers/dateConversions';
 import { digitalSubscriptionLanding } from 'helpers/routes';
 import OrderedList from 'components/list/orderedList';
 import CopyrightText from 'pages/promotion-terms/CopyrightText';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { Option } from 'helpers/types/option';
 
-export default function DigitalPackTerms(props: PromotionTerms) {
+type PropTypes = {
+  starts: Date,
+  expires: Option<Date>,
+  promoCode: string,
+  countryGroupId: CountryGroupId,
+}
+
+export default function DigitalPackTerms(props: PropTypes) {
 
   const expiryCopy = props.expires ?
     `The closing date and time of the promotion is ${formatUserDate(props.expires)}. 
@@ -17,7 +25,7 @@ export default function DigitalPackTerms(props: PromotionTerms) {
     'The promotion (the “Promotion”) is open to new Guardian Digital Subscription subscribers aged 18 and over ("you") subject to paragraph 2 below.',
     'By entering the promotion you are accepting these terms and conditions.',
     <div>To enter the promotion, you must: (i) either go to{' '}
-      <a href={digitalSubscriptionLanding()}>support.theguardian.com</a> or call
+      <a href={digitalSubscriptionLanding(props.countryGroupId)}>support.theguardian.com</a> or call
       +44 (0) 330 333 6767 and quote promotion code {props.promoCode} (ii)
       purchase a Guardian Digital Subscription and maintain that subscription for at
       least three months.

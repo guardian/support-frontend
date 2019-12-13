@@ -41,6 +41,9 @@ const routes: {
   createReminder: '/contribute/remind-me',
 };
 
+const countryPath = (countryGroupId: CountryGroupId) =>
+  countryGroups[countryGroupId].supportInternationalisationId;
+
 function postcodeLookupUrl(postcode: string): string {
   return `${getOrigin() + routes.postcodeLookup}/${postcode}`;
 }
@@ -49,12 +52,12 @@ function paperSubsUrl(withDelivery: boolean = false): string {
   return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
 }
 
-function digitalSubscriptionLanding() {
-  return `${getOrigin()}${routes.digitalSubscriptionLanding}`;
+function digitalSubscriptionLanding(countryGroupId: CountryGroupId) {
+  return `${getOrigin()}/${countryPath(countryGroupId)}${routes.digitalSubscriptionLanding}`;
 }
 
-function guardianWeeklyLanding(gift: boolean) {
-  return `${getOrigin()}${gift ? routes.guardianWeeklySubscriptionLandingGift : routes.guardianWeeklySubscriptionLanding}`;
+function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
+  return `${getOrigin()}/${countryPath(countryGroupId)}${gift ? routes.guardianWeeklySubscriptionLandingGift : routes.guardianWeeklySubscriptionLanding}`;
 }
 
 const promotionTermsUrl = (promoCode: string) => `${getOrigin()}/p/${promoCode}/terms`;
@@ -71,11 +74,11 @@ function paperCheckoutUrl(
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.
 function payPalCancelUrl(cgId: CountryGroupId): string {
-  return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
+  return `${getOrigin()}/${countryPath(cgId)}/contribute`;
 }
 
 function payPalReturnUrl(cgId: CountryGroupId, email: string): string {
-  return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/paypal/rest/return?email=${encodeURIComponent(email)}`;
+  return `${getOrigin()}/${countryPath(cgId)}/paypal/rest/return?email=${encodeURIComponent(email)}`;
 }
 
 // ----- Exports ----- //
