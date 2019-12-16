@@ -21,7 +21,7 @@ const DigitalPackshot = () => (
           media: '(min-width: 740px)',
         },
       ]}
-      fallback="subscriptioDailyPackshotMobile"
+      fallback="subscriptionDailyPackshotMobile"
       fallbackSize={1000}
       altText=""
       fallbackImgType="png"
