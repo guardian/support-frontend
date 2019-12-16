@@ -78,7 +78,6 @@ export type ProductCopy = {
   productImage: React.Node,
   offer?: string,
   buttons: ProductButton[],
-  isFeature?: boolean,
   classModifier?: string[],
 }
 
@@ -134,7 +133,6 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
     link: digitalSubscriptionLanding(countryGroupId),
     analyticsTracking: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription'),
   }],
-  isFeature: true,
 });
 
 const getWeeklyImage = (isTop: boolean) => {
