@@ -15,6 +15,3 @@ class AmazonPayConfigProvider(config: Config, defaultStage: Stage) extends Touch
     )
   }
 }
-
-//support/frontend/DEV/touchpoint.backend.environments.UAT.amazonpay.
-//support/frontend/DEV/touchpoint.backend.environments.SANDBOX.amazonpay.
