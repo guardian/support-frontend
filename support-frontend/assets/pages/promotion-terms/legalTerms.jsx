@@ -14,7 +14,10 @@ const getTermsForProduct = (props: PromotionTermsPropTypes) => {
     case GuardianWeekly:
       return <WeeklyTerms {...props} />;
     case DigitalPack:
-      return <DigitalPackTerms {...props.promotionTerms} />;
+      return (<DigitalPackTerms
+        {...props.promotionTerms}
+        countryGroupId={props.countryGroupId}
+      />);
     default:
       return <PaperTerms {...props.promotionTerms} />;
   }

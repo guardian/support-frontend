@@ -16,11 +16,13 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 import './subscriptionsLanding.scss';
 
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
+import subscriptionsLandingReducer
+  from 'pages/subscriptions-landing/subscriptionsLandingReducer';
 
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
-const store = pageInit();
+const store = pageInit(() => subscriptionsLandingReducer(), true);
 
 const Header = headerWithCountrySwitcherContainer({
   path: '/subscribe',
