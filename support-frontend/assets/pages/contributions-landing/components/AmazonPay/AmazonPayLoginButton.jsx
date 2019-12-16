@@ -46,9 +46,8 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
         </div>
       );
     }
-    // TODO - spinner?
-    return <AnimatedDots appearance="dark" />;
 
+    return <AnimatedDots appearance="dark" />;
   }
 }
 
