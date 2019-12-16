@@ -7,7 +7,7 @@ const DigitalPackshot = () => (
     <GridPicture
       sources={[
         {
-          gridId: 'subscriptioDailyPackshotMobile',
+          gridId: 'subscriptionDailyPackshotMobile',
           srcSizes: [500],
           imgType: 'png',
           sizes: '100vw',
