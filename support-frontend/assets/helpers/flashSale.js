@@ -96,40 +96,6 @@ const Sales: Sale[] = [
       AUDCountries: { ...dpSale, price: 10.75 },
     },
   },
-  {
-    subscriptionProduct: 'Paper',
-    activeRegions: [GBPCountries],
-    startTime: new Date(2019, 10, 28).getTime(), // 28 Nov 2019
-    endTime: new Date(2019, 11, 16).getTime(), // 16 Dec 2019
-    duration: '12 months',
-    saleDetails: {
-      GBPCountries: {
-        promoCode: 'GE19SUBS',
-        annualPlanPromoCode: '',
-        intcmp: '',
-        price: 8.09,
-        annualPrice: 0,
-        discountPercentage: 0.52,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Paper',
-            subHeading: 'Save up to 52% for a year',
-            description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
-          },
-          landingPage: {
-            roundel: ['Save up to', '52%', 'for a year'],
-            heading: 'Save up to 52% for a year on The Guardian and The Observer',
-            subHeading: '',
-          },
-          bundle: {
-            heading: 'Paper',
-            subHeading: 'Save up to 52% for a year',
-            description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round.',
-          },
-        },
-      },
-    },
-  },
 ];
 
 function getTimeTravelDaysOverride() {

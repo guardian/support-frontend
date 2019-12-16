@@ -34,7 +34,7 @@ export type ContentTabPropTypes = {|
   getRef: (?HTMLElement)=> void
 |};
 
-const promoTermsUrl = promotionTermsUrl(getQueryParameter(promoQueryParam) || getPromoCode('Paper', GBPCountries, 'GE19SUBS'));
+const promoTermsUrl = promotionTermsUrl(getQueryParameter(promoQueryParam) || getPromoCode('Paper', GBPCountries, 'SEP2512VHD'));
 
 // Helper functions
 const getPageInfoChip = (): string => {

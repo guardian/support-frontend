@@ -23,6 +23,8 @@ import { getTitle } from '../../helpers/products';
 import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import { flashSaleIsActive } from 'helpers/flashSale';
+import { Paper } from 'helpers/subscriptions';
 
 // ---- Helpers ----- //
 
@@ -72,6 +74,27 @@ const copy = {
   },
 };
 
+const getOfferText = (price, productOption, fulfilmentOption) => {
+  if (flashSaleIsActive(Paper)) {
+    return getOfferStr(price, getNewsstandPrice(productOption));
+  }
+  const offerCopy = {
+    Collection: {
+      Everyday: 'Save 37% on retail price',
+      Sixday: 'Save 33% on retail price',
+      Weekend: 'Save 25% on retail price',
+      Sunday: 'Save 22% on retail price',
+    },
+    HomeDelivery: {
+      Everyday: 'Save 17% on retail price',
+      Sixday: 'Save 12% on retail price',
+      Weekend: 'Save 9% on retail price',
+      Sunday: null,
+    },
+  };
+  return offerCopy[fulfilmentOption][productOption];
+};
+
 const getPlans = (
   fulfilmentOption: PaperFulfilmentOptions,
   productPrices: ProductPrices,
@@ -92,9 +115,11 @@ const getPlans = (
         ),
         title: getTitle(productOption),
         copy: copy[fulfilmentOption][productOption],
-        price: getPriceStr(price),
-        offer: getOfferStr(price.price, getNewsstandPrice(productOption)),
-        saving: getSavingStr(getProductPrice(productPrices, fulfilmentOption, productOption)),
+        price: flashSaleIsActive(Paper) ? getPriceStr(price) : getRegularPriceStr(price),
+        offer: getOfferText(price.price, productOption, fulfilmentOption),
+        saving: flashSaleIsActive(Paper)
+          ? getSavingStr(getProductPrice(productPrices, fulfilmentOption, productOption))
+          : null,
       },
     };
   }, {});
