@@ -63,6 +63,8 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val payPalController: PaypalController =
     new PaypalController(controllerComponents, mockPaypalRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
 
+  val mockAmazonPayController: AmazonPayController = mock[AmazonPayController]
+
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     mock[RequestBasedProvider[StripeBackend]]
 
@@ -80,6 +82,7 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     new StripeController(controllerComponents, stripeBackendProvider, mockCloudWatchService)(DefaultThreadPool(ec), List.empty),
     payPalController,
     new GoCardlessController(controllerComponents, goCardlessBackendProvider)(DefaultThreadPool(ec), List.empty),
+    mockAmazonPayController
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty

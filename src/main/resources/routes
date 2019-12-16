@@ -55,7 +55,14 @@ POST     /contribute/one-off/paypal/refund                    controllers.Paypal
 POST     /direct-debit/check-account                          controllers.GoCardlessController.checkBankAccount
 OPTIONS  /direct-debit/check-account                          controllers.AppController.corsOptions
 
+#############################################
+# Amazon Pay
+#############################################
+POST     /contribute/one-off/amazon-pay/execute-payment            controllers.AmazonPayController.executePayment
+OPTIONS  /contribute/one-off/amazon-pay/execute-payment            controllers.AppController.corsOptions
 
+POST        /contribute/one-off/amazon-pay/notifications            controllers.AmazonPayController.notification
+OPTIONS     /contribute/one-off/amazon-pay/notifications            controllers.AppController.corsOptions
 #############################################
 # SUBSCRIBE WITH GOOGLE
 #############################################

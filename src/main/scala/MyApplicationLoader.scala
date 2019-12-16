@@ -1,20 +1,24 @@
 
+import _root_.controllers._
+import aws.AWSClientBuilder
+import backend._
+import com.amazon.pay.impl.ipn.NotificationFactory
+import com.amazon.pay.response.ipn.model.Notification
+import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
-import play.api._
+import com.typesafe.scalalogging.StrictLogging
+import conf.{ConfigLoader, PlayConfigUpdater}
+import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import play.api.ApplicationLoader.Context
+import play.api._
 import play.api.db.{DBComponents, HikariCPComponents}
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import router.Routes
-import util.RequestBasedProvider
-import aws.AWSClientBuilder
-import backend.{GoCardlessBackend, PaypalBackend, StripeBackend, SubscribeWithGoogleBackend}
-import _root_.controllers.{AppController, ErrorHandler, GoCardlessController, PaypalController, StripeController}
-import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
-import conf.{ConfigLoader, PlayConfigUpdater}
-import com.typesafe.scalalogging.StrictLogging
 import services.CloudWatchService
+import util.RequestBasedProvider
+
+import scala.collection.JavaConverters._
 
 class MyApplicationLoader extends ApplicationLoader with StrictLogging {
   def load(context: Context): Application = {
@@ -84,11 +88,20 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
+
+  val amazonPayBackendProvider: RequestBasedProvider[AmazonPayBackend] =
+    new AmazonPayBackend.Builder(configLoader, cloudWatchClient)
+      .buildRequestBasedProvider(requestEnvironments)
+      .valueOr(throw _)
+
   implicit val allowedCorsUrl = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
 
   // Usually the cloudWatchService is determined based on the request (live vs test). But inside the controllers
   // we may not know the environment, so we just use live. Note - in DEV/CODE, there is no difference between test/live
   val liveCloudWatchService = new CloudWatchService(cloudWatchClient, requestEnvironments.live)
+
+  def parseNotification(headers: Map[String, String], body: String): Notification =
+    NotificationFactory.parseNotification(headers.asJava, body)
 
   override val router =
     new Routes(
@@ -97,5 +110,6 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       new StripeController(controllerComponents, stripeBackendProvider, liveCloudWatchService),
       new PaypalController(controllerComponents, paypalBackendProvider),
       new GoCardlessController(controllerComponents, goCardlessBackendProvider),
+      new AmazonPayController(controllerComponents, amazonPayBackendProvider, parseNotification)
     )
 }

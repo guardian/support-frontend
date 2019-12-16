@@ -1,21 +1,20 @@
 package services
 
+import aws.AWSClientBuilder
 import cats.data.{EitherT, Validated}
-import io.circe.syntax._
-import io.circe.{Encoder, Json}
-import com.amazonaws.ClientConfiguration
+import com.amazonaws.services.sqs.AmazonSQSAsync
 import com.amazonaws.services.sqs.model.{MessageAttributeValue, SendMessageRequest}
-import com.amazonaws.services.sqs.{AmazonSQS, AmazonSQSClientBuilder}
 import com.typesafe.scalalogging.StrictLogging
 import conf.ContributionsStoreQueueConfig
-
-import scala.concurrent.Future
-import model.{InitializationError, InitializationResult, SQSThreadPool}
+import io.circe.syntax._
+import io.circe.{Encoder, Json}
 import model.db.ContributionData
+import model.{InitializationError, InitializationResult, SQSThreadPool}
 import services.ContributionsStoreQueueService.Message
 
-import scala.util.control.NonFatal
 import scala.collection.JavaConverters._
+import scala.concurrent.Future
+import scala.util.control.NonFatal
 
 
 trait ContributionsStoreService {
@@ -68,12 +67,8 @@ class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: St
 
   private object SqsService {
 
-    private val sqsClient: AmazonSQS = {
-      AmazonSQSClientBuilder.standard
-        .withClientConfiguration(new ClientConfiguration())
-        .withRegion(region)
-        .build
-    }
+    private val sqsClient: AmazonSQSAsync = AWSClientBuilder
+      .buildAmazonSQSAsyncClient()
 
     private val messageAttributes = Map(
       "keyId" -> new MessageAttributeValue().withStringValue(keyId).withDataType("String")
@@ -86,7 +81,7 @@ class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: St
           .withMessageBody(message)
           .withMessageAttributes(messageAttributes.asJava)
 
-        sqsClient.sendMessage(request)
+        sqsClient.sendMessage(request) //Sync API of Async client
       }
         .map(_ => Right.apply(()))
         .recover {

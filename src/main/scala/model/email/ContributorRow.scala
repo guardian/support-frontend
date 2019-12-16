@@ -83,6 +83,7 @@ case class ContributorRow(
   private def renderPaymentMethod: String = paymentMethod match {
     case Stripe | StripeApplePay | StripePaymentRequestButton => "credit / debit card"
     case Paypal => "PayPal"
+    case AmazonPay => "Amazon Pay"
     case SubscribeWithGoogle => "Subscribe With Google" //todo: confirm phrase usage
   }
 

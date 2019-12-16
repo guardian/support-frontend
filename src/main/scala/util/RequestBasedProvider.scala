@@ -1,8 +1,8 @@
 package util
 
+import model.RequestType
 import play.api.mvc.Request
 import simulacrum.typeclass
-import model.RequestType
 
 @typeclass trait RequestTypeDecoder[A] {
   def requestType(data: A): RequestType
@@ -26,6 +26,7 @@ object RequestTypeDecoder {
 
 // Get an instance of A for a given request type
 trait RequestBasedProvider[A] {
+
   import RequestTypeDecoder.ops._
 
   def getInstanceForRequestType(requestType: RequestType): A

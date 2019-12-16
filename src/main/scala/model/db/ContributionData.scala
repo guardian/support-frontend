@@ -5,10 +5,11 @@ import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
 import java.util.UUID
 
 import cats.implicits._
+import com.amazon.pay.response.model.AuthorizationDetails
 import com.paypal.api.payments.Payment
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
-import model.PaymentProvider.SubscribeWithGoogle
+import model.PaymentProvider.{AmazonPay, SubscribeWithGoogle}
 import model.acquisition.StripeCharge
 import model.paypal.PaypalApiError
 import model.subscribewithgoogle.GoogleRecordPayment
@@ -42,7 +43,8 @@ object ContributionData extends StrictLogging {
 
   def fromStripeCharge(
     identityId: Option[Long],
-    charge: Charge, countrySubdivisionCode: Option[String],
+    charge: Charge,
+    countrySubdivisionCode: Option[String],
     paymentProvider: PaymentProvider,
   ): ContributionData =
     // TODO: error handling
@@ -110,6 +112,22 @@ object ContributionData extends StrictLogging {
       amount = googleRecordPayment.amount,
       countryCode = Some(googleRecordPayment.countryCode),
       countrySubdivisionCode = None
+    )
+  }
+
+  def fromAmazonPay(amazonPayment: AuthorizationDetails, identity: Option[Long], email: String, countryCode: Option[String], countrySubdivisionCode: Option[String], orderRef: String): ContributionData = {
+    ContributionData(
+      paymentProvider = AmazonPay,
+      paymentStatus = PaymentStatus.Paid,
+      paymentId = orderRef,
+      identityId = identity,
+      email = email,
+      // Time at which the object was created. Measured in seconds since the Unix epoch.
+      created = LocalDateTime.ofInstant(Instant.ofEpochMilli(amazonPayment.getCreationTimestamp.toGregorianCalendar.getTimeInMillis), ZoneOffset.UTC),
+      currency = Currency.withNameInsensitive(amazonPayment.getAuthorizationAmount.getCurrencyCode),
+      amount = BigDecimal(amazonPayment.getAuthorizationAmount.getAmount),
+      countryCode = countryCode,
+      countrySubdivisionCode = countrySubdivisionCode
     )
   }
 }

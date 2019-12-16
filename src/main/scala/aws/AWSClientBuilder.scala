@@ -24,7 +24,7 @@ object AWSClientBuilder {
       .withCredentials(credentialsProvider)
       .build()
 
-  def buildAmazonSQSAsyncClient(queueName: String): AmazonSQSAsync =
+  def buildAmazonSQSAsyncClient(): AmazonSQSAsync =
     AmazonSQSAsyncClientBuilder
       .standard()
       .withCredentials(credentialsProvider)

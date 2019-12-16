@@ -205,7 +205,6 @@ class StripeBackend(
 
     emailService.sendThankYouEmail(contributorRow).leftMap(BackendError.fromEmailError)
   }
-
 }
 
 object StripeBackend {

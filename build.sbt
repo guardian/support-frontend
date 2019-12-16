@@ -22,6 +22,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-ec2" % AWSJavaSDKVersion,
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % AWSJavaSDKVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % AWSJavaSDKVersion,
+  "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
   "com.beachape" %% "enumeratum" % "1.5.12",
   "com.beachape" %% "enumeratum-circe" % "1.5.12",
   "com.dripower" %% "play-circe" % "2611.0",
@@ -50,14 +51,15 @@ libraryDependencies ++= Seq(
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
   "com.gu" %% "support-internationalisation" % "0.9",
   "com.gu" %% "support-models" % "0.65",
-  "com.gu" %% "ophan-event-model" % "0.0.10",
+  "com.gu" %% "ophan-event-model" % "0.0.15",
   "org.apache.thrift" % "libthrift" % "0.12.0",// needed for snyk deps https://app.snyk.io/vuln/SNYK-JAVA-ORGAPACHETHRIFT-173706
   "com.gu" %% "fezziwig" % "1.1" excludeAll ExclusionRule(organization = "com.twitter"),
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc,
   ws,
-  "com.lihaoyi" %% "pprint" % "0.5.3"
+  "com.lihaoyi" %% "pprint" % "0.5.3",
+  "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
 )
 
 lazy val TeamCityTest = config("teamcity").extend(Test)

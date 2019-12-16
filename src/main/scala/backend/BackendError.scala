@@ -7,6 +7,7 @@ import model.DefaultThreadPool
 import services.{ContributionsStoreService, EmailService, IdentityClient}
 import model.paypal.{PaypalApiError => PaypalAPIError}
 import cats.implicits._
+import model.amazonpay.{AmazonPayApiError => AmazonPayError }
 import model.stripe.{StripeApiError => StripeError}
 
 import scala.concurrent.Future
@@ -18,6 +19,7 @@ sealed abstract class BackendError extends Exception {
     case BackendError.Ophan(err) => err.map(_.getMessage).mkString(", ")
     case BackendError.StripeApiError(err) => err.getMessage
     case BackendError.PaypalApiError(err) => err.message
+    case BackendError.AmazonPayApiError(err) => err.message
     case BackendError.Email(err) => err.getMessage
     case BackendError.MultipleErrors(errors) => errors.map(_.getMessage).mkString(" & ")
     case BackendError.SubscribeWithGoogleDuplicateEventError(error) => error.getMessage
@@ -31,6 +33,7 @@ object BackendError {
   final case class Ophan(error: List[AnalyticsServiceError]) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
+  final case class AmazonPayApiError(err: AmazonPayError) extends BackendError
   final case class SubscribeWithGoogleDuplicateEventError(error: SubscribeWithGoogleDuplicateInsertEventError) extends BackendError
   final case class Email(error: EmailService.Error) extends BackendError
   final case class MultipleErrors(errors: List[BackendError]) extends BackendError
@@ -58,5 +61,4 @@ object BackendError {
   def fromEmailError(err: EmailService.Error): BackendError = Email(err)
   def fromSubscribeWithGoogleDuplicatePaymentError(err: SubscribeWithGoogleDuplicateInsertEventError): BackendError =
     SubscribeWithGoogleDuplicateEventError(err)
-
 }

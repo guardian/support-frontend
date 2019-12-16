@@ -34,7 +34,7 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
 object EmailService {
   def fromEmailConfig(config: EmailConfig)(implicit pool: DefaultThreadPool): InitializationResult[EmailService] = {
     Validated.catchNonFatal {
-      new EmailService(AWSClientBuilder.buildAmazonSQSAsyncClient(config.queueName), config.queueName)
+      new EmailService(AWSClientBuilder.buildAmazonSQSAsyncClient(), config.queueName)
     }.leftMap { err =>
       InitializationError(s"unable to instantiate EmailService for config: ${config}. Error trace: ${err.getMessage}")
     }
