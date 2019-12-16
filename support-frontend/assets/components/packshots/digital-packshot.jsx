@@ -1,18 +1,30 @@
 import React from 'react';
 
-import GridImage from 'components/gridImage/gridImage';
+import GridPicture from 'components/gridPicture/gridPicture';
 
 const DigitalPackshot = () => (
   <div className="subscriptions-int-daily-packshot">
-    <GridImage
-      classModifiers={['']}
-      gridId="subscriptionDailyPackshot"
-      srcSizes={[1000, 500]}
-      sizes="(max-width: 480px) 100px,
-            (max-width: 740px) 100%,
-            (max-width: 1067px) 150%,
-            800px"
-      imgType="png"
+    <GridPicture
+      sources={[
+        {
+          gridId: 'subscriptionDailyPackshotMobile',
+          srcSizes: [500],
+          imgType: 'png',
+          sizes: '100vw',
+          media: '(max-width: 739px)',
+        },
+        {
+          gridId: 'subscriptionDailyPackshot',
+          srcSizes: [1000, 500],
+          imgType: 'png',
+          sizes: '(min-width: 1000px) 2000px, 1000px',
+          media: '(min-width: 740px)',
+        },
+      ]}
+      fallback="subscriptionDailyPackshotMobile"
+      fallbackSize={1000}
+      altText=""
+      fallbackImgType="png"
     />
   </div>
 );
