@@ -14,6 +14,7 @@ type PropTypes = {|
   overheading: Option<string>,
   children?: Node,
   orderIsAGift?: boolean,
+  overheadingClass?: string,
 |};
 
 
@@ -21,13 +22,14 @@ type PropTypes = {|
 
 function HeadingBlock(props: PropTypes) {
   const giftOrder = props.orderIsAGift ? '__gift' : '';
+  const overheadingClass = props.overheadingClass ? props.overheadingClass : '';
   return (
     <div className={`component-heading-block${giftOrder}`}>
       <div className="component-heading-block__content">
         {props.overheading ?
         [
           (
-            <h1 className="component-heading-block__overheading">{props.overheading}</h1>),
+            <h1 className={`component-heading-block__overheading${overheadingClass}`}>{props.overheading}</h1>),
           (
             <div className="component-heading-block__heading">
               <h2 className="component-heading-block__maxwidth">{props.children}</h2>
@@ -50,6 +52,7 @@ HeadingBlock.defaultProps = {
   children: null,
   overheading: null,
   orderIsAGift: false,
+  overheadingClass: '',
 };
 
 

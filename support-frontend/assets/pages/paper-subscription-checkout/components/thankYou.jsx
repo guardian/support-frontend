@@ -83,6 +83,7 @@ function ThankYouContent({
         <HeroPicture />
         <HeadingBlock
           overheading="Thank you for supporting our journalism!"
+          overheadingClass="--thankyou"
         >
           {isPending ?
           `Your subscription to the ${productOption} package is being processed` :
@@ -127,6 +128,11 @@ function ThankYouContent({
             />)
           }
         </Asyncronously>
+        <Text>
+          This is the option to choose if you want to hear about how to make the most of your print
+          subscription, receive a dedicated weekly email from our membership editor and get more
+          information on ways to support The Guardian.
+        </Text>
       </Content>
     </div>
   );
