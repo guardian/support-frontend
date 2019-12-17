@@ -59,6 +59,7 @@ import {
 } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
+import PaperPackshot from 'components/packshots/paper-packshot';
 
 // types
 
@@ -161,7 +162,14 @@ const guardianWeekly = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, is
   productImage: getWeeklyImage(isTop),
 });
 
-const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy): ProductCopy => ({
+const getPaperImage = (isTop: boolean) => {
+  if (isTop) {
+    return <PrintFeaturePackshot />;
+  }
+  return <PaperPackshot />;
+};
+
+const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: boolean): ProductCopy => ({
   title: 'Paper',
   subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
   description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
@@ -170,7 +178,7 @@ const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy): ProductCop
     link: paperSubsUrl(false),
     analyticsTracking: sendTrackingEventsOnClick('paper_cta', Paper, abTest, 'paper-subscription'),
   }],
-  productImage: <PrintFeaturePackshot />,
+  productImage: getPaperImage(isTop),
   offer: priceCopy.discountCopy,
 });
 
@@ -224,7 +232,7 @@ const orderedProducts = (state: State): ProductCopy[] => {
     return [
       guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
       digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
-      paper(countryGroupId, state.page.pricingCopy[Paper]),
+      paper(countryGroupId, state.page.pricingCopy[Paper], false),
       paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
       premiumApp(countryGroupId),
     ];
