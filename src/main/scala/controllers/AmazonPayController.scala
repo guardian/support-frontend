@@ -63,15 +63,19 @@ class AmazonPayController(
     notificationRequest =>
       val notification = unmarshalNotification(notificationRequest)
 
-      val handleResult = notification.flatMap(n =>
-        amazonBackendProvider
-          .getInstanceFor(notificationRequest)
-          .handleNotification(n)
-      )
-
-        handleResult.fold(
-        err =>  new Status(SERVICE_UNAVAILABLE)(ResultBody.Error("")), //503 will cause Amazon to retry every hour for 14 days
-        res => new Status(NO_CONTENT)(ResultBody.Success("")))
+      notification
+        .flatMap { n =>
+          amazonBackendProvider
+            .getInstanceFor(notificationRequest)
+            .handleNotification(n)
+        }
+        .fold(
+          err => {
+            logger.error(s"Error processing Amazon Pay notification: ${err.getMessage}", err)
+            new Status(SERVICE_UNAVAILABLE)(ResultBody.Error("")) //503 will cause Amazon to retry every hour for 14 days
+          },
+          _ => new Status(NO_CONTENT)(ResultBody.Success(""))
+        )
 
   }
 

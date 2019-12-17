@@ -2,7 +2,7 @@ package backend
 
 import cats.data.EitherT
 import cats.implicits._
-import com.amazon.pay.response.ipn.model.RefundNotification
+import com.amazon.pay.response.ipn.model.{AuthorizationNotification, NotificationType, RefundNotification}
 import com.amazon.pay.response.model._
 import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmOrderReferenceResponseData, ResponseData}
 import com.amazonaws.services.sqs.model.SendMessageResult
@@ -247,11 +247,11 @@ class AmazonPayBackendSpec extends WordSpec
 
       "a request is made to process a refund hook" should {
 
-        "return error if refund hook is not valid" in new AmazonPayBackendFixture {
-          val mockNotification = mock[RefundNotification]
+        "return Unit if not a refund" in new AmazonPayBackendFixture {
+          val mockNotification = mock[AuthorizationNotification]
+          when(mockNotification.getNotificationType).thenReturn(NotificationType.AuthorizationNotification)
 
-          when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponseError)
-          amazonPayBackend.handleNotification(mockNotification).futureLeft shouldBe BackendError.AmazonPayApiError(new AmazonPayApiError(Some(503), "Something went wrong handling the refund"))
+          amazonPayBackend.handleNotification(mockNotification).futureRight shouldBe ()
         }
       }
     }

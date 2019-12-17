@@ -142,7 +142,8 @@ class AmazonPayBackend(cloudWatchService: CloudWatchService,
         logger.info(s"Derived order ref $orderRef ")
         flagContributionAsRefunded(orderRef).leftWiden //This allows BackendError (a subtype of Throwable) to be widened to satisfy eitherTs invariance
       case _ =>
-        EitherT.leftT(BackendError.AmazonPayApiError(AmazonPayApiError(Some(503), "Something went wrong handling the refund")))
+        // Ignore any other notifications
+        EitherT.rightT(())
     }
   }
 
