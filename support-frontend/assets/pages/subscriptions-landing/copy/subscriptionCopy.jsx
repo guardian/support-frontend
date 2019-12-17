@@ -34,10 +34,8 @@ import DigitalPackshot
 import PrintFeaturePackshot from 'components/packshots/print-feature-packshot';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-  AUDCountries, Canada,
-  EURCountries,
+  AUDCountries,
   GBPCountries,
-  International, NZDCountries, UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
 import {
@@ -220,12 +218,6 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
   classModifier: ['subscriptions__premuim-app'],
 });
 
-const internationalProducts = (countryGroupId: CountryGroupId, state: State) => [
-  guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
-  digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
-  premiumApp(countryGroupId),
-];
-
 const orderedProducts = (state: State): ProductCopy[] => {
   const { countryGroupId } = state.common.internationalisation;
   if (countryGroupId === GBPCountries) {
@@ -237,7 +229,11 @@ const orderedProducts = (state: State): ProductCopy[] => {
       premiumApp(countryGroupId),
     ];
   }
-  return internationalProducts(countryGroupId, state);
+  return [
+    guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
+    digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
+    premiumApp(countryGroupId),
+  ];
 };
 
 const getSubscriptionCopy = (state: State) =>
