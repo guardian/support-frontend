@@ -12,6 +12,7 @@ export type NewLandingPageTemplateTestVariants = 'control' | 'new_template' | 'n
 export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
+const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
 const subsShowcasePageMatch = '/(eu|int)/subscribe(/.*)?$';
 
 const countryGroupId: CountryGroupId = detect();
