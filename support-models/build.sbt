@@ -7,6 +7,7 @@ description := "Scala library to provide shared step-function models to Guardian
 libraryDependencies ++= Seq(
   "com.gu" %% "acquisition-event-producer-play26" % "4.0.25", //this should really be split into models and producer
                                                               // so we don't have to pull in thrift binary compression libs etc
+  "com.gu" %% "support-internationalisation" % "0.12",
   "org.typelevel" %% "cats-core" % catsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,

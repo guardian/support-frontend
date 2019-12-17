@@ -113,8 +113,7 @@ lazy val `support-models` = (project in file("support-models"))
     commonSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-internationalisation`)
-  .aggregate(`support-internationalisation`)
+  )
 
 lazy val `support-config` = (project in file("support-config"))
   .configs(IntegrationTest)
