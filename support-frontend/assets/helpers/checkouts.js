@@ -16,14 +16,13 @@ import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationa
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { Amount, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, Stripe, AmazonPay } from 'helpers/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
 import { isSwitchOn } from 'helpers/globals';
 
-
 // ----- Types ----- //
 
-export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe' | 'existingCard' | 'existingDirectDebit';
+export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe' | 'existingCard' | 'existingDirectDebit' | 'amazonPay';
 
 type StripeHandler = { open: Function, close: Function };
 
@@ -38,6 +37,7 @@ function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMetho
     case DirectDebit: return 'directDebit';
     case ExistingCard: return 'existingCard';
     case ExistingDirectDebit: return 'existingDirectDebit';
+    case AmazonPay: return 'amazonPay';
     default: return null;
   }
 }
@@ -76,35 +76,42 @@ function getContributionTypeFromUrl(): ?ContributionType {
 // Returns an array of Payment Methods, in the order of preference,
 // i.e the first element in the array will be the default option
 function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry): PaymentMethod[] {
-  return contributionType !== 'ONE_OFF' && countryId === 'GB'
-    ? [DirectDebit, Stripe, PayPal]
-    : [Stripe, PayPal];
+  if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
+    return [DirectDebit, Stripe, PayPal];
+  } else if (contributionType === 'ONE_OFF' && countryId === 'US') {
+    return [Stripe, PayPal, AmazonPay];
+  }
+  return [Stripe, PayPal];
+
 }
 
 function getValidPaymentMethods(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
+  inAmazonPayTest: boolean,
 ): PaymentMethod[] {
   const switchKey = (contributionType === 'ONE_OFF') ? 'oneOffPaymentMethods' : 'recurringPaymentMethods';
   return getPaymentMethods(contributionType, countryId)
     .filter(paymentMethod =>
-      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
+      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`) &&
+      (paymentMethod !== 'AmazonPay' || inAmazonPayTest));
 }
 
 function getPaymentMethodToSelect(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
+  inAmazonPayTest: boolean,
 ) {
-  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId, inAmazonPayTest);
   return validPaymentMethods[0] || 'None';
 }
 
 function getPaymentMethodFromSession(): ?PaymentMethod {
   const pm: ?string = storage.getSession('selectedPaymentMethod');
   // can't use Flow types for these comparisons for some strange reason
-  if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal' || pm === 'ExistingCard' || pm === 'ExistingDirectDebit') {
+  if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal' || pm === 'ExistingCard' || pm === 'ExistingDirectDebit' || pm === 'AmazonPay') {
     return (pm: PaymentMethod);
   }
   return null;
@@ -114,6 +121,8 @@ function getPaymentDescription(contributionType: ContributionType, paymentMethod
   if (contributionType === 'ONE_OFF') {
     if (paymentMethod === PayPal) {
       return 'with PayPal';
+    } else if (paymentMethod === AmazonPay) {
+      return 'with Amazon Pay';
     }
 
     return 'with card';
@@ -172,6 +181,8 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
       return 'Direct debit';
     case PayPal:
       return PayPal;
+    case AmazonPay:
+      return 'Amazon Pay';
     default:
       return 'Other Payment Method';
   }

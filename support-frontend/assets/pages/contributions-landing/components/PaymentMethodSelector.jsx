@@ -33,19 +33,22 @@ import type {
 } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { getReauthenticateUrl } from 'helpers/externalLinks';
 import AnimatedDots from 'components/spinners/animatedDots';
-import { ExistingCard, ExistingDirectDebit, Stripe } from '../../../helpers/paymentMethods';
+import { ExistingCard, ExistingDirectDebit, Stripe, AmazonPay } from '../../../helpers/paymentMethods';
 import {
   getExistingPaymentMethodLabel,
   mapExistingPaymentMethodToPaymentMethod,
   subscriptionsToExplainerList,
   subscriptionToExplainerPart,
-} from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
+} from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type { PaymentSecuritySecureTransactionGreyNonUKVariants } from 'helpers/abTests/abtestDefinitions';
+import type {
+  PaymentSecuritySecureTransactionGreyNonUKVariants,
+} from 'helpers/abTests/abtestDefinitions';
 import {
   type CountryGroupId,
   detect,
 } from 'helpers/internationalisation/countryGroup';
+import SvgAmazonPayLogo from 'components/svgs/amazonPayLogo';
 
 
 // ----- Types ----- //
@@ -63,6 +66,7 @@ type PropTypes = {|
   isTestUser: boolean,
   switches: Switches,
   paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
+  inAmazonPayTest: boolean,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -77,6 +81,8 @@ const mapStateToProps = (state: State) => ({
   switches: state.common.settings.switches,
   paymentSecuritySecureTransactionGreyNonUKVariant:
     state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
+  inAmazonPayTest:
+    state.common.abParticipations.amazonPaySingleUS === 'amazonPay',
 });
 
 const mapDispatchToProps = {
@@ -93,6 +99,8 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
     case DirectDebit:
     case ExistingDirectDebit:
       return <SvgDirectDebitSymbol />;
+    case AmazonPay:
+      return <SvgAmazonPayLogo />;
     case Stripe:
     case ExistingCard:
     default:
@@ -103,7 +111,7 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
 function withProps(props: PropTypes) {
 
   const paymentMethods: PaymentMethod[] =
-    getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
+    getValidPaymentMethods(props.contributionType, props.switches, props.countryId, props.inAmazonPayTest);
 
   const noPaymentMethodsErrorMessage =
     (<GeneralErrorMessage

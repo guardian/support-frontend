@@ -680,6 +680,11 @@ form {
   margin-left: 5px;
 }
 
+.form__radio-group--buttons .form__radio-group-input + .form__radio-group-label .svg-amazon-pay {
+  margin-right: 8px;
+  width: 26px;
+}
+
 .has-existing-payment-option-explainer {
   padding-bottom: 0 !important;
 

@@ -5,6 +5,7 @@ const PayPal: 'PayPal' = 'PayPal';
 const DirectDebit: 'DirectDebit' = 'DirectDebit';
 const ExistingCard: 'ExistingCard' = 'ExistingCard';
 const ExistingDirectDebit: 'ExistingDirectDebit' = 'ExistingDirectDebit';
+const AmazonPay: 'AmazonPay' = 'AmazonPay';
 
 export type PaymentMethodMap<T> = {|
   Stripe: T,
@@ -13,6 +14,7 @@ export type PaymentMethodMap<T> = {|
   ExistingCard: T,
   ExistingDirectDebit: T,
   None: T,
+  AmazonPay: T,
 |};
 
 // This lets us create a union type from the object keys,
@@ -22,4 +24,4 @@ export type PaymentMethodMap<T> = {|
 // so it's irrelevant - so we supply null
 export type PaymentMethod = $Keys<PaymentMethodMap<null>>;
 
-export { Stripe, PayPal, DirectDebit, ExistingCard, ExistingDirectDebit };
+export { Stripe, PayPal, DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay };

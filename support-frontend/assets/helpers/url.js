@@ -99,6 +99,10 @@ function getPathAfterRoute(route: string): string[] {
   return pathName.splice(pathName.findIndex(r => r === route));
 }
 
+function isProd(): boolean {
+  return getBaseDomain() === 'theguardian.com';
+}
+
 // ----- Exports ----- //
 
 export {
@@ -110,4 +114,5 @@ export {
   addQueryParamsToURL,
   getAbsoluteURL,
   getPathAfterRoute,
+  isProd,
 };

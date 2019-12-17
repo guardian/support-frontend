@@ -41,6 +41,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val oneOffStripeConfigProvider = new StripeConfigProvider(config, stage, "oneOffStripe")
 
+  lazy val amazonPayConfigProvider = new AmazonPayConfigProvider(config, stage)
+
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
   lazy val settingsSources: SettingsSources = SettingsSources.fromConfig(config, stage).valueOr(throw _)

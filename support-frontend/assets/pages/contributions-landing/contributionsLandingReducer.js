@@ -76,11 +76,26 @@ export type StripeCardFormData = {
   handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null,
 }
 
+export type AmazonPayLibrary = {
+  amazonLoginObject: Object | null,
+  amazonPaymentsObject: Object | null,
+}
+
+export type AmazonPayData = {
+  amazonPayLibrary: AmazonPayLibrary,
+  walletWidgetReady: boolean,
+  orderReferenceId: string | null,
+  paymentSelected: boolean,
+  hasAccessToken: boolean,
+  fatalError: boolean,
+}
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
-  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
+  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries, // TODO clean up when rest of Stripe Checkout is removed
+  amazonPayData: AmazonPayData,
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
@@ -128,15 +143,26 @@ function createFormReducer() {
     thirdPartyPaymentLibraries: {
       ONE_OFF: {
         Stripe: null,
+        AmazonPay: null,
       },
       MONTHLY: {
         Stripe: null,
-        PayPal: null,
       },
       ANNUAL: {
         Stripe: null,
-        PayPal: null,
       },
+    },
+    amazonPayData: {
+      amazonPayLibrary: {
+        amazonLoginObject: null,
+        amazonPaymentsObject: null,
+      },
+      loginButtonReady: false,
+      walletWidgetReady: false,
+      orderReferenceId: null,
+      paymentSelected: false,
+      hasAccessToken: false,
+      fatalError: false,
     },
     formData: {
       firstName: null,
@@ -223,6 +249,75 @@ function createFormReducer() {
               ...state.thirdPartyPaymentLibraries.ANNUAL,
               ...action.thirdPartyPaymentLibraryByContrib.ANNUAL,
             },
+          },
+        };
+
+      case 'SET_AMAZON_PAY_LOGIN_OBJECT':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            amazonPayLibrary: {
+              ...state.amazonPayData.amazonPayLibrary,
+              amazonLoginObject: action.amazonLoginObject,
+            },
+          },
+        };
+
+      case 'SET_AMAZON_PAY_PAYMENTS_OBJECT':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            amazonPayLibrary: {
+              ...state.amazonPayData.amazonPayLibrary,
+              amazonPaymentsObject: action.amazonPaymentsObject,
+            },
+          },
+        };
+
+      case 'SET_AMAZON_PAY_WALLET_WIDGET_READY':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            walletWidgetReady: true,
+          },
+        };
+
+      case 'SET_AMAZON_PAY_ORDER_REFERENCE_ID':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            orderReferenceId: action.orderReferenceId,
+          },
+        };
+
+      case 'SET_AMAZON_PAY_PAYMENT_SELECTED':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            paymentSelected: action.paymentSelected,
+          },
+        };
+
+      case 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            hasAccessToken: true,
+          },
+        };
+
+      case 'SET_AMAZON_PAY_FATAL_ERROR':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            fatalError: true,
           },
         };
 

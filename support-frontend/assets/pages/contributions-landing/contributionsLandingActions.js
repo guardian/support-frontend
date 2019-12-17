@@ -18,19 +18,21 @@ import type {
   StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
+  type AmazonPayAuthorisation,
   type PaymentAuthorisation,
   type PaymentResult,
   type StripePaymentRequestButtonMethod,
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { StripeChargeData, CreateStripePaymentIntentRequest } from 'helpers/paymentIntegrations/oneOffContributions';
+import type { StripeChargeData, CreateStripePaymentIntentRequest, AmazonPayData } from 'helpers/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
   processStripePaymentIntentRequest,
+  postOneOffAmazonPayExecutePaymentRequest,
 } from 'helpers/paymentIntegrations/oneOffContributions';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
@@ -45,7 +47,7 @@ import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalA
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
@@ -61,6 +63,13 @@ export type Action =
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
+  | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
+  | { type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT', amazonPaymentsObject: Object }
+  | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' }
+  | { type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId: string }
+  | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
+  | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
+  | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -195,6 +204,26 @@ const setThirdPartyPaymentLibrary =
     type: 'UPDATE_PAYMENT_READY',
     thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
   });
+
+const setAmazonPayLoginObject = (amazonLoginObject: Object): Action => ({
+  type: 'SET_AMAZON_PAY_LOGIN_OBJECT',
+  amazonLoginObject,
+});
+
+const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
+  type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT',
+  amazonPaymentsObject,
+});
+
+const setAmazonPayWalletWidgetReady: Action = ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' });
+const setAmazonPayHasAccessToken: Action = ({ type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' });
+const setAmazonPayFatalError: Action = ({ type: 'SET_AMAZON_PAY_FATAL_ERROR' });
+
+const setAmazonPayPaymentSelected = (paymentSelected: boolean): Action =>
+  ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected });
+
+const setAmazonPayOrderReferenceId = (orderReferenceId: string): Action =>
+  ({ type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId });
 
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
@@ -340,6 +369,26 @@ const regularPaymentRequestFromAuthorisation = (
   telephoneNumber: null,
 });
 
+const amazonPayDataFromAuthorisation = (
+  authorisation: AmazonPayAuthorisation,
+  state: State,
+): AmazonPayData => ({
+  paymentData: {
+    currency: state.common.internationalisation.currencyId,
+    amount: getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    ),
+    orderReferenceId: authorisation.orderReferenceId,
+    email: state.page.form.formData.email || '',
+  },
+  acquisitionData: derivePaymentApiAcquisitionData(
+    state.common.referrerAcquisitionData,
+    state.common.abParticipations,
+  ),
+});
+
 // A PaymentResult represents the end state of the checkout process,
 // standardised across payment methods & contribution types.
 // This will execute at the end of every checkout, with the exception
@@ -370,6 +419,9 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
               stripeAccountForContributionType[state.page.form.contributionType],
             ));
           } else {
+            if (result.error === 'amazon_pay_fatal') {
+              dispatch(setAmazonPayFatalError);
+            }
             dispatch(paymentFailure(result.error));
           }
 
@@ -430,7 +482,7 @@ const executeStripeOneOffPayment = (
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(
-      postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage),
+      postOneOffStripeExecutePaymentRequest(data)(setGuestToken, setThankYouPage),
       paymentAuthorisation,
     ));
 
@@ -443,7 +495,19 @@ const makeCreateStripePaymentIntentRequest = (
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(
-      processStripePaymentIntentRequest(data, setGuestToken, setThankYouPage, handleStripe3DS),
+      processStripePaymentIntentRequest(data, handleStripe3DS)(setGuestToken, setThankYouPage),
+      paymentAuthorisation,
+    ));
+
+const executeAmazonPayOneOffPayment = (
+  data: AmazonPayData,
+  setGuestToken: (string) => void,
+  setThankYouPage: (ThankYouPageStage) => void,
+  paymentAuthorisation: PaymentAuthorisation,
+) =>
+  (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
+    dispatch(onPaymentResult(
+      postOneOffAmazonPayExecutePaymentRequest(data)(setGuestToken, setThankYouPage),
       paymentAuthorisation,
     ));
 
@@ -546,6 +610,22 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       logInvalidCombination('ONE_OFF', ExistingDirectDebit);
       return Promise.resolve(error);
     },
+    AmazonPay: (
+      dispatch: Dispatch<Action>,
+      state: State,
+      paymentAuthorisation: PaymentAuthorisation,
+    ): Promise<PaymentResult> => {
+      if (paymentAuthorisation.paymentMethod === AmazonPay) {
+        return dispatch(executeAmazonPayOneOffPayment(
+          amazonPayDataFromAuthorisation(paymentAuthorisation, state),
+          (token: string) => dispatch(setGuestAccountCreationToken(token)),
+          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+          paymentAuthorisation,
+        ));
+      }
+      return Promise.resolve(error);
+
+    },
     None: () => {
       logInvalidCombination('ONE_OFF', 'None');
       return Promise.resolve(error);
@@ -553,6 +633,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   ANNUAL: {
     ...recurringPaymentAuthorisationHandlers,
+    AmazonPay: () => {
+      logInvalidCombination('ANNUAL', AmazonPay);
+      return Promise.resolve(error);
+    },
     None: () => {
       logInvalidCombination('ANNUAL', 'None');
       return Promise.resolve(error);
@@ -560,6 +644,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   MONTHLY: {
     ...recurringPaymentAuthorisationHandlers,
+    AmazonPay: () => {
+      logInvalidCombination('MONTHLY', AmazonPay);
+      return Promise.resolve(error);
+    },
     None: () => {
       logInvalidCombination('MONTHLY', 'None');
       return Promise.resolve(error);
@@ -588,6 +676,13 @@ export {
   updateState,
   updateUserFormData,
   setThirdPartyPaymentLibrary,
+  setAmazonPayLoginObject,
+  setAmazonPayPaymentsObject,
+  setAmazonPayWalletWidgetReady,
+  setAmazonPayHasAccessToken,
+  setAmazonPayFatalError,
+  setAmazonPayOrderReferenceId,
+  setAmazonPayPaymentSelected,
   selectAmount,
   updateOtherAmount,
   paymentFailure,
