@@ -13,7 +13,6 @@ export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
-const subsShowcasePageMatch = '/(eu|int)/subscribe(/.*)?$';
 
 const countryGroupId: CountryGroupId = detect();
 
@@ -83,29 +82,6 @@ export const tests: Tests = {
     seed: 10,
     targetPage: contributionsLandingPageMatch,
     canRun: () => countryGroupId !== 'GBPCountries',
-  },
-
-  subsShowcaseOrderingTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'weeklyTop',
-      },
-      {
-        id: 'digitalTop',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 4,
-    targetPage: subsShowcasePageMatch,
-    optimizeId: 'sj4_I5OAT3SJpqgnxtJ6Xg',
   },
 
   newLandingPageTemplateTestR2: {
