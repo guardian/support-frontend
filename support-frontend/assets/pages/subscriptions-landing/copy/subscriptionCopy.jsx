@@ -220,45 +220,24 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
   classModifier: ['subscriptions__premuim-app'],
 });
 
-const weeklyInternational = (countryGroupId: CountryGroupId, state: State) => [
+const internationalProducts = (countryGroupId: CountryGroupId, state: State) => [
   guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
   digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
   premiumApp(countryGroupId),
 ];
 
-const testOrdering = (countryGroupId: CountryGroupId, state: State) => {
-  const weeklyTop = state.common.abParticipations.subsShowcaseOrderingTest === 'weeklyTop';
-  if (weeklyTop) {
-    return weeklyInternational(countryGroupId, state);
-  }
-  return [
-    digital(countryGroupId, state.page.pricingCopy[DigitalPack], true),
-    guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], false),
-    premiumApp(countryGroupId),
-  ];
-};
-
 const orderedProducts = (state: State): ProductCopy[] => {
   const { countryGroupId } = state.common.internationalisation;
-  switch (countryGroupId) {
-    case GBPCountries:
-      return [
-        paper(countryGroupId, state.page.pricingCopy[Paper]),
-        digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
-        guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], false),
-        paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
-        premiumApp(countryGroupId),
-      ];
-    case EURCountries:
-    case International:
-      return testOrdering(countryGroupId, state);
-    case NZDCountries:
-    case AUDCountries:
-    case Canada:
-    case UnitedStates:
-    default:
-      return weeklyInternational(countryGroupId, state);
+  if (countryGroupId === GBPCountries) {
+    return [
+      guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
+      digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
+      paper(countryGroupId, state.page.pricingCopy[Paper]),
+      paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
+      premiumApp(countryGroupId),
+    ];
   }
+  return internationalProducts(countryGroupId, state);
 };
 
 const getSubscriptionCopy = (state: State) =>

@@ -85,29 +85,6 @@ export const tests: Tests = {
     canRun: () => countryGroupId !== 'GBPCountries',
   },
 
-  subsShowcaseOrderingTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'weeklyTop',
-      },
-      {
-        id: 'digitalTop',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 4,
-    targetPage: subsShowcasePageMatch,
-    optimizeId: 'sj4_I5OAT3SJpqgnxtJ6Xg',
-  },
-
   newLandingPageTemplateTestR2: {
     type: 'OTHER',
     variants: [
