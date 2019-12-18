@@ -158,8 +158,6 @@ function DigitalCheckoutForm(props: PropTypes) {
   const PriceSummary = () =>
     <p className="component-credit-card-price">{priceSummary}</p>;
 
-  console.log('payPalHasLoaded: ', props.payPalHasLoaded);
-
   return (
     <Content>
       <CheckoutLayout aside={(
