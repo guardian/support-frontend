@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { type Node } from 'react';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
@@ -14,23 +14,38 @@ import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { withError } from 'hocs/withError';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
+import { type BillingPeriod } from 'helpers/billingPeriods';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 type PropTypes = {|
   country: IsoCountry,
-  product: SubscriptionProduct,
   paymentMethod: Option<PaymentMethod>,
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
   validationError: Option<string>,
+  priceSummary?: Node,
+  allErrors: Array<Object>,
+  billingPeriod: BillingPeriod,
+  amount: number,
+  setupRecurringPayPalPayment: Function,
+  isTestUser: boolean,
+  validateForm: Function,
+  csrf: Csrf,
+  currencyId: IsoCurrency,
+  formIsValid: Function,
+  payPalHasLoaded: boolean,
+  directDebitButtonText: string,
 |}
 
 const FieldsetWithError = withError(Fieldset);
 
 function PaymentMethodSelector(props: PropTypes) {
-  const paymentMethods = supportedPaymentMethods(props.country, props.product);
+  const paymentMethods = supportedPaymentMethods(props.country);
 
   return (paymentMethods.length > 1 ?
     <FormSection title="How would you like to pay?">
@@ -40,6 +55,7 @@ function PaymentMethodSelector(props: PropTypes) {
             id="payment-methods"
             legend="How would you like to pay?"
             error={props.validationError}
+            role="radiogroup"
           >
             {paymentMethods.includes(DirectDebit) &&
             <RadioInput
@@ -58,7 +74,6 @@ function PaymentMethodSelector(props: PropTypes) {
               checked={props.paymentMethod === Stripe}
               onChange={() => props.setPaymentMethod(Stripe)}
             />
-            {paymentMethods.includes(PayPal) &&
             <RadioInput
               inputId="qa-paypal"
               image={<SvgPayPal />}
@@ -66,10 +81,33 @@ function PaymentMethodSelector(props: PropTypes) {
               name="paymentMethod"
               checked={props.paymentMethod === PayPal}
               onChange={() => props.setPaymentMethod(PayPal)}
-            />}
+            />
           </FieldsetWithError>
         </div>
       </Rows>
+      {props.paymentMethod === PayPal && (
+      <PayPalSubmitButton
+        paymentMethod={props.paymentMethod}
+        onPaymentAuthorised={props.onPaymentAuthorised}
+        csrf={props.csrf}
+        currencyId={props.currencyId}
+        payPalHasLoaded={props.payPalHasLoaded}
+        formIsValid={props.formIsValid}
+        validateForm={props.validateForm}
+        isTestUser={props.isTestUser}
+        setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+        amount={props.amount}
+        billingPeriod={props.billingPeriod}
+        allErrors={props.allErrors}
+      />)}
+      {props.paymentMethod === DirectDebit && (
+      <SubscriptionSubmitButton
+        paymentMethod={props.paymentMethod}
+        allErrors={props.allErrors}
+        className={DirectDebit}
+        component={props.priceSummary}
+        text={props.directDebitButtonText}
+      />)}
       <DirectDebitPopUpForm
         buttonText="Subscribe with Direct Debit"
         onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
@@ -79,5 +117,10 @@ function PaymentMethodSelector(props: PropTypes) {
     </FormSection>
     : null);
 }
+
+PaymentMethodSelector.defaultProps = {
+  priceSummary: null,
+};
+
 
 export { PaymentMethodSelector };

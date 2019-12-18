@@ -5,7 +5,6 @@
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { getUser } from 'helpers/subscriptionsForms/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { defaultPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { isTestUser } from 'helpers/user/user';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
@@ -46,7 +45,7 @@ function createFormReducer(
     firstNameGiftRecipient: null,
     lastNameGiftRecipient: null,
     emailGiftRecipient: null,
-    paymentMethod: defaultPaymentMethod(initialCountry, product),
+    paymentMethod: null,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
@@ -106,7 +105,7 @@ function createFormReducer(
       case 'SET_COUNTRY_CHANGED':
         return {
           ...state,
-          paymentMethod: defaultPaymentMethod(action.country, product),
+          paymentMethod: null,
           // When the country changes we need to update the fulfilment option because it may mean
           // a switch between domestic and rest of the world
           fulfilmentOption: getFulfilmentOption(action, state.fulfilmentOption),

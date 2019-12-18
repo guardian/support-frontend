@@ -55,7 +55,6 @@ export class PayPalExpressButton extends React.Component<PropTypes> {
     if (!this.props.hasLoaded) {
       return null;
     }
-
     const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
       paymentMethod: PayPal,
       token,

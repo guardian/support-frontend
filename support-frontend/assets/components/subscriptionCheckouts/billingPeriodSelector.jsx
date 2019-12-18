@@ -29,7 +29,7 @@ type PropTypes = {|
 function BillingPeriodSelector(props: PropTypes) {
   return (
     <FormSection title="How often would you like to pay?">
-      <Fieldset legend="How often would you like to pay?">
+      <Fieldset legend="How often would you like to pay?" role="radiogroup">
         {props.billingPeriods.map((billingPeriod) => {
           const productPrice = getProductPrice(
             props.productPrices,
