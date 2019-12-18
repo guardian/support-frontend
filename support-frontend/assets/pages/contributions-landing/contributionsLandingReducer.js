@@ -281,7 +281,7 @@ function createFormReducer() {
           ...state,
           amazonPayData: {
             ...state.amazonPayData,
-            walletWidgetReady: true,
+            walletWidgetReady: action.isReady,
           },
         };
 
