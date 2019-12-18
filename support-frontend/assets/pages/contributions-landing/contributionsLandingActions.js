@@ -65,7 +65,7 @@ export type Action =
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
   | { type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT', amazonPaymentsObject: Object }
-  | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' }
+  | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY', isReady: boolean }
   | { type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId: string }
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
@@ -215,7 +215,9 @@ const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
   amazonPaymentsObject,
 });
 
-const setAmazonPayWalletWidgetReady: Action = ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY' });
+const setAmazonPayWalletWidgetReady = (isReady: boolean): Action =>
+  ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY', isReady });
+
 const setAmazonPayHasAccessToken: Action = ({ type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' });
 const setAmazonPayFatalError: Action = ({ type: 'SET_AMAZON_PAY_FATAL_ERROR' });
 
@@ -421,6 +423,10 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
           } else {
             if (result.error === 'amazon_pay_fatal') {
               dispatch(setAmazonPayFatalError);
+            }
+            if (result.error === 'amazon_pay_try_other_card') {
+              // Must re-render the wallet widget in order to display amazon's error message
+              dispatch(setAmazonPayWalletWidgetReady(false));
             }
             dispatch(paymentFailure(result.error));
           }
