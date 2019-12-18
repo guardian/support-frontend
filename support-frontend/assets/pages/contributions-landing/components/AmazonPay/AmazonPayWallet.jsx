@@ -9,7 +9,7 @@ import { logException } from 'helpers/logger';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
-  setAmazonPayWalletWidgetReady: () => Action,
+  setAmazonPayWalletWidgetReady: boolean => Action,
   setAmazonPayOrderReferenceId: string => Action,
   setAmazonPayPaymentSelected: boolean => Action,
   isTestUser: boolean,
@@ -20,7 +20,7 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  setAmazonPayWalletWidgetReady: () => dispatch(setAmazonPayWalletWidgetReady),
+  setAmazonPayWalletWidgetReady: (isReady: boolean) => dispatch(setAmazonPayWalletWidgetReady(isReady)),
   setAmazonPayOrderReferenceId:
     (orderReferenceId: string) => dispatch(setAmazonPayOrderReferenceId(orderReferenceId)),
   setAmazonPayPaymentSelected: (paymentSelected: boolean) =>
@@ -53,6 +53,7 @@ class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
     new amazonPaymentsObject.Widgets.Wallet({
       sellerId: getSellerId(this.props.isTestUser),
       design: { designMode: 'responsive' },
+      amazonOrderReferenceId: this.props.amazonPayData.orderReferenceId,
       onOrderReferenceCreate: (orderReference) => {
         this.props.setAmazonPayOrderReferenceId(orderReference.getAmazonOrderReferenceId());
       },
@@ -65,7 +66,7 @@ class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
       },
     }).bind('WalletWidgetDiv');
 
-    this.props.setAmazonPayWalletWidgetReady();
+    this.props.setAmazonPayWalletWidgetReady(true);
   }
 
   render() {
