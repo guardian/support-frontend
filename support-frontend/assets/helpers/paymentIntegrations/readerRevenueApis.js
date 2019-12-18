@@ -29,6 +29,7 @@ import {
   ExistingDirectDebit,
   PayPal,
   Stripe,
+  AmazonPay,
 } from 'helpers/paymentMethods';
 import type { Title } from 'helpers/user/details';
 
@@ -147,6 +148,10 @@ export type ExistingDirectDebitAuthorisation = {|
   paymentMethod: typeof ExistingDirectDebit,
   billingAccountId: string
 |};
+export type AmazonPayAuthorisation = {|
+  paymentMethod: typeof AmazonPay,
+  orderReferenceId: string
+|}
 
 // Represents an authorisation to execute payments with a given payment method.
 // This will generally be supplied by third-party code (Stripe, PayPal, GoCardless).
@@ -159,7 +164,8 @@ export type PaymentAuthorisation =
   PayPalAuthorisation |
   DirectDebitAuthorisation |
   ExistingCardAuthorisation |
-  ExistingDirectDebitAuthorisation;
+  ExistingDirectDebitAuthorisation |
+  AmazonPayAuthorisation;
 
 // Represents the end state of the checkout process,
 // standardised across payment methods & contribution types.

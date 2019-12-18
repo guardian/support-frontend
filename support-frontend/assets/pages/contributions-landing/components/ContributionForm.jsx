@@ -48,9 +48,10 @@ import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/St
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import type { PaymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { logException } from 'helpers/logger';
 
 
 // ----- Types ----- //
@@ -84,6 +85,7 @@ type PropTypes = {|
   createStripePaymentMethod: () => void,
   paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
+  amazonPayOrderReferenceId: string | null,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -117,6 +119,7 @@ const mapStateToProps = (state: State) => ({
   paymentSecuritySecureTransactionGreyNonUKVariant:
     state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
   recurringStripePaymentRequestButtonTestVariant: state.common.abParticipations.recurringStripePaymentRequestButton,
+  amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
 });
 
 
@@ -153,6 +156,7 @@ const formHandlersForRecurring = {
     paymentMethod: 'ExistingDirectDebit',
     billingAccountId: props.existingPaymentMethod.billingAccountId,
   }),
+  AmazonPay: (props: PropTypes) => logInvalidCombination(props.contributionType, AmazonPay),
 };
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
@@ -178,6 +182,16 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
     DirectDebit: () => { logInvalidCombination('ONE_OFF', DirectDebit); },
     ExistingCard: () => { logInvalidCombination('ONE_OFF', ExistingCard); },
     ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
+    AmazonPay: (props: PropTypes) => {
+      const { amazonPayOrderReferenceId } = props;
+      if (amazonPayOrderReferenceId) {
+        props.setPaymentIsWaiting(true);
+        props.onPaymentAuthorisation({ paymentMethod: AmazonPay, orderReferenceId: amazonPayOrderReferenceId });
+      } else {
+        logException('Missing orderReferenceId for amazon pay');
+      }
+
+    },
     None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
   ANNUAL: {
@@ -197,7 +211,6 @@ function onSubmit(props: PropTypes): Event => void {
     event.preventDefault();
     const flowPrefix = 'npf';
     const form = event.target;
-
     // Only recurring uses stripe checkout
     if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe && props.contributionType !== 'ONE_OFF') {
       props.onPaymentAuthorisation({ paymentMethod: Stripe, token: 'tok_visa', stripePaymentMethod: 'StripeCheckout' });

@@ -8,7 +8,7 @@ import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.config.{PayPalConfig, PayPalConfigProvider, Stage, Stages, StripeConfig, StripeConfigProvider}
+import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
 import config.StringsConfig
@@ -31,7 +31,9 @@ case class ContributionsPaymentMethodConfigs(
   regularDefaultStripeConfig: StripeConfig,
   regularUatStripeConfig: StripeConfig,
   regularDefaultPayPalConfig: PayPalConfig,
-  regularUatPayPalConfig: PayPalConfig
+  regularUatPayPalConfig: PayPalConfig,
+  defaultAmazonPayConfig: AmazonPayConfig,
+  uatAmazonPayConfig: AmazonPayConfig
 )
 
 class Application(
@@ -42,6 +44,7 @@ class Application(
   oneOffStripeConfigProvider: StripeConfigProvider,
   regularStripeConfigProvider: StripeConfigProvider,
   payPalConfigProvider: PayPalConfigProvider,
+  amazonPayConfigProvider: AmazonPayConfigProvider,
   paymentAPIService: PaymentAPIService,
   membersDataService: MembersDataService,
   stringsConfig: StringsConfig,
@@ -170,9 +173,11 @@ class Application(
         regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
         regularUatStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-        regularUatPayPalConfig = payPalConfigProvider.get(true)
+        regularUatPayPalConfig = payPalConfigProvider.get(true),
+        defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+        uatAmazonPayConfig = amazonPayConfigProvider.get(true)
       ),
-      paymentApiStripeUrl = paymentAPIService.stripeUrl,
+      paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       stripeSetupIntentEndpoint = stripeIntentUrl,

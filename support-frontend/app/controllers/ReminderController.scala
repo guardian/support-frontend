@@ -20,11 +20,10 @@ class ReminderController(components: ControllerComponents,
   import actionRefiners._
 
   def sendReminderCreatedEvent(): Action[ReminderEventRequest] = PrivateAction.async(circe.json[ReminderEventRequest]) { implicit request =>
-
     val email = request.body.email
 
     ValidateEmail(email) match {
-      case ValidEmail(ve) => sendToLambda(ve)
+      case ValidEmail(ve) => sendToLambda(request.body)
       case InvalidEmail => respondWithBadRequest(s"Bad Request: Regex match failed for email: $email")
     }
   }
@@ -34,8 +33,9 @@ class ReminderController(components: ControllerComponents,
     Future.successful(BadRequest(message))
   }
 
-  private def sendToLambda(email: String) =
-    sendReminderEmail(email).map(res => if (res) Ok else internalServerError(s"Internal Server Error: Request failed for: $email"))
+  private def sendToLambda(reminderEventRequest: ReminderEventRequest) =
+    sendReminderEmail(reminderEventRequest).map(res =>
+      if (res) Ok else internalServerError(s"Internal Server Error: Request failed for: ${reminderEventRequest.email}"))
 
   private def internalServerError(message: String) = {
     SafeLogger.warn(message)
@@ -43,7 +43,7 @@ class ReminderController(components: ControllerComponents,
   }
 }
 
-case class ReminderEventRequest(email: String)
+case class ReminderEventRequest(email: String, reminderDate: String)
 object ReminderEventRequest {
   implicit val decoder: Decoder[ReminderEventRequest] = deriveDecoder
 }

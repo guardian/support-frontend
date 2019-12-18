@@ -571,6 +571,11 @@
 
   @include mq($from: tablet) {
     width: 600px;
+    margin-top: 45px;
+  }
+
+  @include mq($from: leftCol) {
+    margin-top: 20px;
   }
 
   img {

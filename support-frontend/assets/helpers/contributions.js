@@ -11,6 +11,7 @@ import type { Radio } from 'components/radioToggle/radioToggle';
 import { logException } from 'helpers/logger';
 import { Annual, type BillingPeriod, Monthly } from 'helpers/billingPeriods';
 import type { PaymentMethod, PaymentMethodMap } from 'helpers/paymentMethods';
+import type { ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 
 // ----- Types ----- //
 
@@ -35,10 +36,11 @@ export const logInvalidCombination = (contributionType: ContributionType, paymen
   logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
 };
 
+// Legacy type, only used by stripe checkout. Can be cleaned up after stripe checkout fully removed
 export type ThirdPartyPaymentLibraries = {
-  ONE_OFF: { Stripe: Object | null },
-  MONTHLY: { Stripe: Object | null, PayPal: Object | null },
-  ANNUAL: { Stripe: Object | null, PayPal: Object | null },
+  ONE_OFF: { Stripe: ThirdPartyPaymentLibrary | null },
+  MONTHLY: { Stripe: ThirdPartyPaymentLibrary | null },
+  ANNUAL: { Stripe: ThirdPartyPaymentLibrary | null },
 };
 
 export type Amount = {

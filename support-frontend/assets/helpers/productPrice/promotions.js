@@ -36,6 +36,7 @@ export type PromotionTerms = {
   product: SubscriptionProduct, // actually only GuardianWeekly, Paper or Digital Pack?
   productRatePlans: string[],
   promoCode: string,
+  isGift: boolean,
 }
 
 export type Promotion =
