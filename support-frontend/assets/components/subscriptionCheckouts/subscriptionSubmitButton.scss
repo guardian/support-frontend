@@ -1,9 +1,21 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.component-submit-button--DirectDebit, .component-submit-button--PayPal {
+.component-submit-button {
+  margin-top: 30px;
+}
+
+.component-submit-button-paypal--PayPal,
+.component-submit-button-directDebit--DirectDebit {
     max-width: gu-span(5);
-    margin-top: 0; 
-    margin-right: $gu-h-spacing / 2; 
-    margin-bottom: $gu-v-spacing * 2;
+    margin-top: 0;
+    margin-right: $gu-h-spacing / 2;
+    margin-bottom: $gu-v-spacing;
     margin-left: $gu-h-spacing / 2;
+}
+
+.component-submit-button-paypal--DirectDebit,
+.component-submit-button-paypal--Stripe,
+.component-submit-button-directDebit--Paypal,
+.component-submit-button-directDebit--Stripe {
+  display: none;
 }

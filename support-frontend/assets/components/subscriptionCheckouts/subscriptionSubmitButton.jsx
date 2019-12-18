@@ -31,7 +31,7 @@ function SubscriptionSubmitButton(props: PropTypes) {
   return (
     <span className={props.paymentMethod === props.className ? 'show' : 'is-hidden'}>
       <div className="component-submit-button">
-        <div className={props.paymentMethod ? `component-submit-button--${props.paymentMethod}` : 'component-submit-button'}>
+        <div className={props.paymentMethod ? `component-submit-button-directDebit--${props.paymentMethod}` : 'component-submit-button-directDebit'}>
           <Button
             id="qa-submit-button"
             type="submit"

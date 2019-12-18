@@ -29,7 +29,6 @@ import {
 } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { signOut } from 'helpers/user/user';
 import GridImage from 'components/gridImage/gridImage';
@@ -57,8 +56,7 @@ import {
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
-import { PayPal, DirectDebit, Stripe } from 'helpers/paymentMethods';
-import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import { PayPal, Stripe } from 'helpers/paymentMethods';
 import {
   getAppliedPromoDescription,
   getPriceDescription,
@@ -160,6 +158,8 @@ function DigitalCheckoutForm(props: PropTypes) {
   const PriceSummary = () =>
     <p className="component-credit-card-price">{priceSummary}</p>;
 
+  console.log('payPalHasLoaded: ', props.payPalHasLoaded);
+
   return (
     <Content>
       <CheckoutLayout aside={(
@@ -210,15 +210,10 @@ function DigitalCheckoutForm(props: PropTypes) {
           />
           <PaymentMethodSelector
             country={props.country}
-            product={DigitalPack}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
             validationError={firstError('paymentMethod', props.formErrors)}
-          />
-          <PayPalSubmitButton
-            paymentMethod={props.paymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
             csrf={props.csrf}
             currencyId={props.currencyId}
             payPalHasLoaded={props.payPalHasLoaded}
@@ -229,13 +224,8 @@ function DigitalCheckoutForm(props: PropTypes) {
             amount={props.amount}
             billingPeriod={props.billingPeriod}
             allErrors={[...props.addressErrors, ...props.formErrors]}
-          />
-          <SubscriptionSubmitButton
-            paymentMethod={props.paymentMethod}
-            allErrors={[...props.addressErrors, ...props.formErrors]}
-            className={DirectDebit}
-            component={<PriceSummary />}
-            text="Start your free trial now"
+            priceSummary={<PriceSummary />}
+            directDebitButtonText="Start your free trial now"
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"

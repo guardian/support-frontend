@@ -53,7 +53,6 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import CancellationSection
   from 'components/subscriptionCheckouts/cancellationSection';
 import { newspaperCountries } from 'helpers/internationalisation/country';
-import { Paper } from 'helpers/subscriptions';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -62,15 +61,19 @@ import {
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
-import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 import { TextArea } from 'components/forms/textArea';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { Stripe } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { getGlobal } from 'helpers/globals';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
+import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+
 
 // ----- Types ----- //
 
@@ -88,6 +91,12 @@ type PropTypes = {|
   isTestUser: boolean,
   validateForm: () => Function,
   stripeSetupIntentEndpoint: string,
+  csrf: Csrf,
+  currencyId: IsoCurrency,
+  payPalHasLoaded: boolean,
+  formIsValid: Function,
+  setupRecurringPayPalPayment: Function,
+  amount: number,
 |};
 
 // ----- Map State/Props ----- //
@@ -103,18 +112,29 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     isTestUser: state.page.checkout.isTestUser,
     country: state.common.internationalisation.countryId,
     stripeSetupIntentEndpoint: getGlobal('stripeSetupIntentEndpoint'),
+    csrf: state.page.csrf,
+    currencyId: state.common.internationalisation.currencyId,
+    payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+    amount: getProductPrice(
+      state.page.checkout.productPrices,
+      state.page.checkout.fulfilmentOption,
+      state.page.checkout.productOption,
+    ).price,
   };
 }
 
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
+    formIsValid: () =>
+      (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => withDeliveryFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
       submitWithDeliveryForm(dispatch, getState()),
     validateForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
       const state = getState();
       validateWithDeliveryForm(dispatch, state);
     },
+    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
     signOut,
   };
 }
@@ -277,17 +297,21 @@ function PaperCheckoutForm(props: PropTypes) {
           </FormSection>
           <PaymentMethodSelector
             country="GB"
-            product={Paper}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
             validationError={firstError('paymentMethod', props.formErrors)}
-          />
-          <SubscriptionSubmitButton
-            paymentMethod={props.paymentMethod}
+            csrf={props.csrf}
+            currencyId={props.currencyId}
+            payPalHasLoaded={props.payPalHasLoaded}
+            formIsValid={props.formIsValid}
+            validateForm={props.validateForm}
+            isTestUser={props.isTestUser}
+            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+            amount={props.amount}
+            billingPeriod={props.billingPeriod}
             allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-            className={DirectDebit}
-            text="Pay now"
+            directDebitButtonText="Pay now"
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"

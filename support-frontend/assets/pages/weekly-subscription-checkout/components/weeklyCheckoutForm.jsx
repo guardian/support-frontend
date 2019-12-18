@@ -45,7 +45,6 @@ import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection
   from 'components/subscriptionCheckouts/cancellationSection';
-import { GuardianWeekly } from 'helpers/subscriptions';
 import { signOut } from 'helpers/user/user';
 import type {
   Action,
@@ -68,13 +67,16 @@ import {
   type SetCountryChangedAction,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
-import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { Stripe } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { getGlobal } from 'helpers/globals';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
+import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 
 // ----- Types ----- //
 
@@ -94,7 +96,12 @@ type PropTypes = {|
   country: IsoCountry,
   isTestUser: boolean,
   validateForm: () => Function,
-  stripeSetupIntentEndpoint: string
+  stripeSetupIntentEndpoint: string,
+  csrf: Csrf,
+  currencyId: IsoCurrency,
+  payPalHasLoaded: boolean,
+  formIsValid: Function,
+  setupRecurringPayPalPayment: Function,
 |};
 
 // ----- Map State/Props ----- //
@@ -114,6 +121,9 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     isTestUser: state.page.checkout.isTestUser,
     country: state.common.internationalisation.countryId,
     stripeSetupIntentEndpoint: getGlobal('stripeSetupIntentEndpoint'),
+    csrf: state.page.csrf,
+    currencyId: state.common.internationalisation.currencyId,
+    payPalHasLoaded: state.page.checkout.payPalHasLoaded,
   };
 }
 
@@ -121,6 +131,8 @@ function mapDispatchToProps() {
   const { setCountry } = addressActionCreatorsFor('billing');
   return {
     ...formActionCreators,
+    formIsValid: () =>
+      (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => withDeliveryFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
       submitWithDeliveryForm(dispatch, getState()),
     signOut,
@@ -130,6 +142,7 @@ function mapDispatchToProps() {
       const state = getState();
       validateWithDeliveryForm(dispatch, state);
     },
+    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
   };
 }
 
@@ -276,17 +289,21 @@ function WeeklyCheckoutForm(props: PropTypes) {
           />
           <PaymentMethodSelector
             country={props.billingCountry}
-            product={GuardianWeekly}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
             validationError={firstError('paymentMethod', props.formErrors)}
-          />
-          <SubscriptionSubmitButton
-            paymentMethod={props.paymentMethod}
+            csrf={props.csrf}
+            currencyId={props.currencyId}
+            payPalHasLoaded={props.payPalHasLoaded}
+            formIsValid={props.formIsValid}
+            validateForm={props.validateForm}
+            isTestUser={props.isTestUser}
+            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+            amount={price.price}
+            billingPeriod={props.billingPeriod}
             allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-            className={DirectDebit}
-            text="Pay now"
+            directDebitButtonText="Pay now"
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"
