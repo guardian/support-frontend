@@ -6,6 +6,7 @@ import { type Action, setAmazonPayWalletWidgetReady, setAmazonPayOrderReferenceI
 import { connect } from 'react-redux';
 import './AmazonPay.scss';
 import { logException } from 'helpers/logger';
+import { trackComponentLoad } from '../../../../helpers/tracking/behaviour';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
@@ -72,6 +73,7 @@ class AmazonPayWalletComponent extends React.Component<PropTypes, void> {
   render() {
     const { amazonLoginObject, amazonPaymentsObject } = this.props.amazonPayData.amazonPayLibrary;
     if (amazonLoginObject && amazonPaymentsObject) {
+      trackComponentLoad('amazon-pay-wallet-loaded');
       return (
         <div>
           <div className="walletWidgetDiv" id="WalletWidgetDiv" />
