@@ -18,8 +18,11 @@ import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpres
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { PayPal } from 'helpers/paymentMethods';
+import { PayPal, AmazonPay } from 'helpers/paymentMethods';
 import Button from 'components/button/button';
+import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
+import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
+import type { AmazonPayData } from '../contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -41,6 +44,7 @@ type PropTypes = {|
   amount: number,
   billingPeriod: BillingPeriod,
   showSecureBackground: boolean,
+  amazonPayData: AmazonPayData,
 |};
 
 function mapStateToProps(state: State) {
@@ -63,6 +67,7 @@ function mapStateToProps(state: State) {
       contributionType,
     ),
     billingPeriod: billingPeriodFromContrib(contributionType),
+    amazonPayData: state.page.form.amazonPayData,
   });
 }
 
@@ -87,6 +92,8 @@ function withProps(props: PropTypes) {
     // if all payment methods are switched off, do not display the button
     const formClassName = 'form--contribution';
     const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
+    const amazonPaymentReady = () =>
+      !props.amazonPayData.fatalError && props.amazonPayData.orderReferenceId && props.amazonPayData.paymentSelected;
 
     const submitButtonCopy = getContributeButtonCopyWithPaymentType(
       props.contributionType,
@@ -98,11 +105,17 @@ function withProps(props: PropTypes) {
 
     const classNames: string = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
 
+    const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?
+      <AmazonPayWallet isTestUser={props.isTestUser} /> :
+      <AmazonPayLoginButton />);
+
     // We have to show/hide PayPalExpressButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
     // See PayPalExpressButton for more info.
     return (
-      <div className={classNames}>
+      <div
+        className={classNames}
+      >
         <div
           id="component-paypal-button-checkout"
           className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
@@ -121,7 +134,10 @@ function withProps(props: PropTypes) {
             billingPeriod={props.billingPeriod}
           />
         </div>
-        {!showPayPalRecurringButton ?
+
+        { !props.amazonPayData.fatalError && props.paymentMethod === AmazonPay && getAmazonPayComponent() }
+
+        {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
           <Button
             type="submit"
             aria-label={submitButtonCopy}

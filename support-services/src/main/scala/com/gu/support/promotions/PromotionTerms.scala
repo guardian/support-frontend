@@ -11,7 +11,8 @@ case class PromotionTerms(
   starts: DateTime,
   expires: Option[DateTime],
   product: Product,
-  productRatePlans: List[String]
+  productRatePlans: List[String],
+  isGift: Boolean
 )
 
 object PromotionTerms {
@@ -39,13 +40,19 @@ object PromotionTerms {
       .filter(productRatePlan => includedProductRatePlanIds.contains(productRatePlan.id))
       .map(_.description)
 
+    val isGift = product
+      .getProductRatePlans(environment)
+      .filter(productRatePlan => includedProductRatePlanIds.contains(productRatePlan.id))
+      .forall(_.fixedTerm)
+
     PromotionTerms(
       promotion.promoCode,
       promotion.promotion.description,
       promotion.promotion.starts,
       promotion.promotion.expires,
       product,
-      productRatePlans
+      productRatePlans,
+      isGift
     )
   }
 }

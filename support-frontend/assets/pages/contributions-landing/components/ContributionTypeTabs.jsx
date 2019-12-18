@@ -30,7 +30,8 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   switches: Switches,
   contributionTypes: ContributionTypes,
-  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
+  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId, boolean) => void,
+  inAmazonPayTest: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -39,6 +40,8 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
+  inAmazonPayTest:
+    state.common.abParticipations.amazonPaySingleUS === 'amazonPay',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -47,8 +50,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
     switches: Switches,
     countryId: IsoCountry,
     countryGroupId: CountryGroupId,
+    inAmazonPayTest: boolean,
   ) => {
-    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
+    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId, inAmazonPayTest);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
   },
@@ -83,6 +87,7 @@ function withProps(props: PropTypes) {
                     props.switches,
                     props.countryId,
                     props.countryGroupId,
+                    props.inAmazonPayTest,
                   )
                 }
                 checked={props.contributionType === contributionType}

@@ -7,18 +7,19 @@ import Content from 'components/content/content';
 import { formatUserDate } from 'helpers/dateConversions';
 import UnorderedList from 'components/list/unorderedList';
 import AnchorButton from 'components/button/anchorButton';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { DigitalPack, Paper } from 'helpers/subscriptions';
 import { routes } from 'helpers/routes';
 
-const landingPageForProduct = (product: SubscriptionProduct) => {
-  switch (product) {
+const landingPageForProduct = (props: PromotionTerms) => {
+  switch (props.product) {
     case DigitalPack:
       return routes.digitalSubscriptionLanding;
     case Paper:
       return routes.paperSubscriptionLanding;
     default:
-      return routes.guardianWeeklySubscriptionLanding;
+      return props.isGift ?
+        routes.guardianWeeklySubscriptionLandingGift :
+        routes.guardianWeeklySubscriptionLanding;
   }
 };
 
@@ -43,7 +44,7 @@ export default function PromoDetails(props: PromotionTerms) {
         }
         />
       </LargeParagraph>
-      <AnchorButton href={`${landingPageForProduct(props.product)}?promoCode=${props.promoCode}`}>
+      <AnchorButton href={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}>
         Get this offer
       </AnchorButton>
     </Content>
