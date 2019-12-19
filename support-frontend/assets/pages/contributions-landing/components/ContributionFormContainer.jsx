@@ -97,7 +97,7 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   contributeCopy: defaultContributeCopy,
 };
 
-const usEoyAppealCopyAndContributeCopy: CountryMetaData = (usEoyCopyVariant: UsEoyCopyTestVariants) => ({
+const usEoyAppealCopyAndContributeCopy = (usEoyCopyVariant: UsEoyCopyTestVariants): CountryMetaData => ({
   headerCopy: usEoyHeaderCopy,
   contributeCopy: usEoyAppealContributeCopy(usEoyCopyVariant),
 });
