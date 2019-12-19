@@ -7,6 +7,7 @@ import { type Action, setAmazonPayHasAccessToken } from 'pages/contributions-lan
 import Button from 'components/button/button';
 import { logException } from 'helpers/logger';
 import AnimatedDots from 'components/spinners/animatedDots';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
@@ -24,6 +25,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
 
   loginPopup = (amazonLoginObject: Object) => (): void => {
+    trackComponentClick('amazon-pay-login-click');
     const loginOptions = { scope: 'profile postal_code payments:widget payments:shipping_address', popup: true };
     amazonLoginObject.authorize(loginOptions, (response) => {
       if (response.error) {
