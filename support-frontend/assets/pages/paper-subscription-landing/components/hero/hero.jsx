@@ -19,7 +19,7 @@ import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import {
   showCountdownTimer,
 } from 'helpers/flashSale';
-import { getDiscountCopy } from '../hero/discountCopy';
+import { getDiscountCopy } from './discountCopy';
 import './joyOfPrint.scss';
 
 const discountCopy = getDiscountCopy();

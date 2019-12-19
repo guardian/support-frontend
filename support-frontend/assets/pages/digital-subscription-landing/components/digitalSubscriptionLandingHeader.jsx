@@ -164,7 +164,7 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   if (flashSaleIsActive(product, country)) {
     const saleCopy = getSaleCopy(product, country);
     return {
-      heading: `${saleCopy.landingPage.heading}`,
+      heading: saleCopy.landingPage.heading,
       subHeading: `${saleCopy.landingPage.subHeading}`,
     };
   }

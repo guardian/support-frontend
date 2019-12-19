@@ -1,16 +1,18 @@
 // @flow
 
+import React, { type Node } from 'react';
+
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 type DiscountCopy = {
   roundel: string[],
-  heading: string,
+  heading: string | Node,
 };
 
 const discountCopy: DiscountCopy = {
   roundel: ['Save up to', '37%', 'for a year'],
-  heading: 'Save up to 37% for a year on The Guardian and The Observer',
+  heading: <span>Save up to 37% for a year on The Guardian<br />and The Observer</span>,
 };
 
 export const getDiscountCopy = (): DiscountCopy => {

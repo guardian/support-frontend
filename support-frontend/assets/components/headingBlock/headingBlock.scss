@@ -53,13 +53,8 @@
   background-color: gu-colour(highlight-main);
 }
 
-.component-heading-block__maxwidth {
-  max-width: gu-span(10);
-}
-
 .component-heading-block__gift {
-  .component-heading-block__maxwidth {
-    max-width: gu-span(7);
+  .component-heading-block__fontSize {
 
     @include mq($until: mobileLandscape) {
       font-size: 26px;

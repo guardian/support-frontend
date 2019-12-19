@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
 import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
@@ -50,7 +50,7 @@ const HeroGlobe = () => (
   </div>
 );
 
-const CampaignHeader = (props: {heading: string, orderIsAGift: boolean}) => (
+const CampaignHeader = (props: {heading: string | Node, orderIsAGift: boolean}) => (
   <ProductPageHero
     appearance="campaign"
     overheading="Guardian Weekly subscriptions"

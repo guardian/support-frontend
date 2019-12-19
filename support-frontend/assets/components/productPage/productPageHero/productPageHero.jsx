@@ -24,7 +24,7 @@ type WrapperPropTypes = {|
 type PropTypes = {|
   ...WrapperPropTypes,
   overheading: string,
-  heading: string,
+  heading: string | Node,
   content?: Option<Node>,
   hasCampaign: boolean,
   showProductPageHeroHeader?: boolean,
@@ -35,7 +35,7 @@ type PropTypes = {|
 type ProductPageHeroHeaderTypes = {
   overheading: string,
   hasCampaign: boolean,
-  heading: string,
+  heading: string | Node,
   content?: Option<Node>,
   orderIsAGift?: boolean,
   giftImage?: Node,
