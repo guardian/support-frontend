@@ -6,7 +6,7 @@ import { type Action, setAmazonPayWalletWidgetReady, setAmazonPayOrderReferenceI
 import { connect } from 'react-redux';
 import './AmazonPay.scss';
 import { logException } from 'helpers/logger';
-import { trackComponentLoad } from '../../../../helpers/tracking/behaviour';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
