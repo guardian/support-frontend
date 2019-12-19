@@ -49,7 +49,7 @@ import { getQueryParameter } from 'helpers/url';
 import AnchorButton from 'components/button/anchorButton';
 
 type PageCopy = {|
-  title: string,
+  title: string | React.Node,
   firstParagraph: React.Node,
   priceCardSubHeading: string,
 |};
@@ -123,8 +123,8 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
 
 const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
   const defaultTitle = orderIsAGift ?
-    'Give a gift that challenges the status quo'
-    : 'Pause for thought with The Guardian\'s essential news magazine';
+    <span>Give a gift that challenges<br />the status quo</span>
+    : <span>Pause for thought with The Guardian&apos;s<br />essential news magazine</span>;
   return {
     title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,
     firstParagraph: getFirstParagraph(promotionCopy),

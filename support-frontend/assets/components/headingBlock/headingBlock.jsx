@@ -32,13 +32,13 @@ function HeadingBlock(props: PropTypes) {
             <h1 className={`component-heading-block__overheading${overheadingClass}`}>{props.overheading}</h1>),
           (
             <div className="component-heading-block__heading">
-              <h2 className="component-heading-block__maxwidth">{props.children}</h2>
+              <h2 className="component-heading-block__fontSize">{props.children}</h2>
             </div>
            ),
          ]
         :
         <div className="component-heading-block__heading">
-          <h1 className="component-heading-block__maxwidth">{props.children}</h1>
+          <h1 className="component-heading-block__fontSize">{props.children}</h1>
         </div>
       }
       </div>
