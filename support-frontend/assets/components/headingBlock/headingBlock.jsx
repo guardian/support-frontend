@@ -11,7 +11,7 @@ import './headingBlock.scss';
 // ----- Types ----- //
 
 type PropTypes = {|
-  overheading: Option<string>,
+  overheading: Option<string> | Node,
   children?: Node,
   orderIsAGift?: boolean,
   overheadingClass?: string,

@@ -22,7 +22,7 @@ export type SaleCopy = {
     description: string,
   },
   landingPage: {
-    heading: string | Node,
+    heading: Option<Node>,
     subHeading: string,
     roundel: string[],
   },
@@ -195,7 +195,7 @@ function getSaleCopy(product: SubscriptionProduct, countryGroupId: CountryGroupI
       description: '',
     },
     landingPage: {
-      heading: '',
+      heading: null,
       subHeading: '',
       roundel: [''],
     },
