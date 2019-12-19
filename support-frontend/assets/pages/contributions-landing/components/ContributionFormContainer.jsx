@@ -76,16 +76,21 @@ const defaultContributeCopy = (
 const usEoyHeaderCopy = '2020 will be an epic year for America';
 const usEoyAppealContributeCopy = (usEoyCopyVariant: UsEoyCopyTestVariants) =>
   (usEoyCopyVariant === 'v1' ?
-    (<span>
-      The Guardian’s open, independent reporting has been supported by hundreds of thousands of readers in the US like
-      you – we have supporters in each of the fifty states. Thanks to your valuable contributions, tens of millions
-      across America read our quality, factual journalism at this critical time.
-    </span>) :
-    (<span>
-      And the result could define the country for a generation. The need for a strong, independent press has never
-      been greater. As we prepare for 2020, we’re asking our US readers support the Guardian’s open, independent
-      reporting. Help us reach our goal of $1.5 million.
-    </span>));
+    (
+      <span>
+        The Guardian’s open, independent reporting has been supported by hundreds of thousands of readers in the US like
+        you – we have supporters in each of the fifty states. Thanks to your valuable contributions, tens of millions
+        across America read our quality, factual journalism at this critical time.
+      </span>
+    ) :
+    (
+      <span>
+        And the result could define the country for a generation. The need for a strong, independent press has never
+        been greater. As we prepare for 2020, we’re asking our US readers support the Guardian’s open, independent
+        reporting. Help us reach our goal of $1.5 million.
+      </span>
+    )
+  );
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
