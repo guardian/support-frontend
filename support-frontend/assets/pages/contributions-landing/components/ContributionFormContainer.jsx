@@ -14,7 +14,7 @@ import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { PaymentSecuritySecureTransactionGreyNonUKVariants, NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { PaymentSecuritySecureTransactionGreyNonUKVariants, NewLandingPageTemplateTestVariants, UsEoyCopyTestVariants } from 'helpers/abTests/abtestDefinitions';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 
 
@@ -33,6 +33,7 @@ type PropTypes = {|
   countryId: IsoCountry,
   paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   newTemplateVariant: NewLandingPageTemplateTestVariants,
+  usEoyCopyVariant: UsEoyCopyTestVariants,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -46,6 +47,7 @@ const mapStateToProps = (state: State) => ({
   newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTestR2,
   paymentSecuritySecureTransactionGreyNonUKVariant:
     state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
+  usEoyCopyVariant: state.common.abParticipations.usEoyCopy,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -71,23 +73,29 @@ const defaultContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
-const usEoyHeaderCopy = 'Support our journalism with a year-end gift';
-const usEoyAppealContributeCopy = (
-  <span>
-    The Guardian’s open, independent reporting has been supported by hundreds of thousands of readers in the
-    US like you – we have supporters in each of the fifty states. Thanks to your valuable contributions, tens
-    of millions across America read our quality, factual journalism at this critical time.
-  </span>);
+const usEoyHeaderCopy = '2020 will be an epic year for America';
+const usEoyAppealContributeCopy = (usEoyCopyVariant: UsEoyCopyTestVariants) =>
+  (usEoyCopyVariant === 'v1' ?
+    (<span>
+      The Guardian’s open, independent reporting has been supported by hundreds of thousands of readers in the US like
+      you – we have supporters in each of the fifty states. Thanks to your valuable contributions, tens of millions
+      across America read our quality, factual journalism at this critical time.
+    </span>) :
+    (<span>
+      And the result could define the country for a generation. The need for a strong, independent press has never
+      been greater. As we prepare for 2020, we’re asking our US readers support the Guardian’s open, independent
+      reporting. Help us reach our goal of $1.5 million.
+    </span>));
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
 };
 
-const usEoyAppealCopyAndContributeCopy: CountryMetaData = {
+const usEoyAppealCopyAndContributeCopy: CountryMetaData = (usEoyCopyVariant: UsEoyCopyTestVariants) => ({
   headerCopy: usEoyHeaderCopy,
-  contributeCopy: usEoyAppealContributeCopy,
-};
+  contributeCopy: usEoyAppealContributeCopy(usEoyCopyVariant),
+});
 
 const campaignName = getCampaignName();
 const campaign = campaignName && campaigns[campaignName] ? campaigns[campaignName] : null;
@@ -103,7 +111,7 @@ function withProps(props: PropTypes) {
 
   const landingPageCopy = (): CountryMetaData => {
     if (props.countryId === 'US') {
-      return usEoyAppealCopyAndContributeCopy;
+      return usEoyAppealCopyAndContributeCopy(props.usEoyCopyVariant);
     }
 
     return defaultHeaderCopyAndContributeCopy;
