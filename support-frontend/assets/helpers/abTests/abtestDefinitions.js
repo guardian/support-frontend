@@ -10,6 +10,7 @@ export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'payme
 export type PaymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
 export type NewLandingPageTemplateTestVariants = 'control' | 'new_template' | 'notintest';
 export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
+export type UsEoyCopyTestVariants = 'v1' | 'v2' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
@@ -59,6 +60,28 @@ export const tests: Tests = {
     independent: true,
     seed: 2,
     targetPage: contributionsLandingPageMatch,
+  },
+
+  usEoyCopy: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'v1',
+      },
+      {
+        id: 'v2',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 3,
+    targetPage: usContributionsLandingPageMatch,
   },
 
   paymentSecuritySecureTransactionGreyNonUK: {
