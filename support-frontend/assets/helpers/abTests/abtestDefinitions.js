@@ -15,6 +15,7 @@ export type UsEoyCopyTestVariants = 'v1' | 'v2' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
+const digitalLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/subscribe/digital(/.*)?$';
 
 const countryGroupId: CountryGroupId = detect();
 
@@ -151,5 +152,28 @@ export const tests: Tests = {
     independent: true,
     seed: 11,
     targetPage: contributionsLandingPageMatch,
+  },
+
+  SubsBannerNewYearCopyTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 0,
+      },
+    },
+    isActive: true,
+    independent: true, //TODO: this can probably be removed
+    seed: 12,
+    targetPage: digitalLandingPageMatch,
+    optimizeId: 'as232' //TODO: update
   },
 };
