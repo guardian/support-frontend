@@ -14,6 +14,7 @@ import { type AmountsRegions } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
+import { getQueryParameter } from 'helpers/url'
 
 // ----- Types ----- //
 
@@ -123,6 +124,22 @@ function getParticipationsFromUrl(): ?Participations {
   }
 
   return null;
+}
+
+function getParticipationsFromAcquisitionData(): ?Participations {
+  const acquisitionDataParam = getQueryParameter('acquisitionData');
+
+  try {
+    const acquisitionData = JSON.parse(acquisitionDataParam);
+    if(acquisitionData.abTest && acquisitionData.abTest.name && acquisitionData.abTest.variant) {
+      return {
+        [acquisitionData.abTest.name]: acquisitionData.abTest.variant
+      };
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 function userInBreakpoint(audience: Audience): boolean {
@@ -255,8 +272,9 @@ const init = (
 ): Participations => {
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
+  const acquisitionParticipations: ?Participations = getParticipationsFromAcquisitionData();
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  const combinedParticipations: Participations = { ...participations, ...urlParticipations };
+  const combinedParticipations: Participations = { ...participations, ...acquisitionParticipations, ...urlParticipations };
   setLocalStorageParticipations(combinedParticipations);
 
   return combinedParticipations;
