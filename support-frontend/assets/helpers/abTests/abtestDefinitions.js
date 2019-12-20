@@ -8,6 +8,7 @@ import {
 // ----- Tests ----- //
 export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'paymentRequestButton' | 'notintest';
 export type PaymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
+export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
 export type NewLandingPageTemplateTestVariants = 'control' | 'new_template' | 'notintest';
 export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
 export type UsEoyCopyTestVariants = 'v1' | 'v2' | 'notintest';
@@ -82,6 +83,29 @@ export const tests: Tests = {
     independent: true,
     seed: 3,
     targetPage: usContributionsLandingPageMatch,
+  },
+
+  landingPageReverseAmounts: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'reversedAmounts',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 4,
+    targetPage: usContributionsLandingPageMatch,
+    canRun: () => countryGroupId === 'UnitedStates',
   },
 
   paymentSecuritySecureTransactionGreyNonUK: {
