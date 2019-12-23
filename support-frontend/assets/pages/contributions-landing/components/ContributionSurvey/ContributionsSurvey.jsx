@@ -23,7 +23,7 @@ type PropTypes = {|
 
 export default function ContributionsSurvey(props: PropTypes) {
   const surveyLink = 'https://www.surveymonkey.co.uk/r/RLGSQ87';
-  const isEurope = pprops.countryGroupId === 'EURCountries';
+  const isEurope = props.countryGroupId === 'EURCountries';
   const showSurvey = props.isRunning && isEurope && surveyLink;
 
   return showSurvey ? (
