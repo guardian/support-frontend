@@ -23,8 +23,8 @@ type PropTypes = {|
 
 export default function ContributionsSurvey(props: PropTypes) {
   const surveyLink = 'https://www.surveymonkey.co.uk/r/RLGSQ87';
-  const isUSorEU = props.countryGroupId === 'UnitedStates' || props.countryGroupId === 'EURCountries';
-  const showSurvey = props.isRunning && isUSorEU && surveyLink;
+  const isEurope = pprops.countryGroupId === 'EURCountries';
+  const showSurvey = props.isRunning && isEurope && surveyLink;
 
   return showSurvey ? (
     <div className="contribution-thank-you-block">
