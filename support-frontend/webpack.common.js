@@ -69,7 +69,8 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     favicons: 'images/favicons.js',
     showcasePage: 'pages/showcase/showcase.jsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
-    contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
+    // contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
+    contributionsLandingPage: 'pages/contributions-landing/contributionsLandingTs.tsx',
     fontLoader: 'helpers/fontLoader.js',
 
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
@@ -109,7 +110,8 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
       path.resolve(__dirname, 'assets'),
       path.resolve(__dirname, 'node_modules'),
     ],
-    extensions: ['.js', '.jsx'],
+    extensions: ['.tsx', 'ts', '.jsx', '.js'],
+    // extensions: ['.js', '.jsx'],
   },
 
   module: {
@@ -174,6 +176,11 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           },
           ...cssLoaders,
         ],
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: [/node_modules/, /.storybook/, /flow-typed/],
+        loader: 'ts-loader',
       },
     ],
   },
