@@ -66,7 +66,6 @@ type PropTypes = {|
   isTestUser: boolean,
   switches: Switches,
   paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
-  inAmazonPayTest: boolean,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -81,8 +80,6 @@ const mapStateToProps = (state: State) => ({
   switches: state.common.settings.switches,
   paymentSecuritySecureTransactionGreyNonUKVariant:
     state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
-  inAmazonPayTest:
-    state.common.abParticipations.amazonPaySingleUS === 'amazonPay',
 });
 
 const mapDispatchToProps = {
@@ -111,7 +108,7 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
 function withProps(props: PropTypes) {
 
   const paymentMethods: PaymentMethod[] =
-    getValidPaymentMethods(props.contributionType, props.switches, props.countryId, props.inAmazonPayTest);
+    getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
 
   const noPaymentMethodsErrorMessage =
     (<GeneralErrorMessage
