@@ -21,7 +21,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import { setupStripe } from 'helpers/stripe';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
-import type { RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types -----//
 
@@ -35,7 +34,6 @@ type PropTypes = {|
   stripeHasLoaded: boolean,
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
-  recurringTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
 // ----- Component ----- //
@@ -68,7 +66,6 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
               <StripePaymentRequestButton
                 stripeAccount={stripeAccount}
                 amount={amount}
-                recurringTestVariant={this.props.recurringTestVariant}
               />
             </Elements>
           </StripeProvider>

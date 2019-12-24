@@ -50,7 +50,7 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { PaymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { PaymentSecuritySecureTransactionGreyNonUKVariants } from 'helpers/abTests/abtestDefinitions';
 import { logException } from 'helpers/logger';
 
 
@@ -84,7 +84,6 @@ type PropTypes = {|
   country: IsoCountry,
   createStripePaymentMethod: () => void,
   paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
-  recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
   amazonPayOrderReferenceId: string | null,
 |};
 
@@ -118,7 +117,6 @@ const mapStateToProps = (state: State) => ({
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   paymentSecuritySecureTransactionGreyNonUKVariant:
     state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
-  recurringStripePaymentRequestButtonTestVariant: state.common.abParticipations.recurringStripePaymentRequestButton,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
 });
 
@@ -255,7 +253,6 @@ function withProps(props: PropTypes) {
         country={props.country}
         otherAmounts={props.otherAmounts}
         selectedAmounts={props.selectedAmounts}
-        recurringTestVariant={props.recurringStripePaymentRequestButtonTestVariant}
       />
       <div className={classNameWithModifiers('form', ['content'])}>
         <ContributionFormFields />

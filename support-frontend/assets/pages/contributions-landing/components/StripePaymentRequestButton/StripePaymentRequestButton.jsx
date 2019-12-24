@@ -59,7 +59,7 @@ import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { ErrorReason } from 'helpers/errorReasons';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
-import type { RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
 
 // ----- Types -----//
 
@@ -89,7 +89,6 @@ type PropTypes = {|
   stripeAccount: StripeAccount,
   setPaymentWaiting: (isWaiting: boolean) => Action,
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
-  recurringTestVariant: RecurringStripePaymentRequestButtonTestVariants,
 |};
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -102,6 +101,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
+  switches: state.common.settings.switches,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -210,19 +210,6 @@ function onClick(event, props: PropTypes) {
   }
 }
 
-// The value of result will either be:
-// . null - browser has no compatible payment method)
-// . {applePay: true} - applePay is available
-// . {applePay: false} - GooglePay, Microsoft Pay and PaymentRequestApi available
-const availablePaymentRequestButtonPaymentMethod = (result: Object): StripePaymentMethod | null => {
-  if (result && result.applePay === true) {
-    return 'StripeApplePay';
-  } else if (result && result.applePay === false) {
-    return 'StripePaymentRequestButton';
-  }
-  return null;
-};
-
 function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentMethod: StripePaymentMethod) {
   paymentRequest.on('token', ({ complete, token, ...data }) => {
 
@@ -274,14 +261,11 @@ function initialisePaymentRequest(props: PropTypes) {
   });
 
   paymentRequest.canMakePayment().then((result) => {
-    const paymentMethod = availablePaymentRequestButtonPaymentMethod(result);
-    if (paymentMethod !== null) {
+    const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
+    if (paymentMethod) {
+      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
       trackComponentClick(`${paymentMethod}-loaded`);
-
-      if (props.contributionType === 'ONE_OFF' || props.recurringTestVariant === 'paymentRequestButton') {
-        setUpPaymentListener(props, paymentRequest, paymentMethod);
-        props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
-      }
+      setUpPaymentListener(props, paymentRequest, paymentMethod);
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }
