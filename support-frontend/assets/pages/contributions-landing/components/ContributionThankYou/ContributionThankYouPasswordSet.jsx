@@ -10,10 +10,12 @@ import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 type PropTypes = {
-  countryId: IsoCountry
+  countryId: IsoCountry,
+  countryGroupId: CountryGroupId
 }
 
 // ----- Render ----- //
@@ -30,7 +32,7 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
             {body}
           </p>
         </section>
-        <ContributionSurvey isRunning />
+        <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
         <SpreadTheWord />
         <div className="gu-content__return-link">
