@@ -100,7 +100,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |      "stripe": "On",
           |      "stripeApplePay": "On",
           |      "stripePaymentRequestButton": "On",
-          |      "payPal": "On"
+          |      "payPal": "On",
           |      "amazonPay": "On"
           |    },
           |    "recurringPaymentMethods": {
