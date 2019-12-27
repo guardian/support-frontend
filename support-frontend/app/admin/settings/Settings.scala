@@ -114,6 +114,8 @@ object SettingsSource extends LazyLogging {
 
 case class PaymentMethodsSwitch(
   stripe: SwitchState,
+  stripeApplePay: SwitchState,
+  stripePaymentRequestButton: SwitchState,
   payPal: SwitchState,
   directDebit: Option[SwitchState],
   existingCard: Option[SwitchState],
@@ -135,6 +137,8 @@ object PaymentMethodsSwitch {
   def fromConfig(config: Config): PaymentMethodsSwitch =
     PaymentMethodsSwitch(
       SwitchState.fromConfig(config, "stripe"),
+      SwitchState.fromConfig(config, "stripeApplePay"),
+      SwitchState.fromConfig(config, "stripePaymentRequestButton"),
       SwitchState.fromConfig(config, "payPal"),
       SwitchState.optionFromConfig(config, "directDebit"),
       SwitchState.optionFromConfig(config, "existingCard"),
