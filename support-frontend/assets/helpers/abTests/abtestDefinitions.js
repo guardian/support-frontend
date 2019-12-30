@@ -34,7 +34,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     independent: true,
     seed: 1,
     targetPage: usContributionsLandingPageMatch,
