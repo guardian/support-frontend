@@ -39,7 +39,7 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
   render() {
     const { amazonLoginObject, amazonPaymentsObject } = this.props.amazonPayData.amazonPayLibrary;
     if (amazonLoginObject && amazonPaymentsObject) {
-      trackComponentLoad('amazon-pay-login-displayed');
+      trackComponentLoad('amazon-pay-login-loaded');
       return (
         <div>
           <div id="AmazonLoginButton" />
