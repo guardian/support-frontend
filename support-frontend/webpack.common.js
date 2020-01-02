@@ -179,7 +179,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
       },
       {
         test: /\.tsx?$/,
-        exclude: [/node_modules/, /.storybook/, /flow-typed/],
+        exclude: /node_modules/,
         loader: 'ts-loader',
       },
     ],
