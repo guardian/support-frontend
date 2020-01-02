@@ -3,35 +3,35 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
+import { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
-import { type State } from '../contributionsLandingReducer';
+import { State } from '../contributionsLandingReducer';
 import { ContributionFormTs, EmptyContributionForm } from './ContributionFormTs';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { PaymentSecuritySecureTransactionGreyNonUKVariants, NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
+import  { IsoCountry } from 'helpers/internationalisation/country';
+import  { PaymentSecuritySecureTransactionGreyNonUKVariants, NewLandingPageTemplateTestVariants } from 'helpers/abTests/abtestDefinitions';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {|
+type PropTypes = {
   paymentComplete: boolean,
   countryGroupId: CountryGroupId,
   thankYouRoute: string,
-  setPaymentIsWaiting: boolean => void,
-  onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
+  setPaymentIsWaiting: (boolean) => void,
+  onThirdPartyPaymentAuthorised: (PaymentAuthorisation) => void,
   setTickerGoalReached: () => void,
   tickerGoalReached: boolean,
-  campaignCodeParameter: ?string,
+  campaignCodeParameter: tring,
   isReturningContributor: boolean,
   countryId: IsoCountry,
   paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   newTemplateVariant: NewLandingPageTemplateTestVariants,
-|};
+};
 
 /* eslint-enable react/no-unused-prop-types */
 

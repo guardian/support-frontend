@@ -1,34 +1,35 @@
 // ----- Imports ----- //
 
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import  { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { billingPeriodFromContrib, type ContributionType, getAmount } from 'helpers/contributions';
-import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { SelectedAmounts } from 'helpers/contributions';
+import { billingPeriodFromContrib,  ContributionType, getAmount } from 'helpers/contributions';
+import {  IsoCurrency } from 'helpers/internationalisation/currency';
+import {  PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import  { SelectedAmounts } from 'helpers/contributions';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
 import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import  { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
-import { type State } from '../contributionsLandingReducer';
+import {  State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
-import type { PaymentMethod } from 'helpers/paymentMethods';
+import  { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal, AmazonPay } from 'helpers/paymentMethods';
 
 // import Button from 'components/button/button';
-import { Button, LinkButton } from "@guardian/src-button"
-import { SvgCheckmark, SvgArrowRightStraight } from "@guardian/src-svgs"
+import { Button, LinkButton } from "@guardian/src-button";
+import { forwardRef, createRef } from 'preact/compat';
+import { SvgCheckmark, SvgArrowRightStraight } from "@guardian/src-svgs";
 
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
-import type { AmazonPayData } from '../contributionsLandingReducer';
+import  { AmazonPayData } from '../contributionsLandingReducer';
 
 // ----- Types ----- //
 
-type PropTypes = {|
+type PropTypes = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
@@ -41,13 +42,13 @@ type PropTypes = {|
   setupRecurringPayPalPayment: Function,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
-  onPaymentAuthorisation: PaymentAuthorisation => void,
+  onPaymentAuthorisation: (PaymentAuthorisation) => void,
   formIsSubmittable: boolean,
   amount: number,
   billingPeriod: BillingPeriod,
   showSecureBackground: boolean,
   amazonPayData: AmazonPayData,
-|};
+};
 
 function mapStateToProps(state: State) {
   const { contributionType } = state.page.form;

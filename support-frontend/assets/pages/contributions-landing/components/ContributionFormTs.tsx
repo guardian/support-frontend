@@ -1,21 +1,21 @@
 // ----- Imports ----- //
 
-import { getAmount, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { getAmount, ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import {
-  type ContributionType,
-  type PaymentMatrix,
+  ContributionType,
+  PaymentMatrix,
   logInvalidCombination,
 } from 'helpers/contributions';
-import { type ErrorReason } from 'helpers/errorReasons';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { ErrorReason } from 'helpers/errorReasons';
+import { IsoCountry } from 'helpers/internationalisation/country';
+import { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
+import { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
@@ -24,8 +24,8 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import { checkAmount } from 'helpers/formValidation';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 
 import { ContributionFormFields, EmptyContributionFormFields } from './ContributionFormFields';
 import { ContributionTypeTabs, EmptyContributionTypeTabs } from './ContributionTypeTabs';
@@ -34,7 +34,7 @@ import { PaymentMethodSelector, EmptyPaymentMethodSelector } from './PaymentMeth
 // import { ContributionSubmit, EmptyContributionSubmit } from './ContributionSubmit';
 import { ContributionSubmit, EmptyContributionSubmit } from './ContributionSubmitTs';
 
-import { type State } from 'pages/contributions-landing/contributionsLandingReducer';
+import { State } from 'pages/contributions-landing/contributionsLandingReducer';
 
 import {
   paymentWaiting,
@@ -45,17 +45,17 @@ import {
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import type { PaymentMethod } from 'helpers/paymentMethods';
+import { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { PaymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { PaymentSecuritySecureTransactionGreyNonUKVariants, RecurringStripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { logException } from 'helpers/logger';
 
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {|
+type PropTypes = {
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
   email: string,
@@ -67,13 +67,13 @@ type PropTypes = {|
   currency: IsoCurrency,
   paymentError: ErrorReason | null,
   selectedAmounts: SelectedAmounts,
-  setPaymentIsWaiting: boolean => void,
+  setPaymentIsWaiting: (boolean) => void,
   openDirectDebitPopUp: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   setStripeV3HasLoaded: () => void,
   stripeV3HasLoaded: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
-  onPaymentAuthorisation: PaymentAuthorisation => void,
+  onPaymentAuthorisation: (PaymentAuthorisation) => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   isSignedIn: boolean,
   formIsValid: boolean,
@@ -85,7 +85,7 @@ type PropTypes = {|
   paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   recurringStripePaymentRequestButtonTestVariant: RecurringStripePaymentRequestButtonTestVariants,
   amazonPayOrderReferenceId: string | null,
-|};
+};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
 // i.e it is null.
@@ -158,7 +158,7 @@ const formHandlersForRecurring = {
   AmazonPay: (props: PropTypes) => logInvalidCombination(props.contributionType, AmazonPay),
 };
 
-const formHandlers: PaymentMatrix<PropTypes => void> = {
+const formHandlers: PaymentMatrix<(PropTypes) => void> = {
   ONE_OFF: {
     Stripe: (props: PropTypes) => {
       if (props.createStripePaymentMethod) {
@@ -204,7 +204,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
 };
 
 // Note PayPal recurring flow does not call this function
-function onSubmit(props: PropTypes): Event => void {
+function onSubmit(props: PropTypes): (Event) => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
     event.preventDefault();
