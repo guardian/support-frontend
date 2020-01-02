@@ -18,7 +18,7 @@ const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
 const countryGroupId: CountryGroupId = detect();
 
 export const tests: Tests = {
-  amazonPaySingleUS: {
+  amazonPaySingleUS2020: {
     type: 'OTHER',
     variants: [
       {
@@ -34,9 +34,9 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     independent: true,
-    seed: 1,
+    seed: 13,
     targetPage: usContributionsLandingPageMatch,
   },
 

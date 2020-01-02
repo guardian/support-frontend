@@ -234,7 +234,7 @@ const init = (store: Store<State, Action, Function>) => {
   const contributionTypes = getContributionTypes(state);
   dispatch(setContributionTypes(contributionTypes));
 
-  const inAmazonPayTest = state.common.abParticipations.amazonPaySingleUS === 'amazonPay';
+  const inAmazonPayTest = state.common.abParticipations.amazonPaySingleUS2020 === 'amazonPay';
 
   initialisePaymentMethods(state, dispatch, contributionTypes, inAmazonPayTest);
 

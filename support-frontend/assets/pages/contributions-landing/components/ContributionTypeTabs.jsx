@@ -41,7 +41,7 @@ const mapStateToProps = (state: State) => ({
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
   inAmazonPayTest:
-    state.common.abParticipations.amazonPaySingleUS === 'amazonPay',
+    state.common.abParticipations.amazonPaySingleUS2020 === 'amazonPay',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
