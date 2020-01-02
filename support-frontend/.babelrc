@@ -5,9 +5,9 @@
     [
       "@babel/preset-env",
       {
-        "modules": false,
+        "modules": false
       }
-    ],
+    ]
   ],
   "overrides": [
     {
