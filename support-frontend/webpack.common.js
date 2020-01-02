@@ -102,8 +102,8 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
 
   resolve: {
     alias: {
-      react: 'preact-compat',
-      'react-dom': 'preact-compat',
+      react: 'preact/compat',
+      'react-dom': 'preact/compat',
       ophan: 'ophan-tracker-js/build/ophan.support',
     },
     modules: [
@@ -111,13 +111,12 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
       path.resolve(__dirname, 'node_modules'),
     ],
     extensions: ['.tsx', 'ts', '.jsx', '.js'],
-    // extensions: ['.js', '.jsx'],
   },
 
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
       },
@@ -176,11 +175,6 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           },
           ...cssLoaders,
         ],
-      },
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        loader: 'ts-loader',
       },
     ],
   },
