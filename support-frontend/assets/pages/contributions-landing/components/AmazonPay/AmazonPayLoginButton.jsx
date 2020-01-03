@@ -7,7 +7,7 @@ import { type Action, setAmazonPayHasAccessToken } from 'pages/contributions-lan
 import Button from 'components/button/button';
 import { logException } from 'helpers/logger';
 import AnimatedDots from 'components/spinners/animatedDots';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import {trackComponentClick, trackComponentLoad} from 'helpers/tracking/behaviour';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
@@ -39,6 +39,7 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
   render() {
     const { amazonLoginObject, amazonPaymentsObject } = this.props.amazonPayData.amazonPayLibrary;
     if (amazonLoginObject && amazonPaymentsObject) {
+      trackComponentLoad('amazon-pay-login-loaded');
       return (
         <div>
           <div id="AmazonLoginButton" />

@@ -82,7 +82,7 @@ const mapStateToProps = (state: State) => ({
   paymentSecuritySecureTransactionGreyNonUKVariant:
     state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
   inAmazonPayTest:
-    state.common.abParticipations.amazonPaySingleUS === 'amazonPay',
+    state.common.abParticipations.amazonPaySingleUS2020 === 'amazonPay',
 });
 
 const mapDispatchToProps = {
