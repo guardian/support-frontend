@@ -98,10 +98,9 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
         'Csrf-Token': csrf.token || '',
       },
       body: JSON.stringify({
-          'email': email,
-          'reminderDate': this.state.selectedDate,
-        }
-      ),
+        email,
+        reminderDate: this.state.selectedDate,
+      }),
     };
 
     if (email && csrf.token) {
