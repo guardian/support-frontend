@@ -118,7 +118,11 @@
     }
 
     .component-radio-input {
-      margin-bottom: $gu-v-spacing / 2;
+      margin-bottom: $gu-v-spacing;
+
+      &:first-of-type {
+        margin-top: $gu-v-spacing / 2;
+      }
     }
   }
 }
