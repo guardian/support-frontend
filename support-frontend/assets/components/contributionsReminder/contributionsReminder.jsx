@@ -121,7 +121,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
           <FormLabel label="Remind me in:" htmlFor={null}>
             <Fieldset legend="Choose one of the following dates to receive your reminder:">
               {reminderDates.map((reminderDate) => {
-                const dateWithoutSpace = reminderDate.dateName.replace(/\s+/g, '');
+                const dateWithoutSpace = reminderDate.dateName.replace(/\s+/g, '').toLowerCase();
                 return (
                   <RadioInput
                     id={dateWithoutSpace}
