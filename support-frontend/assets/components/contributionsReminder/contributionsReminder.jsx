@@ -97,10 +97,11 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
         'Content-Type': 'application/json',
         'Csrf-Token': csrf.token || '',
       },
-      body: {
-        email,
-        reminderDate: this.state.selectedDate,
-      },
+      body: JSON.stringify({
+          'email': email,
+          'reminderDate': this.state.selectedDate,
+        }
+      ),
     };
 
     if (email && csrf.token) {
@@ -109,7 +110,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
       return (
         <section className="contribution-thank-you-block contribution-thank-you-block--reminders">
           <h3 className="contribution-thank-you-block__title">
-            Set up a reminder for the end of the year
+            Set up a reminder to contribute again
           </h3>
           <p className="contribution-thank-you-block__message">
             {'Lots of readers choose to make single contributions at various points in the year. Opt in to receive a reminder in case you would like to support our journalism again. This will be a single email, with no obligation.'}
@@ -118,8 +119,8 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
           <FormLabel label="Remind me in:" htmlFor={null}>
             <Fieldset legend="Choose one of the following dates to receive your reminder:">
               <RadioInput id="march2020" text="March 2020" name="reminder" onChange={evt => this.setDateState(evt, '2020-03-19 00:00:00', 'march2020')} />
-              <RadioInput id="june2020" text="June 2020" name="reminder" onChange={evt => this.setDateState(evt, '2020-06-19 00:00:00', 'june2020')} />
-              <RadioInput id="december2020" text="December 2020" name="reminder" onChange={evt => this.setDateState(evt, '2020-12-19 00:00:00', 'december2020')} />
+              <RadioInput id="june2020" text="June 2020" name="reminder" onChange={evt => this.setDateState(evt, '2020-06-01 00:00:00', 'june2020')} />
+              <RadioInput id="december2020" text="December 2020" name="reminder" onChange={evt => this.setDateState(evt, '2020-12-01 00:00:00', 'december2020')} />
             </Fieldset>
           </FormLabel>
 
@@ -140,11 +141,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 trackComponentClick('reminder-test-link-clicked');
                 if (this.state.selectedDateAsWord) { trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`); }
 
-                fetch(routes.createReminder, {
-                  method: requestParams.method,
-                  headers: requestParams.headers,
-                  body: JSON.stringify(requestParams.body),
-                }).then((response) => {
+                fetch(routes.createReminder, requestParams).then((response) => {
                   if (response.ok) {
                     this.requestHasSucceeded();
                   } else {
