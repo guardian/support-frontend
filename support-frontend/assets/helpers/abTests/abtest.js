@@ -14,7 +14,7 @@ import { type AmountsRegions } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
-import { getQueryParameter } from 'helpers/url'
+import { getQueryParameter } from 'helpers/url';
 
 // ----- Types ----- //
 
@@ -52,6 +52,11 @@ type Audiences = {
   [IsoCountry | CountryGroupId | 'ALL']: Audience
 };
 
+type AcquisitionABTest = {
+  name: string,
+  variant: string
+}
+
 export type Variant = {
   id: string,
   amountsRegions?: AmountsRegions,
@@ -65,7 +70,13 @@ export type Test = {|
   audiences: Audiences,
   isActive: boolean,
   canRun?: () => boolean,
-  independent: boolean,
+  // Indicates whether the A/B test is controlled by the referrer (acquisition channel)
+  // e.g. Test of a banner design change on dotcom
+  // If true the A/B test participation info should be passed through in the acquisition data
+  // query parameter.
+  // In particular this allows 3rd party tests to be identified and tracked in support-frontend (and optimize)
+  // without too much "magic" involving the shared mvtId.
+  referrerControlled: boolean,
   seed: number,
   // An optional regex that will be tested against the path of the current page
   // before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
@@ -126,18 +137,21 @@ function getParticipationsFromUrl(): ?Participations {
   return null;
 }
 
-function getParticipationsFromAcquisitionData(): ?Participations {
+function getTestFromAcquisitionData(): ?AcquisitionABTest {
   const acquisitionDataParam = getQueryParameter('acquisitionData');
+
+  if (acquisitionDataParam == null) {
+    return null;
+  }
 
   try {
     const acquisitionData = JSON.parse(acquisitionDataParam);
-    if(acquisitionData.abTest && acquisitionData.abTest.name && acquisitionData.abTest.variant) {
-      return {
-        [acquisitionData.abTest.name]: acquisitionData.abTest.variant
-      };
+    if (acquisitionData.abTest && acquisitionData.abTest.name && acquisitionData.abTest.variant) {
+      return acquisitionData.abTest;
     }
     return null;
   } catch {
+    console.error('Cannot parse acquisition data from query string');
     return null;
   }
 }
@@ -165,7 +179,15 @@ function userInBreakpoint(audience: Audience): boolean {
 
 }
 
-function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry, countryGroupId: CountryGroupId) {
+function userInTest(
+  test: Test,
+  testId: string,
+  mvtId: number,
+  country: IsoCountry,
+  countryGroupId: CountryGroupId,
+  acquisitionDataTest: ?AcquisitionABTest,
+) {
+  const { audiences, referrerControlled } = test;
 
   if (cookie.get('_post_deploy_user')) {
     return false;
@@ -177,17 +199,17 @@ function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry, co
     return false;
   }
 
+  if (referrerControlled) {
+    return acquisitionDataTest && acquisitionDataTest.name === testId;
+  }
+
   const testMin: number = MVT_MAX * audience.offset;
   const testMax: number = testMin + (MVT_MAX * audience.size);
 
   return (mvtId >= testMin) && (mvtId < testMax) && userInBreakpoint(audience);
 }
 
-function randomNumber(mvtId: number, independent: boolean, seed: number): number {
-  if (!independent) {
-    return mvtId;
-  }
-
+function randomNumber(mvtId: number, seed: number): number {
   const rng = seedrandom(mvtId + seed);
   return Math.abs(rng.int32());
 }
@@ -209,10 +231,20 @@ const trackOptimizeExperiment = (optimizeId: string, variants: Variant[], varian
 function assignUserToVariant(
   mvtId: number,
   test: Test,
+  acquisitionDataTest: ?AcquisitionABTest,
 ): number {
-  const { independent, seed } = test;
+  const { referrerControlled, seed } = test;
 
-  return randomNumber(mvtId, independent, seed) % test.variants.length;
+  if (referrerControlled && acquisitionDataTest != null) {
+    const acquisitionVariant = acquisitionDataTest.variant;
+    const index = test.variants.findIndex(variant => variant.id === acquisitionVariant);
+    if (!index) {
+      console.error('Variant not found for A/B test in acquistion data');
+    }
+    return index;
+  }
+
+  return randomNumber(mvtId, seed) % test.variants.length;
 }
 
 function targetPageMatches(targetPage: ?string) {
@@ -230,6 +262,8 @@ function getParticipations(
 
   const currentParticipation = getLocalStorageParticipation();
   const participations: Participations = {};
+
+  const acquisitionDataTest: ?AcquisitionABTest = getTestFromAcquisitionData();
 
   Object.keys(abTests).forEach((testId) => {
     const test = abTests[testId];
@@ -249,7 +283,7 @@ function getParticipations(
 
     if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
-    } else if (userInTest(test.audiences, mvtId, country, countryGroupId)) {
+    } else if (userInTest(test, testId, mvtId, country, countryGroupId, acquisitionDataTest)) {
       const variantIndex = assignUserToVariant(mvtId, test);
       participations[testId] = test.variants[variantIndex].id;
 
@@ -272,9 +306,8 @@ const init = (
 ): Participations => {
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
-  const acquisitionParticipations: ?Participations = getParticipationsFromAcquisitionData();
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  const combinedParticipations: Participations = { ...participations, ...acquisitionParticipations, ...urlParticipations };
+  const combinedParticipations: Participations = { ...participations, ...urlParticipations };
   setLocalStorageParticipations(combinedParticipations);
 
   return combinedParticipations;
