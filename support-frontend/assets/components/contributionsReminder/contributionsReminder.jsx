@@ -91,17 +91,20 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
   render() {
     const { email, csrf } = this.props;
 
-    const requestParams = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Csrf-Token': csrf.token || '',
+    const reminderDates = [
+      {
+        dateName: 'March 2020',
+        timeStamp: '2020-03-19 00:00:00',
       },
-      body: JSON.stringify({
-        email,
-        reminderDate: this.state.selectedDate,
-      }),
-    };
+      {
+        dateName: 'June 2020',
+        timeStamp: '2020-03-01 00:00:00',
+      },
+      {
+        dateName: 'December 2020',
+        timeStamp: '2020-12-01 00:00:00',
+      },
+    ];
 
     if (email && csrf.token) {
       const isClicked = this.state.buttonState !== 'initial';
@@ -117,9 +120,17 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
 
           <FormLabel label="Remind me in:" htmlFor={null}>
             <Fieldset legend="Choose one of the following dates to receive your reminder:">
-              <RadioInput id="march2020" text="March 2020" name="reminder" onChange={evt => this.setDateState(evt, '2020-03-19 00:00:00', 'march2020')} />
-              <RadioInput id="june2020" text="June 2020" name="reminder" onChange={evt => this.setDateState(evt, '2020-06-01 00:00:00', 'june2020')} />
-              <RadioInput id="december2020" text="December 2020" name="reminder" onChange={evt => this.setDateState(evt, '2020-12-01 00:00:00', 'december2020')} />
+              {reminderDates.map((reminderDate) => {
+                const dateWithoutSpace = reminderDate.dateName.replace(/\s+/g, '');
+                return (
+                  <RadioInput
+                    id={dateWithoutSpace}
+                    text={reminderDate.dateName}
+                    name="reminder"
+                    onChange={evt => this.setDateState(evt, reminderDate.timeStamp, dateWithoutSpace)}
+                  />
+                );
+              })}
             </Fieldset>
           </FormLabel>
 
@@ -140,7 +151,17 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 trackComponentClick('reminder-test-link-clicked');
                 if (this.state.selectedDateAsWord) { trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`); }
 
-                fetch(routes.createReminder, requestParams).then((response) => {
+                fetch(routes.createReminder, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Csrf-Token': csrf.token || '',
+                  },
+                  body: JSON.stringify({
+                    email,
+                    reminderDate: this.state.selectedDate,
+                  }),
+                }).then((response) => {
                   if (response.ok) {
                     this.requestHasSucceeded();
                   } else {
