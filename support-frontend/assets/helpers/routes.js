@@ -38,7 +38,6 @@ const routes: {
   guardianWeeklySubscriptionLandingGift: '/subscribe/weekly/gift',
   postcodeLookup: '/postcode-lookup',
   createSignInUrl: '/identity/signin-url',
-  createReminder: 'https://contribution-reminders-code.support.guardianapis.com/remind-me',
 };
 
 const createReminderEndpoint = isProd() ?
