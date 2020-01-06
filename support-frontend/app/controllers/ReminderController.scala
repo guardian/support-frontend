@@ -35,7 +35,7 @@ class ReminderController(components: ControllerComponents,
 
   private def sendToLambda(reminderEventRequest: ReminderEventRequest) =
     sendReminderEmail(reminderEventRequest).map(res =>
-      if (res) Ok else internalServerError(s"Internal Server Error: Request failed for: ${reminderEventRequest.email}"))
+      if (res) Ok else internalServerError(s"Internal Server Error: Request failed for: ${reminderEventRequest}"))
 
   private def internalServerError(message: String) = {
     SafeLogger.warn(message)

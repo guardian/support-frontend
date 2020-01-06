@@ -23,24 +23,26 @@ class RemindMeService(stage: Stage) {
     case _ => "contributions-reminders-lambda-CODE"
   }
 
-  private val expectedResponse = """{"statusCode":200,"body":"\"OK\""}"""
+  private val expectedResponse = """"statusCode":200,"body":"\"OK\"""""
 
   def apply(reminderEventRequest: ReminderEventRequest)(implicit ec: ExecutionContext): Future[Boolean] = {
+    val lambdaPayload = contructPayload(reminderEventRequest)
     val request = new InvokeRequest()
       .withFunctionName(functionName)
-      .withPayload(contructPayload(reminderEventRequest))
+      .withPayload(lambdaPayload)
 
     val res = lambdaClient.invoke(request)
     val responseBody = new String(res.getPayload.array())
-    val isSuccessResponse = responseBody == expectedResponse
+    val isSuccessResponse = responseBody.contains(expectedResponse)
 
-    if (!isSuccessResponse) SafeLogger.warn(s"Got ${responseBody} for ${res.getSdkHttpMetadata}")
+    if (!isSuccessResponse) SafeLogger.warn(s"Got ${responseBody} for function: ${functionName} with request: ${lambdaPayload}")
 
     Future(isSuccessResponse)
   }
 
   def contructPayload(reminderEventRequest: ReminderEventRequest): String = {
     val payloadBody = Json.obj("email" -> reminderEventRequest.email, "reminderDate" -> reminderEventRequest.reminderDate)
-    Json.obj("ReminderCreatedEvent" -> payloadBody).toString
+    // TO DO: remove "ReminderCreatedEvent" -> payloadBody" when the new lambda is in Production
+    Json.obj("ReminderCreatedEvent" -> payloadBody, "body" -> payloadBody.toString()).toString
   }
 }

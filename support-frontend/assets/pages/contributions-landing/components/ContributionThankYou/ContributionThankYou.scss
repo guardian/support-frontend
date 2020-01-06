@@ -111,4 +111,18 @@
     margin-bottom: $gu-v-spacing;
     line-height: 20px;
   }
+
+  .contribution-thank-you-block--reminders {
+    .component-button {
+      margin-top: $gu-v-spacing;
+    }
+
+    .component-radio-input {
+      margin-bottom: $gu-v-spacing;
+
+      &:first-of-type {
+        margin-top: $gu-v-spacing / 2;
+      }
+    }
+  }
 }
