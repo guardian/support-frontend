@@ -148,11 +148,10 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 trackComponentClick('reminder-test-link-clicked');
                 if (this.state.selectedDateAsWord) { trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`); }
 
-                fetch(routes.createReminder, {
+                fetch(createReminderEndpoint, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
-                    'Csrf-Token': csrf.token || '',
                   },
                   body: JSON.stringify({
                     email,
