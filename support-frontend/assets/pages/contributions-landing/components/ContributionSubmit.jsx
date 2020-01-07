@@ -19,7 +19,8 @@ import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal, AmazonPay } from 'helpers/paymentMethods';
-import { Button } from "@guardian/src-button";
+import { LinkButton, buttonReaderRevenue } from "@guardian/src-button";
+import { ThemeProvider } from 'emotion-theming'
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
 import type { AmazonPayData } from '../contributionsLandingReducer';
@@ -138,14 +139,17 @@ function withProps(props: PropTypes) {
         { !props.amazonPayData.fatalError && props.paymentMethod === AmazonPay && getAmazonPayComponent() }
 
         {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
-          <Button
-            type="submit"
-            aria-label={submitButtonCopy}
-            disabled={props.isWaiting}
-            postDeploymentTestID="contributions-landing-submit-contribution-button"
-          >
-            {submitButtonCopy}
-          </Button> : null }
+          <ThemeProvider theme={buttonReaderRevenue}>
+            <LinkButton
+              type="submit"
+              showIcon={true}
+              aria-label={submitButtonCopy}
+              disabled={props.isWaiting}
+              postDeploymentTestID="contributions-landing-submit-contribution-button"
+            >
+              {submitButtonCopy}
+            </LinkButton>
+          </ThemeProvider> : null }
       </div>
     );
   }
