@@ -17,6 +17,11 @@ type PropTypes = {
   email: string | null,
 }
 
+type ReminderDate = {
+  dateName: string,
+  timeStamp: string,
+}
+
 type ButtonState = 'initial' | 'pending' | 'success' | 'fail';
 
 type StateTypes = {
@@ -31,6 +36,28 @@ const mapStateToProps = state => ({
 
 // ----- Render ----- //
 class ContributionsReminder extends Component<PropTypes, StateTypes> {
+  reminderDates: Array<ReminderDate>;
+  randomIndex: number;
+
+  constructor() {
+    super();
+    this.reminderDates = [
+      {
+        dateName: 'March 2020',
+        timeStamp: '2020-03-19 00:00:00',
+      },
+      {
+        dateName: 'June 2020',
+        timeStamp: '2020-03-01 00:00:00',
+      },
+      {
+        dateName: 'December 2020',
+        timeStamp: '2020-12-01 00:00:00',
+      },
+    ];
+    this.randomIndex = Math.floor(Math.random() * (this.reminderDates.length));
+  }
+
   static defaultProps = {
     email: null,
   }
@@ -40,6 +67,15 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
     selectedDate: null,
     selectedDateAsWord: null,
   }
+
+  componentDidMount = () => {
+    this.setState({
+      selectedDate: this.reminderDates[this.randomIndex].timeStamp,
+      selectedDateAsWord: this.trimAndDowncase(this.reminderDates[this.randomIndex].dateName),
+    });
+  }
+
+  trimAndDowncase = (word: string) => word.replace(/\s+/g, '').toLowerCase()
 
   setDateState = (evt: any, date: string, dateAsWord: string) => {
     if (!evt.target.checked || !date) {
@@ -117,14 +153,15 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
 
           <FormLabel label="Remind me in:" htmlFor={null}>
             <Fieldset legend="Choose one of the following dates to receive your reminder:">
-              {reminderDates.map((reminderDate) => {
-                const dateWithoutSpace = reminderDate.dateName.replace(/\s+/g, '').toLowerCase();
+              {this.reminderDates.map((reminderDate, index) => {
+                const dateWithoutSpace = this.trimAndDowncase(reminderDate.dateName);
                 return (
                   <RadioInput
                     id={dateWithoutSpace}
                     text={reminderDate.dateName}
                     name="reminder"
                     onChange={evt => this.setDateState(evt, reminderDate.timeStamp, dateWithoutSpace)}
+                    defaultChecked={index === this.randomIndex}
                   />
                 );
               })}
