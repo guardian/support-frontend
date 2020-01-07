@@ -19,7 +19,7 @@ import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal, AmazonPay } from 'helpers/paymentMethods';
-import Button from 'components/button/button';
+import { Button } from "@guardian/src-button";
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
 import type { AmazonPayData } from '../contributionsLandingReducer';

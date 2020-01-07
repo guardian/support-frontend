@@ -9,23 +9,6 @@
       }
     ]
   ],
-  "overrides": [
-    {
-      "test": ["**/*.ts", "**/*.tsx"],
-      "presets": [
-        "@babel/preset-typescript",
-        [
-          "@babel/preset-env",
-          {
-            "targets": {
-              "node": "current"
-            }
-          }
-        ],
-        "@babel/preset-react"
-      ]
-    }
-  ],
   "plugins": [
     "@babel/plugin-transform-exponentiation-operator",
     "@babel/plugin-proposal-class-properties",

@@ -69,8 +69,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     favicons: 'images/favicons.js',
     showcasePage: 'pages/showcase/showcase.jsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
-    // contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
-    contributionsLandingPage: 'pages/contributions-landing/contributionsLandingTs.tsx',
+    contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
     fontLoader: 'helpers/fontLoader.js',
 
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
@@ -110,13 +109,13 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
       path.resolve(__dirname, 'assets'),
       path.resolve(__dirname, 'node_modules'),
     ],
-    extensions: ['.tsx', 'ts', '.jsx', '.js'],
+    extensions: ['.jsx', '.js'],
   },
 
   module: {
     rules: [
       {
-        test: /\.(js|jsx|ts|tsx)$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
       },
