@@ -72,6 +72,7 @@ type PropTypes = {|
   otherAmounts: OtherAmounts,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
+  stateOrProvince: UsState | CaState | null,
   isTestUser: boolean,
   amount: number,
   stripePaymentRequestButtonData: StripePaymentRequestButtonData,
@@ -83,7 +84,7 @@ type PropTypes = {|
   updateEmail: string => void,
   updateFirstName: string => void,
   updateLastName: string => void,
-  updateState: (state: UsState | CaState | null) => void,
+  updateStateOrProvince: (state: UsState | CaState | null) => void,
   paymentMethod: PaymentMethod,
   setAssociatedPaymentMethod: () => (Function) => void,
   stripeAccount: StripeAccount,
@@ -97,6 +98,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   stripePaymentRequestButtonData: state.page.form.stripePaymentRequestButtonData[ownProps.stripeAccount],
   countryGroupId: state.common.internationalisation.countryGroupId,
   country: state.common.internationalisation.countryId,
+  stateOrProvince: state.page.form.formData.state,
   currency: state.common.internationalisation.currencyId,
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
@@ -115,7 +117,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateEmail: (email: string) => dispatch(updateEmail(email)),
   updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
   updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
-  updateState: (state: UsState | CaState | null) => dispatch(updateState(state)),
+  updateStateOrProvince: (state: UsState | CaState | null) => dispatch(updateState(state)),
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
   setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
@@ -160,13 +162,20 @@ function updatePayerName(data: Object, setFirstName: string => void, setLastName
 
 }
 
-function updatePayerState(token: Object, setState: (UsState | CaState | null) => void): boolean {
-  const state = token.card.address_state;
-  if (state) {
-    setState(state);
+// Attempt to get state/province from the token, otherwise fall back on the value in the form
+function updatePayerStateOrProvince(
+  token: Object,
+  stateOrProvinceFromForm: UsState | CaState | null,
+  setStateOrProvince: (UsState | CaState | null) => void
+): boolean {
+  const stateOrProvinceFromCard = token.card.address_state;
+  if (stateOrProvinceFromCard) {
+    setStateOrProvince(stateOrProvinceFromCard);
+    return true;
+  } else if (stateOrProvinceFromForm) {
     return true;
   }
-  logException('Missing address_state in payment request token');
+  logException('Missing address_state in payment request token and no state/province selected in the form');
   return false;
 
 }
@@ -223,13 +232,13 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
     // We need to do this so that we can offer marketing permissions on the thank you page
     updatePayerEmail(data, props.updateEmail);
 
-    const stateUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
-      updatePayerState(token, props.updateState) : true;
+    const stateOrProvinceUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
+      updatePayerStateOrProvince(token, props.stateOrProvince, props.updateStateOrProvince) : true;
 
     const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
       updatePayerName(data, props.updateFirstName, props.updateLastName) : true;
 
-    if (nameUpdateOk && stateUpdateOk) {
+    if (nameUpdateOk && stateOrProvinceUpdateOk) {
       const tokenId = props.isTestUser ? 'tok_visa' : token.id;
       if (data.methodName) {
         // https://stripe.com/docs/stripe-js/reference#payment-response-object
