@@ -191,8 +191,6 @@ trait Controllers {
     actionRefiners
   )
 
-  lazy val reminderController = new ReminderController(controllerComponents, actionRefiners, sendReminderEmailService)
-
   lazy val promotionsController = new Promotions(
     promotionServiceProvider,
     priceSummaryServiceProvider,

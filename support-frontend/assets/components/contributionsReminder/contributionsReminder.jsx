@@ -6,8 +6,7 @@ import React, { Component } from 'react';
 import TrackableButton from 'components/button/trackableButton';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import { connect } from 'react-redux';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { routes } from 'helpers/routes';
+import { createReminderEndpoint } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
@@ -16,7 +15,6 @@ import { Label as FormLabel } from 'components/forms/label';
 // ----- Types ----- //
 type PropTypes = {
   email: string | null,
-  csrf: CsrfState,
 }
 
 type ButtonState = 'initial' | 'pending' | 'success' | 'fail';
@@ -29,7 +27,6 @@ type StateTypes = {
 
 const mapStateToProps = state => ({
   email: state.page.form.formData.email,
-  csrf: state.page.csrf,
 });
 
 // ----- Render ----- //
@@ -89,7 +86,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const { email, csrf } = this.props;
+    const { email } = this.props;
 
     const reminderDates = [
       {
@@ -106,7 +103,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
       },
     ];
 
-    if (email && csrf.token) {
+    if (email) {
       const isClicked = this.state.buttonState !== 'initial';
 
       return (
@@ -151,11 +148,10 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 trackComponentClick('reminder-test-link-clicked');
                 if (this.state.selectedDateAsWord) { trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`); }
 
-                fetch(routes.createReminder, {
+                fetch(createReminderEndpoint, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
-                    'Csrf-Token': csrf.token || '',
                   },
                   body: JSON.stringify({
                     email,
@@ -178,7 +174,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
       );
     }
 
-    logException('Unable to display reminder sign up due to not having a valid email address or CSRF token to send to the API');
+    logException('Unable to display reminder sign up due to not having a valid email address to send to the API');
     return null;
   }
 }

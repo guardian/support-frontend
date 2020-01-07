@@ -4,7 +4,7 @@
 
 import type { CountryGroupId } from './internationalisation/countryGroup';
 import { countryGroups } from './internationalisation/countryGroup';
-import { getOrigin } from './url';
+import { getOrigin, isProd } from './url';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { type Option } from 'helpers/types/option';
@@ -38,8 +38,10 @@ const routes: {
   guardianWeeklySubscriptionLandingGift: '/subscribe/weekly/gift',
   postcodeLookup: '/postcode-lookup',
   createSignInUrl: '/identity/signin-url',
-  createReminder: '/contribute/remind-me',
 };
+
+const createReminderEndpoint = isProd() ?
+  'https://contribution-reminders.support.guardianapis.com/remind-me' : 'https://contribution-reminders-code.support.guardianapis.com/remind-me';
 
 const countryPath = (countryGroupId: CountryGroupId) =>
   countryGroups[countryGroupId].supportInternationalisationId;
@@ -85,6 +87,7 @@ function payPalReturnUrl(cgId: CountryGroupId, email: string): string {
 
 export {
   routes,
+  createReminderEndpoint,
   postcodeLookupUrl,
   payPalCancelUrl,
   payPalReturnUrl,
