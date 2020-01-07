@@ -34,30 +34,26 @@ const mapStateToProps = state => ({
   email: state.page.form.formData.email,
 });
 
+const reminderDates: Array<ReminderDate> = [
+  {
+    dateName: 'March 2020',
+    timeStamp: '2020-03-19 00:00:00',
+  },
+  {
+    dateName: 'June 2020',
+    timeStamp: '2020-03-01 00:00:00',
+  },
+  {
+    dateName: 'December 2020',
+    timeStamp: '2020-12-01 00:00:00',
+  },
+];
+
+const randomIndex: number = Math.floor(Math.random() * (reminderDates.length));
+
+const trimAndDowncase = (word: string) => word.replace(/\s+/g, '').toLowerCase();
 // ----- Render ----- //
 class ContributionsReminder extends Component<PropTypes, StateTypes> {
-  reminderDates: Array<ReminderDate>;
-  randomIndex: number;
-
-  constructor() {
-    super();
-    this.reminderDates = [
-      {
-        dateName: 'March 2020',
-        timeStamp: '2020-03-19 00:00:00',
-      },
-      {
-        dateName: 'June 2020',
-        timeStamp: '2020-03-01 00:00:00',
-      },
-      {
-        dateName: 'December 2020',
-        timeStamp: '2020-12-01 00:00:00',
-      },
-    ];
-    this.randomIndex = Math.floor(Math.random() * (this.reminderDates.length));
-  }
-
   static defaultProps = {
     email: null,
   }
@@ -70,12 +66,10 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
 
   componentDidMount = () => {
     this.setState({
-      selectedDate: this.reminderDates[this.randomIndex].timeStamp,
-      selectedDateAsWord: this.trimAndDowncase(this.reminderDates[this.randomIndex].dateName),
+      selectedDate: reminderDates[randomIndex].timeStamp,
+      selectedDateAsWord: trimAndDowncase(reminderDates[randomIndex].dateName),
     });
   }
-
-  trimAndDowncase = (word: string) => word.replace(/\s+/g, '').toLowerCase()
 
   setDateState = (evt: any, date: string, dateAsWord: string) => {
     if (!evt.target.checked || !date) {
@@ -124,21 +118,6 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
   render() {
     const { email } = this.props;
 
-    const reminderDates = [
-      {
-        dateName: 'March 2020',
-        timeStamp: '2020-03-19 00:00:00',
-      },
-      {
-        dateName: 'June 2020',
-        timeStamp: '2020-03-01 00:00:00',
-      },
-      {
-        dateName: 'December 2020',
-        timeStamp: '2020-12-01 00:00:00',
-      },
-    ];
-
     if (email) {
       const isClicked = this.state.buttonState !== 'initial';
 
@@ -153,15 +132,15 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
 
           <FormLabel label="Remind me in:" htmlFor={null}>
             <Fieldset legend="Choose one of the following dates to receive your reminder:">
-              {this.reminderDates.map((reminderDate, index) => {
-                const dateWithoutSpace = this.trimAndDowncase(reminderDate.dateName);
+              {reminderDates.map((reminderDate, index) => {
+                const dateWithoutSpace = trimAndDowncase(reminderDate.dateName);
                 return (
                   <RadioInput
                     id={dateWithoutSpace}
                     text={reminderDate.dateName}
                     name="reminder"
                     onChange={evt => this.setDateState(evt, reminderDate.timeStamp, dateWithoutSpace)}
-                    defaultChecked={index === this.randomIndex}
+                    defaultChecked={index === randomIndex}
                   />
                 );
               })}
