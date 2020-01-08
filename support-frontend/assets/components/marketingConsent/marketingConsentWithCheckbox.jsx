@@ -93,6 +93,26 @@ function MarketingButton(props: ButtonPropTypes) {
   );
 }
 
+const createTitleText = () => {
+  const { countryGroupId, contributionType } = this.props;
+  const titleTexts = {
+    UsAllPlusRowRecurring: 'a weekly email',
+    AuAll: 'an occasional email',
+    UkRowSingle: 'occasional emails',
+  };
+
+  if (countryGroupId === 'UnitedStates') {
+    return titleTexts.UsAllPlusRowRecurring;
+  } else if (countryGroupId === 'AUDCountries') {
+    return titleTexts.AuAll;
+  } else if (contributionType === 'ONE_OFF') {
+    return titleTexts.UkRowSingle;
+  }
+  return titleTexts.UsAllPlusRowRecurring;
+};
+
+const emailFrequency = createTitleText();
+
 const renderMessage = ({ title, message }: {title: string, message: string}) => (
   <div>
     <h3 className="contribution-thank-you-block__title">{title}</h3>
@@ -113,25 +133,6 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const createTitleText = () => {
-      const { countryGroupId, contributionType } = this.props;
-      const titleTexts = {
-        UsAllPlusRowRecurring: 'a weekly email',
-        AuAll: 'an occasional email',
-        UkRowSingle: 'occasional emails',
-      };
-
-      if (countryGroupId === 'UnitedStates') {
-        return titleTexts.UsAllPlusRowRecurring;
-      } else if (countryGroupId === 'AUDCountries') {
-        return titleTexts.AuAll;
-      } else if (contributionType === 'ONE_OFF') {
-        return titleTexts.UkRowSingle;
-      }
-      return titleTexts.UsAllPlusRowRecurring;
-    };
-
-    const emailFrequency = createTitleText();
 
     if (this.props.error) {
       return (<GeneralErrorMessage
