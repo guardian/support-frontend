@@ -93,8 +93,7 @@ function MarketingButton(props: ButtonPropTypes) {
   );
 }
 
-const createTitleText = () => {
-  const { countryGroupId, contributionType } = this.props;
+const createTitleText = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   const titleTexts = {
     UsAllPlusRowRecurring: 'a weekly email',
     AuAll: 'an occasional email',
@@ -110,8 +109,6 @@ const createTitleText = () => {
   }
   return titleTexts.UsAllPlusRowRecurring;
 };
-
-const emailFrequency = createTitleText();
 
 const renderMessage = ({ title, message }: {title: string, message: string}) => (
   <div>
@@ -133,6 +130,7 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
   }
 
   render() {
+    const emailFrequency = createTitleText(this.props.countryGroupId, this.props.contributionType);
 
     if (this.props.error) {
       return (<GeneralErrorMessage
