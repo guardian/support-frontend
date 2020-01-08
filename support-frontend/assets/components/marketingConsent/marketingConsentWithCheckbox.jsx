@@ -15,7 +15,7 @@ import NonInteractiveButton from 'components/button/nonInteractiveButton';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import 'components/marketingConsent/marketingConsent.scss';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
+import type { ContributionType } from 'helpers/contributions';
 // ----- Types ----- //
 
 type SharedPropTypes = {|
@@ -36,6 +36,7 @@ type PropTypes = {|
   error: boolean,
   renderMessage: ({title: string, message: string}) => Node,
   countryGroupId: CountryGroupId,
+  contributionType: ContributionType,
 |};
 
 type StateTypes ={|
@@ -112,7 +113,25 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const emailFrequency = this.props.countryGroupId === 'AUDCountries' ? 'an occasional' : 'a weekly';
+    const createTitleText = () => {
+      const { countryGroupId, contributionType } = this.props;
+      const titleTexts = {
+        UsAllPlusRowRecurring: 'a weekly email',
+        AuAll: 'an occasional email',
+        UkRowSingle: 'occasional emails',
+      };
+
+      if (countryGroupId === 'UnitedStates') {
+        return titleTexts.UsAllPlusRowRecurring;
+      } else if (countryGroupId === 'AUDCountries') {
+        return titleTexts.AuAll;
+      } else if (contributionType === 'ONE_OFF') {
+        return titleTexts.UkRowSingle;
+      }
+      return titleTexts.UsAllPlusRowRecurring;
+    };
+
+    const emailFrequency = createTitleText();
 
     if (this.props.error) {
       return (<GeneralErrorMessage
@@ -126,7 +145,7 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
       return (
         <section className={classNameWithModifiers('component-marketing-consent', ['newsletter', 'with-checkbox'])}>
           {this.props.renderMessage({
-            title: `Would you like to receive ${emailFrequency} email from inside The Guardian?`,
+            title: `Would you like to receive ${emailFrequency} from inside The Guardian?`,
             message: 'Our membership editor will discuss the most important news stories from the week and suggest compelling articles to read. Opt in below to receive this and more information on ways to support The Guardian.',
           })}
 
