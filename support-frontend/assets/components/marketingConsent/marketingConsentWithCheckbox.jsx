@@ -130,7 +130,8 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const frequencyCopy: { titleFreq: string, msgFreq: string } = getCopyTexts(this.props.countryGroupId, this.props.contributionType);
+    const frequencyCopy: { titleFreq: string, msgFreq: string } =
+    getCopyTexts(this.props.countryGroupId, this.props.contributionType);
 
     if (this.props.error) {
       return (<GeneralErrorMessage

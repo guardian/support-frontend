@@ -7,7 +7,7 @@ import { type Action, setAmazonPayHasAccessToken } from 'pages/contributions-lan
 import Button from 'components/button/button';
 import { logException } from 'helpers/logger';
 import AnimatedDots from 'components/spinners/animatedDots';
-import {trackComponentClick, trackComponentLoad} from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 
 type PropTypes = {|
   amazonPayData: AmazonPayData,
