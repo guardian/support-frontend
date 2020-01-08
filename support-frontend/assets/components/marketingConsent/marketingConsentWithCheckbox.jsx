@@ -93,21 +93,21 @@ function MarketingButton(props: ButtonPropTypes) {
   );
 }
 
-const createTitleText = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
-  const titleTexts = {
-    UsAllPlusRowRecurring: 'a weekly email',
-    AuAll: 'an occasional email',
-    UkRowSingle: 'occasional emails',
+const createRegionalCopy = (titleFreq: string, msgFreq: string): { titleFreq: string, msgFreq: string } => ({
+  titleFreq,
+  msgFreq,
+});
+
+const getCopyTexts = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
+  const copy = {
+    ukRowRecurring: createRegionalCopy('a weekly email', 'from the week '),
+    allSinglePlusUsAusRecurring: createRegionalCopy('occasional emails', ''),
   };
 
-  if (countryGroupId === 'UnitedStates') {
-    return titleTexts.UsAllPlusRowRecurring;
-  } else if (countryGroupId === 'AUDCountries') {
-    return titleTexts.AuAll;
-  } else if (contributionType === 'ONE_OFF') {
-    return titleTexts.UkRowSingle;
+  if (contributionType === 'ONE_OFF' || countryGroupId === 'UnitedStates' || countryGroupId === 'AUDCountries') {
+    return copy.allSinglePlusUsAusRecurring;
   }
-  return titleTexts.UsAllPlusRowRecurring;
+  return copy.ukRowRecurring;
 };
 
 const renderMessage = ({ title, message }: {title: string, message: string}) => (
@@ -130,7 +130,7 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const emailFrequency = createTitleText(this.props.countryGroupId, this.props.contributionType);
+    const frequencyCopy: { titleFreq: string, msgFreq: string } = getCopyTexts(this.props.countryGroupId, this.props.contributionType);
 
     if (this.props.error) {
       return (<GeneralErrorMessage
@@ -144,8 +144,8 @@ class MarketingConsentWithCheckbox extends Component<PropTypes, StateTypes> {
       return (
         <section className={classNameWithModifiers('component-marketing-consent', ['newsletter', 'with-checkbox'])}>
           {this.props.renderMessage({
-            title: `Would you like to receive ${emailFrequency} from inside The Guardian?`,
-            message: 'Our membership editor will discuss the most important news stories from the week and suggest compelling articles to read. Opt in below to receive this and more information on ways to support The Guardian.',
+            title: `Would you like to receive ${frequencyCopy.titleFreq} from inside The Guardian?`,
+            message: `Our membership editor will discuss the most important news stories ${frequencyCopy.msgFreq}and suggest compelling articles to read. Opt in below to receive this and more information on ways to support The Guardian.`,
           })}
 
           <CheckboxInput
