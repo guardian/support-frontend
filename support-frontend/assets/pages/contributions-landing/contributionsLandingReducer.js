@@ -73,7 +73,7 @@ export type StripeCardFormData = {
   setupIntentClientSecret: string | null, // For recurring only
   // These callbacks must be initialised after the StripeCardForm component has been created
   createPaymentMethod: ((email: string) => void) | null,
-  handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null,
+  handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null, // For single only
 }
 
 export type AmazonPayLibrary = {

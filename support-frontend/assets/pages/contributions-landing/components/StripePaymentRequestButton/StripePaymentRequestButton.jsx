@@ -27,7 +27,7 @@ import {
   type CountryGroupId,
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import {trackComponentClick, trackComponentLoad} from 'helpers/tracking/behaviour';
 import type {
   CaState,
   IsoCountry,
@@ -35,13 +35,13 @@ import type {
 } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type {
-  State,
+  State, Stripe3DSResult,
   StripePaymentRequestButtonData,
 } from 'pages/contributions-landing/contributionsLandingReducer';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
   onThirdPartyPaymentAuthorised,
-  paymentWaiting as setPaymentWaiting,
+  paymentWaiting as setPaymentWaiting, setHandleStripe3DS,
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
@@ -90,6 +90,7 @@ type PropTypes = {|
   stripeAccount: StripeAccount,
   setPaymentWaiting: (isWaiting: boolean) => Action,
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
+  setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
 |};
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -124,6 +125,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentWaiting: (isWaiting: boolean) => dispatch(setPaymentWaiting(isWaiting)),
   setError: (error: ErrorReason, stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonError(error, stripeAccount)),
+  setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>) =>
+    dispatch(setHandleStripe3DS(handleStripe3DS)),
 });
 
 
@@ -168,7 +171,8 @@ function updatePayerStateOrProvince(
   stateOrProvinceFromForm: UsState | CaState | null,
   setStateOrProvince: (UsState | CaState | null) => void
 ): boolean {
-  const stateOrProvinceFromCard = token.card.address_state;
+  // const stateOrProvinceFromCard = token.card.address_state;
+  const stateOrProvinceFromCard = token.billing_details.address.state;
   if (stateOrProvinceFromCard) {
     setStateOrProvince(stateOrProvinceFromCard);
     return true;
@@ -217,6 +221,44 @@ function onClick(event, props: PropTypes) {
   if (props.stripePaymentRequestButtonData.stripePaymentRequestObject && amountIsValid) {
     props.stripePaymentRequestButtonData.stripePaymentRequestObject.show();
   }
+}
+
+function setUpPaymentListenerSCA(props: PropTypes, paymentRequest: Object, stripePaymentMethod: StripePaymentMethod) {
+  paymentRequest.on('paymentmethod', ({ complete, paymentMethod, ...data }) => {
+    debugger
+
+    // Always dismiss the payment popup immediately - any pending/success/failure will be displayed on our own page.
+    // This is because `complete` must be called within 30 seconds or the user will see an error.
+    // Our backend (support-workers) can in extreme cases take longer than this, so we must call complete now.
+    // This means that the browser's payment popup will be dismissed, and our own 'spinner' will be displayed until
+    // the backend job finishes.
+    complete('success');
+
+    // We need to do this so that we can offer marketing permissions on the thank you page
+    updatePayerEmail(data, props.updateEmail);
+
+    const stateOrProvinceUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
+      updatePayerStateOrProvince(paymentMethod, props.stateOrProvince, props.updateStateOrProvince) : true;
+
+    const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
+      updatePayerName(data, props.updateFirstName, props.updateLastName) : true;
+
+    if (nameUpdateOk && stateOrProvinceUpdateOk) {
+      if (data.methodName) {
+        // https://stripe.com/docs/stripe-js/reference#payment-response-object
+        // methodName:
+        // "The unique name of the payment handler the customer
+        // chose to authorize payment. For example, 'basic-card'."
+        trackComponentClick(`${data.methodName}-paymentAuthorised`);
+      }
+      props.setPaymentWaiting(true);
+
+      props.onPaymentAuthorised({ paymentMethod: Stripe, paymentMethodId: paymentMethod.id, stripePaymentMethod })
+        .then(onComplete());
+    } else {
+      props.setError('incomplete_payment_request_details', props.stripeAccount);
+    }
+  });
 }
 
 function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentMethod: StripePaymentMethod) {
@@ -274,12 +316,22 @@ function initialisePaymentRequest(props: PropTypes) {
     if (paymentMethod) {
       props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
       trackComponentClick(`${paymentMethod}-loaded`);
-      setUpPaymentListener(props, paymentRequest, paymentMethod);
+      if (props.contributionType === 'ONE_OFF') {
+        setUpPaymentListenerSCA(props, paymentRequest, paymentMethod);
+      } else {
+        setUpPaymentListener(props, paymentRequest, paymentMethod);
+      }
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }
   });
   props.setStripePaymentRequestObject(paymentRequest, props.stripeAccount);
+
+  // TODO - duplicate of one in StripeCardForm
+  props.setHandleStripe3DS((clientSecret: string) => {
+    trackComponentLoad('stripe-3ds');
+    return props.stripe.handleCardAction(clientSecret);
+  });
 }
 
 const paymentButtonStyle = {
