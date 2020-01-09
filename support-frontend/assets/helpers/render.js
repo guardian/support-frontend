@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { logException } from 'helpers/logger';
+import { isSafari } from 'helpers/userAgent';
 
 // Without this the build-time pre-rendering breaks, because fetch is undefined when running with node
 const safeFetch = (url: string, opts) => {
@@ -50,7 +51,7 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
   if (element) {
     delete element.dataset.notHydrated;
     try {
-      if (process.env.NODE_ENV === 'DEV') {
+      if (process.env.NODE_ENV === 'DEV' && !isSafari) {
         import('react-axe').then((axe) => {
           console.log('Loading react-axe for accessibility analysis');
           axe.default(React, ReactDOM, 1000);
