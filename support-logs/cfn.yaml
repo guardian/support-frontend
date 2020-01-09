@@ -2,10 +2,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Proxy instance for kibana
 
 Parameters:
-  NginxAMI:
-    Description: AMI ID (may be replaced by RiffRaff for latest baked AMI)
+  AMI:
+    Description: AMI ID (will be set by RiffRaff to the latest baked AMI)
     Type: String
-    Default: ami-0a15b21aee4d9a317
   VpcId:
     Description: "ID of the VPC onto which to launch the instance eg. vpc-1234abcd"
     Type: AWS::EC2::VPC::Id
@@ -73,7 +72,7 @@ Resources:
   KibanaProxyInstance:
     Type: AWS::EC2::Instance
     Properties:
-        ImageId: !Ref NginxAMI
+        ImageId: !Ref AMI
         InstanceType: t2.micro
         IamInstanceProfile: !Ref KibanaProxyInstanceProfile
         BlockDeviceMappings:
