@@ -19,10 +19,6 @@
   z-index: 10;
   margin-top: $gu-v-spacing * 2;
 
-  @include mq($from: leftCol) {
-    margin-top: $gu-v-spacing * 6;
-  }
-
   @include mq($from: phablet) {
     font-size: 35px;
     line-height: 1;
@@ -38,6 +34,16 @@
       span:first-of-type {
         position: relative;
         z-index: 5;
+      }
+      span:nth-of-type(2) {
+        @include mq($until: leftCol) {
+          display: block;
+          width: 400px;
+        }
+
+        @include mq($until: desktop) {
+          width: 300px;
+        }
       }
     }
     p {
@@ -58,15 +64,11 @@
 
   @include mq($from: phablet) {
     justify-content: flex-end;
-    margin-top: -10rem;
+    margin-top: -11rem;
   }
 
   @include mq($from: desktop) {
     margin-top: -12rem;
-  }
-
-  @include mq($from: leftCol) {
-    margin-top: -15rem;
   }
 }
 
@@ -81,6 +83,10 @@
 
   img {
     max-height: 200px;
+
+    @include mq($from: mobileLandscape) {
+      max-height: 220px;
+    }
 
     @include mq($from: tablet) {
       max-height: 240px;

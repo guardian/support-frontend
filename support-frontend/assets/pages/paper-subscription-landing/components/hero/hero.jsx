@@ -90,7 +90,7 @@ const DefaultHeader = () => (
 const CampaignHeader = () => (
   <ProductPagehero
     appearance="campaign"
-    overheading="The Guardian newspaper subscriptions"
+    overheading="Newspaper subscriptions"
     heading={discountCopy.heading}
     modifierClasses={['paper-sale']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
@@ -98,8 +98,8 @@ const CampaignHeader = () => (
   >
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
-        <h2><span>Not every pleasure</span><br /><span>is a guilty one</span></h2>
-        <p>Become a Guardian and<br />Observer subscriber</p>
+        <h2><span>Subscribe to The</span><br /><span>Guardian and The Observer</span></h2>
+        <p>Choose from a range of<br />packages to suit you</p>
       </div>
     </div>
     <div className="sale-joy-of-print-graphic-outer">
