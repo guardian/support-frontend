@@ -98,7 +98,7 @@ const CampaignHeader = () => (
   >
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
-        <h2><span>Challenge the</span><br /><span>writing on the wall.</span></h2>
+        <h2><span>Not every pleasure</span><br /><span>is a guilty one</span></h2>
         <p>Become a Guardian and<br />Observer subscriber</p>
       </div>
     </div>
@@ -109,10 +109,10 @@ const CampaignHeader = () => (
         </div>
         <div className="sale-joy-of-print-graphic">
           <GridImage
-            gridId="printShowcase"
+            gridId="printCampaign2020"
             srcSizes={[1000, 500]}
             sizes="(max-width: 740px) 100vw, 800px"
-            imgType="jpg"
+            imgType="png"
             altText="Newspapers"
           />
         </div>

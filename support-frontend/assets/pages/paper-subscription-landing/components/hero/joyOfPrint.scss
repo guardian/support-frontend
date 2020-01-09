@@ -3,9 +3,8 @@
 // "Joy of Print Sale" specific styles below!
 
 .component-product-page-hero--campaign.component-product-page-hero--paper-sale {
-  background: gu-colour(highlight-main);
+  background: #f29ca9;
   height: auto;
-  border-bottom: 1px solid gu-colour(neutral-86);
   min-height: auto;
 }
 
@@ -35,13 +34,6 @@
       margin: $gu-v-spacing * 2 0;
       span {
         padding: 0 $gu-h-spacing / 2;
-        padding-right: $gu-h-spacing / 2;
-        @include mq($from: desktop) {
-          line-height: 50px;
-        }
-        background-color: black;
-        color: #ffffff;
-        padding-bottom: $gu-v-spacing / 2;
       }
       span:first-of-type {
         position: relative;
@@ -66,7 +58,7 @@
 
   @include mq($from: phablet) {
     justify-content: flex-end;
-    margin-top: -11rem;
+    margin-top: -10rem;
   }
 
   @include mq($from: desktop) {
@@ -88,9 +80,13 @@
   line-height: 0 !important;
 
   img {
-    max-height: 180px;
+    max-height: 200px;
 
-    @include mq($from: leftCol) {
+    @include mq($from: tablet) {
+      max-height: 240px;
+    }
+
+    @include mq($from: desktop) {
       max-height: 280px;
     }
   }
@@ -98,14 +94,14 @@
 
 .sale-joy-of-print-badge {
   position: relative;
-  margin-bottom: -3rem;
+  margin-bottom: -5rem;
   margin-left: -4rem;
   z-index: 1;
   flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: gu-colour(neutral-7);
+  background: #0074a6;
   color: #ffffff;
   text-align: center;
   border-radius: 50%;
@@ -130,6 +126,10 @@
     -moz-font-feature-settings: "lnum";
     -webkit-font-feature-settings: "lnum";
     font-feature-settings: "lnum";
+  }
+
+  @include mq($from: tablet) {
+    margin-bottom: -7rem;
   }
 
   @include mq($from: desktop) {
