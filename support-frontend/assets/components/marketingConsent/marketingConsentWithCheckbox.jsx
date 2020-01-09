@@ -93,14 +93,15 @@ function MarketingButton(props: ButtonPropTypes) {
   );
 }
 
-const createRegionalTextVariations = (titleFreq: string, msgFreq: string): { titleFreq: string, msgFreq: string } => ({
-  titleFreq,
-  msgFreq,
-});
-
 const copy = {
-  ukRowRecurring: createRegionalTextVariations('a weekly email', 'from the week '),
-  allSinglePlusUsAusRecurring: createRegionalTextVariations('occasional emails', ''),
+  ukRowRecurring: {
+    titleFreq: 'a weekly email',
+    msgFreq: 'from the week ',
+  },
+  allSinglePlusUsAusRecurring: {
+    titleFreq: 'occasional emails',
+    msgFreq: '',
+  },
 };
 
 const getCopyTexts = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
