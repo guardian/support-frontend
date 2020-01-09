@@ -93,16 +93,17 @@ function MarketingButton(props: ButtonPropTypes) {
   );
 }
 
-const createRegionalCopy = (titleFreq: string, msgFreq: string): { titleFreq: string, msgFreq: string } => ({
+const createRegionalTextVariations = (titleFreq: string, msgFreq: string): { titleFreq: string, msgFreq: string } => ({
   titleFreq,
   msgFreq,
 });
 
+const copy = {
+  ukRowRecurring: createRegionalTextVariations('a weekly email', 'from the week '),
+  allSinglePlusUsAusRecurring: createRegionalTextVariations('occasional emails', ''),
+};
+
 const getCopyTexts = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
-  const copy = {
-    ukRowRecurring: createRegionalCopy('a weekly email', 'from the week '),
-    allSinglePlusUsAusRecurring: createRegionalCopy('occasional emails', ''),
-  };
 
   if (contributionType === 'ONE_OFF' || countryGroupId === 'UnitedStates' || countryGroupId === 'AUDCountries') {
     return copy.allSinglePlusUsAusRecurring;
