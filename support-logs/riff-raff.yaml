@@ -9,4 +9,3 @@ deployments:
       amiTags:
         AmigoStage: PROD
         Recipe: ubuntu-xenial-with-nginx
-      amiEncrypted: true
