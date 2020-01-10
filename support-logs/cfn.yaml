@@ -101,6 +101,8 @@ Resources:
                 ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
                 ssl_prefer_server_ciphers on;
 
+                access_log  /dev/null;
+                error_log   /dev/null   crit;
 
                 location ^~ /_plugin/kibana {
                     # Forward requests to Kibana
