@@ -6,7 +6,6 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
-export type PaymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
 export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
 export type NewLandingPageTemplateTestVariants = 'control' | 'new_template' | 'notintest';
 export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
@@ -105,29 +104,6 @@ export const tests: Tests = {
     seed: 4,
     targetPage: usContributionsLandingPageMatch,
     canRun: () => countryGroupId === 'UnitedStates',
-  },
-
-  paymentSecuritySecureTransactionGreyNonUK: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1_securetransactiongrey',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 10,
-    targetPage: contributionsLandingPageMatch,
-    canRun: () => countryGroupId !== 'GBPCountries',
   },
 
   newLandingPageTemplateTestR2: {

@@ -50,7 +50,6 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
-import type { PaymentSecuritySecureTransactionGreyNonUKVariants } from 'helpers/abTests/abtestDefinitions';
 import { logException } from 'helpers/logger';
 
 
@@ -83,7 +82,6 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   createStripePaymentMethod: () => void,
-  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   amazonPayOrderReferenceId: string | null,
 |};
 
@@ -115,8 +113,6 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
-  paymentSecuritySecureTransactionGreyNonUKVariant:
-    state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
 });
 
