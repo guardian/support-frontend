@@ -14,7 +14,7 @@ import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { PaymentSecuritySecureTransactionGreyNonUKVariants, NewLandingPageTemplateTestVariants, UsEoyCopyTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { NewLandingPageTemplateTestVariants, UsEoyCopyTestVariants } from 'helpers/abTests/abtestDefinitions';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 
 
@@ -31,7 +31,6 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   countryId: IsoCountry,
-  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   newTemplateVariant: NewLandingPageTemplateTestVariants,
   usEoyCopyVariant: UsEoyCopyTestVariants,
 |};
@@ -45,8 +44,6 @@ const mapStateToProps = (state: State) => ({
   isReturningContributor: state.page.user.isReturningContributor,
   countryId: state.common.internationalisation.countryId,
   newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTestR2,
-  paymentSecuritySecureTransactionGreyNonUKVariant:
-    state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
   usEoyCopyVariant: state.common.abParticipations.usEoyCopy,
 });
 
@@ -129,11 +126,7 @@ function withProps(props: PropTypes) {
 
   const showSecureTransactionIndicator = () => {
     if (props.newTemplateVariant === 'new_template') {
-      if (props.countryGroupId === 'GBPCountries') {
-        return <SecureTransactionIndicator modifierClasses={['new-template']} />;
-      } else if (props.paymentSecuritySecureTransactionGreyNonUKVariant === 'V1_securetransactiongrey') {
-        return <SecureTransactionIndicator modifierClasses={['new-template', 'hideaftermobile']} />;
-      }
+      return <SecureTransactionIndicator modifierClasses={['new-template', 'hideaftermobile']} />;
     }
     return null;
   };
