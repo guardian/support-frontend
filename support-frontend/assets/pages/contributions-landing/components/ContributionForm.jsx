@@ -232,9 +232,6 @@ function withProps(props: PropTypes) {
 
   const classModifiers = ['contribution', 'with-labels'];
 
-  const showSecureStripeContainer: boolean = props.paymentSecuritySecureTransactionGreyNonUKVariant !== 'control' || props.countryGroupId === 'GBPCountries';
-  const showSecureButtonBg: boolean = showSecureStripeContainer && props.paymentMethod === Stripe;
-
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
       <h2 className="hidden-heading">Make a contribution</h2>
@@ -266,13 +263,11 @@ function withProps(props: PropTypes) {
           paymentMethod={props.paymentMethod}
           isTestUser={props.isTestUser}
           country={props.country}
-          showSecureBackground={showSecureStripeContainer}
         />
 
         <ContributionErrorMessage />
         <ContributionSubmit
           onPaymentAuthorisation={props.onPaymentAuthorisation}
-          showSecureBackground={showSecureButtonBg}
         />
       </div>
 

@@ -43,7 +43,6 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   amount: number,
   billingPeriod: BillingPeriod,
-  showSecureBackground: boolean,
   amazonPayData: AmazonPayData,
 |};
 
@@ -103,8 +102,6 @@ function withProps(props: PropTypes) {
       props.paymentMethod,
     );
 
-    const classNames: string = props.showSecureBackground ? 'form__submit--secure' : 'form__submit';
-
     const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?
       <AmazonPayWallet isTestUser={props.isTestUser} /> :
       <AmazonPayLoginButton />);
@@ -114,7 +111,7 @@ function withProps(props: PropTypes) {
     // See PayPalExpressButton for more info.
     return (
       <div
-        className={classNames}
+        className="form__submit"
       >
         <div
           id="component-paypal-button-checkout"
