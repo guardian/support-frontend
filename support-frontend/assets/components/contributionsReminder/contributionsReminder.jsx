@@ -41,7 +41,7 @@ const reminderDates: Array<ReminderDate> = [
   },
   {
     dateName: 'June 2020',
-    timeStamp: '2020-03-01 00:00:00',
+    timeStamp: '2020-06-01 00:00:00',
   },
   {
     dateName: 'December 2020',
