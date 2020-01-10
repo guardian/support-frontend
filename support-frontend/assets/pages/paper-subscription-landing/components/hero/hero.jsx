@@ -90,7 +90,7 @@ const DefaultHeader = () => (
 const CampaignHeader = () => (
   <ProductPagehero
     appearance="campaign"
-    overheading="The Guardian newspaper subscriptions"
+    overheading="Newspaper subscriptions"
     heading={discountCopy.heading}
     modifierClasses={['paper-sale']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
@@ -98,8 +98,8 @@ const CampaignHeader = () => (
   >
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
-        <h2><span>Challenge the</span><br /><span>writing on the wall.</span></h2>
-        <p>Become a Guardian and<br />Observer subscriber</p>
+        <h2><span>Subscribe to The</span><br /><span>Guardian and The Observer</span></h2>
+        <p>Choose from a range of<br />packages to suit you</p>
       </div>
     </div>
     <div className="sale-joy-of-print-graphic-outer">
@@ -109,10 +109,10 @@ const CampaignHeader = () => (
         </div>
         <div className="sale-joy-of-print-graphic">
           <GridImage
-            gridId="printShowcase"
+            gridId="printCampaign2020"
             srcSizes={[1000, 500]}
             sizes="(max-width: 740px) 100vw, 800px"
-            imgType="jpg"
+            imgType="png"
             altText="Newspapers"
           />
         </div>
