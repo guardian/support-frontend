@@ -238,7 +238,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   handleCardSetupForRecurring(clientSecret: string): void {
-    // TODO - rename to confirmCardSetup?
     this.props.stripe.handleCardSetup(clientSecret).then((result) => {
       if (result.error) {
         this.handleStripeError(result.error);
