@@ -30,7 +30,6 @@ import ContributionThankYouContainer
   from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from 'components/consentBanner/consentBanner';
-import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import './contributionsLanding.scss';
 import './contributionsLandingEOY2019.scss';
 import './newTemplate.scss';
@@ -95,12 +94,6 @@ const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campai
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
 
-const showSecureTransactionIndicator = () => {
-  if (store.getState().common.abParticipations.newLandingPageTemplateTestR2 === 'control') {
-    return <SecureTransactionIndicator modifierClasses={['top', 'hideaftermobile']} />;
-  }
-  return null;
-};
 
 const originalPage = (campaignCodeParameter: ?string) => (
   <Page
@@ -109,7 +102,6 @@ const originalPage = (campaignCodeParameter: ?string) => (
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
   >
-    {showSecureTransactionIndicator()}
     <ContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
       campaignCodeParameter={campaignCodeParameter}
@@ -125,7 +117,6 @@ const newTemplagePage = (campaignCodeParameter: ?string) => (
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
   >
-    {showSecureTransactionIndicator()}
     <ContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
       campaignCodeParameter={campaignCodeParameter}
