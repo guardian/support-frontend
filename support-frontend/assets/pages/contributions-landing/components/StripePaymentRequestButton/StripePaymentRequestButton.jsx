@@ -171,7 +171,7 @@ function updatePayerName(data: Object, setFirstName: string => void, setLastName
 
 // Attempt to get state/province from the token, otherwise fall back on the value in the form
 function updatePayerStateOrProvince(
-  stateOrProvinceFromCard: string | null,
+  stateOrProvinceFromCard?: string,
   stateOrProvinceFromForm: UsState | CaState | null,
   setStateOrProvince: (UsState | CaState | null) => void
 ): boolean {
@@ -244,7 +244,7 @@ function fetchClientSecret(props: PropTypes): Promise<string> {
 function onPayment(
   props: PropTypes,
   paymentRequestComplete: (string) => void,
-  paymentRequestData: object,
+  paymentRequestData: Object,
   stateOrProvinceFromCard?: string,
   processPayment: () => void,
 ): void {
