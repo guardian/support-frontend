@@ -228,7 +228,7 @@ function onClick(event, props: PropTypes) {
   }
 }
 
-function setUpPaymentListener(props: PropTypes, paymentRequest: Object, stripePaymentMethod: StripePaymentMethod, clientSecret?: string) {
+function setUpPaymentListener(props: PropTypes, paymentRequest: Object, stripePaymentMethod: StripePaymentMethod) {
   paymentRequest.on('paymentmethod', ({ complete, paymentMethod, ...data }) => {
     debugger
 
@@ -262,26 +262,31 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, stripePa
         props.onPaymentAuthorised({paymentMethod: Stripe, paymentMethodId: paymentMethod.id, stripePaymentMethod})
           .then(onComplete());
       } else {
-        //TODO - if clientSecret not ready, set a callback
-        if (clientSecret) {
-          props.stripe.confirmCardSetup(
-            clientSecret,
-            { payment_method: paymentMethod.id }
-          ).then(confirmResult => {
-            debugger
-
-            if (confirmResult.error) {
-              console.log("Error confirming:", confirmResult)
-              // TODO - fail properly
-            } else {
-              props.onPaymentAuthorised({paymentMethod: Stripe, paymentMethodId: paymentMethod.id, stripePaymentMethod})
-                .then(onComplete());
-            }
+        fetchClientSecret(props)
+          .then(clientSecret => {
+            return new Promise(function(resolve) {
+              setTimeout(resolve.bind(null, clientSecret), 10000)
+            })
           })
-        } else {
-          console.log("No clientSecret!")
-          //TODO - setup a callback?
-        }
+          .then(clientSecret => {
+            console.log("got clientSecret")
+            props.setSetupIntentClientSecret(clientSecret);
+
+            props.stripe.confirmCardSetup(
+              clientSecret,
+              { payment_method: paymentMethod.id }
+            ).then(confirmResult => {
+              debugger
+
+              if (confirmResult.error) {
+                console.log("Error confirming:", confirmResult)
+                // TODO - fail properly
+              } else {
+                props.onPaymentAuthorised({paymentMethod: Stripe, paymentMethodId: paymentMethod.id, stripePaymentMethod})
+                  .then(onComplete());
+              }
+            })
+          });
       }
     } else {
       props.setError('incomplete_payment_request_details', props.stripeAccount);
@@ -329,34 +334,23 @@ function initialisePaymentRequest(props: PropTypes) {
     requestPayerName: props.stripeAccount !== 'ONE_OFF',
   });
 
-  //TODO - get clientSecret before doing this?
-  fetchClientSecret(props)
-    .then(clientSecret => {
-      return new Promise(function(resolve) {
-        setTimeout(resolve.bind(null, clientSecret), 10000)
-      })
-    })
-    .then(clientSecret => {
-      console.log("got clientSecret")
-      props.setSetupIntentClientSecret(clientSecret);
-      props.setStripePaymentRequestObject(paymentRequest, props.stripeAccount);
+  paymentRequest.canMakePayment().then((result) => {
+    const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
+    if (paymentMethod) {
+      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
+      trackComponentClick(`${paymentMethod}-loaded`);
 
-      paymentRequest.canMakePayment().then((result) => {
-        const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
-        if (paymentMethod) {
-          props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
-          trackComponentClick(`${paymentMethod}-loaded`);
+      if (props.contributionType !== 'ONE_OFF') {
+        setUpPaymentListener(props, paymentRequest, paymentMethod);
+      } else {
+        setUpPaymentListener(props, paymentRequest, paymentMethod);
+      }
+    } else {
+      props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
+    }5
+  });
 
-          if (props.contributionType !== 'ONE_OFF') {
-            setUpPaymentListener(props, paymentRequest, paymentMethod, clientSecret);
-          } else {
-            setUpPaymentListener(props, paymentRequest, paymentMethod);
-          }
-        } else {
-          props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
-        }
-      });
-    });
+  props.setStripePaymentRequestObject(paymentRequest, props.stripeAccount);
 
   if (props.contributionType === 'ONE_OFF') {
     // TODO - duplicate of one in StripeCardForm
