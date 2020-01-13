@@ -11,6 +11,7 @@ export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts'
 export type NewLandingPageTemplateTestVariants = 'control' | 'new_template' | 'notintest';
 export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
 export type UsEoyCopyTestVariants = 'v1' | 'v2' | 'notintest';
+export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
@@ -40,14 +41,14 @@ export const tests: Tests = {
     targetPage: usContributionsLandingPageMatch,
   },
 
-  recurringStripePaymentRequestButton: {
+  stripePaymentRequestButtonSca: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'paymentRequestButton',
+        id: 'sca',
       },
     ],
     audiences: {
