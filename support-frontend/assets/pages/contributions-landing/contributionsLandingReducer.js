@@ -59,10 +59,6 @@ export type StripePaymentRequestButtonData = {
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
   paymentError: ErrorReason | null,
-
-  // For recurring only. This needs to be separate from the one in StripeCardFormData in case the user tries to use
-  // PRB and Stripe Elements in the same session
-  setupIntentClientSecret: string | null,
 }
 
 export type Stripe3DSResult = {
@@ -193,7 +189,6 @@ function createFormReducer() {
         stripePaymentRequestObject: null,
         stripePaymentRequestButtonClicked: false,
         paymentError: null,
-        setupIntentClientSecret: null,
       },
     },
     stripeCardFormData: {
@@ -433,19 +428,6 @@ function createFormReducer() {
             },
           },
         };
-
-      case 'SET_STRIPE_PAYMENT_REQUEST_CLIENT_SECRET':
-        return {
-          ...state,
-          stripePaymentRequestButtonData: {
-            ...state.stripePaymentRequestButtonData,
-            REGULAR: {
-              ...state.stripePaymentRequestButtonData.REGULAR,
-              setupIntentClientSecret: action.setupIntentClientSecret,
-            },
-          },
-        };
-
 
       case 'SET_STRIPE_V3_HAS_LOADED':
         return {

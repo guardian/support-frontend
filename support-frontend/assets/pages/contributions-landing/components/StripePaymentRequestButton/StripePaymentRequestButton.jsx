@@ -46,7 +46,6 @@ import {
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
   setStripePaymentRequestObject,
-  setStripePaymentRequestClientSecret,
   updateEmail,
   updateFirstName,
   updateLastName,
@@ -94,7 +93,6 @@ type PropTypes = {|
   setPaymentWaiting: (isWaiting: boolean) => Action,
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
-  setSetupIntentClientSecret: (setupIntentClientSecret: string) => Action,
   scaTestVariant: StripePaymentRequestButtonScaTestVariants,
 |};
 
@@ -133,8 +131,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setStripePaymentRequestButtonError(error, stripeAccount)),
   setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>) =>
     dispatch(setHandleStripe3DS(handleStripe3DS)),
-  setSetupIntentClientSecret: (setupIntentClientSecret: string) =>
-    dispatch(setStripePaymentRequestClientSecret(setupIntentClientSecret)),
 });
 
 
@@ -319,7 +315,6 @@ function setUpPaymentListenerSca(props: PropTypes, paymentRequest: Object, strip
         // and then provide the associated clientSecret for confirmation
         fetchClientSecret(props)
           .then((clientSecret: string) => {
-            props.setSetupIntentClientSecret(clientSecret);
 
             props.stripe.confirmCardSetup(
               clientSecret,

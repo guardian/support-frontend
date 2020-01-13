@@ -85,7 +85,6 @@ export type Action =
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR', paymentError: ErrorReason, stripeAccount: StripeAccount }
-  | { type: 'SET_STRIPE_PAYMENT_REQUEST_CLIENT_SECRET', setupIntentClientSecret: string }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
   | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
@@ -155,9 +154,6 @@ const setStripePaymentRequestButtonClicked = (stripeAccount: StripeAccount): Act
 
 const setStripePaymentRequestButtonError = (paymentError: ErrorReason, stripeAccount: StripeAccount): Action =>
   ({ type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR', paymentError, stripeAccount });
-
-const setStripePaymentRequestClientSecret = (setupIntentClientSecret: string): Action =>
-  ({ type: 'SET_STRIPE_PAYMENT_REQUEST_CLIENT_SECRET', setupIntentClientSecret });
 
 const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -714,7 +710,6 @@ export {
   setStripePaymentRequestObject,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
-  setStripePaymentRequestClientSecret,
   setStripeV3HasLoaded,
   setTickerGoalReached,
   setCreateStripePaymentMethod,
