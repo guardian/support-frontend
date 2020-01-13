@@ -32,7 +32,7 @@ import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
 import './contributionsLandingEOY2019.scss';
-import './newTemplate.scss';
+import './newContributionsLandingTemplate.scss';
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -94,10 +94,9 @@ const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campai
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
 
-
-const originalPage = (campaignCodeParameter: ?string) => (
+const contributionsLandingPage = (campaignCodeParameter: ?string) => (
   <Page
-    classModifiers={['contribution-form', ...cssModifiers]}
+    classModifiers={['new-template', 'contribution-form', ...cssModifiers]}
     header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
@@ -109,24 +108,6 @@ const originalPage = (campaignCodeParameter: ?string) => (
     <ConsentBanner />
   </Page>
 );
-
-const newTemplagePage = (campaignCodeParameter: ?string) => (
-  <Page
-    classModifiers={['new-template']}
-    header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-    footer={<Footer disclaimer countryGroupId={countryGroupId} />}
-    backgroundImageSrc={backgroundImageSrc}
-  >
-    <ContributionFormContainer
-      thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-      campaignCodeParameter={campaignCodeParameter}
-    />
-    <ConsentBanner />
-  </Page>
-);
-
-
-const contributionsLandingPage = (campaignCodeParameter: ?string) => (store.getState().common.abParticipations.newLandingPageTemplateTestR2 === 'new_template' ? newTemplagePage(campaignCodeParameter) : originalPage(campaignCodeParameter));
 
 const router = (
   <BrowserRouter>

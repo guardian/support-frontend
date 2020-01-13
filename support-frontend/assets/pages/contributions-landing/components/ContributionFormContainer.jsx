@@ -14,7 +14,7 @@ import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { NewLandingPageTemplateTestVariants, UsEoyCopyTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { UsEoyCopyTestVariants } from 'helpers/abTests/abtestDefinitions';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 
 
@@ -31,7 +31,6 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   countryId: IsoCountry,
-  newTemplateVariant: NewLandingPageTemplateTestVariants,
   usEoyCopyVariant: UsEoyCopyTestVariants,
 |};
 
@@ -43,7 +42,6 @@ const mapStateToProps = (state: State) => ({
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
   countryId: state.common.internationalisation.countryId,
-  newTemplateVariant: state.common.abParticipations.newLandingPageTemplateTestR2,
   usEoyCopyVariant: state.common.abParticipations.usEoyCopy,
 });
 
@@ -124,12 +122,7 @@ function withProps(props: PropTypes) {
     ...campaign || {},
   };
 
-  const showSecureTransactionIndicator = () => {
-    if (props.newTemplateVariant === 'new_template') {
-      return <SecureTransactionIndicator modifierClasses={['new-template', 'hideaftermobile']} />;
-    }
-    return null;
-  };
+  const showSecureTransactionIndicator = () => <SecureTransactionIndicator modifierClasses={['top']} />;
 
   if (props.paymentComplete) {
     // We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.

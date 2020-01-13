@@ -7,7 +7,6 @@ import {
 
 // ----- Tests ----- //
 export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
-export type NewLandingPageTemplateTestVariants = 'control' | 'new_template' | 'notintest';
 export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
 export type UsEoyCopyTestVariants = 'v1' | 'v2' | 'notintest';
 
@@ -104,27 +103,5 @@ export const tests: Tests = {
     seed: 4,
     targetPage: usContributionsLandingPageMatch,
     canRun: () => countryGroupId === 'UnitedStates',
-  },
-
-  newLandingPageTemplateTestR2: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'new_template',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 11,
-    targetPage: contributionsLandingPageMatch,
   },
 };
