@@ -6,7 +6,7 @@ Retry:
   - com.gu.support.workers.exceptions.RetryLimited
   IntervalSeconds: 1
   MaxAttempts: 3
-  BackoffRate: 2
+  BackoffRate: 5 #Retry after 1, 5 and 25 seconds
 - ErrorEquals:
   - com.gu.support.workers.exceptions.RetryUnlimited
   IntervalSeconds: 1
