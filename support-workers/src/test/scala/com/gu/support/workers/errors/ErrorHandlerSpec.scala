@@ -53,6 +53,7 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     //Salesforce
     new SalesforceErrorResponse("test", expiredAuthenticationCode).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("test", rateLimitExceeded).asRetryException shouldBe a[RetryUnlimited]
+    new SalesforceErrorResponse("test", readOnlyMaintenance).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryNone]
 
     //Stripe
