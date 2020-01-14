@@ -27,7 +27,7 @@ import {
   type CountryGroupId,
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import {trackComponentClick, trackComponentLoad} from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import type {
   CaState,
   IsoCountry,
@@ -173,7 +173,7 @@ function updatePayerName(data: Object, setFirstName: string => void, setLastName
 function updatePayerStateOrProvince(
   stateOrProvinceFromCard?: string,
   stateOrProvinceFromForm: UsState | CaState | null,
-  setStateOrProvince: (UsState | CaState | null) => void
+  setStateOrProvince: (UsState | CaState | null) => void,
 ): boolean {
   if (stateOrProvinceFromCard) {
     setStateOrProvince(stateOrProvinceFromCard);
@@ -233,9 +233,9 @@ function fetchClientSecret(props: PropTypes): Promise<string> {
   ).then((result) => {
     if (result.client_secret) {
       return Promise.resolve(result.client_secret);
-    } else {
-      return Promise.reject(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
     }
+    return Promise.reject(new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`));
+
   });
 }
 
@@ -285,7 +285,7 @@ function setUpPaymentListenerNonSca(props: PropTypes, paymentRequest: Object, pa
 
     const processPayment = () => {
       const tokenId = props.isTestUser ? 'tok_visa' : token.id;
-      props.onPaymentAuthorised({paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod})
+      props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
         .then(onComplete);
     };
 
@@ -304,12 +304,11 @@ function setUpPaymentListenerSca(props: PropTypes, paymentRequest: Object, strip
 
     const processPayment = () => {
       if (props.contributionType === 'ONE_OFF') {
-        props.onPaymentAuthorised(
-          { paymentMethod: Stripe,
-            paymentMethodId: paymentMethod.id,
-            stripePaymentMethod
-          }
-        ).then(onComplete);
+        props.onPaymentAuthorised({
+          paymentMethod: Stripe,
+          paymentMethodId: paymentMethod.id,
+          stripePaymentMethod,
+        }).then(onComplete);
       } else {
         // For recurring we need to request a new SetupIntent,
         // and then provide the associated clientSecret for confirmation
@@ -318,22 +317,21 @@ function setUpPaymentListenerSca(props: PropTypes, paymentRequest: Object, strip
 
             props.stripe.confirmCardSetup(
               clientSecret,
-              {payment_method: paymentMethod.id}
-            ).then(confirmResult => {
+              { payment_method: paymentMethod.id },
+            ).then((confirmResult) => {
 
               if (confirmResult.error) {
                 props.setError('card_authentication_error', props.stripeAccount);
                 props.setPaymentWaiting(false);
               } else {
-                props.onPaymentAuthorised(
-                  { paymentMethod: Stripe,
-                    paymentMethodId: paymentMethod.id,
-                    stripePaymentMethod
-                  }
-                ).then(onComplete);
+                props.onPaymentAuthorised({
+                  paymentMethod: Stripe,
+                  paymentMethodId: paymentMethod.id,
+                  stripePaymentMethod,
+                }).then(onComplete);
               }
-            })
-          }).catch(error => {
+            });
+          }).catch((error) => {
             logException(`Error confirming recurring contribution from Payment Request Button: ${error}`);
             props.setError('internal_error', props.stripeAccount);
             props.setPaymentWaiting(false);
