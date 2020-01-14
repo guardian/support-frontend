@@ -117,7 +117,7 @@ function withProps(props: PropTypes) {
   const legend = (
     <div className="secure-transaction">
       <legend id="payment_method" className="form__legend"><h3>Payment method</h3></legend>
-      <SecureTransactionIndicator modifierClasses={['middle', 'showaftermobile']} />
+      <SecureTransactionIndicator modifierClasses={['middle']} />
     </div>
   );
 
