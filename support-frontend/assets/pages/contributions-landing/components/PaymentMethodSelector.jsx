@@ -41,13 +41,6 @@ import {
   subscriptionToExplainerPart,
 } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type {
-  PaymentSecuritySecureTransactionGreyNonUKVariants,
-} from 'helpers/abTests/abtestDefinitions';
-import {
-  type CountryGroupId,
-  detect,
-} from 'helpers/internationalisation/countryGroup';
 import SvgAmazonPayLogo from 'components/svgs/amazonPayLogo';
 
 
@@ -65,7 +58,6 @@ type PropTypes = {|
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   isTestUser: boolean,
   switches: Switches,
-  paymentSecuritySecureTransactionGreyNonUKVariant: PaymentSecuritySecureTransactionGreyNonUKVariants,
   inAmazonPayTest: boolean,
 |};
 /* eslint-enable react/no-unused-prop-types */
@@ -79,8 +71,6 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
-  paymentSecuritySecureTransactionGreyNonUKVariant:
-    state.common.abParticipations.paymentSecuritySecureTransactionGreyNonUK,
   inAmazonPayTest:
     state.common.abParticipations.amazonPaySingleUS2020 === 'amazonPay',
 });
@@ -124,19 +114,12 @@ function withProps(props: PropTypes) {
   const fullExistingPaymentMethods: RecentlySignedInExistingPaymentMethod[] =
     ((props.existingPaymentMethods || []).filter(isUsableExistingPaymentMethod): any);
 
-  const countryGroupId: CountryGroupId = detect();
-
-  const legendSimple = (
-    <legend id="payment_method" className="form__legend"><h3>Payment method</h3></legend>
+  const legend = (
+    <div className="secure-transaction">
+      <legend id="payment_method" className="form__legend"><h3>Payment method</h3></legend>
+      <SecureTransactionIndicator modifierClasses={['middle']} />
+    </div>
   );
-
-  const legend = props.paymentSecuritySecureTransactionGreyNonUKVariant === 'V1_securetransactiongrey' && countryGroupId !== 'GBPCountries' ?
-    (
-      <div className="secure-transaction">
-        {legendSimple} <SecureTransactionIndicator modifierClasses={['middle', 'showaftermobile']} />
-      </div>
-    ) :
-    legendSimple;
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
