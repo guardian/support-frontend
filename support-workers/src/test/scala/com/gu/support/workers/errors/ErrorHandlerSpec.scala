@@ -52,6 +52,12 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     }
   }
 
+  "ErrorHandler" should "throw an RetryNone when it handles a 403 unauthorized error" in {
+    an[RetryNone] should be thrownBy {
+      ErrorHandler.handleException(WebServiceClientError(CodeBody("403", "Unauthorized")))
+    }
+  }
+
   "asRetryException method" should "allow us to work out retries" in {
     //General
     new SocketTimeoutException().asRetryException shouldBe a[RetryUnlimited]

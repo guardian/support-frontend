@@ -24,14 +24,15 @@ object RetryImplicits {
         new RetryUnlimited(message = e.getMessage, cause = throwable)
 
       //WebServiceClientError
-      case e @ (clientError: WebServiceClientError) =>
-        if (clientError.codeBody.code == "401"){ // Authentication clientError (401)
-          new RetryLimited(message = e.getMessage, cause = throwable)
-        } else {
-          new RetryNone(message = e.getMessage, cause = throwable)
-        }
+      case e @ (_: WebServiceClientError) if e.codeBody.code == "401" =>
+        // We are retrying on 401s now because we have been receiving this
+        // response from Zuora during maintenance windows
+        new RetryLimited(message = e.getMessage, cause = throwable)
 
-      //Invalid Json or http client error (4xx)
+      case e @ (_: WebServiceClientError) =>
+        new RetryNone(message = e.getMessage, cause = throwable)
+
+      //Invalid Json
       case e @ (_: ParsingFailure | _: MatchError) =>
         new RetryNone(message = e.getMessage, cause = throwable)
 
