@@ -158,7 +158,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
   };
 
   setupRecurringHandlers(): void {
-    // Start by requesting the client_secret for a new Payment Method.
+    // Start by requesting the client_secret for a new SetupIntent.
     // Note - because this value is requested asynchronously when the component loads,
     // it's possible for it to arrive after the user clicks 'Contribute'. This eventuality
     // is handled in the callback below by checking the value of paymentWaiting.
