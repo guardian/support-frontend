@@ -5,8 +5,8 @@ Retry:
 - ErrorEquals:
   - com.gu.support.workers.exceptions.RetryLimited
   IntervalSeconds: 1
-  MaxAttempts: 3
-  BackoffRate: 5 #Retry after 1, 5 and 25 seconds
+  MaxAttempts: 5
+  BackoffRate: 10 #Retry after 1 sec, 10 sec, 100 sec, 16 mins and 2 hours 46 mins
 - ErrorEquals:
   - com.gu.support.workers.exceptions.RetryUnlimited
   IntervalSeconds: 1
