@@ -46,7 +46,8 @@ import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
 
 if (process.env.NODE_ENV === 'DEV') {
-  import('preact/devtools');
+  // $FlowIgnore
+  import('preact/debug');
 }
 
 // ----- Types ----- //
