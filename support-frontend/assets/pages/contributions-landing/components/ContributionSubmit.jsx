@@ -14,7 +14,7 @@ import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
 import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
+import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
