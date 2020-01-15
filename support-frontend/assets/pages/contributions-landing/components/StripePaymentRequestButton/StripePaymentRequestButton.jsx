@@ -41,7 +41,8 @@ import type {
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
   onThirdPartyPaymentAuthorised,
-  paymentWaiting as setPaymentWaiting, setHandleStripe3DS,
+  paymentWaiting as setPaymentWaiting,
+  setHandleStripe3DS,
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
