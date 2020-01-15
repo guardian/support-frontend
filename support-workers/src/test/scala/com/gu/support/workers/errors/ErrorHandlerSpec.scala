@@ -4,6 +4,7 @@ import java.net.{SocketException, SocketTimeoutException}
 
 import com.amazonaws.services.kms.model._
 import com.gu.paypal.PayPalError
+import com.gu.rest.{CodeBody, WebServiceClientError}
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
 import com.gu.stripe.StripeError
@@ -42,6 +43,18 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
   "ErrorHandler" should "throw an RetryNone when it handles any other Salesforce error" in {
     an[RetryNone] should be thrownBy {
       ErrorHandler.handleException(new SalesforceErrorResponse("test", "test"))
+    }
+  }
+
+  "ErrorHandler" should "throw an RetryLimited when it handles a 401 authentication error" in {
+    an[RetryLimited] should be thrownBy {
+      ErrorHandler.handleException(WebServiceClientError(CodeBody("401", "Authentication error")))
+    }
+  }
+
+  "ErrorHandler" should "throw an RetryNone when it handles a 403 unauthorized error" in {
+    an[RetryNone] should be thrownBy {
+      ErrorHandler.handleException(WebServiceClientError(CodeBody("403", "Unauthorized")))
     }
   }
 
