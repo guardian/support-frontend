@@ -187,10 +187,12 @@ object Salesforce {
       SalesforceErrorResponse.readOnlyMaintenance
     )
 
-    def asRetryException: RetryException = if (errorsToRetryUnlimited.contains(errorCode))
-      new RetryUnlimited(message, cause = this)
-    else
-      new RetryNone(message, cause = this)
+    // Temporarily retry all errors during a maintenance window
+    def asRetryException: RetryException =
+      // if (errorsToRetryUnlimited.contains(errorCode))
+        new RetryUnlimited(message, cause = this)
+      // else
+      //  new RetryNone(message, cause = this)
   }
 
   object SalesforceAuthenticationErrorResponse {
