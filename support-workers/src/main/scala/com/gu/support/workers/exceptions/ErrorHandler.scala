@@ -20,8 +20,6 @@ object ErrorHandler {
     case e: StripeError => logAndRethrow(e.asRetryException)
     //PayPal
     case e: PayPalError => logAndRethrow(e.asRetryException)
-    //AWS encryption SDK
-    case e: AWSKMSException => logAndRethrow(e.asRetryException)
     //Zuora
     case e: ZuoraErrorResponse => logAndRethrow(e.asRetryException)
     //Salesforce
