@@ -40,11 +40,12 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     }
   }
 
-  "ErrorHandler" should "throw an RetryNone when it handles any other Salesforce error" in {
-    an[RetryNone] should be thrownBy {
-      ErrorHandler.handleException(new SalesforceErrorResponse("test", "test"))
-    }
-  }
+  // Temporary
+//  "ErrorHandler" should "throw an RetryNone when it handles any other Salesforce error" in {
+//    an[RetryNone] should be thrownBy {
+//      ErrorHandler.handleException(new SalesforceErrorResponse("test", "test"))
+//    }
+//  }
 
   "ErrorHandler" should "throw an RetryLimited when it handles a 401 authentication error" in {
     an[RetryLimited] should be thrownBy {
@@ -67,7 +68,7 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     new SalesforceErrorResponse("test", expiredAuthenticationCode).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("test", rateLimitExceeded).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("test", readOnlyMaintenance).asRetryException shouldBe a[RetryUnlimited]
-    new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryNone]
+    new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryUnlimited] // Temporary
 
     //Stripe
     new StripeError("card_error", "").asRetryException shouldBe a[RetryNone]
