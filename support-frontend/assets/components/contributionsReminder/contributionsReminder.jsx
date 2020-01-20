@@ -28,6 +28,7 @@ type StateTypes = {
   buttonState: ButtonState;
   selectedDate: string | null;
   selectedDateAsWord: string | null,
+  preselectedDateAsWord: string | null,
 }
 
 const mapStateToProps = state => ({
@@ -62,12 +63,17 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
     buttonState: 'initial',
     selectedDate: null,
     selectedDateAsWord: null,
+    preselectedDateAsWord: null,
   }
 
   componentDidMount = () => {
+    const randomDate = reminderDates[randomIndex];
+    const randomDateAsWord = trimAndDowncase(randomDate.dateName);
+
     this.setState({
-      selectedDate: reminderDates[randomIndex].timeStamp,
-      selectedDateAsWord: trimAndDowncase(reminderDates[randomIndex].dateName),
+      selectedDate: randomDate.timeStamp,
+      selectedDateAsWord: randomDateAsWord,
+      preselectedDateAsWord: randomDateAsWord,
     });
   }
 
@@ -162,7 +168,14 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 this.requestIsPending();
 
                 trackComponentClick('reminder-test-link-clicked');
-                if (this.state.selectedDateAsWord) { trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`); }
+
+                if (this.state.preselectedDateAsWord) {
+                  trackComponentClick(`reminder-test-preselected-date-${this.state.preselectedDateAsWord}`);
+                }
+
+                if (this.state.selectedDateAsWord) {
+                  trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`);
+                }
 
                 fetch(createReminderEndpoint, {
                   method: 'POST',
