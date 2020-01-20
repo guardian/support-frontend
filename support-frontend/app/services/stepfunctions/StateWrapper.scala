@@ -11,34 +11,38 @@ import io.circe.{Decoder, Encoder}
 import scala.util.Try
 
 class StateWrapper() {
-  implicit private val executionErrorEncoder = deriveEncoder[ExecutionError]
-  implicit private val executionErrorDecoder = deriveDecoder[ExecutionError]
+  implicit private val executionErrorEncoder: Encoder.AsObject[ExecutionError] = deriveEncoder[ExecutionError]
+  implicit private val executionErrorDecoder: Decoder[ExecutionError] = deriveDecoder[ExecutionError]
 
-  implicit private val requestInfoEncoder = deriveEncoder[RequestInfo]
-  implicit private val requestInfoDecoder = deriveDecoder[RequestInfo]
+  implicit private val requestInfoEncoder: Encoder.AsObject[RequestInfo] = deriveEncoder[RequestInfo]
+  implicit private val requestInfoDecoder: Decoder[RequestInfo] = deriveDecoder[RequestInfo]
 
-  implicit private val wrapperEncoder = deriveEncoder[JsonWrapper]
-  implicit private val wrapperDecoder = deriveDecoder[JsonWrapper]
+  implicit private val wrapperEncoder: Encoder.AsObject[JsonWrapper] = deriveEncoder[JsonWrapper]
+  implicit private val wrapperDecoder: Decoder[JsonWrapper] = deriveDecoder[JsonWrapper]
 
   val utf8 = java.nio.charset.StandardCharsets.UTF_8
 
   def wrap[T](state: T, isTestUser: Boolean, isExistingAccount: Boolean)(implicit encoder: Encoder[T]): String = {
-    JsonWrapper(encodeState(state), None, RequestInfo(isTestUser, failed = false, Nil, isExistingAccount)).asJson.noSpaces
+    JsonWrapper(encodeState(state), None, RequestInfo(isTestUser, failed = false, Nil, isExistingAccount, Some(false))).asJson.noSpaces
   }
 
   def unWrap[T](s: String)(implicit decoder: Decoder[T]): Try[T] =
     for {
       unwrapped <- decode[JsonWrapper](s)(wrapperDecoder).toTry
-      decoded <- decodeState(unwrapped.state)(decoder)
+      decoded <- decodeState(unwrapped)(decoder)
     } yield decoded
 
-  private def encodeState[T](state: T)(implicit encoder: Encoder[T]): String = encodeToBase64String(state.asJson.noSpaces.getBytes(utf8))
+  private def encodeState[T](state: T)(implicit encoder: Encoder[T]): String = state.asJson.noSpaces
 
-  private def decodeState[T](state: String)(implicit decoder: Decoder[T]): Try[T] = for {
-    state <- Try(Base64.getDecoder.decode(state))
-    decrypted <- Try(new String(state, utf8))
-    result <- decode[T](decrypted).toTry
+  private def decodeState[T](wrapper: JsonWrapper)(implicit decoder: Decoder[T]): Try[T] = for {
+    state <- Try(base64decode(wrapper))
+    result <- decode[T](state).toTry
   } yield result
 
-  private def encodeToBase64String(value: Array[Byte]): String = new String(Base64.getEncoder.encode(value))
+  private def base64decode(wrapper: JsonWrapper) =
+    if (wrapper.requestInfo.base64Encoded.getOrElse(true))
+      new String(Base64.getDecoder.decode(wrapper.state), utf8)
+    else
+      wrapper.state
+
 }
