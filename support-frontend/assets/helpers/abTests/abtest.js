@@ -284,7 +284,7 @@ function getParticipations(
     if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
     } else if (userInTest(test, testId, mvtId, country, countryGroupId, acquisitionDataTest)) {
-      const variantIndex = assignUserToVariant(mvtId, test);
+      const variantIndex = assignUserToVariant(mvtId, test, acquisitionDataTest);
       participations[testId] = test.variants[variantIndex].id;
 
       if (test.optimizeId) {
