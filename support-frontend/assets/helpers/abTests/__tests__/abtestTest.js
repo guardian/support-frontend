@@ -18,6 +18,16 @@ const emptySettings: Settings = {
   amounts: { },
 };
 
+const acquisitionDataMockTestControl = { componentId: 'acquisitions-subscription-banner', componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER', abTest: { name: 'mockTest', variant: 'control' } };
+const acquisitionDataMockTestVariant = { componentId: 'acquisitions-subscription-banner', componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER', abTest: { name: 'mockTest', variant: 'variant' } };
+const acquisitionDataMockTest2Control = { componentId: 'acquisitions-subscription-banner', componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER', abTest: { name: 'mockTest2', variant: 'control' } };
+const acquisitionDataMockTest2Variant = { componentId: 'acquisitions-subscription-banner', componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER', abTest: { name: 'mockTest2', variant: 'variant' } };
+
+const mockTestControl = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTestControl))}`;
+const mockTestVariant = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTestVariant))}`;
+const mockTest2Control = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTest2Control))}`;
+const mockTest2Variant = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTest2Variant))}`;
+
 describe('basic behaviour of init', () => {
 
   beforeEach(() => {
@@ -26,7 +36,7 @@ describe('basic behaviour of init', () => {
 
   it('The user should be allocated in the control bucket', () => {
     document.cookie = 'GU_mvt_id=12346';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"control"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestControl);
 
     const tests = {
       mockTest: {
@@ -54,7 +64,7 @@ describe('basic behaviour of init', () => {
   it('The user should be allocated in the variant bucket', () => {
 
     document.cookie = 'GU_mvt_id=12345';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"variant"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestVariant);
 
     const tests = {
       mockTest: {
@@ -271,7 +281,7 @@ describe('basic behaviour of init', () => {
   it('The ab test framework should be able to differentiate country groups', () => {
 
     document.cookie = 'GU_mvt_id=12346';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"control"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestControl);
 
     const tests = {
       mockTest: {
@@ -434,7 +444,7 @@ describe('Correct allocation in a multi test environment', () => {
   it('It correctly segments a user who has a cookie in the top 80% in GB', () => {
 
     document.cookie = 'GU_mvt_id=810000';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"control"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestControl);
     const country = 'GB';
     const countryGroupId = GBPCountries;
     const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
@@ -460,7 +470,7 @@ describe('Correct allocation in a multi test environment', () => {
   it('It correctly segments a user who has a cookie between 20% and 80% in GB', () => {
 
     document.cookie = 'GU_mvt_id=510000';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"control"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestControl);
     const country = 'GB';
     const countryGroupId = GBPCountries;
     let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
@@ -470,7 +480,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
 
     document.cookie = 'GU_mvt_id=510001';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"variant"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestVariant);
     participations = abInit(country, countryGroupId, emptySettings, tests);
     expectedParticipations = {
       mockTest: 'variant', mockTest2: 'notintest',
@@ -481,7 +491,7 @@ describe('Correct allocation in a multi test environment', () => {
   it('It correctly segments a user who has a cookie between 20% and 80% in US', () => {
 
     document.cookie = 'GU_mvt_id=510000';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest2"%2C"variant"%3A"control"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTest2Control);
     const country = 'US';
     const countryGroupId = UnitedStates;
     let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
@@ -491,7 +501,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
 
     document.cookie = 'GU_mvt_id=510001';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest2"%2C"variant"%3A"variant"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTest2Variant);
     participations = abInit(country, countryGroupId, emptySettings, tests);
     expectedParticipations = {
       mockTest: 'notintest', mockTest2: 'variant',
@@ -503,7 +513,7 @@ describe('Correct allocation in a multi test environment', () => {
   it('It correctly segments a user who has a cookie between 0 and 20% in GB', () => {
 
     document.cookie = 'GU_mvt_id=150000';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"control"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestControl);
     const country = 'GB';
     const countryGroupId = GBPCountries;
 
@@ -514,7 +524,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
 
     document.cookie = 'GU_mvt_id=150001';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"variant"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestVariant);
     participations = abInit(country, countryGroupId, emptySettings, tests);
     expectedParticipations = {
       mockTest: 'variant', mockTest2: 'notintest',
@@ -525,7 +535,7 @@ describe('Correct allocation in a multi test environment', () => {
   it('It correctly segments the user a user who has a cookie between 0 and 20% in US', () => {
 
     document.cookie = 'GU_mvt_id=150000';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"control"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestControl);
     const country = 'US';
     const countryGroupId = UnitedStates;
 
@@ -536,7 +546,7 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
 
     document.cookie = 'GU_mvt_id=150001';
-    window.history.pushState({}, 'Test Title', '/test.html?REFPVID=k4y4pskfmzdovtkfwfae&INTCMP=gdnwb_copts_banner_subscribe_SubscriptionBanner&acquisitionData=%7B"source"%3A"GUARDIAN_WEB"%2C"componentId"%3A"acquisitions-subscription-banner"%2C"componentType"%3A"ACQUISITIONS_SUBSCRIPTIONS_BANNER"%2C"campaignCode"%3A"gdnwb_copts_banner_subscribe_SubscriptionBanner"%2C"abTest"%3A%7B"name"%3A"mockTest"%2C"variant"%3A"variant"%7D%2C"referrerPageviewId"%3A"k4y4pskfmzdovtkfwfae"%2C"referrerUrl"%3A"http%3A%2F%2Flocalhost%3A3000%2Fuk"%7D');
+    window.history.pushState({}, 'Test Title', mockTestVariant);
     participations = abInit(country, GBPCountries, emptySettings, tests);
     expectedParticipations = {
       mockTest: 'variant', mockTest2: 'notintest',
