@@ -120,7 +120,6 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
 
   render() {
     const { email } = this.props;
-    const { selectedDateAsWord, preselectedDateAsWord, } = this.state
 
     if (email) {
       const isClicked = this.state.buttonState !== 'initial';
@@ -160,7 +159,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
               () => {
                 trackComponentLoad('reminder-test-link-loaded');
 
-                if (this.state.preselectedDateAsWord){
+                if (this.state.preselectedDateAsWord) {
                   trackComponentLoad(`reminder-test-preselected-date${this.state.preselectedDateAsWord}`);
                 }
               }
