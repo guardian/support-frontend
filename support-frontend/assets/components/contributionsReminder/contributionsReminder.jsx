@@ -67,10 +67,13 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
   }
 
   componentDidMount = () => {
+    const randomDate = reminderDates[randomIndex];
+    const randomDateAsWord = trimAndDowncase(randomDate.dateName);
+
     this.setState({
-      selectedDate: reminderDates[randomIndex].timeStamp,
-      selectedDateAsWord: trimAndDowncase(reminderDates[randomIndex].dateName),
-      preselectedDateAsWord: trimAndDowncase(reminderDates[randomIndex].dateName),
+      selectedDate: randomDate.timeStamp,
+      selectedDateAsWord: randomDateAsWord,
+      preselectedDateAsWord: randomDateAsWord,
     });
   }
 
@@ -158,10 +161,6 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
             trackingEvent={
               () => {
                 trackComponentLoad('reminder-test-link-loaded');
-
-                if (this.state.preselectedDateAsWord) {
-                  trackComponentLoad(`reminder-test-preselected-date${this.state.preselectedDateAsWord}`);
-                }
               }
             }
             onClick={
@@ -169,6 +168,10 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 this.requestIsPending();
 
                 trackComponentClick('reminder-test-link-clicked');
+
+                if (this.state.preselectedDateAsWord) {
+                  trackComponentClick(`reminder-test-preselected-date-${this.state.preselectedDateAsWord}`);
+                }
 
                 if (this.state.selectedDateAsWord) {
                   trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`);
