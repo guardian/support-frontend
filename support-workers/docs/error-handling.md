@@ -40,25 +40,11 @@ Most errors should be logged to Sentry so they can be investigated. However tran
 | invalid_request_error | Invalid request errors arise when your request has invalid parameters.                                                                                    | No        |
 | validation_error      | Errors triggered by our client-side libraries when failing to validate fields (e.g., when a card number or expiration date is invalid or incomplete).     | No        |
 
-### AWS Encryption
-| Error                      | Description                                                                                         | Retry?    |
-|----------------------------|-----------------------------------------------------------------------------------------------------|-----------|
-| NotFoundException          | The request was rejected because the specified entity or resource could not be found.               | Limited   |
-| DisabledException          | The request was rejected because the specified CMK is not enabled.                                  | Limited   |
-| InvalidKeyUsageException   | The request was rejected because the specified KeySpec value is not valid.                          | Limited   |
-| AWSKMSException            | Any other KMS exception, for instance expired creds.                                                | Limited   |
-| KeyUnavailableException    | The request was rejected because the specified CMK was not available. The request can be retried.   | Unlimited |
-| DependencyTimeoutException | The system timed out while trying to fulfill the request. The request can be retried.               | Unlimited |
-| KMSInternalException       | The request was rejected because an internal exception occurred. The request can be retried.        | Unlimited |
-| KMSInvalidStateException   | The request was rejected because the state of the specified resource is not valid for this request. | Unlimited |
-| InvalidGrantTokenException | The request was rejected because the specified grant token is not valid.                            | No        |
-
-
 ### Zuora
 
-[Error docs](https://knowledgecenter.zuora.com/DC_Developers/C_REST_API/A_REST_basics/3_Responses_and_errors) - note that the error json structure described on this page is incorrect as 
+[Error docs](https://knowledgecenter.zuora.com/DC_Developers/C_REST_API/A_REST_basics/3_Responses_and_errors) - note that the error json structure described on this page is incorrect as
 the api endpoint we call returns a different structure documented [here](https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe). This returns a list of errors,
-which are not yet included in the REST documentation, but can be found [here](https://knowledgecenter.zuora.com/DC_Developers/G_SOAP_API/L_Error_Handling/Errors#ErrorCode_Object). 
+which are not yet included in the REST documentation, but can be found [here](https://knowledgecenter.zuora.com/DC_Developers/G_SOAP_API/L_Error_Handling/Errors#ErrorCode_Object).
 
 Many of these errors don't seem to be relevant to the API call(s) that we're making, so I have started by adding retries for the more obvious candidates:
 
@@ -66,12 +52,12 @@ Many of these errors don't seem to be relevant to the API call(s) that we're mak
 |------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
 | API_DISABLED           | The API was disabled                                                                                                                                               | Unlimited |
 | LOCK_COMPETITION       | The operation failed from a lock competition. For example, a lock can occur when multiple client operations try to update an object at the same time. Retry later. | Unlimited |
-| REQUEST_EXCEEDED_LIMIT | The total number of requests for the unit interval has exceeded the limit allowed by the system.                                                                   | Unlimited |  
-| REQUEST_EXCEEDED_RATE  | The total number of concurrent requests has exceeded the limit allowed by the system. Please resubmit your request later.                                          | Unlimited |  
+| REQUEST_EXCEEDED_LIMIT | The total number of requests for the unit interval has exceeded the limit allowed by the system.                                                                   | Unlimited |
+| REQUEST_EXCEEDED_RATE  | The total number of concurrent requests has exceeded the limit allowed by the system. Please resubmit your request later.                                          | Unlimited |
 | SERVER_UNAVAILABLE     | The Zuora server wasn't available.                                                                                                                                 | Unlimited |
-| UNKNOWN_ERROR          | There was an unknown error. No further details are available.                                                                                                      | Unlimited |  
+| UNKNOWN_ERROR          | There was an unknown error. No further details are available.                                                                                                      | Unlimited |
 
-Handling Zuora errors is made more complicated because the response may return a list of errors, meaning we need to decide how to deal with a mixture of fatal and non-fatal errors. 
+Handling Zuora errors is made more complicated because the response may return a list of errors, meaning we need to decide how to deal with a mixture of fatal and non-fatal errors.
 In practice, the list never seems to contain more than one item. Therefore if the response contains multiple errors, or an error which we don't think is safe to retry, we currently assume that the request will never succeed and fail at this point.
 
 ### Salesforce
