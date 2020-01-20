@@ -174,6 +174,6 @@ export const tests: Tests = {
     referrerControlled: true,
     seed: 12,
     targetPage: digitalLandingPageMatch,
-    optimizeId: 'as232', // TODO: update
+    optimizeId: 'g7XyuKalTEimXX-xlKPx_g',
   },
 };
