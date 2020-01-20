@@ -28,6 +28,7 @@ type StateTypes = {
   buttonState: ButtonState;
   selectedDate: string | null;
   selectedDateAsWord: string | null,
+  preselectedDateAsWord: string | null,
 }
 
 const mapStateToProps = state => ({
@@ -62,12 +63,14 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
     buttonState: 'initial',
     selectedDate: null,
     selectedDateAsWord: null,
+    preselectedDateAsWord: null,
   }
 
   componentDidMount = () => {
     this.setState({
       selectedDate: reminderDates[randomIndex].timeStamp,
       selectedDateAsWord: trimAndDowncase(reminderDates[randomIndex].dateName),
+      preselectedDateAsWord: trimAndDowncase(reminderDates[randomIndex].dateName),
     });
   }
 
@@ -117,6 +120,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
 
   render() {
     const { email } = this.props;
+    const { selectedDateAsWord, preselectedDateAsWord, } = this.state
 
     if (email) {
       const isClicked = this.state.buttonState !== 'initial';
@@ -155,6 +159,10 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
             trackingEvent={
               () => {
                 trackComponentLoad('reminder-test-link-loaded');
+
+                if (this.state.preselectedDateAsWord){
+                  trackComponentLoad(`reminder-test-preselected-date${this.state.preselectedDateAsWord}`);
+                }
               }
             }
             onClick={
@@ -162,7 +170,10 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 this.requestIsPending();
 
                 trackComponentClick('reminder-test-link-clicked');
-                if (this.state.selectedDateAsWord) { trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`); }
+
+                if (this.state.selectedDateAsWord) {
+                  trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`);
+                }
 
                 fetch(createReminderEndpoint, {
                   method: 'POST',
