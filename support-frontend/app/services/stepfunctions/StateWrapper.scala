@@ -20,7 +20,7 @@ class StateWrapper() {
   implicit private val wrapperEncoder = deriveEncoder[JsonWrapper]
   implicit private val wrapperDecoder = deriveDecoder[JsonWrapper]
 
-  val utf8 = "UTF-8"
+  val utf8 = java.nio.charset.StandardCharsets.UTF_8
 
   def wrap[T](state: T, isTestUser: Boolean, isExistingAccount: Boolean)(implicit encoder: Encoder[T]): String = {
     JsonWrapper(encodeState(state), None, RequestInfo(isTestUser, failed = false, Nil, isExistingAccount)).asJson.noSpaces
