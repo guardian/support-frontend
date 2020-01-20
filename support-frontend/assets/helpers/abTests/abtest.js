@@ -242,6 +242,8 @@ function assignUserToVariant(
       console.error('Variant not found for A/B test in acquistion data');
     }
     return index;
+  } else if (referrerControlled && acquisitionDataTest === null) {
+    console.error('A/B test expects acquistion data but none was provided');
   }
 
   return randomNumber(mvtId, seed) % test.variants.length;
