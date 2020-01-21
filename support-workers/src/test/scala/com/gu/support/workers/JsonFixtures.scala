@@ -8,7 +8,6 @@ import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
-import com.gu.support.workers.encoding.Wrapper
 import io.circe.syntax._
 import org.joda.time.{DateTimeZone, LocalDate}
 
@@ -16,8 +15,7 @@ import org.joda.time.{DateTimeZone, LocalDate}
 object JsonFixtures {
 
   def wrapFixture(string: String): ByteArrayInputStream =
-    Wrapper
-      .wrapString(string, RequestInfo(testUser = false, failed = false, Nil, accountExists = false, base64Encoded = Some(false)))
+    JsonWrapper(string, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
       .asJson.noSpaces.asInputStream
 
   def userJson(id: String = idId): String =

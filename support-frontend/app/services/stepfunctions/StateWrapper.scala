@@ -1,7 +1,5 @@
 package services.stepfunctions
 
-import java.util.Base64
-
 import com.gu.support.workers.{ExecutionError, JsonWrapper, RequestInfo}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.parser.decode
@@ -23,26 +21,12 @@ class StateWrapper() {
   val utf8 = java.nio.charset.StandardCharsets.UTF_8
 
   def wrap[T](state: T, isTestUser: Boolean, isExistingAccount: Boolean)(implicit encoder: Encoder[T]): String = {
-    JsonWrapper(encodeState(state), None, RequestInfo(isTestUser, failed = false, Nil, isExistingAccount, Some(false))).asJson.noSpaces
+    JsonWrapper(state.asJson.noSpaces, None, RequestInfo(isTestUser, failed = false, Nil, isExistingAccount)).asJson.noSpaces
   }
 
   def unWrap[T](s: String)(implicit decoder: Decoder[T]): Try[T] =
     for {
-      unwrapped <- decode[JsonWrapper](s)(wrapperDecoder).toTry
-      decoded <- decodeState(unwrapped)(decoder)
+      wrapper <- decode[JsonWrapper](s)(wrapperDecoder).toTry
+      decoded <- decode[T](wrapper.state).toTry
     } yield decoded
-
-  private def encodeState[T](state: T)(implicit encoder: Encoder[T]): String = state.asJson.noSpaces
-
-  private def decodeState[T](wrapper: JsonWrapper)(implicit decoder: Decoder[T]): Try[T] = for {
-    state <- Try(base64decode(wrapper))
-    result <- decode[T](state).toTry
-  } yield result
-
-  private def base64decode(wrapper: JsonWrapper) =
-    if (wrapper.requestInfo.base64Encoded.getOrElse(true))
-      new String(Base64.getDecoder.decode(wrapper.state), utf8)
-    else
-      wrapper.state
-
 }
