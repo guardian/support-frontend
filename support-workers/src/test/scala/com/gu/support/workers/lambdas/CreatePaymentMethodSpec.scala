@@ -77,7 +77,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
       createPaymentMethod.handleRequestFuture(inStream, outStream, mock[Context]).map { _ =>
 
-        val p = outStream.toClass[PaymentMethod](encrypted = false)
+        val p = outStream.toClass[PaymentMethod]
       }
     }
   }

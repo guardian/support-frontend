@@ -3,15 +3,14 @@ package services.stepfunctions
 import java.util.Base64
 
 import com.gu.support.workers.{ExecutionError, JsonWrapper, RequestInfo}
-import cats.syntax.either._
-import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.parser.decode
 import io.circe.syntax._
+import io.circe.{Decoder, Encoder}
 
 import scala.util.Try
 
-class StateWrapper(encryption: EncryptionProvider, useEncryption: Boolean) {
+class StateWrapper() {
   implicit private val executionErrorEncoder = deriveEncoder[ExecutionError]
   implicit private val executionErrorDecoder = deriveDecoder[ExecutionError]
 
@@ -21,8 +20,10 @@ class StateWrapper(encryption: EncryptionProvider, useEncryption: Boolean) {
   implicit private val wrapperEncoder = deriveEncoder[JsonWrapper]
   implicit private val wrapperDecoder = deriveDecoder[JsonWrapper]
 
+  val utf8 = java.nio.charset.StandardCharsets.UTF_8
+
   def wrap[T](state: T, isTestUser: Boolean, isExistingAccount: Boolean)(implicit encoder: Encoder[T]): String = {
-    JsonWrapper(encodeState(state), None, RequestInfo(useEncryption, isTestUser, failed = false, Nil, isExistingAccount)).asJson.noSpaces
+    JsonWrapper(encodeState(state), None, RequestInfo(isTestUser, failed = false, Nil, isExistingAccount)).asJson.noSpaces
   }
 
   def unWrap[T](s: String)(implicit decoder: Decoder[T]): Try[T] =
@@ -31,11 +32,11 @@ class StateWrapper(encryption: EncryptionProvider, useEncryption: Boolean) {
       decoded <- decodeState(unwrapped.state)(decoder)
     } yield decoded
 
-  private def encodeState[T](state: T)(implicit encoder: Encoder[T]): String = encodeToBase64String(encryption.encrypt(state.asJson.noSpaces))
+  private def encodeState[T](state: T)(implicit encoder: Encoder[T]): String = encodeToBase64String(state.asJson.noSpaces.getBytes(utf8))
 
   private def decodeState[T](state: String)(implicit decoder: Decoder[T]): Try[T] = for {
     state <- Try(Base64.getDecoder.decode(state))
-    decrypted <- Try(encryption.decrypt(state))
+    decrypted <- Try(new String(state, utf8))
     result <- decode[T](decrypted).toTry
   } yield result
 

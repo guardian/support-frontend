@@ -109,7 +109,6 @@ function withProps(props: PropTypes) {
         errorMessage="Please provide a valid email address"
         required
         disabled={isSignedIn}
-        showRequiredLabel={!isSignedIn}
       />
       <Signout isSignedIn />
       <MustSignIn
@@ -134,7 +133,6 @@ function withProps(props: PropTypes) {
             formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your first name"
             required
-            showRequiredLabel
           />
           <ContributionTextInput
             id="contributionLastName"
@@ -149,7 +147,6 @@ function withProps(props: PropTypes) {
             formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your last name"
             required
-            showRequiredLabel
           />
         </div> : null
       }
@@ -158,7 +155,6 @@ function withProps(props: PropTypes) {
         selectedState={state}
         isValid={checkState(state)}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-        showRequiredLabel
       />
     </div>
   );
@@ -175,7 +171,6 @@ function withoutProps() {
         placeholder="example@domain.com"
         icon={<SvgEnvelope />}
         disabled
-        showRequiredLabel
         errorMessage={null}
       />
       <div>
@@ -185,7 +180,6 @@ function withoutProps() {
           label="First name"
           icon={<SvgUser />}
           disabled
-          showRequiredLabel
           errorMessage={null}
         />
         <ContributionTextInput
@@ -194,7 +188,6 @@ function withoutProps() {
           label="Last name"
           icon={<SvgUser />}
           disabled
-          showRequiredLabel
           errorMessage={null}
         />
       </div>

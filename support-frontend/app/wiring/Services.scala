@@ -8,10 +8,10 @@ import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.PromotionServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
+import services._
 import services.aws.AwsS3Client.s3
 import services.paypal.PayPalNvpServiceProvider
-import services.stepfunctions.{Encryption, StateWrapper, SupportWorkersClient}
-import services._
+import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -27,7 +27,7 @@ trait Services {
   lazy val goCardlessServiceProvider = new GoCardlessFrontendServiceProvider(appConfig.goCardlessConfigProvider)
 
   lazy val supportWorkersClient = {
-    val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws), appConfig.aws.useEncryption)
+    val stateWrapper = new StateWrapper()
     SupportWorkersClient(
       appConfig.stepFunctionArn,
       stateWrapper,
@@ -48,8 +48,6 @@ trait Services {
     new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider)
 
   lazy val getAddressIOService: GetAddressIOService = new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
-
-  lazy val sendReminderEmailService = new RemindMeService(appConfig.stage)
 
   lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
 }

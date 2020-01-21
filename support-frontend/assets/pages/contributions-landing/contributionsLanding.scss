@@ -460,10 +460,10 @@ button {
   margin: 10px 0 10px;
   font-size: 12px;
   line-height: 16px;
-  color: gu-colour(neutral-60);
+  color: gu-colour(neutral-20);
 
   a {
-    color: gu-colour(neutral-46);
+    color: gu-colour(neutral-7);
   }
 
   .component-terms-privacy__change {
@@ -786,7 +786,7 @@ form {
   float: right;
 }
 
-.form__label__required {
+.form__label__optional {
   font-family: $gu-text-sans-web;
   font-style: italic;
   font-size: 15px;
@@ -859,17 +859,6 @@ form {
 }
 
 .form__submit .component-button {
-  width: 100%;
-}
-
-.form__submit--secure {
-  margin: -6px -10px 0;
-  padding: 6px 10px 40px;
-  background-color: gu-colour(neutral-97);
-  border-bottom: 1px solid gu-colour(neutral-86);
-}
-
-.form__submit--secure .component-button {
   width: 100%;
 }
 

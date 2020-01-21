@@ -4,6 +4,7 @@ import java.net.{SocketException, SocketTimeoutException}
 
 import com.amazonaws.services.kms.model._
 import com.gu.paypal.PayPalError
+import com.gu.rest.{CodeBody, WebServiceClientError}
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
 import com.gu.stripe.StripeError
@@ -45,6 +46,18 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     }
   }
 
+  "ErrorHandler" should "throw an RetryLimited when it handles a 401 authentication error" in {
+    an[RetryLimited] should be thrownBy {
+      ErrorHandler.handleException(WebServiceClientError(CodeBody("401", "Authentication error")))
+    }
+  }
+
+  "ErrorHandler" should "throw an RetryNone when it handles a 403 unauthorized error" in {
+    an[RetryNone] should be thrownBy {
+      ErrorHandler.handleException(WebServiceClientError(CodeBody("403", "Unauthorized")))
+    }
+  }
+
   "asRetryException method" should "allow us to work out retries" in {
     //General
     new SocketTimeoutException().asRetryException shouldBe a[RetryUnlimited]
@@ -53,6 +66,7 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     //Salesforce
     new SalesforceErrorResponse("test", expiredAuthenticationCode).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("test", rateLimitExceeded).asRetryException shouldBe a[RetryUnlimited]
+    new SalesforceErrorResponse("test", readOnlyMaintenance).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryNone]
 
     //Stripe

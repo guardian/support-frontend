@@ -19,6 +19,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe, AmazonPay } from 'helpers/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
 import { isSwitchOn } from 'helpers/globals';
+import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
 
 // ----- Types ----- //
 
@@ -85,13 +86,17 @@ function getPaymentMethods(contributionType: ContributionType, countryId: IsoCou
 
 }
 
+function switchKeyForContributionType(contributionType: ContributionType): 'oneOffPaymentMethods' | 'recurringPaymentMethods' {
+  return contributionType === 'ONE_OFF' ? 'oneOffPaymentMethods' : 'recurringPaymentMethods';
+}
+
 function getValidPaymentMethods(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
   inAmazonPayTest: boolean,
 ): PaymentMethod[] {
-  const switchKey = (contributionType === 'ONE_OFF') ? 'oneOffPaymentMethods' : 'recurringPaymentMethods';
+  const switchKey = switchKeyForContributionType(contributionType);
   return getPaymentMethods(contributionType, countryId)
     .filter(paymentMethod =>
       isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`) &&
@@ -188,6 +193,23 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
   }
 }
 
+// The value of result will either be:
+// . null - browser has no compatible payment method button)
+// . {applePay: true} - applePay is available
+// . {applePay: false} - GooglePay, Microsoft Pay and PaymentRequestApi available
+function getAvailablePaymentRequestButtonPaymentMethod(
+  result: Object,
+  contributionType: ContributionType,
+): StripePaymentMethod | null {
+  const switchKey = switchKeyForContributionType(contributionType);
+  if (result && result.applePay === true && isSwitchOn(`${switchKey}.stripeApplePay`)) {
+    return 'StripeApplePay';
+  } else if (result && result.applePay === false && isSwitchOn(`${switchKey}.stripePaymentRequestButton`)) {
+    return 'StripePaymentRequestButton';
+  }
+  return null;
+}
+
 // ----- Exports ----- //
 
 export {
@@ -203,4 +225,5 @@ export {
   getPaymentMethodFromSession,
   getPaymentDescription,
   getPaymentLabel,
+  getAvailablePaymentRequestButtonPaymentMethod,
 };

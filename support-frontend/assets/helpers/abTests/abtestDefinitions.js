@@ -6,12 +6,10 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
-export type RecurringStripePaymentRequestButtonTestVariants = 'control' | 'paymentRequestButton' | 'notintest';
-export type PaymentSecuritySecureTransactionGreyNonUKVariants = 'control' | 'V1_securetransactiongrey' | 'notintest';
 export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
-export type NewLandingPageTemplateTestVariants = 'control' | 'new_template' | 'notintest';
 export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
 export type UsEoyCopyTestVariants = 'v1' | 'v2' | 'notintest';
+export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
@@ -20,7 +18,7 @@ const digitalLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/subscribe/digital(/.*)
 const countryGroupId: CountryGroupId = detect();
 
 export const tests: Tests = {
-  amazonPaySingleUS: {
+  amazonPaySingleUS2020: {
     type: 'OTHER',
     variants: [
       {
@@ -38,18 +36,18 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    seed: 1,
+    seed: 13,
     targetPage: usContributionsLandingPageMatch,
   },
 
-  recurringStripePaymentRequestButton: {
+  stripePaymentRequestButtonSca: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'paymentRequestButton',
+        id: 'sca',
       },
     ],
     audiences: {
@@ -108,52 +106,7 @@ export const tests: Tests = {
     targetPage: usContributionsLandingPageMatch,
     canRun: () => countryGroupId === 'UnitedStates',
   },
-
-  paymentSecuritySecureTransactionGreyNonUK: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1_securetransactiongrey',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 10,
-    targetPage: contributionsLandingPageMatch,
-    canRun: () => countryGroupId !== 'GBPCountries',
-  },
-
-  newLandingPageTemplateTestR2: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'new_template',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 11,
-    targetPage: contributionsLandingPageMatch,
-  },
-
+  
   SubsBannerNewYearCopyTest: {
     type: 'OTHER',
     variants: [

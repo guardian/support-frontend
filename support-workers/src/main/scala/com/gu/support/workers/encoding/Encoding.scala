@@ -4,7 +4,6 @@ import java.io.{InputStream, OutputStream}
 import java.util.Base64
 
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.encoding.Encryption._
 import com.gu.support.workers.encoding.Wrapper._
 import com.gu.support.workers.lambdas.HandlerResult
 import com.gu.support.workers.{ExecutionError, RequestInfo}
@@ -22,7 +21,7 @@ object Encoding {
     for {
       wrapper <- unWrap(is)
       state <- Try(Base64.getDecoder.decode(wrapper.state))
-      decrypted <- Try(decrypt(state, wrapper.requestInfo.encrypted))
+      decrypted <- Try(new String(state, utf8))
       result <- decode[T](decrypted).toTry
     } yield (result, wrapper.error, wrapper.requestInfo)
 

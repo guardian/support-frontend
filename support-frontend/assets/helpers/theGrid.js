@@ -106,6 +106,7 @@ export const imageCatalogue: {
   gwGiftingPackshotMob: '3d1cecfdc8c90b2005712e56669afe6e3b8c5e5a/688_87_2481_3102',
   giftingGlobe: '4a7ee6f430a29fc8ac8d9f0667cfafc67b6aba46/145_148_1203_1201',
   printFeaturePackshot: '017a2f5c27394635b53c414962bbb775ce9b131d/5_39_1572_861',
+  printCampaign2020: 'e50943f03b58caf6fde78d81eb65c92c048701c9/1844_0_1674_1006',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

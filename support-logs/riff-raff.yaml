@@ -6,9 +6,6 @@ deployments:
     type: cloud-formation
     parameters:
       templatePath: cfn.yaml
-      amiParametersToTags:
-        NginxAMI:
-          BuiltBy: amigo
-          AmigoStage: PROD
-          Recipe: ubuntu-xenial-with-nginx
-      amiEncrypted: true
+      amiTags:
+        AmigoStage: PROD
+        Recipe: ubuntu-xenial-with-nginx

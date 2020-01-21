@@ -19,8 +19,6 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val googleAuth = new GoogleAuth(config.getConfig("googleAuth"))
 
-  lazy val aws = AwsConfig.fromConfig(config)
-
   lazy val getAddressIOConfig = GetAddressIOConfig.fromConfig(config)
 
   lazy val guardianDomain = GuardianDomain(config.getString("guardianDomain"))

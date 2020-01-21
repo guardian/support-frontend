@@ -23,8 +23,17 @@ object RetryImplicits {
       case e @ (_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) =>
         new RetryUnlimited(message = e.getMessage, cause = throwable)
 
-      //Invalid Json or http client error (4xx)
-      case e @ (_: ParsingFailure | _: MatchError | _: WebServiceClientError) =>
+      //WebServiceClientError
+      case e @ (_: WebServiceClientError) if e.codeBody.code == "401" =>
+        // We are retrying on 401s now because we have been receiving this
+        // response from Zuora during maintenance windows
+        new RetryLimited(message = e.getMessage, cause = throwable)
+
+      case e @ (_: WebServiceClientError) =>
+        new RetryNone(message = e.getMessage, cause = throwable)
+
+      //Invalid Json
+      case e @ (_: ParsingFailure | _: MatchError) =>
         new RetryNone(message = e.getMessage, cause = throwable)
 
       //Any Exception that we haven't specifically handled
@@ -34,9 +43,9 @@ object RetryImplicits {
 
   implicit class StripeConversions(val throwable: StripeError) extends AnyVal {
     def asRetryException: RetryException = throwable.`type` match {
-      case ("api_connection_error" | "api_error" | "rate_limit_error") => new RetryUnlimited(throwable.asJson.noSpaces, cause = throwable)
+      case "api_connection_error" | "api_error" | "rate_limit_error" => new RetryUnlimited(throwable.asJson.noSpaces, cause = throwable)
       case "authentication_error" => new RetryLimited(throwable.asJson.noSpaces, cause = throwable)
-      case ("card_error" | "invalid_request_error" | "validation_error") => new RetryNone(throwable.asJson.noSpaces, cause = throwable)
+      case "card_error" | "invalid_request_error" | "validation_error" => new RetryNone(throwable.asJson.noSpaces, cause = throwable)
     }
   }
 

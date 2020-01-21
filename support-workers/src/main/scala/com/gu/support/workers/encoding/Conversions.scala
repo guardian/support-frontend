@@ -11,7 +11,7 @@ import scala.util.Try
 
 object Conversions {
 
-  implicit class InputStreamConversions[T](val self: T) {
+  implicit class InputStreamConversions[T](val self: T) extends AnyVal {
 
     def asInputStream()(implicit encoder: Encoder[T]): ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()
@@ -20,10 +20,10 @@ object Conversions {
     }
   }
 
-  implicit class FromOutputStream(val self: ByteArrayOutputStream) {
-    def toClass[T](encrypted: Boolean)(implicit decoder: Decoder[T]): T = {
+  implicit class FromOutputStream(val self: ByteArrayOutputStream) extends AnyVal {
+    def toClass[T](implicit decoder: Decoder[T]): T = {
       val is = self.toInputStream
-      val str = Encryption.decrypt(Streamable.bytes(is), encrypted)
+      val str = new String(Streamable.bytes(is), utf8)
       val t = Try(str).flatMap(decode[T](_).toTry)
       is.close()
       t.get
@@ -32,7 +32,7 @@ object Conversions {
     def toInputStream: ByteArrayInputStream = new ByteArrayInputStream(self.toByteArray)
   }
 
-  implicit class StringInputStreamConversions[String](val str: String) {
+  implicit class StringInputStreamConversions[String](val str: String) extends AnyVal {
 
     def asInputStream: ByteArrayInputStream = {
       val convertStream = new ByteArrayOutputStream()

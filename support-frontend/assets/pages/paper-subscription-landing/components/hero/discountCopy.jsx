@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type Node } from 'react';
+import { type Node } from 'react';
 
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
@@ -11,8 +11,8 @@ type DiscountCopy = {
 };
 
 const discountCopy: DiscountCopy = {
-  roundel: ['Save up to', '37%', 'for a year'],
-  heading: <span>Save up to 37% for a year on The Guardian<br />and The Observer</span>,
+  roundel: ['Save up to', '37%', 'a year'],
+  heading: 'Save up to 37% a year with a subscription',
 };
 
 export const getDiscountCopy = (): DiscountCopy => {

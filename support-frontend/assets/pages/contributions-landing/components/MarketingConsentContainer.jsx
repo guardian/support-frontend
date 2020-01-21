@@ -17,6 +17,7 @@ const mapStateToProps = state => ({
   error: state.page.marketingConsent.error,
   requestPending: state.page.marketingConsent.requestPending,
   countryGroupId: state.common.internationalisation.countryGroupId,
+  contributionType: state.page.form.contributionType,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
