@@ -14,12 +14,6 @@ import io.circe.syntax._
 import scala.io.Source
 import scala.util.Try
 
-/**
- * TODO: Remove this
- * AWS Step Functions expect to be passed valid Json, as we want to encrypt the whole of the
- * state, we need to wrap it in a Json 'wrapper' object as a Base64 encoded String.
- * This class helps with that
- */
 object Wrapper {
   def unWrap(is: InputStream): Try[JsonWrapper] = {
     val t = Try(Source.fromInputStream(is).mkString).flatMap(decode[JsonWrapper](_).toTry)
@@ -31,7 +25,10 @@ object Wrapper {
     wrapString(handlerResult.value.asJson.noSpaces, handlerResult.requestInfo)
 
   def wrapString(string: String, requestInfo: RequestInfo): JsonWrapper =
-    JsonWrapper(encodeToBase64String(string.getBytes(utf8)), None, requestInfo)
+    if (requestInfo.base64Encoded.getOrElse(true))
+      JsonWrapper(encodeToBase64String(string.getBytes(utf8)), None, requestInfo)
+    else
+      JsonWrapper(string, None, requestInfo)
 
   def encodeToBase64String(value: Array[Byte]): String = new String(Base64.getEncoder.encode(value))
 }

@@ -45,7 +45,6 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
           paymentMethod =  paymentMethod,
           firstDeliveryDate = None,
           promoCode = None,
-          salesForceContact = sfContact,
           salesforceContacts = SalesforceContactRecords(sfContact, None),
           acquisitionData = state.acquisitionData
         ),

@@ -16,7 +16,6 @@ case class CreateZuoraSubscriptionState(
   paymentMethod: PaymentMethod,
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
-  salesForceContact: SalesforceContactRecord, //TODO: Remove this it is redundant now we have gifting
   salesforceContacts: SalesforceContactRecords,
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
