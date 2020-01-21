@@ -1,6 +1,5 @@
 package com.gu.support.workers.exceptions
 
-import com.amazonaws.services.kms.model.AWSKMSException
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
