@@ -55,7 +55,8 @@
       "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
     },
     "verbose": true,
-    "testEnvironment": "./jestEnvironment"
+    "testEnvironment": "./jestEnvironment",
+    "testURL": "https://www.somthing.com/test.html"
   },
   "repository": {
     "type": "git",

@@ -13,6 +13,7 @@ export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'not
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
+const digitalLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/subscribe/digital(/.*)?$';
 
 const countryGroupId: CountryGroupId = detect();
 
@@ -34,7 +35,7 @@ export const tests: Tests = {
       },
     },
     isActive: true,
-    independent: true,
+    referrerControlled: false,
     seed: 13,
     targetPage: usContributionsLandingPageMatch,
   },
@@ -56,7 +57,7 @@ export const tests: Tests = {
       },
     },
     isActive: window.guardian && !!window.guardian.recurringStripePaymentRequestButton,
-    independent: true,
+    referrerControlled: false,
     seed: 2,
     targetPage: contributionsLandingPageMatch,
   },
@@ -78,7 +79,7 @@ export const tests: Tests = {
       },
     },
     isActive: true,
-    independent: true,
+    referrerControlled: false,
     seed: 3,
     targetPage: usContributionsLandingPageMatch,
   },
@@ -100,9 +101,32 @@ export const tests: Tests = {
       },
     },
     isActive: true,
-    independent: true,
+    referrerControlled: false,
     seed: 4,
     targetPage: usContributionsLandingPageMatch,
     canRun: () => countryGroupId === 'UnitedStates',
+  },
+  
+  SubsBannerNewYearCopyTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 0,
+      },
+    },
+    isActive: true,
+    referrerControlled: true,
+    seed: 12,
+    targetPage: digitalLandingPageMatch,
+    optimizeId: 'g7XyuKalTEimXX-xlKPx_g',
   },
 };
