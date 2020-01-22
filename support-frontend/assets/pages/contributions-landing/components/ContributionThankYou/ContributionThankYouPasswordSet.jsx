@@ -9,12 +9,10 @@ import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 type PropTypes = {
-  countryId: IsoCountry,
   countryGroupId: CountryGroupId
 }
 
@@ -48,7 +46,7 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
         </div>
       </div>
 
-      <ContributionThankYouBlurb countryId={props.countryId} />
+      <ContributionThankYouBlurb />
     </div>
   );
 }

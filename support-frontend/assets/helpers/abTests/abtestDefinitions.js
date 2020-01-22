@@ -1,21 +1,13 @@
 // @flow
 import type { Tests } from './abtest';
-import {
-  type CountryGroupId,
-  detect,
-} from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
-export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
 export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
-export type UsEoyCopyTestVariants = 'v1' | 'v2' | 'notintest';
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
 const digitalLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/subscribe/digital(/.*)?$';
-
-const countryGroupId: CountryGroupId = detect();
 
 export const tests: Tests = {
   amazonPaySingleUS2020: {
@@ -62,51 +54,6 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-  usEoyCopy: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'v1',
-      },
-      {
-        id: 'v2',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 3,
-    targetPage: usContributionsLandingPageMatch,
-  },
-
-  landingPageReverseAmounts: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'reversedAmounts',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 4,
-    targetPage: usContributionsLandingPageMatch,
-    canRun: () => countryGroupId === 'UnitedStates',
-  },
-  
   SubsBannerNewYearCopyTest: {
     type: 'OTHER',
     variants: [
