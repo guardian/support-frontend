@@ -206,7 +206,7 @@ function ContributionThankYou(props: PropTypes) {
         </div>
       </div>
 
-      <ContributionThankYouBlurb countryId={props.countryId} />
+      <ContributionThankYouBlurb />
     </div>
   );
 }
