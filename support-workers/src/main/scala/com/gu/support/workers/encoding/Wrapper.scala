@@ -1,11 +1,10 @@
 package com.gu.support.workers.encoding
 
 import java.io.InputStream
-import java.util.Base64
 
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.workers.JsonWrapper
 import com.gu.support.workers.lambdas.HandlerResult
-import com.gu.support.workers.{JsonWrapper, RequestInfo}
 import io.circe.Encoder
 import io.circe.generic.auto._
 import io.circe.parser._
@@ -22,13 +21,6 @@ object Wrapper {
   }
 
   def wrap[T](handlerResult: HandlerResult[T])(implicit encoder: Encoder[T]): JsonWrapper =
-    wrapString(handlerResult.value.asJson.noSpaces, handlerResult.requestInfo)
+    JsonWrapper(handlerResult.value.asJson.noSpaces, None, handlerResult.requestInfo)
 
-  def wrapString(string: String, requestInfo: RequestInfo): JsonWrapper =
-    if (requestInfo.base64Encoded.getOrElse(true))
-      JsonWrapper(encodeToBase64String(string.getBytes(utf8)), None, requestInfo)
-    else
-      JsonWrapper(string, None, requestInfo)
-
-  def encodeToBase64String(value: Array[Byte]): String = new String(Base64.getEncoder.encode(value))
 }
