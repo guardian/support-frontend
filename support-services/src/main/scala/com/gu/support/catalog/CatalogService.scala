@@ -23,7 +23,7 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     sixWeeklyPriceList: Pricelist,
     catalogPrices: List[Pricelist]
   ) = {
-    Pricelist(sixWeeklyPriceList.productRatePlanId,
+    Pricelist(sixWeeklyPriceList.productRatePlanId, 0,
       catalogPrices.find(_.productRatePlanId == quarterlyId).map(_.prices).getOrElse(sixWeeklyPriceList.prices)
     )
   }

@@ -3,9 +3,9 @@ package com.gu.support.catalog
 import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.support.workers.{Annual, Monthly, Quarterly}
 import io.circe.parser._
-
 import CatalogServiceSpec.serviceWithFixtures
 import com.gu.support.config.TouchPointEnvironments.PROD
+import ophan.thrift.event.PrintProduct.VoucherEveryday
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -52,6 +52,12 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       RestOfWorld,
       NoProductOptions
     ) shouldBe Some(Price(325.20, USD))
+
+    (for {
+      voucherEveryday <- Paper.getProductRatePlan(PROD, Monthly, Collection, Everyday)
+      priceList <- serviceWithFixtures.getPriceList(voucherEveryday)
+    } yield priceList.saving shouldBe 31).getOrElse(fail())
+
   }
 }
 
