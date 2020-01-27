@@ -37,7 +37,7 @@ object Catalog {
         val saving = getSaving(productRatePlan)
         Json.obj(
           ("productRatePlanId", id),
-          ("saving", Json.fromInt(saving)),
+          ("savingVsRetail", saving),
           ("prices", Json.fromValues(priceList))
         )
     }
@@ -46,8 +46,8 @@ object Catalog {
 
   def getSaving(json: Json) =
     json.getField("Saving__c").getOrElse(Json.fromInt(0)).asString.getOrElse("0") match {
-      case "null" => 0
-      case i: String => i.toInt
+      case "null" => Json.Null
+      case i: String => Json.fromInt(i.toInt)
     }
 
   def sumPriceLists(priceLists: List[Json]): Iterable[Json] = {

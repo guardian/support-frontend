@@ -116,7 +116,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
   it should "find the retail saving for print products" in {
     val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
     val prices = service.getPricesForCountryGroup(Paper, UK, Nil)
-    prices(Collection)(Sixday)(Monthly)(GBP).saving shouldBe 26
+    prices(Collection)(Sixday)(Monthly)(GBP).savingVsRetail shouldBe 26
     succeed
   }
 

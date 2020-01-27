@@ -18,7 +18,6 @@ import { type State } from '../../paperSubscriptionLandingPageReducer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type {
   PaperProductOptions,
-  ProductOptions,
 } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { paperCheckoutUrl } from 'helpers/routes';
@@ -77,11 +76,11 @@ const copy = {
   },
 };
 
-const getOfferText = (price: ProductPrice, productOption: ProductOptions) => {
+const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) => {
   if (flashSaleIsActive(Paper)) {
     return getOfferStr(price.price, getNewsstandPrice(productOption));
   }
-  if (price.saving > 0) { return `Save ${price.saving}% on retail price`; }
+  if (price.saving && price.saving > 0) { return `Save ${price.saving}% on retail price`; }
 
   return null;
 };

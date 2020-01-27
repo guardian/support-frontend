@@ -6,7 +6,7 @@ import com.gu.support.promotions._
 
 case class PriceSummary(
   price: BigDecimal,
-  saving: Int,
+  savingVsRetail: Option[Int],
   currency: Currency,
   fixedTerm: Boolean,
   promotions: List[PromotionSummary]

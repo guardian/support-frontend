@@ -34,7 +34,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
         val priceSummaries = for {
           productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)
           price <- filterCurrencies(catalogService.getPriceList(productRatePlan).map(_.prices), countryGroup)
-          saving <- catalogService.getPriceList(productRatePlan).map(_.saving)
+          saving <- catalogService.getPriceList(productRatePlan).map(_.savingVsRetail)
         } yield getPriceSummary(promotions, countryGroup, productRatePlan, price, saving)
         (keys, priceSummaries.toMap)
     }
@@ -50,7 +50,12 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       .getOrElse(Nil)
       .filter(price => countryGroup.supportedCurrencies.contains(price.currency))
 
-  private def getPriceSummary(promotions: List[PromotionWithCode], countryGroup: CountryGroup, productRatePlan: ProductRatePlan[Product], price: Price, saving: Int) = {
+  private def getPriceSummary(promotions: List[PromotionWithCode],
+    countryGroup: CountryGroup,
+    productRatePlan: ProductRatePlan[Product],
+    price: Price,
+    saving: Option[Int]
+  ) = {
     val promotionSummaries: List[PromotionSummary] = for {
       promotion <- promotions
       country <- countryGroup.defaultCountry.orElse(countryGroup.countries.headOption)
