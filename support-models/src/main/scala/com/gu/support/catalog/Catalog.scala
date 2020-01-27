@@ -45,7 +45,9 @@ object Catalog {
   }
 
   def getSaving(json: Json) =
-    json.getField("Saving__c").getOrElse(Json.fromInt(0)).asString.getOrElse("0") match {
+    json.getField("Saving__c")
+      .getOrElse(Json.fromString("null"))
+      .asString.getOrElse("null") match {
       case "null" => Json.Null
       case i: String => Json.fromInt(i.toInt)
     }
