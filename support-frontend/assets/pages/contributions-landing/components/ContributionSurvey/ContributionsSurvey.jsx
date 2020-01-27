@@ -4,7 +4,6 @@
 
 import React from 'react';
 import AnchorButton from 'components/button/anchorButton';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Component ----- //
 
@@ -18,15 +17,12 @@ configured below and the prop 'isRunning' needs to be set to
 
 type PropTypes = {|
   isRunning: boolean,
-  countryGroupId: CountryGroupId,
 |};
 
 export default function ContributionsSurvey(props: PropTypes) {
   const surveyLink = 'https://www.surveymonkey.co.uk/r/RLGSQ87';
-  const isEurope = props.countryGroupId === 'EURCountries';
-  const showSurvey = props.isRunning && isEurope && surveyLink;
 
-  return showSurvey ? (
+  return props.isRunning ? (
     <div className="contribution-thank-you-block">
       <h3 className="contribution-thank-you-block__title">Tell us about your contribution</h3>
       <p className="contribution-thank-you-block__message">
