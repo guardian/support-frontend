@@ -80,7 +80,7 @@ const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) =
   if (flashSaleIsActive(Paper)) {
     return getOfferStr(price.price, getNewsstandPrice(productOption));
   }
-  if (price.saving && price.saving > 0) { return `Save ${price.saving}% on retail price`; }
+  if (price.savingVsRetail && price.savingVsRetail > 0) { return `Save ${price.savingVsRetail}% on retail price`; }
 
   return null;
 };
