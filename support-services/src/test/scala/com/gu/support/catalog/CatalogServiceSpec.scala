@@ -5,7 +5,6 @@ import com.gu.support.workers.{Annual, Monthly, Quarterly}
 import io.circe.parser._
 import CatalogServiceSpec.serviceWithFixtures
 import com.gu.support.config.TouchPointEnvironments.PROD
-import ophan.thrift.event.PrintProduct.VoucherEveryday
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
