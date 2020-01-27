@@ -16,7 +16,10 @@ import ProductPagePlanForm, { type PropTypes } from 'components/productPage/prod
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import type {
+  PaperProductOptions,
+  ProductOptions,
+} from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { paperCheckoutUrl } from 'helpers/routes';
 import { getTitle } from '../../helpers/products';
@@ -74,25 +77,13 @@ const copy = {
   },
 };
 
-const getOfferText = (price, productOption, fulfilmentOption) => {
+const getOfferText = (price: ProductPrice, productOption: ProductOptions) => {
   if (flashSaleIsActive(Paper)) {
-    return getOfferStr(price, getNewsstandPrice(productOption));
+    return getOfferStr(price.price, getNewsstandPrice(productOption));
   }
-  const offerCopy = {
-    Collection: {
-      Everyday: 'Save 37% on retail price',
-      Sixday: 'Save 33% on retail price',
-      Weekend: 'Save 25% on retail price',
-      Sunday: 'Save 22% on retail price',
-    },
-    HomeDelivery: {
-      Everyday: 'Save 17% on retail price',
-      Sixday: 'Save 12% on retail price',
-      Weekend: 'Save 9% on retail price',
-      Sunday: null,
-    },
-  };
-  return offerCopy[fulfilmentOption][productOption];
+  if (price.saving > 0) { return `Save ${price.saving}% on retail price`; }
+
+  return null;
 };
 
 const getPlans = (
@@ -116,7 +107,7 @@ const getPlans = (
         title: getTitle(productOption),
         copy: copy[fulfilmentOption][productOption],
         price: flashSaleIsActive(Paper) ? getPriceStr(price) : getRegularPriceStr(price),
-        offer: getOfferText(price.price, productOption, fulfilmentOption),
+        offer: getOfferText(price, productOption),
         saving: flashSaleIsActive(Paper)
           ? getSavingStr(getProductPrice(productPrices, fulfilmentOption, productOption))
           : null,
