@@ -1,0 +1,11 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.root {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.input {
+  max-width: 8em;
+  margin-right: $gu-h-spacing/2;
+}
