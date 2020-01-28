@@ -32,6 +32,8 @@
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
+    <link rel="stylesheet" type="text/css" href="https://services.postcodeanywhere.co.uk/css/address-3.91.css" />
+    <script type="text/javascript" src="https://services.postcodeanywhere.co.uk/js/address-3.91.js"></script>
     <script type="text/javascript">
       window.guardian = window.guardian || {};
 
