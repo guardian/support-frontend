@@ -84,21 +84,21 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
   componentDidMount(): void {
     const { props } = this;
     const fields = [
-      { element: `${props.scope}-search`, field: "" },
-      { element: `${props.scope}-lineOne`, field: "Line1" },
-      { element: `${props.scope}-lineTwo`, field: "Line2", mode: pca.fieldMode.POPULATE },
-      { element: `${props.scope}-city`, field: "City", mode: pca.fieldMode.POPULATE },
-      { element: `${props.scope}-stateProvince`, field: "Province", mode: pca.fieldMode.POPULATE },
-      { element: `${props.scope}-postcode`, field: "PostalCode" },
-      { element: `${props.scope}-country`, field: "CountryName", mode: pca.fieldMode.COUNTRY }
+      { element: `${props.scope}-search`, field: '' },
+      { element: `${props.scope}-lineOne`, field: 'Line1' },
+      { element: `${props.scope}-lineTwo`, field: 'Line2', mode: pca.fieldMode.POPULATE },
+      { element: `${props.scope}-city`, field: 'City', mode: pca.fieldMode.POPULATE },
+      { element: `${props.scope}-stateProvince`, field: 'Province', mode: pca.fieldMode.POPULATE },
+      { element: `${props.scope}-postcode`, field: 'PostalCode' },
+      { element: `${props.scope}-country`, field: 'CountryName', mode: pca.fieldMode.COUNTRY },
     ];
     const options = { key: 'KU38-EK85-GN78-YA78' };
     const control = new pca.Address(fields, options);
 
-    control.listen("populate", function(address, variations) {
+    control.listen('populate', (address, variations) => {
       console.log(address);
-      if (address.CountryIso2 !== props.country){
-        console.log("Country changed, running manual address update");
+      if (address.CountryIso2 !== props.country) {
+        console.log('Country changed, running manual address update');
         props.setAddressLineOne(address.Line1);
         props.setAddressLineTwo(address.Line2);
 
@@ -115,7 +115,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
       <div>
         <StaticInputWithLabel
           id={`${scope}-search`}
-          label={"Search"}
+          label="Search"
         />
         <SelectWithError
           id={`${scope}-country`}
