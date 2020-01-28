@@ -36,6 +36,7 @@ import {
   caStates,
   usStates,
 } from 'helpers/internationalisation/country';
+import type { AddressSearch } from 'components/subscriptionCheckouts/addressSearch/addressSearch';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -95,7 +96,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
     const options = { key: 'KU38-EK85-GN78-YA78' };
     const control = new pca.Address(fields, options);
 
-    control.listen('populate', (address, variations) => {
+    control.listen('populate', (address: AddressSearch) => {
       console.log(address);
       if (address.CountryIso2 !== props.country) {
         console.log('Country changed, running manual address update');
