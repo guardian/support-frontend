@@ -46,7 +46,7 @@ export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 type FormData = UserFormData & {
   otherAmounts: OtherAmounts,
   state: UsState | CaState | null,
-  country: IsoCountry,
+  country: IsoCountry | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
 
