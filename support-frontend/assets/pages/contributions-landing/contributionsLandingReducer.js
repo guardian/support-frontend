@@ -23,6 +23,7 @@ import { type State as MarketingConsentState } from '../../components/marketingC
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
+import type {IsoCountry} from "../../helpers/internationalisation/country";
 
 // ----- Types ----- //
 
@@ -45,6 +46,7 @@ export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 type FormData = UserFormData & {
   otherAmounts: OtherAmounts,
   state: UsState | CaState | null,
+  country: IsoCountry,
   checkoutFormHasBeenSubmitted: boolean,
 };
 
@@ -174,6 +176,7 @@ function createFormReducer() {
         ANNUAL: { amount: null },
       },
       state: null,
+      country: null,
       checkoutFormHasBeenSubmitted: false,
     },
     stripeV3HasLoaded: false,
@@ -380,6 +383,9 @@ function createFormReducer() {
 
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
+
+      case 'UPDATE_COUNTRY':
+        return { ...state, formData: { ...state.formData, country: action.country } };
 
       case 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD':
         return {

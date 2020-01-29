@@ -52,6 +52,7 @@ import {
   updateLastName,
   updatePaymentMethod,
   updateState,
+  updateCountry,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
@@ -62,6 +63,7 @@ import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
 import type { StripePaymentRequestButtonScaTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { fromString as countryFromString} from "../../../../helpers/internationalisation/country";
 
 // ----- Types -----//
 
@@ -87,6 +89,7 @@ type PropTypes = {|
   updateFirstName: string => void,
   updateLastName: string => void,
   updateStateOrProvince: (state: UsState | CaState | null) => void,
+  updateCountry: IsoCountry => void,
   paymentMethod: PaymentMethod,
   setAssociatedPaymentMethod: () => (Function) => void,
   stripeAccount: StripeAccount,
@@ -124,6 +127,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
   updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
   updateStateOrProvince: (state: UsState | CaState | null) => dispatch(updateState(state)),
+  updateCountry: (country: IsoCountry) => dispatch(updateCountry(country)),
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
   setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
@@ -184,7 +188,34 @@ function updatePayerStateOrProvince(
   }
   logException('Missing address_state in payment request token and no state/province selected in the form');
   return false;
+}
 
+// Attempt to get state/province from the token, otherwise fall back on the value in the form
+function updatePayerCountry(
+  countryFromCard?: string,
+  countryFromForm: IsoCountry,
+  setCountry: IsoCountry => void,
+): boolean {
+
+
+  console.log("updating payer country",  countryFromCard,
+    countryFromForm,
+    setCountry,);
+  if (!!countryFromCard){
+    console.log("setting country to iso")
+    const isoCountry= countryFromString(countryFromCard);
+    if (!!isoCountry) {
+      console.log("setting country")
+      setCountry(isoCountry);
+      return true;
+    } else {
+      return false;
+    }
+  } else if (countryFromForm) {
+    return true;
+  }
+  logException('Missing address_state in payment request token and no state/province selected in the form');
+  return false;
 }
 
 const onComplete = (res: PaymentResult) => {
@@ -246,6 +277,7 @@ function onPayment(
   props: PropTypes,
   paymentRequestComplete: (string) => void,
   paymentRequestData: Object,
+  countryFromCard?: string,
   stateOrProvinceFromCard?: string,
   processPayment: () => void,
 ): void {
@@ -259,13 +291,22 @@ function onPayment(
   // We need to do this so that we can offer marketing permissions on the thank you page
   updatePayerEmail(paymentRequestData, props.updateEmail);
 
+  console.log("ON PAYMENT", stateOrProvinceFromCard);
+  console.log("ON PAYMENT", countryFromCard);
+  console.log("ON PAYMENT", props.stateOrProvince);
+  console.log("ON PAYMENT", props.updateStateOrProvince);
+  console.log("ON PAYMENT", props.countryGroupId);
+
   const stateOrProvinceUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
     updatePayerStateOrProvince(stateOrProvinceFromCard, props.stateOrProvince, props.updateStateOrProvince) : true;
+
+  const countryUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
+    updatePayerCountry(countryFromCard, props.country, props.updateCountry) : true;
 
   const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
     updatePayerName(paymentRequestData, props.updateFirstName, props.updateLastName) : true;
 
-  if (nameUpdateOk && stateOrProvinceUpdateOk) {
+  if (nameUpdateOk && stateOrProvinceUpdateOk && countryUpdateOk) {
     if (paymentRequestData.methodName) {
       // https://stripe.com/docs/stripe-js/reference#payment-response-object
       // methodName:
@@ -294,6 +335,7 @@ function setUpPaymentListenerNonSca(props: PropTypes, paymentRequest: Object, pa
       props,
       complete,
       data,
+      token.card.address_country,
       token.card.address_state,
       processPayment,
     );
@@ -344,6 +386,7 @@ function setUpPaymentListenerSca(props: PropTypes, paymentRequest: Object, strip
       props,
       complete,
       data,
+      paymentMethod.billing_details.address.country,
       paymentMethod.billing_details.address.state,
       processPayment,
     );
