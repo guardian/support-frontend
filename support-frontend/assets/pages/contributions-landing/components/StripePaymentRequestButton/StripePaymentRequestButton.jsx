@@ -190,7 +190,7 @@ function updatePayerStateOrProvince(
   return false;
 }
 
-// Attempt to get state/province from the token, otherwise fall back on the value in the form
+// Attempt to get country from the token, otherwise fall back on the value in the form
 function updatePayerCountry(
   countryFromCard?: string,
   countryFromForm: IsoCountry,
