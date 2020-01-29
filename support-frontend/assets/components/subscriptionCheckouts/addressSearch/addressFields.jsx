@@ -37,6 +37,14 @@ import {
   usStates,
 } from 'helpers/internationalisation/country';
 import type { AddressSearch } from 'components/subscriptionCheckouts/addressSearch/addressSearch';
+import { Fieldset } from 'components/forms/fieldset';
+import { TextArea } from 'components/forms/textArea';
+import Text from 'components/text/text';
+import AddressDisplayText
+  from 'components/subscriptionCheckouts/addressSearch/addressDisplayText';
+import AnchorButton from 'components/button/anchorButton';
+import Button from 'components/button/button';
+import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -58,8 +66,14 @@ const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const SelectWithError = withError(SelectWithLabel);
 const MaybeSelect = canShow(SelectWithError);
 const MaybeInput = canShow(InputWithError);
+const MaybeFieldset = canShow(Fieldset);
 
 class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
+
+  constructor(props) {
+    super(props);
+    this.state = {searchComplete: false};
+  }
 
   static shouldShowStateDropdown(country: Option<IsoCountry>): boolean {
     return country === 'US' || country === 'CA' || country === 'AU';
@@ -86,11 +100,6 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
     const { props } = this;
     const fields = [
       { element: `${props.scope}-search`, field: '' },
-      { element: `${props.scope}-lineOne`, field: 'Line1' },
-      { element: `${props.scope}-lineTwo`, field: 'Line2', mode: pca.fieldMode.POPULATE },
-      { element: `${props.scope}-city`, field: 'City', mode: pca.fieldMode.POPULATE },
-      { element: `${props.scope}-stateProvince`, field: 'Province', mode: pca.fieldMode.POPULATE },
-      { element: `${props.scope}-postcode`, field: 'PostalCode' },
       { element: `${props.scope}-country`, field: 'CountryName', mode: pca.fieldMode.COUNTRY },
     ];
     const options = { key: 'KU38-EK85-GN78-YA78' };
@@ -98,15 +107,15 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
 
     control.listen('populate', (address: AddressSearch) => {
       console.log(address);
-      if (address.CountryIso2 !== props.country) {
-        console.log('Country changed, running manual address update');
-        props.setAddressLineOne(address.Line1);
-        props.setAddressLineTwo(address.Line2);
+      this.setState({searchComplete: true});
 
-        props.setTownCity(address.City);
-        props.setState(address.Province);
-        props.setPostcode(address.PostalCode);
-      }
+      props.setAddressLineOne(address.Line1);
+      props.setAddressLineTwo(address.Line2);
+
+      props.setTownCity(address.City);
+      props.setState(address.Province);
+      props.setPostcode(address.PostalCode);
+
     });
   }
 
@@ -117,71 +126,85 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
         <StaticInputWithLabel
           id={`${scope}-search`}
           label="Search"
+          placeholder="Start typing your address"
         />
-        <SelectWithError
-          id={`${scope}-country`}
-          label="Country"
-          value={props.country}
-          setValue={props.setCountry}
-          error={firstError('country', props.formErrors)}
+        <MaybeFieldset
+          isShown={this.state.searchComplete}
         >
-          <option value="">--</option>
-          {sortedOptions(props.countries)}
-        </SelectWithError>
-        <InputWithError
-          id={`${scope}-lineOne`}
-          label="Address Line 1"
-          type="text"
-          value={props.lineOne}
-          setValue={props.setAddressLineOne}
-          error={firstError('lineOne', props.formErrors)}
-        />
-        <InputWithError
-          id={`${scope}-lineTwo`}
-          label="Address Line 2"
-          optional
-          type="text"
-          value={props.lineTwo}
-          setValue={props.setAddressLineTwo}
-          error={firstError('lineTwo', props.formErrors)}
-        />
-        <InputWithError
-          id={`${scope}-city`}
-          label="Town/City"
-          type="text"
-          value={props.city}
-          setValue={props.setTownCity}
-          error={firstError('city', props.formErrors)}
-        />
-        <MaybeSelect
-          id={`${scope}-stateProvince`}
-          label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-          value={props.state}
-          setValue={props.setState}
-          error={firstError('state', props.formErrors)}
-          isShown={AddressFields.shouldShowStateDropdown(props.country)}
-        >
-          <option value="">--</option>
-          {AddressFields.statesForCountry(props.country)}
-        </MaybeSelect>
-        <MaybeInput
-          id={`${scope}-stateProvince`}
-          label="State"
-          value={props.state}
-          setValue={props.setState}
-          error={firstError('state', props.formErrors)}
-          optional
-          isShown={AddressFields.shouldShowStateInput(props.country)}
-        />
-        <InputWithError
-          id={`${scope}-postcode`}
-          label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
-          type="text"
-          optional={isPostcodeOptional(props.country)}
-          value={props.postCode}
-          setValue={props.setPostcode}
-          error={firstError('postCode', props.formErrors)}
-        />
+          <AddressDisplayText
+            lineOne={props.lineOne}
+            lineTwo={props.lineTwo}
+            city={props.city}
+            state={props.state}
+            country={props.country}
+          />
+        </MaybeFieldset>
+        <CheckoutExpander copy="I want to enter my address manually">
+          <SelectWithError
+            id={`${scope}-country`}
+            label="Country"
+            value={props.country}
+            setValue={props.setCountry}
+            error={firstError('country', props.formErrors)}
+          >
+            <option value="">--</option>
+            {sortedOptions(props.countries)}
+          </SelectWithError>
+          <InputWithError
+            id={`${scope}-lineOne`}
+            label="Address Line 1"
+            type="text"
+            value={props.lineOne}
+            setValue={props.setAddressLineOne}
+            error={firstError('lineOne', props.formErrors)}
+          />
+          <InputWithError
+            id={`${scope}-lineTwo`}
+            label="Address Line 2"
+            optional
+            type="text"
+            value={props.lineTwo}
+            setValue={props.setAddressLineTwo}
+            error={firstError('lineTwo', props.formErrors)}
+          />
+          <InputWithError
+            id={`${scope}-city`}
+            label="Town/City"
+            type="text"
+            value={props.city}
+            setValue={props.setTownCity}
+            error={firstError('city', props.formErrors)}
+          />
+          <MaybeSelect
+            id={`${scope}-stateProvince`}
+            label={props.country === 'CA' ? 'Province/Territory' : 'State'}
+            value={props.state}
+            setValue={props.setState}
+            error={firstError('state', props.formErrors)}
+            isShown={AddressFields.shouldShowStateDropdown(props.country)}
+          >
+            <option value="">--</option>
+            {AddressFields.statesForCountry(props.country)}
+          </MaybeSelect>
+          <MaybeInput
+            id={`${scope}-stateProvince`}
+            label="State"
+            value={props.state}
+            setValue={props.setState}
+            error={firstError('state', props.formErrors)}
+            optional
+            isShown={AddressFields.shouldShowStateInput(props.country)}
+          />
+          <InputWithError
+            id={`${scope}-postcode`}
+            label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
+            type="text"
+            optional={isPostcodeOptional(props.country)}
+            value={props.postCode}
+            setValue={props.setPostcode}
+            error={firstError('postCode', props.formErrors)}
+          />
+        </CheckoutExpander>
       </div>
     );
   }
