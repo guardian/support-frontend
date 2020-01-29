@@ -197,17 +197,9 @@ function updatePayerCountry(
   setCountry: IsoCountry => void,
 ): boolean {
 
-
-  console.log(
-    'updating payer country', countryFromCard,
-    countryFromForm,
-    setCountry,
-  );
   if (countryFromCard) {
-    console.log('setting country to iso');
     const isoCountry = countryFromString(countryFromCard);
     if (isoCountry) {
-      console.log('setting country');
       setCountry(isoCountry);
       return true;
     }

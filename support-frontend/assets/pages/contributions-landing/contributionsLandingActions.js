@@ -531,11 +531,6 @@ function recurringPaymentAuthorisationHandler(
   paymentAuthorisation: PaymentAuthorisation,
 ): Promise<PaymentResult> {
   const request = regularPaymentRequestFromAuthorisation(paymentAuthorisation, state);
-  console.log('regularPaymentRequestFromAuthorisation', request.billingAddress);
-  console.log('regularPaymentRequestFromAuthorisation', request.billingAddress.state);
-  console.log('request.billingAddress.country', request.billingAddress.country);
-  console.log('state.common.internationalisation.countryId', state.common.internationalisation.countryId);
-
 
   return dispatch(onPaymentResult(
     postRegularPaymentRequest(
@@ -676,10 +671,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
 
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
-    console.log('in on third party payment');
-    console.log('in on third party payment paymentAuthorisation', paymentAuthorisation);
     const state = getState();
-    console.log('in on third party payment state', state);
     return paymentAuthorisationHandlers[state.page.form.contributionType][state.page.form.paymentMethod](
       dispatch,
       state,
