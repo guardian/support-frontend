@@ -268,7 +268,7 @@ function onPayment(
   const stateOrProvinceUpdateOk = isUsOrCanadian ?
     updatePayerStateOrProvince(stateOrProvinceFromCard, props.stateOrProvince, props.updateStateOrProvince) : true;
 
-  //We need to update the country so it matches the one on the card
+  // We need to update the country so it matches the state taken from the card
   if (isUsOrCanadian && countryFromCard) {
     const isoCountry = countryFromString(countryFromCard);
     if (isoCountry) {
