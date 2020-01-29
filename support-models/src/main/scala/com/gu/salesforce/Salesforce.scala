@@ -2,7 +2,6 @@ package com.gu.salesforce
 
 import cats.syntax.functor._
 import com.gu.i18n.Title
-import com.gu.salesforce.Salesforce.SalesforceErrorResponse.{expiredAuthenticationCode, rateLimitExceeded}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.CustomCodecs._
@@ -174,13 +173,21 @@ object Salesforce {
     implicit val codec: Codec[SalesforceErrorResponse] = deriveCodec
     val expiredAuthenticationCode = "INVALID_SESSION_ID"
     val rateLimitExceeded = "REQUEST_LIMIT_EXCEEDED"
+    val readOnlyMaintenance = "INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE"
   }
 
   case class SalesforceErrorResponse(
     message: String,
     errorCode: String
   ) extends Throwable {
-    def asRetryException: RetryException = if (errorCode == expiredAuthenticationCode || errorCode == rateLimitExceeded)
+
+    val errorsToRetryUnlimited = List(
+      SalesforceErrorResponse.expiredAuthenticationCode,
+      SalesforceErrorResponse.rateLimitExceeded,
+      SalesforceErrorResponse.readOnlyMaintenance
+    )
+
+    def asRetryException: RetryException = if (errorsToRetryUnlimited.contains(errorCode))
       new RetryUnlimited(message, cause = this)
     else
       new RetryNone(message, cause = this)

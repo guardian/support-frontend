@@ -39,7 +39,6 @@ Mappings:
       MinInstances: 1
       InstanceType: t3.small
       CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/44e9f40c-c884-40e6-a171-6769e9a8b173
-      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
@@ -49,7 +48,6 @@ Mappings:
       InsufficientInstances: 2
       InstanceType: t3.small
       CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/9d8ff96c-63d5-425b-88d1-f529770e5b6d
-      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
@@ -181,15 +179,6 @@ Resources:
                 - states:GetExecutionHistory
                 - states:DescribeStateMachine
                 Resource: arn:aws:states:*:*:*
-        - PolicyName: KMSEncryption
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                - kms:Encrypt
-                - kms:Decrypt
-                Resource: !FindInMap [ StageVariables, !Ref Stage, AwsKeyARN ]
         - PolicyName: DynamoPromotions
           PolicyDocument:
             Statement:

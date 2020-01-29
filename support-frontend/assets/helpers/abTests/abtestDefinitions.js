@@ -1,20 +1,13 @@
 // @flow
 import type { Tests } from './abtest';
-import {
-  type CountryGroupId,
-  detect,
-} from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
-export type LandingPageReverseAmountsTestVariant = 'control' | 'reversedAmounts' | 'notintest';
 export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
-export type UsEoyCopyTestVariants = 'v1' | 'v2' | 'notintest';
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
-
-const countryGroupId: CountryGroupId = detect();
+const digitalLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/subscribe/digital(/.*)?$';
 
 export const tests: Tests = {
   amazonPaySingleUS2020: {
@@ -34,7 +27,7 @@ export const tests: Tests = {
       },
     },
     isActive: true,
-    independent: true,
+    referrerControlled: false,
     seed: 13,
     targetPage: usContributionsLandingPageMatch,
   },
@@ -56,53 +49,31 @@ export const tests: Tests = {
       },
     },
     isActive: window.guardian && !!window.guardian.recurringStripePaymentRequestButton,
-    independent: true,
+    referrerControlled: false,
     seed: 2,
     targetPage: contributionsLandingPageMatch,
   },
 
-  usEoyCopy: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'v1',
-      },
-      {
-        id: 'v2',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 3,
-    targetPage: usContributionsLandingPageMatch,
-  },
-
-  landingPageReverseAmounts: {
+  SubsBannerNewYearCopyTest: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'reversedAmounts',
+        id: 'variant',
       },
     ],
     audiences: {
       ALL: {
         offset: 0,
-        size: 1,
+        size: 0,
       },
     },
     isActive: true,
-    independent: true,
-    seed: 4,
-    targetPage: usContributionsLandingPageMatch,
-    canRun: () => countryGroupId === 'UnitedStates',
+    referrerControlled: true,
+    seed: 12,
+    targetPage: digitalLandingPageMatch,
+    optimizeId: 'g7XyuKalTEimXX-xlKPx_g',
   },
 };

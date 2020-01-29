@@ -23,7 +23,6 @@ object Configuration {
     .forEnvironment(loadFromS3)
     .load(stage, ConfigFactory.load())
 
-  val encryptionKeyId = config.getString("aws.encryptionKeyId")
   val stripeConfigProvider = new StripeConfigProvider(config, stage)
   val payPalConfigProvider = new PayPalConfigProvider(config, stage)
   val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)

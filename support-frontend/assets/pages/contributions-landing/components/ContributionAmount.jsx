@@ -24,7 +24,6 @@ import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
-import type { LandingPageReverseAmountsTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -41,7 +40,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  landingPageReverseAmountsVariant: LandingPageReverseAmountsTestVariant,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -56,7 +54,6 @@ const mapStateToProps = state => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  landingPageReverseAmountsVariant: state.common.abParticipations.landingPageReverseAmounts,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -166,14 +163,11 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
-  // JTL - related to landing page reverse amounts test:
-  const amountsToRender = props.landingPageReverseAmountsVariant === 'reversedAmounts' ? validAmounts.reverse() : validAmounts;
-
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
       <ul className="form__radio-group-list">
-        {amountsToRender.map(renderAmount(
+        {validAmounts.map(renderAmount(
           currencies[props.currency],
           spokenCurrencies[props.currency],
           props,

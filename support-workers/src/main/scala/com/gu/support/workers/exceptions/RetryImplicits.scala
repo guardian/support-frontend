@@ -2,7 +2,6 @@ package com.gu.support.workers.exceptions
 
 import java.net.{SocketException, SocketTimeoutException}
 
-import com.amazonaws.services.kms.model._
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import io.circe.{DecodingFailure, ParsingFailure}
@@ -46,20 +45,6 @@ object RetryImplicits {
       case "api_connection_error" | "api_error" | "rate_limit_error" => new RetryUnlimited(throwable.asJson.noSpaces, cause = throwable)
       case "authentication_error" => new RetryLimited(throwable.asJson.noSpaces, cause = throwable)
       case "card_error" | "invalid_request_error" | "validation_error" => new RetryNone(throwable.asJson.noSpaces, cause = throwable)
-    }
-  }
-
-  implicit class AwsKmsConversions(val throwable: AWSKMSException) extends AnyVal {
-    def asRetryException: RetryException = throwable match {
-      case e @ (_: KeyUnavailableException |
-        _: DependencyTimeoutException |
-        _: KMSInternalException |
-        _: KMSInvalidStateException) => new RetryUnlimited(message = e.getMessage, cause = throwable)
-      case e: InvalidGrantTokenException => new RetryNone(message = e.getMessage, cause = throwable)
-      case e @ (_: NotFoundException |
-        _: DisabledException |
-        _: InvalidKeyUsageException |
-        _: Throwable) => new RetryLimited(message = e.getMessage, cause = throwable)
     }
   }
 

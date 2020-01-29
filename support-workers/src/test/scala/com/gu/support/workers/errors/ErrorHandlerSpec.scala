@@ -2,7 +2,6 @@ package com.gu.support.workers.errors
 
 import java.net.{SocketException, SocketTimeoutException}
 
-import com.amazonaws.services.kms.model._
 import com.gu.paypal.PayPalError
 import com.gu.rest.{CodeBody, WebServiceClientError}
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
@@ -66,6 +65,7 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     //Salesforce
     new SalesforceErrorResponse("test", expiredAuthenticationCode).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("test", rateLimitExceeded).asRetryException shouldBe a[RetryUnlimited]
+    new SalesforceErrorResponse("test", readOnlyMaintenance).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryNone]
 
     //Stripe
@@ -77,12 +77,6 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     //PayPal
     PayPalError(500, "").asRetryException shouldBe a[RetryUnlimited]
     PayPalError(400, "").asRetryException shouldBe a[RetryNone]
-
-    //AWS KMS
-    new KMSInvalidStateException("").asRetryException shouldBe a[RetryUnlimited]
-    new InvalidGrantTokenException("").asRetryException shouldBe a[RetryNone]
-    new DisabledException("").asRetryException shouldBe a[RetryLimited]
-    new AWSKMSException("The security token included in the request is expired").asRetryException shouldBe a[RetryLimited]
 
     //Zuora
     ZuoraErrorResponse(false, List(ZuoraError("API_DISABLED", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
