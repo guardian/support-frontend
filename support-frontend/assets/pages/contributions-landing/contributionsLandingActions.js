@@ -359,7 +359,7 @@ const regularPaymentRequestFromAuthorisation = (
     state: state.page.form.formData.state,
     postCode: null, // required go cardless field
     country:
-      state.page.form.formData.country ? state.page.form.formData.country : state.common.internationalisation.countryId
+      state.page.form.formData.country ? state.page.form.formData.country : state.common.internationalisation.countryId,
   },
   deliveryAddress: null,
   product: {

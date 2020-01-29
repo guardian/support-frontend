@@ -285,12 +285,6 @@ function onPayment(
   // We need to do this so that we can offer marketing permissions on the thank you page
   updatePayerEmail(paymentRequestData, props.updateEmail);
 
-  console.log('ON PAYMENT', stateOrProvinceFromCard);
-  console.log('ON PAYMENT', countryFromCard);
-  console.log('ON PAYMENT', props.stateOrProvince);
-  console.log('ON PAYMENT', props.updateStateOrProvince);
-  console.log('ON PAYMENT', props.countryGroupId);
-
   const stateOrProvinceUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
     updatePayerStateOrProvince(stateOrProvinceFromCard, props.stateOrProvince, props.updateStateOrProvince) : true;
 
