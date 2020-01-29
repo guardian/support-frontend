@@ -51,7 +51,7 @@ import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
-import type {IsoCountry} from "../../helpers/internationalisation/country";
+import type { IsoCountry } from '../../helpers/internationalisation/country';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -358,7 +358,7 @@ const regularPaymentRequestFromAuthorisation = (
     city: null, // required go cardless field
     state: state.page.form.formData.state,
     postCode: null, // required go cardless field
-    country: state.page.form.formData.country, //state.common.internationalisation.countryId,
+    country: state.page.form.formData.country, // state.common.internationalisation.countryId,
   },
   deliveryAddress: null,
   product: {
@@ -530,10 +530,10 @@ function recurringPaymentAuthorisationHandler(
   paymentAuthorisation: PaymentAuthorisation,
 ): Promise<PaymentResult> {
   const request = regularPaymentRequestFromAuthorisation(paymentAuthorisation, state);
-  console.log("regularPaymentRequestFromAuthorisation" ,request.billingAddress);
-  console.log("regularPaymentRequestFromAuthorisation" ,request.billingAddress.state);
-  console.log("request.billingAddress.country" ,request.billingAddress.country);
-  console.log("state.common.internationalisation.countryId" , state.common.internationalisation.countryId);
+  console.log('regularPaymentRequestFromAuthorisation', request.billingAddress);
+  console.log('regularPaymentRequestFromAuthorisation', request.billingAddress.state);
+  console.log('request.billingAddress.country', request.billingAddress.country);
+  console.log('state.common.internationalisation.countryId', state.common.internationalisation.countryId);
 
 
   return dispatch(onPaymentResult(
@@ -675,10 +675,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
 
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
-  console.log("in on third party payment");
-    console.log("in on third party payment paymentAuthorisation", paymentAuthorisation);
+    console.log('in on third party payment');
+    console.log('in on third party payment paymentAuthorisation', paymentAuthorisation);
     const state = getState();
-    console.log("in on third party payment state", state);
+    console.log('in on third party payment state', state);
     return paymentAuthorisationHandlers[state.page.form.contributionType][state.page.form.paymentMethod](
       dispatch,
       state,

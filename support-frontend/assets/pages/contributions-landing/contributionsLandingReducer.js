@@ -23,7 +23,7 @@ import { type State as MarketingConsentState } from '../../components/marketingC
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
-import type {IsoCountry} from "../../helpers/internationalisation/country";
+import type { IsoCountry } from '../../helpers/internationalisation/country';
 
 // ----- Types ----- //
 

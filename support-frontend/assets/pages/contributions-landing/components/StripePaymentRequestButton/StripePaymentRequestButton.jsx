@@ -63,7 +63,7 @@ import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
 import type { StripePaymentRequestButtonScaTestVariants } from 'helpers/abTests/abtestDefinitions';
-import { fromString as countryFromString} from "../../../../helpers/internationalisation/country";
+import { fromString as countryFromString } from '../../../../helpers/internationalisation/country';
 
 // ----- Types -----//
 
@@ -198,19 +198,21 @@ function updatePayerCountry(
 ): boolean {
 
 
-  console.log("updating payer country",  countryFromCard,
+  console.log(
+    'updating payer country', countryFromCard,
     countryFromForm,
-    setCountry,);
-  if (!!countryFromCard){
-    console.log("setting country to iso")
-    const isoCountry= countryFromString(countryFromCard);
-    if (!!isoCountry) {
-      console.log("setting country")
+    setCountry,
+  );
+  if (countryFromCard) {
+    console.log('setting country to iso');
+    const isoCountry = countryFromString(countryFromCard);
+    if (isoCountry) {
+      console.log('setting country');
       setCountry(isoCountry);
       return true;
-    } else {
-      return false;
     }
+    return false;
+
   } else if (countryFromForm) {
     return true;
   }
@@ -291,11 +293,11 @@ function onPayment(
   // We need to do this so that we can offer marketing permissions on the thank you page
   updatePayerEmail(paymentRequestData, props.updateEmail);
 
-  console.log("ON PAYMENT", stateOrProvinceFromCard);
-  console.log("ON PAYMENT", countryFromCard);
-  console.log("ON PAYMENT", props.stateOrProvince);
-  console.log("ON PAYMENT", props.updateStateOrProvince);
-  console.log("ON PAYMENT", props.countryGroupId);
+  console.log('ON PAYMENT', stateOrProvinceFromCard);
+  console.log('ON PAYMENT', countryFromCard);
+  console.log('ON PAYMENT', props.stateOrProvince);
+  console.log('ON PAYMENT', props.updateStateOrProvince);
+  console.log('ON PAYMENT', props.countryGroupId);
 
   const stateOrProvinceUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
     updatePayerStateOrProvince(stateOrProvinceFromCard, props.stateOrProvince, props.updateStateOrProvince) : true;
