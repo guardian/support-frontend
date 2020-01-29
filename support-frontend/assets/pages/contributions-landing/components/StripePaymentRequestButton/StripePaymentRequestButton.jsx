@@ -190,28 +190,6 @@ function updatePayerStateOrProvince(
   return false;
 }
 
-// Attempt to get country from the token, otherwise fall back on the value in the form
-function updatePayerCountry(
-  countryFromCard?: string,
-  countryFromForm: IsoCountry,
-  setCountry: IsoCountry => void,
-): boolean {
-
-  if (countryFromCard) {
-    const isoCountry = countryFromString(countryFromCard);
-    if (isoCountry) {
-      setCountry(isoCountry);
-      return true;
-    }
-    return false;
-
-  } else if (countryFromForm) {
-    return true;
-  }
-  logException('Missing address_state in payment request token and no state/province selected in the form');
-  return false;
-}
-
 const onComplete = (res: PaymentResult) => {
   if (res.paymentStatus === 'success') {
     trackComponentClick('apple-pay-payment-complete');
@@ -285,16 +263,23 @@ function onPayment(
   // We need to do this so that we can offer marketing permissions on the thank you page
   updatePayerEmail(paymentRequestData, props.updateEmail);
 
-  const stateOrProvinceUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
+  const isUsOrCanadian = props.countryGroupId === UnitedStates || props.countryGroupId === Canada;
+
+  const stateOrProvinceUpdateOk = isUsOrCanadian ?
     updatePayerStateOrProvince(stateOrProvinceFromCard, props.stateOrProvince, props.updateStateOrProvince) : true;
 
-  const countryUpdateOk = props.countryGroupId === UnitedStates || props.countryGroupId === Canada ?
-    updatePayerCountry(countryFromCard, props.country, props.updateCountry) : true;
+  //We need to update the country so it matches the one on the card
+  if (isUsOrCanadian && countryFromCard) {
+    const isoCountry = countryFromString(countryFromCard);
+    if (isoCountry) {
+      props.updateCountry((isoCountry));
+    }
+  }
 
   const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
     updatePayerName(paymentRequestData, props.updateFirstName, props.updateLastName) : true;
 
-  if (nameUpdateOk && stateOrProvinceUpdateOk && countryUpdateOk) {
+  if (nameUpdateOk && stateOrProvinceUpdateOk) {
     if (paymentRequestData.methodName) {
       // https://stripe.com/docs/stripe-js/reference#payment-response-object
       // methodName:
