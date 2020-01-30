@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import GridPicture from 'components/gridPicture/gridPicture';
 import ProductPagehero
   from 'components/productPage/productPageHero/productPageHero';
 import AnchorButton from 'components/button/anchorButton';
@@ -25,38 +24,13 @@ const mapStateToProps = (state: State) => {
   const maxSavingVsRetail = getMaxSavingVsRetail(state.page.productPrices);
   return {
     discountCopy: getDiscountCopy(maxSavingVsRetail),
-  }
+  };
 };
 
 const Discount = (props: { discountCopy: string[] }) => (
   <div>
     {props.discountCopy.map(copy => <span>{ copy }</span>)}
   </div>
-);
-
-const HeroPicture = () => (
-  <GridPicture
-    sources={[
-      {
-        gridId: 'paperLandingHeroMobile',
-        srcSizes: [500, 922],
-        imgType: 'png',
-        sizes: '100vw',
-        media: '(max-width: 739px)',
-      },
-      {
-        gridId: 'paperLandingHero',
-        srcSizes: [1000, 2000],
-        imgType: 'png',
-        sizes: '(min-width: 1000px) 2000px, 1000px',
-        media: '(min-width: 740px)',
-      },
-    ]}
-    fallback="paperLandingHero"
-    fallbackSize={1000}
-    altText=""
-    fallbackImgType="png"
-  />
 );
 
 const CampaignHeader = (props: PropTypes) => (
@@ -94,5 +68,3 @@ const CampaignHeader = (props: PropTypes) => (
 );
 
 export default connect(mapStateToProps)(CampaignHeader);
-
-export {  HeroPicture };
