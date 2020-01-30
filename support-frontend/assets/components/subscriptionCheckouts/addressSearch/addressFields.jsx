@@ -38,12 +38,8 @@ import {
 } from 'helpers/internationalisation/country';
 import type { AddressSearch } from 'components/subscriptionCheckouts/addressSearch/addressSearch';
 import { Fieldset } from 'components/forms/fieldset';
-import { TextArea } from 'components/forms/textArea';
-import Text from 'components/text/text';
 import AddressDisplayText
   from 'components/subscriptionCheckouts/addressSearch/addressDisplayText';
-import AnchorButton from 'components/button/anchorButton';
-import Button from 'components/button/button';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 
 type StatePropTypes<GlobalState> = {|
@@ -70,11 +66,6 @@ const MaybeFieldset = canShow(Fieldset);
 
 class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
 
-  constructor(props) {
-    super(props);
-    this.state = {searchComplete: false};
-  }
-
   static shouldShowStateDropdown(country: Option<IsoCountry>): boolean {
     return country === 'US' || country === 'CA' || country === 'AU';
   }
@@ -96,18 +87,25 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
     }
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { searchComplete: false };
+  }
+
   componentDidMount(): void {
     const { props } = this;
     const fields = [
       { element: `${props.scope}-search`, field: '' },
+      // eslint-disable-next-line no-undef
       { element: `${props.scope}-country`, field: 'CountryName', mode: pca.fieldMode.COUNTRY },
     ];
     const options = { key: 'KU38-EK85-GN78-YA78' };
+    // eslint-disable-next-line no-undef
     const control = new pca.Address(fields, options);
 
     control.listen('populate', (address: AddressSearch) => {
       console.log(address);
-      this.setState({searchComplete: true});
+      this.setState({ searchComplete: true });
 
       props.setAddressLineOne(address.Line1);
       props.setAddressLineTwo(address.Line2);
@@ -135,6 +133,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
             lineOne={props.lineOne}
             lineTwo={props.lineTwo}
             city={props.city}
+            postCode={props.postCode}
             state={props.state}
             country={props.country}
           />

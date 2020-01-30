@@ -8,21 +8,19 @@ import './addressDisplayText.scss';
 import { countries } from 'helpers/internationalisation/country';
 
 const addressLine = (string: Option<string>) => {
-  if(string && string !== "")
-    return <span>{string}<br/></span>
+  if (string && string !== '') { return <span>{string}<br /></span>; }
   return null;
 };
 
-const AddressDisplayText = (props: FormFields) => {
-  return (
-    <Text className="component-address-display">
-      {addressLine(props.lineOne)}
-      {addressLine(props.lineTwo)}
-      {addressLine(props.city)}
-      {addressLine(props.state)}
-      {countries[props.country]}
-    </Text>
-  )
-};
+const AddressDisplayText = (props: FormFields) => (
+  <Text className="component-address-display">
+    {addressLine(props.lineOne)}
+    {addressLine(props.lineTwo)}
+    {addressLine(props.city)}
+    {addressLine(props.state)}
+    {addressLine(props.postCode)}
+    {countries[props.country]}
+  </Text>
+);
 
 export default AddressDisplayText;
