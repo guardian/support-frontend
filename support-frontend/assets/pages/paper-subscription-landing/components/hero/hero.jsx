@@ -3,38 +3,36 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 import GridPicture from 'components/gridPicture/gridPicture';
-import ProductPagehero, {
-  HeroHanger,
-  HeroHeading,
-  HeroWrapper,
-} from 'components/productPage/productPageHero/productPageHero';
+import ProductPagehero
+  from 'components/productPage/productPageHero/productPageHero';
 import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
 import GridImage from 'components/gridImage/gridImage';
-import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSaleCountdown';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import HeadingBlock from 'components/headingBlock/headingBlock';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import {
-  showCountdownTimer,
-} from 'helpers/flashSale';
 import { getDiscountCopy } from './discountCopy';
 import './joyOfPrint.scss';
+import type { State } from 'pages/paper-subscription-landing/paperSubscriptionLandingPageReducer';
+import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
+import type { DiscountCopy } from 'pages/paper-subscription-landing/components/hero/discountCopy';
 
-const discountCopy = getDiscountCopy();
+type PropTypes = {
+  discountCopy: DiscountCopy,
+}
+
+const mapStateToProps = (state: State) => {
+  const maxSavingVsRetail = getMaxSavingVsRetail(state.page.productPrices);
+  return {
+    discountCopy: getDiscountCopy(maxSavingVsRetail),
+  }
+};
 
 const Discount = (props: { discountCopy: string[] }) => (
   <div>
     {props.discountCopy.map(copy => <span>{ copy }</span>)}
   </div>
 );
-
-const TimerIfActive = () => (showCountdownTimer('Paper', GBPCountries) ? (
-  <FlashSaleCountdownInHero
-    product="Paper"
-    countryGroupId="GBPCountries"
-  />) : null);
 
 const HeroPicture = () => (
   <GridPicture
@@ -61,37 +59,11 @@ const HeroPicture = () => (
   />
 );
 
-const Footer = () => (
-  <HeroHanger>
-    <AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
-  </HeroHanger>
-);
-
-const Heading = () => (
-  <HeroHeading hasCampaign={false}>
-    <HeadingBlock overheading="The Guardian newspaper subscriptions">{discountCopy.heading}</HeadingBlock>
-  </HeroHeading>
-);
-
-const DefaultHeader = () => (
-  <header>
-    <HeroWrapper
-      appearance="feature"
-      modifierClasses={['paper']}
-    >
-      <HeroPicture />
-      <TimerIfActive />
-    </HeroWrapper>
-    <Heading />
-    <Footer />
-  </header>
-);
-
-const CampaignHeader = () => (
+const CampaignHeader = (props: PropTypes) => (
   <ProductPagehero
     appearance="campaign"
     overheading="Newspaper subscriptions"
-    heading={discountCopy.heading}
+    heading={props.discountCopy.heading}
     modifierClasses={['paper-sale']}
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
@@ -105,7 +77,7 @@ const CampaignHeader = () => (
     <div className="sale-joy-of-print-graphic-outer">
       <div className="sale-joy-of-print-graphic-inner">
         <div className="sale-joy-of-print-badge">
-          <Discount discountCopy={discountCopy.roundel} />
+          <Discount discountCopy={props.discountCopy.roundel} />
         </div>
         <div className="sale-joy-of-print-graphic">
           <GridImage
@@ -121,4 +93,6 @@ const CampaignHeader = () => (
   </ProductPagehero>
 );
 
-export { DefaultHeader, CampaignHeader, HeroPicture };
+export default connect(mapStateToProps)(CampaignHeader);
+
+export {  HeroPicture };

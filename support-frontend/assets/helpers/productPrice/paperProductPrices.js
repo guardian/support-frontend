@@ -59,11 +59,11 @@ function getSavingsForFulfilmentOption(
   });
 }
 
-function getBiggestSavingVsRetail(productPrices: ProductPrices): number {
+function getMaxSavingVsRetail(productPrices: ProductPrices): number {
   const countryPrices = productPrices['United Kingdom'];
   const allSavings = getSavingsForFulfilmentOption(countryPrices, Collection)
     .concat(getSavingsForFulfilmentOption(countryPrices, HomeDelivery));
   return Math.max(...allSavings);
 }
 
-export { getProductPrice, finalPrice, getBiggestSavingVsRetail };
+export { getProductPrice, finalPrice, getMaxSavingVsRetail };

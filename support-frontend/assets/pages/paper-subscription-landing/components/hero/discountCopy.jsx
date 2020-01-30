@@ -5,20 +5,20 @@ import { type Node } from 'react';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
-type DiscountCopy = {
+export type DiscountCopy = {
   roundel: string[],
   heading: string | Node,
 };
 
-const discountCopy: DiscountCopy = {
-  roundel: ['Save up to', '37%', 'a year'],
-  heading: 'Save up to 37% a year with a subscription',
-};
+const discountCopy = (discountPercentage: number): DiscountCopy => ({
+  roundel: ['Save up to', `${discountPercentage}%`, 'a year'],
+  heading: `Save up to ${discountPercentage}% a year with a subscription`,
+});
 
-export const getDiscountCopy = (): DiscountCopy => {
+export const getDiscountCopy = (discountPercentage: number): DiscountCopy => {
   if (flashSaleIsActive('Paper', GBPCountries)) {
     const saleCopy = getSaleCopy('Paper', GBPCountries);
     return saleCopy.landingPage;
   }
-  return discountCopy;
+  return discountCopy(discountPercentage);
 };

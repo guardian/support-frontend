@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 import { isNumeric } from 'helpers/productPrice/productPrices';
 import { hasDiscount } from 'helpers/productPrice/promotions';
-import { getBiggestSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
+import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 
 // ----- Tests ----- //
 
@@ -19,7 +19,7 @@ describe('productPrices', () => {
     expect(isNumeric(50)).toEqual(true);
   });
 
-  describe('getBiggestSavingVsRetail', () => {
+  describe('getMaxSavingVsRetail', () => {
     const productPrices = {
       'United Kingdom': {
         Collection: {
@@ -169,7 +169,7 @@ describe('productPrices', () => {
       },
     };
 
-    expect(getBiggestSavingVsRetail(productPrices)).toEqual(29);
+    expect(getMaxSavingVsRetail(productPrices)).toEqual(29);
   });
 
   describe('hasDiscount', () => {

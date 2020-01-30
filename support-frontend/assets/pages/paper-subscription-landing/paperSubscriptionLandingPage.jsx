@@ -15,7 +15,7 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import 'stylesheets/skeleton/skeleton.scss';
 
-import { CampaignHeader } from './components/hero/hero';
+import CampaignHeader from './components/hero/hero';
 import Tabs from './components/tabs';
 import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
