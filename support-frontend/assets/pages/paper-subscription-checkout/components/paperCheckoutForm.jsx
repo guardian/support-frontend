@@ -63,7 +63,7 @@ import {
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { TextArea } from 'components/forms/textArea';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Stripe } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
@@ -73,6 +73,8 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 
 // ----- Types ----- //
@@ -311,7 +313,6 @@ function PaperCheckoutForm(props: PropTypes) {
             amount={props.amount}
             billingPeriod={props.billingPeriod}
             allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-            directDebitButtonText="Pay now"
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"
@@ -328,6 +329,18 @@ function PaperCheckoutForm(props: PropTypes) {
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Pay now"
+            />
+          </FormSectionHiddenUntilSelected>
+          <FormSectionHiddenUntilSelected
+            id="directDebitForm"
+            show={props.paymentMethod === DirectDebit}
+            title="Your account details"
+          >
+            <DirectDebitForm
+              buttonText="Subscribe with Direct Debit"
+              onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
+                props.onPaymentAuthorised(pa);
+              }}
             />
           </FormSectionHiddenUntilSelected>
           <GeneralErrorMessage

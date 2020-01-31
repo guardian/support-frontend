@@ -1,11 +1,9 @@
 // @flow
 
-import React, { type Node } from 'react';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import React from 'react';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import Rows from 'components/base/rows';
-import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { type Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
@@ -17,7 +15,6 @@ import { withError } from 'hocs/withError';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
-import { SubscriptionSubmitButton } from 'components/subscriptionCheckouts/subscriptionSubmitButton';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -28,7 +25,6 @@ type PropTypes = {|
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
   validationError: Option<string>,
-  priceSummary?: Node,
   allErrors: Array<Object>,
   billingPeriod: BillingPeriod,
   amount: number,
@@ -39,7 +35,6 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   formIsValid: Function,
   payPalHasLoaded: boolean,
-  directDebitButtonText: string,
 |}
 
 const FieldsetWithError = withError(Fieldset);
@@ -100,27 +95,9 @@ function PaymentMethodSelector(props: PropTypes) {
         billingPeriod={props.billingPeriod}
         allErrors={props.allErrors}
       />)}
-      {props.paymentMethod === DirectDebit && (
-      <SubscriptionSubmitButton
-        paymentMethod={props.paymentMethod}
-        allErrors={props.allErrors}
-        className={DirectDebit}
-        component={props.priceSummary}
-        text={props.directDebitButtonText}
-      />)}
-      <DirectDebitPopUpForm
-        buttonText="Subscribe with Direct Debit"
-        onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
-          props.onPaymentAuthorised(pa);
-        }}
-      />
     </FormSection>
     : null);
 }
-
-PaymentMethodSelector.defaultProps = {
-  priceSummary: null,
-};
 
 
 export { PaymentMethodSelector };

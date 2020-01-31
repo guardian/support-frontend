@@ -56,7 +56,7 @@ import {
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
-import { PayPal, Stripe } from 'helpers/paymentMethods';
+import { PayPal, Stripe, DirectDebit } from 'helpers/paymentMethods';
 import {
   getAppliedPromoDescription,
   getPriceDescription,
@@ -65,6 +65,8 @@ import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { getGlobal } from 'helpers/globals';
+import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 
 // ----- Types ----- //
@@ -222,8 +224,6 @@ function DigitalCheckoutForm(props: PropTypes) {
             amount={props.amount}
             billingPeriod={props.billingPeriod}
             allErrors={[...props.addressErrors, ...props.formErrors]}
-            priceSummary={<PriceSummary />}
-            directDebitButtonText="Start your free trial now"
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"
@@ -241,6 +241,18 @@ function DigitalCheckoutForm(props: PropTypes) {
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Start your free trial now"
+            />
+          </FormSectionHiddenUntilSelected>
+          <FormSectionHiddenUntilSelected
+            id="directDebitForm"
+            show={props.paymentMethod === DirectDebit}
+            title="Your account details"
+          >
+            <DirectDebitForm
+              buttonText="Subscribe with Direct Debit"
+              onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
+                props.onPaymentAuthorised(pa);
+              }}
             />
           </FormSectionHiddenUntilSelected>
           <GeneralErrorMessage
