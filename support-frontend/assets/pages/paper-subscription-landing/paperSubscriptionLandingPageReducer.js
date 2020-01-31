@@ -19,7 +19,7 @@ export type ActiveTabState = PaperFulfilmentOptions;
 export type State = {
   common: CommonState,
   page: {
-    productPrices: ?ProductPrices,
+    productPrices: ProductPrices,
     tab: ActiveTabState,
   }
 };
