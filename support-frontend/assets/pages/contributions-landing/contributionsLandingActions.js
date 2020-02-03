@@ -45,7 +45,7 @@ import * as cookie from 'helpers/cookie';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
+import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult, type PayPalButtonCallbacks } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
@@ -96,6 +96,7 @@ export type Action =
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
+  | { type: 'UPDATE_PAYPAL_BUTTON_CALLBACKS', payPalButtonCallbacks: PayPalButtonCallbacks }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -277,6 +278,9 @@ const setStripeCardFormComplete = (isComplete: boolean): ((Function) => void) =>
 
 const setSetupIntentClientSecret = (setupIntentClientSecret: string): Action =>
   ({ type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret });
+
+const updatePayPalButtonCallbacks = (payPalButtonCallbacks: PayPalButtonCallbacks): Action =>
+  ({ type: 'UPDATE_PAYPAL_BUTTON_CALLBACKS', payPalButtonCallbacks });
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
@@ -716,4 +720,5 @@ export {
   setHandleStripe3DS,
   setStripeCardFormComplete,
   setSetupIntentClientSecret,
+  updatePayPalButtonCallbacks,
 };

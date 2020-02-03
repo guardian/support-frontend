@@ -90,6 +90,12 @@ export type AmazonPayData = {
   fatalError: boolean,
 }
 
+export type PayPalButtonCallbacks = {
+  payPalButtonEnable: () => void,
+  payPalButtonDisable: () => void,
+}
+
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
@@ -112,6 +118,7 @@ type FormState = {
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,
   payPalHasLoaded: boolean,
+  payPalButtonCallbacks: PayPalButtonCallbacks | null,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
@@ -210,6 +217,7 @@ function createFormReducer() {
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
+    payPalButtonCallbacks: null,
     hasSeenDirectDebitThankYouCopy: false,
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
@@ -440,6 +448,9 @@ function createFormReducer() {
 
       case 'SET_PAYPAL_HAS_LOADED':
         return { ...state, payPalHasLoaded: true };
+
+      case 'UPDATE_PAYPAL_BUTTON_CALLBACKS':
+        return { ...state, payPalButtonCallbacks: { ...action.payPalButtonCallbacks } };
 
       case 'SET_TICKER_GOAL_REACHED':
         return { ...state, tickerGoalReached: true };

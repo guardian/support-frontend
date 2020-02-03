@@ -4,6 +4,7 @@
 
 import ReactDOM from 'react-dom';
 import React from 'react';
+import { connect } from 'react-redux';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getPayPalOptions, type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
@@ -11,6 +12,8 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPal } from 'helpers/paymentMethods';
+import { type Action, updatePayPalButtonCallbacks } from 'pages/contributions-landing/contributionsLandingActions';
+import { type PayPalButtonCallbacks } from 'pages/contributions-landing/contributionsLandingReducer';
 
 type PropTypes = {|
   onPaymentAuthorisation: Function,
@@ -24,7 +27,14 @@ type PropTypes = {|
   amount: number,
   billingPeriod: BillingPeriod,
   setupRecurringPayPalPayment: SetupPayPalRequestType,
+  updatePayPalButtonCallbacks: (PayPalButtonCallbacks) => Action,
 |};
+
+
+const mapDispatchToProps = (dispatch: Function) => ({
+  updatePayPalButtonCallbacks: (payPalButtonCallbacks: PayPalButtonCallbacks) =>
+    dispatch(updatePayPalButtonCallbacks(payPalButtonCallbacks)),
+});
 
 
 // Q. Why is this a class rather than a function?
@@ -43,7 +53,7 @@ type PropTypes = {|
 // 1. Loading this iframe is an expensive operation which causes an obvious visual re-render
 // 2. We don't want to have to re-bind handlers which interact with the iframe
 //    (e.g. the handler bound in getPayPalOptions)
-export class PayPalExpressButton extends React.Component<PropTypes> {
+class PayPalExpressButtonComponent extends React.Component<PropTypes> {
   shouldComponentUpdate(nextProps: PropTypes) {
     return (this.props.hasLoaded !== nextProps.hasLoaded);
   }
@@ -78,7 +88,11 @@ export class PayPalExpressButton extends React.Component<PropTypes> {
         this.props.amount,
         this.props.billingPeriod,
         this.props.setupRecurringPayPalPayment,
+        this.props.updatePayPalButtonCallbacks,
       ),
     );
   }
 }
+
+const PayPalExpressButton = connect(mapDispatchToProps)(PayPalExpressButtonComponent);
+export default PayPalExpressButton;

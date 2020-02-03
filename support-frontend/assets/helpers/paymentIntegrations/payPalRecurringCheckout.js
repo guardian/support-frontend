@@ -12,7 +12,9 @@ import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import { PayPal } from 'helpers/paymentMethods';
 import { billingPeriodFromContrib, getAmount } from '../contributions';
 import type { Csrf } from '../csrf/csrfReducer';
-import type { State } from '../../pages/contributions-landing/contributionsLandingReducer';
+import type { State, PayPalButtonCallbacks } from '../../pages/contributions-landing/contributionsLandingReducer';
+import { type Action } from 'pages/contributions-landing/contributionsLandingActions';
+
 
 export type SetupPayPalRequestType = (
   resolve: string => void,
@@ -165,6 +167,7 @@ function getPayPalOptions(
   amount: number,
   billingPeriod: BillingPeriod,
   setupPayPalPayment: SetupPayPalRequestType,
+  updatePayPalButtonCallbacks: (PayPalButtonCallbacks) => Action,
 ): Object {
 
   function toggleButton(actions): void {
@@ -189,16 +192,17 @@ function getPayPalOptions(
     // If all is working correctly, it should not be called multiple times because we
     // should never be re-loading the iframe.
     validate(actions) {
-      if (validateCalled) {
-        logException('PayPal recurring button should only be loaded once');
-        return;
-      }
+      // if (validateCalled) {
+      //   logException('PayPal recurring button should only be loaded once');
+      //   return;
+      // }
 
       window.enablePayPalButton = actions.enable;
       window.disablePayPalButton = actions.disable;
 
       validateCalled = true;
       toggleButton(actions);
+      updatePayPalButtonCallbacks(actions);
 
     },
 
