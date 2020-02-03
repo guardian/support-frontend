@@ -3,15 +3,11 @@
 
 .component-direct-debit-form {
   clear: left;
-  margin-top: 80px;
+  margin-top: 20px;
   margin-left: 0;
 
-  @include mq($from: mobileLandscape) {
-    margin-left: $gu-h-spacing;
-    margin-right: $gu-h-spacing /2;
-  }
-
   .component-error-message {
+    display: block;
     background-color: transparent;
     color: gu-colour(state-error);
     padding: 0;
@@ -39,38 +35,19 @@
   }
 }
 
+.component-direct-debit-form__account-holder-name,
+.component-direct-debit-form__account-number,
+.component-direct-debit-form__sort-code {
+  margin-bottom: 20px;
+}
+
 .component-direct-debit-form__field-label {
   display: block;
-  font-family: $gu-headline;
+  font-family: $gu-text-sans-web;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
   margin-top: 8px;
   margin-bottom: 6px;
-}
-
-.component-direct-debit-form__sort-code-field {
-  text-align: center;
-  font-family: $gu-text-sans-web;
-  font-size: 14px;
-  background-color: white;
-  color: gu-colour(neutral-7);
-  border: 1px solid gu-colour(neutral-7);
-  border-radius: 25px;
-  height: 41px;
-  width: 47px;
-  @include mq($from: mobileMedium) {
-    width: 57px;
-  }
-  padding: 0 15px;
-  margin-bottom: 25px;
-}
-
-.component-direct-debit-form__sort-code-separator {
-  margin: 6px;
-  font-size: 18px;
-  @include mq($from: mobileMedium) {
-    margin: 10px;
-  }
 }
 
 .component-direct-debit-form__text-field {
@@ -78,9 +55,9 @@
   font-size: 14px;
   font-weight: bold;
   background-color: white;
-  color: black;
-  border: 1px solid gu-colour(neutral-7);
-  border-radius: 25px;
+  color: gu-colour(neutral-7);
+  border: 1px solid gu-colour(neutral-86);
+  padding: 0 15px;
   height: 40px;
   width: 266px;
   @include mq($from: mobileMedium) {
@@ -89,7 +66,16 @@
   @include mq($from: mobileLandscape) {
     width: 374px
   }
-  padding: 0 15px;
+}
+
+.component-direct-debit-form__sort-code-field {
+  width: 177px;
+  @include mq($from: mobileMedium) {
+    width: 209px;
+  }
+  @include mq($from: mobileLandscape) {
+    width: 249px
+  }
 }
 
 .component-direct-debit-form__confirmation-text {
@@ -150,10 +136,9 @@
 .component-direct-debit-form__cta-text {
   color: gu-colour(neutral-7);
   font-family: $gu-text-sans-web;
-  font-size: 14px;
-  line-height: 3;
-  text-align: left;
-  float: left;
+  font-size: 16px;
+  margin-left: 10px;
+  font-weight: 600;
 }
 
 .component-direct-debit-form__cta-text--inverse {
@@ -167,8 +152,6 @@
   cursor: pointer;
   position: relative;
   height: $gu-cta-height;
-  margin-top: 20px;
-  margin-bottom: 10px;
 
   .svg-arrow-right-straight {
     width: 24px;
@@ -185,19 +168,9 @@
 }
 
 .component-direct-debit-form__cta--pay-button {
-  .svg-direct-debit-symbol {
-    margin: 8px 8px 0 8px;
-    float: left;
-  }
-  @include mq($until: mobileMedium) {
-    width: 300px;
-  }
-  @include mq($from: mobileMedium) {
-    width: 343px;
-  }
-  @include mq($from: mobileLandscape) {
-    width: 407px
-  }
+  display: inline-flex;
+  justify-content: space-between;
+  width: 280px;
 }
 
 .component-direct-debit-form__cta--edit-button {

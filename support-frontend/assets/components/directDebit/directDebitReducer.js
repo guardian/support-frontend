@@ -7,24 +7,18 @@ import type { Action, Phase } from './directDebitActions';
 // ----- Setup ----- //
 
 export type DirectDebitState = {
-  isPopUpOpen: boolean,
-  isDDGuaranteeOpen: boolean,
-  sortCodeArray: Array<string>,
+  sortCode: string,
   accountNumber: string,
   accountHolderName: string,
-  accountHolderConfirmation: boolean,
   formError: string,
   phase: Phase
 };
 
 
 const initialState: DirectDebitState = {
-  isPopUpOpen: false,
-  isDDGuaranteeOpen: false,
-  sortCodeArray: Array(3).fill(''),
+  sortCode: '',
   accountNumber: '',
   accountHolderName: '',
-  accountHolderConfirmation: false,
   formError: '',
   phase: 'entry',
 };
@@ -39,34 +33,10 @@ const directDebitReducer = (
 
   switch (action.type) {
 
-    case 'DIRECT_DEBIT_POP_UP_OPEN':
-
-      return Object.assign({}, state, {
-        isPopUpOpen: true,
-      });
-
-    case 'DIRECT_DEBIT_POP_UP_CLOSE':
-
-      return Object.assign({}, state, {
-        isPopUpOpen: false,
-      });
-
-    case 'DIRECT_DEBIT_GUARANTEE_OPEN':
-
-      return Object.assign({}, state, {
-        isDDGuaranteeOpen: true,
-      });
-
-    case 'DIRECT_DEBIT_GUARANTEE_CLOSE':
-
-      return Object.assign({}, state, {
-        isDDGuaranteeOpen: false,
-      });
-
     case 'DIRECT_DEBIT_UPDATE_SORT_CODE':
-      initialState.sortCodeArray[action.index] = action.partialSortCode;
+      initialState.sortCode = action.sortCode;
       return Object.assign({}, state, {
-        sortCode: initialState.sortCodeArray,
+        sortCode: initialState.sortCode,
       });
 
     case 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER':
@@ -79,11 +49,6 @@ const directDebitReducer = (
 
       return Object.assign({}, state, {
         accountHolderName: action.accountHolderName,
-      });
-
-    case 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION':
-      return Object.assign({}, state, {
-        accountHolderConfirmation: action.accountHolderConfirmation,
       });
 
     case 'DIRECT_DEBIT_SET_FORM_ERROR':

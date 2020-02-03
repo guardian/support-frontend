@@ -6,59 +6,37 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import ErrorMessage from 'components/errorMessage/errorMessage';
 import SortCodeInput
   from 'components/directDebit/directDebitForm/sortCodeInput';
-import DirectDebitGuarantee
-  from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import type {
   Action,
   Phase,
-  SortCodeIndex,
 } from 'components/directDebit/directDebitActions';
 import {
-  closeDirectDebitGuarantee,
   confirmDirectDebitClicked,
-  openDirectDebitGuarantee,
-  payDirectDebitClicked,
-  setDirectDebitFormPhase,
-  updateAccountHolderConfirmation,
   updateAccountHolderName,
   updateAccountNumber,
   updateSortCode,
 } from 'components/directDebit/directDebitActions';
-import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
-import SvgDirectDebitSymbolAndText
-  from 'components/svgs/directDebitSymbolAndText';
-import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
-import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
-import { contributionsEmail } from 'helpers/legal';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import './directDebitForm.scss';
+import Button from 'components/button/button';
+import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 
 // ---- Types ----- //
 
 type PropTypes = {|
   buttonText: string,
   onPaymentAuthorisation: PaymentAuthorisation => void,
-  isDDGuaranteeOpen: boolean,
-  sortCodeArray: Array<string>,
+  sortCode: string,
   accountNumber: string,
   accountHolderName: string,
-  accountHolderConfirmation: boolean,
-  updateSortCode: (index: SortCodeIndex, event: SyntheticInputEvent<HTMLInputElement>) => void,
+  updateSortCode: (event: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
-  updateAccountHolderConfirmation: (accountHolderConfirmation: SyntheticInputEvent<HTMLInputElement>) => void,
-  openDDGuaranteeClicked: () => void,
-  closeDDGuaranteeClicked: () => void,
   formError: string,
   phase: Phase,
-  payDirectDebitClicked: () => void,
-  editDirectDebitClicked: () => void,
   confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => void,
-  countryGroupId: CountryGroupId,
 |};
 
 
@@ -66,7 +44,6 @@ type PropTypes = {|
 
 function mapStateToProps(state) {
   return {
-    isDDGuaranteeOpen: state.page.directDebit.isDDGuaranteeOpen,
     sortCodeArray: state.page.directDebit.sortCodeArray,
     accountNumber: state.page.directDebit.accountNumber,
     accountHolderName: state.page.directDebit.accountHolderName,
@@ -80,25 +57,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
   return {
-    payDirectDebitClicked: () => {
-      dispatch(payDirectDebitClicked());
-      return false;
-    },
-    editDirectDebitClicked: () => {
-      dispatch(setDirectDebitFormPhase('entry'));
-    },
     confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => {
       dispatch(confirmDirectDebitClicked(onPaymentAuthorisation));
       return false;
     },
-    openDDGuaranteeClicked: () => {
-      dispatch(openDirectDebitGuarantee());
-    },
-    closeDDGuaranteeClicked: () => {
-      dispatch(closeDirectDebitGuarantee());
-    },
-    updateSortCode: (index: SortCodeIndex, event: SyntheticInputEvent<HTMLInputElement>) => {
-      dispatch(updateSortCode(index, event.target.value));
+    updateSortCode: (event: SyntheticInputEvent<HTMLInputElement>) => {
+      dispatch(updateSortCode(event.target.value));
     },
     updateAccountNumber: (event: SyntheticInputEvent<HTMLInputElement>) => {
       const accountNumber: string = event.target.value;
@@ -107,10 +71,6 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     updateAccountHolderName: (event: SyntheticInputEvent<HTMLInputElement>) => {
       const accountHolderName: string = event.target.value;
       dispatch(updateAccountHolderName(accountHolderName));
-    },
-    updateAccountHolderConfirmation: (event: SyntheticInputEvent<HTMLInputElement>) => {
-      const accountHolderConfirmation: boolean = event.target.checked;
-      dispatch(updateAccountHolderConfirmation(accountHolderConfirmation));
     },
   };
 
@@ -127,44 +87,23 @@ const DirectDebitForm = (props: PropTypes) => (
       value={props.accountHolderName}
     />
 
+    <SortCodeInput
+      phase={props.phase}
+      onChange={props.updateSortCode}
+      value={props.sortCode}
+    />
+
     <AccountNumberInput
       phase={props.phase}
       onChange={props.updateAccountNumber}
       value={props.accountNumber}
     />
 
-    <SortCodeInput
-      phase={props.phase}
-      onChange={props.updateSortCode}
-      sortCodeArray={props.sortCodeArray}
-    />
-
-    <ConfirmationInput
-      phase={props.phase}
-      onChange={props.updateAccountHolderConfirmation}
-      checked={props.accountHolderConfirmation}
-    />
-
-    <PaymentButton
-      buttonText={props.buttonText}
-      phase={props.phase}
-      onPayClick={() => props.payDirectDebitClicked()}
-      onEditClick={() => props.editDirectDebitClicked()}
-      onConfirmClick={() => props.confirmDirectDebitClicked(props.onPaymentAuthorisation)}
-    />
-
-    <ErrorMessage
-      message={props.formError}
-      svg={<SvgExclamationAlternate />}
-    />
-
-    <LegalNotice countryGroupId={props.countryGroupId} />
-
-    <DirectDebitGuarantee
-      isDDGuaranteeOpen={props.isDDGuaranteeOpen}
-      openDDGuaranteeClicked={props.openDDGuaranteeClicked}
-      closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
-    />
+    <Button id="qa-direct-debit-submit" onClick={() => props.confirmDirectDebitClicked(props.onPaymentAuthorisation)}>
+      {props.buttonText}
+    </Button>
+    {(props.formError.length > 0)
+    && <ErrorSummary errors={[{ message: props.formError }]} />}
   </div>
 );
 
@@ -225,134 +164,13 @@ function AccountHolderNameInput(props: {phase: Phase, value: string, onChange: F
   return (
     <div className="component-direct-debit-form__account-holder-name">
       <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
-        Account name
+        Bank account holder name
       </label>
       {props.phase === 'entry' ? editable : locked}
     </div>
   );
 }
 
-function ConfirmationInput(props: {phase: Phase, checked: boolean, onChange: Function }) {
-  const editable = (
-    <span>
-      <div className="component-direct-debit-form__confirmation-css-checkbox">
-        <input
-          className="component-direct-debit-form__confirmation-input"
-          id="confirmation-input"
-          type="checkbox"
-          onChange={props.onChange}
-          checked={props.checked}
-        />
-        <label
-          id="qa-confirmation-input"
-          className="component-direct-debit-form__confirmation-label"
-          htmlFor="confirmation-input"
-        />
-      </div>
-      <span className="component-direct-debit-form__confirmation-text">
-        I confirm that I am the account holder and I am solely able to authorise debit from
-        the account
-      </span>
-    </span>
-  );
-
-  const locked = (
-    <span>
-      <label htmlFor="confirmation-text__locked" className="component-direct-debit-form__field-label">
-        Declaration
-      </label>
-      <div id="confirmation-text__locked" className="component-direct-debit-form__confirmation-text__locked">
-        I have confirmed that I am the account holder and that I am solely able to authorise debit
-        from the account
-      </div>
-      <div className="component-direct-debit-form__confirmation-guidance">
-        If the details above are correct press confirm to set up your direct debit, otherwise press
-        back to make changes
-      </div>
-    </span>
-  );
-
-  return (
-    <div className="component-direct-debit-form__account-holder-confirmation">
-      <div>
-        <label htmlFor="confirmation-input">
-          {props.phase === 'entry' ? editable : locked}
-        </label>
-      </div>
-    </div>
-  );
-}
-
-function PaymentButton(props: {
-  buttonText: string,
-  phase: Phase,
-  onPayClick: Function,
-  onEditClick: Function,
-  onConfirmClick: Function
-}) {
-  if (props.phase === 'entry') {
-    return (
-      <button
-        id="qa-submit-button-1"
-        className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
-        onClick={props.onPayClick}
-      >
-        <SvgDirectDebitSymbol />
-        <span className="component-direct-debit-form__cta-text">
-          {props.buttonText}
-        </span>
-        <SvgArrowRightStraight />
-      </button>
-    );
-  }
-  if (props.phase === 'confirmation') {
-    return (
-      <span>
-        <button
-          className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
-          onClick={props.onEditClick}
-        >
-          <SvgArrowRightStraight />
-          <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">Back</span>
-        </button>
-        <button
-          id="qa-submit-button-2"
-          className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
-          onClick={props.onConfirmClick}
-        >
-          <span className="component-direct-debit-form__cta-text">Confirm</span>
-          <SvgArrowRightStraight />
-        </button>
-      </span>
-    );
-  }
-
-  return null;
-}
-
-function LegalNotice(props: { countryGroupId: CountryGroupId }) {
-  return (
-    <div className="component-direct-debit-form__legal-notice">
-      <p>
-        <strong>Payments by GoCardless </strong>
-        <a href="https://gocardless.com/legal/privacy/" target="_blank" rel="noopener noreferrer">read the GoCardless privacy notice.</a>
-      </p>
-      <p><strong>Advance notice</strong> The details of your Direct Debit instruction including
-        payment schedule, due date, frequency and amount will be sent to you within three working
-        days. All the normal Direct Debit safeguards and guarantees apply.
-      </p>
-      <strong>Direct Debit</strong>
-      <p>
-        The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch,
-        LE65 1JT United Kingdom<br />
-        Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays,
-        8am-6pm at weekends (GMT/BST)<br />
-        <a href={contributionsEmail[props.countryGroupId]}>{contributionsEmail[props.countryGroupId].replace('mailto:', '')}</a>
-      </p>
-      <SvgDirectDebitSymbolAndText />
-    </div>
-  );
-}
 
 // ----- Exports ----- //
 
