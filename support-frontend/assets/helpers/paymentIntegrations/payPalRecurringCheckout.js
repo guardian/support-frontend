@@ -12,7 +12,7 @@ import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import { PayPal } from 'helpers/paymentMethods';
 import { billingPeriodFromContrib, getAmount } from '../contributions';
 import type { Csrf } from '../csrf/csrfReducer';
-import type { State, PayPalButtonCallbacks } from '../../pages/contributions-landing/contributionsLandingReducer';
+import type { State } from '../../pages/contributions-landing/contributionsLandingReducer';
 import { type Action } from 'pages/contributions-landing/contributionsLandingActions';
 
 
