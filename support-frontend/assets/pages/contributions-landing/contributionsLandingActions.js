@@ -280,10 +280,8 @@ const setStripeCardFormComplete = (isComplete: boolean): ((Function) => void) =>
 const setSetupIntentClientSecret = (setupIntentClientSecret: string): Action =>
   ({ type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret });
 
-const updatePayPalButtonReady = (ready: boolean): Action => {
-  console.log("updatePayPalButtonReady", ready)
-  return ({type: 'UPDATE_PAYPAL_BUTTON_READY', ready});
-}
+const updatePayPalButtonReady = (ready: boolean): Action =>
+  ({ type: 'UPDATE_PAYPAL_BUTTON_READY', ready });
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {

@@ -154,7 +154,6 @@ function createAgreement(payPalData: Object, csrf: CsrfState) {
     .then(response => response.json());
 }
 
-let validateCalled;
 
 function getPayPalOptions(
   currencyId: IsoCurrency,
@@ -188,20 +187,11 @@ function getPayPalOptions(
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
     commit: true,
 
-    // This gets called when the button is first initialised, i.e. when the iframe loads.
-    // If all is working correctly, it should not be called multiple times because we
-    // should never be re-loading the iframe.
     validate(actions) {
-      // if (validateCalled) {
-      //   logException('PayPal recurring button should only be loaded once');
-      //   return;
-      // }
 
-      console.log("setting callbacks")
       window.enablePayPalButton = actions.enable;
       window.disablePayPalButton = actions.disable;
 
-      // validateCalled = true;
       toggleButton(actions);
 
       updatePayPalButtonReady(true);

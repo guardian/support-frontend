@@ -34,7 +34,6 @@ type Action = ContributionsLandingAction | UserAction;
 // ----- Functions ----- //
 
 const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) => {
-  console.log("enableOrDisablePayPalExpressCheckoutButton", formIsSubmittable)
   if (formIsSubmittable && window.enablePayPalButton) {
     window.enablePayPalButton();
   } else if (window.disablePayPalButton) {
