@@ -94,5 +94,5 @@ class PayPalExpressButtonComponent extends React.Component<PropTypes> {
   }
 }
 
-const PayPalExpressButton = connect(mapDispatchToProps)(PayPalExpressButtonComponent);
+const PayPalExpressButton = connect(null, mapDispatchToProps)(PayPalExpressButtonComponent);
 export default PayPalExpressButton;
