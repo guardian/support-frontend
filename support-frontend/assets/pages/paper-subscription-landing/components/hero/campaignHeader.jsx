@@ -21,16 +21,20 @@ type PropTypes = {
 }
 
 const mapStateToProps = (state: State) => {
-  const maxSavingVsRetail = getMaxSavingVsRetail(state.page.productPrices);
+  const maxSavingVsRetail = state.page.productPrices ?
+    getMaxSavingVsRetail(state.page.productPrices) : 0;
   return {
     discountCopy: getDiscountCopy(maxSavingVsRetail),
   };
 };
 
-const Discount = (props: { discountCopy: string[] }) => (
-  <div>
-    {props.discountCopy.map(copy => <span>{ copy }</span>)}
-  </div>
+const Roundel = (props: { roundelCopy: string[] }) => (
+  props.roundelCopy.length > 0 ?
+    <div className="sale-joy-of-print-badge">
+      <div>
+        {props.roundelCopy.map(copy => <span>{ copy }</span>)}
+      </div>
+    </div>: null
 );
 
 const CampaignHeader = (props: PropTypes) => (
@@ -50,9 +54,7 @@ const CampaignHeader = (props: PropTypes) => (
     </div>
     <div className="sale-joy-of-print-graphic-outer">
       <div className="sale-joy-of-print-graphic-inner">
-        <div className="sale-joy-of-print-badge">
-          <Discount discountCopy={props.discountCopy.roundel} />
-        </div>
+        <Roundel roundelCopy={props.discountCopy.roundel} />
         <div className="sale-joy-of-print-graphic">
           <GridImage
             gridId="printCampaign2020"

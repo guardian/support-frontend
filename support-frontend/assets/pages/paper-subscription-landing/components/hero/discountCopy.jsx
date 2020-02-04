@@ -10,10 +10,17 @@ export type DiscountCopy = {
   heading: string | Node,
 };
 
-const discountCopy = (discountPercentage: number): DiscountCopy => ({
-  roundel: ['Save up to', `${discountPercentage}%`, 'a year'],
-  heading: `Save up to ${discountPercentage}% a year with a subscription`,
-});
+const discountCopy = (discountPercentage: number): DiscountCopy => (
+  discountPercentage > 0 ?
+    {
+      roundel: ['Save up to', `${discountPercentage}%`, 'a year'],
+      heading: `Save up to ${discountPercentage}% a year with a subscription`,
+    } :
+    {
+      roundel: [],
+      heading: `Save money with a subscription`,
+    }
+);
 
 export const getDiscountCopy = (discountPercentage: number): DiscountCopy => {
   if (flashSaleIsActive('Paper', GBPCountries)) {
