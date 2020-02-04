@@ -202,7 +202,10 @@ function getPayPalOptions(
 
       validateCalled = true;
       toggleButton(actions);
-      updatePayPalButtonCallbacks(actions);
+      updatePayPalButtonCallbacks({
+        payPalButtonEnable: actions.enable,
+        payPalButtonDisable: actions.disable,
+      });
 
     },
 
