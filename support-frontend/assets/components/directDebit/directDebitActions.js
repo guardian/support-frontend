@@ -1,5 +1,6 @@
 // @flow
 
+import * as storage from 'helpers/storage';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import { checkAccount } from './helpers/ajax';
@@ -7,12 +8,20 @@ import { DirectDebit } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
+export type SortCodeIndex = 0 | 1 | 2;
+
 export type Phase = 'entry' | 'confirmation';
 
 export type Action =
-  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', sortCode: string }
+  | { type: 'DIRECT_DEBIT_POP_UP_OPEN' }
+  | { type: 'DIRECT_DEBIT_POP_UP_CLOSE' }
+  | { type: 'DIRECT_DEBIT_GUARANTEE_OPEN' }
+  | { type: 'DIRECT_DEBIT_GUARANTEE_CLOSE' }
+  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index: SortCodeIndex, partialSortCode: string }
+  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING', sortCode: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', accountHolderName: string }
+  | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
   | { type: 'DIRECT_DEBIT_SET_FORM_ERROR', message: string }
   | { type: 'DIRECT_DEBIT_RESET_FORM_ERROR' }
   | { type: 'DIRECT_DEBIT_SET_FORM_PHASE', phase: Phase };
@@ -20,14 +29,34 @@ export type Action =
 
 // ----- Actions ----- //
 
-const updateSortCode = (sortCode: string): Action =>
-  ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', sortCode });
+const openDirectDebitPopUp = (): Action => {
+  storage.setSession('selectedPaymentMethod', DirectDebit);
+  return { type: 'DIRECT_DEBIT_POP_UP_OPEN' };
+};
+
+const closeDirectDebitPopUp = (): Action =>
+  ({ type: 'DIRECT_DEBIT_POP_UP_CLOSE' });
+
+const openDirectDebitGuarantee = (): Action =>
+  ({ type: 'DIRECT_DEBIT_GUARANTEE_OPEN' });
+
+const closeDirectDebitGuarantee = (): Action =>
+  ({ type: 'DIRECT_DEBIT_GUARANTEE_CLOSE' });
+
+const updateSortCode = (index: SortCodeIndex, partialSortCode: string): Action =>
+  ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index, partialSortCode });
+
+const updateSortCodeString = (sortCode: string): Action =>
+  ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING', sortCode });
 
 const updateAccountNumber = (accountNumber: string): Action =>
   ({ type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber });
 
 const updateAccountHolderName = (accountHolderName: string): Action =>
   ({ type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', accountHolderName });
+
+const updateAccountHolderConfirmation = (accountHolderConfirmation: boolean): Action =>
+  ({ type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation });
 
 const setDirectDebitFormError = (message: string): Action =>
   ({ type: 'DIRECT_DEBIT_SET_FORM_ERROR', message });
@@ -43,14 +72,22 @@ function payDirectDebitClicked(): Function {
   return (dispatch: Function, getState: Function) => {
 
     const {
-      sortCode,
+      sortCodeString,
+      sortCodeArray,
       accountNumber,
+      accountHolderConfirmation,
     } = getState().page.directDebit;
 
+    const sortCode = sortCodeArray.join('') || sortCodeString;
     const isTestUser: boolean = getState().page.user.isTestUser || false;
     const { csrf } = getState().page;
 
     dispatch(resetDirectDebitFormError());
+
+    if (!accountHolderConfirmation) {
+      dispatch(setDirectDebitFormError('You need to confirm that you are the account holder.'));
+      return;
+    }
 
     checkAccount(sortCode, accountNumber, isTestUser, csrf)
       .then((response) => {
@@ -85,10 +122,13 @@ function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation 
   return (dispatch: Function, getState: Function) => {
 
     const {
-      sortCode,
+      sortCodeString,
+      sortCodeArray,
       accountNumber,
       accountHolderName,
     } = getState().page.directDebit;
+
+    const sortCode = sortCodeArray.join('') || sortCodeString;
 
     onPaymentAuthorisation({
       paymentMethod: DirectDebit,
@@ -97,15 +137,23 @@ function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation 
       accountNumber,
     });
 
+    dispatch(closeDirectDebitPopUp());
+
   };
 }
 
 // ----- Exports ----//
 
 export {
+  openDirectDebitPopUp,
+  closeDirectDebitPopUp,
+  openDirectDebitGuarantee,
+  closeDirectDebitGuarantee,
   updateSortCode,
+  updateSortCodeString,
   updateAccountNumber,
   updateAccountHolderName,
+  updateAccountHolderConfirmation,
   setDirectDebitFormError,
   resetDirectDebitFormError,
   payDirectDebitClicked,

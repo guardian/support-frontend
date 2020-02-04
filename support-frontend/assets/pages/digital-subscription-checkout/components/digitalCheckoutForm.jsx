@@ -65,7 +65,7 @@ import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { getGlobal } from 'helpers/globals';
-import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
+import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 
