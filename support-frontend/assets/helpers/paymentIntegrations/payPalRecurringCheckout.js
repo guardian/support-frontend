@@ -167,7 +167,7 @@ function getPayPalOptions(
   amount: number,
   billingPeriod: BillingPeriod,
   setupPayPalPayment: SetupPayPalRequestType,
-  updatePayPalButtonCallbacks: (PayPalButtonCallbacks) => Action,
+  updatePayPalButtonReady: (boolean) => Action,
 ): Object {
 
   function toggleButton(actions): void {
@@ -197,20 +197,14 @@ function getPayPalOptions(
       //   return;
       // }
 
-      // window.enablePayPalButton = actions.enable;
-      // window.disablePayPalButton = actions.disable;
+      console.log("setting callbacks")
+      window.enablePayPalButton = actions.enable;
+      window.disablePayPalButton = actions.disable;
 
-      validateCalled = true;
+      // validateCalled = true;
       toggleButton(actions);
-      console.log("validate", {
-        payPalButtonEnable: actions.enable,
-        payPalButtonDisable: actions.disable,
-      })
-      updatePayPalButtonCallbacks({
-        payPalButtonEnable: actions.enable,
-        payPalButtonDisable: actions.disable,
-      });
 
+      updatePayPalButtonReady(true);
     },
 
     funding: {

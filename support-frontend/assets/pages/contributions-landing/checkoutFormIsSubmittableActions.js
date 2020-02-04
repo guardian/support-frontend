@@ -34,6 +34,7 @@ type Action = ContributionsLandingAction | UserAction;
 // ----- Functions ----- //
 
 const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) => {
+  console.log("enableOrDisablePayPalExpressCheckoutButton", formIsSubmittable)
   if (formIsSubmittable && window.enablePayPalButton) {
     window.enablePayPalButton();
   } else if (window.disablePayPalButton) {
@@ -41,8 +42,10 @@ const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) 
   }
 };
 
-const setFormIsSubmittable = (formIsSubmittable: boolean): Action => {
-  enableOrDisablePayPalExpressCheckoutButton(formIsSubmittable);
+const setFormIsSubmittable = (formIsSubmittable: boolean, payPalButtonReady: boolean): Action => {
+  if (payPalButtonReady) {
+    enableOrDisablePayPalExpressCheckoutButton(formIsSubmittable);
+  }
   return ({ type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable });
 };
 
@@ -123,7 +126,9 @@ function enableOrDisableForm() {
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn;
 
-    dispatch(setFormIsSubmittable(shouldEnable));
+    // const isPayPalExpress = state.page.form.paymentMethod === 'PayPal' && state.page.form.contributionType !== 'ONE_OFF';
+
+    dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };
 }
 

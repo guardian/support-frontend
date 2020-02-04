@@ -96,7 +96,7 @@ export type Action =
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
-  | { type: 'UPDATE_PAYPAL_BUTTON_CALLBACKS', payPalButtonCallbacks: PayPalButtonCallbacks }
+  | { type: 'UPDATE_PAYPAL_BUTTON_READY', ready: boolean }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -112,6 +112,7 @@ const updatePaymentMethod = (paymentMethod: PaymentMethod): ((Function) => void)
     // so we need to store the payment method in the storage so that it is available on the
     // thank you page in all scenarios.
     storage.setSession('selectedPaymentMethod', paymentMethod);
+    dispatch(updatePayPalButtonReady(false));
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod })));
   };
 
@@ -279,9 +280,9 @@ const setStripeCardFormComplete = (isComplete: boolean): ((Function) => void) =>
 const setSetupIntentClientSecret = (setupIntentClientSecret: string): Action =>
   ({ type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret });
 
-const updatePayPalButtonCallbacks = (payPalButtonCallbacks: PayPalButtonCallbacks): Action => {
-  console.log("updatePayPalButtonCallbacks", payPalButtonCallbacks)
-  return ({type: 'UPDATE_PAYPAL_BUTTON_CALLBACKS', payPalButtonCallbacks});
+const updatePayPalButtonReady = (ready: boolean): Action => {
+  console.log("updatePayPalButtonReady", ready)
+  return ({type: 'UPDATE_PAYPAL_BUTTON_READY', ready});
 }
 
 const sendFormSubmitEventForPayPalRecurring = () =>
@@ -722,5 +723,5 @@ export {
   setHandleStripe3DS,
   setStripeCardFormComplete,
   setSetupIntentClientSecret,
-  updatePayPalButtonCallbacks,
+  updatePayPalButtonReady,
 };

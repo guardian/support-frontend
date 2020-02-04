@@ -12,8 +12,7 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPal } from 'helpers/paymentMethods';
-import { type Action, updatePayPalButtonCallbacks } from 'pages/contributions-landing/contributionsLandingActions';
-import { type PayPalButtonCallbacks } from 'pages/contributions-landing/contributionsLandingReducer';
+import { type Action, updatePayPalButtonReady } from 'pages/contributions-landing/contributionsLandingActions';
 
 type PropTypes = {|
   onPaymentAuthorisation: Function,
@@ -27,13 +26,13 @@ type PropTypes = {|
   amount: number,
   billingPeriod: BillingPeriod,
   setupRecurringPayPalPayment: SetupPayPalRequestType,
-  updatePayPalButtonCallbacks: (PayPalButtonCallbacks) => Action,
+  updatePayPalButtonReady: (boolean) => Action,
 |};
 
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  updatePayPalButtonCallbacks: (payPalButtonCallbacks: PayPalButtonCallbacks) =>
-    dispatch(updatePayPalButtonCallbacks(payPalButtonCallbacks)),
+  updatePayPalButtonReady: (ready: boolean) =>
+    dispatch(updatePayPalButtonReady(ready)),
 });
 
 
@@ -88,7 +87,7 @@ class PayPalExpressButtonComponent extends React.Component<PropTypes> {
         this.props.amount,
         this.props.billingPeriod,
         this.props.setupRecurringPayPalPayment,
-        this.props.updatePayPalButtonCallbacks,
+        this.props.updatePayPalButtonReady,
       ),
     );
   }
