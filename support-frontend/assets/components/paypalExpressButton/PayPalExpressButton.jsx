@@ -35,23 +35,14 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(updatePayPalButtonReady(ready)),
 });
 
-
-// Q. Why is this a class rather than a function?
-// A. Because we need to override shouldComponentUpdate.
-//
-// Q. Why do you need to override shouldComponentUpdate? Isn't that dangerous?
-// A. We want to bypass React's normal decision-making about whether to re-render
-// this particular component, because it uses some third-party code we can't control and
-// which behaves in a very specific way.
-//
 // When we use PayPal's JS library via window.paypal.Button.driver, it renders a button inside
 // an iframe. Each time this code is called, the iframe ends up with a different id,
 // so React will always try and update the DOM even when nothing has substantively changed.
 //
-// We don't want this to happen, for two reasons.
-// 1. Loading this iframe is an expensive operation which causes an obvious visual re-render
-// 2. We don't want to have to re-bind handlers which interact with the iframe
-//    (e.g. the handler bound in getPayPalOptions)
+// We don't want this to happen, because loading this iframe is an
+// expensive operation which causes an obvious visual re-render.
+//
+// TODO: find a solution to this problem under Preact X.
 class PayPalExpressButtonComponent extends React.Component<PropTypes> {
   shouldComponentUpdate(nextProps: PropTypes) {
     return (this.props.hasLoaded !== nextProps.hasLoaded);
