@@ -444,7 +444,7 @@ function createFormReducer() {
         return { ...state, payPalHasLoaded: true };
 
       case 'UPDATE_PAYPAL_BUTTON_READY':
-        return { ...state, payPalButtonReady: action.payPalButtonReady };
+        return { ...state, payPalButtonReady: action.ready };
 
       case 'SET_TICKER_GOAL_REACHED':
         return { ...state, tickerGoalReached: true };
