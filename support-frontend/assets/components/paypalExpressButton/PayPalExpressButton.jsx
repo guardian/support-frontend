@@ -29,6 +29,10 @@ type PropTypes = {|
   updatePayPalButtonReady: (boolean) => Action,
 |};
 
+const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
+  paymentMethod: PayPal,
+  token,
+});
 
 const mapDispatchToProps = (dispatch: Function) => ({
   updatePayPalButtonReady: (ready: boolean) =>
@@ -43,46 +47,35 @@ const mapDispatchToProps = (dispatch: Function) => ({
 // expensive operation which causes an obvious visual re-render.
 //
 // TODO: find a solution to this problem under Preact X.
-class PayPalExpressButtonComponent extends React.Component<PropTypes> {
-  shouldComponentUpdate(nextProps: PropTypes) {
-    return (this.props.hasLoaded !== nextProps.hasLoaded);
+const PayPalExpressButtonComponent = (props: PropTypes) => {
+
+  const onPaymentAuthorisation = (token: string): void => {
+    props.onPaymentAuthorisation(tokenToAuthorisation(token));
+  };
+
+  // hasLoaded determines whether window.paypal is available
+  if (!props.hasLoaded) {
+    return null;
   }
 
-  props: PropTypes;
-
-  render() {
-    // hasLoaded determines whether window.paypal is available
-    if (!this.props.hasLoaded) {
-      return null;
-    }
-    const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
-      paymentMethod: PayPal,
-      token,
-    });
-
-    const onPaymentAuthorisation = (token: string): void => {
-      this.props.onPaymentAuthorisation(tokenToAuthorisation(token));
-    };
-
-    // This element contains an iframe which contains the actual button
-    return React.createElement(
-      window.paypal.Button.driver('react', { React, ReactDOM }),
-      getPayPalOptions(
-        this.props.currencyId,
-        this.props.csrf,
-        onPaymentAuthorisation,
-        this.props.canOpen,
-        this.props.onClick,
-        this.props.formClassName,
-        this.props.isTestUser,
-        this.props.amount,
-        this.props.billingPeriod,
-        this.props.setupRecurringPayPalPayment,
-        this.props.updatePayPalButtonReady,
-      ),
-    );
-  }
-}
+  // This element contains an iframe which contains the actual button
+  return React.createElement(
+    window.paypal.Button.driver('react', { React, ReactDOM }),
+    getPayPalOptions(
+      props.currencyId,
+      props.csrf,
+      onPaymentAuthorisation,
+      props.canOpen,
+      props.onClick,
+      props.formClassName,
+      props.isTestUser,
+      props.amount,
+      props.billingPeriod,
+      props.setupRecurringPayPalPayment,
+      props.updatePayPalButtonReady,
+    ),
+  );
+};
 
 const PayPalExpressButton = connect(null, mapDispatchToProps)(PayPalExpressButtonComponent);
 export default PayPalExpressButton;
