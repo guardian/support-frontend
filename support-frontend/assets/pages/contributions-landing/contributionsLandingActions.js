@@ -279,8 +279,10 @@ const setStripeCardFormComplete = (isComplete: boolean): ((Function) => void) =>
 const setSetupIntentClientSecret = (setupIntentClientSecret: string): Action =>
   ({ type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret });
 
-const updatePayPalButtonCallbacks = (payPalButtonCallbacks: PayPalButtonCallbacks): Action =>
-  ({ type: 'UPDATE_PAYPAL_BUTTON_CALLBACKS', payPalButtonCallbacks });
+const updatePayPalButtonCallbacks = (payPalButtonCallbacks: PayPalButtonCallbacks): Action => {
+  console.log("updatePayPalButtonCallbacks", payPalButtonCallbacks)
+  return ({type: 'UPDATE_PAYPAL_BUTTON_CALLBACKS', payPalButtonCallbacks});
+}
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {

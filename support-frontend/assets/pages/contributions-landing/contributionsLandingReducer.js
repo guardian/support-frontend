@@ -450,7 +450,8 @@ function createFormReducer() {
         return { ...state, payPalHasLoaded: true };
 
       case 'UPDATE_PAYPAL_BUTTON_CALLBACKS':
-        return { ...state, payPalButtonCallbacks: { ...action.payPalButtonCallbacks } };
+        console.log("UPDATE_PAYPAL_BUTTON_CALLBACKS", action.payPalButtonCallbacks)
+        return { ...state, payPalButtonCallbacks: action.payPalButtonCallbacks };
 
       case 'SET_TICKER_GOAL_REACHED':
         return { ...state, tickerGoalReached: true };

@@ -202,6 +202,10 @@ function getPayPalOptions(
 
       validateCalled = true;
       toggleButton(actions);
+      console.log("validate", {
+        payPalButtonEnable: actions.enable,
+        payPalButtonDisable: actions.disable,
+      })
       updatePayPalButtonCallbacks({
         payPalButtonEnable: actions.enable,
         payPalButtonDisable: actions.disable,
