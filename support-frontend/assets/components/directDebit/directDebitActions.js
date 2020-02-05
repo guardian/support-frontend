@@ -69,7 +69,6 @@ const setDirectDebitFormPhase = (phase: Phase): Action =>
 
 
 function payDirectDebitClicked(): Function {
-  console.log('payDirectDebitClicked!');
   return (dispatch: Function, getState: Function) => {
 
     const {
