@@ -46,6 +46,7 @@ import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
 
 if (process.env.NODE_ENV === 'DEV') {
+  // eslint-disable-next-line no-unused-expressions
   import('preact/devtools');
 }
 
