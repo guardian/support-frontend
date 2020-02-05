@@ -125,8 +125,6 @@ function enableOrDisableForm() {
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn;
 
-    // const isPayPalExpress = state.page.form.paymentMethod === 'PayPal' && state.page.form.contributionType !== 'ONE_OFF';
-
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };
 }
