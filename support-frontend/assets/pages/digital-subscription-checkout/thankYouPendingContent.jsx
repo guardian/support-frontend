@@ -39,17 +39,22 @@ function ThankYouPendingContent(props: {countryGroupId: CountryGroupId}) {
           </LargeParagraph>
           <p>
             If you require any further assistance, you can visit
-            our <a
+            our
+            <a
               onClick={sendClickedEvent('dp checkout : faq')}
               href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
             >
               FAQs page
-                </a> to find answers to common user issues. Alternatively, you can also
-            visit our <a
+            </a>
+            to find answers to common user issues. Alternatively, you can also
+            visit our
+            <a
               onClick={sendClickedEvent('dp checkout : help')}
               href="https://www.theguardian.com/help"
-            >Help page
-                      </a> for customer support.
+            >
+              Help page
+            </a>
+            for customer support.
           </p>
         </Text>
       </Content>
