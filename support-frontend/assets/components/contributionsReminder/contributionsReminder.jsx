@@ -135,8 +135,8 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
           </h3>
           <p className="contribution-thank-you-block__message">
             Lots of readers choose to make single contributions at various points in the year.
-             Opt in to receive a reminder in case you would like to support our journalism again.
-             This will be a single email, with no obligation.
+            Opt in to receive a reminder in case you would like to support our journalism again.
+            This will be a single email, with no obligation.
           </p>
 
           <FormLabel label="Remind me in:" htmlFor={null}>

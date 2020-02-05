@@ -22,7 +22,8 @@ type Out<Props, A> = React$ComponentType<AugmentedProps<Props, A>>;
 // ----- Component ----- //
 
 function asControlled<V, A, Props: InitialProps<V>>(Component: In<Props>): Out<Props, A> {
-  return ({ setValue, ...props }: AugmentedProps) => (
+  // eslint-disable-next-line react/prop-types
+  return ({ setValue, ...props }) => (
     <Component {...props} onChange={e => setValue(e.target.value)} />
   );
 }

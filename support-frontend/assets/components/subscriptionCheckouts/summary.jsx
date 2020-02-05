@@ -23,8 +23,10 @@ export type DataListItem = {
 type PropTypes = {
   billingPeriod: BillingPeriod,
   changeSubscription?: Option<string>,
+  // eslint-disable-next-line react/no-unused-prop-types
   dataList: DataListItem[],
   description: ?string,
+  // eslint-disable-next-line react/no-unused-prop-types
   image: $Call<GridImageType, GridImg>,
   productPrice: ProductPrice,
   title: string,
@@ -155,13 +157,14 @@ const HideDropDown = (props: {
 
 
 const ShowDropDown = (props: {
+  changeSubscription: Option<string>,
   description: ?string,
-  changeSubscription: null,
   deliveryMethod: string | null,
   onClick: Function,
   showDropDown: boolean,
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
+  // orderIsAGift: boolean,
   title: string,
 }) => (
   <div className={styles.contentWrapper}>
@@ -197,11 +200,22 @@ const ShowDropDown = (props: {
 );
 
 
-const Mobile = (props: { showDropDown: boolean }) => (
-  <span className={styles.mobileOnly}>
-    {!props.showDropDown && <HideDropDown {...props} />}
-    {props.showDropDown && <ShowDropDown {...props} />}
-  </span>
+const Mobile = (props: {
+  changeSubscription: Option<string>,
+  description: ?string,
+  showDropDown: boolean,
+  deliveryMethod: string | null,
+  productPrice: ProductPrice,
+  // orderIsAGift: boolean,
+  billingPeriod: BillingPeriod,
+  onClick: Function,
+  title: string,
+  paper: boolean
+  }) => (
+    <span className={styles.mobileOnly}>
+      {!props.showDropDown && <HideDropDown {...props} />}
+      {props.showDropDown && <ShowDropDown {...props} />}
+    </span>
 );
 
 // Main class
