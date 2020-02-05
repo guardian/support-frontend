@@ -22,7 +22,7 @@ type Out<Props, A> = React$ComponentType<AugmentedProps<Props, A>>;
 // ----- Component ----- //
 
 function asControlled<V, A, Props: InitialProps<V>>(Component: In<Props>): Out<Props, A> {
-  return ({ setValue, ...props }) => (
+  return ({ setValue, ...props }: AugmentedProps) => (
     <Component {...props} onChange={e => setValue(e.target.value)} />
   );
 }
