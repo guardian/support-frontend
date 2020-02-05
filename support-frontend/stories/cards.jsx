@@ -32,7 +32,7 @@ stories.add('Old Product Option', () => (
         onClick={noOp}
         footer={<ProductPagePlanFormPrice title="You pay £24.86 a month" copy="Your saving is £2.94 per month" />}
       >
-          You pay: £20.76 a month for 12 months
+        You pay: £20.76 a month for 12 months
       </ProductPagePlanFormLabel>
     </div>
   </div>
@@ -54,7 +54,7 @@ stories.add('Product Option', () => (
           dailyEditionsVariant={false}
           hidden={false}
         >
-            Save 22% a month on <br />&nbsp;retail price
+          Save 22% a month on <br />&nbsp;retail price
         </ProductOptionOffer>
       </ProductOptionContent>
       <ProductOptionButton

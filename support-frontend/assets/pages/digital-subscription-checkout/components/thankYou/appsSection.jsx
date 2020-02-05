@@ -38,7 +38,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
           href={getDailyEditionUrl(countryGroupId)}
           onClick={sendTrackingEventsOnClick('checkout_thankyou_daily_edition', 'DigitalPack', null)}
         >
-            Download from App Store
+          Download from App Store
         </AnchorButton>
         <AnchorButton
           appearance="greyHollow"
@@ -46,7 +46,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
           href={androidDailyUrl}
           onClick={sendTrackingEventsOnClick('checkout_thankyou_daily_edition', 'DigitalPack', null)}
         >
-            Download from Google Play
+          Download from Google Play
         </AnchorButton>
       </div>
     </Text>
@@ -61,7 +61,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
           href={getIosAppUrl(countryGroupId)}
           onClick={sendTrackingEventsOnClick('checkout_thankyou_app_store', 'DigitalPack', null)}
         >
-            Download from App Store
+          Download from App Store
         </AnchorButton>
         <AnchorButton
           aria-label="Click to download the app on the Google Play store"
@@ -69,7 +69,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
           href={androidAppUrl}
           onClick={sendTrackingEventsOnClick('checkout_thankyou_play_store', 'DigitalPack', null)}
         >
-            Download from Google Play
+          Download from Google Play
         </AnchorButton>
       </div>
     </Text>

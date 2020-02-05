@@ -44,7 +44,7 @@ export default function CtaContribute() {
               href="/contribute"
               onClick={() => trackComponentClick('support-page-cta-contribute')}
             >
-            Make a Contribution
+              Make a Contribution
             </AnchorButton>
           </NarrowContent>
         </div>

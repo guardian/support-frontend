@@ -270,11 +270,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
                 <p className="component-text__sans">
-                We will take the first payment on the
-                date you receive your first Guardian Weekly.
+                  We will take the first payment on the
+                  date you receive your first Guardian Weekly.
                 </p>
                 <p className="component-text__sans">
-                Subscription start dates are automatically selected to be the earliest we can fulfil your order.
+                  Subscription start dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
             </Rows>

@@ -43,7 +43,7 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
                 aria-label="Subscribe-button"
                 salesCopy={paymentOption.salesCopy}
               >
-                {'Start free trial now'}
+                Start free trial now
               </ProductOptionButton>
             </ProductOption>
           </div>
