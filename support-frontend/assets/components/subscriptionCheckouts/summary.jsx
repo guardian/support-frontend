@@ -11,6 +11,7 @@ import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
+import type { Option } from 'helpers/types/option';
 
 // Types
 
@@ -21,7 +22,7 @@ export type DataListItem = {
 
 type PropTypes = {
   billingPeriod: BillingPeriod,
-  changeSubscription?: string | null,
+  changeSubscription?: Option<string>,
   dataList: DataListItem[],
   description: ?string,
   image: $Call<GridImageType, GridImg>,
@@ -154,13 +155,13 @@ const HideDropDown = (props: {
 
 
 const ShowDropDown = (props: {
-  ...PropTypes,
+  description: ?string,
+  changeSubscription: null,
   deliveryMethod: string | null,
   onClick: Function,
   showDropDown: boolean,
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
-  orderIsAGift: boolean,
   title: string,
 }) => (
   <div className={styles.contentWrapper}>
