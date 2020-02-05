@@ -164,7 +164,6 @@ const ShowDropDown = (props: {
   showDropDown: boolean,
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
-  // orderIsAGift: boolean,
   title: string,
 }) => (
   <div className={styles.contentWrapper}>
@@ -206,7 +205,6 @@ const Mobile = (props: {
   showDropDown: boolean,
   deliveryMethod: string | null,
   productPrice: ProductPrice,
-  // orderIsAGift: boolean,
   billingPeriod: BillingPeriod,
   onClick: Function,
   title: string,
