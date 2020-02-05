@@ -21,17 +21,21 @@ export withExtraClassName('original-classname')(Element)
 import React, { type ComponentType } from 'react';
 
 type InitialProps = {
-  className?: ?string,
+  className: string,
 };
 
 // ----- Component ----- //
 
 function withExtraClassName(originalClassName: string) {
   return function withOriginalClassname<Props: InitialProps>(Component: ComponentType<Props>): ComponentType<Props> {
-    return ({ className, ...props }) =>
+    return ({ className, ...props }: InitialProps) =>
       <Component {...props} className={className ? [originalClassName, className].join(' ') : originalClassName} />;
   };
 }
+
+withExtraClassName.defaultProps = {
+  className: '',
+};
 
 // ----- Exports ----- //
 
