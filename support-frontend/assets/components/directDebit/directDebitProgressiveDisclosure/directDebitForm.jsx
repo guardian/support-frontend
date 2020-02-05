@@ -2,12 +2,12 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
+import { compose, type Dispatch } from 'redux';
 import {
   type Action,
-  type Phase,
+  payDirectDebitClicked,
   confirmDirectDebitClicked,
   updateAccountHolderName,
   updateAccountNumber,
@@ -17,12 +17,22 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import './directDebitForm.scss';
 import Button from 'components/button/button';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+import { Input } from 'components/forms/input';
+import { withLabel } from 'hocs/withLabel';
+import { withError } from 'hocs/withError';
+import GeneralErrorMessage
+  from 'components/generalErrorMessage/generalErrorMessage';
+import type { ErrorReason } from 'helpers/errorReasons';
+
 
 // ---- Types ----- //
 
 type PropTypes = {|
+  /* eslint-disable react/no-unused-prop-types */
   buttonText: string,
-  onPaymentAuthorisation: PaymentAuthorisation => void,
+  cardError: ErrorReason | null,
+  cardErrorHeading: string,
+  allErrors: Array<Object>,
   sortCodeString: string,
   accountNumber: string,
   accountHolderName: string,
@@ -30,9 +40,18 @@ type PropTypes = {|
   updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
   formError: string,
-  phase: Phase,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
+  submitForm: Function,
+  validateForm: Function,
   confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => void,
+  payDirectDebitClicked: () => void,
 |};
+
+type StateTypes = {
+  accountHolderName: Object,
+  sortCodeString: Object,
+  accountNumber: Object,
+}
 
 
 // ----- Map State/Props ----- //
@@ -44,7 +63,6 @@ function mapStateToProps(state) {
     accountHolderName: state.page.directDebit.accountHolderName,
     accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
     formError: state.page.directDebit.formError,
-    phase: state.page.directDebit.phase,
     countryGroupId: state.common.internationalisation.countryGroupId,
   };
 }
@@ -52,6 +70,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
   return {
+    payDirectDebitClicked: () => {
+      dispatch(payDirectDebitClicked());
+      return false;
+    },
     confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => {
       dispatch(confirmDirectDebitClicked(onPaymentAuthorisation));
       return false;
@@ -71,136 +93,124 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 }
 
+const InputWithError = compose(withError, withLabel)(Input);
+
+
 // ----- Component ----- //
 
-const DirectDebitForm = (props: PropTypes) => (
-  <div className="component-direct-debit-form">
+class DirectDebitForm extends Component<PropTypes, StateTypes> {
+  constructor(props: PropTypes) {
+    super(props);
+    this.state = {
+      accountHolderName: {
+        error: '',
+        message: 'Please enter a valid account name',
+        rule: accountHolderName => accountHolderName.match(/^\D+$/),
+      },
+      sortCodeString: {
+        error: '',
+        message: 'Please enter a valid sort code',
+        rule: sortCodeString => sortCodeString.match(/^\d{6}$/),
+      },
+      accountNumber: {
+        error: '',
+        message: 'Please enter a valid account number',
+        rule: accountNumber => accountNumber.match(/^\d{6,10}$/),
+      },
+    };
+  }
 
-    <AccountHolderNameInput
-      phase={props.phase}
-      onChange={props.updateAccountHolderName}
-      value={props.accountHolderName}
-    />
+  onSubmit = (event) => {
+    const { props } = this;
+    event.preventDefault();
+    props.validateForm();
+    this.handleErrors();
 
-    <SortCodeInput
-      phase={props.phase}
-      onChange={props.updateSortCodeString}
-      value={props.sortCodeString}
-    />
+  };
 
-    <AccountNumberInput
-      phase={props.phase}
-      onChange={props.updateAccountNumber}
-      value={props.accountNumber}
-    />
+  onChange = (field, onChange, event) => {
+    this.setState({
+      [field]: {
+        ...this.state[field],
+        error: '',
+      },
+    });
+    onChange(event);
+  }
 
-    <Button id="qa-direct-debit-submit" onClick={() => props.confirmDirectDebitClicked(props.onPaymentAuthorisation)}>
-      {props.buttonText}
-    </Button>
-    {(props.formError.length > 0)
-    && <ErrorSummary errors={[{ message: props.formError }]} />}
-  </div>
-);
+  handleErrors = () => {
+    ['accountHolderName', 'sortCodeString', 'accountNumber'].forEach((field) => {
+      const { props, state } = this;
+      if (!state[field].rule(props[field])) {
+        this.setState({
+          [field]: {
+            ...state[field],
+            error: state[field].message,
+          },
+        });
+      }
+    });
+  };
 
 
-// ----- Auxiliary components ----- //
+  render() {
+    const { props, state } = this;
+    return (
+      <div className="component-direct-debit-form">
+        <div className="component-direct-debit-form__account-holder-name">
+          <InputWithError
+            id="account-holder-name-input"
+            value={props.accountHolderName}
+            onChange={e => this.onChange('accountHolderName', props.updateAccountHolderName, e)}
+            maxLength="40"
+            className="component-direct-debit-form__text-field focus-target"
+            label="Bank account holder name"
+            error={state.accountHolderName.error}
+          />
+        </div>
 
-function AccountNumberInput(props: {phase: Phase, onChange: Function, value: string}) {
-  const editable = (
-    <input
-      id="account-number-input"
-      value={props.value}
-      onChange={props.onChange}
-      pattern="[0-9]*"
-      minLength="6"
-      maxLength="10"
-      className="component-direct-debit-form__text-field focus-target"
-    />
-  );
-  const locked = (
-    <span>
-      {props.value}
-    </span>
-  );
-  return (
-    <div className="component-direct-debit-form__account-number">
-      <label htmlFor="account-number-input" className="component-direct-debit-form__field-label">
-        Account number
-      </label>
-      {props.phase === 'entry' ? editable : locked}
-    </div>
-  );
+        <div className="component-direct-debit-form__sort-code">
+          <InputWithError
+            id="sort-code-input"
+            label="Sort code"
+            value={props.sortCodeString}
+            onChange={e => this.onChange('sortCodeString', props.updateSortCodeString, e)}
+            error={state.sortCodeString.error}
+            minLength={6}
+            maxLength={6}
+            className="component-direct-debit-form__sort-code-field focus-target component-direct-debit-form__text-field"
+          />
+        </div>
+
+        <div className="component-direct-debit-form__account-number">
+          <InputWithError
+            id="account-number-input"
+            value={props.accountNumber}
+            onChange={e => this.onChange('accountNumber', props.updateAccountNumber, e)}
+            minLength="6"
+            maxLength="10"
+            className="component-direct-debit-form__text-field focus-target"
+            label="Account number"
+            error={state.accountNumber.error}
+          />
+        </div>
+
+        <Button id="qa-direct-debit-submit" onClick={event => this.onSubmit(event)}>
+          {props.buttonText}
+        </Button>
+        {(props.allErrors.length > 0) && (
+          <ErrorSummary errors={[...props.allErrors, { message: props.formError }]} />
+        )}
+        {(props.allErrors.length === 0 && props.cardError) && (
+          <GeneralErrorMessage
+            errorReason={props.cardError}
+            errorHeading={props.cardErrorHeading}
+          />
+        )}
+      </div>
+    );
+  }
 }
-
-/*
- * BACS requirement:
- "Name of the account holder, as known by the bank. Usually this is the
- same as the name stored with the linked creditor. This field will be
- transliterated, upcased and truncated to 18 characters."
- https://developer.gocardless.com/api-reference/
- * */
-function AccountHolderNameInput(props: {phase: Phase, value: string, onChange: Function}) {
-  const editable = (
-    <input
-      id="account-holder-name-input"
-      value={props.value}
-      onChange={props.onChange}
-      maxLength="40"
-      className="component-direct-debit-form__text-field focus-target"
-    />
-  );
-
-  const locked = (
-    <span>
-      {props.value}
-    </span>
-  );
-
-  return (
-    <div className="component-direct-debit-form__account-holder-name">
-      <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
-        Bank account holder name
-      </label>
-      {props.phase === 'entry' ? editable : locked}
-    </div>
-  );
-}
-
-type SortCodePropTypes = {
-  value: string,
-  phase: Phase,
-  onChange: (SyntheticInputEvent<HTMLInputElement>) => void,
-};
-
-function SortCodeInput(props: SortCodePropTypes) {
-  const editable = (
-    <input
-      id="sort-code-input"
-      value={props.value}
-      onChange={props.onChange}
-      pattern="[0-9][0-9][0-9][0-9][0-9][0-9]"
-      minLength={6}
-      maxLength={6}
-      className="component-direct-debit-form__sort-code-field focus-target component-direct-debit-form__text-field"
-    />
-  );
-
-  const locked = (
-    <span>
-      {props.value}
-    </span>
-  );
-
-  return (
-    <div className="component-direct-debit-form__sort-code">
-      <label htmlFor="sort-code-input" className="component-direct-debit-form__field-label">
-        Sort code
-      </label>
-      {props.phase === 'entry' ? editable : locked}
-    </div>
-  );
-}
-
 
 // ----- Exports ----- //
 

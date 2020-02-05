@@ -69,6 +69,7 @@ const setDirectDebitFormPhase = (phase: Phase): Action =>
 
 
 function payDirectDebitClicked(): Function {
+  console.log('payDirectDebitClicked!');
   return (dispatch: Function, getState: Function) => {
 
     const {
@@ -84,7 +85,7 @@ function payDirectDebitClicked(): Function {
 
     dispatch(resetDirectDebitFormError());
 
-    if (!accountHolderConfirmation) {
+    if (!accountHolderConfirmation && sortCodeString.length > 0) {
       dispatch(setDirectDebitFormError('You need to confirm that you are the account holder.'));
       return;
     }

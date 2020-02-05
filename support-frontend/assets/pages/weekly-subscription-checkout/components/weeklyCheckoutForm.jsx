@@ -69,8 +69,6 @@ import {
 import { type SetCountryAction } from 'helpers/page/commonActions';
 import { Stripe, DirectDebit } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
-import GeneralErrorMessage
-  from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { getGlobal } from 'helpers/globals';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
@@ -333,12 +331,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
               onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                 props.onPaymentAuthorised(pa);
               }}
+              submitForm={props.submitForm}
+              validateForm={props.validateForm}
+              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+              cardError={props.submissionError}
+              cardErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
-          <GeneralErrorMessage
-            errorReason={props.submissionError}
-            errorHeading={submissionErrorHeading}
-          />
           <CancellationSection />
         </Form>
       </Layout>
