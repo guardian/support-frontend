@@ -196,7 +196,7 @@ const ShowDropDown = (props: {
 );
 
 
-const Mobile = props => (
+const Mobile = (props: { showDropDown: boolean }) => (
   <span className={styles.mobileOnly}>
     {!props.showDropDown && <HideDropDown {...props} />}
     {props.showDropDown && <ShowDropDown {...props} />}
