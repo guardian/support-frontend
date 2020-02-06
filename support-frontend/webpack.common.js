@@ -11,6 +11,7 @@ const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
 const { getClassName } = require('./scripts/css');
 
+
 const cssLoaders = [{
   loader: 'postcss-loader',
   options: {
@@ -101,8 +102,8 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
 
   resolve: {
     alias: {
-      react: 'preact/compat',
-      'react-dom': 'preact/compat',
+      // react: 'preact/compat',
+      // 'react-dom': 'preact/compat',
       ophan: 'ophan-tracker-js/build/ophan.support',
     },
     modules: [

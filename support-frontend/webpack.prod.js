@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
 
 module.exports = merge(common('[name].[chunkhash].css', '[name].[chunkhash].js', true), {
   mode: 'production',
@@ -12,6 +14,9 @@ module.exports = merge(common('[name].[chunkhash].css', '[name].[chunkhash].js',
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
     }),
   ],
 });
