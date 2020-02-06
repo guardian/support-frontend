@@ -6,7 +6,7 @@ import React, { type Element } from 'react';
 
 import { connect } from 'react-redux';
 
-import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/hero';
+import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/heroPicture';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
