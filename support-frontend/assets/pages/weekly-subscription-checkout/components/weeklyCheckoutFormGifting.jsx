@@ -246,10 +246,10 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
                 <p className="component-text__sans">
-                  We will take payment on the date the recipient receives the first Guardian Weekly.
+                We will take payment on the date the recipient receives the first Guardian Weekly.
                 </p>
                 <p className="component-text__sans">
-                  Subscription start dates are automatically selected to be the earliest we can fulfil your order.
+                Subscription start dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
             </Rows>

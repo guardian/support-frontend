@@ -331,7 +331,6 @@ const getCurrentParticipations = (): Participations => getLocalStorageParticipat
 
 export {
   init,
-  setLocalStorageParticipations,
   getVariantsAsString,
   getCurrentParticipations,
   targetPageMatches,

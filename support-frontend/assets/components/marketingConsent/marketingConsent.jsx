@@ -64,7 +64,7 @@ function MarketingButton(props: ButtonPropTypes) {
         }
       icon={<SvgSubscribe />}
     >
-      Sign me up
+        Sign me up
     </Button>
   );
 }

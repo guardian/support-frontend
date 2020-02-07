@@ -221,7 +221,7 @@ function DigitalSubscriptionLandingHeader(props: PropTypes) {
           icon={<SvgChevron />}
           href="#subscribe"
         >
-          See Subscription options
+            See Subscription options
         </AnchorButton>
       </HeroHanger>
     </div>

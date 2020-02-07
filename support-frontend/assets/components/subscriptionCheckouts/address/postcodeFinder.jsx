@@ -33,7 +33,7 @@ type PropTypes = {|
 
 
 // Helpers
-const InputWithButton = ({ onClick, isLoading, ...props }: { onClick: Function, isLoading: boolean }) => (
+const InputWithButton = ({ onClick, isLoading, ...props }) => (
   <div className={styles.root}>
     <Input
       {...props}

@@ -56,7 +56,7 @@ const CollectionTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropType
           href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
           onClick={sendClickedEvent('paper_subscription_collection_page-subscription_faq_link')}
         >
-          Subscriptions FAQs
+        Subscriptions FAQs
         </a>
       }
       telephoneLink={
