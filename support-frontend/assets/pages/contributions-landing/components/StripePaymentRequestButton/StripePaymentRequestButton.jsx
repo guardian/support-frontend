@@ -52,7 +52,7 @@ import {
   updateLastName,
   updatePaymentMethod,
   updateState,
-  updateCountry,
+  updateBillingCountry,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
@@ -89,7 +89,7 @@ type PropTypes = {|
   updateFirstName: string => void,
   updateLastName: string => void,
   updateStateOrProvince: (state: UsState | CaState | null) => void,
-  updateCountry: IsoCountry => void,
+  updateBillingCountry: IsoCountry => void,
   paymentMethod: PaymentMethod,
   setAssociatedPaymentMethod: () => (Function) => void,
   stripeAccount: StripeAccount,
@@ -127,7 +127,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
   updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
   updateStateOrProvince: (state: UsState | CaState | null) => dispatch(updateState(state)),
-  updateCountry: (country: IsoCountry) => dispatch(updateCountry(country)),
+  updateCountry: (billingCountry: IsoCountry) => dispatch(updateBillingCountry(billingCountry)),
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
   setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
@@ -249,7 +249,7 @@ function onPayment(
   props: PropTypes,
   paymentRequestComplete: (string) => void,
   paymentRequestData: Object,
-  countryFromCard?: string,
+  billingCountryFromCard?: string,
   stateOrProvinceFromCard?: string,
   processPayment: () => void,
 ): void {
@@ -269,10 +269,10 @@ function onPayment(
     updatePayerStateOrProvince(stateOrProvinceFromCard, props.stateOrProvince, props.updateStateOrProvince) : true;
 
   // We need to update the country so it matches the state taken from the card
-  if (isUsOrCanadian && countryFromCard) {
-    const isoCountry = countryFromString(countryFromCard);
+  if (isUsOrCanadian && billingCountryFromCard) {
+    const isoCountry = countryFromString(billingCountryFromCard);
     if (isoCountry) {
-      props.updateCountry((isoCountry));
+      props.updateBillingCountry((isoCountry));
     }
   }
 
