@@ -72,7 +72,7 @@ export const MustSignIn = (props: PropTypes) => {
     case 'current':
       return (
         <a className={classNameWithModifiers('form__error', ['sign-in'])} href={signInUrl} onClick={onClick}>
-          You already have a Guardian account. Please <span className="underline">sign in</span> or use another email address.
+            You already have a Guardian account. Please <span className="underline">sign in</span> or use another email address.
         </a>
       );
 

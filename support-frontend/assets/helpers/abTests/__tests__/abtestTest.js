@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { Settings } from 'helpers/settings';
-import { setLocalStorageParticipations, getVariantsAsString, init as abInit } from '../abtest';
+import { getVariantsAsString, init as abInit } from '../abtest';
 import type { Participations } from '../abtest';
 import { GBPCountries, UnitedStates } from '../../internationalisation/countryGroup';
 
@@ -32,9 +32,7 @@ describe('basic behaviour of init', () => {
 
   beforeEach(() => {
     window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
-    setLocalStorageParticipations({});
   });
-
 
   it('The user should be allocated in the control bucket', () => {
     document.cookie = 'GU_mvt_id=12346';
@@ -393,9 +391,6 @@ describe('Correct allocation in a multi test environment', () => {
 
   Test 3 is 100% GB, but canRun is false
    */
-  beforeEach(() => {
-    setLocalStorageParticipations({});
-  });
 
   const tests = {
     mockTest: {
@@ -478,22 +473,16 @@ describe('Correct allocation in a multi test environment', () => {
     window.history.pushState({}, 'Test Title', mockTestControl);
     const country = 'GB';
     const countryGroupId = GBPCountries;
-    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
-    const expectedParticipations: Participations = {
+    let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    let expectedParticipations: Participations = {
       mockTest: 'control', mockTest2: 'notintest',
     };
     expect(participations).toEqual(expectedParticipations);
-  });
-
-  it('It correctly segments a user in to a variant, who has a cookie between 20% and 80% in GB', () => {
-
-    const country = 'GB';
-    const countryGroupId = GBPCountries;
 
     document.cookie = 'GU_mvt_id=510001';
     window.history.pushState({}, 'Test Title', mockTestVariant);
-    const participations = abInit(country, countryGroupId, emptySettings, tests);
-    const expectedParticipations = {
+    participations = abInit(country, countryGroupId, emptySettings, tests);
+    expectedParticipations = {
       mockTest: 'variant', mockTest2: 'notintest',
     };
     expect(participations).toEqual(expectedParticipations);
@@ -505,26 +494,18 @@ describe('Correct allocation in a multi test environment', () => {
     window.history.pushState({}, 'Test Title', mockTest2Control);
     const country = 'US';
     const countryGroupId = UnitedStates;
-    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
-    const expectedParticipations: Participations = {
+    let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    let expectedParticipations: Participations = {
       mockTest: 'notintest', mockTest2: 'control',
     };
     expect(participations).toEqual(expectedParticipations);
 
-  });
-
-  it('It correctly segments a user into a variant who has a cookie between 20% and 80% in US', () => {
-
     document.cookie = 'GU_mvt_id=510001';
     window.history.pushState({}, 'Test Title', mockTest2Variant);
-
-    const country = 'US';
-    const countryGroupId = UnitedStates;
-    const participations = abInit(country, countryGroupId, emptySettings, tests);
-    const expectedParticipations = {
+    participations = abInit(country, countryGroupId, emptySettings, tests);
+    expectedParticipations = {
       mockTest: 'notintest', mockTest2: 'variant',
     };
-
     expect(participations).toEqual(expectedParticipations);
     expect(getVariantsAsString(participations)).toEqual('mockTest=notintest; mockTest2=variant');
   });
@@ -533,29 +514,21 @@ describe('Correct allocation in a multi test environment', () => {
 
     document.cookie = 'GU_mvt_id=150000';
     window.history.pushState({}, 'Test Title', mockTestControl);
-
     const country = 'GB';
     const countryGroupId = GBPCountries;
-    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
-    const expectedParticipations: Participations = {
+
+    let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    let expectedParticipations: Participations = {
       mockTest: 'control', mockTest2: 'notintest',
     };
-
     expect(participations).toEqual(expectedParticipations);
-  });
-
-  it('It correctly segments a user into a variant who has a cookie between 0 and 20% in GB', () => {
 
     document.cookie = 'GU_mvt_id=150001';
     window.history.pushState({}, 'Test Title', mockTestVariant);
-
-    const country = 'GB';
-    const countryGroupId = GBPCountries;
-    const participations = abInit(country, countryGroupId, emptySettings, tests);
-    const expectedParticipations = {
+    participations = abInit(country, countryGroupId, emptySettings, tests);
+    expectedParticipations = {
       mockTest: 'variant', mockTest2: 'notintest',
     };
-
     expect(participations).toEqual(expectedParticipations);
   });
 
@@ -563,29 +536,21 @@ describe('Correct allocation in a multi test environment', () => {
 
     document.cookie = 'GU_mvt_id=150000';
     window.history.pushState({}, 'Test Title', mockTestControl);
-
     const country = 'US';
     const countryGroupId = UnitedStates;
-    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
-    const expectedParticipations: Participations = {
+
+    let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    let expectedParticipations: Participations = {
       mockTest: 'control', mockTest2: 'notintest',
     };
-
     expect(participations).toEqual(expectedParticipations);
-  });
-
-
-  it('It correctly segments the user into a variant a user who has a cookie between 0 and 20% in US', () => {
 
     document.cookie = 'GU_mvt_id=150001';
     window.history.pushState({}, 'Test Title', mockTestVariant);
-
-    const country = 'US';
-    const participations = abInit(country, GBPCountries, emptySettings, tests);
-    const expectedParticipations = {
+    participations = abInit(country, GBPCountries, emptySettings, tests);
+    expectedParticipations = {
       mockTest: 'variant', mockTest2: 'notintest',
     };
-
     expect(participations).toEqual(expectedParticipations);
   });
 
