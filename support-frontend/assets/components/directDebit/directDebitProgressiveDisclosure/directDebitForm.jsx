@@ -199,7 +199,14 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           {props.buttonText}
         </Button>
         {(props.allErrors.length > 0) && (
-          <ErrorSummary errors={[...props.allErrors, { message: props.formError }]} />
+          <ErrorSummary
+            errors={[
+              ...props.allErrors,
+              { message: state.accountHolderName.error },
+              { message: state.sortCodeString.error },
+              { message: state.accountNumber.error },
+            ]}
+          />
         )}
         {(props.allErrors.length === 0 && props.cardError) && (
           <GeneralErrorMessage
