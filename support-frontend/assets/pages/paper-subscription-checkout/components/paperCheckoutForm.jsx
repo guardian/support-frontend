@@ -341,6 +341,11 @@ function PaperCheckoutForm(props: PropTypes) {
               onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                 props.onPaymentAuthorised(pa);
               }}
+              submitForm={props.submitForm}
+              validateForm={props.validateForm}
+              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+              cardError={props.submissionError}
+              cardErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
           <GeneralErrorMessage

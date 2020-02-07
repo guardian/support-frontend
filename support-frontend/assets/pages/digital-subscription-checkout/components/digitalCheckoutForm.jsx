@@ -253,6 +253,11 @@ function DigitalCheckoutForm(props: PropTypes) {
               onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                 props.onPaymentAuthorised(pa);
               }}
+              submitForm={props.submitForm}
+              validateForm={props.validateForm}
+              allErrors={[...props.addressErrors, ...props.formErrors]}
+              cardError={props.submissionError}
+              cardErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
           <GeneralErrorMessage

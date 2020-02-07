@@ -68,8 +68,6 @@ import {
 import { type SetCountryAction } from 'helpers/page/commonActions';
 import { Stripe, DirectDebit } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
-import GeneralErrorMessage
-  from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Heading from 'components/heading/heading';
 import './weeklyCheckout.scss';
@@ -361,12 +359,13 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                 props.onPaymentAuthorised(pa);
               }}
+              submitForm={props.submitForm}
+              validateForm={props.validateForm}
+              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+              cardError={props.submissionError}
+              cardErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
-          <GeneralErrorMessage
-            errorReason={props.submissionError}
-            errorHeading={submissionErrorHeading}
-          />
         </Form>
       </Layout>
     </Content>
