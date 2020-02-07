@@ -34,7 +34,7 @@ const Roundel = (props: { roundelCopy: string[] }) => (
       <div>
         {props.roundelCopy.map(copy => <span>{ copy }</span>)}
       </div>
-    </div>: null
+    </div> : null
 );
 
 const CampaignHeader = (props: PropTypes) => (

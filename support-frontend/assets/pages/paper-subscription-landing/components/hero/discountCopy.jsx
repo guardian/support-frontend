@@ -18,7 +18,7 @@ const discountCopy = (discountPercentage: number): DiscountCopy => (
     } :
     {
       roundel: [],
-      heading: `Save money with a subscription`,
+      heading: 'Save money with a subscription',
     }
 );
 
