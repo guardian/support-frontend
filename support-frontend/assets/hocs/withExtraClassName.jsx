@@ -28,6 +28,7 @@ type InitialProps = {
 
 function withExtraClassName(originalClassName: string) {
   return function withOriginalClassname<Props: InitialProps>(Component: ComponentType<Props>): ComponentType<Props> {
+    // eslint-disable-next-line react/prop-types
     return ({ className, ...props }) =>
       <Component {...props} className={className ? [originalClassName, className].join(' ') : originalClassName} />;
   };

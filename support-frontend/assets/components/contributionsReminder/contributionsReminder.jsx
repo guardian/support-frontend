@@ -70,6 +70,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
     const randomDate = reminderDates[randomIndex];
     const randomDateAsWord = trimAndDowncase(randomDate.dateName);
 
+    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({
       selectedDate: randomDate.timeStamp,
       selectedDateAsWord: randomDateAsWord,
@@ -133,7 +134,9 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
             Set up a reminder to contribute again
           </h3>
           <p className="contribution-thank-you-block__message">
-            {'Lots of readers choose to make single contributions at various points in the year. Opt in to receive a reminder in case you would like to support our journalism again. This will be a single email, with no obligation.'}
+            Lots of readers choose to make single contributions at various points in the year.
+            Opt in to receive a reminder in case you would like to support our journalism again.
+            This will be a single email, with no obligation.
           </p>
 
           <FormLabel label="Remind me in:" htmlFor={null}>

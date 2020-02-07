@@ -38,6 +38,10 @@ function Error({ error, htmlFor, children }: Props) {
   );
 }
 
+Error.defaultProps = {
+  children: null,
+};
+
 // ----- Exports ----- //
 
 export { Error };

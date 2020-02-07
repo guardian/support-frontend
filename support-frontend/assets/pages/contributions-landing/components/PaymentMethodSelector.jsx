@@ -160,7 +160,7 @@ function withProps(props: PropTypes) {
                 {getPaymentMethodLogo(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod))}
               </label>
               <div className="existing-payment-option-explainer">
-                  Used for your{' '}
+                Used for your{' '}
                 {subscriptionsToExplainerList(existingPaymentMethod.subscriptions.map(subscriptionToExplainerPart))}
               </div>
             </li>

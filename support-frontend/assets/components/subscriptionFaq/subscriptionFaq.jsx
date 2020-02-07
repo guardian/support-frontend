@@ -36,7 +36,7 @@ function SubscriptionFaq(props: PropTypes) {
             <a className="component-subscription-faq__href" href={faqLink(props)} onClick={sendTrackingEventsOnClick('onward_faq', 'DigitalPack', null)}> Frequently Asked Questions</a> and
             in the&nbsp;
             <a className="component-subscription-faq__href" href={subscriptionsTermsLinks.DigitalPack} onClick={sendTrackingEventsOnClick('onward_tos', 'DigitalPack', null)}>
-            Digital Subscription terms and conditions
+              Digital Subscription terms and conditions
             </a>.
           </div>
         </div>

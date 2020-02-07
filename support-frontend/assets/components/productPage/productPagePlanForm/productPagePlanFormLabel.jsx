@@ -47,7 +47,7 @@ export default ({
         }
       <div className="component-product-page-plan-form-label__cta" >
         <AnchorButton id={`qa-${title.toLowerCase().replace(' ', '-')}`} onClick={onClick} aria-label={`Subscribe – ${title}`} href={href}>
-            Subscribe now
+          Subscribe now
         </AnchorButton>
       </div>
     </div>

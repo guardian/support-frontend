@@ -290,7 +290,7 @@ function PaperCheckoutForm(props: PropTypes) {
                   date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
                 </p>
                 <p>
-                 Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                  Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
             </Rows>

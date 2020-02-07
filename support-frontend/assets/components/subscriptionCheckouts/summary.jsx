@@ -11,6 +11,7 @@ import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
+import type { Option } from 'helpers/types/option';
 
 // Types
 
@@ -21,9 +22,11 @@ export type DataListItem = {
 
 type PropTypes = {
   billingPeriod: BillingPeriod,
-  changeSubscription?: string | null,
+  changeSubscription?: Option<string>,
+  // eslint-disable-next-line react/no-unused-prop-types
   dataList: DataListItem[],
   description: ?string,
+  // eslint-disable-next-line react/no-unused-prop-types
   image: $Call<GridImageType, GridImg>,
   productPrice: ProductPrice,
   title: string,
@@ -154,13 +157,13 @@ const HideDropDown = (props: {
 
 
 const ShowDropDown = (props: {
-  ...PropTypes,
+  changeSubscription: Option<string>,
+  description: ?string,
   deliveryMethod: string | null,
   onClick: Function,
   showDropDown: boolean,
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
-  orderIsAGift: boolean,
   title: string,
 }) => (
   <div className={styles.contentWrapper}>
@@ -196,11 +199,21 @@ const ShowDropDown = (props: {
 );
 
 
-const Mobile = props => (
-  <span className={styles.mobileOnly}>
-    {!props.showDropDown && <HideDropDown {...props} />}
-    {props.showDropDown && <ShowDropDown {...props} />}
-  </span>
+const Mobile = (props: {
+  changeSubscription: Option<string>,
+  description: ?string,
+  showDropDown: boolean,
+  deliveryMethod: string | null,
+  productPrice: ProductPrice,
+  billingPeriod: BillingPeriod,
+  onClick: Function,
+  title: string,
+  paper: boolean
+  }) => (
+    <span className={styles.mobileOnly}>
+      {!props.showDropDown && <HideDropDown {...props} />}
+      {props.showDropDown && <ShowDropDown {...props} />}
+    </span>
 );
 
 // Main class

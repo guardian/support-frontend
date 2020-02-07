@@ -35,9 +35,9 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
   >
     <Text title="How home delivery works">
       <p>
-          If you live in Greater London (within the M25), you
-          can use The Guardian’s home delivery service. If not, you can
-          still <LinkTo tab={Collection} setTabAction={setTabAction} >subscribe using our voucher scheme</LinkTo>.
+        If you live in Greater London (within the M25), you
+        can use The Guardian’s home delivery service. If not, you can
+        still <LinkTo tab={Collection} setTabAction={setTabAction} >subscribe using our voucher scheme</LinkTo>.
       </p>
       <OrderedList items={[
         'Select your subscription below and checkout',
@@ -68,7 +68,7 @@ const DeliveryTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes)
           href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
           onClick={sendClickedEvent('paper_subscription_delivery_page-subscription_faq_link')}
         >
-        Subscriptions FAQs
+          Subscriptions FAQs
         </a>
       }
       telephoneLink={
