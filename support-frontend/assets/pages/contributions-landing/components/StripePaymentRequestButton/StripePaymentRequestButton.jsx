@@ -127,7 +127,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
   updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
   updateStateOrProvince: (state: UsState | CaState | null) => dispatch(updateState(state)),
-  updateCountry: (billingCountry: IsoCountry) => dispatch(updateBillingCountry(billingCountry)),
+  updateBillingCountry: (billingCountry: IsoCountry) => dispatch(updateBillingCountry(billingCountry)),
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
   setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
