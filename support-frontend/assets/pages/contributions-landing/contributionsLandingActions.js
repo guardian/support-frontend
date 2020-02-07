@@ -167,10 +167,8 @@ const updateState = (state: UsState | CaState | null): ((Function) => void) =>
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_STATE', state })));
   };
 
-const updateBillingCountry = (billingCountry: IsoCountry): ((Function) => void) =>
-  (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_BILLING_COUNTRY', billingCountry })));
-  };
+const updateBillingCountry = (billingCountry: IsoCountry): Action =>
+    ({ type: 'UPDATE_BILLING_COUNTRY', billingCountry });
 
 const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): ((Function) => void) =>
   (dispatch: Function): void => {
