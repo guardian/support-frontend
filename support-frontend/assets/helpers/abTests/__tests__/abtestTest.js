@@ -3,10 +3,9 @@
 // ----- Imports ----- //
 
 import type { Settings } from 'helpers/settings';
-import { getVariantsAsString, init as abInit } from '../abtest';
+import { setLocalStorageParticipations, getVariantsAsString, init as abInit } from '../abtest';
 import type { Participations } from '../abtest';
 import { GBPCountries, UnitedStates } from '../../internationalisation/countryGroup';
-import * as storage from 'helpers/storage';
 
 jest.mock('ophan', () => ({
   record: () => null,
@@ -28,10 +27,6 @@ const mockTestControl = `/test.html?acquisitionData=${encodeURI(JSON.stringify(a
 const mockTestVariant = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTestVariant))}`;
 const mockTest2Control = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTest2Control))}`;
 const mockTest2Variant = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTest2Variant))}`;
-
-function setLocalStorageParticipations(participations: Participations): void {
-  storage.setLocal('gu.support.abTests', JSON.stringify(participations));
-}
 
 describe('basic behaviour of init', () => {
 
