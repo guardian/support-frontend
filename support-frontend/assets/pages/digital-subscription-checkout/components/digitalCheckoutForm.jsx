@@ -249,7 +249,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             title="Your account details"
           >
             <DirectDebitForm
-              buttonText="Subscribe with Direct Debit"
+              buttonText="Start your free trial now"
               onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                 props.onPaymentAuthorised(pa);
               }}
