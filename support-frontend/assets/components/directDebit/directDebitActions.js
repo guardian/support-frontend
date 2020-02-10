@@ -84,7 +84,7 @@ function payDirectDebitClicked(): Function {
 
     dispatch(resetDirectDebitFormError());
 
-    if (!accountHolderConfirmation && sortCodeString.length > 0) {
+    if (!accountHolderConfirmation && sortCodeString.length === 0) {
       dispatch(setDirectDebitFormError('You need to confirm that you are the account holder.'));
       return;
     }
@@ -142,6 +142,48 @@ function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation 
   };
 }
 
+function payDirectDebitWithoutConfirmation(): Function {
+  return (dispatch: Function, getState: Function) => {
+
+    const {
+      sortCodeString,
+      accountNumber,
+    } = getState().page.directDebit;
+
+    const sortCode = sortCodeString;
+    const isTestUser: boolean = getState().page.user.isTestUser || false;
+
+    const { csrf } = getState().page;
+
+    dispatch(resetDirectDebitFormError());
+
+    checkAccount(sortCode, accountNumber, isTestUser, csrf)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('invalid_input');
+        }
+        return response.json();
+      })
+      .then((response) => {
+        if (!response.accountValid) {
+          throw new Error('incorrect_input');
+        }
+      })
+      .catch((e) => {
+        let msg = '';
+        switch (e.message) {
+          case 'invalid_input': msg = 'Your bank details are invalid. Please check them and try again';
+            break;
+          case 'incorrect_input': msg = 'Your bank details are not correct. Please check them and try again';
+            break;
+          default: msg = 'Oops, something went wrong, please try again later';
+
+        }
+        dispatch(setDirectDebitFormError(msg));
+      });
+  };
+}
+
 // ----- Exports ----//
 
 export {
@@ -158,5 +200,6 @@ export {
   resetDirectDebitFormError,
   payDirectDebitClicked,
   confirmDirectDebitClicked,
+  payDirectDebitWithoutConfirmation,
   setDirectDebitFormPhase,
 };

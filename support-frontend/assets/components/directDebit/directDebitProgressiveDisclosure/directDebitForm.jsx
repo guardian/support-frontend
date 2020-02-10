@@ -7,11 +7,11 @@ import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
 import {
   type Action,
-  payDirectDebitClicked,
-  confirmDirectDebitClicked,
+  payDirectDebitWithoutConfirmation,
   updateAccountHolderName,
   updateAccountNumber,
   updateSortCodeString,
+  confirmDirectDebitClicked,
 } from 'components/directDebit/directDebitActions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import './directDebitForm.scss';
@@ -43,8 +43,8 @@ type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   submitForm: Function,
   validateForm: Function,
+  payDirectDebitWithoutConfirmation: () => void,
   confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => void,
-  payDirectDebitClicked: () => void,
 |};
 
 type StateTypes = {
@@ -70,8 +70,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
   return {
-    payDirectDebitClicked: () => {
-      dispatch(payDirectDebitClicked());
+    payDirectDebitWithoutConfirmation: () => {
+      dispatch(payDirectDebitWithoutConfirmation());
       return false;
     },
     confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => {
@@ -121,11 +121,15 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
   }
 
   onSubmit = (event) => {
-    const { props } = this;
     event.preventDefault();
+    const { props } = this;
+    const cardErrors = this.getCardErrorsLength(this.getCardErrors()) > 0;
     props.validateForm();
     this.handleErrors();
-
+    if (props.allErrors.length === 0 && !cardErrors) {
+      this.payDirectDebit(props.onPaymentAuthorisation);
+      props.submitForm();
+    }
   };
 
   onChange = (field, onChange, event) => {
@@ -138,9 +142,22 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     onChange(event);
   }
 
+  getCardErrors = () => {
+    const { state } = this;
+    const cardErrors = ['accountHolderName', 'sortCodeString', 'accountNumber'].map(field => ({ message: state[field].error }));
+    return cardErrors;
+  }
+
+  getCardErrorsLength = cardErrors => cardErrors.reduce((accum, error) => {
+    if (error.message.length > 0) {
+      return accum + 1;
+    }
+    return accum;
+  }, 0)
+
   handleErrors = () => {
+    const { props, state } = this;
     ['accountHolderName', 'sortCodeString', 'accountNumber'].forEach((field) => {
-      const { props, state } = this;
       if (!state[field].rule(props[field])) {
         this.setState({
           [field]: {
@@ -152,9 +169,20 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     });
   };
 
+  payDirectDebit = (onPaymentAuthorisation: PaymentAuthorisation => void) => {
+    const { props } = this;
+    props.payDirectDebitWithoutConfirmation();
+    props.confirmDirectDebitClicked(onPaymentAuthorisation);
+    return false;
+  }
 
   render() {
     const { props, state } = this;
+    const cardErrors = this.getCardErrors();
+    const cardErrorsLength = this.getCardErrorsLength(cardErrors);
+    const showGeneralError = props.allErrors.length === 0 && cardErrorsLength === 0 &&
+      (props.cardError && props.cardError !== 'personal_details_incorrect');
+
     return (
       <div className="component-direct-debit-form">
         <div className="component-direct-debit-form__account-holder-name">
@@ -195,25 +223,26 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           />
         </div>
 
-        <Button id="qa-direct-debit-submit" onClick={event => this.onSubmit(event)}>
+        <Button
+          id="qa-direct-debit-submit"
+          onClick={event => this.onSubmit(event)}
+        >
           {props.buttonText}
         </Button>
         {(props.allErrors.length > 0) && (
           <ErrorSummary
             errors={[
               ...props.allErrors,
-              { message: state.accountHolderName.error },
-              { message: state.sortCodeString.error },
-              { message: state.accountNumber.error },
+              ...cardErrors,
             ]}
           />
         )}
-        {(props.allErrors.length === 0 && props.cardError) && (
-          <GeneralErrorMessage
-            errorReason={props.cardError}
-            errorHeading={props.cardErrorHeading}
-          />
-        )}
+        {showGeneralError && (
+        <GeneralErrorMessage
+          errorReason={props.cardError}
+          errorHeading={props.cardErrorHeading}
+        />
+          )}
       </div>
     );
   }
