@@ -260,7 +260,11 @@ function withProps(props: PropTypes) {
           isTestUser={props.isTestUser}
           country={props.country}
         />
-
+        {/*
+          The <div> wrapper for the ContributionErrorMessage is required because a
+          child of ContributionSubmit contains an iframe and otherwise when its
+          sibling ContributionErrorMessage returns null, the iframe would be recreated.
+        */}
         <div>
           <ContributionErrorMessage />
         </div>
