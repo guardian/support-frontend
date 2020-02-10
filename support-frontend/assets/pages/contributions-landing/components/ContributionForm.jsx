@@ -261,7 +261,9 @@ function withProps(props: PropTypes) {
           country={props.country}
         />
 
-        <ContributionErrorMessage />
+        <div>
+          <ContributionErrorMessage />
+        </div>
         <ContributionSubmit
           onPaymentAuthorisation={props.onPaymentAuthorisation}
         />
