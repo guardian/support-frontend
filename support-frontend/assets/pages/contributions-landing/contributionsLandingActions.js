@@ -100,15 +100,16 @@ export type Action =
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
-// Do not export this, as we only want it to be called via updateContributionTypeAndPaymentMethod
-const updateContributionType = (contributionType: ContributionType): ((Function) => void) =>
-  (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType })));
-  };
 
 const updatePayPalButtonReady = (ready: boolean): Action =>
   ({ type: 'UPDATE_PAYPAL_BUTTON_READY', ready });
 
+// Do not export this, as we only want it to be called via updateContributionTypeAndPaymentMethod
+const updateContributionType = (contributionType: ContributionType): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(updatePayPalButtonReady(false));
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType })));
+  };
 
 const updatePaymentMethod = (paymentMethod: PaymentMethod): ((Function) => void) =>
   (dispatch: Function): void => {
