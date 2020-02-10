@@ -51,6 +51,7 @@ import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
+import type { IsoCountry } from '../../helpers/internationalisation/country';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -61,6 +62,7 @@ export type Action =
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
+  | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
@@ -164,6 +166,9 @@ const updateState = (state: UsState | CaState | null): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_STATE', state })));
   };
+
+const updateBillingCountry = (billingCountry: IsoCountry): Action =>
+    ({ type: 'UPDATE_BILLING_COUNTRY', billingCountry });
 
 const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -351,7 +356,9 @@ const regularPaymentRequestFromAuthorisation = (
     city: null, // required go cardless field
     state: state.page.form.formData.state,
     postCode: null, // required go cardless field
-    country: state.common.internationalisation.countryId,
+    country:
+      state.page.form.formData.billingCountry ?
+        state.page.form.formData.billingCountry : state.common.internationalisation.countryId,
   },
   deliveryAddress: null,
   product: {
@@ -680,6 +687,7 @@ export {
   updateLastName,
   updateEmail,
   updateState,
+  updateBillingCountry,
   updateUserFormData,
   setThirdPartyPaymentLibrary,
   setAmazonPayLoginObject,
