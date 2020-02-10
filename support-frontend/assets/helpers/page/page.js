@@ -45,6 +45,11 @@ import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
 
+if (process.env.NODE_ENV === 'DEV') {
+  // $FlowIgnore
+  import('preact/debug');
+}
+
 // ----- Types ----- //
 
 export type ReduxState<PageState> = {|
