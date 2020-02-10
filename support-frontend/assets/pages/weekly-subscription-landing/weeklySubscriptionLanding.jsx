@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import * as React from 'react';
+import type { Element } from 'react';
 import { Provider } from 'react-redux';
 import marked from 'marked';
 import DOMPurify from 'dompurify';
@@ -121,10 +122,15 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
     </LargeParagraph>);
 };
 
+const getRegionalCopyFor = (region: CountryGroupId): Element<'span'> => (region === GBPCountries ?
+  <span>Pause for thought with The Guardian&apos;s<br />essential news magazine</span> :
+  <span>Read The Guardian in print. <br /> Subscribe to The Guardian Weekly today</span>);
+
 const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
+  const currentRegion = detect();
   const defaultTitle = orderIsAGift ?
     <span>Give a gift that challenges<br />the status quo</span>
-    : <span>Pause for thought with The Guardian&apos;s<br />essential news magazine</span>;
+    : getRegionalCopyFor(currentRegion);
   return {
     title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,
     firstParagraph: getFirstParagraph(promotionCopy),
