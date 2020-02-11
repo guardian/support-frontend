@@ -125,11 +125,8 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
 
   onSubmit = (event) => {
     event.preventDefault();
-    const { props } = this;
-    this.handleErrors();
-    props.validateForm();
-    const cardErrors = this.getCardErrorsLength(this.getCardErrors()) > 0;
-    if (props.allErrors.length === 0 && !cardErrors) {
+    const cardErrors = this.validateForm();
+    if (this.props.allErrors.length === 0 && !cardErrors) {
       this.submitForm();
     }
   };
@@ -183,6 +180,13 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     const { props } = this;
     this.payDirectDebit(props.onPaymentAuthorisation);
     props.submitForm();
+  }
+
+  validateForm = () => {
+    const { props } = this;
+    this.handleErrors();
+    props.validateForm();
+    return this.getCardErrorsLength(this.getCardErrors()) > 0;
   }
 
   render() {
