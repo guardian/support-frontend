@@ -229,7 +229,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
         >
           {props.buttonText}
         </Button>
-        {(props.allErrors.length > 0) && (
+        {(props.allErrors.length > 0 || cardErrorsLength > 0) && (
           <ErrorSummary
             errors={[
               ...props.allErrors,
