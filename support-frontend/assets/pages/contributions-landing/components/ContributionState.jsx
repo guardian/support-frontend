@@ -65,14 +65,18 @@ const renderStatesField = (
 
 function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
-  switch (props.countryGroupId) {
-    case UnitedStates && props.contributionType !== 'ONE_OFF':
-      return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
-    case Canada && props.contributionType !== 'ONE_OFF':
-      return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
-    default:
-      return null;
+  if (props.contributionType !== 'ONE_OFF') {
+    switch (props.countryGroupId) {
+      case UnitedStates:
+        return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
+      case Canada:
+        return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
+      default:
+        return null;
+    }
   }
+
+  return null;
 }
 
 ContributionState.defaultProps = {
