@@ -20,10 +20,12 @@ type PropTypes = {|
   onChange: (Event => void) | false,
   isValid: boolean,
   formHasBeenSubmitted: boolean,
+  contributionType: string,
 |};
 
 const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
+  contributionType: state.page.form.contributionType
 });
 
 // ----- Render ----- //
@@ -61,16 +63,18 @@ const renderStatesField = (
   </div>
 );
 
+
+//toDo change this function so it only appears on recurring....
 function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
-  switch (props.countryGroupId) {
-    case UnitedStates:
-      return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
-    case Canada:
-      return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
-    default:
-      return null;
-  }
+    switch (props.countryGroupId) {
+      case UnitedStates && props.contributionType !== 'ONE_OFF':
+        return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
+      case Canada && props.contributionType !== 'ONE_OFF':
+        return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
+      default:
+        return null;
+    }
 }
 
 
