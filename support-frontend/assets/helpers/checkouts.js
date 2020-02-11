@@ -94,22 +94,19 @@ function getValidPaymentMethods(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
-  inAmazonPayTest: boolean,
 ): PaymentMethod[] {
   const switchKey = switchKeyForContributionType(contributionType);
   return getPaymentMethods(contributionType, countryId)
     .filter(paymentMethod =>
-      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`) &&
-      (paymentMethod !== 'AmazonPay' || inAmazonPayTest));
+      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
 }
 
 function getPaymentMethodToSelect(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
-  inAmazonPayTest: boolean,
 ) {
-  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId, inAmazonPayTest);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId);
   return validPaymentMethods[0] || 'None';
 }
 
