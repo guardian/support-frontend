@@ -39,14 +39,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(updatePayPalButtonReady(ready)),
 });
 
-// When we use PayPal's JS library via window.paypal.Button.driver, it renders a button inside
-// an iframe. Each time this code is called, the iframe ends up with a different id,
-// so React will always try and update the DOM even when nothing has substantively changed.
-//
-// We don't want this to happen, because loading this iframe is an
-// expensive operation which causes an obvious visual re-render.
-//
-// TODO: find a solution to this problem under Preact X.
 const PayPalExpressButtonComponent = (props: PropTypes) => {
 
   const onPaymentAuthorisation = (token: string): void => {
