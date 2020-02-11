@@ -105,16 +105,19 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
       accountHolderName: {
         error: '',
         message: 'Please enter a valid account name',
+        // Regex matches a string with any character that is not a digit
         rule: accountHolderName => accountHolderName.match(/^\D+$/),
       },
       sortCodeString: {
         error: '',
         message: 'Please enter a valid sort code',
+        // Regex matches a string with exactly 6 digits
         rule: sortCodeString => sortCodeString.match(/^\d{6}$/),
       },
       accountNumber: {
         error: '',
         message: 'Please enter a valid account number',
+        // Regex matches a string with between 6 and 10 digits
         rule: accountNumber => accountNumber.match(/^\d{6,10}$/),
       },
     };
@@ -144,8 +147,8 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
 
   getCardErrors = () => {
     const { state } = this;
-    const cardErrors = ['accountHolderName', 'sortCodeString', 'accountNumber'].map(field => ({ message: state[field].error }));
-    return cardErrors;
+    return ['accountHolderName', 'sortCodeString', 'accountNumber'].map(field =>
+      ({ message: state[field].error }));
   }
 
   getCardErrorsLength = cardErrors => cardErrors.reduce((accum, error) => {
