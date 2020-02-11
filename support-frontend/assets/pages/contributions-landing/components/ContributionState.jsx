@@ -63,8 +63,6 @@ const renderStatesField = (
   </div>
 );
 
-
-// toDo change this function so it only appears on recurring....
 function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   switch (props.countryGroupId) {
@@ -76,7 +74,6 @@ function ContributionState(props: PropTypes) {
       return null;
   }
 }
-
 
 ContributionState.defaultProps = {
   onChange: false,
