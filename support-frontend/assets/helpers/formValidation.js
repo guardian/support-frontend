@@ -54,11 +54,12 @@ export const checkAmountOrOtherAmount: (SelectedAmounts, OtherAmounts, Contribut
   return checkAmount(amt, countryGroupId, contributionType);
 };
 
-export const checkStateIfApplicable: ((string | null), CountryGroupId) => boolean = (
+export const checkStateIfApplicable: ((string | null), CountryGroupId, ContributionType) => boolean = (
   state: (string | null),
   countryGroupId: CountryGroupId,
+  contributionType: ContributionType,
 ) => {
-  if (countryGroupId === UnitedStates || countryGroupId === Canada) {
+  if (contributionType !== 'ONE_OFF' && (countryGroupId === UnitedStates || countryGroupId === Canada)) {
     return checkState(state);
   }
   return true;

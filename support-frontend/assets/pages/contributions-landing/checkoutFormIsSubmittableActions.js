@@ -79,7 +79,7 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
       true
   ) && checkEmail(email)
     && stripeCardFormOk
-    && checkStateIfApplicable(state, countryGroupId)
+    && checkStateIfApplicable(state, countryGroupId, contributionType)
     && checkAmountOrOtherAmount(selectedAmounts, otherAmounts, contributionType, countryGroupId);
 };
 
