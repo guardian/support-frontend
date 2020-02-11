@@ -18,7 +18,7 @@ export type Action =
   | { type: 'DIRECT_DEBIT_GUARANTEE_OPEN' }
   | { type: 'DIRECT_DEBIT_GUARANTEE_CLOSE' }
   | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index: SortCodeIndex, partialSortCode: string }
-  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING', sortCode: string }
+  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING', sortCodeString: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', accountHolderName: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
@@ -46,8 +46,8 @@ const closeDirectDebitGuarantee = (): Action =>
 const updateSortCode = (index: SortCodeIndex, partialSortCode: string): Action =>
   ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index, partialSortCode });
 
-const updateSortCodeString = (sortCode: string): Action =>
-  ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING', sortCode });
+const updateSortCodeString = (sortCodeString: string): Action =>
+  ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING', sortCodeString });
 
 const updateAccountNumber = (accountNumber: string): Action =>
   ({ type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber });
@@ -84,6 +84,10 @@ function payDirectDebitClicked(): Function {
 
     dispatch(resetDirectDebitFormError());
 
+    /* The new version of the direct debit form doesn't have an account holder confirmation checkbox,
+    so this if-statement is not needed for the new form. The old form uses sortCodeArray whereas the
+    new form uses sortCodeString, so checking if sortCodeString is empty is a way of checking which
+    version of the DD form it is and whether to do this check. */
     if (!accountHolderConfirmation && sortCodeString.length === 0) {
       dispatch(setDirectDebitFormError('You need to confirm that you are the account holder.'));
       return;

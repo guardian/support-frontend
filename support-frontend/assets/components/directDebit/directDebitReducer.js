@@ -73,7 +73,7 @@ const directDebitReducer = (
 
     case 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING':
       return Object.assign({}, state, {
-        sortCodeString: action.sortCode,
+        sortCodeString: action.sortCodeString,
       });
 
     case 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER':
