@@ -100,7 +100,9 @@ class CheckoutsSpec extends AnyFeatureSpec
     checkoutPage.selectStripePaymentMethod()
 
     Then("the stripe form loads")
-    assert(checkoutPage.stripeFormHasLoaded)
+    eventually {
+      assert(checkoutPage.stripeFormHasLoaded)
+    }
 
     Given("they fill in the stripe form")
     checkoutPage.fillStripeForm()
@@ -113,25 +115,19 @@ class CheckoutsSpec extends AnyFeatureSpec
   }
 
   def payWithDirectDebit(checkoutPage: CheckoutPage): Unit ={
-    val directDebit = new DirectDebitForm()
 
     Given("that the user selects to pay with Direct Debit")
     When("they press the Direct Debit payment button")
     checkoutPage.selectDirectDebitPaymentMethod()
 
-    When("they click continue to payment")
-    checkoutPage.clickSubmit()
-
     Then("the direct debit form loads")
+    assert(checkoutPage.directDebitFormHasLoaded)
 
-    Given("The user fills in their details correctly")
-    directDebit.fillForm
+    Given("they fill in the direct debit form")
+    checkoutPage.fillDirectDebitForm()
 
-    Then("the second page loads")
-    directDebit.secondPageHasLoaded
-
-    Given("The user confirms their details")
-    directDebit.confirm
+    When("they click to process payment")
+    checkoutPage.clickDirectDebitSubmit()
 
     thankYouPage(checkoutPage)
   }

@@ -4,14 +4,23 @@ import org.scalatestplus.selenium.Page
 import selenium.util.Browser
 
 trait CheckoutPage extends Page with Browser {
-  private val stripeRadioButton = id("qa-credit-card")
   private val submitButton = id("qa-submit-button")
-  private val stripeSubmitButton = id("qa-stripe-submit-button")
-  private val directDebitButton = id("qa-direct-debit")
   private val personalDetails = id("qa-personal-details")
+
+  // Stripe
+  private val stripeRadioButton = id("qa-credit-card")
+  private val stripeSubmitButton = id("qa-stripe-submit-button")
   private val cardNumber = name("cardnumber")
   private val expiry = name("exp-date")
   private val cvc = name("cvc")
+
+  // Direct debit
+  private val directDebitButton = id("qa-direct-debit")
+  private val accountName = id("account-holder-name-input")
+  private val sortCode = id("sort-code-input")
+  private val accountNumber = id("account-number-input")
+  private val directDebitSubmitButton = id("qa-direct-debit-submit")
+
 
   def selectStripePaymentMethod(): Unit = clickOn(stripeRadioButton)
 
@@ -26,6 +35,10 @@ trait CheckoutPage extends Page with Browser {
     pageHasElement(cardNumber)
   }
 
+  def directDebitFormHasLoaded: Boolean = {
+    pageHasElement(accountNumber)
+  }
+
   def fillStripeForm(): Unit = {
     for (_ <- 1 to 8) setValue(cardNumber, "42")
     switchToParentFrame
@@ -38,6 +51,12 @@ trait CheckoutPage extends Page with Browser {
     switchToParentFrame
   }
 
+  def fillDirectDebitForm(): Unit = {
+    setValue(accountName, "Test user")
+    setValue(sortCode, "200000")
+    setValue(accountNumber, "55779911")
+  }
+
   def thankYouPageHasLoaded: Boolean = {
     pageHasElement(className("thank-you-stage"))
   }
@@ -45,6 +64,8 @@ trait CheckoutPage extends Page with Browser {
   def clickSubmit(): Unit = clickOn(submitButton)
 
   def clickStripeSubmit(): Unit = clickOn(stripeSubmitButton)
+
+  def clickDirectDebitSubmit(): Unit = clickOn(directDebitSubmitButton)
 
   def fillForm(): Unit
 }
