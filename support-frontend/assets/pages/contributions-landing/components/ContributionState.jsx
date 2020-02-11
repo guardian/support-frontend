@@ -20,10 +20,12 @@ type PropTypes = {|
   onChange: (Event => void) | false,
   isValid: boolean,
   formHasBeenSubmitted: boolean,
+  contributionType: string,
 |};
 
 const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
+  contributionType: state.page.form.contributionType,
 });
 
 // ----- Render ----- //
@@ -63,16 +65,19 @@ const renderStatesField = (
 
 function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
-  switch (props.countryGroupId) {
-    case UnitedStates:
-      return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
-    case Canada:
-      return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
-    default:
-      return null;
+  if (props.contributionType !== 'ONE_OFF') {
+    switch (props.countryGroupId) {
+      case UnitedStates:
+        return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
+      case Canada:
+        return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
+      default:
+        return null;
+    }
   }
-}
 
+  return null;
+}
 
 ContributionState.defaultProps = {
   onChange: false,
