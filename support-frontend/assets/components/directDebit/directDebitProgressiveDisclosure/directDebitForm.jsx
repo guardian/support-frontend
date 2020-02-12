@@ -94,6 +94,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 }
 
 const InputWithError = compose(withError, withLabel)(Input);
+const fieldNames = ['accountHolderName', 'sortCodeString', 'accountNumber'];
 
 
 // ----- Component ----- //
@@ -143,7 +144,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
 
   getCardErrors = () => {
     const { state } = this;
-    const cardErrors = ['accountHolderName', 'sortCodeString', 'accountNumber'].map(field =>
+    const cardErrors = fieldNames.map(field =>
       ({ message: state[field].error }));
     return cardErrors;
   }
@@ -157,7 +158,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
 
   handleErrors = () => {
     const { props, state } = this;
-    ['accountHolderName', 'sortCodeString', 'accountNumber'].forEach((field) => {
+    fieldNames.forEach((field) => {
       if (!state[field].rule(props[field])) {
         this.setState({
           [field]: {
