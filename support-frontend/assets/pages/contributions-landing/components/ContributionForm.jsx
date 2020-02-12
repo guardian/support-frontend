@@ -48,7 +48,7 @@ import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/St
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
+import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import { logException } from 'helpers/logger';
 
@@ -205,18 +205,14 @@ function onSubmit(props: PropTypes): Event => void {
     event.preventDefault();
     const flowPrefix = 'npf';
     const form = event.target;
-    // Only recurring uses stripe checkout
-    if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe && props.contributionType !== 'ONE_OFF') {
-      props.onPaymentAuthorisation({ paymentMethod: Stripe, token: 'tok_visa', stripePaymentMethod: 'StripeCheckout' });
-    } else {
-      const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
-      onFormSubmit({
-        ...props,
-        flowPrefix,
-        handlePayment,
-        form,
-      });
-    }
+    const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
+
+    onFormSubmit({
+      ...props,
+      flowPrefix,
+      handlePayment,
+      form,
+    });
   };
 }
 
