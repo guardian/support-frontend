@@ -100,9 +100,7 @@ class CheckoutsSpec extends AnyFeatureSpec
     checkoutPage.selectStripePaymentMethod()
 
     Then("the stripe form loads")
-    eventually {
-      assert(checkoutPage.stripeFormHasLoaded)
-    }
+    assert(checkoutPage.stripeFormHasLoaded)
 
     Given("they fill in the stripe form")
     checkoutPage.fillStripeForm()
