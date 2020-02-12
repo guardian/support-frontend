@@ -1,4 +1,18 @@
 import { directDebitReducer as reducer } from '../directDebitReducer';
+import {
+  openDirectDebitPopUp,
+  closeDirectDebitPopUp,
+  openDirectDebitGuarantee,
+  closeDirectDebitGuarantee,
+  updateSortCode,
+  updateSortCodeString,
+  updateAccountNumber,
+  updateAccountHolderName,
+  updateAccountHolderConfirmation,
+  setDirectDebitFormError,
+  resetDirectDebitFormError,
+  setDirectDebitFormPhase,
+} from '../directDebitActions';
 
 // ----- Tests ----- //
 
@@ -9,21 +23,15 @@ describe('direct debit reducer tests', () => {
   });
 
   it('should handle DIRECT_DEBIT_POP_UP_OPEN', () => {
-    const action = {
-      type: 'DIRECT_DEBIT_POP_UP_OPEN',
-    };
-
+    const action = openDirectDebitPopUp();
     const newState = reducer(undefined, action);
+
     expect(newState.isPopUpOpen).toEqual(true);
   });
 
   it('should handle DIRECT_DEBIT_POP_UP_CLOSE', () => {
-    const action1 = {
-      type: 'DIRECT_DEBIT_POP_UP_OPEN',
-    };
-    const action2 = {
-      type: 'DIRECT_DEBIT_POP_UP_CLOSE',
-    };
+    const action1 = openDirectDebitPopUp();
+    const action2 = closeDirectDebitPopUp();
 
     let newState = reducer(undefined, action1);
     expect(newState.isPopUpOpen).toEqual(true);
@@ -33,21 +41,15 @@ describe('direct debit reducer tests', () => {
   });
 
   it('should handle DIRECT_DEBIT_GUARANTEE_OPEN', () => {
-    const action = {
-      type: 'DIRECT_DEBIT_GUARANTEE_OPEN',
-    };
-
+    const action = openDirectDebitGuarantee();
     const newState = reducer(undefined, action);
+
     expect(newState.isDDGuaranteeOpen).toEqual(true);
   });
 
   it('should handle DIRECT_DEBIT_GUARANTEE_CLOSE', () => {
-    const action1 = {
-      type: 'DIRECT_DEBIT_GUARANTEE_OPEN',
-    };
-    const action2 = {
-      type: 'DIRECT_DEBIT_GUARANTEE_CLOSE',
-    };
+    const action1 = openDirectDebitGuarantee();
+    const action2 = closeDirectDebitGuarantee();
 
     let newState = reducer(undefined, action1);
     expect(newState.isDDGuaranteeOpen).toEqual(true);
@@ -58,118 +60,72 @@ describe('direct debit reducer tests', () => {
 
   it('should handle DIRECT_DEBIT_UPDATE_SORT_CODE', () => {
     const sortCode = '123456';
-    function action(index, partialSortCode) {
-      return {
-        type: 'DIRECT_DEBIT_UPDATE_SORT_CODE',
-        index,
-        partialSortCode,
-      };
-    }
-
-    const firstUpdate = reducer(undefined, action(0, '12'));
-    const secondUpdate = reducer(firstUpdate, action(1, '34'));
-    const thirdUpdate = reducer(secondUpdate, action(2, '56'));
+    const firstUpdate = reducer(undefined, updateSortCode(0, '12'));
+    const secondUpdate = reducer(firstUpdate, updateSortCode(1, '34'));
+    const thirdUpdate = reducer(secondUpdate, updateSortCode(2, '56'));
 
     expect(thirdUpdate.sortCodeArray.join('')).toEqual(sortCode);
   });
 
   it('should handle DIRECT_DEBIT_UPDATE_SORT_CODE_STRING', () => {
     const sortCodeSubmitted = '123456';
-    function action(sortCodeString) {
-      return {
-        type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING',
-        sortCodeString,
-      };
-    }
-
-    const newState = reducer(undefined, action(sortCodeSubmitted));
+    const action = updateSortCodeString(sortCodeSubmitted);
+    const newState = reducer(undefined, action);
 
     expect(newState.sortCodeString).toEqual(sortCodeSubmitted);
   });
 
   it('should handle DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', () => {
-
     const accountNumber = '12345678910';
-    const action = {
-      type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER',
-      accountNumber,
-    };
-
+    const action = updateAccountNumber(accountNumber);
     const newState = reducer(undefined, action);
 
     expect(newState.accountNumber).toEqual(accountNumber);
   });
 
   it('should handle DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', () => {
-
     const accountHolderName = 'John Doe';
-    const action = {
-      type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME',
-      accountHolderName,
-    };
-
+    const action = updateAccountHolderName(accountHolderName);
     const newState = reducer(undefined, action);
 
     expect(newState.accountHolderName).toEqual(accountHolderName);
   });
 
   it('should handle DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', () => {
-
     const accountHolderConfirmation = true;
-    const action = {
-      type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION',
-      accountHolderConfirmation,
-    };
-
+    const action = updateAccountHolderConfirmation(accountHolderConfirmation);
     const newState = reducer(undefined, action);
 
     expect(newState.accountHolderConfirmation).toEqual(accountHolderConfirmation);
   });
 
   it('should handle DIRECT_DEBIT_SET_FORM_ERROR', () => {
-
     const message = 'this is an error';
-    const action = {
-      type: 'DIRECT_DEBIT_SET_FORM_ERROR',
-      message,
-    };
-
+    const action = setDirectDebitFormError(message);
     const newState = reducer(undefined, action);
 
     expect(newState.formError).toEqual(message);
   });
 
   it('should handle DIRECT_DEBIT_RESET_FORM_ERROR', () => {
-
-    const action = {
-      type: 'DIRECT_DEBIT_RESET_FORM_ERROR',
-    };
-
+    const action = resetDirectDebitFormError();
     const newState = reducer(undefined, action);
 
     expect(newState.formError).toEqual('');
   });
 
-  it('should handle DIRECT_DEBIT_SET_FORM_PHASE to confirmation mode', () => {
-    const action = {
-      type: 'DIRECT_DEBIT_SET_FORM_PHASE',
-      phase: 'confirmation',
-    };
+  it('should handle DIRECT_DEBIT_SET_FORM_PHASE correctly', () => {
+    const phaseConf = 'confirmation';
+    const phaseEntry = 'entry';
 
-    const newState = reducer(undefined, action);
+    let action = setDirectDebitFormPhase(phaseConf);
+    let newState = reducer(undefined, action);
+    expect(newState.phase).toEqual(phaseConf);
 
-    expect(newState.phase).toEqual('confirmation');
-  });
+    action = setDirectDebitFormPhase(phaseEntry);
+    newState = reducer(undefined, action);
+    expect(newState.phase).toEqual(phaseEntry);
 
-  it('should handle DIRECT_DEBIT_SET_FORM_PHASE to entry mode', () => {
-    const action = {
-      type: 'DIRECT_DEBIT_SET_FORM_PHASE',
-      phase: 'entry',
-    };
-
-    const newState = reducer(undefined, action);
-
-    expect(newState.phase).toEqual('entry');
   });
 });
 
