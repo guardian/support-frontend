@@ -5,8 +5,9 @@ import {
   openDirectDebitGuarantee,
   closeDirectDebitGuarantee,
   updateSortCode,
-  updateAccountNumber,
+  updateSortCodeString,
   updateAccountHolderName,
+  updateAccountNumber,
   updateAccountHolderConfirmation,
   setDirectDebitFormError,
   resetDirectDebitFormError,
@@ -51,6 +52,15 @@ describe('actions', () => {
       partialSortCode,
     };
     expect(updateSortCode(0, partialSortCode)).toEqual(expectedAction);
+  });
+
+  it('should create an action to update the sort code string', () => {
+    const sortCodeString: string = '121212';
+    const expectedAction = {
+      type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING',
+      sortCodeString,
+    };
+    expect(updateSortCodeString(sortCodeString)).toEqual(expectedAction);
   });
 
   it('should create an action to update the account number', () => {
