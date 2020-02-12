@@ -88,7 +88,8 @@ function payDirectDebitClicked(): Function {
     so this if-statement is not needed for the new form. The old form uses sortCodeArray whereas the
     new form uses sortCodeString, so checking if sortCodeString is empty is a way of checking which
     version of the DD form it is and whether to do this check. */
-    if (!accountHolderConfirmation && sortCodeString.length === 0) {
+    const checkoutUsesProgressiveDisclosureDirectDebit = sortCodeString.length > 0;
+    if (!accountHolderConfirmation && !checkoutUsesProgressiveDisclosureDirectDebit) {
       dispatch(setDirectDebitFormError('You need to confirm that you are the account holder.'));
       return;
     }
