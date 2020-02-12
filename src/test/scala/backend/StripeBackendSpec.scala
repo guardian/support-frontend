@@ -50,7 +50,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   )
 
   val paymentError = PaypalApiError.fromString("Error response")
-  val stripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"))
+  val stripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"), None)
   val backendError = BackendError.fromStripeApiError(stripeApiError)
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
 
@@ -286,7 +286,7 @@ class StripeBackendSpec
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
 
         stripeBackend.confirmPaymentIntent(confirmPaymentIntent, clientBrowserInfo).futureLeft shouldBe
-          StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: canceled")
+          StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: canceled", None)
 
       }
     }

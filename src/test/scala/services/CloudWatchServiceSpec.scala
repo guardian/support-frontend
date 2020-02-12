@@ -39,11 +39,11 @@ class CloudWatchServiceSpec extends WordSpec with Matchers with MockitoSugar wit
 
     "a StripeAPIError is given" should {
       "Register as Payment Error in CloudWatch if stripe error is not of type Card_Exception" in {
-        val error = StripeApiError(Some("APIConnectionException"),Some(500), Some("api_key_required") , "Hi this is a test error")
+        val error = StripeApiError(Some("APIConnectionException"),Some(500), Some("api_key_required") , "Hi this is a test error", None)
         cloudWatch.isPaymentError(error) shouldBe true
       }
       "Do not register as Payment Error in CloudWatch if stripe error is of type Card_Exception" in {
-        val error = StripeApiError(Some("CardException"),Some(500), Some("card_declined") , "Hi this is a test error")
+        val error = StripeApiError(Some("CardException"),Some(500), Some("card_declined") , "Hi this is a test error", None)
         cloudWatch.isPaymentError(error) shouldBe false
       }
 

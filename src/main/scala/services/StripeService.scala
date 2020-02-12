@@ -41,12 +41,12 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
 
   def createCharge(data: LegacyStripeChargeRequest): EitherT[Future, StripeApiError, Charge] = {
     if (model.Currency.exceedsMaxAmount(data.paymentData.amount, data.paymentData.currency)) {
-      Left(StripeApiError.fromString("Amount exceeds the maximum allowed ")).toEitherT[Future]
+      Left(StripeApiError.fromString("Amount exceeds the maximum allowed ", Some(config.publicKey))).toEitherT[Future]
     } else {
       Future(Charge.create(getChargeParams(data), requestOptions))
         .attemptT
         .bimap(
-          StripeApiError.fromThrowable,
+          err => StripeApiError.fromThrowable(err, Some(config.publicKey)),
           charge => {
             logger.info(s"Stripe charge with id ${charge.getId} created")
             charge
@@ -62,7 +62,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
         err => {
           logger.error(s"Refund webhook event is not valid. Stripe sent $stripeHook. " +
             s"Attempting to retrieve a matching event gave: ", err)
-          StripeApiError.fromThrowable(err)
+          StripeApiError.fromThrowable(err, Some(config.publicKey))
         },
         event => {
           logger.info("Refund webhook event is valid")
@@ -72,7 +72,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
 
   def createPaymentIntent(data: StripePaymentIntentRequest.CreatePaymentIntent): EitherT[Future, StripeApiError, PaymentIntent] = {
     if (model.Currency.exceedsMaxAmount(data.paymentData.amount, data.paymentData.currency)) {
-      Left(StripeApiError.fromString("Amount exceeds the maximum allowed ")).toEitherT[Future]
+      Left(StripeApiError.fromString("Amount exceeds the maximum allowed ", Some(config.publicKey))).toEitherT[Future]
     } else {
       Future {
         val params = PaymentIntentCreateParams.builder
@@ -89,7 +89,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
     }
       .attemptT
       .bimap(
-        err => StripeApiError.fromThrowable(err),
+        err => StripeApiError.fromThrowable(err, Some(config.publicKey)),
         paymentIntent => {
           logger.info(s"Created Stripe Payment Intent with id ${paymentIntent.getId}, status ${paymentIntent.getStatus}")
           paymentIntent
@@ -104,7 +104,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
     } yield confirmedPaymentIntent
 
     result.bimap(
-      err => StripeApiError.fromThrowable(err),
+      err => StripeApiError.fromThrowable(err, Some(config.publicKey)),
       paymentIntent => {
         logger.info(s"Confirmed Stripe Payment Intent with id ${paymentIntent.getId}")
         paymentIntent
@@ -166,7 +166,7 @@ class CountryBasedStripeService(default: DefaultStripeService, au: AustraliaStri
       case None => {
         val errorMessage = s"Invalid currency. $stripeCurrency"
         logger.error(errorMessage)
-        Left(StripeApiError.fromString(errorMessage)).toEitherT[Future]
+        Left(StripeApiError.fromString(errorMessage, publicKey = None)).toEitherT[Future]
       }
     }
   }

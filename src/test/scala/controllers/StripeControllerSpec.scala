@@ -47,13 +47,13 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val stripeChargeSuccessMock: StripeCreateChargeResponse = StripeCreateChargeResponse.fromCharge(mockCharge, None)
 
   val stripeServiceResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(StripeApiError.fromStripeException)
+    EitherT.right(Future.successful(stripeChargeSuccessMock))
 
   val stripeServiceInvalidRequestErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", "code", 500, new Throwable)))
+    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", "code", 500, new Throwable), None))
 
   val stripeServiceCardErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromStripeException(new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable)))
+    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromStripeException(new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable), None))
 
   val mockEvent: Event = mock[Event]
 
@@ -61,7 +61,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.right(Future.successful(()))
 
   val processRefundHookFailure: EitherT[Future, BackendError, Unit] =
-    EitherT.leftT[Future, Unit](BackendError.fromStripeApiError(StripeApiError.fromString("Error response")))
+    EitherT.leftT[Future, Unit](BackendError.fromStripeApiError(StripeApiError.fromString("Error response", None)))
 
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 

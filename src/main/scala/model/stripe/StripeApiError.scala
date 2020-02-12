@@ -13,22 +13,22 @@ import PartialFunction.condOpt
 //
 // requestID: This field contains an identifying key for the request which can be used for debugging and investigating any failures
 
-case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], declineCode: Option[String], message: String) extends Exception {
-  override val getMessage: String = message
+case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], declineCode: Option[String], message: String, publicKey: Option[String]) extends Exception {
+  override val getMessage: String = publicKey.map(pk => s"$message. (Public key was $pk)").getOrElse(message)
 }
 
 object StripeApiError {
 
-  def fromString(message: String): StripeApiError = StripeApiError(None, None, None, message)
+  def fromString(message: String, publicKey: Option[String]): StripeApiError = StripeApiError(None, None, None, message, publicKey)
 
-  def fromThrowable(err: Throwable): StripeApiError = {
+  def fromThrowable(err: Throwable, publicKey: Option[String]): StripeApiError = {
     err match {
-      case e: StripeException => fromStripeException(e)
-      case _ => fromString(err.getMessage)
+      case e: StripeException => fromStripeException(e, publicKey)
+      case _ => fromString(err.getMessage, publicKey)
     }
   }
 
-  def fromStripeException(err: StripeException): StripeApiError = {
+  def fromStripeException(err: StripeException, publicKey: Option[String]): StripeApiError = {
     val exceptionType: Option[String] = {
       condOpt(err) {
         case _: ApiConnectionException => "ApiConnectionException"
@@ -41,7 +41,7 @@ object StripeApiError {
 
     val declineCode: Option[String] = condOpt(err) { case e: CardException => e.getDeclineCode }
 
-    StripeApiError(exceptionType, Option(err.getStatusCode), declineCode, err.getMessage)
+    StripeApiError(exceptionType, Option(err.getStatusCode), declineCode, err.getMessage, publicKey)
 
   }
 }

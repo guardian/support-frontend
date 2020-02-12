@@ -86,7 +86,9 @@ class StripeBackend(
 
           case otherStatus =>
             logger.error(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
-            EitherT.fromEither(Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus")))
+            EitherT.fromEither(
+              Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None))
+            )
         }
       }
   }
@@ -108,7 +110,9 @@ class StripeBackend(
 
           case otherStatus =>
             logger.error(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
-            EitherT.fromEither(Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus")))
+            EitherT.fromEither(
+              Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None))
+            )
         }
       }
   }
