@@ -58,7 +58,6 @@ type PropTypes = {|
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   isTestUser: boolean,
   switches: Switches,
-  inAmazonPayTest: boolean,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -71,8 +70,6 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
-  inAmazonPayTest:
-    state.common.abParticipations.amazonPaySingleUS2020 === 'amazonPay',
 });
 
 const mapDispatchToProps = {
@@ -101,7 +98,7 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
 function withProps(props: PropTypes) {
 
   const paymentMethods: PaymentMethod[] =
-    getValidPaymentMethods(props.contributionType, props.switches, props.countryId, props.inAmazonPayTest);
+    getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
 
   const noPaymentMethodsErrorMessage =
     (<GeneralErrorMessage

@@ -56,10 +56,9 @@ function getInitialPaymentMethod(
   contributionType: ContributionType,
   countryId: IsoCountry,
   switches: Switches,
-  inAmazonPayTest: boolean,
 ): PaymentMethod {
   const paymentMethodFromSession = getPaymentMethodFromSession();
-  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId, inAmazonPayTest);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
 
   return (
     paymentMethodFromSession && validPaymentMethods.includes(getPaymentMethodFromSession())
@@ -113,7 +112,6 @@ function initialisePaymentMethods(
   state: State,
   dispatch: Function,
   contributionTypes: ContributionTypes,
-  inAmazonPayTest: boolean,
 ) {
 
   const { countryId, currencyId, countryGroupId } = state.common.internationalisation;
@@ -133,7 +131,6 @@ function initialisePaymentMethods(
           contributionTypeSetting.contributionType,
           switches,
           countryId,
-          inAmazonPayTest,
         );
         // Stripe Payment Intents is currently only for one-offs, so always initialise Stripe Checkout for now
         if (validPayments.includes(Stripe)) {
@@ -149,9 +146,7 @@ function initialisePaymentMethods(
       });
     });
 
-    if (inAmazonPayTest) {
-      setupAmazonPay(countryGroupId, dispatch, isTestUser);
-    }
+    setupAmazonPay(countryGroupId, dispatch, isTestUser);
 
     // initiate fetch of existing payment methods
     const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
@@ -214,14 +209,13 @@ function selectInitialContributionTypeAndPaymentMethod(
   state: State,
   dispatch: Function,
   contributionTypes: ContributionTypes,
-  inAmazonPayTest: boolean,
 ) {
 
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
-  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches, inAmazonPayTest);
+  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }
 
@@ -234,9 +228,7 @@ const init = (store: Store<State, Action, Function>) => {
   const contributionTypes = getContributionTypes(state);
   dispatch(setContributionTypes(contributionTypes));
 
-  const inAmazonPayTest = state.common.abParticipations.amazonPaySingleUS2020 === 'amazonPay';
-
-  initialisePaymentMethods(state, dispatch, contributionTypes, inAmazonPayTest);
+  initialisePaymentMethods(state, dispatch, contributionTypes);
 
   // This will be in window.guardian if it has come from a PayPal one-off contribution,
   // where it is returned by the Payment API to the backend, flashed into the session to preserve
@@ -247,7 +239,7 @@ const init = (store: Store<State, Action, Function>) => {
   }
 
   selectInitialAmounts(state, dispatch);
-  selectInitialContributionTypeAndPaymentMethod(state, dispatch, contributionTypes, inAmazonPayTest);
+  selectInitialContributionTypeAndPaymentMethod(state, dispatch, contributionTypes);
 
   const {
     firstName,
