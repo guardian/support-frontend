@@ -202,6 +202,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           <InputWithError
             id="account-holder-name-input"
             value={props.accountHolderName}
+            autoComplete="off"
             onChange={e => this.onChange('accountHolderName', props.updateAccountHolderName, e)}
             maxLength="40"
             className="component-direct-debit-form__text-field focus-target"
@@ -214,6 +215,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           <InputWithError
             id="sort-code-input"
             label="Sort code"
+            autoComplete="off"
             value={props.sortCodeString}
             onChange={e => this.onChange('sortCodeString', props.updateSortCodeString, e)}
             error={state.sortCodeString.error}
@@ -227,6 +229,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           <InputWithError
             id="account-number-input"
             value={props.accountNumber}
+            autoComplete="off"
             onChange={e => this.onChange('accountNumber', props.updateAccountNumber, e)}
             minLength="6"
             maxLength="10"
