@@ -14,7 +14,7 @@ const discountCopy = (discountPercentage: number): DiscountCopy => (
   discountPercentage > 0 ?
     {
       roundel: ['Save up to', `${discountPercentage}%`, 'a year'],
-      heading: [`Save up to ${discountPercentage}% for a year on The Guardian`, <br />, ' and The Observer'],
+      heading: [`Save up to ${discountPercentage}% a year on The Guardian`, <br />, ' and The Observer'],
     } :
     {
       roundel: [],
