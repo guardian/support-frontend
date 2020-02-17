@@ -1,26 +1,28 @@
 package backend
 
-import cats.data.EitherT
-import cats.implicits._
-import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
-import com.gu.acquisition.model.errors.AnalyticsServiceError
-import model._
-import model.subscribewithgoogle.GoogleRecordPayment
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{Matchers, WordSpec}
-import services._
-import org.mockito.{Matchers => Match}
-import org.mockito.Mockito.{verify, _}
-import org.scalatest.concurrent.IntegrationPatience
-import util.FutureEitherValues
-
-import scala.concurrent.{ExecutionContext, Future}
-
 /**
   * This was commented out during the migration to using a queue for database writes.
   * The tests make use of database queries that are no longer possible from payment-api.
   */
+
+
+//import cats.data.EitherT
+//import cats.implicits._
+//import com.amazonaws.services.sqs.model.SendMessageResult
+//import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
+//import com.gu.acquisition.model.errors.AnalyticsServiceError
+//import model._
+//import model.subscribewithgoogle.GoogleRecordPayment
+//import org.scalatest.mockito.MockitoSugar
+//import org.scalatest.{Matchers, WordSpec}
+//import services._
+//import org.mockito.{Matchers => Match}
+//import org.mockito.Mockito.{verify, _}
+//import org.scalatest.concurrent.IntegrationPatience
+//import util.FutureEitherValues
+//
+//import scala.concurrent.{ExecutionContext, Future}
+
 
 //class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends MockitoSugar {
 //

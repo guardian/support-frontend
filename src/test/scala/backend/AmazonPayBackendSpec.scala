@@ -245,6 +245,30 @@ class AmazonPayBackendSpec extends WordSpec
 
       }
 
+      "Call cancel when transaction times out " in new AmazonPayBackendFixture {
+        val expectedReason = "some reason"
+        when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
+        when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
+        when(mockOrderReferenceStatus.getState).thenReturn("Draft")
+        when(mockAmazonPayService.setOrderReference(any())).thenReturn(setOrderRefRes)
+        when(mockAmazonPayService.confirmOrderReference(any())).thenReturn(mockConfirmRes)
+        when(mockAmazonPayService.authorize(any(), any())).thenReturn(mockAuthResponse)
+        when(mockAuthorizationDetails.getAuthorizationStatus).thenReturn(mockAuthStatus)
+        when(mockAuthStatus.getState).thenReturn("Declined")
+        when(mockAuthStatus.getReasonCode).thenReturn("TransactionTimedOut")
+        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
+
+        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft shouldBe AmazonPayApiError.withReason(200, s"Declined with reason TransactionTimedOut", "TransactionTimedOut")
+        verify(mockAmazonPayService).cancelOrderReference(any())
+      }
+
       "a request is made to process a refund hook" should {
 
         "return Unit if not a refund" in new AmazonPayBackendFixture {

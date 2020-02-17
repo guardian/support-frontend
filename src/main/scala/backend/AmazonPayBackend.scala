@@ -3,7 +3,7 @@ package backend
 import cats.data.EitherT
 import cats.implicits._
 import com.amazon.pay.response.ipn.model.{Notification, NotificationType, RefundNotification}
-import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetails}
+import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetails, Status}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.typesafe.scalalogging.StrictLogging
@@ -33,13 +33,17 @@ class AmazonPayBackend(cloudWatchService: CloudWatchService,
 
     def isNotSuspended(details: OrderReferenceDetails) =  details.getOrderReferenceStatus.getState.toUpperCase != "SUSPENDED"
 
-    def handleDeclinedResponse(orderRef: OrderReferenceDetails, authRes: AuthorizationDetails) = {
-      val isDeclined = authRes.getAuthorizationStatus.getState.toUpperCase == "DECLINED"
+    def handleDeclinedResponse(orderRef: OrderReferenceDetails, authStatus: Status) = {
+      val isDeclined = authStatus.getState.toUpperCase == "DECLINED"
+      if (isDeclined && authStatus.getReasonCode ==  "TransactionTimedOut") {
+        logger.warn(s"Cancelling ${orderRef.getAmazonOrderReferenceId} due to TransactionTimedOut")
+        service.cancelOrderReference(orderRef)
+      }
       Either.cond(
         test = !isDeclined,
         right = orderRef,
         left = AmazonPayApiError
-          .withReason(200, s"Declined with reason ${authRes.getAuthorizationStatus.getReasonCode}", authRes.getAuthorizationStatus.getReasonCode)
+          .withReason(200, s"Declined with reason ${authStatus.getReasonCode}", authStatus.getReasonCode)
       )
     }
 
@@ -48,7 +52,7 @@ class AmazonPayBackend(cloudWatchService: CloudWatchService,
       _ <- if (isNotSuspended(orderRef)) service.setOrderReference(amazonPayRequest.paymentData) else Right(orderRef)
       _ <- service.confirmOrderReference(orderRef)
       authRes <- service.authorize(orderRef, amazonPayRequest.paymentData)
-      _ <- handleDeclinedResponse(orderRef, authRes)
+      _ <- handleDeclinedResponse(orderRef, authRes.getAuthorizationStatus)
     } yield  authRes
 
     handleResponse(response, amazonPayRequest, clientBrowserInfo)

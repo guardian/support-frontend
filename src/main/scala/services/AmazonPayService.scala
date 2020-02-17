@@ -46,6 +46,14 @@ class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool
     }
   }
 
+  def cancelOrderReference(orderRef: OrderReferenceDetails) = {
+    Either.catchNonFatal {
+      client.cancelOrderReference(new CancelOrderReferenceRequest(orderRef.getAmazonOrderReferenceId))
+    }.leftMap { error =>
+      AmazonPayApiError.fromString(error.getMessage)
+    }
+  }
+
   def setOrderReference(payment: AmazonPaymentData): Either[AmazonPayApiError, OrderReferenceDetails] = {
     logger.info("Setting order ref: " + payment.orderReferenceId)
     Either.catchNonFatal {
@@ -101,7 +109,6 @@ class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool
       AmazonPayApiError.fromString(error.getMessage)
     }
   }
-
 
   def close(payment: AmazonPaymentData): Either[AmazonPayApiError, CloseOrderReferenceResponseData] = {
     logger.info(s"Closing ${payment.orderReferenceId}")
