@@ -66,6 +66,7 @@
     "url": "https://github.com/guardian/support-frontend/issues"
   },
   "dependencies": {
+    "@emotion/core": "^10.0.27",
     "@guardian/pasteup": "^1.0.0-alpha.7",
     "@sentry/browser": "^5.4.0",
     "cssnano": "^4.1.10",
