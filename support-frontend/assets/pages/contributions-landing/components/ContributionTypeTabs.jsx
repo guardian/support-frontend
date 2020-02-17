@@ -66,18 +66,26 @@ function withProps(props: PropTypes) {
 
   return (
     <form>
-      <ChoiceCardGroup name="consent" orientation="vertical">
-        <ChoiceCard
-          value="no"
-          label="No"
-          supporting="I do not accept the terms"
-          checked
-        />
-        <ChoiceCard
-          value="yes"
-          label="Yes"
-          supporting="I accept the terms"
-        />,
+      <ChoiceCardGroup name="consent" orientation="horizontal">
+        {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
+        const { contributionType } = contributionTypeSetting;
+        return (
+          <ChoiceCard
+            id={`contributionType-${contributionType}`}
+            value={contributionType}
+            label={toHumanReadableContributionType(contributionType)}
+            onChange={() =>
+                props.onSelectContributionType(
+                  contributionType,
+                  props.switches,
+                  props.countryId,
+                  props.countryGroupId,
+                )
+            }
+            checked={props.contributionType === contributionType}
+          />
+        );
+      })}
       </ChoiceCardGroup>
     </form>
   );
