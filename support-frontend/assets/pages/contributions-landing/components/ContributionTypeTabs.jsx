@@ -21,6 +21,7 @@ import type {
   ContributionTypes,
   ContributionTypeSetting,
 } from 'helpers/contributions';
+import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 
 // ----- Types ----- //
 
@@ -64,60 +65,95 @@ function withProps(props: PropTypes) {
   }
 
   return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      <ul className="form__radio-group-list form__radio-group-list--border">
-        {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
-          const { contributionType } = contributionTypeSetting;
-          return (
-            <li className="form__radio-group-item">
-              <input
-                id={`contributionType-${contributionType}`}
-                className="form__radio-group-input"
-                type="radio"
-                name="contributionType"
-                value={contributionType}
-                onChange={() =>
-                  props.onSelectContributionType(
-                    contributionType,
-                    props.switches,
-                    props.countryId,
-                    props.countryGroupId,
-                  )
-                }
-                checked={props.contributionType === contributionType}
-              />
-              <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
-                {toHumanReadableContributionType(contributionType)}
-              </label>
-            </li>);
-        })}
-      </ul>
-    </fieldset>
+    <form>
+      <ChoiceCardGroup name="consent" orientation="vertical">
+        <ChoiceCard
+          value="no"
+          label="No"
+          supporting="I do not accept the terms"
+          checked
+        />
+        <ChoiceCard
+          value="yes"
+          label="Yes"
+          supporting="I accept the terms"
+        />,
+      </ChoiceCardGroup>
+    </form>
   );
+
+  // return (
+  //   <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
+  //     <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
+  //     <ul className="form__radio-group-list form__radio-group-list--border">
+  //       {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
+  //         const { contributionType } = contributionTypeSetting;
+  //         return (
+  //           <li className="form__radio-group-item">
+  //             <input
+  //               id={`contributionType-${contributionType}`}
+  //               className="form__radio-group-input"
+  //               type="radio"
+  //               name="contributionType"
+  //               value={contributionType}
+  //               onChange={() =>
+  //                 props.onSelectContributionType(
+  //                   contributionType,
+  //                   props.switches,
+  //                   props.countryId,
+  //                   props.countryGroupId,
+  //                 )
+  //               }
+  //               checked={props.contributionType === contributionType}
+  //             />
+  //             <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
+  //               {toHumanReadableContributionType(contributionType)}
+  //             </label>
+  //           </li>);
+  //       })}
+  //     </ul>
+  //   </fieldset>
+  // );
 }
 
 function withoutProps() {
   return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      <ul className="form__radio-group-list form__radio-group-list--border">
-        {
-          ['a', 'b', 'c'].map(id => (
-            <li className="form__radio-group-item">
-              <input
-                id={`contributionType-${id}`}
-                className="form__radio-group-input"
-                type="radio"
-                name="contributionType"
-              />
-              <label htmlFor={`contributionType-${id}`} className="form__radio-group-label">&nbsp;</label>
-            </li>
-            ))
-        }
-      </ul>
-    </fieldset>
+    <form>
+      <ChoiceCardGroup name="consent" orientation="vertical">
+        <ChoiceCard
+          value="no"
+          label="No"
+          supporting="I do not accept the terms"
+          checked
+        />
+        <ChoiceCard
+          value="yes"
+          label="Yes"
+          supporting="I accept the terms"
+        />,
+      </ChoiceCardGroup>
+    </form>
   );
+  // return (
+  //   <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
+  //     <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
+  //     <ul className="form__radio-group-list form__radio-group-list--border">
+  //       {
+  //         ['a', 'b', 'c'].map(id => (
+  //           <li className="form__radio-group-item">
+  //             <input
+  //               id={`contributionType-${id}`}
+  //               className="form__radio-group-input"
+  //               type="radio"
+  //               name="contributionType"
+  //             />
+  //             <label htmlFor={`contributionType-${id}`} className="form__radio-group-label">&nbsp;</label>
+  //           </li>
+  //           ))
+  //       }
+  //     </ul>
+  //   </fieldset>
+  // );
 }
 
 export const ContributionTypeTabs = connect(mapStateToProps, mapDispatchToProps)(withProps);
