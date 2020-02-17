@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type Node } from 'react';
+import { type Node } from 'react';
 
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
@@ -14,7 +14,7 @@ const discountCopy = (discountPercentage: number): DiscountCopy => (
   discountPercentage > 0 ?
     {
       roundel: ['Save up to', `${discountPercentage}%`, 'a year'],
-      heading: [`Save up to ${discountPercentage}% a year on The Guardian`, <br />, ' and The Observer'],
+      heading: [`Save up to ${discountPercentage}% a year with a subscription`],
     } :
     {
       roundel: [],
