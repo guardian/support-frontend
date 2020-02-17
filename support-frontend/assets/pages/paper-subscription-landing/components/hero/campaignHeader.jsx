@@ -57,10 +57,10 @@ const CampaignHeader = (props: PropTypes) => (
         <Roundel roundelCopy={props.discountCopy.roundel} />
         <div className="sale-joy-of-print-graphic">
           <GridImage
-            gridId="printCampaign2020"
+            gridId="printShowcase"
             srcSizes={[1000, 500]}
             sizes="(max-width: 740px) 100vw, 800px"
-            imgType="png"
+            imgType="jpg"
             altText="Newspapers"
           />
         </div>

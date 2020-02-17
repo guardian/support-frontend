@@ -1,13 +1,13 @@
 // @flow
 
-import { type Node } from 'react';
 
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { type Option } from 'helpers/types/option';
 
 export type DiscountCopy = {
   roundel: string[],
-  heading: string | Node,
+  heading: Option<string>,
 };
 
 const discountCopy = (discountPercentage: number): DiscountCopy => (

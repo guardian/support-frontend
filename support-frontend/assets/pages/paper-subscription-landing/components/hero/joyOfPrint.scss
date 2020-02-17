@@ -3,8 +3,9 @@
 // "Joy of Print Sale" specific styles below!
 
 .component-product-page-hero--campaign.component-product-page-hero--paper-sale {
-  background: #f29ca9;
+  background: gu-colour(highlight-main);
   height: auto;
+  border-bottom: 1px solid gu-colour(neutral-86);
   min-height: auto;
 }
 
@@ -19,6 +20,10 @@
   z-index: 10;
   margin-top: $gu-v-spacing * 2;
 
+  @include mq($from: leftCol) {
+    margin-top: $gu-v-spacing * 6;
+  }
+
   @include mq($from: phablet) {
     font-size: 35px;
     line-height: 1;
@@ -29,7 +34,7 @@
       font-family: $gu-titlepiece;
       margin: $gu-v-spacing * 2 0;
       span {
-        padding: 0 $gu-h-spacing / 2;
+       padding: 0 $gu-h-spacing / 2;
       }
       span:first-of-type {
         position: relative;
@@ -46,6 +51,7 @@
         }
       }
     }
+
     p {
       @include gu-fontset-heading;
       padding-left: $gu-h-spacing / 3;
@@ -82,17 +88,9 @@
   line-height: 0 !important;
 
   img {
-    max-height: 200px;
+    max-height: 180px;
 
-    @include mq($from: mobileLandscape) {
-      max-height: 220px;
-    }
-
-    @include mq($from: tablet) {
-      max-height: 240px;
-    }
-
-    @include mq($from: desktop) {
+    @include mq($from: leftCol) {
       max-height: 280px;
     }
   }
@@ -100,15 +98,15 @@
 
 .sale-joy-of-print-badge {
   position: relative;
-  margin-bottom: -5rem;
+  margin-bottom: -3rem;
   margin-left: -4rem;
   z-index: 1;
   flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0074a6;
-  color: #ffffff;
+  background: gu-colour(neutral-7);
+  color: gu-colour(neutral-100);
   text-align: center;
   border-radius: 50%;
   line-height: 1;
@@ -132,10 +130,6 @@
     -moz-font-feature-settings: "lnum";
     -webkit-font-feature-settings: "lnum";
     font-feature-settings: "lnum";
-  }
-
-  @include mq($from: tablet) {
-    margin-bottom: -7rem;
   }
 
   @include mq($from: desktop) {
