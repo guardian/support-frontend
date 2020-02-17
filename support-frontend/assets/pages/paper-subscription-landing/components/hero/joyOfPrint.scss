@@ -35,17 +35,20 @@
       margin: $gu-v-spacing * 2 0;
       span {
        padding: 0 $gu-h-spacing / 2;
-       padding-right: $gu-h-spacing / 2;
-       @include mq($from: desktop) {
-         line-height: 50px;
-       }
-       background-color: black;
-       color: #ffffff;
-       padding-bottom: $gu-v-spacing / 2;
       }
       span:first-of-type {
         position: relative;
         z-index: 5;
+      }
+      span:nth-of-type(2) {
+        @include mq($until: leftCol) {
+          display: block;
+          width: 400px;
+        }
+
+        @include mq($until: desktop) {
+          width: 300px;
+        }
       }
     }
 
