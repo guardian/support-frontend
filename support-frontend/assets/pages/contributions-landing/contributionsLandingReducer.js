@@ -114,6 +114,7 @@ type FormState = {
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,
   payPalHasLoaded: boolean,
+  payPalButtonReady: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
@@ -213,6 +214,7 @@ function createFormReducer() {
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
+    payPalButtonReady: false,
     hasSeenDirectDebitThankYouCopy: false,
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
@@ -446,6 +448,9 @@ function createFormReducer() {
 
       case 'SET_PAYPAL_HAS_LOADED':
         return { ...state, payPalHasLoaded: true };
+
+      case 'UPDATE_PAYPAL_BUTTON_READY':
+        return { ...state, payPalButtonReady: action.ready };
 
       case 'SET_TICKER_GOAL_REACHED':
         return { ...state, tickerGoalReached: true };

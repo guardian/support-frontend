@@ -47,6 +47,10 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       When("they press the Stripe payment button")
       landingPage.selectStripePayment()
 
+
+      And("enter card details")
+      landingPage.fillInCardDetails
+
       When("they click contribute")
       landingPage.clickContribute
 
@@ -80,6 +84,9 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")
       landingPage.selectStripePayment()
+
+      And("enter card details")
+      landingPage.fillInCardDetails
 
       When("they click contribute")
       landingPage.clickContribute

@@ -41,8 +41,10 @@ const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) 
   }
 };
 
-const setFormIsSubmittable = (formIsSubmittable: boolean): Action => {
-  enableOrDisablePayPalExpressCheckoutButton(formIsSubmittable);
+const setFormIsSubmittable = (formIsSubmittable: boolean, payPalButtonReady: boolean): Action => {
+  if (payPalButtonReady) {
+    enableOrDisablePayPalExpressCheckoutButton(formIsSubmittable);
+  }
   return ({ type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable });
 };
 
@@ -123,7 +125,7 @@ function enableOrDisableForm() {
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn;
 
-    dispatch(setFormIsSubmittable(shouldEnable));
+    dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };
 }
 

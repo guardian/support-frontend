@@ -8,7 +8,7 @@ import React from 'react';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
+import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { ErrorSummary } from './submitFormErrorSummary';

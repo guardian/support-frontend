@@ -43,7 +43,7 @@ class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
       return (
         <div>
           <div id="AmazonLoginButton" />
-          <Button type="button" onclick={this.loginPopup(amazonLoginObject)} aria-label="Submit contribution">
+          <Button type="button" onClick={this.loginPopup(amazonLoginObject)} aria-label="Submit contribution">
             Proceed with Amazon Pay
           </Button>
         </div>

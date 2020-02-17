@@ -13,6 +13,8 @@ import { PayPal } from 'helpers/paymentMethods';
 import { billingPeriodFromContrib, getAmount } from '../contributions';
 import type { Csrf } from '../csrf/csrfReducer';
 import type { State } from '../../pages/contributions-landing/contributionsLandingReducer';
+import { type Action } from 'pages/contributions-landing/contributionsLandingActions';
+
 
 export type SetupPayPalRequestType = (
   resolve: string => void,
@@ -152,7 +154,6 @@ function createAgreement(payPalData: Object, csrf: CsrfState) {
     .then(response => response.json());
 }
 
-let validateCalled;
 
 function getPayPalOptions(
   currencyId: IsoCurrency,
@@ -165,6 +166,7 @@ function getPayPalOptions(
   amount: number,
   billingPeriod: BillingPeriod,
   setupPayPalPayment: SetupPayPalRequestType,
+  updatePayPalButtonReady: (boolean) => Action,
 ): Object {
 
   function toggleButton(actions): void {
@@ -185,21 +187,14 @@ function getPayPalOptions(
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
     commit: true,
 
-    // This gets called when the button is first initialised, i.e. when the iframe loads.
-    // If all is working correctly, it should not be called multiple times because we
-    // should never be re-loading the iframe.
     validate(actions) {
-      if (validateCalled) {
-        logException('PayPal recurring button should only be loaded once');
-        return;
-      }
 
       window.enablePayPalButton = actions.enable;
       window.disablePayPalButton = actions.disable;
 
-      validateCalled = true;
       toggleButton(actions);
 
+      updatePayPalButtonReady(true);
     },
 
     funding: {

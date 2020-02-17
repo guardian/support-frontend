@@ -14,7 +14,7 @@ import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
 import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
+import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -113,25 +113,26 @@ function withProps(props: PropTypes) {
       <div
         className="form__submit"
       >
-        <div
-          id="component-paypal-button-checkout"
-          className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
-        >
-          <PayPalExpressButton
-            onPaymentAuthorisation={props.onPaymentAuthorisation}
-            csrf={props.csrf}
-            currencyId={props.currencyId}
-            hasLoaded={props.payPalHasLoaded}
-            canOpen={() => props.formIsSubmittable}
-            onClick={() => props.sendFormSubmitEventForPayPalRecurring()}
-            formClassName={formClassName}
-            isTestUser={props.isTestUser}
-            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            amount={props.amount}
-            billingPeriod={props.billingPeriod}
-          />
-        </div>
-
+        {showPayPalRecurringButton && (
+          <div
+            id="component-paypal-button-checkout"
+            className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
+          >
+            <PayPalExpressButton
+              onPaymentAuthorisation={props.onPaymentAuthorisation}
+              csrf={props.csrf}
+              currencyId={props.currencyId}
+              hasLoaded={props.payPalHasLoaded}
+              canOpen={() => props.formIsSubmittable}
+              onClick={() => props.sendFormSubmitEventForPayPalRecurring()}
+              formClassName={formClassName}
+              isTestUser={props.isTestUser}
+              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+              amount={props.amount}
+              billingPeriod={props.billingPeriod}
+            />
+          </div>
+        )}
         { !props.amazonPayData.fatalError && props.paymentMethod === AmazonPay && getAmazonPayComponent() }
 
         {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
