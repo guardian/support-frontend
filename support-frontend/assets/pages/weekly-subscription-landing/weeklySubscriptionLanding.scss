@@ -105,3 +105,11 @@
 .component-button--with-margin-bottom {
   margin-bottom: 20px;
 }
+
+.gw-temp-break {
+
+  display: block;
+  @include mq($until: phablet) {
+    display: none;
+  }
+}
