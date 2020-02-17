@@ -1,7 +1,5 @@
 // @flow
 
-import { type Node } from 'react';
-
 import { getQueryParameter } from 'helpers/url';
 import { type CountryGroupId, detect } from 'helpers/internationalisation/countryGroup';
 import { fixDecimals } from 'helpers/subscriptions';
@@ -22,7 +20,7 @@ export type SaleCopy = {
     description: string,
   },
   landingPage: {
-    heading: Option<Node>,
+    heading: Option<string>,
     subHeading: string,
     roundel: string[],
   },
