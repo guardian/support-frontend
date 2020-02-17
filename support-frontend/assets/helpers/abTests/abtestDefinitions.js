@@ -2,35 +2,12 @@
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
-export type AmazonPaySingleUSTestVariants = 'control' | 'amazonPay' | 'notintest';
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
-const usContributionsLandingPageMatch = '/us/contribute(/.*)?$';
 const digitalLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/subscribe/digital(/.*)?$';
 
 export const tests: Tests = {
-  amazonPaySingleUS2020: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'amazonPay',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 13,
-    targetPage: usContributionsLandingPageMatch,
-  },
 
   stripePaymentRequestButtonSca: {
     type: 'OTHER',
@@ -74,6 +51,6 @@ export const tests: Tests = {
     referrerControlled: true,
     seed: 12,
     targetPage: digitalLandingPageMatch,
-    optimizeId: 'g7XyuKalTEimXX-xlKPx_g',
+    optimizeId: '21HyzxNZSmikdtgJQNnXUw',
   },
 };

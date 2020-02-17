@@ -51,6 +51,7 @@ import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
+import type { IsoCountry } from '../../helpers/internationalisation/country';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -61,6 +62,7 @@ export type Action =
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
+  | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
@@ -96,12 +98,18 @@ export type Action =
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
+  | { type: 'UPDATE_PAYPAL_BUTTON_READY', ready: boolean }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
+
+
+const updatePayPalButtonReady = (ready: boolean): Action =>
+  ({ type: 'UPDATE_PAYPAL_BUTTON_READY', ready });
 
 // Do not export this, as we only want it to be called via updateContributionTypeAndPaymentMethod
 const updateContributionType = (contributionType: ContributionType): ((Function) => void) =>
   (dispatch: Function): void => {
+    dispatch(updatePayPalButtonReady(false));
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType })));
   };
 
@@ -111,6 +119,7 @@ const updatePaymentMethod = (paymentMethod: PaymentMethod): ((Function) => void)
     // so we need to store the payment method in the storage so that it is available on the
     // thank you page in all scenarios.
     storage.setSession('selectedPaymentMethod', paymentMethod);
+    dispatch(updatePayPalButtonReady(false));
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod })));
   };
 
@@ -164,6 +173,9 @@ const updateState = (state: UsState | CaState | null): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_STATE', state })));
   };
+
+const updateBillingCountry = (billingCountry: IsoCountry): Action =>
+  ({ type: 'UPDATE_BILLING_COUNTRY', billingCountry });
 
 const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -351,7 +363,9 @@ const regularPaymentRequestFromAuthorisation = (
     city: null, // required go cardless field
     state: state.page.form.formData.state,
     postCode: null, // required go cardless field
-    country: state.common.internationalisation.countryId,
+    country:
+      state.page.form.formData.billingCountry ?
+        state.page.form.formData.billingCountry : state.common.internationalisation.countryId,
   },
   deliveryAddress: null,
   product: {
@@ -680,6 +694,7 @@ export {
   updateLastName,
   updateEmail,
   updateState,
+  updateBillingCountry,
   updateUserFormData,
   setThirdPartyPaymentLibrary,
   setAmazonPayLoginObject,
@@ -716,4 +731,5 @@ export {
   setHandleStripe3DS,
   setStripeCardFormComplete,
   setSetupIntentClientSecret,
+  updatePayPalButtonReady,
 };

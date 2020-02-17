@@ -23,6 +23,7 @@ import { type State as MarketingConsentState } from '../../components/marketingC
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
+import type { IsoCountry } from '../../helpers/internationalisation/country';
 
 // ----- Types ----- //
 
@@ -45,6 +46,7 @@ export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 type FormData = UserFormData & {
   otherAmounts: OtherAmounts,
   state: UsState | CaState | null,
+  billingCountry: IsoCountry | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
 
@@ -112,6 +114,7 @@ type FormState = {
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,
   payPalHasLoaded: boolean,
+  payPalButtonReady: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
@@ -174,6 +177,7 @@ function createFormReducer() {
         ANNUAL: { amount: null },
       },
       state: null,
+      billingCountry: null,
       checkoutFormHasBeenSubmitted: false,
     },
     stripeV3HasLoaded: false,
@@ -210,6 +214,7 @@ function createFormReducer() {
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
+    payPalButtonReady: false,
     hasSeenDirectDebitThankYouCopy: false,
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
@@ -381,6 +386,9 @@ function createFormReducer() {
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
+      case 'UPDATE_BILLING_COUNTRY':
+        return { ...state, formData: { ...state.formData, billingCountry: action.billingCountry } };
+
       case 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD':
         return {
           ...state,
@@ -440,6 +448,9 @@ function createFormReducer() {
 
       case 'SET_PAYPAL_HAS_LOADED':
         return { ...state, payPalHasLoaded: true };
+
+      case 'UPDATE_PAYPAL_BUTTON_READY':
+        return { ...state, payPalButtonReady: action.ready };
 
       case 'SET_TICKER_GOAL_REACHED':
         return { ...state, tickerGoalReached: true };

@@ -113,6 +113,13 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     getNumberOfDiscountedPeriods(Months.months(13), Annual) shouldBe 2
   }
 
+  it should "find the retail saving for print products" in {
+    val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+    val prices = service.getPricesForCountryGroup(Paper, UK, Nil)
+    prices(Collection)(Sixday)(Monthly)(GBP).savingVsRetail shouldBe Some(26)
+    succeed
+  }
+
   def checkPrice(discount: DiscountBenefit, original: BigDecimal, expected: BigDecimal, billingPeriod: BillingPeriod): Assertion =
     PriceSummaryService.getDiscountedPrice(Price(original, GBP), discount, billingPeriod).value shouldBe expected
 }

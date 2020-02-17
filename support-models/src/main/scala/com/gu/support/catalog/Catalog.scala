@@ -1,12 +1,12 @@
 package com.gu.support.catalog
 
 import com.gu.i18n.Currency
-import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX, UAT}
 import io.circe.Json.fromString
 import io.circe._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
+import com.gu.support.encoding.JsonHelpers._
 
 case class Catalog(
   prices: List[Pricelist]
@@ -34,13 +34,23 @@ object Catalog {
       productRatePlan =>
         val priceList = sumPriceLists(productRatePlan.\\("pricing"))
         val id = productRatePlan.getField("id").getOrElse(Json.Null)
+        val saving = getSaving(productRatePlan)
         Json.obj(
           ("productRatePlanId", id),
+          ("savingVsRetail", saving),
           ("prices", Json.fromValues(priceList))
         )
     }
     Json.obj(("prices", Json.fromValues(prices)))
   }
+
+  def getSaving(json: Json) =
+    json.getField("Saving__c")
+      .getOrElse(Json.fromString("null"))
+      .asString.getOrElse("null") match {
+      case "null" => Json.Null
+      case i: String => Json.fromInt(i.toInt)
+    }
 
   def sumPriceLists(priceLists: List[Json]): Iterable[Json] = {
     // Paper products such as Everyday are represented in the catalog as multiple
