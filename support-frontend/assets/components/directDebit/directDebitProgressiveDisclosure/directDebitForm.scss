@@ -92,9 +92,11 @@
 }
 
 .component-direct-debit-form__confirmation-css-checkbox {
-  width: 25px;
   position: relative;
-  margin-right: 10px;
+}
+
+#qa-direct-debit-submit {
+  margin-top: 10px;
 }
 
 .component-direct-debit-form__confirmation-label {
