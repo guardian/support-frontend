@@ -24,6 +24,8 @@ import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
+import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
+import { css } from '@emotion/core';
 
 // ----- Types ----- //
 
@@ -163,10 +165,57 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
+  const choiceCards = (shape: string) => {
+    const cssObj: Object | undefined = shape === 'circle' ? {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      border: 0,
+      label: {
+        borderRadius: '50%',
+        maxWidth: '50px',
+        minHeight: '50px',
+        padding: '0',
+      },
+    } : undefined;
+
+
+    return (
+    <>
+      <ChoiceCardGroup
+        name="consent"
+        orientation="horizontal"
+        css={cssObj}
+      >
+        {validAmounts.map((amount: Amount) => (
+          <ChoiceCard
+            id={`contributionAmount-${amount.value}`}
+            name="contributionAmount"
+            value={amount.value}
+        /* eslint-disable react/prop-types */
+            checked={isSelected(amount, props)}
+            onChange={
+            props.selectAmount(amount, props.countryGroupId, props.contributionType)}
+            label={formatAmount(currencies[props.currency], spokenCurrencies[props.currency], amount, false)}
+          />
+        ))
+      }
+        <ChoiceCard
+          id="contributionAmount-other"
+          name="contributionAmount"
+          value="other"
+          checked={showOther}
+          onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
+          label="Other"
+        />
+      </ChoiceCardGroup>
+  </>
+
+  )};
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
-      <ul className="form__radio-group-list">
+      {/* <ul className="form__radio-group-list">
         {validAmounts.map(renderAmount(
           currencies[props.currency],
           spokenCurrencies[props.currency],
@@ -184,7 +233,7 @@ function withProps(props: PropTypes) {
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
-      </ul>
+      </ul> */}
       {showOther ? (
         <ContributionTextInput
           id="contributionOther"
