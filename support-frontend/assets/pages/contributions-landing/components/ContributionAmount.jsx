@@ -183,7 +183,7 @@ function withProps(props: PropTypes) {
         padding: '0',
       },
     };
-    const cssObj: Object | null = shape === 'circles' ? {
+    const cssObj: Object = shape === 'circles' ? {
       ...sharedCss,
       ...circleCss,
     } : { ...sharedCss };
