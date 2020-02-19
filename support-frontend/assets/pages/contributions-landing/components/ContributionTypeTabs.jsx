@@ -65,9 +65,10 @@ function withProps(props: PropTypes) {
 
   const renderAmountChoiceCards = () => (
     <>
-      <ChoiceCardGroup name="consent" orientation="horizontal">
+      <ChoiceCardGroup name="contributionTypes" orientation="horizontal">
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
         const { contributionType } = contributionTypeSetting;
+        console.log(props.contributionType);
         return (
           <ChoiceCard
             id={`contributionType-${contributionType}`}

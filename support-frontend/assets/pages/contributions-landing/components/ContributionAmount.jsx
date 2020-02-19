@@ -191,7 +191,7 @@ function withProps(props: PropTypes) {
     return (
     <>
       <ChoiceCardGroup
-        name="consent"
+        name="amounts"
         css={cssObj}
       >
         {validAmounts.map((amount: Amount) => (
