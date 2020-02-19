@@ -68,7 +68,6 @@ function withProps(props: PropTypes) {
       <ChoiceCardGroup name="contributionTypes" orientation="horizontal">
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
         const { contributionType } = contributionTypeSetting;
-        console.log(props.contributionType);
         return (
           <ChoiceCard
             id={`contributionType-${contributionType}`}
