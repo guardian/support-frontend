@@ -63,43 +63,35 @@ const mapDispatchToProps = (dispatch: Function) => ({
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
 
-  if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
-    return null;
-  }
-
-  if (props.choiceCardsVariant !== 'control') {
-    return (
-      <>
-        <ChoiceCardGroup name="consent" orientation="horizontal">
-          {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
-          const { contributionType } = contributionTypeSetting;
-          return (
-            <ChoiceCard
-              id={`contributionType-${contributionType}`}
-              value={contributionType}
-              label={toHumanReadableContributionType(contributionType)}
-              onChange={() =>
-                  props.onSelectContributionType(
-                    contributionType,
-                    props.switches,
-                    props.countryId,
-                    props.countryGroupId,
-                  )
-              }
-              checked={props.contributionType === contributionType}
-            />
-          );
-        })}
-        </ChoiceCardGroup>
-      </>
-    );
-  }
-
-  return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      <ul className="form__radio-group-list form__radio-group-list--border">
+  const renderAmountChoiceCards = () => (
+    <>
+      <ChoiceCardGroup name="consent" orientation="horizontal">
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
+        const { contributionType } = contributionTypeSetting;
+        return (
+          <ChoiceCard
+            id={`contributionType-${contributionType}`}
+            value={contributionType}
+            label={toHumanReadableContributionType(contributionType)}
+            onChange={() =>
+                props.onSelectContributionType(
+                  contributionType,
+                  props.switches,
+                  props.countryId,
+                  props.countryGroupId,
+                )
+            }
+            checked={props.contributionType === contributionType}
+          />
+        );
+      })}
+      </ChoiceCardGroup>
+  </>
+  );
+
+  const renderControl = () => (
+    <ul className="form__radio-group-list form__radio-group-list--border">
+      {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
           const { contributionType } = contributionTypeSetting;
           return (
             <li className="form__radio-group-item">
@@ -124,7 +116,17 @@ function withProps(props: PropTypes) {
               </label>
             </li>);
         })}
-      </ul>
+    </ul>
+  );
+
+  if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
+    return null;
+  }
+
+  return (
+    <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
+      {props.choiceCardsVariant !== 'control' ? renderAmountChoiceCards() : renderControl()}
     </fieldset>
   );
 }
