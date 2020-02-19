@@ -26,6 +26,7 @@ import { selectAmount, updateOtherAmount } from '../contributionsLandingActions'
 import ContributionTextInput from './ContributionTextInput';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import { css } from '@emotion/core';
+import type { ChoiceCardsProductSetTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -42,6 +43,7 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+  choiceCardsVariant: ChoiceCardsProductSetTestVariants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -56,6 +58,7 @@ const mapStateToProps = state => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
+  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -166,24 +169,30 @@ function withProps(props: PropTypes) {
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
   const choiceCards = (shape: string) => {
-    const cssObj: Object | undefined = shape === 'circle' ? {
+    const sharedCss = {
       display: 'flex',
       justifyContent: 'flex-start',
       border: 0,
+    };
+    const circleCss = {
       label: {
         borderRadius: '50%',
-        maxWidth: '50px',
-        minHeight: '50px',
+        minWidth: '60px',
+        maxWidth: '60px',
+        minHeight: '60px',
+        maxHeight: '60px',
         padding: '0',
       },
-    } : undefined;
-
+    };
+    const cssObj: Object | null = shape === 'circles' ? {
+      ...sharedCss,
+      ...circleCss,
+    } : { ...sharedCss };
 
     return (
     <>
       <ChoiceCardGroup
         name="consent"
-        orientation="horizontal"
         css={cssObj}
       >
         {validAmounts.map((amount: Amount) => (
@@ -209,31 +218,39 @@ function withProps(props: PropTypes) {
         />
       </ChoiceCardGroup>
   </>
+    );
+  };
 
-  )};
+  const inChoiceCardsTest: boolean = props.choiceCardsVariant !== 'control';
+  const choiceCardShape: string = props.choiceCardsVariant;
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
-      {/* <ul className="form__radio-group-list">
-        {validAmounts.map(renderAmount(
+      {inChoiceCardsTest ? choiceCards(choiceCardShape) :
+        (
+          <ul className="form__radio-group-list">
+            {validAmounts.map(renderAmount(
           currencies[props.currency],
           spokenCurrencies[props.currency],
           props,
         ))}
-        <li className="form__radio-group-item">
-          <input
-            id="contributionAmount-other"
-            className="form__radio-group-input"
-            type="radio"
-            name="contributionAmount"
-            value="other"
-            checked={showOther}
-            onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
-          />
-          <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
-        </li>
-      </ul> */}
+            <li className="form__radio-group-item">
+              <input
+                id="contributionAmount-other"
+                className="form__radio-group-input"
+                type="radio"
+                name="contributionAmount"
+                value="other"
+                checked={showOther}
+                onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
+              />
+              <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
+            </li>
+          </ul>
+        )
+      }
+
       {showOther ? (
         <ContributionTextInput
           id="contributionOther"
