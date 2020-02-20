@@ -167,6 +167,7 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
+  // We are running a test with circular choice cards - this custom CSS is required to override the default rectangular shape in the design system component. If the test results indicate that we are to keep the circular variant, we will request for them to be incorporated into the design system.
   const renderContribTypeChoiceCards = (shape: string) => {
     const sharedCss = {
       display: 'flex',
