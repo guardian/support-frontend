@@ -186,7 +186,7 @@ function withProps(props: PropTypes) {
     const cssObj: Object = shape === 'circles' ? {
       ...sharedCss,
       ...circleCss,
-    } : { ...sharedCss };
+    } : sharedCss;
 
     return (
     <>
