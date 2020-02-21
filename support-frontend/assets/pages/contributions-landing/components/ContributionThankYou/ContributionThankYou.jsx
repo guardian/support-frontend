@@ -13,7 +13,7 @@ import {
 } from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit } from 'helpers/paymentMethods';
-import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
+import ContributionThankYouBlurb from './ContributionThankYouBlurb';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';

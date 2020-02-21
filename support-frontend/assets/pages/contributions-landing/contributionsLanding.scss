@@ -286,7 +286,7 @@ header[role="banner"] {
 
   @include mq($from: tablet) {
     width: gu-span(4) + $gu-h-spacing*1.5;
-    flex: 0 0 auto;
+    flex: 0 1 auto;
   }
   @include mq($from: desktop) {
     width: gu-span(5) - $gu-h-spacing*.75;
@@ -313,7 +313,7 @@ header[role="banner"] {
   @include mq($from: tablet) {
     display: block;
     border-top: 10px solid gu-colour(highlight-main);
-    flex: 1 1 0;
+    flex: 1 0 0;
     margin-left: $gu-h-spacing;
   }
 
