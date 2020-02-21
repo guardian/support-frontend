@@ -6,9 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { PersonalisedThankYouPageTestVariants } from 'helpers/abTests/abtestDefinitions';
 import type { ThankYouPageStage } from 'pages/contributions-landing/contributionsLandingReducer';
-// ----- Types ----- //
-
-//
 
 // ----- Types ----- //
 
@@ -28,6 +25,7 @@ const mapStateToProps = state => ({
   personalisedThankYouPageTestVariant: state.common.abParticipations.personalisedThankYouPageTest,
   thankYouPageStage: state.page.form.thankYouPageStage,
 });
+
 // ----- Render ----- //
 
 const ContributionThankYouBlurb = (props: PropTypes) => {
