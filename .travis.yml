@@ -12,3 +12,4 @@ before_cache:
   - find $HOME/.sbt -name "*.lock" -type f -delete -print
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" -type f -delete -print
 script: travis_retry 1 sbt ++$TRAVIS_SCALA_VERSION selenium:test
+after_failure: ./support-frontend/scripts/post_test_results_to_chat.sh
