@@ -12,6 +12,7 @@ import { DirectDebit } from 'helpers/paymentMethods';
 import type { ContributionType } from 'helpers/contributions';
 import ContributionsReminder from 'components/contributionsReminder/contributionsReminder';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import ContributionThankYouBlurb from './ContributionThankYouBlurb';
 
 // ----- Types ----- //
 
@@ -68,17 +69,6 @@ function ContributionThankYouSetPassword(props: PropTypes) {
     },
   };
 
-  const thankYouBlurb = props.countryCode === 'US' ? (
-    <div className="gu-content__blurb gu-content__blurb--thank-you">
-      <h1 className="gu-content__blurb-header">Thank you for <br className="gu-content__blurb-header-break" />making a <br className="gu-content__blurb-header-break" />year-end gift</h1>
-      <p className="gu-content__blurb-blurb gu-content__blurb-blurb--thank-you">Every reader contribution, however big or small, is so valuable and brings us one step closer to hitting our $1.5 million goal.</p>
-    </div>
-  ) : (
-    <div className="gu-content__blurb gu-content__blurb--thank-you">
-      <h1 className="gu-content__blurb-header">Thank you for <br className="gu-content__blurb-header-break" />a valuable <br className="gu-content__blurb-header-break" />contribution</h1>
-    </div>
-  );
-
   const renderDirectDebit = () => {
     props.setHasSeenDirectDebitThankYouCopy();
     return (
@@ -105,7 +95,7 @@ function ContributionThankYouSetPassword(props: PropTypes) {
         </section>
       </div>
 
-      {thankYouBlurb}
+      <ContributionThankYouBlurb />
     </div>
   );
 }

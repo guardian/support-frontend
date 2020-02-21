@@ -6,7 +6,7 @@ import React from 'react';
 import MarketingConsent from 'pages/contributions-landing/components/MarketingConsentContainer';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
-import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
+import ContributionThankYouBlurb from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 
