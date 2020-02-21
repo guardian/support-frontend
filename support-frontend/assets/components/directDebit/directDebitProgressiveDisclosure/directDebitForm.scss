@@ -136,19 +136,25 @@
 }
 
 .component-direct-debit-form__confirmation-guidance {
-  margin-top: 18px;
+  margin: 18px 0;
 }
 
 .component-direct-debit-form__cta-text {
+  display: block;
   color: gu-colour(neutral-7);
   font-family: $gu-text-sans-web;
   font-size: 16px;
-  margin-left: 10px;
   font-weight: 600;
 }
 
 .component-direct-debit-form__cta-text--inverse {
   color: white;
+}
+
+.component-direct-debit-form__cta-container {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .component-direct-debit-form__cta {
@@ -158,8 +164,10 @@
   cursor: pointer;
   position: relative;
   height: $gu-cta-height;
+  padding: 0 20px;
 
   .svg-arrow-right-straight {
+    display: block;
     width: 24px;
     fill: gu-colour(neutral-7);
     position: absolute;
@@ -184,43 +192,17 @@
   border: solid 1px gu-colour(neutral-7);
   color: white;
 
-  @include mq($until: mobileLandscape) {
-    width: 140px;
-    padding-left: 60px;
-  }
-
-  @include mq($from: mobileLandscape) {
-    width: 160px;
-    padding-left: 65px;
-  }
-
-  .svg-arrow-right-straight {
-    width: 24px;
-    fill: white;
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: scaleX(-1) translateY(-50%);
-  }
-
   &:hover {
     background-color: #000;
   }
 }
 
 .component-direct-debit-form__cta--confirm-button {
-  float: right;
+  display: inline-flex;
 
-  @include mq($until: mobileLandscape) {
-    width: 140px;
-    padding-left: 28px;
-    margin-right: 0px;
-  }
-
-  @include mq($from: mobileLandscape) {
-    width: 160px;
-    padding-left: 48px;
-    margin-right: 20px;
+  .component-direct-debit-form__cta-text {
+    margin-right: 30px;
+    margin-bottom: 2px;
   }
 }
 

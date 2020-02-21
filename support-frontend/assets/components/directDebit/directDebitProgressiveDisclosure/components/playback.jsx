@@ -5,9 +5,17 @@
 import React from 'react';
 
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 
-function Playback(props: PropTypes, onEditClick: Function, onConfirmClick: Function) {
+function Playback(props: {
+  editDirectDebitClicked: Function,
+  confirmDirectDebitClicked: Function,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
+  accountHolderName: string,
+  accountNumber: string,
+  sortCodeString: string,
+}): PropTypes {
   return (
     <div className="component-direct-debit-form">
       <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
@@ -43,20 +51,23 @@ function Playback(props: PropTypes, onEditClick: Function, onConfirmClick: Funct
         back to make changes
       </div>
 
-      <button
-        className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
-        onClick={onEditClick}
-      >
-        Edit
-      </button>
-      <button
-        id="qa-submit-button-2"
-        className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
-        onClick={onConfirmClick}
-      >
-        <span className="component-direct-debit-form__cta-text">{props.buttonText}</span>
-        <SvgArrowRightStraight />
-      </button>
+      <div className="component-direct-debit-form__cta-container">
+        <button
+          className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
+          onClick={props.editDirectDebitClicked}
+        >
+          <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">Edit</span>
+        </button>
+        <button
+          id="qa-submit-button-2"
+          className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
+          onClick={props.confirmDirectDebitClicked(props.onPaymentAuthorisation)}
+        >
+          <span className="component-direct-debit-form__cta-text">Subscribe</span>
+          <div className="component-direct-debit-form__arrow"><SvgArrowRightStraight /></div>
+        </button>
+      </div>
+
     </div>
   );
 }

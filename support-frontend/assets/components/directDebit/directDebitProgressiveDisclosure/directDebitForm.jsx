@@ -170,12 +170,17 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     return cardErrors;
   }
 
-  getCardErrorsLength = cardErrors => cardErrors.reduce((accum, error) => {
-    if (error.message.length > 0) {
-      return accum + 1;
-    }
+  getCardErrorsLength = (cardErrors) => {
+    let accum = 0;
+    cardErrors.forEach((error) => {
+      if ((error.message).length > 0) {
+        accum += 1;
+        console.log({ accum });
+      }
+    });
+    console.log('Final accum: ', accum);
     return accum;
-  }, 0)
+  }
 
   handleErrors = () => {
     const { props, state } = this;
@@ -208,7 +213,12 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     const { props } = this;
     this.handleErrors();
     props.validateForm();
-    return this.getCardErrorsLength(this.getCardErrors()) > 0;
+    const cardErrors = this.getCardErrors();
+    console.log({ cardErrors });
+    const cardErrorsLength = this.getCardErrorsLength(cardErrors);
+    console.log('Actual card errors length: ', cardErrorsLength);
+    console.log('Card errors length? ', (this.getCardErrorsLength(this.getCardErrors())));
+    return (this.getCardErrorsLength(this.getCardErrors())) > 0;
   }
 
   render() {
@@ -235,11 +245,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           />
         )}
         {props.phase === 'confirmation' && (
-          <Playback
-            {...props}
-            onEditClick={props.editDirectDebitClicked}
-            onConfirmClick={() => props.confirmDirectDebitClicked(props.onPaymentAuthorisation)}
-          />
+          <Playback {...props} />
         )}
       </span>
     );
