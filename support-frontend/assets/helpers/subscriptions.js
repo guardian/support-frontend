@@ -91,7 +91,7 @@ export const subscriptionPricesForDefaultBillingPeriod: {
     GBPCountries: 10.79,
   },
   PaperAndDigital: {
-    GBPCountries: 21.62,
+    GBPCountries: 21.99,
   },
   DailyEdition: {
     GBPCountries: 11.99,
