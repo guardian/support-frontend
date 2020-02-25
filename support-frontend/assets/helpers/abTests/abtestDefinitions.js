@@ -6,6 +6,7 @@ export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'not
 
 export type ChoiceCardsProductSetTestVariants = 'control' | 'circles' | 'rectangles';
 export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
+export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const digitalLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/subscribe/digital(/.*)?$';
@@ -31,6 +32,28 @@ export const tests: Tests = {
     isActive: true,
     referrerControlled: false,
     seed: 1,
+    targetPage: contributionsLandingPageMatch,
+  },
+
+  postContributionReminderCopyTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'extendedCopy',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    seed: 4,
     targetPage: contributionsLandingPageMatch,
   },
 

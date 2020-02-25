@@ -11,42 +11,63 @@ import { logException } from 'helpers/logger';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { Label as FormLabel } from 'components/forms/label';
+import type { PostContributionReminderCopyTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 type PropTypes = {
   email: string | null,
+  postContributionReminderCopyTestVariant: PostContributionReminderCopyTestVariants,
 }
 
+// JTL: NB "control" and "extendedCopy" are only for
+// postContributionReminderCopyTest and should be removed after this test
 type ReminderDate = {
   dateName: string,
+  control: string,
+  extendedCopy: string,
   timeStamp: string,
 }
 
 type ButtonState = 'initial' | 'pending' | 'success' | 'fail';
 
 type StateTypes = {
-  buttonState: ButtonState;
-  selectedDate: string | null;
+  buttonState: ButtonState,
+  selectedDate: string | null,
   selectedDateAsWord: string | null,
   preselectedDateAsWord: string | null,
 }
 
 const mapStateToProps = state => ({
   email: state.page.form.formData.email,
+  postContributionReminderCopyTestVariant: state.common.abParticipations.postContributionReminderCopyTest,
 });
 
+// JTL: NB "control" and "extendedCopy" are only for
+// postContributionReminderCopyTest and should be removed after this test
 const reminderDates: Array<ReminderDate> = [
   {
-    dateName: 'March 2020',
-    timeStamp: '2020-03-19 00:00:00',
-  },
-  {
     dateName: 'June 2020',
+    control: 'June 2020',
+    extendedCopy: 'Three months (June)',
     timeStamp: '2020-06-01 00:00:00',
   },
   {
+    dateName: 'September 2020',
+    control: 'September 2020',
+    extendedCopy: 'Three months (September)',
+    timeStamp: '2020-09-01 00:00:00',
+  },
+  {
     dateName: 'December 2020',
+    control: 'December 2020',
+    extendedCopy: 'Nine months (December)',
     timeStamp: '2020-12-01 00:00:00',
+  },
+  {
+    dateName: 'March 2021',
+    control: 'March 2021',
+    extendedCopy: 'One year (March 2021)',
+    timeStamp: '2021-03-01 00:00:00',
   },
 ];
 
@@ -57,6 +78,7 @@ const trimAndDowncase = (word: string) => word.replace(/\s+/g, '').toLowerCase()
 class ContributionsReminder extends Component<PropTypes, StateTypes> {
   static defaultProps = {
     email: null,
+    postContributionReminderCopyTestVariant: 'notintest',
   }
 
   state = {
@@ -67,13 +89,13 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
   }
 
   componentDidMount = () => {
-    const randomDate = reminderDates[randomIndex];
-    const randomDateAsWord = trimAndDowncase(randomDate.dateName);
+    const firstOpt = reminderDates[0];
+    const firstOptAsWord = trimAndDowncase(firstOpt.dateName);
 
     this.setState({
-      selectedDate: randomDate.timeStamp,
-      selectedDateAsWord: randomDateAsWord,
-      preselectedDateAsWord: randomDateAsWord,
+      selectedDate: firstOpt.timeStamp,
+      selectedDateAsWord: firstOptAsWord,
+      preselectedDateAsWord: firstOptAsWord,
     });
   }
 
@@ -122,9 +144,9 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const { email } = this.props;
+    const { email, postContributionReminderCopyTestVariant } = this.props;
 
-    if (email) {
+    if (email && postContributionReminderCopyTestVariant !== 'notintest') {
       const isClicked = this.state.buttonState !== 'initial';
 
       return (
@@ -136,14 +158,14 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
             {'Lots of readers choose to make single contributions at various points in the year. Opt in to receive a reminder in case you would like to support our journalism again. This will be a single email, with no obligation.'}
           </p>
 
-          <FormLabel label="Remind me in:" htmlFor={null}>
+          <FormLabel label="I’d like to be reminded in:" htmlFor={null}>
             <Fieldset legend="Choose one of the following dates to receive your reminder:">
               {reminderDates.map((reminderDate, index) => {
                 const dateWithoutSpace = trimAndDowncase(reminderDate.dateName);
                 return (
                   <RadioInput
                     id={dateWithoutSpace}
-                    text={reminderDate.dateName}
+                    text={reminderDate[postContributionReminderCopyTestVariant]}
                     name="reminder"
                     onChange={evt => this.setDateState(evt, reminderDate.timeStamp, dateWithoutSpace)}
                     defaultChecked={index === randomIndex}
