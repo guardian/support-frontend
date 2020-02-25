@@ -5,13 +5,11 @@
 import React from 'react';
 
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 
 function Playback(props: {
   editDirectDebitClicked: Function,
-  confirmDirectDebitClicked: Function,
-  onPaymentAuthorisation: PaymentAuthorisation => void,
+  submitForm: Function,
   accountHolderName: string,
   accountNumber: string,
   sortCodeString: string,
@@ -61,7 +59,7 @@ function Playback(props: {
         <button
           id="qa-submit-button-2"
           className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
-          onClick={props.confirmDirectDebitClicked(props.onPaymentAuthorisation)}
+          onClick={() => props.submitForm()}
         >
           <span className="component-direct-debit-form__cta-text">Subscribe</span>
           <div className="component-direct-debit-form__arrow"><SvgArrowRightStraight /></div>

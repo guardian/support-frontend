@@ -19,7 +19,9 @@ trait CheckoutPage extends Page with Browser {
   private val accountName = id("account-holder-name-input")
   private val sortCode = id("sort-code-input")
   private val accountNumber = id("account-number-input")
+  private val accountConfirmation = id("account-holder-confirmation")
   private val directDebitSubmitButton = id("qa-direct-debit-submit")
+  private val directDebitPlaybackSubmit = id("qa-submit-button-2")
 
 
   def selectStripePaymentMethod(): Unit = clickOn(stripeRadioButton)
@@ -39,6 +41,10 @@ trait CheckoutPage extends Page with Browser {
     pageHasElement(accountNumber)
   }
 
+  def directDebitPlaybackHasLoaded: Boolean = {
+    pageHasElement(directDebitPlaybackSubmit)
+  }
+
   def fillStripeForm(): Unit = {
     for (_ <- 1 to 8) setValue(cardNumber, "42")
     switchToParentFrame
@@ -55,6 +61,7 @@ trait CheckoutPage extends Page with Browser {
     setValue(accountName, "Test user")
     setValue(sortCode, "200000")
     setValue(accountNumber, "55779911")
+    clickOn(accountConfirmation)
   }
 
   def thankYouPageHasLoaded: Boolean = {
@@ -66,6 +73,8 @@ trait CheckoutPage extends Page with Browser {
   def clickStripeSubmit(): Unit = clickOn(stripeSubmitButton)
 
   def clickDirectDebitSubmit(): Unit = clickOn(directDebitSubmitButton)
+
+  def clickDirectDebitConfirm(): Unit = clickOn(directDebitPlaybackSubmit)
 
   def fillForm(): Unit
 }

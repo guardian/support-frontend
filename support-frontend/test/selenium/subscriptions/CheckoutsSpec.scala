@@ -127,6 +127,12 @@ class CheckoutsSpec extends AnyFeatureSpec
     When("they click to process payment")
     checkoutPage.clickDirectDebitSubmit()
 
+    Given("the playback of the user's details has loaded")
+    assert(checkoutPage.directDebitPlaybackHasLoaded)
+
+    When("they click to confirm their details are correct")
+    checkoutPage.clickDirectDebitConfirm()
+
     thankYouPage(checkoutPage)
   }
 

@@ -84,12 +84,7 @@ function payDirectDebitClicked(): Function {
 
     dispatch(resetDirectDebitFormError());
 
-    /* The new version of the direct debit form doesn't have an account holder confirmation checkbox,
-    so this if-statement is not needed for the new form. The old form uses sortCodeArray whereas the
-    new form uses sortCodeString, so checking if sortCodeString is empty is a way of checking which
-    version of the DD form it is and whether to do this check. */
-    const checkoutUsesProgressiveDisclosureDirectDebit = sortCodeString.length > 0;
-    if (!accountHolderConfirmation && !checkoutUsesProgressiveDisclosureDirectDebit) {
+    if (!accountHolderConfirmation) {
       dispatch(setDirectDebitFormError('You need to confirm that you are the account holder.'));
       return;
     }

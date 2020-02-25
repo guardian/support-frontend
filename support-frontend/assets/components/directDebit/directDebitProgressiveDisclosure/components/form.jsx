@@ -30,11 +30,12 @@ function Form(props: {
   accountNumberError: string,
   accountHolderConfirmationError: string,
   showGeneralError: boolean,
-  cardErrorsLength: number,
-  cardErrors: Array<Object>,
+  accountErrorsLength: number,
+  accountErrors: Array<Object>,
   cardError: ErrorReason | null,
   cardErrorHeading: string,
   allErrors: Array<Object>,
+  formError: string | null,
   updateSortCodeString: (event: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
@@ -88,6 +89,7 @@ function Form(props: {
 
       <div className="component-direct-debit-form__confirmation-css-checkbox">
         <CheckBoxWithError
+          id="account-holder-confirmation"
           onChange={e => props.onChange('accountHolderConfirmation', props.updateAccountHolderConfirmation, e)}
           checked={props.accountHolderConfirmation}
           text="I confirm that I am the account holder and I am solely able to authorise debit from
@@ -102,17 +104,17 @@ function Form(props: {
       >
         Submit
       </Button>
-      {(props.allErrors.length > 0 || props.cardErrorsLength > 0) && (
+      {(props.allErrors.length > 0 || props.accountErrorsLength > 0) && (
         <ErrorSummary
           errors={[
             ...props.allErrors,
-            ...props.cardErrors,
+            ...props.accountErrors,
           ]}
         />
       )}
       {props.showGeneralError && (
         <GeneralErrorMessage
-          errorReason={props.cardError}
+          errorReason={props.cardError || props.formError}
           errorHeading={props.cardErrorHeading}
         />
       )}
