@@ -152,14 +152,14 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     props.validateForm();
   }
 
-  onChange = (field, onChange, event) => {
+  onChange = (field, dispatchUpdate, event) => {
     this.setState({
       [field]: {
         ...this.state[field],
         error: '',
       },
     });
-    onChange(event);
+    dispatchUpdate(event);
   }
 
   getAccountErrors = () => {

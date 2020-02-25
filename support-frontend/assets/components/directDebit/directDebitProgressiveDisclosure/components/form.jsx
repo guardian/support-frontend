@@ -13,6 +13,7 @@ import { Input } from 'components/forms/input';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
+import type { ErrorReason } from 'helpers/errorReasons';
 
 import '../directDebitForm.scss';
 
@@ -36,14 +37,13 @@ function Form(props: {
   cardErrorHeading: string,
   allErrors: Array<Object>,
   formError: string | null,
+  updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
   updateSortCodeString: (event: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
-  updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: SyntheticInputEvent<HTMLInputElement>) => void,
-  updateAccountHolderName: Function,
-  onChange: () => void,
-  onSubmit: () => void,
-}): PropTypes {
+  onChange: (field: string, dispatchUpdate: Function, event: SyntheticInputEvent<HTMLInputElement>) => void,
+  onSubmit: (event: SyntheticInputEvent<HTMLInputElement>) => void,
+}) {
   return (
     <div className="component-direct-debit-form">
       <div className="component-direct-debit-form__account-holder-name">
