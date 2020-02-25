@@ -34,6 +34,7 @@ function Form(props: {
   accountErrorsLength: number,
   accountErrors: Array<Object>,
   formError: ErrorReason | null,
+  formErrorHeading: string,
   allErrors: Array<Object>,
   updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
   updateSortCodeString: (event: SyntheticInputEvent<HTMLInputElement>) => void,
@@ -110,7 +111,12 @@ function Form(props: {
           ]}
         />
       )}
-      {props.showGeneralError && <GeneralErrorMessage errorReason={props.formError} />}
+      {props.showGeneralError && (
+        <GeneralErrorMessage
+          errorReason={props.formError}
+          errorHeading={props.formErrorHeading}
+        />
+      )}
     </div>
   );
 }

@@ -29,7 +29,7 @@ import { type ErrorReason } from 'helpers/errorReasons';
 type PropTypes = {|
   /* eslint-disable react/no-unused-prop-types */
   buttonText: string,
-  cardErrorHeading: string,
+  formErrorHeading: string,
   formError: ErrorReason | null,
   allErrors: Array<Object>,
   sortCodeString: string,
