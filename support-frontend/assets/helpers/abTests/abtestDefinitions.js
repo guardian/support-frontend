@@ -4,10 +4,35 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
+export type ChoiceCardsProductSetTestVariants = 'control' | 'circles' | 'rectangles';
+export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
+
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const digitalLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/subscribe/digital(/.*)?$';
 
 export const tests: Tests = {
+
+  personalisedThankYouPageTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'personalised',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    seed: 1,
+    targetPage: contributionsLandingPageMatch,
+  },
 
   stripePaymentRequestButtonSca: {
     type: 'OTHER',
@@ -52,5 +77,30 @@ export const tests: Tests = {
     seed: 12,
     targetPage: digitalLandingPageMatch,
     optimizeId: '21HyzxNZSmikdtgJQNnXUw',
+  },
+
+  choiceCardsProductSetTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'circles',
+      },
+      {
+        id: 'rectangles',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    seed: 3,
+    targetPage: contributionsLandingPageMatch,
   },
 };

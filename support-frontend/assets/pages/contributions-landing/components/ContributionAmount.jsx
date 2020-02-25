@@ -24,6 +24,8 @@ import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
+import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
+import type { ChoiceCardsProductSetTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -40,6 +42,7 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+  choiceCardsVariant: ChoiceCardsProductSetTestVariants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -54,6 +57,7 @@ const mapStateToProps = state => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
+  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -163,28 +167,90 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
-  return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
-      <ul className="form__radio-group-list">
-        {validAmounts.map(renderAmount(
+  // We are running a test with circular choice cards - this custom CSS is required
+  // to override the default rectangular shape in the design system component.
+  // If the test results indicate that we are to keep the circular variant,
+  // we will request for them to be incorporated into the design system.
+  const renderContribTypeChoiceCards = (shape: string) => {
+    const sharedCss = {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      border: 0,
+    };
+    const circleCss = {
+      label: {
+        borderRadius: '50%',
+        minWidth: '60px',
+        maxWidth: '60px',
+        minHeight: '60px',
+        maxHeight: '60px',
+        padding: '0',
+      },
+    };
+    const cssObj: Object = shape === 'circles' ? {
+      ...sharedCss,
+      ...circleCss,
+    } : sharedCss;
+
+    return (
+    <>
+      <ChoiceCardGroup
+        name="amounts"
+        css={cssObj}
+      >
+        {validAmounts.map((amount: Amount) => (
+          <ChoiceCard
+            id={`contributionAmount-${amount.value}`}
+            name="contributionAmount"
+            value={amount.value}
+        /* eslint-disable react/prop-types */
+            checked={isSelected(amount, props)}
+            onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType)}
+            label={formatAmount(currencies[props.currency], spokenCurrencies[props.currency], amount, false)}
+          />
+        ))
+      }
+        <ChoiceCard
+          id="contributionAmount-other"
+          name="contributionAmount"
+          value="other"
+          checked={showOther}
+          onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
+          label="Other"
+        />
+      </ChoiceCardGroup>
+  </>
+    );
+  };
+
+  const renderControl = () => (
+    <ul className="form__radio-group-list">
+      {validAmounts.map(renderAmount(
           currencies[props.currency],
           spokenCurrencies[props.currency],
           props,
         ))}
-        <li className="form__radio-group-item">
-          <input
-            id="contributionAmount-other"
-            className="form__radio-group-input"
-            type="radio"
-            name="contributionAmount"
-            value="other"
-            checked={showOther}
-            onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
-          />
-          <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
-        </li>
-      </ul>
+      <li className="form__radio-group-item">
+        <input
+          id="contributionAmount-other"
+          className="form__radio-group-input"
+          type="radio"
+          name="contributionAmount"
+          value="other"
+          checked={showOther}
+          onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
+        />
+        <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
+      </li>
+    </ul>
+  );
+
+  return (
+    <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
+
+      {props.choiceCardsVariant !== 'control' ? renderContribTypeChoiceCards(props.choiceCardsVariant) : renderControl()}
+
       {showOther ? (
         <ContributionTextInput
           id="contributionOther"

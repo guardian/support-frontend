@@ -12,11 +12,11 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   private val contributePayPalButton = className("paypal-button")
 
-  private val oneOffButton = cssSelector(".form__radio-group-label[for='contributionType-ONE_OFF']")
-  private val monthlyButton = cssSelector(".form__radio-group-label[for='contributionType-MONTHLY']")
-  private val annualButton = cssSelector(".form__radio-group-label[for='contributionType-ANNUAL']")
+  private val oneOffButton = cssSelector(".form__radio-group--contribution-type label[for='contributionType-ONE_OFF']")
+  private val monthlyButton = cssSelector(".form__radio-group--contribution-type label[for='contributionType-MONTHLY']")
+  private val annualButton = cssSelector(".form__radio-group--contribution-type label[for='contributionType-ANNUAL']")
 
-  private val otherAmountButton = cssSelector(".form__radio-group-label[for='contributionAmount-other']")
+  private val otherAmountButton = cssSelector(".form__radio-group--contribution-amount label[for='contributionAmount-other']")
 
   private val otherAmount = id("contributionOther")
 
