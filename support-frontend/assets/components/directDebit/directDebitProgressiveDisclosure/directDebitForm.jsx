@@ -18,9 +18,10 @@ import {
 } from 'components/directDebit/directDebitActions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import './directDebitForm.scss';
-import type { ErrorReason } from 'helpers/errorReasons';
 import Form from './components/form';
 import Playback from './components/playback';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type ErrorReason } from 'helpers/errorReasons';
 
 
 // ---- Types ----- //
@@ -28,8 +29,8 @@ import Playback from './components/playback';
 type PropTypes = {|
   /* eslint-disable react/no-unused-prop-types */
   buttonText: string,
-  cardError: ErrorReason | null,
   cardErrorHeading: string,
+  formError: ErrorReason | null,
   allErrors: Array<Object>,
   sortCodeString: string,
   accountNumber: string,
@@ -39,7 +40,6 @@ type PropTypes = {|
   updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: SyntheticInputEvent<HTMLInputElement>) => void,
-  formError: string,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   submitForm: Function,
   validateForm: Function,
@@ -215,7 +215,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     const accountErrors = this.getAccountErrors();
     const accountErrorsLength = this.getAccountErrorsLength(accountErrors);
     const showGeneralError = props.allErrors.length === 0 && accountErrorsLength === 0 &&
-    (props.formError || props.formError);
+    (props.formError !== null && props.formError.length > 0);
 
     return (
       <span>

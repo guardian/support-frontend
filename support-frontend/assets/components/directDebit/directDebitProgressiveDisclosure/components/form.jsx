@@ -13,7 +13,7 @@ import { Input } from 'components/forms/input';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
-import type { ErrorReason } from 'helpers/errorReasons';
+import { type ErrorReason } from 'helpers/errorReasons';
 
 import '../directDebitForm.scss';
 
@@ -25,7 +25,7 @@ function Form(props: {
   accountHolderName: string,
   sortCodeString: string,
   accountNumber: string,
-  accountHolderConfirmation: Boolean,
+  accountHolderConfirmation: boolean,
   accountHolderNameError: string,
   sortCodeError: string,
   accountNumberError: string,
@@ -33,10 +33,8 @@ function Form(props: {
   showGeneralError: boolean,
   accountErrorsLength: number,
   accountErrors: Array<Object>,
-  cardError: ErrorReason | null,
-  cardErrorHeading: string,
+  formError: ErrorReason | null,
   allErrors: Array<Object>,
-  formError: string | null,
   updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
   updateSortCodeString: (event: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
@@ -112,12 +110,7 @@ function Form(props: {
           ]}
         />
       )}
-      {props.showGeneralError && (
-        <GeneralErrorMessage
-          errorReason={props.cardError || props.formError}
-          errorHeading={props.cardErrorHeading}
-        />
-      )}
+      {props.showGeneralError && <GeneralErrorMessage errorReason={props.formError} />}
     </div>
   );
 }

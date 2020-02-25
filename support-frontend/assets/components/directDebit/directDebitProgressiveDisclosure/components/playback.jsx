@@ -13,7 +13,7 @@ function Playback(props: {
   accountHolderName: string,
   accountNumber: string,
   sortCodeString: string,
-}): PropTypes {
+}) {
   return (
     <div className="component-direct-debit-form">
       <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
