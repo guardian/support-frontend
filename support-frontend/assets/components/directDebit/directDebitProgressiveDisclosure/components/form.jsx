@@ -16,6 +16,7 @@ import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import { type ErrorReason } from 'helpers/errorReasons';
 
 import '../directDebitForm.scss';
+import DirectDebitTerms from './directDebitTerms';
 
 
 const InputWithError = compose(withError, withLabel)(Input);
@@ -117,6 +118,8 @@ function Form(props: {
           errorHeading={props.submissionErrorHeading}
         />
       )}
+
+      <DirectDebitTerms />
     </div>
   );
 }

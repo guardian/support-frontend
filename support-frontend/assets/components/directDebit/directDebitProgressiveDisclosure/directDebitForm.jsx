@@ -17,11 +17,12 @@ import {
   updateAccountHolderConfirmation,
 } from 'components/directDebit/directDebitActions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import './directDebitForm.scss';
 import Form from './components/form';
 import Playback from './components/playback';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ErrorReason } from 'helpers/errorReasons';
+
+import './directDebitForm.scss';
 
 
 // ---- Types ----- //
