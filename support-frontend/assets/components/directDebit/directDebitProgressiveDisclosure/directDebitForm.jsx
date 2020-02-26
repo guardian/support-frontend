@@ -209,7 +209,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           state => ({
             accountErrorsLength: this.getAccountErrorsLength(this.getAccountErrors(state)),
           }),
-          // And then all the errors are checked before an action is dispatched to check the account
+          // And then all the error count is checked before an action is dispatched to check the account
           () => {
             if (props.allErrors.length === 0 && this.state.accountErrorsLength === 0) {
               props.payDirectDebitClicked();
