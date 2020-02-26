@@ -337,7 +337,7 @@ function PaperCheckoutForm(props: PropTypes) {
             title="Your account details"
           >
             <DirectDebitForm
-              buttonText="Subscribe with Direct Debit"
+              buttonText="Subscribe"
               onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                 props.onPaymentAuthorised(pa);
               }}

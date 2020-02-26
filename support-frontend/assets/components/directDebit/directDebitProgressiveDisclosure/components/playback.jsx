@@ -13,6 +13,7 @@ function Playback(props: {
   accountHolderName: string,
   accountNumber: string,
   sortCodeString: string,
+  buttonText: string,
 }) {
   return (
     <div className="component-direct-debit-form">
@@ -61,7 +62,7 @@ function Playback(props: {
           className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
           onClick={() => props.submitForm()}
         >
-          <span className="component-direct-debit-form__cta-text">Subscribe</span>
+          <span className="component-direct-debit-form__cta-text">{props.buttonText}</span>
           <div className="component-direct-debit-form__arrow"><SvgArrowRightStraight /></div>
         </button>
       </div>

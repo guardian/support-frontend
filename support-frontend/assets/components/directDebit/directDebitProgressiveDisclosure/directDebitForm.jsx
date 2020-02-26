@@ -56,6 +56,7 @@ type StateTypes = {
   sortCodeString: Object,
   accountNumber: Object,
   accountHolderConfirmation: Object,
+  accountErrorsLength: number,
 }
 
 
@@ -143,6 +144,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
         message: 'Please confirm you are the account holder',
         rule: accountHolderConfirmation => accountHolderConfirmation === true,
       },
+      accountErrorsLength: 0,
     };
   }
 
@@ -163,8 +165,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     dispatchUpdate(event);
   }
 
-  getAccountErrors = () => {
-    const { state } = this;
+  getAccountErrors = (state) => {
     const cardErrors = fieldNames.map(field =>
       ({ message: state[field].error }));
     return cardErrors;
@@ -184,7 +185,9 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     const { props } = this;
     let accountErrorsLength = 0;
     fieldNames.forEach((field) => {
+      // The following line is checking that the field value matches the validation rule
       if (!this.state[field].rule(props[field])) {
+        // If not, an error is set in state
         this.setState(
           state => ({
             [field]: {
@@ -192,15 +195,27 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
               error: this.state[field].message,
             },
           }),
+          // And then the error count in state is updated
           () => {
-            accountErrorsLength = this.getAccountErrorsLength(this.getAccountErrors());
+            accountErrorsLength = this.getAccountErrorsLength(this.getAccountErrors(this.state));
+            this.setState({
+              accountErrorsLength,
+            });
           },
         );
       } else {
-        accountErrorsLength = this.getAccountErrorsLength(this.getAccountErrors());
-        if (props.allErrors.length === 0 && accountErrorsLength === 0) {
-          props.payDirectDebitClicked();
-        }
+        // If the field is fine, the number of errors is updated
+        this.setState(
+          state => ({
+            accountErrorsLength: this.getAccountErrorsLength(this.getAccountErrors(state)),
+          }),
+          // And then all the errors are checked before an action is dispatched to check the account
+          () => {
+            if (props.allErrors.length === 0 && this.state.accountErrorsLength === 0) {
+              props.payDirectDebitClicked();
+            }
+          },
+        );
       }
     });
   }
@@ -213,8 +228,8 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
 
   render() {
     const { props, state } = this;
-    const accountErrors = this.getAccountErrors();
-    const accountErrorsLength = this.getAccountErrorsLength(accountErrors);
+    const accountErrors = this.getAccountErrors(state);
+    const { accountErrorsLength } = state;
     const showGeneralError = props.allErrors.length === 0 && accountErrorsLength === 0 &&
     (props.submissionError !== null && props.submissionError.length > 0);
 
@@ -241,6 +256,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
             accountHolderName={props.accountHolderName}
             accountNumber={props.accountNumber}
             sortCodeString={props.sortCodeString}
+            buttonText={props.buttonText}
           />
         )}
       </span>
