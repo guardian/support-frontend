@@ -352,7 +352,7 @@ function PaperCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <CancellationSection />
+          <CancellationSection paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>

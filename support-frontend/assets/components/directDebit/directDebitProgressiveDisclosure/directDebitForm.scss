@@ -234,18 +234,3 @@
   margin-top: $gu-v-spacing;
   fill: gu-colour(neutral-60);
 }
-
-.component-direct-debit-terms {
-  font-family: $gu-text-sans-web;
-  color: gu-colour(neutral-7);
-  margin-top: 20px;
-  a, a:visited {
-    color: gu-colour(neutral-7);
-  }
-  li {
-    list-style-type: none;
-  }
-  li ~ li{
-    margin-top: 10px;
-  }
-}

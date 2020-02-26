@@ -338,7 +338,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
-          <CancellationSection />
+          <CancellationSection paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>

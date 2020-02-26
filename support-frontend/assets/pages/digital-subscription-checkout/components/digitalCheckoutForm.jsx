@@ -263,7 +263,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <CancellationSection />
+          <CancellationSection paymentMethod={props.paymentMethod} />
         </Form>
       </CheckoutLayout>
     </Content>

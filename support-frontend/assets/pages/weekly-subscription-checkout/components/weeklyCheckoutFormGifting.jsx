@@ -78,6 +78,8 @@ import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidati
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import CancellationSection
+  from 'components/subscriptionCheckouts/cancellationSection';
 
 // ----- Styles ----- //
 
@@ -366,6 +368,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
+          <CancellationSection orderIsAGift paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>
