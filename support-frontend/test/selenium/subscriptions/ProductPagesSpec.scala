@@ -68,7 +68,7 @@ class ProductPagesSpec extends AnyFeatureSpec
     Given("that a user goes to the page")
     goTo(page)
     Then("it should display")
-    assert(page.pageHasLoaded)
+    assert(false)
   }
 
 
