@@ -47,19 +47,19 @@ const mapStateToProps = state => ({
 const reminderDates: Array<ReminderDate> = [
   {
     dateName: 'June 2020',
-    control: 'June 2020',
+    control: 'June',
     extendedCopy: 'Three months (June)',
     timeStamp: '2020-06-01 00:00:00',
   },
   {
     dateName: 'September 2020',
-    control: 'September 2020',
-    extendedCopy: 'Three months (September)',
+    control: 'September',
+    extendedCopy: 'Six months (September)',
     timeStamp: '2020-09-01 00:00:00',
   },
   {
     dateName: 'December 2020',
-    control: 'December 2020',
+    control: 'December',
     extendedCopy: 'Nine months (December)',
     timeStamp: '2020-12-01 00:00:00',
   },
@@ -70,8 +70,6 @@ const reminderDates: Array<ReminderDate> = [
     timeStamp: '2021-03-01 00:00:00',
   },
 ];
-
-const randomIndex: number = Math.floor(Math.random() * (reminderDates.length));
 
 const trimAndDowncase = (word: string) => word.replace(/\s+/g, '').toLowerCase();
 // ----- Render ----- //
@@ -168,7 +166,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                     text={reminderDate[postContributionReminderCopyTestVariant]}
                     name="reminder"
                     onChange={evt => this.setDateState(evt, reminderDate.timeStamp, dateWithoutSpace)}
-                    defaultChecked={index === randomIndex}
+                    defaultChecked={index === 0}
                   />
                 );
               })}
