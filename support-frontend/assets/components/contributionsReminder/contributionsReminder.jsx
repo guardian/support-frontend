@@ -34,7 +34,6 @@ type StateTypes = {
   buttonState: ButtonState,
   selectedDate: string | null,
   selectedDateAsWord: string | null,
-  preselectedDateAsWord: string | null,
 }
 
 const mapStateToProps = state => ({
@@ -83,7 +82,6 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
     buttonState: 'initial',
     selectedDate: null,
     selectedDateAsWord: null,
-    preselectedDateAsWord: null,
   }
 
   componentDidMount = () => {
@@ -93,7 +91,6 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
     this.setState({
       selectedDate: firstOpt.timeStamp,
       selectedDateAsWord: firstOptAsWord,
-      preselectedDateAsWord: firstOptAsWord,
     });
   }
 
@@ -188,10 +185,6 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 this.requestIsPending();
 
                 trackComponentClick('reminder-test-link-clicked');
-
-                if (this.state.preselectedDateAsWord) {
-                  trackComponentClick(`reminder-test-preselected-date-${this.state.preselectedDateAsWord}`);
-                }
 
                 if (this.state.selectedDateAsWord) {
                   trackComponentClick(`reminder-test-date-${this.state.selectedDateAsWord}`);
