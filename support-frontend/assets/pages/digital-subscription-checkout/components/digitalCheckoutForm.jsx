@@ -76,7 +76,6 @@ type PropTypes = {|
   country: IsoCountry,
   signOut: typeof signOut,
   submitForm: Function,
-
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
@@ -256,8 +255,8 @@ function DigitalCheckoutForm(props: PropTypes) {
               submitForm={props.submitForm}
               validateForm={props.validateForm}
               allErrors={[...props.addressErrors, ...props.formErrors]}
-              formError={props.submissionError}
-              formErrorHeading={submissionErrorHeading}
+              submissionError={props.submissionError}
+              submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
           <GeneralErrorMessage

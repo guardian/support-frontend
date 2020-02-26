@@ -29,8 +29,8 @@ import { type ErrorReason } from 'helpers/errorReasons';
 type PropTypes = {|
   /* eslint-disable react/no-unused-prop-types */
   buttonText: string,
-  formErrorHeading: string,
-  formError: ErrorReason | null,
+  submissionErrorHeading: string,
+  submissionError: ErrorReason | null,
   allErrors: Array<Object>,
   sortCodeString: string,
   accountNumber: string,
@@ -215,7 +215,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     const accountErrors = this.getAccountErrors();
     const accountErrorsLength = this.getAccountErrorsLength(accountErrors);
     const showGeneralError = props.allErrors.length === 0 && accountErrorsLength === 0 &&
-    (props.formError !== null && props.formError.length > 0);
+    (props.submissionError !== null && props.submissionError.length > 0);
 
     return (
       <span>

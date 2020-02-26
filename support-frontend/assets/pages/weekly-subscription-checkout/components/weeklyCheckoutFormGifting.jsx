@@ -362,8 +362,8 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               submitForm={props.submitForm}
               validateForm={props.validateForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-              formError={props.submissionError}
-              formErrorHeading={submissionErrorHeading}
+              submissionError={props.submissionError}
+              submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
         </Form>
