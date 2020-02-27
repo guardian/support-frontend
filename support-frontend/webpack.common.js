@@ -41,6 +41,25 @@ const cssLoaders = [{
   },
 }];
 
+// Hide mini-css-extract-plugin spam logs
+class CleanUpStatsPlugin {
+  // eslint-disable-next-line class-methods-use-this
+  shouldPickStatChild(child) {
+    return child.name.indexOf('mini-css-extract-plugin') !== 0;
+  }
+
+  apply(compiler) {
+    compiler.hooks.done.tap('CleanUpStatsPlugin', (stats) => {
+      const { children } = stats.compilation;
+      if (Array.isArray(children)) {
+        // eslint-disable-next-line no-param-reassign
+        stats.compilation.children = children
+          .filter(child => this.shouldPickStatChild(child));
+      }
+    });
+  }
+}
+
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
     new ManifestPlugin({
@@ -61,6 +80,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
       },
       canPrint: true,
     })] : []),
+    new CleanUpStatsPlugin(),
   ],
 
   context: path.resolve(__dirname, 'assets'),
