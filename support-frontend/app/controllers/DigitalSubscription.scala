@@ -63,9 +63,21 @@ class DigitalSubscription(
       "en" -> buildCanonicalDigitalSubscriptionLink("int")
     )
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes)
+    //noinspection ScalaStyle
+    val shareImageUrl =
+      Some("https://i.guim.co.uk/img/media/1033800a75851058d619bc0519b0b7b48a53dcf5/0_0_1200_1200/1200.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=0d50dd49d1fedeacff8a3e437332c2bf")
 
     Ok(views.html.main(
-      title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks
+      title = title,
+      mainElement = mainElement,
+      mainJsBundle = js,
+      mainStyleBundle = css,
+      fontLoaderBundle = fontLoaderBundle,
+      description = description,
+      canonicalLink = canonicalLink,
+      hrefLangLinks = hrefLangLinks,
+      shareImageUrl = shareImageUrl,
+      shareUrl = canonicalLink
     ) {
       Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
     }).withSettingsSurrogateKey

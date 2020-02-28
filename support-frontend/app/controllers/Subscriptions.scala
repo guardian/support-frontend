@@ -103,6 +103,17 @@ class Subscriptions(
     }).withSettingsSurrogateKey
   }
 
+  val weeklyHrefLangLinks: Map[String, String] =
+    Map(
+      "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
+      "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk"),
+      "en-au" -> buildCanonicalWeeklySubscriptionLink("au"),
+      "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz"),
+      "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca"),
+      "en" -> buildCanonicalWeeklySubscriptionLink("int"),
+      "en" -> buildCanonicalWeeklySubscriptionLink("eu")
+    )
+
   def weeklyGeoRedirect(orderIsAGift: Boolean = false): Action[AnyContent] = geoRedirect(
     if (orderIsAGift) "subscribe/weekly/gift" else "subscribe/weekly"
   )
@@ -132,16 +143,22 @@ class Subscriptions(
         .forUser(false), stage)
         .getCopyForPromoCode(promoCode, GuardianWeekly, country)
     )
-    val hrefLangLinks = Map(
-      "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
-      "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk"),
-      "en-au" -> buildCanonicalWeeklySubscriptionLink("au"),
-      "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz"),
-      "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca"),
-      "en" -> buildCanonicalWeeklySubscriptionLink("int"),
-      "en" -> buildCanonicalWeeklySubscriptionLink("eu")
-    )
-    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks){
+    //noinspection ScalaStyle
+    val shareImageUrl =
+      Some("https://i.guim.co.uk/img/media/00cb294c1f1e5140c63008d7a55b105ef2a786e6/0_0_1200_1200/1200.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=0034a6a7408ca4d162620f2c8b6bf2b9")
+
+    Ok(views.html.main(
+      title = title,
+      mainElement = mainElement,
+      mainJsBundle = js,
+      mainStyleBundle = css,
+      fontLoaderBundle = fontLoaderBundle,
+      description = description,
+      canonicalLink = canonicalLink,
+      hrefLangLinks = weeklyHrefLangLinks,
+      shareImageUrl = shareImageUrl,
+      shareUrl = canonicalLink
+    ){
       Html(
         s"""<script type="text/javascript">
               window.guardian.productPrices = ${outputJson(productPrices)}

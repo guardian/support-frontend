@@ -61,8 +61,21 @@ class PaperSubscription(
     val description = stringsConfig.paperLandingDescription
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) :+ "SEP2512VHD"
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(Paper, promoCodes)
+    //noinspection ScalaStyle
+    val shareImageUrl =
+      Some("https://i.guim.co.uk/img/media/0a1ffb0ec7e4dbbab40421b74e4bcf5d628f4708/0_0_1200_1200/1200.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=c6c7f5b373a1ae54bc66c876a9a60031")
 
-    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink){
+    Ok(views.html.main(
+      title = title,
+      mainElement = mainElement,
+      mainJsBundle = js,
+      mainStyleBundle = css,
+      fontLoaderBundle = fontLoaderBundle,
+      description = description,
+      canonicalLink = canonicalLink,
+      shareImageUrl = shareImageUrl,
+      shareUrl = canonicalLink
+    ){
       Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
     }).withSettingsSurrogateKey
   }
