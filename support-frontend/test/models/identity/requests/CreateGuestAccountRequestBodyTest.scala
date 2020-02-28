@@ -13,7 +13,7 @@ class CreateGuestAccountRequestBodyTest extends AnyWordSpec with Matchers {
       val body = CreateGuestAccountRequestBody.fromEmail("test.user@theguardian.com")
 
       Json.toJson(body).toString shouldEqual
-        """{"primaryEmailAddress":"test.user@theguardian.com","publicFields":{"displayName":"test.user"}}"""
+        """{"primaryEmailAddress":"test.user@theguardian.com"}"""
     }
   }
 }
