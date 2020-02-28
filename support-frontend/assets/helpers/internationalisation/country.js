@@ -17,6 +17,7 @@ import {
   UnitedStates,
 } from './countryGroup';
 import type { CountryGroupId } from './countryGroup';
+import type { ContributionType } from '../contributions';
 
 // ----- Setup ----- //
 
@@ -420,6 +421,11 @@ const stripePaymentRequestAllowedCountries = [
 export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) =>
   stripePaymentRequestAllowedCountries.includes(country);
 
+const stateNeededForCountryForRecurring = ['US', 'CA', 'AU'];
+
+export const requiresStateValue = (contributionType: ContributionType, country: IsoCountry) =>
+  contributionType !== 'ONE_OFF' && stateNeededForCountryForRecurring.includes(country);
+
 // ----- Functions ----- /
 
 function usStateFromString(s: string): Option<UsState> {
@@ -447,11 +453,6 @@ function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option
   }
 }
 
-function findIsoCountry(country: string): Option<IsoCountry> {
-  const maybeIsoCountry = Object.keys(countries).find(key => countries[key] === country);
-  return maybeIsoCountry !== undefined ? maybeIsoCountry : null;
-}
-
 function fromString(s: string): ?IsoCountry {
   const candidateIso = s.toUpperCase();
   const isoCountryArray: Array<IsoCountry> = Object.keys(countries);
@@ -464,6 +465,10 @@ function fromString(s: string): ?IsoCountry {
     return isoCountryArray[isoIndex];
   }
   return null;
+}
+
+function findIsoCountry(country: string): ?IsoCountry {
+  return fromString(country) || Object.entries(countries).find(key => countries[key] === country);
 }
 
 function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {

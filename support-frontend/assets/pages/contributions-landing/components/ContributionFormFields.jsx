@@ -25,7 +25,7 @@ import {
   updateFirstName,
   updateLastName,
   updateEmail,
-  updateState,
+  updateStateOrProvince,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
 
@@ -72,7 +72,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateFirstName: (event) => { dispatch(updateFirstName(event.target.value)); },
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
-  updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
+  updateState: (event) => { dispatch(updateStateOrProvince(event.target.value === '' ? null : event.target.value)); },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 

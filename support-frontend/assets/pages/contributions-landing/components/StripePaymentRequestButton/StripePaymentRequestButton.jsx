@@ -23,14 +23,12 @@ import {
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import {
-  Canada,
   type CountryGroupId,
-  UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import type {
   CaState,
-  IsoCountry,
+  IsoCountry, StateProvince,
   UsState,
 } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
@@ -51,7 +49,7 @@ import {
   updateFirstName,
   updateLastName,
   updatePaymentMethod,
-  updateState,
+  updateStateOrProvince,
   updateBillingCountry,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -63,7 +61,8 @@ import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
 import type { StripePaymentRequestButtonScaTestVariants } from 'helpers/abTests/abtestDefinitions';
-import { fromString as countryFromString } from '../../../../helpers/internationalisation/country';
+import { findIsoCountry, stateProvinceFromString, requiresStateValue } from 'helpers/internationalisation/country';
+import type { Option } from 'helpers/types/option';
 
 // ----- Types -----//
 
@@ -126,7 +125,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateEmail: (email: string) => dispatch(updateEmail(email)),
   updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
   updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
-  updateStateOrProvince: (state: UsState | CaState | null) => dispatch(updateState(state)),
+  updateStateOrProvince: (state: UsState | CaState | null) => dispatch(updateStateOrProvince(state)),
   updateBillingCountry: (billingCountry: IsoCountry) => dispatch(updateBillingCountry(billingCountry)),
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
@@ -263,23 +262,23 @@ function onPayment(
   // We need to do this so that we can offer marketing permissions on the thank you page
   updatePayerEmail(paymentRequestData, props.updateEmail);
 
-  const isUsOrCanadian = props.countryGroupId === UnitedStates || props.countryGroupId === Canada;
+  const isoCountry: ?IsoCountry = findIsoCountry(billingCountryFromCard);
 
-  const stateOrProvinceUpdateOk = isUsOrCanadian ?
-    updatePayerStateOrProvince(stateOrProvinceFromCard, props.stateOrProvince, props.updateStateOrProvince) : true;
-
-  // We need to update the country so it matches the state taken from the card
-  if (isUsOrCanadian && billingCountryFromCard) {
-    const isoCountry = countryFromString(billingCountryFromCard);
-    if (isoCountry) {
-      props.updateBillingCountry((isoCountry));
+  // If US, Canada or Australia, then we need the state value, else we don't
+  let stateOrProvinceSituationOK = requiresStateValue(props.contributionType, isoCountry);
+  if (isoCountry) {
+    props.updateBillingCountry(isoCountry);
+    const stateOrProvince: Option<StateProvince> = stateProvinceFromString(isoCountry, stateOrProvinceFromCard);
+    if (stateOrProvince) {
+      stateOrProvinceSituationOK =
+        updatePayerStateOrProvince(stateOrProvince, props.stateOrProvince, props.updateStateOrProvince);
     }
   }
 
-  const nameUpdateOk: boolean = props.stripeAccount !== 'ONE_OFF' ?
+  const nameUpdateOk: boolean = props.contributionType !== 'ONE_OFF' ?
     updatePayerName(paymentRequestData, props.updateFirstName, props.updateLastName) : true;
 
-  if (nameUpdateOk && stateOrProvinceUpdateOk) {
+  if (nameUpdateOk && stateOrProvinceSituationOK) {
     if (paymentRequestData.methodName) {
       // https://stripe.com/docs/stripe-js/reference#payment-response-object
       // methodName:
