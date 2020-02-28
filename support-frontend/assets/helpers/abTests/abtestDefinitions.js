@@ -109,9 +109,6 @@ export const tests: Tests = {
         id: 'control',
       },
       {
-        id: 'circles',
-      },
-      {
         id: 'rectangles',
       },
     ],
@@ -121,7 +118,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     referrerControlled: false,
     seed: 3,
     targetPage: contributionsLandingPageMatch,
