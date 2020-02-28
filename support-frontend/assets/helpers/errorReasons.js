@@ -25,7 +25,7 @@ export type ErrorReason =
 
 // ----- Functions ----- //
 
-function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
+function appropriateErrorMessage(errorReason: ?ErrorReason | string): ?string {
   switch (errorReason) {
     case 'insufficient_funds':
       return 'The transaction was declined due to insufficient funds in your account. Please use a different card or contact your bank.';

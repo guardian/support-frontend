@@ -49,6 +49,7 @@ type PropTypes = {|
   confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => void,
   countryGroupId: CountryGroupId,
   phase: Phase,
+  formError: ErrorReason | null,
 |};
 
 type StateTypes = {
@@ -57,6 +58,7 @@ type StateTypes = {
   accountNumber: Object,
   accountHolderConfirmation: Object,
   accountErrorsLength: number,
+  allErrorsLength: number,
 }
 
 
@@ -145,14 +147,31 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
         rule: accountHolderConfirmation => accountHolderConfirmation === true,
       },
       accountErrorsLength: 0,
+      allErrorsLength: 0,
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.allErrors.length !== prevProps.allErrors.length) {
+      // Disabling this as react docs say it is okay to set state here with conditions
+      /* eslint-disable react/no-did-update-set-state */
+      this.setState({
+        allErrorsLength: this.props.allErrors.length,
+      });
+    }
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.allErrors.length !== prevState.allErrorsLength) {
+      return { allErrorsLength: nextProps.allErrors.length };
+    }
+    return null;
   }
 
   onSubmit = (event) => {
     event.preventDefault();
-    const { props } = this;
+    this.props.validateForm();
     this.handleErrorsAndCheckAccount();
-    props.validateForm();
   }
 
   onChange = (field, dispatchUpdate, event) => {
@@ -211,7 +230,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           }),
           // And then all the error count is checked before an action is dispatched to check the account
           () => {
-            if (props.allErrors.length === 0 && this.state.accountErrorsLength === 0) {
+            if (this.state.allErrorsLength === 0 && this.state.accountErrorsLength === 0) {
               props.payDirectDebitClicked();
             }
           },
@@ -231,7 +250,8 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     const accountErrors = this.getAccountErrors(state);
     const { accountErrorsLength } = state;
     const showGeneralError = props.allErrors.length === 0 && accountErrorsLength === 0 &&
-    (props.submissionError !== null && props.submissionError.length > 0);
+    ((props.submissionError !== null && props.submissionError !== null) ||
+    (props.formError !== null && props.formError.length > 0));
 
     return (
       <span>

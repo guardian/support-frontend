@@ -6,6 +6,7 @@ import React, { type Node } from 'react';
 import { appropriateErrorMessage, type ErrorReason } from 'helpers/errorReasons';
 import { classNameWithModifiers } from 'helpers/utilities';
 import SvgExclamationAlternate from '../svgs/exclamationAlternate';
+import { type Option } from 'helpers/types/option';
 
 import './generalErrorMessage.scss';
 
@@ -13,7 +14,7 @@ import './generalErrorMessage.scss';
 // ---- Types ----- //
 
 type PropTypes = {|
-  errorReason: ?ErrorReason,
+  errorReason: Option<ErrorReason> | string,
   errorHeading: string,
   svg: Node,
   classModifiers: Array<?string>

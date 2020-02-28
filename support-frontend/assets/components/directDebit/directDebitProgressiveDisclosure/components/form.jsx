@@ -14,6 +14,7 @@ import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import { type ErrorReason } from 'helpers/errorReasons';
+import { type Option } from 'helpers/types/option';
 
 import '../directDebitForm.scss';
 
@@ -36,6 +37,7 @@ function Form(props: {
   submissionError: ErrorReason | null,
   submissionErrorHeading: string,
   allErrors: Array<Object>,
+  formError: Option<string>,
   updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
   updateSortCodeString: (event: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
@@ -113,7 +115,7 @@ function Form(props: {
       )}
       {props.showGeneralError && (
         <GeneralErrorMessage
-          errorReason={props.submissionError}
+          errorReason={props.submissionError || props.formError}
           errorHeading={props.submissionErrorHeading}
         />
       )}
