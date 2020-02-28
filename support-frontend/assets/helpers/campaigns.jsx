@@ -13,7 +13,7 @@ export type TickerSettings = {
 
 export type CampaignSettings = {
   headerCopy?: string | React$Element<string>,
-  contributeCopy?: React$Element<string>,
+  contributeCopy?: string | React$Element<string>,
   formMessage?: React$Element<string>,
   termsAndConditions?: (contributionsTermsLink: string, contactEmail: string) => React$Element<string>,
   cssModifiers?: string[],
