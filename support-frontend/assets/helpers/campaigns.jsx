@@ -27,9 +27,14 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = null;
+const currentCampaignName = 'eu/contribute';
 
-export const campaigns: Campaigns = {};
+export const campaigns: Campaigns = {
+  [currentCampaignName]: {
+    headerCopy: 'Support our rigorous, investigative journalism in Europe and beyond',
+    contributeCopy: 'Your support helps protect the Guardian’s independence. These are testing times, and crises and their solutions are not limited by national boundaries. But then, neither are we. Every contribution, however big or small, is so valuable.',
+  }
+};
 
 export type CampaignName = $Keys<typeof campaigns>
 
