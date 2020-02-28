@@ -249,7 +249,8 @@ function withProps(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
 
-      {props.choiceCardsVariant !== 'control' ? renderContribTypeChoiceCards(props.choiceCardsVariant) : renderControl()}
+      {/*{props.choiceCardsVariant !== 'control' ? renderContribTypeChoiceCards(props.choiceCardsVariant) : renderControl()}*/}
+      { renderControl() }
 
       {showOther ? (
         <ContributionTextInput
