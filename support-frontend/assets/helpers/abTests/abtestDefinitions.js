@@ -109,9 +109,6 @@ export const tests: Tests = {
         id: 'control',
       },
       {
-        id: 'circles',
-      },
-      {
         id: 'rectangles',
       },
     ],
