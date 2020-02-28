@@ -70,7 +70,7 @@ object AsyncAuthenticationService {
       case UserCredentials.SCGUUCookie(value) => AccessCredentials.Cookies(scGuU = value)
       case UserCredentials.CryptoAccessToken(value, _) => AccessCredentials.Token(tokenText = value)
     }
-    AuthenticatedIdUser(accessCredentials, IdMinimalUser(user.id, user.publicFields.displayName))
+    AuthenticatedIdUser(accessCredentials, IdMinimalUser(user.id, user.publicFields.username.orElse(user.privateFields.firstName)))
   }
 
   // Logs failure to authenticate a user.

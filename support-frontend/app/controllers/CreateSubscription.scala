@@ -94,7 +94,7 @@ class CreateSubscription(
       // TODO: in a subsequent PR set these values based on the respective user.
       allowThirdPartyMail = false,
       allowGURelatedMail = false,
-      isTestUser = testUsers.isTestUser(user.publicFields.displayName),
+      isTestUser = testUsers.isTestUser(user.publicFields.username),
       deliveryInstructions = request.deliveryInstructions
     )
   }

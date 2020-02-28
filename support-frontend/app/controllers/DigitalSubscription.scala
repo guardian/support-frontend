@@ -107,7 +107,7 @@ class DigitalSubscription(
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
-    val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
+    val uatMode = testUsers.isTestUser(idUser.publicFields.username)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 
     subscriptionCheckout(

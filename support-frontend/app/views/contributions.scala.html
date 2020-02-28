@@ -36,7 +36,7 @@
     window.guardian.user = {
       id: "@user.id",
       email: "@user.primaryEmailAddress",
-      @user.publicFields.displayName.map { displayName =>
+      @user.publicFields.username.orElse(user.privateFields.firstName).map { displayName =>
         displayName: "@displayName",
       }
       @for(firstName <- user.privateFields.firstName; lastName <- user.privateFields.secondName) {

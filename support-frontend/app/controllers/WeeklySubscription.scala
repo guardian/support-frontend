@@ -64,7 +64,7 @@ class WeeklySubscription(
     val js = "weeklySubscriptionCheckoutPage.js"
     val css = "weeklySubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
-    val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
+    val uatMode = testUsers.isTestUser(idUser.publicFields.username)
     val defaultPromos = if (orderIsAGift) List("GW20GIFT1Y") else List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ defaultPromos
 

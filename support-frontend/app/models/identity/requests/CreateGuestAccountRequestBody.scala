@@ -1,7 +1,6 @@
 package models.identity.requests
 
 import akka.util.ByteString
-import com.gu.identity.model.PublicFields
 import play.api.libs.json.{Json, Writes}
 import play.api.libs.ws.{BodyWritable, InMemoryBody}
 
@@ -10,18 +9,13 @@ import play.api.libs.ws.{BodyWritable, InMemoryBody}
 // Example request:
 // =================
 // {
-//   "email": "a@b.com",
-//   "publicFields": {
-//     "displayName": "a"
-//   }
+//   "email": "a@b.com"
 // }
-case class CreateGuestAccountRequestBody(primaryEmailAddress: String, publicFields: PublicFields)
+case class CreateGuestAccountRequestBody(primaryEmailAddress: String)
 object CreateGuestAccountRequestBody {
 
-  def guestDisplayName(email: String): String = email.split("@").headOption.getOrElse("Guest User")
-
   def fromEmail(email: String): CreateGuestAccountRequestBody =
-    CreateGuestAccountRequestBody(email, PublicFields(displayName = Some(guestDisplayName(email))))
+    CreateGuestAccountRequestBody(email)
 
   implicit val writesCreateGuestAccountRequestBody: Writes[CreateGuestAccountRequestBody] = {
     import com.gu.identity.model.play.WritesInstances.publicFieldsWrites
