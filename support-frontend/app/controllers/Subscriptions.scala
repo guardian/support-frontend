@@ -28,14 +28,12 @@ class Subscriptions(
     val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    promotionServiceProvider: PromotionServiceProvider,
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
-    fontLoaderBundle: Either[RefPath, StyleContent],
-    stage: Stage
+    fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -99,71 +97,6 @@ class Subscriptions(
       Html(
         s"""<script type="text/javascript">
               window.guardian.pricingCopy = ${outputJson(pricingCopy)}
-            </script>""")
-    }).withSettingsSurrogateKey
-  }
-
-  val weeklyHrefLangLinks: Map[String, String] =
-    Map(
-      "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
-      "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk"),
-      "en-au" -> buildCanonicalWeeklySubscriptionLink("au"),
-      "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz"),
-      "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca"),
-      "en" -> buildCanonicalWeeklySubscriptionLink("int"),
-      "en" -> buildCanonicalWeeklySubscriptionLink("eu")
-    )
-
-  def weeklyGeoRedirect(orderIsAGift: Boolean = false): Action[AnyContent] = geoRedirect(
-    if (orderIsAGift) "subscribe/weekly/gift" else "subscribe/weekly"
-  )
-
-  def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian" else "The Guardian Weekly Subscriptions | The Guardian"
-    val mainElement = EmptyDiv("weekly-landing-page-" + countryCode)
-    val js = Left(RefPath("weeklySubscriptionLandingPage.js"))
-    val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
-    val description = stringsConfig.weeklyLandingDescription
-    val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
-    val defaultPromos = if (orderIsAGift) List("GW20GIFT1Y") else List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
-    val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
-    val promoCodes = defaultPromos ++ queryPromos
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, orderIsAGift)
-    // To see if there is any promotional copy in place for this page we need to get a country in the current region (country group)
-    // this is because promotions apply to countries not regions. We can use any country however because the promo tool UI only deals
-    // with regions and then adds all the countries for that region to the promotion
-    val country = (for {
-      countryGroup <- CountryGroup.byId(countryCode)
-      country <- countryGroup.countries.headOption
-    } yield country).getOrElse(UK)
-
-    val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
-      ProductPromotionCopy(promotionServiceProvider
-        .forUser(false), stage)
-        .getCopyForPromoCode(promoCode, GuardianWeekly, country)
-    )
-    //noinspection ScalaStyle
-    val shareImageUrl =
-      Some("https://i.guim.co.uk/img/media/00cb294c1f1e5140c63008d7a55b105ef2a786e6/0_0_1200_1200/1200.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=0034a6a7408ca4d162620f2c8b6bf2b9")
-
-    Ok(views.html.main(
-      title = title,
-      mainElement = mainElement,
-      mainJsBundle = js,
-      mainStyleBundle = css,
-      fontLoaderBundle = fontLoaderBundle,
-      description = description,
-      canonicalLink = canonicalLink,
-      hrefLangLinks = weeklyHrefLangLinks,
-      shareImageUrl = shareImageUrl,
-      shareUrl = canonicalLink
-    ){
-      Html(
-        s"""<script type="text/javascript">
-              window.guardian.productPrices = ${outputJson(productPrices)}
-              window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
-              window.guardian.orderIsAGift = $orderIsAGift
             </script>""")
     }).withSettingsSurrogateKey
   }

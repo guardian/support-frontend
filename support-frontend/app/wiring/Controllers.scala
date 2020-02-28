@@ -89,6 +89,7 @@ trait Controllers {
   lazy val weeklyController = new WeeklySubscription(
     authAction,
     priceSummaryServiceProvider,
+    promotionServiceProvider,
     assetsResolver,
     actionRefiners,
     identityService,
@@ -100,7 +101,8 @@ trait Controllers {
     allSettingsProvider,
     appConfig.supportUrl,
     fontLoader,
-    appConfig.stripeIntentUrl
+    appConfig.stripeIntentUrl,
+    appConfig.stage
   )
 
   lazy val createSubscriptionController = new CreateSubscription(
