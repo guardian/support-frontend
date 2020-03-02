@@ -23,7 +23,6 @@ import type {
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import type { ChoiceCardsProductSetTestVariants } from 'helpers/abTests/abtestDefinitions';
-import { css } from '@emotion/core';
 
 // ----- Types ----- //
 
@@ -69,11 +68,6 @@ function withProps(props: PropTypes) {
       <ChoiceCardGroup
         name="contributionTypes"
         orientation="horizontal"
-        cssOverrides={css`
-          > :last-child {
-            margin-right: 0 !important;
-          }
-        `}
       >
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
         const { contributionType } = contributionTypeSetting;

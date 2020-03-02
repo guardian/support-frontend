@@ -1787,10 +1787,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.7.tgz#680656b92632006d736d0378ae19f8c6943769c8"
   integrity sha512-WSa3gnRYxciFas3QYhtTk8unvj5N9K5IB61LL1CP3bVCJ2euXR13xRRHafI/Vy1dnrDwPa80SaE+apTcwipvpA==
 
-"@guardian/src-choice-card@^0.14.0-alpha.2":
-  version "0.14.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@guardian/src-choice-card/-/src-choice-card-0.14.0-alpha.2.tgz#bcfdd8ee4d250279e0f1943b4667bf3e6578fd7d"
-  integrity sha512-PphICsTLKVCFE3WhEoa1/Ngadms6RPI44UwA1DDzjvfaM21cOB5EIdVj7Dx2K5oomShQzDlL98I1J24F3ixLUA==
+"@guardian/src-choice-card@^0.14.0-alpha.3":
+  version "0.14.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@guardian/src-choice-card/-/src-choice-card-0.14.0-alpha.3.tgz#a25c0c83799f7251c96149fd7e487dc85f5a3ecb"
+  integrity sha512-03dsXyWIXGXtToePPR4H6kTyBq+4rtzUKNCVk7Gk6HKjNOYOK2/3iBLo2mLNjSP8Kt0SdSvfiV58FxxOVMDELg==
 
 "@guardian/src-foundations@^0.14.1":
   version "0.14.1"
