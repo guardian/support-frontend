@@ -23,6 +23,7 @@ import type {
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import type { ChoiceCardsProductSetTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { css } from '@emotion/core';
 
 // ----- Types ----- //
 
@@ -63,9 +64,17 @@ const mapDispatchToProps = (dispatch: Function) => ({
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
 
-  const renderAmountChoiceCards = () => (
+  const renderContribTypeChoiceCards = () => (
     <>
-      <ChoiceCardGroup name="contributionTypes" orientation="horizontal">
+      <ChoiceCardGroup
+        name="contributionTypes"
+        orientation="horizontal"
+        cssOverrides={css`
+          > :last-child {
+            margin-right: 0 !important;
+          }
+        `}
+      >
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
         const { contributionType } = contributionTypeSetting;
         return (
@@ -126,7 +135,7 @@ function withProps(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      {props.choiceCardsVariant !== 'control' ? renderAmountChoiceCards() : renderControl()}
+      {props.choiceCardsVariant === 'rectangles' ? renderContribTypeChoiceCards() : renderControl()}
     </fieldset>
   );
 }

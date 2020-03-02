@@ -26,6 +26,7 @@ import { selectAmount, updateOtherAmount } from '../contributionsLandingActions'
 import ContributionTextInput from './ContributionTextInput';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import type { ChoiceCardsProductSetTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { css } from '@emotion/core';
 
 // ----- Types ----- //
 
@@ -171,6 +172,11 @@ function withProps(props: PropTypes) {
     <>
       <ChoiceCardGroup
         name="amounts"
+        cssOverrides={css`
+          > :last-child {
+            margin-right: 0 !important;
+          }
+        `}
       >
         {validAmounts.map((amount: Amount) => (
           <ChoiceCard
@@ -222,7 +228,7 @@ function withProps(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
 
-      {props.choiceCardsVariant !== 'control' ? renderContribAmountChoiceCards() : renderControl()}
+      {props.choiceCardsVariant === 'rectangles' ? renderContribAmountChoiceCards() : renderControl()}
 
       {showOther ? (
         <ContributionTextInput
