@@ -427,7 +427,8 @@ export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) =>
 // ----- Functions ----- /
 function sateFromMap(l: string, states: {[p: string]: string}): ?StateProvince {
   const s = l.toUpperCase();
-  return states[s] ? s : Object.keys(states).find(key => s.startsWith(key) || states[key] === s);
+  return states[s] ? s :
+    Object.keys(states).find(key => states[key].toUpperCase() === s || (s.length === 3 && s.startsWith(key)));
 }
 
 function usStateFromString(s: string): Option<UsState> {
