@@ -18,11 +18,9 @@ import { type Option } from 'helpers/types/option';
 
 import '../directDebitForm.scss';
 
+type EventHandler = (e: SyntheticInputEvent<HTMLInputElement>) => void;
 
-const InputWithError = compose(withError, withLabel)(Input);
-const CheckBoxWithError = withError(CheckboxInput);
-
-function Form(props: {
+type PropTypes = {
   accountHolderName: string,
   sortCodeString: string,
   accountNumber: string,
@@ -38,13 +36,18 @@ function Form(props: {
   submissionErrorHeading: string,
   allErrors: Array<Object>,
   formError: Option<string>,
-  updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
-  updateSortCodeString: (event: SyntheticInputEvent<HTMLInputElement>) => void,
-  updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
-  updateAccountHolderConfirmation: (accountHolderConfirmation: SyntheticInputEvent<HTMLInputElement>) => void,
+  updateAccountHolderName: EventHandler,
+  updateSortCodeString: EventHandler,
+  updateAccountNumber: EventHandler,
+  updateAccountHolderConfirmation: EventHandler,
   onChange: (field: string, dispatchUpdate: Function, event: SyntheticInputEvent<HTMLInputElement>) => void,
-  onSubmit: (event: SyntheticInputEvent<HTMLInputElement>) => void,
-}) {
+  onSubmit: EventHandler,
+}
+
+const InputWithError = compose(withError, withLabel)(Input);
+const CheckBoxWithError = withError(CheckboxInput);
+
+function Form(props: PropTypes) {
   return (
     <div className="component-direct-debit-form">
       <div className="component-direct-debit-form__account-holder-name">
@@ -65,6 +68,9 @@ function Form(props: {
           id="sort-code-input"
           label="Sort code"
           autoComplete="off"
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
           value={props.sortCodeString}
           onChange={e => props.onChange('sortCodeString', props.updateSortCodeString, e)}
           error={props.sortCodeError}
@@ -80,8 +86,11 @@ function Form(props: {
           value={props.accountNumber}
           autoComplete="off"
           onChange={e => props.onChange('accountNumber', props.updateAccountNumber, e)}
-          minLength="6"
-          maxLength="10"
+          minLength={6}
+          maxLength={8}
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
           className="component-direct-debit-form__text-field focus-target"
           label="Account number"
           error={props.accountNumberError}

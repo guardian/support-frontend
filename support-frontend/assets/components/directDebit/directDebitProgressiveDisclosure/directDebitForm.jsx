@@ -139,7 +139,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
         error: '',
         message: 'Please enter a valid account number',
         // Regex matches a string with between 6 and 10 digits
-        rule: accountNumber => accountNumber.match(/^\d{6,10}$/),
+        rule: accountNumber => accountNumber.match(/^\d{6,8}$/),
       },
       accountHolderConfirmation: {
         error: '',
@@ -248,10 +248,9 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
   render() {
     const { props, state } = this;
     const accountErrors = this.getAccountErrors(state);
-    const { accountErrorsLength } = state;
+    const accountErrorsLength = this.getAccountErrorsLength(accountErrors);
     const showGeneralError = props.allErrors.length === 0 && accountErrorsLength === 0 &&
-    ((props.submissionError !== null && props.submissionError !== null) ||
-    (props.formError !== null && props.formError.length > 0));
+    (props.submissionError !== null || (props.formError !== null && props.formError.length > 0));
 
     return (
       <span>
