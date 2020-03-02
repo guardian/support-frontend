@@ -1787,20 +1787,20 @@
   resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.7.tgz#680656b92632006d736d0378ae19f8c6943769c8"
   integrity sha512-WSa3gnRYxciFas3QYhtTk8unvj5N9K5IB61LL1CP3bVCJ2euXR13xRRHafI/Vy1dnrDwPa80SaE+apTcwipvpA==
 
-"@guardian/src-choice-card@0.13.0-alpha.8":
-  version "0.13.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/@guardian/src-choice-card/-/src-choice-card-0.13.0-alpha.8.tgz#1ffdeca4777d3933414338e125d8757565cbe150"
-  integrity sha512-4VG2Kz4EanSQ74RSaXirII0gRhP5c9I7Su3l9rQkcIlIdofanSdvVmYcaomajJr032pX5eAOFukrFv5jZvKvjQ==
+"@guardian/src-choice-card@^0.14.0-alpha.2":
+  version "0.14.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@guardian/src-choice-card/-/src-choice-card-0.14.0-alpha.2.tgz#bcfdd8ee4d250279e0f1943b4667bf3e6578fd7d"
+  integrity sha512-PphICsTLKVCFE3WhEoa1/Ngadms6RPI44UwA1DDzjvfaM21cOB5EIdVj7Dx2K5oomShQzDlL98I1J24F3ixLUA==
 
-"@guardian/src-foundations@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.13.0.tgz#8bfed9b94e2e4f24ecacb754bbe573b6e0cfe088"
-  integrity sha512-8lTZSo49W1lPhBFaaLrg2Eo2jrwUB3VGw6a7ZRI7oBEyTglmlbjFDiciu2Di6WSrzuSWiI+9OJTSSjCP6lTT2A==
+"@guardian/src-foundations@^0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.14.1.tgz#33cf2e95eedf184fdfc40cc75c1dbca4d6d46fdf"
+  integrity sha512-FiH2nsPvHS6wG7b0AePXTGbDCIV+q0aRHZKhsH2X2WeS9K3fZqEF9y+8lTv22nW3r3sv6nSyh4tT7y5+XPC9pA==
 
-"@guardian/src-svgs@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.13.0.tgz#97d893a6e33feb255666fef6779ffe18a7c4e2f5"
-  integrity sha512-cDIGNOaatYVDk+eWCv2cAdBlXZ2ECDxOcc897GowJYCHmy+HifL0AvzHlHRLKYRQXzVcaPfoXDOjVonA4ViHqw==
+"@guardian/src-svgs@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.14.0.tgz#3a5a6d385f2639aca884b5302f3d3ae6e919e290"
+  integrity sha512-ZGwVwVlX3YwG62xO1YjxaHyGFJC8Us80GPeyY8CMv5lfshYd0gGDNJN6vjUI3ssULjcP8ckGOTFcTFs3hOUrMw==
 
 "@icons/material@^0.2.4":
   version "0.2.4"
