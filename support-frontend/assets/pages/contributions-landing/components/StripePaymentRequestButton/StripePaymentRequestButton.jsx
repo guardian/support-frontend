@@ -243,31 +243,29 @@ function onPayment(
   // the backend job finishes.
   paymentRequestComplete('success');
 
-  // We need to do this so that we can offer marketing permissions on the thank you page
+  // We always need an email address to do ecommerce on support.theguardian.com
   updatePayerEmail(paymentRequestData, props.updateEmail);
 
-  const validatedCountryFromCard: Option<IsoCountry> = findIsoCountry(billingCountryFromCard);
+  // Single doesn't need a name, but recurring (i.e. Zuora and Salesforce) needs a non-empty first and last name.
+  const nameValueOk: boolean = props.contributionType === 'ONE_OFF' ||
+    updatePayerName(paymentRequestData, props.updateFirstName, props.updateLastName);
 
-  // If recurring, Zuora and Salesforce need a valid state or province code for US and Canada billing countries.
-  let countryAndStateUpdateOk =
-    props.contributionType !== 'ONE_OFF' ? !['US', 'CA'].includes(validatedCountryFromCard) : true;
+  // Single doesn't need a state, however recurring (i.e. Zuora) needs a valid state for US and CA billing countries.
+  const validatedCountryFromCard: Option<IsoCountry> = findIsoCountry(billingCountryFromCard);
+  let countryAndStateValueOk = props.contributionType === 'ONE_OFF' || !['US', 'CA'].includes(validatedCountryFromCard);
   if (validatedCountryFromCard) {
     props.updateBillingCountry(validatedCountryFromCard);
     const validatedBillingStateOrProvinceFromCard: Option<StateProvince> =
       stateProvinceFromString(validatedCountryFromCard, billingStateOrProvinceFromCard);
     if (validatedBillingStateOrProvinceFromCard) {
       props.updateStateOrProvince(validatedBillingStateOrProvinceFromCard);
-      countryAndStateUpdateOk = true;
+      countryAndStateValueOk = true;
     } else if (!props.stateOrProvince) {
       logException('Missing address_state in payment request token and no state/province selected in the form');
     }
   }
 
-  // If recurring, Salesforce needs a valid last name.
-  const nameUpdateOk: boolean = props.contributionType !== 'ONE_OFF' ?
-    updatePayerName(paymentRequestData, props.updateFirstName, props.updateLastName) : true;
-
-  if (nameUpdateOk && countryAndStateUpdateOk) {
+  if (nameValueOk && countryAndStateValueOk) {
     if (paymentRequestData.methodName) {
       // https://stripe.com/docs/stripe-js/reference#payment-response-object
       // methodName:

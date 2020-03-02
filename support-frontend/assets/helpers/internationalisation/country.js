@@ -425,22 +425,22 @@ export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) =>
   stripePaymentRequestAllowedCountries.includes(country);
 
 // ----- Functions ----- /
-function sateFromMap(l: string, states: {[p: string]: string}): ?StateProvince {
+function stateProvinceFromMap(l: string, states: {[p: string]: string}): ?StateProvince {
   const s = l.toUpperCase();
   return states[s] ? s :
     Object.keys(states).find(key => states[key].toUpperCase() === s || (s.length === 3 && s.startsWith(key)));
 }
 
 function usStateFromString(s: string): Option<UsState> {
-  return sateFromMap(s, usStates) || null;
+  return stateProvinceFromMap(s, usStates) || null;
 }
 
 function caStateFromString(s: string): Option<CaState> {
-  return sateFromMap(s, caStates) || null;
+  return stateProvinceFromMap(s, caStates) || null;
 }
 
 function auStateFromString(s: string): Option<AuState> {
-  return sateFromMap(s, auStates) || null;
+  return stateProvinceFromMap(s, auStates) || null;
 }
 
 function stateProvinceFromString(country: Option<IsoCountry>, s?: string): Option<StateProvince> {
