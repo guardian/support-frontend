@@ -12,6 +12,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.{ProductPromotionCopy, PromotionServiceProvider}
 import config.StringsConfig

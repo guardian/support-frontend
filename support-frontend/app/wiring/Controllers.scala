@@ -43,14 +43,12 @@ trait Controllers {
     actionRefiners,
     identityService,
     priceSummaryServiceProvider,
-    promotionServiceProvider,
     assetsResolver,
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
-    fontLoader,
-    appConfig.stage
+    fontLoader
   )
 
   lazy val digitalPackController = new DigitalSubscription(
