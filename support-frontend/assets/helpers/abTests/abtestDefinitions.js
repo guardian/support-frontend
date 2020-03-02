@@ -9,7 +9,6 @@ export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 
 export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
-const digitalLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/subscribe/digital(/.*)?$';
 
 export const tests: Tests = {
 
@@ -79,6 +78,7 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
+<<<<<<< HEAD
   SubsBannerNewYearCopyTest: {
     type: 'OTHER',
     variants: [
@@ -103,6 +103,9 @@ export const tests: Tests = {
   },
 
   choiceCardsProductSetTestR2: {
+=======
+  choiceCardsProductSetTest: {
+>>>>>>> feat: removed subs banner test
     type: 'OTHER',
     variants: [
       {
