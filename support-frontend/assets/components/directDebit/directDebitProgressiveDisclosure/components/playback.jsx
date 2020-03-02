@@ -5,6 +5,7 @@
 import React from 'react';
 
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
+import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 
 
 function Playback(props: {
@@ -14,6 +15,8 @@ function Playback(props: {
   accountNumber: string,
   sortCodeString: string,
   buttonText: string,
+  allErrors: Array<Object>,
+  formValidated: boolean,
 }) {
   return (
     <div className="component-direct-debit-form">
@@ -60,12 +63,16 @@ function Playback(props: {
         <button
           id="qa-submit-button-2"
           className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
-          onClick={() => props.submitForm()}
+          onClick={props.formValidated && (e => props.submitForm(e))}
         >
           <span className="component-direct-debit-form__cta-text">{props.buttonText}</span>
           <div className="component-direct-debit-form__arrow"><SvgArrowRightStraight /></div>
         </button>
       </div>
+
+      {props.allErrors.length > 0 && (
+        <ErrorSummary errors={[...props.allErrors]} />
+      )}
 
     </div>
   );

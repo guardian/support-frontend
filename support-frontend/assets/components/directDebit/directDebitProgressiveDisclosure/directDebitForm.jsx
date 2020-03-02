@@ -59,6 +59,7 @@ type StateTypes = {
   accountHolderConfirmation: Object,
   accountErrorsLength: number,
   allErrorsLength: number,
+  formValidated: boolean,
 }
 
 
@@ -148,6 +149,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
       },
       accountErrorsLength: 0,
       allErrorsLength: 0,
+      formValidated: false,
     };
   }
 
@@ -157,6 +159,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
       /* eslint-disable react/no-did-update-set-state */
       this.setState({
         allErrorsLength: this.props.allErrors.length,
+        formValidated: true,
       });
     }
   }
@@ -166,12 +169,6 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
       return { allErrorsLength: nextProps.allErrors.length };
     }
     return null;
-  }
-
-  onSubmit = (event) => {
-    event.preventDefault();
-    this.props.validateForm();
-    this.handleErrorsAndCheckAccount();
   }
 
   onChange = (field, dispatchUpdate, event) => {
@@ -198,6 +195,11 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
       }
     });
     return accum;
+  }
+
+  checkAccount = (event) => {
+    event.preventDefault();
+    this.handleErrorsAndCheckAccount();
   }
 
   handleErrorsAndCheckAccount = () => {
@@ -230,7 +232,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           }),
           // And then all the error count is checked before an action is dispatched to check the account
           () => {
-            if (this.state.allErrorsLength === 0 && this.state.accountErrorsLength === 0) {
+            if (this.state.accountErrorsLength === 0) {
               props.payDirectDebitClicked();
             }
           },
@@ -239,10 +241,13 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     });
   }
 
-  submitForm = () => {
-    const { props } = this;
-    props.confirmDirectDebitClicked(props.onPaymentAuthorisation);
-    props.submitForm();
+  submitForm = (event) => {
+    event.preventDefault();
+    const { props, state } = this;
+    if (state.allErrorsLength === 0) {
+      props.confirmDirectDebitClicked(props.onPaymentAuthorisation);
+      props.submitForm();
+    }
   }
 
   render() {
@@ -265,7 +270,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
             sortCodeError={state.sortCodeString.error}
             accountHolderConfirmationError={state.accountHolderConfirmation.error}
             onChange={this.onChange}
-            onSubmit={this.onSubmit}
+            onSubmit={this.checkAccount}
           />
         )}
         {props.phase === 'confirmation' && (
@@ -276,6 +281,8 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
             accountNumber={props.accountNumber}
             sortCodeString={props.sortCodeString}
             buttonText={props.buttonText}
+            allErrors={props.allErrors}
+            formValidated={state.formValidated}
           />
         )}
       </span>
