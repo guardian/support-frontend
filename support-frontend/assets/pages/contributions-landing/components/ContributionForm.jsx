@@ -231,7 +231,7 @@ function withProps(props: PropTypes) {
         elementID="form-recaptcha"
         callback={(token: string) => console.log(token)}
         publicKey="6Le36d0UAAAAAJRqGjj8ADbrgr3diK1zUlu-7Qdm"
-        action="form-loaded"
+        action="contributionsFormLoaded"
       />
       <h2 className="hidden-heading">Make a contribution</h2>
       <div className="contributions-form-selectors">

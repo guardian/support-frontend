@@ -33,7 +33,7 @@ class Recaptcha extends Component<PropTypes, StateTypes> {
 
   constructor(props: PropTypes) {
     super(props);
-    
+
     this.state = {
       loaded: isCaptchaLoaded(),
     };

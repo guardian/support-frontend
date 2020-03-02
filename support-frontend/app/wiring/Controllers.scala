@@ -6,6 +6,7 @@ import com.gu.aws.AwsCloudWatchMetricPut.{client, setupWarningRequest}
 import controllers.{CSSElementForStage, _}
 import lib.ErrorController
 import play.api.BuiltInComponentsFromContext
+import services.CaptchaService
 
 trait Controllers {
 
@@ -51,6 +52,12 @@ trait Controllers {
     appConfig.supportUrl,
     fontLoader,
     appConfig.stage
+  )
+
+  lazy val recaptchaController = new RecaptchaController(
+    components = controllerComponents,
+    actionRefiners = actionRefiners,
+    captchaService = captchaService
   )
 
   lazy val digitalPackController = new DigitalSubscription(

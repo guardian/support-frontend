@@ -66,6 +66,9 @@ GET  /support-workers/status                                       controllers.S
 # the need for a client token
 POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing
 
+# ----- Recaptcha ----- #
+POST  /recaptcha                                                   controllers.RecaptchaController.verify
+
 # ------ Identity ------ #
 PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest
 GET /identity/get-user-type                                        controllers.IdentityController.getUserType(maybeEmail: Option[String])
