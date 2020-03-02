@@ -22,7 +22,7 @@ import type {
   ContributionTypeSetting,
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
-import type { ChoiceCardsProductSetTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { ChoiceCardsProductSetTestR2Variants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -33,7 +33,7 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
-  choiceCardsVariant: ChoiceCardsProductSetTestVariants,
+  choiceCardsVariant: ChoiceCardsProductSetTestR2Variants,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -42,7 +42,7 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTest,
+  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR2,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

@@ -4,7 +4,7 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
-export type ChoiceCardsProductSetTestVariants = 'control' | 'rectangles';
+export type ChoiceCardsProductSetTestR2Variants = 'control' | 'rectangles';
 export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
 export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
 
@@ -102,7 +102,7 @@ export const tests: Tests = {
     optimizeId: '21HyzxNZSmikdtgJQNnXUw',
   },
 
-  choiceCardsProductSetTest: {
+  choiceCardsProductSetTestR2: {
     type: 'OTHER',
     variants: [
       {

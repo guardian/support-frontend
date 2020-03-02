@@ -25,7 +25,7 @@ import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
-import type { ChoiceCardsProductSetTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { ChoiceCardsProductSetTestR2Variants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -42,7 +42,7 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  choiceCardsVariant: ChoiceCardsProductSetTestVariants,
+  choiceCardsVariant: ChoiceCardsProductSetTestR2Variants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -57,7 +57,7 @@ const mapStateToProps = state => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTest,
+  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR2,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
