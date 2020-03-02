@@ -167,36 +167,10 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
-  // We are running a test with circular choice cards - this custom CSS is required
-  // to override the default rectangular shape in the design system component.
-  // If the test results indicate that we are to keep the circular variant,
-  // we will request for them to be incorporated into the design system.
-  const renderContribTypeChoiceCards = (shape: string) => {
-    const sharedCss = {
-      display: 'flex',
-      justifyContent: 'flex-start',
-      border: 0,
-    };
-    const circleCss = {
-      label: {
-        borderRadius: '50%',
-        minWidth: '60px',
-        maxWidth: '60px',
-        minHeight: '60px',
-        maxHeight: '60px',
-        padding: '0',
-      },
-    };
-    const cssObj: Object = shape === 'circles' ? {
-      ...sharedCss,
-      ...circleCss,
-    } : sharedCss;
-
-    return (
+  const renderContribAmountChoiceCards = () => (
     <>
       <ChoiceCardGroup
         name="amounts"
-        css={cssObj}
       >
         {validAmounts.map((amount: Amount) => (
           <ChoiceCard
@@ -220,8 +194,7 @@ function withProps(props: PropTypes) {
         />
       </ChoiceCardGroup>
   </>
-    );
-  };
+  );
 
   const renderControl = () => (
     <ul className="form__radio-group-list">
@@ -249,7 +222,7 @@ function withProps(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
 
-      {props.choiceCardsVariant !== 'control' ? renderContribTypeChoiceCards(props.choiceCardsVariant) : renderControl()}
+      {props.choiceCardsVariant !== 'control' ? renderContribAmountChoiceCards() : renderControl()}
 
       {showOther ? (
         <ContributionTextInput

@@ -4,7 +4,7 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
-export type ChoiceCardsProductSetTestVariants = 'control' | 'circles' | 'rectangles';
+export type ChoiceCardsProductSetTestVariants = 'control' | 'rectangles';
 export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
 export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
 
