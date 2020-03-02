@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { detect, findIsoCountry } from '../country';
+import { detect, findIsoCountry, stateProvinceFromString } from '../country';
 import { AUDCountries, EURCountries, GBPCountries, UnitedStates } from '../countryGroup';
 
 const { jsdom } = global;
@@ -310,3 +310,33 @@ describe('find iso country', () => {
     expect(findIsoCountry('Simple And Coherent Land')).toBe(null);
   });
 });
+
+describe('find a state for a given country using stateProvinceFromString', () => {
+  it('should return null if no country or state', () => {
+    expect(stateProvinceFromString(null, null)).toBe(null);
+    expect(stateProvinceFromString('US', null)).toBe(null);
+    expect(stateProvinceFromString('US', '')).toBe(null);
+    expect(stateProvinceFromString(null, 'NY')).toBe(null);
+    expect(stateProvinceFromString('', 'NY')).toBe(null);
+  });
+
+  it('should return the StateCode that\'s within a given country\'s set', () => {
+    expect(stateProvinceFromString('US', 'AL')).toBe('AL'); // Alabama
+    expect(stateProvinceFromString('CA', 'AL')).toBe(null); // No state called 'AL' in Canada
+    expect(stateProvinceFromString('AU', 'AL')).toBe(null); // No state called 'AL' in Australia
+
+    expect(stateProvinceFromString('US', 'AB')).toBe(null); // No state called 'AB' in USA
+    expect(stateProvinceFromString('CA', 'AB')).toBe('AB'); // Alberta
+    expect(stateProvinceFromString('AU', 'AB')).toBe(null); // No state called 'AB' in Australia
+
+    expect(stateProvinceFromString('US', 'NT')).toBe(null); // No state called 'NT' in USA
+    expect(stateProvinceFromString('CA', 'NT')).toBe('NT'); // Northwest Territories
+    expect(stateProvinceFromString('AU', 'NT')).toBe('NT'); // Northern Territory
+
+    expect(stateProvinceFromString('CA', 'ON')).toBe('ON'); // Ontario
+    expect(stateProvinceFromString('CA', 'Ontario')).toBe('ON'); // Ontario
+    expect(stateProvinceFromString('CA', 'YT')).toBe('YT'); // Yukon does not start with 2 letter code
+    expect(stateProvinceFromString('CA', 'Yukon')).toBe('YT');
+  });
+});
+
