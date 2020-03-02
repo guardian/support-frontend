@@ -61,7 +61,7 @@ import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
 import type { StripePaymentRequestButtonScaTestVariants } from 'helpers/abTests/abtestDefinitions';
-import { findIsoCountry, stateProvinceFromString, requiresStateValue } from 'helpers/internationalisation/country';
+import { findIsoCountry, stateProvinceFromString } from 'helpers/internationalisation/country';
 import type { Option } from 'helpers/types/option';
 
 // ----- Types -----//
@@ -173,22 +173,6 @@ function updatePayerName(data: Object, setFirstName: string => void, setLastName
 
 }
 
-// Attempt to get state/province from the token, otherwise fall back on the value in the form
-function updatePayerStateOrProvince(
-  stateOrProvinceFromCard?: string,
-  stateOrProvinceFromForm: UsState | CaState | null,
-  setStateOrProvince: (UsState | CaState | null) => void,
-): boolean {
-  if (stateOrProvinceFromCard) {
-    setStateOrProvince(stateOrProvinceFromCard);
-    return true;
-  } else if (stateOrProvinceFromForm) {
-    return true;
-  }
-  logException('Missing address_state in payment request token and no state/province selected in the form');
-  return false;
-}
-
 const onComplete = (res: PaymentResult) => {
   if (res.paymentStatus === 'success') {
     trackComponentClick('apple-pay-payment-complete');
@@ -249,7 +233,7 @@ function onPayment(
   paymentRequestComplete: (string) => void,
   paymentRequestData: Object,
   billingCountryFromCard?: string,
-  stateOrProvinceFromCard?: string,
+  billingStateOrProvinceFromCard?: string,
   processPayment: () => void,
 ): void {
   // Always dismiss the payment popup immediately - any pending/success/failure will be displayed on our own page.
@@ -262,23 +246,28 @@ function onPayment(
   // We need to do this so that we can offer marketing permissions on the thank you page
   updatePayerEmail(paymentRequestData, props.updateEmail);
 
-  const isoCountry: ?IsoCountry = findIsoCountry(billingCountryFromCard);
+  const validatedCountryFromCard: Option<IsoCountry> = findIsoCountry(billingCountryFromCard);
 
-  // If US, Canada or Australia, then we need the state value, else we don't
-  let stateOrProvinceSituationOK = requiresStateValue(props.contributionType, isoCountry);
-  if (isoCountry) {
-    props.updateBillingCountry(isoCountry);
-    const stateOrProvince: Option<StateProvince> = stateProvinceFromString(isoCountry, stateOrProvinceFromCard);
-    if (stateOrProvince) {
-      stateOrProvinceSituationOK =
-        updatePayerStateOrProvince(stateOrProvince, props.stateOrProvince, props.updateStateOrProvince);
+  // If recurring, Zuora and Salesforce need a valid state or province code for US and Canada billing countries.
+  let countryAndStateUpdateOk =
+    props.contributionType !== 'ONE_OFF' ? !['US', 'CA'].includes(validatedCountryFromCard) : true;
+  if (validatedCountryFromCard) {
+    props.updateBillingCountry(validatedCountryFromCard);
+    const validatedBillingStateOrProvinceFromCard: Option<StateProvince> =
+      stateProvinceFromString(validatedCountryFromCard, billingStateOrProvinceFromCard);
+    if (validatedBillingStateOrProvinceFromCard) {
+      props.updateStateOrProvince(validatedBillingStateOrProvinceFromCard);
+      countryAndStateUpdateOk = true;
+    } else if (!props.stateOrProvince) {
+      logException('Missing address_state in payment request token and no state/province selected in the form');
     }
   }
 
+  // If recurring, Salesforce needs a valid last name.
   const nameUpdateOk: boolean = props.contributionType !== 'ONE_OFF' ?
     updatePayerName(paymentRequestData, props.updateFirstName, props.updateLastName) : true;
 
-  if (nameUpdateOk && stateOrProvinceSituationOK) {
+  if (nameUpdateOk && countryAndStateUpdateOk) {
     if (paymentRequestData.methodName) {
       // https://stripe.com/docs/stripe-js/reference#payment-response-object
       // methodName:

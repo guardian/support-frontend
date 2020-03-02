@@ -17,7 +17,6 @@ import {
   UnitedStates,
 } from './countryGroup';
 import type { CountryGroupId } from './countryGroup';
-import type { ContributionType } from '../contributions';
 
 // ----- Setup ----- //
 
@@ -115,12 +114,16 @@ const auStates: {
   JBT: 'Jervis Bay Territory',
 };
 
-const newspaperCountries = {
+const newspaperCountries: {
+  [string]: string,
+} = {
   GB: 'United Kingdom',
   IM: 'Isle of Man',
 };
 
-const countries = {
+const countries: {
+  [string]: string,
+} = {
   GB: 'United Kingdom',
   US: 'United States',
   AU: 'Australia',
@@ -421,26 +424,26 @@ const stripePaymentRequestAllowedCountries = [
 export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) =>
   stripePaymentRequestAllowedCountries.includes(country);
 
-const stateNeededForCountryForRecurring = ['US', 'CA', 'AU'];
-
-export const requiresStateValue = (contributionType: ContributionType, country: IsoCountry) =>
-  contributionType !== 'ONE_OFF' && stateNeededForCountryForRecurring.includes(country);
-
 // ----- Functions ----- /
+function sateFromMap(l: string, states: {[p: string]: string}): ?StateProvince {
+  const s = l.toUpperCase();
+  return states[s] ? s : Object.keys(states).find(key => s.startsWith(key) || states[key] === s);
+}
 
 function usStateFromString(s: string): Option<UsState> {
-  return usStates[s] ? s : null;
+  return sateFromMap(s, usStates) || null;
 }
 
 function caStateFromString(s: string): Option<CaState> {
-  return caStates[s] ? s : null;
+  return sateFromMap(s, caStates) || null;
 }
 
 function auStateFromString(s: string): Option<AuState> {
-  return auStates[s] ? s : null;
+  return sateFromMap(s, auStates) || null;
 }
 
-function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option<StateProvince> {
+function stateProvinceFromString(country: Option<IsoCountry>, s?: string): Option<StateProvince> {
+  if (!s) { return null; }
   switch (country) {
     case 'US':
       return usStateFromString(s);
@@ -467,8 +470,9 @@ function fromString(s: string): ?IsoCountry {
   return null;
 }
 
-function findIsoCountry(country: string): ?IsoCountry {
-  return fromString(country) || Object.entries(countries).find(key => countries[key] === country);
+function findIsoCountry(country?: string): Option<IsoCountry> {
+  if (!country) { return null; }
+  return fromString(country) || Object.keys(countries).find(key => countries[key] === country) || null;
 }
 
 function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
