@@ -221,10 +221,10 @@ function selectInitialContributionTypeAndPaymentMethod(
 
 // Load RecaptchaV3
 const loadRecaptchaV3 = (publicKey) => {
-  const recaptchaScript = document.createElement('script')
-  recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${publicKey}`
-  document.body.appendChild(recaptchaScript)
-}
+  const recaptchaScript = document.createElement('script');
+  recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${publicKey}`;
+  document.body.appendChild(recaptchaScript);
+};
 
 const init = (store: Store<State, Action, Function>) => {
   const { dispatch } = store;

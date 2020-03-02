@@ -51,6 +51,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import { logException } from 'helpers/logger';
+import Recaptcha from 'pages/contributions-landing/components/RecaptchaV3/Recaptcha';
 
 
 // ----- Types ----- //
@@ -226,6 +227,12 @@ function withProps(props: PropTypes) {
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
+      <Recaptcha
+        elementID="form-recaptcha"
+        callback={(token: string) => console.log(token)}
+        publicKey="6Le36d0UAAAAAJRqGjj8ADbrgr3diK1zUlu-7Qdm"
+        action="form-loaded"
+      />
       <h2 className="hidden-heading">Make a contribution</h2>
       <div className="contributions-form-selectors">
         <ContributionTypeTabs />
