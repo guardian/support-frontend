@@ -50,6 +50,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   phase: Phase,
   formError: ErrorReason | null,
+  formValidated: boolean,
 |};
 
 type StateTypes = {
@@ -74,6 +75,7 @@ function mapStateToProps(state) {
     formError: state.page.directDebit.formError,
     countryGroupId: state.common.internationalisation.countryGroupId,
     phase: state.page.directDebit.phase,
+    formValidated: state.page.directDebit.formValidated,
   };
 }
 
@@ -159,7 +161,13 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
       /* eslint-disable react/no-did-update-set-state */
       this.setState({
         allErrorsLength: this.props.allErrors.length,
-        formValidated: true,
+      });
+    }
+    if (this.props.formValidated !== prevProps.formValidated) {
+      // Disabling this as react docs say it is okay to set state here with conditions
+      /* eslint-disable react/no-did-update-set-state */
+      this.setState({
+        formValidated: this.props.formValidated,
       });
     }
   }
@@ -244,10 +252,17 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
   submitForm = (event) => {
     event.preventDefault();
     const { props, state } = this;
-    if (state.allErrorsLength === 0) {
-      props.confirmDirectDebitClicked(props.onPaymentAuthorisation);
-      props.submitForm();
-    }
+    this.setState(
+      {
+        formValidated: true,
+      },
+      () => {
+        if (state.allErrorsLength === 0) {
+          props.confirmDirectDebitClicked(props.onPaymentAuthorisation);
+          props.submitForm();
+        }
+      },
+    );
   }
 
   render() {
@@ -282,7 +297,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
             sortCodeString={props.sortCodeString}
             buttonText={props.buttonText}
             allErrors={props.allErrors}
-            formValidated={state.formValidated}
+            showFormErrors={state.formValidated}
           />
         )}
       </span>

@@ -67,7 +67,6 @@ const resetDirectDebitFormError = (): Action =>
 const setDirectDebitFormPhase = (phase: Phase): Action =>
   ({ type: 'DIRECT_DEBIT_SET_FORM_PHASE', phase });
 
-
 function payDirectDebitClicked(): Function {
   return (dispatch: Function, getState: Function) => {
 

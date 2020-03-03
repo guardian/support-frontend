@@ -15,7 +15,7 @@ export type DirectDebitState = {
   accountHolderName: string,
   accountHolderConfirmation: boolean,
   formError: string,
-  phase: Phase
+  phase: Phase,
 };
 
 

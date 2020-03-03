@@ -34,7 +34,6 @@ type PropTypes = {
   accountErrors: Array<Object>,
   submissionError: ErrorReason | null,
   submissionErrorHeading: string,
-  allErrors: Array<Object>,
   formError: Option<string>,
   updateAccountHolderName: EventHandler,
   updateSortCodeString: EventHandler,
@@ -114,13 +113,8 @@ function Form(props: PropTypes) {
       >
         Submit
       </Button>
-      {(props.allErrors.length > 0 || props.accountErrorsLength > 0) && (
-        <ErrorSummary
-          errors={[
-            ...props.allErrors,
-            ...props.accountErrors,
-          ]}
-        />
+      {props.accountErrorsLength > 0 && (
+        <ErrorSummary errors={[...props.accountErrors]} />
       )}
       {props.showGeneralError && (
         <GeneralErrorMessage
