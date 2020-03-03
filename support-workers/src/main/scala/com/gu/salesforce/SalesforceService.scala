@@ -99,7 +99,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
         OtherState = user.billingAddress.state,
         OtherPostalCode = user.billingAddress.postCode,
         OtherCountry = user.billingAddress.country.name,
-        MailingStreet = getAddressLine(user.deliveryAddress.getOrElse(user.billingAddress)),
+        MailingStreet = user.deliveryAddress.flatMap(getAddressLine),
         MailingCity = user.deliveryAddress.flatMap(_.city),
         MailingState = user.deliveryAddress.flatMap(_.state),
         MailingPostalCode = user.deliveryAddress.flatMap(_.postCode),
