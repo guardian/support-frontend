@@ -89,25 +89,25 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
       )
     ).getOrElse(
       NewContact(
-        user.id,
-        user.primaryEmailAddress,
-        user.title,
-        user.firstName,
-        user.lastName,
-        getAddressLine(user.billingAddress),
-        user.billingAddress.city,
-        user.billingAddress.state,
-        user.billingAddress.postCode,
-        user.billingAddress.country.name,
-        getAddressLine(user.deliveryAddress.getOrElse(user.billingAddress)),
-        user.deliveryAddress.flatMap(_.city),
-        user.deliveryAddress.flatMap(_.state),
-        user.deliveryAddress.flatMap(_.postCode),
-        user.deliveryAddress.map(_.country.name),
-        user.telephoneNumber,
-        user.allowMembershipMail,
-        user.allowThirdPartyMail,
-        user.allowGURelatedMail
+        IdentityID__c = user.id,
+        Email = user.primaryEmailAddress,
+        Salutation = user.title,
+        FirstName = user.firstName,
+        LastName = user.lastName,
+        OtherStreet = getAddressLine(user.billingAddress),
+        OtherCity = user.billingAddress.city,
+        OtherState = user.billingAddress.state,
+        OtherPostalCode = user.billingAddress.postCode,
+        OtherCountry = user.billingAddress.country.name,
+        MailingStreet = getAddressLine(user.deliveryAddress.getOrElse(user.billingAddress)),
+        MailingCity = user.deliveryAddress.flatMap(_.city),
+        MailingState = user.deliveryAddress.flatMap(_.state),
+        MailingPostalCode = user.deliveryAddress.flatMap(_.postCode),
+        MailingCountry = user.deliveryAddress.map(_.country.name),
+        Phone = user.telephoneNumber,
+        Allow_Membership_Mail__c = user.allowMembershipMail,
+        Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
+        Allow_Guardian_Related_Mail__c = user.allowGURelatedMail
       )
     )
 
