@@ -237,8 +237,11 @@ function assignUserToVariant(
 
   if (referrerControlled && acquisitionDataTest != null) {
     const acquisitionVariant = acquisitionDataTest.variant;
+
     const index = test.variants.findIndex(variant => variant.id === acquisitionVariant);
-    if (!index) {
+    const variantFound = index > -1;
+
+    if (!variantFound) {
       console.error('Variant not found for A/B test in acquistion data');
     }
     return index;
