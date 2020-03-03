@@ -1,9 +1,9 @@
 package controllers
 
 import actions.CustomActionBuilders
-import com.gu.monitoring.SafeLogger
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import cats.implicits._
+import io.circe.Decoder
+import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import services.CaptchaService
@@ -15,10 +15,6 @@ object CaptchaRequest {
   implicit val decoder: Decoder[CaptchaRequest] = deriveDecoder
 }
 
-case class RecaptchaResponse(success: Boolean, score: BigDecimal)
-object RecaptchaResponse {
-  implicit val encoder: Encoder[RecaptchaResponse] = deriveEncoder
-}
 
 class RecaptchaController(
   components: ControllerComponents,
@@ -28,7 +24,12 @@ class RecaptchaController(
   import actionRefiners._
   def verify(): Action[CaptchaRequest] = PrivateAction.async(circe.json[CaptchaRequest]) { implicit request =>
     val token = request.body.token
-    captchaService.verify(token)
+    captchaService
+      .verify(token
+      ).map { res =>
+      Ok(res.score.toString)
+    } // ToDo we don't want to return the score to the front-end - just track it? 
+    Future(Ok)
   }
 }
 
