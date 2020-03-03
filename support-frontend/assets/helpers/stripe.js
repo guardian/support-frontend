@@ -16,3 +16,9 @@ export const setupStripe = (setStripeHasLoaded: () => void) => {
     }
   }
 };
+export const stripeCardFormIsIncomplete = (
+  paymentMethod: PaymentMethod,
+  stripeCardFormComplete: boolean,
+): boolean =>
+  paymentMethod === Stripe &&
+  !(stripeCardFormComplete);

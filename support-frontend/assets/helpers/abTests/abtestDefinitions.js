@@ -34,15 +34,14 @@ export const tests: Tests = {
     targetPage: usOnlyLandingPage,
     seed: 5,
   },
-
-  stripePaymentRequestButtonSca: {
+  postContributionReminderCopyTest: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'sca',
+        id: 'extendedCopy',
       },
     ],
     audiences: {
@@ -51,7 +50,29 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: window.guardian && !!window.guardian.recurringStripePaymentRequestButton,
+    isActive: true,
+    referrerControlled: false,
+    seed: 4,
+    targetPage: contributionsLandingPageMatch,
+  },
+
+  stripePaymentRequestButtonVsNoButton: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'button',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
     referrerControlled: false,
     seed: 2,
     targetPage: contributionsLandingPageMatch,
