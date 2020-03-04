@@ -78,34 +78,7 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-<<<<<<< HEAD
-  SubsBannerNewYearCopyTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'variant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 0,
-      },
-    },
-    isActive: true,
-    referrerControlled: true,
-    seed: 12,
-    targetPage: digitalLandingPageMatch,
-    optimizeId: '21HyzxNZSmikdtgJQNnXUw',
-  },
-
-  choiceCardsProductSetTestR2: {
-=======
   choiceCardsProductSetTest: {
->>>>>>> feat: removed subs banner test
     type: 'OTHER',
     variants: [
       {
