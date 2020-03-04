@@ -229,7 +229,22 @@ function withProps(props: PropTypes) {
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
       <Recaptcha
         elementID="form-recaptcha"
-        callback={(token: string) => console.log(token)}
+        callback={
+          (token: string) => {
+            console.log(token);
+            fetch('/recaptcha', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                token,
+              }),
+            }).then((response) => {
+              response.json();
+}).then(data => console.log(data));
+          }
+        }
         publicKey="6Le36d0UAAAAAJRqGjj8ADbrgr3diK1zUlu-7Qdm"
         action="contributionsFormLoaded"
       />

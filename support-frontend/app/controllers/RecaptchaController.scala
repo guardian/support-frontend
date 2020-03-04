@@ -7,40 +7,40 @@ import io.circe.generic.semiauto._
 import io.circe.{Decoder, Encoder}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
-import services.CaptchaService
+import services.RecaptchaService
 
 import scala.concurrent.ExecutionContext
 
-case class CaptchaRequest(token: String)
-object CaptchaRequest {
-  implicit val decoder: Decoder[CaptchaRequest] = deriveDecoder
+case class RecaptchaRequest(token: String)
+object RecaptchaRequest {
+  implicit val decoder: Decoder[RecaptchaRequest] = deriveDecoder
 }
 
-case class CaptchaResponse(allow: Boolean)
+case class RecaptchaResponse(allow: Boolean)
 
-object CaptchaResponse {
-  implicit val encoder: Encoder[CaptchaResponse] = deriveEncoder
+object RecaptchaResponse {
+  implicit val encoder: Encoder[RecaptchaResponse] = deriveEncoder
 }
 
 class RecaptchaController(
   components: ControllerComponents,
   actionRefiners: CustomActionBuilders,
-  captchaService: CaptchaService
+  recaptchaService: RecaptchaService
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
-  import CaptchaResponse.encoder
+  import RecaptchaResponse.encoder
   import io.circe.syntax._
   import actionRefiners._
 
-  def verify(): Action[CaptchaRequest] = PrivateAction.async(circe.json[CaptchaRequest]) { implicit request =>
+  def verify(): Action[RecaptchaRequest] = PrivateAction.async(circe.json[RecaptchaRequest]) { implicit request =>
     val token = request.body.token
-    captchaService
+    recaptchaService
       .verify(token)
       .fold(
         err => {
           logger.warn(s"Recaptcha response error: $err")
           InternalServerError},
-        res => Ok(CaptchaResponse(res.score > 0.1).asJson))
+        res => Ok(RecaptchaResponse(res.score > 0.1).asJson))
   }
 }
 

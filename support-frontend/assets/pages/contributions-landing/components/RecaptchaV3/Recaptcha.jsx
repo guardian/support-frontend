@@ -24,9 +24,7 @@ const defaultProps = {
   action: 'submit',
 };
 
-const isCaptchaLoaded = () => window && window.grecaptcha && typeof window.grecaptcha.execute !== 'undefined';
-
-let loadedCheck;
+const isRecaptchaLoaded = () => window && window.grecaptcha && typeof window.grecaptcha.execute !== 'undefined';
 
 class Recaptcha extends Component<PropTypes, StateTypes> {
   defaultProps = defaultProps;
@@ -35,12 +33,10 @@ class Recaptcha extends Component<PropTypes, StateTypes> {
     super(props);
 
     this.state = {
-      loaded: isCaptchaLoaded(),
+      loaded: isRecaptchaLoaded(),
     };
 
-    if (!this.state.loaded) {
-      loadedCheck = setInterval(this.updateLoadedState.bind(this), 1000);
-    }
+    this.loadedChecker = !this.state.loaded ? setInterval(this.updateLoadedState.bind(this), 1000) : null;
   }
 
   componentDidMount() {
@@ -58,8 +54,12 @@ class Recaptcha extends Component<PropTypes, StateTypes> {
   }
 
   componentWillUnmount() {
-    clearInterval(loadedCheck);
+    if (this.loadedChecker) {
+      clearInterval(this.loadedChecker);
+    }
   }
+  // Weird placement requested by eslint:
+  loadedChecker: IntervalID | null;
 
   execute = () => {
     const {
@@ -78,10 +78,12 @@ class Recaptcha extends Component<PropTypes, StateTypes> {
   }
 
   updateLoadedState = () => {
-    if (isCaptchaLoaded()) {
+    if (isRecaptchaLoaded()) {
       this.setState(() => ({ loaded: true }));
 
-      clearInterval(loadedCheck);
+      if (this.loadedChecker) {
+        clearInterval(this.loadedChecker);
+      }
     }
   }
 

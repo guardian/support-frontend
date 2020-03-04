@@ -67,6 +67,7 @@ GET  /support-workers/status                                       controllers.S
 POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing
 
 # ----- Recaptcha ----- #
++ nocsrf
 POST  /recaptcha                                                   controllers.RecaptchaController.verify
 
 # ------ Identity ------ #
