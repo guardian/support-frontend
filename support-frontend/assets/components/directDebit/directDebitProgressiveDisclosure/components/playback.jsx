@@ -10,13 +10,12 @@ import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSu
 
 function Playback(props: {
   editDirectDebitClicked: Function,
-  submitForm: Function,
+  onSubmit: Function,
   accountHolderName: string,
   accountNumber: string,
   sortCodeString: string,
   buttonText: string,
   allErrors: Array<Object>,
-  showFormErrors: boolean,
 }) {
   return (
     <div className="component-direct-debit-form">
@@ -63,14 +62,14 @@ function Playback(props: {
         <button
           id="qa-submit-button-2"
           className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
-          onClick={e => props.submitForm(e)}
+          onClick={e => props.onSubmit(e)}
         >
           <span className="component-direct-debit-form__cta-text">{props.buttonText}</span>
           <div className="component-direct-debit-form__arrow"><SvgArrowRightStraight /></div>
         </button>
       </div>
 
-      {props.showFormErrors && props.allErrors.length > 0 && (
+      {props.allErrors.length > 0 && (
         <ErrorSummary errors={[...props.allErrors]} />
       )}
 

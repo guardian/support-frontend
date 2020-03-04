@@ -50,7 +50,6 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   phase: Phase,
   formError: ErrorReason | null,
-  formValidated: boolean,
 |};
 
 type StateTypes = {
@@ -60,7 +59,7 @@ type StateTypes = {
   accountHolderConfirmation: Object,
   accountErrorsLength: number,
   allErrorsLength: number,
-  formValidated: boolean,
+  canSubmit: boolean,
 }
 
 
@@ -75,7 +74,6 @@ function mapStateToProps(state) {
     formError: state.page.directDebit.formError,
     countryGroupId: state.common.internationalisation.countryGroupId,
     phase: state.page.directDebit.phase,
-    formValidated: state.page.directDebit.formValidated,
   };
 }
 
@@ -151,32 +149,22 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
       },
       accountErrorsLength: 0,
       allErrorsLength: 0,
-      formValidated: false,
+      canSubmit: false,
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.allErrors.length !== prevProps.allErrors.length) {
-      // Disabling this as react docs say it is okay to set state here with conditions
-      /* eslint-disable react/no-did-update-set-state */
+  componentDidUpdate() {
+    const { props, state } = this;
+    // Disabling this as react docs say it is okay to set state here with conditions
+    /* eslint-disable react/no-did-update-set-state */
+    if (props.allErrors.length === 0 && state.canSubmit && state.allErrorsLength === 0) {
+      this.submitForm(props);
+    }
+    if (state.canSubmit === true) {
       this.setState({
-        allErrorsLength: this.props.allErrors.length,
+        canSubmit: false,
       });
     }
-    if (this.props.formValidated !== prevProps.formValidated) {
-      // Disabling this as react docs say it is okay to set state here with conditions
-      /* eslint-disable react/no-did-update-set-state */
-      this.setState({
-        formValidated: this.props.formValidated,
-      });
-    }
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.allErrors.length !== prevState.allErrorsLength) {
-      return { allErrorsLength: nextProps.allErrors.length };
-    }
-    return null;
   }
 
   onChange = (field, dispatchUpdate, event) => {
@@ -187,6 +175,14 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
       },
     });
     dispatchUpdate(event);
+  }
+
+  onSubmit = (event) => {
+    event.preventDefault();
+    this.props.validateForm();
+    this.setState({
+      canSubmit: true,
+    });
   }
 
   getAccountErrors = (state) => {
@@ -205,12 +201,8 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     return accum;
   }
 
-  checkAccount = (event) => {
+  handleErrorsAndCheckAccount = (event) => {
     event.preventDefault();
-    this.handleErrorsAndCheckAccount();
-  }
-
-  handleErrorsAndCheckAccount = () => {
     const { props } = this;
     let accountErrorsLength = 0;
     fieldNames.forEach((field) => {
@@ -249,20 +241,9 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     });
   }
 
-  submitForm = (event) => {
-    event.preventDefault();
-    const { props, state } = this;
-    this.setState(
-      {
-        formValidated: true,
-      },
-      () => {
-        if (state.allErrorsLength === 0) {
-          props.confirmDirectDebitClicked(props.onPaymentAuthorisation);
-          props.submitForm();
-        }
-      },
-    );
+  submitForm = (props) => {
+    props.confirmDirectDebitClicked(props.onPaymentAuthorisation);
+    props.submitForm();
   }
 
   render() {
@@ -285,19 +266,18 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
             sortCodeError={state.sortCodeString.error}
             accountHolderConfirmationError={state.accountHolderConfirmation.error}
             onChange={this.onChange}
-            onSubmit={this.checkAccount}
+            onSubmit={this.handleErrorsAndCheckAccount}
           />
         )}
         {props.phase === 'confirmation' && (
           <Playback
             editDirectDebitClicked={props.editDirectDebitClicked}
-            submitForm={this.submitForm}
+            onSubmit={this.onSubmit}
             accountHolderName={props.accountHolderName}
             accountNumber={props.accountNumber}
             sortCodeString={props.sortCodeString}
             buttonText={props.buttonText}
             allErrors={props.allErrors}
-            showFormErrors={state.formValidated}
           />
         )}
       </span>
