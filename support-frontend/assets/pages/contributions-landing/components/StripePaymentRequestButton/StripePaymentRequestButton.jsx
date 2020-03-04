@@ -49,7 +49,7 @@ import {
   updateFirstName,
   updateLastName,
   updatePaymentMethod,
-  updateStateOrProvince,
+  updateBillingState,
   updateBillingCountry,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -75,7 +75,7 @@ type PropTypes = {|
   otherAmounts: OtherAmounts,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
-  stateOrProvince: UsState | CaState | null,
+  billingState: UsState | CaState | null,
   isTestUser: boolean,
   amount: number,
   stripePaymentRequestButtonData: StripePaymentRequestButtonData,
@@ -87,7 +87,7 @@ type PropTypes = {|
   updateEmail: string => void,
   updateFirstName: string => void,
   updateLastName: string => void,
-  updateStateOrProvince: (state: UsState | CaState | null) => void,
+  updateBillingState: (billingState: UsState | CaState | null) => void,
   updateBillingCountry: IsoCountry => void,
   paymentMethod: PaymentMethod,
   setAssociatedPaymentMethod: () => (Function) => void,
@@ -105,7 +105,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   stripePaymentRequestButtonData: state.page.form.stripePaymentRequestButtonData[ownProps.stripeAccount],
   countryGroupId: state.common.internationalisation.countryGroupId,
   country: state.common.internationalisation.countryId,
-  stateOrProvince: state.page.form.formData.state,
+  billingState: state.page.form.formData.billingState,
   currency: state.common.internationalisation.currencyId,
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
@@ -125,7 +125,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateEmail: (email: string) => dispatch(updateEmail(email)),
   updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
   updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
-  updateStateOrProvince: (state: UsState | CaState | null) => dispatch(updateStateOrProvince(state)),
+  updateBillingState: (billingState: UsState | CaState | null) => dispatch(updateBillingState(billingState)),
   updateBillingCountry: (billingCountry: IsoCountry) => dispatch(updateBillingCountry(billingCountry)),
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
@@ -233,7 +233,7 @@ function onPayment(
   paymentRequestComplete: (string) => void,
   paymentRequestData: Object,
   billingCountryFromCard?: string,
-  billingStateOrProvinceFromCard?: string,
+  billingBillingStateFromCard?: string,
   processPayment: () => void,
 ): void {
   // Always dismiss the payment popup immediately - any pending/success/failure will be displayed on our own page.
@@ -252,15 +252,16 @@ function onPayment(
 
   // Single doesn't need a state, however recurring (i.e. Zuora) needs a valid state for US and CA billing countries.
   const validatedCountryFromCard: Option<IsoCountry> = findIsoCountry(billingCountryFromCard);
-  let countryAndStateValueOk = props.contributionType === 'ONE_OFF' || !['US', 'CA'].includes(validatedCountryFromCard);
+  const billingAccountRequiresAState = props.contributionType !== 'ONE_OFF' && ['US', 'CA'].includes(validatedCountryFromCard);
+  let countryAndStateValueOk = !billingAccountRequiresAState; // If Zuora requires a state then we're not OK yet.
   if (validatedCountryFromCard) {
     props.updateBillingCountry(validatedCountryFromCard);
-    const validatedBillingStateOrProvinceFromCard: Option<StateProvince> =
-      stateProvinceFromString(validatedCountryFromCard, billingStateOrProvinceFromCard);
-    if (validatedBillingStateOrProvinceFromCard) {
-      props.updateStateOrProvince(validatedBillingStateOrProvinceFromCard);
+    const validatedBillingBillingStateFromCard: Option<StateProvince> =
+      stateProvinceFromString(validatedCountryFromCard, billingBillingStateFromCard);
+    if (validatedBillingBillingStateFromCard) {
+      props.updateBillingState(validatedBillingBillingStateFromCard);
       countryAndStateValueOk = true;
-    } else if (!props.stateOrProvince) {
+    } else if (billingAccountRequiresAState && !props.billingState) {
       logException('Missing address_state in payment request token and no state/province selected in the form');
     }
   }

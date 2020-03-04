@@ -53,7 +53,7 @@ export type FormIsValidParameters = {
   otherAmounts: OtherAmounts,
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
-  state: UsState | CaState | null,
+  billingState: UsState | CaState | null,
   firstName: string | null,
   lastName: string | null,
   email: string | null,
@@ -66,7 +66,7 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
     otherAmounts,
     countryGroupId,
     contributionType,
-    state,
+    billingState,
     firstName,
     lastName,
     email,
@@ -81,7 +81,7 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
       true
   ) && checkEmail(email)
     && stripeCardFormOk
-    && checkStateIfApplicable(state, countryGroupId, contributionType)
+    && checkStateIfApplicable(billingState, countryGroupId, contributionType)
     && checkAmountOrOtherAmount(selectedAmounts, otherAmounts, contributionType, countryGroupId);
 };
 
@@ -90,7 +90,7 @@ const formIsValidParameters = (state: State) => ({
   otherAmounts: state.page.form.formData.otherAmounts,
   countryGroupId: state.common.internationalisation.countryGroupId,
   contributionType: state.page.form.contributionType,
-  state: state.page.form.formData.state,
+  billingState: state.page.form.formData.billingState,
   firstName: state.page.form.formData.firstName,
   lastName: state.page.form.formData.lastName,
   email: state.page.form.formData.email,

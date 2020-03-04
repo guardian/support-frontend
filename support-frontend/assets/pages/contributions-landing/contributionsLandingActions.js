@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { type CaState, type UsState } from 'helpers/internationalisation/country';
+import { type CaState, type UsState, stateProvinceFromString } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
   StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
@@ -52,6 +52,7 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCountry } from '../../helpers/internationalisation/country';
+import {fromCountry} from "../../helpers/internationalisation/countryGroup";
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -61,7 +62,7 @@ export type Action =
   | { type: 'UPDATE_LAST_NAME', lastName: string }
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_PASSWORD', password: string }
-  | { type: 'UPDATE_STATE_OR_PROVINCE', state: UsState | CaState | null }
+  | { type: 'UPDATE_BILLING_STATE', billingState: UsState | CaState | null }
   | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
@@ -169,9 +170,9 @@ const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_USER_FORM_DATA', userFormData })));
   };
 
-const updateStateOrProvince = (state: UsState | CaState | null): ((Function) => void) =>
+const updateBillingState = (billingState: UsState | CaState | null): ((Function) => void) =>
   (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_STATE_OR_PROVINCE', state })));
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_BILLING_STATE', billingState })));
   };
 
 const updateBillingCountry = (billingCountry: IsoCountry): Action =>
@@ -350,40 +351,49 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
   state,
 );
 
-const regularPaymentRequestFromAuthorisation = (
+function regularPaymentRequestFromAuthorisation(
   authorisation: PaymentAuthorisation,
   state: State,
-): RegularPaymentRequest => ({
-  firstName: state.page.form.formData.firstName || '',
-  lastName: state.page.form.formData.lastName || '',
-  email: state.page.form.formData.email || '',
-  billingAddress: {
-    lineOne: null, // required go cardless field
-    lineTwo: null, // required go cardless field
-    city: null, // required go cardless field
-    state: state.page.form.formData.state,
-    postCode: null, // required go cardless field
-    country:
-      state.page.form.formData.billingCountry ?
-        state.page.form.formData.billingCountry : state.common.internationalisation.countryId,
-  },
-  deliveryAddress: null,
-  product: {
-    amount: getAmount(
-      state.page.form.selectedAmounts,
-      state.page.form.formData.otherAmounts,
-      state.page.form.contributionType,
-    ),
-    currency: state.common.internationalisation.currencyId,
-    billingPeriod: state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,
-  },
-  firstDeliveryDate: null,
-  paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
-  ophanIds: getOphanIds(),
-  referrerAcquisitionData: state.common.referrerAcquisitionData,
-  supportAbTests: getSupportAbTests(state.common.abParticipations),
-  telephoneNumber: null,
-});
+): RegularPaymentRequest {
+
+  let { billingCountry, billingState } = state.page.form.formData;
+
+  // if we're going to be taking the country from GEO-IP then we need to take the state from there too
+  if (!billingCountry) {
+    billingCountry = fromCountry(guardian.geoip.countryCode);
+    billingState = stateProvinceFromString(billingCountry, guardian.geoip.stateCode);
+  }
+
+  return {
+    firstName: state.page.form.formData.firstName || '',
+    lastName: state.page.form.formData.lastName || '',
+    email: state.page.form.formData.email || '',
+    billingAddress: {
+      lineOne: null, // required go cardless field
+      lineTwo: null, // required go cardless field
+      city: null, // required go cardless field
+      state: billingCountry, // required Zuora field if country is US or CA
+      postCode: null, // required go cardless field
+      country: billingState, // required Zuora field
+    },
+    deliveryAddress: null,
+    product: {
+      amount: getAmount(
+        state.page.form.selectedAmounts,
+        state.page.form.formData.otherAmounts,
+        state.page.form.contributionType,
+      ),
+      currency: state.common.internationalisation.currencyId,
+      billingPeriod: state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,
+    },
+    firstDeliveryDate: null,
+    paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
+    ophanIds: getOphanIds(),
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
+    supportAbTests: getSupportAbTests(state.common.abParticipations),
+    telephoneNumber: null,
+  };
+}
 
 const amazonPayDataFromAuthorisation = (
   authorisation: AmazonPayAuthorisation,
@@ -693,7 +703,7 @@ export {
   updateFirstName,
   updateLastName,
   updateEmail,
-  updateStateOrProvince,
+  updateBillingState,
   updateBillingCountry,
   updateUserFormData,
   setThirdPartyPaymentLibrary,
