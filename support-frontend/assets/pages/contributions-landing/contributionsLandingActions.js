@@ -360,8 +360,13 @@ function regularPaymentRequestFromAuthorisation(
 
   // if we're going to be taking the country from GEO-IP then we need to take the state from there too
   if (!billingCountry) {
-    billingCountry = fromCountry(guardian.geoip.countryCode);
-    billingState = stateProvinceFromString(billingCountry, guardian.geoip.stateCode);
+    billingCountry = fromCountry(window.guardian.geoip.countryCode);
+
+    // if GEO-IP fails to resolve a country, then get it from the page's internationalisation which will never be null.
+    if (!billingCountry) {
+      billingCountry = state.common.internationalisation.countryId;
+    }
+    billingState = stateProvinceFromString(billingCountry, window.guardian.geoip.stateCode);
   }
 
   return {
@@ -372,9 +377,9 @@ function regularPaymentRequestFromAuthorisation(
       lineOne: null, // required go cardless field
       lineTwo: null, // required go cardless field
       city: null, // required go cardless field
-      state: billingCountry, // required Zuora field if country is US or CA
+      state: billingState, // required Zuora field if country is US or CA
       postCode: null, // required go cardless field
-      country: billingState, // required Zuora field
+      country: billingCountry, // required Zuora field
     },
     deliveryAddress: null,
     product: {

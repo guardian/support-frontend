@@ -44,7 +44,7 @@ type PropTypes = {|
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
-  updateState: Event => void,
+  updateBillingState: Event => void,
   checkIfEmailHasPassword: Event => void,
   contributionType: ContributionType,
 |};
@@ -151,7 +151,7 @@ function withProps(props: PropTypes) {
         </div> : null
       }
       <ContributionState
-        onChange={props.updateState}
+        onChange={props.updateBillingState}
         selectedState={billingState}
         isValid={checkBillingState(billingState)}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
