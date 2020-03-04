@@ -51,6 +51,9 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
 
+  lazy val captchaSecretKey = RecaptchaConfigProvider(config, stage).secretKey
+
+
 }
 
 object Configuration {

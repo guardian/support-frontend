@@ -17,13 +17,12 @@ object RecaptchaResponse {
   implicit val getUserTypeEncoder: Encoder[RecaptchaResponse] = deriveEncoder
 }
 
-class CaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) {
+class CaptchaService(wsClient: WSClient, secretKey: String)(implicit ec: ExecutionContext) {
   val captchaEndpoint = "https://www.google.com/recaptcha/api/siteverify"
-  val secret = "???"
 
   def verify(token: String): EitherT[Future, String, RecaptchaResponse] =
     wsClient.url(captchaEndpoint)
-    .withQueryStringParameters("secret" -> secret, "response" -> token)
+    .withQueryStringParameters("secret" -> secretKey, "response" -> token)
     .withMethod("POST")
     .execute()
       .attemptT
