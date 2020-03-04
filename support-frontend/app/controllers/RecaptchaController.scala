@@ -2,19 +2,24 @@ package controllers
 
 import actions.CustomActionBuilders
 import cats.implicits._
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.generic.semiauto._
+import io.circe.{Decoder, Encoder}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import services.CaptchaService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 case class CaptchaRequest(token: String)
 object CaptchaRequest {
   implicit val decoder: Decoder[CaptchaRequest] = deriveDecoder
 }
 
+case class CaptchaResponse(allow: Boolean)
+
+object CaptchaResponse {
+  implicit val encoder: Encoder[CaptchaResponse] = deriveEncoder
+}
 
 class RecaptchaController(
   components: ControllerComponents,
@@ -27,9 +32,8 @@ class RecaptchaController(
     captchaService
       .verify(token
       ).map { res =>
-      Ok(res.score.toString)
-    } // ToDo we don't want to return the score to the front-end - just track it? 
-    Future(Ok)
+      Ok(CaptchaResponse(res.score > 0.1))
+    }
   }
 }
 
