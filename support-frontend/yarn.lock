@@ -1802,6 +1802,11 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.14.0.tgz#3a5a6d385f2639aca884b5302f3d3ae6e919e290"
   integrity sha512-ZGwVwVlX3YwG62xO1YjxaHyGFJC8Us80GPeyY8CMv5lfshYd0gGDNJN6vjUI3ssULjcP8ckGOTFcTFs3hOUrMw==
 
+"@guardian/src-utilities@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-utilities/-/src-utilities-0.14.0.tgz#681a3f306d80bec95553e4e398a290d2ce9ef7a9"
+  integrity sha512-UgVTfNmX9ao9fWa8hfixsy9zezyE/77xtWAuvdBLFRXOKmxpXUwl9uWLPtMQgbAlhOwef5sX1AXxe3KAeVYMMg==
+
 "@icons/material@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"

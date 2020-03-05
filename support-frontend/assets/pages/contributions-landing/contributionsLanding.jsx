@@ -32,6 +32,8 @@ import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
+import { FocusStyleManager } from '@guardian/src-utilities';
+
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -85,6 +87,7 @@ const setOneOffContributionCookie = () => {
   );
 };
 
+
 const campaignName = getCampaignName();
 
 const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
@@ -92,6 +95,8 @@ const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campai
 
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
+
+FocusStyleManager.onlyShowFocusOnTabs(); // https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility
 
 const contributionsLandingPage = (campaignCodeParameter: ?string) => (
   <Page

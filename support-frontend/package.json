@@ -70,6 +70,7 @@
     "@guardian/src-choice-card": "^0.14.0-alpha.3",
     "@guardian/src-foundations": "^0.14.1",
     "@guardian/src-svgs": "^0.14.0",
+    "@guardian/src-utilities": "^0.14.0",
     "@sentry/browser": "^5.4.0",
     "cssnano": "^4.1.10",
     "dompurify": "^2.0.7",
