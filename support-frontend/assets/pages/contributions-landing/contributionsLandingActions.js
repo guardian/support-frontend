@@ -51,6 +51,8 @@ import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
+import type {Option} from "../../helpers/types/option";
+import type {StateProvince} from "helpers/internationalisation/country";
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -351,7 +353,7 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 
 function getBillingCountryAndState(state: State): {
   billingCountry: IsoCountry,
-  billingState: UsState | CaState | null,
+  billingState: Option<StateProvince>,
 } {
   // If the form provides a billing country, then it will also provide a billing state field if one is required.
   if (state.page.form.formData.billingCountry) {
@@ -360,6 +362,7 @@ function getBillingCountryAndState(state: State): {
       billingState: state.page.form.formData.billingState,
     };
   }
+
   // Else, we need to get the country from GEO-IP or the page's internationalisation context.
   const billingCountry = findIsoCountry(window.guardian.geoip.countryCode) ||
     // If we cannot resolve country by GEO-IP, then use the page's context, which will never be null.
