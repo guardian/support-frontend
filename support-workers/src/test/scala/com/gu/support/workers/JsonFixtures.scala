@@ -27,7 +27,34 @@ object JsonFixtures {
           "lastName": "user",
           "country": "GB",
           "billingAddress": {
-            "country": "GB"
+            "country": "GB",
+            "lineOne": "The Guardian",
+            "lineTwo": "Kings Place",
+            "city": "london",
+            "postCode": "n1 9gu"
+          },
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false,
+          "deliveryInstructions": "Leave with neighbour"
+        }
+    """
+
+  def userJsonAlternate(id: String = idId): String =
+    s"""
+      "user":{
+          "id": "$id",
+          "primaryEmailAddress": "$emailAddress",
+          "firstName": "test",
+          "lastName": "user",
+          "country": "GB",
+          "billingAddress": {
+            "country": "GB",
+            "lineOne": "22 Monkey Street",
+            "lineTwo": "",
+            "city": "Birmingham",
+            "postCode": "BM66AJ"
           },
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
@@ -235,6 +262,16 @@ object JsonFixtures {
         }"""
 
   val createSalesForceContactJson =
+    s"""
+          {
+            $requestIdJson,
+            ${userJson(	"200001969")},
+            "product": ${contribution()},
+            "paymentMethod": $payPalPaymentMethod
+          }
+        """
+
+  val createSalesForceGiftContactJson =
     s"""
           {
             $requestIdJson,
