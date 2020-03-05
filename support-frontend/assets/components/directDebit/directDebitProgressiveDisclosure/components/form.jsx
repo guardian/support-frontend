@@ -111,7 +111,7 @@ function Form(props: PropTypes) {
         id="qa-direct-debit-submit"
         onClick={e => props.onSubmit(e)}
       >
-        Submit
+        Confirm
       </Button>
       {props.accountErrorsLength > 0 && (
         <ErrorSummary errors={[...props.accountErrors]} />
