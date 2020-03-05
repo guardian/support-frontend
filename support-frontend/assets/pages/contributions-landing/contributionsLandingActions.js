@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { type CaState, type UsState, stateProvinceFromString } from 'helpers/internationalisation/country';
+import { type IsoCountry, type CaState, type UsState, stateProvinceFromString, findIsoCountry } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
   StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
@@ -51,8 +51,6 @@ import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
-import type { IsoCountry } from '../../helpers/internationalisation/country';
-import {fromCountry} from "../../helpers/internationalisation/countryGroup";
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -360,7 +358,7 @@ function regularPaymentRequestFromAuthorisation(
 
   // if we're going to be taking the country from GEO-IP then we need to take the state from there too
   if (!billingCountry) {
-    billingCountry = fromCountry(window.guardian.geoip.countryCode);
+    billingCountry = findIsoCountry(window.guardian.geoip.countryCode);
 
     // if GEO-IP fails to resolve a country, then get it from the page's internationalisation which will never be null.
     if (!billingCountry) {
