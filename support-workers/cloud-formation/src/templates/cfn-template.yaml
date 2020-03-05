@@ -358,7 +358,7 @@ Resources:
 
 
   # This alarm is for the PaymentSuccess metric where
-  # ProductType == Paper AND PaymentProvider in [Stripe, Gocardless]
+  # ProductType == Paper AND PaymentProvider in [Stripe, Gocardless, Paypal]
 
   NoPaperAcquisitionInOneDayAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -369,7 +369,7 @@ Resources:
       AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful paper checkouts in 24h
       Metrics:
         - Id: e1
-          Expression: "SUM([FILL(m1,0),FILL(m2,0)])"
+          Expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])"
           Label: AllPaperConversions
         - Id: m1
           Label: String
@@ -395,6 +395,23 @@ Resources:
               Dimensions:
                 - Name: PaymentProvider
                   Value: Gocardless
+                - Name: ProductType
+                  Value: Paper
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+        - Id: m3
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: Paypal
                 - Name: ProductType
                   Value: Paper
                 - Name: Stage
