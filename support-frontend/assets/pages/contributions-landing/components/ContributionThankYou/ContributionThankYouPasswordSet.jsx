@@ -9,11 +9,15 @@ import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import ContributionThankYouBlurb from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
+type PropTypes = {
+  countryGroupId: CountryGroupId
+}
 
 // ----- Render ----- //
-function ContributionThankYouPasswordSet() {
+function ContributionThankYouPasswordSet(props: PropTypes) {
   const title = 'You now have a Guardian account';
   const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
@@ -26,7 +30,7 @@ function ContributionThankYouPasswordSet() {
             {body}
           </p>
         </section>
-        <ContributionSurvey isRunning={false} />
+        <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
         <SpreadTheWord />
         <div className="gu-content__return-link">
