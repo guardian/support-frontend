@@ -351,7 +351,7 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 
 function getBillingCountryAndState(state: State): {
   billingCountry: IsoCountry,
-  billingState: string | null,
+  billingState: UsState | CaState | null,
 } {
   // If the form provides a billing country, then it will also provide a billing state field if one is required.
   if (state.page.form.formData.billingCountry) {
