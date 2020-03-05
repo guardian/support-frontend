@@ -63,6 +63,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
 
+
   const renderContribTypeChoiceCards = () => (
     <>
       <ChoiceCardGroup
