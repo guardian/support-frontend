@@ -77,7 +77,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import CancellationSection
   from 'components/subscriptionCheckouts/cancellationSection';
 
@@ -358,9 +357,6 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           >
             <DirectDebitForm
               buttonText="Subscribe"
-              onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
-                props.onPaymentAuthorised(pa);
-              }}
               submitForm={props.submitForm}
               validateForm={props.validateForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}

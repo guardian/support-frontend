@@ -21,6 +21,7 @@ import type { Option } from 'helpers/types/option';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 
 export type CheckoutState = ReduxState<{|
   checkout: FormState,
@@ -28,6 +29,7 @@ export type CheckoutState = ReduxState<{|
   marketingConsent: MarketingConsentState,
   billingAddress: AddressState,
   hasDeliveryAddress: false,
+  directDebit: DirectDebitState,
 |}>;
 
 export type WithDeliveryCheckoutState = ReduxState<{|
@@ -38,6 +40,7 @@ export type WithDeliveryCheckoutState = ReduxState<{|
   deliveryAddress: AddressState,
   hasDeliveryAddress: true,
   fulfilmentOption: Option<FulfilmentOptions>,
+  directDebit: DirectDebitState,
 |}>;
 
 export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;

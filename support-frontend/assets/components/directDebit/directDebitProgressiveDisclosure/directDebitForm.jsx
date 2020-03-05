@@ -8,7 +8,6 @@ import { type Dispatch } from 'redux';
 import {
   type Action,
   type Phase,
-  confirmDirectDebitClicked,
   payDirectDebitClicked,
   setDirectDebitFormPhase,
   updateAccountHolderName,
@@ -16,7 +15,6 @@ import {
   updateSortCodeString,
   updateAccountHolderConfirmation,
 } from 'components/directDebit/directDebitActions';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import Form from './components/form';
 import Playback from './components/playback';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -41,12 +39,10 @@ type PropTypes = {|
   updateAccountNumber: (accountNumber: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: SyntheticInputEvent<HTMLInputElement>) => void,
-  onPaymentAuthorisation: PaymentAuthorisation => void,
   submitForm: Function,
   validateForm: Function,
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
-  confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => void,
   countryGroupId: CountryGroupId,
   phase: Phase,
   formError: ErrorReason | null,
@@ -86,10 +82,6 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     },
     editDirectDebitClicked: () => {
       dispatch(setDirectDebitFormPhase('entry'));
-    },
-    confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => {
-      dispatch(confirmDirectDebitClicked(onPaymentAuthorisation));
-      return false;
     },
     updateSortCodeString: (event: SyntheticInputEvent<HTMLInputElement>) => {
       dispatch(updateSortCodeString(event.target.value));
@@ -153,20 +145,6 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     };
   }
 
-  componentDidUpdate() {
-    const { props, state } = this;
-    // Disabling this as react docs say it is okay to set state here with conditions
-    /* eslint-disable react/no-did-update-set-state */
-    if (props.allErrors.length === 0 && state.canSubmit && state.allErrorsLength === 0) {
-      this.submitForm(props);
-    }
-    if (state.canSubmit === true) {
-      this.setState({
-        canSubmit: false,
-      });
-    }
-  }
-
   onChange = (field, dispatchUpdate, event) => {
     this.setState({
       [field]: {
@@ -180,9 +158,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
   onSubmit = (event) => {
     event.preventDefault();
     this.props.validateForm();
-    this.setState({
-      canSubmit: true,
-    });
+    this.props.submitForm();
   }
 
   getAccountErrors = (state) => {
@@ -239,11 +215,6 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
         );
       }
     });
-  }
-
-  submitForm = (props) => {
-    props.confirmDirectDebitClicked(props.onPaymentAuthorisation);
-    props.submitForm();
   }
 
   render() {

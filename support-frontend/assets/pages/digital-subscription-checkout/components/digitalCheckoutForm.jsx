@@ -66,8 +66,6 @@ import GeneralErrorMessage
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { getGlobal } from 'helpers/globals';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-
 
 // ----- Types ----- //
 
@@ -249,9 +247,6 @@ function DigitalCheckoutForm(props: PropTypes) {
           >
             <DirectDebitForm
               buttonText="Start free trial"
-              onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
-                props.onPaymentAuthorised(pa);
-              }}
               submitForm={props.submitForm}
               validateForm={props.validateForm}
               allErrors={[...props.addressErrors, ...props.formErrors]}
