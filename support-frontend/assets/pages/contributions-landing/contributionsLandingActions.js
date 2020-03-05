@@ -349,23 +349,34 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
   state,
 );
 
+function getBillingCountryAndState(state: State): {
+  billingCountry: IsoCountry,
+  billingState: string | null,
+} {
+  // If the form provides a billing country, then it will also provide a billing state field if one is required.
+  if (state.page.form.formData.billingCountry) {
+    return {
+      billingCountry: state.page.form.formData.billingCountry,
+      billingState: state.page.form.formData.billingState,
+    };
+  }
+  // Else, we need to get the country from GEO-IP or the page's internationalisation context.
+  const billingCountry = findIsoCountry(window.guardian.geoip.countryCode) ||
+    // If we cannot resolve country by GEO-IP, then use the page's context, which will never be null.
+    state.common.internationalisation.countryId;
+
+  // If we're getting the country from GEO-IP or page's context, then we need to get the optional state from GEO-IP too.
+  const billingState = stateProvinceFromString(billingCountry, window.guardian.geoip.stateCode);
+
+  return { billingCountry, billingState };
+}
+
 function regularPaymentRequestFromAuthorisation(
   authorisation: PaymentAuthorisation,
   state: State,
 ): RegularPaymentRequest {
 
-  let { billingCountry, billingState } = state.page.form.formData;
-
-  // if we're going to be taking the country from GEO-IP then we need to take the state from there too
-  if (!billingCountry) {
-    billingCountry = findIsoCountry(window.guardian.geoip.countryCode);
-
-    // if GEO-IP fails to resolve a country, then get it from the page's internationalisation which will never be null.
-    if (!billingCountry) {
-      billingCountry = state.common.internationalisation.countryId;
-    }
-    billingState = stateProvinceFromString(billingCountry, window.guardian.geoip.stateCode);
-  }
+  const { billingCountry, billingState } = getBillingCountryAndState(state);
 
   return {
     firstName: state.page.form.formData.firstName || '',
