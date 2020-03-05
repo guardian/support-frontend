@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { type IsoCountry, type CaState, type UsState, StateProvince, stateProvinceFromString, findIsoCountry } from 'helpers/internationalisation/country';
+import { type IsoCountry, type CaState, type UsState, type StateProvince, stateProvinceFromString, findIsoCountry } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
   StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
