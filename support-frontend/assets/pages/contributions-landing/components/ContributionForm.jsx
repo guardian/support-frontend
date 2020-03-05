@@ -240,9 +240,8 @@ function withProps(props: PropTypes) {
               body: JSON.stringify({
                 token,
               }),
-            }).then((response) => {
-              response.json();
-}).then(data => console.log(data));
+            }).then(response =>
+              response.json()).then(data => console.log(data));
           }
         }
         publicKey="6Le36d0UAAAAAJRqGjj8ADbrgr3diK1zUlu-7Qdm"

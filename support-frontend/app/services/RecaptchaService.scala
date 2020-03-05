@@ -23,10 +23,14 @@ class RecaptchaService(wsClient: WSClient, secretKey: String)(implicit ec: Execu
   def verify(token: String): EitherT[Future, String, RecaptchaResponse] =
     wsClient.url(recaptchaEndpoint)
     .withQueryStringParameters("secret" -> secretKey, "response" -> token)
+    .withHttpHeaders("Content-length" -> 0.toString )
     .withMethod("POST")
     .execute()
       .attemptT
       .leftMap(_.toString)
-      .subflatMap(resp => (resp.json ).validate[RecaptchaResponse].asEither.leftMap(_.mkString(",")))
+      .subflatMap(resp => {
+        println(resp.body)
+        (resp.json ).validate[RecaptchaResponse].asEither.leftMap(_.mkString(","))
+      })
 }
 
