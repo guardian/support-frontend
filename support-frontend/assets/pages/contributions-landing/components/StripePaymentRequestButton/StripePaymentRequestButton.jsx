@@ -233,7 +233,7 @@ function onPayment(
   paymentRequestComplete: (string) => void,
   paymentRequestData: Object,
   billingCountryFromCard?: string,
-  billingBillingStateFromCard?: string,
+  billingStateFromCard?: string,
   processPayment: () => void,
 ): void {
   // Always dismiss the payment popup immediately - any pending/success/failure will be displayed on our own page.
@@ -257,7 +257,7 @@ function onPayment(
   if (validatedCountryFromCard) {
     props.updateBillingCountry(validatedCountryFromCard);
     const validatedBillingBillingStateFromCard: Option<StateProvince> =
-      stateProvinceFromString(validatedCountryFromCard, billingBillingStateFromCard);
+      stateProvinceFromString(validatedCountryFromCard, billingStateFromCard);
     if (validatedBillingBillingStateFromCard) {
       props.updateBillingState(validatedBillingBillingStateFromCard);
       countryAndStateValueOk = true;
