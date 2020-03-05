@@ -354,22 +354,30 @@ function getBillingCountryAndState(state: State): {
   billingCountry: IsoCountry,
   billingState: Option<StateProvince>,
 } {
-  // If the form provides a billing country, then it will also provide a billing state field if one is required.
+  const pageBaseCountry = state.common.internationalisation.countryId; // Needed later
+
+  // If the page form has a billingCountry, then it must have been provided by a wallet, ApplePay or
+  // Payment Request Button, which will already have filtered the billingState by stateProvinceFromString,
+  // so we can trust both values, verbatim.
   if (state.page.form.formData.billingCountry) {
+    const { billingCountry, billingState } = state.page.form.formData;
+    return { billingCountry, billingState };
+  }
+
+  // If we have a billingState but no billingCountry then the state must have come from the drop-down on the website,
+  // wherupon it must match with the page's base country.
+  if (state.page.form.formData.billingState && !state.page.form.formData.billingCountry) {
     return {
-      billingCountry: state.page.form.formData.billingCountry,
-      billingState: state.page.form.formData.billingState,
+      billingCountry: pageBaseCountry,
+      billingState: stateProvinceFromString(pageBaseCountry, state.page.form.formData.billingState),
     };
   }
 
-  // Else, we need to get the country from GEO-IP or the page's internationalisation context.
-  const billingCountry = findIsoCountry(window.guardian.geoip.countryCode) ||
-    // If we cannot resolve country by GEO-IP, then use the page's context, which will never be null.
-    state.common.internationalisation.countryId;
-
-  // If we're getting the country from GEO-IP or page's context, then we need to get the optional state from GEO-IP too.
+  // Else, it's not a wallet transaction, and it's a no-state checkout page, so the only other option is to determine
+  // the country and state from GEO-IP, and failing that, the page's base country, ultimately from the countryGroup
+  // (e.g. DE for Europe, IN for International, GB for United Kingdom).
+  const billingCountry = findIsoCountry(window.guardian.geoip.countryCode) || pageBaseCountry;
   const billingState = stateProvinceFromString(billingCountry, window.guardian.geoip.stateCode);
-
   return { billingCountry, billingState };
 }
 

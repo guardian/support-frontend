@@ -256,10 +256,10 @@ function onPayment(
   let countryAndStateValueOk = !billingAccountRequiresAState; // If Zuora requires a state then we're not OK yet.
   if (validatedCountryFromCard) {
     props.updateBillingCountry(validatedCountryFromCard);
-    const validatedBillingBillingStateFromCard: Option<StateProvince> =
+    const validatedBillingStateFromCard: Option<StateProvince> =
       stateProvinceFromString(validatedCountryFromCard, billingStateFromCard);
-    if (validatedBillingBillingStateFromCard) {
-      props.updateBillingState(validatedBillingBillingStateFromCard);
+    if (validatedBillingStateFromCard) {
+      props.updateBillingState(validatedBillingStateFromCard);
       countryAndStateValueOk = true;
     } else if (billingAccountRequiresAState && !props.billingState) {
       logException('Missing address_state in payment request token and no state/province selected in the form');
