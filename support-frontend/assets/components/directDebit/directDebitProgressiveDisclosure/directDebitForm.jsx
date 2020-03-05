@@ -40,7 +40,6 @@ type PropTypes = {|
   updateAccountHolderName: (accountHolderName: SyntheticInputEvent<HTMLInputElement>) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: SyntheticInputEvent<HTMLInputElement>) => void,
   submitForm: Function,
-  validateForm: Function,
   payDirectDebitClicked: () => void,
   editDirectDebitClicked: () => void,
   countryGroupId: CountryGroupId,
@@ -157,7 +156,6 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
 
   onSubmit = (event) => {
     event.preventDefault();
-    this.props.validateForm();
     this.props.submitForm();
   }
 

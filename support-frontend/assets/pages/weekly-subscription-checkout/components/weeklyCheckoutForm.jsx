@@ -328,7 +328,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
             <DirectDebitForm
               buttonText="Subscribe"
               submitForm={props.submitForm}
-              validateForm={props.validateForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
               submissionError={props.submissionError}
               submissionErrorHeading={submissionErrorHeading}

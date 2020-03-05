@@ -248,7 +248,6 @@ function DigitalCheckoutForm(props: PropTypes) {
             <DirectDebitForm
               buttonText="Start free trial"
               submitForm={props.submitForm}
-              validateForm={props.validateForm}
               allErrors={[...props.addressErrors, ...props.formErrors]}
               submissionError={props.submissionError}
               submissionErrorHeading={submissionErrorHeading}
