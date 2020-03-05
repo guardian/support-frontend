@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { type IsoCountry, type CaState, type UsState, stateProvinceFromString, findIsoCountry } from 'helpers/internationalisation/country';
+import { type IsoCountry, type CaState, type UsState, StateProvince, stateProvinceFromString, findIsoCountry } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
   StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
@@ -51,8 +51,7 @@ import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
-import type {Option} from "../../helpers/types/option";
-import type {StateProvince} from "helpers/internationalisation/country";
+import type { Option } from 'helpers/types/option';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
