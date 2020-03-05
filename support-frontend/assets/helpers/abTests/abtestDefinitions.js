@@ -78,7 +78,7 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-  choiceCardsProductSetTest: {
+  choiceCardsProductSetTestR2: {
     type: 'OTHER',
     variants: [
       {
