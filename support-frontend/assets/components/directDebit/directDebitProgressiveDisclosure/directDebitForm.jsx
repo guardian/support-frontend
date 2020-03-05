@@ -139,7 +139,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
       accountNumber: {
         error: '',
         message: 'Please enter a valid account number',
-        // Regex matches a string with between 6 and 10 digits
+        // Regex matches a string with between 6 and 8 digits
         rule: accountNumber => accountNumber.match(/^\d{6,8}$/),
       },
       accountHolderConfirmation: {
