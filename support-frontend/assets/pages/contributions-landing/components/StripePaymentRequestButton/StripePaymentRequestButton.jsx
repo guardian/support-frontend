@@ -48,7 +48,7 @@ import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { ErrorReason } from 'helpers/errorReasons';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { toHumanReadableContributionType, getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
-import type { StripePaymentRequestButtonScaTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { StripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
 
@@ -84,7 +84,7 @@ type PropTypes = {|
   setPaymentWaiting: (isWaiting: boolean) => Action,
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
-  scaTestVariant: StripePaymentRequestButtonScaTestVariants,
+  abTestButtonVsNoButton: StripePaymentRequestButtonTestVariants,
   csrf: CsrfState,
 |};
 
