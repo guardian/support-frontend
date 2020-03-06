@@ -62,7 +62,7 @@ export type Action =
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_BILLING_STATE', billingState: UsState | CaState | null }
-  | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry }
+  | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
@@ -174,7 +174,7 @@ const updateBillingState = (billingState: UsState | CaState | null): ((Function)
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_BILLING_STATE', billingState })));
   };
 
-const updateBillingCountry = (billingCountry: IsoCountry): Action =>
+const updateBillingCountry = (billingCountry: IsoCountry | null): Action =>
   ({ type: 'UPDATE_BILLING_COUNTRY', billingCountry });
 
 const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): ((Function) => void) =>
@@ -477,7 +477,7 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
               dispatch(setAmazonPayWalletWidgetReady(false));
             }
             // Reset any updates the previous payment method had made to the form's billingCountry or billingState
-            dispatch(updateBillingCountry(''));
+            dispatch(updateBillingCountry(null));
             dispatch(updateBillingState(null));
 
             // Finally, trigger the form display
