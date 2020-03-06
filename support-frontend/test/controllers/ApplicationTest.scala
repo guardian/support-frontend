@@ -6,7 +6,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
 import assets.{AssetsResolver, RefPath, StyleContent}
-import config.{Configuration, StringsConfig}
+import config.{Configuration, RecaptchaConfigProvider, StringsConfig}
 import fixtures.TestCSRFComponents
 import org.scalatestplus.mockito.MockitoSugar.mock
 import services._
@@ -44,6 +44,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StripeConfigProvider],
         mock[PayPalConfigProvider],
         mock[AmazonPayConfigProvider],
+        mock[RecaptchaConfigProvider],
         mock[PaymentAPIService],
         mock[MembersDataService],
         mock[StringsConfig],
@@ -67,6 +68,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StripeConfigProvider],
         mock[PayPalConfigProvider],
         mock[AmazonPayConfigProvider],
+        mock[RecaptchaConfigProvider],
         mock[PaymentAPIService],
         mock[MembersDataService],
         mock[StringsConfig],
