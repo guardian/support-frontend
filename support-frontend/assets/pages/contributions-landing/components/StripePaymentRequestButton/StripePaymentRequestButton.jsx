@@ -258,7 +258,7 @@ function onPayment(
   let countryAndStateValueOk = !billingAccountRequiresAState; // If Zuora requires a state then we're not OK yet.
   if (validatedCountryFromCard) {
     const validatedBillingStateFromCard: Option<StateProvince> =
-      stateProvinceFromString(validatedCountryFromCard, validatedCountryFromCard);
+      stateProvinceFromString(validatedCountryFromCard, billingStateFromCard);
     if (billingAccountRequiresAState && !validatedBillingStateFromCard) {
       logException(`Invalid billing state: ${billingStateFromCard || ''} for billing country: ${billingCountryFromCard || ''}`);
       // Don't update the form, because the user may pick another payment method that doesn't update formData.
