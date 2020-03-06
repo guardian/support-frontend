@@ -21,7 +21,7 @@ const postToBackend = (token: string): Promise<boolean> =>
     .then(data => data.allow);
 
 const execute = (action: RecaptchaAction): Promise<boolean> => {
-  if (isRecaptchaLoaded) {
+  if (isRecaptchaLoaded()) {
     return window.grecaptcha.execute(publicKey, { action })
       .then((token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
