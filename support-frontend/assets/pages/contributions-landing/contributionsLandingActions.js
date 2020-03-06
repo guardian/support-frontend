@@ -477,7 +477,7 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
               dispatch(setAmazonPayWalletWidgetReady(false));
             }
             // Reset any updates the previous payment method had made to the form's billingCountry or billingState
-            dispatch(updateBillingCountry(null));
+            dispatch(updateBillingCountry(''));
             dispatch(updateBillingState(null));
 
             // Finally, trigger the form display
