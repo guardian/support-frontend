@@ -14,7 +14,7 @@ import './generalErrorMessage.scss';
 // ---- Types ----- //
 
 type PropTypes = {|
-  errorReason: Option<ErrorReason> | string,
+  errorReason: Option<ErrorReason>,
   errorHeading: string,
   svg: Node,
   classModifiers: Array<?string>
