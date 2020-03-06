@@ -26,7 +26,6 @@ import './directDebitForm.scss';
 // ---- Types ----- //
 
 type PropTypes = {|
-  /* eslint-disable react/no-unused-prop-types */
   buttonText: string,
   submissionErrorHeading: string,
   submissionError: ErrorReason | null,

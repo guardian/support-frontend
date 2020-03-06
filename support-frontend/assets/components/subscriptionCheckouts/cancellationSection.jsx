@@ -37,7 +37,7 @@ export default function CancellationSection(props: {
           The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch, LE65 1TJ United
           Kingdom<br />
           Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays, 8am-6pm at weekends
-          (GMT/BST) contribution.support@theguardian.com
+          (GMT/BST) <a className="component-customer-service__email" href="mailto:contribution.support@theguardian.com">contribution.support@theguardian.com</a>
         </p>
       </div>
       )}
