@@ -12,7 +12,7 @@ import Signout from 'components/signout/signout';
 import {
   checkFirstName,
   checkLastName,
-  checkState,
+  checkBillingState,
   checkEmail,
   emailRegexPattern,
 } from 'helpers/formValidation';
@@ -25,7 +25,7 @@ import {
   updateFirstName,
   updateLastName,
   updateEmail,
-  updateStateOrProvince,
+  updateBillingState,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
 
@@ -36,7 +36,7 @@ type PropTypes = {|
   firstName: string,
   lastName: string,
   email: string,
-  state: UsState | CaState | null,
+  billingState: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
   isRecurringContributor: boolean,
@@ -44,7 +44,7 @@ type PropTypes = {|
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
-  updateState: Event => void,
+  updateBillingState: Event => void,
   checkIfEmailHasPassword: Event => void,
   contributionType: ContributionType,
 |};
@@ -61,7 +61,7 @@ const mapStateToProps = (state: State) => ({
   lastName: getCheckoutFormValue(state.page.form.formData.lastName, state.page.user.lastName),
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
-  state: getCheckoutFormValue(state.page.form.formData.state, state.page.user.stateField),
+  billingState: getCheckoutFormValue(state.page.form.formData.billingState, state.page.user.stateField),
   isSignedIn: state.page.user.isSignedIn,
   isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
@@ -72,7 +72,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateFirstName: (event) => { dispatch(updateFirstName(event.target.value)); },
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
-  updateState: (event) => { dispatch(updateStateOrProvince(event.target.value === '' ? null : event.target.value)); },
+  updateBillingState: (event) => { dispatch(updateBillingState(event.target.value === '' ? null : event.target.value)); },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 
@@ -85,7 +85,7 @@ function withProps(props: PropTypes) {
     lastName,
     email,
     isSignedIn,
-    state,
+    billingState,
     checkoutFormHasBeenSubmitted,
   } = props;
 
@@ -151,9 +151,9 @@ function withProps(props: PropTypes) {
         </div> : null
       }
       <ContributionState
-        onChange={props.updateState}
-        selectedState={state}
-        isValid={checkState(state)}
+        onChange={props.updateBillingState}
+        selectedState={billingState}
+        isValid={checkBillingState(billingState)}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
       />
     </div>

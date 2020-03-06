@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { type CaState, type UsState } from 'helpers/internationalisation/country';
+import { type IsoCountry, type CaState, type UsState, type StateProvince, stateProvinceFromString, findIsoCountry } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
   StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
@@ -51,7 +51,7 @@ import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
-import type { IsoCountry } from '../../helpers/internationalisation/country';
+import type { Option } from 'helpers/types/option';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -61,8 +61,8 @@ export type Action =
   | { type: 'UPDATE_LAST_NAME', lastName: string }
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_PASSWORD', password: string }
-  | { type: 'UPDATE_STATE_OR_PROVINCE', state: UsState | CaState | null }
-  | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry }
+  | { type: 'UPDATE_BILLING_STATE', billingState: UsState | CaState | null }
+  | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
@@ -169,12 +169,12 @@ const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_USER_FORM_DATA', userFormData })));
   };
 
-const updateStateOrProvince = (state: UsState | CaState | null): ((Function) => void) =>
+const updateBillingState = (billingState: UsState | CaState | null): ((Function) => void) =>
   (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_STATE_OR_PROVINCE', state })));
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_BILLING_STATE', billingState })));
   };
 
-const updateBillingCountry = (billingCountry: IsoCountry): Action =>
+const updateBillingCountry = (billingCountry: IsoCountry | null): Action =>
   ({ type: 'UPDATE_BILLING_COUNTRY', billingCountry });
 
 const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): ((Function) => void) =>
@@ -350,40 +350,74 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
   state,
 );
 
-const regularPaymentRequestFromAuthorisation = (
+function getBillingCountryAndState(state: State): {
+  billingCountry: IsoCountry,
+  billingState: Option<StateProvince>,
+} {
+  const pageBaseCountry = state.common.internationalisation.countryId; // Needed later
+
+  // If the page form has a billingCountry, then it must have been provided by a wallet, ApplePay or
+  // Payment Request Button, which will already have filtered the billingState by stateProvinceFromString,
+  // so we can trust both values, verbatim.
+  if (state.page.form.formData.billingCountry) {
+    const { billingCountry, billingState } = state.page.form.formData;
+    return { billingCountry, billingState };
+  }
+
+  // If we have a billingState but no billingCountry then the state must have come from the drop-down on the website,
+  // wherupon it must match with the page's base country.
+  if (state.page.form.formData.billingState && !state.page.form.formData.billingCountry) {
+    return {
+      billingCountry: pageBaseCountry,
+      billingState: stateProvinceFromString(pageBaseCountry, state.page.form.formData.billingState),
+    };
+  }
+
+  // Else, it's not a wallet transaction, and it's a no-state checkout page, so the only other option is to determine
+  // the country and state from GEO-IP, and failing that, the page's base country, ultimately from the countryGroup
+  // (e.g. DE for Europe, IN for International, GB for United Kingdom).
+  const billingCountry = findIsoCountry(window.guardian.geoip.countryCode) || pageBaseCountry;
+  const billingState = stateProvinceFromString(billingCountry, window.guardian.geoip.stateCode);
+  return { billingCountry, billingState };
+}
+
+function regularPaymentRequestFromAuthorisation(
   authorisation: PaymentAuthorisation,
   state: State,
-): RegularPaymentRequest => ({
-  firstName: state.page.form.formData.firstName || '',
-  lastName: state.page.form.formData.lastName || '',
-  email: state.page.form.formData.email || '',
-  billingAddress: {
-    lineOne: null, // required go cardless field
-    lineTwo: null, // required go cardless field
-    city: null, // required go cardless field
-    state: state.page.form.formData.state,
-    postCode: null, // required go cardless field
-    country:
-      state.page.form.formData.billingCountry ?
-        state.page.form.formData.billingCountry : state.common.internationalisation.countryId,
-  },
-  deliveryAddress: null,
-  product: {
-    amount: getAmount(
-      state.page.form.selectedAmounts,
-      state.page.form.formData.otherAmounts,
-      state.page.form.contributionType,
-    ),
-    currency: state.common.internationalisation.currencyId,
-    billingPeriod: state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,
-  },
-  firstDeliveryDate: null,
-  paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
-  ophanIds: getOphanIds(),
-  referrerAcquisitionData: state.common.referrerAcquisitionData,
-  supportAbTests: getSupportAbTests(state.common.abParticipations),
-  telephoneNumber: null,
-});
+): RegularPaymentRequest {
+
+  const { billingCountry, billingState } = getBillingCountryAndState(state);
+
+  return {
+    firstName: state.page.form.formData.firstName || '',
+    lastName: state.page.form.formData.lastName || '',
+    email: state.page.form.formData.email || '',
+    billingAddress: {
+      lineOne: null, // required go cardless field
+      lineTwo: null, // required go cardless field
+      city: null, // required go cardless field
+      state: billingState, // required Zuora field if country is US or CA
+      postCode: null, // required go cardless field
+      country: billingCountry, // required Zuora field
+    },
+    deliveryAddress: null,
+    product: {
+      amount: getAmount(
+        state.page.form.selectedAmounts,
+        state.page.form.formData.otherAmounts,
+        state.page.form.contributionType,
+      ),
+      currency: state.common.internationalisation.currencyId,
+      billingPeriod: state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,
+    },
+    firstDeliveryDate: null,
+    paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
+    ophanIds: getOphanIds(),
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
+    supportAbTests: getSupportAbTests(state.common.abParticipations),
+    telephoneNumber: null,
+  };
+}
 
 const amazonPayDataFromAuthorisation = (
   authorisation: AmazonPayAuthorisation,
@@ -442,6 +476,11 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
               // Must re-render the wallet widget in order to display amazon's error message
               dispatch(setAmazonPayWalletWidgetReady(false));
             }
+            // Reset any updates the previous payment method had made to the form's billingCountry or billingState
+            dispatch(updateBillingCountry(null));
+            dispatch(updateBillingState(null));
+
+            // Finally, trigger the form display
             dispatch(paymentFailure(result.error));
           }
 
@@ -693,7 +732,7 @@ export {
   updateFirstName,
   updateLastName,
   updateEmail,
-  updateStateOrProvince,
+  updateBillingState,
   updateBillingCountry,
   updateUserFormData,
   setThirdPartyPaymentLibrary,

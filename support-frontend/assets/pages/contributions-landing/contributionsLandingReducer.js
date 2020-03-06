@@ -31,7 +31,7 @@ export type UserFormData = {
   firstName: string | null,
   lastName: string | null,
   email: string | null,
-  state: string | null,
+  billingState: string | null,
 }
 
 export type ThankYouPageStageMap<T> = {
@@ -45,7 +45,7 @@ export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 
 type FormData = UserFormData & {
   otherAmounts: OtherAmounts,
-  state: UsState | CaState | null,
+  billingState: UsState | CaState | null,
   billingCountry: IsoCountry | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
@@ -176,7 +176,7 @@ function createFormReducer() {
         MONTHLY: { amount: null },
         ANNUAL: { amount: null },
       },
-      state: null,
+      billingState: null,
       billingCountry: null,
       checkoutFormHasBeenSubmitted: false,
     },
@@ -383,8 +383,8 @@ function createFormReducer() {
       case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
         return { ...state, userTypeFromIdentityResponse: action.userTypeFromIdentityResponse };
 
-      case 'UPDATE_STATE_OR_PROVINCE':
-        return { ...state, formData: { ...state.formData, state: action.state } };
+      case 'UPDATE_BILLING_STATE':
+        return { ...state, formData: { ...state.formData, billingState: action.billingState } };
 
       case 'UPDATE_BILLING_COUNTRY':
         return { ...state, formData: { ...state.formData, billingCountry: action.billingCountry } };
