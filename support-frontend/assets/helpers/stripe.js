@@ -1,5 +1,6 @@
 // @flow
 import { logException } from 'helpers/logger';
+import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
 
 export const setupStripe = (setStripeHasLoaded: () => void) => {
   if (window.Stripe) {
