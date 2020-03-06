@@ -252,17 +252,20 @@ function onPayment(
 
   // Single doesn't need a state, however recurring (i.e. Zuora) needs a valid state for US and CA billing countries.
   const validatedCountryFromCard: Option<IsoCountry> = findIsoCountry(billingCountryFromCard);
-  const billingAccountRequiresAState = props.contributionType !== 'ONE_OFF' && ['US', 'CA'].includes(validatedCountryFromCard);
+  const billingAccountRequiresAState =
+    props.contributionType !== 'ONE_OFF' && ['US', 'CA'].includes(validatedCountryFromCard);
+
   let countryAndStateValueOk = !billingAccountRequiresAState; // If Zuora requires a state then we're not OK yet.
   if (validatedCountryFromCard) {
-    props.updateBillingCountry(validatedCountryFromCard);
-    const validatedBillingStateFromCard: Option<StateProvince> =
-      stateProvinceFromString(validatedCountryFromCard, billingStateFromCard);
-    if (validatedBillingStateFromCard) {
+    const validatedBillingStateFromCard = stateProvinceFromString(validatedCountryFromCard, validatedCountryFromCard);
+    if (billingAccountRequiresAState && !validatedBillingStateFromCard) {
+      logException(`Invalid billing state: ${billingStateFromCard || ''} for billing country: ${billingCountryFromCard || ''}`);
+      // Don't update the form, because the user may pick another payment method that doesn't update formData.
+    } else {
+      // Update the form data with the billing country value and a valid-or-null billing state
+      props.updateBillingCountry(validatedCountryFromCard);
       props.updateBillingState(validatedBillingStateFromCard);
       countryAndStateValueOk = true;
-    } else if (billingAccountRequiresAState && !props.billingState) {
-      logException('Missing address_state in payment request token and no state/province selected in the form');
     }
   }
 
