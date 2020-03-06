@@ -5,7 +5,7 @@ import { logException } from './logger';
 
 type RecaptchaAction = 'loaded' | 'submit';
 
-const publicKey = '6Le36d0UAAAAAJRqGjj8ADbrgr3diK1zUlu-7Qdm'; // ToDo make this come from param store
+const publicKey = window.guardian.recaptchaPublicKey;
 const isRecaptchaLoaded = () => window && window.grecaptcha && typeof window.grecaptcha.execute !== 'undefined';
 
 const postToBackend = (token: string): Promise<boolean> =>

@@ -11,13 +11,12 @@ import com.gu.identity.model.{User => IdUser}
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
-import config.StringsConfig
+import config.{Configuration, RecaptchaConfigProvider, StringsConfig}
 import cookies.ServersideAbTestCookie
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
-import config.Configuration
 import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
@@ -45,6 +44,7 @@ class Application(
   regularStripeConfigProvider: StripeConfigProvider,
   payPalConfigProvider: PayPalConfigProvider,
   amazonPayConfigProvider: AmazonPayConfigProvider,
+  recaptchaConfigProvider: RecaptchaConfigProvider,
   paymentAPIService: PaymentAPIService,
   membersDataService: MembersDataService,
   stringsConfig: StringsConfig,
@@ -186,7 +186,8 @@ class Application(
       fontLoaderBundle = fontLoaderBundle,
       geoData = geoData,
       shareImageUrl = "https://media.guim.co.uk/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png",
-      shareUrl = "https://support.theguardian.com/contribute"
+      shareUrl = "https://support.theguardian.com/contribute",
+      recaptchaConfigPublicKey = recaptchaConfigProvider.publicKey
     )
   }
 

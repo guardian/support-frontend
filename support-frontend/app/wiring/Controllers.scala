@@ -29,6 +29,7 @@ trait Controllers {
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     appConfig.amazonPayConfigProvider,
+    appConfig.recaptchaConfigProvider,
     paymentAPIService,
     membersDataService,
     stringsConfig,
