@@ -22,7 +22,7 @@ import type {
   ContributionTypeSetting,
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
-import type { ChoiceCardsProductSetTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { ChoiceCardsProductSetTestR2Variants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 
@@ -33,7 +33,7 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
-  choiceCardsVariant: ChoiceCardsProductSetTestVariants,
+  choiceCardsVariant: ChoiceCardsProductSetTestR2Variants,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -42,7 +42,7 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTest,
+  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR2,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -63,9 +63,13 @@ const mapDispatchToProps = (dispatch: Function) => ({
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
 
-  const renderAmountChoiceCards = () => (
+
+  const renderContribTypeChoiceCards = () => (
     <>
-      <ChoiceCardGroup name="contributionTypes" orientation="horizontal">
+      <ChoiceCardGroup
+        name="contributionTypes"
+        orientation="horizontal"
+      >
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
         const { contributionType } = contributionTypeSetting;
         return (
@@ -126,7 +130,7 @@ function withProps(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      {props.choiceCardsVariant !== 'control' ? renderAmountChoiceCards() : renderControl()}
+      {props.choiceCardsVariant === 'rectangles' ? renderContribTypeChoiceCards() : renderControl()}
     </fieldset>
   );
 }

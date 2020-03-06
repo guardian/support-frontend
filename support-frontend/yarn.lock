@@ -1787,20 +1787,25 @@
   resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.7.tgz#680656b92632006d736d0378ae19f8c6943769c8"
   integrity sha512-WSa3gnRYxciFas3QYhtTk8unvj5N9K5IB61LL1CP3bVCJ2euXR13xRRHafI/Vy1dnrDwPa80SaE+apTcwipvpA==
 
-"@guardian/src-choice-card@0.13.0-alpha.5":
-  version "0.13.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@guardian/src-choice-card/-/src-choice-card-0.13.0-alpha.5.tgz#3e87021eb6ba165ff83b97c60d9edd53b0cde6db"
-  integrity sha512-ZWOcOlmqWmtWDxDEZhgjLTi5EaIHLzRg607MQtRre9QitpQ9Cr9istYRY0jnNI0Yngk/FsdFTvG7epdBRal9+A==
+"@guardian/src-choice-card@^0.14.0-alpha.3":
+  version "0.14.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@guardian/src-choice-card/-/src-choice-card-0.14.0-alpha.3.tgz#a25c0c83799f7251c96149fd7e487dc85f5a3ecb"
+  integrity sha512-03dsXyWIXGXtToePPR4H6kTyBq+4rtzUKNCVk7Gk6HKjNOYOK2/3iBLo2mLNjSP8Kt0SdSvfiV58FxxOVMDELg==
 
-"@guardian/src-foundations@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.13.0.tgz#8bfed9b94e2e4f24ecacb754bbe573b6e0cfe088"
-  integrity sha512-8lTZSo49W1lPhBFaaLrg2Eo2jrwUB3VGw6a7ZRI7oBEyTglmlbjFDiciu2Di6WSrzuSWiI+9OJTSSjCP6lTT2A==
+"@guardian/src-foundations@^0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.14.1.tgz#33cf2e95eedf184fdfc40cc75c1dbca4d6d46fdf"
+  integrity sha512-FiH2nsPvHS6wG7b0AePXTGbDCIV+q0aRHZKhsH2X2WeS9K3fZqEF9y+8lTv22nW3r3sv6nSyh4tT7y5+XPC9pA==
 
-"@guardian/src-svgs@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.13.0.tgz#97d893a6e33feb255666fef6779ffe18a7c4e2f5"
-  integrity sha512-cDIGNOaatYVDk+eWCv2cAdBlXZ2ECDxOcc897GowJYCHmy+HifL0AvzHlHRLKYRQXzVcaPfoXDOjVonA4ViHqw==
+"@guardian/src-svgs@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.14.0.tgz#3a5a6d385f2639aca884b5302f3d3ae6e919e290"
+  integrity sha512-ZGwVwVlX3YwG62xO1YjxaHyGFJC8Us80GPeyY8CMv5lfshYd0gGDNJN6vjUI3ssULjcP8ckGOTFcTFs3hOUrMw==
+
+"@guardian/src-utilities@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-utilities/-/src-utilities-0.14.0.tgz#681a3f306d80bec95553e4e398a290d2ce9ef7a9"
+  integrity sha512-UgVTfNmX9ao9fWa8hfixsy9zezyE/77xtWAuvdBLFRXOKmxpXUwl9uWLPtMQgbAlhOwef5sX1AXxe3KAeVYMMg==
 
 "@icons/material@^0.2.4":
   version "0.2.4"

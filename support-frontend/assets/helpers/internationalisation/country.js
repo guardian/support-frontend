@@ -114,12 +114,16 @@ const auStates: {
   JBT: 'Jervis Bay Territory',
 };
 
-const newspaperCountries = {
+const newspaperCountries: {
+  [string]: string,
+} = {
   GB: 'United Kingdom',
   IM: 'Isle of Man',
 };
 
-const countries = {
+const countries: {
+  [string]: string,
+} = {
   GB: 'United Kingdom',
   US: 'United States',
   AU: 'Australia',
@@ -421,20 +425,26 @@ export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) =>
   stripePaymentRequestAllowedCountries.includes(country);
 
 // ----- Functions ----- /
+function stateProvinceFromMap(l: string, states: {[p: string]: string}): ?StateProvince {
+  const s = l.toUpperCase();
+  return states[s] ? s :
+    Object.keys(states).find(key => states[key].toUpperCase() === s || (s.length === 3 && s.startsWith(key)));
+}
 
 function usStateFromString(s: string): Option<UsState> {
-  return usStates[s] ? s : null;
+  return stateProvinceFromMap(s, usStates) || null;
 }
 
 function caStateFromString(s: string): Option<CaState> {
-  return caStates[s] ? s : null;
+  return stateProvinceFromMap(s, caStates) || null;
 }
 
 function auStateFromString(s: string): Option<AuState> {
-  return auStates[s] ? s : null;
+  return stateProvinceFromMap(s, auStates) || null;
 }
 
-function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option<StateProvince> {
+function stateProvinceFromString(country: Option<IsoCountry>, s?: string): Option<StateProvince> {
+  if (!s) { return null; }
   switch (country) {
     case 'US':
       return usStateFromString(s);
@@ -445,11 +455,6 @@ function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option
     default:
       return null;
   }
-}
-
-function findIsoCountry(country: string): Option<IsoCountry> {
-  const maybeIsoCountry = Object.keys(countries).find(key => countries[key] === country);
-  return maybeIsoCountry !== undefined ? maybeIsoCountry : null;
 }
 
 function fromString(s: string): ?IsoCountry {
@@ -464,6 +469,11 @@ function fromString(s: string): ?IsoCountry {
     return isoCountryArray[isoIndex];
   }
   return null;
+}
+
+function findIsoCountry(country?: string): Option<IsoCountry> {
+  if (!country) { return null; }
+  return fromString(country) || Object.keys(countries).find(key => countries[key] === country) || null;
 }
 
 function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {

@@ -14,5 +14,10 @@ the breakage for reference.
 * Change 1
 * Change 2
 
+## Accessibility test checklist
+ - [ ] [Tested with screen reader](https://accessibility.gutools.co.uk/testing/web/screen-readers/)
+ - [ ] [Navigable with keyboard](https://accessibility.gutools.co.uk/testing/web/keyboard-navigation/)
+ - [ ] [Colour contrast passed](https://accessibility.gutools.co.uk/testing/web/colour-contrast/)
+
 ## Screenshots
 

@@ -383,7 +383,7 @@ function createFormReducer() {
       case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
         return { ...state, userTypeFromIdentityResponse: action.userTypeFromIdentityResponse };
 
-      case 'UPDATE_STATE':
+      case 'UPDATE_STATE_OR_PROVINCE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
       case 'UPDATE_BILLING_COUNTRY':

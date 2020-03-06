@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.salesforce.Fixtures.salesforceId
 import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
-import com.gu.support.workers.JsonFixtures.{createSalesForceContactJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createSalesForceGiftContactJson, createSalesForceContactJson, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.CreateSalesforceContact
@@ -20,6 +20,20 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     createContact.handleRequestFuture(wrapFixture(createSalesForceContactJson), outStream, context).map { _ =>
+
+      val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
+      result.isSuccess should be(true)
+      val contacts = result.get._1.salesforceContacts
+      contacts.buyer.Id should be("0033E00001CVatAQAT")
+    }
+  }
+
+  it should "upsert a gift SalesforceContactRecord" in {
+    val createContact = new CreateSalesforceContact()
+
+    val outStream = new ByteArrayOutputStream()
+
+    createContact.handleRequestFuture(wrapFixture(createSalesForceGiftContactJson), outStream, context).map { _ =>
 
       val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
       result.isSuccess should be(true)

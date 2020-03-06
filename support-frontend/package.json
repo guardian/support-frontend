@@ -55,8 +55,7 @@
       "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
     },
     "verbose": true,
-    "testEnvironment": "./jestEnvironment",
-    "testURL": "https://www.somthing.com/test.html"
+    "testEnvironment": "./jestEnvironment"
   },
   "repository": {
     "type": "git",
@@ -68,9 +67,10 @@
   "dependencies": {
     "@emotion/core": "^10.0.27",
     "@guardian/pasteup": "^1.0.0-alpha.7",
-    "@guardian/src-choice-card": "0.13.0-alpha.5",
-    "@guardian/src-foundations": "^0.13.0",
-    "@guardian/src-svgs": "^0.13.0",
+    "@guardian/src-choice-card": "^0.14.0-alpha.3",
+    "@guardian/src-foundations": "^0.14.1",
+    "@guardian/src-svgs": "^0.14.0",
+    "@guardian/src-utilities": "^0.14.0",
     "@sentry/browser": "^5.4.0",
     "cssnano": "^4.1.10",
     "dompurify": "^2.0.7",

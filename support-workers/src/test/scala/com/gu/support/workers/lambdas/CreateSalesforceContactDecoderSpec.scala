@@ -14,7 +14,7 @@ import org.scalatestplus.mockito.MockitoSugar
 class CreateSalesforceContactDecoderSpec extends AnyFlatSpec with Matchers with MockitoSugar with LazyLogging {
 
   "CreateSalesforceContactDecoder" should "be able to decode a CreateSalesforceContactState" in {
-    val state = decode[CreateSalesforceContactState](createSalesForceContactJson)
+    val state = decode[CreateSalesforceContactState](createSalesForceGiftContactJson)
     val result = state.right.get
     result.product match {
       case contribution: Contribution => contribution.amount should be(5)

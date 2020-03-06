@@ -61,7 +61,7 @@ export type Action =
   | { type: 'UPDATE_LAST_NAME', lastName: string }
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_PASSWORD', password: string }
-  | { type: 'UPDATE_STATE', state: UsState | CaState | null }
+  | { type: 'UPDATE_STATE_OR_PROVINCE', state: UsState | CaState | null }
   | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
@@ -169,9 +169,9 @@ const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_USER_FORM_DATA', userFormData })));
   };
 
-const updateState = (state: UsState | CaState | null): ((Function) => void) =>
+const updateStateOrProvince = (state: UsState | CaState | null): ((Function) => void) =>
   (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_STATE', state })));
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_STATE_OR_PROVINCE', state })));
   };
 
 const updateBillingCountry = (billingCountry: IsoCountry): Action =>
@@ -693,7 +693,7 @@ export {
   updateFirstName,
   updateLastName,
   updateEmail,
-  updateState,
+  updateStateOrProvince,
   updateBillingCountry,
   updateUserFormData,
   setThirdPartyPaymentLibrary,
