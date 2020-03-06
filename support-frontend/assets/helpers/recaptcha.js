@@ -5,6 +5,7 @@ import { logException } from './logger';
 
 const publicKey = '6Le36d0UAAAAAJRqGjj8ADbrgr3diK1zUlu-7Qdm'; // ToDo make this come from param store
 const isRecaptchaLoaded = () => window && window.grecaptcha && typeof window.grecaptcha.execute !== 'undefined';
+
 const postToBackend = (token: string): Promise<boolean> =>
   fetch('/recaptcha', {
     method: 'POST',
@@ -15,14 +16,13 @@ const postToBackend = (token: string): Promise<boolean> =>
       token,
     }),
   }).then(response => response.json())
-    .then((data) => {
-      return data.allow;
-    });
+    .then(data => data.allow);
 
 const execute = (action: string): Promise<boolean> => {
   if (isRecaptchaLoaded) {
-    return window.grecaptcha.execute(publicKey, { action })
-      .then((token) => {
+    return window.grecaptcha
+      .execute(publicKey, { action })
+      .then(token => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
         return postToBackend(token);
       });
@@ -30,9 +30,8 @@ const execute = (action: string): Promise<boolean> => {
   return Promise.reject(new Error('recaptcha not ready'));
 };
 
-const initRecaptchaV3 = () => {
-
-  new Promise((resolve, reject) => {
+const loadRecapture = () => {
+  return new Promise((resolve, reject) => {
     const recaptchaScript = document.createElement('script');
     recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${publicKey}`;
 
@@ -42,11 +41,12 @@ const initRecaptchaV3 = () => {
     if (document.head) {
       document.head.appendChild(recaptchaScript);
     }
-  }).then(() => {
-    window.grecaptcha.ready(() => {
-      execute('loaded');
-    });
   })
+};
+
+const initRecaptchaV3 = () => {
+  loadRecapture()
+    .then(() => window.grecaptcha.ready(() => execute('loaded')))
     .catch((error) => {
       logException('Error loading recaptcha', error);
     });
