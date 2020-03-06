@@ -49,6 +49,7 @@ import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
+import { initRecaptchaV3 } from '../../helpers/recaptcha';
 
 // ----- Functions ----- //
 
@@ -219,13 +220,6 @@ function selectInitialContributionTypeAndPaymentMethod(
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }
 
-// Load RecaptchaV3
-const loadRecaptchaV3 = (publicKey) => {
-  const recaptchaScript = document.createElement('script');
-  recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${publicKey}`;
-  document.body.appendChild(recaptchaScript);
-};
-
 const init = (store: Store<State, Action, Function>) => {
   const { dispatch } = store;
 
@@ -261,7 +255,7 @@ const init = (store: Store<State, Action, Function>) => {
   }));
 
   //  Initialise Recaptcha V3
-  loadRecaptchaV3('6Le36d0UAAAAAJRqGjj8ADbrgr3diK1zUlu-7Qdm');
+  initRecaptchaV3();
 };
 
 

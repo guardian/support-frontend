@@ -51,8 +51,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import { logException } from 'helpers/logger';
-import Recaptcha from 'pages/contributions-landing/components/RecaptchaV3/Recaptcha';
-
+import { execute } from '../../../helpers/recaptcha';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -201,6 +200,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
 
 // Note PayPal recurring flow does not call this function
 function onSubmit(props: PropTypes): Event => void {
+  execute('submit');
   return (event) => {
     // Causes errors to be displayed against payment fields
     event.preventDefault();
@@ -227,26 +227,6 @@ function withProps(props: PropTypes) {
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
-      <Recaptcha
-        elementID="form-recaptcha"
-        callback={
-          (token: string) => {
-            console.log(token);
-            fetch('/recaptcha', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                token,
-              }),
-            }).then(response =>
-              response.json()).then(data => console.log(data));
-          }
-        }
-        publicKey="6Le36d0UAAAAAJRqGjj8ADbrgr3diK1zUlu-7Qdm"
-        action="contributionsFormLoaded"
-      />
       <h2 className="hidden-heading">Make a contribution</h2>
       <div className="contributions-form-selectors">
         <ContributionTypeTabs />

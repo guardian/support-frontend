@@ -29,7 +29,6 @@ class RecaptchaService(wsClient: WSClient, secretKey: String)(implicit ec: Execu
       .attemptT
       .leftMap(_.toString)
       .subflatMap(resp => {
-        println(resp.body)
         (resp.json ).validate[RecaptchaResponse].asEither.leftMap(_.mkString(","))
       })
 }
