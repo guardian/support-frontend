@@ -16,7 +16,6 @@ const postToBackend = (token: string): Promise<boolean> =>
     }),
   }).then(response => response.json())
     .then((data) => {
-      console.log(data);
       return data.allow;
     });
 
@@ -45,7 +44,6 @@ const initRecaptchaV3 = () => {
     }
   }).then(() => {
     window.grecaptcha.ready(() => {
-      console.log('grepcaptcha loaded');
       execute('loaded');
     });
   })

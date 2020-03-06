@@ -254,8 +254,7 @@ const init = (store: Store<State, Action, Function>) => {
     firstName, lastName, email, state: stateField,
   }));
 
-  //  Initialise Recaptcha V3
-  if (state.common.abParticipations.recaptchaPresenceTestVariants === 'recaptchaPresent') {
+  if (state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
     initRecaptchaV3();
   }
 };

@@ -115,7 +115,7 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
-  isRecaptchaPresentTest: state.common.abParticipations.recaptchaPresenceTestVariants === 'recaptchaPresent',
+  isRecaptchaPresentTest: state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent',
 });
 
 
