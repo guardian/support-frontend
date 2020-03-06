@@ -255,7 +255,9 @@ const init = (store: Store<State, Action, Function>) => {
   }));
 
   //  Initialise Recaptcha V3
-  initRecaptchaV3();
+  if (state.common.abParticipations.recaptchaPresenceTestVariants === 'recaptchaPresent') {
+    initRecaptchaV3();
+  }
 };
 
 
