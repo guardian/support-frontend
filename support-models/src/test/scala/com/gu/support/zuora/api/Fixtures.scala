@@ -125,7 +125,7 @@ object Fixtures {
     cardNumber,
     Some(Country.UK),
     12, 22,
-    "AmericanExpress",
+    Some("AmericanExpress"),
     StripeGatewayDefault,
     stripePaymentType = Some(StripePaymentType.StripeCheckout))
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")

@@ -39,7 +39,7 @@ case class CreditCardReferenceTransaction(
   creditCardCountry: Option[Country],
   creditCardExpirationMonth: Int,
   creditCardExpirationYear: Int,
-  creditCardType: String /*TODO: strip spaces?*/ ,
+  creditCardType: Option[String] /*TODO: strip spaces?*/ ,
   paymentGateway: PaymentGateway,
   `type`: String = "CreditCardReferenceTransaction",
   stripePaymentType: Option[StripePaymentType]

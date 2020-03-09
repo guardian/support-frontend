@@ -57,7 +57,7 @@ object Fixtures {
     cardNumber,
     Some(Country.UK),
     12, 22,
-    "AmericanExpress",
+    Some("AmericanExpress"),
     _: PaymentGateway,
     stripePaymentType = Some(StripePaymentType.StripeCheckout)
   )

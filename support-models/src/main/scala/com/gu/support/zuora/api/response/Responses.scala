@@ -115,7 +115,7 @@ case class GetPaymentMethodDirectDebitResponse(
 case class GetPaymentMethodCardReferenceResponse(
   `type`: String,
   paymentMethodStatus: String,
-  creditCardType: String,
+  creditCardType: Option[String],
   tokenId: String,
   secondTokenId: String,
   creditCardCountry: Option[String] = None,

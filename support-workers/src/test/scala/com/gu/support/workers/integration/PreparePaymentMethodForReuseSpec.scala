@@ -44,7 +44,7 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
         creditCardCountry = Some(Country.US),
         creditCardExpirationMonth = 2,
         creditCardExpirationYear = 2022,
-        creditCardType = "Visa",
+        creditCardType = Some("Visa"),
         paymentGateway = StripeGatewayDefault,
         stripePaymentType = None
       )
