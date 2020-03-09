@@ -20,6 +20,7 @@ object PaymentGateway {
     case StripeGatewayAUD.name => StripeGatewayAUD
     case PayPalGateway.name => PayPalGateway
     case DirectDebitGateway.name => DirectDebitGateway
+    case ZuoraInstanceDirectDebitGateway.name => ZuoraInstanceDirectDebitGateway
     case StripeGatewayPaymentIntentsDefault.name => StripeGatewayPaymentIntentsDefault
     case StripeGatewayPaymentIntentsAUD.name => StripeGatewayPaymentIntentsAUD
   }
@@ -55,3 +56,7 @@ case object DirectDebitGateway extends PaymentGateway {
   val name = "GoCardless"
 }
 
+case object ZuoraInstanceDirectDebitGateway extends PaymentGateway {
+  // not sure why there are two GoCardless gateways in Zuora - but having it declared here allows it be re-used
+  val name = "GoCardless - Zuora Instance"
+}
