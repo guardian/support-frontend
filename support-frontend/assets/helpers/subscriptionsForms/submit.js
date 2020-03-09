@@ -39,7 +39,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
-import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -57,6 +56,7 @@ import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 import type { IsoCountry } from '../internationalisation/country';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 
 // ----- Functions ----- //
 
@@ -207,6 +207,15 @@ function checkStripeUserType(
   }
 }
 
+const directDebitAuthorised = (onAuthorised: (pa: PaymentAuthorisation) => void, ddState: DirectDebitState) => {
+  onAuthorised({
+    paymentMethod: DirectDebit,
+    accountHolderName: ddState.accountHolderName,
+    sortCode: ddState.sortCodeString,
+    accountNumber: ddState.accountNumber,
+  });
+};
+
 function showPaymentMethod(
   dispatch: Dispatch<Action>,
   onAuthorised: (pa: PaymentAuthorisation) => void,
@@ -216,13 +225,14 @@ function showPaymentMethod(
   country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
   stripePaymentMethod: Option<string>,
+  state: AnyCheckoutState,
 ): void {
   switch (paymentMethod) {
     case Stripe:
       checkStripeUserType(onAuthorised, isTestUser, price, currency, stripePaymentMethod);
       break;
     case DirectDebit:
-      dispatch(openDirectDebitPopUp());
+      directDebitAuthorised(onAuthorised, state.page.directDebit);
       break;
     case PayPal:
       // PayPal is more complicated and is handled differently, see PayPalExpressButton component
@@ -294,6 +304,7 @@ function submitForm(
     billingCountry,
     paymentMethod,
     stripePaymentMethod,
+    state,
   );
 }
 

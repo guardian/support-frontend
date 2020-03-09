@@ -56,7 +56,7 @@ import {
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
-import { PayPal, Stripe } from 'helpers/paymentMethods';
+import { PayPal, Stripe, DirectDebit } from 'helpers/paymentMethods';
 import {
   getAppliedPromoDescription,
   getPriceDescription,
@@ -65,7 +65,7 @@ import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { getGlobal } from 'helpers/globals';
-
+import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 
 // ----- Types ----- //
 
@@ -74,7 +74,6 @@ type PropTypes = {|
   country: IsoCountry,
   signOut: typeof signOut,
   submitForm: Function,
-
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
@@ -222,8 +221,6 @@ function DigitalCheckoutForm(props: PropTypes) {
             amount={props.amount}
             billingPeriod={props.billingPeriod}
             allErrors={[...props.addressErrors, ...props.formErrors]}
-            priceSummary={<PriceSummary />}
-            directDebitButtonText="Start your free trial now"
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"
@@ -243,11 +240,24 @@ function DigitalCheckoutForm(props: PropTypes) {
               buttonText="Start your free trial now"
             />
           </FormSectionHiddenUntilSelected>
+          <FormSectionHiddenUntilSelected
+            id="directDebitForm"
+            show={props.paymentMethod === DirectDebit}
+            title="Your account details"
+          >
+            <DirectDebitForm
+              buttonText="Start free trial"
+              submitForm={props.submitForm}
+              allErrors={[...props.addressErrors, ...props.formErrors]}
+              submissionError={props.submissionError}
+              submissionErrorHeading={submissionErrorHeading}
+            />
+          </FormSectionHiddenUntilSelected>
           <GeneralErrorMessage
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <CancellationSection />
+          <CancellationSection paymentMethod={props.paymentMethod} />
         </Form>
       </CheckoutLayout>
     </Content>

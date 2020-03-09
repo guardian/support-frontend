@@ -357,4 +357,3 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 // ----- Exports ----- //
 
 export default connect(mapStateToProps, mapDispatchToProps)(DirectDebitForm);
-

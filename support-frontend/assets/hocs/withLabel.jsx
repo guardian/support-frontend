@@ -5,6 +5,7 @@
 import React from 'react';
 
 import { Label, type PropsForHoc } from 'components/forms/label';
+import { type Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 
@@ -15,7 +16,7 @@ type Out<Props> = React$ComponentType<AugmentedProps<Props>>;
 
 // ----- Component ----- //
 
-function withLabel<Props: { id: string }>(Component: In<Props>): Out<Props> {
+function withLabel<Props: { id: Option<string> }>(Component: In<Props>): Out<Props> {
   return ({
     label, optional, footer, ...props
   }: AugmentedProps<Props>) => (

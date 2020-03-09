@@ -18,6 +18,7 @@ export type Action =
   | { type: 'DIRECT_DEBIT_GUARANTEE_OPEN' }
   | { type: 'DIRECT_DEBIT_GUARANTEE_CLOSE' }
   | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index: SortCodeIndex, partialSortCode: string }
+  | { type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING', sortCodeString: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME', accountHolderName: string }
   | { type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
@@ -45,6 +46,9 @@ const closeDirectDebitGuarantee = (): Action =>
 const updateSortCode = (index: SortCodeIndex, partialSortCode: string): Action =>
   ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE', index, partialSortCode });
 
+const updateSortCodeString = (sortCodeString: string): Action =>
+  ({ type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING', sortCodeString });
+
 const updateAccountNumber = (accountNumber: string): Action =>
   ({ type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER', accountNumber });
 
@@ -63,17 +67,17 @@ const resetDirectDebitFormError = (): Action =>
 const setDirectDebitFormPhase = (phase: Phase): Action =>
   ({ type: 'DIRECT_DEBIT_SET_FORM_PHASE', phase });
 
-
 function payDirectDebitClicked(): Function {
   return (dispatch: Function, getState: Function) => {
 
     const {
+      sortCodeString,
       sortCodeArray,
       accountNumber,
       accountHolderConfirmation,
     } = getState().page.directDebit;
 
-    const sortCode = sortCodeArray.join('');
+    const sortCode = sortCodeArray.join('') || sortCodeString;
     const isTestUser: boolean = getState().page.user.isTestUser || false;
     const { csrf } = getState().page;
 
@@ -117,12 +121,13 @@ function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation 
   return (dispatch: Function, getState: Function) => {
 
     const {
+      sortCodeString,
       sortCodeArray,
       accountNumber,
       accountHolderName,
     } = getState().page.directDebit;
 
-    const sortCode = sortCodeArray.join('');
+    const sortCode = sortCodeArray.join('') || sortCodeString;
 
     onPaymentAuthorisation({
       paymentMethod: DirectDebit,
@@ -144,6 +149,7 @@ export {
   openDirectDebitGuarantee,
   closeDirectDebitGuarantee,
   updateSortCode,
+  updateSortCodeString,
   updateAccountNumber,
   updateAccountHolderName,
   updateAccountHolderConfirmation,

@@ -67,16 +67,15 @@ import {
   type SetCountryChangedAction,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
-import { Stripe } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
-import GeneralErrorMessage
-  from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { getGlobal } from 'helpers/globals';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 
 // ----- Types ----- //
 
@@ -303,7 +302,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
             amount={price.price}
             billingPeriod={props.billingPeriod}
             allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-            directDebitButtonText="Pay now"
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"
@@ -322,11 +320,20 @@ function WeeklyCheckoutForm(props: PropTypes) {
               buttonText="Pay now"
             />
           </FormSectionHiddenUntilSelected>
-          <GeneralErrorMessage
-            errorReason={props.submissionError}
-            errorHeading={submissionErrorHeading}
-          />
-          <CancellationSection />
+          <FormSectionHiddenUntilSelected
+            id="directDebitForm"
+            show={props.paymentMethod === DirectDebit}
+            title="Your account details"
+          >
+            <DirectDebitForm
+              buttonText="Subscribe"
+              submitForm={props.submitForm}
+              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+              submissionError={props.submissionError}
+              submissionErrorHeading={submissionErrorHeading}
+            />
+          </FormSectionHiddenUntilSelected>
+          <CancellationSection paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>

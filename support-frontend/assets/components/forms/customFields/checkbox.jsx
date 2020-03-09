@@ -5,11 +5,12 @@
 import React, { type Node } from 'react';
 
 import './checkbox.scss';
+import { type Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 
 type PropTypes = {
-  id?: string,
+  id: Option<string>,
   text: Node
 };
 

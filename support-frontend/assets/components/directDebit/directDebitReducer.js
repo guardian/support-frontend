@@ -10,11 +10,12 @@ export type DirectDebitState = {
   isPopUpOpen: boolean,
   isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
+  sortCodeString: string,
   accountNumber: string,
   accountHolderName: string,
   accountHolderConfirmation: boolean,
   formError: string,
-  phase: Phase
+  phase: Phase,
 };
 
 
@@ -22,6 +23,7 @@ const initialState: DirectDebitState = {
   isPopUpOpen: false,
   isDDGuaranteeOpen: false,
   sortCodeArray: Array(3).fill(''),
+  sortCodeString: '',
   accountNumber: '',
   accountHolderName: '',
   accountHolderConfirmation: false,
@@ -67,6 +69,11 @@ const directDebitReducer = (
       initialState.sortCodeArray[action.index] = action.partialSortCode;
       return Object.assign({}, state, {
         sortCode: initialState.sortCodeArray,
+      });
+
+    case 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING':
+      return Object.assign({}, state, {
+        sortCodeString: action.sortCodeString,
       });
 
     case 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER':

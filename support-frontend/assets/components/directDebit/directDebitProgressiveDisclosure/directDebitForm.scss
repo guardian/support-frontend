@@ -1,0 +1,236 @@
+// -----  gu-sass ----- //
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-direct-debit-form {
+  clear: left;
+  margin-top: 20px;
+  margin-left: 0;
+
+  .component-error-message {
+    display: block;
+    background-color: transparent;
+    color: gu-colour(state-error);
+    padding: 0;
+    height: 0;
+  }
+
+  .component-general-error-message {
+    margin: 20px 0 0;
+  }
+
+  .svg-exclamation-alternate {
+    float: left;
+    margin-right: 8px;
+  }
+
+  .svg-exclamation-alternate__circle {
+    fill: none;
+    stroke: gu-colour(state-error);
+  }
+
+  .svg-exclamation-alternate__exclamation-mark {
+    fill: gu-colour(state-error);
+  }
+
+  .component-error-message__message {
+    position: relative;
+    left: 1px;
+    top: 3px;
+  }
+}
+
+.component-direct-debit-form__account-holder-name,
+.component-direct-debit-form__account-number,
+.component-direct-debit-form__sort-code {
+  margin-bottom: 20px;
+}
+
+.component-direct-debit-form__field-label {
+  display: block;
+  font-family: $gu-text-sans-web;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+.component-direct-debit-form__text-field {
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: white;
+  color: gu-colour(neutral-7);
+  border: 1px solid gu-colour(neutral-86);
+  padding: 0 15px;
+  height: 40px;
+  width: 266px;
+  @include mq($from: mobileMedium) {
+    width: 313px;
+  }
+  @include mq($from: mobileLandscape) {
+    width: 374px
+  }
+}
+
+.component-direct-debit-form__sort-code {
+  width: 177px;
+  @include mq($from: mobileMedium) {
+    width: 209px;
+  }
+  @include mq($from: mobileLandscape) {
+    width: 249px
+  }
+}
+
+.component-direct-debit-form__confirmation-text {
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
+  color: gu-colour(neutral-7);
+  padding-left: 33px;
+  display: block;
+  overflow: hidden;
+}
+
+.component-direct-debit-form__confirmation-css-checkbox {
+  position: relative;
+}
+
+#qa-direct-debit-submit {
+  margin-top: 10px;
+}
+
+.component-direct-debit-form__confirmation-label {
+  cursor: pointer;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 2px;
+  left: 0;
+  background: #fff;
+  border: solid 1px #121212;
+  border-radius: 2px;
+  &:after {
+    opacity: 0;
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 5px;
+    background: transparent;
+    top: 4px;
+    left: 4px;
+    border: 3px solid #333;
+    border-top: none;
+    border-right: none;
+    transform: rotate(-45deg);
+  }
+  &:hover::after {
+    opacity: 0.5;
+  }
+}
+
+.component-direct-debit-form__confirmation-input {
+  display: none;
+  &:checked + label:after {
+    opacity: 1;
+  }
+}
+
+.component-direct-debit-form__confirmation-guidance {
+  margin: 18px 0;
+}
+
+.component-direct-debit-form__cta-text {
+  display: block;
+  color: gu-colour(neutral-7);
+  font-family: $gu-text-sans-web;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.component-direct-debit-form__cta-text--inverse {
+  color: white;
+}
+
+.component-direct-debit-form__cta-container {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.component-direct-debit-form__cta {
+  background-color: gu-colour(highlight-main);
+  border: solid 1px lighten(gu-colour(highlight-main), 15%);
+  border-radius: 100px;
+  cursor: pointer;
+  position: relative;
+  height: $gu-cta-height;
+  padding: 0 20px;
+
+  .svg-arrow-right-straight {
+    display: block;
+    width: 24px;
+    fill: gu-colour(neutral-7);
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &:hover {
+    background-color: lighten(gu-colour(highlight-main), 15%);
+  }
+}
+
+.component-direct-debit-form__cta--pay-button {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 280px;
+}
+
+.component-direct-debit-form__cta--edit-button {
+  background-color: gu-colour(neutral-7);
+  border: solid 1px gu-colour(neutral-7);
+  color: white;
+
+  &:hover {
+    background-color: #000;
+  }
+}
+
+.component-direct-debit-form__cta--confirm-button {
+  display: inline-flex;
+
+  .component-direct-debit-form__cta-text {
+    margin-right: 30px;
+    margin-bottom: 2px;
+  }
+}
+
+.component-direct-debit-form__legal-notice {
+  font-family: $gu-text-sans-web;
+  font-size: 12px;
+  color: gu-colour(neutral-60);
+  padding-top: $gu-v-spacing;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: inline-block;
+  a {
+    color: gu-colour(neutral-60);
+  }
+}
+
+.component-direct-debit-form__open-link {
+  background: none;
+  outline: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.svg-direct-debit-symbol-and-text {
+  margin-top: $gu-v-spacing;
+  fill: gu-colour(neutral-60);
+}

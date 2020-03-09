@@ -63,7 +63,7 @@ import {
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { TextArea } from 'components/forms/textArea';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Stripe } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
@@ -73,7 +73,7 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-
+import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 
 // ----- Types ----- //
 
@@ -311,7 +311,6 @@ function PaperCheckoutForm(props: PropTypes) {
             amount={props.amount}
             billingPeriod={props.billingPeriod}
             allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-            directDebitButtonText="Pay now"
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"
@@ -330,11 +329,24 @@ function PaperCheckoutForm(props: PropTypes) {
               buttonText="Pay now"
             />
           </FormSectionHiddenUntilSelected>
+          <FormSectionHiddenUntilSelected
+            id="directDebitForm"
+            show={props.paymentMethod === DirectDebit}
+            title="Your account details"
+          >
+            <DirectDebitForm
+              buttonText="Subscribe"
+              submitForm={props.submitForm}
+              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+              submissionError={props.submissionError}
+              submissionErrorHeading={submissionErrorHeading}
+            />
+          </FormSectionHiddenUntilSelected>
           <GeneralErrorMessage
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <CancellationSection />
+          <CancellationSection paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>
