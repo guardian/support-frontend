@@ -49,7 +49,6 @@ import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
-import { initRecaptchaV3 } from '../../helpers/recaptcha';
 
 // ----- Functions ----- //
 
@@ -254,9 +253,6 @@ const init = (store: Store<State, Action, Function>) => {
     firstName, lastName, email, billingState: stateField,
   }));
 
-  if (state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-    initRecaptchaV3();
-  }
 };
 
 
