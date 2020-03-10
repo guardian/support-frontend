@@ -1,10 +1,16 @@
 // @flow
-
+// eslint-disable-next-line no-unused-vars
 import React, { type Node, type Element, type ChildrenArray } from 'react';
+/** @jsx jsx */ import { jsx, css } from '@emotion/core';
+import { headline } from '@guardian/src-foundations/typography';
 import { type Option } from 'helpers/types/option';
 import Heading, { type HeadingSize } from 'components/heading/heading';
 
 import './checkoutForm.scss';
+
+const h2 = css`
+    ${headline.small()};
+`;
 
 /*
 Form Section
@@ -42,25 +48,23 @@ FormSection.defaultProps = {
 type FormSectionHiddenPropTypes = {|
   title: Option<string>,
   children: Node,
-  headingSize: HeadingSize,
   show?: boolean,
   id?: Option<string>,
 |};
 
 const FormSectionHiddenUntilSelected = ({
-  children, title, headingSize, show, id,
+  children, title, show, id,
 }: FormSectionHiddenPropTypes) => (
   <div id={id} className={show ? 'component-checkout-form-section' : 'component-checkout-form-section is-hidden'}>
     {show && (
     <div className="component-checkout-form-section__wrap">
-      {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
+      {title && <Heading css={h2}>{title}</Heading>}
       {children}
     </div>)}
   </div>
 );
 
 FormSectionHiddenUntilSelected.defaultProps = {
-  headingSize: 2,
   title: null,
   show: false,
   id: '',

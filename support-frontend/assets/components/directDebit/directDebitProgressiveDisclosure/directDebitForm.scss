@@ -2,9 +2,6 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-direct-debit-form {
-  clear: left;
-  margin-top: 20px;
-  margin-left: 0;
 
   .component-error-message {
     display: block;
@@ -39,12 +36,6 @@
   }
 }
 
-.component-direct-debit-form__account-holder-name,
-.component-direct-debit-form__account-number,
-.component-direct-debit-form__sort-code {
-  margin-bottom: 20px;
-}
-
 .component-direct-debit-form__field-label {
   display: block;
   font-family: $gu-text-sans-web;
@@ -69,16 +60,6 @@
   }
   @include mq($from: mobileLandscape) {
     width: 374px
-  }
-}
-
-.component-direct-debit-form__sort-code {
-  width: 177px;
-  @include mq($from: mobileMedium) {
-    width: 209px;
-  }
-  @include mq($from: mobileLandscape) {
-    width: 249px
   }
 }
 

@@ -2,21 +2,34 @@
 
 // ----- Imports ----- //
 
+// eslint-disable-next-line no-unused-vars
 import React from 'react';
-import { compose } from 'redux';
+/** @jsx jsx */ import { jsx, css } from '@emotion/core';
 
-import Button from 'components/button/button';
+import { ThemeProvider } from 'emotion-theming';
+import { Button, buttonReaderRevenue } from '@guardian/src-button';
+import { TextInput } from '@guardian/src-text-input';
+import { Checkbox } from '@guardian/src-checkbox';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
-import { Input } from 'components/forms/input';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
-import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type Option } from 'helpers/types/option';
 
+import { space } from '@guardian/src-foundations';
+
 import '../directDebitForm.scss';
+
+const spaceAfterInput = css`
+  margin-bottom: ${space[6]}px;
+`;
+
+const directDebitForm = css`
+  clear: left;
+  margin-top: ${space[6]}px;
+  margin-left: 0;
+  margin-bottom: ${space[12]}px;
+`;
 
 type EventHandler = (e: SyntheticInputEvent<HTMLInputElement>) => void;
 
@@ -43,14 +56,11 @@ type PropTypes = {
   onSubmit: EventHandler,
 }
 
-const InputWithError = compose(withError, withLabel)(Input);
-const CheckBoxWithError = withError(CheckboxInput);
-
 function Form(props: PropTypes) {
   return (
-    <div className="component-direct-debit-form">
-      <div className="component-direct-debit-form__account-holder-name">
-        <InputWithError
+    <div css={directDebitForm}>
+      <div css={spaceAfterInput}>
+        <TextInput
           id="account-holder-name-input"
           value={props.accountHolderName}
           autoComplete="off"
@@ -62,11 +72,12 @@ function Form(props: PropTypes) {
         />
       </div>
 
-      <div className="component-direct-debit-form__sort-code">
-        <InputWithError
+      <div css={spaceAfterInput}>
+        <TextInput
           id="sort-code-input"
           label="Sort code"
           autoComplete="off"
+          width={10}
           type="text"
           inputmode="numeric"
           pattern="[0-9]*"
@@ -79,8 +90,8 @@ function Form(props: PropTypes) {
         />
       </div>
 
-      <div className="component-direct-debit-form__account-number">
-        <InputWithError
+      <div css={spaceAfterInput}>
+        <TextInput
           id="account-number-input"
           value={props.accountNumber}
           autoComplete="off"
@@ -96,23 +107,26 @@ function Form(props: PropTypes) {
         />
       </div>
 
-      <div className="component-direct-debit-form__confirmation-css-checkbox">
-        <CheckBoxWithError
+      <div css={spaceAfterInput}>
+        <Checkbox
           id="account-holder-confirmation"
           onChange={e => props.onChange('accountHolderConfirmation', props.updateAccountHolderConfirmation, e)}
           checked={props.accountHolderConfirmation}
-          text="I confirm that I am the account holder and I am solely able to authorise debit from
+          label="Confirmation"
+          supporting="I confirm that I am the account holder and I am solely able to authorise debit from
           the account"
           error={props.accountHolderConfirmationError}
         />
       </div>
+      <ThemeProvider theme={buttonReaderRevenue}>
+        <Button
+          id="qa-direct-debit-submit"
+          onClick={e => props.onSubmit(e)}
+        >
+          Confirm
+        </Button>
+      </ThemeProvider>
 
-      <Button
-        id="qa-direct-debit-submit"
-        onClick={e => props.onSubmit(e)}
-      >
-        Confirm
-      </Button>
       {props.accountErrorsLength > 0 && (
         <ErrorSummary errors={[...props.accountErrors]} />
       )}

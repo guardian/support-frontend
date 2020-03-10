@@ -6,6 +6,8 @@ import React from 'react';
 
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+import { ThemeProvider } from 'emotion-theming';
+import { Button, buttonReaderRevenue, buttonReaderRevenueAlt } from '@guardian/src-button';
 
 
 function Playback(props: {
@@ -53,20 +55,21 @@ function Playback(props: {
       </div>
 
       <div className="component-direct-debit-form__cta-container">
-        <button
-          className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
-          onClick={props.editDirectDebitClicked}
-        >
-          <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">Edit</span>
-        </button>
-        <button
-          id="qa-submit-button-2"
-          className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
-          onClick={e => props.onSubmit(e)}
-        >
-          <span className="component-direct-debit-form__cta-text">{props.buttonText}</span>
-          <div className="component-direct-debit-form__arrow"><SvgArrowRightStraight /></div>
-        </button>
+        <ThemeProvider theme={buttonReaderRevenueAlt}>
+          <Button onClick={props.editDirectDebitClicked}>
+            <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">Edit</span>
+          </Button>
+        </ThemeProvider>
+        <ThemeProvider theme={buttonReaderRevenue}>
+          <Button
+            id="qa-submit-button-2"
+            className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
+            onClick={e => props.onSubmit(e)}
+          >
+            <span className="component-direct-debit-form__cta-text">{props.buttonText}</span>
+            <div className="component-direct-debit-form__arrow"><SvgArrowRightStraight /></div>
+          </Button>
+        </ThemeProvider>
       </div>
 
       {props.allErrors.length > 0 && (
