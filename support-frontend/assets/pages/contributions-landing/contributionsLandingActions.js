@@ -350,11 +350,17 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
   state,
 );
 
-function getBillingCountryAndState(state: State): {
+function getBillingCountryAndState(authorisation: PaymentAuthorisation, state: State): {
   billingCountry: IsoCountry,
   billingState: Option<StateProvince>,
 } {
   const pageBaseCountry = state.common.internationalisation.countryId; // Needed later
+
+  // If the user chose a Direct Debit payment method, then we must use the pageBaseCountry as the billingCountry.
+  if ([DirectDebit, ExistingDirectDebit].includes(authorisation.paymentMethod)) {
+    const { billingState } = state.page.form.formData;
+    return { billingCountry: pageBaseCountry, billingState };
+  }
 
   // If the page form has a billingCountry, then it must have been provided by a wallet, ApplePay or
   // Payment Request Button, which will already have filtered the billingState by stateProvinceFromString,
@@ -386,7 +392,7 @@ function regularPaymentRequestFromAuthorisation(
   state: State,
 ): RegularPaymentRequest {
 
-  const { billingCountry, billingState } = getBillingCountryAndState(state);
+  const { billingCountry, billingState } = getBillingCountryAndState(authorisation, state);
 
   return {
     firstName: state.page.form.formData.firstName || '',
