@@ -76,7 +76,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             CountryGroup.countryByCode(card.country),
             card.exp_month,
             card.exp_year,
-            card.brand.zuoraCreditCardType.getOrElse(""),
+            card.brand.zuoraCreditCardType,
             paymentGateway = chargeGateway(currency),
             stripePaymentType = stripePaymentType
           )
@@ -94,7 +94,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             CountryGroup.countryByCode(card.country),
             card.exp_month,
             card.exp_year,
-            card.brand.zuoraCreditCardType.getOrElse(""),
+            card.brand.zuoraCreditCardType,
             paymentGateway = paymentIntentGateway(currency),
             stripePaymentType = stripePaymentType
           )
