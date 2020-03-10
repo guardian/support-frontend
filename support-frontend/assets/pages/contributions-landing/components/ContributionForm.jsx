@@ -51,7 +51,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import { logException } from 'helpers/logger';
-
+import { execute } from '../../../helpers/recaptcha';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -83,6 +83,7 @@ type PropTypes = {|
   country: IsoCountry,
   createStripePaymentMethod: () => void,
   amazonPayOrderReferenceId: string | null,
+  isRecaptchaPresentTest: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -114,6 +115,7 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
+  isRecaptchaPresentTest: state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent',
 });
 
 
@@ -207,6 +209,10 @@ function onSubmit(props: PropTypes): Event => void {
     const form = event.target;
     const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
 
+    if (props.isRecaptchaPresentTest) {
+      execute('submit');
+    }
+
     onFormSubmit({
       ...props,
       flowPrefix,
@@ -214,6 +220,7 @@ function onSubmit(props: PropTypes): Event => void {
       form,
     });
   };
+
 }
 
 // ----- Render ----- //
