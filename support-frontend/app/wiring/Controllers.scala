@@ -6,6 +6,7 @@ import com.gu.aws.AwsCloudWatchMetricPut.{client, setupWarningRequest}
 import controllers.{CSSElementForStage, _}
 import lib.ErrorController
 import play.api.BuiltInComponentsFromContext
+import services.RecaptchaService
 
 trait Controllers {
 
@@ -28,6 +29,7 @@ trait Controllers {
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     appConfig.amazonPayConfigProvider,
+    appConfig.recaptchaConfigProvider,
     paymentAPIService,
     membersDataService,
     stringsConfig,
@@ -49,6 +51,12 @@ trait Controllers {
     allSettingsProvider,
     appConfig.supportUrl,
     fontLoader
+  )
+
+  lazy val recaptchaController = new RecaptchaController(
+    components = controllerComponents,
+    actionRefiners = actionRefiners,
+    recaptchaService = recaptchaService
   )
 
   lazy val digitalPackController = new DigitalSubscription(
