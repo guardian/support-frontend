@@ -21,7 +21,7 @@ const postToBackend = (token: string): Promise<boolean> =>
   }).then(response => response.json())
     .then(data => data.isLowRisk);
 
-const execute = (action: RecaptchaAction): Promise<boolean> => {
+const execute = (action: RecaptchaAction) => {
   if (isRecaptchaLoaded()) {
     return window.grecaptcha.execute(publicKey, { action })
       .then((token) => {
@@ -33,7 +33,7 @@ const execute = (action: RecaptchaAction): Promise<boolean> => {
 };
 
 const loadRecapture = () =>
-  new Promise((resolve, reject) => {
+  new Promise<void>((resolve, reject) => {
     const recaptchaScript = document.createElement('script');
     recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${publicKey}`;
 

@@ -51,7 +51,6 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import { logException } from 'helpers/logger';
-import { execute } from '../../../helpers/recaptcha';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
