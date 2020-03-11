@@ -51,7 +51,7 @@ const loadRecaptureV2 = () =>
       console.log("v2callback");
       if (window.grecaptcha) {
         window.grecaptcha.render('robot_checkbox', {
-          'sitekey': 'publicKey'
+          'sitekey': ''
         });
       }
     };

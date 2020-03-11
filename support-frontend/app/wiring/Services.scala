@@ -42,7 +42,7 @@ trait Services {
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 
-  lazy val recaptchaService = new RecaptchaService(wsClient, appConfig.recaptchaConfigProvider.secretKey)
+  lazy val recaptchaService = new RecaptchaService(wsClient)
 
   lazy val allSettingsProvider: AllSettingsProvider = AllSettingsProvider.fromConfig(appConfig).valueOr(throw _)
 
