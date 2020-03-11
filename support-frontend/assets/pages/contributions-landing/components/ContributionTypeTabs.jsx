@@ -32,8 +32,9 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   switches: Switches,
   contributionTypes: ContributionTypes,
-  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
+  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId, boolean) => void,
   choiceCardsVariant: ChoiceCardsProductSetTestR2Variants,
+  isLowRisk: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -43,6 +44,7 @@ const mapStateToProps = (state: State) => ({
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
   choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR2,
+  isLowRisk: state.page.form.isLowRisk,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -51,8 +53,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
     switches: Switches,
     countryId: IsoCountry,
     countryGroupId: CountryGroupId,
+    isLowRisk: boolean,
   ) => {
-    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
+    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId, isLowRisk);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
   },
@@ -83,6 +86,7 @@ function withProps(props: PropTypes) {
                   props.switches,
                   props.countryId,
                   props.countryGroupId,
+                  props.isLowRisk,
                 )
             }
             checked={props.contributionType === contributionType}
@@ -111,6 +115,7 @@ function withProps(props: PropTypes) {
                     props.switches,
                     props.countryId,
                     props.countryGroupId,
+                    props.isLowRisk,
                   )
                 }
                 checked={props.contributionType === contributionType}

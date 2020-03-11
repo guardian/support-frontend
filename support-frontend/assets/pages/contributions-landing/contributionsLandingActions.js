@@ -72,6 +72,7 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
+  | { type: 'SET_LOW_RISK', isLowRisk: boolean }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -101,7 +102,6 @@ export type Action =
   | { type: 'UPDATE_PAYPAL_BUTTON_READY', ready: boolean }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
-
 
 const updatePayPalButtonReady = (ready: boolean): Action =>
   ({ type: 'UPDATE_PAYPAL_BUTTON_READY', ready });
@@ -220,6 +220,11 @@ const setThirdPartyPaymentLibrary =
 const setAmazonPayLoginObject = (amazonLoginObject: Object): Action => ({
   type: 'SET_AMAZON_PAY_LOGIN_OBJECT',
   amazonLoginObject,
+});
+
+const setIsLowRisk = (isLowRisk: boolean): Action => ({
+  type: 'SET_LOW_RISK',
+  isLowRisk,
 });
 
 const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
@@ -749,6 +754,7 @@ export {
   setAmazonPayFatalError,
   setAmazonPayOrderReferenceId,
   setAmazonPayPaymentSelected,
+  setIsLowRisk,
   selectAmount,
   updateOtherAmount,
   paymentFailure,

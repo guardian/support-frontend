@@ -209,10 +209,6 @@ function onSubmit(props: PropTypes): Event => void {
     const form = event.target;
     const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
 
-    if (props.isRecaptchaPresentTest) {
-      execute('submit');
-    }
-
     onFormSubmit({
       ...props,
       flowPrefix,

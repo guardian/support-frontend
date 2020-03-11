@@ -57,9 +57,10 @@ function getInitialPaymentMethod(
   contributionType: ContributionType,
   countryId: IsoCountry,
   switches: Switches,
+  isLowRisk: boolean,
 ): PaymentMethod {
   const paymentMethodFromSession = getPaymentMethodFromSession();
-  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId, isLowRisk);
 
   return (
     paymentMethodFromSession && validPaymentMethods.includes(getPaymentMethodFromSession())
@@ -132,6 +133,7 @@ function initialisePaymentMethods(
           contributionTypeSetting.contributionType,
           switches,
           countryId,
+          true,
         );
         // Stripe Payment Intents is currently only for one-offs, so always initialise Stripe Checkout for now
         if (validPayments.includes(Stripe)) {
@@ -216,7 +218,8 @@ function selectInitialContributionTypeAndPaymentMethod(
   const { switches } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
-  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
+  console.log('init low risk', state.page.form.isLowRisk);
+  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches, state.page.form.isLowRisk);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }
 
@@ -255,7 +258,7 @@ const init = (store: Store<State, Action, Function>) => {
   }));
 
   if (state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-    initRecaptchaV3();
+    initRecaptchaV3(dispatch);
   }
 };
 

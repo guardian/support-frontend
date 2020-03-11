@@ -119,6 +119,7 @@ type FormState = {
   formIsValid: boolean,
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
+  isLowRisk: boolean,
 };
 
 type PageState = {
@@ -220,6 +221,7 @@ function createFormReducer() {
     formIsValid: true,
     formIsSubmittable: true,
     tickerGoalReached: false,
+    isLowRisk: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -376,6 +378,9 @@ function createFormReducer() {
 
       case 'SET_PASSWORD_HAS_BEEN_SUBMITTED':
         return { ...state, setPasswordData: { ...state.setPasswordData, passwordHasBeenSubmitted: true } };
+
+      case 'SET_LOW_RISK':
+        return { ...state, isLowRisk: action.isLowRisk };
 
       case 'SET_PASSWORD_ERROR':
         return { ...state, setPasswordData: { ...state.setPasswordData, passwordError: action.passwordError } };

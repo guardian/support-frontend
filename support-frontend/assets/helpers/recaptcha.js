@@ -2,6 +2,7 @@
 
 import { trackComponentLoad } from './tracking/behaviour';
 import { logException } from './logger';
+import { setIsLowRisk } from '../pages/contributions-landing/contributionsLandingActions';
 
 type RecaptchaAction = 'loaded' | 'submit';
 
@@ -18,7 +19,7 @@ const postToBackend = (token: string): Promise<boolean> =>
       token,
     }),
   }).then(response => response.json())
-    .then(data => data.allow);
+    .then(data => data.isLowRisk);
 
 const execute = (action: RecaptchaAction): Promise<boolean> => {
   if (isRecaptchaLoaded()) {
@@ -44,12 +45,15 @@ const loadRecapture = () =>
     }
   });
 
-const initRecaptchaV3 = () => {
+const initRecaptchaV3 = (dispatch: Function) => {
   loadRecapture()
-    .then(() => window.grecaptcha.ready(() => execute('loaded')))
-    .catch((error) => {
-      logException('Error loading recaptcha', error);
-    });
+    .then(() => {
+      window.grecaptcha.ready(() =>
+        execute('loaded')
+          .then(isLowRisk => dispatch(setIsLowRisk(isLowRisk))));
+    })
+    .catch(error =>
+      logException('Error loading recaptcha', error));
 };
 
 export { execute, initRecaptchaV3 };

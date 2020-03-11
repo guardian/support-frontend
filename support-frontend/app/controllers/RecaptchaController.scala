@@ -16,7 +16,7 @@ object RecaptchaRequest {
   implicit val decoder: Decoder[RecaptchaRequest] = deriveDecoder
 }
 
-case class RecaptchaResponse(allow: Boolean)
+case class RecaptchaResponse(isLowRisk: Boolean)
 
 object RecaptchaResponse {
   implicit val encoder: Encoder[RecaptchaResponse] = deriveEncoder
