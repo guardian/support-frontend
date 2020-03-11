@@ -20,10 +20,8 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
-import Form, {
-  FormSection,
-  FormSectionHiddenUntilSelected,
-} from 'components/checkoutForm/checkoutForm';
+import { FormSectionHiddenUntilSelected } from 'components/checkoutForm/formSectionHiddenUntilSelected';
+import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/errorReasons';

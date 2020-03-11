@@ -5,6 +5,10 @@
 .*target/.*
 .*/__tests__/.*
 
+[untyped]
+.*node_modules/@emotion/.*
+.*node_modules/emotion-theming/.*
+
 [include]
 assets
 

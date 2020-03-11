@@ -12,7 +12,8 @@ import {
 } from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
+import { FormSectionHiddenUntilSelected } from 'components/checkoutForm/formSectionHiddenUntilSelected';
+import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';

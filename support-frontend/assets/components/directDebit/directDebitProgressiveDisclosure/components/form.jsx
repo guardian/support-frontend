@@ -2,9 +2,8 @@
 
 // ----- Imports ----- //
 
-// eslint-disable-next-line no-unused-vars
-import React from 'react';
-/** @jsx jsx */ import { jsx, css } from '@emotion/core';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
 
 import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonReaderRevenue } from '@guardian/src-button';
