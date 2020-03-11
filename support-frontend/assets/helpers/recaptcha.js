@@ -32,7 +32,7 @@ const execute = (action: RecaptchaAction) => {
   return Promise.reject(new Error('recaptcha not ready'));
 };
 
-const loadRecapture = () =>
+const loadRecaptureV3 = () =>
   new Promise<void>((resolve, reject) => {
     const recaptchaScript = document.createElement('script');
     recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${publicKey}`;
@@ -45,8 +45,29 @@ const loadRecapture = () =>
     }
   });
 
+const loadRecaptureV2 = () =>
+  new Promise<void>((resolve, reject) => {
+    window.v2OnloadCallback =  () => {
+      console.log("v2callback");
+      if (window.grecaptcha) {
+        window.grecaptcha.render('robot_checkbox', {
+          'sitekey': 'publicKey'
+        });
+      }
+    };
+    const recaptchaScript = document.createElement('script');
+    recaptchaScript.src = `https://www.google.com/recaptcha/api.js?onload=v2OnloadCallback&render=explicit`;
+
+    recaptchaScript.onerror = reject;
+    recaptchaScript.onload = resolve;
+
+    if (document.head) {
+      document.head.appendChild(recaptchaScript);
+    }
+  });
+
 const initRecaptchaV3 = (dispatch: Function) => {
-  loadRecapture()
+  loadRecaptureV3()
     .then(() => {
       window.grecaptcha.ready(() =>
         execute('loaded')
@@ -56,5 +77,5 @@ const initRecaptchaV3 = (dispatch: Function) => {
       logException('Error loading recaptcha', error));
 };
 
-export { execute, initRecaptchaV3, loadRecapture };
+export { execute, initRecaptchaV3, loadRecaptureV2 };
 

@@ -221,7 +221,7 @@ function createFormReducer() {
     formIsValid: true,
     formIsSubmittable: true,
     tickerGoalReached: false,
-    isLowRisk: false,
+    isLowRisk: ! window.guardian.recaptchaV3,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {

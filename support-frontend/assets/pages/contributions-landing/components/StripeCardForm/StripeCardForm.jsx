@@ -329,6 +329,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             </span>
           </div>
         </div>
+        <div id="robot_checkbox"></div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
       </div>
     );

@@ -23,19 +23,32 @@ object RecaptchaResponse {
 }
 
 class RecaptchaController(
-  components: ControllerComponents,
-  actionRefiners: CustomActionBuilders,
-  recaptchaService: RecaptchaService
+                           components: ControllerComponents,
+                           actionRefiners: CustomActionBuilders,
+                           recaptchaService: RecaptchaService,
+                           v2RecaptchaKey: String,
+                           v3RecaptchaKey: String
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
   import RecaptchaResponse.encoder
   import io.circe.syntax._
   import actionRefiners._
 
-  def verify(): Action[RecaptchaRequest] = PrivateAction.async(circe.json[RecaptchaRequest]) { implicit request =>
+  def v3Verify(): Action[RecaptchaRequest] = PrivateAction.async(circe.json[RecaptchaRequest]) { implicit request =>
     val token = request.body.token
     recaptchaService
-      .verify(token)
+      .verify(token, v3RecaptchaKey)
+      .fold(
+        err => {
+          logger.warn(s"Recaptcha response error: $err")
+          InternalServerError},
+        res => Ok(RecaptchaResponse(res.score > 0.1).asJson))
+  }
+
+  def v2Verify(): Action[RecaptchaRequest] = PrivateAction.async(circe.json[RecaptchaRequest]) { implicit request =>
+    val token = request.body.token
+    recaptchaService
+      .verify(token, v2RecaptchaKey)
       .fold(
         err => {
           logger.warn(s"Recaptcha response error: $err")

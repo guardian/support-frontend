@@ -17,10 +17,10 @@ object RecaptchaResponse {
   implicit val getUserTypeEncoder: Encoder[RecaptchaResponse] = deriveEncoder
 }
 
-class RecaptchaService(wsClient: WSClient, secretKey: String)(implicit ec: ExecutionContext) {
+class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) {
   val recaptchaEndpoint = "https://www.google.com/recaptcha/api/siteverify"
 
-  def verify(token: String): EitherT[Future, String, RecaptchaResponse] =
+  def verify(token: String, secretKey: String): EitherT[Future, String, RecaptchaResponse] =
     wsClient.url(recaptchaEndpoint)
     .withQueryStringParameters("secret" -> secretKey, "response" -> token)
     .withHttpHeaders("Content-length" -> 0.toString )
@@ -32,4 +32,5 @@ class RecaptchaService(wsClient: WSClient, secretKey: String)(implicit ec: Execu
         (resp.json ).validate[RecaptchaResponse].asEither.leftMap(_.mkString(","))
       })
 }
+
 
