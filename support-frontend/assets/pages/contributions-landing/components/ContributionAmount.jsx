@@ -9,8 +9,6 @@ import { config, type AmountsRegions, type Amount, type ContributionType, getAmo
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
-  type Currency,
-  type SpokenCurrency,
   currencies,
   spokenCurrencies,
   detect,
@@ -30,7 +28,6 @@ import { yellowChoiceCard } from './ContributionTypeTabs';
 
 // ----- Types ----- //
 
-/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
@@ -45,7 +42,7 @@ type PropTypes = {|
   stripePaymentRequestButtonClicked: boolean,
   choiceCardsVariant: ChoiceCardsProductSetTestR3Variants,
 |};
-/* eslint-enable react/no-unused-prop-types */
+
 
 const mapStateToProps = state => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
@@ -81,31 +78,6 @@ const isSelected = (amount: Amount, props: PropTypes) => {
   }
   return amount.isDefault;
 };
-
-const renderAmount = (
-  currency: Currency,
-  spokenCurrency: SpokenCurrency,
-  props: PropTypes,
-) =>
-  (amount: Amount) => (
-    <li className="form__radio-group-item">
-      <input
-        id={`contributionAmount-${amount.value}`}
-        className="form__radio-group-input"
-        type="radio"
-        name="contributionAmount"
-        value={amount.value}
-      /* eslint-disable react/prop-types */
-        checked={isSelected(amount, props)}
-        onChange={
-          props.selectAmount(amount, props.countryGroupId, props.contributionType)
-        }
-      />
-      <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
-        {formatAmount(currency, spokenCurrency, amount, false)}
-      </label>
-    </li>
-  );
 
 const renderEmptyAmount = (id: string) => (
   <li className="form__radio-group-item amounts__placeholder">

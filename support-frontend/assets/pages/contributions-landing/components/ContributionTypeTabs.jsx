@@ -28,11 +28,15 @@ import { css } from '@emotion/core';
 // ----- Types ----- //
 
 type PropTypes = {|
+  // eslint-disable-next-line react/no-unused-prop-types
   contributionType: ContributionType,
+  // eslint-disable-next-line react/no-unused-prop-types
   countryId: IsoCountry,
   countryGroupId: CountryGroupId,
+  // eslint-disable-next-line react/no-unused-prop-types
   switches: Switches,
   contributionTypes: ContributionTypes,
+  // eslint-disable-next-line react/no-unused-prop-types
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
   choiceCardsVariant: ChoiceCardsProductSetTestR3Variants,
 |};
