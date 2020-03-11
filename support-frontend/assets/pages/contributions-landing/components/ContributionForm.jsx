@@ -216,7 +216,6 @@ function onSubmit(props: PropTypes): Event => void {
       form,
     });
   };
-
 }
 
 // ----- Render ----- //

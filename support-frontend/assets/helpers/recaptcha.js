@@ -56,5 +56,5 @@ const initRecaptchaV3 = (dispatch: Function) => {
       logException('Error loading recaptcha', error));
 };
 
-export { execute, initRecaptchaV3 };
+export { execute, initRecaptchaV3, loadRecapture };
 

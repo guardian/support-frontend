@@ -257,7 +257,7 @@ const init = (store: Store<State, Action, Function>) => {
     firstName, lastName, email, billingState: stateField,
   }));
 
-  if (state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
+  if (window.guardian.recaptchaV3 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
     initRecaptchaV3(dispatch);
   }
 };
