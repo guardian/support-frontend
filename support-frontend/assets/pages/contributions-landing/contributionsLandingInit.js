@@ -256,9 +256,9 @@ const init = (store: Store<State, Action, Function>) => {
     firstName, lastName, email, billingState: stateField,
   }));
 
-  // if (window.guardian.recaptchaV3 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-  //   initRecaptchaV3(dispatch);
-  // }
+  if (window.guardian.recaptchaV3 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
+    initRecaptchaV3(dispatch);
+  }
 
   if (window.guardian.recaptchaV2 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
     loadRecaptureV2(dispatch);

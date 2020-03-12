@@ -68,7 +68,8 @@ POST  /contribute/send-marketing                                   controllers.I
 
 # ----- Recaptcha ----- #
 + nocsrf
-POST  /recaptchav2                                                   controllers.RecaptchaController.v2Verify()
+POST  /recaptchav2                                                  controllers.RecaptchaController.v2Verify()
++ nocsrf
 POST  /recaptchav3                                                  controllers.RecaptchaController.v3Verify()
 
 # ------ Identity ------ #
