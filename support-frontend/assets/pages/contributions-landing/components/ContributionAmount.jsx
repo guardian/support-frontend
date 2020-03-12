@@ -159,7 +159,7 @@ function withProps(props: PropTypes) {
         ))
       }
         <ChoiceCard
-          cssOverrides={yellowChoiceCard}
+          cssOverrides={cssOverrides}
           id="contributionAmount-other"
           name="contributionAmount"
           value="other"
