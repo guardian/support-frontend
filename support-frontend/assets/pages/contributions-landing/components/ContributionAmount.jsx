@@ -23,6 +23,7 @@ import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
+import type { ChoiceCardsProductSetTestR3Variants } from 'helpers/abTests/abtestDefinitions';
 import type { SerializedStyles } from '@emotion/utils';
 import { yellowChoiceCard } from './choiceCardStyles';
 // ----- Types ----- //
