@@ -21,9 +21,7 @@
     "storybook-static": "build-storybook -c .storybook -o storybook-static  -s .storybook/static",
     "cache-ssr": "node scripts/ssrScript.js",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
-    "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle",
-    "snyk-protect": "snyk protect",
-    "prepare": "yarn run snyk-protect"
+    "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle"
   },
   "browserslist": [
     "Chrome >= 49",
@@ -86,7 +84,6 @@
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
     "seedrandom": "^2.4.3",
-    "snyk": "^1.298.1",
     "uuid": "^3.2.1",
     "webpack-bundle-analyzer": "^3.6.0"
   },
@@ -153,6 +150,5 @@
     "cssnano/cosmiconfig/js-yaml": "3.13.1",
     "optimize-css-assets-webpack-plugin/**/js-yaml": "3.13.1",
     "postcss-load-config/cosmiconfig/js-yaml": "3.13.1"
-  },
-  "snyk": true
+  }
 }
