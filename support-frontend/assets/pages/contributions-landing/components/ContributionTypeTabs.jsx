@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 // @flow
 
 // ----- Imports ----- //
@@ -22,7 +23,9 @@ import type {
   ContributionTypeSetting,
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
-import type { ChoiceCardsProductSetTestR2Variants } from 'helpers/abTests/abtestDefinitions';
+import type { ChoiceCardsProductSetTestR3Variants } from 'helpers/abTests/abtestDefinitions';
+import type { SerializedStyles } from '@emotion/utils';
+import { yellowChoiceCard } from './choiceCardStyles';
 
 // ----- Types ----- //
 
@@ -33,7 +36,7 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId, boolean) => void,
-  choiceCardsVariant: ChoiceCardsProductSetTestR2Variants,
+  choiceCardsVariant: ChoiceCardsProductSetTestR3Variants,
   v3isLowRisk: boolean,
 |};
 
@@ -43,8 +46,8 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR2,
-  v3isLowRisk: state.page.form.v3IsLowRisk
+  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR3,
+  v3isLowRisk: state.page.form.v3IsLowRisk,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -67,65 +70,33 @@ function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
 
 
-  const renderContribTypeChoiceCards = () => (
-    <>
-      <ChoiceCardGroup
-        name="contributionTypes"
-        orientation="horizontal"
-      >
-        {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
-        const { contributionType } = contributionTypeSetting;
-        return (
-          <ChoiceCard
-            id={`contributionType-${contributionType}`}
-            value={contributionType}
-            label={toHumanReadableContributionType(contributionType)}
-            onChange={() =>
-                props.onSelectContributionType(
-                  contributionType,
-                  props.switches,
-                  props.countryId,
-                  props.countryGroupId,
-                  props.v3isLowRisk,
-                )
-            }
-            checked={props.contributionType === contributionType}
-          />
-        );
-      })}
-      </ChoiceCardGroup>
-  </>
-  );
-
-  const renderControl = () => (
-    <ul className="form__radio-group-list form__radio-group-list--border">
+  const renderChoiceCards = (cssOverrides: SerializedStyles | null) => (
+    <ChoiceCardGroup
+      name="contributionTypes"
+      orientation="horizontal"
+    >
       {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
-          const { contributionType } = contributionTypeSetting;
-          return (
-            <li className="form__radio-group-item">
-              <input
-                id={`contributionType-${contributionType}`}
-                className="form__radio-group-input"
-                type="radio"
-                name="contributionType"
-                value={contributionType}
-                onChange={() =>
-                  props.onSelectContributionType(
-                    contributionType,
-                    props.switches,
-                    props.countryId,
-                    props.countryGroupId,
-                    props.v3isLowRisk,
-                  )
-                }
-                checked={props.contributionType === contributionType}
-              />
-              <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
-                {toHumanReadableContributionType(contributionType)}
-              </label>
-            </li>);
-        })}
-    </ul>
+      const { contributionType } = contributionTypeSetting;
+      return (
+        <ChoiceCard
+          cssOverrides={cssOverrides}
+          id={`contributionType-${contributionType}`}
+          value={contributionType}
+          label={toHumanReadableContributionType(contributionType)}
+          onChange={() =>
+              props.onSelectContributionType(
+                contributionType,
+                props.switches,
+                props.countryId,
+                props.countryGroupId,
+                props.v3isLowRisk,
+              )
+          }
+          checked={props.contributionType === contributionType}
+        />
+      );
+    })}
+    </ChoiceCardGroup>
   );
 
   if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
@@ -135,7 +106,7 @@ function withProps(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      {props.choiceCardsVariant === 'rectangles' ? renderContribTypeChoiceCards() : renderControl()}
+      {props.choiceCardsVariant === 'yellow' ? renderChoiceCards(yellowChoiceCard) : renderChoiceCards()}
     </fieldset>
   );
 }

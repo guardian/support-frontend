@@ -4,7 +4,7 @@ import { trackComponentLoad } from './tracking/behaviour';
 import { logException } from './logger';
 import {
   setIsLowRiskV2,
-  setIsLowRiskV3
+  setIsLowRiskV3,
 } from '../pages/contributions-landing/contributionsLandingActions';
 
 type RecaptchaAction = 'loaded' | 'submit';
@@ -49,18 +49,23 @@ const loadRecaptureV3 = () =>
     }
   });
 
+const executeV2 = (token, dispatch: Function) => {
+  postToBackend(token, 'v2')
+    .then(isLowRisk => dispatch(setIsLowRiskV2(isLowRisk)));
+};
+
 const loadRecaptureV2 = (dispatch: Function) =>
   new Promise<void>((resolve, reject) => {
-    window.v2OnloadCallback =  () => {
+    window.v2OnloadCallback = () => {
       if (window.grecaptcha) {
         window.grecaptcha.render('robot_checkbox', {
-          'sitekey': v2publicKey,
-           callback : (token) => executeV2(token, dispatch)
+          sitekey: v2publicKey,
+          callback: token => executeV2(token, dispatch),
         });
       }
     };
     const recaptchaScript = document.createElement('script');
-    recaptchaScript.src = `https://www.google.com/recaptcha/api.js?onload=v2OnloadCallback&render=explicit`;
+    recaptchaScript.src = 'https://www.google.com/recaptcha/api.js?onload=v2OnloadCallback&render=explicit';
 
     recaptchaScript.onerror = reject;
     recaptchaScript.onload = resolve;
@@ -69,11 +74,6 @@ const loadRecaptureV2 = (dispatch: Function) =>
       document.head.appendChild(recaptchaScript);
     }
   });
-
-const executeV2 = (token, dispatch: Function) => {
-  postToBackend(token, 'v2')
-    .then(isLowRisk => dispatch(setIsLowRiskV2(isLowRisk)));
-};
 
 const initRecaptchaV3 = (dispatch: Function) => {
   loadRecaptureV3()

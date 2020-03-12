@@ -4,7 +4,7 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
-export type ChoiceCardsProductSetTestR2Variants = 'control' | 'rectangles';
+export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
 export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
 export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
 export type recaptchaPresenceTestVariants = 'control' | 'recaptchaPresent';
@@ -101,14 +101,14 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-  choiceCardsProductSetTestR2: {
+  choiceCardsProductSetTestR3: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'rectangles',
+        id: 'yellow',
       },
     ],
     audiences: {
