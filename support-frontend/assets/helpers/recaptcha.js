@@ -9,7 +9,8 @@ import {
 
 type RecaptchaAction = 'loaded' | 'submit';
 
-const publicKey = window.guardian.recaptchaPublicKey;
+const v3publicKey = window.guardian.v3recaptchaPublicKey;
+const v2publicKey = window.guardian.v2recaptchaPublicKey;
 const isRecaptchaLoaded = () => window && window.grecaptcha && typeof window.grecaptcha.execute !== 'undefined';
 
 const postToBackend = (token: string, endpointSuffix: string): Promise<boolean> =>
@@ -26,7 +27,7 @@ const postToBackend = (token: string, endpointSuffix: string): Promise<boolean> 
 
 const execute = (action: RecaptchaAction) => {
   if (isRecaptchaLoaded()) {
-    return window.grecaptcha.execute(publicKey, { action })
+    return window.grecaptcha.execute(v3publicKey, { action })
       .then((token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
         return postToBackend(token, 'v3');
@@ -38,7 +39,7 @@ const execute = (action: RecaptchaAction) => {
 const loadRecaptureV3 = () =>
   new Promise<void>((resolve, reject) => {
     const recaptchaScript = document.createElement('script');
-    recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${publicKey}`;
+    recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${v3publicKey}`;
 
     recaptchaScript.onerror = reject;
     recaptchaScript.onload = resolve;
@@ -53,7 +54,7 @@ const loadRecaptureV2 = (dispatch: Function) =>
     window.v2OnloadCallback =  () => {
       if (window.grecaptcha) {
         window.grecaptcha.render('robot_checkbox', {
-          'sitekey': 'publicKey',
+          'sitekey': v2publicKey,
            callback : (token) => executeV2(token, dispatch)
         });
       }

@@ -48,7 +48,7 @@ class RecaptchaController(
   def v2Verify(): Action[RecaptchaRequest] = PrivateAction.async(circe.json[RecaptchaRequest]) { implicit request =>
     val token = request.body.token
     recaptchaService
-      .verify(token, "v2PrivateKey")
+      .verify(token, v2RecaptchaKey)
       .fold(
         err => {
           logger.warn(s"Recaptcha response error: $err")

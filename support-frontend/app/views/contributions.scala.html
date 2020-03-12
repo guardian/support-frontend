@@ -26,7 +26,8 @@
   geoData: GeoData,
   shareImageUrl: String,
   shareUrl: String,
-  recaptchaConfigPublicKey: String
+  v3recaptchaConfigPublicKey: String,
+  v2recaptchaConfigPublicKey: String,
 
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -119,7 +120,7 @@
   window.guardian.recaptchaV3 = @settings.switches.experiments.get("recaptchaV3").exists(_.isOn)
   window.guardian.recaptchaV2 = false//@settings.switches.experiments.get("recaptchaV2").exists(_.isOn)
 
-  window.guardian.recaptchaPublicKey = "@recaptchaConfigPublicKey"
-  @*window.guardian.recaptchaPublicKey = "@recaptchaConfigPublicKey"*@
+  window.guardian.v3recaptchaPublicKey = "@v3recaptchaConfigPublicKey"
+  window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
   </script>
 }
