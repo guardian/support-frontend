@@ -4,7 +4,7 @@
 import React, { type Node } from 'react';
 /** @jsx jsx */ import { jsx, css } from '@emotion/core';
 import { headline } from '@guardian/src-foundations/typography';
-import { palette } from '@guardian/src-foundations';
+import { border } from '@guardian/src-foundations/palette';
 import { type Option } from 'helpers/types/option';
 import { space } from '@guardian/src-foundations';
 
@@ -13,7 +13,7 @@ const h2 = css`
 `;
 
 const showFormSection = css`
-    border-top: 1px solid ${palette.border.secondary};
+    border-top: 1px solid ${border.secondary};
     padding: ${space[3]}px;
 `;
 
