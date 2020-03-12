@@ -1,8 +1,7 @@
 // @flow
 
-// eslint-disable-next-line no-unused-vars
 import React, { type Node } from 'react';
-/** @jsx jsx */ import { jsx, css } from '@emotion/core';
+import { css } from '@emotion/core';
 import { headline } from '@guardian/src-foundations/typography';
 import { border } from '@guardian/src-foundations/palette';
 import { type Option } from 'helpers/types/option';
