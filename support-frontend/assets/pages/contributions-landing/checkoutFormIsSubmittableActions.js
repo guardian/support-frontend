@@ -117,13 +117,19 @@ function enableOrDisableForm() {
       state.page.form.userTypeFromIdentityResponse,
     );
 
+    const v2RecaptchaCheck =
+      window.guardian.recaptchaV2 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
+        ? state.page.form.v2IsLowRisk
+        : true;
+
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
 
     const shouldEnable =
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
-      && userCanContributeWithoutSigningIn;
+      && userCanContributeWithoutSigningIn
+      && v2RecaptchaCheck;
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };

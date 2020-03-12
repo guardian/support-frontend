@@ -261,7 +261,7 @@ const init = (store: Store<State, Action, Function>) => {
   // }
 
   if (window.guardian.recaptchaV2 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-    loadRecaptureV2();
+    loadRecaptureV2(dispatch);
   }
 };
 

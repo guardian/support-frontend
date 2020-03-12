@@ -71,7 +71,7 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
-  isLowRisk: state.page.form.isLowRisk,
+  isLowRisk: state.page.form.v3IsLowRisk,
 });
 
 const mapDispatchToProps = {

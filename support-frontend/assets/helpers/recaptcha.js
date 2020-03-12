@@ -2,15 +2,18 @@
 
 import { trackComponentLoad } from './tracking/behaviour';
 import { logException } from './logger';
-import { setIsLowRisk } from '../pages/contributions-landing/contributionsLandingActions';
+import {
+  setIsLowRiskV2,
+  setIsLowRiskV3
+} from '../pages/contributions-landing/contributionsLandingActions';
 
 type RecaptchaAction = 'loaded' | 'submit';
 
 const publicKey = window.guardian.recaptchaPublicKey;
 const isRecaptchaLoaded = () => window && window.grecaptcha && typeof window.grecaptcha.execute !== 'undefined';
 
-const postToBackend = (token: string): Promise<boolean> =>
-  fetch('/recaptcha', {
+const postToBackend = (token: string, endpointSuffix: string): Promise<boolean> =>
+  fetch(`/recaptcha${endpointSuffix}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -26,7 +29,7 @@ const execute = (action: RecaptchaAction) => {
     return window.grecaptcha.execute(publicKey, { action })
       .then((token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
-        return postToBackend(token);
+        return postToBackend(token, 'v3');
       });
   }
   return Promise.reject(new Error('recaptcha not ready'));
@@ -45,13 +48,13 @@ const loadRecaptureV3 = () =>
     }
   });
 
-const loadRecaptureV2 = () =>
+const loadRecaptureV2 = (dispatch: Function) =>
   new Promise<void>((resolve, reject) => {
     window.v2OnloadCallback =  () => {
-      console.log("v2callback");
       if (window.grecaptcha) {
         window.grecaptcha.render('robot_checkbox', {
-          'sitekey': ''
+          'sitekey': 'publicKey',
+           callback : (token) => executeV2(token, dispatch)
         });
       }
     };
@@ -66,12 +69,17 @@ const loadRecaptureV2 = () =>
     }
   });
 
+const executeV2 = (token, dispatch: Function) => {
+  postToBackend(token, 'v2')
+    .then(isLowRisk => dispatch(setIsLowRiskV2(isLowRisk)));
+};
+
 const initRecaptchaV3 = (dispatch: Function) => {
   loadRecaptureV3()
     .then(() => {
       window.grecaptcha.ready(() =>
         execute('loaded')
-          .then(isLowRisk => dispatch(setIsLowRisk(isLowRisk))));
+          .then(isLowRisk => dispatch(setIsLowRiskV3(isLowRisk))));
     })
     .catch(error =>
       logException('Error loading recaptcha', error));

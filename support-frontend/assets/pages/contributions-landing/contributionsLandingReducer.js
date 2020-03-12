@@ -119,7 +119,8 @@ type FormState = {
   formIsValid: boolean,
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
-  isLowRisk: boolean,
+  v3IsLowRisk: boolean,
+  v2IsLowRisk: boolean,
 };
 
 type PageState = {
@@ -221,7 +222,8 @@ function createFormReducer() {
     formIsValid: true,
     formIsSubmittable: true,
     tickerGoalReached: false,
-    isLowRisk: ! window.guardian.recaptchaV3,
+    v3IsLowRisk: ! window.guardian.recaptchaV3,
+    v2IsLowRisk: ! window.guardian.recaptchaV2,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -379,8 +381,11 @@ function createFormReducer() {
       case 'SET_PASSWORD_HAS_BEEN_SUBMITTED':
         return { ...state, setPasswordData: { ...state.setPasswordData, passwordHasBeenSubmitted: true } };
 
-      case 'SET_LOW_RISK':
-        return { ...state, isLowRisk: action.isLowRisk };
+      case 'SET_V3_LOW_RISK':
+        return { ...state, v3IsLowRisk: action.v3IsLowRisk };
+
+      case 'SET_V2_LOW_RISK':
+        return { ...state, v2IsLowRisk: action.v2IsLowRisk };
 
       case 'SET_PASSWORD_ERROR':
         return { ...state, setPasswordData: { ...state.setPasswordData, passwordError: action.passwordError } };

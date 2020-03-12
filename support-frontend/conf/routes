@@ -68,8 +68,8 @@ POST  /contribute/send-marketing                                   controllers.I
 
 # ----- Recaptcha ----- #
 + nocsrf
-POST  /recaptcha                                                   controllers.RecaptchaController.v3Verify()
-POST  /v2recaptcha                                                  controllers.RecaptchaController.v2Verify()
+POST  /recaptchav2                                                   controllers.RecaptchaController.v2Verify()
+POST  /recaptchav3                                                  controllers.RecaptchaController.v3Verify()
 
 # ------ Identity ------ #
 PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest

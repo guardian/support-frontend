@@ -194,8 +194,6 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   }
 
   handleCardSetup(clientSecret: Option<string>): Promise<string> {
-
-    // ToDo validate the recaptcha token here ?
     return this.props.stripe.handleCardSetup(clientSecret).then((result) => {
       if (result.error) {
         this.handleStripeError(result.error);

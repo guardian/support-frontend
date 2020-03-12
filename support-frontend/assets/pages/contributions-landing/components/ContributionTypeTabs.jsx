@@ -34,7 +34,7 @@ type PropTypes = {|
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId, boolean) => void,
   choiceCardsVariant: ChoiceCardsProductSetTestR2Variants,
-  isLowRisk: boolean,
+  v3isLowRisk: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -44,7 +44,7 @@ const mapStateToProps = (state: State) => ({
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
   choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR2,
-  isLowRisk: state.page.form.isLowRisk,
+  v3isLowRisk: state.page.form.v3IsLowRisk
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -86,7 +86,7 @@ function withProps(props: PropTypes) {
                   props.switches,
                   props.countryId,
                   props.countryGroupId,
-                  props.isLowRisk,
+                  props.v3isLowRisk,
                 )
             }
             checked={props.contributionType === contributionType}
@@ -115,7 +115,7 @@ function withProps(props: PropTypes) {
                     props.switches,
                     props.countryId,
                     props.countryGroupId,
-                    props.isLowRisk,
+                    props.v3isLowRisk,
                   )
                 }
                 checked={props.contributionType === contributionType}

@@ -42,18 +42,18 @@ class RecaptchaController(
         err => {
           logger.warn(s"Recaptcha response error: $err")
           InternalServerError},
-        res => Ok(RecaptchaResponse(res.score > 0.1).asJson))
+        res => Ok(RecaptchaResponse((res.score.getOrElse(BigDecimal(0)) > 0.1)).asJson))
   }
 
   def v2Verify(): Action[RecaptchaRequest] = PrivateAction.async(circe.json[RecaptchaRequest]) { implicit request =>
     val token = request.body.token
     recaptchaService
-      .verify(token, v2RecaptchaKey)
+      .verify(token, "v2PrivateKey")
       .fold(
         err => {
           logger.warn(s"Recaptcha response error: $err")
           InternalServerError},
-        res => Ok(RecaptchaResponse(res.score > 0.1).asJson))
+        res => Ok(RecaptchaResponse(res.success).asJson))
   }
 }
 
