@@ -2,9 +2,7 @@
 
 // ----- Imports ----- //
 
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-
+/** @jsx jsx */ import { jsx, css } from '@emotion/core';
 import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonReaderRevenue } from '@guardian/src-button';
 import { TextInput } from '@guardian/src-text-input';

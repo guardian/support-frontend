@@ -8,8 +8,6 @@ import { palette } from '@guardian/src-foundations';
 import { type Option } from 'helpers/types/option';
 import { space } from '@guardian/src-foundations';
 
-import './checkoutForm.scss';
-
 const h2 = css`
     ${headline.xsmall()};
 `;
