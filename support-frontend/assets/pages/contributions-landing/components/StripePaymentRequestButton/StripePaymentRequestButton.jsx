@@ -26,11 +26,7 @@ import {
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
-import type {
-  CaState,
-  IsoCountry, StateProvince,
-  UsState,
-} from 'helpers/internationalisation/country';
+import type { IsoCountry, StateProvince } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type {
   State, Stripe3DSResult,
