@@ -59,7 +59,9 @@ export const checkStateIfApplicable: ((string | null), CountryGroupId, Contribut
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
 ) => {
-  if (contributionType !== 'ONE_OFF' && (countryGroupId === UnitedStates || countryGroupId === Canada || countryGroupId === AUDCountries)) {
+  if (contributionType !== 'ONE_OFF' && (countryGroupId === UnitedStates || countryGroupId === Canada)) {
+    return checkBillingState(billingState);
+  } else if (countryGroupId === AUDCountries) {
     // Allow no state to be selected if the user is GEO-IP'd to one of the non AU countries that use AUD.
     if (window.guardian && window.guardian.geoip) {
       const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
