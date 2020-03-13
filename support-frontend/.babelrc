@@ -5,9 +5,10 @@
     [
       "@babel/preset-env",
       {
-        "modules": false,
+        "modules": false
       }
-    ]
+    ],
+    "@emotion/babel-preset-css-prop"
   ],
   "plugins": [
     "@babel/plugin-transform-exponentiation-operator",
