@@ -8,6 +8,7 @@ import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonReaderRevenue, buttonReaderRevenueAlt } from '@guardian/src-button';
+import { directDebitForm } from './form';
 
 
 function Playback(props: {
@@ -20,7 +21,7 @@ function Playback(props: {
   allErrors: Array<Object>,
 }) {
   return (
-    <div className="component-direct-debit-form">
+    <div css={directDebitForm}>
       <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
         Account name
       </label>
@@ -56,18 +57,16 @@ function Playback(props: {
 
       <div className="component-direct-debit-form__cta-container">
         <ThemeProvider theme={buttonReaderRevenueAlt}>
-          <Button onClick={props.editDirectDebitClicked}>
-            <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">Edit</span>
-          </Button>
+          <Button onClick={props.editDirectDebitClicked}>Edit</Button>
         </ThemeProvider>
         <ThemeProvider theme={buttonReaderRevenue}>
           <Button
             id="qa-submit-button-2"
-            className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
             onClick={e => props.onSubmit(e)}
+            iconSide="right"
+            icon={<SvgArrowRightStraight />}
           >
             <span className="component-direct-debit-form__cta-text">{props.buttonText}</span>
-            <div className="component-direct-debit-form__arrow"><SvgArrowRightStraight /></div>
           </Button>
         </ThemeProvider>
       </div>

@@ -22,7 +22,7 @@ const spaceAfterInput = css`
   margin-bottom: ${space[6]}px;
 `;
 
-const directDebitForm = css`
+export const directDebitForm = css`
   clear: left;
   margin-top: ${space[6]}px;
   margin-left: 0;
