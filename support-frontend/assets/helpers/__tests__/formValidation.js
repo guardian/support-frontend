@@ -85,22 +85,28 @@ describe('formValidation', () => {
         window.guardian.geoip.countryCode = 'TV';
         expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
         expect(checkStateIfApplicable(null, countryGroupId)).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ANNUAL')).toEqual(true);
 
         window.guardian.geoip.countryCode = 'AU';
         expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
         expect(checkStateIfApplicable(null, countryGroupId)).toEqual(false);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
 
         window.guardian.geoip.countryCode = 'GB';
         expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
         expect(checkStateIfApplicable(null, countryGroupId)).toEqual(false);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
 
         // This function tests for presence, it does not validate state and country
         expect(checkStateIfApplicable('NY', countryGroupId)).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
 
         // Function supports no geoip
         delete window.guardian.geoip;
         expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
         expect(checkStateIfApplicable(null, countryGroupId)).toEqual(false);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
       },
     );
 
