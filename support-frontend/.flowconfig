@@ -8,6 +8,7 @@
 [untyped]
 .*node_modules/@emotion/.*
 .*node_modules/emotion-theming/.*
+.*node_modules/@emotion/babel-preset-css-prop.*
 
 [include]
 assets
