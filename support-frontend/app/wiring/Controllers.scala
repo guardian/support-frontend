@@ -58,7 +58,7 @@ trait Controllers {
     actionRefiners = actionRefiners,
     recaptchaService = recaptchaService,
     v3RecaptchaKey = appConfig.recaptchaConfigProvider.v3SecretKey,
-    v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey,
+    v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey
   )
 
   lazy val digitalPackController = new DigitalSubscription(
