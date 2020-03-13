@@ -27,7 +27,8 @@ describe('checkouts', () => {
       const contributionType = 'MONTHLY';
       const countryId = 'GB';
       mock(isSwitchOn).mockImplementation(() => true);
-      expect(getValidPaymentMethods(contributionType, allSwitches, countryId, true)).toEqual([DirectDebit, Stripe, PayPal]);
+      expect(getValidPaymentMethods(contributionType, allSwitches, countryId, true))
+        .toEqual([DirectDebit, Stripe, PayPal]);
       expect(getPaymentMethodToSelect(contributionType, allSwitches, countryId, true)).toEqual(DirectDebit);
 
     });
