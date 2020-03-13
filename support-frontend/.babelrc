@@ -2,13 +2,13 @@
   "presets": [
     "@babel/preset-react",
     "@babel/preset-flow",
-    "@emotion/babel-preset-css-prop",
     [
       "@babel/preset-env",
       {
         "modules": false
       }
-    ]
+    ],
+    "@emotion/babel-preset-css-prop"
   ],
   "plugins": [
     "@babel/plugin-transform-exponentiation-operator",
