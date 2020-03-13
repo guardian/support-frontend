@@ -257,7 +257,7 @@ function withProps(props: PropTypes) {
           isTestUser={props.isTestUser}
           country={props.country}
         />
-        <div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? '' : 'hidden'} />
+        <div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? 'robot_checkbox' : 'hidden'} />
         {/*
           The <div> wrapper for the ContributionErrorMessage is required because a
           child of ContributionSubmit contains an iframe and otherwise when its
