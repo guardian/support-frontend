@@ -59,18 +59,20 @@ export const checkStateIfApplicable: ((string | null), CountryGroupId, Contribut
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
 ) => {
-  if (contributionType !== 'ONE_OFF' && (countryGroupId === UnitedStates || countryGroupId === Canada)) {
-    return checkBillingState(billingState);
-  } else if (countryGroupId === AUDCountries) {
-    // Allow no state to be selected if the user is GEO-IP'd to one of the non AU countries that use AUD.
-    if (window.guardian && window.guardian.geoip) {
-      const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
-      const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(c => c !== 'AU');
-      if (AUDCountriesWithNoStates.includes(window.guardian.geoip.countryCode)) {
-        return true;
+  if (contributionType !== 'ONE_OFF') {
+    if (countryGroupId === UnitedStates || countryGroupId === Canada) {
+      return checkBillingState(billingState);
+    } else if (countryGroupId === AUDCountries) {
+      // Allow no state to be selected if the user is GEO-IP'd to one of the non AU countries that use AUD.
+      if (window.guardian && window.guardian.geoip) {
+        const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
+        const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(c => c !== 'AU');
+        if (AUDCountriesWithNoStates.includes(window.guardian.geoip.countryCode)) {
+          return true;
+        }
       }
+      return checkBillingState(billingState);
     }
-    return checkBillingState(billingState);
   }
   return true;
 };
