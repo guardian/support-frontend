@@ -103,15 +103,15 @@ const caStates: {
 const auStates: {
   [string]: string,
 } = {
+  ACT: 'Australian Capital Territory',
+  JBT: 'Jervis Bay Territory',
+  NSW: 'New South Wales',
+  NT: 'Northern Territory',
+  QLD: 'Queensland',
   SA: 'South Australia',
   TAS: 'Tasmania',
-  NSW: 'New South Wales',
   VIC: 'Victoria',
   WA: 'Western Australia',
-  QLD: 'Queensland',
-  ACT: 'Australian Capital Territory',
-  NT: 'Northern Territory',
-  JBT: 'Jervis Bay Territory',
 };
 
 const newspaperCountries: {

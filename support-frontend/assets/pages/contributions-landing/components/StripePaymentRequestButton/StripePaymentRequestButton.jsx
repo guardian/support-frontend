@@ -26,11 +26,7 @@ import {
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
-import type {
-  CaState,
-  IsoCountry, StateProvince,
-  UsState,
-} from 'helpers/internationalisation/country';
+import type { IsoCountry, StateProvince } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type {
   State, Stripe3DSResult,
@@ -75,7 +71,7 @@ type PropTypes = {|
   otherAmounts: OtherAmounts,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
-  billingState: UsState | CaState | null,
+  billingState: StateProvince | null,
   isTestUser: boolean,
   amount: number,
   stripePaymentRequestButtonData: StripePaymentRequestButtonData,
@@ -87,7 +83,7 @@ type PropTypes = {|
   updateEmail: string => void,
   updateFirstName: string => void,
   updateLastName: string => void,
-  updateBillingState: (billingState: UsState | CaState | null) => void,
+  updateBillingState: (billingState: StateProvince | null) => void,
   updateBillingCountry: IsoCountry => void,
   paymentMethod: PaymentMethod,
   setAssociatedPaymentMethod: () => (Function) => void,
@@ -125,7 +121,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateEmail: (email: string) => dispatch(updateEmail(email)),
   updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
   updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
-  updateBillingState: (billingState: UsState | CaState | null) => dispatch(updateBillingState(billingState)),
+  updateBillingState: (billingState: StateProvince | null) => dispatch(updateBillingState(billingState)),
   updateBillingCountry: (billingCountry: IsoCountry) => dispatch(updateBillingCountry(billingCountry)),
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
     dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),

@@ -6,9 +6,9 @@
 // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
 // for compatibility with Stripe
 import { config } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroup, CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
-import { Canada, UnitedStates } from './internationalisation/countryGroup';
+import { Canada, UnitedStates, AUDCountries, countryGroups } from './internationalisation/countryGroup';
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
@@ -60,6 +60,16 @@ export const checkStateIfApplicable: ((string | null), CountryGroupId, Contribut
   contributionType: ContributionType,
 ) => {
   if (contributionType !== 'ONE_OFF' && (countryGroupId === UnitedStates || countryGroupId === Canada)) {
+    return checkBillingState(billingState);
+  } else if (countryGroupId === AUDCountries) {
+    // Allow no state to be selected if the user is GEO-IP'd to one of the non AU countries that use AUD.
+    if (window.guardian && window.guardian.geoip) {
+      const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
+      const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(c => c !== 'AU');
+      if (AUDCountriesWithNoStates.includes(window.guardian.geoip.countryCode)) {
+        return true;
+      }
+    }
     return checkBillingState(billingState);
   }
   return true;
