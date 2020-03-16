@@ -3,7 +3,7 @@ import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFuncti
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import type { UserSetStateActions } from 'helpers/user/userActions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { fromCountryGroup, stateProvinceFromString } from 'helpers/internationalisation/country';
+import { stateProvinceFieldFromString } from 'helpers/internationalisation/country';
 
 
 // ----- Actions Creators ----- //
@@ -21,12 +21,9 @@ const setIsRecurringContributor = (): ((Function) => void) =>
 const setStateFieldSafely = (pageCountryGroupId: CountryGroupId) =>
   (unsafeState: string): ((Function) => void) =>
     (dispatch: Function): void => {
-      const pageCountry = fromCountryGroup(pageCountryGroupId);
-      if (pageCountry) {
-        const stateField = stateProvinceFromString(pageCountry, unsafeState);
-        if (stateField) {
-          dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STATEFIELD', stateField })));
-        }
+      const stateField = stateProvinceFieldFromString(pageCountryGroupId, unsafeState);
+      if (stateField) {
+        dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STATEFIELD', stateField })));
       }
     };
 

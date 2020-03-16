@@ -443,6 +443,20 @@ function auStateFromString(s: string): Option<AuState> {
   return stateProvinceFromMap(s, auStates) || null;
 }
 
+function stateProvinceFieldFromString(countryGroupId: ?CountryGroupId, s?: string): Option<StateProvince> {
+  if (!s) { return null; }
+  switch (countryGroupId) {
+    case UnitedStates:
+      return usStateFromString(s);
+    case Canada:
+      return caStateFromString(s);
+    case AUDCountries:
+      return auStateFromString(s);
+    default:
+      return null;
+  }
+}
+
 function stateProvinceFromString(country: Option<IsoCountry>, s?: string): Option<StateProvince> {
   if (!s) { return null; }
   switch (country) {
@@ -614,6 +628,7 @@ export {
   newspaperCountries,
   findIsoCountry,
   fromString,
+  stateProvinceFieldFromString,
   stateProvinceFromString,
   fromCountryGroup,
 };
