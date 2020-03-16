@@ -28,6 +28,12 @@ object RetryImplicits {
         // response from Zuora during maintenance windows
         new RetryLimited(message = e.getMessage, cause = throwable)
 
+      case e @ (_: WebServiceClientError) if e.codeBody.code == "429" =>
+        // We are retrying on 429 (rate limit) errors now because we have been hitting Zuora's rate limit at
+        // times when their responses are particularly slow. Retrying with a back off should ensure that these
+        // requests succeed at a later stage.
+        new RetryUnlimited(message = e.getMessage, cause = throwable)
+
       case e @ (_: WebServiceClientError) =>
         new RetryNone(message = e.getMessage, cause = throwable)
 
