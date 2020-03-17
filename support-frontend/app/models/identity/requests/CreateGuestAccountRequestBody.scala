@@ -11,8 +11,9 @@ import play.api.libs.ws.{BodyWritable, InMemoryBody}
 // =================
 // {
 //   "email": "a@b.com",
-//   "publicFields": {
-//     "displayName": "a"
+//   "privateFields": {
+//     "firstName": "a",
+//     "secondName": "b"
 //   }
 // }
 case class CreateGuestAccountRequestBody(primaryEmailAddress: String, privateFields: PrivateFields)
