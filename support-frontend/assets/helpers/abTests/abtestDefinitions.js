@@ -1,5 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
+import { V1 } from './data/testAmountsData';
 
 // ----- Tests ----- //
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
@@ -32,6 +33,29 @@ export const tests: Tests = {
     referrerControlled: false,
     seed: 1,
     targetPage: contributionsLandingPageMatch,
+  },
+
+  usAmountsTest: {
+    type: 'AMOUNTS',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'V1',
+        amountsRegions: V1,
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: contributionsLandingPageMatch,
+    seed: 5,
   },
 
   postContributionReminderCopyTest: {
