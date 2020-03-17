@@ -5,7 +5,7 @@ import java.net.URI
 import cats.data.EitherT
 import cats.implicits._
 import com.google.common.net.InetAddresses
-import com.gu.identity.model.{User => IdUser}
+import com.gu.identity.model.{PrivateFields, User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
@@ -154,9 +154,17 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   }
 
   def createUserIdFromEmailUser(
-    email: String
+    email: String,
+    firstName: String,
+    lastName: String
   )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
-    val body = CreateGuestAccountRequestBody.fromEmail(email)
+    val body = CreateGuestAccountRequestBody(
+      email,
+      PrivateFields(
+        firstName = Some(firstName).filter(_.nonEmpty),
+        secondName = Some(lastName).filter(_.nonEmpty)
+      )
+    )
     execute(
       wsClient.url(s"$apiUrl/guest")
         .withHttpHeaders(postHeaders(req): _*)
@@ -171,9 +179,11 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   }
 
   def getOrCreateUserIdFromEmail(
-    email: String
+    email: String,
+    firstName: String,
+    lastName: String
   )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
-    getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email))
+    getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email, firstName, lastName))
   }
 
   private def get[A](
