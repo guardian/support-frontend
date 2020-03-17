@@ -16,6 +16,7 @@ import './stripeForm.scss';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import { logException } from 'helpers/logger';
 import type { Option } from 'helpers/types/option';
+import { appropriateErrorMessage } from 'helpers/errorReasons';
 
 // Types
 
@@ -126,10 +127,8 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
 
       this.setState({
-        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'internal_error' }],
+        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }],
       });
-
-
     });
   }
 
@@ -183,12 +182,12 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
       // happen then display a generic error about card details
       this.setState({
-        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'payment_details_incorrect' }],
+        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_details_incorrect') }],
       });
     } else {
       // This is probably a Stripe or network problem
       this.setState({
-        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: 'payment_provider_unavailable' }],
+        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_provider_unavailable') }],
       });
     }
   }
