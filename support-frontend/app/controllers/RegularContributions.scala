@@ -130,7 +130,7 @@ class RegularContributions(
       // TODO: in a subsequent PR set these values based on the respective user.
       allowThirdPartyMail = false,
       allowGURelatedMail = false,
-      isTestUser = testUsers.isTestUser(user.privateFields.firstName)
+      isTestUser = testUsers.isTestUser(user.publicFields.username)
     )
   }
 
