@@ -10,6 +10,7 @@ export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 
 export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
+const usOnlyLandingPage = '/us/contribute(/.*)?$';
 
 export const tests: Tests = {
 
@@ -54,7 +55,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: contributionsLandingPageMatch,
+    targetPage: usOnlyLandingPage,
     seed: 5,
   },
 
