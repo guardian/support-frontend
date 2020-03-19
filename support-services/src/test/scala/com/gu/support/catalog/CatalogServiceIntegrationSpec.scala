@@ -31,7 +31,7 @@ class CatalogServiceIntegrationSpec extends AsyncFlatSpec with Matchers with Ins
     forAll(product.ratePlans(environment))(
       ratePlan =>
         service.getPriceList(ratePlan).fold {
-          Console.println(s"Failed to find a catalog price list for $environment > $product > ${ratePlan.id}")
+          Console.println(s"Failed to find a catalog price list for $environment > $product > ${ratePlan.billingPeriod} > ${ratePlan.id}")
           fail()
         }(_ => succeed)
     )
