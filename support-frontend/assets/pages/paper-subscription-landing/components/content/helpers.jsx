@@ -6,29 +6,21 @@ import React, { type Element, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
 import Content from 'components/content/content';
-import Text, { Callout, SansParagraph } from 'components/text/text';
-import ProductPageInfoChip
-  from 'components/productPage/productPageInfoChip/productPageInfoChip';
-import { paperSubsUrl, promotionTermsUrl } from 'helpers/routes';
-import {
-  flashSaleIsActive,
-  getDiscount,
-  getDuration,
-  getPromoCode,
-} from 'helpers/flashSale';
+import Text, { SansParagraph, Callout } from 'components/text/text';
+import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
+import { paperSubsUrl } from 'helpers/routes';
+import { flashSaleIsActive, getDiscount, getDuration, getPromoCode } from 'helpers/flashSale';
 
 import { type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 
 import Form from './form';
-import {
-  Collection,
-  HomeDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { promoQueryParam } from 'helpers/productPrice/promotions';
+import { promotionTermsUrl } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 import {
   ContactPageLink,
@@ -46,8 +38,7 @@ export type ContentTabPropTypes = {|
   getRef: (?HTMLElement)=> void
 |};
 
-const promoTermsUrl = promotionTermsUrl(getQueryParameter(promoQueryParam) ||
-  getPromoCode('Paper', GBPCountries, 'SEP2512VHD'));
+const promoTermsUrl = promotionTermsUrl(getQueryParameter(promoQueryParam) || getPromoCode('Paper', GBPCountries, 'SEP2512VHD'));
 
 // Helper functions
 const getPageInfoChip = (): string => {
@@ -64,15 +55,14 @@ const DiscountCalloutMaybe = () => {
     getDuration('Paper', 'GBPCountries'),
   ];
   if (discount && duration) {
-    return (<Callout>Save up to {Math.round(discount * 100)}%
-      for {duration}
-            </Callout>);
+    return <Callout>Save up to {Math.round(discount * 100)}% for {duration}</Callout>;
   } else if (discount) {
     return <Callout>Save up to {Math.round(discount * 100)}% </Callout>;
   }
   return null;
 
 };
+
 
 // ----- Auxiliary Components ----- //
 const ContentHelpBlock = ({
@@ -90,14 +80,7 @@ const ContentHelpBlock = ({
       {flashSaleIsActive('Paper', GBPCountries) &&
       <Text title="Promotion terms and conditions">
         <SansParagraph>
-          Offer subject to availability. Guardian News and Media Limited
-          (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at
-          any time. For full promotion terms and conditions, see <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={promoTermsUrl}
-          >here
-          </a>.
+          Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTermsUrl}>here</a>.
         </SansParagraph>
       </Text>
       }
@@ -151,19 +134,15 @@ const ContentForm = ({
     </Text>
     <Form />
     {paperHasDeliveryEnabled() &&
-    <Text>
-      <SansParagraph>
-        {
-          selectedTab === Collection
-            ? <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to
-              Delivery
-            </LinkTo>
-            : <LinkTo tab={Collection} setTabAction={setTabAction}>Switch to
-              Vouchers
-            </LinkTo>
-        }
-      </SansParagraph>
-    </Text>
+      <Text>
+        <SansParagraph>
+          {
+            selectedTab === Collection
+              ? <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo>
+              : <LinkTo tab={Collection} setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
+          }
+        </SansParagraph>
+      </Text>
     }
     <ProductPageInfoChip>
       {getPageInfoChip()}
