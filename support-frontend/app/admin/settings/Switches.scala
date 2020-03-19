@@ -6,6 +6,7 @@ import com.gu.support.encoding.Codec.deriveCodec
 case class Switches(
   oneOffPaymentMethods: PaymentMethodsSwitch,
   recurringPaymentMethods: PaymentMethodsSwitch,
+  useDotcomContactPage: SwitchState,
   experiments: Map[String, ExperimentSwitch]
 )
 
