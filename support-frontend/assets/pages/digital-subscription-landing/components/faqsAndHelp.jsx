@@ -12,6 +12,10 @@ import {
 import { type Option } from 'helpers/types/option';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import {
+  ContactPageLink,
+  useDotcomContactPage,
+} from 'helpers/dotcomContactPage';
 
 // ----- Props ----- //
 
@@ -73,6 +77,14 @@ function FaqsAndHelp(props: PropTypes) {
         </div>
       </div>
     );
+
+  if (useDotcomContactPage() === true) {
+    return (
+      <Faqs>
+        For help with Guardian and Observer subscription services please <ContactPageLink />
+      </Faqs>
+    );
+  }
 
   switch (props.selectedCountryGroup) {
     case UnitedStates:

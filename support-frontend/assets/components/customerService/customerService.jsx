@@ -13,7 +13,10 @@ import { type Option } from 'helpers/types/option';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { promotionTermsUrl } from 'helpers/routes';
-import { useDotcomContactPage } from 'helpers/dotcomContactPage';
+import {
+  ContactPageLink,
+  useDotcomContactPage,
+} from 'helpers/dotcomContactPage';
 
 // ----- Props ----- //
 
@@ -93,15 +96,12 @@ function CustomerService(props: PropTypes) {
       </div>
     );
 
-  const DotcomContactPage = () => (
-    <Faqs>
-        For help with Guardian and Observer subscription services please&nbsp;
-      <a href="https://www.theguardian.com/help/contact-us">contact us</a>.
-    </Faqs>
-  );
-
   if (useDotcomContactPage() === true) {
-    return <DotcomContactPage />;
+    return (
+      <Faqs>
+        For help with Guardian and Observer subscription services please <ContactPageLink />.
+      </Faqs>
+    );
   }
 
   switch (props.selectedCountryGroup) {
