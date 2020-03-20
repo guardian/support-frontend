@@ -74,7 +74,7 @@ function FaqsAndHelp(props: PropTypes) {
   const Faqs = ({ children }: { children: React.Node }) =>
     (
       <div className="hope-is-power__faqs">
-        <div className="component-customer-service">
+        <div className="component-customer-service" id="qa-component-customer-service">
           <h2>FAQs and Help</h2>
           <p className="component-customer-service__text">
             {children}
