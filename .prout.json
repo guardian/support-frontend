@@ -9,7 +9,7 @@
             "afterSeen": {
                 "travis": {
                     "config": {
-                        "script": "travis_retry sbt ++$TRAVIS_SCALA_VERSION selenium:test"
+                        "script": "sbt ++$TRAVIS_SCALA_VERSION selenium:test || sbt ++$TRAVIS_SCALA_VERSION selenium:test"
                     }
                 }
             }
