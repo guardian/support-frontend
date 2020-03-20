@@ -84,10 +84,10 @@ function FaqsAndHelp(props: PropTypes) {
       </div>
     );
 
-  if (useDotcomContactPage() === true) {
+  if (useDotcomContactPage()) {
     return (
       <Faqs>
-        For help with Guardian and Observer subscription services please <ContactPageLink />
+        For help with Guardian and Observer subscription services please <ContactPageLink linkText="contact us" />
       </Faqs>
     );
   }

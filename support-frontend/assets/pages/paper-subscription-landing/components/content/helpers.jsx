@@ -72,7 +72,7 @@ const ContentHelpBlock = ({
   telephoneLink: Element<string>
 |}) => {
 
-  const contactUs = useDotcomContactPage() ? <ContactPageLink /> :
+  const contactUs = useDotcomContactPage() ? <ContactPageLink linkText="contact us" /> :
   <span>call our customer services team on {telephoneLink}</span>;
 
   return (

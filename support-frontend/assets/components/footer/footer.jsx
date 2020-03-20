@@ -8,7 +8,7 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import Content, { ContentCentered, type Appearance } from 'components/content/content';
+import Content, { type Appearance } from 'components/content/content';
 
 import './footer.scss';
 import Rows from '../base/rows';

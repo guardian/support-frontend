@@ -24,7 +24,7 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function QuestionsContact(props: PropTypes) {
-  const contactUs = useDotcomContactPage() ? <ContactPageLink /> : (
+  const contactUs = useDotcomContactPage() ? <ContactPageLink linkText="contact us" /> : (
     <a
       className="component-questions-contact__link"
       href={contributionsEmail[props.countryGroupId]}

@@ -23,7 +23,7 @@ type PropTypes = {|
 // ----- Component ----- //
 
 export default function ContribLegal(props: PropTypes) {
-  const contactUs = useDotcomContactPage() ? <ContactPageLink />
+  const contactUs = useDotcomContactPage() ? <ContactPageLink linkText="contact us here" />
     : <a href={contributionsEmail[props.countryGroupId]}>contact us here</a>;
   return (
     <p className="component-contrib-legal">
