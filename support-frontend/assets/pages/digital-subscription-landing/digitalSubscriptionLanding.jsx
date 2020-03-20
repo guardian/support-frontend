@@ -21,14 +21,8 @@ import { init as pageInit } from 'helpers/page/page';
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
-import { FooterCentered } from 'components/footer/footer';
-
-import 'stylesheets/skeleton/skeleton.scss';
-
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import ProductBlock from './components/productBlock';
-
 import './digitalSubscriptionLanding.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 import digitalSubscriptionLandingReducer
@@ -37,7 +31,9 @@ import CallToAction from './components/cta';
 import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
 // ----- Styles ----- //
+
 import './components/digitalSubscriptionLanding.scss';
+import 'stylesheets/skeleton/skeleton.scss';
 
 // ----- Redux Store ----- //
 
@@ -79,18 +75,12 @@ function LandingPage() {
   return (
     <Page
       header={<CountrySwitcherHeader />}
-      footer={
-        <FooterCentered>
-          <FaqsAndHelp
-            selectedCountryGroup={countryGroupId}
-          />
-          <SubscriptionFaq subscriptionProduct="DigitalPack" />
-        </FooterCentered>}
     >
       <CampaignHeader countryGroupId={countryGroupId} />
       <ProductBlock countryGroupId={countryGroupId} />
       <CallToAction />
       <TermsAndConditions />
+      <FaqsAndHelp selectedCountryGroup={countryGroupId} />
       <ConsentBanner />
     </Page>
   );
