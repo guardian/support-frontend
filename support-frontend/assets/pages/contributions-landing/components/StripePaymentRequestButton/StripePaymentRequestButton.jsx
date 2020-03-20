@@ -151,7 +151,8 @@ function updatePayerEmail(data: Object, setEmail: string => void) {
 }
 
 function updatePayerName(data: Object, setFirstName: string => void, setLastName: string => void): boolean {
-  const nameParts = data.payerName.split(' ');
+  // NB: This turns "    jean    claude    van    damme     " into ["jean", "claude", "van", "damme"]
+  const nameParts = data.payerName.trim().replace(/\s+/g, ' ').split(' ');
   if (nameParts.length > 2) {
     setFirstName(nameParts[0]);
     setLastName(nameParts.slice(1).join(' '));
