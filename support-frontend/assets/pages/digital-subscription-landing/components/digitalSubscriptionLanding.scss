@@ -47,12 +47,16 @@
 
 }
 
+.hope-is-power--centered {
+  background-color: #ffffff;
+}
+
+
 .hope-is-power--centered,
-.component-content__content--centered-handler {
+.component-customer-service {
   align-self: flex-start;
   padding-left: 0px;
   width: 100%;
-  background-color: #ffffff;
 
   @include mq($from: mobileLandscape) {
     padding-left: 0px;
@@ -1002,7 +1006,8 @@ div.call-to-action__container {
   }
 }
 
-.hope-is-power__terms {
+.hope-is-power__terms,
+.hope-is-power__faqs {
   display: flex;
   justify-content: center;
   @include gu-fontset-body-sans;
@@ -1017,7 +1022,8 @@ div.call-to-action__container {
     font-weight: 600;
   }
 
-  h3, p {
+  h2, h3, p,
+  .component-subscription-faq__text {
     max-width: calc(100% - 20px);
 
     @include mq($from: mobileMedium) {
@@ -1054,5 +1060,19 @@ div.call-to-action__container {
 
   a, a:visited {
     color: #121212;
+  }
+
+}
+
+.hope-is-power__faqs {
+  background-color: gu-colour(brand-main);
+  color: gu-colour(neutral-100);
+
+  a, a:visited {
+    color: gu-colour(neutral-100);
+  }
+
+  .component-subscription-faq__text {
+    margin-top: 10px;
   }
 }

@@ -22,6 +22,10 @@ import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
 import { promotionTermsUrl } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
+import {
+  ContactPageLink,
+  useDotcomContactPage,
+} from 'helpers/dotcomContactPage';
 
 // Types
 export type ContentPropTypes = {|
@@ -66,25 +70,32 @@ const ContentHelpBlock = ({
 }: {|
   faqLink: Element<string>,
   telephoneLink: Element<string>
-|}) => (
-  <Content appearance="feature" modifierClasses={['faqs']}>
-    {flashSaleIsActive('Paper', GBPCountries) &&
+|}) => {
+
+  const contactUs = useDotcomContactPage() ? <ContactPageLink linkText="contact us" /> :
+  <span>call our customer services team on {telephoneLink}</span>;
+
+  return (
+    <Content appearance="feature" modifierClasses={['faqs']}>
+      {flashSaleIsActive('Paper', GBPCountries) &&
       <Text title="Promotion terms and conditions">
         <SansParagraph>
           Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTermsUrl}>here</a>.
         </SansParagraph>
       </Text>
-    }
-    <Text title="FAQ and help">
-      <SansParagraph>
-        If you’ve got any more questions, you might well find the answers in the {faqLink}.
-      </SansParagraph>
-      <SansParagraph>
-        If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
-      </SansParagraph>
-    </Text>
-  </Content>
-);
+      }
+      <Text title="FAQ and help">
+        <SansParagraph>
+          If you’ve got any more questions, you might well find the answers in
+          the {faqLink}.
+        </SansParagraph>
+        <SansParagraph>
+          If you can’t find the answer to your question here, please {contactUs}.
+        </SansParagraph>
+      </Text>
+    </Content>
+  );
+};
 
 const LinkTo = ({
   setTabAction, tab, children,

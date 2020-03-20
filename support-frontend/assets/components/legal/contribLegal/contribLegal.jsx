@@ -7,6 +7,10 @@ import React from 'react';
 import { contributionsEmail } from 'helpers/legal';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+  ContactPageLink,
+  useDotcomContactPage,
+} from 'helpers/dotcomContactPage';
 
 
 // ---- Types ----- //
@@ -19,7 +23,8 @@ type PropTypes = {|
 // ----- Component ----- //
 
 export default function ContribLegal(props: PropTypes) {
-
+  const contactUs = useDotcomContactPage() ? <ContactPageLink linkText="contact us here" />
+    : <a href={contributionsEmail[props.countryGroupId]}>contact us here</a>;
   return (
     <p className="component-contrib-legal">
       The ultimate owner of the Guardian is The Scott Trust Limited,
@@ -29,7 +34,7 @@ export default function ContribLegal(props: PropTypes) {
       journalism does not constitute a charitable donation, as such your
       contribution is not eligible for Gift Aid in the UK nor a tax-deduction
       elsewhere. If you have any questions about contributing to the Guardian,
-      please <a href={contributionsEmail[props.countryGroupId]}>contact us here</a>.
+      please {contactUs}.
     </p>
   );
 
