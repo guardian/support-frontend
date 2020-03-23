@@ -83,6 +83,8 @@ type PropTypes = {|
   createStripePaymentMethod: () => void,
   amazonPayOrderReferenceId: string | null,
   isRecaptchaPresentTest: boolean,
+  checkoutFormHasBeenSubmitted: boolean,
+  v2IsLowRisk: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -115,6 +117,8 @@ const mapStateToProps = (state: State) => ({
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
   isRecaptchaPresentTest: state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent',
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  v2IsLowRisk: state.page.form.v2IsLowRisk,
 });
 
 
@@ -257,12 +261,17 @@ function withProps(props: PropTypes) {
           isTestUser={props.isTestUser}
           country={props.country}
         />
-        <div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? 'robot_checkbox' : 'hidden'} />
+
+        <div>
+          <div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? 'robot_checkbox' : 'hidden'} />
+          { props.checkoutFormHasBeenSubmitted && !props.v2IsLowRisk && (<div  className="form__error">Please tick to verify you're a human</div>) }
+        </div>
         {/*
           The <div> wrapper for the ContributionErrorMessage is required because a
           child of ContributionSubmit contains an iframe and otherwise when its
           sibling ContributionErrorMessage returns null, the iframe would be recreated.
         */}
+
         <div>
           <ContributionErrorMessage />
         </div>
