@@ -1223,3 +1223,8 @@ form {
 .hidden-heading {
   @include visually-hidden
 }
+
+.robot_checkbox {
+  margin-top: 24px;
+  margin-bottom: 10px;
+}

@@ -35,8 +35,10 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   switches: Switches,
   contributionTypes: ContributionTypes,
-  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
+  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId, boolean) => void,
   choiceCardsVariant: ChoiceCardsProductSetTestR3Variants,
+  v3isLowRisk: boolean,
+  isPostDeploymentTestUser: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -46,6 +48,8 @@ const mapStateToProps = (state: State) => ({
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
   choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR3,
+  v3isLowRisk: state.page.form.v3IsLowRisk,
+  isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -54,15 +58,15 @@ const mapDispatchToProps = (dispatch: Function) => ({
     switches: Switches,
     countryId: IsoCountry,
     countryGroupId: CountryGroupId,
+    isStripeEnabled: boolean,
   ) => {
-    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
+    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId, isStripeEnabled);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
   },
 });
 
 // ----- Render ----- //
-
 
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
@@ -75,6 +79,7 @@ function withProps(props: PropTypes) {
     >
       {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
       const { contributionType } = contributionTypeSetting;
+      const isStripeEnabled = props.isPostDeploymentTestUser ? true : props.v3isLowRisk;
       return (
         <ChoiceCard
           cssOverrides={cssOverrides}
@@ -87,6 +92,7 @@ function withProps(props: PropTypes) {
                 props.switches,
                 props.countryId,
                 props.countryGroupId,
+                isStripeEnabled,
               )
           }
           checked={props.contributionType === contributionType}
@@ -95,7 +101,6 @@ function withProps(props: PropTypes) {
     })}
     </ChoiceCardGroup>
   );
-
 
   if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
     return null;
