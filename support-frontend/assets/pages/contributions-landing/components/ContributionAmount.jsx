@@ -23,9 +23,10 @@ import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
-import type { ChoiceCardsProductSetTestR3Variants } from 'helpers/abTests/abtestDefinitions';
+import { TextInput } from '@guardian/src-text-input';
+import type { DesignSystemFormTestVariants } from 'helpers/abTests/abtestDefinitions';
 import type { SerializedStyles } from '@emotion/utils';
-import { yellowChoiceCard } from './choiceCardStyles';
+
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -40,7 +41,7 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  choiceCardsVariant: ChoiceCardsProductSetTestR3Variants,
+  designSystemVariant: DesignSystemFormTestVariants,
 |};
 
 
@@ -55,7 +56,7 @@ const mapStateToProps = state => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR3,
+  designSystemVariant: state.common.abParticipations.designSystemFormTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -171,14 +172,10 @@ function withProps(props: PropTypes) {
   </>
   );
 
-  return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
-
-      {props.choiceCardsVariant === 'yellow' ? renderChoiceCards(yellowChoiceCard) : renderChoiceCards()}
-
-      {showOther ? (
-        <ContributionTextInput
+  const renderOtherField = (designSystemVariant: DesignSystemFormTestVariants) => {
+    if (designSystemVariant === 'designSystem') {
+      return (
+        <TextInput
           id="contributionOther"
           name="contribution-other-amount"
           type="number"
@@ -192,7 +189,7 @@ function withProps(props: PropTypes) {
           )}
           isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
           formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
-          errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
+          error={`Please provide an amount between ${minAmount} and ${maxAmount}`}
           autoComplete="off"
           step={0.01}
           min={min}
@@ -200,7 +197,43 @@ function withProps(props: PropTypes) {
           autoFocus
           required
         />
-      ) : null}
+      );
+    }
+    return (
+      <ContributionTextInput
+        id="contributionOther"
+        name="contribution-other-amount"
+        type="number"
+        label="Other amount"
+        value={otherAmount}
+        icon={iconForCountryGroup(props.countryGroupId)}
+        onInput={e => props.updateOtherAmount(
+            (e.target: any).value,
+            props.countryGroupId,
+            props.contributionType,
+          )}
+        isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
+        formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
+        errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
+        autoComplete="off"
+        step={0.01}
+        min={min}
+        max={max}
+        autoFocus
+        required
+      />
+    );
+
+  };
+
+  return (
+    <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
+
+      {renderChoiceCards()}
+
+      {showOther ? renderOtherField(props.designSystemVariant) : null}
+
       {showWeeklyBreakdown ? (
         <p className="amount-per-week-breakdown">
           {getAmountPerWeekBreakdown(

@@ -28,6 +28,8 @@ import {
   updateBillingState,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
+import type { DesignSystemFormTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { TextInput } from '@guardian/src-text-input';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -46,6 +48,7 @@ type PropTypes = {|
   updateBillingState: Event => void,
   checkIfEmailHasPassword: Event => void,
   contributionType: ContributionType,
+  designSystemVariant: DesignSystemFormTestVariants,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -65,6 +68,7 @@ const mapStateToProps = (state: State) => ({
   isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
+  designSystemVariant: state.common.abParticipations.designSystemFormTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -86,12 +90,63 @@ function withProps(props: PropTypes) {
     isSignedIn,
     billingState,
     checkoutFormHasBeenSubmitted,
+    designSystemVariant,
   } = props;
 
-  return (
-    <div className="form-fields">
-      <h3 className="hidden-heading">Your details</h3>
-      <ContributionTextInput
+  const fieldsToRender = {
+    designSystem: {
+      email: (<TextInput
+        id="contributionEmail"
+        name="contribution-email"
+        label="Email address"
+        value={email}
+        type="email"
+        autoComplete="email"
+        supporting="example@domain.com"
+        icon={<SvgEnvelope />}
+        onInput={props.updateEmail}
+        onChange={props.checkIfEmailHasPassword}
+        isValid={checkEmail(email)}
+        pattern={emailRegexPattern}
+        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+        errorMessage="Please provide a valid email address"
+        required
+        disabled={isSignedIn}
+      />),
+      name: (
+        <div>
+          <TextInput
+            id="contributionFirstName"
+            name="contribution-fname"
+            label="First name"
+            value={firstName}
+            icon={<SvgUser />}
+            autoComplete="given-name"
+            autoCapitalize="words"
+            onInput={props.updateFirstName}
+            isValid={checkFirstName(firstName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your first name"
+            required
+          />
+          <TextInput
+            id="contributionLastName"
+            name="contribution-lname"
+            label="Last name"
+            value={lastName}
+            icon={<SvgUser />}
+            autoComplete="family-name"
+            autoCapitalize="words"
+            onInput={props.updateLastName}
+            isValid={checkLastName(lastName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your last name"
+            required
+          />
+        </div>),
+    },
+    control: {
+      email: (<ContributionTextInput
         id="contributionEmail"
         name="contribution-email"
         label="Email address"
@@ -108,16 +163,8 @@ function withProps(props: PropTypes) {
         errorMessage="Please provide a valid email address"
         required
         disabled={isSignedIn}
-      />
-      <Signout isSignedIn />
-      <MustSignIn
-        isSignedIn={props.isSignedIn}
-        userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
-        contributionType={props.contributionType}
-        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
-        email={props.email}
-      />
-      {props.contributionType !== 'ONE_OFF' ?
+      />),
+      name: (
         <div>
           <ContributionTextInput
             id="contributionFirstName"
@@ -147,8 +194,23 @@ function withProps(props: PropTypes) {
             errorMessage="Please provide your last name"
             required
           />
-        </div> : null
-      }
+        </div>),
+    },
+  };
+
+  return (
+    <div className="form-fields">
+      <h3 className="hidden-heading">Your details</h3>
+      {fieldsToRender[designSystemVariant].email}
+      <Signout isSignedIn />
+      <MustSignIn
+        isSignedIn={props.isSignedIn}
+        userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
+        contributionType={props.contributionType}
+        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+        email={props.email}
+      />
+      { props.contributionType !== 'ONE_OFF' ? fieldsToRender[designSystemVariant].name : null }
       <ContributionState
         onChange={props.updateBillingState}
         selectedState={billingState}

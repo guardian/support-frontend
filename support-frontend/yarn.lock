@@ -1864,6 +1864,11 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.14.2.tgz#b1789edbb28099f5834ce8319401142a84500d59"
   integrity sha512-e+yrYM2WRRb5C4BkJuGstTbaPTn7WS+TdKT2LoxwYBlXWSM3qrHOOFHCTc97uuEgT5E39GqzA/6oScrwmSr9BA==
 
+"@guardian/src-foundations@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.15.1.tgz#9e621aa2efee0cdb368ebbee129cd2a7d7e5868e"
+  integrity sha512-49Kjd9v6bAy3Xjs9q6/WV+J63bKgUWG5biOScUPE4UKFf3HkNFtafrrvnWf2/1qpDlhGYRFK9tGCh/enagMajA==
+
 "@guardian/src-helpers@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-0.14.0.tgz#9999aa24074060373b079eb37ca9768d47e277c3"
@@ -1871,10 +1876,38 @@
   dependencies:
     "@guardian/src-foundations" "^0.14.0"
 
+"@guardian/src-helpers@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-0.15.1.tgz#ec5b75117bb066ef95002bfedaa76a371c4b1b33"
+  integrity sha512-A564LrM0c8SKC5TySb/dUxO+ggKhp5D+yWagQb3r3r/IS8SxWLhKQUzZpgaXNWyNWXrFTX362G7hAwL3SCNE5g==
+  dependencies:
+    "@guardian/src-foundations" "^0.15.1"
+
+"@guardian/src-inline-error@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-inline-error/-/src-inline-error-0.15.1.tgz#2c7a745ab41075728622c36355f52a3d9c22d61a"
+  integrity sha512-48i8cCZSu5GFB5eCBCAyHRptmPSNylmmx8MjP77Fs7QXh+xTtd4a0ExNXd/7j1Te7h/ye7w3V7t3x9vwWgxJ4A==
+  dependencies:
+    "@guardian/src-helpers" "^0.15.1"
+    "@guardian/src-svgs" "^0.15.1"
+
 "@guardian/src-svgs@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.14.0.tgz#3a5a6d385f2639aca884b5302f3d3ae6e919e290"
   integrity sha512-ZGwVwVlX3YwG62xO1YjxaHyGFJC8Us80GPeyY8CMv5lfshYd0gGDNJN6vjUI3ssULjcP8ckGOTFcTFs3hOUrMw==
+
+"@guardian/src-svgs@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.15.1.tgz#cc2e609893ca06f04bef36bc5e5a1b27c2e43ccf"
+  integrity sha512-skd0aH4ROEyB0d/t5uS3kD/cODK6Eb85VRKu94+RHw/C78ZJza90djRcApHPesSV6f/XlgwBhLH5U/9CAbnrhA==
+
+"@guardian/src-text-input@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-text-input/-/src-text-input-0.15.1.tgz#e686e0f8089471f86ad1b4b479dd6c614f5ea7fe"
+  integrity sha512-bWwewgJX/HYRj6QkbwZsPiqdPI93ZJV8QCtFXjFqKaYstOGU4qz+KOBat7VnsnDWqCURzUIM5OXCp3KCwJCDfQ==
+  dependencies:
+    "@guardian/src-helpers" "^0.15.1"
+    "@guardian/src-inline-error" "^0.15.1"
 
 "@guardian/src-utilities@^0.14.0":
   version "0.14.0"

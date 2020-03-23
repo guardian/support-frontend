@@ -5,7 +5,7 @@ import { V1 } from './data/testAmountsData';
 // ----- Tests ----- //
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
-export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
+export type DesignSystemFormTestVariants = 'control' | 'designSystem';
 export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
 export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
 
@@ -103,14 +103,14 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
-  choiceCardsProductSetTestR3: {
+  designSystemFormTest: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'yellow',
+        id: 'designSystem',
       },
     ],
     audiences: {

@@ -23,7 +23,7 @@ import type {
   ContributionTypeSetting,
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
-import type { ChoiceCardsProductSetTestR3Variants } from 'helpers/abTests/abtestDefinitions';
+import type { DesignSystemFormTestVariants } from 'helpers/abTests/abtestDefinitions';
 import type { SerializedStyles } from '@emotion/utils';
 import { yellowChoiceCard } from './choiceCardStyles';
 
@@ -36,7 +36,7 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
-  choiceCardsVariant: ChoiceCardsProductSetTestR3Variants,
+  choiceCardsVariant: DesignSystemFormTestVariants,
 |};
 
 const mapStateToProps = (state: State) => ({
