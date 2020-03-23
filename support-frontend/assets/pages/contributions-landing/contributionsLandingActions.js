@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { type IsoCountry, type CaState, type UsState, type StateProvince, stateProvinceFromString, findIsoCountry } from 'helpers/internationalisation/country';
+import { type IsoCountry, type StateProvince, stateProvinceFromString, findIsoCountry } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
   StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
@@ -61,7 +61,7 @@ export type Action =
   | { type: 'UPDATE_LAST_NAME', lastName: string }
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_PASSWORD', password: string }
-  | { type: 'UPDATE_BILLING_STATE', billingState: UsState | CaState | null }
+  | { type: 'UPDATE_BILLING_STATE', billingState: StateProvince | null }
   | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
@@ -170,7 +170,7 @@ const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_USER_FORM_DATA', userFormData })));
   };
 
-const updateBillingState = (billingState: UsState | CaState | null): ((Function) => void) =>
+const updateBillingState = (billingState: StateProvince | null): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_BILLING_STATE', billingState })));
   };

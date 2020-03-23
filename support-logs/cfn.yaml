@@ -73,7 +73,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
         ImageId: !Ref AMI
-        InstanceType: t2.micro
+        InstanceType: t3.micro
         IamInstanceProfile: !Ref KibanaProxyInstanceProfile
         BlockDeviceMappings:
         - DeviceName: /dev/sda1

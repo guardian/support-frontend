@@ -11,12 +11,14 @@
     </head>
     <body>
         <h1>New Test User key: @key</h1>
-        Your user will be valid for the next 48H. When registering please populate the following fields with your new test user key.<br/>
-        This test username has also been added as the session cookie _test_username for testing one-off paypal contributions.
+        Your user will be valid for the next 48H.<br/>
+        When registering please populate the following fields with your new test user key.<br/>
+        This test username has also been added as the session cookie _test_username for the client side and for testing one-off paypal contributions.<br/>
+        You must have the cookie present on the client side for the payment providers otherwise the client and server side will use different keys and cause a support workers failure
         <ul>
-            <li><strong>First Name:</strong> @key</li>
-            <li><strong>Username:</strong> @key</li>
-            <li><strong>Email:</strong> @{key}@@gu.com</li>
+            <li><strong>First Name:</strong> @key (only field checked by recurring contributions)</li>
+            <li><strong>Username:</strong> @key (if applicable?)</li>
+            <li><strong>Email:</strong> @{key}@@gu.com (for one off contributions)<li>or alternatively yourname+@{key}@@guardian.co.uk</li>
         </ul>
         <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
     </body>

@@ -18,7 +18,7 @@ import {
   contributionTypeIsRecurring,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { CaState, UsState } from 'helpers/internationalisation/country';
+import type { StateProvince } from 'helpers/internationalisation/country';
 import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 import type { State } from './contributionsLandingReducer';
 import {
@@ -53,7 +53,7 @@ export type FormIsValidParameters = {
   otherAmounts: OtherAmounts,
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
-  billingState: UsState | CaState | null,
+  billingState: StateProvince | null,
   firstName: string | null,
   lastName: string | null,
   email: string | null,

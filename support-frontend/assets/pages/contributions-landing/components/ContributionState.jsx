@@ -5,8 +5,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { usStates, caStates, type UsState, type CaState } from 'helpers/internationalisation/country';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { usStates, caStates, type StateProvince, auStates } from 'helpers/internationalisation/country';
+import { type CountryGroupId, type CountryGroup, countryGroups, AUDCountries } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import SvgGlobe from 'components/svgs/globe';
@@ -16,7 +16,7 @@ import { type State } from '../contributionsLandingReducer';
 // ----- Types ----- //
 type PropTypes = {|
   countryGroupId: CountryGroupId,
-  selectedState: CaState | UsState | null,
+  selectedState: StateProvince | null,
   onChange: (Event => void) | false,
   isValid: boolean,
   formHasBeenSubmitted: boolean,
@@ -29,13 +29,13 @@ const mapStateToProps = (state: State) => ({
 });
 
 // ----- Render ----- //
-const renderState = (selectedState: CaState | UsState | null) => (state: {abbreviation: string, name: string}) => (
+const renderState = (selectedState: StateProvince | null) => (state: {abbreviation: string, name: string}) => (
   <option value={state.abbreviation} selected={selectedState === state.abbreviation}>{state.name}</option>
 );
 
 const renderStatesField = (
   states: {[string]: string},
-  selectedState: UsState | CaState | null,
+  selectedState: StateProvince | null,
   onChange: (Event => void) | false,
   showError: boolean,
   label: string,
@@ -71,6 +71,17 @@ function ContributionState(props: PropTypes) {
         return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
       case Canada:
         return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
+      case AUDCountries: {
+        // Don't show states if the user is GEO-IP'd to one of the non AU countries that use AUD.
+        if (window.guardian && window.guardian.geoip) {
+          const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
+          const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(c => c !== 'AU');
+          if (AUDCountriesWithNoStates.includes(window.guardian.geoip.countryCode)) {
+            return null;
+          }
+        }
+        return renderStatesField(auStates, props.selectedState, props.onChange, showError, 'State / Territory');
+      }
       default:
         return null;
     }

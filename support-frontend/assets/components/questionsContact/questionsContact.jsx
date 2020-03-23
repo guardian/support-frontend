@@ -8,6 +8,10 @@ import PageSection from 'components/pageSection/pageSection';
 import { contributionsEmail } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import {
+  ContactPageLink,
+  useDotcomContactPage,
+} from 'helpers/dotcomContactPage';
 
 
 // ---- Types ----- //
@@ -20,7 +24,13 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function QuestionsContact(props: PropTypes) {
-
+  const contactUs = useDotcomContactPage() ? <ContactPageLink linkText="contact us" /> : (
+    <a
+      className="component-questions-contact__link"
+      href={contributionsEmail[props.countryGroupId]}
+    >
+      contact us
+    </a>);
   return (
     <div className="component-questions-contact">
       <PageSection
@@ -30,12 +40,7 @@ function QuestionsContact(props: PropTypes) {
         <p className="component-questions-contact__description">
           If you have any questions about contributing to The&nbsp;Guardian,
           please&nbsp;
-          <a
-            className="component-questions-contact__link"
-            href={contributionsEmail[props.countryGroupId]}
-          >
-            contact us
-          </a>
+          {contactUs}
         </p>
       </PageSection>
     </div>

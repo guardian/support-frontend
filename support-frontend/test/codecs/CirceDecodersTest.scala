@@ -118,7 +118,8 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |        "description": "Redesign of the payment flow UI",
           |        "state": "On"
           |      }
-          |    }
+          |    },
+          |    "useDotcomContactPage": "Off"
           |  },
           |  "amounts": {
           |    "GBPCountries": {
@@ -285,7 +286,8 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
               description = "Redesign of the payment flow UI",
               state = On
             )
-          )
+          ),
+          useDotcomContactPage = Some(Off)
         ),
         amountsRegions,
         contributionTypes,

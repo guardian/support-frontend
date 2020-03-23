@@ -7,7 +7,7 @@ import { combineReducers } from 'redux';
 import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/commonReducer';
-import { type UsState, type CaState } from 'helpers/internationalisation/country';
+import { type StateProvince } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
@@ -45,7 +45,7 @@ export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 
 type FormData = UserFormData & {
   otherAmounts: OtherAmounts,
-  billingState: UsState | CaState | null,
+  billingState: StateProvince | null,
   billingCountry: IsoCountry | null,
   checkoutFormHasBeenSubmitted: boolean,
 };

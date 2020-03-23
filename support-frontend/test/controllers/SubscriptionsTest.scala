@@ -69,7 +69,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       Switches(
         oneOffPaymentMethods = PaymentMethodsSwitch(On, On, On, On, None, None, None, None),
         recurringPaymentMethods = PaymentMethodsSwitch(On, On, On, On, Some(On), Some(On), Some(On), None),
-        experiments = Map.empty
+        experiments = Map.empty, useDotcomContactPage = Some(SwitchState.Off)
       ),
       AmountsRegions(amounts, amounts, amounts, amounts, amounts, amounts, amounts),
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),

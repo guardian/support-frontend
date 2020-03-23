@@ -1,5 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
+import { V1 } from './data/testAmountsData';
 
 // ----- Tests ----- //
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
@@ -10,6 +11,7 @@ export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy
 export type recaptchaPresenceTestVariants = 'control' | 'recaptchaPresent';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
+const usOnlyLandingPage = '/us/contribute(/.*)?$';
 
 export const tests: Tests = {
 
@@ -53,8 +55,31 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    seed: 5,
+    seed: 6,
     targetPage: contributionsLandingPageMatch,
+  },
+
+  usAmountsTest: {
+    type: 'AMOUNTS',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'V1',
+        amountsRegions: V1,
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: usOnlyLandingPage,
+    seed: 5,
   },
 
   postContributionReminderCopyTest: {

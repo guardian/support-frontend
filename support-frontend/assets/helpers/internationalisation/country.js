@@ -103,15 +103,15 @@ const caStates: {
 const auStates: {
   [string]: string,
 } = {
+  ACT: 'Australian Capital Territory',
+  JBT: 'Jervis Bay Territory',
+  NSW: 'New South Wales',
+  NT: 'Northern Territory',
+  QLD: 'Queensland',
   SA: 'South Australia',
   TAS: 'Tasmania',
-  NSW: 'New South Wales',
   VIC: 'Victoria',
   WA: 'Western Australia',
-  QLD: 'Queensland',
-  ACT: 'Australian Capital Territory',
-  NT: 'Northern Territory',
-  JBT: 'Jervis Bay Territory',
 };
 
 const newspaperCountries: {
@@ -443,6 +443,20 @@ function auStateFromString(s: string): Option<AuState> {
   return stateProvinceFromMap(s, auStates) || null;
 }
 
+function stateProvinceFieldFromString(countryGroupId: ?CountryGroupId, s?: string): Option<StateProvince> {
+  if (!s) { return null; }
+  switch (countryGroupId) {
+    case UnitedStates:
+      return usStateFromString(s);
+    case Canada:
+      return caStateFromString(s);
+    case AUDCountries:
+      return auStateFromString(s);
+    default:
+      return null;
+  }
+}
+
 function stateProvinceFromString(country: Option<IsoCountry>, s?: string): Option<StateProvince> {
   if (!s) { return null; }
   switch (country) {
@@ -614,6 +628,7 @@ export {
   newspaperCountries,
   findIsoCountry,
   fromString,
+  stateProvinceFieldFromString,
   stateProvinceFromString,
   fromCountryGroup,
 };

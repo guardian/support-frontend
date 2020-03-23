@@ -67,21 +67,63 @@ describe('formValidation', () => {
       expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
     });
 
-    it('should return true if countryGroupId is not Canada or United States regardless of the state', () => {
+    it('should return true if countryGroupId is AUDCountries and state is a string', () => {
+      const state = 'NSW';
+      const countryGroupId = AUDCountries;
+      expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+    });
+
+    it(
+      'should return true if countryGroupId is AUDCountries and country uses AUD but is not AU, false otherwise',
+      () => {
+        const countryGroupId = AUDCountries;
+        const state = 'NSW';
+
+        window.guardian = window.guardian || {};
+        window.guardian.geoip = window.guardian.geoip || {};
+
+        window.guardian.geoip.countryCode = 'TV';
+        expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId)).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ANNUAL')).toEqual(true);
+
+        window.guardian.geoip.countryCode = 'AU';
+        expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId)).toEqual(false);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
+
+        window.guardian.geoip.countryCode = 'GB';
+        expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId)).toEqual(false);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
+
+        // This function tests for presence, it does not validate state and country
+        expect(checkStateIfApplicable('NY', countryGroupId)).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
+
+        // Function supports no geoip
+        delete window.guardian.geoip;
+        expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+        expect(checkStateIfApplicable(null, countryGroupId)).toEqual(false);
+        expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(true);
+      },
+    );
+
+    it('should return true if countryGroupId is not Canada, AUDCountries or United States regardless of the state', () => {
       let state = 'AL';
       expect(checkStateIfApplicable(state, GBPCountries)).toEqual(true);
-      expect(checkStateIfApplicable(state, AUDCountries)).toEqual(true);
       expect(checkStateIfApplicable(state, EURCountries)).toEqual(true);
       expect(checkStateIfApplicable(state, International)).toEqual(true);
       expect(checkStateIfApplicable(state, NZDCountries)).toEqual(true);
 
       state = null;
       expect(checkStateIfApplicable(state, GBPCountries)).toEqual(true);
-      expect(checkStateIfApplicable(state, AUDCountries)).toEqual(true);
       expect(checkStateIfApplicable(state, EURCountries)).toEqual(true);
       expect(checkStateIfApplicable(state, International)).toEqual(true);
       expect(checkStateIfApplicable(state, NZDCountries)).toEqual(true);
     });
+
   });
 
   describe('checkAmountOrOtherAmount', () => {

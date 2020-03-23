@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { type ContributionType } from 'helpers/contributions';
-import { type UsState, type CaState } from 'helpers/internationalisation/country';
+import { type StateProvince } from 'helpers/internationalisation/country';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 import Signout from 'components/signout/signout';
@@ -29,14 +29,13 @@ import {
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
 
-
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   firstName: string,
   lastName: string,
   email: string,
-  billingState: UsState | CaState | null,
+  billingState: StateProvince | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
   isRecurringContributor: boolean,

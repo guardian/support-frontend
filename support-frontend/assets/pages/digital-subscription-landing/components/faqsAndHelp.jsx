@@ -12,6 +12,13 @@ import {
 import { type Option } from 'helpers/types/option';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import {
+  ContactPageLink,
+  useDotcomContactPage,
+} from 'helpers/dotcomContactPage';
+import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+
+import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
 
 // ----- Props ----- //
 
@@ -66,13 +73,24 @@ function FaqsAndHelp(props: PropTypes) {
 
   const Faqs = ({ children }: { children: React.Node }) =>
     (
-      <div className="component-customer-service">
-        <h2>FAQs and Help</h2>
-        <div className="component-customer-service__text">
-          {children}
+      <div className="hope-is-power__faqs">
+        <div className="component-customer-service" id="qa-component-customer-service">
+          <h2>FAQs and Help</h2>
+          <p className="component-customer-service__text">
+            {children}
+          </p>
+          <SubscriptionFaq subscriptionProduct="DigitalPack" />
         </div>
       </div>
     );
+
+  if (useDotcomContactPage()) {
+    return (
+      <Faqs>
+        For help with Guardian and Observer subscription services please <ContactPageLink linkText="contact us" />
+      </Faqs>
+    );
+  }
 
   switch (props.selectedCountryGroup) {
     case UnitedStates:
