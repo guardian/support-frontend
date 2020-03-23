@@ -223,15 +223,21 @@ const setAmazonPayLoginObject = (amazonLoginObject: Object): Action => ({
   amazonLoginObject,
 });
 
-const setIsLowRiskV3 = (v3IsLowRisk: boolean): Action => ({
-  type: 'SET_V3_LOW_RISK',
-  v3IsLowRisk,
-});
+const setIsLowRiskV3 = (v3IsLowRisk: boolean): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({
+      type: 'SET_V3_LOW_RISK',
+      v3IsLowRisk,
+    })));
+  };
 
-const setIsLowRiskV2 = (v2IsLowRisk: boolean): Action => ({
-  type: 'SET_V2_LOW_RISK',
-  v2IsLowRisk,
-});
+const setIsLowRiskV2 = (v2IsLowRisk: boolean): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({
+      type: 'SET_V2_LOW_RISK',
+      v2IsLowRisk,
+    })));
+  };
 
 const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
   type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT',
