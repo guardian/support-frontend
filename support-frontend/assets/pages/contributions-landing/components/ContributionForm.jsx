@@ -265,7 +265,7 @@ function withProps(props: PropTypes) {
         <div>
           <div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? 'robot_checkbox' : 'hidden'} />
           { props.checkoutFormHasBeenSubmitted && !props.v2IsLowRisk &&
-          (<div className="form__error"> {`Please tick to verify you're a human`} </div>) }
+          (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>) }
         </div>
         {/*
           The <div> wrapper for the ContributionErrorMessage is required because a

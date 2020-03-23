@@ -49,7 +49,7 @@ const mapStateToProps = (state: State) => ({
   contributionTypes: state.common.settings.contributionTypes,
   choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR3,
   v3isLowRisk: state.page.form.v3IsLowRisk,
-  isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser
+  isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -92,7 +92,7 @@ function withProps(props: PropTypes) {
                 props.switches,
                 props.countryId,
                 props.countryGroupId,
-                isStripeEnabled
+                isStripeEnabled,
               )
           }
           checked={props.contributionType === contributionType}
