@@ -118,7 +118,9 @@ function enableOrDisableForm() {
     );
 
     const v2RecaptchaCheck =
-      window.guardian.recaptchaV2 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
+      window.guardian.recaptchaV2
+      && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
+      && !state.page.user.isTestUser
         ? state.page.form.v2IsLowRisk
         : true;
 
