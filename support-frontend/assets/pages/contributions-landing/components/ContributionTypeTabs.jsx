@@ -38,6 +38,7 @@ type PropTypes = {|
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId, boolean) => void,
   choiceCardsVariant: ChoiceCardsProductSetTestR3Variants,
   v3isLowRisk: boolean,
+  isPostDeploymentTestUser: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -48,6 +49,7 @@ const mapStateToProps = (state: State) => ({
   contributionTypes: state.common.settings.contributionTypes,
   choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR3,
   v3isLowRisk: state.page.form.v3IsLowRisk,
+  isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -56,9 +58,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
     switches: Switches,
     countryId: IsoCountry,
     countryGroupId: CountryGroupId,
-    isLowRisk: boolean,
+    isStripeEnabled: boolean,
   ) => {
-    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId, isLowRisk);
+    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId, isStripeEnabled);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
   },
@@ -77,6 +79,7 @@ function withProps(props: PropTypes) {
     >
       {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
       const { contributionType } = contributionTypeSetting;
+      const isStripeEnabled = props.isPostDeploymentTestUser ? true : props.v3isLowRisk;
       return (
         <ChoiceCard
           cssOverrides={cssOverrides}
@@ -89,7 +92,7 @@ function withProps(props: PropTypes) {
                 props.switches,
                 props.countryId,
                 props.countryGroupId,
-                props.v3isLowRisk,
+                isStripeEnabled
               )
           }
           checked={props.contributionType === contributionType}

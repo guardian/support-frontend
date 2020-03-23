@@ -108,9 +108,9 @@ function getPaymentMethodToSelect(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
-  isLowRisk: boolean,
+  isStripeEnabled: boolean,
 ) {
-  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId, isLowRisk);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId, isStripeEnabled);
   return validPaymentMethods[0] || 'None';
 }
 
