@@ -25,6 +25,7 @@ import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
+import { ExistingCard, Stripe } from 'helpers/paymentMethods';
 
 
 // ----- Types ----- //
@@ -119,6 +120,7 @@ function enableOrDisableForm() {
 
     const v2RecaptchaCheck =
       window.guardian.recaptchaV2
+      && [Stripe, ExistingCard].includes(state.page.form.paymentMethod)
       && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
       && !state.page.user.isPostDeploymentTestUser
         ? state.page.form.v2IsLowRisk
