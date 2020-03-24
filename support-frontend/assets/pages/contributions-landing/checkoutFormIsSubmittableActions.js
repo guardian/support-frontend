@@ -26,7 +26,6 @@ import {
   setFormIsValid,
 } from './contributionsLandingActions';
 
-
 // ----- Types ----- //
 
 type Action = ContributionsLandingAction | UserAction;
@@ -119,6 +118,7 @@ function enableOrDisableForm() {
 
     const v2RecaptchaCheck =
       window.guardian.recaptchaV2
+      && state.page.form.stripeCardFormData.formComplete
       && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
       && !state.page.user.isPostDeploymentTestUser
         ? state.page.form.v2IsLowRisk
