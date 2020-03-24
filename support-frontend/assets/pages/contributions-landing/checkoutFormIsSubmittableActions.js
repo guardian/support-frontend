@@ -25,8 +25,6 @@ import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
-import { ExistingCard, Stripe } from 'helpers/paymentMethods';
-
 
 // ----- Types ----- //
 
