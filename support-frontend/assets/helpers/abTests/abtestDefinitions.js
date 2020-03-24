@@ -3,13 +3,10 @@ import type { Tests } from './abtest';
 import { USV1, UKV1Lower, UKV2Higher } from './data/testAmountsData';
 
 // ----- Tests ----- //
-export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
-export type ChoiceCardsProductSetTestR2Variants = 'control' | 'rectangles';
 export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
 export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
-export type recaptchaPresenceTestVariants = 'control' | 'recaptchaPresent';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
