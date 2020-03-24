@@ -120,7 +120,7 @@ function enableOrDisableForm() {
 
     const v2RecaptchaCheck =
       window.guardian.recaptchaV2
-      && [Stripe, ExistingCard].includes(state.page.form.paymentMethod)
+      && state.page.form.stripeCardFormData.formComplete
       && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
       && !state.page.user.isPostDeploymentTestUser
         ? state.page.form.v2IsLowRisk
