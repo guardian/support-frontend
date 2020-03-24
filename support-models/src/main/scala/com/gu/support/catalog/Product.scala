@@ -136,16 +136,16 @@ case object Paper extends Product {
 
   private val sandboxCollection: List[ProductRatePlan[Paper.type]] = if(useDigitalVoucher) {
     List(
-      collection("2c92c0f961f9cf300161fc44f2661258", SaturdayPlus, "Voucher Saturday paper+"),
-      collection("2c92c0f861f9c26d0161fc434bfe004c", Saturday, "Voucher Saturday paper"),
-      collection("2c92c0f955a0b5bf0155b62623846fc8", SundayPlus, "Voucher Sunday paper+"),
-      collection("2c92c0f95aff3b56015b1045fb9332d2", Sunday, "Voucher Sunday paper"),
-      collection("2c92c0f95aff3b54015b1047efaa2ac3", WeekendPlus, "Voucher Weekend+"),
-      collection("2c92c0f8555ce5cf01556e7f01b81b94", Weekend, "Voucher Weekend"),
-      collection("2c92c0f855c3b8190155c585a95e6f5a", SixdayPlus, "Voucher Sixday+"),
-      collection("2c92c0f8555ce5cf01556e7f01771b8a", Sixday, "Voucher Sixday"),
-      collection("2c92c0f95aff3b53015b10469bbf5f5f", EverydayPlus, "Voucher Everyday+"),
-      collection("2c92c0f9555cf10501556e84a70440e2", Everyday, "Voucher Everyday"),
+      collection("2c92c0f86fa49142016fa49eb1732a39", SaturdayPlus, "Voucher Saturday paper+"),
+      collection("2c92c0f86fa49142016fa49ea442291b", Saturday, "Voucher Saturday paper"),
+      collection("2c92c0f86fa49142016fa49ea90e2976", SundayPlus, "Voucher Sunday paper+"),
+      collection("2c92c0f86fa49142016fa49eb0a42a01", Sunday, "Voucher Sunday paper"),
+      collection("2c92c0f86fa49142016fa49eaecb29dd", WeekendPlus, "Voucher Weekend+"),
+      collection("2c92c0f86fa49142016fa49ea0d028b6", Weekend, "Voucher Weekend"),
+      collection("2c92c0f86fa49142016fa49ea1af28c8", SixdayPlus, "Voucher Sixday+"),
+      collection("2c92c0f86fa49142016fa49e9b9a286f", Sixday, "Voucher Sixday"),
+      collection("2c92c0f86fa49142016fa49eaa492988", EverydayPlus, "Voucher Everyday+"),
+      collection("2c92c0f86fa49142016fa49ea56a2938", Everyday, "Voucher Everyday"),
     )
   } else {
     List(
