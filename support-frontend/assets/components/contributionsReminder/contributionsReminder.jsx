@@ -11,18 +11,11 @@ import { logException } from 'helpers/logger';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { Label as FormLabel } from 'components/forms/label';
+import { createReminderChoiceSet } from 'components/contributionsReminder/contributionsReminderAutomation';
 
 // ----- Types ----- //
 type PropTypes = {
   email: string | null,
-}
-
-// JTL: NB "control" and "extendedCopy" are only for
-// postContributionReminderCopyTest and should be removed after this test
-type ReminderDate = {
-  dateName: string,
-  extendedCopy: string,
-  timeStamp: string,
 }
 
 type ButtonState = 'initial' | 'pending' | 'success' | 'fail';
@@ -36,50 +29,6 @@ type StateTypes = {
 const mapStateToProps = state => ({
   email: state.page.form.formData.email,
 });
-
-const getReminderCopy = (index: number): string => {
-  switch (index) {
-    case 0:
-      return 'Three months';
-    case 1:
-      return 'Six months';
-    case 2:
-      return 'Nine months';
-    case 3:
-      return 'Next year';
-    default:
-      return '';
-  }
-};
-
-export const createReminderChoiceSet = (month: number, year: number): Array<ReminderDate> => {
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const reminderMonthIdxs = [month + 3, month + 6, month + 9, month];
-  const reminderChoiceSet = [];
-
-  for (let i = 0; i < reminderMonthIdxs.length; i += 1) {
-    let reminderMonthAsIdx; let reminderYear;
-
-    if (reminderMonthIdxs[i] <= 11) {
-      reminderMonthAsIdx = reminderMonthIdxs[i];
-      reminderYear = year;
-    } else {
-      reminderMonthAsIdx = reminderMonthIdxs[i] - months.length;
-      reminderYear = year + 1;
-    }
-
-    const reminderMonthForTimestamp = reminderMonthAsIdx + 1 < 10 ? `0${reminderMonthAsIdx + 1}` : reminderMonthAsIdx + 1;
-    const reminderMonthAsWord = months[reminderMonthAsIdx];
-
-    reminderChoiceSet.push({
-      dateName: `${reminderMonthAsWord} ${reminderYear}`,
-      extendedCopy: `${getReminderCopy(i)} (${reminderMonthAsWord}${reminderYear !== year ? ` ${reminderYear}` : ''})`,
-      timeStamp: `${reminderYear}-${reminderMonthForTimestamp}-01 00:00:00`,
-    });
-  }
-
-  return reminderChoiceSet;
-};
 
 const currentDate = new Date();
 
