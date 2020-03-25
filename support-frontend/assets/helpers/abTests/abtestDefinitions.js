@@ -7,7 +7,6 @@ export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'not
 
 export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
 export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
-export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
 export type recaptchaPresenceTestVariants = 'control' | 'recaptchaPresent';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
@@ -80,28 +79,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: usOnlyLandingPage,
     seed: 5,
-  },
-
-  postContributionReminderCopyTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'extendedCopy',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 4,
-    targetPage: contributionsLandingPageMatch,
   },
 
   stripePaymentRequestButtonSca: {
