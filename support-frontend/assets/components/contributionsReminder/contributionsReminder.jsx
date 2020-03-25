@@ -52,7 +52,7 @@ const getReminderCopy = (index: number): string => {
   }
 };
 
-const createReminderChoiceSet = (month: number, year: number): Array<ReminderDate> => {
+export const createReminderChoiceSet = (month: number, year: number): Array<ReminderDate> => {
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const reminderMonthIdxs = [month + 3, month + 6, month + 9, month];
   const reminderChoiceSet = [];
