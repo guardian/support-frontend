@@ -260,8 +260,11 @@ const init = (store: Store<State, Action, Function>) => {
     initRecaptchaV3(dispatch);
   }
 
-  if (window.guardian.recaptchaV2 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-    loadRecaptureV2(dispatch);
+  if (window.guardian.recaptchaV2) {
+    if (state.common.internationalisation.countryGroupId === 'AUDCountries' ||
+      state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
+      loadRecaptureV2(dispatch);
+    }
   }
 };
 
