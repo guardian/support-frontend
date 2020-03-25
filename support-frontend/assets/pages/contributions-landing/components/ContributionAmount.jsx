@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import { config, type AmountsRegions, type Amount, type ContributionType, getAmount } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
+  type Currency,
+  type SpokenCurrency,
   type IsoCurrency,
   currencies,
   spokenCurrencies,
@@ -23,9 +25,7 @@ import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
-import type { ChoiceCardsProductSetTestR3Variants } from 'helpers/abTests/abtestDefinitions';
-import type { SerializedStyles } from '@emotion/utils';
-import { yellowChoiceCard } from './choiceCardStyles';
+
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -40,7 +40,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  choiceCardsVariant: ChoiceCardsProductSetTestR3Variants,
 |};
 
 
@@ -55,7 +54,6 @@ const mapStateToProps = state => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR3,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -78,6 +76,31 @@ const isSelected = (amount: Amount, props: PropTypes) => {
   }
   return amount.isDefault;
 };
+
+const renderAmount = (
+  currency: Currency,
+  spokenCurrency: SpokenCurrency,
+  props: PropTypes,
+) =>
+  (amount: Amount) => (
+    <li className="form__radio-group-item">
+      <input
+        id={`contributionAmount-${amount.value}`}
+        className="form__radio-group-input"
+        type="radio"
+        name="contributionAmount"
+        value={amount.value}
+        /* eslint-disable react/prop-types */
+        checked={isSelected(amount, props)}
+        onChange={
+          props.selectAmount(amount, props.countryGroupId, props.contributionType)
+        }
+      />
+      <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
+        {formatAmount(currency, spokenCurrency, amount, false)}
+      </label>
+    </li>
+  );
 
 const renderEmptyAmount = (id: string) => (
   <li className="form__radio-group-item amounts__placeholder">
@@ -140,14 +163,15 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
-  const renderChoiceCards = (cssOverrides: SerializedStyles) => (
+  /* eslint-disable no-unused-vars */
+  // leaving in place as this is still in active development:
+  const renderChoiceCards = () => (
     <>
       <ChoiceCardGroup
         name="amounts"
       >
         {validAmounts.map((amount: Amount) => (
           <ChoiceCard
-            cssOverrides={cssOverrides}
             id={`contributionAmount-${amount.value}`}
             name="contributionAmount"
             value={amount.value}
@@ -159,7 +183,6 @@ function withProps(props: PropTypes) {
         ))
       }
         <ChoiceCard
-          cssOverrides={cssOverrides}
           id="contributionAmount-other"
           name="contributionAmount"
           value="other"
@@ -170,12 +193,35 @@ function withProps(props: PropTypes) {
       </ChoiceCardGroup>
   </>
   );
+  /* eslint-enable no-unused-vars */
+
+  const renderControl = () => (
+    <ul className="form__radio-group-list">
+      {validAmounts.map(renderAmount(
+        currencies[props.currency],
+        spokenCurrencies[props.currency],
+        props,
+      ))}
+      <li className="form__radio-group-item">
+        <input
+          id="contributionAmount-other"
+          className="form__radio-group-input"
+          type="radio"
+          name="contributionAmount"
+          value="other"
+          checked={showOther}
+          onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
+        />
+        <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
+      </li>
+    </ul>
+  );
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
 
-      {props.choiceCardsVariant === 'yellow' ? renderChoiceCards(yellowChoiceCard) : renderChoiceCards()}
+      {renderControl()}
 
       {showOther ? (
         <ContributionTextInput

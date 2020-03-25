@@ -77,26 +77,4 @@ export const tests: Tests = {
     seed: 2,
     targetPage: contributionsLandingPageMatch,
   },
-
-  choiceCardsProductSetTestR3: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'yellow',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 3,
-    targetPage: contributionsLandingPageMatch,
-  },
 };
