@@ -19,7 +19,7 @@ import './header.scss';
 
 export type PropTypes = {|
   utility: Option<Node>,
-  countryGroupId: ?CountryGroupId,
+  countryGroupId: CountryGroupId,
   display?: 'navigation' | 'checkout' | 'guardianLogo' | void,
 |};
 export type State = {|
@@ -78,7 +78,6 @@ const TopNav = ({ display, getLogoRef, utility }: TopNavPropTypes) => (
 export default class Header extends Component<PropTypes, State> {
   static defaultProps = {
     utility: null,
-    countryGroupId: null,
     display: 'navigation',
   };
 

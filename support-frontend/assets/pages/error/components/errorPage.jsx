@@ -14,6 +14,7 @@ import AnchorButton from 'components/button/anchorButton';
 import { contributionsEmail } from 'helpers/legal';
 import Text, { LargeParagraph } from 'components/text/text';
 import '../error.scss';
+import { detect } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -31,7 +32,7 @@ export default function ErrorPage(props: PropTypes) {
 
   return (
     <Page
-      header={<Header />}
+      header={<Header countryGroupId={detect()} />}
       footer={<Footer />}
     >
       <SquaresIntroduction

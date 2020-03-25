@@ -12,6 +12,7 @@ import Header from 'components/headers/header/header';
 import { Provider } from 'react-redux';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
+import { detect } from 'helpers/internationalisation/countryGroup';
 
 // ----- Redux Store ----- //
 
@@ -23,7 +24,7 @@ const store = pageInit(() => reducer, true);
 const PromotionTermsPage = (props: State) => (
   <Provider store={store}>
     <Page
-      header={<Header />}
+      header={<Header countryGroupId={detect()} />}
       footer={<Footer />}
     >
       <PromoDetails {...props.page.promotionTerms} />

@@ -21,7 +21,7 @@ export default function ({
   trackProduct,
 }: {
   path: string,
-  countryGroupId?: CountryGroupId,
+  countryGroupId: CountryGroupId,
   listOfCountryGroups: CountryGroupId[],
   trackProduct?: Option<SubscriptionProduct>,
 }) {
