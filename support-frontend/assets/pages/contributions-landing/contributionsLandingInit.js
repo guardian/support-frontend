@@ -22,7 +22,7 @@ import {
   getValidContributionTypesFromUrlOrElse,
 } from 'helpers/checkouts';
 import { type ContributionType, contributionTypeAvailable } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId, AUDCountries } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   type Action,
@@ -260,8 +260,11 @@ const init = (store: Store<State, Action, Function>) => {
     initRecaptchaV3(dispatch);
   }
 
-  if (window.guardian.recaptchaV2 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-    loadRecaptureV2(dispatch);
+  if (window.guardian.recaptchaV2) {
+    if (state.page.countryGroupId === AUDCountries ||
+      state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
+      loadRecaptureV2(dispatch);
+    }
   }
 };
 

@@ -8,9 +8,9 @@ export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'not
 export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
 export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
 export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
-export type recaptchaPresenceTestVariants = 'control' | 'recaptchaPresent';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
+const contributionsLandingPageWithoutAU = '/(uk|us|eu|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 
 export const tests: Tests = {
@@ -34,7 +34,7 @@ export const tests: Tests = {
     isActive: true,
     referrerControlled: false,
     seed: 1,
-    targetPage: contributionsLandingPageMatch,
+    targetPage: contributionsLandingPageWithoutAU,
   },
 
   recaptchaPresenceTest: {

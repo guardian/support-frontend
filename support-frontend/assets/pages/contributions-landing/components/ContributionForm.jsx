@@ -82,7 +82,6 @@ type PropTypes = {|
   country: IsoCountry,
   createStripePaymentMethod: () => void,
   amazonPayOrderReferenceId: string | null,
-  isRecaptchaPresentTest: boolean,
   checkoutFormHasBeenSubmitted: boolean,
   v2IsLowRisk: boolean,
 |};
@@ -116,7 +115,6 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
-  isRecaptchaPresentTest: state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent',
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   v2IsLowRisk: state.page.form.v2IsLowRisk,
 });
