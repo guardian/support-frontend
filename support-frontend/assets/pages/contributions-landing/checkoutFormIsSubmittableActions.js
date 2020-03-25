@@ -119,7 +119,10 @@ function enableOrDisableForm() {
     const v2RecaptchaCheck =
       window.guardian.recaptchaV2
       && state.page.form.stripeCardFormData.formComplete
-      && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
+      && (
+        state.common.internationalisation.countryGroupId === 'AUDCountries' ||
+        state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
+      )
       && !state.page.user.isPostDeploymentTestUser
         ? state.page.form.v2IsLowRisk
         : true;
