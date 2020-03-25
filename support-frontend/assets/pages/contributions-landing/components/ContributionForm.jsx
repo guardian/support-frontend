@@ -82,6 +82,7 @@ type PropTypes = {|
   country: IsoCountry,
   createStripePaymentMethod: () => void,
   amazonPayOrderReferenceId: string | null,
+  isRecaptchaRequired: boolean,
   checkoutFormHasBeenSubmitted: boolean,
   v2IsLowRisk: boolean,
 |};
@@ -115,6 +116,9 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
+  isRecaptchaRequired: window.guardian.recaptchaV2 &&
+    (state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent' ||
+    state.common.internationalisation.countryGroupId === 'AUDCountries'),
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   v2IsLowRisk: state.page.form.v2IsLowRisk,
 });
@@ -262,7 +266,7 @@ function withProps(props: PropTypes) {
 
         <div>
           <div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? 'robot_checkbox' : 'hidden'} />
-          { props.paymentMethod === 'Stripe' && props.checkoutFormHasBeenSubmitted && !props.v2IsLowRisk &&
+          { props.isRecaptchaRequired && props.paymentMethod === 'Stripe' && props.checkoutFormHasBeenSubmitted && !props.v2IsLowRisk &&
           (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>) }
         </div>
         {/*
