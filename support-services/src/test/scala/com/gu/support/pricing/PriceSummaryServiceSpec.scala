@@ -21,16 +21,16 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
     val paper = service.getPrices(Paper, List(discountPromoCode))
-    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).price shouldBe 54.12
-    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(37.88)
-    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).price shouldBe 51.96
-    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(36.37)
+    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).price shouldBe 57.99
+    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(40.59)
+    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).price shouldBe 54.99
+    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(38.49)
 
     val digitalPack = service.getPrices(DigitalPack, List(discountPromoCode))
     digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 11.99
     digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(8.39)
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 119.90
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).promotions.head.discountedPrice shouldBe Some(110.91)
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 99
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).promotions.head.discountedPrice shouldBe Some(91.57)
   }
 
   it should "return correct prices for Guardian Weekly" in {

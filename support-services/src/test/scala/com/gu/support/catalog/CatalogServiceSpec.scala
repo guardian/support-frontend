@@ -26,7 +26,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Monthly,
       HomeDelivery,
       Everyday
-    ) shouldBe Some(Price(62.79, GBP))
+    ) shouldBe Some(Price(67.99, GBP))
 
     serviceWithFixtures.getPrice(
       Paper,
@@ -34,7 +34,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Monthly,
       HomeDelivery,
       Sixday
-    ) shouldBe Some(Price(54.12, GBP))
+    ) shouldBe Some(Price(57.99, GBP))
 
     serviceWithFixtures.getPrice(
       GuardianWeekly,
@@ -55,7 +55,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
     (for {
       voucherEveryday <- Paper.getProductRatePlan(PROD, Monthly, Collection, Everyday)
       priceList <- serviceWithFixtures.getPriceList(voucherEveryday)
-    } yield priceList.savingVsRetail shouldBe Some(31)).getOrElse(fail())
+    } yield priceList.savingVsRetail shouldBe Some(29)).getOrElse(fail())
 
   }
 }

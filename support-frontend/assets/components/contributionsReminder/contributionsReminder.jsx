@@ -11,21 +11,11 @@ import { logException } from 'helpers/logger';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { Label as FormLabel } from 'components/forms/label';
-import type { PostContributionReminderCopyTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { createReminderChoiceSet } from 'components/contributionsReminder/contributionsReminderAutomation';
 
 // ----- Types ----- //
 type PropTypes = {
   email: string | null,
-  postContributionReminderCopyTestVariant: PostContributionReminderCopyTestVariants,
-}
-
-// JTL: NB "control" and "extendedCopy" are only for
-// postContributionReminderCopyTest and should be removed after this test
-type ReminderDate = {
-  dateName: string,
-  control: string,
-  extendedCopy: string,
-  timeStamp: string,
 }
 
 type ButtonState = 'initial' | 'pending' | 'success' | 'fail';
@@ -38,37 +28,11 @@ type StateTypes = {
 
 const mapStateToProps = state => ({
   email: state.page.form.formData.email,
-  postContributionReminderCopyTestVariant: state.common.abParticipations.postContributionReminderCopyTest,
 });
 
-// JTL: NB "control" and "extendedCopy" are only for
-// postContributionReminderCopyTest and should be removed after this test
-const reminderDates: Array<ReminderDate> = [
-  {
-    dateName: 'June 2020',
-    control: 'June',
-    extendedCopy: 'Three months (June)',
-    timeStamp: '2020-06-01 00:00:00',
-  },
-  {
-    dateName: 'September 2020',
-    control: 'September',
-    extendedCopy: 'Six months (September)',
-    timeStamp: '2020-09-01 00:00:00',
-  },
-  {
-    dateName: 'December 2020',
-    control: 'December',
-    extendedCopy: 'Nine months (December)',
-    timeStamp: '2020-12-01 00:00:00',
-  },
-  {
-    dateName: 'March 2021',
-    control: 'March 2021',
-    extendedCopy: 'One year (March 2021)',
-    timeStamp: '2021-03-01 00:00:00',
-  },
-];
+const currentDate = new Date();
+
+const reminderDates = createReminderChoiceSet(currentDate.getMonth(), currentDate.getFullYear());
 
 const trimAndDowncase = (word: string) => word.replace(/\s+/g, '').toLowerCase();
 // ----- Render ----- //
@@ -139,9 +103,9 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const { email, postContributionReminderCopyTestVariant } = this.props;
+    const { email } = this.props;
 
-    if (email && postContributionReminderCopyTestVariant !== 'notintest') {
+    if (email) {
       const isClicked = this.state.buttonState !== 'initial';
 
       return (
@@ -160,7 +124,7 @@ class ContributionsReminder extends Component<PropTypes, StateTypes> {
                 return (
                   <RadioInput
                     id={dateWithoutSpace}
-                    text={reminderDate[postContributionReminderCopyTestVariant]}
+                    text={reminderDate.extendedCopy}
                     name="reminder"
                     onChange={evt => this.setDateState(evt, reminderDate.timeStamp, dateWithoutSpace)}
                     defaultChecked={index === 0}
