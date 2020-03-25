@@ -51,6 +51,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import { logException } from 'helpers/logger';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -223,6 +224,11 @@ function onSubmit(props: PropTypes): Event => void {
   };
 }
 
+function renderVerificationCopy(countryGroupId: CountryGroupId, contributionType: ContributionType) {
+  trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
+  return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
+}
+
 // ----- Render ----- //
 
 function withProps(props: PropTypes) {
@@ -266,8 +272,10 @@ function withProps(props: PropTypes) {
 
         <div>
           <div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? 'robot_checkbox' : 'hidden'} />
-          { props.isRecaptchaRequired && props.paymentMethod === 'Stripe' && props.checkoutFormHasBeenSubmitted && !props.v2IsLowRisk &&
-          (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>) }
+          {
+            props.isRecaptchaRequired && props.paymentMethod === 'Stripe' && props.checkoutFormHasBeenSubmitted &&
+            !props.v2IsLowRisk ? renderVerificationCopy(props.countryGroupId, props.contributionType) : null
+          }
         </div>
         {/*
           The <div> wrapper for the ContributionErrorMessage is required because a
