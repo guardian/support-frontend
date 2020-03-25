@@ -175,7 +175,6 @@ function DigitalCheckoutForm(props: PropTypes) {
           description="Premium App + The Guardian Daily + Ad-free"
           productPrice={productPrice}
           billingPeriod={props.billingPeriod}
-          product={props.product}
           changeSubscription={routes.digitalSubscriptionLanding}
         />)}
       >
