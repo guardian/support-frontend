@@ -37,30 +37,53 @@ const mapStateToProps = state => ({
   email: state.page.form.formData.email,
 });
 
-// JTL: NB "control" and "extendedCopy" are only for
-// postContributionReminderCopyTest and should be removed after this test
-const reminderDates: Array<ReminderDate> = [
-  {
-    dateName: 'July 2020',
-    extendedCopy: 'Three months (July)',
-    timeStamp: '2020-07-01 00:00:00',
-  },
-  {
-    dateName: 'October 2020',
-    extendedCopy: 'Six months (October)',
-    timeStamp: '2020-10-01 00:00:00',
-  },
-  {
-    dateName: 'January 2021',
-    extendedCopy: 'Nine months (January 2021)',
-    timeStamp: '2021-01-01 00:00:00',
-  },
-  {
-    dateName: 'April 2021',
-    extendedCopy: 'One year (April 2021)',
-    timeStamp: '2021-04-01 00:00:00',
-  },
-];
+const getReminderCopy = (index: number): string => {
+  switch (index) {
+    case 0:
+      return 'Three months';
+    case 1:
+      return 'Six months';
+    case 2:
+      return 'Nine months';
+    case 3:
+      return 'Next year';
+    default:
+      return '';
+  }
+};
+
+const createReminderChoiceSet = (month: number, year: number): Array<ReminderDate> => {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const reminderMonthIdxs = [month + 3, month + 6, month + 9, month];
+  const reminderChoiceSet = [];
+
+  for (let i = 0; i < reminderMonthIdxs.length; i += 1) {
+    let reminderMonthAsIdx; let reminderYear;
+
+    if (reminderMonthIdxs[i] <= 11) {
+      reminderMonthAsIdx = reminderMonthIdxs[i];
+      reminderYear = year;
+    } else {
+      reminderMonthAsIdx = reminderMonthIdxs[i] - months.length;
+      reminderYear = year + 1;
+    }
+
+    const reminderMonthForTimestamp = reminderMonthAsIdx + 1 < 10 ? `0${reminderMonthAsIdx + 1}` : reminderMonthAsIdx + 1;
+    const reminderMonthAsWord = months[reminderMonthAsIdx];
+
+    reminderChoiceSet.push({
+      dateName: `${reminderMonthAsWord} ${reminderYear}`,
+      extendedCopy: `${getReminderCopy(i)} (${reminderMonthAsWord}${reminderYear !== year ? ` ${reminderYear}` : ''})`,
+      timeStamp: `${reminderYear}-${reminderMonthForTimestamp}-01 00:00:00`,
+    });
+  }
+
+  return reminderChoiceSet;
+};
+
+const currentDate = new Date();
+
+const reminderDates = createReminderChoiceSet(currentDate.getMonth(), currentDate.getFullYear());
 
 const trimAndDowncase = (word: string) => word.replace(/\s+/g, '').toLowerCase();
 // ----- Render ----- //
