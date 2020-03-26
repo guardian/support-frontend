@@ -25,6 +25,7 @@ import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import ConsentBanner from 'components/consentBanner/consentBanner';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Collection or delivery ----- //
 
@@ -42,7 +43,7 @@ const store = pageInit(() => reducer(fulfilment), true);
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header />}
+      header={<Header countryGroupId={GBPCountries} />}
       footer={<Footer />}
     >
       <CampaignHeader />

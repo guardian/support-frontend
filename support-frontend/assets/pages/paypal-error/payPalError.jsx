@@ -14,6 +14,7 @@ import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 
 import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { detect } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Page Startup ----- //
@@ -25,7 +26,7 @@ pageInit();
 
 const content = (
   <Page
-    header={<Header />}
+    header={<Header countryGroupId={detect()} />}
     footer={<Footer />}
   >
     <div className="paypal-error">
