@@ -229,20 +229,20 @@ object Fixtures {
   val salesforceContactJson =
     """
         {
-          "Id": "003g000001UnFItAAN",
-          "AccountId": "001g000001gOR06AAG"
+          "Id": "0033E00001Cq8D2QAJ",
+          "AccountId": "0013E00001AU6xcQAD"
         }
       """
 
   val salesforceContactsJson =
     """{
           "buyer": {
-              "Id": "003g000001UnFItAAN",
-              "AccountId": "001g000001gOR06AAG"
+              "Id": "0033E00001Cq8D2QAJ",
+              "AccountId": "0013E00001AU6xcQAD"
             },
           "giftRecipient": {
-              "Id": "003g000001UnFItAAN",
-              "AccountId": "001g000001gOR06AAG"
+              "Id": "0033E00001Cq8D2QAJ",
+              "AccountId": "0013E00001AU6xcQAD"
             }
        }
       """
