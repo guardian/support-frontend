@@ -9,11 +9,6 @@ import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 
 import styles from './orderSummaryStyles';
 
-export type DataListItem = {
-  title: string,
-  value: string,
-}
-
 type PropTypes = {
   billingPeriod: BillingPeriod,
   // eslint-disable-next-line react/no-unused-prop-types
