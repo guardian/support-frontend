@@ -1859,10 +1859,15 @@
   dependencies:
     "@guardian/src-helpers" "^0.14.0"
 
-"@guardian/src-foundations@^0.14.0", "@guardian/src-foundations@^0.14.2":
+"@guardian/src-foundations@^0.14.0":
   version "0.14.2"
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.14.2.tgz#b1789edbb28099f5834ce8319401142a84500d59"
   integrity sha512-e+yrYM2WRRb5C4BkJuGstTbaPTn7WS+TdKT2LoxwYBlXWSM3qrHOOFHCTc97uuEgT5E39GqzA/6oScrwmSr9BA==
+
+"@guardian/src-foundations@^0.16":
+  version "0.16.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.16.0-alpha.4.tgz#742b7642165f4526a33f0713af1c9c3bd31a8306"
+  integrity sha512-ceSeMoMHiQq4BRO20uchPJId0jrOM6oLUEkZu9UKCx+OZ797BrZpjz71BURiWWwaLc+PMx+3nE/Uc2DnAt/Q5Q==
 
 "@guardian/src-helpers@^0.14.0":
   version "0.14.0"
