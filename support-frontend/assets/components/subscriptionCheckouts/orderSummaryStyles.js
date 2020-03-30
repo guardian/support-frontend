@@ -1,8 +1,7 @@
-import { headline, body } from '@guardian/src-foundations/typography';
-import { textSans } from '@guardian/src-foundations/typography/obj';
+import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
 import { border, brandAltBackground, text } from '@guardian/src-foundations/palette';
-
+import { from } from '@guardian/src-foundations/mq';
 
 const styles = {
   wrapper: {
@@ -25,6 +24,9 @@ const styles = {
 
   sansTitle: {
     ...textSans.medium({ fontWeight: 'bold' }),
+    [from.phablet]: {
+      ...textSans.large({ fontWeight: 'bold' }),
+    },
   },
 
   contentBlock: {
