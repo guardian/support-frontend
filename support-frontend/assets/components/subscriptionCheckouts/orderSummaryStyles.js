@@ -13,6 +13,7 @@ export const topLine = css`
   justify-content: space-between;
   width: calc(100%-${space[3]}px * 2);
   margin: ${space[3]}px;
+  align-items: center;
 
   a, a:visited {
     display: block;
