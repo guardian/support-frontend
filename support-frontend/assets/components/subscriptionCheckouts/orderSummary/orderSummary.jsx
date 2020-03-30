@@ -24,7 +24,7 @@ function OrderSummary(props: PropTypes) {
   const description = getPriceDescription(props.productPrice, props.billingPeriod, true);
 
   return (
-    <div css={styles.wrapper}>
+    <aside css={styles.wrapper}>
       <div css={styles.topLine}>
         <h2 css={styles.sansTitle}>Order summary</h2>
         <a href={props.changeSubscription}>Change</a>
@@ -38,7 +38,7 @@ function OrderSummary(props: PropTypes) {
         </div>
       </div>
       <EndSummary description={description} />
-    </div>
+    </aside>
   );
 }
 
