@@ -21,7 +21,7 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import OrderSummary from 'components/subscriptionCheckouts/orderSummary';
+import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
 import {
   type Action,
   type FormActionCreators,

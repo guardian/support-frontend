@@ -6,8 +6,7 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
-
-// import styles from './orderSummaryStyles';
+import EndSummary from 'components/subscriptionCheckouts/endSummary/endSummary';
 
 import * as styles from './orderSummaryStyles';
 
@@ -38,6 +37,7 @@ function OrderSummary(props: PropTypes) {
           <span>14 day free trial</span>
         </div>
       </div>
+      <EndSummary description={description} />
     </div>
   );
 }
