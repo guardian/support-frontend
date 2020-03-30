@@ -6,36 +6,11 @@ import { V1 } from './data/testAmountsData';
 export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
 
 export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
-export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
-const contributionsLandingPageWithoutAU = '/(uk|us|eu|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 
 export const tests: Tests = {
-
-  personalisedThankYouPageTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'personalised',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 1,
-    targetPage: contributionsLandingPageWithoutAU,
-  },
-
   recaptchaPresenceTest: {
     type: 'OTHER',
     variants: [
