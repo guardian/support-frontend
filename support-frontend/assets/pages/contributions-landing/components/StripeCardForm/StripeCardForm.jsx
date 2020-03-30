@@ -24,7 +24,6 @@ import {
   paymentWaiting as setPaymentWaiting,
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
-  setSetupIntentClientSecret,
   setStripeCardFormComplete,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import { type ContributionType } from 'helpers/contributions';
@@ -50,15 +49,12 @@ type PropTypes = {|
   setStripeCardFormComplete: (isComplete: boolean) => Action,
   checkoutFormHasBeenSubmitted: boolean,
   stripeKey: string,
-  setupIntentClientSecret: string | null,
-  setSetupIntentClientSecret: (setupIntentClientSecret: string) => Action,
   country: IsoCountry,
 |};
 
 const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
-  setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
   paymentWaiting: state.page.form.isWaiting,
   country: state.common.internationalisation.countryId,
 });
@@ -79,8 +75,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setStripeCardFormComplete(isComplete)),
   setPaymentWaiting: (isWaiting: boolean) =>
     dispatch(setPaymentWaiting(isWaiting)),
-  setSetupIntentClientSecret: (setupIntentClientSecret: string) =>
-    dispatch(setSetupIntentClientSecret(setupIntentClientSecret)),
 });
 
 type CardFieldState =
@@ -158,35 +152,22 @@ class CardForm extends Component<PropTypes, StateTypes> {
   };
 
   setupRecurringHandlers(): void {
-    // Start by requesting the client_secret for a new SetupIntent.
-    // Note - because this value is requested asynchronously when the component loads,
-    // it's possible for it to arrive after the user clicks 'Contribute'. This eventuality
-    // is handled in the callback below by checking the value of paymentWaiting.
-    fetchJson(
-      window.guardian.stripeSetupIntentEndpoint,
-      requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
-    ).then((result) => {
-      if (result.client_secret) {
-        this.props.setSetupIntentClientSecret(result.client_secret);
-        // If user has already clicked contribute then handle card setup now
-        if (this.props.paymentWaiting) {
-          this.handleCardSetupForRecurring(result.client_secret);
-        }
-      } else {
-        throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
-      }
-    }).catch((error) => {
-      logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
-      this.props.paymentFailure('internal_error');
-    });
-
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
-      // If clientSecret is not yet available then handleCardSetupForRecurring will be called when it is
-      if (this.props.setupIntentClientSecret) {
-        this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
-      }
+      fetchJson(
+        window.guardian.stripeSetupIntentEndpoint,
+        requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
+      ).then((result) => {
+        if (result.client_secret) {
+          this.handleCardSetupForRecurring(result.client_secret);
+        } else {
+          throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
+        }
+      }).catch((error) => {
+        logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
+        this.props.paymentFailure('internal_error');
+      });
     });
   }
 
