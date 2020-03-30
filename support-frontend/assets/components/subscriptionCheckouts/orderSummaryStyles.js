@@ -20,6 +20,10 @@ export const topLine = css`
     ${textSans.small()};
     color: ${text.primary};
   }
+
+  ${between.phablet.and.desktop} {
+    display: block;
+  }
 `;
 
 export const sansTitle = css`
@@ -34,7 +38,7 @@ export const contentBlock = css`
   width: 100%;
   margin-bottom: ${space[3]}px;
 
-  ${from.desktop} {
+  ${from.tablet} {
     display: block;
   }
 `;
@@ -51,7 +55,7 @@ export const imageContainer = css`
     align-items: flex-end;
   }
 
-  ${until.desktop} {
+  ${until.tablet} {
     width: 65px;
     height: 73px;
     padding-top: 8px;
@@ -59,14 +63,14 @@ export const imageContainer = css`
     overflow: hidden;
     margin-left: ${space[3]}px;
     img {
-      width: 185%;
+      width: 200%;
       align-items: flex-end;
     }
   }
 `;
 
 export const textBlock = css`
-  margin-left: ${space[3]}px;;
+  margin-left: ${space[3]}px;
 
   ${from.desktop} {
     display: flex;
@@ -78,15 +82,12 @@ export const textBlock = css`
   h3 {
     ${headline.xxsmall()};
     font-weight: bold;
-    ${between.phablet.and.desktop} {
-      ${body.medium()};
-      font-weight: bold;
-    }
+    align-items: flex-start;
   }
   p, span {
     ${body.medium()};
     max-width: 220px;
-    ${between.phablet.and.desktop} {
+    ${until.mobileMedium} {
       ${body.small()};
     }
   }
