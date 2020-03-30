@@ -1,7 +1,7 @@
 import { css } from '@emotion/core';
 import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { border, brandAltBackground, text } from '@guardian/src-foundations/palette';
+import { brandAltBackground, text } from '@guardian/src-foundations/palette';
 import { from, between, until } from '@guardian/src-foundations/mq';
 
 export const wrapper = css`
