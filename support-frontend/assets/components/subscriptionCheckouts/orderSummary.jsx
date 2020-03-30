@@ -7,7 +7,9 @@ import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 
-import styles from './orderSummaryStyles';
+// import styles from './orderSummaryStyles';
+
+import * as styles from './orderSummaryStyles';
 
 type PropTypes = {
   billingPeriod: BillingPeriod,

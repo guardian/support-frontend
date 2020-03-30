@@ -1,77 +1,101 @@
+import { css } from '@emotion/core';
 import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
 import { border, brandAltBackground, text } from '@guardian/src-foundations/palette';
-import { from } from '@guardian/src-foundations/mq';
+import { from, between, until } from '@guardian/src-foundations/mq';
 
-const styles = {
-  wrapper: {
-    padding: `${space[3]}px`,
-    color: `${text.primary}`,
-  },
+export const wrapper = css`
+  color: ${text.primary};
+`;
 
-  topLine: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: `${space[3]}px`,
+export const topLine = css`
+  display: flex;
+  justify-content: space-between;
+  width: calc(100%-${space[3]}px * 2);
+  margin: ${space[3]}px;
 
-    'a, a:visited': {
-      display: 'block',
-      ...textSans.medium(),
-      color: `${text.primary}`,
-    },
-  },
+  a, a:visited {
+    display: block;
+    ${textSans.small()};
+    color: ${text.primary};
+  }
+`;
 
-  sansTitle: {
-    ...textSans.medium({ fontWeight: 'bold' }),
-    [from.phablet]: {
-      ...textSans.large({ fontWeight: 'bold' }),
-    },
-  },
+export const sansTitle = css`
+  ${textSans.medium({ fontWeight: 'bold' })};
+  ${from.phablet} {
+    ${textSans.large({ fontWeight: 'bold' })};
+  }
+`;
 
-  contentBlock: {
-    display: 'block',
-    width: '100%',
-    marginBottom: `${space[3]}px`,
-  },
+export const contentBlock = css`
+  display: flex;
+  width: 100%;
+  margin-bottom: ${space[3]}px;
 
-  imageContainer: {
-    display: 'inline-flex',
-    width: '73px',
-    height: '65px',
-    paddingTop: '8px',
-    backgroundColor: `${border.primary}`,
-    overflow: 'hidden',
-    position: 'absolute',
-    img: {
-      width: '160%',
-      alignItems: 'flex-end',
-    },
-  },
+  ${from.desktop} {
+    display: block;
+  }
+`;
 
-  textBlock: {
-    marginLeft: '82px',
-    h3: {
-      ...headline.xxsmall(),
-      fontWeight: 'bold',
-      '@media (min-width: 740px) and (max-width: 975px)': {
-        ...body.medium(),
-        fontWeight: 'bold',
-      },
-    },
-    'p, span': {
-      ...body.medium(),
-      maxWidth: '220px',
-      '@media (min-width: 740px) and (max-width: 975px)': {
-        ...body.small(),
-      },
-    },
-    span: {
-      backgroundColor: `${brandAltBackground.primary}`,
-      padding: `0 ${space[1]}px`,
-    },
-  },
+export const imageContainer = css`
+  display: inline-flex;
+  width: calc(100%-30px);
+  height: auto;
+  padding: 15px 10px 0 15px;
+  background-color: ${border.primary};
 
-};
+  img {
+    width: 100%;
+    align-items: flex-end;
+  }
 
-export default styles;
+  ${until.desktop} {
+    width: 65px;
+    height: 73px;
+    padding-top: 8px;
+    padding-left: 8px;
+    overflow: hidden;
+    margin-left: ${space[3]}px;
+    img {
+      width: 185%;
+      align-items: flex-end;
+    }
+  }
+`;
+
+export const textBlock = css`
+  margin-left: ${space[3]}px;;
+
+  ${from.desktop} {
+    display: flex;
+    justify-content: space-between;
+    width: calc(100%-${space[3]}px * 2);
+    margin: ${space[3]}px;
+  }
+
+  h3 {
+    ${headline.xxsmall()};
+    font-weight: bold;
+    ${between.phablet.and.desktop} {
+      ${body.medium()};
+      font-weight: bold;
+    }
+  }
+  p, span {
+    ${body.medium()};
+    max-width: 220px;
+    ${between.phablet.and.desktop} {
+      ${body.small()};
+    }
+  }
+  span {
+    background-color: ${brandAltBackground.primary};
+    padding: 0 ${space[1]}px;
+  }
+  p {
+    ${from.desktop} {
+      display: none;
+    }
+  }
+`;
