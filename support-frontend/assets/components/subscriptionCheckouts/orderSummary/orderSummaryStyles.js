@@ -48,7 +48,7 @@ export const imageContainer = css`
   width: calc(100%-30px);
   height: auto;
   padding: 15px 10px 0 15px;
-  background-color: ${border.primary};
+  background-color: #63717A;
 
   img {
     width: 100%;
