@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { PersonalisedThankYouPageTestVariants } from 'helpers/abTests/abtestDefinitions';
 import type { ThankYouPageStage } from 'pages/contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
@@ -12,7 +11,6 @@ import type { ThankYouPageStage } from 'pages/contributions-landing/contribution
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   firstName: string,
-  personalisedThankYouPageTestVariant: PersonalisedThankYouPageTestVariants,
   thankYouPageStage: ThankYouPageStage
 |};
 /* eslint-enable react/no-unused-prop-types */
@@ -22,15 +20,14 @@ type PropTypes = {|
 
 const mapStateToProps = state => ({
   firstName: state.page.form.formData.firstName,
-  personalisedThankYouPageTestVariant: state.common.abParticipations.personalisedThankYouPageTest,
   thankYouPageStage: state.page.form.thankYouPageStage,
 });
 
 // ----- Render ----- //
 
 const ContributionThankYouBlurb = (props: PropTypes) => {
-  const { firstName, personalisedThankYouPageTestVariant, thankYouPageStage } = props;
-  const headerText = (firstName && firstName !== '' && personalisedThankYouPageTestVariant === 'personalised') ?
+  const { firstName, thankYouPageStage } = props;
+  const headerText = (firstName && firstName.trim() !== '') ?
     `Thank\xa0you\xa0${firstName}\nfor\xa0your\xa0valuable\ncontribution` : 'Thank\xa0you\xa0for\na\xa0valuable\ncontribution';
 
   return (
