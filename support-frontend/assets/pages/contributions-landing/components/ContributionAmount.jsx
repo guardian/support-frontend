@@ -163,8 +163,7 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
-  /* eslint-disable no-unused-vars */
-  // leaving in place as this is still in active development:
+
   const renderChoiceCards = () => (
     <>
       <ChoiceCardGroup
@@ -175,7 +174,6 @@ function withProps(props: PropTypes) {
             id={`contributionAmount-${amount.value}`}
             name="contributionAmount"
             value={amount.value}
-        /* eslint-disable react/prop-types */
             checked={isSelected(amount, props)}
             onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType)}
             label={formatAmount(currencies[props.currency], spokenCurrencies[props.currency], amount, false)}
@@ -193,8 +191,9 @@ function withProps(props: PropTypes) {
       </ChoiceCardGroup>
   </>
   );
-  /* eslint-enable no-unused-vars */
 
+  /* eslint-disable no-unused-vars */
+  // leaving in place as this is still in active development:
   const renderControl = () => (
     <ul className="form__radio-group-list">
       {validAmounts.map(renderAmount(
@@ -216,12 +215,13 @@ function withProps(props: PropTypes) {
       </li>
     </ul>
   );
+  /* eslint-enable no-unused-vars */
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
 
-      {renderControl()}
+      {renderChoiceCards()}
 
       {showOther ? (
         <ContributionTextInput

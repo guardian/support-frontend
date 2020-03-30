@@ -67,8 +67,7 @@ function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
   const isStripeEnabled = props.isPostDeploymentTestUser ? true : props.v3isLowRisk;
 
-  /* eslint-disable no-unused-vars */
-  // leaving in place as this is still in active development:
+
   const renderChoiceCards = () => (
     <ChoiceCardGroup
       name="contributionTypes"
@@ -96,8 +95,9 @@ function withProps(props: PropTypes) {
     })}
     </ChoiceCardGroup>
   );
-  /* eslint-enable no-unused-vars */
 
+  /* eslint-disable no-unused-vars */
+  // leaving in place as this is still in active development:
   const renderControl = () => (
     <ul className="form__radio-group-list form__radio-group-list--border">
       {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
@@ -128,6 +128,7 @@ function withProps(props: PropTypes) {
       })}
     </ul>
   );
+  /* eslint-enable no-unused-vars */
 
   if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
     return null;
@@ -136,7 +137,7 @@ function withProps(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      {renderControl()}
+      {renderChoiceCards()}
     </fieldset>
   );
 }
