@@ -103,12 +103,13 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
     const productPrice = getProductPrice(productOptions, digitalBillingPeriod, currencyId);
     const fullPrice = productPrice.price;
     const promotion = getAppliedPromo(productPrice.promotions);
+    const promoCode = promotion ? promotion.promoCode : null;
     const promotionalPrice = promotion && promotion.discountedPrice ? promotion.discountedPrice : null;
     const offer = promotion ? promotion.description : BILLING_PERIOD[digitalBillingPeriod].offer;
 
     return {
       title: BILLING_PERIOD[digitalBillingPeriod].title,
-      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod),
+      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode),
       onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, digitalBillingPeriod),
       salesCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
       offer,

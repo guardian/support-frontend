@@ -23,6 +23,7 @@ import { getAnnualPlanPromoCode, getIntcmp, getPromoCode } from './flashSale';
 import { getOrigin } from './url';
 import { GBPCountries } from './internationalisation/countryGroup';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
+import type { Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 
@@ -207,20 +208,12 @@ function getSubsLinks(
 
 }
 
-function getDigitalPackPromoCode(cgId: CountryGroupId, billingPeriod: DigitalBillingPeriod): string {
-  if (billingPeriod === 'Annual') {
-    return getAnnualPlanPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack);
-  }
-  return getPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack);
-
-}
-
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
   countryGroupId: CountryGroupId,
   billingPeriod: DigitalBillingPeriod = Monthly,
+  promoCode: Option<string>,
 ): string {
-  const promoCode = getDigitalPackPromoCode(countryGroupId, billingPeriod);
   const params = new URLSearchParams(window.location.search);
   params.set(promoQueryParam, promoCode);
   if (billingPeriod === Annual) {
