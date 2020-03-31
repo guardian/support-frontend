@@ -19,7 +19,7 @@ import {
   Monthly,
 } from 'helpers/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
-import { getAnnualPlanPromoCode, getIntcmp, getPromoCode } from './flashSale';
+import { getIntcmp, getPromoCode } from './flashSale';
 import { getOrigin } from './url';
 import { GBPCountries } from './internationalisation/countryGroup';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
@@ -215,7 +215,9 @@ function getDigitalCheckout(
   promoCode: Option<string>,
 ): string {
   const params = new URLSearchParams(window.location.search);
-  params.set(promoQueryParam, promoCode);
+  if (promoCode) {
+    params.set(promoQueryParam, promoCode);
+  }
   if (billingPeriod === Annual) {
     params.set('period', Annual);
   }
