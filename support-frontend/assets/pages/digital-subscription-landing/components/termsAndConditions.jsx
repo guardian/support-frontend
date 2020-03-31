@@ -42,7 +42,7 @@ const MaybeLink = (props: {href: Option<string>, text: string}) =>
 const TermsAndConditions = (props: PropTypes) => {
   const annualUrl = getPromoUrl(props.productPrices, props.country, Annual);
   const monthlyUrl = getPromoUrl(props.productPrices, props.country, Monthly);
-  const multipleOffers: boolean = annualUrl && monthlyUrl;
+  const multipleOffers: boolean = !!(annualUrl && monthlyUrl);
 
   return (
     <div className="hope-is-power__terms">
