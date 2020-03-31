@@ -156,6 +156,7 @@ function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: 
 }
 
 export {
+  displayPrice,
   getPriceDescription,
   getAppliedPromoDescription,
 };
