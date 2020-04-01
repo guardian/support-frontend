@@ -56,14 +56,14 @@ const executeV2 = (token, dispatch: Function) => {
 
 const loadRecaptureV2 = (dispatch: Function) =>
   new Promise<void>((resolve, reject) => {
-    window.v2OnloadCallback = () => {
-      if (window.grecaptcha) {
-        window.grecaptcha.render('robot_checkbox', {
-          sitekey: v2publicKey,
-          callback: token => executeV2(token, dispatch),
-        });
-      }
-    };
+    // window.v2OnloadCallback = () => {
+    //   if (window.grecaptcha) {
+    //     window.grecaptcha.render('robot_checkbox', {
+    //       sitekey: v2publicKey,
+    //       callback: token => executeV2(token, dispatch),
+    //     });
+    //   }
+    // };
     const recaptchaScript = document.createElement('script');
     recaptchaScript.src = 'https://www.google.com/recaptcha/api.js?onload=v2OnloadCallback&render=explicit';
 

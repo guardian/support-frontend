@@ -33,6 +33,7 @@ import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
+import type {Csrf as CsrfState} from "helpers/csrf/csrfReducer";
 
 // ----- Types -----//
 
@@ -50,6 +51,7 @@ type PropTypes = {|
   checkoutFormHasBeenSubmitted: boolean,
   stripeKey: string,
   country: IsoCountry,
+  csrf: CsrfState,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -57,6 +59,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   paymentWaiting: state.page.form.isWaiting,
   country: state.common.internationalisation.countryId,
+  csrf: state.page.csrf,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -121,8 +124,30 @@ class CardForm extends Component<PropTypes, StateTypes> {
       this.setupOneOffHandlers();
     } else {
       this.setupRecurringHandlers();
+
+      if (window.grecaptcha && window.grecaptcha.render) {
+        this.setupRecaptchaCallback()
+      } else {
+        window.v2OnloadCallback = this.setupRecaptchaCallback;
+      }
     }
   }
+
+  setupRecaptchaCallback = () => {
+    console.log("setupRecaptchaCallback")
+    window.grecaptcha.render('robot_checkbox', {
+      sitekey: window.guardian.v2recaptchaPublicKey,
+      callback: token => {
+        console.log("recaptcha!", token)
+        fetch(
+          `/stripe/create-setup-intent/recaptcha`,
+          requestOptions({token, stripePublicKey: this.props.stripeKey}, 'same-origin', 'POST', this.props.csrf)
+        )
+          .then(response => response.json())
+          .then(json => console.log(json))
+      }
+    });
+  };
 
   onChange = (fieldName: CardFieldName) => (update) => {
     let newFieldState = { name: 'Incomplete' };
@@ -311,6 +336,14 @@ class CardForm extends Component<PropTypes, StateTypes> {
           </div>
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
+
+        <div>
+          <div id="robot_checkbox" className="robot_checkbox" />
+          {
+            // this.props.checkoutFormHasBeenSubmitted &&
+            // !this.props.v2IsLowRisk ? renderVerificationCopy(props.countryGroupId, props.contributionType) : null
+          }
+        </div>
       </div>
     );
   }

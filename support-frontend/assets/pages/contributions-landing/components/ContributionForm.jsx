@@ -270,13 +270,13 @@ function withProps(props: PropTypes) {
           country={props.country}
         />
 
-        <div>
-          <div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? 'robot_checkbox' : 'hidden'} />
-          {
-            props.isRecaptchaRequired && props.paymentMethod === 'Stripe' && props.checkoutFormHasBeenSubmitted &&
-            !props.v2IsLowRisk ? renderVerificationCopy(props.countryGroupId, props.contributionType) : null
-          }
-        </div>
+        {/*<div>*/}
+          {/*<div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? 'robot_checkbox' : 'hidden'} />*/}
+          {/*{*/}
+            {/*props.isRecaptchaRequired && props.paymentMethod === 'Stripe' && props.checkoutFormHasBeenSubmitted &&*/}
+            {/*!props.v2IsLowRisk ? renderVerificationCopy(props.countryGroupId, props.contributionType) : null*/}
+          {/*}*/}
+        {/*</div>*/}
         {/*
           The <div> wrapper for the ContributionErrorMessage is required because a
           child of ContributionSubmit contains an iframe and otherwise when its
