@@ -42,9 +42,7 @@ class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext)  ext
       .withFunctionName(functionName)
       .withPayload(
         Json.fromFields(
-          List("body" -> Json.fromFields(
-            List("publicKey" -> Json.fromString(publicKey))
-          ))
+          List("body" -> Json.fromString("{\"publicKey\":\"pk_test_Qm3CGRdrV4WfGYCpm0sftR0f\"}"))
         ).noSpaces
       )
 
