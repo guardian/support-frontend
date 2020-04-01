@@ -50,6 +50,7 @@ trait AppComponents extends PlayComponents
     siteMapController,
     regularContributionsController,
     supportWorkersStatusController,
+    stripeController,
     identityController,
     recaptchaController,
     subscriptionsController,

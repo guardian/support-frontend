@@ -129,6 +129,14 @@ trait Controllers {
     actionRefiners
   )
 
+  lazy val stripeController = new StripeController(
+    components = controllerComponents,
+    actionRefiners = actionRefiners,
+    recaptchaService = recaptchaService,
+    stripeService = stripeService,
+    v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey
+  )
+
   lazy val regularContributionsController = new RegularContributions(
     supportWorkersClient,
     assetsResolver,

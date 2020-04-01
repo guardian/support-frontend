@@ -27,6 +27,8 @@ class StripeController(
   import actionRefiners._
   import cats.implicits._
   import cats.data.EitherT
+  import services.SetupIntent.encoder
+  import io.circe.syntax._
 
   def createSetupIntentRecaptcha: Action[SetupIntentRequestRecaptcha] = PrivateAction.async(circe.json[SetupIntentRequestRecaptcha]) { implicit request =>
     val token = request.body.token
@@ -34,14 +36,14 @@ class StripeController(
     val result = for {
       recaptchaResponse <- recaptchaService.verify(token, v2RecaptchaKey)
       response <- if (recaptchaResponse.success) {
-        stripeService(request.body.stripePublicKey).map(response => Ok(response))
-      } else EitherT[Future,String,Result](Forbidden())
+        stripeService(request.body.stripePublicKey).map(response => Ok(response.asJson))
+      } else EitherT.rightT[Future,String](Forbidden(""))
     } yield response
 
     result.fold(
       error => {
         logger.error(error)
-        InternalServerError()
+        InternalServerError("")
       },
       identity
     )
