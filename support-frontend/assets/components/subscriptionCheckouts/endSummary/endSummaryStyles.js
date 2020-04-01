@@ -29,7 +29,7 @@ export const subText = css`
   display: block;
   ${textSans.medium()};
   margin-left: ${space[5]}px;
-
+  line-height: 135%;
 `;
 
 export const dot = css`
