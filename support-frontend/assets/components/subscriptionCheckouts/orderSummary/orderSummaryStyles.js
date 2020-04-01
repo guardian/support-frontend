@@ -1,11 +1,13 @@
 import { css } from '@emotion/core';
 import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { brandAltBackground, text } from '@guardian/src-foundations/palette';
+import { background, brandAltBackground, text } from '@guardian/src-foundations/palette';
 import { from, between, until } from '@guardian/src-foundations/mq';
 
 export const wrapper = css`
+  background-color: ${background.primary};
   color: ${text.primary};
+  padding-bottom: ${space[3]}px;
 `;
 
 export const topLine = css`
@@ -77,25 +79,27 @@ export const textBlock = css`
     justify-content: space-between;
     width: calc(100%-${space[3]}px * 2);
     margin: ${space[3]}px;
+    align-items: baseline;
   }
 
   h3 {
-    ${headline.xxsmall()};
-    font-weight: bold;
+    ${headline.xxsmall({ fontWeight: 'bold' })};
     align-items: flex-start;
   }
   p, span {
-    ${body.medium()};
-    max-width: 220px;
-    ${until.mobileMedium} {
-      ${body.small()};
+    max-width: 240px;
+    ${until.desktop} {
+      margin-bottom: ${space[2]}px;
     }
   }
   span {
     background-color: ${brandAltBackground.primary};
-    padding: 0 ${space[1]}px;
+    padding: ${space[1]}px;
+    ${body.medium()};
   }
   p {
+    ${headline.xxsmall({ fontWeight: 'normal' })};
+    line-height: 135%;
     ${from.desktop} {
       display: none;
     }
