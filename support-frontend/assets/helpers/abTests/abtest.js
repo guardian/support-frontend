@@ -252,10 +252,10 @@ function assignUserToVariant(
   return randomNumber(mvtId, seed) % test.variants.length;
 }
 
-function targetPageMatches(targetPage: ?string) {
+function targetPageMatches(locationPath: string, targetPage: ?string) {
   if (!targetPage) { return true; }
 
-  return window.location.pathname.match(targetPage) != null;
+  return locationPath.match(targetPage) != null;
 }
 
 function getParticipations(
@@ -282,7 +282,7 @@ function getParticipations(
       return;
     }
 
-    if (!targetPageMatches(test.targetPage)) {
+    if (!targetPageMatches(window.location.pathname, test.targetPage)) {
       return;
     }
 

@@ -3,11 +3,15 @@ import type { Tests } from './abtest';
 import { USV1 } from './data/testAmountsData';
 
 // ----- Tests ----- //
+export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
+
 export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
+const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
+export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
   usAmountsTest: {
@@ -55,4 +59,25 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
+  digitalPackMonthlyOfferTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'one-for-one',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    seed: 3,
+    targetPage: subsShowcaseAndDigiSubPages,
+  },
 };
