@@ -1,10 +1,11 @@
 import { css } from '@emotion/core';
 import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { brandAltBackground, text } from '@guardian/src-foundations/palette';
+import { background, brandAltBackground, text } from '@guardian/src-foundations/palette';
 import { from, between, until } from '@guardian/src-foundations/mq';
 
 export const wrapper = css`
+  background-color: ${background.primary};
   color: ${text.primary};
   padding-bottom: ${space[3]}px;
 `;
