@@ -47,14 +47,15 @@ export const contentBlock = css`
 
 export const imageContainer = css`
   display: inline-flex;
+  align-items: flex-start;
   width: calc(100%-30px);
-  height: auto;
   padding: 15px 10px 0 15px;
   background-color: #63717A;
 
   img {
     width: 100%;
-    align-items: flex-end;
+    height: auto;
+
   }
 
   ${until.tablet} {
