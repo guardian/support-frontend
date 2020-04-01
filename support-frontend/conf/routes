@@ -63,7 +63,7 @@ POST /contribute/recurring/create                                  controllers.R
 GET  /support-workers/status                                       controllers.SupportWorkersStatus.status(jobId: String)
 
 
-POST  /stripe/recaptcha-setup                                                 controllers.StripeIntentController.createSetupIntentRecaptcha()
+POST  /stripe/create-setup-intent/recaptcha                         controllers.StripeController.createSetupIntentRecaptcha()
 
 # this endpoint should be removed once identity remove
 # the need for a client token

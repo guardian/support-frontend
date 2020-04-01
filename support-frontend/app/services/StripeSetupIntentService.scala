@@ -19,7 +19,7 @@ object SetupIntent {
   implicit val encoder: Encoder[SetupIntent] = deriveEncoder
 }
 
-class StripeIntentService(stage: Stage)(implicit ec: ExecutionContext)  extends StrictLogging {
+class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext)  extends StrictLogging {
 
     private val lambdaClient = AWSLambdaClientBuilder
       .standard()
