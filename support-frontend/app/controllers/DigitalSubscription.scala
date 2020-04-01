@@ -11,6 +11,7 @@ import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
+import com.gu.support.promotions.PromoCode
 import config.StringsConfig
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -55,7 +56,15 @@ class DigitalSubscription(
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
     val september2019SalePromo = "DK0NT24WG"
-    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) :+ september2019SalePromo
+    val annualIntroCodes: List[PromoCode] = List(
+      "ANNUAL-INTRO-EU",
+      "ANNUAL-INTRO-UK",
+      "ANNUAL-INTRO-US",
+      "ANNUAL-INTRO-NZ",
+      "ANNUAL-INTRO-CA",
+      "ANNUAL-INTRO-AU"
+    )
+    val promoCodes: List[PromoCode] = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ annualIntroCodes :+ september2019SalePromo
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),

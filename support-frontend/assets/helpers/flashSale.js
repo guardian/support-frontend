@@ -153,20 +153,6 @@ function getPromoCode(
   return defaultCode;
 }
 
-function getAnnualPlanPromoCode(
-  product: SubscriptionProduct,
-  countryGroupId?: CountryGroupId = detect(),
-  defaultCode: string,
-): string {
-  if (flashSaleIsActive(product, countryGroupId)) {
-    const sale = getActiveFlashSales(product, countryGroupId)[0];
-    return (sale
-      && sale.saleDetails[countryGroupId]
-      && sale.saleDetails[countryGroupId].annualPlanPromoCode) || defaultCode;
-  }
-  return defaultCode;
-}
-
 function getIntcmp(
   product: SubscriptionProduct,
   countryGroupId: CountryGroupId = detect(),
@@ -261,7 +247,6 @@ export {
   flashSaleIsActive,
   getDisplayFlashSalePrice,
   getPromoCode,
-  getAnnualPlanPromoCode,
   getIntcmp,
   getEndTime,
   getSaleCopy,
