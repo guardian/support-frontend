@@ -125,6 +125,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
     } else {
       this.setupRecurringHandlers();
 
+      // TODO - A/B test?
       if (window.grecaptcha && window.grecaptcha.render) {
         this.setupRecaptchaCallback()
       } else {
@@ -139,6 +140,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: token => {
         console.log("recaptcha!", token)
+        // TODO - Non-AU should use public endpoint
         fetch(
           `/stripe/create-setup-intent/recaptcha`,
           requestOptions({token, stripePublicKey: this.props.stripeKey}, 'same-origin', 'POST', this.props.csrf)
