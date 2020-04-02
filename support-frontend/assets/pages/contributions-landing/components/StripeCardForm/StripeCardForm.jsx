@@ -35,9 +35,9 @@ import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
-import type {Csrf as CsrfState} from "helpers/csrf/csrfReducer";
-import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
-import {recaptchaEnabled} from 'helpers/recaptcha';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { recaptchaEnabled } from 'helpers/recaptcha';
 
 // ----- Types -----//
 
@@ -53,7 +53,7 @@ type PropTypes = {|
   paymentWaiting: boolean,
   setStripeCardFormComplete: (isComplete: boolean) => Action,
   setStripeSetupIntentClientSecret: (clientSecret: string) => Action,
-  setStripeRecaptchaVerified: string => Action,
+  setStripeRecaptchaVerified: boolean => Action,
   checkoutFormHasBeenSubmitted: boolean,
   stripeKey: string,
   country: IsoCountry,
@@ -93,7 +93,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentWaiting: (isWaiting: boolean) =>
     dispatch(setPaymentWaiting(isWaiting)),
   setStripeSetupIntentClientSecret: (clientSecret: string) => dispatch(setStripeSetupIntentClientSecret(clientSecret)),
-  setStripeRecaptchaVerified: (recaptchaVerified: string) => dispatch(setStripeRecaptchaVerified(recaptchaVerified)),
+  setStripeRecaptchaVerified: (recaptchaVerified: boolean) => dispatch(setStripeRecaptchaVerified(recaptchaVerified)),
 });
 
 type CardFieldState =
@@ -148,7 +148,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
       if (recaptchaEnabled(this.props.countryGroupId)) {
         if (window.grecaptcha && window.grecaptcha.render) {
-          this.setupRecaptchaCallback()
+          this.setupRecaptchaCallback();
         } else {
           window.v2OnloadCallback = this.setupRecaptchaCallback;
         }
@@ -160,7 +160,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
   // then go ahead and process the recurring contribution
   componentDidUpdate(prevProps): void {
     const clientSecretHasUpdated = !prevProps.setupIntentClientSecret && this.props.setupIntentClientSecret;
-    if (this.props.paymentWaiting && clientSecretHasUpdated) {
+    if (this.props.paymentWaiting && clientSecretHasUpdated && this.props.setupIntentClientSecret) {
       this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
     }
   }
@@ -169,32 +169,32 @@ class CardForm extends Component<PropTypes, StateTypes> {
   setupRecaptchaCallback = () => {
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
-      callback: token => {
+      callback: (token) => {
         this.props.setStripeRecaptchaVerified(true);
 
         fetch(
-          `/stripe/create-setup-intent/recaptcha`,
+          '/stripe/create-setup-intent/recaptcha',
           requestOptions(
-            {token, stripePublicKey: this.props.stripeKey},
+            { token, stripePublicKey: this.props.stripeKey },
             'same-origin',
             'POST',
-            this.props.csrf
-          )
+            this.props.csrf,
+          ),
         )
           .then(response => response.json())
-          .then(json => {
+          .then((json) => {
             if (json.client_secret) {
               this.props.setStripeSetupIntentClientSecret(json.client_secret);
             } else {
-              throw new Error(`Missing client_secret field in server response: ${json}`)
+              throw new Error(`Missing client_secret field in server response: ${json}`);
             }
           })
-          .catch(err => {
+          .catch((err) => {
             logException(`Error getting Setup Intent client_secret from /stripe/create-setup-intent/recaptcha: ${err}`);
             this.props.paymentFailure('internal_error');
             this.props.setPaymentWaiting(false);
-          })
-      }
+          });
+      },
     });
   };
 
@@ -240,7 +240,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
         // Create a new Setup Intent, then complete the payment
         fetchJson(
           window.guardian.stripeSetupIntentEndpoint,
-          requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null),
+          requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
         ).then((result) => {
           if (result.client_secret) {
             this.handleCardSetupForRecurring(result.client_secret);

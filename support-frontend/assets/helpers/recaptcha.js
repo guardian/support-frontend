@@ -1,5 +1,5 @@
 // @flow
-import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 const recaptchaEnabled = (countryGroupId: CountryGroupId): boolean =>
   window.guardian.recaptchaV2

@@ -99,7 +99,7 @@ function getValidPaymentMethods(
 
   return getPaymentMethods(contributionType, countryId)
     .filter(paymentMethod =>
-      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`))
+      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
 }
 
 function getPaymentMethodToSelect(

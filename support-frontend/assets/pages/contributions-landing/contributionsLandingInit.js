@@ -132,7 +132,6 @@ function initialisePaymentMethods(
           contributionTypeSetting.contributionType,
           switches,
           countryId,
-          true,
         );
         // Stripe Payment Intents is currently only for one-offs, so always initialise Stripe Checkout for now
         if (validPayments.includes(Stripe)) {

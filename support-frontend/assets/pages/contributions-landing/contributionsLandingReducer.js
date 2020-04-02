@@ -370,7 +370,7 @@ function createFormReducer() {
           stripeCardFormData: {
             ...state.stripeCardFormData,
             recaptchaVerified: action.recaptchaVerified,
-          }
+          },
         };
 
       case 'UPDATE_FIRST_NAME':

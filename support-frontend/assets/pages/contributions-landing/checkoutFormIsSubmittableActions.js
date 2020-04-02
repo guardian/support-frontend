@@ -25,7 +25,7 @@ import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
-import {recaptchaEnabled} from 'helpers/recaptcha';
+import { recaptchaEnabled } from 'helpers/recaptcha';
 
 // ----- Types ----- //
 
