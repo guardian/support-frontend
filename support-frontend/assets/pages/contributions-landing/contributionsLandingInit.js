@@ -254,7 +254,7 @@ const init = (store: Store<State, Action, Function>) => {
     firstName, lastName, email, billingState: stateField,
   }));
 
-  loadRecaptchaV2(dispatch);
+  loadRecaptchaV2();
 };
 
 

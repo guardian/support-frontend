@@ -165,6 +165,33 @@ class CardForm extends Component<PropTypes, StateTypes> {
     }
   }
 
+  onChange = (fieldName: CardFieldName) => (update) => {
+    let newFieldState = { name: 'Incomplete' };
+
+    if (update.error) {
+      newFieldState = { name: 'Error', errorMessage: update.error.message };
+    } else if (update.complete) {
+      newFieldState = { name: 'Complete' };
+    }
+
+    this.setState(
+      { [fieldName]: newFieldState },
+      () => this.props.setStripeCardFormComplete(this.formIsComplete()),
+    );
+  };
+
+  onFocus = (fieldName: CardFieldName) => {
+    this.setState({
+      currentlySelected: fieldName,
+    });
+  };
+
+  onBlur = () => {
+    this.setState({
+      currentlySelected: null,
+    });
+  };
+
   // Creates a new setupIntent upon recaptcha verification
   setupRecaptchaCallback = () => {
     window.grecaptcha.render('robot_checkbox', {
@@ -198,41 +225,14 @@ class CardForm extends Component<PropTypes, StateTypes> {
     });
   };
 
-  onChange = (fieldName: CardFieldName) => (update) => {
-    let newFieldState = { name: 'Incomplete' };
-
-    if (update.error) {
-      newFieldState = { name: 'Error', errorMessage: update.error.message };
-    } else if (update.complete) {
-      newFieldState = { name: 'Complete' };
-    }
-
-    this.setState(
-      { [fieldName]: newFieldState },
-      () => this.props.setStripeCardFormComplete(this.formIsComplete()),
-    );
-  };
-
-  onFocus = (fieldName: CardFieldName) => {
-    this.setState({
-      currentlySelected: fieldName,
-    });
-  };
-
-  onBlur = () => {
-    this.setState({
-      currentlySelected: null,
-    });
-  };
-
   setupRecurringHandlers(): void {
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
       if (recaptchaEnabled(this.props.countryGroupId)) {
-        // Recaptcha verification is required for setupIntent creation.
-        // If setupIntentClientSecret is ready then complete the payment now.
-        // If setupIntentClientSecret is not yet ready then componentDidUpdate will complete the payment when it arrives.
+        /* Recaptcha verification is required for setupIntent creation.
+        If setupIntentClientSecret is ready then complete the payment now.
+        If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
         if (this.props.setupIntentClientSecret) {
           this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
         }
@@ -400,7 +400,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
           <div id="robot_checkbox" className="robot_checkbox" />
           {
             this.props.checkoutFormHasBeenSubmitted &&
-            !this.props.recaptchaVerified ? renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
+            !this.props.recaptchaVerified ?
+              renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
           }
         </div>
       </div>
