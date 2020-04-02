@@ -94,23 +94,20 @@ function getValidPaymentMethods(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
-  allowStripe: boolean,
 ): PaymentMethod[] {
   const switchKey = switchKeyForContributionType(contributionType);
 
   return getPaymentMethods(contributionType, countryId)
     .filter(paymentMethod =>
       isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`))
-    .filter(paymentMethod => allowStripe || paymentMethod !== Stripe);
 }
 
 function getPaymentMethodToSelect(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
-  isStripeEnabled: boolean,
 ) {
-  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId, isStripeEnabled);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId);
   return validPaymentMethods[0] || 'None';
 }
 

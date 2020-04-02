@@ -83,7 +83,6 @@ type PropTypes = {|
   createStripePaymentMethod: () => void,
   amazonPayOrderReferenceId: string | null,
   checkoutFormHasBeenSubmitted: boolean,
-  v2IsLowRisk: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -116,7 +115,6 @@ const mapStateToProps = (state: State) => ({
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
-  v2IsLowRisk: state.page.form.v2IsLowRisk,
 });
 
 

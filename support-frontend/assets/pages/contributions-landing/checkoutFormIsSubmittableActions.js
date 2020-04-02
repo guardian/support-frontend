@@ -119,10 +119,17 @@ function enableOrDisableForm() {
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
 
+    const auStripeRecurringNotVerified =
+      state.common.internationalisation.countryGroupId === 'AUDCountries'
+      && state.page.form.contributionType !== 'ONE_OFF'
+      && state.page.form.paymentMethod === 'Stripe'
+      && !state.page.form.stripeCardFormData.recaptchaVerified;
+
     const shouldEnable =
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
-      && userCanContributeWithoutSigningIn;
+      && userCanContributeWithoutSigningIn
+      && !auStripeRecurringNotVerified;
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };

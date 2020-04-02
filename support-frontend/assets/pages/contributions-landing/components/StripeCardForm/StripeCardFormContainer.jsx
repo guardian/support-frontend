@@ -49,7 +49,6 @@ class StripeCardFormContainer extends React.Component<PropTypes, void> {
          * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
          * Instead, we must create separate instances for ONE_OFF and REGULAR.
          */
-        console.log("Using stripeKey:", stripeKey)
         return (
           <div className="stripe-card-element-container">
             <StripeProvider apiKey={stripeKey} key={stripeAccount}>

@@ -57,10 +57,9 @@ function getInitialPaymentMethod(
   contributionType: ContributionType,
   countryId: IsoCountry,
   switches: Switches,
-  isLowRisk: boolean,
 ): PaymentMethod {
   const paymentMethodFromSession = getPaymentMethodFromSession();
-  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId, isLowRisk);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
 
   return (
     paymentMethodFromSession && validPaymentMethods.includes(getPaymentMethodFromSession())
@@ -218,7 +217,7 @@ function selectInitialContributionTypeAndPaymentMethod(
   const { switches } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
-  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches, state.page.form.v3IsLowRisk);
+  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }
 
