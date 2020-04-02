@@ -219,7 +219,12 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   render() {
     const { stripe } = this.props;
     if (stripe) {
-      stripe.elements();
+      if (stripe.elements) {
+        stripe.elements();
+      } else {
+        // eslint-disable-next-line no-underscore-dangle
+        stripe._elements();
+      }
     }
 
     return (
