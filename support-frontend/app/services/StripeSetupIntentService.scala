@@ -43,7 +43,6 @@ class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext)  ext
   }
 
   def apply(publicKey: String)(implicit ec: ExecutionContext): EitherT[Future, String, SetupIntent] = {
-    logger.info(s"Using publicKey: $publicKey")
     val request = new InvokeRequest()
       .withFunctionName(functionName)
       .withPayload(
@@ -54,19 +53,12 @@ class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext)  ext
 
     Future(lambdaClient.invoke(request))
       .attemptT
-      .leftMap({ err =>
-        logger.error(s"a: ${err.getMessage}")
-        err.toString
-      })
+      .leftMap(_.toString)
       .subflatMap { resp =>
         val responseString = new String(resp.getPayload.array())
-        logger.info(s"Response from lambda: $responseString")
         decode[LambdaResponse](responseString)
           .flatMap { lambdaResponse => decode[SetupIntent](lambdaResponse.body)}
-          .leftMap({ err =>
-            logger.error(s"b: ${err.getMessage}")
-            err.toString
-          })
+          .leftMap(_.toString)
       }
   }
 }
