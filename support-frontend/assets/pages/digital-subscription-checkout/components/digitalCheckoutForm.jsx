@@ -21,7 +21,7 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import Summary from 'components/subscriptionCheckouts/summary';
+import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
 import {
   type Action,
   type FormActionCreators,
@@ -66,6 +66,7 @@ import GeneralErrorMessage
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { getGlobal } from 'helpers/globals';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import { routes } from 'helpers/routes';
 
 // ----- Types ----- //
 
@@ -160,7 +161,7 @@ function DigitalCheckoutForm(props: PropTypes) {
   return (
     <Content>
       <CheckoutLayout aside={(
-        <Summary
+        <OrderSummary
           image={
             <GridImage
               gridId="subscriptionDailyPackshot"
@@ -174,7 +175,7 @@ function DigitalCheckoutForm(props: PropTypes) {
           description="Premium App + The Guardian Daily + Ad-free"
           productPrice={productPrice}
           billingPeriod={props.billingPeriod}
-          product={props.product}
+          changeSubscription={routes.digitalSubscriptionLanding}
         />)}
       >
         <Form onSubmit={(ev) => {

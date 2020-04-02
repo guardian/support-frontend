@@ -23,9 +23,6 @@ import type {
   ContributionTypeSetting,
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
-import type { ChoiceCardsProductSetTestR3Variants } from 'helpers/abTests/abtestDefinitions';
-import type { SerializedStyles } from '@emotion/utils';
-import { yellowChoiceCard } from './choiceCardStyles';
 
 // ----- Types ----- //
 
@@ -36,8 +33,6 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
-  choiceCardsVariant: ChoiceCardsProductSetTestR3Variants,
-  isPostDeploymentTestUser: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -46,8 +41,6 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-  choiceCardsVariant: state.common.abParticipations.choiceCardsProductSetTestR3,
-  isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -68,8 +61,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
 
-
-  const renderChoiceCards = (cssOverrides: SerializedStyles | null) => (
+  const renderChoiceCards = () => (
     <ChoiceCardGroup
       name="contributionTypes"
       orientation="horizontal"
@@ -78,7 +70,6 @@ function withProps(props: PropTypes) {
       const { contributionType } = contributionTypeSetting;
       return (
         <ChoiceCard
-          cssOverrides={cssOverrides}
           id={`contributionType-${contributionType}`}
           value={contributionType}
           label={toHumanReadableContributionType(contributionType)}
@@ -97,6 +88,39 @@ function withProps(props: PropTypes) {
     </ChoiceCardGroup>
   );
 
+  /* eslint-disable no-unused-vars */
+  // leaving in place as this is still in active development:
+  const renderControl = () => (
+    <ul className="form__radio-group-list form__radio-group-list--border">
+      {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
+        const { contributionType } = contributionTypeSetting;
+        return (
+          <li className="form__radio-group-item">
+            <input
+              id={`contributionType-${contributionType}`}
+              className="form__radio-group-input"
+              type="radio"
+              name="contributionType"
+              value={contributionType}
+              onChange={() =>
+                props.onSelectContributionType(
+                  contributionType,
+                  props.switches,
+                  props.countryId,
+                  props.countryGroupId,
+                )
+              }
+              checked={props.contributionType === contributionType}
+            />
+            <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
+              {toHumanReadableContributionType(contributionType)}
+            </label>
+          </li>);
+      })}
+    </ul>
+  );
+  /* eslint-enable no-unused-vars */
+
   if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
     return null;
   }
@@ -104,7 +128,7 @@ function withProps(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      {props.choiceCardsVariant === 'yellow' ? renderChoiceCards(yellowChoiceCard) : renderChoiceCards()}
+      {renderChoiceCards()}
     </fieldset>
   );
 }
