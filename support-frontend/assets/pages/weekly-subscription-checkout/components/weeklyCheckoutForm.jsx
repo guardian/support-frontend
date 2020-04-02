@@ -42,7 +42,7 @@ import type {
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
-import { deliverableCountries } from 'helpers/internationalisation/deliverableCountries';
+import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection
@@ -152,7 +152,7 @@ function mapDispatchToProps() {
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
-const DeliveryAddress = withStore(deliverableCountries, 'delivery', getDeliveryAddress);
+const DeliveryAddress = withStore(weeklyDeliverableCountries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(countries, 'billing', getBillingAddress);
 const days = getWeeklyDays();
 

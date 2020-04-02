@@ -1,6 +1,9 @@
 // @flow
 
-const deliverableCountries: {
+// This is temporary list which is valid during the COVID-19 pandemic
+// the original country list is in country.js
+
+const weeklyDeliverableCountries: {
   [string]: string,
 } = {
   GB: 'United Kingdom',
@@ -215,4 +218,4 @@ const deliverableCountries: {
   SH: 'Saint Helena',
 };
 
-export { deliverableCountries };
+export { weeklyDeliverableCountries };
