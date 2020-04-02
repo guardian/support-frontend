@@ -191,6 +191,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
           })
           .catch(err => {
             logException(`Error getting Setup Intent client_secret from /stripe/create-setup-intent/recaptcha: ${err}`);
+            this.props.paymentFailure('internal_error');
+            this.props.setPaymentWaiting(false);
           })
       }
     });
