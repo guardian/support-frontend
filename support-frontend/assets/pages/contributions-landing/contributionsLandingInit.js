@@ -49,7 +49,7 @@ import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
-import { initRecaptchaV3, loadRecaptureV2 } from '../../helpers/recaptcha';
+import { loadRecaptchaV2 } from '../../helpers/recaptcha';
 
 // ----- Functions ----- //
 
@@ -256,16 +256,7 @@ const init = (store: Store<State, Action, Function>) => {
     firstName, lastName, email, billingState: stateField,
   }));
 
-  if (window.guardian.recaptchaV3 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-    initRecaptchaV3(dispatch);
-  }
-
-  // if (window.guardian.recaptchaV2) {
-  //   if (state.common.internationalisation.countryGroupId === 'AUDCountries' ||
-  //     state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-      loadRecaptureV2(dispatch);
-  //   }
-  // }
+  loadRecaptchaV2(dispatch);
 };
 
 

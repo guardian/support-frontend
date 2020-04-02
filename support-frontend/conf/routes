@@ -69,12 +69,6 @@ POST  /stripe/create-setup-intent/recaptcha                         controllers.
 # the need for a client token
 POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing
 
-# ----- Recaptcha ----- #
-+ nocsrf
-POST  /recaptchav2                                                  controllers.RecaptchaController.v2Verify()
-+ nocsrf
-POST  /recaptchav3                                                  controllers.RecaptchaController.v3Verify()
-
 # ------ Identity ------ #
 PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest
 GET /identity/get-user-type                                        controllers.IdentityController.getUserType(maybeEmail: Option[String])

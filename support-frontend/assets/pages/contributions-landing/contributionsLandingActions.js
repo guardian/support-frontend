@@ -72,8 +72,6 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
-  | { type: 'SET_V3_LOW_RISK', v3IsLowRisk: boolean }
-  | { type: 'SET_V2_LOW_RISK', v2IsLowRisk: boolean }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -222,22 +220,6 @@ const setAmazonPayLoginObject = (amazonLoginObject: Object): Action => ({
   type: 'SET_AMAZON_PAY_LOGIN_OBJECT',
   amazonLoginObject,
 });
-
-const setIsLowRiskV3 = (v3IsLowRisk: boolean): ((Function) => void) =>
-  (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({
-      type: 'SET_V3_LOW_RISK',
-      v3IsLowRisk,
-    })));
-  };
-
-const setIsLowRiskV2 = (v2IsLowRisk: boolean): ((Function) => void) =>
-  (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({
-      type: 'SET_V2_LOW_RISK',
-      v2IsLowRisk,
-    })));
-  };
 
 const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
   type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT',
@@ -768,8 +750,6 @@ export {
   setAmazonPayFatalError,
   setAmazonPayOrderReferenceId,
   setAmazonPayPaymentSelected,
-  setIsLowRiskV3,
-  setIsLowRiskV2,
   selectAmount,
   updateOtherAmount,
   paymentFailure,

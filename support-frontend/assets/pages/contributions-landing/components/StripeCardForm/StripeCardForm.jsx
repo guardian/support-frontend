@@ -113,6 +113,12 @@ const fieldStyle = {
   },
 };
 
+// TODO - use this
+function renderVerificationCopy(countryGroupId: CountryGroupId, contributionType: ContributionType) {
+  trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
+  return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
+}
+
 const errorMessageFromState = (state: CardFieldState): string | null =>
   (state.name === 'Error' ? state.errorMessage : null);
 
@@ -159,22 +165,18 @@ class CardForm extends Component<PropTypes, StateTypes> {
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: token => {
-        console.log("recaptcha!", token, this.props.stripeKey)
         fetch(
           `/stripe/create-setup-intent/recaptcha`,
           requestOptions({token, stripePublicKey: this.props.stripeKey}, 'same-origin', 'POST', this.props.csrf)
         )
           .then(response => response.json())
           .then(json => {
-            setTimeout(() => {
-              console.log(json)
-              if (json.client_secret) {
-                this.props.setStripeSetupIntentClientSecret(json.client_secret);
-              } else {
-                // TODO - proper error handling
-                console.log("Missing client secret")
-              }
-            }, 5000);
+            if (json.client_secret) {
+              this.props.setStripeSetupIntentClientSecret(json.client_secret);
+            } else {
+              // TODO - proper error handling
+              console.log("Missing client secret")
+            }
           })
       }
     });
@@ -211,18 +213,13 @@ class CardForm extends Component<PropTypes, StateTypes> {
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
-      // AU should already have the clientSecret from the recaptcha request
       if (this.props.countryGroupId === 'AUDCountries') {
+        // If clientSecret not ready yet then componentDidUpdate will complete the payment when it arrives
         if (this.props.setupIntentClientSecret) {
-          debugger
           this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
-        } else {
-          console.log("Missing clientSecret for AU")
-          // When clientSecret becomes available, call this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
         }
       } else {
         // Create a new setupIntent
-        debugger
         fetchJson(
           window.guardian.stripeSetupIntentEndpoint,
           requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null),
