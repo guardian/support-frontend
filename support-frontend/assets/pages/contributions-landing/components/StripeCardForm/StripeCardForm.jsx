@@ -25,6 +25,7 @@ import {
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
   setStripeCardFormComplete,
+  setStripeSetupIntentClientSecret,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -34,6 +35,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
 import type {Csrf as CsrfState} from "helpers/csrf/csrfReducer";
+import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
+import {AUDCountries} from "helpers/internationalisation/countryGroup";
 
 // ----- Types -----//
 
@@ -48,10 +51,13 @@ type PropTypes = {|
   setPaymentWaiting: (isWaiting: boolean) => Action,
   paymentWaiting: boolean,
   setStripeCardFormComplete: (isComplete: boolean) => Action,
+  setStripeSetupIntentClientSecret: (clientSecret: string) => Action,
   checkoutFormHasBeenSubmitted: boolean,
   stripeKey: string,
   country: IsoCountry,
+  countryGroupId: CountryGroupId,
   csrf: CsrfState,
+  setupIntentClientSecret: string | null,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -59,7 +65,9 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   paymentWaiting: state.page.form.isWaiting,
   country: state.common.internationalisation.countryId,
+  countryGroupId: state.common.internationalisation.countryGroupId,
   csrf: state.page.csrf,
+  clientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -78,6 +86,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setStripeCardFormComplete(isComplete)),
   setPaymentWaiting: (isWaiting: boolean) =>
     dispatch(setPaymentWaiting(isWaiting)),
+  setStripeSetupIntentClientSecret: (clientSecret: string) => dispatch(setStripeSetupIntentClientSecret(clientSecret)),
 });
 
 type CardFieldState =
@@ -125,28 +134,38 @@ class CardForm extends Component<PropTypes, StateTypes> {
     } else {
       this.setupRecurringHandlers();
 
-      // TODO - A/B test?
-      if (window.grecaptcha && window.grecaptcha.render) {
-        this.setupRecaptchaCallback()
-      } else {
-        window.v2OnloadCallback = this.setupRecaptchaCallback;
+      // Recaptcha for AU only for now
+      if (this.props.countryGroupId === 'AUDCountries') {
+        if (window.grecaptcha && window.grecaptcha.render) {
+          this.setupRecaptchaCallback()
+        } else {
+          window.v2OnloadCallback = this.setupRecaptchaCallback;
+        }
       }
     }
   }
 
+  // Creates a new setupIntent with recaptcha verification
   setupRecaptchaCallback = () => {
-    console.log("setupRecaptchaCallback")
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: token => {
         console.log("recaptcha!", token)
-        // TODO - Non-AU should use public endpoint
         fetch(
           `/stripe/create-setup-intent/recaptcha`,
           requestOptions({token, stripePublicKey: this.props.stripeKey}, 'same-origin', 'POST', this.props.csrf)
         )
           .then(response => response.json())
-          .then(json => console.log(json))
+          // TODO - put client_secret into redux
+          .then(json => {
+            console.log(json)
+            if (json.client_secret) {
+              this.props.setStripeSetupIntentClientSecret(json.client_secret);
+            } else {
+              // TODO - proper error handling
+              console.log("Missing client secret")
+            }
+          })
       }
     });
   };
@@ -180,21 +199,33 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
   setupRecurringHandlers(): void {
     this.props.setCreateStripePaymentMethod(() => {
+      debugger
       this.props.setPaymentWaiting(true);
 
-      fetchJson(
-        window.guardian.stripeSetupIntentEndpoint,
-        requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
-      ).then((result) => {
-        if (result.client_secret) {
-          this.handleCardSetupForRecurring(result.client_secret);
+      // AU should already have the clientSecret from the recaptcha request
+      if (this.props.countryGroup === 'AUDCountries') {
+        if (this.props.setupIntentClientSecret) {
+          this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
         } else {
-          throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
+          // TODO proper error handling
+          console.log("Missing clientSecret for AU")
         }
-      }).catch((error) => {
-        logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
-        this.props.paymentFailure('internal_error');
-      });
+      } else {
+        // Create a new setupIntent
+        fetchJson(
+          window.guardian.stripeSetupIntentEndpoint,
+          requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null),
+        ).then((result) => {
+          if (result.client_secret) {
+            this.handleCardSetupForRecurring(result.client_secret);
+          } else {
+            throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
+          }
+        }).catch((error) => {
+          logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
+          this.props.paymentFailure('internal_error');
+        });
+      }
     });
   }
 

@@ -9,11 +9,16 @@ import com.amazonaws.services.lambda.AWSLambdaClientBuilder
 import com.amazonaws.services.lambda.model.InvokeRequest
 import com.gu.support.config.{Stage, Stages}
 import com.typesafe.scalalogging.StrictLogging
-import io.circe.{Decoder, Encoder, Json, JsonObject}
+import io.circe.{Decoder, Encoder, Json}
 import io.circe.parser.decode
-import io.circe.Printer
 
 import scala.concurrent.{ExecutionContext, Future}
+
+case class LambdaResponse(body: String)
+object LambdaResponse {
+  import io.circe.generic.auto._
+  implicit val decoder = Decoder[LambdaResponse]
+}
 
 case class SetupIntent(client_secret: String)
 object SetupIntent {
@@ -53,9 +58,10 @@ class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext)  ext
         err.toString
       })
       .subflatMap { resp =>
-        val v = new String(resp.getPayload.array())
-        logger.info(s"Response from lambda: $v")
-        decode[SetupIntent](v)
+        val responseString = new String(resp.getPayload.array())
+        logger.info(s"Response from lambda: $responseString")
+        decode[LambdaResponse](responseString)
+          .flatMap { lambdaResponse => decode[SetupIntent](lambdaResponse.body)}
           .leftMap({ err =>
             logger.error(s"b: ${err.getMessage}")
             err.toString

@@ -93,6 +93,7 @@ export type Action =
   | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
   | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
   | { type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete: boolean }
+  | { type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret: String }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -301,6 +302,11 @@ const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => Promise<S
 const setStripeCardFormComplete = (isComplete: boolean): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete })));
+  };
+
+const setStripeSetupIntentClientSecret = (setupIntentClientSecret: string): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret })));
   };
 
 const sendFormSubmitEventForPayPalRecurring = () =>
@@ -790,5 +796,6 @@ export {
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
   setStripeCardFormComplete,
+  setStripeSetupIntentClientSecret,
   updatePayPalButtonReady,
 };

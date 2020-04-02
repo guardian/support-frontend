@@ -72,6 +72,7 @@ export type Stripe3DSResult = {
 
 export type StripeCardFormData = {
   formComplete: boolean,
+  setupIntentClientSecret: string | null,
   // These callbacks must be initialised after the StripeCardForm component has been created
   createPaymentMethod: ((email: string) => void) | null,
   handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null, // For single only
@@ -198,6 +199,7 @@ function createFormReducer() {
     },
     stripeCardFormData: {
       formComplete: false,
+      setupIntentClientSecret: null,
       createPaymentMethod: null,
       handle3DS: null,
     },
@@ -352,6 +354,15 @@ function createFormReducer() {
           stripeCardFormData: {
             ...state.stripeCardFormData,
             formComplete: action.isComplete,
+          },
+        };
+
+      case 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET':
+        return {
+          ...state,
+          stripeCardFormData: {
+            ...state.stripeCardFormData,
+            setupIntentClientSecret: action.setupIntentClientSecret
           },
         };
 

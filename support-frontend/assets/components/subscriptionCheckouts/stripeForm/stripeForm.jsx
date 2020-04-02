@@ -198,7 +198,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
         this.handleStripeError(result.error);
         return Promise.resolve(result.error);
       }
-      return result.setupIntent.payment_method;
+      return result.setupIntentClientSecret.payment_method;
 
     });
   }

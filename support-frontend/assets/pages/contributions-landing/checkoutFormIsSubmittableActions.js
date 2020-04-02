@@ -116,16 +116,16 @@ function enableOrDisableForm() {
       state.page.form.userTypeFromIdentityResponse,
     );
 
-    const v2RecaptchaCheck =
-      window.guardian.recaptchaV2
-      && state.page.form.stripeCardFormData.formComplete
-      && (
-        state.common.internationalisation.countryGroupId === 'AUDCountries' ||
-        state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
-      )
-      && !state.page.user.isPostDeploymentTestUser
-        ? state.page.form.v2IsLowRisk
-        : true;
+    // const v2RecaptchaCheck =
+    //   window.guardian.recaptchaV2
+    //   && state.page.form.stripeCardFormData.formComplete
+    //   && (
+    //     state.common.internationalisation.countryGroupId === 'AUDCountries' ||
+    //     state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
+    //   )
+    //   && !state.page.user.isPostDeploymentTestUser
+    //     ? state.page.form.v2IsLowRisk
+    //     : true;
 
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
@@ -133,8 +133,8 @@ function enableOrDisableForm() {
     const shouldEnable =
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
-      && userCanContributeWithoutSigningIn
-      && v2RecaptchaCheck;
+      && userCanContributeWithoutSigningIn;
+      // && v2RecaptchaCheck;
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };
