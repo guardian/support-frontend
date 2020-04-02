@@ -25,6 +25,7 @@ import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
+import {recaptchaEnabled} from 'helpers/recaptcha';
 
 // ----- Types ----- //
 
@@ -120,7 +121,7 @@ function enableOrDisableForm() {
     dispatch(setFormIsValid(formIsValid));
 
     const auStripeRecurringNotVerified =
-      state.common.internationalisation.countryGroupId === 'AUDCountries'
+      recaptchaEnabled(state.common.internationalisation.countryGroupId)
       && state.page.form.contributionType !== 'ONE_OFF'
       && state.page.form.paymentMethod === 'Stripe'
       && !state.page.form.stripeCardFormData.recaptchaVerified;

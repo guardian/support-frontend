@@ -37,6 +37,7 @@ import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
 import type {Csrf as CsrfState} from "helpers/csrf/csrfReducer";
 import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
+import {recaptchaEnabled} from 'helpers/recaptcha';
 
 // ----- Types -----//
 
@@ -118,9 +119,6 @@ const fieldStyle = {
   },
 };
 
-// TODO - make it switchable?
-const regionHasRecaptcha = (countryGroupId: CountryGroupId): boolean => countryGroupId === 'AUDCountries';
-
 const renderVerificationCopy = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
   return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
@@ -148,7 +146,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
     } else {
       this.setupRecurringHandlers();
 
-      if (regionHasRecaptcha(this.props.countryGroupId)) {
+      if (recaptchaEnabled(this.props.countryGroupId)) {
         if (window.grecaptcha && window.grecaptcha.render) {
           this.setupRecaptchaCallback()
         } else {
@@ -229,7 +227,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
-      if (regionHasRecaptcha(this.props.countryGroupId)) {
+      if (recaptchaEnabled(this.props.countryGroupId)) {
         // Recaptcha verification is required for setupIntent creation.
         // If setupIntentClientSecret is ready then complete the payment now.
         // If setupIntentClientSecret is not yet ready then componentDidUpdate will complete the payment when it arrives.

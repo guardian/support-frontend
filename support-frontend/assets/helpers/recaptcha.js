@@ -1,4 +1,9 @@
 // @flow
+import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
+
+const recaptchaEnabled = (countryGroupId: CountryGroupId): boolean =>
+  window.guardian.recaptchaV2
+  && countryGroupId === 'AUDCountries';
 
 const loadRecaptchaV2 = (dispatch: Function) =>
   new Promise<void>((resolve, reject) => {
@@ -13,5 +18,5 @@ const loadRecaptchaV2 = (dispatch: Function) =>
     }
   });
 
-export { loadRecaptchaV2 };
+export { loadRecaptchaV2, recaptchaEnabled };
 
