@@ -53,14 +53,6 @@ trait Controllers {
     fontLoader
   )
 
-  lazy val recaptchaController = new RecaptchaController(
-    components = controllerComponents,
-    actionRefiners = actionRefiners,
-    recaptchaService = recaptchaService,
-    v3RecaptchaKey = appConfig.recaptchaConfigProvider.v3SecretKey,
-    v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey
-  )
-
   lazy val digitalPackController = new DigitalSubscription(
     priceSummaryServiceProvider,
     assetsResolver,

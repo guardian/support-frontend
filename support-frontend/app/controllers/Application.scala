@@ -187,7 +187,6 @@ class Application(
       geoData = geoData,
       shareImageUrl = "https://media.guim.co.uk/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png",
       shareUrl = "https://support.theguardian.com/contribute",
-      v3recaptchaConfigPublicKey = recaptchaConfigProvider.v3PublicKey,
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey
     )
   }

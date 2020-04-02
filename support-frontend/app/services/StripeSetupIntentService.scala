@@ -43,11 +43,12 @@ class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext)  ext
   }
 
   def apply(publicKey: String)(implicit ec: ExecutionContext): EitherT[Future, String, SetupIntent] = {
+    logger.info(s"Using publicKey: $publicKey")
     val request = new InvokeRequest()
       .withFunctionName(functionName)
       .withPayload(
         Json.fromFields(
-          List("body" -> Json.fromString("{\"publicKey\":\"pk_test_Qm3CGRdrV4WfGYCpm0sftR0f\"}"))
+          List("body" -> Json.fromString(s"""{"publicKey":"$publicKey"}"""))
         ).noSpaces
       )
 

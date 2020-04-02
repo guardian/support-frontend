@@ -52,7 +52,6 @@ trait AppComponents extends PlayComponents
     supportWorkersStatusController,
     stripeController,
     identityController,
-    recaptchaController,
     subscriptionsController,
     digitalPackController,
     weeklyController,
