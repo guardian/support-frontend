@@ -37,6 +37,7 @@ import CreditCardsUS from './creditCardsUS.svg';
 import type {Csrf as CsrfState} from "helpers/csrf/csrfReducer";
 import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
 import {AUDCountries} from "helpers/internationalisation/countryGroup";
+import AnimatedDots from "pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton";
 
 // ----- Types -----//
 
@@ -67,7 +68,7 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   countryGroupId: state.common.internationalisation.countryGroupId,
   csrf: state.page.csrf,
-  clientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret
+  setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -145,26 +146,35 @@ class CardForm extends Component<PropTypes, StateTypes> {
     }
   }
 
+  componentDidUpdate(prevProps): void {
+    const clientSecretHasChanged = !prevProps.setupIntentClientSecret && this.props.setupIntentClientSecret;
+    if (this.props.countryGroupId === 'AUDCountries' && this.props.checkoutFormHasBeenSubmitted && clientSecretHasChanged) {
+      debugger
+      this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
+    }
+  }
+
   // Creates a new setupIntent with recaptcha verification
   setupRecaptchaCallback = () => {
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: token => {
-        console.log("recaptcha!", token)
+        console.log("recaptcha!", token, this.props.stripeKey)
         fetch(
           `/stripe/create-setup-intent/recaptcha`,
           requestOptions({token, stripePublicKey: this.props.stripeKey}, 'same-origin', 'POST', this.props.csrf)
         )
           .then(response => response.json())
-          // TODO - put client_secret into redux
           .then(json => {
-            console.log(json)
-            if (json.client_secret) {
-              this.props.setStripeSetupIntentClientSecret(json.client_secret);
-            } else {
-              // TODO - proper error handling
-              console.log("Missing client secret")
-            }
+            setTimeout(() => {
+              console.log(json)
+              if (json.client_secret) {
+                this.props.setStripeSetupIntentClientSecret(json.client_secret);
+              } else {
+                // TODO - proper error handling
+                console.log("Missing client secret")
+              }
+            }, 5000);
           })
       }
     });
@@ -199,19 +209,20 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
   setupRecurringHandlers(): void {
     this.props.setCreateStripePaymentMethod(() => {
-      debugger
       this.props.setPaymentWaiting(true);
 
       // AU should already have the clientSecret from the recaptcha request
-      if (this.props.countryGroup === 'AUDCountries') {
+      if (this.props.countryGroupId === 'AUDCountries') {
         if (this.props.setupIntentClientSecret) {
+          debugger
           this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
         } else {
-          // TODO proper error handling
           console.log("Missing clientSecret for AU")
+          // When clientSecret becomes available, call this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
         }
       } else {
         // Create a new setupIntent
+        debugger
         fetchJson(
           window.guardian.stripeSetupIntentEndpoint,
           requestOptions({publicKey: this.props.stripeKey}, 'omit', 'POST', null),

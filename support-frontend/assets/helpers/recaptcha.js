@@ -65,7 +65,7 @@ const loadRecaptureV2 = (dispatch: Function) =>
     //   }
     // };
     const recaptchaScript = document.createElement('script');
-    recaptchaScript.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+    recaptchaScript.src = 'https://www.google.com/recaptcha/api.js?onload=v2OnloadCallback&render=explicit';
 
     recaptchaScript.onerror = reject;
     recaptchaScript.onload = resolve;
