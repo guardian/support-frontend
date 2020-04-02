@@ -219,7 +219,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   render() {
     const { stripe } = this.props;
     if (stripe) {
-      stripe.elements();
+      stripe._elements();
     }
 
     return (
