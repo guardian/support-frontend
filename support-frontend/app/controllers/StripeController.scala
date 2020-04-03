@@ -37,7 +37,10 @@ class StripeController(
       recaptchaResponse <- recaptchaService.verify(token, v2RecaptchaKey)
       response <- if (recaptchaResponse.success) {
         stripeService(request.body.stripePublicKey).map(response => Ok(response.asJson))
-      } else EitherT.rightT[Future,String](Forbidden(""))
+      } else {
+        logger.info(s"Returning status Forbidden for Stripe Intent request because Recaptcha verification failed")
+        EitherT.rightT[Future,String](Forbidden(""))
+      }
     } yield response
 
     result.fold(

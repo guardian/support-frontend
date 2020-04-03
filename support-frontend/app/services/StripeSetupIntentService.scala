@@ -46,6 +46,7 @@ class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext)  ext
     val request = new InvokeRequest()
       .withFunctionName(functionName)
       .withPayload(
+        // The lambda expects the input to have the format used by API Gateway
         Json.fromFields(
           List("body" -> Json.fromString(s"""{"publicKey":"$publicKey"}"""))
         ).noSpaces
