@@ -30,7 +30,6 @@ abstract class JsonLambda[Request: Decoder, Environment](implicit executionConte
   override def handleRequest(input: InputStream, output: OutputStream, context: Context): Unit = {
     val ioStreamAttempt = Try(Source.fromInputStream(input).mkString) flatMap { inputString =>
       input.close()
-      SafeLogger.info(s"Got input $inputString")
       val environment = minimalEnvironment()
       val outputString = Await.result(
         lambdaString(environment, inputString),
