@@ -18,13 +18,3 @@ export const setupStripe = (setStripeHasLoaded: () => void) => {
     }
   }
 };
-
-export const stripeCardFormIsIncomplete = (
-  contributionType: ContributionType,
-  paymentMethod: PaymentMethod,
-  stripeCardFormComplete: boolean,
-  stripeElementsRecurringTestVariant: string,
-): boolean =>
-  (contributionType === 'ONE_OFF' || stripeElementsRecurringTestVariant === 'stripeElements') &&
-  paymentMethod === Stripe &&
-  !(stripeCardFormComplete);
