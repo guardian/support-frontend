@@ -4,7 +4,7 @@
   @include gu-fontset-explainer;
   color: gu-colour(state-error);
   display: block;
-  
+
   @include mq($from: mobileMedium) {
     width: 80%;
   }
@@ -16,6 +16,9 @@
 
 .component-form-error__summary-error {
   margin-top: $gu-v-spacing / 2;
+  a, a:visited {
+    color: inherit;
+  }
   &:first-of-type {
     margin-top: $gu-v-spacing;
   }
@@ -28,7 +31,7 @@
 .component-form-error {
   .StripeElement--invalid, .StripeElement--empty {
     border: 1px solid #c70000;
-  }  
+  }
 }
 
 .component-form-error__heading {

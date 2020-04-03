@@ -126,7 +126,7 @@ const applyDeliveryAddressRules = (
   const homeRules = validate([
     {
       rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
-      error: formError('postCode', 'Sorry, we cannot deliver a paper to an address with this postcode. Please call Customer Services on: 0330 333 6767 or press Back to purchase a voucher subscription.'),
+      error: formError('postCode', 'Temporary COVID message'),
     },
   ]);
 
