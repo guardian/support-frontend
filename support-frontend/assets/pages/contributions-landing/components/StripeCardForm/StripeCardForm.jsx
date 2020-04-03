@@ -2,21 +2,14 @@
 
 // ----- Imports ----- //
 
-import React, { Component } from 'react';
-import {
-  CardCVCElement,
-  CardExpiryElement,
-  CardNumberElement,
-  injectStripe,
-} from 'react-stripe-elements';
-import { connect } from 'react-redux';
-import { fetchJson, requestOptions } from 'helpers/fetch';
-import type {
-  State,
-  Stripe3DSResult,
-} from 'pages/contributions-landing/contributionsLandingReducer';
-import { Stripe } from 'helpers/paymentMethods';
-import { type PaymentResult } from 'helpers/paymentIntegrations/readerRevenueApis';
+import React, {Component} from 'react';
+import {CardCVCElement, CardExpiryElement, CardNumberElement, injectStripe,} from 'react-stripe-elements';
+import {connect} from 'react-redux';
+import {fetchJson, requestOptions} from 'helpers/fetch';
+import type {State, Stripe3DSResult,} from 'pages/contributions-landing/contributionsLandingReducer';
+import {Stripe} from 'helpers/paymentMethods';
+import {type PaymentResult} from 'helpers/paymentIntegrations/readerRevenueApis';
+import {routes} from "../../../../helpers/routes";
 import {
   type Action,
   onThirdPartyPaymentAuthorised,
@@ -25,19 +18,19 @@ import {
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
   setStripeCardFormComplete,
-  setStripeSetupIntentClientSecret,
   setStripeRecaptchaVerified,
+  setStripeSetupIntentClientSecret,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import { type ContributionType } from 'helpers/contributions';
-import type { ErrorReason } from 'helpers/errorReasons';
-import { logException } from 'helpers/logger';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import {type ContributionType} from 'helpers/contributions';
+import type {ErrorReason} from 'helpers/errorReasons';
+import {logException} from 'helpers/logger';
+import {trackComponentLoad} from 'helpers/tracking/behaviour';
+import type {IsoCountry} from 'helpers/internationalisation/country';
 import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { recaptchaEnabled } from 'helpers/recaptcha';
+import type {Csrf as CsrfState} from 'helpers/csrf/csrfReducer';
+import type {CountryGroupId} from 'helpers/internationalisation/countryGroup';
+import {recaptchaEnabled} from 'helpers/recaptcha';
 
 // ----- Types -----//
 
@@ -243,13 +236,13 @@ class CardForm extends Component<PropTypes, StateTypes> {
       } else {
         // Create a new Setup Intent, then complete the payment
         fetchJson(
-          window.guardian.stripeSetupIntentEndpoint,
-          requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
+          routes.stripeSetupIntent,
+          requestOptions({ stripePublicKey: this.props.stripeKey }, 'omit', 'POST', this.props.csrf),
         ).then((result) => {
           if (result.client_secret) {
             this.handleCardSetupForRecurring(result.client_secret);
           } else {
-            throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
+            throw new Error(`Missing client_secret field in response from ${routes.stripeSetupIntent}`);
           }
         }).catch((error) => {
           logException(`Error getting Stripe client secret for recurring contribution: ${error}`);

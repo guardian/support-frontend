@@ -3,36 +3,30 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
-import { fetchJson, requestOptions } from 'helpers/fetch';
-import {
-  injectStripe,
-  PaymentRequestButtonElement,
-} from 'react-stripe-elements';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type {
-  ContributionType,
-  OtherAmounts,
-  SelectedAmounts,
-} from 'helpers/contributions';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import {connect} from 'react-redux';
+import {fetchJson, requestOptions} from 'helpers/fetch';
+import {injectStripe, PaymentRequestButtonElement,} from 'react-stripe-elements';
+import type {IsoCurrency} from 'helpers/internationalisation/currency';
+import type {ContributionType, OtherAmounts, SelectedAmounts,} from 'helpers/contributions';
+import type {PaymentAuthorisation} from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentResult,
   type StripePaymentMethod,
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
-import {
-  type CountryGroupId,
-} from 'helpers/internationalisation/countryGroup';
-import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
-import type { IsoCountry, StateProvince } from 'helpers/internationalisation/country';
-import { logException } from 'helpers/logger';
+import {routes} from "../../../../helpers/routes";
+import {checkAmountOrOtherAmount, isValidEmail} from 'helpers/formValidation';
+import {type CountryGroupId,} from 'helpers/internationalisation/countryGroup';
+import {trackComponentClick, trackComponentLoad} from 'helpers/tracking/behaviour';
+import type {IsoCountry, StateProvince} from 'helpers/internationalisation/country';
+import {findIsoCountry, stateProvinceFromString} from 'helpers/internationalisation/country';
+import {logException} from 'helpers/logger';
 import type {
-  State, Stripe3DSResult,
+  State,
+  Stripe3DSResult,
   StripePaymentRequestButtonData,
 } from 'pages/contributions-landing/contributionsLandingReducer';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
+import type {Action} from 'pages/contributions-landing/contributionsLandingActions';
 import {
   onThirdPartyPaymentAuthorised,
   paymentWaiting as setPaymentWaiting,
@@ -41,24 +35,22 @@ import {
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
   setStripePaymentRequestObject,
+  updateBillingCountry,
+  updateBillingState,
   updateEmail,
   updateFirstName,
   updateLastName,
   updatePaymentMethod,
-  updateBillingState,
-  updateBillingCountry,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { Stripe } from 'helpers/paymentMethods';
-import { toHumanReadableContributionType } from 'helpers/checkouts';
-import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
-import type { ErrorReason } from 'helpers/errorReasons';
-import GeneralErrorMessage
-  from 'components/generalErrorMessage/generalErrorMessage';
-import { getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
-import type { StripePaymentRequestButtonScaTestVariants } from 'helpers/abTests/abtestDefinitions';
-import { findIsoCountry, stateProvinceFromString } from 'helpers/internationalisation/country';
-import type { Option } from 'helpers/types/option';
+import type {PaymentMethod} from 'helpers/paymentMethods';
+import {Stripe} from 'helpers/paymentMethods';
+import {getAvailablePaymentRequestButtonPaymentMethod, toHumanReadableContributionType} from 'helpers/checkouts';
+import type {StripeAccount} from 'helpers/paymentIntegrations/stripeCheckout';
+import type {ErrorReason} from 'helpers/errorReasons';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import type {StripePaymentRequestButtonScaTestVariants} from 'helpers/abTests/abtestDefinitions';
+import type {Option} from 'helpers/types/option';
+import type {Csrf as CsrfState} from "../../../../helpers/csrf/csrfReducer";
 
 // ----- Types -----//
 
@@ -93,6 +85,7 @@ type PropTypes = {|
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   scaTestVariant: StripePaymentRequestButtonScaTestVariants,
+  csrf: CsrfState,
 |};
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -108,6 +101,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   paymentMethod: state.page.form.paymentMethod,
   switches: state.common.settings.switches,
   scaTestVariant: state.common.abParticipations.stripePaymentRequestButtonSca,
+  csrf: state.page.csrf,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -212,13 +206,13 @@ function onClick(event, props: PropTypes) {
 // Requests a new SetupIntent and returns the associated clientSecret
 function fetchClientSecret(props: PropTypes): Promise<string> {
   return fetchJson(
-    window.guardian.stripeSetupIntentEndpoint,
-    requestOptions({ publicKey: props.stripeKey }, 'omit', 'POST', null),
+    routes.stripeSetupIntent,
+    requestOptions({ stripePublicKey: props.stripeKey }, 'omit', 'POST', props.csrf),
   ).then((result) => {
     if (result.client_secret) {
       return Promise.resolve(result.client_secret);
     }
-    return Promise.reject(new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`));
+    return Promise.reject(new Error(`Missing client_secret field in response from ${routes.stripeSetupIntent}`));
 
   });
 }
