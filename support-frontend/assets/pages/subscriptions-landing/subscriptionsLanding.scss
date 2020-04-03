@@ -365,7 +365,33 @@
   }
 }
 
-.subscriptions__product-subtitle {
+.subscriptions__sales {
+  font-size: 28px;
+  line-height: 30px;
+  font-weight: 300;
+  display: inline-block;
+  background-color: gu-colour('highlight-main');
+  vertical-align: middle;
+  padding: 0px 7px 3px;
+  margin: 6px 0px;
+
+  @include mq($until: desktop) {
+    font-size: 24px;
+  }
+
+  @include mq($until: tablet) {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+}
+
+.subscriptions__product-subtitle--large {
   font-size: 28px;
   line-height: 30px;
   font-weight: 300;
@@ -383,6 +409,27 @@
   @include mq($until: mobileLandscape) {
     font-size: 20px;
     line-height: 24px;
+  }
+}
+
+.subscriptions__product-subtitle--small {
+  font-size: 24px;
+  line-height: 27px;
+  font-weight: 300;
+  font-family: $gu-headline;
+
+  @include mq($until: desktop) {
+    font-size: 20px;
+  }
+
+  @include mq($until: mobileLandscape) {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  @include mq($until: mobileMedium) {
+    font-size: 16px;
+    line-height: 20px;
   }
 }
 
@@ -427,31 +474,6 @@
   @include mq($until: tablet) {
     border-top: none;
   }
-}
-
-.subscriptions__sales {
-  font-size: 24px;
-  line-height: 27px;
-  display: inline-block;
-  background-color: gu-colour('highlight-main');
-  vertical-align: middle;
-  padding: 0px 7px 3px;
-  margin-top: 6px;
-
-  @include mq($until: desktop) {
-    font-size: 20px;
-  }
-
-  @include mq($until: mobileLandscape) {
-    font-size: 18px;
-    line-height: 24px;
-  }
-
-  @include mq($until: mobileMedium) {
-    font-size: 16px;
-    line-height: 20px;
-  }
-
 }
 
 .subscriptions__product--feature .subscriptions__sales {

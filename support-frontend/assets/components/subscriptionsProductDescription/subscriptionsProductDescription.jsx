@@ -33,8 +33,9 @@ const SubscriptionsProductDescription = ({
 }: PropTypes) => (
   <div>
     <h2 className="subscriptions__product-title">{title}</h2>
-    <h3 className="subscriptions__product-subtitle">{subtitle}</h3>
-    {offer && <h4 className="subscriptions__sales">{offer}</h4>}
+    {offer && <h3 className="subscriptions__sales">{offer}</h3>}
+    {offer && <h3 className="subscriptions__product-subtitle--small">{subtitle}</h3>}
+    {!offer && <h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>}
     <p className="subscriptions__description">{description}</p>
     <div className={isFeature ? 'subscriptions__button-container--feature' : 'subscriptions__button-container'}>
       {buttons.map((button, index) => (
@@ -46,7 +47,7 @@ const SubscriptionsProductDescription = ({
         >
           {button.ctaButtonText}
         </AnchorButton>
-      ))}
+        ))}
     </div>
   </div>
 );

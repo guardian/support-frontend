@@ -55,7 +55,8 @@ class DigitalSubscription(
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
-    val september2019SalePromo = "DK0NT24WG"
+    val september2019SalePromo = "DK0NT24WG" //Not using this during the one for one test
+    val oneForOnePromo = "ONE-FOR-ONE"
     val annualIntroCodes: List[PromoCode] = List(
       "ANNUAL-INTRO-EU",
       "ANNUAL-INTRO-UK",
@@ -64,7 +65,7 @@ class DigitalSubscription(
       "ANNUAL-INTRO-CA",
       "ANNUAL-INTRO-AU"
     )
-    val promoCodes: List[PromoCode] = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ annualIntroCodes :+ september2019SalePromo
+    val promoCodes: List[PromoCode] = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ annualIntroCodes :+ oneForOnePromo
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),

@@ -105,7 +105,10 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
     const promotion = getAppliedPromo(productPrice.promotions);
     const promoCode = promotion ? promotion.promoCode : null;
     const promotionalPrice = promotion && promotion.discountedPrice ? promotion.discountedPrice : null;
-    const offer = promotion ? promotion.description : BILLING_PERIOD[digitalBillingPeriod].offer;
+    const offer = promotion &&
+    promotion.landingPage &&
+    promotion.landingPage.roundel ? promotion.landingPage.roundel :
+      BILLING_PERIOD[digitalBillingPeriod].offer;
 
     return {
       title: BILLING_PERIOD[digitalBillingPeriod].title,
