@@ -1,7 +1,5 @@
 // @flow
 import { logException } from 'helpers/logger';
-import type { ContributionType } from 'helpers/contributions';
-import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
 
 export const setupStripe = (setStripeHasLoaded: () => void) => {
   if (window.Stripe) {
@@ -18,13 +16,3 @@ export const setupStripe = (setStripeHasLoaded: () => void) => {
     }
   }
 };
-
-export const stripeCardFormIsIncomplete = (
-  contributionType: ContributionType,
-  paymentMethod: PaymentMethod,
-  stripeCardFormComplete: boolean,
-  stripeElementsRecurringTestVariant: string,
-): boolean =>
-  (contributionType === 'ONE_OFF' || stripeElementsRecurringTestVariant === 'stripeElements') &&
-  paymentMethod === Stripe &&
-  !(stripeCardFormComplete);
