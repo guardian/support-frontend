@@ -3,30 +3,30 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import {connect} from 'react-redux';
-import {fetchJson, requestOptions} from 'helpers/fetch';
-import {injectStripe, PaymentRequestButtonElement,} from 'react-stripe-elements';
-import type {IsoCurrency} from 'helpers/internationalisation/currency';
-import type {ContributionType, OtherAmounts, SelectedAmounts,} from 'helpers/contributions';
-import type {PaymentAuthorisation} from 'helpers/paymentIntegrations/readerRevenueApis';
+import { connect } from 'react-redux';
+import { fetchJson, requestOptions } from 'helpers/fetch';
+import { injectStripe, PaymentRequestButtonElement } from 'react-stripe-elements';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentResult,
   type StripePaymentMethod,
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import {routes} from "../../../../helpers/routes";
-import {checkAmountOrOtherAmount, isValidEmail} from 'helpers/formValidation';
-import {type CountryGroupId,} from 'helpers/internationalisation/countryGroup';
-import {trackComponentClick, trackComponentLoad} from 'helpers/tracking/behaviour';
-import type {IsoCountry, StateProvince} from 'helpers/internationalisation/country';
-import {findIsoCountry, stateProvinceFromString} from 'helpers/internationalisation/country';
-import {logException} from 'helpers/logger';
+import { routes } from '../../../../helpers/routes';
+import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
+import type { IsoCountry, StateProvince } from 'helpers/internationalisation/country';
+import { findIsoCountry, stateProvinceFromString } from 'helpers/internationalisation/country';
+import { logException } from 'helpers/logger';
 import type {
   State,
   Stripe3DSResult,
   StripePaymentRequestButtonData,
 } from 'pages/contributions-landing/contributionsLandingReducer';
-import type {Action} from 'pages/contributions-landing/contributionsLandingActions';
+import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
   onThirdPartyPaymentAuthorised,
   paymentWaiting as setPaymentWaiting,
@@ -42,15 +42,15 @@ import {
   updateLastName,
   updatePaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type {PaymentMethod} from 'helpers/paymentMethods';
-import {Stripe} from 'helpers/paymentMethods';
-import {getAvailablePaymentRequestButtonPaymentMethod, toHumanReadableContributionType} from 'helpers/checkouts';
-import type {StripeAccount} from 'helpers/paymentIntegrations/stripeCheckout';
-import type {ErrorReason} from 'helpers/errorReasons';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { Stripe } from 'helpers/paymentMethods';
+import { getAvailablePaymentRequestButtonPaymentMethod, toHumanReadableContributionType } from 'helpers/checkouts';
+import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
+import type { ErrorReason } from 'helpers/errorReasons';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import type {StripePaymentRequestButtonScaTestVariants} from 'helpers/abTests/abtestDefinitions';
-import type {Option} from 'helpers/types/option';
-import type {Csrf as CsrfState} from "../../../../helpers/csrf/csrfReducer";
+import type { StripePaymentRequestButtonScaTestVariants } from 'helpers/abTests/abtestDefinitions';
+import type { Option } from 'helpers/types/option';
+import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
 
 // ----- Types -----//
 

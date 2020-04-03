@@ -2,14 +2,14 @@
 
 // ----- Imports ----- //
 
-import React, {Component} from 'react';
-import {CardCVCElement, CardExpiryElement, CardNumberElement, injectStripe,} from 'react-stripe-elements';
-import {connect} from 'react-redux';
-import {fetchJson, requestOptions} from 'helpers/fetch';
-import type {State, Stripe3DSResult,} from 'pages/contributions-landing/contributionsLandingReducer';
-import {Stripe} from 'helpers/paymentMethods';
-import {type PaymentResult} from 'helpers/paymentIntegrations/readerRevenueApis';
-import {routes} from "../../../../helpers/routes";
+import React, { Component } from 'react';
+import { CardCVCElement, CardExpiryElement, CardNumberElement, injectStripe } from 'react-stripe-elements';
+import { connect } from 'react-redux';
+import { fetchJson, requestOptions } from 'helpers/fetch';
+import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
+import { Stripe } from 'helpers/paymentMethods';
+import { type PaymentResult } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { routes } from '../../../../helpers/routes';
 import {
   type Action,
   onThirdPartyPaymentAuthorised,
@@ -21,16 +21,16 @@ import {
   setStripeRecaptchaVerified,
   setStripeSetupIntentClientSecret,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import {type ContributionType} from 'helpers/contributions';
-import type {ErrorReason} from 'helpers/errorReasons';
-import {logException} from 'helpers/logger';
-import {trackComponentLoad} from 'helpers/tracking/behaviour';
-import type {IsoCountry} from 'helpers/internationalisation/country';
+import { type ContributionType } from 'helpers/contributions';
+import type { ErrorReason } from 'helpers/errorReasons';
+import { logException } from 'helpers/logger';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
-import type {Csrf as CsrfState} from 'helpers/csrf/csrfReducer';
-import type {CountryGroupId} from 'helpers/internationalisation/countryGroup';
-import {recaptchaEnabled} from 'helpers/recaptcha';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { recaptchaEnabled } from 'helpers/recaptcha';
 
 // ----- Types -----//
 
@@ -395,7 +395,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
         {recaptchaEnabled(this.props.countryGroupId, this.props.contributionType) &&
           <div>
-            <div id="robot_checkbox" className="robot_checkbox"/>
+            <div id="robot_checkbox" className="robot_checkbox" />
             {
               this.props.checkoutFormHasBeenSubmitted &&
               !this.props.recaptchaVerified ?

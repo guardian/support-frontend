@@ -25,7 +25,7 @@ import {
   setFormIsValid,
 } from './contributionsLandingActions';
 import { recaptchaEnabled } from 'helpers/recaptcha';
-import {Stripe} from "helpers/paymentMethods";
+import { Stripe } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
