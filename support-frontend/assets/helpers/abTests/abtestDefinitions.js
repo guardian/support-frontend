@@ -12,28 +12,6 @@ const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
 
 export const tests: Tests = {
-  recaptchaPresenceTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'recaptchaPresent',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 6,
-    targetPage: contributionsLandingPageMatch,
-  },
-
   usAmountsTest: {
     type: 'AMOUNTS',
     variants: [

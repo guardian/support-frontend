@@ -26,7 +26,6 @@
   geoData: GeoData,
   shareImageUrl: String,
   shareUrl: String,
-  v3recaptchaConfigPublicKey: String,
   v2recaptchaConfigPublicKey: String,
 
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
@@ -117,10 +116,8 @@
   window.guardian.forceCampaign = @settings.switches.experiments.get("forceCampaign").exists(_.isOn)
   window.guardian.recurringStripePaymentRequestButton = @settings.switches.experiments.get("recurringStripePaymentRequestButton").exists(_.isOn)
 
-  window.guardian.recaptchaV3 = @settings.switches.experiments.get("recaptchaV3").exists(_.isOn)
   window.guardian.recaptchaV2 = @settings.switches.experiments.get("recaptchaV2").exists(_.isOn)
 
-  window.guardian.v3recaptchaPublicKey = "@v3recaptchaConfigPublicKey"
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
   </script>
 }

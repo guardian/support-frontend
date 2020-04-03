@@ -72,8 +72,6 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
-  | { type: 'SET_V3_LOW_RISK', v3IsLowRisk: boolean }
-  | { type: 'SET_V2_LOW_RISK', v2IsLowRisk: boolean }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -93,6 +91,8 @@ export type Action =
   | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
   | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
   | { type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete: boolean }
+  | { type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret: string }
+  | { type: 'SET_STRIPE_RECAPTCHA_VERIFIED', recaptchaVerified: boolean }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -222,22 +222,6 @@ const setAmazonPayLoginObject = (amazonLoginObject: Object): Action => ({
   amazonLoginObject,
 });
 
-const setIsLowRiskV3 = (v3IsLowRisk: boolean): ((Function) => void) =>
-  (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({
-      type: 'SET_V3_LOW_RISK',
-      v3IsLowRisk,
-    })));
-  };
-
-const setIsLowRiskV2 = (v2IsLowRisk: boolean): ((Function) => void) =>
-  (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({
-      type: 'SET_V2_LOW_RISK',
-      v2IsLowRisk,
-    })));
-  };
-
 const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
   type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT',
   amazonPaymentsObject,
@@ -301,6 +285,16 @@ const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => Promise<S
 const setStripeCardFormComplete = (isComplete: boolean): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete })));
+  };
+
+const setStripeSetupIntentClientSecret = (setupIntentClientSecret: string): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret })));
+  };
+
+const setStripeRecaptchaVerified = (recaptchaVerified: boolean): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECAPTCHA_VERIFIED', recaptchaVerified })));
   };
 
 const sendFormSubmitEventForPayPalRecurring = () =>
@@ -762,8 +756,6 @@ export {
   setAmazonPayFatalError,
   setAmazonPayOrderReferenceId,
   setAmazonPayPaymentSelected,
-  setIsLowRiskV3,
-  setIsLowRiskV2,
   selectAmount,
   updateOtherAmount,
   paymentFailure,
@@ -790,5 +782,7 @@ export {
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
   setStripeCardFormComplete,
+  setStripeSetupIntentClientSecret,
+  setStripeRecaptchaVerified,
   updatePayPalButtonReady,
 };

@@ -44,6 +44,8 @@ trait Services {
 
   lazy val recaptchaService = new RecaptchaService(wsClient)
 
+  lazy val stripeService = new StripeSetupIntentService(appConfig.stage)
+
   lazy val allSettingsProvider: AllSettingsProvider = AllSettingsProvider.fromConfig(appConfig).valueOr(throw _)
 
   lazy val priceSummaryServiceProvider: PriceSummaryServiceProvider =

@@ -32,9 +32,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   switches: Switches,
   contributionTypes: ContributionTypes,
-  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId, boolean) => void,
-  v3isLowRisk: boolean,
-  isPostDeploymentTestUser: boolean,
+  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -43,8 +41,6 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-  v3isLowRisk: state.page.form.v3IsLowRisk,
-  isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -53,9 +49,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
     switches: Switches,
     countryId: IsoCountry,
     countryGroupId: CountryGroupId,
-    isStripeEnabled: boolean,
   ) => {
-    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId, isStripeEnabled);
+    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
   },
@@ -65,8 +60,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
-  const isStripeEnabled = props.isPostDeploymentTestUser ? true : props.v3isLowRisk;
-
 
   const renderChoiceCards = () => (
     <ChoiceCardGroup
@@ -86,7 +79,6 @@ function withProps(props: PropTypes) {
                 props.switches,
                 props.countryId,
                 props.countryGroupId,
-                isStripeEnabled,
               )
           }
           checked={props.contributionType === contributionType}
@@ -116,7 +108,6 @@ function withProps(props: PropTypes) {
                   props.switches,
                   props.countryId,
                   props.countryGroupId,
-                  isStripeEnabled,
                 )
               }
               checked={props.contributionType === contributionType}

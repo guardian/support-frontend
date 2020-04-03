@@ -53,14 +53,6 @@ trait Controllers {
     fontLoader
   )
 
-  lazy val recaptchaController = new RecaptchaController(
-    components = controllerComponents,
-    actionRefiners = actionRefiners,
-    recaptchaService = recaptchaService,
-    v3RecaptchaKey = appConfig.recaptchaConfigProvider.v3SecretKey,
-    v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey
-  )
-
   lazy val digitalPackController = new DigitalSubscription(
     priceSummaryServiceProvider,
     assetsResolver,
@@ -127,6 +119,14 @@ trait Controllers {
     supportWorkersClient,
     controllerComponents,
     actionRefiners
+  )
+
+  lazy val stripeController = new StripeController(
+    components = controllerComponents,
+    actionRefiners = actionRefiners,
+    recaptchaService = recaptchaService,
+    stripeService = stripeService,
+    v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey
   )
 
   lazy val regularContributionsController = new RegularContributions(

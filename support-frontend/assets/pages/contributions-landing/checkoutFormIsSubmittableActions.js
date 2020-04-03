@@ -24,6 +24,7 @@ import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
+import { recaptchaEnabled } from 'helpers/recaptcha';
 import {Stripe} from "helpers/paymentMethods";
 
 // ----- Types ----- //
@@ -111,25 +112,19 @@ function enableOrDisableForm() {
       state.page.form.userTypeFromIdentityResponse,
     );
 
-    const v2RecaptchaCheck =
-      window.guardian.recaptchaV2
-      && state.page.form.stripeCardFormData.formComplete
-      && (
-        state.common.internationalisation.countryGroupId === 'AUDCountries' ||
-        state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent'
-      )
-      && !state.page.user.isPostDeploymentTestUser
-        ? state.page.form.v2IsLowRisk
-        : true;
-
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
+
+    const stripeRecurringNotVerified =
+      recaptchaEnabled(state.common.internationalisation.countryGroupId, state.page.form.contributionType)
+      && state.page.form.paymentMethod === 'Stripe'
+      && !state.page.form.stripeCardFormData.recaptchaVerified;
 
     const shouldEnable =
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn
-      && v2RecaptchaCheck;
+      && !stripeRecurringNotVerified;
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };

@@ -51,7 +51,6 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
 import { logException } from 'helpers/logger';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -83,9 +82,7 @@ type PropTypes = {|
   country: IsoCountry,
   createStripePaymentMethod: () => void,
   amazonPayOrderReferenceId: string | null,
-  isRecaptchaRequired: boolean,
   checkoutFormHasBeenSubmitted: boolean,
-  v2IsLowRisk: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -117,11 +114,7 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
-  isRecaptchaRequired: window.guardian.recaptchaV2 &&
-    (state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent' ||
-    state.common.internationalisation.countryGroupId === 'AUDCountries'),
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
-  v2IsLowRisk: state.page.form.v2IsLowRisk,
 });
 
 
@@ -224,11 +217,6 @@ function onSubmit(props: PropTypes): Event => void {
   };
 }
 
-function renderVerificationCopy(countryGroupId: CountryGroupId, contributionType: ContributionType) {
-  trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
-  return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
-}
-
 // ----- Render ----- //
 
 function withProps(props: PropTypes) {
@@ -269,19 +257,6 @@ function withProps(props: PropTypes) {
           isTestUser={props.isTestUser}
           country={props.country}
         />
-
-        <div>
-          <div id="robot_checkbox" className={props.paymentMethod === 'Stripe' ? 'robot_checkbox' : 'hidden'} />
-          {
-            props.isRecaptchaRequired && props.paymentMethod === 'Stripe' && props.checkoutFormHasBeenSubmitted &&
-            !props.v2IsLowRisk ? renderVerificationCopy(props.countryGroupId, props.contributionType) : null
-          }
-        </div>
-        {/*
-          The <div> wrapper for the ContributionErrorMessage is required because a
-          child of ContributionSubmit contains an iframe and otherwise when its
-          sibling ContributionErrorMessage returns null, the iframe would be recreated.
-        */}
 
         <div>
           <ContributionErrorMessage />

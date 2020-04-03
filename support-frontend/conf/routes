@@ -62,15 +62,12 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.A
 POST /contribute/recurring/create                                  controllers.RegularContributions.create
 GET  /support-workers/status                                       controllers.SupportWorkersStatus.status(jobId: String)
 
+
+POST  /stripe/create-setup-intent/recaptcha                         controllers.StripeController.createSetupIntentRecaptcha()
+
 # this endpoint should be removed once identity remove
 # the need for a client token
 POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing
-
-# ----- Recaptcha ----- #
-+ nocsrf
-POST  /recaptchav2                                                  controllers.RecaptchaController.v2Verify()
-+ nocsrf
-POST  /recaptchav3                                                  controllers.RecaptchaController.v3Verify()
 
 # ------ Identity ------ #
 PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest

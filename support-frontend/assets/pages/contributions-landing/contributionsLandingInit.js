@@ -49,7 +49,7 @@ import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
-import { initRecaptchaV3, loadRecaptureV2 } from '../../helpers/recaptcha';
+import { loadRecaptchaV2 } from '../../helpers/recaptcha';
 
 // ----- Functions ----- //
 
@@ -57,10 +57,9 @@ function getInitialPaymentMethod(
   contributionType: ContributionType,
   countryId: IsoCountry,
   switches: Switches,
-  isLowRisk: boolean,
 ): PaymentMethod {
   const paymentMethodFromSession = getPaymentMethodFromSession();
-  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId, isLowRisk);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
 
   return (
     paymentMethodFromSession && validPaymentMethods.includes(getPaymentMethodFromSession())
@@ -133,7 +132,6 @@ function initialisePaymentMethods(
           contributionTypeSetting.contributionType,
           switches,
           countryId,
-          true,
         );
         // Stripe Payment Intents is currently only for one-offs, so always initialise Stripe Checkout for now
         if (validPayments.includes(Stripe)) {
@@ -218,7 +216,7 @@ function selectInitialContributionTypeAndPaymentMethod(
   const { switches } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
-  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches, state.page.form.v3IsLowRisk);
+  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }
 
@@ -256,16 +254,7 @@ const init = (store: Store<State, Action, Function>) => {
     firstName, lastName, email, billingState: stateField,
   }));
 
-  if (window.guardian.recaptchaV3 && state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-    initRecaptchaV3(dispatch);
-  }
-
-  if (window.guardian.recaptchaV2) {
-    if (state.common.internationalisation.countryGroupId === 'AUDCountries' ||
-      state.common.abParticipations.recaptchaPresenceTest === 'recaptchaPresent') {
-      loadRecaptureV2(dispatch);
-    }
-  }
+  loadRecaptchaV2();
 };
 
 
