@@ -19,12 +19,12 @@ import {
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { StateProvince } from 'helpers/internationalisation/country';
-import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 import type { State } from './contributionsLandingReducer';
 import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
+import {Stripe} from "helpers/paymentMethods";
 
 // ----- Types ----- //
 
@@ -93,12 +93,7 @@ const formIsValidParameters = (state: State) => ({
   firstName: state.page.form.formData.firstName,
   lastName: state.page.form.formData.lastName,
   email: state.page.form.formData.email,
-  stripeCardFormOk: !stripeCardFormIsIncomplete(
-    state.page.form.contributionType,
-    state.page.form.paymentMethod,
-    state.page.form.stripeCardFormData.formComplete,
-    state.common.abParticipations.stripeElementsRecurring,
-  ),
+  stripeCardFormOk: state.page.form.paymentMethod !== Stripe || state.page.form.stripeCardFormData.formComplete,
 });
 
 function enableOrDisableForm() {
