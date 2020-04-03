@@ -48,13 +48,11 @@ class Subscriptions(
     implicit val codec : com.gu.support.encoding.Codec[PriceCopy] = deriveCodec
   }
 
-  def pricingCopy(priceSummary: PriceSummary): PriceCopy = {
-    val discountCopy = for {
-      promotion <- priceSummary.promotions.headOption
-      discountedPrice <- promotion.discountedPrice
-    } yield PriceCopy(discountedPrice, promotion.description)
-    discountCopy.getOrElse(PriceCopy(priceSummary.price, ""))
-  }
+  def pricingCopy(priceSummary: PriceSummary): PriceCopy =
+    PriceCopy(
+      priceSummary.price,
+      priceSummary.promotions.headOption.map(_.description).getOrElse("")
+    )
 
   def getLandingPrices(countryGroup: CountryGroup): Map[String, PriceCopy] = {
     val service = priceSummaryServiceProvider.forUser(false)
@@ -69,7 +67,7 @@ class Subscriptions(
     val weekly = service.getPrices(GuardianWeekly, Nil)(countryGroup)(Domestic)(NoProductOptions)(Quarterly)(countryGroup.currency)
 
     val digitalSubscription = service
-      .getPrices(DigitalPack, List("DK0NT24WG"))(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
+      .getPrices(DigitalPack, List("ONE-FOR-ONE"))(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
 
     Map(GuardianWeekly.toString -> pricingCopy(weekly), DigitalPack.toString -> pricingCopy(digitalSubscription)) ++ paperMap
   }
