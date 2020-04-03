@@ -20,7 +20,7 @@ class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "find multiple promo codes" in {
-    val promotions = serviceWithFixtures.findPromotions(List(freeTrialPromoCode, GuardianWeekly.AnnualPromoCode))
+    val promotions = serviceWithFixtures.findPromotions(List(freeTrialPromoCode, DefaultPromotions.GuardianWeekly.NonGift.tenAnnual))
     promotions should contain (freeTrialWithCode)
     promotions should contain (guardianWeeklyWithCode)
   }
@@ -31,7 +31,7 @@ class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "find all the Guardian Weekly promotions" in {
-    val promotions = serviceWithFixtures.findPromotions(List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode))
+    val promotions = serviceWithFixtures.findPromotions(List(DefaultPromotions.GuardianWeekly.NonGift.tenAnnual, DefaultPromotions.GuardianWeekly.NonGift.sixForSix))
     promotions.length shouldBe 2
   }
 
