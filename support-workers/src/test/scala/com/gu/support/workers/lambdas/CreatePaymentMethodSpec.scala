@@ -40,7 +40,6 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
       createSalesforceContactState.get._1.paymentMethod match {
         case payPal: PayPalReferenceTransaction =>
           payPal.paypalBaid should be(validBaid)
-          payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
         case _ => fail()
       }
     }

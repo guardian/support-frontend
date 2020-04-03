@@ -45,12 +45,20 @@ case class CreditCardReferenceTransaction(
   stripePaymentType: Option[StripePaymentType]
 ) extends PaymentMethod
 
+object PayPalReferenceTransaction {
+  def apply(paypalBaid: String): PayPalReferenceTransaction =
+    new PayPalReferenceTransaction(
+      paypalBaid = paypalBaid,
+      paypalType = "ExpressCheckout",
+      `type` = "PayPal",
+      paymentGateway = PayPalGateway
+    )
+}
 case class PayPalReferenceTransaction(
   paypalBaid: String,
-  paypalEmail: String,
-  paypalType: String = "ExpressCheckout",
-  `type`: String = "PayPal",
-  paymentGateway: PaymentGateway = PayPalGateway
+  paypalType: String,
+  `type`: String,
+  paymentGateway: PaymentGateway
 ) extends PaymentMethod
 
 case class DirectDebitPaymentMethod(

@@ -3,7 +3,6 @@ package com.gu.support.workers.exceptions
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.paypal.PayPalError
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.stripe.StripeError
 import com.gu.support.workers.exceptions.RetryImplicits._
@@ -17,8 +16,6 @@ object ErrorHandler {
   val handleException: Throwable => Nothing = {
     //Stripe
     case e: StripeError => logAndRethrow(e.asRetryException)
-    //PayPal
-    case e: PayPalError => logAndRethrow(e.asRetryException)
     //Zuora
     case e: ZuoraErrorResponse => logAndRethrow(e.asRetryException)
     //Salesforce

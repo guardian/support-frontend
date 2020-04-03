@@ -2,7 +2,6 @@ package com.gu.support.workers.errors
 
 import java.net.{SocketException, SocketTimeoutException}
 
-import com.gu.paypal.PayPalError
 import com.gu.rest.{CodeBody, WebServiceClientError}
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
@@ -73,10 +72,6 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     new StripeError("invalid_request_error", "").asRetryException shouldBe a[RetryNone]
     new StripeError("api_error", "").asRetryException shouldBe a[RetryUnlimited]
     new StripeError("rate_limit_error", "").asRetryException shouldBe a[RetryUnlimited]
-
-    //PayPal
-    PayPalError(500, "").asRetryException shouldBe a[RetryUnlimited]
-    PayPalError(400, "").asRetryException shouldBe a[RetryNone]
 
     //Zuora
     ZuoraErrorResponse(false, List(ZuoraError("API_DISABLED", "tbc"))).asRetryException shouldBe a[RetryUnlimited]

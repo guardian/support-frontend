@@ -3,7 +3,6 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.i18n.{CountryGroup, Currency}
 import com.gu.monitoring.SafeLogger
-import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
@@ -40,7 +39,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       case stripe: StripePaymentFields =>
         createStripePaymentMethod(stripe, services.stripeService, state.product.currency)
       case paypal: PayPalPaymentFields =>
-        createPayPalPaymentMethod(paypal, services.payPalService)
+        createPayPalPaymentMethod(paypal)
       case dd: DirectDebitPaymentFields =>
         createDirectDebitPaymentMethod(dd, state.user)
       case _: ExistingPaymentFields =>
@@ -102,10 +101,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     })
   }
 
-  def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =
-    payPalService
-      .retrieveEmail(payPal.baid)
-      .map(PayPalReferenceTransaction(payPal.baid, _))
+  def createPayPalPaymentMethod(payPal: PayPalPaymentFields): Future[PayPalReferenceTransaction] =
+    Future.successful(PayPalReferenceTransaction(payPal.baid))
 
   def createDirectDebitPaymentMethod(dd: DirectDebitPaymentFields, user: User): Future[DirectDebitPaymentMethod] = {
     val addressLine = AddressLineTransformer.combinedAddressLine(user.billingAddress.lineOne, user.billingAddress.lineTwo)
