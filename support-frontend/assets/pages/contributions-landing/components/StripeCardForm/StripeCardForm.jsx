@@ -197,6 +197,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
+        trackComponentLoad('contributions-recaptcha-client-token-received');
+
         this.props.setStripeRecaptchaVerified(true);
 
         fetch(
@@ -211,6 +213,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
           .then(response => response.json())
           .then((json) => {
             if (json.client_secret) {
+              trackComponentLoad('contributions-recaptcha-verified');
+
               this.props.setStripeSetupIntentClientSecret(json.client_secret);
             } else {
               throw new Error(`Missing client_secret field in server response: ${json}`);
