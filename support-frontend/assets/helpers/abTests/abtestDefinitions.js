@@ -79,5 +79,6 @@ export const tests: Tests = {
     referrerControlled: false,
     seed: 3,
     targetPage: subsShowcaseAndDigiSubPages,
+    optimizeId: '0FxHy4ruSIOqVvgREPUwvw',
   },
 };
