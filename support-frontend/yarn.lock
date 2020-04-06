@@ -1915,7 +1915,7 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.14.2.tgz#b1789edbb28099f5834ce8319401142a84500d59"
   integrity sha512-e+yrYM2WRRb5C4BkJuGstTbaPTn7WS+TdKT2LoxwYBlXWSM3qrHOOFHCTc97uuEgT5E39GqzA/6oScrwmSr9BA==
 
-"@guardian/src-foundations@^0.16":
+"@guardian/src-foundations@^0.16", "@guardian/src-foundations@^0.16.1":
   version "0.16.1"
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.16.1.tgz#d5e52a57012c588d146b05ded7f9fbc4a9af40d5"
   integrity sha512-E6YDqq53gy5CoO8xFPWDBjiYiI0o+4BE1/mFcwkpWGwtpkSnxi21LhkaQ63r+KRxoDB29clc86ChbNHXw9keFA==
@@ -1939,10 +1939,31 @@
   dependencies:
     "@guardian/src-foundations" "^0.17.0"
 
+"@guardian/src-inline-error@^0.16.1":
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-inline-error/-/src-inline-error-0.16.1.tgz#696d8aef35390fa90312ec62167736807f5a7870"
+  integrity sha512-I7CFCmOHGA0z7nz2lsLhL7XFAZtbWIgB5DE2EqxG11T74hkRn3Nzvzxoivn7r7XvXNuSW0pctcszW6e6yDz6tA==
+  dependencies:
+    "@guardian/src-helpers" "^0.16.1"
+    "@guardian/src-svgs" "^0.16.1"
+
 "@guardian/src-svgs@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.14.0.tgz#3a5a6d385f2639aca884b5302f3d3ae6e919e290"
   integrity sha512-ZGwVwVlX3YwG62xO1YjxaHyGFJC8Us80GPeyY8CMv5lfshYd0gGDNJN6vjUI3ssULjcP8ckGOTFcTFs3hOUrMw==
+
+"@guardian/src-svgs@^0.16.1":
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.16.1.tgz#331d6bb30513c45b09e5b4807832eb4a146a27ea"
+  integrity sha512-OudfWJaKpTTP0J1QckqX0NmfneXgQ5YieZ/4em2lNXGZFEfYyxHnIXrAQE5LjmIGR8eJQoIikkwWiAFt4ziHXQ==
+
+"@guardian/src-text-input@^0.16.1":
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-text-input/-/src-text-input-0.16.1.tgz#53fb1355230c5be3a11ea969686fc3ac9831ac3d"
+  integrity sha512-o4nnyiBr2ZVYDADgmSeDdYLz52V7e0wmdBXOTmEpurONLY2bBogM9+XWwNLBdmX8YxdzOIlwc9UeEa/RChFn9Q==
+  dependencies:
+    "@guardian/src-helpers" "^0.16.1"
+    "@guardian/src-inline-error" "^0.16.1"
 
 "@guardian/src-utilities@^0.14.0":
   version "0.14.0"
