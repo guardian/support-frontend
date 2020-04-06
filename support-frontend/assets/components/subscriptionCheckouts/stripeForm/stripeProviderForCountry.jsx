@@ -29,6 +29,7 @@ function StripeProviderForCountry(props: PropTypes) {
           stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
           validateForm={props.validateForm}
           buttonText={props.buttonText}
+          csrf={props.csrf}
         />
       </Elements>
     </StripeProvider>

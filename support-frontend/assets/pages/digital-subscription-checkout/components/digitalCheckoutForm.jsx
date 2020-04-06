@@ -239,6 +239,7 @@ function DigitalCheckoutForm(props: PropTypes) {
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Start your free trial now"
+              csrf={props.csrf}
             />
           </FormSectionHiddenUntilSelected>
           <FormSectionHiddenUntilSelected

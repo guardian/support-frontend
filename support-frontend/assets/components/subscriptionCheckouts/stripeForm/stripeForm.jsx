@@ -17,6 +17,7 @@ import { fetchJson, requestOptions } from 'helpers/fetch';
 import { logException } from 'helpers/logger';
 import type { Option } from 'helpers/types/option';
 import { appropriateErrorMessage } from 'helpers/errorReasons';
+import type { Csrf } from '../../../helpers/csrf/csrfReducer';
 
 // Types
 
@@ -30,6 +31,7 @@ export type StripeFormPropTypes = {
   validateForm: Function,
   buttonText: string,
   stripeSetupIntentEndpoint: string,
+  csrf: Csrf,
 }
 
 type StateTypes = {
@@ -111,7 +113,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     // is handled in the callback below by checking the value of paymentWaiting.
     fetchJson(
       this.props.stripeSetupIntentEndpoint,
-      requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
+      requestOptions({ stripePublicKey: this.props.stripeKey }, 'omit', 'POST', this.props.csrf),
     ).then((result) => {
       if (result.client_secret) {
         this.setState({ setupIntentClientSecret: result.client_secret });

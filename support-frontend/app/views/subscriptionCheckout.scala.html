@@ -63,7 +63,7 @@
         uat: "@uatPayPalConfig.payPalEnvironment"
       };
       window.guardian.csrf = { token: "@CSRF.getToken.value" };
-      window.guardian.stripeSetupIntentEndpoint = "@stripeSetupIntentEndpoint";
+      window.guardian.stripeSetupIntentEndpoint = "/stripe/create-setup-intent";
 
       window.guardian.checkoutPostcodeLookup = "@settings.switches.experiments.get("checkoutPostcodeLookup").exists(_.isOn)"
   </script>
