@@ -1865,9 +1865,9 @@
   integrity sha512-e+yrYM2WRRb5C4BkJuGstTbaPTn7WS+TdKT2LoxwYBlXWSM3qrHOOFHCTc97uuEgT5E39GqzA/6oScrwmSr9BA==
 
 "@guardian/src-foundations@^0.16":
-  version "0.16.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.16.0-alpha.4.tgz#742b7642165f4526a33f0713af1c9c3bd31a8306"
-  integrity sha512-ceSeMoMHiQq4BRO20uchPJId0jrOM6oLUEkZu9UKCx+OZ797BrZpjz71BURiWWwaLc+PMx+3nE/Uc2DnAt/Q5Q==
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.16.1.tgz#d5e52a57012c588d146b05ded7f9fbc4a9af40d5"
+  integrity sha512-E6YDqq53gy5CoO8xFPWDBjiYiI0o+4BE1/mFcwkpWGwtpkSnxi21LhkaQ63r+KRxoDB29clc86ChbNHXw9keFA==
 
 "@guardian/src-helpers@^0.14.0":
   version "0.14.0"

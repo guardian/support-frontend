@@ -5,7 +5,7 @@ import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, Action, ControllerComponents, Result}
+import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import services.{RecaptchaService, StripeSetupIntentService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -14,6 +14,11 @@ import scala.concurrent.{ExecutionContext, Future}
 case class SetupIntentRequestRecaptcha(token: String, stripePublicKey: String)
 object SetupIntentRequestRecaptcha {
   implicit val decoder: Decoder[SetupIntentRequestRecaptcha] = deriveDecoder
+}
+
+case class SetupIntentRequest(stripePublicKey: String)
+object SetupIntentRequest {
+  implicit val decoder: Decoder[SetupIntentRequest] = deriveDecoder
 }
 
 class StripeController(
@@ -25,10 +30,10 @@ class StripeController(
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
   import actionRefiners._
-  import cats.implicits._
   import cats.data.EitherT
-  import services.SetupIntent.encoder
+  import cats.implicits._
   import io.circe.syntax._
+  import services.SetupIntent.encoder
 
   def createSetupIntentRecaptcha: Action[SetupIntentRequestRecaptcha] = PrivateAction.async(circe.json[SetupIntentRequestRecaptcha]) { implicit request =>
     val token = request.body.token
@@ -39,7 +44,7 @@ class StripeController(
         stripeService(request.body.stripePublicKey).map(response => Ok(response.asJson))
       } else {
         logger.info(s"Returning status Forbidden for Stripe Intent request because Recaptcha verification failed")
-        EitherT.rightT[Future,String](Forbidden(""))
+        EitherT.rightT[Future, String](Forbidden(""))
       }
     } yield response
 
@@ -49,6 +54,16 @@ class StripeController(
         InternalServerError("")
       },
       identity
+    )
+  }
+
+  def createSetupIntent: Action[SetupIntentRequest] = PrivateAction.async(circe.json[SetupIntentRequest]) { implicit request =>
+    stripeService(request.body.stripePublicKey).fold(
+      error => {
+        logger.error(error)
+        InternalServerError("")
+      },
+      response => Ok(response.asJson)
     )
   }
 }

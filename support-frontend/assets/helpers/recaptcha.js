@@ -1,6 +1,6 @@
 // @flow
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type {ContributionType} from "helpers/contributions";
+import type { ContributionType } from 'helpers/contributions';
 
 const recaptchaEnabled = (countryGroupId: CountryGroupId, contributionType: ContributionType): boolean =>
   window.guardian.recaptchaV2

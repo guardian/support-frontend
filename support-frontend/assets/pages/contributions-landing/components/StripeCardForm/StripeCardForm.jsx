@@ -3,20 +3,13 @@
 // ----- Imports ----- //
 
 import React, { Component } from 'react';
-import {
-  CardCVCElement,
-  CardExpiryElement,
-  CardNumberElement,
-  injectStripe,
-} from 'react-stripe-elements';
+import { CardCVCElement, CardExpiryElement, CardNumberElement, injectStripe } from 'react-stripe-elements';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
-import type {
-  State,
-  Stripe3DSResult,
-} from 'pages/contributions-landing/contributionsLandingReducer';
+import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 import { Stripe } from 'helpers/paymentMethods';
 import { type PaymentResult } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { routes } from '../../../../helpers/routes';
 import {
   type Action,
   onThirdPartyPaymentAuthorised,
@@ -25,8 +18,8 @@ import {
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
   setStripeCardFormComplete,
-  setStripeSetupIntentClientSecret,
   setStripeRecaptchaVerified,
+  setStripeSetupIntentClientSecret,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import { type ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -243,13 +236,13 @@ class CardForm extends Component<PropTypes, StateTypes> {
       } else {
         // Create a new Setup Intent, then complete the payment
         fetchJson(
-          window.guardian.stripeSetupIntentEndpoint,
-          requestOptions({ publicKey: this.props.stripeKey }, 'omit', 'POST', null),
+          routes.stripeSetupIntent,
+          requestOptions({ stripePublicKey: this.props.stripeKey }, 'omit', 'POST', this.props.csrf),
         ).then((result) => {
           if (result.client_secret) {
             this.handleCardSetupForRecurring(result.client_secret);
           } else {
-            throw new Error(`Missing client_secret field in response from ${window.guardian.stripeSetupIntentEndpoint}`);
+            throw new Error(`Missing client_secret field in response from ${routes.stripeSetupIntent}`);
           }
         }).catch((error) => {
           logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
@@ -402,7 +395,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
         {recaptchaEnabled(this.props.countryGroupId, this.props.contributionType) &&
           <div>
-            <div id="robot_checkbox" className="robot_checkbox"/>
+            <div id="robot_checkbox" className="robot_checkbox" />
             {
               this.props.checkoutFormHasBeenSubmitted &&
               !this.props.recaptchaVerified ?
