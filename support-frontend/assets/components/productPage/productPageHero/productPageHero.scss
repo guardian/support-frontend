@@ -64,19 +64,9 @@
   .component-left-margin-section__content {
     @include mq($from: tablet) {
       border-left: 1px solid gu-colour(neutral-86);
-      .component-product-page-hero-content {
-        margin-left: -1px;
-      }
     }
     @include multiline-bottom-border;
   }
-}
-
-.component-product-page-hero-content {
-  border-top: 1px solid rgba(#fff, 0.5);
-  padding: $gu-v-spacing  ($gu-h-spacing / 2);
-  background: gu-colour(neutral-7);
-  color: #ffffff;
 }
 
 .payment-selection-container {
