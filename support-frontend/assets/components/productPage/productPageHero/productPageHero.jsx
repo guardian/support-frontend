@@ -109,10 +109,9 @@ ProductPageHero.defaultProps = {
 };
 
 ProductPageHeroHeader.defaultProps = {
-  content: null,
   orderIsAGift: false,
   giftImage: null,
 };
 
-export { HeroHanger, HeroWrapper, HeroHeading, ProductPageHeroHeader };
+export { HeroWrapper, HeroHeading, ProductPageHeroHeader };
 export default ProductPageHero;

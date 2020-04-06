@@ -51,7 +51,8 @@ const content = (
         <Content needsHigherZindex>
           <Text>
             <LargeParagraph>
-              We offer two different subscription types: voucher booklets and home delivery.
+              We offer two different subscription types: subscription cards and home delivery.
+              Pick the most convenient option available in your area
             </LargeParagraph>
           </Text>
           <Tabs />
