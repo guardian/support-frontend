@@ -349,6 +349,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Pay now"
+              csrf={props.csrf}
             />
           </FormSectionHiddenUntilSelected>
           <FormSectionHiddenUntilSelected
