@@ -4,6 +4,7 @@ import { USV1 } from './data/testAmountsData';
 
 // ----- Tests ----- //
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
+export type LandingPageDesignSystemTestVariants = 'control' | 'ds';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
@@ -78,5 +79,27 @@ export const tests: Tests = {
     targetPage: digitalCheckout,
     optimizeId: '3sSS81FKT6SXawegvxyK-A',
   },
-};
 
+  landingPageDesignSystemTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'ds',
+      },
+
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    seed: 3,
+    targetPage: contributionsLandingPageMatch,
+  },
+};
