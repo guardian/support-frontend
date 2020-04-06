@@ -17,7 +17,7 @@ import { fetchJson, requestOptions } from 'helpers/fetch';
 import { logException } from 'helpers/logger';
 import type { Option } from 'helpers/types/option';
 import { appropriateErrorMessage } from 'helpers/errorReasons';
-import type {Csrf} from "../../../helpers/csrf/csrfReducer";
+import type { Csrf } from '../../../helpers/csrf/csrfReducer';
 
 // Types
 
