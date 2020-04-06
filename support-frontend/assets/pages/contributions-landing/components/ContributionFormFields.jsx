@@ -28,6 +28,10 @@ import {
   updateBillingState,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
+import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
+import ContributionTextInputDs from './ContributionTextInputDs';
+
+
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -46,6 +50,7 @@ type PropTypes = {|
   updateBillingState: Event => void,
   checkIfEmailHasPassword: Event => void,
   contributionType: ContributionType,
+  designSystemTestVariant: LandingPageDesignSystemTestVariants,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -65,6 +70,7 @@ const mapStateToProps = (state: State) => ({
   isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
+  designSystemTestVariant: state.common.abParticipations.landingPageDesignSystemTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -88,9 +94,8 @@ function withProps(props: PropTypes) {
     checkoutFormHasBeenSubmitted,
   } = props;
 
-  return (
-    <div className="form-fields">
-      <h3 className="hidden-heading">Your details</h3>
+  const renderControl = () => (
+    <>
       <ContributionTextInput
         id="contributionEmail"
         name="contribution-email"
@@ -155,6 +160,43 @@ function withProps(props: PropTypes) {
         isValid={checkBillingState(billingState)}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
       />
+    </>
+  );
+
+  const renderDesignSystemFields = () => (
+    <>
+      <ContributionTextInputDs
+        id="contributionEmail"
+        name="contribution-email"
+        label="Email address"
+        value={email}
+        type="email"
+        autoComplete="email"
+        placeholder="example@domain.com"
+        onInput={props.updateEmail}
+        onChange={props.checkIfEmailHasPassword}
+        isValid={checkEmail(email)}
+        pattern={emailRegexPattern}
+        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+        errorMessage="Enter a valid email address"
+        required
+        disabled={isSignedIn}
+      />
+      <Signout isSignedIn />
+      <MustSignIn
+        isSignedIn={props.isSignedIn}
+        userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
+        contributionType={props.contributionType}
+        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+        email={props.email}
+      />
+    </>
+  );
+
+  return (
+    <div className="form-fields">
+      <h3 className="hidden-heading">Your details</h3>
+      {this.props.designSystemTestVariant === 'ds' ? renderDesignSystemFields() : renderControl()}
     </div>
   );
 }
