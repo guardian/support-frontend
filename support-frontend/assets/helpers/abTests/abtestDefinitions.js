@@ -5,8 +5,6 @@ import { USV1, UKV1Lower, UKV2Higher } from './data/testAmountsData';
 // ----- Tests ----- //
 export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
-export type PersonalisedThankYouPageTestVariants = 'control' | 'personalised' | 'notintest';
-export type PostContributionReminderCopyTestVariants = 'control' | 'extendedCopy' | 'notintest';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
@@ -34,27 +32,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: usOnlyLandingPage,
     seed: 5,
-  },
-  postContributionReminderCopyTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'extendedCopy',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 4,
-    targetPage: contributionsLandingPageMatch,
   },
 
   stripePaymentRequestButtonVsNoButton: {
