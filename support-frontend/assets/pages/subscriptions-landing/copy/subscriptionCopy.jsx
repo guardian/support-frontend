@@ -228,6 +228,7 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
 
 const getDigitalCopy = (state: State) => {
   if (state.common.abParticipations.digitalPackMonthlyOfferTest === 'one-for-one') {
+    // $FlowIgnore - just for the sake of this AB test
     return state.page.pricingCopy.DigitalPackVariant;
   }
   return state.page.pricingCopy[DigitalPack];
