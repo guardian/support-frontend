@@ -96,9 +96,17 @@
   z-index: 10;
 }
 
+.component-content__content,
+.component-content__content--grey {
+  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
+}
+
 .component-content__content {
   max-width: gu-span(12);
-  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
+}
+
+.component-content__content--grey {
+  background-color: gu-colour(neutral-97);
 }
 
 

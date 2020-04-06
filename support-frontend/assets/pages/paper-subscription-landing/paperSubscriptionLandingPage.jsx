@@ -48,7 +48,7 @@ const content = (
     >
       <CampaignHeader />
       {paperHasDeliveryEnabled() &&
-        <Content needsHigherZindex>
+        <Content needsHigherZindex innerBackground="grey">
           <Text>
             <LargeParagraph>
               We offer two different subscription types: subscription cards and home delivery.

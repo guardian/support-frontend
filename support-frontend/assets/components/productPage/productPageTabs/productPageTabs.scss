@@ -71,6 +71,7 @@
   box-shadow: inset 0 4px 0 0 gu-colour(highlight-main);
   text-decoration: none;
   pointer-events: none;
+  background-color: gu-colour(neutral-100);
   cursor: default;
   &:focus {
     box-shadow: inset 0 4px 0 0 gu-colour(highlight-dark);
