@@ -11,7 +11,7 @@ import { setTab, type TabActions } from '../../paperSubscriptionLandingPageActio
 
 import { type ContentPropTypes } from './helpers';
 import DeliveryTab from './deliveryTab';
-import CollectionTab from './collectionTab';
+import SubscriptionCardTab from './subsCardTab';
 import './content.scss';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 
@@ -33,7 +33,7 @@ class Content extends Component<ContentPropTypes> {
     const { selectedTab, setTabAction } = this.props;
 
     return selectedTab === Collection
-      ? <CollectionTab
+      ? <SubscriptionCardTab
         {...{ selectedTab, setTabAction }}
         getRef={(r) => { if (r) { this.tabRef = r; } }}
       />

@@ -18,7 +18,7 @@ import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 
 export const tabs: {[PaperFulfilmentOptions]: {name: string, href: string}} = {
   Collection: {
-    name: 'Voucher Booklet',
+    name: 'Subscription card',
     href: paperSubsUrl(false),
   },
   HomeDelivery: {

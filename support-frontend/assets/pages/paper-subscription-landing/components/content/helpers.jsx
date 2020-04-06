@@ -123,7 +123,7 @@ const ContentForm = ({
   selectedTab: ActiveTabState,
   setTabAction: typeof setTab,
 |}) => (
-  <Content appearance="feature" id="subscribe">
+  <Content id="subscribe" border={false}>
     <Text
       title={title}
     >
