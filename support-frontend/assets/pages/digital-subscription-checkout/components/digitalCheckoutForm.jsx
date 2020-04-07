@@ -89,7 +89,6 @@ type PropTypes = {|
   validateForm: () => Function,
   formIsValid: Function,
   addressErrors: Array<Object>,
-  stripeSetupIntentEndpoint: string,
 |};
 
 // ----- Map State/Props ----- //
@@ -113,7 +112,6 @@ function mapStateToProps(state: CheckoutState) {
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
     addressErrors: state.page.billingAddress.fields.formErrors,
-    stripeSetupIntentEndpoint: getGlobal('stripeSetupIntentEndpoint'),
   };
 }
 
@@ -235,7 +233,7 @@ function DigitalCheckoutForm(props: PropTypes) {
               submitForm={props.submitForm}
               allErrors={[...props.addressErrors]}
               setStripePaymentMethod={props.setStripePaymentMethod}
-              stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
+              stripeSetupIntentEndpoint={routes.stripeSetupIntent}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Start your free trial now"

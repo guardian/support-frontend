@@ -90,7 +90,6 @@ type PropTypes = {|
   country: IsoCountry,
   isTestUser: boolean,
   validateForm: () => Function,
-  stripeSetupIntentEndpoint: string,
   csrf: Csrf,
   currencyId: IsoCurrency,
   payPalHasLoaded: boolean,
@@ -111,7 +110,6 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     deliveryAddressErrors: state.page.billingAddress.fields.formErrors,
     isTestUser: state.page.checkout.isTestUser,
     country: state.common.internationalisation.countryId,
-    stripeSetupIntentEndpoint: getGlobal('stripeSetupIntentEndpoint'),
     csrf: state.page.csrf,
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
@@ -323,7 +321,7 @@ function PaperCheckoutForm(props: PropTypes) {
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
               setStripePaymentMethod={props.setStripePaymentMethod}
-              stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
+              stripeSetupIntentEndpoint={routes.stripeSetupIntent}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Pay now"

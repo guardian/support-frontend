@@ -51,7 +51,6 @@ class Application(
   settingsProvider: AllSettingsProvider,
   guardianDomain: GuardianDomain,
   stage: Stage,
-  stripeIntentUrl: String,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components)
@@ -180,7 +179,6 @@ class Application(
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
-      stripeSetupIntentEndpoint = stripeIntentUrl,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,

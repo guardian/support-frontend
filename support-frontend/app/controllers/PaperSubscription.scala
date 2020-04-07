@@ -39,8 +39,7 @@ class PaperSubscription(
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent],
-  stripeSetupIntentEndpoint: String
+  fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -114,8 +113,7 @@ class PaperSubscription(
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),
-      payPalConfigProvider.get(true),
-      stripeSetupIntentEndpoint
+      payPalConfigProvider.get(true)
     )
   }
 

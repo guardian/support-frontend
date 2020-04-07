@@ -118,8 +118,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         stringsConfig = new StringsConfig(),
         settingsProvider = settingsProvider,
         supportUrl = "support.thegulocal.com",
-        fontLoaderBundle = Left(RefPath("test")),
-        stripeSetupIntentEndpoint = appConf.getString("stripe.intent.url")
+        fontLoaderBundle = Left(RefPath("test"))
       )
     }
 

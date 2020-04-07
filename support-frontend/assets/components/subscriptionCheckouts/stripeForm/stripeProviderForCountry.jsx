@@ -6,6 +6,7 @@ import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { type StripeFormPropTypes } from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import {routes} from "helpers/routes";
 
 // Types
 
@@ -26,7 +27,7 @@ function StripeProviderForCountry(props: PropTypes) {
           allErrors={props.allErrors}
           stripeKey={stripeKey}
           setStripePaymentMethod={props.setStripePaymentMethod}
-          stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
+          stripeSetupIntentEndpoint={routes.stripeSetupIntent}
           validateForm={props.validateForm}
           buttonText={props.buttonText}
           csrf={props.csrf}

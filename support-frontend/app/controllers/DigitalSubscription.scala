@@ -37,8 +37,7 @@ class DigitalSubscription(
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent],
-  stripeSetupIntentEndpoint: String
+  fontLoaderBundle: Either[RefPath, StyleContent]
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
@@ -143,8 +142,7 @@ class DigitalSubscription(
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
-      payPalConfigProvider.get(true),
-      stripeSetupIntentEndpoint
+      payPalConfigProvider.get(true)
     )
   }
 
