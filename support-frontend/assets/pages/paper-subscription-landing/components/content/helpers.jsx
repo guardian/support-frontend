@@ -74,16 +74,24 @@ const ContentHelpBlock = ({
 
   const contactUs = useDotcomContactPage() ? <ContactPageLink linkText="contact us" /> :
   <span>call our customer services team on {telephoneLink}</span>;
-
-  return (
-    <Content appearance="feature" modifierClasses={['faqs']}>
-      {flashSaleIsActive('Paper', GBPCountries) &&
+  const tAndCs = flashSaleIsActive('Paper', GBPCountries) ?
+    (
       <Text title="Promotion terms and conditions">
         <SansParagraph>
           Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTermsUrl}>here</a>.
         </SansParagraph>
       </Text>
-      }
+    ) :
+    (
+      <Text title="Terms and conditions">
+        <SansParagraph>
+          For full Guardian and Observer voucher and home delivery terms and conditions, see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions">here</a>.
+        </SansParagraph>
+      </Text>
+    );
+  return (
+    <Content appearance="feature" modifierClasses={['faqs']}>
+      {tAndCs}
       <Text title="FAQ and help">
         <SansParagraph>
           If you’ve got any more questions, you might well find the answers in
