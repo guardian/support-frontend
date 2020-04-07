@@ -18,8 +18,11 @@ Mappings:
     PROD:
       StripeConfig: live
 
+Conditions:
+  ProdOnlyResource: !Equals [!Ref Stage, PROD]
+
 Resources:
-  StripeIntentLambda:
+  LambdaFunctionOverHttps:
     Type: AWS::Serverless::Function
     Properties:
       Description: Returns a stripe setup intent token so we can get authorisation of a recurring payment on the client side
@@ -54,15 +57,17 @@ Resources:
                     !FindInMap [ StageMap, !Ref Stage, StripeConfig ]
   StripeIntentAlarm:
       Type: AWS::CloudWatch::Alarm
-#        Condition: !Equals [!Ref Stage, PROD]
+      Condition: ProdOnlyResource
       Properties:
+        AlarmActions:
+          - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
         AlarmName: StripeIntentLambdaAlarm
         AlarmDescription: Alarm if StripeIntentLambda errors too many times
         Namespace: AWS/Lambda
         MetricName: Errors
         Dimensions:
           - Name: FunctionName
-            Value: !Ref StripeIntentLambda
+            Value: !Ref LambdaFunctionOverHttps
         Statistic: Sum
         ComparisonOperator: GreaterThanThreshold
         Threshold: 0
