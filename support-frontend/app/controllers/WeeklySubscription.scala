@@ -42,7 +42,6 @@ class WeeklySubscription(
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
-  stripeSetupIntentEndpoint: String,
   stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
@@ -152,7 +151,6 @@ class WeeklySubscription(
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
       payPalConfigProvider.get(true),
-      stripeSetupIntentEndpoint,
       orderIsAGift
     )
   }

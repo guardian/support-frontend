@@ -11,7 +11,6 @@ import com.typesafe.config.{Config => TypesafeConfig}
 class Configuration(config: TypesafeConfig) {
 
   lazy val stage = Stage.fromString(config.getString("stage")).get
-  lazy val stripeIntentUrl = config.getString("stripe.intent.url")
 
   lazy val sentryDsn = config.getOptionalString("sentry.dsn")
 

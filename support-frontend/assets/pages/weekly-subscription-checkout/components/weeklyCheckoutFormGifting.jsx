@@ -72,7 +72,6 @@ import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidat
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Heading from 'components/heading/heading';
 import './weeklyCheckout.scss';
-import { getGlobal } from 'helpers/globals';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
@@ -101,8 +100,6 @@ type PropTypes = {|
   country: IsoCountry,
   isTestUser: boolean,
   validateForm: () => Function,
-  stripeSetupIntentEndpoint: string,
-  stripeSetupIntentEndpoint: string,
   csrf: Csrf,
   currencyId: IsoCurrency,
   payPalHasLoaded: boolean,
@@ -126,7 +123,6 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     billingAddressErrors: state.page.billingAddress.fields.formErrors,
     isTestUser: state.page.checkout.isTestUser,
     country: state.common.internationalisation.countryId,
-    stripeSetupIntentEndpoint: getGlobal('stripeSetupIntentEndpoint'),
     csrf: state.page.csrf,
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
@@ -345,7 +341,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
               setStripePaymentMethod={props.setStripePaymentMethod}
-              stripeSetupIntentEndpoint={props.stripeSetupIntentEndpoint}
+              stripeSetupIntentEndpoint={routes.stripeSetupIntent}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Pay now"
