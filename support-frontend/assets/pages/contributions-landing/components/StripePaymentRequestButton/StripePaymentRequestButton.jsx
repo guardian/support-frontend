@@ -349,6 +349,7 @@ function initialisePaymentRequest(props: PropTypes) {
         setUpPaymentListenerSca(props, paymentRequest, paymentMethod);
       } else {
         trackComponentLoad(`${paymentMethod}-hidden`);
+        props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
       }
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
