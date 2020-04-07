@@ -139,7 +139,7 @@ const ContentForm = ({
           {
             selectedTab === Collection
               ? <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo>
-              : <LinkTo tab={Collection} setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
+              : <LinkTo tab={Collection} setTabAction={setTabAction}>Switch to Subscription card</LinkTo>
           }
         </SansParagraph>
       </Text>
