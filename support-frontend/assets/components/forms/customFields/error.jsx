@@ -32,7 +32,13 @@ function Error({ error, htmlFor, children }: Props) {
         htmlFor={htmlFor}
         className="component-form-error__error"
       >
-        {error}
+        {(error === 'Temporary COVID message') && (
+          <li className="component-form-error__summary-error">
+            The address and postcode you entered is outside of our delivery area. You may want to
+            consider purchasing a <a href="/uk/subscribe/paper">voucher subscription</a>
+          </li>)
+        }
+        {(error !== 'Temporary COVID message') && error}
       </Element>
     </div>
   );
