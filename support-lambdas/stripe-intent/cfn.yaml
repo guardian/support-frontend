@@ -65,15 +65,15 @@ Resources:
       Properties:
         AlarmActions:
           - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Join
-        - ' '
-        - - !FindInMap [ Constants, Alarm, Urgent ]
-          - 'PROD'
-          - 'Stripe create setup intent Lambda failing'
-      AlarmDescription: !Join
-        - ' '
-        - - 'Impact - Stripe will not work for subscriptions or recurring contributions.'
-          - !FindInMap [ Constants, Alarm, Process ]
+        AlarmName: !Join
+            - ' '
+            - !FindInMap [ Constants, Alarm, Urgent ]
+            - 'PROD'
+            - 'Stripe create setup intent Lambda failing'
+        AlarmDescription: !Join
+            - ' '
+            - 'Impact - Stripe will not work for subscriptions or recurring contributions.'
+            - !FindInMap [ Constants, Alarm, Process ]
         Namespace: AWS/Lambda
         MetricName: Errors
         Dimensions:
