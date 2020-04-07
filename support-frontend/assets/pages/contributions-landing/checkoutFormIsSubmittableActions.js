@@ -25,7 +25,7 @@ import {
   setFormIsValid,
 } from './contributionsLandingActions';
 import { recaptchaEnabled } from 'helpers/recaptcha';
-import { Stripe } from 'helpers/paymentMethods';
+import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 
 // ----- Types ----- //
 
@@ -94,7 +94,10 @@ const formIsValidParameters = (state: State) => ({
   firstName: state.page.form.formData.firstName,
   lastName: state.page.form.formData.lastName,
   email: state.page.form.formData.email,
-  stripeCardFormOk: state.page.form.paymentMethod !== Stripe || state.page.form.stripeCardFormData.formComplete,
+  stripeCardFormOk: !stripeCardFormIsIncomplete(
+    state.page.form.paymentMethod,
+    state.page.form.stripeCardFormData.formComplete,
+  ),
 });
 
 function enableOrDisableForm() {

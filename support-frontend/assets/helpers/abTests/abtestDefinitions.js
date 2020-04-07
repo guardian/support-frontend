@@ -3,9 +3,8 @@ import type { Tests } from './abtest';
 import { USV1 } from './data/testAmountsData';
 
 // ----- Tests ----- //
-export type StripePaymentRequestButtonScaTestVariants = 'control' | 'sca' | 'notintest';
-
 export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
+export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
@@ -34,14 +33,14 @@ export const tests: Tests = {
     seed: 5,
   },
 
-  stripePaymentRequestButtonSca: {
+  stripePaymentRequestButtonVsNoButton: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'sca',
+        id: 'button',
       },
     ],
     audiences: {
@@ -50,7 +49,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: window.guardian && !!window.guardian.recurringStripePaymentRequestButton,
+    isActive: true,
     referrerControlled: false,
     seed: 2,
     targetPage: contributionsLandingPageMatch,
