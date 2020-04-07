@@ -72,7 +72,7 @@ Resources:
               - 'Stripe create setup intent Lambda failing'
         AlarmDescription: !Join
             - ' '
-            - - 'Impact - Stripe will not work for subscriptions or recurring contributions.'
+            - - 'Impact - Credit card checkout will not work for subscriptions or recurring contributions.'
               - !FindInMap [ Constants, Alarm, Process ]
         Namespace: AWS/Lambda
         MetricName: Errors
