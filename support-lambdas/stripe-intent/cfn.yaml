@@ -17,6 +17,10 @@ Mappings:
       StripeConfig: test
     PROD:
       StripeConfig: live
+  Constants:
+    Alarm:
+      Process: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      Urgent: URGENT 9-5 -
 
 Conditions:
   ProdOnlyResource: !Equals [!Ref Stage, PROD]
@@ -61,8 +65,15 @@ Resources:
       Properties:
         AlarmActions:
           - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-        AlarmName: StripeIntentLambdaAlarm
-        AlarmDescription: Alarm if StripeIntentLambda errors too many times
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ Constants, Alarm, Urgent ]
+          - 'PROD'
+          - 'Stripe create setup intent Lambda failing'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Stripe will not work for subscriptions or recurring contributions.'
+          - !FindInMap [ Constants, Alarm, Process ]
         Namespace: AWS/Lambda
         MetricName: Errors
         Dimensions:
