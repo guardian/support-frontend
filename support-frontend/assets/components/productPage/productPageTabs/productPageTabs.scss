@@ -13,24 +13,16 @@
 }
 
 .component-product-page-tabs__li {
-  overflow: hidden;
+  &:first-child {
+    border-left: 1px solid gu-colour(neutral-86);
+    border-right: 1px solid gu-colour(neutral-86);
+  }
   &:last-child {
+    border-left: none;
     border-right: 1px solid gu-colour(neutral-86);
   }
   @include mq($until:phablet) {
     flex: 1 1 0;
-  }
-}
-
-.component-product-page-tabs__li + .component-product-page-tabs__li .component-product-page-tabs__tab {
-  &:before {
-    position: absolute;
-    bottom: $gu-h-spacing*0.8;
-    left: 0;
-    width: 1px;
-    height: 100%;
-    background: gu-colour(neutral-86);
-    content: '';
   }
 }
 
