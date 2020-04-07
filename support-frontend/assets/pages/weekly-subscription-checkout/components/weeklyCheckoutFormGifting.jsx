@@ -72,7 +72,6 @@ import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidat
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Heading from 'components/heading/heading';
 import './weeklyCheckout.scss';
-import { getGlobal } from 'helpers/globals';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
