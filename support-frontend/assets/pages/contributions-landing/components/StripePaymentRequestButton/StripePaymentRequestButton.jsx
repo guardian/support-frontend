@@ -343,10 +343,12 @@ function initialisePaymentRequest(props: PropTypes) {
   paymentRequest.canMakePayment().then((result) => {
     const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
     if (paymentMethod) {
-      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
-      trackComponentClick(`${paymentMethod}-loaded`);
       if (paymentMethod === 'StripeApplePay' || props.abTestButtonVsNoButton === 'button') {
+        trackComponentLoad(`${paymentMethod}-displayed`);
+        props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
         setUpPaymentListenerSca(props, paymentRequest, paymentMethod);
+      } else {
+        trackComponentLoad(`${paymentMethod}-hidden`);
       }
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
