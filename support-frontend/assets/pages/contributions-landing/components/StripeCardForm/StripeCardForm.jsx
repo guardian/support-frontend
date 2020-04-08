@@ -208,7 +208,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
               this.props.setStripeSetupIntentClientSecret(json.client_secret);
             } else {
-              throw new Error(`Missing client_secret field in server response: ${json}`);
+              throw new Error(`Missing client_secret field in server response`, json);
             }
           })
           .catch((err) => {
