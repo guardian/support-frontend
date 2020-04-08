@@ -113,7 +113,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     // is handled in the callback below by checking the value of paymentWaiting.
     fetchJson(
       this.props.stripeSetupIntentEndpoint,
-      requestOptions({ stripePublicKey: this.props.stripeKey }, 'omit', 'POST', this.props.csrf),
+      requestOptions({ stripePublicKey: this.props.stripeKey },  'same-origin','POST', this.props.csrf),
     ).then((result) => {
       if (result.client_secret) {
         this.setState({ setupIntentClientSecret: result.client_secret });
