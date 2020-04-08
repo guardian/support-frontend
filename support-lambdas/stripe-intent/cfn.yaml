@@ -84,4 +84,3 @@ Resources:
         Threshold: 0
         EvaluationPeriods: 1
         Period: 60
-        TreatMissingData: "breaching"
