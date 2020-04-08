@@ -1,5 +1,33 @@
+// -----  gu-sass ----- //
+@import '~stylesheets/gu-sass/gu-sass';
+
+
 .component-terms-privacy {
 	font-size: 14px;
+
+  a {
+    color: inherit;
+  }
+}
+
+.patrons {
+
+  margin-top: $gu-v-spacing;
+  margin-bottom: $gu-v-spacing;
+
+  h4 {
+    font-family: $gu-headline;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 20px;
+  }
+
+  p {
+    margin-top: $gu-v-spacing * 0.5;
+    font-family: $gu-text-sans-web;
+    font-size: 14px;
+    line-height: 17px;
+  }
 
   a {
     color: inherit;
