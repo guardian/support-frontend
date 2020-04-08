@@ -88,15 +88,20 @@ class StripeController(
 
   def createSetupIntentWithAuth: Action[SetupIntentRequest] =
     authenticatedAction(subscriptionsClientId).async(circe.json[SetupIntentRequest]) {
+
+      val cloudwatchEvent = createSetupIntentRequest(stage, "authorisedEndpoint");
+      AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+
       implicit request: AuthRequest[SetupIntentRequest] =>
         identityService.getUser(request.user.minimalUser).fold(
           error => {
+            logger.error(s"createSetupIntentWithAuth returning InternalServerError because: $error")
             Future.successful(InternalServerError)
           },
           user => {
             stripeService(request.body.stripePublicKey).fold(
               error => {
-                logger.error(error)
+                logger.error(s"createSetupIntentWithAuth returning InternalServerError because: $error")
                 InternalServerError("")
               },
               response => Ok(response.asJson)
