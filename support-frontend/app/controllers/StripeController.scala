@@ -66,4 +66,15 @@ class StripeController(
       response => Ok(response.asJson)
     )
   }
+
+  def createSetupIntentWithAuth: Action[SetupIntentRequest] =
+    authenticatedAction(subscriptionsClientId).async(circe.json[SetupIntentRequest]) { implicit request =>
+    stripeService(request.body.stripePublicKey).fold(
+      error => {
+        logger.error(error)
+        InternalServerError("")
+      },
+      response => Ok(response.asJson)
+    )
+  }
 }
