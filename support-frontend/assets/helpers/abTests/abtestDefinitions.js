@@ -3,11 +3,11 @@ import type { Tests } from './abtest';
 import { USV1 } from './data/testAmountsData';
 
 // ----- Tests ----- //
-export type ChoiceCardsProductSetTestR3Variants = 'control' | 'yellow';
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
+export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
   usAmountsTest: {
@@ -55,4 +55,26 @@ export const tests: Tests = {
     targetPage: contributionsLandingPageMatch,
   },
 
+  digitalPackMonthlyOfferTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'one-for-one',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    seed: 4,
+    targetPage: subsShowcaseAndDigiSubPages,
+    optimizeId: '0FxHy4ruSIOqVvgREPUwvw',
+  },
 };

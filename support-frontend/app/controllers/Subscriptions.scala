@@ -8,6 +8,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog._
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.pricing.{PriceSummary, PriceSummaryServiceProvider}
+import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.workers.{Monthly, Quarterly}
 import config.StringsConfig
 import lib.RedirectWithEncodedQueryString
@@ -58,7 +59,7 @@ class Subscriptions(
     val service = priceSummaryServiceProvider.forUser(false)
 
     val paperMap = if (countryGroup == CountryGroup.UK) {
-      val paper = service.getPrices(Paper, List("GE19SUBS"))(CountryGroup.UK)(Collection)(Sunday)(Monthly)(GBP)
+      val paper = service.getPrices(Paper, Nil)(CountryGroup.UK)(Collection)(Sunday)(Monthly)(GBP)
       Map(Paper.toString -> pricingCopy(paper))
     }
     else
@@ -67,9 +68,22 @@ class Subscriptions(
     val weekly = service.getPrices(GuardianWeekly, Nil)(countryGroup)(Domestic)(NoProductOptions)(Quarterly)(countryGroup.currency)
 
     val digitalSubscription = service
-      .getPrices(DigitalPack, List("ONE-FOR-ONE"))(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
+      .getPrices(
+        DigitalPack,
+        List(DefaultPromotions.DigitalSubscription.Monthly.fiftyPercentOff3Months)
+      )(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
 
-    Map(GuardianWeekly.toString -> pricingCopy(weekly), DigitalPack.toString -> pricingCopy(digitalSubscription)) ++ paperMap
+    //To support monthly pricing AB test
+    val digitalSubscriptionVariant = service
+      .getPrices(
+        DigitalPack, List(DefaultPromotions.DigitalSubscription.Monthly.oneForOne)
+      )(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
+
+    Map(
+      GuardianWeekly.toString -> pricingCopy(weekly),
+      DigitalPack.toString -> pricingCopy(digitalSubscription),
+      "DigitalPackVariant" -> pricingCopy(digitalSubscriptionVariant)
+    ) ++ paperMap
   }
 
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>

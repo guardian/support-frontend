@@ -7,7 +7,7 @@ import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.fromStage
 import com.gu.support.config.{Stage, ZuoraConfig}
-import com.gu.support.promotions.{PromoCode, PromotionService}
+import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromotionService}
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
@@ -144,7 +144,7 @@ object ProductSubscriptionBuilders {
     }
 
     private[this] def isIntroductoryPromotion(maybePromoCode: Option[PromoCode]) =
-      maybePromoCode.contains(catalog.GuardianWeekly.SixForSixPromoCode) && guardianWeekly.billingPeriod == SixWeekly
+      maybePromoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix) && guardianWeekly.billingPeriod == SixWeekly
   }
 
 }
