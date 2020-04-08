@@ -44,6 +44,9 @@
   transition: box-shadow 0.2s;
   line-height: 1;
   cursor: pointer;
+  @include mq($until:mobileMedium) {
+    font-size: 16px;
+  }
 
   @include mq($from:phablet) {
     min-width: gu-span(3) + $gu-h-spacing/2;
