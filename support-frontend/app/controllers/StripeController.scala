@@ -1,6 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
+import actions.CustomActionBuilders.AuthRequest
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
@@ -68,13 +69,14 @@ class StripeController(
   }
 
   def createSetupIntentWithAuth: Action[SetupIntentRequest] =
-    authenticatedAction(subscriptionsClientId).async(circe.json[SetupIntentRequest]) { implicit request =>
-    stripeService(request.body.stripePublicKey).fold(
-      error => {
-        logger.error(error)
-        InternalServerError("")
-      },
-      response => Ok(response.asJson)
-    )
-  }
+    authenticatedAction(subscriptionsClientId).async(circe.json[SetupIntentRequest]) {
+      implicit request: AuthRequest[SetupIntentRequest] =>
+        stripeService(request.body.stripePublicKey).fold(
+          error => {
+            logger.error(error)
+            InternalServerError("")
+          },
+          response => Ok(response.asJson)
+        )
+    }
 }
