@@ -72,20 +72,6 @@ class StripeController(
     }
   }
 
-  def createSetupIntent: Action[SetupIntentRequest] = PrivateAction.async(circe.json[SetupIntentRequest]) { implicit request =>
-
-    val cloudwatchEvent = createSetupIntentRequest(stage, "CSRF-only");
-    AwsCloudWatchMetricPut(client)(cloudwatchEvent)
-
-    stripeService(request.body.stripePublicKey).fold(
-      error => {
-        logger.error(s"Returning status InternalServerError for Create Stripe Intent request because: $error")
-        InternalServerError("")
-      },
-      response => Ok(response.asJson)
-    )
-  }
-
   def createSetupIntentWithAuth: Action[SetupIntentRequest] =
     authenticatedAction(subscriptionsClientId).async(circe.json[SetupIntentRequest]) {
 
