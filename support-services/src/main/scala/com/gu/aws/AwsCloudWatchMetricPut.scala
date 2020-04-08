@@ -73,7 +73,16 @@ object AwsCloudWatchMetricPut {
       )
     )
 
-  def getMetricRequest(name: MetricName, dimensions: Map[MetricDimensionName, MetricDimensionValue]) : MetricRequest =
+  def createSetupIntentRequest(stage: Stage, mode: String): MetricRequest =
+    getMetricRequest(
+      MetricName("CreateSetupIntent"),
+      Map(
+        MetricDimensionName("Mode") -> MetricDimensionValue(mode),
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
+      )
+    )
+
+  private def getMetricRequest(name: MetricName, dimensions: Map[MetricDimensionName, MetricDimensionValue]) : MetricRequest =
     MetricRequest(
       MetricNamespace(s"support-frontend"),
       name,

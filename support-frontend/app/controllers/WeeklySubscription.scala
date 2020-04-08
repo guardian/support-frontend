@@ -14,7 +14,7 @@ import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.{ProductPromotionCopy, PromotionServiceProvider}
+import com.gu.support.promotions.{DefaultPromotions, ProductPromotionCopy, PromotionServiceProvider}
 import config.StringsConfig
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -72,7 +72,10 @@ class WeeklySubscription(
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
-    val defaultPromos = if (orderIsAGift) List("GW20GIFT1Y") else List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
+    val defaultPromos = if (orderIsAGift)
+      DefaultPromotions.GuardianWeekly.Gift.all
+     else
+      DefaultPromotions.GuardianWeekly.NonGift.all
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val promoCodes = defaultPromos ++ queryPromos
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, orderIsAGift)
@@ -134,7 +137,10 @@ class WeeklySubscription(
     val css = "weeklySubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
-    val defaultPromos = if (orderIsAGift) List("GW20GIFT1Y") else List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
+    val defaultPromos = if (orderIsAGift)
+      DefaultPromotions.GuardianWeekly.Gift.all
+    else
+      DefaultPromotions.GuardianWeekly.NonGift.all
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ defaultPromos
 
     subscriptionCheckout(

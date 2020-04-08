@@ -5,8 +5,9 @@ import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.support.catalog._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
+import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
 import com.gu.support.promotions.ServicesFixtures.discountPromoCode
-import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
+import com.gu.support.promotions.{DefaultPromotions, DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
 import org.joda.time.Months
 import org.scalatest.OptionValues._
@@ -36,7 +37,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
   it should "return correct prices for Guardian Weekly" in {
     val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
-    val guardianWeekly = service.getPrices(GuardianWeekly, List(discountPromoCode, GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode))
+    val guardianWeekly = service.getPrices(GuardianWeekly, List(discountPromoCode, NonGift.tenAnnual, NonGift.sixForSix))
 
     // Quarterly should have the discount promotion only
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 1
@@ -54,12 +55,12 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     guardianWeekly(Europe)(RestOfWorld)(NoProductOptions)(Annual)(EUR).price shouldBe 270
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
-      .find(_.promoCode == GuardianWeekly.AnnualPromoCode).value.discountedPrice shouldBe Some(135.00)
+      .find(_.promoCode == NonGift.tenAnnual).value.discountedPrice shouldBe Some(135.00)
 
     // SixWeekly should have the 6 for 6 promotion and the discount
     guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions.size shouldBe 2
     guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions
-      .find(_.promoCode == GuardianWeekly.SixForSixPromoCode).value.introductoryPrice.value.price shouldBe 6
+      .find(_.promoCode == NonGift.sixForSix).value.introductoryPrice.value.price shouldBe 6
 
   }
 

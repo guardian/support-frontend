@@ -122,7 +122,9 @@ trait Controllers {
     actionRefiners = actionRefiners,
     recaptchaService = recaptchaService,
     stripeService = stripeService,
-    v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey
+    identityService = identityService,
+    v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey,
+    appConfig.stage
   )
 
   lazy val regularContributionsController = new RegularContributions(
