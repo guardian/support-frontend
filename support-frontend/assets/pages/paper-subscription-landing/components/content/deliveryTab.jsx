@@ -6,7 +6,6 @@ import React from 'react';
 import Content, { Divider } from 'components/content/content';
 import Text from 'components/text/text';
 import UnorderedList from 'components/list/unorderedList';
-import OrderedList from 'components/list/orderedList';
 import GridImage from 'components/gridImage/gridImage';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
