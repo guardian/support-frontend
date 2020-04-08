@@ -18,7 +18,7 @@ import type {
 } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
+// import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import { setupStripe } from 'helpers/stripe';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 

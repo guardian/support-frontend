@@ -9,7 +9,6 @@ import { fetchJson, requestOptions } from 'helpers/fetch';
 import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 import { Stripe } from 'helpers/paymentMethods';
 import { type PaymentResult } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { routes } from '../../../../helpers/routes';
 import {
   type Action,
   onThirdPartyPaymentAuthorised,
@@ -194,7 +193,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
         this.props.setStripeRecaptchaVerified(true);
 
-        fetch(
+        fetchJson(
           '/stripe/create-setup-intent/recaptcha',
           requestOptions(
             { token, stripePublicKey: this.props.stripeKey },
@@ -203,7 +202,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
             this.props.csrf,
           ),
         )
-          .then(response => response.json())
           .then((json) => {
             if (json.client_secret) {
               trackComponentLoad('contributions-recaptcha-verified');
