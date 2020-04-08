@@ -45,8 +45,10 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
   }
 
   render() {
-    const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
+    // const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
+    const showStripePaymentRequestButton = false;
 
+    // TODO - Payment Request Button is disabled until it uses Recaptcha
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
       const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
       const apiKey = getStripeKey(stripeAccount, this.props.country, this.props.isTestUser);

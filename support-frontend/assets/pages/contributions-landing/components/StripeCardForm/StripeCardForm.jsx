@@ -139,7 +139,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
     } else {
       this.setupRecurringHandlers();
 
-      if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
+      if (recaptchaEnabled(this.props.contributionType)) {
         if (window.grecaptcha && window.grecaptcha.render) {
           this.setupRecaptchaCallback();
         } else {
@@ -226,28 +226,11 @@ class CardForm extends Component<PropTypes, StateTypes> {
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
-      if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
-        /* Recaptcha verification is required for setupIntent creation.
-        If setupIntentClientSecret is ready then complete the payment now.
-        If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
-        if (this.props.setupIntentClientSecret) {
-          this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
-        }
-      } else {
-        // Create a new Setup Intent, then complete the payment
-        fetchJson(
-          routes.stripeSetupIntent,
-          requestOptions({ stripePublicKey: this.props.stripeKey }, 'omit', 'POST', this.props.csrf),
-        ).then((result) => {
-          if (result.client_secret) {
-            this.handleCardSetupForRecurring(result.client_secret);
-          } else {
-            throw new Error(`Missing client_secret field in response from ${routes.stripeSetupIntent}`);
-          }
-        }).catch((error) => {
-          logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
-          this.props.paymentFailure('internal_error');
-        });
+      /* Recaptcha verification is required for setupIntent creation.
+      If setupIntentClientSecret is ready then complete the payment now.
+      If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
+      if (this.props.setupIntentClientSecret) {
+        this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
       }
     });
   }
@@ -393,7 +376,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
 
-        {recaptchaEnabled(this.props.countryGroupId, this.props.contributionType) &&
+        {recaptchaEnabled(this.props.contributionType) &&
           <div>
             <div id="robot_checkbox" className="robot_checkbox" />
             {

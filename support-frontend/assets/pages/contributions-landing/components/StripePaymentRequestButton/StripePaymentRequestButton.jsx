@@ -206,13 +206,14 @@ function onClick(event, props: PropTypes) {
 // Requests a new SetupIntent and returns the associated clientSecret
 function fetchClientSecret(props: PropTypes): Promise<string> {
   return fetchJson(
-    routes.stripeSetupIntent,
+    // TODO - use recaptcha endpoint
+    routes.stripeSetupIntentWithAuth,
     requestOptions({ stripePublicKey: props.stripeKey }, 'omit', 'POST', props.csrf),
   ).then((result) => {
     if (result.client_secret) {
       return Promise.resolve(result.client_secret);
     }
-    return Promise.reject(new Error(`Missing client_secret field in response from ${routes.stripeSetupIntent}`));
+    return Promise.reject(new Error(`Missing client_secret field in response from ${routes.stripeSetupIntentWithAuth}`));
 
   });
 }

@@ -119,7 +119,7 @@ function enableOrDisableForm() {
     dispatch(setFormIsValid(formIsValid));
 
     const stripeRecurringNotVerified =
-      recaptchaEnabled(state.common.internationalisation.countryGroupId, state.page.form.contributionType)
+      recaptchaEnabled(state.page.form.contributionType)
       && state.page.form.paymentMethod === 'Stripe'
       && !state.page.form.stripeCardFormData.recaptchaVerified;
 
