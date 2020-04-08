@@ -4,12 +4,14 @@ import actions.CustomActionBuilders
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{createSetupIntentRequest, client}
 import com.gu.support.config.Stage
+import actions.CustomActionBuilders.AuthRequest
+import com.gu.monitoring.SafeLogger
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
-import services.{RecaptchaService, StripeSetupIntentService}
+import services.{IdentityService, RecaptchaService, StripeSetupIntentService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -29,6 +31,7 @@ class StripeController(
   actionRefiners: CustomActionBuilders,
   recaptchaService: RecaptchaService,
   stripeService: StripeSetupIntentService,
+  identityService: IdentityService,
   v2RecaptchaKey: String,
   stage: Stage
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
@@ -82,4 +85,28 @@ class StripeController(
       response => Ok(response.asJson)
     )
   }
+
+  def createSetupIntentWithAuth: Action[SetupIntentRequest] =
+    authenticatedAction(subscriptionsClientId).async(circe.json[SetupIntentRequest]) {
+
+      val cloudwatchEvent = createSetupIntentRequest(stage, "authorisedEndpoint");
+      AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+
+      implicit request: AuthRequest[SetupIntentRequest] =>
+        identityService.getUser(request.user.minimalUser).fold(
+          error => {
+            logger.error(s"createSetupIntentWithAuth returning InternalServerError because: $error")
+            Future.successful(InternalServerError)
+          },
+          user => {
+            stripeService(request.body.stripePublicKey).fold(
+              error => {
+                logger.error(s"createSetupIntentWithAuth returning InternalServerError because: $error")
+                InternalServerError("")
+              },
+              response => Ok(response.asJson)
+            )
+          }
+        ).flatten
+    }
 }

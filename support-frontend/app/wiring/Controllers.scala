@@ -122,6 +122,7 @@ trait Controllers {
     actionRefiners = actionRefiners,
     recaptchaService = recaptchaService,
     stripeService = stripeService,
+    identityService = identityService,
     v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey,
     appConfig.stage
   )

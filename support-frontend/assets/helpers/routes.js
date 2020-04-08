@@ -39,6 +39,7 @@ const routes: {
   postcodeLookup: '/postcode-lookup',
   createSignInUrl: '/identity/signin-url',
   stripeSetupIntent: '/stripe/create-setup-intent',
+  stripeSetupIntentWithAuth: '/stripe/create-setup-intent/auth',
 };
 
 const createReminderEndpoint = isProd() ?

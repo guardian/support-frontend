@@ -232,7 +232,7 @@ function DigitalCheckoutForm(props: PropTypes) {
               submitForm={props.submitForm}
               allErrors={[...props.addressErrors]}
               setStripePaymentMethod={props.setStripePaymentMethod}
-              stripeSetupIntentEndpoint={routes.stripeSetupIntent}
+              stripeSetupIntentEndpoint={routes.stripeSetupIntentWithAuth}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Start your free trial now"
