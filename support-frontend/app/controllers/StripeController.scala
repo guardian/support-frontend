@@ -51,19 +51,20 @@ class StripeController(
         response <- if (recaptchaResponse.success) {
           stripeService(request.body.stripePublicKey).map(response => Ok(response.asJson))
         } else {
-          logger.info(s"Returning status Forbidden for Stripe Intent request because Recaptcha verification failed")
+          logger.warn(s"Returning status Forbidden for Create Stripe Intent Recaptcha request because Recaptcha verification failed")
           EitherT.rightT[Future, String](Forbidden(""))
         }
       } yield response
 
       result.fold(
         error => {
-          logger.error(error)
+          logger.error(s"Returning status InternalServerError for Create Stripe Intent Recaptcha request because: $error")
           InternalServerError("")
         },
         identity
       )
     } else {
+      logger.warn(s"Returning status BadRequest for Create Stripe Intent Recaptcha request because user provided no one-time-token value")
       Future.successful(BadRequest("reCAPTCHA one-time-token required"))
     }
   }
@@ -75,7 +76,7 @@ class StripeController(
 
     stripeService(request.body.stripePublicKey).fold(
       error => {
-        logger.error(error)
+        logger.error(s"Returning status InternalServerError for Create Stripe Intent request because: $error")
         InternalServerError("")
       },
       response => Ok(response.asJson)
