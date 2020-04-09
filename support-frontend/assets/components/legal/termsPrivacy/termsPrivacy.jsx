@@ -25,33 +25,22 @@ type PropTypes = {|
 function TermsPrivacy(props: PropTypes) {
   const terms = <a href={contributionsTermsLinks[props.countryGroupId]}>Terms and Conditions</a>;
   const privacy = <a href={privacyLink}>Privacy Policy</a>;
-
-  const getRegionalAmount = (countryGroupId: CountryGroupId): number => {
-    const isoCurrency: IsoCurrency = fromCountryGroupId(countryGroupId);
-    switch (isoCurrency) {
-      case 'GBP':
-        return 100;
-      case 'USD':
-        return 135;
-      case 'EUR':
-        return 117;
-      case 'AUD':
-        return 185;
-      case 'CAD':
-        return 167;
-      case 'NZD':
-        return 200;
-      default:
-        return 100;
-    }
-  };
-  const regionalAmount = `${currencies[fromCountryGroupId(props.countryGroupId)].glyph}${getRegionalAmount(props.countryGroupId)}`;
+  const regionalAmounts = {
+    'GBP': 100,
+    'USD': 135,
+    'EUR': 117,
+    'AUD': 185,
+    'CAD': 167,
+    'NZD': 200
+  }
+  const getRegionalAmount = (countryGroupId: CountryGroupId): number => regionalAmounts[fromCountryGroupId(countryGroupId)];
+  const regionalAmountString = `${currencies[fromCountryGroupId(props.countryGroupId)].glyph}${getRegionalAmount(props.countryGroupId)}`;
   const patronsLink = <a href="https://patrons.theguardian.com/join">Find out more today</a>;
   const patronText = (
     <div className="patrons">
       <h4>Guardian Patrons programme</h4>
       <p>
-        If you would like to support us at a higher level, from {regionalAmount} a month,
+        If you would like to support us at a higher level, from {regionalAmountString} a month,
         you can join us as a Guardian Patron. {patronsLink}
       </p>
     </div>
