@@ -37,7 +37,7 @@ function TermsPrivacy(props: PropTypes) {
     const currency: IsoCurrency = fromCountryGroupId(props.countryGroupId) || 'GBP';
     return `${currencies[currency].glyph}${regionalAmounts[currency]}`;
   };
-  const patronsLink = <a href="https://patrons.theguardian.com/join">Find out more today</a>;
+  const patronsLink = <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">Find out more today</a>;
   const patronText = (
     <div className="patrons">
       <h4>Guardian Patrons programme</h4>
