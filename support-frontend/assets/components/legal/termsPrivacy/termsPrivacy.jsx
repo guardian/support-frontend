@@ -32,20 +32,24 @@ function TermsPrivacy(props: PropTypes) {
     AUD: 185,
     CAD: 167,
     NZD: 200,
-  }
-  const getRegionalAmount = (countryGroupId: CountryGroupId): number => regionalAmounts[fromCountryGroupId(countryGroupId)];
-  const regionalAmountString = `${currencies[fromCountryGroupId(props.countryGroupId)].glyph}${getRegionalAmount(props.countryGroupId)}`;
+  };
+  const getRegionalAmountString = (): string => {
+    let currency: ?IsoCurrency = fromCountryGroupId(props.countryGroupId);
+    if (!currency) {
+      currency = 'GBP';
+    }
+    return `${currencies[currency].glyph}${regionalAmounts[currency]}`;
+  };
   const patronsLink = <a href="https://patrons.theguardian.com/join">Find out more today</a>;
   const patronText = (
     <div className="patrons">
       <h4>Guardian Patrons programme</h4>
       <p>
-        If you would like to support us at a higher level, from {regionalAmountString} a month,
+        If you would like to support us at a higher level, from {getRegionalAmountString()} a month,
         you can join us as a Guardian Patron. {patronsLink}
       </p>
     </div>
   );
-
 
   if (props.campaignName && campaigns[props.campaignName] && campaigns[props.campaignName].termsAndConditions) {
     return campaigns[props.campaignName].termsAndConditions(
