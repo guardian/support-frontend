@@ -34,10 +34,7 @@ function TermsPrivacy(props: PropTypes) {
     NZD: 200,
   };
   const getRegionalAmountString = (): string => {
-    let currency: ?IsoCurrency = fromCountryGroupId(props.countryGroupId);
-    if (!currency) {
-      currency = 'GBP';
-    }
+    const currency: IsoCurrency = fromCountryGroupId(props.countryGroupId) || 'GBP';
     return `${currencies[currency].glyph}${regionalAmounts[currency]}`;
   };
   const patronsLink = <a href="https://patrons.theguardian.com/join">Find out more today</a>;
