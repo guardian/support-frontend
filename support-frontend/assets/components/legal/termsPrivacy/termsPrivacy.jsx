@@ -26,12 +26,12 @@ function TermsPrivacy(props: PropTypes) {
   const terms = <a href={contributionsTermsLinks[props.countryGroupId]}>Terms and Conditions</a>;
   const privacy = <a href={privacyLink}>Privacy Policy</a>;
   const regionalAmounts = {
-    'GBP': 100,
-    'USD': 135,
-    'EUR': 117,
-    'AUD': 185,
-    'CAD': 167,
-    'NZD': 200
+    GBP: 100,
+    USD: 135,
+    EUR: 117,
+    AUD: 185,
+    CAD: 167,
+    NZD: 200,
   }
   const getRegionalAmount = (countryGroupId: CountryGroupId): number => regionalAmounts[fromCountryGroupId(countryGroupId)];
   const regionalAmountString = `${currencies[fromCountryGroupId(props.countryGroupId)].glyph}${getRegionalAmount(props.countryGroupId)}`;
