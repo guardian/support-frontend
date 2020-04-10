@@ -4,10 +4,9 @@
 
 import React from 'react';
 
-import Content, { Divider } from 'components/content/content';
+import Content from 'components/content/content';
 import Text from 'components/text/text';
 import UnorderedList from 'components/list/unorderedList';
-import OrderedList from 'components/list/orderedList';
 import GridImage from 'components/gridImage/gridImage';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
@@ -27,15 +26,14 @@ const ContentVoucherFaqBlock = () => (
     />
   }
   >
-    <Text title="How to use our vouchers">
-      <OrderedList items={[
-        'Pick your subscription package below',
-        'We’ll send you a book of vouchers that contain one voucher per paper in your subscription',
-        'Take your voucher to your retailer. Your vouchers will be accepted at retailers across the UK, including most independent newsagents',
-      ]}
-      />
+    <Text>
+        Pick your subscription package below. We’ll send you a book of vouchers that
+        contain one voucher per paper in your subscription.
     </Text>
-    <Divider small />
+    <Text>
+        Take your voucher to your retailer. Your vouchers will be accepted at retailers
+        across the UK, including most independent newsagents.
+    </Text>
     <Text title="Giving you peace of mind">
       <UnorderedList items={[
         'Your newsagent won’t lose out; we’ll pay them the same amount that they receive if you pay cash for your paper',
@@ -49,7 +47,7 @@ const ContentVoucherFaqBlock = () => (
 const CollectionTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
   <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
     <ContentVoucherFaqBlock />
-    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below: Voucher" />
+    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below" />
     <ContentHelpBlock
       faqLink={
         <a
