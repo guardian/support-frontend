@@ -26,6 +26,7 @@ import {
   ContactPageLink,
   useDotcomContactPage,
 } from 'helpers/dotcomContactPage';
+import InfoSvg from './info.svg';
 
 // Types
 export type ContentPropTypes = {|
@@ -152,7 +153,7 @@ const ContentForm = ({
         </SansParagraph>
       </Text>
     }
-    <ProductPageInfoChip>
+    <ProductPageInfoChip icon={<InfoSvg />}>
       {getPageInfoChip()}
     </ProductPageInfoChip>
   </Content>
