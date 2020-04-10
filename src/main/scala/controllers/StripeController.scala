@@ -30,7 +30,7 @@ class StripeController(
     cc.parsers,
     cc.executionContext,
     cloudWatchService,
-    RateLimitingSettings(10, 1.hour),
+    RateLimitingSettings(5, 5.hours),
     paymentProvider = PaymentProvider.Stripe
   )
 
