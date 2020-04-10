@@ -12,8 +12,12 @@ import { setTab, type TabActions } from '../../paperSubscriptionLandingPageActio
 import { type ContentPropTypes } from './helpers';
 import DeliveryTab from './deliveryTab';
 import SubscriptionCardTab from './subsCardTab';
+import CollectionTab from './collectionTab';
 import './content.scss';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
+
+// TODO: update this to get value from window.guardian
+const tabToUseForCollection = 'subscriptions';
 
 // ----- Render ----- //
 class Content extends Component<ContentPropTypes> {
@@ -32,15 +36,23 @@ class Content extends Component<ContentPropTypes> {
   render() {
     const { selectedTab, setTabAction } = this.props;
 
-    return selectedTab === Collection
-      ? <SubscriptionCardTab
+    if (selectedTab === Collection) {
+      return tabToUseForCollection === 'voucher'
+        ? <CollectionTab
+          {...{ selectedTab, setTabAction }}
+          getRef={(r) => { if (r) { this.tabRef = r; } }}
+        />
+
+        : <SubscriptionCardTab
+          {...{ selectedTab, setTabAction }}
+          getRef={(r) => { if (r) { this.tabRef = r; } }}
+        />;
+    }
+    return (
+      <DeliveryTab
         {...{ selectedTab, setTabAction }}
         getRef={(r) => { if (r) { this.tabRef = r; } }}
-      />
-      : <DeliveryTab
-        {...{ selectedTab, setTabAction }}
-        getRef={(r) => { if (r) { this.tabRef = r; } }}
-      />;
+      />);
   }
 }
 

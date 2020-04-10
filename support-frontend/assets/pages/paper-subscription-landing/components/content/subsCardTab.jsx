@@ -14,7 +14,7 @@ import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpe
 
 
 // ----- Content ----- //
-const ContentVoucherFaqBlock = () => (
+const SubsCardFaqBlock = () => (
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
@@ -37,7 +37,7 @@ const ContentVoucherFaqBlock = () => (
 
 const SubscriptionCardTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
   <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
-    <ContentVoucherFaqBlock />
+    <SubsCardFaqBlock />
     <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below" />
     <ContentHelpBlock
       faqLink={
