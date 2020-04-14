@@ -413,14 +413,16 @@ class CardForm extends Component<PropTypes, StateTypes> {
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
 
+        {recaptchaEnabled(this.props.countryGroupId, this.props.contributionType) &&
         <div>
           <div id="robot_checkbox" className="robot_checkbox" />
           {
-              this.props.checkoutFormHasBeenSubmitted &&
-              !this.props.recaptchaVerified ?
-                renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
-            }
+            this.props.checkoutFormHasBeenSubmitted &&
+            !this.props.recaptchaVerified ?
+              renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
+          }
         </div>
+        }
       </div>
     );
   }
