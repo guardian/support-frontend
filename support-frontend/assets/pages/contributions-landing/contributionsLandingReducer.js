@@ -120,6 +120,7 @@ type FormState = {
   formIsValid: boolean,
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
+  recaptchaToken: string | null,
 };
 
 type PageState = {
@@ -222,6 +223,7 @@ function createFormReducer() {
     formIsValid: true,
     formIsSubmittable: true,
     tickerGoalReached: false,
+    recaptchaToken: null,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -372,6 +374,9 @@ function createFormReducer() {
             recaptchaVerified: action.recaptchaVerified,
           },
         };
+
+      case 'UPDATE_RECAPTCHA_TOKEN':
+        return { ...state, recaptchaToken: action.recaptchaToken };
 
       case 'UPDATE_FIRST_NAME':
         return { ...state, formData: { ...state.formData, firstName: action.firstName } };

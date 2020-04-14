@@ -64,7 +64,8 @@ export type StripeChargeData = {|
     stripePaymentMethod: StripePaymentMethod,
   },
   acquisitionData: PaymentAPIAcquisitionData,
-  publicKey: string
+  publicKey: string,
+  recaptchaToken: string | null,
 |};
 
 export type CreateStripePaymentIntentRequest = {

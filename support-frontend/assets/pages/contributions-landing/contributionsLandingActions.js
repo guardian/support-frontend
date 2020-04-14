@@ -72,6 +72,7 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
+  | { type: 'UPDATE_RECAPTCHA_TOKEN', recaptchaToken: string }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -146,6 +147,11 @@ const updateEmail = (email: string): ((Function) => void) =>
   };
 
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
+
+const updateRecaptchaToken = (recaptchaToken: string): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_RECAPTCHA_TOKEN', recaptchaToken })));
+  };
 
 const setPaymentRequestButtonPaymentMethod =
   (paymentMethod: 'none' | StripePaymentMethod, stripeAccount: StripeAccount): Action =>
@@ -337,6 +343,7 @@ const buildStripeChargeDataFromAuthorisation = (
     state.common.internationalisation.countryId,
     state.page.user.isTestUser || false,
   ),
+  recaptchaToken: state.page.form.recaptchaToken,
 });
 
 const stripeChargeDataFromCheckoutAuthorisation = (
@@ -785,4 +792,5 @@ export {
   setStripeSetupIntentClientSecret,
   setStripeRecaptchaVerified,
   updatePayPalButtonReady,
+  updateRecaptchaToken,
 };

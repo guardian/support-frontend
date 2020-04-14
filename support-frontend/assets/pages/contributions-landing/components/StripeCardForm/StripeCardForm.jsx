@@ -31,6 +31,7 @@ import CreditCardsUS from './creditCardsUS.svg';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { recaptchaEnabled } from 'helpers/recaptcha';
+import {updateRecaptchaToken} from "../../contributionsLandingActions";
 
 // ----- Types -----//
 
@@ -55,6 +56,7 @@ type PropTypes = {|
   setupIntentClientSecret: string | null,
   recaptchaVerified: boolean,
   formIsSubmittable: boolean,
+  setRecaptchaToken: string => Action,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -86,6 +88,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentWaiting: (isWaiting: boolean) =>
     dispatch(setPaymentWaiting(isWaiting)),
   setStripeSetupIntentClientSecret: (clientSecret: string) => dispatch(setStripeSetupIntentClientSecret(clientSecret)),
+  setRecaptchaToken: (recaptchaToken: string) => dispatch(updateRecaptchaToken(recaptchaToken)),
   setStripeRecaptchaVerified: (recaptchaVerified: boolean) => dispatch(setStripeRecaptchaVerified(recaptchaVerified)),
 });
 
@@ -136,16 +139,18 @@ class CardForm extends Component<PropTypes, StateTypes> {
   componentDidMount(): void {
     if (this.props.contributionType === 'ONE_OFF') {
       this.setupOneOffHandlers();
+      if (window.grecaptcha && window.grecaptcha.render) {
+        this.setupRecaptchaTokenForOneOff();
+      } else {
+        window.v2OnloadCallback = this.setupRecaptchaTokenForOneOff;
+      }
     } else {
       this.setupRecurringHandlers();
-
-      if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
         if (window.grecaptcha && window.grecaptcha.render) {
           this.setupRecaptchaCallback();
         } else {
           window.v2OnloadCallback = this.setupRecaptchaCallback;
         }
-      }
     }
   }
 
@@ -218,6 +223,20 @@ class CardForm extends Component<PropTypes, StateTypes> {
             this.props.paymentFailure('internal_error');
             this.props.setPaymentWaiting(false);
           });
+      },
+    });
+  };
+
+  setupRecaptchaTokenForOneOff = () => {
+    window.grecaptcha.render('robot_checkbox', {
+      sitekey: window.guardian.v2recaptchaPublicKey,
+      callback: (token) => {
+        trackComponentLoad('contributions-recaptcha-client-token-received');
+
+
+        this.props.setRecaptchaToken(token);
+        this.props.setStripeRecaptchaVerified(true);
+
       },
     });
   };
@@ -393,7 +412,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
 
-        {recaptchaEnabled(this.props.countryGroupId, this.props.contributionType) &&
           <div>
             <div id="robot_checkbox" className="robot_checkbox" />
             {
@@ -402,7 +420,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
                 renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
             }
           </div>
-        }
       </div>
     );
   }
