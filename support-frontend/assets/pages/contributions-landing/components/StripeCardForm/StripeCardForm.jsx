@@ -31,7 +31,7 @@ import CreditCardsUS from './creditCardsUS.svg';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { recaptchaEnabled } from 'helpers/recaptcha';
-import {updateRecaptchaToken} from "../../contributionsLandingActions";
+import { updateRecaptchaToken } from '../../contributionsLandingActions';
 
 // ----- Types -----//
 
@@ -146,11 +146,11 @@ class CardForm extends Component<PropTypes, StateTypes> {
       }
     } else {
       this.setupRecurringHandlers();
-        if (window.grecaptcha && window.grecaptcha.render) {
-          this.setupRecaptchaCallback();
-        } else {
-          window.v2OnloadCallback = this.setupRecaptchaCallback;
-        }
+      if (window.grecaptcha && window.grecaptcha.render) {
+        this.setupRecaptchaCallback();
+      } else {
+        window.v2OnloadCallback = this.setupRecaptchaCallback;
+      }
     }
   }
 
@@ -232,11 +232,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
-
-
         this.props.setRecaptchaToken(token);
         this.props.setStripeRecaptchaVerified(true);
-
       },
     });
   };
@@ -412,14 +409,14 @@ class CardForm extends Component<PropTypes, StateTypes> {
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
 
-          <div>
-            <div id="robot_checkbox" className="robot_checkbox" />
-            {
+        <div>
+          <div id="robot_checkbox" className="robot_checkbox" />
+          {
               this.props.checkoutFormHasBeenSubmitted &&
               !this.props.recaptchaVerified ?
                 renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
             }
-          </div>
+        </div>
       </div>
     );
   }

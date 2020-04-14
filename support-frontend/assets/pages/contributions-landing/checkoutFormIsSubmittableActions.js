@@ -118,7 +118,7 @@ function enableOrDisableForm() {
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
 
-    const stripeRecurringNotVerified =
+    const recaptchaNotVerified =
       recaptchaEnabled(state.common.internationalisation.countryGroupId, state.page.form.contributionType)
       && state.page.form.paymentMethod === 'Stripe'
       && !state.page.form.stripeCardFormData.recaptchaVerified;
@@ -127,7 +127,7 @@ function enableOrDisableForm() {
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn
-      && !stripeRecurringNotVerified;
+      && !recaptchaNotVerified;
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };
