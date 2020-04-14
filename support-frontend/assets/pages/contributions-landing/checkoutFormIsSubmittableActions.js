@@ -118,16 +118,19 @@ function enableOrDisableForm() {
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
 
-    const recaptchaNotVerified =
-      recaptchaEnabled(state.common.internationalisation.countryGroupId)
-      && state.page.form.paymentMethod === 'Stripe'
-      && !state.page.form.stripeCardFormData.recaptchaVerified;
+    const recaptchaRequired =
+      state.page.form.paymentMethod === 'Stripe'
+      && recaptchaEnabled(state.common.internationalisation.countryGroupId);
+
+    const RecaptchaVerified =
+      state.page.form.stripeCardFormData.recaptchaVerified
+      || !!state.page.form.recaptchaToken;
 
     const shouldEnable =
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn
-      && !recaptchaNotVerified;
+      && (RecaptchaVerified || !recaptchaRequired )
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };
