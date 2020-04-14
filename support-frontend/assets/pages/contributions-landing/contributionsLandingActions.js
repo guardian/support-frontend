@@ -93,7 +93,7 @@ export type Action =
   | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
   | { type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete: boolean }
   | { type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret: string }
-  | { type: 'SET_STRIPE_RECAPTCHA_VERIFIED', recaptchaVerified: boolean }
+  | { type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified: boolean }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -298,9 +298,9 @@ const setStripeSetupIntentClientSecret = (setupIntentClientSecret: string): ((Fu
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret })));
   };
 
-const setStripeRecaptchaVerified = (recaptchaVerified: boolean): ((Function) => void) =>
+const setStripeRecurringRecaptchaVerified = (recaptchaVerified: boolean): ((Function) => void) =>
   (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECAPTCHA_VERIFIED', recaptchaVerified })));
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified })));
   };
 
 const sendFormSubmitEventForPayPalRecurring = () =>
@@ -343,7 +343,7 @@ const buildStripeChargeDataFromAuthorisation = (
     state.common.internationalisation.countryId,
     state.page.user.isTestUser || false,
   ),
-  recaptchaToken: state.page.form.recaptchaToken,
+  recaptchaToken: state.page.form.oneOffRecaptchaToken,
 });
 
 const stripeChargeDataFromCheckoutAuthorisation = (
@@ -790,7 +790,7 @@ export {
   setHandleStripe3DS,
   setStripeCardFormComplete,
   setStripeSetupIntentClientSecret,
-  setStripeRecaptchaVerified,
+  setStripeRecurringRecaptchaVerified,
   updatePayPalButtonReady,
   updateRecaptchaToken,
 };

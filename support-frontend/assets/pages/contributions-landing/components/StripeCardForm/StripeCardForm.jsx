@@ -18,7 +18,7 @@ import {
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
   setStripeCardFormComplete,
-  setStripeRecaptchaVerified,
+  setStripeRecurringRecaptchaVerified,
   setStripeSetupIntentClientSecret,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import { type ContributionType } from 'helpers/contributions';
@@ -47,16 +47,16 @@ type PropTypes = {|
   paymentWaiting: boolean,
   setStripeCardFormComplete: (isComplete: boolean) => Action,
   setStripeSetupIntentClientSecret: (clientSecret: string) => Action,
-  setStripeRecaptchaVerified: boolean => Action,
+  setStripeRecurringRecaptchaVerified: boolean => Action,
   checkoutFormHasBeenSubmitted: boolean,
   stripeKey: string,
   country: IsoCountry,
   countryGroupId: CountryGroupId,
   csrf: CsrfState,
   setupIntentClientSecret: string | null,
-  recaptchaVerified: boolean,
+  recurringRecaptchaVerified: boolean,
   formIsSubmittable: boolean,
-  setRecaptchaToken: string => Action,
+  setOneOffRecaptchaToken: string => Action,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -67,7 +67,7 @@ const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   csrf: state.page.csrf,
   setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
-  recaptchaVerified: state.page.form.stripeCardFormData.recaptchaVerified,
+  recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
 });
 
@@ -88,8 +88,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentWaiting: (isWaiting: boolean) =>
     dispatch(setPaymentWaiting(isWaiting)),
   setStripeSetupIntentClientSecret: (clientSecret: string) => dispatch(setStripeSetupIntentClientSecret(clientSecret)),
-  setRecaptchaToken: (recaptchaToken: string) => dispatch(updateRecaptchaToken(recaptchaToken)),
-  setStripeRecaptchaVerified: (recaptchaVerified: boolean) => dispatch(setStripeRecaptchaVerified(recaptchaVerified)),
+  setOneOffRecaptchaToken: (recaptchaToken: string) => dispatch(updateRecaptchaToken(recaptchaToken)),
+  setStripeRecurringRecaptchaVerified: (recaptchaVerified: boolean) => dispatch(setStripeRecurringRecaptchaVerified(recaptchaVerified)),
 });
 
 type CardFieldState =
@@ -181,13 +181,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
   };
 
   // Creates a new setupIntent upon recaptcha verification
-  setupRecaptchaCallback = () => {
+  setupRecurringRecaptchaCallback = () => {
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
-
-        this.props.setStripeRecaptchaVerified(true);
+        this.props.setStripeRecurringRecaptchaVerified(true);
 
         fetch(
           '/stripe/create-setup-intent/recaptcha',
@@ -222,8 +221,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
-        this.props.setRecaptchaToken(token);
-        this.props.setStripeRecaptchaVerified(true);
+        this.props.setOneOffRecaptchaToken(token);
       },
     });
   };
@@ -231,9 +229,9 @@ class CardForm extends Component<PropTypes, StateTypes> {
   setupRecurringHandlers(): void {
     if (recaptchaEnabled(this.props.countryGroupId)) {
       if (window.grecaptcha && window.grecaptcha.render) {
-        this.setupRecaptchaCallback();
+        this.setupRecurringRecaptchaCallback();
       } else {
-        window.v2OnloadCallback = this.setupRecaptchaCallback;
+        window.v2OnloadCallback = this.setupRecurringRecaptchaCallback;
       }
     }
     this.props.setCreateStripePaymentMethod(() => {
@@ -418,7 +416,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
           <div id="robot_checkbox" className="robot_checkbox" />
           {
             this.props.checkoutFormHasBeenSubmitted &&
-            !this.props.recaptchaVerified ?
+            !this.props.recurringRecaptchaVerified ?
               renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
           }
         </div>

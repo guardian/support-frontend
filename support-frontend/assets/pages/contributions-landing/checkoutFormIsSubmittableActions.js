@@ -123,14 +123,15 @@ function enableOrDisableForm() {
       && recaptchaEnabled(state.common.internationalisation.countryGroupId);
 
     const RecaptchaVerified =
-      state.page.form.stripeCardFormData.recaptchaVerified
-      || !!state.page.form.recaptchaToken;
+      state.page.form.contributionType !== 'ONE_OFF' ?
+      state.page.form.stripeCardFormData.recurringRecaptchaVerified
+      : !!state.page.form.oneOffRecaptchaToken;
 
     const shouldEnable =
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn
-      && (RecaptchaVerified || !recaptchaRequired )
+      && (RecaptchaVerified || !recaptchaRequired );
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };

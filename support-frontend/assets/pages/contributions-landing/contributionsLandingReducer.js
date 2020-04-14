@@ -73,7 +73,7 @@ export type Stripe3DSResult = {
 export type StripeCardFormData = {
   formComplete: boolean,
   setupIntentClientSecret: string | null,
-  recaptchaVerified: boolean,
+  recurringRecaptchaVerified: boolean,
   // These callbacks must be initialised after the StripeCardForm component has been created
   createPaymentMethod: ((email: string) => void) | null,
   handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null, // For single only
@@ -120,7 +120,7 @@ type FormState = {
   formIsValid: boolean,
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
-  recaptchaToken: string | null,
+  oneOffRecaptchaToken: string | null,
 };
 
 type PageState = {
@@ -200,7 +200,7 @@ function createFormReducer() {
     stripeCardFormData: {
       formComplete: false,
       setupIntentClientSecret: null,
-      recaptchaVerified: false,
+      recurringRecaptchaVerified: false,
       createPaymentMethod: null,
       handle3DS: null,
     },
@@ -223,7 +223,7 @@ function createFormReducer() {
     formIsValid: true,
     formIsSubmittable: true,
     tickerGoalReached: false,
-    recaptchaToken: null,
+    oneOffRecaptchaToken: null,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -366,17 +366,17 @@ function createFormReducer() {
           },
         };
 
-      case 'SET_STRIPE_RECAPTCHA_VERIFIED':
+      case 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED':
         return {
           ...state,
           stripeCardFormData: {
             ...state.stripeCardFormData,
-            recaptchaVerified: action.recaptchaVerified,
+            recurringRecaptchaVerified: action.recaptchaVerified,
           },
         };
 
       case 'UPDATE_RECAPTCHA_TOKEN':
-        return { ...state, recaptchaToken: action.recaptchaToken };
+        return { ...state, oneOffRecaptchaToken: action.recaptchaToken };
 
       case 'UPDATE_FIRST_NAME':
         return { ...state, formData: { ...state.formData, firstName: action.firstName } };
