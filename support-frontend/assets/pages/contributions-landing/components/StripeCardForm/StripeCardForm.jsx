@@ -139,22 +139,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
   componentDidMount(): void {
     if (this.props.contributionType === 'ONE_OFF') {
       this.setupOneOffHandlers();
-      if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
-        if (window.grecaptcha && window.grecaptcha.render) {
-          this.setupRecaptchaTokenForOneOff();
-        } else {
-          window.v2OnloadCallback = this.setupRecaptchaTokenForOneOff;
-        }
-      }
     } else {
       this.setupRecurringHandlers();
-      if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
-        if (window.grecaptcha && window.grecaptcha.render) {
-          this.setupRecaptchaCallback();
-        } else {
-          window.v2OnloadCallback = this.setupRecaptchaCallback;
-        }
-      }
     }
   }
 
@@ -243,6 +229,13 @@ class CardForm extends Component<PropTypes, StateTypes> {
   };
 
   setupRecurringHandlers(): void {
+    if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
+      if (window.grecaptcha && window.grecaptcha.render) {
+        this.setupRecaptchaCallback();
+      } else {
+        window.v2OnloadCallback = this.setupRecaptchaCallback;
+      }
+    }
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
@@ -273,6 +266,13 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   setupOneOffHandlers(): void {
+    if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
+      if (window.grecaptcha && window.grecaptcha.render) {
+        this.setupRecaptchaTokenForOneOff();
+      } else {
+        window.v2OnloadCallback = this.setupRecaptchaTokenForOneOff;
+      }
+    }
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
