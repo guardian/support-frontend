@@ -1,4 +1,5 @@
 @import '~stylesheets/gu-sass/gu-sass';
+$teal-green: #006d67;
 
 .component-product-page-hero {
   box-sizing: border-box;
@@ -94,9 +95,9 @@
   z-index: 20;
   display: inline-flex;
   flex-direction: column;
-  background-color: #ffe500;
+  background-color: $teal-green;
   @include gu-fontset-heading;
-  color: gu-colour(neutral-7);
+  color: gu-colour(neutral-97);
   padding: $gu-v-spacing / 3 0 22px;
 
 
@@ -207,9 +208,10 @@
     height: 90px;
     width: 90px;
     border-radius: 50%;
-    background-color: #00b2ff;
+    background-color: gu-colour(neutral-97);
     margin-top: 0px;
     margin-left: 5px;
+    color: gu-colour(neutral-7);
 
     @include mq($from: mobileLandscape) {
       right: 20px;
