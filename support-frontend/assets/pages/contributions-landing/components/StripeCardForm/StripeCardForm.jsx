@@ -229,7 +229,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
   };
 
   setupRecurringHandlers(): void {
-    if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
+    if (recaptchaEnabled(this.props.countryGroupId)) {
       if (window.grecaptcha && window.grecaptcha.render) {
         this.setupRecaptchaCallback();
       } else {
@@ -239,7 +239,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
-      if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
+      if (recaptchaEnabled(this.props.countryGroupId)) {
         /* Recaptcha verification is required for setupIntent creation.
         If setupIntentClientSecret is ready then complete the payment now.
         If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
@@ -266,7 +266,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   setupOneOffHandlers(): void {
-    if (recaptchaEnabled(this.props.countryGroupId, this.props.contributionType)) {
+    if (recaptchaEnabled(this.props.countryGroupId)) {
       if (window.grecaptcha && window.grecaptcha.render) {
         this.setupRecaptchaTokenForOneOff();
       } else {
@@ -413,7 +413,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
 
-        {recaptchaEnabled(this.props.countryGroupId, this.props.contributionType) &&
+        {recaptchaEnabled(this.props.countryGroupId) &&
         <div>
           <div id="robot_checkbox" className="robot_checkbox" />
           {
