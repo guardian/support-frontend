@@ -39,7 +39,7 @@ import {
 import AddressDisplayText
   from 'components/subscriptionCheckouts/addressSearch/addressDisplayText';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
-import type { AddressSearch } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
+import { ResultsDropdown } from 'components/subscriptionCheckouts/addressSearch/resultsDropdown';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -63,17 +63,18 @@ const MaybeSelect = canShow(SelectWithError);
 const MaybeInput = canShow(InputWithError);
 
 type State = {
-  searchComplete: boolean
+  searchComplete: boolean,
+  searchTerm: string,
 }
 
-class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>, State> {
+class AddressFieldsApi<GlobalState> extends Component<PropTypes<GlobalState>, State> {
 
   static shouldShowStateDropdown(country: Option<IsoCountry>): boolean {
     return country === 'US' || country === 'CA' || country === 'AU';
   }
 
   static shouldShowStateInput(country: Option<IsoCountry>): boolean {
-    return country !== 'GB' && !AddressFields.shouldShowStateDropdown(country);
+    return country !== 'GB' && !AddressFieldsApi.shouldShowStateDropdown(country);
   }
 
   static statesForCountry(country: Option<IsoCountry>): React$Node {
@@ -89,34 +90,41 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>, State
     }
   }
 
+  updateSearchTerm(searchTerm: string) {
+    this.setState({ searchTerm })
+  }
+
   constructor(props) {
     super(props);
-    this.state = { searchComplete: false };
+    this.state = {
+      searchComplete: false,
+      searchTerm: '',
+    };
   }
 
   componentDidMount(): void {
     const { props } = this;
-    const fields = [
-      { element: `${props.scope}-search`, field: '' },
-      /* eslint-disable no-undef */
-      // $FlowIgnore: pca is a global from the Loqate script
-      { element: `${props.scope}-country`, field: 'CountryName', mode: pca.fieldMode.COUNTRY },
-    ];
+    // const fields = [
+    //   { element: `${props.scope}-search`, field: '' },
+    //   /* eslint-disable no-undef */
+    //   // $FlowIgnore: pca is a global from the Loqate script
+    //   { element: `${props.scope}-country`, field: 'CountryName', mode: pca.fieldMode.COUNTRY },
+    // ];
     const options = { key: 'KU38-EK85-GN78-YA78' };
-    const control = new pca.Address(fields, options);
-    /* eslint-enable no-undef */
-    control.listen('populate', (address: AddressSearch) => {
-      console.log(address);
-      this.setState({ searchComplete: true });
-
-      props.setAddressLineOne(address.Line1);
-      props.setAddressLineTwo(address.Line2);
-
-      props.setTownCity(address.City);
-      props.setState(address.Province);
-      props.setPostcode(address.PostalCode);
-
-    });
+    // const control = new pca.Address(fields, options);
+    // /* eslint-enable no-undef */
+    // control.listen('populate', (address: AddressSearch) => {
+    //   console.log(address);
+    //   this.setState({ searchComplete: true });
+    //
+    //   props.setAddressLineOne(address.Line1);
+    //   props.setAddressLineTwo(address.Line2);
+    //
+    //   props.setTownCity(address.City);
+    //   props.setState(address.Province);
+    //   props.setPostcode(address.PostalCode);
+    //
+    // });
   }
 
   render() {
@@ -131,11 +139,13 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>, State
     />) : null;
     return (
       <div>
-        <StaticInputWithLabel
+        <InputWithLabel
           id={`${scope}-search`}
           label="Search"
           placeholder="Start typing your address"
+          setValue={value => this.updateSearchTerm(value)}
         />
+        <ResultsDropdown searchTerm={this.state.searchTerm} />
         {addressDisplay}
         <CheckoutExpander copy="I want to enter my address manually">
           <SelectWithError
@@ -179,10 +189,10 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>, State
             value={props.state}
             setValue={props.setState}
             error={firstError('state', props.formErrors)}
-            isShown={AddressFields.shouldShowStateDropdown(props.country)}
+            isShown={AddressFieldsApi.shouldShowStateDropdown(props.country)}
           >
             <option value="">--</option>
-            {AddressFields.statesForCountry(props.country)}
+            {AddressFieldsApi.statesForCountry(props.country)}
           </MaybeSelect>
           <MaybeInput
             id={`${scope}-stateProvince`}
@@ -191,7 +201,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>, State
             setValue={props.setState}
             error={firstError('state', props.formErrors)}
             optional
-            isShown={AddressFields.shouldShowStateInput(props.country)}
+            isShown={AddressFieldsApi.shouldShowStateInput(props.country)}
           />
           <InputWithError
             id={`${scope}-postcode`}
@@ -221,4 +231,4 @@ export const withStore = <GlobalState>(
       scope,
     }),
     addressActionCreatorsFor(scope),
-  )(AddressFields);
+  )(AddressFieldsApi);

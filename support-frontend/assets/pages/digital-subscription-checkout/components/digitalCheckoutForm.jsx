@@ -41,7 +41,7 @@ import {
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection
   from 'components/subscriptionCheckouts/cancellationSection';
-import { withStore } from 'components/subscriptionCheckouts/addressSearch/addressFields';
+import { withStore } from 'components/subscriptionCheckouts/addressSearch/addressFieldsApi';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { DigitalPack } from 'helpers/subscriptions';
