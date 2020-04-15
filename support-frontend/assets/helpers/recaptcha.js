@@ -1,11 +1,8 @@
 // @flow
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { ContributionType } from 'helpers/contributions';
 
-const recaptchaEnabled = (countryGroupId: CountryGroupId, contributionType: ContributionType): boolean =>
-  window.guardian.recaptchaV2
-  && contributionType !== 'ONE_OFF'
-  && countryGroupId === 'AUDCountries';
+const recaptchaEnabled = (countryGroupId: CountryGroupId): boolean =>
+  window.guardian.recaptchaV2 && countryGroupId === 'AUDCountries';
 
 const loadRecaptchaV2 = () =>
   new Promise<void>((resolve, reject) => {
