@@ -1,7 +1,4 @@
 // @flow
-import type { ContributionType } from 'helpers/contributions';
-
-const recaptchaEnabled = (contributionType: ContributionType): boolean => contributionType !== 'ONE_OFF';
 
 const loadRecaptchaV2 = () =>
   new Promise<void>((resolve, reject) => {
@@ -16,5 +13,4 @@ const loadRecaptchaV2 = () =>
     }
   });
 
-export { loadRecaptchaV2, recaptchaEnabled };
-
+export { loadRecaptchaV2 };

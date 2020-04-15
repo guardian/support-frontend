@@ -24,7 +24,6 @@ import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
-import { recaptchaEnabled } from 'helpers/recaptcha';
 import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 
 // ----- Types ----- //
@@ -118,16 +117,19 @@ function enableOrDisableForm() {
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
 
-    const stripeRecurringNotVerified =
-      recaptchaEnabled(state.page.form.contributionType)
-      && state.page.form.paymentMethod === 'Stripe'
-      && !state.page.form.stripeCardFormData.recaptchaVerified;
+    const recaptchaRequired = state.page.user.isPostDeploymentTestUser ? false
+      : state.page.form.paymentMethod === 'Stripe';
+
+    const recaptchaVerified =
+      state.page.form.contributionType !== 'ONE_OFF' ?
+        state.page.form.stripeCardFormData.recurringRecaptchaVerified
+        : !!state.page.form.oneOffRecaptchaToken;
 
     const shouldEnable =
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn
-      && !stripeRecurringNotVerified;
+      && (recaptchaVerified || !recaptchaRequired);
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };

@@ -17,7 +17,7 @@ import {
   setCreateStripePaymentMethod,
   setHandleStripe3DS,
   setStripeCardFormComplete,
-  setStripeRecaptchaVerified,
+  setStripeRecurringRecaptchaVerified,
   setStripeSetupIntentClientSecret,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import { type ContributionType } from 'helpers/contributions';
@@ -29,7 +29,7 @@ import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { recaptchaEnabled } from 'helpers/recaptcha';
+import { updateRecaptchaToken } from '../../contributionsLandingActions';
 
 // ----- Types -----//
 
@@ -45,15 +45,17 @@ type PropTypes = {|
   paymentWaiting: boolean,
   setStripeCardFormComplete: (isComplete: boolean) => Action,
   setStripeSetupIntentClientSecret: (clientSecret: string) => Action,
-  setStripeRecaptchaVerified: boolean => Action,
+  setStripeRecurringRecaptchaVerified: boolean => Action,
   checkoutFormHasBeenSubmitted: boolean,
   stripeKey: string,
   country: IsoCountry,
   countryGroupId: CountryGroupId,
   csrf: CsrfState,
   setupIntentClientSecret: string | null,
-  recaptchaVerified: boolean,
+  recurringRecaptchaVerified: boolean,
   formIsSubmittable: boolean,
+  setOneOffRecaptchaToken: string => Action,
+  oneOffRecaptchaToken: string,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -64,8 +66,9 @@ const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   csrf: state.page.csrf,
   setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
-  recaptchaVerified: state.page.form.stripeCardFormData.recaptchaVerified,
+  recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
+  oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -85,7 +88,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentWaiting: (isWaiting: boolean) =>
     dispatch(setPaymentWaiting(isWaiting)),
   setStripeSetupIntentClientSecret: (clientSecret: string) => dispatch(setStripeSetupIntentClientSecret(clientSecret)),
-  setStripeRecaptchaVerified: (recaptchaVerified: boolean) => dispatch(setStripeRecaptchaVerified(recaptchaVerified)),
+  setOneOffRecaptchaToken: (recaptchaToken: string) => dispatch(updateRecaptchaToken(recaptchaToken)),
+  setStripeRecurringRecaptchaVerified: (recaptchaVerified: boolean) =>
+    dispatch(setStripeRecurringRecaptchaVerified(recaptchaVerified)),
 });
 
 type CardFieldState =
@@ -137,14 +142,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
       this.setupOneOffHandlers();
     } else {
       this.setupRecurringHandlers();
-
-      if (recaptchaEnabled(this.props.contributionType)) {
-        if (window.grecaptcha && window.grecaptcha.render) {
-          this.setupRecaptchaCallback();
-        } else {
-          window.v2OnloadCallback = this.setupRecaptchaCallback;
-        }
-      }
     }
   }
 
@@ -185,13 +182,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
   };
 
   // Creates a new setupIntent upon recaptcha verification
-  setupRecaptchaCallback = () => {
+  setupRecurringRecaptchaCallback = () => {
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
-
-        this.props.setStripeRecaptchaVerified(true);
+        this.props.setStripeRecurringRecaptchaVerified(true);
 
         fetchJson(
           '/stripe/create-setup-intent/recaptcha',
@@ -220,7 +216,23 @@ class CardForm extends Component<PropTypes, StateTypes> {
     });
   };
 
+  setupRecaptchaTokenForOneOff = () => {
+    window.grecaptcha.render('robot_checkbox', {
+      sitekey: window.guardian.v2recaptchaPublicKey,
+      callback: (token) => {
+        trackComponentLoad('contributions-recaptcha-client-token-received');
+        this.props.setOneOffRecaptchaToken(token);
+      },
+    });
+  };
+
   setupRecurringHandlers(): void {
+    if (window.grecaptcha && window.grecaptcha.render) {
+      this.setupRecurringRecaptchaCallback();
+    } else {
+      window.v2OnloadCallback = this.setupRecurringRecaptchaCallback;
+    }
+
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
@@ -234,6 +246,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   setupOneOffHandlers(): void {
+    if (window.grecaptcha && window.grecaptcha.render) {
+      this.setupRecaptchaTokenForOneOff();
+    } else {
+      window.v2OnloadCallback = this.setupRecaptchaTokenForOneOff;
+    }
+
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
@@ -323,6 +341,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
       return <CreditCardsROW className="form__credit-card-icons" />;
     };
 
+    const recaptchaVerified = this.props.oneOffRecaptchaToken || this.props.recurringRecaptchaVerified;
+
     return (
       <div className="form__fields">
         <legend className="form__legend"><h3>Your card details</h3></legend>
@@ -374,16 +394,14 @@ class CardForm extends Component<PropTypes, StateTypes> {
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
 
-        {recaptchaEnabled(this.props.contributionType) &&
-          <div>
-            <div id="robot_checkbox" className="robot_checkbox" />
-            {
-              this.props.checkoutFormHasBeenSubmitted &&
-              !this.props.recaptchaVerified ?
-                renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
-            }
-          </div>
-        }
+        <div>
+          <div id="robot_checkbox" className="robot_checkbox" />
+          {
+            this.props.checkoutFormHasBeenSubmitted
+            && !recaptchaVerified ?
+              renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
+          }
+        </div>
       </div>
     );
   }
