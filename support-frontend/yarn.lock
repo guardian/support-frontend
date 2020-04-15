@@ -1852,6 +1852,13 @@
   resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.7.tgz#680656b92632006d736d0378ae19f8c6943769c8"
   integrity sha512-WSa3gnRYxciFas3QYhtTk8unvj5N9K5IB61LL1CP3bVCJ2euXR13xRRHafI/Vy1dnrDwPa80SaE+apTcwipvpA==
 
+"@guardian/src-accordion@0.17.0-alpha.1":
+  version "0.17.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-accordion/-/src-accordion-0.17.0-alpha.1.tgz#b14ee9778bba951e26a69d2d68e18ce0b44e6175"
+  integrity sha512-4NNWyWIn4/j+drCrlc50UFl0bH2RBis4Iki7Sh00dMhmWsGWiEX4+jGvOaOKoIg2YKvxI42PnWRir2JW8TlCMA==
+  dependencies:
+    "@guardian/src-helpers" "^0.17.0"
+
 "@guardian/src-choice-card@^0.14.0-alpha.6":
   version "0.14.0-alpha.6"
   resolved "https://registry.yarnpkg.com/@guardian/src-choice-card/-/src-choice-card-0.14.0-alpha.6.tgz#42f645fb810ffe543de8cb3cf1b3b2e5aadfc82f"
@@ -1869,12 +1876,24 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.16.1.tgz#d5e52a57012c588d146b05ded7f9fbc4a9af40d5"
   integrity sha512-E6YDqq53gy5CoO8xFPWDBjiYiI0o+4BE1/mFcwkpWGwtpkSnxi21LhkaQ63r+KRxoDB29clc86ChbNHXw9keFA==
 
+"@guardian/src-foundations@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.17.0.tgz#ea189b370fb222ef52686998fab8d8673d496a54"
+  integrity sha512-Dgm/i1J3JjxZeADT6+EgT6rz3hL0OrB4KEiNerxycL2saCBS9HqtmK18io95s7eg9pUZVINq+3KwrFeB8czY3g==
+
 "@guardian/src-helpers@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-0.14.0.tgz#9999aa24074060373b079eb37ca9768d47e277c3"
   integrity sha512-1k1/zSkahgB5FiSSBeVfsvW6G1C2G0TnZt4TrHNFOar/9otgB1m48KKA77evwW2NaiSFvGRbrWfDw4U5F+wnmA==
   dependencies:
     "@guardian/src-foundations" "^0.14.0"
+
+"@guardian/src-helpers@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-0.17.0.tgz#94aca933a5fa9c8f4666378eddf1ec144700f78b"
+  integrity sha512-DGcF1gB+eqE/dksG4qHWTkrFV3D3dTXqtq/uX2lZnWfy/vvyxmxvvmKZKQ7zBAtxvmnrQFoTx6FWk7lFQv2C8w==
+  dependencies:
+    "@guardian/src-foundations" "^0.17.0"
 
 "@guardian/src-svgs@^0.14.0":
   version "0.14.0"

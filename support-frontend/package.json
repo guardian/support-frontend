@@ -69,6 +69,7 @@
     "@emotion/cache": "^10.0.29",
     "@emotion/core": "^10.0.27",
     "@guardian/pasteup": "^1.0.0-alpha.7",
+    "@guardian/src-accordion": "0.17.0-alpha.1",
     "@guardian/src-choice-card": "^0.14.0-alpha.6",
     "@guardian/src-foundations": "^0.16",
     "@guardian/src-svgs": "^0.14.0",

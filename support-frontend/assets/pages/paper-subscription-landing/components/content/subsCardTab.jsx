@@ -9,9 +9,22 @@ import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import { Accordion, AccordionRow } from '@guardian/src-accordion';
+import { css } from '@emotion/core';
+import { neutral } from '@guardian/src-foundations/palette';
+import { textSans } from '@guardian/src-foundations/typography';
+import { space } from '@guardian/src-foundations';
 
 import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpers';
 
+const accordionContainer = css`
+  background-color: ${neutral['97']};
+
+  p {
+    ${textSans.small()};
+    margin-bottom: ${space[3]}px;
+  }
+`;
 
 // ----- Content ----- //
 const SubsCardFaqBlock = () => (
@@ -20,7 +33,7 @@ const SubsCardFaqBlock = () => (
     image={<GridImage
       gridId="paperVoucherFeature"
       srcSizes={[750, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 500px"
+      sizes="(max-width: 740px) 100vw, 300px"
       imgType="png"
     />
   }
@@ -32,6 +45,27 @@ const SubsCardFaqBlock = () => (
     <Text>
       You can collect the newspaper from your local store or have your copies delivered by your newsagent.
     </Text>
+    <Text>
+      <div css={accordionContainer}>
+        <Accordion>
+          <AccordionRow label="Collecting from multiple newsagents">
+            <p>
+              Present your card to a newsagent each time you collect the paper. The newsagent will scan your
+              card and will bee reimbursed for each transaction automatically.
+            </p>
+            <p><a href="https://imovo.org/guardianstorefinder">Find your nearest participating retailer</a></p>
+          </AccordionRow>
+          <AccordionRow label="Delivery from your retailer">
+            <p>
+              Simply give your preferred store / retailer the barcode printed on your
+              subscription letter.
+            </p>
+            <p><a href="https://imovo.org/guardianstorefinder">Find your nearest participating retailer</a></p>
+          </AccordionRow>
+        </Accordion>
+      </div>
+    </Text>
+
   </Content>
 );
 

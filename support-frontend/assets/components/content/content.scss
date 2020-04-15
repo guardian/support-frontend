@@ -105,6 +105,21 @@
   max-width: gu-span(12);
 }
 
+.component-content.component-content--white.component-content--overflow-hidden.component-content--force-border {
+  .component-text:first-of-type {
+    margin-top: 270px;
+    @include mq($from: mobileMedium) {
+      margin-top: 320px;
+    }
+    @include mq($from: mobileLandscape) {
+      margin-top: 340px;
+    }
+    @include mq($from: tablet) {
+      margin-top: 10px;
+    }
+  }
+}
+
 .component-content__content--grey {
   background-color: gu-colour(neutral-97);
 }
@@ -169,15 +184,15 @@
 // ----- Images ------ //
 
 .component-content__image {
+  position: absolute;
   max-width: gu-span(6);
   @include mq($from: tablet) {
-    position: absolute;
     left: gu-span(7) + ($gu-h-spacing * 2);
   }
   @include mq($from: desktop) {
     left: gu-span(8) + ($gu-h-spacing * 2);
   }
-  bottom: ($gu-v-spacing*2)*-1;
+  top: ($gu-v-spacing*2)*-1;
   .component-grid-image {
     display: block;
     width: 100%;
