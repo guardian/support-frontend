@@ -40,6 +40,7 @@ import AddressDisplayText
   from 'components/subscriptionCheckouts/addressSearch/addressDisplayText';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import { ResultsDropdown } from 'components/subscriptionCheckouts/addressSearch/resultsDropdown';
+import * as styles from './addressFieldsApiStyles';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -138,12 +139,18 @@ class AddressFieldsApi<GlobalState> extends Component<PropTypes<GlobalState>, St
       country={props.country}
     />) : null;
     return (
-      <div>
+      <div css={styles.formDiv}>
         <InputWithLabel
           id={`${scope}-search`}
           label="Search"
+          autocomplete="off"
           placeholder="Start typing your address"
           setValue={value => this.updateSearchTerm(value)}
+          onKeyPress={(ev) => {
+            if (ev.keyCode && ev.keyCode === '40') {
+              ev.preventDefault();
+            }
+          }}
         />
         <ResultsDropdown searchTerm={this.state.searchTerm} />
         {addressDisplay}

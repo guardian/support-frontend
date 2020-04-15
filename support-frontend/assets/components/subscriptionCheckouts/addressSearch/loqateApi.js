@@ -12,9 +12,15 @@ export type AddressSearch = {
   CountryIso2: IsoCountry,
 };
 
+export type FindItemType = 'Address' | 'Postcode' | 'Locality';
+
+// https://www.loqate.com/resources/support/apis/Capture/Interactive/Find/1.1/
 export type FindItem = {
   Id: string,
+  Type: FindItemType,
   Text: string,
+  Highlight: string,
+  Description: string,
 }
 
 export type FindResponse = {

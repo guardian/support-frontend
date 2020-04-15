@@ -2,8 +2,12 @@
 
 import React, { Component } from 'react';
 import { find } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
-import type { FindResponse } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
+import type {
+  FindItem,
+  FindResponse,
+} from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 import type { Option } from 'helpers/types/option';
+import * as styles from './resultsDropdownStyles';
 
 type State = {
   findComplete: boolean,
@@ -13,6 +17,9 @@ type State = {
 type PropTypes = {
   searchTerm: string,
 }
+
+const ListItem = (props: { item: FindItem, index: number }) =>
+  <li css={styles.listItem} tabIndex="0">{props.item.Text} <span css={styles.description}>{props.item.Description}</span> </li>;
 
 class ResultsDropdown extends Component<PropTypes, State> {
 
@@ -30,21 +37,22 @@ class ResultsDropdown extends Component<PropTypes, State> {
     }
     if (nextProps.searchTerm !== this.props.searchTerm) {
       this.setState({ findComplete: false });
-      find(nextProps.searchTerm).then(findResponse => this.setState(
-        {
+      find(nextProps.searchTerm).then((findResponse: FindResponse) => {
+        console.log(findResponse);
+        this.setState({
           findComplete: true,
           findResponse,
-        }));
+        });
+      });
     }
     return false;
-
   }
 
   render() {
     if (this.state.findResponse) {
-      const listItems = this.state.findResponse.Items.map(item => <li>{item.Text}</li>);
+      const listItems = this.state.findResponse.Items.map((item, i) => <ListItem item={item} index={i} />);
       return (
-        <div>
+        <div css={styles.list}>
           <ul>
             {listItems}
           </ul>
