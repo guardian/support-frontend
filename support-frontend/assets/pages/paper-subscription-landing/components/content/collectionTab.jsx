@@ -6,12 +6,26 @@ import React from 'react';
 
 import Content from 'components/content/content';
 import Text from 'components/text/text';
-import UnorderedList from 'components/list/unorderedList';
 import GridImage from 'components/gridImage/gridImage';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpers';
+import { Accordion, AccordionRow } from '@guardian/src-accordion';
+import { css } from '@emotion/core';
+import { neutral } from '@guardian/src-foundations/palette';
+import { textSans } from '@guardian/src-foundations/typography';
+import { space } from '@guardian/src-foundations';
+
+
+const accordionContainer = css`
+  background-color: ${neutral['97']};
+
+  p {
+    ${textSans.small()};
+    margin-bottom: ${space[4]}px;
+  }
+`;
 
 
 // ----- Content ----- //
@@ -34,12 +48,21 @@ const ContentVoucherFaqBlock = () => (
         Take your voucher to your retailer. Your vouchers will be accepted at retailers
         across the UK, including most independent newsagents.
     </Text>
-    <Text title="Giving you peace of mind">
-      <UnorderedList items={[
-        'Your newsagent won’t lose out; we’ll pay them the same amount that they receive if you pay cash for your paper',
-        'You can pause your subscription for up to four weeks a year. So if you’re going on holiday, you won’t have to pay for the papers you’ll miss',
-      ]}
-      />
+    <Text>
+      <div css={accordionContainer}>
+        <Accordion>
+          <AccordionRow label="Collection details">
+            <p>
+              Your newsagent won’t lose out; we’ll pay them the same amount that they receive if
+              you pay cash for your paper.
+            </p>
+            <p>
+              You can pause your subscription for up to four weeks a year. So if you’re going on holiday,
+              you won’t have to pay for the papers you’ll miss.
+            </p>
+          </AccordionRow>
+        </Accordion>
+      </div>
     </Text>
   </Content>
 );
@@ -47,7 +70,7 @@ const ContentVoucherFaqBlock = () => (
 const CollectionTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
   <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
     <ContentVoucherFaqBlock />
-    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below" />
+    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your voucher subscription package below" />
     <ContentHelpBlock
       faqLink={
         <a
