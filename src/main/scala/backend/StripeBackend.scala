@@ -29,6 +29,7 @@ class StripeBackend(
                      identityService: IdentityService,
                      ophanService: AnalyticsService,
                      emailService: EmailService,
+                     recaptchaService: RecaptchaService,
                      cloudWatchService: CloudWatchService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
@@ -65,32 +66,41 @@ class StripeBackend(
   def createPaymentIntent(
     request: StripePaymentIntentRequest.CreatePaymentIntent,
     clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
+    def createIntent: EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] =
+      stripeService.createPaymentIntent(request)
+        .leftMap(err => {
+          logger.error(s"Unable to create Stripe Payment Intent ($request)", err)
+          cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
+          err
+        })
+        .flatMap { paymentIntent =>
 
-    stripeService.createPaymentIntent(request)
-      .leftMap(err => {
-        logger.error(s"Unable to create Stripe Payment Intent ($request)", err)
-        cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
-        err
-      })
-      .flatMap { paymentIntent =>
+          //https://stripe.com/docs/payments/intents#intent-statuses
+          paymentIntent.getStatus match {
+            case "requires_action" =>
+              //3DS required, return the clientSecret to the client
+              EitherT.fromEither(Right(StripePaymentIntentsApiResponse.RequiresAction(paymentIntent.getClientSecret)))
 
-        //https://stripe.com/docs/payments/intents#intent-statuses
-        paymentIntent.getStatus match {
-          case "requires_action" =>
-            //3DS required, return the clientSecret to the client
-            EitherT.fromEither(Right(StripePaymentIntentsApiResponse.RequiresAction(paymentIntent.getClientSecret)))
+            case "succeeded" =>
+              //Payment complete without the need for 3DS - do post-payment tasks and return success to client
+              EitherT.liftF(paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo))
 
-          case "succeeded" =>
-            //Payment complete without the need for 3DS - do post-payment tasks and return success to client
-            EitherT.liftF(paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo))
-
-          case otherStatus =>
-            logger.error(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
-            EitherT.fromEither(
-              Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None))
-            )
+            case otherStatus =>
+              logger.error(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
+              EitherT.fromEither(
+                Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None))
+              )
+          }
         }
-      }
+
+    request.recaptchaToken.fold(createIntent) {
+      token =>
+        recaptchaService
+          .verify(token)
+          .flatMap { resp =>
+            if (resp.success) createIntent else EitherT.leftT(StripeApiError.fromString("Recaptcha failed", None))
+          }
+    }
   }
 
   def confirmPaymentIntent(
@@ -219,9 +229,10 @@ object StripeBackend {
                      identityService: IdentityService,
                      ophanService: AnalyticsService,
                      emailService: EmailService,
+                     recaptchaService: RecaptchaService,
                      cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): StripeBackend = {
-    new StripeBackend(stripeService, databaseService, identityService, ophanService, emailService, cloudWatchService)
+    new StripeBackend(stripeService, databaseService, identityService, ophanService, emailService, recaptchaService, cloudWatchService)
   }
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
@@ -245,6 +256,9 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
+      configLoader
+        .loadConfig[Environment, RecaptchaConfig](env)
+        .andThen(RecaptchaService.fromRecaptchaConfig): InitializationResult[RecaptchaService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService]
     ).mapN(StripeBackend.apply)
   }

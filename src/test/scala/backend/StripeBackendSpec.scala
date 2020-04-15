@@ -6,8 +6,8 @@ import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.stripe.model.Charge.PaymentMethodDetails
-import io.circe.Json
 import com.stripe.model.{Charge, ChargeCollection, Event, PaymentIntent}
+import io.circe.Json
 import model.paypal.PaypalApiError
 import model.stripe.StripePaymentIntentRequest.{ConfirmPaymentIntent, CreatePaymentIntent}
 import model.stripe.{StripeApiError, _}
@@ -29,11 +29,13 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   //-- entities
   val email = Json.fromString("email@email.com").as[NonEmptyString].right.get
   val token = Json.fromString("token").as[NonEmptyString].right.get
+  val recaptchaToken = "recaptchaToken"
   val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
   val stripePaymentData = StripePaymentData(email, Currency.USD, 12, token, None)
   val stripePublicKey = StripePublicKey("pk_test_FOOBAR")
   val stripeChargeRequest = LegacyStripeChargeRequest(stripePaymentData, acquisitionData, Some(stripePublicKey))
-  val createPaymentIntent = CreatePaymentIntent("payment-method-id", stripePaymentData, acquisitionData, Some(stripePublicKey))
+  val createPaymentIntent = CreatePaymentIntent("payment-method-id", stripePaymentData, acquisitionData, Some(stripePublicKey), None)
+  val createPaymentIntentWithRecaptcha = CreatePaymentIntent("payment-method-id", stripePaymentData, acquisitionData, Some(stripePublicKey), Some(recaptchaToken))
   val confirmPaymentIntent = ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
 
   val countrySubdivisionCode = Some("NY")
@@ -87,6 +89,12 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(emailError))
   val emailServiceErrorResponse: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(EmailService.Error(new Exception("email service failure"))))
+  val recaptchaServiceErrorResponse: EitherT[Future, StripeApiError, RecaptchaResponse] =
+    EitherT.left(Future.successful(stripeApiError))
+  val recaptchaServiceSuccess: EitherT[Future, StripeApiError, RecaptchaResponse] =
+    EitherT.right(Future.successful(RecaptchaResponse(true)))
+  val recaptchaServiceFail: EitherT[Future, StripeApiError, RecaptchaResponse] =
+    EitherT.right(Future.successful(RecaptchaResponse(false)))
 
   //-- service mocks
   val mockStripeService: StripeService = mock[StripeService]
@@ -94,6 +102,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockIdentityService: IdentityService = mock[IdentityService]
   val mockOphanService: AnalyticsService = mock[AnalyticsService]
   val mockEmailService: EmailService = mock[EmailService]
+  val mockRecaptchaService: RecaptchaService = mock[RecaptchaService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
   //-- test obj
@@ -103,6 +112,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockIdentityService,
     mockOphanService,
     mockEmailService,
+    mockRecaptchaService,
     mockCloudWatchService)(new DefaultThreadPool(ec))
 
   def populateChargeMock(): Unit = {
@@ -152,7 +162,6 @@ class StripeBackendSpec
       "return error if stripe service fails" in new StripeBackendFixture {
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponseError)
         stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureLeft shouldBe stripeApiError
-
       }
 
       "return successful payment response even if identityService, " +
@@ -255,6 +264,56 @@ class StripeBackendSpec
 
         stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight shouldBe
           StripePaymentIntentsApiResponse.RequiresAction("a_secret")
+      }
+    }
+
+    "a request is made to create a Payment Intent with a recaptcha token" should {
+      "return success if recaptcha is ok" in new StripeBackendFixture {
+        populateChargeMock()
+        when(paymentIntentMock.getStatus).thenReturn("succeeded")
+
+        populatePaymentIntentMock()
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockStripeService.createPaymentIntent(createPaymentIntent)).thenReturn(paymentServiceIntentResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
+        when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceSuccess)
+
+        stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight shouldBe
+          StripePaymentIntentsApiResponse.Success(Some("guest-token"))
+      }
+
+      "return fail if recaptcha check fails" in new StripeBackendFixture {
+        populateChargeMock()
+        when(paymentIntentMock.getStatus).thenReturn("succeeded")
+
+        populatePaymentIntentMock()
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockStripeService.createPaymentIntent(createPaymentIntent)).thenReturn(paymentServiceIntentResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
+        when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceFail)
+
+        stripeBackend.createPaymentIntent(createPaymentIntentWithRecaptcha, clientBrowserInfo).futureLeft shouldBe
+          StripeApiError.fromString(s"Recaptcha failed", None)
+      }
+
+      "error if recaptcha is unavailable" in new StripeBackendFixture {
+        populateChargeMock()
+        when(paymentIntentMock.getStatus).thenReturn("succeeded")
+
+        populatePaymentIntentMock()
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockStripeService.createPaymentIntent(createPaymentIntent)).thenReturn(paymentServiceIntentResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
+        when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceErrorResponse)
+
+        stripeBackend.createPaymentIntent(createPaymentIntentWithRecaptcha, clientBrowserInfo).futureLeft shouldBe
+          StripeApiError.fromString(s"Stripe error", None)
       }
     }
 

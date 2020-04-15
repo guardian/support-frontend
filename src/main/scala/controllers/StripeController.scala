@@ -1,17 +1,17 @@
 package controllers
 
 import actions.{CorsActionProvider, RateLimitingAction, RateLimitingSettings}
+import backend.StripeBackend
 import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
+import controllers.ActionOps.Extension
+import model._
+import model.stripe.StripePaymentIntentsApiResponse.{requiresActionEncoder, successEncoder}
+import model.stripe._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import util.RequestBasedProvider
-import backend.StripeBackend
-import model.stripe.{LegacyStripeChargeRequest, StripePaymentIntentRequest, StripePaymentIntentsApiResponse, StripeRefundHook}
-import model.stripe.StripePaymentIntentsApiResponse.{requiresActionEncoder, successEncoder}
-import model._
-import ActionOps.Extension
 import services.CloudWatchService
+import util.RequestBasedProvider
 
 import scala.concurrent.duration._
 
@@ -22,9 +22,9 @@ class StripeController(
 )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
   extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
 
-  import util.RequestTypeDecoder.instances._
-  import model.stripe.StripeJsonDecoder._
   import model.CheckoutError.checkoutErrorEncoder
+  import model.stripe.StripeJsonDecoder._
+  import util.RequestTypeDecoder.instances._
 
   private val RateLimitingAction = new RateLimitingAction(
     cc.parsers,
@@ -36,18 +36,17 @@ class StripeController(
 
   lazy val CorsAndRateLimitAction = CorsAction andThen RateLimitingAction
 
-  def executePayment: Action[LegacyStripeChargeRequest] = CorsAndRateLimitAction.async(circe.json[LegacyStripeChargeRequest]) { request => {
-      stripeBackendProvider.getInstanceFor(request)
-        .createCharge(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
-        .fold(
-          err => {
-            val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
-            new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
-          },
-          charge => Ok(ResultBody.Success(charge))
-        )
-      }
-    }.withLogging(this.getClass.getCanonicalName, "executePayment")
+  def executePayment: Action[LegacyStripeChargeRequest] = CorsAndRateLimitAction.async(circe.json[LegacyStripeChargeRequest]) { request =>
+    stripeBackendProvider.getInstanceFor(request)
+      .createCharge(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
+      .fold(
+        err => {
+          val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
+          new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
+        },
+        charge => Ok(ResultBody.Success(charge))
+      )
+  }.withLogging(this.getClass.getCanonicalName, "executePayment")
 
   def processRefund: Action[StripeRefundHook] = Action(circe.json[StripeRefundHook]).async { request =>
     stripeBackendProvider.getInstanceFor(request)
