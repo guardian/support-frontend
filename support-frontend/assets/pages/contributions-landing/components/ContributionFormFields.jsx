@@ -30,7 +30,7 @@ import {
 } from '../contributionsLandingActions';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 import ContributionTextInputDs from './ContributionTextInputDs';
-
+import ContributionStateDs from './ContributionStateDs';
 
 
 // ----- Types ----- //
@@ -48,6 +48,7 @@ type PropTypes = {|
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateBillingState: Event => void,
+  updateBillingStateDs: (string | null) => void,
   checkIfEmailHasPassword: Event => void,
   contributionType: ContributionType,
   designSystemTestVariant: LandingPageDesignSystemTestVariants,
@@ -78,6 +79,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateBillingState: (event) => { dispatch(updateBillingState(event.target.value === '' ? null : event.target.value)); },
+  updateBillingStateDs: (formattedBillingState: string | null) => {
+    dispatch(updateBillingState(formattedBillingState));
+  },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 
@@ -172,13 +176,13 @@ function withProps(props: PropTypes) {
         value={email}
         type="email"
         autoComplete="email"
-        placeholder="example@domain.com"
+        supporting="example@domain.com"
         onInput={props.updateEmail}
         onChange={props.checkIfEmailHasPassword}
         isValid={checkEmail(email)}
         pattern={emailRegexPattern}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-        errorMessage="Enter a valid email address"
+        errorMessage="Please provide a valid email address"
         required
         disabled={isSignedIn}
       />
@@ -189,6 +193,47 @@ function withProps(props: PropTypes) {
         contributionType={props.contributionType}
         checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
         email={props.email}
+      />
+      {props.contributionType !== 'ONE_OFF' ?
+        <div>
+          <ContributionTextInputDs
+            id="contributionFirstName"
+            name="contribution-fname"
+            label="First name"
+            value={firstName}
+            autoComplete="given-name"
+            autoCapitalize="words"
+            onInput={props.updateFirstName}
+            isValid={checkFirstName(firstName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your first name"
+            required
+          />
+          <ContributionTextInputDs
+            id="contributionLastName"
+            name="contribution-lname"
+            label="Last name"
+            value={lastName}
+            autoComplete="family-name"
+            autoCapitalize="words"
+            onInput={props.updateLastName}
+            isValid={checkLastName(lastName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your last name"
+            required
+          />
+        </div> : null
+      }
+      {/* <ContributionState
+        onChange={props.updateBillingState}
+        selectedState={billingState}
+        isValid={checkBillingState(billingState)}
+        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+      /> */}
+      <ContributionStateDs
+        onChange={props.updateBillingStateDs}
+        value={billingState}
+        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
       />
     </>
   );
