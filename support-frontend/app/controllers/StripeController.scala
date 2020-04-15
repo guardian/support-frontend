@@ -45,7 +45,7 @@ class StripeController(
   def createSetupIntentRecaptcha: Action[SetupIntentRequestRecaptcha] = PrivateAction.async(circe.json[SetupIntentRequestRecaptcha]) { implicit request =>
     val v2RecaptchaToken = request.body.token
 
-    val cloudwatchEvent = createSetupIntentRequest(stage, "v2Recaptcha");
+    val cloudwatchEvent = createSetupIntentRequest(stage, "v2Recaptcha")
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
     if (v2RecaptchaToken.nonEmpty) {
@@ -70,6 +70,20 @@ class StripeController(
       logger.warn(s"Returning status BadRequest for Create Stripe Intent Recaptcha request because user provided no one-time-token value")
       Future.successful(BadRequest("reCAPTCHA one-time-token required"))
     }
+  }
+
+  def createSetupIntentPRB: Action[SetupIntentRequest] = PrivateAction.async(circe.json[SetupIntentRequest]) { implicit request =>
+
+    val cloudwatchEvent = createSetupIntentRequest(stage, "CSRF-only")
+    AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+
+    stripeService(request.body.stripePublicKey).fold(
+      error => {
+        logger.error(s"Returning status InternalServerError for Create Stripe Intent request because: $error")
+        InternalServerError("")
+      },
+      response => Ok(response.asJson)
+    )
   }
 
   def createSetupIntentWithAuth: Action[SetupIntentRequest] =

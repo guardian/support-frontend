@@ -18,7 +18,7 @@ import type {
 } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-// import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
+import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import { setupStripe } from 'helpers/stripe';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 
@@ -45,9 +45,7 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
   }
 
   render() {
-    // TODO - Payment Request Button is disabled for recurring until it uses Recaptcha
-    // const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
-    const showStripePaymentRequestButton = this.props.contributionType === 'ONE_OFF';
+    const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
 
     if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
       const stripeAccount = stripeAccountForContributionType[this.props.contributionType];

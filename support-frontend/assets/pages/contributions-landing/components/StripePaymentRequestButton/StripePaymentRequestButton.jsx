@@ -206,8 +206,7 @@ function onClick(event, props: PropTypes) {
 // Requests a new SetupIntent and returns the associated clientSecret
 function fetchClientSecret(props: PropTypes): Promise<string> {
   return fetchJson(
-    // TODO - use recaptcha endpoint
-    routes.stripeSetupIntentWithAuth,
+    '/stripe/create-setup-intent/prb',
     requestOptions({ stripePublicKey: props.stripeKey }, 'omit', 'POST', props.csrf),
   ).then((result) => {
     if (result.client_secret) {
