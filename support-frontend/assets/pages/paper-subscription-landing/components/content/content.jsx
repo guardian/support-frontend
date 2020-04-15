@@ -16,8 +16,7 @@ import CollectionTab from './collectionTab';
 import './content.scss';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 
-// TODO: update this to get value from window.guardian
-const tabToUseForCollection = 'subscriptions';
+const { useDigitalVoucher } = window.guardian;
 
 // ----- Render ----- //
 class Content extends Component<ContentPropTypes> {
@@ -35,15 +34,16 @@ class Content extends Component<ContentPropTypes> {
 
   render() {
     const { selectedTab, setTabAction } = this.props;
+    console.log({ useDigitalVoucher });
 
     if (selectedTab === Collection) {
-      return tabToUseForCollection === 'voucher'
-        ? <CollectionTab
+      return useDigitalVoucher
+        ? <SubscriptionCardTab
           {...{ selectedTab, setTabAction }}
           getRef={(r) => { if (r) { this.tabRef = r; } }}
         />
 
-        : <SubscriptionCardTab
+        : <CollectionTab
           {...{ selectedTab, setTabAction }}
           getRef={(r) => { if (r) { this.tabRef = r; } }}
         />;

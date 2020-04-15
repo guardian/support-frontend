@@ -8,6 +8,7 @@
 @import views.ViewHelpers._
 @import io.circe.syntax._
 @import com.gu.support.encoding.CustomCodecs._
+@import com.gu.support.catalog.Paper
 
 @import assets.RefPath
 @import views.EmptyDiv
@@ -64,6 +65,8 @@
       window.guardian.csrf = { token: "@CSRF.getToken.value" };
 
       window.guardian.checkoutPostcodeLookup = "@settings.switches.experiments.get("checkoutPostcodeLookup").exists(_.isOn)"
+
+      window.guardian.useDigitalVoucher = @{Paper.useDigitalVoucher}
   </script>
 
   }

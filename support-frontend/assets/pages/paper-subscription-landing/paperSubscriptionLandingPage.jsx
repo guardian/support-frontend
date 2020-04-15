@@ -36,7 +36,7 @@ const reactElementId = 'paper-subscription-landing-page';
 // ----- Redux Store ----- //
 
 const store = pageInit(() => reducer(fulfilment), true);
-
+const { useDigitalVoucher } = window.guardian;
 
 // ----- Render ----- //
 
@@ -51,8 +51,9 @@ const content = (
         <Content needsHigherZindex innerBackground="grey">
           <Text>
             <LargeParagraph>
-              We offer two different subscription types: subscription cards and home delivery.
-              Pick the most convenient option available in your area
+              {useDigitalVoucher
+              ? 'We offer two different subscription types: subscription cards and home delivery. Pick the most convenient option available in your area.'
+              : 'We offer two different subscription types: voucher booklets and home delivery'}
             </LargeParagraph>
           </Text>
           <Tabs />

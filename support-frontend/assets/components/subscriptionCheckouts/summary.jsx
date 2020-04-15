@@ -228,6 +228,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
 
   render() {
     const { product } = this.props;
+    console.log('props: ', this.props);
 
     return (
       <aside className={styles.root}>

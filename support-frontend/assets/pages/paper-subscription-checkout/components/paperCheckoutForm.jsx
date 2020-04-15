@@ -148,10 +148,13 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 // ----- Component ----- //
 
 function PaperCheckoutForm(props: PropTypes) {
+  const { useDigitalVoucher } = window.guardian;
+  const collectionOption = useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
+  const collectionOptionDescription = useDigitalVoucher ? 'subscription card' : 'vouchers';
   const days = getDays(props.fulfilmentOption, props.productOption);
-  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
-  const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : 'Voucher booklet';
-  const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : 'Where should we deliver your vouchers?';
+  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : collectionOption;
+  const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : collectionOption;
+  const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
@@ -284,10 +287,10 @@ function PaperCheckoutForm(props: PropTypes) {
               <Text className="component-text__paddingTop">
                 <p>
                   We will take the first payment on the
-                  date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
+                  date you {(props.fulfilmentOption === HomeDelivery || !useDigitalVoucher) ? 'receive' : 'start using'} your {(props.fulfilmentOption === HomeDelivery || !useDigitalVoucher) && 'first'} {fulfilmentOptionDescriptor.toLowerCase()}.
                 </p>
                 <p>
-                 Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                 Subscription start dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
             </Rows>

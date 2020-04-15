@@ -25,29 +25,37 @@ const emptyAmountsSettings = {
   ANNUAL: [],
 };
 
-const getSettings = (): Settings => getGlobal('settings') || {
-  switches: {
-    experiments: {},
-  },
-  amounts: {
-    GBPCountries: emptyAmountsSettings,
-    UnitedStates: emptyAmountsSettings,
-    EURCountries: emptyAmountsSettings,
-    AUDCountries: emptyAmountsSettings,
-    International: emptyAmountsSettings,
-    NZDCountries: emptyAmountsSettings,
-    Canada: emptyAmountsSettings,
-  },
-  contributionTypes: {
-    GBPCountries: [],
-    UnitedStates: [],
-    EURCountries: [],
-    AUDCountries: [],
-    International: [],
-    NZDCountries: [],
-    Canada: [],
-  },
-  metricUrl: '',
+const getSettings = (): Settings => {
+  const globalSettings = getGlobal('settings');
+  if (globalSettings) {
+    const useDigitalVoucher = getGlobal('useDigitalVoucher');
+    return { ...globalSettings, useDigitalVoucher };
+  }
+  return {
+    switches: {
+      experiments: {},
+    },
+    amounts: {
+      GBPCountries: emptyAmountsSettings,
+      UnitedStates: emptyAmountsSettings,
+      EURCountries: emptyAmountsSettings,
+      AUDCountries: emptyAmountsSettings,
+      International: emptyAmountsSettings,
+      NZDCountries: emptyAmountsSettings,
+      Canada: emptyAmountsSettings,
+    },
+    contributionTypes: {
+      GBPCountries: [],
+      UnitedStates: [],
+      EURCountries: [],
+      AUDCountries: [],
+      International: [],
+      NZDCountries: [],
+      Canada: [],
+    },
+    metricUrl: '',
+    useDigitalVoucher: null,
+  };
 };
 
 const getProductPrices = (): ?ProductPrices => getGlobal('productPrices');

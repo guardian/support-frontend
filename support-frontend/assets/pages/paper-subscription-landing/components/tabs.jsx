@@ -16,9 +16,11 @@ import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 
 // ----- Tabs ----- //
 
+const { useDigitalVoucher } = window.guardian;
+
 export const tabs: {[PaperFulfilmentOptions]: {name: string, href: string}} = {
   Collection: {
-    name: 'Subscription card',
+    name: useDigitalVoucher ? 'Subscription Card' : 'Voucher Booklet',
     href: paperSubsUrl(false),
   },
   HomeDelivery: {

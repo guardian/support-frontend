@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Content, { Divider } from 'components/content/content';
+import Content from 'components/content/content';
 import Text from 'components/text/text';
 import UnorderedList from 'components/list/unorderedList';
 import GridImage from 'components/gridImage/gridImage';
@@ -41,7 +41,6 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
       Select your subscription below and checkout. You&apos;ll receive your first newspaper
       as quickly as five days from subscribing.
     </Text>
-    <Divider small />
     <Text title="Giving you peace of mind">
       <UnorderedList items={[
         'Your paper will arrive before 8am from Monday to Saturday and before 8.30am on Sunday',
