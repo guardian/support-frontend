@@ -56,6 +56,7 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
+  postDeploymentTestUser: string,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -69,6 +70,7 @@ const mapStateToProps = (state: State) => ({
   recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
+  postDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -235,6 +237,24 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
+      if (this.props.postDeploymentTestUser){
+        fetchJson(
+          '/stripe/create-setup-intent/recaptcha',
+          requestOptions(
+            { token: 'post-deploy-token', stripePublicKey: this.props.stripeKey },
+            'same-origin',
+            'POST',
+            this.props.csrf,
+          ),
+        )
+          .then((json) => {
+            if (json.client_secret) {
+              this.handleCardSetupForRecurring(json.client_secret);
+            } else {
+              throw new Error(`Missing client_secret field in server response: ${JSON.stringify(json)}`);
+            }
+          })
+      }
 
       /* Recaptcha verification is required for setupIntent creation.
       If setupIntentClientSecret is ready then complete the payment now.

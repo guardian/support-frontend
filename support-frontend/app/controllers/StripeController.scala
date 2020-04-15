@@ -2,8 +2,8 @@ package controllers
 
 import actions.CustomActionBuilders
 import com.gu.aws.AwsCloudWatchMetricPut
-import com.gu.aws.AwsCloudWatchMetricPut.{createSetupIntentRequest, client}
-import com.gu.support.config.Stage
+import com.gu.aws.AwsCloudWatchMetricPut.{client, createSetupIntentRequest}
+import com.gu.support.config.{Stage, StripeConfig}
 import actions.CustomActionBuilders.AuthRequest
 import com.gu.monitoring.SafeLogger
 import com.typesafe.scalalogging.StrictLogging
@@ -27,13 +27,14 @@ object SetupIntentRequest {
 }
 
 class StripeController(
-  components: ControllerComponents,
-  actionRefiners: CustomActionBuilders,
-  recaptchaService: RecaptchaService,
-  stripeService: StripeSetupIntentService,
-  identityService: IdentityService,
-  v2RecaptchaKey: String,
-  stage: Stage
+                        components: ControllerComponents,
+                        actionRefiners: CustomActionBuilders,
+                        recaptchaService: RecaptchaService,
+                        stripeService: StripeSetupIntentService,
+                        identityService: IdentityService,
+                        v2RecaptchaKey: String,
+                        testStripeConfig: StripeConfig,
+                        stage: Stage
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
   import actionRefiners._
@@ -48,28 +49,35 @@ class StripeController(
     val cloudwatchEvent = createSetupIntentRequest(stage, "v2Recaptcha")
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
-    if (v2RecaptchaToken.nonEmpty) {
-      val result = for {
-        recaptchaResponse <- recaptchaService.verify(v2RecaptchaToken, v2RecaptchaKey)
-        response <- if (recaptchaResponse.success) {
-          stripeService(request.body.stripePublicKey).map(response => Ok(response.asJson))
-        } else {
-          logger.warn(s"Returning status Forbidden for Create Stripe Intent Recaptcha request because Recaptcha verification failed")
-          EitherT.rightT[Future, String](Forbidden(""))
-        }
-      } yield response
+    val testPublicKeys = Set(testStripeConfig.australiaAccount.publicKey,
+      testStripeConfig.defaultAccount.publicKey,
+      testStripeConfig.unitedStatesAccount.publicKey)
 
-      result.fold(
-        error => {
-          logger.error(s"Returning status InternalServerError for Create Stripe Intent Recaptcha request because: $error")
-          InternalServerError("")
-        },
-        identity
-      )
-    } else {
-      logger.warn(s"Returning status BadRequest for Create Stripe Intent Recaptcha request because user provided no one-time-token value")
-      Future.successful(BadRequest("reCAPTCHA one-time-token required"))
-    }
+    val verified =
+      if (testPublicKeys(request.body.stripePublicKey)) {
+        EitherT.rightT[Future, String](true)
+      }
+      else {
+        recaptchaService.verify(v2RecaptchaToken, v2RecaptchaKey).map(_.success)
+      }
+
+    val result = for {
+      v <- verified
+      response <- if (v) {
+        stripeService(request.body.stripePublicKey).map(response => Ok(response.asJson))
+      } else {
+        logger.warn(s"Returning status Forbidden for Create Stripe Intent Recaptcha request because Recaptcha verification failed")
+        EitherT.rightT[Future, String](Forbidden(""))
+      }
+    } yield response
+
+    result.fold(
+      error => {
+        logger.error(s"Returning status InternalServerError for Create Stripe Intent Recaptcha request because: $error")
+        InternalServerError("")
+      },
+      identity
+    )
   }
 
   def createSetupIntentPRB: Action[SetupIntentRequest] = PrivateAction.async(circe.json[SetupIntentRequest]) { implicit request =>
