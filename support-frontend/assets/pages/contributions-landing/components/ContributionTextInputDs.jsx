@@ -14,8 +14,7 @@ type PropTypes = {|
   id: string,
   name: string,
   label: string,
-  placeholder: string | null,
-  // icon: React$Element<*>,
+  supporting: string | null,
   type?: string,
   value: string | null,
   errorMessage: string | null,
@@ -38,27 +37,18 @@ type PropTypes = {|
 
 export default function ContributionTextInputDs(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
-  // const modifiersArray = showError ? ['invalid', props.id] : [props.id];
-  const showOptionalLabel = (!props.required);
 
   return (
     <div className={classNameWithModifiers('form__field', [props.name])}>
-      <label className="form__label" htmlFor={props.id}>
-        <span>{props.label}</span>
-        <span className={showOptionalLabel ? 'form__label__optional' : 'hidden'}>
-          optional
-        </span>
-      </label>
-      <span className="form__input-with-icon">
+      <span>
         <TextInput
+          label={props.label}
           id={props.id}
-          // className={classNameWithModifiers('form__input', modifiersArray)}
           type={props.type}
           autoCapitalize={props.autoCapitalize}
           autoComplete={props.autoComplete}
           autoFocus={props.autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
           optional={!props.required}
-          // placeholder={props.placeholder}
           onInput={props.onInput}
           onChange={props.onChange}
           value={props.value}
@@ -68,24 +58,19 @@ export default function ContributionTextInputDs(props: PropTypes) {
           step={props.step}
           disabled={props.disabled}
           error={showError && props.errorMessage}
-          supporting={!showError && props.placeholder}
+          supporting={!showError && props.supporting}
+          cssOverrides={{
+            width: 'calc(100% - 20px)',
+          }}
         />
-        {/* <span className="form__icon">
-          {props.icon}
-        </span> */}
       </span>
-      {/* {showError ? (
-        <div className="form__error">
-          {props.errorMessage}
-        </div>
-      ) : null} */}
     </div>
   );
 }
 
 ContributionTextInputDs.defaultProps = {
   type: 'text',
-  placeholder: null,
+  supporting: null,
   required: false,
   onInput: undefined,
   onChange: () => {},

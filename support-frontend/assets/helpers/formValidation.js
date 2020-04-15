@@ -9,6 +9,8 @@ import { config } from 'helpers/contributions';
 import type { CountryGroup, CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { Canada, UnitedStates, AUDCountries, countryGroups } from './internationalisation/countryGroup';
+import { stateProvinceFieldFromString } from 'helpers/internationalisation/country';
+
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
@@ -25,6 +27,9 @@ export const maxTwoDecimals: string => boolean = input => new RegExp('^\\d+\\.?\
 export const checkFirstName: (string | null) => boolean = isNotEmpty;
 export const checkLastName: (string | null) => boolean = isNotEmpty;
 export const checkBillingState: (string | null) => boolean = s => typeof s === 'string' && isNotEmpty(s);
+export const checkBillingStateDs: (string | null, CountryGroupId) => boolean = (input, countryGroupId) =>
+  input !== null && stateProvinceFieldFromString(countryGroupId, input) !== null;
+
 export const checkEmail: (string | null) => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(input) || isValidEmail(input);
