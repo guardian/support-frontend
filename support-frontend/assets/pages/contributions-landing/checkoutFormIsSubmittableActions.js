@@ -119,8 +119,8 @@ function enableOrDisableForm() {
     dispatch(setFormIsValid(formIsValid));
 
     const recaptchaRequired =
-      state.page.form.paymentMethod === 'Stripe'
-      && recaptchaEnabled(state.common.internationalisation.countryGroupId);
+      (!state.page.user.isPostDeploymentTestUser) || (state.page.form.paymentMethod === 'Stripe'
+      && recaptchaEnabled(state.common.internationalisation.countryGroupId));
 
     const RecaptchaVerified =
       state.page.form.contributionType !== 'ONE_OFF' ?
