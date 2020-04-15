@@ -1,11 +1,10 @@
 package controllers
 
 import actions.CustomActionBuilders
+import actions.CustomActionBuilders.AuthRequest
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client, createSetupIntentRequest}
 import com.gu.support.config.{Stage, StripeConfig}
-import actions.CustomActionBuilders.AuthRequest
-import com.gu.monitoring.SafeLogger
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
@@ -54,12 +53,10 @@ class StripeController(
       testStripeConfig.unitedStatesAccount.publicKey)
 
     val verified =
-      if (testPublicKeys(request.body.stripePublicKey)) {
+      if (testPublicKeys(request.body.stripePublicKey))
         EitherT.rightT[Future, String](true)
-      }
-      else {
+      else
         recaptchaService.verify(v2RecaptchaToken, v2RecaptchaKey).map(_.success)
-      }
 
     val result = for {
       v <- verified
