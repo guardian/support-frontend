@@ -124,14 +124,14 @@ function enableOrDisableForm() {
 
     const RecaptchaVerified =
       state.page.form.contributionType !== 'ONE_OFF' ?
-      state.page.form.stripeCardFormData.recurringRecaptchaVerified
-      : !!state.page.form.oneOffRecaptchaToken;
+        state.page.form.stripeCardFormData.recurringRecaptchaVerified
+        : !!state.page.form.oneOffRecaptchaToken;
 
     const shouldEnable =
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn
-      && (RecaptchaVerified || !recaptchaRequired );
+      && (RecaptchaVerified || !recaptchaRequired);
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };

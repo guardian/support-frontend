@@ -57,6 +57,7 @@ type PropTypes = {|
   recurringRecaptchaVerified: boolean,
   formIsSubmittable: boolean,
   setOneOffRecaptchaToken: string => Action,
+  oneOffRecaptchaToken: string,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -69,6 +70,7 @@ const mapStateToProps = (state: State) => ({
   setupIntentClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
   recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
+  oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -89,7 +91,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(setPaymentWaiting(isWaiting)),
   setStripeSetupIntentClientSecret: (clientSecret: string) => dispatch(setStripeSetupIntentClientSecret(clientSecret)),
   setOneOffRecaptchaToken: (recaptchaToken: string) => dispatch(updateRecaptchaToken(recaptchaToken)),
-  setStripeRecurringRecaptchaVerified: (recaptchaVerified: boolean) => dispatch(setStripeRecurringRecaptchaVerified(recaptchaVerified)),
+  setStripeRecurringRecaptchaVerified: (recaptchaVerified: boolean) =>
+    dispatch(setStripeRecurringRecaptchaVerified(recaptchaVerified)),
 });
 
 type CardFieldState =
@@ -415,8 +418,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
         <div>
           <div id="robot_checkbox" className="robot_checkbox" />
           {
-            this.props.checkoutFormHasBeenSubmitted &&
-            !this.props.recurringRecaptchaVerified ?
+            this.props.checkoutFormHasBeenSubmitted
+            && (!this.props.oneOffRecaptchaToken || !this.props.recurringRecaptchaVerified) ?
               renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
           }
         </div>
