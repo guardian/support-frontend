@@ -15,9 +15,7 @@ export const list = css`
   border: solid 1px ${border.secondary};
 `;
 
-export const listItem = css`
+export const listItem = (selected: boolean) => css`
   padding: 0px 4px;
-  &:hover {
-    background: #eee;
-  }
+  background: ${selected ? '#eee' : '#fff'};
 `;

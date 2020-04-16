@@ -1,7 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
-import { find } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
+import React from 'react';
 import type {
   FindItem,
   FindResponse,
@@ -9,57 +8,41 @@ import type {
 import type { Option } from 'helpers/types/option';
 import * as styles from './resultsDropdownStyles';
 
-type State = {
-  findComplete: boolean,
-  findResponse: Option<FindResponse>,
-}
-
 type PropTypes = {
-  searchTerm: string,
+  findResponse: Option<FindResponse>,
+  selectedItem: number,
+  setSelectedItem: Function,
 }
 
-const ListItem = (props: { item: FindItem, index: number }) =>
-  <li css={styles.listItem} tabIndex="0">{props.item.Text} <span css={styles.description}>{props.item.Description}</span> </li>;
+const ListItem = (props: { item: FindItem, index: number, selected: boolean, setSelectedItem: Function }) => (
 
-class ResultsDropdown extends Component<PropTypes, State> {
+  <li
+    css={styles.listItem(props.selected)}
+    tabIndex="-1"
+    onMouseOver={() => props.setSelectedItem(props.index)}
+  >
+    {props.item.Text}
+    <span css={styles.description}>{props.item.Description}</span>
+  </li>);
 
-  constructor() {
-    super();
-    this.state = {
-      findComplete: false,
-      findResponse: null,
-    };
+const ResultsDropdown = (props: PropTypes) => {
+  if (props.findResponse) {
+    const listItems = props.findResponse.Items.map((item, index) =>
+      <ListItem
+        item={item}
+        index={index}
+        selected={index === props.selectedItem}
+        setSelectedItem={props.setSelectedItem}
+      />);
+
+    return (
+      <div css={styles.list}>
+        <ul tabIndex="0">
+          {listItems}
+        </ul>
+      </div>);
   }
-
-  shouldComponentUpdate(nextProps: Readonly<PropTypes>, nextState: ReadOnly<State>): boolean {
-    if (this.state.findComplete === false && nextState.findComplete === true) {
-      return true;
-    }
-    if (nextProps.searchTerm !== this.props.searchTerm) {
-      this.setState({ findComplete: false });
-      find(nextProps.searchTerm).then((findResponse: FindResponse) => {
-        console.log(findResponse);
-        this.setState({
-          findComplete: true,
-          findResponse,
-        });
-      });
-    }
-    return false;
-  }
-
-  render() {
-    if (this.state.findResponse) {
-      const listItems = this.state.findResponse.Items.map((item, i) => <ListItem item={item} index={i} />);
-      return (
-        <div css={styles.list}>
-          <ul>
-            {listItems}
-          </ul>
-        </div>);
-    }
-    return null;
-  }
-}
+  return null;
+};
 
 export { ResultsDropdown };
