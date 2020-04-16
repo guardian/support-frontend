@@ -14,7 +14,6 @@ import {
   type StripePaymentMethod,
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { routes } from '../../../../helpers/routes';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
