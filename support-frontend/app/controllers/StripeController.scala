@@ -26,14 +26,14 @@ object SetupIntentRequest {
 }
 
 class StripeController(
-                        components: ControllerComponents,
-                        actionRefiners: CustomActionBuilders,
-                        recaptchaService: RecaptchaService,
-                        stripeService: StripeSetupIntentService,
-                        identityService: IdentityService,
-                        v2RecaptchaKey: String,
-                        testStripeConfig: StripeConfig,
-                        stage: Stage
+  components: ControllerComponents,
+  actionRefiners: CustomActionBuilders,
+  recaptchaService: RecaptchaService,
+  stripeService: StripeSetupIntentService,
+  identityService: IdentityService,
+  v2RecaptchaKey: String,
+  testStripeConfig: StripeConfig,
+  stage: Stage
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
   import actionRefiners._
