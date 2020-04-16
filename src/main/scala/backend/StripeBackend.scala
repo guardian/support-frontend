@@ -10,6 +10,7 @@ import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
 import conf.ConfigLoader._
 import conf._
+import model.Environment.{Live, Test}
 import model._
 import model.acquisition.StripeAcquisition
 import model.db.ContributionData
@@ -18,8 +19,8 @@ import model.stripe.{StripePaymentIntentRequest, _}
 import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
-import scala.collection.JavaConverters._
 
+import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
 // Provides methods required by the Stripe controller
@@ -30,7 +31,8 @@ class StripeBackend(
                      ophanService: AnalyticsService,
                      emailService: EmailService,
                      recaptchaService: RecaptchaService,
-                     cloudWatchService: CloudWatchService
+                     cloudWatchService: CloudWatchService,
+                     environment: Environment
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
@@ -66,7 +68,7 @@ class StripeBackend(
   def createPaymentIntent(
     request: StripePaymentIntentRequest.CreatePaymentIntent,
     clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
-    def createIntent: EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] =
+    def createIntent(): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] =
       stripeService.createPaymentIntent(request)
         .leftMap(err => {
           logger.error(s"Unable to create Stripe Payment Intent ($request)", err)
@@ -93,12 +95,13 @@ class StripeBackend(
           }
         }
 
-    request.recaptchaToken.fold(createIntent) {
-      token =>
+    environment match {
+      case Test => createIntent()
+      case Live =>
         recaptchaService
-          .verify(token)
+          .verify(request.recaptchaToken)
           .flatMap { resp =>
-            if (resp.success) createIntent else EitherT.leftT(StripeApiError.fromString("Recaptcha failed", None))
+            if (resp.success) createIntent() else EitherT.leftT(StripeApiError.fromString("Recaptcha failed", None))
           }
     }
   }
@@ -230,9 +233,10 @@ object StripeBackend {
                      ophanService: AnalyticsService,
                      emailService: EmailService,
                      recaptchaService: RecaptchaService,
-                     cloudWatchService: CloudWatchService
+                     cloudWatchService: CloudWatchService,
+                     environment: Environment
   )(implicit pool: DefaultThreadPool): StripeBackend = {
-    new StripeBackend(stripeService, databaseService, identityService, ophanService, emailService, recaptchaService, cloudWatchService)
+    new StripeBackend(stripeService, databaseService, identityService, ophanService, emailService, recaptchaService, cloudWatchService, environment)
   }
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
@@ -259,7 +263,8 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, RecaptchaConfig](env)
         .andThen(RecaptchaService.fromRecaptchaConfig): InitializationResult[RecaptchaService],
-      new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService]
+      new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
+      env.valid: InitializationResult[Environment]
     ).mapN(StripeBackend.apply)
   }
 }

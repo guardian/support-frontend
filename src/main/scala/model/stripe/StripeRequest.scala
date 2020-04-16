@@ -139,7 +139,7 @@ object StripePaymentIntentRequest {
     paymentData: StripePaymentData,
     acquisitionData: AcquisitionData,
     publicKey: Option[StripePublicKey],
-    recaptchaToken: Option[String]) extends StripeRequest
+    recaptchaToken: String) extends StripeRequest
 
   case class ConfirmPaymentIntent(
     paymentIntentId: String,
