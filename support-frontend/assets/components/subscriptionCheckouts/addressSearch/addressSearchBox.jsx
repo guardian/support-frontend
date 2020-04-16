@@ -38,6 +38,10 @@ class AddressSearchBox extends Component<PropTypes, State> {
     if (this.state.findComplete === false && nextState.findComplete === true) {
       return true;
     }
+    if (nextState.findTerm === '') {
+      this.setState({ findResponse: null });
+      return true;
+    }
     if (nextState.findTerm !== this.state.findTerm) {
       this.setState({ findComplete: false });
       find(nextState.findTerm).then((findResponse: FindResponse) => {
@@ -56,13 +60,14 @@ class AddressSearchBox extends Component<PropTypes, State> {
 
   onArrowKeys(ev: KeyboardEvent) {
     console.log(ev);
-    if (ev.code === 'ArrowDown') {
+    const currentSelected = this.state.selectedItem;
+    if (ev.code === 'ArrowDown' && currentSelected < 9) {
       ev.preventDefault();
-      this.setSelectedItem(this.state.selectedItem + 1);
+      this.setSelectedItem(currentSelected + 1);
     }
-    if (ev.code === 'ArrowUp') {
+    if (ev.code === 'ArrowUp' && currentSelected > -1) {
       ev.preventDefault();
-      this.setSelectedItem(this.state.selectedItem - 1);
+      this.setSelectedItem(currentSelected - 1);
     }
   }
 
@@ -89,7 +94,7 @@ class AddressSearchBox extends Component<PropTypes, State> {
         <ResultsDropdown
           findResponse={this.state.findResponse}
           selectedItem={this.state.selectedItem}
-          setSelectedItem={(i) => this.setSelectedItem(i)}
+          setSelectedItem={i => this.setSelectedItem(i)}
         />
       </div>);
   }

@@ -15,11 +15,10 @@ type PropTypes = {
 }
 
 const ListItem = (props: { item: FindItem, index: number, selected: boolean, setSelectedItem: Function }) => (
-
   <li
     css={styles.listItem(props.selected)}
-    tabIndex="-1"
     onMouseOver={() => props.setSelectedItem(props.index)}
+    onFocus={() => props.setSelectedItem(props.index)}
   >
     {props.item.Text}
     <span css={styles.description}>{props.item.Description}</span>
@@ -28,16 +27,16 @@ const ListItem = (props: { item: FindItem, index: number, selected: boolean, set
 const ResultsDropdown = (props: PropTypes) => {
   if (props.findResponse) {
     const listItems = props.findResponse.Items.map((item, index) =>
-      <ListItem
+      (<ListItem
         item={item}
         index={index}
         selected={index === props.selectedItem}
         setSelectedItem={props.setSelectedItem}
-      />);
+      />));
 
     return (
       <div css={styles.list}>
-        <ul tabIndex="0">
+        <ul>
           {listItems}
         </ul>
       </div>);
