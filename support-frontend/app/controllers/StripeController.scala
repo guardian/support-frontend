@@ -49,8 +49,7 @@ class StripeController(
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
     val testPublicKeys = Set(testStripeConfig.australiaAccount.publicKey,
-      testStripeConfig.defaultAccount.publicKey,
-      testStripeConfig.unitedStatesAccount.publicKey)
+      testStripeConfig.defaultAccount.publicKey)
 
     val verified =
       if (testPublicKeys(request.body.stripePublicKey))
