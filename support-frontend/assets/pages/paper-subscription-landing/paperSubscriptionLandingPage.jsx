@@ -52,9 +52,9 @@ const content = (
         <Content needsHigherZindex innerBackground="grey">
           <Text>
             <LargeParagraph>
-              {useDigitalVoucher
-              ? 'We offer two different subscription types: subscription cards and home delivery. Pick the most convenient option available in your area.'
-              : 'We offer two different subscription types: voucher booklets and home delivery'}
+              {useDigitalVoucher === null || useDigitalVoucher === false || useDigitalVoucher === undefined
+              ? 'We offer two different subscription types: voucher booklets and home delivery'
+              : 'We offer two different subscription types: subscription cards and home delivery. Pick the most convenient option available in your area.'}
             </LargeParagraph>
           </Text>
           <Tabs />
