@@ -5,12 +5,16 @@ import { ResultsDropdown } from 'components/subscriptionCheckouts/addressSearch/
 import { withLabel } from 'hocs/withLabel';
 import { Input } from 'components/forms/input';
 import { asControlled } from 'hocs/asControlled';
-import { find } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
-import type { FindResponse } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
+import { find, retrieve } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
+import type {
+  AddressSearch,
+  FindResponse,
+} from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 import type { Option } from 'helpers/types/option';
 
 type PropTypes = {
   scope: string,
+  onSearchComplete: (AddressSearch) => void;
 }
 
 type State = {
@@ -52,10 +56,7 @@ class AddressSearchBox extends Component<PropTypes, State> {
         });
       });
     }
-    if (nextState.selectedItem !== this.state.selectedItem) {
-      return true;
-    }
-    return false;
+    return nextState.selectedItem !== this.state.selectedItem;
   }
 
   onArrowKeys(ev: KeyboardEvent) {
@@ -68,6 +69,22 @@ class AddressSearchBox extends Component<PropTypes, State> {
     if (ev.code === 'ArrowUp' && currentSelected > -1) {
       ev.preventDefault();
       this.setSelectedItem(currentSelected - 1);
+    }
+    if (ev.code === 'Enter') {
+      console.log(`${currentSelected} selected`);
+      this.onAddressSelected(currentSelected);
+    }
+  }
+
+  onAddressSelected(index: number) {
+    const findItem = this.state.findResponse.Items[index];
+    if (findItem) {
+      retrieve(findItem.Id)
+        .then((retrieveResponse) => {
+          const address = retrieveResponse.Items[0];
+          console.log(address);
+          this.props.onSearchComplete(address);
+        });
     }
   }
 
@@ -94,7 +111,8 @@ class AddressSearchBox extends Component<PropTypes, State> {
         <ResultsDropdown
           findResponse={this.state.findResponse}
           selectedItem={this.state.selectedItem}
-          setSelectedItem={i => this.setSelectedItem(i)}
+          setSelectedItem={index => this.setSelectedItem(index)}
+          onAddressSelected={index => this.onAddressSelected(index)}
         />
       </div>);
   }

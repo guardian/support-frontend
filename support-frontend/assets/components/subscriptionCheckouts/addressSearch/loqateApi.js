@@ -27,20 +27,37 @@ export type FindResponse = {
   Items: FindItem[],
 }
 
-const find = (searchTerm: string): Promise<FindResponse> => {
-  const body = `&Key=KU38-EK85-GN78-YA78&Text=${searchTerm}`;
+export type RetrieveResponse = {
+  Items: AddressSearch[],
+}
 
+const post = (url: string, body: string) => {
+  const bodyWithKey = `&Key=KU38-EK85-GN78-YA78&${body}`;
   return fetch(
-    'https://services.postcodeanywhere.co.uk/Capture/Interactive/Find/v1.10/json3.ws',
+    url,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body,
+      body: bodyWithKey,
     },
   )
     .then(response => response.json());
+}
+
+const find = (searchTerm: string): Promise<FindResponse> => {
+  return post(
+    'https://services.postcodeanywhere.co.uk/Capture/Interactive/Find/v1.10/json3.ws',
+    `Text=${searchTerm}`,
+  );
 };
 
-export { find };
+const retrieve = (addressId: string): Promise<RetrieveResponse> => {
+  return post(
+    'https://services.postcodeanywhere.co.uk/Capture/Interactive/Retrieve/v1.10/json3.ws',
+    `ID=${addressId}`,
+  );
+};
+
+export { find, retrieve };

@@ -41,6 +41,7 @@ import AddressDisplayText
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import * as styles from './addressFieldsApiStyles';
 import { AddressSearchBox } from 'components/subscriptionCheckouts/addressSearch/addressSearchBox';
+import type { AddressSearch } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -84,6 +85,15 @@ function statesForCountry(country: Option<IsoCountry>): React$Node {
   }
 }
 
+const searchComplete = (address: AddressSearch, actions: AddressActionCreators) => {
+  actions.setAddressLineOne(address.Line1);
+  actions.setAddressLineTwo(address.Line2);
+  actions.setCountry(address.CountryIso2);
+  actions.setPostcode(address.PostalCode);
+  actions.setState(address.Province);
+  actions.setTownCity(address.City);
+};
+
 const AddressFieldsApi = (props: PropTypes) => {
   const { scope } = props;
   const addressDisplay = false ? (<AddressDisplayText // TODO
@@ -96,7 +106,7 @@ const AddressFieldsApi = (props: PropTypes) => {
   />) : null;
   return (
     <div css={styles.formDiv}>
-      <AddressSearchBox scope={scope} />
+      <AddressSearchBox scope={scope} onSearchComplete={address => searchComplete(address, props)} />
       {addressDisplay}
       <CheckoutExpander copy="I want to enter my address manually">
         <SelectWithError
