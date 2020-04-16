@@ -79,12 +79,12 @@ class StripeController(
 
   def createSetupIntentPRB: Action[SetupIntentRequest] = PrivateAction.async(circe.json[SetupIntentRequest]) { implicit request =>
 
-    val cloudwatchEvent = createSetupIntentRequest(stage, "CSRF-only")
+    val cloudwatchEvent = createSetupIntentRequest(stage, "PRB-CSRF-only")
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
     stripeService(request.body.stripePublicKey).fold(
       error => {
-        logger.error(s"Returning status InternalServerError for Create Stripe Intent request because: $error")
+        logger.error(s"Returning status InternalServerError for Create Stripe Intent PRB request because: $error")
         InternalServerError("")
       },
       response => Ok(response.asJson)
