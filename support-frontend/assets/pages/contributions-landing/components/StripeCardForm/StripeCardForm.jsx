@@ -237,6 +237,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
+
+      // Post-deploy tests bypass recaptcha, and no verification happens server-side for the test Stripe account
       if (this.props.postDeploymentTestUser){
         fetchJson(
           '/stripe/create-setup-intent/recaptcha',
