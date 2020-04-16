@@ -54,6 +54,7 @@ class StripeController(
 
     val verified =
       if (testPublicKeys(request.body.stripePublicKey))
+        // Requests against the test account do not require verification
         EitherT.rightT[Future, String](true)
       else
         recaptchaService.verify(v2RecaptchaToken, v2RecaptchaKey).map(_.success)
