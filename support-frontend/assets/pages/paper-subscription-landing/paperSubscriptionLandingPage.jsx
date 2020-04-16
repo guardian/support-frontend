@@ -36,7 +36,8 @@ const reactElementId = 'paper-subscription-landing-page';
 // ----- Redux Store ----- //
 
 const store = pageInit(() => reducer(fulfilment), true);
-const { useDigitalVoucher } = window.guardian;
+const state = store.getState();
+const { useDigitalVoucher } = state.common.settings;
 
 // ----- Render ----- //
 

@@ -73,6 +73,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import { type Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 
@@ -95,6 +96,7 @@ type PropTypes = {|
   formIsValid: Function,
   setupRecurringPayPalPayment: Function,
   amount: number,
+  useDigitalVoucher: Option<boolean>,
 |};
 
 // ----- Map State/Props ----- //
@@ -112,6 +114,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     csrf: state.page.csrf,
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+    useDigitalVoucher: state.common.settings.useDigitalVoucher,
     amount: getProductPrice(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
@@ -148,9 +151,8 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 // ----- Component ----- //
 
 function PaperCheckoutForm(props: PropTypes) {
-  const { useDigitalVoucher } = window.guardian;
-  const collectionOption = useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
-  const collectionOptionDescription = useDigitalVoucher ? 'subscription card' : 'vouchers';
+  const collectionOption = props.useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
+  const collectionOptionDescription = props.useDigitalVoucher ? 'subscription card' : 'vouchers';
   const days = getDays(props.fulfilmentOption, props.productOption);
   const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : collectionOption;
   const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : collectionOption;
@@ -287,7 +289,7 @@ function PaperCheckoutForm(props: PropTypes) {
               <Text className="component-text__paddingTop">
                 <p>
                   We will take the first payment on the
-                  date you {(props.fulfilmentOption === HomeDelivery || !useDigitalVoucher) ? 'receive' : 'start using'} your {(props.fulfilmentOption === HomeDelivery || !useDigitalVoucher) && 'first'} {fulfilmentOptionDescriptor.toLowerCase()}.
+                  date you receive your {(props.fulfilmentOption === HomeDelivery || !props.useDigitalVoucher) && 'first'} {fulfilmentOptionDescriptor.toLowerCase()}.
                 </p>
                 <p>
                  Subscription start dates are automatically selected to be the earliest we can fulfil your order.

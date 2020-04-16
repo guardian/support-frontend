@@ -106,6 +106,12 @@
 }
 
 .component-content.component-content--white.component-content--overflow-hidden.component-content--force-border {
+  .component-text {
+    @include mq($from: desktop) {
+      max-width: gu-span(7);
+    }
+  }
+
   .component-text:first-of-type {
     margin-top: 270px;
     @include mq($from: mobileMedium) {

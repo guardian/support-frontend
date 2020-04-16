@@ -31,7 +31,8 @@ import InfoSvg from './info.svg';
 // Types
 export type ContentPropTypes = {|
   selectedTab: ActiveTabState,
-  setTabAction: typeof setTab
+  setTabAction: typeof setTab,
+  useDigitalVoucher?: Option<boolean>,
 |};
 
 export type ContentTabPropTypes = {|

@@ -16,7 +16,6 @@ import CollectionTab from './collectionTab';
 import './content.scss';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 
-const { useDigitalVoucher } = window.guardian;
 
 // ----- Render ----- //
 class Content extends Component<ContentPropTypes> {
@@ -33,8 +32,7 @@ class Content extends Component<ContentPropTypes> {
   tabRef: ?HTMLElement;
 
   render() {
-    const { selectedTab, setTabAction } = this.props;
-    console.log({ useDigitalVoucher });
+    const { selectedTab, setTabAction, useDigitalVoucher } = this.props;
 
     if (selectedTab === Collection) {
       return useDigitalVoucher
@@ -61,6 +59,7 @@ class Content extends Component<ContentPropTypes> {
 
 const mapStateToProps = (state: State) => ({
   selectedTab: state.page.tab,
+  useDigitalVoucher: state.common.settings.useDigitalVoucher,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>
