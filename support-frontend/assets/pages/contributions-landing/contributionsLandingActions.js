@@ -343,7 +343,7 @@ const buildStripeChargeDataFromAuthorisation = (
     state.common.internationalisation.countryId,
     state.page.user.isTestUser || false,
   ),
-  recaptchaToken: state.page.form.oneOffRecaptchaToken,
+  recaptchaToken: state.page.user.isPostDeploymentTestUser ? 'post-deploy-token' : state.page.form.oneOffRecaptchaToken,
 });
 
 const stripeChargeDataFromCheckoutAuthorisation = (

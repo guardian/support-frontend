@@ -8,40 +8,29 @@ import com.typesafe.config.Config
 
 case class StripeConfig(defaultAccount: StripeAccountConfig,
                         australiaAccount: StripeAccountConfig,
-                        unitedStatesAccount: StripeAccountConfig,
                         version: Option[String])
   extends TouchpointConfig {
 
   // Still needed for SupportWorkers (recurring products) which don't support a US Stripe account yet.
-  def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig = {
+  def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig =
     maybeCurrency match {
-      case Some(AUD) => {
+      case Some(AUD) =>
         SafeLogger.debug(s"StripeConfig: getting AU stripe account for AUD")
         australiaAccount
-      }
-      case _ => {
+      case _ =>
         SafeLogger.debug(s"StripeConfig: getting default stripe account for ${maybeCurrency.map(_.iso).mkString}")
         defaultAccount
-      }
     }
-  }
 
-  def forCountry(maybeCountry: Option[Country]): StripeAccountConfig = {
+  def forCountry(maybeCountry: Option[Country]): StripeAccountConfig =
     maybeCountry match {
-      case Some(Country.Australia) => {
+      case Some(Country.Australia) =>
         SafeLogger.debug(s"StripeConfig: getting AU stripe account for Australia")
         australiaAccount
-      }
-      case Some(Country.US) => {
-        SafeLogger.debug(s"StripeConfig: getting US stripe account for United States")
-        unitedStatesAccount
-      }
-      case _ => {
+      case _ =>
         SafeLogger.debug(s"StripeConfig: getting default stripe account for ${maybeCountry.map(_.name).mkString}")
         defaultAccount
-      }
     }
-  }
 }
 
 case class StripeAccountConfig(secretKey: String, publicKey: String)
@@ -51,7 +40,6 @@ class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String =
   def fromConfig(config: Config): StripeConfig = StripeConfig(
     accountFromConfig(config, prefix, "default"),
     accountFromConfig(config, prefix, Country.Australia.alpha2),
-    accountFromConfig(config, prefix, Country.US.alpha2),
     version = stripeVersion(config)
   )
 

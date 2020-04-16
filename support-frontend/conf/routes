@@ -65,7 +65,7 @@ GET  /support-workers/status                                       controllers.S
 
 POST  /stripe/create-setup-intent/recaptcha                        controllers.StripeController.createSetupIntentRecaptcha()
 POST  /stripe/create-setup-intent/auth                             controllers.StripeController.createSetupIntentWithAuth()
-POST  /stripe/create-setup-intent                                  controllers.StripeController.createSetupIntent()
+POST  /stripe/create-setup-intent/prb                              controllers.StripeController.createSetupIntentPRB()
 
 # this endpoint should be removed once identity remove
 # the need for a client token
