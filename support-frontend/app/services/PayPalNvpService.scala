@@ -4,13 +4,14 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.config.PayPalConfig
 import com.gu.support.touchpoint.TouchpointService
-import com.netaporter.uri.QueryString
-import com.netaporter.uri.Uri.parseQuery
+import io.lemonlabs.uri.QueryString
+import io.lemonlabs.uri.parsing.UrlParser.parseQuery
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.paypal.{PayPalBillingDetails, Token}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.Try
 
 class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService {
 
@@ -35,12 +36,12 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
 
   }
 
-  private def extractResponse(response: WSResponse): QueryString = {
+  private def extractResponse(response: WSResponse): Try[QueryString] = {
 
     val responseBody = response.body
     val parsedResponse = parseQuery(responseBody)
 
-    logNVPResponse(parsedResponse)
+    parsedResponse.map(logNVPResponse)
     parsedResponse
   }
 
@@ -52,7 +53,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
     wsClient
       .url(apiConfig.url)
       .post(allParams)
-      .map(extractResponse)
+      .flatMap(response => Future.fromTry(extractResponse(response)))
 
   }
 

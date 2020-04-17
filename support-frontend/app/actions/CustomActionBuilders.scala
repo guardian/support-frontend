@@ -1,6 +1,6 @@
 package actions
 
-import com.netaporter.uri.dsl._
+import io.lemonlabs.uri.typesafe.dsl._
 import config.Configuration.IdentityUrl
 import play.api.mvc.Results._
 import play.api.mvc.Security.AuthenticatedRequest
@@ -39,11 +39,11 @@ class CustomActionBuilders(
   private val idSkipValidationReturn: (String, String) = "skipValidationReturn" -> "true"
 
   private def idWebAppRegisterUrl(path: String, clientId: String, idWebAppRegisterPath: String): String =
-    idWebAppUrl.value / idWebAppRegisterPath ?
+    (idWebAppUrl.value / idWebAppRegisterPath ?
       ("returnUrl" -> s"$supportUrl$path") &
       idSkipConfirmation &
       idSkipValidationReturn &
-      "clientId" -> clientId
+      "clientId" -> clientId).toString
 
   def onUnauthenticated(identityClientId: String): RequestHeader => Result = request => {
     SeeOther(idWebAppRegisterUrl(request.uri, identityClientId, "signin"))
