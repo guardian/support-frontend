@@ -8,6 +8,7 @@ import com.typesafe.config.Config
 
 case class StripeConfig(defaultAccount: StripeAccountConfig,
                         australiaAccount: StripeAccountConfig,
+                        unitedStatesAccount: StripeAccountConfig,
                         version: Option[String])
   extends TouchpointConfig {
 
@@ -27,6 +28,9 @@ case class StripeConfig(defaultAccount: StripeAccountConfig,
       case Some(Country.Australia) =>
         SafeLogger.debug(s"StripeConfig: getting AU stripe account for Australia")
         australiaAccount
+      case Some(Country.US) =>
+        SafeLogger.debug(s"StripeConfig: getting US stripe account for United States")
+        unitedStatesAccount
       case _ =>
         SafeLogger.debug(s"StripeConfig: getting default stripe account for ${maybeCountry.map(_.name).mkString}")
         defaultAccount
@@ -40,6 +44,7 @@ class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String =
   def fromConfig(config: Config): StripeConfig = StripeConfig(
     accountFromConfig(config, prefix, "default"),
     accountFromConfig(config, prefix, Country.Australia.alpha2),
+    accountFromConfig(config, prefix, Country.US.alpha2),
     version = stripeVersion(config)
   )
 
