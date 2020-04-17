@@ -50,8 +50,8 @@ import { text } from '@storybook/addon-knobs';
 import Button from 'components/button/button';
 import {
   applyBillingAddressRules,
-  setFormErrorsFor,
 } from 'components/subscriptionCheckouts/addressSearch/addressFieldsStore';
+import './addressFieldsApi.scss';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -163,6 +163,7 @@ class AddressFieldsApi extends Component<PropTypes, State> {
         {(searchState === 'searching' || searchState === 'editing') &&
           <AddressSearchBox
             scope={scope}
+            formErrors={props.formErrors}
             onSearchComplete={address => this.searchComplete(address, props)}
           />
         }

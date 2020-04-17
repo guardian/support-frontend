@@ -15,10 +15,15 @@ import type {
   FindResponse,
 } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 import type { Option } from 'helpers/types/option';
+import { withError } from 'hocs/withError';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { FormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { firstError } from 'helpers/subscriptionsForms/validation';
 
 type PropTypes = {
   scope: string,
   onSearchComplete: (AddressSearch) => void;
+  formErrors: FormError<FormField>[],
 }
 
 type State = {
@@ -28,7 +33,7 @@ type State = {
   selectedItem: number,
 }
 
-const InputWithLabel = asControlled(withLabel(Input));
+const InputWithError = withError(asControlled(withLabel(Input)));
 
 class AddressSearchBox extends Component<PropTypes, State> {
 
@@ -120,16 +125,20 @@ class AddressSearchBox extends Component<PropTypes, State> {
     this.setState({ findTerm });
   }
 
+  getError = () =>
+    (this.state.findTerm === '' ? firstError('lineOne', this.props.formErrors) : null);
+
   render() {
     return (
       <div>
-        <InputWithLabel
+        <InputWithError
           id={`${this.props.scope}-search`}
           label="Search"
           autocomplete="off"
           placeholder="Start typing your address"
           setValue={value => this.updateSearchTerm(value)}
           onKeyDown={ev => this.onArrowKeys(ev)}
+          error={this.getError()}
         />
         <ResultsDropdown
           findResponse={this.state.findResponse}
