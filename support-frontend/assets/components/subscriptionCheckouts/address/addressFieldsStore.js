@@ -144,6 +144,7 @@ const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormFi
 });
 
 const addressActionCreatorsFor = (scope: AddressType) => ({
+  setFormErrors: (errors: FormError<FormField>[]) => (dispatch: Dispatch) => dispatch(setFormErrorsFor(scope)(errors)),
   setCountry: (countryRaw: string) => (dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) => {
     const country = fromString(countryRaw);
     if (country) {

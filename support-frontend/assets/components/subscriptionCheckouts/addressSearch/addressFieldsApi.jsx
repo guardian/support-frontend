@@ -30,7 +30,11 @@ import {
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { canShow } from 'hocs/canShow';
 import type { Option } from 'helpers/types/option';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type {
+  CaState,
+  IsoCountry,
+  UsState,
+} from 'helpers/internationalisation/country';
 import {
   auStates,
   caStates,
@@ -38,11 +42,16 @@ import {
 } from 'helpers/internationalisation/country';
 import AddressDisplayText
   from 'components/subscriptionCheckouts/addressSearch/addressDisplayText';
-import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import * as styles from './addressFieldsApiStyles';
 import { AddressSearchBox } from 'components/subscriptionCheckouts/addressSearch/addressSearchBox';
 import type { AddressSearch } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 import { Component } from 'preact';
+import { text } from '@storybook/addon-knobs';
+import Button from 'components/button/button';
+import {
+  applyBillingAddressRules,
+  setFormErrorsFor,
+} from 'components/subscriptionCheckouts/addressSearch/addressFieldsStore';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -57,8 +66,10 @@ type PropTypes<GlobalState> = {|
   ...StatePropTypes<GlobalState>,
 |}
 
+type SearchState = 'searching' | 'complete' | 'editing';
+
 type State = {
-  searchComplete: boolean,
+  searchState: SearchState,
 }
 
 const StaticInputWithLabel = withLabel(Input);
@@ -95,7 +106,7 @@ class AddressFieldsApi extends Component<PropTypes, State> {
 
   constructor() {
     super();
-    this.state = { searchComplete: false };
+    this.state = { searchState: 'searching' };
   }
 
   searchComplete = (address: AddressSearch, actions: AddressActionCreators) => {
@@ -105,92 +116,141 @@ class AddressFieldsApi extends Component<PropTypes, State> {
     actions.setPostcode(address.PostalCode);
     actions.setState(address.Province);
     actions.setTownCity(address.City);
-    this.setState({ searchComplete: true });
+    this.setState({ searchState: 'complete' });
   };
 
+  validateAddress() {
+    const errors = applyBillingAddressRules({
+      country: this.props.country,
+      state: this.props.state,
+      lineOne: this.props.lineOne,
+      lineTwo: this.props.lineTwo,
+      postCode: this.props.postCode,
+      city: this.props.city,
+    }, this.props.scope);
+    if (errors.length !== 0) {
+      this.props.setFormErrors(errors);
+    } else {
+      this.setState({ searchState: 'complete' });
+    }
+  }
+
+  onManualEditClick() {
+    const { searchState } = this.state;
+    if (searchState === 'searching') {
+      this.setState({ searchState: 'editing' });
+    } else if (searchState === 'editing') {
+      this.validateAddress();
+    } else if (searchState === 'complete') {
+      this.setState({ searchState: 'editing' });
+    }
+  }
+
+  getEditButtonCopy(searchState: SearchState) {
+    switch (searchState) {
+      case 'complete': return 'Edit';
+      case 'editing': return 'Save address';
+      default: return 'I want to enter my address manually';
+    }
+  }
+
   render() {
+    const { searchState } = this.state;
     const { scope, ...props } = this.props;
-    const addressDisplay = this.state.searchComplete ? (<AddressDisplayText
-      lineOne={props.lineOne}
-      lineTwo={props.lineTwo}
-      city={props.city}
-      postCode={props.postCode}
-      state={props.state}
-      country={props.country}
-    />) : (
-      <AddressSearchBox
-        scope={scope}
-        onSearchComplete={address => this.searchComplete(address, props)}
-      />);
+
     return (
       <div css={styles.formDiv}>
-        {addressDisplay}
-        <CheckoutExpander copy="I want to enter my address manually">
-          <SelectWithError
-            id={`${scope}-country`}
-            label="Country"
-            value={props.country}
-            setValue={props.setCountry}
-            error={firstError('country', props.formErrors)}
-          >
-            <option value="">--</option>
-            {sortedOptions(props.countries)}
-          </SelectWithError>
-          <InputWithError
-            id={`${scope}-lineOne`}
-            label="Address Line 1"
-            type="text"
-            value={props.lineOne}
-            setValue={props.setAddressLineOne}
-            error={firstError('lineOne', props.formErrors)}
+        {(searchState === 'searching' || searchState === 'editing') &&
+          <AddressSearchBox
+            scope={scope}
+            onSearchComplete={address => this.searchComplete(address, props)}
           />
-          <InputWithError
-            id={`${scope}-lineTwo`}
-            label="Address Line 2"
-            optional
-            type="text"
-            value={props.lineTwo}
-            setValue={props.setAddressLineTwo}
-            error={firstError('lineTwo', props.formErrors)}
+        }
+        {searchState === 'complete' &&
+          <AddressDisplayText
+            lineOne={props.lineOne}
+            lineTwo={props.lineTwo}
+            city={props.city}
+            postCode={props.postCode}
+            state={props.state}
+            country={props.country}
           />
-          <InputWithError
-            id={`${scope}-city`}
-            label="Town/City"
-            type="text"
-            value={props.city}
-            setValue={props.setTownCity}
-            error={firstError('city', props.formErrors)}
-          />
-          <MaybeSelect
-            id={`${scope}-stateProvince`}
-            label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-            value={props.state}
-            setValue={props.setState}
-            error={firstError('state', props.formErrors)}
-            isShown={shouldShowStateDropdown(props.country)}
-          >
-            <option value="">--</option>
-            {statesForCountry(props.country)}
-          </MaybeSelect>
-          <MaybeInput
-            id={`${scope}-stateProvince`}
-            label="State"
-            value={props.state}
-            setValue={props.setState}
-            error={firstError('state', props.formErrors)}
-            optional
-            isShown={shouldShowStateInput(props.country)}
-          />
-          <InputWithError
-            id={`${scope}-postcode`}
-            label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
-            type="text"
-            optional={isPostcodeOptional(props.country)}
-            value={props.postCode}
-            setValue={props.setPostcode}
-            error={firstError('postCode', props.formErrors)}
-          />
-        </CheckoutExpander>
+        }
+        {searchState === 'editing' &&
+          <div>
+            <SelectWithError
+              id={`${scope}-country`}
+              label="Country"
+              value={props.country}
+              setValue={props.setCountry}
+              error={firstError('country', props.formErrors)}
+            >
+              <option value="">--</option>
+              {sortedOptions(props.countries)}
+            </SelectWithError>
+            <InputWithError
+              id={`${scope}-lineOne`}
+              label="Address Line 1"
+              type="text"
+              value={props.lineOne}
+              setValue={props.setAddressLineOne}
+              error={firstError('lineOne', props.formErrors)}
+            />
+            <InputWithError
+              id={`${scope}-lineTwo`}
+              label="Address Line 2"
+              optional
+              type="text"
+              value={props.lineTwo}
+              setValue={props.setAddressLineTwo}
+              error={firstError('lineTwo', props.formErrors)}
+            />
+            <InputWithError
+              id={`${scope}-city`}
+              label="Town/City"
+              type="text"
+              value={props.city}
+              setValue={props.setTownCity}
+              error={firstError('city', props.formErrors)}
+            />
+            <MaybeSelect
+              id={`${scope}-stateProvince`}
+              label={props.country === 'CA' ? 'Province/Territory' : 'State'}
+              value={props.state}
+              setValue={props.setState}
+              error={firstError('state', props.formErrors)}
+              isShown={shouldShowStateDropdown(props.country)}
+            >
+              <option value="">--</option>
+              {statesForCountry(props.country)}
+            </MaybeSelect>
+            <MaybeInput
+              id={`${scope}-stateProvince`}
+              label="State"
+              value={props.state}
+              setValue={props.setState}
+              error={firstError('state', props.formErrors)}
+              optional
+              isShown={shouldShowStateInput(props.country)}
+            />
+            <InputWithError
+              id={`${scope}-postcode`}
+              label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
+              type="text"
+              optional={isPostcodeOptional(props.country)}
+              value={props.postCode}
+              setValue={props.setPostcode}
+              error={firstError('postCode', props.formErrors)}
+            />
+          </div>}
+        <Button
+          style={`margin-top: 20px;`}
+          onClick={() => this.onManualEditClick()}
+          icon={null}
+          appearance="secondary"
+        >
+          {text('Label', this.getEditButtonCopy(searchState))}
+        </Button>
       </div>
     );
   }
