@@ -352,7 +352,7 @@ const buildStripeChargeDataFromAuthorisation = (
     state.common.internationalisation.countryId,
     state.page.user.isTestUser || false,
   ),
-  recaptchaToken: stripeOneOffRecaptchaToken(stripePaymentMethod, state),
+  recaptchaToken: stripeOneOffRecaptchaToken(state),
 });
 
 const stripeChargeDataFromCheckoutAuthorisation = (
