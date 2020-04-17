@@ -68,6 +68,7 @@
     "@emotion/babel-preset-css-prop": "10.0.09",
     "@emotion/cache": "10.0.09",
     "@emotion/core": "10.0.09",
+    "@emotion/serialize": "^0.11.16",
     "@guardian/pasteup": "^1.0.0-alpha.7",
     "@guardian/src-accordion": "0.17.0-alpha.1",
     "@guardian/src-choice-card": "^0.14.0-alpha.6",
