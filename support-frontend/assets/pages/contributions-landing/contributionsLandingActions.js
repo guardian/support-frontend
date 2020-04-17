@@ -318,6 +318,14 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     onFormSubmit(formSubmitParameters);
   };
 
+const stripeOneOffRecaptchaToken = (stripePaymentMethod: StripePaymentMethod, state: State): string => {
+  if (state.page.user.isPostDeploymentTestUser) {
+    return 'post-deploy-token';
+  }
+
+  return state.page.form.oneOffRecaptchaToken || '';
+};
+
 const buildStripeChargeDataFromAuthorisation = (
   stripePaymentMethod: StripePaymentMethod,
   token: string,
@@ -343,7 +351,7 @@ const buildStripeChargeDataFromAuthorisation = (
     state.common.internationalisation.countryId,
     state.page.user.isTestUser || false,
   ),
-  recaptchaToken: state.page.user.isPostDeploymentTestUser ? 'post-deploy-token' : state.page.form.oneOffRecaptchaToken,
+  recaptchaToken: stripeOneOffRecaptchaToken(stripePaymentMethod, state),
 });
 
 const stripeChargeDataFromCheckoutAuthorisation = (
