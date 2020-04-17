@@ -114,8 +114,6 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       sitekey: window.guardian.v2recaptchaPublicKey, // To Do this needs to be the site key
       callback: (token) => {
         trackComponentLoad('subscriptions-recaptcha-client-token-received');
-        // this.props.setStripeRecurringRecaptchaVerified(true);
-
         fetchJson(
           '/stripe/create-setup-intent/recaptcha',
           requestOptions(
@@ -215,7 +213,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     }
   }
 
-  handleCardSetup(clientSecret: Option<string>): Promise<string> {
+   handleCardSetup(clientSecret: Option<string>): Promise<string> {
     return this.props.stripe.handleCardSetup(clientSecret).then((result) => {
       if (result.error) {
         this.handleStripeError(result.error);
