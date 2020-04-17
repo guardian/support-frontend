@@ -15,6 +15,7 @@ import model._
 import model.acquisition.StripeAcquisition
 import model.db.ContributionData
 import model.email.ContributorRow
+import model.stripe.StripePaymentMethod.{StripeApplePay, StripePaymentRequestButton}
 import model.stripe.{StripePaymentIntentRequest, _}
 import play.api.libs.ws.WSClient
 import services._
@@ -95,14 +96,20 @@ class StripeBackend(
           }
         }
 
+    // Bypass Recaptcha for Test Stripe account
+    // Note that in DEV/CODE there is no Live StripeBackend, so it will never verify Recaptcha
     environment match {
       case Test => createIntent()
       case Live =>
-        recaptchaService
-          .verify(request.recaptchaToken)
-          .flatMap { resp =>
-            if (resp.success) createIntent() else EitherT.leftT(StripeApiError.fromString("Recaptcha failed", None))
-          }
+        request.paymentData.stripePaymentMethod match {
+          case Some(StripeApplePay) | Some(StripePaymentRequestButton) => createIntent()
+          case _ =>
+            recaptchaService
+              .verify(request.recaptchaToken)
+              .flatMap { resp =>
+                if (resp.success) createIntent() else EitherT.leftT(StripeApiError.fromString("Recaptcha failed", None))
+              }
+        }
     }
   }
 
