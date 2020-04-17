@@ -323,6 +323,7 @@ const stripeOneOffRecaptchaToken = (stripePaymentMethod: StripePaymentMethod, st
     return 'post-deploy-token';
   }
 
+  // see https://github.com/guardian/payment-api/pull/195
   return state.page.form.oneOffRecaptchaToken || '';
 };
 
