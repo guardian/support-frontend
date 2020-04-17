@@ -318,7 +318,7 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     onFormSubmit(formSubmitParameters);
   };
 
-const stripeOneOffRecaptchaToken = (stripePaymentMethod: StripePaymentMethod, state: State): string => {
+const stripeOneOffRecaptchaToken = (state: State): string => {
   if (state.page.user.isPostDeploymentTestUser) {
     return 'post-deploy-token';
   }
