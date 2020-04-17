@@ -41,7 +41,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
     val responseBody = response.body
     val parsedResponse = parseQuery(responseBody)
 
-    parsedResponse.map(logNVPResponse)
+    parsedResponse.foreach(logNVPResponse)
     parsedResponse
   }
 
