@@ -269,6 +269,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
             style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
             onChange={e => this.handleChange(e)}
           />
+          <div id="robot_checkbox" className="robot_checkbox" />
           <div className="component-stripe-submit-button">
             <Button id="qa-stripe-submit-button" onClick={event => this.requestSCAPaymentMethod(event)}>
               {this.props.buttonText}

@@ -55,7 +55,6 @@ const FormSectionHiddenUntilSelected = ({
     <div className="component-checkout-form-section__wrap">
       {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
       {children}
-      <div id="robot_checkbox" className="robot_checkbox" />
     </div>)}
   </div>
 );
