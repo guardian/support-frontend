@@ -135,8 +135,7 @@ class DigitalSubscription(
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
       payPalConfigProvider.get(true),
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey,
-      orderIsAGift = true,
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey
     )
   }
 
