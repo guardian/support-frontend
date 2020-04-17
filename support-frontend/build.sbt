@@ -32,7 +32,7 @@ libraryDependencies ++= Seq(
   "com.gu.identity" %% "identity-auth-play" % "3.195",
   "com.gu" %% "identity-test-users" % "0.6",
   "com.google.guava" % "guava" % "25.0-jre",
-  "com.netaporter" %% "scala-uri" % "0.4.16",
+  "io.lemonlabs" %% "scala-uri" % "2.2.0",
   "com.gu" %% "play-googleauth" % "0.7.6",
   "io.github.bonigarcia" % "webdrivermanager" % "3.3.0" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
