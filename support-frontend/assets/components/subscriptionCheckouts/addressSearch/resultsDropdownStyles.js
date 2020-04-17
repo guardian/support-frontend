@@ -7,6 +7,8 @@ export const description = css`
 `;
 
 export const list = css`
+  overflow: auto;
+  max-height: 350px;
   box-sizing: border-box;
   position: absolute;
   z-index: 999;

@@ -44,20 +44,21 @@ const post = (url: string, body: string) => {
     },
   )
     .then(response => response.json());
-}
-
-const find = (searchTerm: string): Promise<FindResponse> => {
-  return post(
-    'https://services.postcodeanywhere.co.uk/Capture/Interactive/Find/v1.10/json3.ws',
-    `Text=${searchTerm}`,
-  );
 };
 
-const retrieve = (addressId: string): Promise<RetrieveResponse> => {
-  return post(
-    'https://services.postcodeanywhere.co.uk/Capture/Interactive/Retrieve/v1.10/json3.ws',
-    `ID=${addressId}`,
-  );
-};
+const find = (searchTerm: string): Promise<FindResponse> => post(
+  'https://services.postcodeanywhere.co.uk/Capture/Interactive/Find/v1.10/json3.ws',
+  `Text=${searchTerm}`,
+);
 
-export { find, retrieve };
+const moreResults = (id: string): Promise<FindResponse> => post(
+  'https://services.postcodeanywhere.co.uk/Capture/Interactive/Find/v1.10/json3.ws',
+  `Container=${id}`,
+);
+
+const retrieve = (addressId: string): Promise<RetrieveResponse> => post(
+  'https://services.postcodeanywhere.co.uk/Capture/Interactive/Retrieve/v1.10/json3.ws',
+  `ID=${addressId}`,
+);
+
+export { find, moreResults, retrieve };

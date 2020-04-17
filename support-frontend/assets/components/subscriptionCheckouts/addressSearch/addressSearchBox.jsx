@@ -5,7 +5,11 @@ import { ResultsDropdown } from 'components/subscriptionCheckouts/addressSearch/
 import { withLabel } from 'hocs/withLabel';
 import { Input } from 'components/forms/input';
 import { asControlled } from 'hocs/asControlled';
-import { find, retrieve } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
+import {
+  find,
+  moreResults,
+  retrieve,
+} from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 import type {
   AddressSearch,
   FindResponse,
@@ -62,7 +66,7 @@ class AddressSearchBox extends Component<PropTypes, State> {
   onArrowKeys(ev: KeyboardEvent) {
     console.log(ev);
     const currentSelected = this.state.selectedItem;
-    if (ev.code === 'ArrowDown' && currentSelected < 9) {
+    if (ev.code === 'ArrowDown' && currentSelected < this.state.findResponse.Items.length - 1) {
       ev.preventDefault();
       this.setSelectedItem(currentSelected + 1);
     }
@@ -76,15 +80,34 @@ class AddressSearchBox extends Component<PropTypes, State> {
     }
   }
 
+  componentDidUpdate() {
+    if (this.state.selectedItem === -1) {
+      return;
+    }
+    const resultItem = document.getElementById(`component-address-search-result-item-${this.state.selectedItem}`);
+    if (resultItem) {
+      resultItem.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
   onAddressSelected(index: number) {
     const findItem = this.state.findResponse.Items[index];
-    if (findItem) {
+    if (findItem.Type === 'Address') {
       retrieve(findItem.Id)
         .then((retrieveResponse) => {
           const address = retrieveResponse.Items[0];
           console.log(address);
           this.props.onSearchComplete(address);
         });
+    } else {
+      this.setState({ findComplete: false });
+      moreResults(findItem.Id).then((findResponse: FindResponse) => {
+        console.log(findResponse);
+        this.setState({
+          findComplete: true,
+          findResponse,
+        });
+      });
     }
   }
 

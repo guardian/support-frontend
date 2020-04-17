@@ -21,6 +21,7 @@ const ResultsDropdown = (props: PropTypes) => {
       /* keyboard navigation is handled by the search box */
       <li
         role="menuitem"
+        id={`component-address-search-result-item-${index}`}
         css={styles.listItem(index === props.selectedItem)}
         onMouseOver={() => props.setSelectedItem(index)}
         onFocus={() => props.setSelectedItem(index)}
