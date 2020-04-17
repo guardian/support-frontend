@@ -38,15 +38,15 @@ class CustomActionBuilders(
   // Prevents the identity validation email sending users back to our checkout.
   private val idSkipValidationReturn: (String, String) = "skipValidationReturn" -> "true"
 
-  private def idWebAppRegisterUrl(path: String, clientId: String, idWebAppRegisterPath: String): String =
-    (idWebAppUrl.value / idWebAppRegisterPath ?
+  private def idWebAppRegisterUrl(path: String, clientId: String): String =
+    (idWebAppUrl.value / "signin" ?
       ("returnUrl" -> s"$supportUrl$path") &
       idSkipConfirmation &
       idSkipValidationReturn &
       "clientId" -> clientId).toString
 
   def onUnauthenticated(identityClientId: String): RequestHeader => Result = request => {
-    SeeOther(idWebAppRegisterUrl(request.uri, identityClientId, "signin"))
+    SeeOther(idWebAppRegisterUrl(request.uri, identityClientId))
   }
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =
