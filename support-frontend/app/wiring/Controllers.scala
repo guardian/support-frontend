@@ -65,7 +65,8 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
-    fontLoader
+    fontLoader,
+    appConfig.recaptchaConfigProvider
   )
 
   lazy val paperController = new PaperSubscription(
@@ -80,7 +81,8 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
-    fontLoader
+    fontLoader,
+    appConfig.recaptchaConfigProvider
   )
 
   lazy val weeklyController = new WeeklySubscription(
@@ -98,7 +100,8 @@ trait Controllers {
     allSettingsProvider,
     appConfig.supportUrl,
     fontLoader,
-    appConfig.stage
+    appConfig.stage,
+    appConfig.recaptchaConfigProvider
   )
 
   lazy val createSubscriptionController = new CreateSubscription(

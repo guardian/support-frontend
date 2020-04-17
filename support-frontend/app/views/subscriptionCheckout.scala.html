@@ -27,6 +27,7 @@
   uatStripeConfig: StripeConfig,
   defaultPayPalConfig: PayPalConfig,
   uatPayPalConfig: PayPalConfig,
+  v2recaptchaConfigPublicKey: String,
   orderIsAGift: Boolean = false,
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
@@ -64,6 +65,7 @@
       window.guardian.csrf = { token: "@CSRF.getToken.value" };
 
       window.guardian.checkoutPostcodeLookup = "@settings.switches.experiments.get("checkoutPostcodeLookup").exists(_.isOn)"
-  </script>
+      window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
+</script>
 
   }

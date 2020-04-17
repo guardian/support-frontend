@@ -12,7 +12,7 @@ import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigP
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
-import config.StringsConfig
+import config.{RecaptchaConfigProvider, StringsConfig}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import play.twirl.api.Html
@@ -37,7 +37,8 @@ class DigitalSubscription(
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent]
+  fontLoaderBundle: Either[RefPath, StyleContent],
+  recaptchaConfigProvider: RecaptchaConfigProvider
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
@@ -133,7 +134,9 @@ class DigitalSubscription(
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
-      payPalConfigProvider.get(true)
+      payPalConfigProvider.get(true),
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey,
+      true,
     )
   }
 

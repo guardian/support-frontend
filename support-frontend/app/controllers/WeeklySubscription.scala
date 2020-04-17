@@ -15,7 +15,7 @@ import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.{DefaultPromotions, ProductPromotionCopy, PromotionServiceProvider}
-import config.StringsConfig
+import config.{RecaptchaConfigProvider, StringsConfig}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import play.twirl.api.Html
@@ -42,7 +42,8 @@ class WeeklySubscription(
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
-  stage: Stage
+  stage: Stage,
+  recaptchaConfigProvider: RecaptchaConfigProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -157,6 +158,7 @@ class WeeklySubscription(
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
       payPalConfigProvider.get(true),
+      recaptchaConfigProvider.v2PublicKey,
       orderIsAGift
     )
   }

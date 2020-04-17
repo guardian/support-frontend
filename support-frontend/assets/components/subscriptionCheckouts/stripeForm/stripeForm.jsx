@@ -18,6 +18,8 @@ import { logException } from 'helpers/logger';
 import type { Option } from 'helpers/types/option';
 import { appropriateErrorMessage } from 'helpers/errorReasons';
 import type { Csrf } from '../../../helpers/csrf/csrfReducer';
+import { trackComponentLoad } from '../../../helpers/tracking/behaviour';
+import { loadRecaptchaV2 } from '../../../helpers/recaptcha';
 
 // Types
 
@@ -106,32 +108,51 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     return cardErrors;
   }, []);
 
-  setupRecurringHandlers(): void {
-    // Start by requesting the client_secret for a new Payment Method.
-    // Note - because this value is requested asynchronously when the component loads,
-    // it's possible for it to arrive after the user clicks 'Contribute'. This eventuality
-    // is handled in the callback below by checking the value of paymentWaiting.
-    fetchJson(
-      this.props.stripeSetupIntentEndpoint,
-      requestOptions({ stripePublicKey: this.props.stripeKey }, 'same-origin', 'POST', this.props.csrf),
-    ).then((result) => {
-      if (result.client_secret) {
-        this.setState({ setupIntentClientSecret: result.client_secret });
+  // Creates a new setupIntent upon recaptcha verification
+  setupRecurringRecaptchaCallback = () => {
+    window.grecaptcha.render('robot_checkbox', {
+      sitekey: window.guardian.v2recaptchaPublicKey, // To Do this needs to be the site key
+      callback: (token) => {
+        trackComponentLoad('subscriptions-recaptcha-client-token-received');
+        // this.props.setStripeRecurringRecaptchaVerified(true);
 
-        // If user has already clicked contribute then handle card setup now
-        if (this.state.paymentWaiting) {
-          this.handleCardSetup(result.client_secret);
-        }
-      } else {
-        throw new Error(`Missing client_secret field in response from ${this.props.stripeSetupIntentEndpoint}`);
-      }
-    }).catch((error) => {
-      logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
+        fetchJson(
+          '/stripe/create-setup-intent/recaptcha',
+          requestOptions(
+            { token, stripePublicKey: this.props.stripeKey },
+            'same-origin',
+            'POST',
+            this.props.csrf,
+          ),
+        )
+          .then((result) => {
+            if (result.client_secret) {
+              this.setState({ setupIntentClientSecret: result.client_secret });
 
-      this.setState({
-        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }],
-      });
+              // If user has already clicked contribute then handle card setup now
+              if (this.state.paymentWaiting) {
+                this.handleCardSetup(result.client_secret);
+              }
+            } else {
+              throw new Error(`Missing client_secret field in response from ${this.props.stripeSetupIntentEndpoint}`);
+            }
+          }).catch((error) => {
+            logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
+
+            this.setState({
+              cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }],
+            });
+          });
+      },
     });
+  };
+
+  setupRecurringHandlers(): void {
+    if (window.grecaptcha && window.grecaptcha.render) {
+      this.setupRecurringRecaptchaCallback();
+    } else {
+      window.v2OnloadCallback = this.setupRecurringRecaptchaCallback;
+    }
   }
 
   handleCardErrors = () => {
@@ -219,6 +240,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   };
 
   render() {
+    loadRecaptchaV2();
     const { stripe } = this.props;
     if (stripe) {
       stripe.elements();

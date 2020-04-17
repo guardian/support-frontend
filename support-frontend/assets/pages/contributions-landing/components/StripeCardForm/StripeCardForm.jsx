@@ -239,7 +239,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       this.props.setPaymentWaiting(true);
 
       // Post-deploy tests bypass recaptcha, and no verification happens server-side for the test Stripe account
-      if (this.props.postDeploymentTestUser){
+      if (this.props.postDeploymentTestUser) {
         fetchJson(
           '/stripe/create-setup-intent/recaptcha',
           requestOptions(
@@ -255,7 +255,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             } else {
               throw new Error(`Missing client_secret field in server response: ${JSON.stringify(json)}`);
             }
-          })
+          });
       }
 
       /* Recaptcha verification is required for setupIntent creation.
