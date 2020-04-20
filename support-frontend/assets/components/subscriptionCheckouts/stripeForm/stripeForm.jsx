@@ -23,6 +23,7 @@ import { appropriateErrorMessage } from 'helpers/errorReasons';
 import type { Csrf } from '../../../helpers/csrf/csrfReducer';
 import { trackComponentLoad } from '../../../helpers/tracking/behaviour';
 import { loadRecaptchaV2 } from '../../../helpers/recaptcha';
+import { isPostDeployUser } from 'helpers/user/user';
 import { routes } from 'helpers/routes';
 
 // Types
@@ -115,46 +116,20 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     return cardErrors;
   }, []);
 
-  recaptchaCompleted() {
-    this.setState({ recaptchaCompleted: true });
-    this.props.allErrors = this.props.allErrors.filter(error => error.field !== 'recaptcha');
-  }
   // Creates a new setupIntent upon recaptcha verification
   setupRecurringRecaptchaCallback = () => {
-    window.grecaptcha.render('robot_checkbox', {
-      sitekey: window.guardian.v2recaptchaPublicKey,
-      callback: (token) => {
-        trackComponentLoad('subscriptions-recaptcha-client-token-received');
-        this.recaptchaCompleted();
-        fetchJson(
-          routes.stripeSetupIntentRecaptcha,
-          requestOptions(
-            { token, stripePublicKey: this.props.stripeKey },
-            'same-origin',
-            'POST',
-            this.props.csrf,
-          ),
-        )
-          .then((result) => {
-            if (result.client_secret) {
-              this.setState({ setupIntentClientSecret: result.client_secret });
-
-              // If user has already clicked submit then handle card setup now
-              if (this.state.paymentWaiting) {
-                this.handleCardSetup(result.client_secret);
-              }
-            } else {
-              throw new Error(`Missing client_secret field in response from ${routes.stripeSetupIntentRecaptcha}`);
-            }
-          }).catch((error) => {
-            logException(`Error getting Stripe client secret for subscription: ${error}`);
-
-            this.setState({
-              cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }],
-            });
-          });
-      },
-    });
+    if (isPostDeployUser()) {
+      this.fetchPaymentIntent('dummy');
+    } else {
+      window.grecaptcha.render('robot_checkbox', {
+        sitekey: window.guardian.v2recaptchaPublicKey,
+        callback: (token) => {
+          trackComponentLoad('subscriptions-recaptcha-client-token-received');
+          this.recaptchaCompleted();
+          this.fetchPaymentIntent(token);
+        },
+      });
+    }
   };
 
   setupRecurringHandlers(): void {
@@ -163,6 +138,41 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     } else {
       window.v2OnloadCallback = this.setupRecurringRecaptchaCallback;
     }
+  }
+
+  fetchPaymentIntent(token) {
+    fetchJson(
+      routes.stripeSetupIntentRecaptcha,
+      requestOptions(
+        { token, stripePublicKey: this.props.stripeKey },
+        'same-origin',
+        'POST',
+        this.props.csrf,
+      ),
+    )
+      .then((result) => {
+        if (result.client_secret) {
+          this.setState({ setupIntentClientSecret: result.client_secret });
+
+          // If user has already clicked submit then handle card setup now
+          if (this.state.paymentWaiting) {
+            this.handleCardSetup(result.client_secret);
+          }
+        } else {
+          throw new Error(`Missing client_secret field in response from ${routes.stripeSetupIntentRecaptcha}`);
+        }
+      }).catch((error) => {
+        logException(`Error getting Stripe client secret for subscription: ${error}`);
+
+        this.setState({
+          cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }],
+        });
+      });
+  }
+
+  recaptchaCompleted() {
+    this.setState({ recaptchaCompleted: true });
+    this.props.allErrors = this.props.allErrors.filter(error => error.field !== 'recaptcha');
   }
 
   handleCardErrors = () => {
@@ -237,7 +247,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   }
 
   checkRecaptcha() {
-    if (!this.state.recaptchaCompleted) {
+    if (!isPostDeployUser() && !this.state.recaptchaCompleted) {
       this.props.allErrors.push({
         field: 'recaptcha',
         message: 'Please check the \'I am not a robot\' checkbox',
