@@ -72,6 +72,16 @@ class AddressSearchBox extends Component<PropTypes, State> {
     return nextState.selectedItem !== this.state.selectedItem;
   }
 
+  componentDidUpdate() {
+    if (this.state.selectedItem === -1) {
+      return;
+    }
+    const resultItem = document.getElementById(`component-address-search-result-item-${this.state.selectedItem}`);
+    if (resultItem) {
+      resultItem.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
   onArrowKeys(ev: KeyboardEvent) {
     console.log(ev);
     const currentSelected = this.state.selectedItem;
@@ -86,16 +96,6 @@ class AddressSearchBox extends Component<PropTypes, State> {
     if (ev.code === 'Enter') {
       console.log(`${currentSelected} selected`);
       this.onAddressSelected(currentSelected);
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.state.selectedItem === -1) {
-      return;
-    }
-    const resultItem = document.getElementById(`component-address-search-result-item-${this.state.selectedItem}`);
-    if (resultItem) {
-      resultItem.scrollIntoView({ block: 'nearest' });
     }
   }
 
@@ -125,12 +125,12 @@ class AddressSearchBox extends Component<PropTypes, State> {
     this.setState({ selectedItem: newIndex });
   }
 
+  getError = () =>
+    (this.state.findTerm === '' ? firstError('lineOne', this.props.formErrors) : null);
+
   updateSearchTerm(findTerm: string) {
     this.setState({ findTerm });
   }
-
-  getError = () =>
-    (this.state.findTerm === '' ? firstError('lineOne', this.props.formErrors) : null);
 
   render() {
     const { scope } = this.props;
@@ -139,12 +139,16 @@ class AddressSearchBox extends Component<PropTypes, State> {
       <div>
         <Label id={labelId(scope)} htmlFor={inputId(scope)} label="Search" />
         <div>
+          { /* eslint-disable jsx-a11y/role-has-required-aria-props */ }
+          {/* This inspection seems to be configured to use v1.0 of the aria spec. We are using 1.1
+          detailed here: https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.1pattern/listbox-combo.html */}
           <div
             role="combobox"
             aria-haspopup="listbox"
             aria-owns={resultsListId(scope)}
             aria-expanded={!!this.state.findResponse}
           >
+            {/* eslint-enable jsx-a11y/role-has-required-aria-props */}
             <InputWithError
               id={inputId(scope)}
               label="Search"

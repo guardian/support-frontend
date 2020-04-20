@@ -1,3 +1,5 @@
+// @flow
+
 import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography/obj';
 import { border } from '@guardian/src-foundations/palette';

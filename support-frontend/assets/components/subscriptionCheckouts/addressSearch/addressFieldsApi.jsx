@@ -31,9 +31,7 @@ import {
 import { canShow } from 'hocs/canShow';
 import type { Option } from 'helpers/types/option';
 import type {
-  CaState,
   IsoCountry,
-  UsState,
 } from 'helpers/internationalisation/country';
 import {
   auStates,
@@ -109,15 +107,24 @@ class AddressFieldsApi extends Component<PropTypes, State> {
     this.state = { searchState: 'searching' };
   }
 
-  searchComplete = (address: AddressSearch, actions: AddressActionCreators) => {
-    actions.setAddressLineOne(address.Line1);
-    actions.setAddressLineTwo(address.Line2);
-    actions.setCountry(address.CountryIso2);
-    actions.setPostcode(address.PostalCode);
-    actions.setState(address.Province);
-    actions.setTownCity(address.City);
-    this.setState({ searchState: 'complete' });
-  };
+  onManualEditClick() {
+    const { searchState } = this.state;
+    if (searchState === 'searching') {
+      this.setState({ searchState: 'editing' });
+    } else if (searchState === 'editing') {
+      this.validateAddress();
+    } else if (searchState === 'complete') {
+      this.setState({ searchState: 'editing' });
+    }
+  }
+
+  static getEditButtonCopy(searchState: SearchState) {
+    switch (searchState) {
+      case 'complete': return 'Edit';
+      case 'editing': return 'Save address';
+      default: return 'I want to enter my address manually';
+    }
+  }
 
   validateAddress() {
     const errors = applyBillingAddressRules({
@@ -135,24 +142,15 @@ class AddressFieldsApi extends Component<PropTypes, State> {
     }
   }
 
-  onManualEditClick() {
-    const { searchState } = this.state;
-    if (searchState === 'searching') {
-      this.setState({ searchState: 'editing' });
-    } else if (searchState === 'editing') {
-      this.validateAddress();
-    } else if (searchState === 'complete') {
-      this.setState({ searchState: 'editing' });
-    }
-  }
-
-  getEditButtonCopy(searchState: SearchState) {
-    switch (searchState) {
-      case 'complete': return 'Edit';
-      case 'editing': return 'Save address';
-      default: return 'I want to enter my address manually';
-    }
-  }
+  searchComplete = (address: AddressSearch, actions: AddressActionCreators) => {
+    actions.setAddressLineOne(address.Line1);
+    actions.setAddressLineTwo(address.Line2);
+    actions.setCountry(address.CountryIso2);
+    actions.setPostcode(address.PostalCode);
+    actions.setState(address.Province);
+    actions.setTownCity(address.City);
+    this.setState({ searchState: 'complete' });
+  };
 
   render() {
     const { searchState } = this.state;
@@ -245,12 +243,12 @@ class AddressFieldsApi extends Component<PropTypes, State> {
             />
           </div>}
         <Button
-          style={`margin-top: 20px;`}
+          style={{ 'margin-top': '20px' }}
           onClick={() => this.onManualEditClick()}
           icon={null}
           appearance="secondary"
         >
-          {text('Label', this.getEditButtonCopy(searchState))}
+          {text('Label', AddressFieldsApi.getEditButtonCopy(searchState))}
         </Button>
       </div>
     );
