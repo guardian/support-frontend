@@ -95,6 +95,6 @@ class StripeController(
     implicit request =>
       val cloudwatchEvent = createSetupIntentRequest(stage, "Deprecated-AuthorisedEndpoint");
       AwsCloudWatchMetricPut(client)(cloudwatchEvent)
-      Future.successful(Gone())
+      Future.successful(Gone)
   }
 }
