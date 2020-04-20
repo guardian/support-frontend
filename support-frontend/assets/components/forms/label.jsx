@@ -13,6 +13,7 @@ export type PropsForHoc = {
   label: string,
   optional?: boolean,
   footer?: Node,
+  id?: string,
 };
 
 type Props = PropsForHoc & {
@@ -23,12 +24,12 @@ type Props = PropsForHoc & {
 // ----- Component ----- //
 
 function Label({
-  label, children, footer, htmlFor, optional,
+  label, children, footer, htmlFor, optional, id,
 }: Props) {
   const Element = htmlFor ? 'label' : 'strong';
   return (
     <div className="component-form-label">
-      <Element className="component-form-label__label" htmlFor={htmlFor}>
+      <Element className="component-form-label__label" id={id} htmlFor={htmlFor}>
         {label}
         {optional && <span className="component-form-label__note">Optional</span>}
       </Element>
@@ -40,6 +41,7 @@ function Label({
 Label.defaultProps = {
   footer: null,
   optional: false,
+  id: null,
 };
 
 // ----- Exports ----- //

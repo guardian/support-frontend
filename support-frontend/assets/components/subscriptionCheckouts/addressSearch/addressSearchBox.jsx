@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { ResultsDropdown } from 'components/subscriptionCheckouts/addressSearch/resultsDropdown';
-import { withLabel } from 'hocs/withLabel';
 import { Input } from 'components/forms/input';
 import { asControlled } from 'hocs/asControlled';
 import {
@@ -19,6 +18,11 @@ import { withError } from 'hocs/withError';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { FormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { firstError } from 'helpers/subscriptionsForms/validation';
+import { Label } from 'components/forms/label';
+import {
+  inputId,
+  labelId, resultsListId, resultsListItemId,
+} from 'components/subscriptionCheckouts/addressSearch/addressSearchIdHelpers';
 
 type PropTypes = {
   scope: string,
@@ -33,7 +37,7 @@ type State = {
   selectedItem: number,
 }
 
-const InputWithError = withError(asControlled(withLabel(Input)));
+const InputWithError = withError(asControlled(Input));
 
 class AddressSearchBox extends Component<PropTypes, State> {
 
@@ -129,23 +133,39 @@ class AddressSearchBox extends Component<PropTypes, State> {
     (this.state.findTerm === '' ? firstError('lineOne', this.props.formErrors) : null);
 
   render() {
+    const { scope } = this.props;
+    const { selectedItem } = this.state;
     return (
       <div>
-        <InputWithError
-          id={`${this.props.scope}-search`}
-          label="Search"
-          autocomplete="off"
-          placeholder="Start typing your address"
-          setValue={value => this.updateSearchTerm(value)}
-          onKeyDown={ev => this.onArrowKeys(ev)}
-          error={this.getError()}
-        />
-        <ResultsDropdown
-          findResponse={this.state.findResponse}
-          selectedItem={this.state.selectedItem}
-          setSelectedItem={index => this.setSelectedItem(index)}
-          onAddressSelected={index => this.onAddressSelected(index)}
-        />
+        <Label id={labelId(scope)} htmlFor={inputId(scope)} label="Search" />
+        <div>
+          <div
+            role="combobox"
+            aria-haspopup="listbox"
+            aria-owns={resultsListId(scope)}
+            aria-expanded={!!this.state.findResponse}
+          >
+            <InputWithError
+              id={inputId(scope)}
+              label="Search"
+              autocomplete="off"
+              placeholder="Start typing your address"
+              setValue={value => this.updateSearchTerm(value)}
+              onKeyDown={ev => this.onArrowKeys(ev)}
+              error={this.getError()}
+              aria-autocomplete="list"
+              aria-controls={resultsListId(scope)}
+              aria-activedescendant={resultsListItemId(scope, selectedItem)}
+            />
+            <ResultsDropdown
+              scope={this.props.scope}
+              findResponse={this.state.findResponse}
+              selectedItem={selectedItem}
+              setSelectedItem={index => this.setSelectedItem(index)}
+              onAddressSelected={index => this.onAddressSelected(index)}
+            />
+          </div>
+        </div>
       </div>);
   }
 }
