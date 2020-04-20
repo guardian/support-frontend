@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unused-state */
 // @flow
 
-import React, { Component, div, type Node } from 'react';
+import React, { Component, type Node } from 'react';
 import { compose } from 'redux';
 import { injectStripe } from 'react-stripe-elements';
 import Button from 'components/button/button';
@@ -64,12 +64,20 @@ const invalidStyles = {
   color: '#c70000',
 };
 
+
+const Recaptcha = props =>
+  (<div
+    className="robot_checkbox"
+    {...props}
+  />);
+
+
 // Main component
 
 const CardNumberWithError = compose(withError, withLabel)(CardNumberElement);
 const CardExpiryWithError = compose(withError, withLabel)(CardExpiryElement);
 const CardCvcWithError = compose(withError, withLabel)(CardCvcElement);
-const DivWithError = withError(div);
+const RecaptchaWithError = withError(Recaptcha);
 
 class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   constructor(props) {
@@ -300,9 +308,8 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
             style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
             onChange={e => this.handleChange(e)}
           />
-          <DivWithError
+          <RecaptchaWithError
             id="robot_checkbox"
-            className="robot_checkbox"
             error={firstError('recaptcha', this.props.allErrors)}
           />
           <div className="component-stripe-submit-button">
