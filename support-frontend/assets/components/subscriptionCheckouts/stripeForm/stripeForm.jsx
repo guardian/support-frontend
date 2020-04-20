@@ -118,22 +118,20 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
 
   // Creates a new setupIntent upon recaptcha verification
   setupRecurringRecaptchaCallback = () => {
-    if (isPostDeployUser()) {
-      this.fetchPaymentIntent('dummy');
-    } else {
-      window.grecaptcha.render('robot_checkbox', {
-        sitekey: window.guardian.v2recaptchaPublicKey,
-        callback: (token) => {
-          trackComponentLoad('subscriptions-recaptcha-client-token-received');
-          this.recaptchaCompleted();
-          this.fetchPaymentIntent(token);
-        },
-      });
-    }
+    window.grecaptcha.render('robot_checkbox', {
+      sitekey: window.guardian.v2recaptchaPublicKey,
+      callback: (token) => {
+        trackComponentLoad('subscriptions-recaptcha-client-token-received');
+        this.recaptchaCompleted();
+        this.fetchPaymentIntent(token);
+      },
+    });
   };
 
   setupRecurringHandlers(): void {
-    if (window.grecaptcha && window.grecaptcha.render) {
+    if (isPostDeployUser()) {
+      this.fetchPaymentIntent('dummy');
+    } else if (window.grecaptcha && window.grecaptcha.render) {
       this.setupRecurringRecaptchaCallback();
     } else {
       window.v2OnloadCallback = this.setupRecurringRecaptchaCallback;
