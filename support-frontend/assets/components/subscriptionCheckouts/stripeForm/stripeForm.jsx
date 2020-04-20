@@ -1,12 +1,15 @@
 /* eslint-disable react/no-unused-state */
 // @flow
 
-import React, { Component, type Node } from 'react';
+import React, { Component, div, type Node } from 'react';
 import { compose } from 'redux';
 import { injectStripe } from 'react-stripe-elements';
 import Button from 'components/button/button';
 import { ErrorSummary } from '../submitFormErrorSummary';
-import { type FormError } from 'helpers/subscriptionsForms/validation';
+import {
+  firstError,
+  type FormError,
+} from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { CardNumberElement, CardExpiryElement, CardCvcElement } from 'react-stripe-elements';
 import { withError } from 'hocs/withError';
@@ -42,7 +45,8 @@ type StateTypes = {
   cardCvc: Object,
   cardErrors: Array<Object>,
   setupIntentClientSecret: Option<string>,
-  paymentWaiting: boolean
+  paymentWaiting: boolean,
+  recaptchaCompleted: boolean,
 }
 
 // Styles for stripe elements
@@ -64,6 +68,7 @@ const invalidStyles = {
 const CardNumberWithError = compose(withError, withLabel)(CardNumberElement);
 const CardExpiryWithError = compose(withError, withLabel)(CardExpiryElement);
 const CardCvcWithError = compose(withError, withLabel)(CardCvcElement);
+const DivWithError = withError(div);
 
 class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   constructor(props) {
@@ -93,12 +98,14 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       cardErrors: [],
       setupIntentClientSecret: null,
       paymentWaiting: false,
+      recaptchaCompleted: false,
     };
   }
 
 
   componentDidMount() {
     this.setupRecurringHandlers();
+    loadRecaptchaV2();
   }
 
   getAllCardErrors = () => ['cardNumber', 'cardExpiry', 'cardCvc'].reduce((cardErrors, field) => {
@@ -108,12 +115,17 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     return cardErrors;
   }, []);
 
+  recaptchaCompleted() {
+    this.setState({ recaptchaCompleted: true });
+    this.props.allErrors = this.props.allErrors.filter(error => error.field !== 'recaptcha');
+  }
   // Creates a new setupIntent upon recaptcha verification
   setupRecurringRecaptchaCallback = () => {
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
         trackComponentLoad('subscriptions-recaptcha-client-token-received');
+        this.recaptchaCompleted();
         fetchJson(
           routes.stripeSetupIntentRecaptcha,
           requestOptions(
@@ -224,10 +236,20 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     });
   }
 
+  checkRecaptcha() {
+    if (!this.state.recaptchaCompleted) {
+      this.props.allErrors.push({
+        field: 'recaptcha',
+        message: 'Please check the \'I am not a robot\' checkbox',
+      });
+    }
+  }
+
   requestSCAPaymentMethod = (event) => {
     event.preventDefault();
     this.props.validateForm();
     this.handleCardErrors();
+    this.checkRecaptcha();
 
     if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
 
@@ -238,7 +260,6 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   };
 
   render() {
-    loadRecaptchaV2();
     const { stripe } = this.props;
     if (stripe) {
       stripe.elements();
@@ -269,7 +290,11 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
             style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
             onChange={e => this.handleChange(e)}
           />
-          <div id="robot_checkbox" className="robot_checkbox" />
+          <DivWithError
+            id="robot_checkbox"
+            className="robot_checkbox"
+            error={firstError('recaptcha', this.props.allErrors)}
+          />
           <div className="component-stripe-submit-button">
             <Button id="qa-stripe-submit-button" onClick={event => this.requestSCAPaymentMethod(event)}>
               {this.props.buttonText}

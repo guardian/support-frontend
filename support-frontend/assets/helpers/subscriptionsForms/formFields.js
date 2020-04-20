@@ -36,6 +36,7 @@ export type FormFields = {|
   productOption: ProductOptions,
   orderIsAGift: Option<boolean>,
   deliveryInstructions: Option<string>,
+  recaptcha: Option<boolean>,
 |};
 
 export type FormField = $Keys<FormFields>;
