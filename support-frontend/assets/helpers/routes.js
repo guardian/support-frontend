@@ -34,7 +34,7 @@ const routes: {
   guardianWeeklySubscriptionLandingGift: '/subscribe/weekly/gift',
   postcodeLookup: '/postcode-lookup',
   createSignInUrl: '/identity/signin-url',
-  stripeSetupIntentWithAuth: '/stripe/create-setup-intent/auth',
+  stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
 };
 
 const createReminderEndpoint = isProd() ?

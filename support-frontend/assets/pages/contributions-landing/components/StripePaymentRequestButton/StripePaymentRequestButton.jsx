@@ -211,7 +211,7 @@ function fetchClientSecret(props: PropTypes): Promise<string> {
     if (result.client_secret) {
       return Promise.resolve(result.client_secret);
     }
-    return Promise.reject(new Error(`Missing client_secret field in response for PRB`));
+    return Promise.reject(new Error('Missing client_secret field in response for PRB'));
 
   });
 }

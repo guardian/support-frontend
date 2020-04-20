@@ -9,7 +9,7 @@ import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigP
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
-import config.StringsConfig
+import config.{RecaptchaConfigProvider, StringsConfig}
 import play.api.mvc._
 import play.twirl.api.Html
 import services.stepfunctions.SupportWorkersClient
@@ -39,7 +39,8 @@ class PaperSubscription(
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent]
+  fontLoaderBundle: Either[RefPath, StyleContent],
+  recaptchaConfigProvider: RecaptchaConfigProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -113,7 +114,8 @@ class PaperSubscription(
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),
-      payPalConfigProvider.get(true)
+      payPalConfigProvider.get(true),
+      recaptchaConfigProvider.v2PublicKey
     )
   }
 

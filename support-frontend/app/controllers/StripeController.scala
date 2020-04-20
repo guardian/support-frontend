@@ -1,7 +1,6 @@
 package controllers
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.AuthRequest
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client, createSetupIntentRequest}
 import com.gu.support.config.{Stage, StripeConfig}
@@ -93,25 +92,11 @@ class StripeController(
 
   def createSetupIntentWithAuth: Action[SetupIntentRequest] =
     authenticatedAction(subscriptionsClientId).async(circe.json[SetupIntentRequest]) {
-
-      val cloudwatchEvent = createSetupIntentRequest(stage, "authorisedEndpoint");
-      AwsCloudWatchMetricPut(client)(cloudwatchEvent)
-
-      implicit request: AuthRequest[SetupIntentRequest] =>
-        identityService.getUser(request.user.minimalUser).fold(
-          error => {
-            logger.error(s"createSetupIntentWithAuth returning InternalServerError because: $error")
-            Future.successful(InternalServerError)
-          },
-          user => {
-            stripeService(request.body.stripePublicKey).fold(
-              error => {
-                logger.error(s"createSetupIntentWithAuth returning InternalServerError because: $error")
-                InternalServerError("")
-              },
-              response => Ok(response.asJson)
-            )
-          }
-        ).flatten
+      implicit request =>
+        val cloudwatchEvent = createSetupIntentRequest(stage, "Deprecated-AuthorisedEndpoint");
+        AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+        // This endpoint is deprecated
+        Future.successful(Redirect(routes.StripeController.createSetupIntentRecaptcha(), MOVED_PERMANENTLY))
     }
+
 }

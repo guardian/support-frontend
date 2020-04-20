@@ -30,6 +30,7 @@ import CreditCardsUS from './creditCardsUS.svg';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { updateRecaptchaToken } from '../../contributionsLandingActions';
+import { routes } from 'helpers/routes';
 
 // ----- Types -----//
 
@@ -192,7 +193,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
         this.props.setStripeRecurringRecaptchaVerified(true);
 
         fetchJson(
-          '/stripe/create-setup-intent/recaptcha',
+          routes.stripeSetupIntentRecaptcha,
           requestOptions(
             { token, stripePublicKey: this.props.stripeKey },
             'same-origin',
@@ -210,7 +211,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             }
           })
           .catch((err) => {
-            logException(`Error getting Setup Intent client_secret from /stripe/create-setup-intent/recaptcha: ${err}`);
+            logException(`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err}`);
             this.props.paymentFailure('internal_error');
             this.props.setPaymentWaiting(false);
           });
@@ -229,6 +230,10 @@ class CardForm extends Component<PropTypes, StateTypes> {
   };
 
   setupRecurringHandlers(): void {
+    // Start by requesting the client_secret for a new Payment Method.
+    // Note - because this value is requested asynchronously when the component loads,
+    // it's possible for it to arrive after the user clicks 'Contribute'.
+    // This is handled in the callback below by checking the value of paymentWaiting.
     if (window.grecaptcha && window.grecaptcha.render) {
       this.setupRecurringRecaptchaCallback();
     } else {
@@ -239,9 +244,9 @@ class CardForm extends Component<PropTypes, StateTypes> {
       this.props.setPaymentWaiting(true);
 
       // Post-deploy tests bypass recaptcha, and no verification happens server-side for the test Stripe account
-      if (this.props.postDeploymentTestUser){
+      if (this.props.postDeploymentTestUser) {
         fetchJson(
-          '/stripe/create-setup-intent/recaptcha',
+          routes.stripeSetupIntentRecaptcha,
           requestOptions(
             { token: 'post-deploy-token', stripePublicKey: this.props.stripeKey },
             'same-origin',
@@ -255,7 +260,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             } else {
               throw new Error(`Missing client_secret field in server response: ${JSON.stringify(json)}`);
             }
-          })
+          });
       }
 
       /* Recaptcha verification is required for setupIntent creation.
