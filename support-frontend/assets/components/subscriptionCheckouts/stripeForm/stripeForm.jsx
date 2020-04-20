@@ -20,6 +20,7 @@ import { appropriateErrorMessage } from 'helpers/errorReasons';
 import type { Csrf } from '../../../helpers/csrf/csrfReducer';
 import { trackComponentLoad } from '../../../helpers/tracking/behaviour';
 import { loadRecaptchaV2 } from '../../../helpers/recaptcha';
+import { routes } from 'helpers/routes';
 
 // Types
 
@@ -32,7 +33,6 @@ export type StripeFormPropTypes = {
   submitForm: Function,
   validateForm: Function,
   buttonText: string,
-  stripeSetupIntentEndpoint: string,
   csrf: Csrf,
 }
 
@@ -115,7 +115,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
       callback: (token) => {
         trackComponentLoad('subscriptions-recaptcha-client-token-received');
         fetchJson(
-          '/stripe/create-setup-intent/recaptcha',
+          routes.stripeSetupIntentRecaptcha,
           requestOptions(
             { token, stripePublicKey: this.props.stripeKey },
             'same-origin',
@@ -132,7 +132,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
                 this.handleCardSetup(result.client_secret);
               }
             } else {
-              throw new Error(`Missing client_secret field in response from ${this.props.stripeSetupIntentEndpoint}`);
+              throw new Error(`Missing client_secret field in response from ${routes.stripeSetupIntentRecaptcha}`);
             }
           }).catch((error) => {
             logException(`Error getting Stripe client secret for subscription: ${error}`);
