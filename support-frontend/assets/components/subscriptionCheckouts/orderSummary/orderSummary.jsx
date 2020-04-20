@@ -5,9 +5,8 @@ import { type ProductPrice } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
-import { getPriceDescription, displayPrice } from 'helpers/productPrice/priceDescriptions';
+import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import EndSummary from 'components/subscriptionCheckouts/endSummary/endSummary';
-import { extendedGlyph } from 'helpers/internationalisation/currency';
 
 import * as styles from './orderSummaryStyles';
 
@@ -23,11 +22,6 @@ type PropTypes = {
 
 function OrderSummary(props: PropTypes) {
   const description = getPriceDescription(props.productPrice, props.billingPeriod, true);
-  const promoDescription = props.productPrice.promotions && props.productPrice.promotions.length > 0
-    ? props.productPrice.promotions[0].description
-    : null;
-  const glyph = extendedGlyph(props.productPrice.currency);
-  const priceString = displayPrice(glyph, props.productPrice.price);
 
   return (
     <aside css={styles.wrapper}>
@@ -43,11 +37,9 @@ function OrderSummary(props: PropTypes) {
           <span>14 day free trial</span>
         </div>
       </div>
-      <EndSummary
-        description={description}
-        promotion={promoDescription}
-        price={priceString}
-      />
+      <div css={styles.endSummary}>
+        <EndSummary />
+      </div>
     </aside>
   );
 }
