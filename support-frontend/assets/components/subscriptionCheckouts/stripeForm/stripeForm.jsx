@@ -111,7 +111,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   // Creates a new setupIntent upon recaptcha verification
   setupRecurringRecaptchaCallback = () => {
     window.grecaptcha.render('robot_checkbox', {
-      sitekey: window.guardian.v2recaptchaPublicKey, // To Do this needs to be the site key
+      sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
         trackComponentLoad('subscriptions-recaptcha-client-token-received');
         fetchJson(
@@ -127,7 +127,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
             if (result.client_secret) {
               this.setState({ setupIntentClientSecret: result.client_secret });
 
-              // If user has already clicked contribute then handle card setup now
+              // If user has already clicked submit then handle card setup now
               if (this.state.paymentWaiting) {
                 this.handleCardSetup(result.client_secret);
               }
@@ -135,7 +135,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
               throw new Error(`Missing client_secret field in response from ${this.props.stripeSetupIntentEndpoint}`);
             }
           }).catch((error) => {
-            logException(`Error getting Stripe client secret for recurring contribution: ${error}`);
+            logException(`Error getting Stripe client secret for subscription: ${error}`);
 
             this.setState({
               cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }],
