@@ -25,6 +25,7 @@ import { trackComponentLoad } from '../../../helpers/tracking/behaviour';
 import { loadRecaptchaV2 } from '../../../helpers/recaptcha';
 import { isPostDeployUser } from 'helpers/user/user';
 import { routes } from 'helpers/routes';
+import { RecaptchaWithError } from 'components/subscriptionCheckouts/stripeForm/recaptcha';
 
 // Types
 
@@ -64,20 +65,11 @@ const invalidStyles = {
   color: '#c70000',
 };
 
-
-const Recaptcha = props =>
-  (<div
-    className="robot_checkbox"
-    {...props}
-  />);
-
-
 // Main component
 
 const CardNumberWithError = compose(withError, withLabel)(CardNumberElement);
 const CardExpiryWithError = compose(withError, withLabel)(CardExpiryElement);
 const CardCvcWithError = compose(withError, withLabel)(CardCvcElement);
-const RecaptchaWithError = withError(Recaptcha);
 
 class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   constructor(props) {
@@ -255,7 +247,9 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   }
 
   checkRecaptcha() {
-    if (!isPostDeployUser() && !this.state.recaptchaCompleted) {
+    if (!isPostDeployUser() &&
+      !this.state.recaptchaCompleted &&
+      !this.props.allErrors.find(error => error.field === 'recaptcha')) {
       this.props.allErrors.push({
         field: 'recaptcha',
         message: 'Please check the \'I am not a robot\' checkbox',
