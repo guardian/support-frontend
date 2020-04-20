@@ -219,3 +219,18 @@
     margin-top: 10px;
   }
 }
+.cancellationPolicy {
+  display: none;
+
+  @include mq($from: desktop) {
+    display: block;
+  }
+}
+
+.endSummay {
+  display: block;
+
+  @include mq($from: desktop) {
+    display: none;
+  }
+}
