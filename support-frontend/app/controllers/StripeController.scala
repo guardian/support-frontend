@@ -8,7 +8,7 @@ import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, Action, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.{IdentityService, RecaptchaService, StripeSetupIntentService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -90,13 +90,11 @@ class StripeController(
     )
   }
 
-  def createSetupIntentWithAuth: Action[SetupIntentRequest] =
-    authenticatedAction(subscriptionsClientId).async(circe.json[SetupIntentRequest]) {
-      implicit request =>
-        val cloudwatchEvent = createSetupIntentRequest(stage, "Deprecated-AuthorisedEndpoint");
-        AwsCloudWatchMetricPut(client)(cloudwatchEvent)
-        // This endpoint is deprecated
-        Future.successful(Redirect(routes.StripeController.createSetupIntentRecaptcha(), MOVED_PERMANENTLY))
-    }
-
+  // This endpoint is deprecated
+  def createSetupIntentWithAuth: Action[AnyContent] = Action.async {
+    implicit request =>
+      val cloudwatchEvent = createSetupIntentRequest(stage, "Deprecated-AuthorisedEndpoint");
+      AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+      Future.successful(Gone)
+  }
 }
