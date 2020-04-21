@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React, { useState } from 'react';
+
 import { connect } from 'react-redux';
 
 import { usStates, caStates, type StateProvince, auStates } from 'helpers/internationalisation/country';
@@ -31,12 +32,6 @@ const mapStateToProps = (state: State) => ({
 });
 
 // ----- Render ----- //
-// const renderState = (selectedState: StateProvince | null) => (state: {abbreviation: string, name: string}) => (
-//   <option value={state.abbreviation} selected={selectedState === state.abbreviation}>{state.name}</option>
-// );
-
-// TODO: 1. convert state name to key for updatebillingstate function
-// 2. Fix validation - shows as valid even when it's not
 
 const renderStatesField = (
   states: {[string]: string},
@@ -69,15 +64,14 @@ const renderStatesField = (
 
 
 const ContributionStateDs = (props: PropTypes) => {
-  const [currentInput, setCurrentInput] = useState('');
-  const isValid = checkBillingStateDs(props.value, props.countryGroupId);
+  const [currentInput, setCurrentInput] = useState(props.value);
+  const isValid = checkBillingStateDs(currentInput, props.countryGroupId);
   const showError = !isValid && props.formHasBeenSubmitted;
+
   const handleChange = (event: SyntheticInputEvent<HTMLInputElement>): void => {
-    console.log('event', event.target.value);
     const input: string = event.target.value;
     setCurrentInput(input);
     const formattedBillingState = stateProvinceFieldFromString(props.countryGroupId, input);
-    console.log({ formattedBillingState });
     props.onChange(formattedBillingState);
   };
   if (props.contributionType !== 'ONE_OFF') {
