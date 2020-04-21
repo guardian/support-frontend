@@ -370,6 +370,10 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
     const recaptchaVerified = this.props.oneOffRecaptchaToken || this.props.recurringRecaptchaVerified;
 
+    const googleTermsUrl: string = "https://policies.google.com/terms";
+
+    const googlePrivacyUrl: string = "https://policies.google.com/privacy";
+
     return (
       <div className="form__fields">
         <legend className="form__legend"><h3>Your card details</h3></legend>
@@ -421,8 +425,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
 
-        <div>
+        <div className="form__field">
+          <label className="form__label">
+            <span>Security check</span>
+          </label>
           <div id="robot_checkbox" className="robot_checkbox" />
+          <p className="recaptcha-terms">By ticking this box, you agree to let Google check if you are human. Please refer to their <a href={googleTermsUrl}>Terms</a> and <a href={googlePrivacyUrl}>Privacy</a> policies.</p>
           {
             this.props.checkoutFormHasBeenSubmitted
             && !recaptchaVerified ?
