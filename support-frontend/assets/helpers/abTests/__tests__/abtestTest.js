@@ -3,9 +3,14 @@
 // ----- Imports ----- //
 
 import type { Settings } from 'helpers/settings';
-import { getVariantsAsString, init as abInit } from '../abtest';
+import {
+  getVariantsAsString,
+  init as abInit,
+  targetPageMatches,
+} from '../abtest';
 import type { Participations } from '../abtest';
 import { GBPCountries, UnitedStates } from '../../internationalisation/countryGroup';
+import { subsShowcaseAndDigiSubPages } from 'helpers/abTests/abtestDefinitions';
 
 jest.mock('ophan', () => ({
   record: () => null,
@@ -554,4 +559,14 @@ describe('Correct allocation in a multi test environment', () => {
     expect(participations).toEqual(expectedParticipations);
   });
 
+});
+
+describe('targetPage matching for the digital pack product page and showcase page test', () => {
+  expect(targetPageMatches('/uk/subscribe/paper', subsShowcaseAndDigiSubPages)).toEqual(false);
+  expect(targetPageMatches('/uk/subscribe/digital/checkout', subsShowcaseAndDigiSubPages)).toEqual(false);
+  expect(targetPageMatches('/us/subscribe', subsShowcaseAndDigiSubPages)).toEqual(true);
+  expect(targetPageMatches('/us/subscribe/digital', subsShowcaseAndDigiSubPages)).toEqual(true);
+  const withAcquisitionParams = '/uk/subscribe?INTCMP=header_support_subscribe&acquisitionData=%7B"componentType"%3A"ACQUISITIONS_HEADER"%2C"componentId"%3A"header_support_subscribe"%2C"source"%3A"GUARDIAN_WEB"%2C"referrerPageviewId"%3A"k8heft91k5c3tnnnmwjd"%2C"referrerUrl"%3A"https%3A%2F%2Fwww.theguardian.com%2Fuk"%7D';
+  expect(targetPageMatches(withAcquisitionParams, subsShowcaseAndDigiSubPages)).toEqual(true);
+  expect(targetPageMatches('/us/subscribe/digital?test=blah', subsShowcaseAndDigiSubPages)).toEqual(true);
 });

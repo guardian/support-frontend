@@ -38,7 +38,7 @@ export type FormFields = {|
   deliveryInstructions: Option<string>,
 |};
 
-export type FormField = $Keys<FormFields>;
+export type FormField = $Keys<FormFields> | 'recaptcha';
 
 export type FormState = {|
   stage: Stage,

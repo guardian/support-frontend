@@ -6,7 +6,7 @@ import java.time.OffsetDateTime
 import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvider}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.catalog.GuardianWeekly
-import com.gu.support.promotions.PromotionService
+import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -61,7 +61,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   }
 
   it should "create a 6 for 6 Guardian Weekly subscription" in {
-    createSubscription(createGuardianWeeklySubscriptionJson(Quarterly, Some(GuardianWeekly.SixForSixPromoCode)))
+    createSubscription(createGuardianWeeklySubscriptionJson(Quarterly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)))
   }
 
   it should "create an Guardian Weekly gift subscription" in {

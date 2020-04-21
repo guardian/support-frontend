@@ -181,7 +181,7 @@ function CampaignHeader() {
           <span className="hope-is-power--heavy-text">Support The Guardian</span> and enjoy two innovative apps and <span className="nobr">ad-free reading</span> on theguardian.com. The complete digital experience from The Guardian.
         </h2>
         <div className="hope-is-power__circle">
-          <span className="hope-is-power__circle-text--large">14 day</span>
+          <span className="hope-is-power__circle-text hope-is-power__circle-text--large">14 day</span>
           <span className="hope-is-power__circle-text">free trial</span>
         </div>
       </div>

@@ -72,6 +72,7 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
+  | { type: 'UPDATE_RECAPTCHA_TOKEN', recaptchaToken: string }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -92,7 +93,7 @@ export type Action =
   | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
   | { type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete: boolean }
   | { type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret: string }
-  | { type: 'SET_STRIPE_RECAPTCHA_VERIFIED', recaptchaVerified: boolean }
+  | { type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified: boolean }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -146,6 +147,11 @@ const updateEmail = (email: string): ((Function) => void) =>
   };
 
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
+
+const updateRecaptchaToken = (recaptchaToken: string): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_RECAPTCHA_TOKEN', recaptchaToken })));
+  };
 
 const setPaymentRequestButtonPaymentMethod =
   (paymentMethod: 'none' | StripePaymentMethod, stripeAccount: StripeAccount): Action =>
@@ -292,9 +298,9 @@ const setStripeSetupIntentClientSecret = (setupIntentClientSecret: string): ((Fu
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret })));
   };
 
-const setStripeRecaptchaVerified = (recaptchaVerified: boolean): ((Function) => void) =>
+const setStripeRecurringRecaptchaVerified = (recaptchaVerified: boolean): ((Function) => void) =>
   (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECAPTCHA_VERIFIED', recaptchaVerified })));
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified })));
   };
 
 const sendFormSubmitEventForPayPalRecurring = () =>
@@ -311,6 +317,15 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     };
     onFormSubmit(formSubmitParameters);
   };
+
+const stripeOneOffRecaptchaToken = (state: State): string => {
+  if (state.page.user.isPostDeploymentTestUser) {
+    return 'post-deploy-token';
+  }
+
+  // see https://github.com/guardian/payment-api/pull/195
+  return state.page.form.oneOffRecaptchaToken || '';
+};
 
 const buildStripeChargeDataFromAuthorisation = (
   stripePaymentMethod: StripePaymentMethod,
@@ -337,6 +352,7 @@ const buildStripeChargeDataFromAuthorisation = (
     state.common.internationalisation.countryId,
     state.page.user.isTestUser || false,
   ),
+  recaptchaToken: stripeOneOffRecaptchaToken(state),
 });
 
 const stripeChargeDataFromCheckoutAuthorisation = (
@@ -783,6 +799,7 @@ export {
   setHandleStripe3DS,
   setStripeCardFormComplete,
   setStripeSetupIntentClientSecret,
-  setStripeRecaptchaVerified,
+  setStripeRecurringRecaptchaVerified,
   updatePayPalButtonReady,
+  updateRecaptchaToken,
 };

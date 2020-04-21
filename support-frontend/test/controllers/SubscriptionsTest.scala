@@ -16,7 +16,7 @@ import com.gu.support.workers.Monthly
 import com.gu.tip.Tip
 import com.typesafe.config.ConfigFactory
 import config.Configuration.MetricUrl
-import config.StringsConfig
+import config.{RecaptchaConfigProvider, StringsConfig}
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -89,10 +89,10 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       val stripe = mock[StripeConfigProvider]
       val stripeAccountConfig = StripeAccountConfig("", "")
       when(stripe.get(any[Boolean])).thenReturn(
-        StripeConfig(stripeAccountConfig, stripeAccountConfig, stripeAccountConfig, None)
-      )
+        StripeConfig(stripeAccountConfig, stripeAccountConfig, stripeAccountConfig, None))
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
+      val recaptchaConfigProvider = mock[RecaptchaConfigProvider]
 
       val prices: ProductPrices = Map(
         CountryGroup.UK ->
@@ -118,7 +118,8 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         stringsConfig = new StringsConfig(),
         settingsProvider = settingsProvider,
         supportUrl = "support.thegulocal.com",
-        fontLoaderBundle = Left(RefPath("test"))
+        fontLoaderBundle = Left(RefPath("test")),
+        recaptchaConfigProvider
       )
     }
 

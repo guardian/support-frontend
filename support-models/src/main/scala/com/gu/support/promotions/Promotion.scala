@@ -58,7 +58,7 @@ object Promotions {
       CountryGroup.countries.toSet
     ),
     campaignCode = "Six For Six campaign code",
-    channelCodes = Map("dummy channel" -> Set(GuardianWeekly.SixForSixPromoCode)),
+    channelCodes = Map("dummy channel" -> Set(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)),
     starts = new DateTime(1971, 2, 20, 12, 0, 0, 0),
     expires = None,
     discount = None, freeTrial = None, incentive = None,
