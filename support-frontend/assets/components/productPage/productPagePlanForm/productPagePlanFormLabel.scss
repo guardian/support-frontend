@@ -76,7 +76,21 @@
   margin: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing*1.5;
   padding-top: $gu-v-spacing/3;
   .component-button {
-    width: 100%;
+    width: gu-span(3);
+    font-size: 16px;
+    @include mq($from: tablet) {
+      width: 100%;
+      svg {
+        display: none;
+      }
+    }
+
+    @include mq($from: desktop) {
+      font-size: 16px;
+      svg {
+        display: block;
+      }
+    }
   }
 }
 

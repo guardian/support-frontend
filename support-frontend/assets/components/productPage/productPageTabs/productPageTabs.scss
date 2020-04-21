@@ -49,7 +49,7 @@
   }
 
   @include mq($from:phablet) {
-    min-width: gu-span(3) + $gu-h-spacing/2;
+    min-width: gu-span(2) + $gu-h-spacing * 2.5;
   }
 }
 
@@ -71,4 +71,8 @@
   &:focus {
     box-shadow: inset 0 4px 0 0 gu-colour(highlight-dark);
   }
+}
+
+.component-product-page-tabs__tab--not-active {
+  border-bottom: 1px solid gu-colour(neutral-86);
 }

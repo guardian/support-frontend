@@ -36,7 +36,7 @@ const ProductPageTabs = ({
             {href ? (
               <a
                 href={href}
-                className={classNameWithModifiers('component-product-page-tabs__tab', isActive ? ['active'] : [])}
+                className={classNameWithModifiers('component-product-page-tabs__tab', isActive ? ['active'] : ['not-active'])}
                 onClick={(ev) => { ev.preventDefault(); onChange(index); }}
               >
                 {name}
@@ -45,7 +45,7 @@ const ProductPageTabs = ({
             :
             (
               <button
-                className={classNameWithModifiers('component-product-page-tabs__tab', isActive ? ['active'] : [])}
+                className={classNameWithModifiers('component-product-page-tabs__tab', isActive ? ['active'] : ['not-active'])}
                 onClick={() => onChange(index)}
               >
                 {name}

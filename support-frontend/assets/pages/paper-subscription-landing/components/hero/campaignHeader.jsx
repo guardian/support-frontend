@@ -49,7 +49,7 @@ const CampaignHeader = (props: PropTypes) => (
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
         <h2><span>Subscribe to The</span><br /><span>Guardian and The Observer</span></h2>
-        <p>Choose from a range of<br />packages to suit you</p>
+        <p>Choose from a range of packages to suit you</p>
       </div>
     </div>
     <div className="sale-joy-of-print-graphic-outer">

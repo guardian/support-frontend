@@ -24,18 +24,20 @@
     margin-top: $gu-v-spacing * 6;
   }
 
+  @include mq($from: tablet) {
+    padding-left: 0;
+  }
+
   @include mq($from: phablet) {
     font-size: 35px;
     line-height: 1;
     display: block;
-    padding-left: $gu-v-spacing;
+    padding-left: $gu-h-spacing/2;
 
     h2 {
       font-family: $gu-titlepiece;
       margin: $gu-v-spacing * 2 0;
-      span {
-       padding: 0 $gu-h-spacing / 2;
-      }
+
       span:first-of-type {
         position: relative;
         z-index: 5;
@@ -54,8 +56,15 @@
 
     p {
       @include gu-fontset-heading;
-      padding-left: $gu-h-spacing / 3;
+      @include mq($until: wide) {
+        width: gu-span(5);
+      }
+      @include mq($until: leftCol) {
+        width: gu-span(4);
+      }
     }
+
+
   }
 
   @include mq($from: desktop) {
