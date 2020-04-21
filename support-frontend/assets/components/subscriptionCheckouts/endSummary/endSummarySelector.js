@@ -14,9 +14,10 @@ const getPromotion = (productPrice: ProductPrice) =>
     : null);
 
 function mapStateToProps(state: CheckoutState) {
-  const { billingPeriod } = state.page.checkout;
+  const { billingPeriod, productPrices } = state.page.checkout;
+
   const productPrice = getProductPrice(
-    state.page.checkout.productPrices,
+    productPrices,
     state.common.internationalisation.countryId,
     billingPeriod,
   );
