@@ -24,10 +24,6 @@
     margin-top: $gu-v-spacing * 6;
   }
 
-  @include mq($from: tablet) {
-    padding-left: 0;
-  }
-
   @include mq($from: phablet) {
     font-size: 35px;
     line-height: 1;
@@ -63,8 +59,10 @@
         width: gu-span(4);
       }
     }
+  }
 
-
+  @include mq($from: tablet) {
+    padding-left: 0;
   }
 
   @include mq($from: desktop) {
