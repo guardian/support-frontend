@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
@@ -27,7 +27,7 @@ import {
   getStateFormErrors,
   isPostcodeOptional,
   type State as AddressState,
-} from 'components/subscriptionCheckouts/address/addressFieldsStore';
+} from 'components/subscriptionCheckouts/addressSearch/addressFieldsStore';
 import { canShow } from 'hocs/canShow';
 import type { Option } from 'helpers/types/option';
 import type {
@@ -43,7 +43,6 @@ import AddressDisplayText
 import * as styles from './addressFieldsApiStyles';
 import { AddressSearchBox } from 'components/subscriptionCheckouts/addressSearch/addressSearchBox';
 import type { AddressSearch } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
-import { Component } from 'preact';
 import { text } from '@storybook/addon-knobs';
 import Button from 'components/button/button';
 import {
@@ -100,7 +99,7 @@ function statesForCountry(country: Option<IsoCountry>): React$Node {
 }
 
 
-class AddressFieldsApi extends Component<PropTypes, State> {
+class AddressFieldsApi<GlobalState> extends Component<PropTypes<GlobalState>, State> {
 
   constructor() {
     super();

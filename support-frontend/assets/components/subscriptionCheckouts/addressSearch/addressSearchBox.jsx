@@ -51,7 +51,7 @@ class AddressSearchBox extends Component<PropTypes, State> {
     };
   }
 
-  shouldComponentUpdate(nextProps: Readonly<PropTypes>, nextState: ReadOnly<State>): boolean {
+  shouldComponentUpdate(nextProps: PropTypes, nextState: State): boolean {
     if (this.state.findComplete === false && nextState.findComplete === true) {
       return true;
     }
@@ -83,7 +83,9 @@ class AddressSearchBox extends Component<PropTypes, State> {
   }
 
   onArrowKeys(ev: KeyboardEvent) {
-    console.log(ev);
+    if (!this.state.findResponse) {
+      return;
+    }
     const currentSelected = this.state.selectedItem;
     if (ev.code === 'ArrowDown' && currentSelected < this.state.findResponse.Items.length - 1) {
       ev.preventDefault();
@@ -100,6 +102,9 @@ class AddressSearchBox extends Component<PropTypes, State> {
   }
 
   onAddressSelected(index: number) {
+    if (!this.state.findResponse || !this.state.findResponse.Items[index]) {
+      return;
+    }
     const findItem = this.state.findResponse.Items[index];
     if (findItem.Type === 'Address') {
       retrieve(findItem.Id)
@@ -120,7 +125,7 @@ class AddressSearchBox extends Component<PropTypes, State> {
     }
   }
 
-  setSelectedItem(newIndex) {
+  setSelectedItem(newIndex: number) {
     console.log(`setting selected item to ${newIndex}`);
     this.setState({ selectedItem: newIndex });
   }
@@ -137,39 +142,40 @@ class AddressSearchBox extends Component<PropTypes, State> {
     const { selectedItem } = this.state;
     return (
       <div>
-        <Label id={labelId(scope)} htmlFor={inputId(scope)} label="Search" />
-        <div>
-          { /* eslint-disable jsx-a11y/role-has-required-aria-props */ }
-          {/* This inspection seems to be configured to use v1.0 of the aria spec. We are using 1.1
-          detailed here: https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.1pattern/listbox-combo.html */}
-          <div
-            role="combobox"
-            aria-haspopup="listbox"
-            aria-owns={resultsListId(scope)}
-            aria-expanded={!!this.state.findResponse}
-          >
-            {/* eslint-enable jsx-a11y/role-has-required-aria-props */}
-            <InputWithError
-              id={inputId(scope)}
-              label="Search"
-              autocomplete="off"
-              placeholder="Start typing your address"
-              setValue={value => this.updateSearchTerm(value)}
-              onKeyDown={ev => this.onArrowKeys(ev)}
-              error={this.getError()}
-              aria-autocomplete="list"
-              aria-controls={resultsListId(scope)}
-              aria-activedescendant={resultsListItemId(scope, selectedItem)}
-            />
-            <ResultsDropdown
-              scope={this.props.scope}
-              findResponse={this.state.findResponse}
-              selectedItem={selectedItem}
-              setSelectedItem={index => this.setSelectedItem(index)}
-              onAddressSelected={index => this.onAddressSelected(index)}
-            />
+        <Label labelId={labelId(scope)} htmlFor={inputId(scope)} label="Search">
+          <div>
+            { /* eslint-disable jsx-a11y/role-has-required-aria-props */ }
+            {/* This inspection seems to be configured to use v1.0 of the aria spec. We are using 1.1
+            detailed here: https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.1pattern/listbox-combo.html */}
+            <div
+              role="combobox"
+              aria-haspopup="listbox"
+              aria-owns={resultsListId(scope)}
+              aria-expanded={!!this.state.findResponse}
+            >
+              {/* eslint-enable jsx-a11y/role-has-required-aria-props */}
+              <InputWithError
+                id={inputId(scope)}
+                label="Search"
+                autocomplete="off"
+                placeholder="Start typing your address"
+                setValue={value => this.updateSearchTerm(value)}
+                onKeyDown={ev => this.onArrowKeys(ev)}
+                error={this.getError()}
+                aria-autocomplete="list"
+                aria-controls={resultsListId(scope)}
+                aria-activedescendant={resultsListItemId(scope, selectedItem)}
+              />
+              <ResultsDropdown
+                scope={this.props.scope}
+                findResponse={this.state.findResponse}
+                selectedItem={selectedItem}
+                setSelectedItem={index => this.setSelectedItem(index)}
+                onAddressSelected={index => this.onAddressSelected(index)}
+              />
+            </div>
           </div>
-        </div>
+        </Label>
       </div>);
   }
 }
