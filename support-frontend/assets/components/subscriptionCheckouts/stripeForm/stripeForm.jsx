@@ -25,7 +25,7 @@ import { trackComponentLoad } from '../../../helpers/tracking/behaviour';
 import { loadRecaptchaV2 } from '../../../helpers/recaptcha';
 import { isPostDeployUser } from 'helpers/user/user';
 import { routes } from 'helpers/routes';
-import { RecaptchaWithError } from 'components/subscriptionCheckouts/stripeForm/recaptcha';
+import { Recaptcha } from 'components/subscriptionCheckouts/stripeForm/recaptcha';
 
 // Types
 
@@ -70,6 +70,7 @@ const invalidStyles = {
 const CardNumberWithError = compose(withError, withLabel)(CardNumberElement);
 const CardExpiryWithError = compose(withError, withLabel)(CardExpiryElement);
 const CardCvcWithError = compose(withError, withLabel)(CardCvcElement);
+const RecaptchaWithError = compose(withError, withLabel)(Recaptcha);
 
 class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   constructor(props) {
@@ -302,6 +303,8 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
           />
           <RecaptchaWithError
             id="robot_checkbox"
+            label="Security check"
+            style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
             error={firstError('recaptcha', this.props.allErrors)}
           />
           <div className="component-stripe-submit-button">
