@@ -21,16 +21,12 @@ function mapStateToProps(state: CheckoutState) {
     state.common.internationalisation.countryId,
     billingPeriod,
   );
-
-  const description = getPriceDescription(productPrice, billingPeriod, true);
-  const promotion = getPromotion(productPrice);
   const glyph = extendedGlyph(productPrice.currency);
-  const formattedPrice = displayPrice(glyph, productPrice.price);
 
   return {
-    description,
-    promotion,
-    formattedPrice,
+    priceDescription: getPriceDescription(productPrice, billingPeriod, true),
+    promotion: getPromotion(productPrice),
+    displayPrice: displayPrice(glyph, productPrice.price),
   };
 }
 

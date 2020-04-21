@@ -10,21 +10,21 @@ import mapStateToProps from 'components/subscriptionCheckouts/endSummary/endSumm
 const Dot = () => <div css={styles.dot} />;
 
 type Props = {
-  description: string,
+  priceDescription: string,
   promotion: Option<string>,
-  formattedPrice: string,
+  displayPrice: string,
 };
 
-function EndSummary({ description, promotion, formattedPrice }: Props) {
+function EndSummary({ priceDescription, promotion, displayPrice }: Props) {
 
   return (
     <ul css={styles.list}>
       <li css={styles.listMain}><Dot />14-day free trial</li>
       <li css={styles.listMain}>
-        <span><Dot />{promotion !== null ? promotion : `${formattedPrice}/month`}</span>
+        <span><Dot />{promotion !== null ? promotion : `${displayPrice}/month`}</span>
         <span css={styles.subText}>
-          {promotion !== null && description ?
-            `So you'll pay ${description}` :
+          {promotion !== null && priceDescription ?
+            `So you'll pay ${priceDescription}` :
             'Your first payment will occur after the 14-day trial ends'}
         </span>
       </li>
