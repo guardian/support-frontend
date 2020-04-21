@@ -26,7 +26,6 @@
   shareImageUrl: String,
   shareUrl: String,
   v2recaptchaConfigPublicKey: String,
-
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl)) {
@@ -111,8 +110,6 @@
   }
 
   window.guardian.forceCampaign = @settings.switches.experiments.get("forceCampaign").exists(_.isOn)
-
-  window.guardian.recaptchaV2 = @settings.switches.experiments.get("recaptchaV2").exists(_.isOn)
 
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
   </script>

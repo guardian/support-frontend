@@ -13,15 +13,11 @@ const routes: {
   [string]: string,
 } = {
   recurringContribCheckout: '/contribute/recurring',
-  recurringContribCheckoutGuest: '/contribute/recurring-guest',
-  recurringContribThankyou: '/contribute/recurring/thankyou',
   recurringContribCreate: '/contribute/recurring/create',
   recurringContribPending: '/contribute/recurring/pending',
   contributionsSendMarketing: '/contribute/send-marketing',
   contributionsSetPasswordGuest: '/identity/set-password-guest',
   getUserType: '/identity/get-user-type',
-  oneOffContribCheckout: '/contribute/one-off',
-  oneOffContribThankyou: '/contribute/one-off/thankyou',
   oneOffContribAutofill: '/contribute/one-off/autofill',
   contributionsMarketingConfirm: '/contribute/marketing-confirm',
   payPalSetupPayment: '/paypal/setup-payment',
@@ -38,7 +34,7 @@ const routes: {
   guardianWeeklySubscriptionLandingGift: '/subscribe/weekly/gift',
   postcodeLookup: '/postcode-lookup',
   createSignInUrl: '/identity/signin-url',
-  stripeSetupIntent: '/stripe/create-setup-intent',
+  stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
 };
 
 const createReminderEndpoint = isProd() ?

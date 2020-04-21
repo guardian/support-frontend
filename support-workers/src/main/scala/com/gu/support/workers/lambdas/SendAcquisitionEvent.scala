@@ -14,6 +14,7 @@ import com.gu.monitoring.{LambdaExecutionResult, PaymentProvider, SafeLogger, Su
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{GuardianWeekly, Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendAcquisitionEventState
 import io.circe.generic.auto._
@@ -200,6 +201,6 @@ object SendAcquisitionEvent {
         ).flatten)
 
       def isSixForSix(stateAndInfo: SendAcquisitionEventStateAndRequestInfo) =
-        stateAndInfo.state.product.billingPeriod == Quarterly && stateAndInfo.state.promoCode.contains(GuardianWeekly.SixForSixPromoCode)
+        stateAndInfo.state.product.billingPeriod == Quarterly && stateAndInfo.state.promoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)
     }
 }

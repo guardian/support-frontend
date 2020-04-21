@@ -313,7 +313,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
               setStripePaymentMethod={props.setStripePaymentMethod}
-              stripeSetupIntentEndpoint={routes.stripeSetupIntent}
               name={`${props.firstName} ${props.lastName}`}
               validateForm={props.validateForm}
               buttonText="Pay now"

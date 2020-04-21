@@ -1,5 +1,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+$teal-green: #006d67;
+
 .component-product-page-hero {
   box-sizing: border-box;
   & * {
@@ -94,9 +96,9 @@
   z-index: 20;
   display: inline-flex;
   flex-direction: column;
-  background-color: #ffe500;
+  background-color: $teal-green;
   @include gu-fontset-heading;
-  color: gu-colour(neutral-7);
+  color: gu-colour(neutral-97);
   padding: $gu-v-spacing / 3 0 22px;
 
 
@@ -207,7 +209,7 @@
     height: 90px;
     width: 90px;
     border-radius: 50%;
-    background-color: #00b2ff;
+    background-color: gu-colour('highlight-main');
     margin-top: 0px;
     margin-left: 5px;
 
@@ -230,8 +232,10 @@
   }
 
   .hope-is-power__circle-text {
-      font-size: 16px;
-      line-height: 22px;
+    font-size: 16px;
+    line-height: 22px;
+    color: gu-colour(neutral-7);
+
     @include mq($from: phablet) {
       font-size: 22px;
       line-height: 28px;
@@ -241,6 +245,7 @@
   .hope-is-power__circle-text--large {
     font-size: 24px;
     line-height: 32px;
+
     @include mq($from: phablet) {
       font-size: 34px;
       line-height: 40px;

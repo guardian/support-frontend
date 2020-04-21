@@ -1,12 +1,15 @@
 package controllers
 
 import actions.CustomActionBuilders
+import com.gu.aws.AwsCloudWatchMetricPut
+import com.gu.aws.AwsCloudWatchMetricPut.{client, createSetupIntentRequest}
+import com.gu.support.config.{Stage, StripeConfig}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, Action, ControllerComponents}
-import services.{RecaptchaService, StripeSetupIntentService}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+import services.{IdentityService, RecaptchaService, StripeSetupIntentService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -26,7 +29,10 @@ class StripeController(
   actionRefiners: CustomActionBuilders,
   recaptchaService: RecaptchaService,
   stripeService: StripeSetupIntentService,
-  v2RecaptchaKey: String
+  identityService: IdentityService,
+  v2RecaptchaKey: String,
+  testStripeConfig: StripeConfig,
+  stage: Stage
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
   import actionRefiners._
@@ -36,34 +42,59 @@ class StripeController(
   import services.SetupIntent.encoder
 
   def createSetupIntentRecaptcha: Action[SetupIntentRequestRecaptcha] = PrivateAction.async(circe.json[SetupIntentRequestRecaptcha]) { implicit request =>
-    val token = request.body.token
+    val v2RecaptchaToken = request.body.token
+
+    val cloudwatchEvent = createSetupIntentRequest(stage, "v2Recaptcha")
+    AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+
+    val testPublicKeys = Set(testStripeConfig.australiaAccount.publicKey,
+      testStripeConfig.defaultAccount.publicKey)
+
+    val verified =
+      if (testPublicKeys(request.body.stripePublicKey))
+        // Requests against the test account do not require verification
+        EitherT.rightT[Future, String](true)
+      else
+        recaptchaService.verify(v2RecaptchaToken, v2RecaptchaKey).map(_.success)
 
     val result = for {
-      recaptchaResponse <- recaptchaService.verify(token, v2RecaptchaKey)
-      response <- if (recaptchaResponse.success) {
+      v <- verified
+      response <- if (v) {
         stripeService(request.body.stripePublicKey).map(response => Ok(response.asJson))
       } else {
-        logger.info(s"Returning status Forbidden for Stripe Intent request because Recaptcha verification failed")
+        logger.warn(s"Returning status Forbidden for Create Stripe Intent Recaptcha request because Recaptcha verification failed")
         EitherT.rightT[Future, String](Forbidden(""))
       }
     } yield response
 
     result.fold(
       error => {
-        logger.error(error)
+        logger.error(s"Returning status InternalServerError for Create Stripe Intent Recaptcha request because: $error")
         InternalServerError("")
       },
       identity
     )
   }
 
-  def createSetupIntent: Action[SetupIntentRequest] = PrivateAction.async(circe.json[SetupIntentRequest]) { implicit request =>
+  def createSetupIntentPRB: Action[SetupIntentRequest] = PrivateAction.async(circe.json[SetupIntentRequest]) { implicit request =>
+
+    val cloudwatchEvent = createSetupIntentRequest(stage, "PRB-CSRF-only")
+    AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+
     stripeService(request.body.stripePublicKey).fold(
       error => {
-        logger.error(error)
+        logger.error(s"Returning status InternalServerError for Create Stripe Intent PRB request because: $error")
         InternalServerError("")
       },
       response => Ok(response.asJson)
     )
+  }
+
+  // This endpoint is deprecated
+  def createSetupIntentWithAuth: Action[AnyContent] = Action.async {
+    implicit request =>
+      val cloudwatchEvent = createSetupIntentRequest(stage, "Deprecated-AuthorisedEndpoint");
+      AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+      Future.successful(Gone)
   }
 }

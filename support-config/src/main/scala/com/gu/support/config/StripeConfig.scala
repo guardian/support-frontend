@@ -13,35 +13,28 @@ case class StripeConfig(defaultAccount: StripeAccountConfig,
   extends TouchpointConfig {
 
   // Still needed for SupportWorkers (recurring products) which don't support a US Stripe account yet.
-  def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig = {
+  def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig =
     maybeCurrency match {
-      case Some(AUD) => {
+      case Some(AUD) =>
         SafeLogger.debug(s"StripeConfig: getting AU stripe account for AUD")
         australiaAccount
-      }
-      case _ => {
+      case _ =>
         SafeLogger.debug(s"StripeConfig: getting default stripe account for ${maybeCurrency.map(_.iso).mkString}")
         defaultAccount
-      }
     }
-  }
 
-  def forCountry(maybeCountry: Option[Country]): StripeAccountConfig = {
+  def forCountry(maybeCountry: Option[Country]): StripeAccountConfig =
     maybeCountry match {
-      case Some(Country.Australia) => {
+      case Some(Country.Australia) =>
         SafeLogger.debug(s"StripeConfig: getting AU stripe account for Australia")
         australiaAccount
-      }
-      case Some(Country.US) => {
+      case Some(Country.US) =>
         SafeLogger.debug(s"StripeConfig: getting US stripe account for United States")
         unitedStatesAccount
-      }
-      case _ => {
+      case _ =>
         SafeLogger.debug(s"StripeConfig: getting default stripe account for ${maybeCountry.map(_.name).mkString}")
         defaultAccount
-      }
     }
-  }
 }
 
 case class StripeAccountConfig(secretKey: String, publicKey: String)
