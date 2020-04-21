@@ -224,12 +224,6 @@ function withProps(props: PropTypes) {
           />
         </div> : null
       }
-      {/* <ContributionState
-        onChange={props.updateBillingState}
-        selectedState={billingState}
-        isValid={checkBillingState(billingState)}
-        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-      /> */}
       <ContributionStateDs
         onChange={props.updateBillingStateDs}
         value={billingState}
