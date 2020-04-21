@@ -13,11 +13,9 @@ export default function CancellationSection(props: {
   orderIsAGift?: boolean,
   isDigitialCheckout?: boolean,
 }) {
-  const cancellationPolicyDisplayStyle = props.isDigitialCheckout ? styles.cancellationPolicy : null;
-
   return (
     <FormSection>
-      <div className={cancellationPolicyDisplayStyle}>
+      <div className={props.isDigitialCheckout ? styles.cancellationPolicy : null}>
         <CancellationPolicy orderIsAGift={props.orderIsAGift} />
       </div>
       {props.isDigitialCheckout && (
