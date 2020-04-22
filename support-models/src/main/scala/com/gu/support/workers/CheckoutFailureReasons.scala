@@ -68,6 +68,7 @@ object CheckoutFailureReasons {
     case "expired_card" => PaymentMethodUnacceptable
     case "fraudulent" => PaymentMethodUnacceptable
     case "generic_decline" => PaymentMethodUnacceptable
+    case "card_declined" => PaymentMethodUnacceptable
     case "incorrect_number" => PaymentMethodDetailsIncorrect
     case "incorrect_cvc" => PaymentMethodDetailsIncorrect
     case "incorrect_pin" => PaymentMethodDetailsIncorrect
