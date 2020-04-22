@@ -51,7 +51,7 @@ const SubsCardFaqBlock = () => (
           <AccordionRow label="Collecting from multiple newsagents">
             <p>
               Present your card to a newsagent each time you collect the paper. The newsagent will scan your
-              card and will bee reimbursed for each transaction automatically.
+              card and will be reimbursed for each transaction automatically.
             </p>
             <p><a href="https://imovo.org/guardianstorefinder">Find your nearest participating retailer</a></p>
           </AccordionRow>
