@@ -14,7 +14,12 @@ import PartialFunction.condOpt
 // requestID: This field contains an identifying key for the request which can be used for debugging and investigating any failures
 
 case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], declineCode: Option[String], message: String, publicKey: Option[String]) extends Exception {
-  override val getMessage: String = publicKey.map(pk => s"$message. (Public key was $pk)").getOrElse(message)
+  override val getMessage: String =
+    List(
+      message,
+      declineCode.map(dc => s"Stripe decline code: $dc"),
+      publicKey.map(pk => s"Public key was $pk.")
+    ).mkString(". ")
 }
 
 object StripeApiError {
