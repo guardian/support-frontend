@@ -1,0 +1,12 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.recaptcha-terms {
+  font-size: 12px;
+  font-family: $gu-text-sans-web;
+
+  margin-top: 5px;
+
+  a {
+    color: inherit;
+  }
+}

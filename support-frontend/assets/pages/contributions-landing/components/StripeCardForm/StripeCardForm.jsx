@@ -31,6 +31,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { updateRecaptchaToken } from '../../contributionsLandingActions';
 import { routes } from 'helpers/routes';
+import { Recaptcha } from 'components/recaptcha/recaptcha';
 
 // ----- Types -----//
 
@@ -370,9 +371,9 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
     const recaptchaVerified = this.props.oneOffRecaptchaToken || this.props.recurringRecaptchaVerified;
 
-    const googleTermsUrl: string = "https://policies.google.com/terms";
+    const googleTermsUrl: string = 'https://policies.google.com/terms';
 
-    const googlePrivacyUrl: string = "https://policies.google.com/privacy";
+    const googlePrivacyUrl: string = 'https://policies.google.com/privacy';
 
     return (
       <div className="form__fields">
@@ -426,11 +427,10 @@ class CardForm extends Component<PropTypes, StateTypes> {
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
 
         <div className="form__field">
-          <label className="form__label">
+          <label className="form__label" htmlFor="robot_checkbox">
             <span>Security check</span>
           </label>
-          <div id="robot_checkbox" className="robot_checkbox" />
-          <p className="recaptcha-terms">By ticking this box, you agree to let Google check if you are human. Please refer to their <a href={googleTermsUrl}>Terms</a> and <a href={googlePrivacyUrl}>Privacy</a> policies.</p>
+          <Recaptcha/>
           {
             this.props.checkoutFormHasBeenSubmitted
             && !recaptchaVerified ?
