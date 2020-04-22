@@ -48,7 +48,7 @@ class Content extends Component<ContentPropTypes> {
     }
     return (
       <DeliveryTab
-        {...{ selectedTab, setTabAction }}
+        {...{ selectedTab, setTabAction, useDigitalVoucher }}
         getRef={(r) => { if (r) { this.tabRef = r; } }}
       />);
   }

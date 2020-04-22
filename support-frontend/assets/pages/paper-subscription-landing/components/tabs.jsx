@@ -43,9 +43,11 @@ type PropTypes = {|
   useDigitalVoucher: Option<boolean>,
 |};
 
-const getTabTitle = (useDigitalVoucher, k) => {
-  if (k === 'HomeDelivery' || useDigitalVoucher) {
-    return tabs[k].name;
+// This is a temporary workaround while we have both iMovo and vouchers
+// We can get rid of this when we drop vouchers
+const getTabTitle = (useDigitalVoucher, fulfilmentMethod) => {
+  if (fulfilmentMethod === 'HomeDelivery' || useDigitalVoucher) {
+    return tabs[fulfilmentMethod].name;
   }
   return 'Voucher Booklet';
 };
@@ -58,9 +60,11 @@ function Tabs({ selectedTab, setTabAction, useDigitalVoucher }: PropTypes) {
       <ProductPageTabs
         active={selectedTab}
         onChange={(t) => { setTabAction(Object.keys(tabs)[t]); }}
-        tabs={Object.keys(tabs).map(k => ({
-        name: getTabTitle(useDigitalVoucher, k),
-        href: tabs[k].href,
+        tabs={Object.keys(tabs).map(fulfilmentMethod => ({
+          // The following line is a workaround for iMovo and vouchers
+          // Once we drop vouchers, we can reinstate: name: tabs[fulfilmentMethod].name,
+        name: getTabTitle(useDigitalVoucher, fulfilmentMethod),
+        href: tabs[fulfilmentMethod].href,
       }))}
       />
     </Outset>

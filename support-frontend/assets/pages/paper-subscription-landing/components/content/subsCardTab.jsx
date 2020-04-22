@@ -20,11 +20,13 @@ import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpe
 const accordionContainer = css`
   background-color: ${neutral['97']};
 
-  p {
+  p, a {
     ${textSans.small()};
     margin-bottom: ${space[3]}px;
   }
 `;
+
+const LinkToImovo = () => <a href="https://imovo.org/guardianstorefinder">Find your nearest participating retailer</a>;
 
 // ----- Content ----- //
 const SubsCardFaqBlock = () => (
@@ -39,8 +41,8 @@ const SubsCardFaqBlock = () => (
   }
   >
     <Text>
-      The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with news kiosks
-      in the UK.
+      The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with
+      news kiosks in the UK.
     </Text>
     <Text>
       You can collect the newspaper from your local store or have your copies delivered by your newsagent.
@@ -52,15 +54,14 @@ const SubsCardFaqBlock = () => (
             <p>
               Present your card to a newsagent each time you collect the paper. The newsagent will scan your
               card and will bee reimbursed for each transaction automatically.
-            </p>
-            <p><a href="https://imovo.org/guardianstorefinder">Find your nearest participating retailer</a></p>
+            </p><LinkToImovo /><p />
           </AccordionRow>
           <AccordionRow label="Delivery from your retailer">
             <p>
               Simply give your preferred store / retailer the barcode printed on your
               subscription letter.
             </p>
-            <p><a href="https://imovo.org/guardianstorefinder">Find your nearest participating retailer</a></p>
+            <p><LinkToImovo /></p>
           </AccordionRow>
         </Accordion>
       </div>
