@@ -121,7 +121,7 @@ class AddressComponent<GlobalState> extends Component<PropTypes<GlobalState>, St
     switch (searchState) {
       case 'complete': return 'Edit';
       case 'editing': return 'Save address';
-      default: return 'I want to enter my address manually';
+      default: return 'Enter address manually';
     }
   }
 
@@ -241,14 +241,13 @@ class AddressComponent<GlobalState> extends Component<PropTypes<GlobalState>, St
               error={firstError('postCode', props.formErrors)}
             />
           </div>}
-        <Button
-          style={{ 'margin-top': '20px' }}
+        <button
+          css={styles.editButton}
+          type="button"
           onClick={() => this.onManualEditClick()}
-          icon={null}
-          appearance="secondary"
         >
-          {text('Label', AddressComponent.getEditButtonCopy(searchState))}
-        </Button>
+          {AddressComponent.getEditButtonCopy(searchState)}
+        </button>
       </div>
     );
   }
