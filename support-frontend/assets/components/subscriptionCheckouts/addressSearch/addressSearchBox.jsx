@@ -52,7 +52,11 @@ class AddressSearchBox extends Component<PropTypes, State> {
   }
 
   shouldComponentUpdate(nextProps: PropTypes, nextState: State): boolean {
-    if (this.state.findComplete === false && nextState.findComplete === true) {
+    if (
+      (this.state.findComplete === false && nextState.findComplete === true) ||
+      (this.state.findResponse !== nextState.findResponse)
+    ) {
+      console.log('update 1');
       return true;
     }
     if (nextState.findTerm === '') {
@@ -60,13 +64,18 @@ class AddressSearchBox extends Component<PropTypes, State> {
       return true;
     }
     if (nextState.findTerm !== this.state.findTerm) {
+      console.log(`searching for ${nextState.findTerm}`);
       this.setState({ findComplete: false });
       find(nextState.findTerm).then((findResponse: FindResponse) => {
         console.log(findResponse);
-        this.setState({
-          findComplete: true,
-          findResponse,
-        });
+        // Responses can overlap if a user types quickly this checks that
+        // the response we have matches the current search term
+        if (nextState.findTerm === this.state.findTerm) {
+          this.setState({
+            findComplete: true,
+            findResponse,
+          });
+        }
       });
     }
     return nextState.selectedItem !== this.state.selectedItem;

@@ -25,7 +25,6 @@ type PropTypes = {
 }
 
 const HighlightedDescription = ({ item }: { item: FindItem }) => {
-  console.log(item);
   const highlights = item.Highlight.split(';');
   const text = parseTextRegions(item.Text, highlights[0])
     .map(textRegion =>
