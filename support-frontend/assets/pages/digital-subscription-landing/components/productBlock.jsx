@@ -75,7 +75,7 @@ const dailyImage = (
       },
       {
         gridId: 'digitalSubsDaily',
-        srcSizes: [140, 500, 1000],
+        srcSizes: [140, 500, 951],
         imgType: 'png',
         sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
         media: '(min-width: 740px)',
@@ -100,7 +100,7 @@ const appImage = (
       },
       {
         gridId: 'digitalSubsApp',
-        srcSizes: [140, 500, 1000],
+        srcSizes: [140, 500, 950],
         imgType: 'png',
         sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
         media: '(min-width: 740px)',
