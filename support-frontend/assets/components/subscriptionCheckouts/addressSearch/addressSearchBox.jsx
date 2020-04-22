@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { ResultsDropdown } from 'components/subscriptionCheckouts/addressSearch/resultsDropdown';
+import { AddressResultsDropdown } from 'components/subscriptionCheckouts/addressSearch/addressResultsDropdown';
 import { Input } from 'components/forms/input';
 import { asControlled } from 'hocs/asControlled';
 import {
@@ -10,7 +10,7 @@ import {
   retrieve,
 } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 import type {
-  AddressSearch,
+  AddressSearchResult,
   FindResponse,
 } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 import type { Option } from 'helpers/types/option';
@@ -26,7 +26,7 @@ import {
 
 type PropTypes = {
   scope: string,
-  onSearchComplete: (AddressSearch) => void;
+  onSearchComplete: (AddressSearchResult) => void;
   formErrors: FormError<FormField>[],
 }
 
@@ -166,7 +166,7 @@ class AddressSearchBox extends Component<PropTypes, State> {
                 aria-controls={resultsListId(scope)}
                 aria-activedescendant={resultsListItemId(scope, selectedItem)}
               />
-              <ResultsDropdown
+              <AddressResultsDropdown
                 scope={this.props.scope}
                 findResponse={this.state.findResponse}
                 selectedItem={selectedItem}

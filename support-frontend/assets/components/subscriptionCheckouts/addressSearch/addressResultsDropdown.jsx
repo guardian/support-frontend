@@ -2,14 +2,19 @@
 
 import React from 'react';
 import type {
+  FindItem,
   FindResponse,
 } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 import type { Option } from 'helpers/types/option';
-import * as styles from './resultsDropdownStyles';
+import * as styles from 'components/subscriptionCheckouts/addressSearch/addressResultsDropdownStyles';
 import {
   labelId, resultsListId,
   resultsListItemId,
 } from 'components/subscriptionCheckouts/addressSearch/addressSearchIdHelpers';
+import {
+  parseHighlights,
+  parseTextRegions,
+} from 'components/subscriptionCheckouts/addressSearch/addressResultsHelpers';
 
 type PropTypes = {
   scope: string,
@@ -19,7 +24,21 @@ type PropTypes = {
   onAddressSelected: Function,
 }
 
-const ResultsDropdown = (props: PropTypes) => {
+const HighlightedDescription = ({ item }: { item: FindItem }) => {
+  console.log(item);
+  const highlights = item.Highlight.split(';');
+  const text = parseTextRegions(item.Text, highlights[0])
+    .map(textRegion =>
+      <span className={textRegion.type}>{item.Text.substr(textRegion.start, textRegion.length + 1)}</span>);
+
+  const description = parseTextRegions(item.Description, highlights[1] || '')
+    .map(textRegion =>
+      <span className={textRegion.type}>{item.Description.substr(textRegion.start, textRegion.length + 1)}</span>);
+
+  return text.concat([<span> </span>]).concat(description);
+};
+
+const AddressResultsDropdown = (props: PropTypes) => {
   if (props.findResponse) {
     const { scope } = props;
     const listItems = props.findResponse.Items.map((item, index) => {
@@ -36,7 +55,7 @@ const ResultsDropdown = (props: PropTypes) => {
           onClick={() => props.onAddressSelected(index)}
           aria-selected={selected}
         >
-          {item.Text} <span css={styles.description}>{item.Description}</span>
+          <HighlightedDescription item={item} />
         </li>);
       /* eslint-enable jsx-a11y/click-events-have-key-events */
     });
@@ -55,4 +74,4 @@ const ResultsDropdown = (props: PropTypes) => {
   return null;
 };
 
-export { ResultsDropdown };
+export { AddressResultsDropdown, parseHighlights };

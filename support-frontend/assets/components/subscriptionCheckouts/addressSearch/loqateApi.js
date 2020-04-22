@@ -2,7 +2,7 @@
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
-export type AddressSearch = {
+export type AddressSearchResult = {
   Company: string,
   City: string,
   Line1: string,
@@ -28,7 +28,7 @@ export type FindResponse = {
 }
 
 export type RetrieveResponse = {
-  Items: AddressSearch[],
+  Items: AddressSearchResult[],
 }
 
 const post = (url: string, body: string) => {

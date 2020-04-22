@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { Option } from 'helpers/types/option';
-import type { FormFields } from 'components/subscriptionCheckouts/addressSearch/addressFieldsStore';
+import type { FormFields } from 'components/subscriptionCheckouts/addressSearch/addressComponentStore';
 import Text from 'components/text/text';
 import './addressDisplayText.scss';
 import { countries } from 'helpers/internationalisation/country';

@@ -4,10 +4,6 @@ import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography/obj';
 import { border } from '@guardian/src-foundations/palette';
 
-export const description = css`
-  ${textSans.small()};
-`;
-
 export const list = css`
   overflow: auto;
   max-height: 350px;
@@ -22,4 +18,8 @@ export const list = css`
 export const listItem = (selected: boolean) => css`
   padding: 0px 4px;
   background: ${selected ? '#eee' : '#fff'};
+  ${textSans.small()}
+  .highlight {
+    font-weight: bold;
+  }
 `;

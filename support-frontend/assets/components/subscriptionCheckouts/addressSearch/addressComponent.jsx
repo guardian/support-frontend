@@ -27,7 +27,7 @@ import {
   getStateFormErrors,
   isPostcodeOptional,
   type State as AddressState,
-} from 'components/subscriptionCheckouts/addressSearch/addressFieldsStore';
+} from 'components/subscriptionCheckouts/addressSearch/addressComponentStore';
 import { canShow } from 'hocs/canShow';
 import type { Option } from 'helpers/types/option';
 import type {
@@ -40,15 +40,15 @@ import {
 } from 'helpers/internationalisation/country';
 import AddressDisplayText
   from 'components/subscriptionCheckouts/addressSearch/addressDisplayText';
-import * as styles from './addressFieldsApiStyles';
+import * as styles from 'components/subscriptionCheckouts/addressSearch/addressComponentStyles';
 import { AddressSearchBox } from 'components/subscriptionCheckouts/addressSearch/addressSearchBox';
-import type { AddressSearch } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
+import type { AddressSearchResult } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
 import { text } from '@storybook/addon-knobs';
 import Button from 'components/button/button';
 import {
   applyBillingAddressRules,
-} from 'components/subscriptionCheckouts/addressSearch/addressFieldsStore';
-import './addressFieldsApi.scss';
+} from 'components/subscriptionCheckouts/addressSearch/addressComponentStore';
+import 'components/subscriptionCheckouts/addressSearch/addressComponent.scss';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -99,7 +99,7 @@ function statesForCountry(country: Option<IsoCountry>): React$Node {
 }
 
 
-class AddressFieldsApi<GlobalState> extends Component<PropTypes<GlobalState>, State> {
+class AddressComponent<GlobalState> extends Component<PropTypes<GlobalState>, State> {
 
   constructor() {
     super();
@@ -141,7 +141,7 @@ class AddressFieldsApi<GlobalState> extends Component<PropTypes<GlobalState>, St
     }
   }
 
-  searchComplete = (address: AddressSearch, actions: AddressActionCreators) => {
+  searchComplete = (address: AddressSearchResult, actions: AddressActionCreators) => {
     actions.setAddressLineOne(address.Line1);
     actions.setAddressLineTwo(address.Line2);
     actions.setCountry(address.CountryIso2);
@@ -247,7 +247,7 @@ class AddressFieldsApi<GlobalState> extends Component<PropTypes<GlobalState>, St
           icon={null}
           appearance="secondary"
         >
-          {text('Label', AddressFieldsApi.getEditButtonCopy(searchState))}
+          {text('Label', AddressComponent.getEditButtonCopy(searchState))}
         </Button>
       </div>
     );
@@ -267,4 +267,4 @@ export const withStore = <GlobalState>(
       scope,
     }),
     addressActionCreatorsFor(scope),
-  )(AddressFieldsApi);
+  )(AddressComponent);
