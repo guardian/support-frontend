@@ -29,13 +29,13 @@ const HighlightedDescription = ({ item }: { item: FindItem }) => {
   const highlights = item.Highlight.split(';');
   const text = parseTextRegions(item.Text, highlights[0])
     .map(textRegion =>
-      <span className={textRegion.type}>{item.Text.substr(textRegion.start, textRegion.length + 1)}</span>);
+      <span className={textRegion.type}>{item.Text.substring(textRegion.start, textRegion.end + 1)}</span>);
 
   const description = parseTextRegions(item.Description, highlights[1] || '')
     .map(textRegion =>
-      <span className={textRegion.type}>{item.Description.substr(textRegion.start, textRegion.length + 1)}</span>);
+      <span className={textRegion.type}>{item.Description.substring(textRegion.start, textRegion.end + 1)}</span>);
 
-  return text.concat([<span> </span>]).concat(description);
+  return text.concat([<span>{' '}</span>]).concat(description);
 };
 
 const AddressResultsDropdown = (props: PropTypes) => {

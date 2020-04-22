@@ -56,6 +56,6 @@ describe('address description highlighting', () => {
 
     const result2 = parseTextRegions('London, N10 1ST', '8-10');
     expect(result2.length).toBe(3);
-    expect(result2[1].length).toBe(2);
+    expect(result2[1].end).toBe(10);
   });
 });
