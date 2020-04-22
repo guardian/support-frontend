@@ -8,7 +8,7 @@ export function Recaptcha() {
     <>
       <div id="robot_checkbox" className="robot_checkbox" />
       <p className="recaptcha-terms ">
-        By ticking this box, you agree to let Google check if you are human. Please refer to their <a href='https://policies.google.com/terms'>Terms</a> and <a href='https://policies.google.com/privacy'>Privacy</a> policies.
+        By ticking this box, you agree to let Google perform a security check to confirm you are a human. Please refer to their <a href='https://policies.google.com/terms'>Terms</a> and <a href='https://policies.google.com/privacy'>Privacy</a> policies.
       </p>
     </>
   );
