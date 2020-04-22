@@ -371,10 +371,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
     const recaptchaVerified = this.props.oneOffRecaptchaToken || this.props.recurringRecaptchaVerified;
 
-    const googleTermsUrl: string = 'https://policies.google.com/terms';
-
-    const googlePrivacyUrl: string = 'https://policies.google.com/privacy';
-
     return (
       <div className="form__fields">
         <legend className="form__legend"><h3>Your card details</h3></legend>
