@@ -11,7 +11,11 @@ type TextRegion = {
 const parseHighlights = (highlightString: string): number[][] => (highlightString === '' ? [] :
   highlightString
     .split(',')
-    .map(occurrence => occurrence.split('-').map(num => parseInt(num, 10))));
+    .map(occurrence => occurrence.split('-').map(num => parseInt(num, 10)))
+    // Somewhat confusingly Loqate's highlight notation is exclusive of the end character
+    // so 0-3 actually means chars 0, 1 & 2
+    .map(highlight => [highlight[0], highlight[1] - 1])
+);
 
 const lastItem = (arr: any[]) => arr[arr.length - 1];
 
