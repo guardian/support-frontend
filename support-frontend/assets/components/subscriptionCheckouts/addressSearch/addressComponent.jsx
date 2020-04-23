@@ -43,8 +43,6 @@ import AddressDisplayText
 import * as styles from 'components/subscriptionCheckouts/addressSearch/addressComponentStyles';
 import { AddressSearchBox } from 'components/subscriptionCheckouts/addressSearch/addressSearchBox';
 import type { AddressSearchResult } from 'components/subscriptionCheckouts/addressSearch/loqateApi';
-import { text } from '@storybook/addon-knobs';
-import Button from 'components/button/button';
 import {
   applyBillingAddressRules,
 } from 'components/subscriptionCheckouts/addressSearch/addressComponentStore';
