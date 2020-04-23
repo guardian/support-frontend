@@ -25,6 +25,9 @@ import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import ContributionTextInput from './ContributionTextInput';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
+import ContributionTextInputDs from './ContributionTextInputDs';
+import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
+
 
 // ----- Types ----- //
 
@@ -40,6 +43,7 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+  designSystemTestVariant: LandingPageDesignSystemTestVariants,
 |};
 
 
@@ -54,6 +58,8 @@ const mapStateToProps = state => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
+  designSystemTestVariant: state.common.abParticipations.landingPageDesignSystemTest,
+
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -162,6 +168,7 @@ function withProps(props: PropTypes) {
   const maxAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
+  const otherLabelSymbol: string = currencies[props.currency].glyph;
 
 
   const renderChoiceCards = () => (
@@ -191,6 +198,62 @@ function withProps(props: PropTypes) {
       </ChoiceCardGroup>
   </>
   );
+
+  const renderControlOtherField = () => (
+    <ContributionTextInput
+      id="contributionOther"
+      name="contribution-other-amount"
+      type="number"
+      label="Other amount"
+      value={otherAmount}
+      icon={iconForCountryGroup(props.countryGroupId)}
+      onInput={e => props.updateOtherAmount(
+      (e.target: any).value,
+      props.countryGroupId,
+      props.contributionType,
+    )}
+      isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
+      formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
+      errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
+      autoComplete="off"
+      step={0.01}
+      min={min}
+      max={max}
+      autoFocus
+      required
+    />
+  );
+
+  const renderDsOtherField = () => (
+    <ContributionTextInputDs
+      id="contributionOther"
+      name="contribution-other-amount"
+      type="number"
+      label={`Other amount (${otherLabelSymbol})`}
+      value={otherAmount}
+      onInput={e => props.updateOtherAmount(
+      (e.target: any).value,
+      props.countryGroupId,
+      props.contributionType,
+    )}
+      isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
+      formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
+      errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
+      autoComplete="off"
+      step={0.01}
+      min={min}
+      max={max}
+      autoFocus
+      required
+    />
+  );
+
+  const renderOther = () => {
+    if (props.designSystemTestVariant === 'ds') {
+      return renderDsOtherField();
+    }
+    return renderControlOtherField();
+  };
 
   /* eslint-disable no-unused-vars */
   // leaving in place as this is still in active development:
@@ -223,30 +286,8 @@ function withProps(props: PropTypes) {
 
       {renderChoiceCards()}
 
-      {showOther ? (
-        <ContributionTextInput
-          id="contributionOther"
-          name="contribution-other-amount"
-          type="number"
-          label="Other amount"
-          value={otherAmount}
-          icon={iconForCountryGroup(props.countryGroupId)}
-          onInput={e => props.updateOtherAmount(
-            (e.target: any).value,
-            props.countryGroupId,
-            props.contributionType,
-          )}
-          isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
-          formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
-          errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
-          autoComplete="off"
-          step={0.01}
-          min={min}
-          max={max}
-          autoFocus
-          required
-        />
-      ) : null}
+      {showOther && renderOther()}
+
       {showWeeklyBreakdown ? (
         <p className="amount-per-week-breakdown">
           {getAmountPerWeekBreakdown(

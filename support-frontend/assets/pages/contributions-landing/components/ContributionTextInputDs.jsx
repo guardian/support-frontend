@@ -75,7 +75,7 @@ export default function ContributionTextInputDs(props: PropTypes) {
           supporting={props.supporting}
           cssOverrides={{
             width: 'calc(100% - 20px)',
-            ...cssInvalid(),
+            ...cssInvalid,
           }}
         />
       </span>
