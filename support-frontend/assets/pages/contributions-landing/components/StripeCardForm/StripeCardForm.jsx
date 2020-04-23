@@ -31,6 +31,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { updateRecaptchaToken } from '../../contributionsLandingActions';
 import { routes } from 'helpers/routes';
+import { Recaptcha } from 'components/recaptcha/recaptcha';
 
 // ----- Types -----//
 
@@ -421,8 +422,11 @@ class CardForm extends Component<PropTypes, StateTypes> {
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
 
-        <div>
-          <div id="robot_checkbox" className="robot_checkbox" />
+        <div className="form__field">
+          <label className="form__label" htmlFor="robot_checkbox">
+            <span>Security check</span>
+          </label>
+          <Recaptcha/>
           {
             this.props.checkoutFormHasBeenSubmitted
             && !recaptchaVerified ?
