@@ -77,7 +77,7 @@ const BILLING_PERIOD = {
     title: 'Annual',
     salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
       const display = price => getDisplayPrice(currencyId, price);
-      return promotionalPrice ?
+      return typeof promotionalPrice === 'number' ?
         <span>
           <span className="product-option__price">{display(promotionalPrice)}</span>
           <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
@@ -134,7 +134,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
     const fullPrice = productPrice.price;
     const promotion = getPromotion(productPrice.promotions, state.common.abParticipations.digitalPackMonthlyOfferTest);
     const promoCode = promotion ? promotion.promoCode : null;
-    const promotionalPrice = promotion && promotion.discountedPrice ? promotion.discountedPrice : null;
+    const promotionalPrice = promotion && typeof promotion.discountedPrice === 'number' ? promotion.discountedPrice : null;
     const offer = promotion &&
     promotion.landingPage &&
     promotion.landingPage.roundel ? promotion.landingPage.roundel :
