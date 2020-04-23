@@ -38,6 +38,20 @@ type PropTypes = {|
 export default function ContributionTextInputDs(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
 
+  // This is required to ensure that the field's border doesn't turn red
+  // when the user starts typing
+  const cssInvalid: {} = () => {
+    if (!props.formHasBeenSubmitted) {
+      return {
+        '&:invalid': {
+          border: '2px solid #999999',
+          color: 'inherit',
+        },
+      };
+    }
+    return {};
+  };
+
   return (
     <div className={classNameWithModifiers('form__field', [props.name])}>
       <span>
@@ -58,9 +72,10 @@ export default function ContributionTextInputDs(props: PropTypes) {
           step={props.step}
           disabled={props.disabled}
           error={showError && props.errorMessage}
-          supporting={!showError && props.supporting}
+          supporting={props.supporting}
           cssOverrides={{
             width: 'calc(100% - 20px)',
+            ...cssInvalid(),
           }}
         />
       </span>
