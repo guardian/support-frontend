@@ -41,7 +41,8 @@ import {
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection
   from 'components/subscriptionCheckouts/cancellationSection';
-import { withStore } from 'components/subscriptionCheckouts/addressSearch/addressComponent';
+import { withStore as withStoreLoqate } from 'components/subscriptionCheckouts/addressSearch/addressComponent';
+import { withStore as withStoreControl } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { DigitalPack } from 'helpers/subscriptions';
@@ -66,6 +67,7 @@ import GeneralErrorMessage
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { routes } from 'helpers/routes';
+import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Types ----- //
 
@@ -88,6 +90,7 @@ type PropTypes = {|
   validateForm: () => Function,
   formIsValid: Function,
   addressErrors: Array<Object>,
+  participations: Participations,
 |};
 
 // ----- Map State/Props ----- //
@@ -111,6 +114,7 @@ function mapStateToProps(state: CheckoutState) {
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
     addressErrors: state.page.billingAddress.fields.formErrors,
+    participations: state.common.abParticipations,
   };
 }
 
@@ -136,7 +140,8 @@ function mapDispatchToProps() {
   };
 }
 
-const Address = withStore(countries, 'billing', getBillingAddress);
+const LocateAddress = withStoreLoqate(countries, 'billing', getBillingAddress);
+const ControlAddress = withStoreControl(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 
@@ -151,6 +156,8 @@ function DigitalCheckoutForm(props: PropTypes) {
   const priceSummary = `${offerOnSelected || 'Enjoy your digital subscription free for 14 days, then'} ${helperSelected}.`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
+
+  const Address = props.participations.fancyAddressTest === 'loqate' ? LocateAddress : ControlAddress;
 
   const PriceSummary = () =>
     <p className="component-credit-card-price">{priceSummary}</p>;
