@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
@@ -33,70 +33,100 @@ const mapStateToProps = (state: State) => ({
 
 // ----- Render ----- //
 
-const renderStatesField = (
-  states: {[string]: string},
-  value: StateProvince | null,
-  onChange: SyntheticInputEvent<HTMLInputElement> => void,
-  showError: boolean,
-  label: string,
-) => (
-  <>
-    <TextInput
-      id="ContributionStateDs"
-      label={label}
-      value={value}
-      autoComplete="off"
-      list="states-list"
-      supporting={!showError && `Please enter your ${label.toLowerCase()}`}
-      onChange={onChange}
-      error={showError && `Please provide a ${label.toLowerCase()}`}
-      required
-      cssOverrides={{
-        width: 'calc(100% - 20px)',
-      }}
-    />
-    <datalist id="states-list">
-      {Object.values(states).map(state => <option value={state} />)};
-    </datalist>
+class ContributionStateDs extends Component<PropTypes, {currentInput: string, isValid: boolean}> {
 
-  </>
-);
-
-
-const ContributionStateDs = (props: PropTypes) => {
-  const [currentInput, setCurrentInput] = useState(props.value);
-  const isValid = checkBillingStateDs(currentInput, props.countryGroupId);
-  const showError = !isValid && props.formHasBeenSubmitted;
-
-  const handleChange = (event: SyntheticInputEvent<HTMLInputElement>): void => {
-    const input: string = event.target.value;
-    setCurrentInput(input);
-    const formattedBillingState = stateProvinceFieldFromString(props.countryGroupId, input);
-    props.onChange(formattedBillingState);
-  };
-  if (props.contributionType !== 'ONE_OFF') {
-    switch (props.countryGroupId) {
-      case UnitedStates:
-        return renderStatesField(usStates, currentInput, handleChange, showError, 'State');
-      case Canada:
-        return renderStatesField(caStates, currentInput, handleChange, showError, 'Province');
-      case AUDCountries: {
-        // Don't show states if the user is GEO-IP'd to one of the non AU countries that use AUD.
-        if (window.guardian && window.guardian.geoip) {
-          const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
-          const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(c => c !== 'AU');
-          if (AUDCountriesWithNoStates.includes(window.guardian.geoip.countryCode)) {
-            return null;
-          }
-        }
-        return renderStatesField(auStates, currentInput, handleChange, showError, 'State / Territory');
-      }
-      default:
-        return null;
-    }
+  state = {
+    currentInput: this.props.value ? this.props.value : '',
+    isValid: checkBillingStateDs(this.props.value, this.props.countryGroupId),
   }
 
-  return null;
-};
+  // The combobox is treated as 'invalid' if it has an empty string,
+  // so we need to override the default TextInput component's CSS
+  // so that the field doesn't appear outlined in red if the field is empty.
+  cssInvalid: {} = () => {
+    if (this.state.currentInput === '') {
+      if (!this.props.formHasBeenSubmitted) {
+        return {
+          '&:invalid': {
+            border: '2px solid #999999',
+            color: 'inherit',
+          },
+        };
+      }
+      return {
+        '&:invalid': {
+          border: '4px solid #C70000',
+        },
+      };
+    }
+    return {};
+  };
+
+  handleInputChange = (event: SyntheticInputEvent<HTMLInputElement>): void => {
+    const input: string = event.target.value;
+    const isValid = checkBillingStateDs(input, this.props.countryGroupId);
+    this.setState({
+      currentInput: input,
+      isValid,
+    });
+    const formattedBillingState = stateProvinceFieldFromString(this.props.countryGroupId, input);
+    this.props.onChange(formattedBillingState);
+  };
+
+  renderStatesField = (
+    states: {[string]: string},
+    label: string,
+  ) => (
+    <div className="form__field">
+      <TextInput
+        id="ContributionStateDs"
+        label={label}
+        value={this.state.currentInput}
+        autoComplete="off"
+        list="states-list"
+        supporting={`Start typing your ${label.toLowerCase()} or click to select from a list`}
+        onChange={this.handleInputChange}
+        error={!this.state.isValid && this.props.formHasBeenSubmitted && `Please provide a valid ${label.toLowerCase()}`}
+        required
+        cssOverrides={{
+          width: 'calc(100% - 20px)',
+          ...this.cssInvalid(),
+        }}
+      />
+      <datalist id="states-list">
+        {Object.values(states).map(state => <option value={state} />)};
+      </datalist>
+
+    </div>
+  );
+
+  renderByRegion = () => {
+    if (this.props.contributionType !== 'ONE_OFF') {
+      switch (this.props.countryGroupId) {
+        case UnitedStates:
+          return this.renderStatesField(usStates, 'State');
+        case Canada:
+          return this.renderStatesField(caStates, 'Province');
+        case AUDCountries: {
+        // Don't show states if the user is GEO-IP'd to one of the non AU countries that use AUD.
+          if (window.guardian && window.guardian.geoip) {
+            const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
+            const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(c => c !== 'AU');
+            if (AUDCountriesWithNoStates.includes(window.guardian.geoip.countryCode)) {
+              return null;
+            }
+          }
+          return this.renderStatesField(auStates, 'State / Territory');
+        }
+        default:
+          return null;
+      }
+    }
+
+    return null;
+  };
+
+  render = () => this.renderByRegion();
+}
 
 export default connect(mapStateToProps)(ContributionStateDs);
