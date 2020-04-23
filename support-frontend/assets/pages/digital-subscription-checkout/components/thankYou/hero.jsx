@@ -22,12 +22,12 @@ const defaultHeroes: GridImages = {
     },
     tablet: {
       gridId: 'subscriptionDailyPackshot',
-      srcSizes: [500, 1000, 1584],
+      srcSizes: [500, 1000, 1825],
       imgType: 'png',
     },
     desktop: {
       gridId: 'subscriptionDailyPackshot',
-      srcSizes: [500, 1000, 1584],
+      srcSizes: [500, 1000, 1825],
       imgType: 'png',
     },
   },
