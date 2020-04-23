@@ -3,6 +3,7 @@ import React from 'react';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { type Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit } from 'helpers/paymentMethods';
 import styles from './summary.module.scss';
 import EndSummary from 'components/subscriptionCheckouts/endSummary/endSummary';
 import CancellationPolicy from 'components/subscriptionCheckouts/cancellationPolicy';
@@ -23,7 +24,7 @@ export default function CancellationSection(props: {
           <EndSummary />
         </div>
       )}
-      <DirectDebitTerms paymentMethod={props.paymentMethod} />
+      {(props.paymentMethod === DirectDebit) && <DirectDebitTerms />}
     </FormSection>
   );
 }
