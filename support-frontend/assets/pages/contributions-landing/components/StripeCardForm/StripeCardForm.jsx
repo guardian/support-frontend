@@ -369,7 +369,9 @@ class CardForm extends Component<PropTypes, StateTypes> {
       return <CreditCardsROW className="form__credit-card-icons" />;
     };
 
-    const recaptchaVerified = this.props.oneOffRecaptchaToken || this.props.recurringRecaptchaVerified;
+    const recaptchaVerified =
+      this.props.contributionType === 'ONE_OFF' ?
+        this.props.oneOffRecaptchaToken : this.props.recurringRecaptchaVerified;
 
     return (
       <div className="form__fields">
