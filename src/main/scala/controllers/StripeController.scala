@@ -52,7 +52,10 @@ class StripeController(
     stripeBackendProvider.getInstanceFor(request)
       .processRefundHook(request.body)
       .fold(
-        err => InternalServerError(ResultBody.Error(err.getMessage)),
+        err => {
+          logger.error(s"Error processing stripe refund: ${err.getMessage}")
+          InternalServerError(ResultBody.Error(err.getMessage))
+        },
         _ => Ok(ResultBody.Success("successfully processed Stripe refund webhook"))
       )
   }.withLogging(this.getClass.getCanonicalName, "processRefund")
@@ -70,7 +73,7 @@ class StripeController(
           case requiresAction: StripePaymentIntentsApiResponse.RequiresAction => Ok(ResultBody.RequiresAction(requiresAction))
         }
       )
-  }
+  }.withLogging(this.getClass.getCanonicalName, "createPayment")
 
   def confirmPayment: Action[StripePaymentIntentRequest.ConfirmPaymentIntent] = CorsAndRateLimitAction.async(circe.json[StripePaymentIntentRequest.ConfirmPaymentIntent]) { request =>
     stripeBackendProvider.getInstanceFor(request)
@@ -82,7 +85,7 @@ class StripeController(
         },
         response => Ok(ResultBody.Success(response))
       )
-  }
+  }.withLogging(this.getClass.getCanonicalName, "confirmPayment")
 
   override implicit val controllerComponents: ControllerComponents = cc
   override implicit val corsUrls: List[String] = allowedCorsUrls

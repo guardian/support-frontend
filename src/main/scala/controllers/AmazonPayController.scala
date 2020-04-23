@@ -26,6 +26,7 @@ class AmazonPayController(
   import util.RequestTypeDecoder.instances._
 
   def toErrorResult(error: AmazonPayApiError): Result = {
+    logger.error(s"AmazonPay API error: ${error.getMessage}")
     new Status(error.responseCode.getOrElse(INTERNAL_SERVER_ERROR))(ResultBody.Error(error))
   }
 

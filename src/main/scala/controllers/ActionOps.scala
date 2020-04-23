@@ -30,7 +30,7 @@ object ActionOps {
           val parsed = action.parser.apply(requestHeader)
           parsed.map {
             case Left(result) =>
-              logger.info(s"${logId.value}: action $class1.$message failed with: $result")
+              logger.warn(s"${logId.value}: action $class1.$message failed with: $result")
               Left(result)
             case Right(a) =>
               logger.info(s"${logId.value}: action $class1.$message started with:\n${prettyPrint(a)}")
