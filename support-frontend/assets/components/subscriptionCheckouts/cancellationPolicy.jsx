@@ -1,8 +1,12 @@
 // @flow
 
 import React from 'react';
-import { cancellationCopy } from 'components/subscriptionCheckouts/endSummary/endSummaryCopy';
 import Text from 'components/text/text';
+
+export const cancellationCopy = {
+  title: 'Cancel at any time',
+  body: 'There is no set time on your agreement with us so you can end your subscription whenever you wish',
+};
 
 const CancellationPolicy = ({ orderIsAGift }: {orderIsAGift?: boolean}) => (
   <Text>
