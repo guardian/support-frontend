@@ -2,20 +2,15 @@
 
 import React from 'react';
 import * as styles from './endSummaryStyles';
-import { type Option } from 'helpers/types/option';
 import { connect } from 'react-redux';
-import { cancellationCopy } from 'components/subscriptionCheckouts/endSummary/endSummaryCopy';
+import { cancellationCopy } from 'components/subscriptionCheckouts/cancellationPolicy';
 import mapStateToProps from 'components/subscriptionCheckouts/endSummary/endSummarySelector';
+
+import type { EndSummaryProps } from 'components/subscriptionCheckouts/endSummary/endSummarySelector';
 
 const Dot = () => <div css={styles.dot} />;
 
-type Props = {
-  priceDescription: string,
-  promotion: Option<string>,
-  displayPrice: string,
-};
-
-function EndSummary({ priceDescription, promotion, displayPrice }: Props) {
+function EndSummary({ priceDescription, promotion, displayPrice }: EndSummaryProps) {
 
   return (
     <ul css={styles.list}>

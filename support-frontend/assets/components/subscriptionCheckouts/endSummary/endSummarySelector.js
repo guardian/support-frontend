@@ -4,16 +4,23 @@ import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { getPriceDescription, displayPrice } from 'helpers/productPrice/priceDescriptions';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
 
+import { type Option } from 'helpers/types/option';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
-const getPromotion = (productPrice: ProductPrice) =>
+export type EndSummaryProps = {
+  priceDescription: string,
+  promotion: Option<?string>,
+  displayPrice: string,
+}
+
+const getPromotion = (productPrice: ProductPrice): Option<?string> =>
   productPrice.promotions &&
   (productPrice.promotions.length > 0
     ? productPrice.promotions[0].description
     : null);
 
-function mapStateToProps(state: CheckoutState) {
+function mapStateToProps(state: CheckoutState): EndSummaryProps {
   const { billingPeriod, productPrices } = state.page.checkout;
 
   const productPrice = getProductPrice(
