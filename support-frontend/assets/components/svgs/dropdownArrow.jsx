@@ -10,7 +10,7 @@ export default function SvgDropdownArrow() {
       viewBox="0 0 10 10"
       width={10}
       height={10}
-      preserveAspectRatio
+      preserveAspectRatio="xMidYMid"
       aria-hidden="true"
       focusable="false"
     >
