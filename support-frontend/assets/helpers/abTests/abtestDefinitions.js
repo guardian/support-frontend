@@ -54,27 +54,5 @@ export const tests: Tests = {
     seed: 2,
     targetPage: contributionsLandingPageMatch,
   },
-
-  digitalPackMonthlyOfferTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'one-for-one',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 4,
-    targetPage: subsShowcaseAndDigiSubPages,
-    optimizeId: '0FxHy4ruSIOqVvgREPUwvw',
-  },
 };
+

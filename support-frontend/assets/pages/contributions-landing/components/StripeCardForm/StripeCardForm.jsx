@@ -428,7 +428,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
           <label className="form__label" htmlFor="robot_checkbox">
             <span>Security check</span>
           </label>
-          <Recaptcha/>
+          <Recaptcha />
           {
             this.props.checkoutFormHasBeenSubmitted
             && !recaptchaVerified ?
