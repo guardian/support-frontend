@@ -79,6 +79,7 @@ import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payP
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import CancellationSection
   from 'components/subscriptionCheckouts/cancellationSection';
+import Total from 'components/subscriptionCheckouts/total/total';
 
 // ----- Styles ----- //
 
@@ -360,6 +361,11 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
+          <Total
+            price={price.price}
+            currency={props.currencyId}
+            promotions={price.promotions}
+          />
           <CancellationSection orderIsAGift paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>

@@ -73,6 +73,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import Total from 'components/subscriptionCheckouts/total/total';
 
 // ----- Types ----- //
 
@@ -342,6 +343,10 @@ function PaperCheckoutForm(props: PropTypes) {
           <GeneralErrorMessage
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
+          />
+          <Total
+            price={props.amount}
+            currency={props.currencyId}
           />
           <CancellationSection paymentMethod={props.paymentMethod} />
         </Form>
