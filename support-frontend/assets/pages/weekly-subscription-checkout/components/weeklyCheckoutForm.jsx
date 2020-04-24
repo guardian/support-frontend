@@ -45,8 +45,7 @@ import { countries } from 'helpers/internationalisation/country';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import CancellationSection
-  from 'components/subscriptionCheckouts/cancellationSection';
+import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import { signOut } from 'helpers/user/user';
 import type {
   Action,
@@ -338,7 +337,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
             currency={props.currencyId}
             promotions={price.promotions}
           />
-          <CancellationSection paymentMethod={props.paymentMethod} />
+          <PaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>
