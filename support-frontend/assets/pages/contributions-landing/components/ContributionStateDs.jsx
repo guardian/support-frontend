@@ -43,7 +43,7 @@ class ContributionStateDs extends Component<PropTypes, {currentInput: string, is
   // The combobox is treated as 'invalid' if it has an empty string,
   // so we need to override the default TextInput component's CSS
   // so that the field doesn't appear outlined in red if the field is empty.
-  cssInvalid: {} = () => {
+  cssInvalid = () => {
     if (this.state.currentInput === '') {
       if (!this.props.formHasBeenSubmitted) {
         return {

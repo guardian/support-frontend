@@ -169,6 +169,10 @@ function withProps(props: PropTypes) {
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
   const otherLabelSymbol: string = currencies[props.currency].glyph;
+  const {
+    checkOtherAmount, checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
+  } = props;
+  const updateAmount = props.updateOtherAmount;
 
 
   const renderChoiceCards = () => (
@@ -207,13 +211,13 @@ function withProps(props: PropTypes) {
       label="Other amount"
       value={otherAmount}
       icon={iconForCountryGroup(props.countryGroupId)}
-      onInput={e => props.updateOtherAmount(
+      onInput={e => updateAmount(
       (e.target: any).value,
       props.countryGroupId,
       props.contributionType,
     )}
-      isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
-      formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
+      isValid={checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
+      formHasBeenSubmitted={(checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked)}
       errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
       autoComplete="off"
       step={0.01}
@@ -231,13 +235,13 @@ function withProps(props: PropTypes) {
       type="number"
       label={`Other amount (${otherLabelSymbol})`}
       value={otherAmount}
-      onInput={e => props.updateOtherAmount(
+      onInput={e => updateAmount(
       (e.target: any).value,
       props.countryGroupId,
       props.contributionType,
     )}
-      isValid={props.checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
-      formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
+      isValid={checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
+      formHasBeenSubmitted={(checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked)}
       errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
       autoComplete="off"
       step={0.01}
