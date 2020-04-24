@@ -39,8 +39,7 @@ import {
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import DigitalCancellationSection
-  from 'components/subscriptionCheckouts/digitalCancellationSection';
+import DigitalPaymentTerms from 'components/subscriptionCheckouts/digitalPaymentTerms';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
@@ -261,8 +260,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             currency={productPrice.currency}
             promotions={productPrice.promotions}
           />
-          <DigitalCancellationSection
-            isDigitialCheckout
+          <DigitalPaymentTerms
             paymentMethod={props.paymentMethod}
           />
         </Form>

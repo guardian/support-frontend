@@ -50,8 +50,7 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import CancellationSection
-  from 'components/subscriptionCheckouts/cancellationSection';
+import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
@@ -348,7 +347,7 @@ function PaperCheckoutForm(props: PropTypes) {
             price={props.amount}
             currency={props.currencyId}
           />
-          <CancellationSection paymentMethod={props.paymentMethod} />
+          <PaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>
