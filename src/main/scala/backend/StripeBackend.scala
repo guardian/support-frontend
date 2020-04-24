@@ -20,6 +20,7 @@ import model.stripe.{StripePaymentIntentRequest, _}
 import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
+import StripeApiError.recaptchaErrorText
 
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
@@ -107,7 +108,7 @@ class StripeBackend(
             recaptchaService
               .verify(request.recaptchaToken)
               .flatMap { resp =>
-                if (resp.success) createIntent() else EitherT.leftT(StripeApiError.fromString("Recaptcha failed", None))
+                if (resp.success) createIntent() else EitherT.leftT(StripeApiError.fromString(recaptchaErrorText, publicKey = None))
               }
         }
     }

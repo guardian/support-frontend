@@ -24,6 +24,8 @@ case class StripeApiError(exceptionType: Option[String], responseCode: Option[In
 
 object StripeApiError {
 
+  val recaptchaErrorText = "Recaptcha failed"
+
   def fromString(message: String, publicKey: Option[String]): StripeApiError = StripeApiError(None, None, None, message, publicKey)
 
   def fromThrowable(err: Throwable, publicKey: Option[String]): StripeApiError = {
