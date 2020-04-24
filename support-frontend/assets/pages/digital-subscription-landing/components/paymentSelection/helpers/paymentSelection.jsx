@@ -22,9 +22,7 @@ import type {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
-import { getAppliedPromo, promoQueryParam } from 'helpers/productPrice/promotions';
-import type { Promotion } from 'helpers/productPrice/promotions';
-import { getQueryParameter } from 'helpers/url';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { isNumeric } from 'helpers/productPrice/productPrices';
 
 export type PaymentOption = {
