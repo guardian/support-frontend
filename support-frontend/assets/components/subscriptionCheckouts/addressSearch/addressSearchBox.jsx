@@ -56,7 +56,6 @@ class AddressSearchBox extends Component<PropTypes, State> {
       (this.state.findComplete === false && nextState.findComplete === true) ||
       (this.state.findResponse !== nextState.findResponse)
     ) {
-      console.log('update 1');
       return true;
     }
     if (nextState.findTerm === '') {
@@ -93,7 +92,6 @@ class AddressSearchBox extends Component<PropTypes, State> {
       this.setSelectedItem(currentSelected - 1);
     }
     if (ev.code === 'Enter') {
-      console.log(`${currentSelected} selected`);
       this.onAddressSelected(currentSelected);
     }
   }
@@ -107,13 +105,11 @@ class AddressSearchBox extends Component<PropTypes, State> {
       retrieve(findItem.Id)
         .then((retrieveResponse) => {
           const address = retrieveResponse.Items[0];
-          console.log(address);
           this.props.onSearchComplete(address);
         });
     } else {
       this.setState({ findComplete: false });
       moreResults(findItem.Id).then((findResponse: FindResponse) => {
-        console.log(findResponse);
         this.setState({
           findComplete: true,
           findResponse,
@@ -123,7 +119,6 @@ class AddressSearchBox extends Component<PropTypes, State> {
   }
 
   setSelectedItem(newIndex: number) {
-    console.log(`setting selected item to ${newIndex}`);
     this.setState({ selectedItem: newIndex });
   }
 
@@ -131,10 +126,8 @@ class AddressSearchBox extends Component<PropTypes, State> {
     (this.state.findTerm === '' ? firstError('lineOne', this.props.formErrors) : null);
 
   findSearchTerm(newFindTerm: string) {
-    console.log(`searching for ${newFindTerm}`);
     this.setState({ findComplete: false });
     find(newFindTerm).then((findResponse: FindResponse) => {
-      console.log(findResponse);
       // Responses can overlap if a user types quickly, this checks that
       // the response we have matches the current search term
       if (newFindTerm === this.state.findTerm) {
