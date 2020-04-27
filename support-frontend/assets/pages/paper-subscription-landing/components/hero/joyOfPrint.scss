@@ -48,6 +48,10 @@
           width: 300px;
         }
       }
+
+      @include mq($until: tablet) {
+        font-size: 28px;
+      }
     }
 
     p {

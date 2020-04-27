@@ -48,7 +48,7 @@ const CampaignHeader = (props: PropTypes) => (
   >
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
-        <h2><span>Subscribe to The</span><br /><span>Guardian and The Observer</span></h2>
+        <h2><span>Subscribe to The Guardian</span><br /><span>and The Observer</span></h2>
         <p>Choose from a range of packages to suit you</p>
       </div>
     </div>

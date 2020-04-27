@@ -51,7 +51,7 @@ const ContentVoucherFaqBlock = () => (
     <Text>
       <div css={accordionContainer}>
         <Accordion>
-          <AccordionRow label="Collection details">
+          <AccordionRow label="Voucher details">
             <p>
               Your newsagent won’t lose out; we’ll pay them the same amount that they receive if
               you pay cash for your paper.
