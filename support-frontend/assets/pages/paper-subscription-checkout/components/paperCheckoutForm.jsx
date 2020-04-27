@@ -223,6 +223,7 @@ function PaperCheckoutForm(props: PropTypes) {
                 <TextAreaWithLabel
                   id="delivery-instructions"
                   label="Delivery instructions"
+                  maxlength={250}
                   value={props.deliveryInstructions}
                   setValue={props.setDeliveryInstructions}
                 />
