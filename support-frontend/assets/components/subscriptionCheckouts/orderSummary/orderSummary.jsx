@@ -2,17 +2,17 @@
 
 import React from 'react';
 import { type ProductPrice } from 'helpers/productPrice/productPrices';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import { type DigitalBillingPeriod, Annual } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
-import { getPriceDescription, displayPrice } from 'helpers/productPrice/priceDescriptions';
+import { getAppliedPromoDescription } from 'helpers/productPrice/priceDescriptions';
 import EndSummary from 'components/subscriptionCheckouts/endSummary/endSummary';
-import { extendedGlyph } from 'helpers/internationalisation/currency';
+import { getBillingDescription, hasDiscountOrPromotion } from 'helpers/productPrice/priceDescriptionsDigital';
 
 import * as styles from './orderSummaryStyles';
 
 type PropTypes = {
-  billingPeriod: BillingPeriod,
+  billingPeriod: DigitalBillingPeriod,
   // eslint-disable-next-line react/no-unused-prop-types
   changeSubscription?: string | null,
   image: $Call<GridImageType, GridImg>,
@@ -22,12 +22,10 @@ type PropTypes = {
 
 
 function OrderSummary(props: PropTypes) {
-  const description = getPriceDescription(props.productPrice, props.billingPeriod, true);
-  const promoDescription = props.productPrice.promotions && props.productPrice.promotions.length > 0
-    ? props.productPrice.promotions[0].description
-    : null;
-  const glyph = extendedGlyph(props.productPrice.currency);
-  const priceString = displayPrice(glyph, props.productPrice.price);
+  const savings = hasDiscountOrPromotion(props.productPrice)
+    ? getAppliedPromoDescription(props.billingPeriod, props.productPrice)
+    : `Subscribe ${props.billingPeriod === Annual ? 'for a year' : 'monthly'}`;
+  const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
 
   return (
     <aside css={styles.wrapper}>
@@ -39,14 +37,13 @@ function OrderSummary(props: PropTypes) {
         <div css={styles.imageContainer}>{props.image}</div>
         <div css={styles.textBlock}>
           <h3>{props.title}</h3>
-          <p>{description}</p>
+          <p>{priceString}</p>
           <span>14 day free trial</span>
         </div>
       </div>
       <EndSummary
-        description={description}
-        promotion={promoDescription}
-        price={priceString}
+        savings={savings}
+        priceString={priceString}
       />
     </aside>
   );

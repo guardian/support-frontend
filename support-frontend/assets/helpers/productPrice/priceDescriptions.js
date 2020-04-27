@@ -5,6 +5,7 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import {
   billingPeriodNoun as upperCaseNoun,
   Quarterly,
+  Annual,
 } from 'helpers/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
@@ -35,15 +36,11 @@ const standardRate = (
   price: number,
   billingPeriod: BillingPeriod,
   fixedTerm: boolean,
-  compact: boolean,
 ) => {
   if (fixedTerm) {
     return `${displayPrice(glyph, price)} for ${billingPeriodNoun(billingPeriod, fixedTerm)}`;
   }
-  return compact ?
-    `${displayPrice(glyph, price)}/${billingPeriodNoun(billingPeriod, fixedTerm)}`
-    :
-    `${displayPrice(glyph, price)} every ${billingPeriodNoun(billingPeriod, fixedTerm)}`;
+  return `${displayPrice(glyph, price)}/${billingPeriodNoun(billingPeriod, fixedTerm)}`;
 };
 
 const getStandardRateCopy = (
@@ -51,7 +48,6 @@ const getStandardRateCopy = (
   price: number,
   billingPeriod: BillingPeriod,
   fixedTerm: boolean,
-  compact: boolean,
 ) => {
   if (fixedTerm) { return ''; }
 
@@ -59,9 +55,8 @@ const getStandardRateCopy = (
     glyph, price,
     billingPeriod,
     fixedTerm,
-    compact,
   );
-  return compact ? `, then ${standard}` : `, then standard rate (${standard})`;
+  return `, then ${standard}`;
 };
 
 function getDiscountDescription(
@@ -71,12 +66,11 @@ function getDiscountDescription(
   discountedPrice: number,
   numberOfDiscountedPeriods: ?number,
   billingPeriod: BillingPeriod,
-  compact: boolean,
 ) {
   const noun = billingPeriodNoun(billingPeriod, fixedTerm);
 
   if (numberOfDiscountedPeriods) {
-    const discountCopy = `${displayPrice(
+    const discountCopy = `You'll pay ${displayPrice(
       glyph,
       discountedPrice,
     )}${billingPeriodQuantifier(
@@ -90,7 +84,6 @@ function getDiscountDescription(
       price,
       billingPeriod,
       fixedTerm,
-      compact,
     );
 
     return `${discountCopy}${standardCopy}`;
@@ -108,7 +101,7 @@ const getIntroductoryPriceDescription = (
   productPrice: ProductPrice,
   compact: boolean,
 ) => {
-  const standardCopy = standardRate(glyph, productPrice.price, Quarterly, productPrice.fixedTerm, compact);
+  const standardCopy = standardRate(glyph, productPrice.price, Quarterly, productPrice.fixedTerm);
   const separator = compact ? '/' : ' for the first ';
   const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
 
@@ -141,10 +134,9 @@ function getPriceDescription(
       promotion.discountedPrice,
       promotion.numberOfDiscountedPeriods,
       billingPeriod,
-      compact,
     );
   }
-  return standardRate(glyph, productPrice.price, billingPeriod, productPrice.fixedTerm, compact);
+  return standardRate(glyph, productPrice.price, billingPeriod, productPrice.fixedTerm);
 }
 
 function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: ProductPrice) {
@@ -152,7 +144,7 @@ function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: 
   if (appliedPromo && appliedPromo.landingPage && appliedPromo.landingPage.roundel) {
     return appliedPromo.landingPage.roundel;
   }
-  return '';
+  return billingPeriod === Annual ? 'Save over 20% against monthly in the first year.' : '';
 }
 
 export {

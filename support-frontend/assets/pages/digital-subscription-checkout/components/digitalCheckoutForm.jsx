@@ -10,7 +10,7 @@ import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
@@ -55,7 +55,7 @@ import {
   submitCheckoutForm,
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
+import { BillingPeriodSelectorDigital } from './billingPeriodSelector';
 import { PayPal, Stripe, DirectDebit } from 'helpers/paymentMethods';
 import {
   getAppliedPromoDescription,
@@ -83,7 +83,7 @@ type PropTypes = {|
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   amount: number,
-  billingPeriod: BillingPeriod,
+  billingPeriod: DigitalBillingPeriod,
   setupRecurringPayPalPayment: Function,
   validateForm: () => Function,
   formIsValid: Function,
@@ -154,6 +154,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 
   const PriceSummary = () =>
     <p className="component-credit-card-price">{priceSummary}</p>;
+  console.log({ productPrice });
 
   return (
     <Content>
@@ -196,7 +197,7 @@ function DigitalCheckoutForm(props: PropTypes) {
           <FormSection title="Address">
             <Address />
           </FormSection>
-          <BillingPeriodSelector
+          <BillingPeriodSelectorDigital
             billingCountry={props.country}
             billingPeriods={[Monthly, Annual]}
             productPrices={props.productPrices}

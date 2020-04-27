@@ -29,7 +29,7 @@ function RadioInputWithHelper({
       <input className="component-radio-input__input" type="radio" {...otherProps} />
       <div className="component-radio-input__text">{text}</div>
       <p className="component-radio-input__helper">
-        {offer ? <span className="component-radio-input__offer">{offer}</span> : ''} {helper}
+        {offer ? <span className="component-radio-input__offer">{offer}<br /></span> : ''} {helper}
       </p>
       <span className="component-radio-input__image">{image}</span>
     </label>
