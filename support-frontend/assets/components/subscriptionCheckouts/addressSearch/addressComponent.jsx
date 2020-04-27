@@ -139,7 +139,7 @@ class AddressComponent<GlobalState> extends Component<PropTypes<GlobalState>, St
     }
   }
 
-  searchComplete = (address: AddressSearchResult, actions: AddressActionCreators) => {
+  searchComplete(address: AddressSearchResult, actions: AddressActionCreators) {
     actions.setAddressLineOne(address.Line1);
     actions.setAddressLineTwo(address.Line2);
     actions.setCountry(address.CountryIso2);
@@ -147,7 +147,7 @@ class AddressComponent<GlobalState> extends Component<PropTypes<GlobalState>, St
     actions.setState(address.Province);
     actions.setTownCity(address.City);
     this.setState({ searchState: 'complete' });
-  };
+  }
 
   render() {
     const { searchState } = this.state;
