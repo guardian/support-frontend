@@ -7,10 +7,8 @@ import Text from 'components/text/text';
 import './addressDisplayText.scss';
 import { countries } from 'helpers/internationalisation/country';
 
-const addressLine = (string: Option<string>) => {
-  if (string && string !== '') { return <span>{string}<br /></span>; }
-  return null;
-};
+const addressLine = (string: Option<string>) =>
+  ((string && string !== '') ? <span>{string}<br /></span> : null);
 
 const AddressDisplayText = (props: FormFields) => (
   <Text className="component-address-display">

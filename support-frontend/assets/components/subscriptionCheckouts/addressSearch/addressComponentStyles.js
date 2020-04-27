@@ -6,10 +6,9 @@ export const formDiv = css`
 `;
 
 export const editButton = css`
-  ${textSans.medium()};
+  ${textSans.medium({ 'font-weight': '600' })};
   text-decoration: underline;
   font-size: 100%;
-  font-weight: 600;
   text-align: left;
   background: none;
   margin-top: 6px;
