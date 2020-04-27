@@ -73,8 +73,7 @@ const getFormFields = (state: State): FormFields => ({
 
 // ----- Functions ----- //
 
-const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
-  country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
+const isPostcodeOptional = (country: Option<IsoCountry>): boolean => !(['GB', 'AU', 'US', 'CA'].includes(country));
 
 const checkpostCodeLength = (input: string | null): boolean => ((input == null) || (input.length <= 20));
 
@@ -126,7 +125,7 @@ const applyDeliveryAddressRules = (
   const homeRules = validate([
     {
       rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
-      error: formError('postCode', 'Sorry, we cannot deliver a paper to an address with this postcode. Please call Customer Services on: 0330 333 6767 or press Back to purchase a voucher subscription.'),
+      error: formError('postCode', 'Temporary COVID message'),
     },
   ]);
 
