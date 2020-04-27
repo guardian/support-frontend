@@ -72,7 +72,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     referrerControlled: false,
     seed: 3,
     targetPage: digitalCheckout,
