@@ -152,7 +152,6 @@ function DigitalCheckoutForm(props: PropTypes) {
 
   const PriceSummary = () =>
     <p className="component-credit-card-price">{priceSummary}</p>;
-  console.log({ productPrice });
 
   return (
     <Content>

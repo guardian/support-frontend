@@ -2,13 +2,12 @@
 
 import React from 'react';
 import * as styles from './endSummaryStyles';
-import { type Option } from 'helpers/types/option';
 
 const Dot = () => <div css={styles.dot} />;
 
 function EndSummary(props: {
   priceString: string,
-  savings: Option<string>,
+  savings: string,
 }) {
   return (
     <ul css={styles.list}>
