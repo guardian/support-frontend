@@ -4,7 +4,7 @@ import React from 'react';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInputWithHelper } from 'components/forms/customFields/radioInputWithHelper';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
-import { billingPeriodTitle, Monthly } from 'helpers/billingPeriods';
+import { billingPeriodTitle } from 'helpers/billingPeriods';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
@@ -38,8 +38,8 @@ function BillingPeriodSelectorDigital(props: PropTypes) {
             billingPeriod,
             'NoFulfilmentOptions',
           );
-          const offerText = (props.selected === Monthly || hasDiscountOrPromotion(productPrice))
-            ? getAppliedPromoDescription(props.selected, productPrice)
+          const offerText = hasDiscountOrPromotion(productPrice)
+            ? getAppliedPromoDescription(billingPeriod, productPrice)
             : '';
           return (<RadioInputWithHelper
             text={billingPeriodTitle(billingPeriod)}
