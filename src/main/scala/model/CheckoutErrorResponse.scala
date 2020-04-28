@@ -27,7 +27,7 @@ object CheckoutErrorResponse extends StrictLogging {
       .getOrElse(Unknown)
 
     val responseCode = checkoutFailureReason match {
-      case Unknown if (stripeApiError.getMessage == recaptchaErrorText) =>
+      case Unknown if (stripeApiError.message == recaptchaErrorText) =>
         BAD_REQUEST
       case Unknown =>
         logger.error(s"Stripe API error: Unknown checkoutFailureReason for decline code: ${stripeApiError.declineCode}")
