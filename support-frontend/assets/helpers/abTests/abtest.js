@@ -137,6 +137,22 @@ function getParticipationsFromUrl(): ?Participations {
   return null;
 }
 
+function getIsRemoteFromAcquisitionData(): boolean {
+  const queryString = getQueryParameter('acquisitionData');
+
+  if (!queryString) {
+    return false;
+  }
+
+  try {
+    const data = JSON.parse(queryString);
+    return data ? data.isRemote === 'true' : false;
+  } catch {
+    console.error('Cannot parse acquisition data from query string');
+    return false;
+  }
+}
+
 function getTestFromAcquisitionData(): ?AcquisitionABTest {
   const acquisitionDataParam = getQueryParameter('acquisitionData');
 
@@ -269,6 +285,11 @@ function getParticipations(
   const participations: Participations = {};
 
   const acquisitionDataTest: ?AcquisitionABTest = getTestFromAcquisitionData();
+  const isRemote = getIsRemoteFromAcquisitionData();
+
+  if (isRemote) {
+    participations['ContributionsService'] = 'remote';
+  }
 
   Object.keys(abTests).forEach((testId) => {
     const test = abTests[testId];
