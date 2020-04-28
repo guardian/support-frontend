@@ -19,7 +19,7 @@ export const topLine = css`
 
   a, a:visited {
     display: block;
-    ${textSans.small()};
+    ${textSans.medium({ fontWeight: 'bold' })};
     color: ${text.primary};
   }
 

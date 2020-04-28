@@ -12,18 +12,18 @@ function EndSummary(props: {
 }) {
   return (
     <ul css={styles.list}>
-      <li css={styles.listMain}>
-        <span><Dot />14-day free trial</span>
+      <li>
+        <Dot /><div css={styles.listMain}>14-day free trial</div>
         <span css={styles.subText}>
           Your first payment will occur after the trial ends
         </span>
       </li>
-      <li css={styles.listMain}>
-        <span><Dot />{props.savings}</span>
+      <li>
+        <Dot /><div css={styles.listMain}>{props.savings}</div>
         <span css={styles.subText}>{props.priceString}</span>
       </li>
-      <li css={styles.listMain}>
-        <span><Dot />You can cancel any time</span>
+      <li>
+        <Dot /><div css={styles.listMain}>You can cancel any time</div>
       </li>
     </ul>
   );

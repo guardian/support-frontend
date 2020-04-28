@@ -11,7 +11,6 @@ import {
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
-import { Annual, Monthly } from 'helpers/billingPeriods';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -55,7 +54,6 @@ import {
   submitCheckoutForm,
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { BillingPeriodSelectorDigital } from './billingPeriodSelector';
 import { PayPal, Stripe, DirectDebit } from 'helpers/paymentMethods';
 import {
   getAppliedPromoDescription,
@@ -197,13 +195,6 @@ function DigitalCheckoutForm(props: PropTypes) {
           <FormSection title="Address">
             <Address />
           </FormSection>
-          <BillingPeriodSelectorDigital
-            billingCountry={props.country}
-            billingPeriods={[Monthly, Annual]}
-            productPrices={props.productPrices}
-            selected={props.billingPeriod}
-            onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
-          />
           <PaymentMethodSelector
             country={props.country}
             paymentMethod={props.paymentMethod}

@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { type ProductPrice } from 'helpers/productPrice/productPrices';
-import { type DigitalBillingPeriod, Annual } from 'helpers/billingPeriods';
+import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
-import { getAppliedPromoDescription } from 'helpers/productPrice/priceDescriptions';
+import { getAppliedPromoDescription, getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import EndSummary from 'components/subscriptionCheckouts/endSummary/endSummary';
 import { getBillingDescription, hasDiscountOrPromotion } from 'helpers/productPrice/priceDescriptionsDigital';
 
@@ -24,7 +24,7 @@ type PropTypes = {
 function OrderSummary(props: PropTypes) {
   const savings = hasDiscountOrPromotion(props.productPrice)
     ? getAppliedPromoDescription(props.billingPeriod, props.productPrice)
-    : `Subscribe ${props.billingPeriod === Annual ? 'for a year' : 'monthly'}`;
+    : getPriceDescription(props.productPrice, props.billingPeriod);
   const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
 
   return (

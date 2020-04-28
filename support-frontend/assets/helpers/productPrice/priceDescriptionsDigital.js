@@ -2,7 +2,6 @@
 
 import { Monthly, type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-// import type { IsoCountry } from 'helpers/internationalisation/country';
 import { displayPrice, getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
 import {
@@ -21,15 +20,11 @@ function getBillingDescription(
   billingPeriod: DigitalBillingPeriod,
 ) {
   const glyph = extendedGlyph(productPrice.currency);
+  const billingPeriodIsMonthly = billingPeriod === Monthly ? 'every month' : 'a year';
 
-  if (billingPeriod === Monthly) {
-    return hasDiscountOrPromotion(productPrice)
-      ? getPriceDescription(productPrice, billingPeriod)
-      : `A recurring charge of ${displayPrice(glyph, productPrice.price)} every month`;
-  }
   return hasDiscountOrPromotion(productPrice)
     ? getPriceDescription(productPrice, billingPeriod)
-    : `You'll pay ${displayPrice(glyph, productPrice.price)}/year`;
+    : `A recurring charge of ${displayPrice(glyph, productPrice.price)} ${billingPeriodIsMonthly}`;
 }
 
 export {
