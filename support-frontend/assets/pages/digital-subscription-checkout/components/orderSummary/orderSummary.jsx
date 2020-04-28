@@ -6,7 +6,7 @@ import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import { getAppliedPromoDescription, getPriceDescription } from 'helpers/productPrice/priceDescriptions';
-import EndSummary from 'components/subscriptionCheckouts/endSummary/endSummary';
+import EndSummary from '../endSummary/endSummary';
 import { getBillingDescription, hasDiscountOrPromotion } from 'helpers/productPrice/priceDescriptionsDigital';
 
 import * as styles from './orderSummaryStyles';
@@ -22,8 +22,11 @@ type PropTypes = {
 
 
 function OrderSummary(props: PropTypes) {
+  const appliedPromoString = getAppliedPromoDescription(props.billingPeriod, props.productPrice) === ''
+    ? 'Save over 20% against monthly in the first year.'
+    : getAppliedPromoDescription(props.billingPeriod, props.productPrice);
   const savings = hasDiscountOrPromotion(props.productPrice)
-    ? getAppliedPromoDescription(props.billingPeriod, props.productPrice)
+    ? appliedPromoString
     : getPriceDescription(props.productPrice, props.billingPeriod);
   const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
 

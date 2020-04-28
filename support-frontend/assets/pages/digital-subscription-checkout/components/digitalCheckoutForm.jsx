@@ -20,7 +20,7 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
+import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
 import {
   type Action,
   type FormActionCreators,

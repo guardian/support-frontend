@@ -5,7 +5,6 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import {
   billingPeriodNoun as upperCaseNoun,
   Quarterly,
-  Annual,
 } from 'helpers/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
@@ -144,7 +143,7 @@ function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: 
   if (appliedPromo && appliedPromo.landingPage && appliedPromo.landingPage.roundel) {
     return appliedPromo.landingPage.roundel;
   }
-  return billingPeriod === Annual ? 'Save over 20% against monthly in the first year.' : '';
+  return '';
 }
 
 export {
