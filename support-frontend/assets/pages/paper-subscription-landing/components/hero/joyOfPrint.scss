@@ -127,6 +127,10 @@
   width: 6rem;
   height: 6rem;
 
+  @include mq($from: desktop) {
+    font-size: 16px;
+  }
+
   span {
     display: block;
     line-height: 1;

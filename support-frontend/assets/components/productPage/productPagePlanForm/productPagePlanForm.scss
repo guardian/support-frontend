@@ -1,9 +1,14 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-product-page-plan-form__items {
-  margin: 0 $gu-h-spacing/-2 $gu-v-spacing * 2;
+  margin: 0 ($gu-h-spacing/-2) ($gu-v-spacing * 2);
+
   @include mq($until: tablet) {
     max-width: gu-span(5);
+  }
+
+  @include mq($until: phablet) {
+    max-width: calc(100%-($gu-h-spacing/-2)*2);
   }
 
   @include mq($from: tablet) {
