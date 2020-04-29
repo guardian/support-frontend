@@ -20,14 +20,16 @@ type PropTypes = {
   title: string,
 };
 
+const appliedPromoString = (props: PropTypes) =>
+  getAppliedPromoDescription(props.billingPeriod, props.productPrice) ||
+  'Save over 20% against monthly in the first year.';
 
 function OrderSummary(props: PropTypes) {
-  const appliedPromoString = getAppliedPromoDescription(props.billingPeriod, props.productPrice) === ''
-    ? 'Save over 20% against monthly in the first year.'
-    : getAppliedPromoDescription(props.billingPeriod, props.productPrice);
+
   const savings = hasDiscountOrPromotion(props.productPrice)
-    ? appliedPromoString
+    ? appliedPromoString(props)
     : getPriceDescription(props.productPrice, props.billingPeriod);
+
   const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
 
   return (
