@@ -10,8 +10,7 @@ import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import { Annual, Monthly } from 'helpers/billingPeriods';
+import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -21,7 +20,7 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
+import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
 import {
   type Action,
   type FormActionCreators,
@@ -55,7 +54,6 @@ import {
   submitCheckoutForm,
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { PayPal, Stripe, DirectDebit } from 'helpers/paymentMethods';
 import {
   getAppliedPromoDescription,
@@ -83,7 +81,7 @@ type PropTypes = {|
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   amount: number,
-  billingPeriod: BillingPeriod,
+  billingPeriod: DigitalBillingPeriod,
   setupRecurringPayPalPayment: Function,
   validateForm: () => Function,
   formIsValid: Function,
@@ -196,13 +194,6 @@ function DigitalCheckoutForm(props: PropTypes) {
           <FormSection title="Address">
             <Address />
           </FormSection>
-          <BillingPeriodSelector
-            billingCountry={props.country}
-            billingPeriods={[Monthly, Annual]}
-            productPrices={props.productPrices}
-            selected={props.billingPeriod}
-            onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
-          />
           <PaymentMethodSelector
             country={props.country}
             paymentMethod={props.paymentMethod}
