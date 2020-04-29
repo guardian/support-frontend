@@ -56,10 +56,6 @@ import {
 } from 'helpers/subscriptionsForms/submit';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { PayPal, Stripe, DirectDebit } from 'helpers/paymentMethods';
-import {
-  getAppliedPromoDescription,
-  getPriceDescription,
-} from 'helpers/productPrice/priceDescriptions';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
@@ -146,14 +142,8 @@ function DigitalCheckoutForm(props: PropTypes) {
     props.country,
     props.billingPeriod,
   );
-  const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
-  const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
-  const priceSummary = `${offerOnSelected || 'Enjoy your digital subscription free for 14 days, then'} ${helperSelected}.`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
-
-  const PriceSummary = () =>
-    <p className="component-credit-card-price">{priceSummary}</p>;
 
   return (
     <Content>
@@ -228,7 +218,6 @@ function DigitalCheckoutForm(props: PropTypes) {
             <StripeProviderForCountry
               country={props.country}
               isTestUser={props.isTestUser}
-              component={<PriceSummary />}
               submitForm={props.submitForm}
               allErrors={[...props.addressErrors]}
               setStripePaymentMethod={props.setStripePaymentMethod}

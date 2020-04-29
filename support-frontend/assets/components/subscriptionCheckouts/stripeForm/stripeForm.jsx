@@ -30,7 +30,6 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 // Types
 
 export type StripeFormPropTypes = {
-  component: Node,
   stripe: Object,
   allErrors: FormError<FormField>[],
   stripeKey: string,
@@ -312,7 +311,6 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
               {this.props.buttonText}
             </Button>
           </div>
-          <span>{this.props.component}</span>
           {(this.state.cardErrors.length > 0 || this.props.allErrors.length > 0)
           && <ErrorSummary errors={[...this.props.allErrors, ...this.state.cardErrors]} />}
         </fieldset>
