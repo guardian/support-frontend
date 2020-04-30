@@ -287,6 +287,9 @@ function getParticipations(
   const acquisitionDataTest: ?AcquisitionABTest = getTestFromAcquisitionData();
   const isRemote = getIsRemoteFromAcquisitionData();
 
+  // This is a temporary addition to help us compare remote and locally rendered
+  // epics on Frontend (as part of testing out the new Contributions Service).
+  // It will be removed once the new service is shown to be working correctly.
   if (isRemote) {
     participations['ContributionsService'] = 'remote';
   }
