@@ -1,17 +1,15 @@
 // @flow
 
 import { getProductPrice } from 'helpers/productPrice/productPrices';
-import { getPriceDescription, displayPrice } from 'helpers/productPrice/priceDescriptions';
-import { extendedGlyph } from 'helpers/internationalisation/currency';
 
 import { type Option } from 'helpers/types/option';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 
 export type EndSummaryProps = {
   priceDescription: string,
   promotion: Option<?string>,
-  displayPrice: string,
 }
 
 const getPromotion = (productPrice: ProductPrice): Option<?string> =>
@@ -28,12 +26,12 @@ function mapStateToProps(state: CheckoutState): EndSummaryProps {
     state.common.internationalisation.countryId,
     billingPeriod,
   );
-  const glyph = extendedGlyph(productPrice.currency);
+
+  const digitalBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
 
   return {
-    priceDescription: getPriceDescription(productPrice, billingPeriod, true),
+    priceDescription: getBillingDescription(productPrice, digitalBillingPeriod),
     promotion: getPromotion(productPrice),
-    displayPrice: displayPrice(glyph, productPrice.price),
   };
 }
 

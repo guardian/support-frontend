@@ -2,13 +2,12 @@
 
 import React from 'react';
 import * as styles from './endSummaryStyles';
+import { connect } from 'react-redux';
+import mapStateToProps, { type EndSummaryProps } from './endSummarySelector';
 
 const Dot = () => <div css={styles.dot} />;
 
-function EndSummary(props: {
-  priceString: string,
-  savings: string,
-}) {
+function EndSummary({ promotion, priceDescription }: EndSummaryProps) {
   return (
     <ul css={styles.list}>
       <li>
@@ -18,8 +17,8 @@ function EndSummary(props: {
         </span>
       </li>
       <li>
-        <Dot /><div css={styles.listMain}>{props.savings}</div>
-        <span css={styles.subText}>{props.priceString}</span>
+        <Dot /><div css={styles.listMain}>{promotion}</div>
+        <span css={styles.subText}>{priceDescription}</span>
       </li>
       <li>
         <Dot /><div css={styles.listMain}>You can cancel any time</div>
@@ -28,4 +27,4 @@ function EndSummary(props: {
   );
 }
 
-export default EndSummary;
+export default connect(mapStateToProps)(EndSummary);
