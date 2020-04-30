@@ -9,11 +9,16 @@ import CancellationPolicy from 'components/subscriptionCheckouts/cancellationPol
 
 export default function PaymentTerms(props: {
   paymentMethod: Option<PaymentMethod>,
+  orderIsAGift?: boolean,
 }) {
   return (
     <FormSection>
-      <CancellationPolicy />
+      {props.orderIsAGift && <CancellationPolicy />}
       {(props.paymentMethod === DirectDebit) && <DirectDebitTerms />}
     </FormSection>
   );
 }
+
+PaymentTerms.defaultProps = {
+  orderIsAGift: false,
+};
