@@ -8,13 +8,11 @@ export const cancellationCopy = {
   body: 'There is no set time on your agreement with us so you can end your subscription whenever you wish',
 };
 
-const CancellationPolicy = ({ orderIsAGift }: {orderIsAGift?: boolean}) => (
+const CancellationPolicy = () => (
   <Text>
-    {!orderIsAGift && (
-      <p>
-        <strong>{cancellationCopy.title}</strong> {cancellationCopy.body}
-      </p>
-      )}
+    <p>
+      <strong>{cancellationCopy.title}</strong> {cancellationCopy.body}
+    </p>
   </Text>
 );
 
