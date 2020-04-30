@@ -13,7 +13,7 @@ export default function PaymentTerms(props: {
 }) {
   return (
     <FormSection>
-      {props.orderIsAGift && <CancellationPolicy />}
+      {!props.orderIsAGift && <CancellationPolicy />}
       {(props.paymentMethod === DirectDebit) && <DirectDebitTerms />}
     </FormSection>
   );
