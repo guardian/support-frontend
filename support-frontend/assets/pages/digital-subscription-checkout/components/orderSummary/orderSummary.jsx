@@ -5,10 +5,8 @@ import { type ProductPrice } from 'helpers/productPrice/productPrices';
 import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
-import { getAppliedPromoDescription, getPriceDescription } from 'helpers/productPrice/priceDescriptions';
-import EndSummary from '../endSummary/endSummary';
-import { getBillingDescription, hasDiscountOrPromotion } from 'helpers/productPrice/priceDescriptionsDigital';
-
+import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
+import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import * as styles from './orderSummaryStyles';
 
 type PropTypes = {
@@ -20,15 +18,7 @@ type PropTypes = {
   title: string,
 };
 
-const appliedPromoString = (props: PropTypes) =>
-  getAppliedPromoDescription(props.billingPeriod, props.productPrice) ||
-  'Save over 20% against monthly in the first year.';
-
 function OrderSummary(props: PropTypes) {
-
-  const savings = hasDiscountOrPromotion(props.productPrice)
-    ? appliedPromoString(props)
-    : getPriceDescription(props.productPrice, props.billingPeriod);
 
   const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
 
@@ -46,10 +36,9 @@ function OrderSummary(props: PropTypes) {
           <span>14 day free trial</span>
         </div>
       </div>
-      <EndSummary
-        savings={savings}
-        priceString={priceString}
-      />
+      <div css={styles.endSummary}>
+        <EndSummary />
+      </div>
     </aside>
   );
 }

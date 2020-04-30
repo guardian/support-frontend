@@ -106,3 +106,11 @@ export const textBlock = css`
     }
   }
 `;
+
+export const endSummary = css`
+  display: none;
+
+  ${from.desktop} {
+    display: block;
+  }
+`;
