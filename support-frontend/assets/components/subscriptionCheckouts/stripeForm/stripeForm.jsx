@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unused-state */
 // @flow
 
-import React, { Component, type Node } from 'react';
+import React, { Component } from 'react';
 import { compose } from 'redux';
 import { injectStripe } from 'react-stripe-elements';
 import Button from 'components/button/button';
@@ -30,7 +30,6 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 // Types
 
 export type StripeFormPropTypes = {
-  component: Node,
   stripe: Object,
   allErrors: FormError<FormField>[],
   stripeKey: string,
