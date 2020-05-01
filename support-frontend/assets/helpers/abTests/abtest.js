@@ -291,7 +291,7 @@ function getParticipations(
   // epics on Frontend (as part of testing out the new Contributions Service).
   // It will be removed once the new service is shown to be working correctly.
   if (isRemote) {
-    participations['ContributionsService'] = 'remote';
+    participations.ContributionsService = 'remote';
   }
 
   Object.keys(abTests).forEach((testId) => {
