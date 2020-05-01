@@ -112,6 +112,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     )
 
   private def buildSubscribeItem(state: CreateZuoraSubscriptionState, promotionService: PromotionService): SubscribeItem = {
+    val billingEnabled = state.paymentMethod.isDefined
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
     SubscribeItem(
       account = buildAccount(state),
@@ -119,7 +120,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
       paymentMethod = state.paymentMethod,
       subscriptionData = buildSubscriptionData(state, promotionService),
-      subscribeOptions= SubscribeOptions()
+      subscribeOptions= SubscribeOptions(billingEnabled, billingEnabled)
     )
   }
 
@@ -171,6 +172,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     sfContactId__c = state.salesforceContacts.recipient.Id,
     identityId__c = state.user.id,
     paymentGateway = state.paymentMethod.map(_.paymentGateway),
-    createdRequestId__c = state.requestId.toString
+    createdRequestId__c = state.requestId.toString,
+    autoPay = state.paymentMethod.isDefined
   )
 }
