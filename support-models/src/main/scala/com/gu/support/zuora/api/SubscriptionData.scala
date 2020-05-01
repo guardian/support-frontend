@@ -111,6 +111,9 @@ object ReaderType {
   case object Gift extends ReaderType {
     val value = "Gift"
   }
+  case object Corporate extends ReaderType {
+    val value = "Corporate"
+  }
   case object Agent extends ReaderType {
     val value = "Agent"
   }
@@ -119,6 +122,7 @@ object ReaderType {
     s match {
       case Gift.value => Gift
       case Agent.value => Agent
+      case Corporate.value => Corporate
       case _ => Direct
     }
 
