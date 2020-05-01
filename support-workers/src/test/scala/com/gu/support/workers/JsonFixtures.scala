@@ -384,7 +384,11 @@ object JsonFixtures {
     s"""
           {
             $requestIdJson,
-            ${userJsonNoAddress},
+            $userJsonNoAddress,
+            "redemptionData": {
+              "redemptionCode": "123abc",
+              "corporateAccountId": "00001"
+            },
             "product": $digitalPackJson,
             "salesForceContact": $salesforceContactJson,
             $salesforceContactsJson

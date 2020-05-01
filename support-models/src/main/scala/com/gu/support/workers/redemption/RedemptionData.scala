@@ -1,13 +1,18 @@
-package com.gu.support.workers
+package com.gu.support.workers.redemption
 
 import cats.syntax.functor._
 import com.gu.support.encoding.Codec
+import com.gu.support.zuora.api.Subscription
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
-abstract class RedemptionData(redemptionCode: String)
+abstract class RedemptionData(val redemptionCode: RedemptionCode) {
+  def redeem(subscription: Subscription) = subscription.copy(redemptionCode = Some(redemptionCode))
+}
 
-case class Corporate(redemptionCode: String, corporateAccountId: String) extends RedemptionData(redemptionCode)
+case class Corporate(override val redemptionCode: RedemptionCode, corporateAccountId: CorporateAccountId) extends RedemptionData(redemptionCode) {
+  override def redeem(subscription: Subscription) = super.redeem(subscription).copy(corporateAccountId = Some(corporateAccountId))
+}
 
 object RedemptionData {
     import Codec.deriveCodec

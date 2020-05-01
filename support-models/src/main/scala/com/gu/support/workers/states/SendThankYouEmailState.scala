@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 import com.gu.support.promotions.PromoCode
+import com.gu.support.workers.redemption.RedemptionData
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
 

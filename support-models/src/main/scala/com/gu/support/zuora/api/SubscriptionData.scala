@@ -7,6 +7,7 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{decodeDateTime, encodeDateTime, monthDecoder, _}
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
+import com.gu.support.workers.redemption.{CorporateAccountId, RedemptionCode}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
 import org.joda.time.{LocalDate, Months}
@@ -151,6 +152,8 @@ object Subscription {
     .copyField("PromoCode", "PromotionCode__c")
     .renameField("PromoCode", "InitialPromotionCode__c")
     .renameField("ReaderType", "ReaderType__c")
+    .renameField("RedemptionCode", "RedemptionCode__c")
+    .renameField("CorporateAccountId", "CorporateAccountId__c")
   )
 }
 
@@ -166,6 +169,8 @@ case class Subscription(
   termType: String = "TERMED",
   readerType: ReaderType = ReaderType.Direct,
   promoCode: Option[PromoCode] = None,
+  redemptionCode: Option[RedemptionCode] = None,
+  corporateAccountId: Option[CorporateAccountId] = None
 )
 
 object RatePlanChargeData {

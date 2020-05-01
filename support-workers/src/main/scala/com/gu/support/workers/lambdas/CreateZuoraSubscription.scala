@@ -120,7 +120,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
       paymentMethod = state.paymentMethod,
       subscriptionData = buildSubscriptionData(state, promotionService),
-      subscribeOptions= SubscribeOptions(billingEnabled, billingEnabled)
+      subscribeOptions = SubscribeOptions(billingEnabled, billingEnabled)
     )
   }
 
@@ -135,7 +135,16 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
     state.product match {
       case c: Contribution => c.build(state.requestId, config)
-      case d: DigitalPack => d.build(state.requestId, config, state.user.billingAddress.country, state.promoCode, promotionService, stage, isTestUser)
+      case d: DigitalPack => d.build(
+        state.requestId,
+        config,
+        state.user.billingAddress.country,
+        state.promoCode,
+        state.redemptionData,
+        promotionService,
+        stage,
+        isTestUser
+      )
       case p: Paper => p.build(state.requestId, state.user.billingAddress.country, state.promoCode, state.firstDeliveryDate, promotionService, stage, isTestUser)
       case w: GuardianWeekly => w.build(
         state.requestId,
