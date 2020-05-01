@@ -16,7 +16,7 @@ case class PaperEmailFields(
   paymentSchedule: PaymentSchedule,
   firstDeliveryDate: Option[LocalDate],
   currency: Currency,
-  paymentMethod: PaymentMethod,
+  paymentMethod: Option[PaymentMethod],
   sfContactId: SfContactId,
   directDebitMandateId: Option[String] = None,
   promotion: Option[Promotion] = None,

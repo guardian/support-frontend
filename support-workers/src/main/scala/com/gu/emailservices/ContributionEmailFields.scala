@@ -15,12 +15,12 @@ case class ContributionEmailFields(
     name: String,
     billingPeriod: BillingPeriod,
     sfContactId: SfContactId,
-    paymentMethod: PaymentMethod,
+    paymentMethod: Option[PaymentMethod],
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {
 
   val paymentFields = paymentMethod match {
-    case dd: DirectDebitPaymentMethod => List(
+    case Some(dd: DirectDebitPaymentMethod) => List(
       "account name" -> dd.bankTransferAccountName,
       "account number" -> mask(dd.bankTransferAccountNumber),
       "sort code" -> hyphenate(dd.bankCode),
@@ -28,7 +28,7 @@ case class ContributionEmailFields(
       "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
       "payment method" -> "Direct Debit"
     )
-    case dd: ClonedDirectDebitPaymentMethod => List(
+    case Some(dd: ClonedDirectDebitPaymentMethod) => List(
       "account name" -> dd.bankTransferAccountName,
       "account number" -> mask(dd.bankTransferAccountNumber),
       "sort code" -> hyphenate(dd.bankCode),
@@ -36,8 +36,9 @@ case class ContributionEmailFields(
       "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
       "payment method" -> "Direct Debit"
     )
-    case _: PayPalReferenceTransaction => List("payment method" -> "PayPal")
-    case _: CreditCardReferenceTransaction => List("payment method" -> "credit / debit card")
+    case Some(_: PayPalReferenceTransaction) => List("payment method" -> "PayPal")
+    case Some(_: CreditCardReferenceTransaction) => List("payment method" -> "credit / debit card")
+    case None => Nil
   }
 
   override val fields = List(

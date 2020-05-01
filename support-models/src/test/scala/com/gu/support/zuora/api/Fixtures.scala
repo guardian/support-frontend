@@ -113,7 +113,7 @@ object Fixtures {
     salesforceAccountId,
     salesforceId,
     identityId,
-    paymentGateway,
+    Some(paymentGateway),
     "createdreqid_hi"
   )
 
@@ -248,12 +248,12 @@ object Fixtures {
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(currency), contactDetails, Some(contactDetails), creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(currency), contactDetails, Some(contactDetails), Some(creditCardPaymentMethod), monthlySubscriptionData, SubscribeOptions())
     ))
 
   def directDebitSubscriptionRequest: SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, directDebitPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, Some(directDebitPaymentMethod), monthlySubscriptionData, SubscribeOptions())
     ))
 
   val invalidMonthlySubsData = SubscriptionData(
@@ -269,7 +269,7 @@ object Fixtures {
     Subscription(date, date, date, "id123", termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account(), contactDetails, None, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
+    SubscribeItem(account(), contactDetails, None, Some(creditCardPaymentMethod), invalidMonthlySubsData, SubscribeOptions())
   ))
 
   val incorrectPaymentMethod = SubscribeRequest(
@@ -277,7 +277,7 @@ object Fixtures {
       SubscribeItem(account(),
       contactDetails,
       None,
-      payPalPaymentMethod,
+        Some(payPalPaymentMethod),
       invalidMonthlySubsData,
       SubscribeOptions())
     )

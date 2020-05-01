@@ -20,38 +20,51 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
+  override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services): FutureHandlerResult = {
     SafeLogger.debug(s"CreatePaymentMethod state: $state")
-    createPaymentMethod(state, services)
-      .map(paymentMethod =>
-        HandlerResult(
-          getCreateSalesforceContactState(state, paymentMethod),
-          requestInfo
-            .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
-            .appendMessage(s"Product is ${state.product.describe}")
-        ))
+    state.paymentFields.map(
+      paymentFields =>
+        createPaymentMethod(paymentFields, state.user, state.product.currency, services)
+        .map(paymentMethod =>
+          HandlerResult(
+            getCreateSalesforceContactState(state, Some(paymentMethod)),
+            requestInfo
+              .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
+              .appendMessage(s"Product is ${state.product.describe}")
+          ))
+    ).getOrElse(
+      Future.successful(HandlerResult(
+        getCreateSalesforceContactState(state, None),
+        requestInfo
+          .appendMessage(s"No Payment method present")
+          .appendMessage(s"Product is a corporate Digital Subscription")
+      ))
+    )
   }
 
   private def createPaymentMethod(
-    state: CreatePaymentMethodState,
+    paymentFields: PaymentFields,
+    user:User,
+    currency: Currency,
     services: Services
-  ) =
-    state.paymentFields match {
+  ): Future[PaymentMethod] =
+    paymentFields match {
       case stripe: StripePaymentFields =>
-        createStripePaymentMethod(stripe, services.stripeService, state.product.currency)
+        createStripePaymentMethod(stripe, services.stripeService, currency)
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
-        createDirectDebitPaymentMethod(dd, state.user)
+        createDirectDebitPaymentMethod(dd, user)
       case _: ExistingPaymentFields =>
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
     }
 
-  private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentMethod) =
+  private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: Option[PaymentMethod]) =
     CreateSalesforceContactState(
       state.requestId,
       state.user,
       state.giftRecipient,
+      state.redemptionData,
       state.product,
       paymentMethod,
       state.firstDeliveryDate,

@@ -21,7 +21,7 @@ class CreateSalesforceContactDecoderSpec extends AnyFlatSpec with Matchers with 
       case _ => fail()
     }
     result.paymentMethod match {
-      case payPal: PayPalReferenceTransaction => succeed
+      case Some(_: PayPalReferenceTransaction) => succeed
       case _ => fail()
     }
   }

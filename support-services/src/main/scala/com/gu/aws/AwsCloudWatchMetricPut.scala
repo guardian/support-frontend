@@ -63,11 +63,11 @@ object AwsCloudWatchMetricPut {
         MetricDimensionName("Environment") -> MetricDimensionValue(environment.toString)
       ))
 
-  def paymentSuccessRequest(stage: Stage, paymentProvider: PaymentProvider, productType: ProductType): MetricRequest =
+  def paymentSuccessRequest(stage: Stage, paymentProvider: Option[PaymentProvider], productType: ProductType): MetricRequest =
     getMetricRequest(
       MetricName("PaymentSuccess"),
       Map(
-        MetricDimensionName("PaymentProvider") -> MetricDimensionValue(paymentProvider.name),
+        MetricDimensionName("PaymentProvider") -> MetricDimensionValue(paymentProvider.map(_.name).getOrElse("None")),
         MetricDimensionName("ProductType") -> MetricDimensionValue(productType.toString),
         MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
       )

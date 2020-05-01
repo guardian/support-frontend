@@ -41,6 +41,23 @@ object JsonFixtures {
         }
     """
 
+  def userJsonNoAddress =
+    s"""
+      "user":{
+          "id": "$idId",
+          "primaryEmailAddress": "$emailAddress",
+          "firstName": "test",
+          "lastName": "user",
+          "billingAddress": {
+            "country": "GB"
+          },
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false
+        }
+    """
+
   def userJsonAlternate(id: String = idId): String =
     s"""
       "user":{
@@ -362,6 +379,18 @@ object JsonFixtures {
             $salesforceContactsJson
             }
         """
+
+  val createDigiPackCorporateSubscriptionJson =
+    s"""
+          {
+            $requestIdJson,
+            ${userJsonNoAddress},
+            "product": $digitalPackJson,
+            "salesForceContact": $salesforceContactJson,
+            $salesforceContactsJson
+            }
+        """
+
 
   val createDigiPackSubscriptionWithPromoJson =
     s"""

@@ -16,7 +16,7 @@ object PaperFieldsGenerator {
     paymentSchedule: PaymentSchedule,
     firstDeliveryDate: Option[LocalDate],
     currency: Currency,
-    paymentMethod: PaymentMethod,
+    paymentMethod: Option[PaymentMethod],
     sfContactId: SfContactId,
     directDebitMandateId: Option[String],
     promotion: Option[Promotion],
@@ -64,25 +64,26 @@ object PaperFieldsGenerator {
   }
 
   protected def getPaymentFields(
-    paymentMethod: PaymentMethod,
+    paymentMethod: Option[PaymentMethod],
     directDebitMandateId: Option[String]
   ): Seq[(String, String)] = paymentMethod match {
-    case dd: DirectDebitPaymentMethod => List(
+    case Some(dd: DirectDebitPaymentMethod) => List(
       "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
       "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
       "account_holder" -> dd.bankTransferAccountName,
       "payment_method" -> "Direct Debit",
       "mandate_id" -> directDebitMandateId.getOrElse("")
     )
-    case dd: ClonedDirectDebitPaymentMethod => List(
+    case Some(dd: ClonedDirectDebitPaymentMethod) => List(
       "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
       "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
       "account_holder" -> dd.bankTransferAccountName,
       "payment_method" -> "Direct Debit",
       "mandate_id" -> dd.mandateId
     )
-    case _: CreditCardReferenceTransaction => List("payment_method" -> "Credit/Debit Card")
-    case _: PayPalReferenceTransaction => List("payment_method" -> "PayPal")
+    case Some(_: CreditCardReferenceTransaction) => List("payment_method" -> "Credit/Debit Card")
+    case Some(_: PayPalReferenceTransaction) => List("payment_method" -> "PayPal")
+    case None => Nil
   }
 
 }

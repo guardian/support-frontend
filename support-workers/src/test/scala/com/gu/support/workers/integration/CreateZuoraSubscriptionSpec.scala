@@ -28,45 +28,49 @@ import scala.concurrent.duration._
 @IntegrationTest
 class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
 
-  "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
-    createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
-  }
+//  "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
+//    createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
+//  }
+//
+//  it should "create an annual Zuora subscription" in {
+//    createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual))
+//  }
+//
+//  it should "create a Digital Pack subscription" in {
+//    createSubscription(createDigiPackZuoraSubscriptionJson)
+//  }
 
-  it should "create an annual Zuora subscription" in {
-    createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual))
+  it should "create a Digital Pack corporate subscription" in {
+    createSubscription(createDigiPackCorporateSubscriptionJson)
   }
-
-  it should "create a Digital Pack subscription" in {
-    createSubscription(createDigiPackZuoraSubscriptionJson)
-  }
-
-  it should "create a Digital Pack subscription with a discount" in {
-    createSubscription(createDigiPackSubscriptionWithPromoJson)
-  }
-
-  it should "create a Digital Pack subscription with a discount and free trial" in {
-    createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
-  }
-
-  it should "create an everyday paper subscription" in {
-    createSubscription(createEverydayPaperSubscriptionJson)
-  }
-
-  it should "create an Annual Guardian Weekly subscription" in {
-    createSubscription(createGuardianWeeklySubscriptionJson(Annual))
-  }
-
-  it should "create an Quarterly Guardian Weekly subscription" in {
-    createSubscription(createGuardianWeeklySubscriptionJson(Quarterly))
-  }
-
-  it should "create a 6 for 6 Guardian Weekly subscription" in {
-    createSubscription(createGuardianWeeklySubscriptionJson(Quarterly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)))
-  }
-
-  it should "create an Guardian Weekly gift subscription" in {
-    createSubscription(guardianWeeklyGiftJson)
-  }
+//
+//  it should "create a Digital Pack subscription with a discount" in {
+//    createSubscription(createDigiPackSubscriptionWithPromoJson)
+//  }
+//
+//  it should "create a Digital Pack subscription with a discount and free trial" in {
+//    createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
+//  }
+//
+//  it should "create an everyday paper subscription" in {
+//    createSubscription(createEverydayPaperSubscriptionJson)
+//  }
+//
+//  it should "create an Annual Guardian Weekly subscription" in {
+//    createSubscription(createGuardianWeeklySubscriptionJson(Annual))
+//  }
+//
+//  it should "create an Quarterly Guardian Weekly subscription" in {
+//    createSubscription(createGuardianWeeklySubscriptionJson(Quarterly))
+//  }
+//
+//  it should "create a 6 for 6 Guardian Weekly subscription" in {
+//    createSubscription(createGuardianWeeklySubscriptionJson(Quarterly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)))
+//  }
+//
+//  it should "create an Guardian Weekly gift subscription" in {
+//    createSubscription(guardianWeeklyGiftJson)
+//  }
 
   private def createSubscription(json: String) = {
     val createZuora = new CreateZuoraSubscription(mockServiceProvider)

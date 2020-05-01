@@ -99,6 +99,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.requestId,
       state.user,
       state.giftRecipient,
+      state.redemptionData,
       state.product,
       state.paymentMethod,
       state.firstDeliveryDate,
@@ -169,7 +170,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
     sfContactId__c = state.salesforceContacts.recipient.Id,
     identityId__c = state.user.id,
-    paymentGateway = state.paymentMethod.paymentGateway,
+    paymentGateway = state.paymentMethod.map(_.paymentGateway),
     createdRequestId__c = state.requestId.toString
   )
 }

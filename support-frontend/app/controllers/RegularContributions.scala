@@ -88,9 +88,9 @@ class RegularContributions(
         InternalServerError
       },
       { statusResponse =>
-        if (!testUsers.isTestUser(request)) {
+        if (!testUsers.isTestUser(request) && body.paymentFields.isDefined) {
           monitoredRegion(body.billingAddress.country).map { region =>
-            val tipPath = TipPath(region, RecurringContribution, monitoredPaymentMethod(body.paymentFields), guestCheckout)
+            val tipPath = TipPath(region, RecurringContribution, monitoredPaymentMethod(body.paymentFields.get), guestCheckout)
             verify(tipPath, tipMonitoring.verify)
           }
         }

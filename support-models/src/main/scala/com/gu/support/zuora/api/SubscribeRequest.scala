@@ -13,7 +13,7 @@ case class SubscribeItem(
   account: Account,
   billToContact: ContactDetails,
   soldToContact: Option[ContactDetails],
-  paymentMethod: PaymentMethod,
+  paymentMethod: Option[PaymentMethod],
   subscriptionData: SubscriptionData,
   subscribeOptions: SubscribeOptions
 )

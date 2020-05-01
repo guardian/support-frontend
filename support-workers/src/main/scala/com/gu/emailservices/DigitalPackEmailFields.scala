@@ -42,29 +42,30 @@ case class DigitalPackEmailFields(
     user: User,
     paymentSchedule: PaymentSchedule,
     currency: Currency,
-    paymentMethod: PaymentMethod,
+    paymentMethod: Option[PaymentMethod],
     sfContactId: SfContactId,
     directDebitMandateId: Option[String] = None,
     promotion: Option[Promotion] = None
 ) extends EmailFields {
 
   val paymentFields = paymentMethod match {
-    case dd: DirectDebitPaymentMethod => List(
+    case Some(dd: DirectDebitPaymentMethod) => List(
       "Account number" -> mask(dd.bankTransferAccountNumber),
       "Sort Code" -> hyphenate(dd.bankCode),
       "Account Name" -> dd.bankTransferAccountName,
       "Default payment method" -> "Direct Debit",
       "MandateID" -> directDebitMandateId.getOrElse("")
     )
-    case dd: ClonedDirectDebitPaymentMethod => List(
+    case Some(dd: ClonedDirectDebitPaymentMethod) => List(
       "Sort Code" -> hyphenate(dd.bankCode),
       "Account number" -> mask(dd.bankTransferAccountNumber),
       "Account Name" -> dd.bankTransferAccountName,
       "Default payment method" -> "Direct Debit",
       "MandateID" -> dd.mandateId
     )
-    case _: CreditCardReferenceTransaction => List("Default payment method" -> "Credit/Debit Card")
-    case _: PayPalReferenceTransaction => Seq("Default payment method" -> "PayPal")
+    case Some(_: CreditCardReferenceTransaction) => List("Default payment method" -> "Credit/Debit Card")
+    case Some(_: PayPalReferenceTransaction) => Seq("Default payment method" -> "PayPal")
+    case None => Nil
   }
 
   override val fields = List(

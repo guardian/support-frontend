@@ -11,8 +11,9 @@ case class SendAcquisitionEventState(
   requestId: UUID,
   user: User,
   giftRecipient: Option[GiftRecipient],
+  redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentMethod: PaymentMethod,
+  paymentMethod: Option[PaymentMethod],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]

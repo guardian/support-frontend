@@ -44,7 +44,7 @@ case class CreateSupportWorkersRequest(
   emailGiftRecipient: Option[String],
   product: ProductType,
   firstDeliveryDate: Option[LocalDate],
-  paymentFields: PaymentFields,
+  paymentFields: Option[PaymentFields],
   promoCode: Option[PromoCode],
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -126,6 +126,7 @@ class SupportWorkersClient(
       requestId = requestId,
       user = user,
       giftRecipient = getGiftRecipient(request.body),
+      None, // TODO
       product = request.body.product,
       paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
@@ -136,7 +137,7 @@ class SupportWorkersClient(
       promoCode = request.body.promoCode,
       firstDeliveryDate = request.body.firstDeliveryDate
     )
-    val isExistingAccount = createPaymentMethodState.paymentFields.isInstanceOf[ExistingPaymentFields]
+    val isExistingAccount = createPaymentMethodState.paymentFields.exists(_.isInstanceOf[ExistingPaymentFields])
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")

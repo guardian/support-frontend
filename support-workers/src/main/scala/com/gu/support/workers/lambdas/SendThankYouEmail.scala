@@ -39,7 +39,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
   }
 
   def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentMethod match {
-    case _: DirectDebitPaymentMethod =>
+    case Some(_: DirectDebitPaymentMethod) =>
       zuoraService.getMandateIdFromAccountNumber(state.accountNumber)
     case _ => Future.successful(None)
   }
