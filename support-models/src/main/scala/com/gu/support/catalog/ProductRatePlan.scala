@@ -14,5 +14,4 @@ case class ProductRatePlan[+T <: Product](
   // we do discounts we wouldn't need this and we would be able to apply 6 for 6 to other products
   productRatePlanChargeId: Option[ProductRatePlanChargeId] = None,
   fixedTerm: Boolean = false,
-  redemptionCode: Boolean = false // For users redeeming a code eg. corporates
 )

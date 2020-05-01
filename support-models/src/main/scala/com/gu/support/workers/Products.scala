@@ -3,7 +3,7 @@ package com.gu.support.workers
 import cats.syntax.functor._
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
-import com.gu.support.catalog.{FulfilmentOptions, ProductOptions}
+import com.gu.support.catalog.{DigitalProductOptions, FulfilmentOptions, NoProductOptions, PaperProductOptions, ProductOptions}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.syntax._
@@ -30,7 +30,8 @@ case class Contribution(
 
 case class DigitalPack(
   currency: Currency,
-  billingPeriod: BillingPeriod
+  billingPeriod: BillingPeriod,
+  productOptions: DigitalProductOptions = NoProductOptions
 ) extends ProductType {
   override val catalogType = com.gu.support.catalog.DigitalPack
   override def describe: String = s"$billingPeriod-DigitalPack-$currency"
@@ -40,7 +41,7 @@ case class Paper(
   currency: Currency = GBP,
   billingPeriod: BillingPeriod = Monthly,
   fulfilmentOptions: FulfilmentOptions,
-  productOptions: ProductOptions
+  productOptions: PaperProductOptions
 ) extends ProductType {
   override val catalogType = com.gu.support.catalog.Paper
   override def describe: String = s"Paper-$fulfilmentOptions-$productOptions"
