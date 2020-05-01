@@ -39,14 +39,24 @@ case object DigitalPack extends Product {
       PROD -> List(
         ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Monthly"),
         ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Annual"),
+        ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Redemption Code", // TODO Id
+          redemptionCode = true
+        ),
       ),
       UAT -> List(
         ProductRatePlan("2c92c0f94f2acf73014f2c908f671591", Monthly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Monthly"),
         ProductRatePlan("2c92c0f84f2ac59d014f2c94aea9199e", Annual, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Annual"),
+        ProductRatePlan("2c92c0f94f2acf73014f2c908f671591", Monthly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Monthly"),
+        ProductRatePlan("2c92c0f94f2acf73014f2c908f671591", Monthly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Redemption Code", // TODO Id
+          redemptionCode = true
+        ),
       ),
       SANDBOX -> List(
         ProductRatePlan("2c92c0f84bbfec8b014bc655f4852d9d", Monthly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Monthly"),
         ProductRatePlan("2c92c0f94bbffaaa014bc6a4212e205b", Annual, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Annual"),
+        ProductRatePlan("2c92c0f971c65dfe0171c6c1f86e603c", Monthly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Redemption Code",
+          redemptionCode = true
+        ),
       ))
 }
 
