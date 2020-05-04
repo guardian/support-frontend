@@ -3,9 +3,8 @@ package com.gu.support.promotions
 object DefaultPromotions {
   object DigitalSubscription {
     object Monthly {
-      val oneForOne = "ONE-FOR-ONE"
       val fiftyPercentOff3Months = "DK0NT24WG"
-      def all = List(oneForOne, fiftyPercentOff3Months)
+      def all = List(fiftyPercentOff3Months)
     }
 
     object Annual {

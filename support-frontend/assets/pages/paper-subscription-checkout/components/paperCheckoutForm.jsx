@@ -50,8 +50,7 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import CancellationSection
-  from 'components/subscriptionCheckouts/cancellationSection';
+import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
@@ -74,6 +73,7 @@ import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidati
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { type Option } from 'helpers/types/option';
+import Total from 'components/subscriptionCheckouts/total/total';
 
 // ----- Types ----- //
 
@@ -228,6 +228,7 @@ function PaperCheckoutForm(props: PropTypes) {
                 <TextAreaWithLabel
                   id="delivery-instructions"
                   label="Delivery instructions"
+                  maxlength={250}
                   value={props.deliveryInstructions}
                   setValue={props.setDeliveryInstructions}
                 />
@@ -348,7 +349,11 @@ function PaperCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <CancellationSection paymentMethod={props.paymentMethod} />
+          <Total
+            price={props.amount}
+            currency={props.currencyId}
+          />
+          <PaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>

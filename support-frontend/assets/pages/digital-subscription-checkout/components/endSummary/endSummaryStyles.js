@@ -5,11 +5,9 @@ import { from } from '@guardian/src-foundations/mq';
 import { text, border } from '@guardian/src-foundations/palette';
 
 export const list = css`
-  display: none;
 
   ${from.desktop} {
     color: ${text.primary};
-    display: block;
     width: calc(100%-${space[3]}px * 2);
     margin: ${space[3]}px;
     padding-top: ${space[3]}px;
@@ -23,6 +21,9 @@ export const list = css`
 
 export const listMain = css`
   ${textSans.medium({ fontWeight: 'bold' })};
+  margin-left: ${space[3]}px;
+  display: inline-block;
+  max-width: 90%;
 `;
 
 export const subText = css`
@@ -38,5 +39,6 @@ export const dot = css`
   width: 9px;
   border-radius: 50%;
   background-color: #63717A;
-  margin-right: ${space[3]}px;
+  vertical-align: top;
+  margin-top: ${space[2]}px;
 `;

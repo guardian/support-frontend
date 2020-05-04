@@ -10,8 +10,7 @@ import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import { Annual, Monthly } from 'helpers/billingPeriods';
+import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -21,7 +20,7 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
+import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
 import {
   type Action,
   type FormActionCreators,
@@ -39,8 +38,7 @@ import {
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import CancellationSection
-  from 'components/subscriptionCheckouts/cancellationSection';
+import DigitalPaymentTerms from 'components/subscriptionCheckouts/digitalPaymentTerms';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
@@ -55,17 +53,13 @@ import {
   submitCheckoutForm,
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { PayPal, Stripe, DirectDebit } from 'helpers/paymentMethods';
-import {
-  getAppliedPromoDescription,
-  getPriceDescription,
-} from 'helpers/productPrice/priceDescriptions';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { routes } from 'helpers/routes';
+import Total from 'components/subscriptionCheckouts/total/total';
 
 // ----- Types ----- //
 
@@ -83,7 +77,7 @@ type PropTypes = {|
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   amount: number,
-  billingPeriod: BillingPeriod,
+  billingPeriod: DigitalBillingPeriod,
   setupRecurringPayPalPayment: Function,
   validateForm: () => Function,
   formIsValid: Function,
@@ -146,14 +140,9 @@ function DigitalCheckoutForm(props: PropTypes) {
     props.country,
     props.billingPeriod,
   );
-  const offerOnSelected = getAppliedPromoDescription(props.billingPeriod, productPrice);
-  const helperSelected = getPriceDescription(productPrice, props.billingPeriod);
-  const priceSummary = `${offerOnSelected || 'Enjoy your digital subscription free for 14 days, then'} ${helperSelected}.`;
+
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
-
-  const PriceSummary = () =>
-    <p className="component-credit-card-price">{priceSummary}</p>;
 
   return (
     <Content>
@@ -196,13 +185,6 @@ function DigitalCheckoutForm(props: PropTypes) {
           <FormSection title="Address">
             <Address />
           </FormSection>
-          <BillingPeriodSelector
-            billingCountry={props.country}
-            billingPeriods={[Monthly, Annual]}
-            productPrices={props.productPrices}
-            selected={props.billingPeriod}
-            onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
-          />
           <PaymentMethodSelector
             country={props.country}
             paymentMethod={props.paymentMethod}
@@ -228,7 +210,6 @@ function DigitalCheckoutForm(props: PropTypes) {
             <StripeProviderForCountry
               country={props.country}
               isTestUser={props.isTestUser}
-              component={<PriceSummary />}
               submitForm={props.submitForm}
               allErrors={[...props.addressErrors]}
               setStripePaymentMethod={props.setStripePaymentMethod}
@@ -255,7 +236,14 @@ function DigitalCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <CancellationSection paymentMethod={props.paymentMethod} />
+          <Total
+            price={productPrice.price}
+            currency={productPrice.currency}
+            promotions={productPrice.promotions}
+          />
+          <DigitalPaymentTerms
+            paymentMethod={props.paymentMethod}
+          />
         </Form>
       </CheckoutLayout>
     </Content>

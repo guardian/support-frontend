@@ -157,6 +157,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           id={`${scope}-city`}
           label="Town/City"
           type="text"
+          maxlength={40}
           value={props.city}
           setValue={props.setTownCity}
           error={firstError('city', props.formErrors)}

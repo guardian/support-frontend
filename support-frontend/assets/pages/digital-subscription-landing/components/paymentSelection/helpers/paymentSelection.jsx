@@ -22,9 +22,8 @@ import type {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
-import { promoQueryParam } from 'helpers/productPrice/promotions';
-import type { Promotion } from 'helpers/productPrice/promotions';
-import { getQueryParameter } from 'helpers/url';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import { isNumeric } from 'helpers/productPrice/productPrices';
 
 export type PaymentOption = {
   title: string,
@@ -77,7 +76,7 @@ const BILLING_PERIOD = {
     title: 'Annual',
     salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
       const display = price => getDisplayPrice(currencyId, price);
-      return promotionalPrice ?
+      return isNumeric(promotionalPrice) ?
         <span>
           <span className="product-option__price">{display(promotionalPrice)}</span>
           <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
@@ -93,34 +92,6 @@ const BILLING_PERIOD = {
   },
 };
 
-const matchesQueryParam = promotion =>
-  getQueryParameter(promoQueryParam) === promotion.promoCode;
-const matchesABVariant = (promotion: Promotion, abVariant: Option<string>) => {
-  if (!abVariant) {
-    return false;
-  }
-
-  if (abVariant === 'one-for-one') {
-    return promotion.promoCode.toLowerCase() === 'one-for-one';
-  }
-
-  return promotion.promoCode === 'DK0NT24WG';
-};
-
-// When the 'one for one vs 3 months' ab test is complete this function can
-// be deleted and we can use the getAppliedPromo function from promotions.js
-function getPromotion(promotions: ?Promotion[], abVariant: string): Option<Promotion> {
-  if (promotions && promotions.length > 0) {
-    if (promotions.length > 1) {
-      return promotions.find(matchesQueryParam) ||
-        promotions.find(promotion => matchesABVariant(promotion, abVariant)) ||
-        promotions[0];
-    }
-    return promotions[0];
-  }
-  return null;
-}
-
 // state
 const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> } => {
   const { productPrices } = state.page;
@@ -132,9 +103,9 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
 
     const productPrice = getProductPrice(productOptions, digitalBillingPeriod, currencyId);
     const fullPrice = productPrice.price;
-    const promotion = getPromotion(productPrice.promotions, state.common.abParticipations.digitalPackMonthlyOfferTest);
+    const promotion = getAppliedPromo(productPrice.promotions);
     const promoCode = promotion ? promotion.promoCode : null;
-    const promotionalPrice = promotion && promotion.discountedPrice ? promotion.discountedPrice : null;
+    const promotionalPrice = promotion && isNumeric(promotion.discountedPrice) ? promotion.discountedPrice : null;
     const offer = promotion &&
     promotion.landingPage &&
     promotion.landingPage.roundel ? promotion.landingPage.roundel :
