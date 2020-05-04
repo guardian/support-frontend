@@ -50,7 +50,7 @@ object ProductOptions {
 }
 
 object DigitalProductOptions {
-  val productOptions: List[catalog.DigitalProductOptions] = List(Redemption)
+  val productOptions: List[catalog.DigitalProductOptions] = List(Redemption, NoProductOptions)
 
   implicit val decoder: Decoder[DigitalProductOptions] =
     Decoder.decodeString.emap(code => fromString(code, productOptions).toRight(s"unrecognised product options '$code'"))
