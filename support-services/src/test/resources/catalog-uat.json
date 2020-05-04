@@ -2822,6 +2822,83 @@
       "SuspensionAllowed__c": "False",
       "productRatePlans": [
         {
+          "id": "2c92c0f971c65df50171dfabef87093d",
+          "status": "Active",
+          "name": "Corporate Digital Subscription",
+          "description": "",
+          "effectiveStartDate": "2020-01-01",
+          "effectiveEndDate": "2050-01-01",
+          "TermType__c": "TERMED",
+          "FrontendId__c": null,
+          "Saving__c": null,
+          "DefaultTerm__c": "12",
+          "RatePlanType__c": "Base",
+          "PromotionCode__c": null,
+          "TrialPeriodDays__c": null,
+          "productRatePlanCharges": [
+            {
+              "id": "2c92c0f871c64cea0171dfacb1696aad",
+              "name": "Corporate Digital Subscription",
+              "type": "OneTime",
+              "model": "FlatFee",
+              "uom": null,
+              "pricingSummary": [
+                "GBP0"
+              ],
+              "pricing": [
+                {
+                  "currency": "GBP",
+                  "price": 0,
+                  "tiers": null,
+                  "includedUnits": null,
+                  "overagePrice": null,
+                  "discountPercentage": null,
+                  "discountAmount": null
+                }
+              ],
+              "defaultQuantity": null,
+              "applyDiscountTo": null,
+              "discountLevel": null,
+              "discountClass": null,
+              "productDiscountApplyDetails": [],
+              "endDateCondition": "One_Time",
+              "upToPeriods": null,
+              "upToPeriodsType": null,
+              "billingDay": null,
+              "listPriceBase": null,
+              "billingTiming": null,
+              "billingPeriod": null,
+              "billingPeriodAlignment": null,
+              "specificBillingPeriod": null,
+              "smoothingModel": null,
+              "numberOfPeriods": null,
+              "overageCalculationOption": null,
+              "overageUnusedUnitsCreditOption": null,
+              "unusedIncludedUnitPrice": null,
+              "usageRecordRatingOption": null,
+              "priceChangeOption": null,
+              "priceIncreasePercentage": null,
+              "useTenantDefaultForPriceChange": null,
+              "taxable": false,
+              "taxCode": "",
+              "taxMode": "TaxExclusive",
+              "ProductType__c": "Digital Pack",
+              "triggerEvent": "ContractEffective",
+              "description": "",
+              "revRecCode": null,
+              "revRecTriggerCondition": null,
+              "revenueRecognitionRuleName": "Recognize upon invoicing",
+              "useDiscountSpecificAccountingCode": null,
+              "financeInformation": {
+                "deferredRevenueAccountingCode": "Digital Pack",
+                "deferredRevenueAccountingCodeType": "SalesRevenue",
+                "recognizedRevenueAccountingCode": "Digital Pack",
+                "recognizedRevenueAccountingCodeType": "SalesRevenue"
+              }
+            }
+          ]
+        },
+        {
           "id": "2c92c0f94f2acf76014f2c92b5791f0f",
           "status": "Active",
           "name": "Digital Pack Quarterly",

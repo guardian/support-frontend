@@ -44,7 +44,7 @@ case object DigitalPack extends Product {
       UAT -> List(
         ProductRatePlan("2c92c0f94f2acf73014f2c908f671591", Monthly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Monthly"),
         ProductRatePlan("2c92c0f84f2ac59d014f2c94aea9199e", Annual, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Annual"),
-        ProductRatePlan("2c92c0f94f2acf73014f2c908f671591", Monthly, NoFulfilmentOptions, Redemption, "Digital Subscription Redemption Code"), // TODO Id
+        ProductRatePlan("2c92c0f971c65df50171dfabef87093d", Monthly, NoFulfilmentOptions, Redemption, "Digital Subscription Redemption Code"),
       ),
       SANDBOX -> List(
         ProductRatePlan("2c92c0f84bbfec8b014bc655f4852d9d", Monthly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Monthly"),
