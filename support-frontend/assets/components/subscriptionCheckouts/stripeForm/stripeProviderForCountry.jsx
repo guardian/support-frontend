@@ -21,7 +21,6 @@ function StripeProviderForCountry(props: PropTypes) {
     <StripeProvider apiKey={stripeKey} key={stripeKey}>
       <Elements>
         <StripeForm
-          component={props.component}
           submitForm={props.submitForm}
           allErrors={props.allErrors}
           stripeKey={stripeKey}

@@ -226,20 +226,12 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
   classModifier: ['subscriptions__premuim-app'],
 });
 
-const getDigitalCopy = (state: State) => {
-  if (state.common.abParticipations.digitalPackMonthlyOfferTest === 'one-for-one') {
-    // $FlowIgnore - just for the sake of this AB test
-    return state.page.pricingCopy.DigitalPackVariant;
-  }
-  return state.page.pricingCopy[DigitalPack];
-};
-
 const orderedProducts = (state: State): ProductCopy[] => {
   const { countryGroupId } = state.common.internationalisation;
   if (countryGroupId === GBPCountries) {
     return [
       guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
-      digital(countryGroupId, getDigitalCopy(state), false),
+      digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
       paper(countryGroupId, state.page.pricingCopy[Paper], false),
       paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
       premiumApp(countryGroupId),
@@ -247,7 +239,7 @@ const orderedProducts = (state: State): ProductCopy[] => {
   }
   return [
     guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
-    digital(countryGroupId, getDigitalCopy(state), false),
+    digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
     premiumApp(countryGroupId),
   ];
 };
