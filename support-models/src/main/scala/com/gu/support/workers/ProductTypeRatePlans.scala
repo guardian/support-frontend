@@ -1,6 +1,6 @@
 package com.gu.support.workers
 
-import com.gu.support.catalog.{NoProductOptions, Product, ProductRatePlan}
+import com.gu.support.catalog.{Corporate, NoProductOptions, Product, ProductRatePlan}
 import com.gu.support.config.TouchPointEnvironment
 
 
@@ -40,7 +40,7 @@ object ProductTypeRatePlans {
   implicit val digitalRatePlan: ProductTypeRatePlans[DigitalPack] = (product: DigitalPack, environment: TouchPointEnvironment, fixedTerm) =>
     product.catalogType.ratePlans.getOrElse(environment, Nil).find(productRatePlan =>
       (productRatePlan.billingPeriod == product.billingPeriod && productRatePlan.productOptions == product.productOptions) ||
-        (productRatePlan.productOptions != NoProductOptions && productRatePlan.productOptions == product.productOptions)
+        (productRatePlan.productOptions == Corporate && product.productOptions == Corporate) // We don't care about the billing period for corporates
     )
 
   implicit val paperRatePlan: ProductTypeRatePlans[Paper] = (product: Paper, environment: TouchPointEnvironment, fixedTerm) =>
