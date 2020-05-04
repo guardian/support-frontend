@@ -10,7 +10,6 @@ import { type IsoCurrency, fromCountryGroupId, currencies } from 'helpers/intern
 import type { ContributionType } from 'helpers/contributions';
 import { type CampaignName, campaigns } from 'helpers/campaigns';
 import './termsPrivacy.scss';
-import { Divider } from 'components/content/content';
 
 
 // ---- Types ----- //
@@ -91,7 +90,6 @@ function TermsPrivacy(props: PropTypes) {
           : null
         }
         <div className="component-terms-privacy__terms">
-          {props.countryGroupId}
           By proceeding, you are agreeing to our {terms}. To find out what personal data we collect and how we use it,
           please visit our {privacy}.
         </div>
