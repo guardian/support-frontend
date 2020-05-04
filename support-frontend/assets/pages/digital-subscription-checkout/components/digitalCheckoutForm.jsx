@@ -59,7 +59,6 @@ import GeneralErrorMessage
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { routes } from 'helpers/routes';
-import Total from 'components/subscriptionCheckouts/total/total';
 
 // ----- Types ----- //
 
@@ -235,11 +234,6 @@ function DigitalCheckoutForm(props: PropTypes) {
           <GeneralErrorMessage
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
-          />
-          <Total
-            price={productPrice.price}
-            currency={productPrice.currency}
-            promotions={productPrice.promotions}
           />
           <DigitalPaymentTerms
             paymentMethod={props.paymentMethod}
