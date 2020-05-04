@@ -12,7 +12,7 @@ sealed trait DigitalProductOptions extends ProductOptions
 
 case object NoProductOptions extends ProductOptions with DigitalProductOptions
 
-case object Redemption extends DigitalProductOptions
+case object Corporate extends DigitalProductOptions
 
 case object Saturday extends PaperProductOptions
 
@@ -50,7 +50,7 @@ object ProductOptions {
 }
 
 object DigitalProductOptions {
-  val productOptions: List[catalog.DigitalProductOptions] = List(Redemption, NoProductOptions)
+  val productOptions: List[catalog.DigitalProductOptions] = List(Corporate, NoProductOptions)
 
   implicit val decoder: Decoder[DigitalProductOptions] =
     Decoder.decodeString.emap(code => fromString(code, productOptions).toRight(s"unrecognised product options '$code'"))

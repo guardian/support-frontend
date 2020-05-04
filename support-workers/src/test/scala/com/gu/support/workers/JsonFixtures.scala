@@ -150,7 +150,8 @@ object JsonFixtures {
     """
       {
         "currency": "GBP",
-        "billingPeriod" : "Annual"
+        "billingPeriod" : "Annual",
+        "productOptions" : "Corporate"
       }
     """
 
