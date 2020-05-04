@@ -44,6 +44,12 @@
     margin-left: -($gu-h-spacing * 1.25);
     margin-right: -($gu-h-spacing * 1.25);
   }
+
+  @include mq($from: mobile) {
+    margin-left: -($gu-h-spacing * 1.25);
+    margin-right: -($gu-h-spacing * 1.25);
+  }
+
   @include mq($from: leftCol) {
     margin-left: -($gu-h-spacing * 4.25);
     margin-right: -($gu-h-spacing * 4.25);
