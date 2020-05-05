@@ -38,7 +38,7 @@ import {
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import DigitalPaymentTerms from 'components/subscriptionCheckouts/digitalPaymentTerms';
+import DigitalPaymentTerms from './digitalPaymentTerms';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
@@ -59,6 +59,7 @@ import GeneralErrorMessage
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { routes } from 'helpers/routes';
+import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 
 // ----- Types ----- //
 
@@ -235,6 +236,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
+          <EndSummaryMobile />
           <DigitalPaymentTerms
             paymentMethod={props.paymentMethod}
           />
