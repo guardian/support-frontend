@@ -117,8 +117,10 @@ function enableOrDisableForm() {
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
 
-    const recaptchaRequired = state.page.user.isPostDeploymentTestUser ? false
-      : state.page.form.paymentMethod === 'Stripe';
+    const disabledIfPostDeploy =
+      state.page.user.isPostDeploymentTestUser ? false : state.page.form.paymentMethod === 'Stripe';
+
+    const recaptchaRequired = window.guardian.recaptchaEnabled ? disabledIfPostDeploy : false;
 
     const recaptchaVerified =
       state.page.form.contributionType !== 'ONE_OFF' ?
@@ -129,7 +131,7 @@ function enableOrDisableForm() {
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn
-      && (recaptchaVerified || !recaptchaRequired);
+      && (!recaptchaRequired || recaptchaVerified);
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
   };
