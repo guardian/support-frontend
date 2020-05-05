@@ -211,11 +211,18 @@
   }
 }
 
-.directDebitTerms {
-  a, a:visited {
-    color: gu-colour(neutral-7);
+.cancellationPolicy {
+  display: none;
+
+  @include mq($from: desktop) {
+    display: block;
   }
-  p {
-    margin-top: 10px;
+}
+
+.endSummay {
+  display: block;
+
+  @include mq($from: desktop) {
+    display: none;
   }
 }

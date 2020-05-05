@@ -25,11 +25,11 @@ describe('getPriceDescription', () => {
         }],
     };
     expect(getPriceDescription(gwAnnual, Annual))
-      .toEqual('£135 for 1 year, then standard rate (£150 every year)');
+      .toEqual('You\'ll pay £135 for 1 year, then £150/year');
 
     const gwQuarterly = { price: 37.5, currency: 'GBP', promotions: [] };
     expect(getPriceDescription(gwQuarterly, Quarterly))
-      .toEqual('£37.50 every quarter');
+      .toEqual('£37.50/quarter');
 
     const gwQuarterlyWithPromo = {
       price: 37.5,
@@ -45,7 +45,7 @@ describe('getPriceDescription', () => {
         }],
     };
     expect(getPriceDescription(gwQuarterlyWithPromo, Quarterly))
-      .toEqual('£31.87 for 1 quarter, then standard rate (£37.50 every quarter)');
+      .toEqual('You\'ll pay £31.87 for 1 quarter, then £37.50/quarter');
 
     const gwSixWeekly = {
       price: 81.30,
@@ -59,6 +59,6 @@ describe('getPriceDescription', () => {
         }],
     };
     expect(getPriceDescription(gwSixWeekly, SixWeekly))
-      .toEqual('US$6 for the first 6 issues (then US$81.30 every quarter)');
+      .toEqual('US$6 for the first 6 issues (then US$81.30/quarter)');
   });
 });

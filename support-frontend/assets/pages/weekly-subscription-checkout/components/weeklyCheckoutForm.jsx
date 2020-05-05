@@ -45,8 +45,7 @@ import { countries } from 'helpers/internationalisation/country';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import CancellationSection
-  from 'components/subscriptionCheckouts/cancellationSection';
+import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import { signOut } from 'helpers/user/user';
 import type {
   Action,
@@ -77,6 +76,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import Total from 'components/subscriptionCheckouts/total/total';
 
 // ----- Types ----- //
 
@@ -332,7 +332,12 @@ function WeeklyCheckoutForm(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
-          <CancellationSection paymentMethod={props.paymentMethod} />
+          <Total
+            price={price.price}
+            currency={props.currencyId}
+            promotions={price.promotions}
+          />
+          <PaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>

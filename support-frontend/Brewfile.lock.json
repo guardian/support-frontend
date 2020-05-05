@@ -11,7 +11,7 @@
         }
       },
       "adoptopenjdk8": {
-        "version": "8,242:b08",
+        "version": "8,252:b09",
         "options": {
           "full_name": "AdoptOpenJDK/openjdk/adoptopenjdk8"
         }
@@ -19,34 +19,34 @@
     },
     "tap": {
       "guardian/devtools": {
-        "revision": "b907f37fbd572d5492d438cd247bf1ac4826ff62"
+        "revision": "3b36cf6abae1b19c647beb30fd42ef8b1325da72"
       }
     },
     "brew": {
       "guardian/devtools/dev-nginx": null,
       "awscli": {
-        "version": "2.0.0",
+        "version": "2.0.10",
         "bottle": {
           "cellar": "/usr/local/Cellar",
           "prefix": "/usr/local",
           "files": {
             "catalina": {
-              "url": "https://homebrew.bintray.com/bottles/awscli-2.0.0.catalina.bottle.tar.gz",
-              "sha256": "3033f2cccdaa092b04280859f72b510cab3d680e4b86eaa626ffccdcbfe9790c"
+              "url": "https://homebrew.bintray.com/bottles/awscli-2.0.10.catalina.bottle.tar.gz",
+              "sha256": "05bd63ee4669aac00204a4606273875654655efe37a40bbfe0f4c5cc3f7b069d"
             },
             "mojave": {
-              "url": "https://homebrew.bintray.com/bottles/awscli-2.0.0.mojave.bottle.tar.gz",
-              "sha256": "10584b5630f3247ecea6cc68b2b3f74ed3b4d165ced46a7646e1b7a02e98db48"
+              "url": "https://homebrew.bintray.com/bottles/awscli-2.0.10.mojave.bottle.tar.gz",
+              "sha256": "4ddd6d30c56eee7991cf14069d97d70896959f01c05a22782aabe861da3f7e62"
             },
             "high_sierra": {
-              "url": "https://homebrew.bintray.com/bottles/awscli-2.0.0.high_sierra.bottle.tar.gz",
-              "sha256": "d9360809cb789c75c9b379564a8168d7f41baa052d14062473bdbc119077435b"
+              "url": "https://homebrew.bintray.com/bottles/awscli-2.0.10.high_sierra.bottle.tar.gz",
+              "sha256": "004bfcc8b0f71d49ac7ae1764191faefe9c91eaa3fe2c11d5baaec957e445889"
             }
           }
         }
       },
       "yarn": {
-        "version": "1.22.1",
+        "version": "1.22.4",
         "bottle": false
       }
     }
@@ -54,9 +54,9 @@
   "system": {
     "macos": {
       "mojave": {
-        "HOMEBREW_VERSION": "2.2.9",
+        "HOMEBREW_VERSION": "2.2.14-31-gcdae58f",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "191f7d18394d49c38e25790ade7aab85703a21e7",
+        "Homebrew/homebrew-core": "433cedc2bd5e83f07ea826fefc90685dbb11a4b6",
         "CLT": "10.3.0.0.1.1562985497",
         "Xcode": "11.3.1",
         "macOS": "10.14.6"

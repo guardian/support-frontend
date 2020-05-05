@@ -77,8 +77,8 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
-import CancellationSection
-  from 'components/subscriptionCheckouts/cancellationSection';
+import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
+import Total from 'components/subscriptionCheckouts/total/total';
 
 // ----- Styles ----- //
 
@@ -360,7 +360,12 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
-          <CancellationSection orderIsAGift paymentMethod={props.paymentMethod} />
+          <Total
+            price={price.price}
+            currency={props.currencyId}
+            promotions={price.promotions}
+          />
+          <PaymentTerms orderIsAGift paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>

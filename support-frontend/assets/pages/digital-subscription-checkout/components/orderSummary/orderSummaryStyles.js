@@ -19,7 +19,7 @@ export const topLine = css`
 
   a, a:visited {
     display: block;
-    ${textSans.small()};
+    ${textSans.medium({ fontWeight: 'bold' })};
     color: ${text.primary};
   }
 
@@ -104,5 +104,13 @@ export const textBlock = css`
     ${from.desktop} {
       display: none;
     }
+  }
+`;
+
+export const endSummary = css`
+  display: none;
+
+  ${from.desktop} {
+    display: block;
   }
 `;
