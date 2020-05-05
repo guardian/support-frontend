@@ -119,7 +119,9 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |        "state": "On"
           |      }
           |    },
-          |    "useDotcomContactPage": "Off"
+          |    "useDotcomContactPage": "Off",
+          |    "enableRecaptchaFrontend": "Off",
+          |    "enableRecaptchaBackend": "Off"
           |  },
           |  "amounts": {
           |    "GBPCountries": {
