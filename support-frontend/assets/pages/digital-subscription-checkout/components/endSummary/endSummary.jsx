@@ -27,8 +27,4 @@ function EndSummary({ promotion, priceDescription }: EndSummaryProps) {
   );
 }
 
-EndSummary.defaultProps = {
-  endSummaryMobile: false,
-};
-
 export default connect(mapStateToProps)(EndSummary);
