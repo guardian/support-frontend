@@ -9,13 +9,11 @@ import DirectDebitTerms from 'components/subscriptionCheckouts/directDebitTerms'
 export default function DigitalPaymentTerms(props: {
   paymentMethod: Option<PaymentMethod>,
 }) {
-  return (
-    <span>
-      {props.paymentMethod === DirectDebit &&
+  return props.paymentMethod === DirectDebit
+    ? (
       <FormSection>
         <DirectDebitTerms />
-      </FormSection>}
-    </span>
-  );
+      </FormSection>)
+    : null;
 
 }
