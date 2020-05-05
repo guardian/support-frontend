@@ -47,7 +47,8 @@ class StripeController(
     val recaptchaBackendEnabled = settingsProvider.getAllSettings().switches.enableRecaptchaBackend.isOn
     val recaptchaFrontendEnabled = settingsProvider.getAllSettings().switches.enableRecaptchaFrontend.isOn
 
-    val recaptchaEnabled = recaptchaBackendEnabled && recaptchaFrontendEnabled
+    // We never validate on backend unless frontend validation is Enabled
+    val recaptchaEnabled = recaptchaFrontendEnabled && recaptchaBackendEnabled
 
     val v2RecaptchaToken = request.body.token
 
@@ -63,7 +64,6 @@ class StripeController(
       else
         EitherT.rightT[Future, String](true)
     // Requests against the test account do not require verification
-
 
     val result = for {
       v <- verified
