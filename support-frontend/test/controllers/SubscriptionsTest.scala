@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.SwitchState.On
+import admin.settings.SwitchState.{Off, On}
 import admin.settings._
 import assets.RefPath
 import cats.data.EitherT
@@ -69,7 +69,9 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       Switches(
         oneOffPaymentMethods = PaymentMethodsSwitch(On, On, On, On, None, None, None, None),
         recurringPaymentMethods = PaymentMethodsSwitch(On, On, On, On, Some(On), Some(On), Some(On), None),
-        experiments = Map.empty, useDotcomContactPage = Some(SwitchState.Off)
+        experiments = Map.empty, useDotcomContactPage = Some(SwitchState.Off),
+        enableRecaptchaBackend = Off,
+        enableRecaptchaFrontend = Off
       ),
       AmountsRegions(amounts, amounts, amounts, amounts, amounts, amounts, amounts),
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),

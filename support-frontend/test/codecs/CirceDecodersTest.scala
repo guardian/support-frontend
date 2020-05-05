@@ -287,7 +287,9 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
               state = On
             )
           ),
-          useDotcomContactPage = Some(Off)
+          useDotcomContactPage = Some(Off),
+          enableRecaptchaBackend = Off,
+          enableRecaptchaFrontend = Off
         ),
         amountsRegions,
         contributionTypes,
