@@ -10,7 +10,6 @@ import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDig
 export type EndSummaryProps = {
   priceDescription: string,
   promotion: Option<?string>,
-  endSummaryMobile?: boolean,
 }
 
 const getPromotion = (productPrice: ProductPrice): Option<?string> =>
