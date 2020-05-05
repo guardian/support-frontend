@@ -1,0 +1,10 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-form-error {
+  .component-form-error__error {
+    margin-top: $gu-v-spacing;
+  }
+}
+.component-form-error__error {
+  margin-top: 0;
+}

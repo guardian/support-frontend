@@ -39,7 +39,8 @@ import {
 } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import DigitalPaymentTerms from 'components/subscriptionCheckouts/digitalPaymentTerms';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import { withStore as withStoreLoqate } from 'components/subscriptionCheckouts/addressSearch/addressComponent';
+import { withStore as withStoreControl } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { DigitalPack } from 'helpers/subscriptions';
@@ -60,6 +61,7 @@ import { StripeProviderForCountry } from 'components/subscriptionCheckouts/strip
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { routes } from 'helpers/routes';
 import Total from 'components/subscriptionCheckouts/total/total';
+import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Types ----- //
 
@@ -82,6 +84,7 @@ type PropTypes = {|
   validateForm: () => Function,
   formIsValid: Function,
   addressErrors: Array<Object>,
+  participations: Participations,
 |};
 
 // ----- Map State/Props ----- //
@@ -105,6 +108,7 @@ function mapStateToProps(state: CheckoutState) {
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
     addressErrors: state.page.billingAddress.fields.formErrors,
+    participations: state.common.abParticipations,
   };
 }
 
@@ -130,7 +134,8 @@ function mapDispatchToProps() {
   };
 }
 
-const Address = withStore(countries, 'billing', getBillingAddress);
+const LocateAddress = withStoreLoqate(countries, 'billing', getBillingAddress);
+const ControlAddress = withStoreControl(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 
@@ -143,6 +148,8 @@ function DigitalCheckoutForm(props: PropTypes) {
 
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
+
+  const Address = props.participations.fancyAddressTest === 'loqate' ? LocateAddress : ControlAddress;
 
   return (
     <Content>

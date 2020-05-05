@@ -8,6 +8,7 @@ export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
+const digitalCheckout = '/subscribe/digital/checkout';
 
 export const tests: Tests = {
   usAmountsTest: {
@@ -53,6 +54,29 @@ export const tests: Tests = {
     referrerControlled: false,
     seed: 2,
     targetPage: contributionsLandingPageMatch,
+  },
+
+  fancyAddressTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'loqate',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    seed: 3,
+    targetPage: digitalCheckout,
+    optimizeId: '3sSS81FKT6SXawegvxyK-A',
   },
 };
 
