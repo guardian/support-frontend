@@ -39,7 +39,7 @@ function TermsPrivacy(props: PropTypes) {
   };
 
   const patronsLink = <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">Find out more today</a>;
-  const americasContactLink = <a href={"mailto:northamerica.help@guardian.co.uk"}>contact us</a>
+  const americasContactLink = <a href={"mailto:us.philanthropy@theguardian.com"}>contact us</a>
 
   const patronText = (
     <div className="patrons">
