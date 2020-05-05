@@ -69,6 +69,13 @@ trait Controllers {
     appConfig.recaptchaConfigProvider
   )
 
+  lazy val digitalRedemptionController = new DigitalRedemption(
+    actionRefiners,
+    identityService,
+    membersDataService,
+    controllerComponents
+  )
+
   lazy val paperController = new PaperSubscription(
     priceSummaryServiceProvider,
     assetsResolver,

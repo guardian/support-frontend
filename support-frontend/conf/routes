@@ -92,6 +92,8 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.D
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
 GET  /subscribe/digital/checkout                                   controllers.DigitalSubscription.displayForm()
 GET  /subscribe/digital/checkout/thankyou-existing                 controllers.DigitalSubscription.displayThankYouExisting()
+GET  /subscribe/digital/redeem                                     controllers.DigitalRedemption.displayForm()
+# GET  /r/:redemptionCode                                            controllers.Application.permanentRedirect(location = s"/subscribe/digital/redeem${})
 
 GET  /weekly                                                       controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly                                             controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = false)
