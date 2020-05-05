@@ -13,14 +13,11 @@ import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
 import com.gu.support.zuora.api._
-import com.gu.zuora.ProductSubscriptionBuilders.allowFixedTermSubs
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
 import scala.util.{Failure, Success, Try}
 
 object ProductSubscriptionBuilders {
-
-  val allowFixedTermSubs = true // TODO: remove this flag once we're live
 
   def validateRatePlan(maybeProductRatePlan: Option[ProductRatePlan[catalog.Product]], productDescription: String): ProductRatePlanId =
     maybeProductRatePlan.map(_.id) match {
@@ -123,7 +120,7 @@ object ProductSubscriptionBuilders {
       }
 
       val environment = fromStage(stage, isTestUser)
-      val gift = allowFixedTermSubs && readerType == ReaderType.Gift
+      val gift = readerType == ReaderType.Gift
 
       val recurringProductRatePlanId = validateRatePlan(guardianWeekly.productRatePlan(environment, fixedTerm = gift), guardianWeekly.describe)
 
@@ -160,7 +157,7 @@ trait ProductSubscriptionBuilder {
     readerType: ReaderType = ReaderType.Direct,
     initialTermMonths: Int = 12
   ) = {
-    val (initialTerm, autoRenew, initialTermPeriodType) = if(allowFixedTermSubs && readerType == ReaderType.Gift)
+    val (initialTerm, autoRenew, initialTermPeriodType) = if(readerType == ReaderType.Gift)
       (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, Day)
     else
       (12, true, Month)
