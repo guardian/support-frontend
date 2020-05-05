@@ -120,8 +120,7 @@ class SupportWorkersClient(
   def createSubscription(
     request: AnyAuthRequest[CreateSupportWorkersRequest],
     user: User,
-    requestId: UUID,
-    promoCode: Option[PromoCode] = None
+    requestId: UUID
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {
     SafeLogger.info(s"$requestId: debug info ${request.body.debugInfo}")
 
