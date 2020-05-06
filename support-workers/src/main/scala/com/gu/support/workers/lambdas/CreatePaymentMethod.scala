@@ -37,7 +37,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         getCreateSalesforceContactState(state, None),
         requestInfo
           .appendMessage(s"No Payment method present")
-          .appendMessage(s"Product is a corporate Digital Subscription")
+          .appendMessage(s"Product is ${state.product.describe}")
       ))
     )
   }
