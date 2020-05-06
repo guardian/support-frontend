@@ -128,6 +128,7 @@ trait Controllers {
     identityService = identityService,
     v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey,
     testStripeConfig = appConfig.regularStripeConfigProvider.get(true),
+    allSettingsProvider,
     appConfig.stage
   )
 

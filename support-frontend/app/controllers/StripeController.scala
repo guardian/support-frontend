@@ -1,6 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.settings.AllSettingsProvider
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client, createSetupIntentRequest}
 import com.gu.support.config.{Stage, StripeConfig}
@@ -32,6 +33,7 @@ class StripeController(
   identityService: IdentityService,
   v2RecaptchaKey: String,
   testStripeConfig: StripeConfig,
+  settingsProvider: AllSettingsProvider,
   stage: Stage
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
@@ -42,6 +44,12 @@ class StripeController(
   import services.SetupIntent.encoder
 
   def createSetupIntentRecaptcha: Action[SetupIntentRequestRecaptcha] = PrivateAction.async(circe.json[SetupIntentRequestRecaptcha]) { implicit request =>
+    val recaptchaBackendEnabled = settingsProvider.getAllSettings().switches.enableRecaptchaBackend.isOn
+    val recaptchaFrontendEnabled = settingsProvider.getAllSettings().switches.enableRecaptchaFrontend.isOn
+
+    // We never validate on backend unless frontend validation is Enabled
+    val recaptchaEnabled = recaptchaFrontendEnabled && recaptchaBackendEnabled
+
     val v2RecaptchaToken = request.body.token
 
     val cloudwatchEvent = createSetupIntentRequest(stage, "v2Recaptcha")
@@ -50,12 +58,13 @@ class StripeController(
     val testPublicKeys = Set(testStripeConfig.australiaAccount.publicKey,
       testStripeConfig.defaultAccount.publicKey)
 
+    // Requests against the test account do not require verification
     val verified =
-      if (testPublicKeys(request.body.stripePublicKey))
-        // Requests against the test account do not require verification
-        EitherT.rightT[Future, String](true)
-      else
+      if (recaptchaEnabled && !testPublicKeys(request.body.stripePublicKey))
         recaptchaService.verify(v2RecaptchaToken, v2RecaptchaKey).map(_.success)
+      else
+        EitherT.rightT[Future, String](true)
+
 
     val result = for {
       v <- verified

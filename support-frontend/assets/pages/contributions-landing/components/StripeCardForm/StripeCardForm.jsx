@@ -235,17 +235,19 @@ class CardForm extends Component<PropTypes, StateTypes> {
     // Note - because this value is requested asynchronously when the component loads,
     // it's possible for it to arrive after the user clicks 'Contribute'.
     // This is handled in the callback below by checking the value of paymentWaiting.
-    if (window.grecaptcha && window.grecaptcha.render) {
-      this.setupRecurringRecaptchaCallback();
-    } else {
-      window.v2OnloadCallback = this.setupRecurringRecaptchaCallback;
+    if (window.guardian.recaptchaEnabled) {
+      if (window.grecaptcha && window.grecaptcha.render) {
+        this.setupRecurringRecaptchaCallback();
+      } else {
+        window.v2OnloadCallback = this.setupRecurringRecaptchaCallback;
+      }
     }
 
     this.props.setCreateStripePaymentMethod(() => {
       this.props.setPaymentWaiting(true);
 
       // Post-deploy tests bypass recaptcha, and no verification happens server-side for the test Stripe account
-      if (this.props.postDeploymentTestUser) {
+      if (!window.guardian.recaptchaEnabled || this.props.postDeploymentTestUser) {
         fetchJson(
           routes.stripeSetupIntentRecaptcha,
           requestOptions(
@@ -274,10 +276,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
   }
 
   setupOneOffHandlers(): void {
-    if (window.grecaptcha && window.grecaptcha.render) {
-      this.setupRecaptchaTokenForOneOff();
-    } else {
-      window.v2OnloadCallback = this.setupRecaptchaTokenForOneOff;
+    if (window.guardian.recaptchaEnabled) {
+      if (window.grecaptcha && window.grecaptcha.render) {
+        this.setupRecaptchaTokenForOneOff();
+      } else {
+        window.v2OnloadCallback = this.setupRecaptchaTokenForOneOff;
+      }
     }
 
     this.props.setCreateStripePaymentMethod(() => {
@@ -423,18 +427,20 @@ class CardForm extends Component<PropTypes, StateTypes> {
           </div>
         </div>
         {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
+        { window.guardian.recaptchaEnabled ?
+          <div className="form__field">
 
-        <div className="form__field">
-          <label className="form__label" htmlFor="robot_checkbox">
-            <span>Security check</span>
-          </label>
-          <Recaptcha />
-          {
-            this.props.checkoutFormHasBeenSubmitted
-            && !recaptchaVerified ?
-              renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
-          }
-        </div>
+            <label className="form__label" htmlFor="robot_checkbox">
+              <span>Security check</span>
+            </label>
+            <Recaptcha />
+            {
+              this.props.checkoutFormHasBeenSubmitted
+              && !recaptchaVerified ?
+                renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
+            }
+          </div>
+          : null }
       </div>
     );
   }

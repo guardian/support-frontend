@@ -129,7 +129,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   };
 
   setupRecurringHandlers(): void {
-    if (isPostDeployUser()) {
+    if (!window.guardian.recaptchaEnabled || isPostDeployUser()) {
       this.fetchPaymentIntent('dummy');
     } else if (window.grecaptcha && window.grecaptcha.render) {
       this.setupRecurringRecaptchaCallback();
@@ -245,7 +245,8 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   }
 
   checkRecaptcha() {
-    if (!isPostDeployUser() &&
+    if (window.guardian.recaptchaEnabled &&
+      !isPostDeployUser() &&
       !this.state.recaptchaCompleted &&
       !this.props.allErrors.find(error => error.field === 'recaptcha')) {
       this.props.allErrors.push({

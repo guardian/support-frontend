@@ -7,6 +7,8 @@ case class Switches(
   oneOffPaymentMethods: PaymentMethodsSwitch,
   recurringPaymentMethods: PaymentMethodsSwitch,
   useDotcomContactPage: Option[SwitchState],
+  enableRecaptchaBackend: SwitchState,
+  enableRecaptchaFrontend: SwitchState,
   experiments: Map[String, ExperimentSwitch]
 )
 

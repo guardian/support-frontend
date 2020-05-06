@@ -111,6 +111,7 @@
 
   window.guardian.forceCampaign = @settings.switches.experiments.get("forceCampaign").exists(_.isOn)
 
+  window.guardian.recaptchaEnabled = @settings.switches.enableRecaptchaFrontend.isOn
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
   </script>
 }
