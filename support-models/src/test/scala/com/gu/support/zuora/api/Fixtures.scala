@@ -277,7 +277,7 @@ object Fixtures {
       SubscribeItem(account(),
       contactDetails,
       None,
-        Some(payPalPaymentMethod),
+      Some(payPalPaymentMethod),
       invalidMonthlySubsData,
       SubscribeOptions())
     )
