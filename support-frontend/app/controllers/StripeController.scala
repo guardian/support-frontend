@@ -58,12 +58,13 @@ class StripeController(
     val testPublicKeys = Set(testStripeConfig.australiaAccount.publicKey,
       testStripeConfig.defaultAccount.publicKey)
 
+    // Requests against the test account do not require verification
     val verified =
       if (recaptchaEnabled && !testPublicKeys(request.body.stripePublicKey))
         recaptchaService.verify(v2RecaptchaToken, v2RecaptchaKey).map(_.success)
       else
         EitherT.rightT[Future, String](true)
-    // Requests against the test account do not require verification
+
 
     val result = for {
       v <- verified

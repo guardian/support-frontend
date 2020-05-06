@@ -117,10 +117,10 @@ function enableOrDisableForm() {
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
 
-    const disabledIfPostDeploy =
-      state.page.user.isPostDeploymentTestUser ? false : state.page.form.paymentMethod === 'Stripe';
-
-    const recaptchaRequired = window.guardian.recaptchaEnabled ? disabledIfPostDeploy : false;
+    const recaptchaRequired =
+      window.guardian.recaptchaEnabled &&
+      state.page.form.paymentMethod === 'Stripe' &&
+      !state.page.user.isPostDeploymentTestUser;
 
     const recaptchaVerified =
       state.page.form.contributionType !== 'ONE_OFF' ?
