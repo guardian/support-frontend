@@ -1,7 +1,9 @@
 package backend
 
+import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
+import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
@@ -19,6 +21,8 @@ import org.scalatest.PrivateMethodTester._
 import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{Matchers, WordSpec}
+import play.api.libs.ws.WSClient
+import services.SwitchState.On
 import services._
 import util.FutureEitherValues
 
@@ -95,6 +99,8 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(RecaptchaResponse(true)))
   val recaptchaServiceFail: EitherT[Future, StripeApiError, RecaptchaResponse] =
     EitherT.right(Future.successful(RecaptchaResponse(false)))
+  val switchServiceOnResponse: EitherT[Future, Nothing, Switches] =
+    EitherT.right(Future.successful(Switches(Some(On), Some(On))))
 
   //-- service mocks
   val mockStripeService: StripeService = mock[StripeService]
@@ -104,6 +110,13 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockEmailService: EmailService = mock[EmailService]
   val mockRecaptchaService: RecaptchaService = mock[RecaptchaService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
+  val mockSwitchService: SwitchService = mock[SwitchService]
+  implicit val mockWsClient: WSClient = mock[WSClient]
+  implicit val mockActorSystem: ActorSystem = mock[ActorSystem]
+  implicit val mockS3Client: AmazonS3 = mock[AmazonS3]
+
+  // happens on instantiation of StripeBackend
+  when(mockSwitchService.recaptchaSwitches).thenReturn(switchServiceOnResponse)
 
   //-- test obj
   val stripeBackend = new StripeBackend(
@@ -114,7 +127,10 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockEmailService,
     mockRecaptchaService,
     mockCloudWatchService,
-    Live)(new DefaultThreadPool(ec))
+    mockSwitchService,
+    Live
+    )(new DefaultThreadPool(ec), mockWsClient)
+
 
   def populateChargeMock(): Unit = {
     when(chargeMock.getId).thenReturn("id")
@@ -150,7 +166,8 @@ class StripeBackendSpec
   extends WordSpec
     with Matchers
     with FutureEitherValues
-    with IntegrationPatience {
+    with IntegrationPatience
+with WSClientProvider {
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 

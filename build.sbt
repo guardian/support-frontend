@@ -19,6 +19,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.amazonaws" % "aws-java-sdk-ssm" % AWSJavaSDKVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % AWSJavaSDKVersion,
+  "com.amazonaws" % "aws-java-sdk-s3" % AWSJavaSDKVersion,
   "com.amazonaws" % "aws-java-sdk-ec2" % AWSJavaSDKVersion,
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % AWSJavaSDKVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % AWSJavaSDKVersion,
@@ -57,6 +58,7 @@ libraryDependencies ++= Seq(
   jdbc,
   ws,
   "com.lihaoyi" %% "pprint" % "0.5.3",
+  "com.github.blemale" %% "scaffeine" % "3.1.0",
   "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
 )
 

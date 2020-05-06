@@ -253,6 +253,13 @@ Resources:
             - Effect: Allow
               Action: kms:Encrypt
               Resource: !Ref SqsKmsArn
+        - PolicyName: SettingsBucket
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource:
+                  - !Sub arn:aws:s3:::support-admin-console/${Stage}/*
 
 
 

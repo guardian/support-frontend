@@ -1,10 +1,12 @@
 
 import _root_.controllers._
+import akka.actor.ActorSystem
 import aws.AWSClientBuilder
 import backend._
 import com.amazon.pay.impl.ipn.NotificationFactory
 import com.amazon.pay.response.ipn.model.Notification
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
+import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.typesafe.scalalogging.StrictLogging
 import conf.{ConfigLoader, PlayConfigUpdater}
@@ -63,6 +65,8 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
   override val threadPools: AppThreadPools = AppThreadPools.load(executionContext, actorSystem).valueOr(throw _)
 
   implicit val _wsClient: WSClient = wsClient
+  implicit val s3Client: AmazonS3 = AWSClientBuilder.buildS3Client
+  private implicit val system: ActorSystem = ActorSystem()
 
   override lazy val httpErrorHandler = new ErrorHandler(environment, configuration, sourceMapper, Some(router))
 

@@ -1,10 +1,12 @@
 package backend
 
+import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
+import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
@@ -15,17 +17,16 @@ import model._
 import model.acquisition.StripeAcquisition
 import model.db.ContributionData
 import model.email.ContributorRow
+import model.stripe.StripeApiError.recaptchaErrorText
 import model.stripe.StripePaymentMethod.{StripeApplePay, StripePaymentRequestButton}
 import model.stripe.{StripePaymentIntentRequest, _}
 import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
-import StripeApiError.recaptchaErrorText
 
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
-// Provides methods required by the Stripe controller
 class StripeBackend(
                      stripeService: StripeService,
                      databaseService: ContributionsStoreService,
@@ -34,8 +35,16 @@ class StripeBackend(
                      emailService: EmailService,
                      recaptchaService: RecaptchaService,
                      cloudWatchService: CloudWatchService,
+                     switchService: SwitchService,
                      environment: Environment
-)(implicit pool: DefaultThreadPool) extends StrictLogging {
+)(implicit pool: DefaultThreadPool, WSClient: WSClient) extends StrictLogging {
+
+  switchService.startPoller()
+
+  // We only want the backend switch to be valid if the frontend switch is enabled
+  private def recaptchaEnabled =
+    switchService.recaptchaSwitches
+      .map(s => s.enableRecaptchaFrontend.exists(_.isOn) && s.enableRecaptchaBackend.exists(_.isOn))
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   // Legacy handler for the Stripe Charges API
@@ -70,6 +79,29 @@ class StripeBackend(
   def createPaymentIntent(
     request: StripePaymentIntentRequest.CreatePaymentIntent,
     clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
+
+    def isApplePay = request.paymentData.stripePaymentMethod match {
+      case Some(StripeApplePay) | Some(StripePaymentRequestButton) => true
+      case _ => false
+    }
+
+    // Check the Switch Bypass Recaptcha for Test Stripe account // Apple Pay on Live
+    // Note that in DEV/CODE there is no Live StripeBackend, so it will never verify Recaptcha
+    def recaptchaRequired() =
+      recaptchaEnabled.map {
+        case true =>
+          environment match {
+            case Live if isApplePay =>
+              false
+            case Live =>
+              true
+            case Test =>
+              false
+          }
+        case _ =>
+          false
+      }
+
     def createIntent(): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] =
       stripeService.createPaymentIntent(request)
         .leftMap(err => {
@@ -97,20 +129,15 @@ class StripeBackend(
           }
         }
 
-    // Bypass Recaptcha for Test Stripe account
-    // Note that in DEV/CODE there is no Live StripeBackend, so it will never verify Recaptcha
-    environment match {
-      case Test => createIntent()
-      case Live =>
-        request.paymentData.stripePaymentMethod match {
-          case Some(StripeApplePay) | Some(StripePaymentRequestButton) => createIntent()
-          case _ =>
-            recaptchaService
-              .verify(request.recaptchaToken)
-              .flatMap { resp =>
-                if (resp.success) createIntent() else EitherT.leftT(StripeApiError.fromString(recaptchaErrorText, publicKey = None))
-              }
-        }
+   recaptchaRequired().flatMap {
+      case true =>
+        recaptchaService
+          .verify(request.recaptchaToken)
+          .flatMap { resp =>
+            if (resp.success) createIntent() else EitherT.leftT(StripeApiError.fromString(recaptchaErrorText, publicKey = None))
+          }
+      case false =>
+        createIntent()
     }
   }
 
@@ -242,16 +269,29 @@ object StripeBackend {
                      emailService: EmailService,
                      recaptchaService: RecaptchaService,
                      cloudWatchService: CloudWatchService,
+                     switchService: SwitchService,
                      environment: Environment
-  )(implicit pool: DefaultThreadPool): StripeBackend = {
-    new StripeBackend(stripeService, databaseService, identityService, ophanService, emailService, recaptchaService, cloudWatchService, environment)
+  )(implicit pool: DefaultThreadPool,
+    WSClient: WSClient,
+    awsClient: AmazonS3): StripeBackend = {
+    new StripeBackend(stripeService,
+      databaseService,
+      identityService,
+      ophanService,
+      emailService,
+      recaptchaService,
+      cloudWatchService,
+      switchService,
+      environment)
   }
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
     implicit defaultThreadPool: DefaultThreadPool,
     stripeThreadPool: StripeThreadPool,
     sqsThreadPool: SQSThreadPool,
-    wsClient: WSClient
+    wsClient: WSClient,
+    awsClient: AmazonS3,
+    system: ActorSystem
   ) extends EnvironmentBasedBuilder[StripeBackend] {
 
     override def build(env: Environment): InitializationResult[StripeBackend] = (
@@ -272,6 +312,7 @@ object StripeBackend {
         .loadConfig[Environment, RecaptchaConfig](env)
         .andThen(RecaptchaService.fromRecaptchaConfig): InitializationResult[RecaptchaService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
+      new SwitchService(env)(awsClient, system, stripeThreadPool).valid: InitializationResult[SwitchService],
       env.valid: InitializationResult[Environment]
     ).mapN(StripeBackend.apply)
   }
