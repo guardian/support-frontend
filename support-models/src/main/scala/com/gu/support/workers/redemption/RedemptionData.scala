@@ -10,7 +10,7 @@ abstract class RedemptionData(val redemptionCode: RedemptionCode) {
   def redeem(subscription: Subscription) = subscription.copy(redemptionCode = Some(redemptionCode))
 }
 
-case class Corporate(override val redemptionCode: RedemptionCode, corporateAccountId: CorporateAccountId) extends RedemptionData(redemptionCode) {
+case class CorporateRedemption(override val redemptionCode: RedemptionCode, corporateAccountId: CorporateAccountId) extends RedemptionData(redemptionCode) {
   override def redeem(subscription: Subscription) =
     super.redeem(subscription)
       .copy(
@@ -22,14 +22,14 @@ case class Corporate(override val redemptionCode: RedemptionCode, corporateAccou
 object RedemptionData {
     import Codec.deriveCodec
     import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
-    implicit val corporateCodec: Codec[Corporate] = deriveCodec
+    implicit val corporateCodec: Codec[CorporateRedemption] = deriveCodec
 
     implicit val encoder: Encoder[RedemptionData] = Encoder.instance {
-      case c: Corporate => c.asJson
+      case c: CorporateRedemption => c.asJson
     }
 
     implicit val decoder: Decoder[RedemptionData] =
       List[Decoder[RedemptionData]](
-        Decoder[Corporate].widen
+        Decoder[CorporateRedemption].widen
       ).reduceLeft(_ or _)
 }
