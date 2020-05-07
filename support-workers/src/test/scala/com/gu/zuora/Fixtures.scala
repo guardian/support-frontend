@@ -8,6 +8,7 @@ import com.gu.support.catalog
 import com.gu.support.catalog.{Everyday, HomeDelivery}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.workers._
+import com.gu.support.workers.states.PaidProduct
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
 
@@ -99,7 +100,7 @@ object Fixtures {
         account(currency),
         contactDetails,
         None,
-        Some(creditCardPaymentMethod(StripeServiceForCurrency.paymentIntentGateway(currency))),
+        PaidProduct(creditCardPaymentMethod(StripeServiceForCurrency.paymentIntentGateway(currency))),
         monthlySubscriptionData,
         SubscribeOptions()
       )
@@ -107,7 +108,7 @@ object Fixtures {
 
   def directDebitSubscriptionRequest: SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, Some(directDebitPaymentMethod), monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, PaidProduct(directDebitPaymentMethod), monthlySubscriptionData, SubscribeOptions())
     ))
 
   def directDebitSubscriptionRequestPaper: SubscribeRequest =
@@ -116,7 +117,7 @@ object Fixtures {
         account(paymentGateway = DirectDebitGateway),
         contactDetails,
         Some(differentContactDetails),
-        Some(directDebitPaymentMethod),
+        PaidProduct(directDebitPaymentMethod),
         everydayPaperSubscriptionData,
         SubscribeOptions()
       )
@@ -135,7 +136,7 @@ object Fixtures {
     Subscription(date, date, date, "id123", termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account(), contactDetails, None, Some(creditCardPaymentMethod(StripeGatewayDefault)), invalidMonthlySubsData, SubscribeOptions())
+    SubscribeItem(account(), contactDetails, None, PaidProduct(creditCardPaymentMethod(StripeGatewayDefault)), invalidMonthlySubsData, SubscribeOptions())
   ))
 
   val incorrectPaymentMethod = SubscribeRequest(
@@ -143,7 +144,7 @@ object Fixtures {
       SubscribeItem(account(),
         contactDetails,
         None,
-        Some(payPalPaymentMethod),
+        PaidProduct(payPalPaymentMethod),
         invalidMonthlySubsData,
         SubscribeOptions()
       )

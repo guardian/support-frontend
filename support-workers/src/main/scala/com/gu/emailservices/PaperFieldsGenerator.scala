@@ -4,6 +4,7 @@ import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.promotions.Promotion
 import com.gu.support.workers._
+import com.gu.support.workers.states.{FreeProduct, PaidProduct, PaymentDetails}
 import org.joda.time.LocalDate
 
 //noinspection ScalaStyle
@@ -16,7 +17,7 @@ object PaperFieldsGenerator {
     paymentSchedule: PaymentSchedule,
     firstDeliveryDate: Option[LocalDate],
     currency: Currency,
-    paymentMethod: Option[PaymentMethod],
+    paymentMethod: PaymentDetails[PaymentMethod],
     sfContactId: SfContactId,
     directDebitMandateId: Option[String],
     promotion: Option[Promotion],
@@ -64,26 +65,26 @@ object PaperFieldsGenerator {
   }
 
   protected def getPaymentFields(
-    paymentMethod: Option[PaymentMethod],
+    paymentMethod: PaymentDetails[PaymentMethod],
     directDebitMandateId: Option[String]
   ): Seq[(String, String)] = paymentMethod match {
-    case Some(dd: DirectDebitPaymentMethod) => List(
+    case PaidProduct(dd: DirectDebitPaymentMethod) => List(
       "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
       "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
       "account_holder" -> dd.bankTransferAccountName,
       "payment_method" -> "Direct Debit",
       "mandate_id" -> directDebitMandateId.getOrElse("")
     )
-    case Some(dd: ClonedDirectDebitPaymentMethod) => List(
+    case PaidProduct(dd: ClonedDirectDebitPaymentMethod) => List(
       "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
       "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
       "account_holder" -> dd.bankTransferAccountName,
       "payment_method" -> "Direct Debit",
       "mandate_id" -> dd.mandateId
     )
-    case Some(_: CreditCardReferenceTransaction) => List("payment_method" -> "Credit/Debit Card")
-    case Some(_: PayPalReferenceTransaction) => List("payment_method" -> "PayPal")
-    case None => Nil
+    case PaidProduct(_: CreditCardReferenceTransaction) => List("payment_method" -> "Credit/Debit Card")
+    case PaidProduct(_: PayPalReferenceTransaction) => List("payment_method" -> "PayPal")
+    case FreeProduct => Nil
   }
 
 }

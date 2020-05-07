@@ -15,6 +15,7 @@ import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.integration.TestData.directDebitPaymentMethod
 import com.gu.support.workers.lambdas.SendThankYouEmail
+import com.gu.support.workers.states.PaidProduct
 import com.gu.test.tags.objects.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json
@@ -51,7 +52,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       "",
       Monthly,
       SfContactId("sfContactId"),
-      Some(directDebitPaymentMethod),
+      PaidProduct(directDebitPaymentMethod),
       Some(mandateId)
     )
     val resultJson = parse(ef.payload)
@@ -99,7 +100,7 @@ object SendThankYouEmailManualTest {
       new DateTime(1999, 12, 31, 11, 59),
       20,
       Currency.GBP,
-      "UK", "", Monthly, salesforceContactId, Some(directDebitPaymentMethod), Some(mandateId)
+      "UK", "", Monthly, salesforceContactId, PaidProduct(directDebitPaymentMethod), Some(mandateId)
     )
     val service = new EmailService
     service.send(ef)
@@ -115,7 +116,7 @@ object SendThankYouEmailManualTest {
       user,
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
       GBP,
-      Some(directDebitPaymentMethod),
+      PaidProduct(directDebitPaymentMethod),
       salesforceContactId,
       Some(mandateId)
     )
@@ -151,7 +152,7 @@ object SendThankYouEmailManualTest {
       PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
       Some(new LocalDate(2019, 3, 26)),
       GBP,
-      Some(directDebitPaymentMethod),
+      PaidProduct(directDebitPaymentMethod),
       salesforceContactId,
       Some(mandateId)
     )
@@ -189,7 +190,7 @@ object SendThankYouEmailManualTest {
       )),
       Some(new LocalDate(2019, 3, 26)),
       GBP,
-      Some(directDebitPaymentMethod),
+      PaidProduct(directDebitPaymentMethod),
       salesforceContactId,
       Some(mandateId),
     )
@@ -224,7 +225,7 @@ object SendThankYouEmailManualTest {
       PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50))),
       Some(new LocalDate(2019, 3, 26)),
       GBP,
-      Some(directDebitPaymentMethod),
+      PaidProduct(directDebitPaymentMethod),
       salesforceContactId,
       Some(mandateId),
       giftRecipient = Some(GiftRecipient(None, "Earl", "Palmer", None))

@@ -9,7 +9,7 @@ import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PreparePaymentMethodForReuseState}
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaidProduct, PreparePaymentMethodForReuseState}
 import com.gu.support.zuora.api.PaymentGateway
 import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodDirectDebitResponse, GetPaymentMethodResponse}
 
@@ -43,7 +43,7 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
           giftRecipient = state.giftRecipient,
           redemptionData = state.redemptionData,
           product = state.product,
-          paymentMethod = Some(paymentMethod),
+          paymentMethod = PaidProduct(paymentMethod),
           firstDeliveryDate = None,
           promoCode = None,
           salesforceContacts = SalesforceContactRecords(sfContact, None),

@@ -13,8 +13,8 @@ case class FailureHandlerState(
   giftRecipient: Option[GiftRecipient],
   redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentFields: Option[PaymentFields], //Will be present if CreatePaymentMethod failed
-  paymentMethod: Option[PaymentMethod], //Will be present if anything after CreatePaymentMethod failed
+  paymentFields: PaymentDetails[PaymentFields], //Will be present if CreatePaymentMethod failed
+  paymentMethod: PaymentDetails[PaymentMethod], //Will be present if anything after CreatePaymentMethod failed
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode]
 ) extends StepFunctionUserState

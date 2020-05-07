@@ -4,7 +4,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.JsonFixtures.{validBaid, _}
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreatePaymentMethodState
+import com.gu.support.workers.states.{CreatePaymentMethodState, PaidProduct}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Json
 import io.circe.generic.auto._
@@ -89,7 +89,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       case _ => fail()
     }
     result.paymentFields match {
-      case Some(paypal: PayPalPaymentFields) => paypal.baid should be(validBaid)
+      case PaidProduct(paypal: PayPalPaymentFields) => paypal.baid should be(validBaid)
       case _ => fail()
     }
   }
@@ -102,7 +102,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
         case _ => fail()
       }
       result.paymentFields match {
-        case Some(dd: DirectDebitPaymentFields) => dd.accountHolderName should be(mickeyMouse)
+        case PaidProduct(dd: DirectDebitPaymentFields) => dd.accountHolderName should be(mickeyMouse)
         case _ => fail()
       }
     })

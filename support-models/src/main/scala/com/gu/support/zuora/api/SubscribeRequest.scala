@@ -4,6 +4,7 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.PaymentMethod
+import com.gu.support.workers.states.PaymentDetails
 
 object SubscribeItem {
   implicit val codec: Codec[SubscribeItem] = capitalizingCodec
@@ -13,7 +14,7 @@ case class SubscribeItem(
   account: Account,
   billToContact: ContactDetails,
   soldToContact: Option[ContactDetails],
-  paymentMethod: Option[PaymentMethod],
+  paymentMethod: PaymentDetails[PaymentMethod],
   subscriptionData: SubscriptionData,
   subscribeOptions: SubscribeOptions
 )

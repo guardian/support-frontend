@@ -180,7 +180,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
     sfContactId__c = state.salesforceContacts.recipient.Id,
     identityId__c = state.user.id,
-    paymentGateway = state.paymentMethod.map(_.paymentGateway),
+    paymentGateway = state.paymentMethod.map(_.paymentGateway).toOption,
     createdRequestId__c = state.requestId.toString,
     autoPay = state.paymentMethod.isDefined
   )

@@ -8,6 +8,7 @@ import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers._
+import com.gu.support.workers.states.PaymentDetails
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -84,7 +85,7 @@ case class LambdaExecutionResult(
   status: LambdaExecutionStatus,
   isTestUser: Boolean,
   product: ProductType,
-  paymentDetails: Option[PaymentProvider],
+  paymentDetails: PaymentDetails[PaymentProvider],
   firstDeliveryDate: Option[LocalDate],
   isGift: Boolean,
   promoCode: Option[PromoCode],

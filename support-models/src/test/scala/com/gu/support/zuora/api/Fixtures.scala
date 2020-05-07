@@ -2,6 +2,7 @@ package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
+import com.gu.support.workers.states.PaidProduct
 import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction, StripePaymentType}
 import org.joda.time.LocalDate
 
@@ -248,12 +249,12 @@ object Fixtures {
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(currency), contactDetails, Some(contactDetails), Some(creditCardPaymentMethod), monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(currency), contactDetails, Some(contactDetails), PaidProduct(creditCardPaymentMethod), monthlySubscriptionData, SubscribeOptions())
     ))
 
   def directDebitSubscriptionRequest: SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, Some(directDebitPaymentMethod), monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, PaidProduct(directDebitPaymentMethod), monthlySubscriptionData, SubscribeOptions())
     ))
 
   val invalidMonthlySubsData = SubscriptionData(
@@ -269,7 +270,7 @@ object Fixtures {
     Subscription(date, date, date, "id123", termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account(), contactDetails, None, Some(creditCardPaymentMethod), invalidMonthlySubsData, SubscribeOptions())
+    SubscribeItem(account(), contactDetails, None, PaidProduct(creditCardPaymentMethod), invalidMonthlySubsData, SubscribeOptions())
   ))
 
   val incorrectPaymentMethod = SubscribeRequest(
@@ -277,7 +278,7 @@ object Fixtures {
       SubscribeItem(account(),
       contactDetails,
       None,
-      Some(payPalPaymentMethod),
+      PaidProduct(payPalPaymentMethod),
       invalidMonthlySubsData,
       SubscribeOptions())
     )

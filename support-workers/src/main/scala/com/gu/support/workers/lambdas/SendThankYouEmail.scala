@@ -13,7 +13,7 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.{PromoCode, Promotion, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
-import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.states.{PaidProduct, SendThankYouEmailState}
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._
@@ -39,7 +39,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
   }
 
   def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentMethod match {
-    case Some(_: DirectDebitPaymentMethod) =>
+    case PaidProduct(_: DirectDebitPaymentMethod) =>
       zuoraService.getMandateIdFromAccountNumber(state.accountNumber)
     case _ => Future.successful(None)
   }

@@ -14,7 +14,7 @@ case class CreatePaymentMethodState(
   giftRecipient: Option[GiftRecipient],
   redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentFields: Option[PaymentFields],
+  paymentFields: PaymentDetails[PaymentFields],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]

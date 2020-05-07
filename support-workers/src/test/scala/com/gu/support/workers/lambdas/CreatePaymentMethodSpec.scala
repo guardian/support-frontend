@@ -15,7 +15,7 @@ import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.exceptions.RetryNone
-import com.gu.support.workers.states.CreateSalesforceContactState
+import com.gu.support.workers.states.{CreateSalesforceContactState, PaidProduct}
 import com.gu.test.tags.objects.IntegrationTest
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -38,7 +38,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
       createSalesforceContactState.isSuccess should be(true)
       createSalesforceContactState.get._1.paymentMethod match {
-        case Some(payPal: PayPalReferenceTransaction) =>
+        case PaidProduct(payPal: PayPalReferenceTransaction) =>
           payPal.paypalBaid should be(validBaid)
           payPal.paypalEmail should be("membership.paypal-buyer@theguardian.com")
         case _ => fail()
@@ -60,7 +60,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
       createSalesforceContactState.isSuccess should be(true)
       createSalesforceContactState.get._1.paymentMethod match {
-        case Some(stripe: CreditCardReferenceTransaction) =>
+        case PaidProduct(stripe: CreditCardReferenceTransaction) =>
           stripe.tokenId should be("1234")
         case _ => fail()
       }

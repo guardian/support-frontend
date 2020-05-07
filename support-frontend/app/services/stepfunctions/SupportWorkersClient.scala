@@ -15,7 +15,7 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
+import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState, FreeProduct, PaidProduct}
 import com.gu.support.workers.{Status, _}
 import ophan.thrift.event.AbTest
 import org.joda.time.LocalDate
@@ -128,7 +128,7 @@ class SupportWorkersClient(
       giftRecipient = getGiftRecipient(request.body),
       None, // TODO
       product = request.body.product,
-      paymentFields = request.body.paymentFields,
+      paymentFields = request.body.paymentFields.map(PaidProduct(_)).getOrElse(FreeProduct),
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.body.ophanIds,
         referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),

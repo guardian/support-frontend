@@ -14,7 +14,7 @@ case class SendThankYouEmailState(
   giftRecipient: Option[GiftRecipient],
   redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentMethod: Option[PaymentMethod],
+  paymentMethod: PaymentDetails[PaymentMethod],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   salesForceContact: SalesforceContactRecord,
