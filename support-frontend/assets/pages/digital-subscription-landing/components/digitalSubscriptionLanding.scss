@@ -64,6 +64,9 @@ $teal-green: #006d67;
     padding-left: 0px;
   }
 
+}
+
+.hope-is-power--centered {
   @include mq($from: phablet) {
     padding-left: 20px;
     align-self: center;

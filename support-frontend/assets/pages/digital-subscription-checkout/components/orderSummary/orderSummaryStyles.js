@@ -19,8 +19,11 @@ export const topLine = css`
 
   a, a:visited {
     display: block;
-    ${textSans.medium({ fontWeight: 'bold' })};
+    ${textSans.small()};
     color: ${text.primary};
+    ${from.desktop} {
+      ${textSans.medium({ fontWeight: 'bold' })};
+    }
   }
 
   ${between.phablet.and.desktop} {
@@ -84,22 +87,27 @@ export const textBlock = css`
   }
 
   h3 {
-    ${headline.xxsmall({ fontWeight: 'bold' })};
-    align-items: flex-start;
+    ${body.medium({ fontWeight: 'bold' })};
+    margin-top: -5px;
+    ${from.desktop} {
+      ${headline.xxsmall({ fontWeight: 'bold' })};
+      margin-top: 0;
+    }
   }
   p, span {
     max-width: 240px;
-    ${until.desktop} {
-      margin-bottom: ${space[2]}px;
-    }
   }
   span {
     background-color: ${brandAltBackground.primary};
-    padding: ${space[1]}px;
-    ${body.medium()};
+    padding: 2px;
+    ${textSans.small({ fontWeight: 'bold' })};
+    ${from.desktop} {
+      padding: ${space[1]}px;
+      ${textSans.medium()};
+    }
   }
   p {
-    ${headline.xxsmall({ fontWeight: 'normal' })};
+    ${body.small({ fontWeight: 'normal' })};
     line-height: 135%;
     ${from.desktop} {
       display: none;
