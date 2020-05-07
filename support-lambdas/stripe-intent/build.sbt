@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
 ).map(_ % circeVersion)
 
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,

@@ -29,7 +29,7 @@ lazy val release = Seq[ReleaseStep](
 
 lazy val commonSettings = Seq(
   organization := "com.gu",
-  scalaVersion := "2.12.10",
+  scalaVersion := "2.13.2",
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
   isSnapshot := false,
   publishTo := {
@@ -54,8 +54,8 @@ lazy val commonSettings = Seq(
 )
 
 lazy val commonDependencies = Seq(
-  "com.typesafe" % "config" % "1.3.2",
-  "org.scalatest" %% "scalatest" % "3.2.0-M1" % "it, test"
+  "com.typesafe" % "config" % "1.4.0",
+  "org.scalatest" %% "scalatest" % "3.3.0-SNAP2" % "it, test"
 )
 
 lazy val root = (project in file("."))
