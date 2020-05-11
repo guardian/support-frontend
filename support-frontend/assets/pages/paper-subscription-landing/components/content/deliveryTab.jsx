@@ -3,10 +3,8 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Content, { Divider } from 'components/content/content';
+import Content from 'components/content/content';
 import Text from 'components/text/text';
-import UnorderedList from 'components/list/unorderedList';
-import OrderedList from 'components/list/orderedList';
 import GridImage from 'components/gridImage/gridImage';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
@@ -20,9 +18,28 @@ import {
 } from './helpers';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import { Accordion, AccordionRow } from '@guardian/src-accordion';
+import { css } from '@emotion/core';
+import { neutral } from '@guardian/src-foundations/palette';
+import { textSans } from '@guardian/src-foundations/typography';
+import { space } from '@guardian/src-foundations';
+import { type Option } from 'helpers/types/option';
+
+
+const accordionContainer = css`
+  background-color: ${neutral['97']};
+
+  p {
+    ${textSans.small()};
+    margin-bottom: ${space[4]}px;
+  }
+`;
 
 // ----- Content ----- //
-const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}) => (
+const ContentDeliveryFaqBlock = ({
+  setTabAction,
+  useDigitalVoucher,
+}: {setTabAction: typeof setTab, useDigitalVoucher?: Option<boolean>}) => (
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
@@ -33,35 +50,52 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
     />
     }
   >
-    <Text title="How home delivery works">
-      <p>
-          If you live in Greater London (within the M25), you
-          can use The Guardian’s home delivery service. If not, you can
-          still <LinkTo tab={Collection} setTabAction={setTabAction} >subscribe using our voucher scheme</LinkTo>.
-      </p>
-      <OrderedList items={[
-        'Select your subscription below and checkout',
-        'You’ll receive your first newspaper as quickly as five days from you subscribing',
-        ]}
-      />
+    <Text>
+      If you live in Greater London (within the M25), you can use The Guardian’s home delivery
+      service. If not, you can use our <LinkTo tab={Collection} setTabAction={setTabAction}>{useDigitalVoucher ? 'subscription cards' : 'voucher scheme'}</LinkTo>.
     </Text>
-    <Divider small />
-    <Text title="Giving you peace of mind">
-      <UnorderedList items={[
-        'Your paper will arrive before 8am from Monday to Saturday and before 8.30am on Sunday',
-        'We can’t deliver to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
-        'You can pause your subscription for up to 36 days a year. So if you’re going away anywhere, you won’t have to pay for the papers that you miss',
-        ]}
-      />
+    <Text>
+      Select your subscription below and checkout. You&apos;ll receive your first newspaper
+      as quickly as five days from subscribing.
+    </Text>
+    <Text>
+      <div css={accordionContainer}>
+        <Accordion>
+          <AccordionRow label="Delivery details">
+            <p>
+              Your paper will arrive before 8am from Monday to Saturday and before 8.30am on Sunday.
+            </p>
+            <p>
+              We can’t deliver to individual flats, or apartments within blocks because we need
+              access to your post box to deliver your paper.
+            </p>
+            <p>
+              You can pause your subscription for up to 36 days a year. So if you’re going away
+              anywhere, you won’t have to pay for the papers that you miss.
+            </p>
+          </AccordionRow>
+        </Accordion>
+      </div>
     </Text>
   </Content>
 
 );
 
-const DeliveryTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
+ContentDeliveryFaqBlock.defaultProps = {
+  useDigitalVoucher: null,
+};
+
+const DeliveryTab = ({
+  getRef, setTabAction, selectedTab, useDigitalVoucher,
+}: ContentTabPropTypes) => (
   <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
-    <ContentDeliveryFaqBlock setTabAction={setTabAction} />
-    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below: Delivery" />
+    <ContentDeliveryFaqBlock setTabAction={setTabAction} useDigitalVoucher={useDigitalVoucher} />
+    <ContentForm
+      selectedTab={selectedTab}
+      setTabAction={setTabAction}
+      title="Pick your home delivery subscription package below"
+      useDigitalVoucher={useDigitalVoucher}
+    />
     <ContentHelpBlock
       faqLink={
         <a

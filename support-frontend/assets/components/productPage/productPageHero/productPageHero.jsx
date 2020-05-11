@@ -36,7 +36,6 @@ type ProductPageHeroHeaderTypes = {
   overheading: string,
   hasCampaign: boolean,
   heading: string | Node,
-  content?: Option<Node>,
   orderIsAGift?: boolean,
   giftImage?: Node,
 }
@@ -57,18 +56,6 @@ HeroWrapper.defaultProps = {
   appearance: 'grey',
   className: null,
 };
-
-const HeroHanger = ({
-  children,
-}: {children: Node}) => (
-  <div className={classNameWithModifiers('component-product-page-hero-hanger', ['bottom'])}>
-    <LeftMarginSection>
-      <div className="component-product-page-hero-content">
-        {children}
-      </div>
-    </LeftMarginSection>
-  </div>
-);
 
 const HeroHeading = ({
   children,
@@ -101,7 +88,7 @@ const ProductPageHero = ({
 );
 
 const ProductPageHeroHeader = ({
-  overheading, heading, content, hasCampaign, orderIsAGift, giftImage,
+  overheading, heading, hasCampaign, orderIsAGift, giftImage,
 }: ProductPageHeroHeaderTypes) => (
   <div>
     <HeroHeading {...{ hasCampaign, orderIsAGift, giftImage }}>
@@ -112,22 +99,19 @@ const ProductPageHeroHeader = ({
         {heading}
       </HeadingBlock>
     </HeroHeading>
-    {content && <HeroHanger>{content}</HeroHanger>}
   </div>
 );
 
 ProductPageHero.defaultProps = {
   children: null,
-  content: null,
   ...HeroWrapper.defaultProps,
   showProductPageHeroHeader: true,
 };
 
 ProductPageHeroHeader.defaultProps = {
-  content: null,
   orderIsAGift: false,
   giftImage: null,
 };
 
-export { HeroHanger, HeroWrapper, HeroHeading, ProductPageHeroHeader };
+export { HeroWrapper, HeroHeading, ProductPageHeroHeader };
 export default ProductPageHero;

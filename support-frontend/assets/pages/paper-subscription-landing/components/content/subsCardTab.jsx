@@ -9,27 +9,27 @@ import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
-
-import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpers';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 
+import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpers';
 
 const accordionContainer = css`
   background-color: ${neutral['97']};
 
-  p {
+  p, a {
     ${textSans.small()};
-    margin-bottom: ${space[4]}px;
+    margin-bottom: ${space[3]}px;
   }
 `;
 
+const LinkToImovo = () => <a href="https://imovo.org/guardianstorefinder">Find your nearest participating retailer</a>;
 
 // ----- Content ----- //
-const ContentVoucherFaqBlock = () => (
+const SubsCardFaqBlock = () => (
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
@@ -41,36 +41,40 @@ const ContentVoucherFaqBlock = () => (
   }
   >
     <Text>
-        Pick your subscription package below. We’ll send you a book of vouchers that
-        contain one voucher per paper in your subscription.
+      The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with
+      news kiosks in the UK.
     </Text>
     <Text>
-        Take your voucher to your retailer. Your vouchers will be accepted at retailers
-        across the UK, including most independent newsagents.
+      You can collect the newspaper from your local store or have your copies delivered by your newsagent.
     </Text>
     <Text>
       <div css={accordionContainer}>
         <Accordion>
-          <AccordionRow label="Voucher details">
+          <AccordionRow label="Collecting from multiple newsagents">
             <p>
-              Your newsagent won’t lose out; we’ll pay them the same amount that they receive if
-              you pay cash for your paper.
+              Present your card to a newsagent each time you collect the paper. The newsagent will scan your
+              card and will be reimbursed for each transaction automatically.
             </p>
+            <p><LinkToImovo /></p>
+          </AccordionRow>
+          <AccordionRow label="Delivery from your retailer">
             <p>
-              You can pause your subscription for up to four weeks a year. So if you’re going on holiday,
-              you won’t have to pay for the papers you’ll miss.
+              Simply give your preferred store / retailer the barcode printed on your
+              subscription letter.
             </p>
+            <p><LinkToImovo /></p>
           </AccordionRow>
         </Accordion>
       </div>
     </Text>
+
   </Content>
 );
 
-const CollectionTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
+const SubscriptionCardTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
   <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
-    <ContentVoucherFaqBlock />
-    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your voucher subscription package below" />
+    <SubsCardFaqBlock />
+    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below" />
     <ContentHelpBlock
       faqLink={
         <a
@@ -90,4 +94,4 @@ const CollectionTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropType
     />
   </div>
 );
-export default CollectionTab;
+export default SubscriptionCardTab;

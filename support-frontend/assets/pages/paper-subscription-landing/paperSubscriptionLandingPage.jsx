@@ -36,7 +36,8 @@ const reactElementId = 'paper-subscription-landing-page';
 // ----- Redux Store ----- //
 
 const store = pageInit(() => reducer(fulfilment), true);
-
+const state = store.getState();
+const { useDigitalVoucher } = state.common.settings;
 
 // ----- Render ----- //
 
@@ -48,10 +49,12 @@ const content = (
     >
       <CampaignHeader />
       {paperHasDeliveryEnabled() &&
-        <Content needsHigherZindex>
+        <Content needsHigherZindex innerBackground="grey">
           <Text>
             <LargeParagraph>
-              We offer two different subscription types: voucher booklets and home delivery.
+              {!useDigitalVoucher
+              ? 'We offer two different subscription types: voucher booklets and home delivery'
+              : 'We offer two different subscription types: subscription cards and home delivery. Pick the most convenient option available in your area.'}
             </LargeParagraph>
           </Text>
           <Tabs />

@@ -30,6 +30,7 @@ type PropTypes = {|
   children: Node,
   image: Option<Node>,
   modifierClasses: Array<string>,
+  innerBackground?: Option<string>,
   needsHigherZindex: boolean,
   border: Option<boolean>,
 |};
@@ -38,7 +39,7 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const Content = ({
-  appearance, children, id, modifierClasses, image, needsHigherZindex, border,
+  appearance, children, id, modifierClasses, innerBackground, image, needsHigherZindex, border,
 }: PropTypes) => (
   <div
     id={id}
@@ -55,7 +56,11 @@ const Content = ({
   )}
   >
     <LeftMarginSection>
-      <div className="component-content__content">
+      <div className={innerBackground ?
+        `component-content__content--${innerBackground}` :
+        'component-content__content'
+        }
+      >
         {children}
         {image &&
           <div className="component-content__image">{image}</div>
@@ -70,6 +75,7 @@ Content.defaultProps = {
   id: null,
   image: null,
   modifierClasses: [],
+  innerBackground: null,
   needsHigherZindex: false,
   border: null,
 };

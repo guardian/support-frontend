@@ -3,6 +3,7 @@
 .component-product-page-plan-form-label {
   position: relative;
   height: 100%;
+  border: 1px solid gu-colour(neutral-86);
 }
 
 .component-product-page-plan-form-label__input {
@@ -12,7 +13,7 @@
 
 .component-product-page-plan-form-label__box {
   @include gu-fontset-body-sans;
-  background: gu-colour(neutral-100);
+  background: gu-colour(neutral-97);
   color: gu-colour(neutral-7);
   display: block;
   height: 100%;
@@ -32,14 +33,15 @@
 .component-product-page-plan-form-label__title {
   @include gu-fontset-heading-sans;
   padding: $gu-v-spacing/2.15 $gu-h-spacing/2;
-  background-color: gu-colour(neutral-86);
+  background-color: gu-colour(brand-main);
+  color: gu-colour(neutral-100);
   position: relative;
   transition: .2s background;
 }
 
 .component-product-page-plan-form-label__content {
   flex: 1 1 auto;
-  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing/1.5;  
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing/1.5;
 }
 
 .component-product-page-plan-form-label__check {
@@ -68,14 +70,27 @@
   border-top: 1px solid gu-colour(neutral-86);
   margin: $gu-v-spacing/2 $gu-h-spacing/2 0;
   padding-top: $gu-v-spacing/2;
-  padding-bottom: $gu-v-spacing;
 }
 
 .component-product-page-plan-form-label__cta {
-  margin: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing;
-  padding-top: $gu-v-spacing/2;
+  margin: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing*1.5;
+  padding-top: $gu-v-spacing/3;
   .component-button {
-    width: 100%;
+    width: gu-span(3);
+    font-size: 16px;
+    @include mq($from: tablet) {
+      width: 100%;
+      svg {
+        display: none;
+      }
+    }
+
+    @include mq($from: desktop) {
+      font-size: 16px;
+      svg {
+        display: block;
+      }
+    }
   }
 }
 
@@ -85,7 +100,7 @@
   font-weight: bold;
 }
 
-.component-product-page-plan-form-price__copy { 
+.component-product-page-plan-form-price__copy {
   font-style: italic;
 }
 
@@ -98,19 +113,20 @@
 .component-product-page-plan-form-label-offer {
   $vertical-padding: $gu-v-spacing / 4;
   $horizontal-padding: $gu-h-spacing / 4;
-  color: gu-colour(neutral-100);
+  color: gu-colour(neutral-7);
   font-weight: 600;
   display: inline;
   line-height: 1.4;
-  box-shadow: 
-  $horizontal-padding $vertical-padding 0 0 gu-colour(neutral-7), 
-  $horizontal-padding ($vertical-padding * -1) 0 0 gu-colour(neutral-7), 
-  ($horizontal-padding * -1) $vertical-padding 0 0 gu-colour(neutral-7),
-  ($horizontal-padding * -1) ($vertical-padding * -1) 0 0 gu-colour(neutral-7);
-  
+  box-shadow:
+  $horizontal-padding $vertical-padding 0 0 gu-colour(highlight-main),
+  $horizontal-padding ($vertical-padding * -1) 0 0 gu-colour(highlight-main),
+  ($horizontal-padding * -1) $vertical-padding 0 0 gu-colour(highlight-main),
+  ($horizontal-padding * -1) ($vertical-padding * -1) 0 0 gu-colour(highlight-main);
+
   .component-product-page-plan-form-label-offer__inside {
-    background: gu-colour(neutral-7);
+    background: gu-colour(highlight-main);
+    color: inherit;
     line-height: 1.4;
     padding: $vertical-padding 0;
-  }  
+  }
 }

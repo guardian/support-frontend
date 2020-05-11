@@ -28,14 +28,12 @@
     font-size: 35px;
     line-height: 1;
     display: block;
-    padding-left: $gu-v-spacing;
+    padding-left: $gu-h-spacing/2;
 
     h2 {
       font-family: $gu-titlepiece;
       margin: $gu-v-spacing * 2 0;
-      span {
-       padding: 0 $gu-h-spacing / 2;
-      }
+
       span:first-of-type {
         position: relative;
         z-index: 5;
@@ -50,12 +48,25 @@
           width: 300px;
         }
       }
+
+      @include mq($until: tablet) {
+        font-size: 28px;
+      }
     }
 
     p {
       @include gu-fontset-heading;
-      padding-left: $gu-h-spacing / 3;
+      @include mq($until: wide) {
+        width: gu-span(5);
+      }
+      @include mq($until: leftCol) {
+        width: gu-span(4);
+      }
     }
+  }
+
+  @include mq($from: tablet) {
+    padding-left: 0;
   }
 
   @include mq($from: desktop) {
@@ -105,8 +116,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: gu-colour(neutral-7);
-  color: gu-colour(neutral-100);
+  background: gu-colour(sport-bright);
+  color: gu-colour(neutral-7);
   text-align: center;
   border-radius: 50%;
   line-height: 1;
@@ -115,6 +126,10 @@
   font-weight: 700;
   width: 6rem;
   height: 6rem;
+
+  @include mq($from: desktop) {
+    font-size: 16px;
+  }
 
   span {
     display: block;

@@ -26,11 +26,13 @@ import {
   ContactPageLink,
   useDotcomContactPage,
 } from 'helpers/dotcomContactPage';
+import InfoSvg from './info.svg';
 
 // Types
 export type ContentPropTypes = {|
   selectedTab: ActiveTabState,
-  setTabAction: typeof setTab
+  setTabAction: typeof setTab,
+  useDigitalVoucher?: Option<boolean>,
 |};
 
 export type ContentTabPropTypes = {|
@@ -124,14 +126,15 @@ const LinkTo = ({
 );
 
 const ContentForm = ({
-  title, text, setTabAction, selectedTab,
+  title, text, setTabAction, selectedTab, useDigitalVoucher,
 }: {|
   title: string,
   text?: Option<string>,
   selectedTab: ActiveTabState,
   setTabAction: typeof setTab,
+  useDigitalVoucher?: Option<boolean>,
 |}) => (
-  <Content appearance="feature" id="subscribe">
+  <Content id="subscribe" border={false}>
     <Text
       title={title}
     >
@@ -145,18 +148,20 @@ const ContentForm = ({
       <Text>
         <SansParagraph>
           {
-            selectedTab === Collection
-              ? <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo>
-              : <LinkTo tab={Collection} setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
+            selectedTab === Collection ?
+              <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo> :
+              <LinkTo tab={Collection} setTabAction={setTabAction}>
+                  Switch to {useDigitalVoucher ? 'Subscription card' : 'Vouchers'}
+              </LinkTo>
           }
         </SansParagraph>
       </Text>
     }
-    <ProductPageInfoChip>
+    <ProductPageInfoChip icon={<InfoSvg />}>
       {getPageInfoChip()}
     </ProductPageInfoChip>
   </Content>
 );
-ContentForm.defaultProps = { text: null };
+ContentForm.defaultProps = { text: null, useDigitalVoucher: null };
 
 export { ContentHelpBlock, LinkTo, ContentForm };

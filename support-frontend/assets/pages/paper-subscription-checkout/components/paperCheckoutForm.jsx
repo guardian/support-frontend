@@ -72,6 +72,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import { type Option } from 'helpers/types/option';
 import Total from 'components/subscriptionCheckouts/total/total';
 
 // ----- Types ----- //
@@ -95,6 +96,7 @@ type PropTypes = {|
   formIsValid: Function,
   setupRecurringPayPalPayment: Function,
   amount: number,
+  useDigitalVoucher: Option<boolean>,
 |};
 
 // ----- Map State/Props ----- //
@@ -112,6 +114,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     csrf: state.page.csrf,
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+    useDigitalVoucher: state.common.settings.useDigitalVoucher,
     amount: getProductPrice(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
@@ -148,10 +151,12 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 // ----- Component ----- //
 
 function PaperCheckoutForm(props: PropTypes) {
+  const collectionOption = props.useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
+  const collectionOptionDescription = props.useDigitalVoucher ? 'subscription card' : 'vouchers';
   const days = getDays(props.fulfilmentOption, props.productOption);
-  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
-  const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : 'Voucher booklet';
-  const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : 'Where should we deliver your vouchers?';
+  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : collectionOption;
+  const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : collectionOption;
+  const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
@@ -285,10 +290,10 @@ function PaperCheckoutForm(props: PropTypes) {
               <Text className="component-text__paddingTop">
                 <p>
                   We will take the first payment on the
-                  date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
+                  date you receive your {(props.fulfilmentOption === HomeDelivery || !props.useDigitalVoucher) && 'first'} {fulfilmentOptionDescriptor.toLowerCase()}.
                 </p>
                 <p>
-                 Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                 Subscription start dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
             </Rows>

@@ -4,9 +4,11 @@
   @include gu-fontset-explainer;
   font-weight: 400;
   color: gu-colour(neutral-100);
+}
 
+.component-content.component-content--feature.component-content--faqs {
   .component-content__content {
-    padding-bottom: $gu-v-spacing * 2;
+    padding-top: 6px;
     max-width: gu-span(8);
   }
 }
