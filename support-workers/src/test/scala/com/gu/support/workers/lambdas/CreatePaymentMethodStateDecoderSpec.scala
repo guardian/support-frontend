@@ -56,7 +56,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      Some(PayPalPaymentFields(validBaid))
+      PaidProduct(PayPalPaymentFields(validBaid))
     ))
 
   }
@@ -67,7 +67,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      Some(StripeSourcePaymentFields(stripeToken, Some(StripePaymentType.StripeCheckout)))
+      PaidProduct(StripeSourcePaymentFields(stripeToken, Some(StripePaymentType.StripeCheckout)))
     ))
   }
 
@@ -77,7 +77,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      Some(StripePaymentMethodPaymentFields(stripePaymentMethodToken, Some(StripePaymentType.StripeCheckout)))
+      PaidProduct(StripePaymentMethodPaymentFields(stripePaymentMethodToken, Some(StripePaymentType.StripeCheckout)))
     ))
   }
 
