@@ -100,7 +100,7 @@ object Fixtures {
         account(currency),
         contactDetails,
         None,
-        PaidProduct(creditCardPaymentMethod(StripeServiceForCurrency.paymentIntentGateway(currency))),
+        Some(creditCardPaymentMethod(StripeServiceForCurrency.paymentIntentGateway(currency))),
         monthlySubscriptionData,
         SubscribeOptions()
       )
@@ -108,7 +108,7 @@ object Fixtures {
 
   def directDebitSubscriptionRequest: SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, PaidProduct(directDebitPaymentMethod), monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, Some(directDebitPaymentMethod), monthlySubscriptionData, SubscribeOptions())
     ))
 
   def directDebitSubscriptionRequestPaper: SubscribeRequest =
@@ -117,7 +117,7 @@ object Fixtures {
         account(paymentGateway = DirectDebitGateway),
         contactDetails,
         Some(differentContactDetails),
-        PaidProduct(directDebitPaymentMethod),
+        Some(directDebitPaymentMethod),
         everydayPaperSubscriptionData,
         SubscribeOptions()
       )
@@ -136,7 +136,7 @@ object Fixtures {
     Subscription(date, date, date, "id123", termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account(), contactDetails, None, PaidProduct(creditCardPaymentMethod(StripeGatewayDefault)), invalidMonthlySubsData, SubscribeOptions())
+    SubscribeItem(account(), contactDetails, None, Some(creditCardPaymentMethod(StripeGatewayDefault)), invalidMonthlySubsData, SubscribeOptions())
   ))
 
   val incorrectPaymentMethod = SubscribeRequest(
@@ -144,7 +144,7 @@ object Fixtures {
       SubscribeItem(account(),
         contactDetails,
         None,
-        PaidProduct(payPalPaymentMethod),
+        Some(payPalPaymentMethod),
         invalidMonthlySubsData,
         SubscribeOptions()
       )

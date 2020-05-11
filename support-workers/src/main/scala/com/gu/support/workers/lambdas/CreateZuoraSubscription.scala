@@ -118,7 +118,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       account = buildAccount(state),
       billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
       soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
-      paymentMethod = state.paymentMethod,
+      paymentMethod = state.paymentMethod.toOption,
       subscriptionData = buildSubscriptionData(state, promotionService),
       subscribeOptions = SubscribeOptions(billingEnabled, billingEnabled)
     )

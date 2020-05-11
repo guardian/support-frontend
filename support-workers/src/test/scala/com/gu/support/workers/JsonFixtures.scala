@@ -391,6 +391,7 @@ object JsonFixtures {
               "corporateAccountId": "00001"
             },
             "product": $digitalPackJson,
+            "paymentMethod": "FreeProduct",
             "salesForceContact": $salesforceContactJson,
             $salesforceContactsJson
             }
