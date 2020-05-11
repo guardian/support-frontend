@@ -11,7 +11,9 @@ import { DirectDebit } from 'helpers/paymentMethods';
 import DirectDebitTerms from 'components/subscriptionCheckouts/directDebitTerms';
 
 const directDebitSection = css`
-  padding: 0 ${space[3]}px ${space[3]}px;
+  display: block;
+  padding: ${space[3]}px;
+  padding-top: 0;
   background-color: #F6F6F6;
   border: none;
 
@@ -21,7 +23,7 @@ const directDebitSection = css`
 `;
 
 const borderTop = css`
-  width: 100%;
+  display: block;
   border-top: 1px solid ${border.secondary};
 
   ${from.desktop} {
@@ -34,11 +36,11 @@ export default function DigitalPaymentTerms(props: {
 }) {
   return props.paymentMethod === DirectDebit
     ? (
-      <div css={directDebitSection}>
-        <div css={borderTop}>
+      <span css={directDebitSection}>
+        <span css={borderTop}>
           <DirectDebitTerms />
-        </div>
-      </div>)
+        </span>
+      </span>)
     : null;
 
 }

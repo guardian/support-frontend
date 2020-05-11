@@ -8,6 +8,7 @@ import { border, background } from '@guardian/src-foundations/palette';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 
 const endSummaryMobile = css`
+  display: block;
   padding: ${space[3]}px;
   border-top: 1px solid ${border.secondary};
   background-color: #f6f6f6; /* Using the hex code as ${background.secondary} isn't exposed in the API yet */
@@ -23,9 +24,9 @@ const endSummaryMobile = css`
 
 function EndSummaryMobile() {
   return (
-    <div css={endSummaryMobile}>
+    <span css={endSummaryMobile}>
       <EndSummary />
-    </div>
+    </span>
   );
 }
 
