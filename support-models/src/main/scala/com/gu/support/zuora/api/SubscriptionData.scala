@@ -117,13 +117,18 @@ object ReaderType {
   case object Agent extends ReaderType {
     val value = "Agent"
   }
+  case object Unknown extends ReaderType {
+    val value = "Unknown"
+  }
+
 
   def fromString(s: String): ReaderType =
     s match {
       case Gift.value => Gift
       case Agent.value => Agent
       case Corporate.value => Corporate
-      case _ => Direct
+      case Direct.value => Direct
+      case _ => Unknown
     }
 
   implicit val decode: Decoder[ReaderType] = Decoder.decodeString.map(code => fromString(code))
