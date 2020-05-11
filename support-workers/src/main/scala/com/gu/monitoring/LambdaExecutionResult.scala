@@ -8,7 +8,7 @@ import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers._
-import com.gu.support.workers.states.PaymentDetails
+import com.gu.support.workers.states.{FreeProduct, PaidProduct, PaymentDetails}
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -47,6 +47,8 @@ case object DirectDebit extends PaymentProvider
 
 case object Existing extends PaymentProvider
 
+case object FreeNoProvider extends PaymentProvider
+
 object PaymentProvider {
   def fromString(code: String): Option[PaymentProvider] = {
     List(Stripe, PayPal, DirectDebit, Existing).find(_.getClass.getSimpleName == s"$code$$")
@@ -57,25 +59,27 @@ object PaymentProvider {
 
   implicit val encoder: Encoder[PaymentProvider] = Encoder.encodeString.contramap[PaymentProvider](_.toString)
 
-  def fromPaymentFields(paymentFields: PaymentFields): PaymentProvider = paymentFields match {
-    case stripe: StripePaymentFields => stripe.stripePaymentType match {
+  def fromPaymentFields(paymentFields: PaymentDetails[PaymentFields]): PaymentProvider = paymentFields match {
+    case PaidProduct(stripe: StripePaymentFields) => stripe.stripePaymentType match {
       case Some(StripePaymentType.StripeApplePay) => StripeApplePay
       case _ => Stripe
     }
-    case _: PayPalPaymentFields => PayPal
-    case _: DirectDebitPaymentFields => DirectDebit
-    case _: ExistingPaymentFields => Existing
+    case PaidProduct(_: PayPalPaymentFields) => PayPal
+    case PaidProduct(_: DirectDebitPaymentFields) => DirectDebit
+    case PaidProduct(_: ExistingPaymentFields) => Existing
+    case FreeProduct => FreeNoProvider
   }
 
-  def fromPaymentMethod(paymentMethod: PaymentMethod): PaymentProvider = paymentMethod match {
-    case creditCardPayment: CreditCardReferenceTransaction =>
+  def fromPaymentMethod(paymentMethod: PaymentDetails[PaymentMethod]): PaymentProvider = paymentMethod match {
+    case PaidProduct(creditCardPayment: CreditCardReferenceTransaction) =>
       creditCardPayment.stripePaymentType match {
         case Some(StripePaymentType.StripeApplePay) => StripeApplePay
         case _ => Stripe
       }
-    case _: PayPalReferenceTransaction => PayPal
-    case _: DirectDebitPaymentMethod => DirectDebit
-    case _: ClonedDirectDebitPaymentMethod => Existing
+    case PaidProduct(_: PayPalReferenceTransaction) => PayPal
+    case PaidProduct(_: DirectDebitPaymentMethod) => DirectDebit
+    case PaidProduct(_: ClonedDirectDebitPaymentMethod) => Existing
+    case FreeProduct => FreeNoProvider
   }
 
 }
@@ -85,7 +89,7 @@ case class LambdaExecutionResult(
   status: LambdaExecutionStatus,
   isTestUser: Boolean,
   product: ProductType,
-  paymentDetails: PaymentDetails[PaymentProvider],
+  paymentDetails: Option[PaymentProvider],
   firstDeliveryDate: Option[LocalDate],
   isGift: Boolean,
   promoCode: Option[PromoCode],

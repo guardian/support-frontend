@@ -47,7 +47,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         Success,
         state.user.isTestUser,
         state.product,
-        state.paymentMethod.map(PaymentProvider.fromPaymentMethod),
+        Some(PaymentProvider.fromPaymentMethod(state.paymentMethod)),
         state.firstDeliveryDate,
         state.giftRecipient.isDefined,
         state.promoCode,

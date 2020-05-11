@@ -17,7 +17,7 @@ class LambdaExecutionResultSpec extends AnyFlatSpec with Matchers {
     val success = LambdaExecutionResult(
       requestId, Success, isTestUser = false,
       Contribution(20, GBP, Monthly),
-      PaidProduct(PayPal),
+      Some(PayPal),
       None, isGift = false, None,
       Country.UK, None, None, None
     )
