@@ -129,7 +129,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   };
 
   setupRecurringHandlers(): void {
-    if (isPostDeployUser()) {
+    if (!window.guardian.recaptchaEnabled || isPostDeployUser()) {
       this.fetchPaymentIntent('dummy');
     } else if (window.grecaptcha && window.grecaptcha.render) {
       this.setupRecurringRecaptchaCallback();
@@ -245,7 +245,8 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   }
 
   checkRecaptcha() {
-    if (!isPostDeployUser() &&
+    if (window.guardian.recaptchaEnabled &&
+      !isPostDeployUser() &&
       !this.state.recaptchaCompleted &&
       !this.props.allErrors.find(error => error.field === 'recaptcha')) {
       this.props.allErrors.push({
@@ -300,12 +301,13 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
             style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
             onChange={e => this.handleChange(e)}
           />
+          { window.guardian.recaptchaEnabled ?
           <RecaptchaWithError
             id="robot_checkbox"
             label="Security check"
             style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
             error={firstError('recaptcha', this.props.allErrors)}
-          />
+          /> : null }
           <div className="component-stripe-submit-button">
             <Button id="qa-stripe-submit-button" onClick={event => this.requestSCAPaymentMethod(event)}>
               {this.props.buttonText}

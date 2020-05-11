@@ -5,7 +5,6 @@ import { from } from '@guardian/src-foundations/mq';
 import { text, border } from '@guardian/src-foundations/palette';
 
 export const list = css`
-
   ${from.desktop} {
     color: ${text.primary};
     width: calc(100%-${space[3]}px * 2);

@@ -11,14 +11,14 @@ function EndSummary({ promotion, priceDescription }: EndSummaryProps) {
   return (
     <ul css={styles.list}>
       <li>
+        <Dot /><div css={styles.listMain}>{promotion}</div>
+        <span css={styles.subText}>{priceDescription}</span>
+      </li>
+      <li>
         <Dot /><div css={styles.listMain}>14-day free trial</div>
         <span css={styles.subText}>
           Your first payment will occur after the trial ends
         </span>
-      </li>
-      <li>
-        <Dot /><div css={styles.listMain}>{promotion}</div>
-        <span css={styles.subText}>{priceDescription}</span>
       </li>
       <li>
         <Dot /><div css={styles.listMain}>You can cancel any time</div>

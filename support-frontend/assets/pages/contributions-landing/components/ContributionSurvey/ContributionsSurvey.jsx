@@ -15,6 +15,9 @@ configured below and the prop 'isRunning' needs to be set to
 `ContributionThankYou` and `ContributionThankYouPasswordSet`)
 *********************************************************** */
 
+const testimonialSurveyLink = 'https://www.surveymonkey.co.uk/r/SWLJ7JZ';
+const globalTestimonialEndDate = Date.parse('2020-05-13');
+const ausTestimonialEndDate = Date.parse('2020-05-28');
 
 type PropTypes = {|
   isRunning: boolean,
@@ -22,9 +25,10 @@ type PropTypes = {|
 |};
 
 export default function ContributionsSurvey(props: PropTypes) {
-  const surveyLink = 'https://www.surveymonkey.co.uk/r/S93QPK9';
-  const isEurope = props.countryGroupId === 'EURCountries';
-  const showSurvey = props.isRunning && isEurope && surveyLink;
+  const isAus = props.countryGroupId === 'AUDCountries';
+  const endDate = isAus ? ausTestimonialEndDate : globalTestimonialEndDate;
+  const now = new Date();
+  const showSurvey = props.isRunning && now < endDate;
 
   return showSurvey ? (
     <div className="contribution-thank-you-block">
@@ -33,7 +37,7 @@ export default function ContributionsSurvey(props: PropTypes) {
           Please fill out this short form to help us learn a little more about your support for The Guardian
       </p>
       <AnchorButton
-        href={surveyLink}
+        href={testimonialSurveyLink}
         appearance="secondary"
         aria-label="Link to contribution survey"
       >

@@ -219,10 +219,3 @@
   }
 }
 
-.endSummay {
-  display: block;
-
-  @include mq($from: desktop) {
-    display: none;
-  }
-}

@@ -37,7 +37,10 @@ function TermsPrivacy(props: PropTypes) {
     const currency: IsoCurrency = fromCountryGroupId(props.countryGroupId) || 'GBP';
     return `${currencies[currency].glyph}${regionalAmounts[currency]}`;
   };
+
   const patronsLink = <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">Find out more today</a>;
+  const americasContactLink = <a href={"mailto:us.philanthropy@theguardian.com"}>contact us</a>
+
   const patronText = (
     <div className="patrons">
       <h4>Guardian Patrons programme</h4>
@@ -45,6 +48,27 @@ function TermsPrivacy(props: PropTypes) {
         If you would like to support us at a higher level, from {getRegionalAmountString()} a month,
         you can join us as a Guardian Patron. {patronsLink}
       </p>
+    </div>
+  );
+
+  const patronAndPhilanthropicAskText = (
+    <div>
+      <div className="horizontalRule"></div>
+      <div className="philanthropic-ask">
+        <h4>Contribute another way</h4>
+        <p>
+          Please {americasContactLink} if you would like to: make a larger single contribution
+          as an individual, contribute as a company or foundation, or would like
+          to discuss legacy gifting.
+        </p>
+        <p>
+          To contribute at a higher level on a recurring basis, you can join as a
+          Guardian Patron. {patronsLink}.
+        </p>
+        <p>
+          Thank you for your generosity.
+        </p>
+      </div>
     </div>
   );
 
@@ -70,7 +94,13 @@ function TermsPrivacy(props: PropTypes) {
           please visit our {privacy}.
         </div>
       </div>
-      <div>{props.contributionType !== 'ONE_OFF' && patronText}</div>
+      <hr/>
+      <div>
+        {
+          props.contributionType !== 'ONE_OFF' &&
+          (props.countryGroupId === "UnitedStates") ? patronAndPhilanthropicAskText : patronText
+        }
+      </div>
     </>
   );
 }
