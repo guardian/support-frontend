@@ -27,7 +27,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       case FreeProduct => Future.successful(HandlerResult(
         getCreateSalesforceContactState(state, FreeProduct),
         requestInfo
-          .appendMessage(s"No Payment method present")
+          .appendMessage(s"Free product has no payment method")
           .appendMessage(s"Product is ${state.product.describe}")
       ))
       case PaidProduct(paymentFields) => createPaymentMethod(paymentFields, state.user, state.product.currency, services)
