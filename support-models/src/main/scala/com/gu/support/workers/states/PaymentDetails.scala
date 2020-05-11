@@ -39,7 +39,7 @@ case object FreeProduct extends PaymentDetails[Nothing] {
 }
 
 object PaymentDetails {
-  implicit def paidProductEncoder[T: Encoder]: Encoder[PaidProduct[T]] = Encoder.instance(a => a.asJson)
+  implicit def paidProductEncoder[T: Encoder]: Encoder[PaidProduct[T]] = Encoder.instance(a => a.value.asJson)
 
   implicit def paidProductDecoder[T: Decoder]: Decoder[PaidProduct[T]] = deriveDecoder[PaidProduct[T]]
     .prepare(_.withFocus(
