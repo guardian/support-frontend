@@ -15,8 +15,9 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState, FreeProduct, PaidProduct}
+import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState, FreeProduct, PaidProduct, PaymentDetails}
 import com.gu.support.workers.{Status, _}
+import io.circe.{Decoder, Encoder}
 import ophan.thrift.event.AbTest
 import org.joda.time.LocalDate
 import play.api.mvc.Call
@@ -44,7 +45,7 @@ case class CreateSupportWorkersRequest(
   emailGiftRecipient: Option[String],
   product: ProductType,
   firstDeliveryDate: Option[LocalDate],
-  paymentFields: Option[PaymentFields],
+  paymentFields: PaymentDetails[PaymentFields],
   promoCode: Option[PromoCode],
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -128,7 +129,7 @@ class SupportWorkersClient(
       giftRecipient = getGiftRecipient(request.body),
       None, // TODO
       product = request.body.product,
-      paymentFields = request.body.paymentFields.map(PaidProduct(_)).getOrElse(FreeProduct),
+      paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.body.ophanIds,
         referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),

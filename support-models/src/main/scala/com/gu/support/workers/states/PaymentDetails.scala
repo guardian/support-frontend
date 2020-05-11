@@ -16,6 +16,8 @@ sealed abstract class PaymentDetails[+A] {
 
   def map[B](f: A => B): PaymentDetails[B] = if (isEmpty) FreeProduct else PaidProduct(f(get))
 
+  def foreach(f: A => Unit): Unit = if (!isEmpty)f(get)
+
   def isDefined: Boolean = !isEmpty
 
   def toOption: Option[A] = if (isEmpty) None else Some(get)
