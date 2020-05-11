@@ -9,12 +9,17 @@ import io.circe.{Decoder, Encoder, Json, JsonObject}
 
 sealed abstract class PaymentDetails[+A] {
   def isEmpty: Boolean
+
   def get: A
 
   def exists(predicate: A => Boolean): Boolean = predicate(get)
+
   def map[B](f: A => B): PaymentDetails[B] = if (isEmpty) FreeProduct else PaidProduct(f(get))
+
   def isDefined: Boolean = !isEmpty
+
   def toOption: Option[A] = if (isEmpty) None else Some(get)
+
   def orElse[B >: A](alternative: => PaymentDetails[B]): PaymentDetails[B] = if (isEmpty) alternative else this
 }
 
@@ -34,16 +39,13 @@ case object FreeProduct extends PaymentDetails[Nothing] {
 }
 
 object PaymentDetails {
-  implicit def paidProductEncoder[T: Encoder]: Encoder[PaidProduct[T]] = deriveEncoder[PaidProduct[T]]
-    .mapJson { json =>
-      val jsonObject = json.asObject.getOrElse(JsonObject.empty)
-      val value = jsonObject("value")
-      value.getOrElse(Json.Null)
-    }
+  implicit def paidProductEncoder[T: Encoder]: Encoder[PaidProduct[T]] = Encoder.instance(a => a.asJson)
 
-  implicit def paidProductDecoder[T: Decoder]: Decoder[PaidProduct[T]] = deriveDecoder[PaidProduct[T]].prepare(_.withFocus(json =>
-    JsonObject.fromIterable(List("value" -> json)).asJson
-  ))
+  implicit def paidProductDecoder[T: Decoder]: Decoder[PaidProduct[T]] = deriveDecoder[PaidProduct[T]]
+    .prepare(_.withFocus(
+      json =>
+        JsonObject.fromIterable(List("value" -> json)).asJson
+    ))
 
   implicit def freeProductEncoder: Encoder[FreeProduct.type] = Encoder.instance(_ => Json.fromString(FreeProduct.value))
 
