@@ -9,6 +9,8 @@ export const wrapper = css`
   color: ${text.primary};
   ${until.desktop} {
     padding: ${space[3]}px;
+  }
+  ${until.tablet} {
     box-shadow: 0px 4px 4px ${border.secondary};
   }
 `;
@@ -50,7 +52,6 @@ export const sansTitle = css`
 export const contentBlock = css`
   display: flex;
   width: 100%;
-  margin-bottom: ${space[3]}px;
 
   ${from.tablet} {
     display: block;
