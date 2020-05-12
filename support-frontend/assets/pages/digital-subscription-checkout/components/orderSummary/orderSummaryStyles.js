@@ -23,7 +23,7 @@ export const topLine = css`
   padding: ${space[3]}px;
 
   ${until.desktop} {
-    border-top: 1px solid ${border.secondary};
+    border-top: 1px solid #EDEDED;
     padding: ${space[1]}px 0 ${space[2]}px;
   }
 
