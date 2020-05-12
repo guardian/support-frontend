@@ -33,7 +33,7 @@ object PreviewPaymentSchedule {
     val dateChargeMap = charges.groupBy(_.serviceStartDate)
     val payments = dateChargeMap.map { dateAndCharge =>
       val (paymentDate, charges) = dateAndCharge
-      Payment(paymentDate, charges.map(charge => round(charge.chargeAmount) + round(charge.taxAmount)).sum)
+      Payment(paymentDate, round(charges.map(charge => charge.chargeAmount + charge.taxAmount).sum))
     }
     implicit def localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isBefore _)
     PaymentSchedule(payments.toList.sortBy(_.date))
