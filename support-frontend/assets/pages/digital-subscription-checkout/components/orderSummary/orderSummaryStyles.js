@@ -7,7 +7,10 @@ import { from, between, until } from '@guardian/src-foundations/mq';
 export const wrapper = css`
   background-color: ${background.primary};
   color: ${text.primary};
-  padding: ${space[3]}px;
+  ${until.desktop} {
+    padding: ${space[3]}px;
+    box-shadow: 0px 4px 4px ${border.secondary};
+  }
 `;
 
 export const topLine = css`
@@ -15,8 +18,13 @@ export const topLine = css`
   justify-content: space-between;
   width: calc(100%-${space[3]}px * 2);
   align-items: center;
-  border-top: 1px solid ${border.secondary};
-  padding: ${space[1]}px 0 ${space[2]}px;
+  padding: ${space[3]}px;
+
+  ${until.desktop} {
+    border-top: 1px solid ${border.secondary};
+    padding: ${space[1]}px 0 ${space[2]}px;
+  }
+
 
   a, a:visited {
     display: block;
