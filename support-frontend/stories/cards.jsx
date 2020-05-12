@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import ProductPagePlanFormLabel from 'components/productPage/productPagePlanForm/productPagePlanFormLabel';
+import ProductPagePlanFormLabel from 'components/productPage/productPagePlanForm/darkBackground/productPagePlanFormLabelDark';
 import ProductPagePlanFormPrice from 'components/productPage/productPagePlanForm/productPagePlanFormPrice';
 
 // components

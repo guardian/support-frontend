@@ -1,6 +1,6 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.component-product-page-plan-form__items {
+.component-product-page-plan-form__items--light {
   margin: 0 ($gu-h-spacing/-2) ($gu-v-spacing * 2);
 
   @include mq($until: tablet) {
@@ -22,7 +22,7 @@
   }
 }
 
-.component-product-page-plan-form__items > .component-product-page-plan-form__item {
+.component-product-page-plan-form__items--light > .component-product-page-plan-form__item--light {
   flex: 0 0 25%;
   padding: 0 $gu-h-spacing/3;
   box-sizing: border-box;
@@ -34,3 +34,25 @@
     padding: 0 $gu-h-spacing/2;
   }
 }
+
+.component-product-page-plan-form__items--dark {
+  margin: 0 $gu-h-spacing/-2 $gu-v-spacing * 2;
+  @include mq($until: leftCol) {
+    max-width: gu-span(6);
+  }
+  @include mq($from: leftCol) {
+    display: flex;
+    align-items: stretch;
+  }
+}
+
+.component-product-page-plan-form__items--dark > .component-product-page-plan-form__item--dark {
+  flex: 0 0 25%;
+  padding: 0 $gu-h-spacing/2;
+  box-sizing: border-box;
+  margin-bottom: $gu-v-spacing;
+  @include mq($from: leftCol) {
+    margin-bottom: 0;
+  }
+}
+

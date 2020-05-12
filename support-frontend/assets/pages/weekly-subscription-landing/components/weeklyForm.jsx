@@ -61,6 +61,7 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
         },
       };
     }, {}),
+    theme: 'dark',
   };
 };
 
