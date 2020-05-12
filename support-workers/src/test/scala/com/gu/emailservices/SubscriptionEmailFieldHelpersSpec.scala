@@ -50,7 +50,7 @@ class SubscriptionEmailFieldHelpersSpec extends AnyFlatSpec with Matchers {
     val firstDiscountedPayment = Payment(referenceDate, 5.99)
     val firstFullPricePayment = Payment(referenceDate.plusMonths(3), 11.99)
     val schedule: List[Payment] = payments(firstDiscountedPayment, List(1, 2)) ++ payments(firstFullPricePayment, List(1, 2, 3, 4, 5, 6, 7, 8, 9))
-    val expected = "£5.99 for 3 months, then £11.99 every month"
+    val expected = "£5.99 every month for 3 months, then £11.99 every month"
     assert(SubscriptionEmailFieldHelpers.describe(PaymentSchedule(schedule), Monthly, GBP, None) == expected)
   }
 
@@ -58,7 +58,7 @@ class SubscriptionEmailFieldHelpersSpec extends AnyFlatSpec with Matchers {
     val firstDiscountedPayment = Payment(referenceDate, 30.00)
     val firstFullPricePayment = Payment(referenceDate.plusMonths(6), 37.50)
     val schedule: List[Payment] = payments(firstDiscountedPayment, List(3)) ++ payments(firstFullPricePayment, List(3, 6))
-    val expected = "£30.00 for 2 quarters, then £37.50 every quarter"
+    val expected = "£30.00 every quarter for 2 quarters, then £37.50 every quarter"
     assert(SubscriptionEmailFieldHelpers.describe(PaymentSchedule(schedule), Quarterly, GBP, None) == expected)
   }
 

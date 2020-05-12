@@ -82,7 +82,7 @@ object SubscriptionEmailFieldHelpers {
           case SixWeekly => throw new RuntimeException("Six for six is currently unsupported")
         }
       }
-      s"${priceWithCurrency(currency, initialPrice)} for $introductoryTimespan, " +
+      s"${priceWithCurrency(currency, initialPrice)} every ${billingPeriod.noun} for $introductoryTimespan, " +
         s"then ${priceWithCurrency(currency, paymentsWithDifferentPrice.head.amount)} every ${billingPeriod.noun}"
     }
 
