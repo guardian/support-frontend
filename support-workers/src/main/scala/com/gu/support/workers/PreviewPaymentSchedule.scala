@@ -27,11 +27,13 @@ object PreviewPaymentSchedule {
     ).map(response => paymentSchedule(response.invoiceData.flatMap(_.invoiceItem)))
   }
 
+  def round(d: Double) = BigDecimal(d).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
+
   def paymentSchedule(charges: List[Charge]): PaymentSchedule = {
     val dateChargeMap = charges.groupBy(_.serviceStartDate)
     val payments = dateChargeMap.map { dateAndCharge =>
       val (paymentDate, charges) = dateAndCharge
-      Payment(paymentDate, charges.map(charge => charge.chargeAmount + charge.taxAmount).sum)
+      Payment(paymentDate, charges.map(charge => round(charge.chargeAmount) + round(charge.taxAmount)).sum)
     }
     implicit def localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isBefore _)
     PaymentSchedule(payments.toList.sortBy(_.date))

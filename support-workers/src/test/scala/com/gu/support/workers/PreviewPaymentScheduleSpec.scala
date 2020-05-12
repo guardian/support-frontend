@@ -30,4 +30,15 @@ class PreviewPaymentScheduleSpec extends AnyFlatSpec with Matchers {
     assert(schedule == expected)
   }
 
+  "paymentSchedule" should "round charge amounts to two decimal places" in {
+    val taxExclusiveCharge = Charge(firstPaymentDate, firstPaymentDate.plusMonths(1), 0, 5.9901)
+    val charges = List(
+      taxExclusiveCharge,
+      taxExclusiveCharge.copy(serviceStartDate = firstPaymentDate.plusMonths(1), serviceEndDate = firstPaymentDate.plusMonths(2), chargeAmount = 5.99)
+    )
+    val expected = PaymentSchedule(List(Payment(firstPaymentDate, 5.99), Payment(firstPaymentDate.plusMonths(1), 5.99)))
+    val schedule = PreviewPaymentSchedule.paymentSchedule(charges)
+    assert(schedule == expected)
+  }
+
 }
