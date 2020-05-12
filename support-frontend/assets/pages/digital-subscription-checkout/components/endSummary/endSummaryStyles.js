@@ -27,7 +27,7 @@ export const listMain = css`
 
 export const subText = css`
   display: block;
-  ${textSans.medium()};
+  ${textSans.small()};
   margin-left: ${space[5]}px;
   line-height: 135%;
 `;
