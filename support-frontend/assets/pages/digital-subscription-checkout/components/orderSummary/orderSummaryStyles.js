@@ -1,21 +1,22 @@
 import { css } from '@emotion/core';
 import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { background, brandAltBackground, text } from '@guardian/src-foundations/palette';
+import { background, brandAltBackground, text, border } from '@guardian/src-foundations/palette';
 import { from, between, until } from '@guardian/src-foundations/mq';
 
 export const wrapper = css`
   background-color: ${background.primary};
   color: ${text.primary};
-  padding-bottom: ${space[3]}px;
+  padding: ${space[3]}px;
 `;
 
 export const topLine = css`
   display: flex;
   justify-content: space-between;
   width: calc(100%-${space[3]}px * 2);
-  margin: ${space[3]}px;
   align-items: center;
+  border-top: 1px solid ${border.secondary};
+  padding: ${space[1]}px 0 ${space[2]}px;
 
   a, a:visited {
     display: block;
@@ -53,7 +54,7 @@ export const imageContainer = css`
   align-items: flex-start;
   width: calc(100%-30px);
   padding: 15px 10px 0 15px;
-  background-color: #63717A;
+  background-color: #F6F6F6;
 
   img {
     width: 100%;
@@ -67,7 +68,6 @@ export const imageContainer = css`
     padding-top: 8px;
     padding-left: 8px;
     overflow: hidden;
-    margin-left: ${space[3]}px;
     img {
       width: 200%;
       align-items: flex-end;
