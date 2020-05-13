@@ -2,7 +2,7 @@ import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { text, border } from '@guardian/src-foundations/palette';
+import { text, border, background } from '@guardian/src-foundations/palette';
 
 export const list = css`
   ${from.desktop} {
@@ -27,7 +27,7 @@ export const listMain = css`
 
 export const subText = css`
   display: block;
-  ${textSans.medium()};
+  ${textSans.small()};
   margin-left: ${space[5]}px;
   line-height: 135%;
 `;
@@ -37,7 +37,7 @@ export const dot = css`
   height: 9px;
   width: 9px;
   border-radius: 50%;
-  background-color: #63717A;
+  background-color: ${background.ctaPrimary};
   vertical-align: top;
   margin-top: ${space[2]}px;
 `;

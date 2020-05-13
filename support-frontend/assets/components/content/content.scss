@@ -101,6 +101,13 @@
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
 }
 
+.component-footer {
+  .component-content__content,
+  .component-content__content--grey {
+    padding: ($gu-h-spacing / 2);
+  }
+}
+
 .component-content__content {
   max-width: gu-span(12);
 
