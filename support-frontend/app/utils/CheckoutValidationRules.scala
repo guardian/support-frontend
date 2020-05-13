@@ -94,9 +94,9 @@ object DigitalPackValidation {
     import createSupportWorkersRequest.product._
     import createSupportWorkersRequest.billingAddress._
 
-    //noinspection SimplifyBoolean
+    val allowCorporateSubs = false
     def isCorporateSub(request: CreateSupportWorkersRequest) =
-      request.paymentFields == FreeProduct && false //TODO: also need a valid code, this is coming in part 2
+      request.paymentFields == FreeProduct && allowCorporateSubs //TODO: also need a valid code, this is coming in part 2
 
     def hasValidPaymentDetails(request: CreateSupportWorkersRequest) = hasValidPaymentDetailsForPaidProduct(paymentFields) ||
       isCorporateSub(request)
