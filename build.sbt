@@ -51,7 +51,7 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "25.0-jre", //-- added explicitly - snyk report avoid logback vulnerability
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
   "com.gu" %% "support-internationalisation" % "0.9",
-  "com.gu" %% "support-models" % "0.66",
+  "com.gu" %% "support-models" % "0.67",
   "org.apache.thrift" % "libthrift" % "0.12.0",// needed for snyk deps https://app.snyk.io/vuln/SNYK-JAVA-ORGAPACHETHRIFT-173706
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
