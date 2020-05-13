@@ -1,4 +1,4 @@
-import LibraryVersions.{awsClientVersion, catsVersion, circeVersion, okhttpVersion}
+import LibraryVersions.{awsClientVersion, catsVersion, circeVersion, okhttpVersion, scalaLogging}
 
 name := "support-rest"
 
@@ -6,7 +6,7 @@ description := "Scala library to provide shared services to Guardian Support pro
 
 // rest
 libraryDependencies ++= Seq(
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
+  scalaLogging,
   "org.typelevel" %% "cats-core" % catsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,

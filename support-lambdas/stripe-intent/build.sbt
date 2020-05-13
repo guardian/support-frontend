@@ -1,4 +1,4 @@
-import LibraryVersions.{awsClientVersion, catsVersion, circeVersion, okhttpVersion}
+import LibraryVersions._
 
 name := "stripe-intent"
 description:= "Returns a stripe setup intent token so we can get authorisation of a recurring payment on the client side"
@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
+  scalaLogging,
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.3",
 )
