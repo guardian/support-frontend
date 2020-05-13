@@ -66,7 +66,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       _ => HandlerResult((), requestInfo)
     )
 
-    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, paymentProviderFromPaymentMethod(state.paymentMethod), state.product)
+    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.paymentMethod.toOption.map(paymentProviderFromPaymentMethod), state.product)
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
     result
@@ -171,7 +171,7 @@ object SendAcquisitionEvent {
               paymentFrequency = paymentFrequencyFromBillingPeriod(stateAndInfo.state.product.billingPeriod),
               currency = stateAndInfo.state.product.currency.iso,
               amount = productAmount,
-              paymentProvider = Some(paymentProviderFromPaymentMethod(stateAndInfo.state.paymentMethod)),
+              paymentProvider = stateAndInfo.state.paymentMethod.map(paymentProviderFromPaymentMethod).toOption,
               // Currently only passing through at most one campaign code
               campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
               abTests = Some(thrift.AbTestInfo(

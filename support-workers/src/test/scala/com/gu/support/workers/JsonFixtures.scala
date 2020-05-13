@@ -41,6 +41,23 @@ object JsonFixtures {
         }
     """
 
+  def userJsonNoAddress =
+    s"""
+      "user":{
+          "id": "$idId",
+          "primaryEmailAddress": "$emailAddress",
+          "firstName": "test",
+          "lastName": "user",
+          "billingAddress": {
+            "country": "GB"
+          },
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false
+        }
+    """
+
   def userJsonAlternate(id: String = idId): String =
     s"""
       "user":{
@@ -133,7 +150,8 @@ object JsonFixtures {
     """
       {
         "currency": "GBP",
-        "billingPeriod" : "Annual"
+        "billingPeriod" : "Annual",
+        "productOptions" : "Corporate"
       }
     """
 
@@ -362,6 +380,23 @@ object JsonFixtures {
             $salesforceContactsJson
             }
         """
+
+  val createDigiPackCorporateSubscriptionJson =
+    s"""
+          {
+            $requestIdJson,
+            $userJsonNoAddress,
+            "redemptionData": {
+              "redemptionCode": "123abc",
+              "corporateAccountId": "00001"
+            },
+            "product": $digitalPackJson,
+            "paymentMethod": "FreeProduct",
+            "salesForceContact": $salesforceContactJson,
+            $salesforceContactsJson
+            }
+        """
+
 
   val createDigiPackSubscriptionWithPromoJson =
     s"""

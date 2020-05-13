@@ -4,6 +4,7 @@ import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{Everyday, HomeDelivery}
 import com.gu.support.workers._
+import com.gu.support.workers.states.PaidProduct
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -101,7 +102,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "fail if the source payment field received is an empty string" in {
-    val requestMissingState = validDigitalPackRequest.copy(paymentFields = StripeSourcePaymentFields("", None))
+    val requestMissingState = validDigitalPackRequest.copy(paymentFields = PaidProduct(StripeSourcePaymentFields("", None)))
     DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
@@ -183,7 +184,7 @@ object TestData {
     lastName = "hopper",
     product = DigitalPack(Currency.USD, Monthly),
     firstDeliveryDate = None,
-    paymentFields = StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout)),
+    paymentFields = PaidProduct(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
@@ -221,7 +222,7 @@ object TestData {
     lastName = "hopper",
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields = StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout)),
+    paymentFields = PaidProduct(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),

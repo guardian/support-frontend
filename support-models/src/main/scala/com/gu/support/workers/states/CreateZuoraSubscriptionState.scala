@@ -7,13 +7,15 @@ import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
+import com.gu.support.workers.redemption.RedemptionData
 
 case class CreateZuoraSubscriptionState(
   requestId: UUID,
   user: User,
   giftRecipient: Option[GiftRecipient],
+  redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentMethod: PaymentMethod,
+  paymentMethod: PaymentDetails[PaymentMethod],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   salesforceContacts: SalesforceContactRecords,

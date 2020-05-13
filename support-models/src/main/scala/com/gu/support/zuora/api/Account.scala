@@ -18,7 +18,7 @@ case class Account(
   crmId: String, //Salesforce accountId
   sfContactId__c: String, //Salesforce contactId
   identityId__c: String,
-  paymentGateway: PaymentGateway,
+  paymentGateway: Option[PaymentGateway],
   createdRequestId__c: String,
   billCycleDay: Int = 0,
   autoPay: Boolean = true,

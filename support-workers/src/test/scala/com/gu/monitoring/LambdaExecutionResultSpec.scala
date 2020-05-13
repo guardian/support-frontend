@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
+import com.gu.support.workers.states.PaidProduct
 import com.gu.support.workers.{Contribution, Monthly}
 import io.circe.parser._
 import io.circe.syntax._

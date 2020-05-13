@@ -99,6 +99,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.requestId,
       state.user,
       state.giftRecipient,
+      state.redemptionData,
       state.product,
       state.paymentMethod,
       state.firstDeliveryDate,
@@ -111,14 +112,15 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     )
 
   private def buildSubscribeItem(state: CreateZuoraSubscriptionState, promotionService: PromotionService): SubscribeItem = {
+    val billingEnabled = state.paymentMethod.isDefined
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
     SubscribeItem(
       account = buildAccount(state),
       billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
       soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
-      paymentMethod = state.paymentMethod,
+      paymentMethod = state.paymentMethod.toOption,
       subscriptionData = buildSubscriptionData(state, promotionService),
-      subscribeOptions= SubscribeOptions()
+      subscribeOptions = SubscribeOptions(billingEnabled, billingEnabled)
     )
   }
 
@@ -133,7 +135,16 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
     state.product match {
       case c: Contribution => c.build(state.requestId, config)
-      case d: DigitalPack => d.build(state.requestId, config, state.user.billingAddress.country, state.promoCode, promotionService, stage, isTestUser)
+      case d: DigitalPack => d.build(
+        state.requestId,
+        config,
+        state.user.billingAddress.country,
+        state.promoCode,
+        state.redemptionData,
+        promotionService,
+        stage,
+        isTestUser
+      )
       case p: Paper => p.build(state.requestId, state.user.billingAddress.country, state.promoCode, state.firstDeliveryDate, promotionService, stage, isTestUser)
       case w: GuardianWeekly => w.build(
         state.requestId,
@@ -169,7 +180,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
     sfContactId__c = state.salesforceContacts.recipient.Id,
     identityId__c = state.user.id,
-    paymentGateway = state.paymentMethod.paymentGateway,
-    createdRequestId__c = state.requestId.toString
+    paymentGateway = state.paymentMethod.map(_.paymentGateway).toOption,
+    createdRequestId__c = state.requestId.toString,
+    autoPay = state.paymentMethod.isDefined
   )
 }

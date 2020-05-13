@@ -4,7 +4,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.JsonFixtures.{validBaid, _}
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreatePaymentMethodState
+import com.gu.support.workers.states.{CreatePaymentMethodState, PaidProduct}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Json
 import io.circe.generic.auto._
@@ -56,7 +56,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      PayPalPaymentFields(validBaid)
+      PaidProduct(PayPalPaymentFields(validBaid))
     ))
 
   }
@@ -67,7 +67,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      StripeSourcePaymentFields(stripeToken, Some(StripePaymentType.StripeCheckout))
+      PaidProduct(StripeSourcePaymentFields(stripeToken, Some(StripePaymentType.StripeCheckout)))
     ))
   }
 
@@ -77,19 +77,19 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      StripePaymentMethodPaymentFields(stripePaymentMethodToken, Some(StripePaymentType.StripeCheckout))
+      PaidProduct(StripePaymentMethodPaymentFields(stripePaymentMethodToken, Some(StripePaymentType.StripeCheckout)))
     ))
   }
 
   it should "be able to decode a DigtalBundle with PayPal payment fields" in {
     val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodDigitalPackJson)
-    val result = state.right.get
+    val result = state.right.getOrElse(fail(state.left.get.getMessage))
     result.product match {
       case digitalPack: DigitalPack => digitalPack.billingPeriod should be(Annual)
       case _ => fail()
     }
     result.paymentFields match {
-      case paypal: PayPalPaymentFields => paypal.baid should be(validBaid)
+      case PaidProduct(paypal: PayPalPaymentFields) => paypal.baid should be(validBaid)
       case _ => fail()
     }
   }
@@ -102,7 +102,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
         case _ => fail()
       }
       result.paymentFields match {
-        case dd: DirectDebitPaymentFields => dd.accountHolderName should be(mickeyMouse)
+        case PaidProduct(dd: DirectDebitPaymentFields) => dd.accountHolderName should be(mickeyMouse)
         case _ => fail()
       }
     })

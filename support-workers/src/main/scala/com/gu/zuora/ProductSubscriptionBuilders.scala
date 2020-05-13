@@ -12,6 +12,7 @@ import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
+import com.gu.support.workers.redemption.RedemptionData
 import com.gu.support.zuora.api._
 import com.gu.zuora.ProductSubscriptionBuilders.allowFixedTermSubs
 import org.joda.time.{DateTimeZone, Days, LocalDate}
@@ -49,6 +50,7 @@ object ProductSubscriptionBuilders {
       config: ZuoraConfig,
       country: Country,
       maybePromoCode: Option[PromoCode],
+      maybeRedemptionData: Option[RedemptionData],
       promotionService: PromotionService,
       stage: Stage,
       isTestUser: Boolean
@@ -62,14 +64,21 @@ object ProductSubscriptionBuilders {
 
       val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(fromStage(stage, isTestUser), fixedTerm = false), digitalPack.describe)
 
-      val subscriptionData = buildProductSubscription(
-        requestId,
-        productRatePlanId,
-        contractAcceptanceDate = contractAcceptanceDate,
-        contractEffectiveDate = contractEffectiveDate
+      val subscriptionData = maybeRedeemCode(maybeRedemptionData,
+        buildProductSubscription(
+          requestId,
+          productRatePlanId,
+          contractAcceptanceDate = contractAcceptanceDate,
+          contractEffectiveDate = contractEffectiveDate
+        )
       )
 
       applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
+    }
+
+    def maybeRedeemCode(maybeRedemptionData: Option[RedemptionData], subscriptionData: SubscriptionData): SubscriptionData = {
+      val redeemedSub = maybeRedemptionData.map(_.redeem(subscriptionData.subscription)).getOrElse(subscriptionData.subscription)
+      subscriptionData.copy(subscription = redeemedSub)
     }
   }
 

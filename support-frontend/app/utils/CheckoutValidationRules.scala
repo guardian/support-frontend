@@ -3,14 +3,16 @@ package utils
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers._
+import com.gu.support.workers.states.{FreeProduct, PaidProduct, PaymentDetails}
 import org.joda.time.LocalDate
 import services.stepfunctions.CreateSupportWorkersRequest
+import utils.PaidProductValidation.hasValidPaymentDetailsForPaidProduct
 
 object CheckoutValidationRules {
   def validatorFor(productType: ProductType): CreateSupportWorkersRequest => Boolean = productType match {
-    case digitalPack: DigitalPack => DigitalPackValidation.passes
-    case paper: Paper => PaperValidation.passes
-    case _ => SimpleCheckoutFormValidation.passes
+    case _: DigitalPack => DigitalPackValidation.passes
+    case _: Paper => PaperValidation.passes
+    case _ => PaidProductValidation.passes
   }
 }
 
@@ -18,13 +20,25 @@ object SimpleCheckoutFormValidation {
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean =
     noEmptyNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName) &&
-      noExcessivelyLongNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName) &&
-      noEmptyPaymentFields(createSupportWorkersRequest.paymentFields)
-
+      noExcessivelyLongNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName)
 
   private def noEmptyNameFields(firstName: String, lastName: String) = !firstName.isEmpty && !lastName.isEmpty
 
   private def noExcessivelyLongNameFields(firstName: String, lastName: String) = !(firstName.length > 40) && !(lastName.length > 80)
+
+}
+
+object PaidProductValidation {
+
+  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean =
+    SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
+    hasValidPaymentDetailsForPaidProduct(createSupportWorkersRequest.paymentFields)
+
+  def hasValidPaymentDetailsForPaidProduct(paymentDetails: PaymentDetails[PaymentFields]): Boolean =
+    paymentDetails match {
+      case PaidProduct(paymentFields) => noEmptyPaymentFields(paymentFields)
+      case FreeProduct => false
+    }
 
   private def noEmptyPaymentFields(paymentFields: PaymentFields): Boolean = paymentFields match {
     case directDebitDetails: DirectDebitPaymentFields =>
@@ -80,11 +94,19 @@ object DigitalPackValidation {
     import createSupportWorkersRequest.product._
     import createSupportWorkersRequest.billingAddress._
 
+    val allowCorporateSubs = false
+    def isCorporateSub(request: CreateSupportWorkersRequest) =
+      request.paymentFields == FreeProduct && allowCorporateSubs //TODO: also need a valid code, this is coming in part 2
+
+    def hasValidPaymentDetails(request: CreateSupportWorkersRequest) = hasValidPaymentDetailsForPaidProduct(paymentFields) ||
+      isCorporateSub(request)
+
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
       hasStateIfRequired(country, state, currency) &&
       hasPostcodeIfRequired(country, postCode) &&
       currencyIsSupportedForCountry(country, currency) &&
-      hasAddressLine1AndCity(billingAddress)
+      hasAddressLine1AndCity(billingAddress) &&
+      hasValidPaymentDetails(createSupportWorkersRequest)
   }
 }
 
@@ -106,7 +128,7 @@ object PaperValidation {
       case None => false
     }
 
-    SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
+    PaidProductValidation.passes(createSupportWorkersRequest) &&
     hasDeliveryAddressInUKAndPaidInGbp &&
     hasFirstDeliveryDate(createSupportWorkersRequest.firstDeliveryDate) &&
     hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) &&

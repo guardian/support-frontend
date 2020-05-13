@@ -41,6 +41,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson())
     testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson(Annual))
     testDecoding[CreateZuoraSubscriptionState](createDigiPackZuoraSubscriptionJson)
+    testDecoding[CreateZuoraSubscriptionState](createCorporateDigiPackZuoraSubscriptionJson)
   }
 
   "SendThankYouEmailState" should "deserialise correctly" in {
