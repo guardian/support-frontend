@@ -1,7 +1,7 @@
 import { css } from '@emotion/core';
 import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { background, brandAltBackground, text, border } from '@guardian/src-foundations/palette';
+import { background, brandAltBackground, text, border, neutral } from '@guardian/src-foundations/palette';
 import { from, between, until } from '@guardian/src-foundations/mq';
 
 export const wrapper = css`
@@ -23,7 +23,7 @@ export const topLine = css`
   padding: ${space[3]}px;
 
   ${until.desktop} {
-    border-top: 1px solid #EDEDED;
+    border-top: 1px solid ${neutral['93']};
     padding: ${space[1]}px 0 ${space[2]}px;
   }
 
@@ -63,7 +63,7 @@ export const imageContainer = css`
   align-items: flex-start;
   width: calc(100%-30px);
   padding: 15px 10px 0 15px;
-  background-color: #F6F6F6;
+  background-color: ${neutral['97']};
 
   img {
     width: 100%;
