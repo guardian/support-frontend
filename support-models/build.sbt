@@ -1,4 +1,4 @@
-import LibraryVersions.{catsVersion, circeVersion}
+import LibraryVersions.{catsVersion, circeVersion, jacksonVersion}
 
 name := "support-models"
 
@@ -11,5 +11,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
-  "io.circe" %% "circe-parser" % circeVersion
+  "io.circe" %% "circe-parser" % circeVersion,
+  // This is required to force aws libraries to use the latest version of jackson
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
 )
