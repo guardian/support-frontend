@@ -15,7 +15,7 @@ setupGitHook := {
 libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "2.0.1",
   "org.typelevel" %% "cats" % "0.9.0",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "io.symphonia" % "lambda-logging" % "1.0.1",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,

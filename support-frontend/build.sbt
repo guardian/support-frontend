@@ -8,7 +8,7 @@ testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
 
 testOptions in Test := Seq(Tests.Filter(unitTestFilter))
 
-import LibraryVersions.{circeVersion, awsClientVersion, jacksonVersion}
+import LibraryVersions.{circeVersion, awsClientVersion, jacksonVersion, catsVersion}
 
 resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
 
@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
-  "org.typelevel" %% "cats-core" % "1.0.1",
+  "org.typelevel" %% "cats-core" % catsVersion,
   "com.dripower" %% "play-circe" % "2609.1",
   "com.gu" %% "fezziwig" % "1.3",
   "io.circe" %% "circe-core" % circeVersion,
