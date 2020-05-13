@@ -118,6 +118,7 @@ const getPlans = (
 // ----- State/Props Maps ----- //
 const mapStateToProps = (state: State): PropTypes<PaperProductOptions> => ({
   plans: state.page.productPrices ? getPlans(state.page.tab, state.page.productPrices) : {},
+  theme: 'light',
 });
 
 // ----- Exports ----- //

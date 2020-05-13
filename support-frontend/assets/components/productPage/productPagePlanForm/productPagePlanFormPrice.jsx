@@ -5,7 +5,7 @@
 import React from 'react';
 import { type Option } from 'helpers/types/option';
 
-import './productPagePlanFormLabel.scss';
+import './productPagePlanFormPrice.scss';
 
 // ---- Types ----- //
 
