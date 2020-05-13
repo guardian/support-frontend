@@ -97,7 +97,7 @@ export const textBlock = css`
 
   h3 {
     ${body.medium({ fontWeight: 'bold' })};
-    margin-top: -5px;
+    margin: -5px 0 -3px;
     ${from.desktop} {
       ${headline.xxsmall({ fontWeight: 'bold' })};
       margin-top: 0;
