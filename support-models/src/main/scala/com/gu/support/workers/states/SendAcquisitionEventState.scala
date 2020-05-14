@@ -14,7 +14,7 @@ case class SendAcquisitionEventState(
   giftRecipient: Option[GiftRecipient],
   redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentMethod: PaymentDetails[PaymentMethod],
+  paymentMethod: Either[PaymentMethod, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]

@@ -14,7 +14,7 @@ case class SendThankYouEmailState(
   giftRecipient: Option[GiftRecipient],
   redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentMethod: PaymentDetails[PaymentMethod],
+  paymentMethod: Either[PaymentMethod, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   salesForceContact: SalesforceContactRecord,
@@ -28,6 +28,7 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 
 object SendThankYouEmailState {
+  import com.gu.support.encoding.CustomCodecs._
   implicit val codec: Codec[SendThankYouEmailState] = deriveCodec
 }
 

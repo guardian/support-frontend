@@ -4,7 +4,6 @@ import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{Everyday, HomeDelivery}
 import com.gu.support.workers._
-import com.gu.support.workers.states.PaidProduct
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

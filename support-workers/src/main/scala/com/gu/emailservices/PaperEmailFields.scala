@@ -5,7 +5,7 @@ import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.catalog.{FulfilmentOptions, HomeDelivery, ProductOptions}
 import com.gu.support.promotions.Promotion
 import com.gu.support.workers._
-import com.gu.support.workers.states.PaymentDetails
+import com.gu.support.workers.redemption.RedemptionData
 import org.joda.time.LocalDate
 
 case class PaperEmailFields(
@@ -17,7 +17,7 @@ case class PaperEmailFields(
   paymentSchedule: PaymentSchedule,
   firstDeliveryDate: Option[LocalDate],
   currency: Currency,
-  paymentMethod: PaymentDetails[PaymentMethod],
+  paymentMethod: Either[PaymentMethod, RedemptionData],
   sfContactId: SfContactId,
   directDebitMandateId: Option[String] = None,
   promotion: Option[Promotion] = None,

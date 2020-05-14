@@ -14,7 +14,7 @@ case class CreateSalesforceContactState(
   giftRecipient: Option[GiftRecipient],
   redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentMethod: PaymentDetails[PaymentMethod],
+  paymentMethod: Either[PaymentMethod, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]
@@ -24,5 +24,7 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 
 object CreateSalesforceContactState {
+  import com.gu.support.encoding.CustomCodecs.decodeEither
+  import com.gu.support.encoding.CustomCodecs.encodeEither
   implicit val codec: Codec[CreateSalesforceContactState] = deriveCodec
 }

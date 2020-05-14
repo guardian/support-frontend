@@ -4,7 +4,7 @@ import com.gu.emailservices.SubscriptionEmailFieldHelpers.{formatDate, hyphenate
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers._
-import com.gu.support.workers.states.{FreeProduct, PaidProduct, PaymentDetails}
+import com.gu.support.workers.redemption.RedemptionData
 import org.joda.time.DateTime
 
 case class ContributionEmailFields(
@@ -16,12 +16,12 @@ case class ContributionEmailFields(
     name: String,
     billingPeriod: BillingPeriod,
     sfContactId: SfContactId,
-    paymentMethod: PaymentDetails[PaymentMethod],
+    paymentMethod: Either[PaymentMethod, RedemptionData],
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {
 
   val paymentFields = paymentMethod match {
-    case PaidProduct(dd: DirectDebitPaymentMethod) => List(
+    case Left(dd: DirectDebitPaymentMethod) => List(
       "account name" -> dd.bankTransferAccountName,
       "account number" -> mask(dd.bankTransferAccountNumber),
       "sort code" -> hyphenate(dd.bankCode),
@@ -29,7 +29,7 @@ case class ContributionEmailFields(
       "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
       "payment method" -> "Direct Debit"
     )
-    case PaidProduct(dd: ClonedDirectDebitPaymentMethod) => List(
+    case Left(dd: ClonedDirectDebitPaymentMethod) => List(
       "account name" -> dd.bankTransferAccountName,
       "account number" -> mask(dd.bankTransferAccountNumber),
       "sort code" -> hyphenate(dd.bankCode),
@@ -37,9 +37,9 @@ case class ContributionEmailFields(
       "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
       "payment method" -> "Direct Debit"
     )
-    case PaidProduct(_: PayPalReferenceTransaction) => List("payment method" -> "PayPal")
-    case PaidProduct(_: CreditCardReferenceTransaction) => List("payment method" -> "credit / debit card")
-    case FreeProduct => Nil
+    case Left(_: PayPalReferenceTransaction) => List("payment method" -> "PayPal")
+    case Left(_: CreditCardReferenceTransaction) => List("payment method" -> "credit / debit card")
+    case Right(_: RedemptionData) => Nil
   }
 
   override val fields = List(

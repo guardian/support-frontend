@@ -10,7 +10,8 @@ import com.gu.stripe.StripeService
 import com.gu.stripe.StripeServiceForCurrency._
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
-import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState, FreeProduct, PaidProduct, PaymentDetails}
+import com.gu.support.workers.redemption.RedemptionData
+import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -27,13 +28,13 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       paymentFields => createPaymentMethod(paymentFields, state.user, state.product.currency, services)
         .map(paymentMethod =>
           HandlerResult(
-            getCreateSalesforceContactState(state, PaidProduct(paymentMethod)),
+            getCreateSalesforceContactState(state, Left(paymentMethod)),
             requestInfo
               .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
               .appendMessage(s"Product is ${state.product.describe}")
           )),
       redemptionData => Future.successful(HandlerResult(
-        getCreateSalesforceContactState(state, FreeProduct),
+        getCreateSalesforceContactState(state, Right(redemptionData)),
         requestInfo
           .appendMessage(s"Product redemption has no payment method")
           .appendMessage(s"Product is ${state.product.describe}")
@@ -58,7 +59,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
     }
 
-  private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentDetails[PaymentMethod]) =
+  private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: Either[PaymentMethod, RedemptionData]) =
     CreateSalesforceContactState(
       state.requestId,
       state.user,

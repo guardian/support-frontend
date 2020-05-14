@@ -16,7 +16,7 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.redemption.RedemptionData
-import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState, FreeProduct, PaidProduct, PaymentDetails}
+import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
 import io.circe.{Decoder, Encoder}
 import ophan.thrift.event.AbTest

@@ -13,8 +13,8 @@ case class FailureHandlerState(
   giftRecipient: Option[GiftRecipient],
   redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentFields: Option[PaymentDetails[PaymentFields]], //Will be present if CreatePaymentMethod failed
-  paymentMethod: Option[PaymentDetails[PaymentMethod]], //Will be present if anything after CreatePaymentMethod failed
+  paymentFields: Option[Either[PaymentFields, RedemptionData]], //Will be present if CreatePaymentMethod failed
+  paymentMethod: Option[Either[PaymentMethod, RedemptionData]], //Will be present if anything after CreatePaymentMethod failed
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode]
 ) extends StepFunctionUserState
@@ -24,6 +24,7 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 
 object FailureHandlerState {
+  import com.gu.support.encoding.CustomCodecs._
   implicit val codec: Codec[FailureHandlerState] = deriveCodec
 }
 
