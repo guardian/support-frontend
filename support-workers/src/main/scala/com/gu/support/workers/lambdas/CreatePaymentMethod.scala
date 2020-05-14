@@ -23,22 +23,22 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services): FutureHandlerResult = {
     SafeLogger.debug(s"CreatePaymentMethod state: $state")
 
-    state.paymentFields match {
-      case FreeProduct => Future.successful(HandlerResult(
-        getCreateSalesforceContactState(state, FreeProduct),
-        requestInfo
-          .appendMessage(s"Free product has no payment method")
-          .appendMessage(s"Product is ${state.product.describe}")
-      ))
-      case PaidProduct(paymentFields) => createPaymentMethod(paymentFields, state.user, state.product.currency, services)
+    state.paymentFields fold (
+      paymentFields => createPaymentMethod(paymentFields, state.user, state.product.currency, services)
         .map(paymentMethod =>
           HandlerResult(
             getCreateSalesforceContactState(state, PaidProduct(paymentMethod)),
             requestInfo
               .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
               .appendMessage(s"Product is ${state.product.describe}")
-          ))
-    }
+          )),
+      redemptionData => Future.successful(HandlerResult(
+        getCreateSalesforceContactState(state, FreeProduct),
+        requestInfo
+          .appendMessage(s"Product redemption has no payment method")
+          .appendMessage(s"Product is ${state.product.describe}")
+      ))
+    )
   }
 
   private def createPaymentMethod(

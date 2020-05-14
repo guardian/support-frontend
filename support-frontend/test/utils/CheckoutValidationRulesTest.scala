@@ -102,7 +102,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "fail if the source payment field received is an empty string" in {
-    val requestMissingState = validDigitalPackRequest.copy(paymentFields = PaidProduct(StripeSourcePaymentFields("", None)))
+    val requestMissingState = validDigitalPackRequest.copy(paymentFields = Left(StripeSourcePaymentFields("", None)))
     DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
@@ -184,7 +184,7 @@ object TestData {
     lastName = "hopper",
     product = DigitalPack(Currency.USD, Monthly),
     firstDeliveryDate = None,
-    paymentFields = PaidProduct(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
+    paymentFields = Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
@@ -222,7 +222,7 @@ object TestData {
     lastName = "hopper",
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields = PaidProduct(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
+    paymentFields = Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),

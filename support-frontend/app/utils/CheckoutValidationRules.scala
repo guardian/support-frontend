@@ -3,6 +3,7 @@ package utils
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers._
+import com.gu.support.workers.redemption.RedemptionData
 import com.gu.support.workers.states.{FreeProduct, PaidProduct, PaymentDetails}
 import org.joda.time.LocalDate
 import services.stepfunctions.CreateSupportWorkersRequest
@@ -34,13 +35,13 @@ object PaidProductValidation {
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
     hasValidPaymentDetailsForPaidProduct(createSupportWorkersRequest.paymentFields)
 
-  def hasValidPaymentDetailsForPaidProduct(paymentDetails: PaymentDetails[PaymentFields]): Boolean =
-    paymentDetails match {
-      case PaidProduct(paymentFields) => noEmptyPaymentFields(paymentFields)
-      case FreeProduct => false
-    }
+  def hasValidPaymentDetailsForPaidProduct(paymentDetails: Either[PaymentFields, RedemptionData]): Boolean =
+    paymentDetails fold (
+      paymentFields => noEmptyPaymentFields(paymentFields),
+      _ => false
+    )
 
-  private def noEmptyPaymentFields(paymentFields: PaymentFields): Boolean = paymentFields match {
+  def noEmptyPaymentFields(paymentFields: PaymentFields): Boolean = paymentFields match {
     case directDebitDetails: DirectDebitPaymentFields =>
       !directDebitDetails.accountHolderName.isEmpty && !directDebitDetails.accountNumber.isEmpty && !directDebitDetails.sortCode.isEmpty
     case _: StripePaymentMethodPaymentFields => true // already validated in PaymentMethodId.apply
@@ -95,11 +96,13 @@ object DigitalPackValidation {
     import createSupportWorkersRequest.billingAddress._
 
     val allowCorporateSubs = false
-    def isCorporateSub(request: CreateSupportWorkersRequest) =
-      request.paymentFields == FreeProduct && allowCorporateSubs //TODO: also need a valid code, this is coming in part 2
+    def isCorporateSub(redemptionData: RedemptionData) =
+      allowCorporateSubs //TODO: validate redemption data, this is coming in part 2
 
-    def hasValidPaymentDetails(request: CreateSupportWorkersRequest) = hasValidPaymentDetailsForPaidProduct(paymentFields) ||
-      isCorporateSub(request)
+    def hasValidPaymentDetails(request: CreateSupportWorkersRequest) = paymentFields.fold(
+      paymentFields => PaidProductValidation.noEmptyPaymentFields(paymentFields),
+      redemptionData => isCorporateSub(redemptionData)
+    )
 
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
       hasStateIfRequired(country, state, currency) &&
