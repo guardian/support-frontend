@@ -1,21 +1,32 @@
 import { css } from '@emotion/core';
 import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { background, brandAltBackground, text } from '@guardian/src-foundations/palette';
+import { background, brandAltBackground, text, border, neutral } from '@guardian/src-foundations/palette';
 import { from, between, until } from '@guardian/src-foundations/mq';
 
 export const wrapper = css`
   background-color: ${background.primary};
   color: ${text.primary};
-  padding-bottom: ${space[3]}px;
+  ${until.desktop} {
+    padding: ${space[3]}px;
+  }
+  ${until.tablet} {
+    box-shadow: 0px 4px 4px ${border.secondary};
+  }
 `;
 
 export const topLine = css`
   display: flex;
   justify-content: space-between;
   width: calc(100%-${space[3]}px * 2);
-  margin: ${space[3]}px;
   align-items: center;
+  padding: ${space[3]}px;
+
+  ${until.desktop} {
+    border-top: 1px solid ${neutral['93']};
+    padding: ${space[1]}px 0 ${space[2]}px;
+  }
+
 
   a, a:visited {
     display: block;
@@ -41,7 +52,6 @@ export const sansTitle = css`
 export const contentBlock = css`
   display: flex;
   width: 100%;
-  margin-bottom: ${space[3]}px;
 
   ${from.tablet} {
     display: block;
@@ -53,7 +63,7 @@ export const imageContainer = css`
   align-items: flex-start;
   width: calc(100%-30px);
   padding: 15px 10px 0 15px;
-  background-color: #63717A;
+  background-color: ${neutral['97']};
 
   img {
     width: 100%;
@@ -67,7 +77,6 @@ export const imageContainer = css`
     padding-top: 8px;
     padding-left: 8px;
     overflow: hidden;
-    margin-left: ${space[3]}px;
     img {
       width: 200%;
       align-items: flex-end;
@@ -88,7 +97,7 @@ export const textBlock = css`
 
   h3 {
     ${body.medium({ fontWeight: 'bold' })};
-    margin-top: -5px;
+    margin: -5px 0 -3px;
     ${from.desktop} {
       ${headline.xxsmall({ fontWeight: 'bold' })};
       margin-top: 0;
