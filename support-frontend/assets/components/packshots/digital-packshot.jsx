@@ -8,7 +8,7 @@ const DigitalPackshot = () => (
       sources={[
         {
           gridId: 'subscriptionDailyPackshotMobile',
-          srcSizes: [433],
+          srcSizes: [500],
           imgType: 'png',
           sizes: '100vw',
           media: '(max-width: 739px)',
