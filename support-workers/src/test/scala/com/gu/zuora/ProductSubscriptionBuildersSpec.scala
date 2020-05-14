@@ -25,25 +25,25 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
     termLength shouldBe 92
   }
 
-  "SubscriptionData for a gift subscription" should "have autoRenew set to false" in checkAllowed(
+  "SubscriptionData for a gift subscription" should "have autoRenew set to false" in (
     gift.subscription.autoRenew shouldBe false
   )
 
-  it should "have the contractAcceptanceDate set to the first delivery date" in checkAllowed(
+  it should "have the contractAcceptanceDate set to the first delivery date" in (
     gift.subscription.contractAcceptanceDate shouldBe firstDeliveryDate
   )
 
-  it should "have the contractEffectiveDate and the termStartDate set to the date it was sold" in checkAllowed {
+  it should "have the contractEffectiveDate and the termStartDate set to the date it was sold" in {
     gift.subscription.contractEffectiveDate shouldBe saleDate
     gift.subscription.termStartDate shouldBe saleDate
   }
 
-  it should "have an initial term of 95 days" in checkAllowed {
+  it should "have an initial term of 95 days" in {
     gift.subscription.initialTerm shouldBe 95
     gift.subscription.initialTermPeriodType shouldBe Day
   }
 
-  it should "have the correct productRatePlanId" in checkAllowed(
+  it should "have the correct productRatePlanId" in (
     gift.ratePlanData.head.ratePlan.productRatePlanId shouldBe "2c92c0f96ded216a016df491134d4091"
   )
 
@@ -68,10 +68,10 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
     nonGift.ratePlanData.head.ratePlan.productRatePlanId shouldBe "2c92c0f965dc30640165f150c0956859"
   }
 
-  val weekly = GuardianWeekly(GBP, Quarterly, Domestic)
-  val promotionService = mock[PromotionService]
-  val saleDate = new LocalDate(2019, 10, 24)
-  val firstDeliveryDate = saleDate.plusDays(3)
+  lazy val weekly = GuardianWeekly(GBP, Quarterly, Domestic)
+  lazy val promotionService = mock[PromotionService]
+  lazy val saleDate = new LocalDate(2019, 10, 24)
+  lazy val firstDeliveryDate = saleDate.plusDays(3)
 
   lazy val gift: SubscriptionData =
     weekly.build(
@@ -84,7 +84,7 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
       isTestUser = false,
       contractEffectiveDate = saleDate)
 
-  val nonGift = weekly.build(
+  lazy val nonGift = weekly.build(
     UUID.randomUUID(),
     Country.UK, None,
     Some(firstDeliveryDate),
@@ -93,11 +93,5 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
     DEV,
     isTestUser = false,
     contractEffectiveDate = saleDate)
-
-  def checkAllowed(assertion: => Assertion) = {
-    if (ProductSubscriptionBuilders.allowFixedTermSubs) {
-      assertion
-    } else succeed
-  }
 
 }
