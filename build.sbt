@@ -33,6 +33,7 @@ lazy val root = (project in file("."))
   .aggregate(eventProducerPlayJson27, eventProducerPlayJson28)
   .settings(
     sourceDirectory := baseDirectory.value / "dummy",
+    publishArtifact := false
   )
 
 lazy val eventProducerPlayJson27 = (project in file("play27"))
