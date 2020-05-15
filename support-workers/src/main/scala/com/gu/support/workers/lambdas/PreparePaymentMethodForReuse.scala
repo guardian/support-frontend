@@ -41,7 +41,6 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
           requestId = UUID.randomUUID(),
           user = state.user,
           giftRecipient = state.giftRecipient,
-          redemptionData = state.redemptionData,
           product = state.product,
           paymentMethod = Left(paymentMethod),
           firstDeliveryDate = None,

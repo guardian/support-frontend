@@ -11,7 +11,6 @@ case class FailureHandlerState(
   requestId: UUID,
   user: User,
   giftRecipient: Option[GiftRecipient],
-  redemptionData: Option[RedemptionData],
   product: ProductType,
   paymentFields: Option[Either[PaymentFields, RedemptionData]], //Will be present if CreatePaymentMethod failed
   paymentMethod: Option[Either[PaymentMethod, RedemptionData]], //Will be present if anything after CreatePaymentMethod failed

@@ -64,7 +64,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.requestId,
       state.user,
       state.giftRecipient,
-      state.redemptionData,
       state.product,
       paymentMethod,
       state.firstDeliveryDate,
@@ -78,7 +77,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     currency: Currency
   ): Future[CreditCardReferenceTransaction] = {
     val stripeServiceForCurrency = stripeService.withCurrency(currency)
-    (stripe match {
+    stripe match {
       case StripeSourcePaymentFields(source, stripePaymentType) =>
         stripeServiceForCurrency.createCustomerFromToken(source).map { customer =>
           val card = customer.source
@@ -112,7 +111,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             stripePaymentType = stripePaymentType
           )
         }
-    })
+    }
   }
 
   def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =

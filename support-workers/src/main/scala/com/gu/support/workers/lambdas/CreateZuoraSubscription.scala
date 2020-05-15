@@ -99,7 +99,6 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.requestId,
       state.user,
       state.giftRecipient,
-      state.redemptionData,
       state.product,
       state.paymentMethod,
       state.firstDeliveryDate,
@@ -140,7 +139,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         config,
         state.user.billingAddress.country,
         state.promoCode,
-        state.redemptionData,
+        state.paymentMethod,
         promotionService,
         stage,
         isTestUser

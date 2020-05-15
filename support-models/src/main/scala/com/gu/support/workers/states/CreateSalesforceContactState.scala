@@ -12,7 +12,6 @@ case class CreateSalesforceContactState(
   requestId: UUID,
   user: User,
   giftRecipient: Option[GiftRecipient],
-  redemptionData: Option[RedemptionData],
   product: ProductType,
   paymentMethod: Either[PaymentMethod, RedemptionData],
   firstDeliveryDate: Option[LocalDate],

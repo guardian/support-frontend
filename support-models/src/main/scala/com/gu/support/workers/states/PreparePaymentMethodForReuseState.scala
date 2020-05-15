@@ -12,7 +12,6 @@ case class PreparePaymentMethodForReuseState(
     paymentFields: ExistingPaymentFields,
     user: User,
     giftRecipient: Option[GiftRecipient],
-    redemptionData: Option[RedemptionData],
     acquisitionData: Option[AcquisitionData]
   ) extends StepFunctionUserState
 

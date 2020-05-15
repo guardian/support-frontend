@@ -129,7 +129,6 @@ class SupportWorkersClient(
       requestId = requestId,
       user = user,
       giftRecipient = getGiftRecipient(request.body),
-      None, // TODO
       product = request.body.product,
       paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(

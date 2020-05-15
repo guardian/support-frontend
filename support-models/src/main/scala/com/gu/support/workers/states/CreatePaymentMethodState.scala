@@ -12,7 +12,6 @@ case class CreatePaymentMethodState(
   requestId: UUID,
   user: User,
   giftRecipient: Option[GiftRecipient],
-  redemptionData: Option[RedemptionData],
   product: ProductType,
   paymentFields: Either[PaymentFields, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
