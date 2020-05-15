@@ -32,6 +32,7 @@ resolvers += Resolver.sonatypeRepo("releases")
 lazy val root = (project in file("."))
   .aggregate(eventProducerPlayJson27, eventProducerPlayJson28)
   .settings(
+    licenses += ("MIT", url("http://opensource.org/licenses/MIT")),// to keep bintrayEnsureLicenses happy
     sourceDirectory := baseDirectory.value / "dummy",
     publishArtifact := false
   )
