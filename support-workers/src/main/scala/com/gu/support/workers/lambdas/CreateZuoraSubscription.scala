@@ -7,7 +7,7 @@ import com.gu.config.Configuration
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.promotions.PromotionService
+import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api._
@@ -34,8 +34,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     services: Services
   ): FutureHandlerResult = {
     val now = () => OffsetDateTime.now
-    val subscribeItem = buildSubscribeItem(state, services.promotionService)
     for {
+      subscribeItem <- Future.fromTry(buildSubscribeItem(state, services.promotionService).left.map(err => new RuntimeException(err.toString)).toTry)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
       maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
@@ -110,17 +110,19 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.acquisitionData
     )
 
-  private def buildSubscribeItem(state: CreateZuoraSubscriptionState, promotionService: PromotionService): SubscribeItem = {
+  private def buildSubscribeItem(state: CreateZuoraSubscriptionState, promotionService: PromotionService): Either[PromoError, SubscribeItem] = {
     val billingEnabled = state.paymentMethod.isLeft
-    //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
-    SubscribeItem(
-      account = buildAccount(state),
-      billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
-      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
-      paymentMethod = state.paymentMethod.left.toOption,
-      subscriptionData = buildSubscriptionData(state, promotionService),
-      subscribeOptions = SubscribeOptions(billingEnabled, billingEnabled)
-    )
+    buildSubscriptionData(state, promotionService).map { subscriptionData =>
+      //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
+      SubscribeItem(
+        account = buildAccount(state),
+        billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
+        soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
+        paymentMethod = state.paymentMethod.left.toOption,
+        subscriptionData = subscriptionData,
+        subscribeOptions = SubscribeOptions(billingEnabled, billingEnabled)
+      )
+    }
   }
 
   private def buildSubscriptionData(state: CreateZuoraSubscriptionState, promotionService: PromotionService) = {
@@ -133,7 +135,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val stage = Configuration.stage
 
     state.product match {
-      case c: Contribution => c.build(state.requestId, config)
+      case c: Contribution => Right(c.build(state.requestId, config))
       case d: DigitalPack => d.build(
         state.requestId,
         config,
@@ -144,7 +146,15 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         stage,
         isTestUser
       )
-      case p: Paper => p.build(state.requestId, state.user.billingAddress.country, state.promoCode, state.firstDeliveryDate, promotionService, stage, isTestUser)
+      case p: Paper => p.build(
+        state.requestId,
+        state.user.billingAddress.country,
+        state.promoCode,
+        state.firstDeliveryDate,
+        promotionService,
+        stage,
+        isTestUser
+      )
       case w: GuardianWeekly => w.build(
         state.requestId,
         state.user.billingAddress.country,

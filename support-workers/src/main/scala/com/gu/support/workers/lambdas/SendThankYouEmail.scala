@@ -125,7 +125,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
    ): Option[Promotion] =
     for {
       promoCode <- maybePromoCode
-      promotionWithCode <- promotionService.findPromotion(promoCode)
+      promotionWithCode <- promotionService.findPromotion(promoCode).toOption
       validPromotion <- promotionService.validatePromotion(promotionWithCode, country, productRatePlanId, isRenewal = false).toOption
     } yield validPromotion.promotion
 
