@@ -7,6 +7,7 @@ import com.gu.paypal.PayPalError
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.stripe.StripeError
 import com.gu.support.workers.exceptions.RetryImplicits._
+import com.gu.support.workers.lambdas.BuildSubscribePromoError
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
 /**
  * Maps exceptions from the application to either fatal or non fatal exceptions
@@ -25,6 +26,8 @@ object ErrorHandler {
     case e: SalesforceErrorResponse => logAndRethrow(e.asRetryException)
     // Ophan
     case e: AnalyticsServiceError => logAndRethrow(e.asRetryException)
+    // promo code issues
+    case e: BuildSubscribePromoError => logAndRethrow(e.asRetryException)
     //Any Exception that we haven't specifically handled
     case e: Throwable => logAndRethrow(e.asRetryException)
   }
