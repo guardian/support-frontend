@@ -9,6 +9,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers._
+import com.gu.support.workers.exceptions.{RetryException, RetryNone}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
@@ -18,7 +19,10 @@ import com.gu.zuora.ProductSubscriptionBuilders._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-
+case class BuildSubscribePromoError(message: PromoError) extends RuntimeException {
+  def asRetryException: RetryException =
+    new RetryNone(message.toString, cause = this)
+}
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
@@ -35,7 +39,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   ): FutureHandlerResult = {
     val now = () => OffsetDateTime.now
     for {
-      subscribeItem <- Future.fromTry(buildSubscribeItem(state, services.promotionService).left.map(err => new RuntimeException(err.toString)).toTry)
+      subscribeItem <- Future.fromTry(buildSubscribeItem(state, services.promotionService).left.map(err => new BuildSubscribePromoError(err)).toTry)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
       maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
