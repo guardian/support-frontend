@@ -34,7 +34,8 @@ lazy val root = (project in file("."))
   .settings(
     licenses += ("MIT", url("http://opensource.org/licenses/MIT")),// to keep bintrayEnsureLicenses happy
     sourceDirectory := baseDirectory.value / "dummy",
-    publishArtifact := false
+    publishArtifact := false,
+    bintrayReleaseOnPublish := false
   )
 
 lazy val eventProducerPlayJson27 = (project in file("play27"))
