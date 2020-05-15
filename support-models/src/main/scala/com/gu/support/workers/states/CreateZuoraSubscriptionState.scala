@@ -13,9 +13,8 @@ case class CreateZuoraSubscriptionState(
   requestId: UUID,
   user: User,
   giftRecipient: Option[GiftRecipient],
-  redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentMethod: PaymentDetails[PaymentMethod],
+  paymentMethod: Either[PaymentMethod, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   salesforceContacts: SalesforceContactRecords,
@@ -26,5 +25,6 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 
 object CreateZuoraSubscriptionState {
+  import com.gu.support.encoding.CustomCodecs._
   implicit val codec: Codec[CreateZuoraSubscriptionState] = deriveCodec
 }

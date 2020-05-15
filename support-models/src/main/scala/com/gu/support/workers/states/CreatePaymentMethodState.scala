@@ -12,9 +12,8 @@ case class CreatePaymentMethodState(
   requestId: UUID,
   user: User,
   giftRecipient: Option[GiftRecipient],
-  redemptionData: Option[RedemptionData],
   product: ProductType,
-  paymentFields: PaymentDetails[PaymentFields],
+  paymentFields: Either[PaymentFields, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]
@@ -24,6 +23,8 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 
 object CreatePaymentMethodState {
+  import com.gu.support.encoding.CustomCodecs.decodeEither
+  import com.gu.support.encoding.CustomCodecs.encodeEither
   implicit val codec: Codec[CreatePaymentMethodState] = deriveCodec
 }
 

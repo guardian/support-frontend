@@ -8,10 +8,11 @@ import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
+import org.scalatest.EitherValues
 import org.scalatest.flatspec.AsyncFlatSpec
 
 
-class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging {
+class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging with EitherValues {
 
   "Contribution JSON with a billing period set" should "be decoded correctly" in {
     val input = contribution(billingPeriod = Annual)
@@ -41,7 +42,9 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson())
     testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson(Annual))
     testDecoding[CreateZuoraSubscriptionState](createDigiPackZuoraSubscriptionJson)
-    testDecoding[CreateZuoraSubscriptionState](createCorporateDigiPackZuoraSubscriptionJson)
+    testDecoding[CreateZuoraSubscriptionState](createCorporateDigiPackZuoraSubscriptionJson,
+      state => state.paymentMethod.right.value.redemptionCode shouldBe "fakeCode"
+    )
   }
 
   "SendThankYouEmailState" should "deserialise correctly" in {

@@ -4,7 +4,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.JsonFixtures.{validBaid, _}
 import com.gu.support.workers._
-import com.gu.support.workers.states.{CreatePaymentMethodState, PaidProduct}
+import com.gu.support.workers.states.CreatePaymentMethodState
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Json
 import io.circe.generic.auto._
@@ -56,7 +56,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      PaidProduct(PayPalPaymentFields(validBaid))
+      Left(PayPalPaymentFields(validBaid))
     ))
 
   }
@@ -67,7 +67,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      PaidProduct(StripeSourcePaymentFields(stripeToken, Some(StripePaymentType.StripeCheckout)))
+      Left(StripeSourcePaymentFields(stripeToken, Some(StripePaymentType.StripeCheckout)))
     ))
   }
 
@@ -77,7 +77,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       (state.product, state.paymentFields))
     fieldsToTest should be(Right(
       Contribution(5, GBP, Monthly),
-      PaidProduct(StripePaymentMethodPaymentFields(stripePaymentMethodToken, Some(StripePaymentType.StripeCheckout)))
+      Left(StripePaymentMethodPaymentFields(stripePaymentMethodToken, Some(StripePaymentType.StripeCheckout)))
     ))
   }
 
@@ -89,7 +89,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
       case _ => fail()
     }
     result.paymentFields match {
-      case PaidProduct(paypal: PayPalPaymentFields) => paypal.baid should be(validBaid)
+      case Left(paypal: PayPalPaymentFields) => paypal.baid should be(validBaid)
       case _ => fail()
     }
   }
@@ -102,7 +102,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
         case _ => fail()
       }
       result.paymentFields match {
-        case PaidProduct(dd: DirectDebitPaymentFields) => dd.accountHolderName should be(mickeyMouse)
+        case Left(dd: DirectDebitPaymentFields) => dd.accountHolderName should be(mickeyMouse)
         case _ => fail()
       }
     })

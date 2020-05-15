@@ -6,7 +6,7 @@ import com.gu.support.zuora.api.{ReaderType, Subscription}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
-abstract class RedemptionData(val redemptionCode: RedemptionCode) {
+abstract class RedemptionData(val redemptionCode: RedemptionCode){
   def redeem(subscription: Subscription) = subscription.copy(redemptionCode = Some(redemptionCode))
 }
 

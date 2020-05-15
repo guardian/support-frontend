@@ -8,7 +8,7 @@ import org.joda.time.{DateTime, Days, LocalDate, Months}
 
 import scala.util.Try
 
-object CustomCodecs extends InternationalisationCodecs with HelperCodecs
+object CustomCodecs extends InternationalisationCodecs with HelperCodecs with EitherCodecs
 
 trait InternationalisationCodecs {
   implicit val encodeTitle: Encoder[Title] = Encoder.encodeString.contramap(_.title)
@@ -50,4 +50,21 @@ trait HelperCodecs {
     .or(Decoder.decodeString.map(DateTime.parse))
   implicit val uuidDecoder: Decoder[UUID] = Decoder.decodeString.emap(code => Try(UUID.fromString(code)).toOption.toRight(s"Invalid UUID '$code'"))
   implicit val uuidEncoder: Encoder[UUID] = Encoder.encodeString.contramap(_.toString)
+}
+
+trait EitherCodecs {
+  import io.circe.syntax._
+
+  implicit def decodeEither[A, B](implicit
+    decoderA: Decoder[A],
+    decoderB: Decoder[B]
+  ): Decoder[Either[A, B]] = decoderA.either(decoderB)
+
+  implicit def encodeEither[A, B](implicit
+    encoderA: Encoder[A],
+    encoderB: Encoder[B]
+  ): Encoder[Either[A, B]] = {
+    o: Either[A, B] =>
+      o.fold(_.asJson, _.asJson)
+  }
 }

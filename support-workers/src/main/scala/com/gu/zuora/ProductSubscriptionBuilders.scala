@@ -47,7 +47,7 @@ object ProductSubscriptionBuilders {
       config: ZuoraConfig,
       country: Country,
       maybePromoCode: Option[PromoCode],
-      maybeRedemptionData: Option[RedemptionData],
+      paymentMethod: Either[PaymentMethod, RedemptionData],
       promotionService: PromotionService,
       stage: Stage,
       isTestUser: Boolean
@@ -61,16 +61,19 @@ object ProductSubscriptionBuilders {
 
       val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(fromStage(stage, isTestUser), fixedTerm = false), digitalPack.describe)
 
-      val subscriptionData = maybeRedeemCode(maybeRedemptionData,
-        buildProductSubscription(
-          requestId,
-          productRatePlanId,
-          contractAcceptanceDate = contractAcceptanceDate,
-          contractEffectiveDate = contractEffectiveDate
-        )
+      val subscriptionData = buildProductSubscription(
+        requestId,
+        productRatePlanId,
+        contractAcceptanceDate = contractAcceptanceDate,
+        contractEffectiveDate = contractEffectiveDate
       )
 
-      applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
+      val redeemedSub = paymentMethod.fold(
+        _ => subscriptionData.subscription,
+        redemptionData => redemptionData.redeem(subscriptionData.subscription)
+      )
+
+      applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData.copy(subscription = redeemedSub))
     }
 
     def maybeRedeemCode(maybeRedemptionData: Option[RedemptionData], subscriptionData: SubscriptionData): SubscriptionData = {
@@ -165,7 +168,7 @@ trait ProductSubscriptionBuilder {
     contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
     readerType: ReaderType = ReaderType.Direct,
     initialTermMonths: Int = 12
-  ) = {
+  ): SubscriptionData = {
     val (initialTerm, autoRenew, initialTermPeriodType) = if(readerType == ReaderType.Gift)
       (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, Day)
     else

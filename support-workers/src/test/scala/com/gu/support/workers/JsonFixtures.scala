@@ -386,12 +386,11 @@ object JsonFixtures {
           {
             $requestIdJson,
             $userJsonNoAddress,
-            "redemptionData": {
+            "product": $digitalPackJson,
+            "paymentMethod": {
               "redemptionCode": "123abc",
               "corporateAccountId": "00001"
             },
-            "product": $digitalPackJson,
-            "paymentMethod": "FreeProduct",
             "salesForceContact": $salesforceContactJson,
             $salesforceContactsJson
             }

@@ -15,7 +15,8 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState, FreeProduct, PaidProduct, PaymentDetails}
+import com.gu.support.workers.redemption.RedemptionData
+import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
 import io.circe.{Decoder, Encoder}
 import ophan.thrift.event.AbTest
@@ -27,8 +28,9 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
-
   import codecs.CirceDecoders._
+  import com.gu.support.encoding.CustomCodecs.encodeEither
+  import com.gu.support.encoding.CustomCodecs.decodeEither
 
   implicit val codec: Codec[CreateSupportWorkersRequest] = deriveCodec
 }
@@ -45,7 +47,7 @@ case class CreateSupportWorkersRequest(
   emailGiftRecipient: Option[String],
   product: ProductType,
   firstDeliveryDate: Option[LocalDate],
-  paymentFields: PaymentDetails[PaymentFields],
+  paymentFields: Either[PaymentFields, RedemptionData],
   promoCode: Option[PromoCode],
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -127,7 +129,6 @@ class SupportWorkersClient(
       requestId = requestId,
       user = user,
       giftRecipient = getGiftRecipient(request.body),
-      None, // TODO
       product = request.body.product,
       paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
@@ -138,7 +139,7 @@ class SupportWorkersClient(
       promoCode = request.body.promoCode,
       firstDeliveryDate = request.body.firstDeliveryDate
     )
-    val isExistingAccount = createPaymentMethodState.paymentFields.exists(_.isInstanceOf[ExistingPaymentFields])
+    val isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")

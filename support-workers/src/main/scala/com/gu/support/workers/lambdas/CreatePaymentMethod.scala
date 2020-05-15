@@ -10,7 +10,8 @@ import com.gu.stripe.StripeService
 import com.gu.stripe.StripeServiceForCurrency._
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
-import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState, FreeProduct, PaidProduct, PaymentDetails}
+import com.gu.support.workers.redemption.RedemptionData
+import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -23,22 +24,22 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services): FutureHandlerResult = {
     SafeLogger.debug(s"CreatePaymentMethod state: $state")
 
-    state.paymentFields match {
-      case FreeProduct => Future.successful(HandlerResult(
-        getCreateSalesforceContactState(state, FreeProduct),
-        requestInfo
-          .appendMessage(s"Free product has no payment method")
-          .appendMessage(s"Product is ${state.product.describe}")
-      ))
-      case PaidProduct(paymentFields) => createPaymentMethod(paymentFields, state.user, state.product.currency, services)
+    state.paymentFields fold (
+      paymentFields => createPaymentMethod(paymentFields, state.user, state.product.currency, services)
         .map(paymentMethod =>
           HandlerResult(
-            getCreateSalesforceContactState(state, PaidProduct(paymentMethod)),
+            getCreateSalesforceContactState(state, Left(paymentMethod)),
             requestInfo
               .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
               .appendMessage(s"Product is ${state.product.describe}")
-          ))
-    }
+          )),
+      redemptionData => Future.successful(HandlerResult(
+        getCreateSalesforceContactState(state, Right(redemptionData)),
+        requestInfo
+          .appendMessage(s"Product redemption has no payment method")
+          .appendMessage(s"Product is ${state.product.describe}")
+      ))
+    )
   }
 
   private def createPaymentMethod(
@@ -58,12 +59,11 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
     }
 
-  private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentDetails[PaymentMethod]) =
+  private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: Either[PaymentMethod, RedemptionData]) =
     CreateSalesforceContactState(
       state.requestId,
       state.user,
       state.giftRecipient,
-      state.redemptionData,
       state.product,
       paymentMethod,
       state.firstDeliveryDate,
@@ -77,7 +77,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     currency: Currency
   ): Future[CreditCardReferenceTransaction] = {
     val stripeServiceForCurrency = stripeService.withCurrency(currency)
-    (stripe match {
+    stripe match {
       case StripeSourcePaymentFields(source, stripePaymentType) =>
         stripeServiceForCurrency.createCustomerFromToken(source).map { customer =>
           val card = customer.source
@@ -111,7 +111,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             stripePaymentType = stripePaymentType
           )
         }
-    })
+    }
   }
 
   def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =
