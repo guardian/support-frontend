@@ -37,7 +37,7 @@ object PaidProductValidation {
   def hasValidPaymentDetailsForPaidProduct(paymentDetails: Either[PaymentFields, RedemptionData]): Boolean =
     paymentDetails fold (
       paymentFields => noEmptyPaymentFields(paymentFields),
-      _ => false
+      redemptionData => false
     )
 
   def noEmptyPaymentFields(paymentFields: PaymentFields): Boolean = paymentFields match {

@@ -66,7 +66,7 @@ case class DigitalPackEmailFields(
     )
     case Left(_: CreditCardReferenceTransaction) => List("Default payment method" -> "Credit/Debit Card")
     case Left(_: PayPalReferenceTransaction) => Seq("Default payment method" -> "PayPal")
-    case Right(_) => Nil
+    case Right(redemptionData) => Nil
   }
 
   override val fields = List(
