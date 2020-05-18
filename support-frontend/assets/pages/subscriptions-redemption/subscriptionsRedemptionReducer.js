@@ -9,33 +9,42 @@ import type { Option } from 'helpers/types/option';
 
 export type CorporateRedemption = {
   redemptionCode: string,
-  corporateAccountId: string,
+  corporateName: string,
 }
 
 export type RedemptionData = CorporateRedemption
 
 export type RedemptionFormState = {
-  stage: string,
   userCode: Option<string>,
+  error: Option<string>,
 };
+
+export type Checkout = {
+  stage: string,
+}
 
 export type State = {
   common: CommonState,
   page: {
-    checkout: RedemptionFormState,
-    redemptionCode: Option<RedemptionData>,
+    checkout: Checkout,
+    form: RedemptionFormState,
+    redemptionData: Option<RedemptionData>,
   }
 };
 
 const getRedemptionData = (): Option<RedemptionData> => getGlobal('redemptionData');
+const getCheckout = (): Checkout => ({
+  stage: getGlobal('stage') || 'checkout',
+});
 const getForm = (): RedemptionFormState => ({
-  stage: 'checkout',
-  userCode: '123',
+  userCode: null,
+  error: null,
 });
 
 // ----- Export ----- //
 
 export default () => combineReducers({
-  checkout: getForm,
+  checkout: getCheckout,
+  form: getForm,
   redemptionData: getRedemptionData,
 });
