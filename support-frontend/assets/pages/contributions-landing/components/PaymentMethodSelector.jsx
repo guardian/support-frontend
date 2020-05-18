@@ -42,6 +42,8 @@ import {
 } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import SvgAmazonPayLogo from 'components/svgs/amazonPayLogo';
+import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { RadioGroup, Radio } from '@guardian/src-radio';
 
 
 // ----- Types ----- //
@@ -58,6 +60,7 @@ type PropTypes = {|
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   isTestUser: boolean,
   switches: Switches,
+  designSystemTestVariant: LandingPageDesignSystemTestVariants,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -70,6 +73,7 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
+  designSystemTestVariant: state.common.abParticipations.landingPageDesignSystemTest,
 });
 
 const mapDispatchToProps = {
@@ -118,11 +122,20 @@ function withProps(props: PropTypes) {
     </div>
   );
 
+  const renderLabelAndLogo = (paymentMethod: PaymentMethod) => (
+    <>
+      <span>{getPaymentLabel(paymentMethod)}</span>
+      <span id="paymentMethodLogo">{getPaymentMethodLogo(paymentMethod)}</span>
+    </>
+  );
+
   return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
+    <div
+      className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}
+    >
       {legend}
       { paymentMethods.length ?
-        <ul className="form__radio-group-list">
+        <RadioGroup className="form__radio-group-list">
           {contributionTypeIsRecurring(props.contributionType) && !props.existingPaymentMethods && (
           <div className="awaiting-existing-payment-options">
             <AnimatedDots appearance="medium" />
@@ -131,42 +144,46 @@ function withProps(props: PropTypes) {
           }
           {contributionTypeIsRecurring(props.contributionType) &&
           fullExistingPaymentMethods.map((existingPaymentMethod: RecentlySignedInExistingPaymentMethod) => (
-            <li className="form__radio-group-item">
-              <input
+            <>
+              <Radio
                 id={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
-                className="form__radio-group-input"
+                // className="form__radio-group-input"
                 name="paymentMethodSelector"
                 type="radio"
                 value={existingPaymentMethod}
                 onChange={() => {
-                    props.updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod));
-                    props.updateSelectedExistingPaymentMethod(existingPaymentMethod);
-                  }}
+                      props.updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod));
+                      props.updateSelectedExistingPaymentMethod(existingPaymentMethod);
+                    }}
                 checked={
-                    props.paymentMethod === mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod) &&
-                    props.existingPaymentMethod === existingPaymentMethod
-                  }
+                      props.paymentMethod === mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod) &&
+                      props.existingPaymentMethod === existingPaymentMethod
+                    }
                 arial-labelledby="payment_method"
+                label={getExistingPaymentMethodLabel(existingPaymentMethod)}
+                cssOverrides={{
+                  outline: '1px solid green',
+                }}
               />
               <label
                 htmlFor={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
                 className="form__radio-group-label has-existing-payment-option-explainer"
               >
                 <span className="radio-ui" />
-                <span className="radio-ui__label">{getExistingPaymentMethodLabel(existingPaymentMethod)}</span>
+                {/* <span className="radio-ui__label">{getExistingPaymentMethodLabel(existingPaymentMethod)}</span> */}
                 {getPaymentMethodLogo(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod))}
               </label>
               <div className="existing-payment-option-explainer">
-                  Used for your{' '}
+                    Used for your{' '}
                 {subscriptionsToExplainerList(existingPaymentMethod.subscriptions.map(subscriptionToExplainerPart))}
               </div>
-            </li>
+            </>
             ))}
           {paymentMethods.map(paymentMethod => (
-            <li className="form__radio-group-item">
-              <input
+            <>
+              <Radio
                 id={`paymentMethodSelector-${paymentMethod}`}
-                className="form__radio-group-input"
+                // className="form__radio-group-input"
                 name="paymentMethodSelector"
                 type="radio"
                 value={paymentMethod}
@@ -175,13 +192,18 @@ function withProps(props: PropTypes) {
                   props.updateSelectedExistingPaymentMethod(undefined);
                 }}
                 checked={props.paymentMethod === paymentMethod}
+                // label={renderLabelAndLogo(paymentMethod)}
+                label={renderLabelAndLogo(paymentMethod)}
+                // cssOverrides={{
+
+                // }}
               />
-              <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
+              {/* <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
                 <span className="radio-ui" />
                 <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
                 {getPaymentMethodLogo(paymentMethod)}
-              </label>
-            </li>
+              </label> */}
+          </>
           ))}
           {
             contributionTypeIsRecurring(props.contributionType) &&
@@ -193,38 +215,122 @@ function withProps(props: PropTypes) {
               </li>
             )
           }
-        </ul>
+        </RadioGroup>
         : noPaymentMethodsErrorMessage
       }
 
-    </fieldset>
+    </div>
   );
+
+  // return (
+  //   <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
+  //     {legend}
+  //     { paymentMethods.length ?
+  //       <ul className="form__radio-group-list">
+  //         {contributionTypeIsRecurring(props.contributionType) && !props.existingPaymentMethods && (
+  //         <div className="awaiting-existing-payment-options">
+  //           <AnimatedDots appearance="medium" />
+  //         </div>
+  //           )
+  //         }
+  //         {contributionTypeIsRecurring(props.contributionType) &&
+  //         fullExistingPaymentMethods.map((existingPaymentMethod: RecentlySignedInExistingPaymentMethod) => (
+  //           <li className="form__radio-group-item">
+  //             <input
+  //               id={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
+  //               className="form__radio-group-input"
+  //               name="paymentMethodSelector"
+  //               type="radio"
+  //               value={existingPaymentMethod}
+  //               onChange={() => {
+  //                   props.updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod));
+  //                   props.updateSelectedExistingPaymentMethod(existingPaymentMethod);
+  //                 }}
+  //               checked={
+  //                   props.paymentMethod === mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod) &&
+  //                   props.existingPaymentMethod === existingPaymentMethod
+  //                 }
+  //               arial-labelledby="payment_method"
+  //             />
+  //             <label
+  //               htmlFor={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
+  //               className="form__radio-group-label has-existing-payment-option-explainer"
+  //             >
+  //               <span className="radio-ui" />
+  //               <span className="radio-ui__label">{getExistingPaymentMethodLabel(existingPaymentMethod)}</span>
+  //               {getPaymentMethodLogo(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod))}
+  //             </label>
+  //             <div className="existing-payment-option-explainer">
+  //                 Used for your{' '}
+  //               {subscriptionsToExplainerList(existingPaymentMethod.subscriptions.map(subscriptionToExplainerPart))}
+  //             </div>
+  //           </li>
+  //           ))}
+  //         {paymentMethods.map(paymentMethod => (
+  //           <li className="form__radio-group-item">
+  //             <input
+  //               id={`paymentMethodSelector-${paymentMethod}`}
+  //               className="form__radio-group-input"
+  //               name="paymentMethodSelector"
+  //               type="radio"
+  //               value={paymentMethod}
+  //               onChange={() => {
+  //                 props.updatePaymentMethod(paymentMethod);
+  //                 props.updateSelectedExistingPaymentMethod(undefined);
+  //               }}
+  //               checked={props.paymentMethod === paymentMethod}
+  //             />
+  //             <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
+  //               <span className="radio-ui" />
+  //               <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
+  //               {getPaymentMethodLogo(paymentMethod)}
+  //             </label>
+  //           </li>
+  //         ))}
+  //         {
+  //           contributionTypeIsRecurring(props.contributionType) &&
+  //           props.existingPaymentMethods &&
+  //           props.existingPaymentMethods.length > 0 &&
+  //           fullExistingPaymentMethods.length === 0 && (
+  //             <li className="form__radio-group-item">
+  //               ...or <a className="reauthenticate-link" href={getReauthenticateUrl()}>re-enter your password</a> to use one of your existing payment methods.
+  //             </li>
+  //           )
+  //         }
+  //       </ul>
+  //       : noPaymentMethodsErrorMessage
+  //     }
+
+  //   </fieldset>
+  // );
 }
 
 function withoutProps() {
   return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
-      <legend className="form__legend">Payment method</legend>
-      <ul className="form__radio-group-list">
-        {[Stripe, PayPal, DirectDebit].map(paymentMethod => (
-          <li className="form__radio-group-item">
-            <input
-              id={`paymentMethodSelector-${paymentMethod}`}
-              className="form__radio-group-input"
-              name="paymentMethodSelector"
-              type="radio"
-              value={paymentMethod}
-            />
-            <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
-              <span className="radio-ui" />
-              <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
-              {getPaymentMethodLogo(paymentMethod)}
-            </label>
-          </li>
-          ))}
-      </ul>
-    </fieldset>
+    // <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
+    //   <legend className="form__legend">Payment method</legend>
+    //   <ul className="form__radio-group-list">
+    //     {[Stripe, PayPal, DirectDebit].map(paymentMethod => (
+    //       <li className="form__radio-group-item">
+    //         <input
+    //           id={`paymentMethodSelector-${paymentMethod}`}
+    //           className="form__radio-group-input"
+    //           name="paymentMethodSelector"
+    //           type="radio"
+    //           value={paymentMethod}
+    //         />
+    //         <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
+    //           <span className="radio-ui" />
+    //           <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
+    //           {getPaymentMethodLogo(paymentMethod)}
+    //         </label>
+    //       </li>
+    //       ))}
+    //   </ul>
+    // </fieldset>
+    <div>Hello</div>
   );
+
 }
 
 export const PaymentMethodSelector = connect(mapStateToProps, mapDispatchToProps)(withProps);
