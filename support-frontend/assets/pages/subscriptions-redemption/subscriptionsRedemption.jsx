@@ -17,6 +17,7 @@ import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import reducer from './subscriptionsRedemptionReducer';
+import RedemptionForm from 'pages/subscriptions-redemption/components/redemptionForm';
 
 // ----- Redux Store ----- //
 const store = pageInit(() => reducer(), true);
@@ -41,7 +42,7 @@ const content = (
         </Footer>}
     >
       <CheckoutStage
-        checkoutForm={null}
+        checkoutForm={<RedemptionForm />}
         thankYouContentPending={null}
         thankYouContent={null}
         subscriptionProduct="DigitalPack"
