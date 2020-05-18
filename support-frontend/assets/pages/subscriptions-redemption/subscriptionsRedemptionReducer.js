@@ -6,7 +6,6 @@ import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { getGlobal } from 'helpers/globals';
 import type { Option } from 'helpers/types/option';
-import stage from 'components/subscriptionCheckouts/stage';
 
 export type CorporateRedemption = {
   redemptionCode: string,
@@ -15,7 +14,7 @@ export type CorporateRedemption = {
 
 export type RedemptionData = CorporateRedemption
 
-export type CheckoutForm = {
+export type RedemptionFormState = {
   stage: string,
   userCode: Option<string>,
 };
@@ -23,13 +22,13 @@ export type CheckoutForm = {
 export type State = {
   common: CommonState,
   page: {
-    checkout: CheckoutForm,
+    checkout: RedemptionFormState,
     redemptionCode: Option<RedemptionData>,
   }
 };
 
 const getRedemptionData = (): Option<RedemptionData> => getGlobal('redemptionData');
-const getCheckout = (): CheckoutForm => ({
+const getForm = (): RedemptionFormState => ({
   stage: 'checkout',
   userCode: '123',
 });
@@ -37,6 +36,6 @@ const getCheckout = (): CheckoutForm => ({
 // ----- Export ----- //
 
 export default () => combineReducers({
-  checkout: getCheckout,
+  checkout: getForm,
   redemptionData: getRedemptionData,
 });
