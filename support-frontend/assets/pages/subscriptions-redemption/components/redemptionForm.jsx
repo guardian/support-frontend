@@ -24,9 +24,12 @@ function mapStateToProps(state: State) {
   return state.page.form;
 }
 
-function mapDispatchToProps() {
+function mapDispatchToProps(dispatch) {
   return {
-    submitForm: () => console.log('submit'),
+    submitForm: () => {
+      console.log('submit');
+      dispatch({ type: 'test' });
+    },
   };
 }
 
@@ -70,4 +73,4 @@ function RedemptionForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps())(RedemptionForm);
+export default connect(mapStateToProps, mapDispatchToProps)(RedemptionForm);
