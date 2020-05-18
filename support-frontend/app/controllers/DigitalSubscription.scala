@@ -41,7 +41,7 @@ class DigitalSubscription(
   recaptchaConfigProvider: RecaptchaConfigProvider
 )(
   implicit val ec: ExecutionContext
-) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax with DigitalController {
+) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
@@ -84,6 +84,17 @@ class DigitalSubscription(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
+  private def userHasDigipack(user: AuthenticatedIdUser): Future[Boolean] = {
+    user.credentials match {
+      case cookies: AccessCredentials.Cookies =>
+        membersDataService.userAttributes(cookies).value map {
+          case Left(_) => false
+          case Right(response: MembersDataService.UserAttributes) => response.contentAccess.digitalPack
+        }
+      case _ => Future.successful(false)
+    }
+  }
+
   def displayForm(): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -93,7 +104,7 @@ class DigitalSubscription(
           Future.successful(InternalServerError)
         },
         user => {
-          userHasDigipack(membersDataService, request.user) map {
+          userHasDigipack(request.user) map {
             case true => Redirect(routes.DigitalSubscription.displayThankYouExisting().url, request.queryString, status = FOUND)
             case _ => Ok(digitalSubscriptionFormHtml(user))
           }

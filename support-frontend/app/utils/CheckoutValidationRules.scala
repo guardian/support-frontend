@@ -6,7 +6,6 @@ import com.gu.support.workers._
 import com.gu.support.workers.redemption.RedemptionData
 import org.joda.time.LocalDate
 import services.stepfunctions.CreateSupportWorkersRequest
-import utils.PaidProductValidation.hasValidPaymentDetailsForPaidProduct
 
 object CheckoutValidationRules {
   def validatorFor(productType: ProductType): CreateSupportWorkersRequest => Boolean = productType match {

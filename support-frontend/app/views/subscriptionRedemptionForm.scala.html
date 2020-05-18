@@ -1,0 +1,78 @@
+@import admin.settings.AllSettings
+@import assets.AssetsResolver
+@import com.gu.i18n.Currency.AUD
+@import com.gu.identity.model.{User => IdUser}
+@import com.gu.support.config._
+@import helper.CSRF
+@import com.gu.support.pricing.ProductPrices
+@import views.ViewHelpers._
+@import io.circe.syntax._
+@import com.gu.support.encoding.CustomCodecs._
+@import com.gu.support.catalog.Paper
+
+@import assets.RefPath
+@import views.EmptyDiv
+@import views.ReactDiv
+@import assets.StyleContent
+@(
+        title: String,
+        mainElement: ReactDiv,
+        js: String,
+        css: String,
+        fontLoaderBundle: Either[RefPath, StyleContent],
+        csrf: Option[String],
+        user: IdUser,
+        uatMode: Boolean,
+        productPrices: ProductPrices,
+        defaultStripeConfig: StripeConfig,
+        uatStripeConfig: StripeConfig,
+        defaultPayPalConfig: PayPalConfig,
+        uatPayPalConfig: PayPalConfig,
+        v2recaptchaConfigPublicKey: String,
+        orderIsAGift: Boolean = false,
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
+
+@main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
+  <script type="text/javascript">
+      window.guardian = window.guardian || {};
+
+      window.guardian.productPrices = @{Html(outputJson(productPrices))}
+
+      window.guardian.orderIsAGift = @orderIsAGift
+
+      window.guardian.user = {
+        firstName: "@user.privateFields.firstName",
+        lastName: "@user.privateFields.secondName",
+        email: "@user.primaryEmailAddress"
+      };
+
+      window.guardian.stripeKeyDefaultCurrencies = {
+        REGULAR: {
+          default: "@defaultStripeConfig.forCurrency(None).publicKey",
+          uat: "@uatStripeConfig.forCurrency(None).publicKey"
+        }
+      };
+      window.guardian.stripeKeyAustralia = {
+        REGULAR: {
+          default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+          uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
+        }
+      };
+      window.guardian.stripeKeyUnitedStates = window.guardian.stripeKeyDefaultCurrencies;
+      window.guardian.payPalEnvironment = {
+        default: "@defaultPayPalConfig.payPalEnvironment",
+        uat: "@uatPayPalConfig.payPalEnvironment"
+      };
+      window.guardian.csrf = { token: "@CSRF.getToken.value" };
+
+      window.guardian.checkoutPostcodeLookup = "@settings.switches.experiments.get("checkoutPostcodeLookup").exists(_.isOn)"
+
+      window.guardian.useDigitalVoucher = @{Paper.useDigitalVoucher}
+
+      window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
+
+      window.guardian.recaptchaEnabled = @settings.switches.enableRecaptchaFrontend.isOn
+
+  </script>
+
+}

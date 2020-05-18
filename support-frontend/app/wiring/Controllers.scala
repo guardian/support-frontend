@@ -69,11 +69,14 @@ trait Controllers {
     appConfig.recaptchaConfigProvider
   )
 
-  lazy val digitalRedemptionController = new DigitalRedemption(
+  lazy val redemptionController = new Redemption(
     actionRefiners,
+    assetsResolver,
+    allSettingsProvider,
     identityService,
     membersDataService,
-    controllerComponents
+    controllerComponents,
+    fontLoader
   )
 
   lazy val paperController = new PaperSubscription(
