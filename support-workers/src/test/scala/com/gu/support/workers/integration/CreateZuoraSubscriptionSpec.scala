@@ -65,7 +65,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   }
 
   it should "create a 6 for 6 Guardian Weekly subscription" in {
-    createSubscription(createGuardianWeeklySubscriptionJson(Quarterly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)))
+    createSubscription(createGuardianWeeklySubscriptionJson(SixWeekly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)))
   }
 
   it should "create an Guardian Weekly gift subscription" in {

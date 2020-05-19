@@ -22,7 +22,7 @@ object PromotionTerms {
   implicit val codec: Codec[PromotionTerms] = Codec.deriveCodec
 
   def fromPromoCode(promotionService: PromotionService, stage: Stage, promoCode: PromoCode): Option[PromotionTerms] =
-    promotionService.findPromotion(promoCode).map(promotionTermsFromPromotion(stage))
+    promotionService.findPromotion(promoCode).toOption.map(promotionTermsFromPromotion(stage))
 
 
   def promotionTermsFromPromotion(stage: Stage)(promotion: PromotionWithCode): PromotionTerms = {

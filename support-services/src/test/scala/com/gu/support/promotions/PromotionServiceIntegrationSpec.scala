@@ -13,13 +13,13 @@ class PromotionServiceIntegrationSpec extends AsyncFlatSpec with Matchers {
   "PromotionService" should "apply a real promo code" in {
     val realPromoCode = "DJP8L27FY"
     val digipackMonthlyProductRatePlanId = "2c92c0f84bbfec8b014bc655f4852d9d"
-    val promotionWithCode = serviceWithDynamo.findPromotion(realPromoCode).get
-    val result = serviceWithDynamo.applyPromotion(promotionWithCode, UK, digipackMonthlyProductRatePlanId, subscriptionData, isRenewal = false)
+    val promotionWithCode = serviceWithDynamo.findPromotion(realPromoCode).right.get
+    val result = serviceWithDynamo.applyPromotion(promotionWithCode, UK, digipackMonthlyProductRatePlanId, subscriptionData, isRenewal = false).right.get
     result.ratePlanData.length shouldBe 2
   }
 
   it should "find a promotion" in {
     val promotion = serviceWithDynamo.findPromotion("DK0NT24WG")
-    promotion.isDefined shouldBe true
+    promotion.isRight shouldBe true
   }
 }

@@ -14,10 +14,14 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
   //This is a small hack to allow us to start using promotions to handle 6 for 6 without having to build the tooling
   private def allWith6For6 = promotionCollection.all.toList :+ Promotions.SixForSixPromotion
 
-  def findPromotion(promoCode: PromoCode): Option[PromotionWithCode] =
+  def findPromotion(promoCode: PromoCode): Either[PromoError, PromotionWithCode] =
     allWith6For6
-      .find(_.promoCodes.exists(_ == promoCode))
-      .map(PromotionWithCode(promoCode, _))
+      .filter(_.promoCodes.exists(_ == promoCode))
+      .map(PromotionWithCode(promoCode, _)) match {
+      case Nil => Left(NoSuchCode)
+      case code :: Nil => Right(code)
+      case tooMany => Left(DuplicateCode(tooMany.mkString(", ")))
+    }
 
   def findPromotions(promoCodes: List[PromoCode]): List[PromotionWithCode] =
     allWith6For6
@@ -40,9 +44,8 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
     productRatePlanId: ProductRatePlanId,
     subscriptionData: SubscriptionData,
     isRenewal: Boolean
-  ): SubscriptionData =
+  ): Either[PromoError, SubscriptionData] =
     validatePromotion(promotion, country, productRatePlanId, isRenewal)
       .map(PromotionApplicator(_, config.discount).applyTo(subscriptionData))
-      .toOption.getOrElse(subscriptionData)
 
 }

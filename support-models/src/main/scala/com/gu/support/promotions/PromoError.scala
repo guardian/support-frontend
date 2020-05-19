@@ -13,11 +13,15 @@ case object InvalidProductRatePlan extends PromoError {
 }
 
 case object NotApplicable extends PromoError {
-  override  val msg = "This promotion is not applicable"
+  override val msg = "This promotion is not applicable"
 }
 
 case object NoSuchCode extends PromoError {
-  override  val msg = "Unknown or expired promo code"
+  override val msg = "Unknown or expired promo code"
+}
+
+case class DuplicateCode(debug: String) extends PromoError {
+  override val msg = s"Duplicate promo codes: $debug"
 }
 
 case object ExpiredPromotion extends PromoError {
