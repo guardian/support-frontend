@@ -124,8 +124,8 @@ function withProps(props: PropTypes) {
 
   const renderLabelAndLogo = (paymentMethod: PaymentMethod) => (
     <>
-      <span>{getPaymentLabel(paymentMethod)}</span>
-      <span id="paymentMethodLogo">{getPaymentMethodLogo(paymentMethod)}</span>
+      <div>{getPaymentLabel(paymentMethod)}</div>
+      <div id="paymentMethodLogo">{getPaymentMethodLogo(paymentMethod)}</div>
     </>
   );
 
@@ -244,9 +244,9 @@ function withProps(props: PropTypes) {
                     }
                 arial-labelledby="payment_method"
                 label={getExistingPaymentMethodLabel(existingPaymentMethod)}
-                cssOverrides={{
-                  outline: '1px solid green',
-                }}
+                // cssOverrides={{
+                //   // copy from below
+                // }}
               />
               <div className="existing-payment-option-explainer">
                     Used for your{' '}
@@ -267,9 +267,29 @@ function withProps(props: PropTypes) {
                 }}
                 checked={props.paymentMethod === paymentMethod}
                 label={renderLabelAndLogo(paymentMethod)}
-                // cssOverrides={{
+                cssOverrides={{
+                  '& + div': {
+                    display: 'flex',
+                    width: '100%',
+                    margin: 0,
+                    padding: '$gu-v-spacing/2 0',
 
-                // }}
+                  },
+                  '& + div div': {
+                    'justify-content': 'flex-end',
+                    outline: '1px solid green',
+                    flex: 1,
+                    'align-items': 'center',
+                  },
+                  '& + div div svg': {
+                    outline: '1px solid red',
+                    maxWidth: '20px',
+                    float: 'right',
+                  },
+                  '&:not(:checked) + div div svg': {
+                    filter: 'grayscale(100%)',
+                  },
+                }}
               />
           </>
           ))}
