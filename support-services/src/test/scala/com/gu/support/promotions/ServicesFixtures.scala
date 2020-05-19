@@ -53,10 +53,6 @@ object ServicesFixtures {
   val guardianWeeklyWithCode = PromotionWithCode(NonGift.tenAnnual, guardianWeeklyAnnual)
   val duplicate1 = promotion(validProductRatePlanIds, duplicatedPromoCode, discountBenefit)
   val duplicate2 = promotion(validProductRatePlanIds, duplicatedPromoCode, freeTrial = freeTrialBenefit)
-  val duplicatedWithCode = List(
-    PromotionWithCode(duplicatedPromoCode, duplicate1),
-    PromotionWithCode(duplicatedPromoCode, duplicate1)
-  )
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(
