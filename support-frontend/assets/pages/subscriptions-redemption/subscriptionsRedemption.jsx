@@ -15,9 +15,9 @@ import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 
 import ConsentBanner from '../../components/consentBanner/consentBanner';
-import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import reducer from './subscriptionsRedemptionReducer';
 import RedemptionForm from 'pages/subscriptions-redemption/components/redemptionForm';
+import Header from 'components/headers/header/header';
 
 // ----- Redux Store ----- //
 const store = pageInit(() => reducer(), true);
@@ -29,7 +29,7 @@ const { countryGroupId } = store.getState().common.internationalisation;
 const content = (
   <Provider store={store}>
     <Page
-      header={<HeaderWrapper />}
+      header={<Header display="guardianLogo" countryGroupId='GBPCountries' />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />

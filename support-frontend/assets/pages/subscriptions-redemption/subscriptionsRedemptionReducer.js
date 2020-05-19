@@ -7,12 +7,10 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { getGlobal } from 'helpers/globals';
 import type { Option } from 'helpers/types/option';
 
-export type CorporateRedemption = {
+export type CorporateCustomer = {
   redemptionCode: string,
-  corporateName: string,
+  name: string,
 }
-
-export type RedemptionData = CorporateRedemption
 
 export type RedemptionFormState = {
   userCode: Option<string>,
@@ -28,11 +26,11 @@ export type State = {
   page: {
     checkout: Checkout,
     form: RedemptionFormState,
-    redemptionData: Option<RedemptionData>,
+    corporateCustomer: CorporateCustomer,
   }
 };
 
-const getRedemptionData = (): Option<RedemptionData> => getGlobal('redemptionData');
+const getCustomer = (): CorporateCustomer => getGlobal('corporateCustomer');
 const getCheckout = (): Checkout => ({
   stage: getGlobal('stage') || 'checkout',
 });
@@ -46,5 +44,5 @@ const getForm = (): RedemptionFormState => ({
 export default () => combineReducers({
   checkout: getCheckout,
   form: getForm,
-  redemptionData: getRedemptionData,
+  corporateCustomer: getCustomer,
 });
