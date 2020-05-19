@@ -105,7 +105,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`)
-  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`)
+  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `support-redemptiondb`)
 
 
 lazy val `support-models` = (project in file("support-models"))
