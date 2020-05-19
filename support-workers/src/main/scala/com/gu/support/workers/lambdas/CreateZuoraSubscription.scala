@@ -39,7 +39,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   ): FutureHandlerResult = {
     val now = () => OffsetDateTime.now
     for {
-      subscribeItem <- Future.fromTry(buildSubscribeItem(state, services.promotionService).left.map(err => new BuildSubscribePromoError(err)).toTry)
+      subscribeItem <- Future.fromTry(buildSubscribeItem(state, services.promotionService).left.map(BuildSubscribePromoError).toTry)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
       maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
