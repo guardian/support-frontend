@@ -70,7 +70,8 @@ lazy val root = (project in file("."))
     `support-config`,
     `support-internationalisation`,
     `support-services`,
-    `stripe-intent`
+    `stripe-intent`,
+    `support-redemptiondb`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -158,3 +159,6 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies,
   ).dependsOn(`support-rest`, `support-config`)
+
+lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
+  .enablePlugins(RiffRaffArtifact)

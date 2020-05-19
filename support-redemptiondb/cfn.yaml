@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  Stage:
+    Type: String
+    Description: Stage for the tables
+    AllowedValues:
+      - DEV
+      - UAT
+      - PROD
+Resources:
+  RedemptionCodeDynamoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "redemptionCode"
+          AttributeType: "S"
+      BillingMode: "PAY_PER_REQUEST"
+      KeySchema:
+        - AttributeName: "redemptionCode"
+          KeyType: "HASH"
+      TableName: !Sub redemption-codes-${Stage}
+Outputs:
+  PreviewDynamoArnOut:
+    Description: ARN for dynamo table
+    Value: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${RedemptionCodeDynamoTable}
+    Export:
+      Name: !Sub ${AWS::StackName}-DynamoTableArn
