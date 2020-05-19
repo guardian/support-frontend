@@ -2,21 +2,14 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider}
-import com.gu.monitoring.SafeLogger
-import play.api.mvc.{AbstractController, Action, ActionBuilder, AnyContent, ControllerComponents}
-import ActionBuilder._
-import services.{IdentityService, MembersDataService}
-import SafeLogger._
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.identity.model.User
-import cats.implicits._
+import play.api.mvc.{AbstractController, ControllerComponents}
 import play.twirl.api.Html
+import services.{IdentityService, MembersDataService}
 import views.EmptyDiv
-import views.ViewHelpers.outputJson
-import views.html.helper.CSRF
-import views.html.main
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class Redemption(
   val actionRefiners: CustomActionBuilders,
@@ -34,7 +27,9 @@ class Redemption(
 
   implicit val a: AssetsResolver = assets
 
-  def displayForm() = NoCacheAction() {
+  //def getRedemptionData(redemptionCode: RedemptionCode): Option[CorporateRedemption] =
+
+  def displayForm(redemptionCode: String) = NoCacheAction() {
     implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       val title = "Support the Guardian | Redeem your code"
@@ -52,6 +47,17 @@ class Redemption(
         Html(s"""<script type="text/javascript">window.guardian.productPrices = ""</script>""")
       })
   }
+
+//  def create: Action[CreateSupportWorkersRequest] =
+//    authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
+//      implicit request: AuthRequest[CreateSupportWorkersRequest] =>
+//        handleCreateSupportWorkersRequest(request, CheckoutValidationRules.validatorFor(request.body.product))
+//    }
+
+//  def redeemCode() = NoCacheAction() {
+//    implicit request =>
+//
+//  }
 
 //  def processRedemption(): Action[AnyContent] =
 //    authenticatedAction(subscriptionsClientId).async { implicit request =>

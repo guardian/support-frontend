@@ -109,7 +109,8 @@ GET  /uk/subscribe/paper/delivery                                  controllers.P
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscription.displayForm()
 
 # redemptions
-GET  /subscribe/redeem                                     controllers.Redemption.displayForm()
+GET  /subscribe/redeem/:redemptionCode                             controllers.Redemption.displayForm(redemptionCode: String)
+# POST /subscribe/redeem/:redemptionCode                             controllers.CreateSubscription.create
 # GET  /r/:redemptionCode                                            controllers.Application.permanentRedirect(location = s"/subscribe/digital/redeem${})
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)

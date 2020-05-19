@@ -8,9 +8,9 @@ import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
 import com.gu.stripe.StripeServiceForCurrency._
+import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
-import com.gu.support.workers.redemption.RedemptionData
 import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
 
 import scala.concurrent.ExecutionContext.Implicits.global

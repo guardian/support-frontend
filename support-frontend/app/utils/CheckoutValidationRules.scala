@@ -2,8 +2,8 @@ package utils
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
-import com.gu.support.workers.redemption.RedemptionData
 import org.joda.time.LocalDate
 import services.stepfunctions.CreateSupportWorkersRequest
 

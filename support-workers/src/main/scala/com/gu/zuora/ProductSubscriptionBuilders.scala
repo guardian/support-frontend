@@ -8,11 +8,11 @@ import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.fromStage
 import com.gu.support.config.{Stage, ZuoraConfig}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromotionService}
+import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
-import com.gu.support.workers.redemption.RedemptionData
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
