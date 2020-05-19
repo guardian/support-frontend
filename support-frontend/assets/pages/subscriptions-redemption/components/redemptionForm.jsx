@@ -5,60 +5,46 @@ import { css } from '@emotion/core';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
-import type { State } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
-import { withLabel } from 'hocs/withLabel';
-import { Input } from 'components/forms/input';
-import { compose } from 'redux';
-import { asControlled } from 'hocs/asControlled';
-import { withError } from 'hocs/withError';
+import type { CorporateCustomer, State } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import Button from 'components/button/button';
-import type { Option } from 'helpers/types/option';
-
-type PropTypes = {
-  userCode: Option<string>,
-  error: Option<string>,
-  submitForm: () => void,
-}
+import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
 
 function mapStateToProps(state: State) {
-  return state.page.form;
+  return state.page.corporateCustomer;
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    submitForm: () => {
-      console.log('submit');
-      dispatch({ type: 'test' });
-    },
-  };
-}
-
-const InputWithError = compose(asControlled, withError, withLabel)(Input);
-
-function RedemptionForm(props: PropTypes) {
+function RedemptionForm(props: CorporateCustomer) {
   const formCss = css`
     min-height: 550px;
   `;
+  const paraCss = css`
+    margin-bottom: 16px;
+  `;
+
   const buttonText = 'Redeem';
   return (
     <div>
       <Content>
-        <CheckoutLayout>
+        <CheckoutLayout aside={(
+          <ProductSummary />
+        )}
+        >
           <Form onSubmit={(ev) => {
             ev.preventDefault();
-            props.submitForm();
           }}
           >
             <FormSection title="The Guardian Digital Subscription Redemption">
               <div css={formCss}>
-                <InputWithError
-                  id="redemption-code"
-                  label="Insert your code"
-                  type="text"
-                  value={props.userCode}
-                  setValue={() => {}}
-                  error={props.error}
-                />
+                <p css={paraCss}>
+                  As a valued member of <strong>{props.name}</strong> we would like to invite you
+                  to set up your subscription
+                </p>
+                <p css={paraCss}>
+                  Your registration details will be sent to the group administrator to review
+                </p>
+                <p css={paraCss}>
+                  On the next screen you will be prompted to set up a Guardian user account
+                </p>
                 <Button id="submit-button" type="submit">
                   {buttonText}
                 </Button>
@@ -73,4 +59,4 @@ function RedemptionForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(RedemptionForm);
+export default connect(mapStateToProps)(RedemptionForm);
