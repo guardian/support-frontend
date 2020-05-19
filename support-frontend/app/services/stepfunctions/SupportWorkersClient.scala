@@ -14,8 +14,8 @@ import com.gu.monitoring.SafeLogger._
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
+import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.redemption.RedemptionData
 import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
 import io.circe.{Decoder, Encoder}
