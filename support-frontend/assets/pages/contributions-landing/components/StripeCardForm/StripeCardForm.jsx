@@ -34,6 +34,7 @@ import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { InlineError } from '@guardian/src-inline-error';
+import { StripeCardFormField, guardianTextSansWeb } from "./StripeCardFormField";
 
 // ----- Types -----//
 
@@ -112,8 +113,6 @@ type StateTypes = {
   [CardFieldName]: CardFieldState,
   currentlySelected: CardFieldName | null,
 };
-
-const guardianTextSansWeb = '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif';
 
 const fieldStyleControl = {
   base: {
@@ -480,40 +479,24 @@ class CardForm extends Component<PropTypes, StateTypes> {
           <InlineError> {errorMessage} </InlineError> : null
         }
 
-        <div>
-          <label>
-            <div
-              css={{
-                fontSize: '17px',
-                fontWeight: 700,
-                lineHeight: 1.5,
-                fontFamily: guardianTextSansWeb,
-                marginBottom: '4px',
-                position: 'relative',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
+        <StripeCardFormField
+          labelChildren={
+            <>
               Card number
               {showCardsDs(this.props.country)}
-            </div>
-            <div
-              css={{
-                border: this.state['CardNumber'].name === 'Error' ? '4px solid #C70000': '2px solid #999999',
-                height: '34px',
-                padding: '10px 8px 0px 8px',
-              }}
-            >
-              <CardNumberElement
-                id="stripeCardNumberElement"
-                style={fieldStyleDS}
-                onChange={this.onChange('CardNumber')}
-                onFocus={() => this.onFocus('CardNumber')}
-                onBlur={this.onBlur}
-              />
-            </div>
-          </label>
-        </div>
+            </>
+          }
+          inputChildren={
+            <CardNumberElement
+              id="stripeCardNumberElement"
+              style={fieldStyleDS}
+              onChange={this.onChange('CardNumber')}
+              onFocus={() => this.onFocus('CardNumber')}
+              onBlur={this.onBlur}
+            />
+          }
+          error={this.state['CardNumber'].name === 'Error'}
+        />
 
         <div
           css={{
@@ -527,46 +510,37 @@ class CardForm extends Component<PropTypes, StateTypes> {
               marginRight: '8px',
             }}
           >
-            <div
-              css={{
-                fontSize: '17px',
-                fontWeight: 700,
-                lineHeight: 1.5,
-                fontFamily: guardianTextSansWeb,
-                marginBottom: '4px',
-                position: 'relative',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
-              Expiry date
-            </div>
-            <div
-              css={{
-                fontSize: '15px',
-                lineHeight: 1.5,
-                color: '#767676',
-                marginBottom: '4px',
-                fontWeight: 400,
-              }}
-            >
-              MM / YY
-            </div>
-            <div
-              css={{
-                border: this.state['Expiry'].name === 'Error' ? '4px solid #C70000': '2px solid #999999',
-                height: '34px',
-                padding: '10px 8px 0px 8px',
-              }}
-            >
-              <CardExpiryElement
-                id="stripeCardExpiryElement"
-                style={fieldStyleControl}
-                onChange={this.onChange('Expiry')}
-                onFocus={() => this.onFocus('Expiry')}
-                onBlur={this.onBlur}
-              />
-            </div>
+            <StripeCardFormField
+              labelChildren={
+                <>
+                  Expiry date
+                </>
+              }
+              hintChildren={
+                <div
+                  css={{
+                    fontSize: '15px',
+                    lineHeight: 1.5,
+                    color: '#767676',
+                    marginBottom: '4px',
+                    fontWeight: 400,
+                  }}
+                >
+                  MM / YY
+                </div>
+              }
+              inputChildren={
+                <CardExpiryElement
+                  id="stripeCardExpiryElement"
+                  style={fieldStyleControl}
+                  placeholder=""
+                  onChange={this.onChange('Expiry')}
+                  onFocus={() => this.onFocus('Expiry')}
+                  onBlur={this.onBlur}
+                />
+              }
+              error={this.state['Expiry'].name === 'Error'}
+            />
           </label>
 
           <label
@@ -575,88 +549,77 @@ class CardForm extends Component<PropTypes, StateTypes> {
               marginLeft: '8px',
             }}
           >
-            <div
-              css={{
-                fontSize: '17px',
-                fontWeight: 700,
-                lineHeight: 1.5,
-                fontFamily: guardianTextSansWeb,
-                marginBottom: '4px',
-                position: 'relative',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
-              Security code
-            </div>
-            <div
-              css={{
-                position: 'relative',
-                cursor: 'pointer',
-                zIndex: 1,
-                '&:hover div': {
-                  visibility: 'visible',
-                },
-                width: '18px',
-              }}
-            >
-              <div
-                css={{
-                  fontSize: '11px',
-                  lineHeight: 1.5,
-                  width: '14px',
-                  height: '14px',
-                  background: '#999999',
-                  fontWeight: 700,
-                  marginBottom: '9px',
-                  color: 'white',
-                  textAlign: 'center',
-                  borderRadius: '50%',
-                  padding: '0 2px 4px 2px',
-                }}
-              >
-                ?
-              </div>
-              <div
-                css={{
-                  background: '#EDEDED',
-                  width: '224px',
-                  height: '111px',
-                  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                  visibility: 'hidden',
-                  position: 'absolute',
-                  padding: '10px',
-                  top: '-115px',
-                  left: '25px',
-                }}
-              >
-                <p
+            <StripeCardFormField
+              labelChildren={
+                <>
+                  Security code
+                </>
+              }
+              hintChildren={
+                <div
                   css={{
-                    fontWeight: 900,
+                    position: 'relative',
+                    cursor: 'pointer',
+                    zIndex: 1,
+                    '&:hover div': {
+                      visibility: 'visible',
+                    },
+                    width: '18px',
                   }}
                 >
-                  What's this?
-                </p>
-                <p>The last three digits on the back of your card, above the signature</p>
-              </div>
-            </div>
-
-            <div
-              css={{
-                border: this.state['CVC'].name === 'Error' ? '4px solid #C70000' : '2px solid #999999',
-                height: '34px',
-                padding: '10px 8px 0px 8px',
-              }}
-            >
-              <CardCVCElement
-                id="stripeCardCVCElement"
-                style={fieldStyleControl}
-                placeholder=""
-                onChange={this.onChange('CVC')}
-                onFocus={() => this.onFocus('CVC')}
-                onBlur={this.onBlur}
-              />
-            </div>
+                  <div
+                    css={{
+                      fontSize: '11px',
+                      lineHeight: 1.5,
+                      width: '14px',
+                      height: '14px',
+                      background: '#999999',
+                      fontWeight: 700,
+                      marginBottom: '9px',
+                      color: 'white',
+                      textAlign: 'center',
+                      borderRadius: '50%',
+                      padding: '0 2px 4px 2px',
+                    }}
+                  >
+                    ?
+                  </div>
+                  <div
+                    css={{
+                      background: '#EDEDED',
+                      width: '224px',
+                      height: '111px',
+                      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                      visibility: 'hidden',
+                      position: 'absolute',
+                      padding: '10px',
+                      top: '-115px',
+                      left: '25px',
+                    }}
+                  >
+                    <p
+                      css={{
+                        fontWeight: 900,
+                      }}
+                    >
+                      What's this?
+                    </p>
+                    <p>The last three digits on the back of your card, above the signature</p>
+                  </div>
+                </div>
+              }
+              inputChildren={
+                <CardCVCElement
+                  id="stripeCardCVCElement"
+                  style={fieldStyleControl}
+                  placeholder=""
+                  onChange={this.onChange('CVC')}
+                  onFocus={() => this.onFocus('CVC')}
+                  onBlur={this.onBlur}
+                />
+              }
+              error={this.state['CVC'].name === 'Error'}
+            />
           </label>
         </div>
       </div>
