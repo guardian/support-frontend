@@ -4,11 +4,10 @@ Parameters:
     Type: String
     Description: Stage for the tables
     AllowedValues:
-      - DEV
-      - UAT
+      - CODE
       - PROD
 Resources:
-  RedemptionCodeDynamoTable:
+  RedemptionCodeDynamoTableDEV:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
@@ -18,10 +17,42 @@ Resources:
       KeySchema:
         - AttributeName: "redemptionCode"
           KeyType: "HASH"
-      TableName: !Sub redemption-codes-${Stage}
+      TableName: !Sub redemption-codes-DEV-${Stage}
+  RedemptionCodeDynamoTableUAT:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "redemptionCode"
+          AttributeType: "S"
+      BillingMode: "PAY_PER_REQUEST"
+      KeySchema:
+        - AttributeName: "redemptionCode"
+          KeyType: "HASH"
+      TableName: !Sub redemption-codes-UAT-${Stage}
+  RedemptionCodeDynamoTablePROD:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "redemptionCode"
+          AttributeType: "S"
+      BillingMode: "PAY_PER_REQUEST"
+      KeySchema:
+        - AttributeName: "redemptionCode"
+          KeyType: "HASH"
+      TableName: !Sub redemption-codes-PROD-${Stage}
 Outputs:
-  PreviewDynamoArnOut:
-    Description: ARN for dynamo table
-    Value: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${RedemptionCodeDynamoTable}
+  DynamoArnOutDEV:
+    Description: ARN for DEV dynamo table
+    Value: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${RedemptionCodeDynamoTableDEV}
     Export:
-      Name: !Sub ${AWS::StackName}-DynamoTableArn
+      Name: !Sub ${AWS::StackName}-DynamoTableArnDEV
+  DynamoArnOutUAT:
+    Description: ARN for UAT dynamo table
+    Value: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${RedemptionCodeDynamoTableUAT}
+    Export:
+      Name: !Sub ${AWS::StackName}-DynamoTableArnUAT
+  DynamoArnOut:
+    Description: ARN for PROD dynamo table
+    Value: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${RedemptionCodeDynamoTablePROD}
+    Export:
+      Name: !Sub ${AWS::StackName}-DynamoTableArnPROD
