@@ -31,7 +31,7 @@ export function StripeCardFormField(props: PropTypes) {
       {props.hintChildren || null}
       <div
         css={{
-          border: props.error ? '4px solid #C70000': '2px solid #999999',
+          border: props.error ? '4px solid #C70000' : '2px solid #999999',
           height: '34px',
           padding: '10px 8px 0px 8px',
         }}
