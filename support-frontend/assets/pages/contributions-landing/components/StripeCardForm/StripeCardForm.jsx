@@ -591,7 +591,49 @@ class CardForm extends Component<PropTypes, StateTypes> {
             </div>
             <div
               css={{
-                border: this.state['CVC'].name === 'Error' ? '4px solid #C70000': '2px solid #999999',
+                position: 'relative',
+                cursor: 'help',
+                zIndex: 1,
+              }}
+            >
+              <div
+                css={{
+                  fontSize: '11px',
+                  lineHeight: 1.5,
+                  width: '14px',
+                  height: '14px',
+                  background: '#999999',
+                  fontWeight: 700,
+                  marginBottom: '9px',
+                  color: 'white',
+                  textAlign: 'center',
+                  borderRadius: '50%',
+                  padding: '0 2px 4px 2px',
+                }}
+              >
+                ?
+              </div>
+              <span
+                css={{
+                  background: '#EDEDED',
+                  width: '224px',
+                  height: '111px',
+                  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                  visibility: 'hidden',
+                  position: 'absolute',
+                  '&:hover': {
+                    visibility: 'visible',
+                  },
+                }}
+              >
+                <p>What's this?</p>
+                <p>The last three digits on the back of your card, above the signature</p>
+              </span>
+            </div>
+
+            <div
+              css={{
+                border: this.state['CVC'].name === 'Error' ? '4px solid #C70000' : '2px solid #999999',
                 height: '34px',
                 padding: '10px 8px 0px 8px',
               }}
