@@ -138,7 +138,7 @@ const fieldStyleDS = {
 
 const renderVerificationCopy = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
-  return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
+  return (<InlineError>Please tick to verify you're a human</InlineError>);
 };
 
 const errorMessageFromState = (state: CardFieldState): string | null =>
@@ -622,6 +622,33 @@ class CardForm extends Component<PropTypes, StateTypes> {
             />
           </label>
         </div>
+        { window.guardian.recaptchaEnabled ?
+          <div
+            css={{
+              marginTop: '10px',
+            }}
+          >
+            <label
+              css={{
+                fontSize: '17px',
+                fontWeight: 700,
+                lineHeight: 1.5,
+                fontFamily: guardianTextSansWeb,
+                marginBottom: '4px',
+              }}
+              htmlFor="robot_checkbox"
+            >
+              <span>Security check</span>
+            </label>
+            {
+              this.props.checkoutFormHasBeenSubmitted
+              && !recaptchaVerified ?
+                renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
+            }
+            <Recaptcha />
+          </div>
+          : null
+        }
       </div>
     );
 
