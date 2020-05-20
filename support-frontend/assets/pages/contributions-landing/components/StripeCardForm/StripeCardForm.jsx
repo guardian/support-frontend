@@ -32,6 +32,8 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { updateRecaptchaToken } from '../../contributionsLandingActions';
 import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
+import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { InlineError } from '@guardian/src-inline-error';
 
 // ----- Types -----//
 
@@ -59,6 +61,7 @@ type PropTypes = {|
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
   postDeploymentTestUser: string,
+  designSystemTestVariant: LandingPageDesignSystemTestVariants,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -73,6 +76,7 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
   postDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
+  designSystemTestVariant: state.common.abParticipations.landingPageDesignSystemTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -109,14 +113,27 @@ type StateTypes = {
   currentlySelected: CardFieldName | null,
 };
 
-const fieldStyle = {
+const guardianTextSansWeb = '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif';
+
+const fieldStyleControl = {
   base: {
-    fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
+    fontFamily: guardianTextSansWeb,
     fontSize: '16px',
     '::placeholder': {
       color: '#999999',
     },
     lineHeight: '24px',
+  },
+};
+
+const fieldStyleDS = {
+  base: {
+    fontFamily: guardianTextSansWeb,
+    fontSize: '17px',
+    '::placeholder': {
+      color: '#999999',
+    },
+    lineHeight: 1.5,
   },
 };
 
@@ -373,13 +390,25 @@ class CardForm extends Component<PropTypes, StateTypes> {
       return <CreditCardsROW className="form__credit-card-icons" />;
     };
 
+    const showCardsDs = (country: IsoCountry) => {
+      const css = {
+        float: 'right',
+        position: 'absolute',
+        right: 0,
+      };
+      if (country === 'US') {
+        return <CreditCardsUS />;
+      }
+      return <CreditCardsROW />;
+    };
+
     const recaptchaVerified =
       this.props.contributionType === 'ONE_OFF' ?
         this.props.oneOffRecaptchaToken : this.props.recurringRecaptchaVerified;
 
-    return (
+    const renderControl = () => (
       <div className="form__fields">
-        <legend className="form__legend"><h3>Your card details</h3></legend>
+        <legend className="form__legend"><h3>You r card details</h3></legend>
         <div className="form__field">
           <label className="form__label" htmlFor="stripeCardNumberElement">
             <span>Card number</span>
@@ -388,7 +417,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
           <span className={getClasses('CardNumber')}>
             <CardNumberElement
               id="stripeCardNumberElement"
-              style={fieldStyle}
+              style={fieldStyleControl}
               onChange={this.onChange('CardNumber')}
               onFocus={() => this.onFocus('CardNumber')}
               onBlur={this.onBlur}
@@ -403,7 +432,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             <span className={getClasses('Expiry')}>
               <CardExpiryElement
                 id="stripeCardExpiryElement"
-                style={fieldStyle}
+                style={fieldStyleControl}
                 onChange={this.onChange('Expiry')}
                 onFocus={() => this.onFocus('Expiry')}
                 onBlur={this.onBlur}
@@ -417,7 +446,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             <span className={getClasses('CVC')}>
               <CardCVCElement
                 id="stripeCardCVCElement"
-                style={fieldStyle}
+                style={fieldStyleControl}
                 placeholder=""
                 onChange={this.onChange('CVC')}
                 onFocus={() => this.onFocus('CVC')}
@@ -443,6 +472,145 @@ class CardForm extends Component<PropTypes, StateTypes> {
           : null }
       </div>
     );
+
+    const renderDesignSystemStyleForm = () => (
+      <div>
+        <legend className="form__legend"><h3>Your card details</h3></legend>
+        {errorMessage ?
+          <InlineError> {errorMessage} </InlineError> : null
+        }
+
+        <div>
+          <label>
+            <div
+              css={{
+                fontSize: '17px',
+                fontWeight: 700,
+                lineHeight: 1.5,
+                fontFamily: guardianTextSansWeb,
+                marginBottom: '4px',
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
+              Card number
+              {showCardsDs(this.props.country)}
+            </div>
+            <div
+              css={{
+                border: this.state['CardNumber'].name === 'Error' ? '4px solid #C70000': '2px solid #999999',
+                height: '34px',
+                padding: '10px 8px 0px 8px',
+              }}
+            >
+              <CardNumberElement
+                id="stripeCardNumberElement"
+                style={fieldStyleDS}
+                onChange={this.onChange('CardNumber')}
+                onFocus={() => this.onFocus('CardNumber')}
+                onBlur={this.onBlur}
+              />
+            </div>
+          </label>
+        </div>
+
+        <div
+          css={{
+            display: 'flex',
+            marginTop: '10px',
+          }}
+        >
+          <label
+            css={{
+              width: '30%',
+              marginRight: '8px',
+            }}
+          >
+            <div
+              css={{
+                fontSize: '17px',
+                fontWeight: 700,
+                lineHeight: 1.5,
+                fontFamily: guardianTextSansWeb,
+                marginBottom: '4px',
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
+              Expiry date
+            </div>
+            <div
+              css={{
+                fontSize: '15px',
+                lineHeight: 1.5,
+                color: '#767676',
+                marginBottom: '4px',
+                fontWeight: 400,
+              }}
+            >
+              MM / YY
+            </div>
+            <div
+              css={{
+                border: this.state['Expiry'].name === 'Error' ? '4px solid #C70000': '2px solid #999999',
+                height: '34px',
+                padding: '10px 8px 0px 8px',
+              }}
+            >
+              <CardExpiryElement
+                id="stripeCardExpiryElement"
+                style={fieldStyleControl}
+                onChange={this.onChange('Expiry')}
+                onFocus={() => this.onFocus('Expiry')}
+                onBlur={this.onBlur}
+              />
+            </div>
+          </label>
+
+          <label
+            css={{
+              width: '30%',
+              marginLeft: '8px',
+            }}
+          >
+            <div
+              css={{
+                fontSize: '17px',
+                fontWeight: 700,
+                lineHeight: 1.5,
+                fontFamily: guardianTextSansWeb,
+                marginBottom: '4px',
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
+              Security code
+            </div>
+            <div
+              css={{
+                border: this.state['CVC'].name === 'Error' ? '4px solid #C70000': '2px solid #999999',
+                height: '34px',
+                padding: '10px 8px 0px 8px',
+              }}
+            >
+              <CardCVCElement
+                id="stripeCardCVCElement"
+                style={fieldStyleControl}
+                placeholder=""
+                onChange={this.onChange('CVC')}
+                onFocus={() => this.onFocus('CVC')}
+                onBlur={this.onBlur}
+              />
+            </div>
+          </label>
+        </div>
+      </div>
+    );
+
+    return this.props.designSystemTestVariant === 'ds' ? renderDesignSystemStyleForm() : renderControl()
   }
 }
 
