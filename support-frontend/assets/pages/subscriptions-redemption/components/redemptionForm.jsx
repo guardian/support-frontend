@@ -6,11 +6,16 @@ import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
 import type { CorporateCustomer, State } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
-import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
+import AnchorButton from 'components/button/anchorButton';
+import { getOrigin } from 'helpers/url';
 
 function mapStateToProps(state: State) {
   return state.page.corporateCustomer;
+}
+
+function redeemCodeUrl(redemptionCode: string) {
+  return `${getOrigin()}/subscribe/redeem/create/${redemptionCode}`;
 }
 
 function RedemptionForm(props: CorporateCustomer) {
@@ -45,9 +50,9 @@ function RedemptionForm(props: CorporateCustomer) {
                 <p css={paraCss}>
                   On the next screen you will be prompted to set up a Guardian user account
                 </p>
-                <Button id="submit-button" type="submit">
+                <AnchorButton id="submit-button" href={redeemCodeUrl(props.redemptionCode)} >
                   {buttonText}
-                </Button>
+                </AnchorButton>
               </div>
             </FormSection>
           </Form>
