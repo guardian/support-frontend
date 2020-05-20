@@ -125,7 +125,7 @@ function withProps(props: PropTypes) {
   const renderLabelAndLogo = (paymentMethod: PaymentMethod) => (
     <>
       <div>{getPaymentLabel(paymentMethod)}</div>
-      <div id="paymentMethodLogo">{getPaymentMethodLogo(paymentMethod)}</div>
+      {getPaymentMethodLogo(paymentMethod)}
     </>
   );
 
@@ -272,21 +272,13 @@ function withProps(props: PropTypes) {
                     display: 'flex',
                     width: '100%',
                     margin: 0,
-                    padding: '$gu-v-spacing/2 0',
-
+                    justifyContent: 'space-between',
                   },
-                  '& + div div': {
-                    'justify-content': 'flex-end',
-                    outline: '1px solid green',
-                    flex: 1,
-                    'align-items': 'center',
-                  },
-                  '& + div div svg': {
-                    outline: '1px solid red',
+                  '& + div svg': {
                     maxWidth: '20px',
-                    float: 'right',
+                    fill: '#00b2ff',
                   },
-                  '&:not(:checked) + div div svg': {
+                  '&:not(:checked) + div svg': {
                     filter: 'grayscale(100%)',
                   },
                 }}
