@@ -408,7 +408,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
     const renderControl = () => (
       <div className="form__fields">
-        <legend className="form__legend"><h3>You r card details</h3></legend>
+        <legend className="form__legend"><h3>Your card details</h3></legend>
         <div className="form__field">
           <label className="form__label" htmlFor="stripeCardNumberElement">
             <span>Card number</span>
@@ -592,8 +592,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
             <div
               css={{
                 position: 'relative',
-                cursor: 'help',
+                cursor: 'pointer',
                 zIndex: 1,
+                '&:hover div': {
+                  visibility: 'visible',
+                },
+                width: '18px',
               }}
             >
               <div
@@ -613,7 +617,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
               >
                 ?
               </div>
-              <span
+              <div
                 css={{
                   background: '#EDEDED',
                   width: '224px',
@@ -621,14 +625,20 @@ class CardForm extends Component<PropTypes, StateTypes> {
                   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
                   visibility: 'hidden',
                   position: 'absolute',
-                  '&:hover': {
-                    visibility: 'visible',
-                  },
+                  padding: '10px',
+                  top: '-115px',
+                  left: '25px',
                 }}
               >
-                <p>What's this?</p>
+                <p
+                  css={{
+                    fontWeight: 900,
+                  }}
+                >
+                  What's this?
+                </p>
                 <p>The last three digits on the back of your card, above the signature</p>
-              </span>
+              </div>
             </div>
 
             <div
