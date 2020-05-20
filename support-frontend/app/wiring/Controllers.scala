@@ -75,6 +75,8 @@ trait Controllers {
     allSettingsProvider,
     identityService,
     membersDataService,
+    testUsers,
+    supportWorkersClient,
     controllerComponents,
     fontLoader
   )

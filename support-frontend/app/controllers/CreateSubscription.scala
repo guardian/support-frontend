@@ -49,7 +49,7 @@ class CreateSubscription(
     validator: CreateSupportWorkersRequest => Boolean
   ): Future[Result] = {
     SafeLogger.info(s"[${request.uuid}] User ${request.user.minimalUser.id} is attempting to create a new ${request.body.product} subscription")
-
+    request.uuid
     val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.billingAddress.country)
 
     val createSupportWorkersRequest = request.body.copy(
