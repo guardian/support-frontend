@@ -23,7 +23,7 @@ const surveyLinks: {[key: SubscriptionProduct]: string} = {
 export const SubscriptionsSurvey = ({ product }: PropTypes) => {
   const surveyLink = surveyLinks[product];
   const title = 'Tell us about your subscription';
-  const message = 'Please fill out this short form to help us learn a little more about your support for The Guardian';
+  const message = 'Please fill out this short form to help us learn a little more about why you purchased a subscription';
 
   return surveyLink ? (
     <Content>
