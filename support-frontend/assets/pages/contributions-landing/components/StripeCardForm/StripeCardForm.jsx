@@ -34,7 +34,7 @@ import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { InlineError } from '@guardian/src-inline-error';
-import { StripeCardFormField, guardianTextSansWeb } from "./StripeCardFormField";
+import { StripeCardFormField, guardianTextSansWeb } from './StripeCardFormField';
 
 // ----- Types -----//
 
@@ -138,7 +138,7 @@ const fieldStyleDS = {
 
 const renderVerificationCopy = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
-  return (<InlineError>Please tick to verify you're a human</InlineError>);
+  return (<InlineError>Please tick to verify you&apos;re a human</InlineError>);
 };
 
 const errorMessageFromState = (state: CardFieldState): string | null =>
@@ -390,11 +390,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
     };
 
     const showCardsDs = (country: IsoCountry) => {
-      const css = {
-        float: 'right',
-        position: 'absolute',
-        right: 0,
-      };
       if (country === 'US') {
         return <CreditCardsUS />;
       }
@@ -495,7 +490,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
               onBlur={this.onBlur}
             />
           }
-          error={this.state['CardNumber'].name === 'Error'}
+          error={this.state.CardNumber.name === 'Error'}
         />
 
         <div
@@ -539,11 +534,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
                   onBlur={this.onBlur}
                 />
               }
-              error={this.state['Expiry'].name === 'Error'}
+              error={this.state.Expiry.name === 'Error'}
             />
           </label>
 
           <label
+            htmlFor="firstName"
             css={{
               width: '30%',
               marginLeft: '8px',
@@ -561,7 +557,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
                     position: 'relative',
                     cursor: 'pointer',
                     zIndex: 1,
-                    '&:hover div': {
+                    '&:focus div, &:active div, &:hover div': {
                       visibility: 'visible',
                     },
                     width: '18px',
@@ -602,7 +598,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
                         fontWeight: 900,
                       }}
                     >
-                      What's this?
+                      What&apos;s this?
                     </p>
                     <p>The last three digits on the back of your card, above the signature</p>
                   </div>
@@ -618,7 +614,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
                   onBlur={this.onBlur}
                 />
               }
-              error={this.state['CVC'].name === 'Error'}
+              error={this.state.CVC.name === 'Error'}
             />
           </label>
         </div>
@@ -652,7 +648,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       </div>
     );
 
-    return this.props.designSystemTestVariant === 'ds' ? renderDesignSystemStyleForm() : renderControl()
+    return this.props.designSystemTestVariant === 'ds' ? renderDesignSystemStyleForm() : renderControl();
   }
 }
 
