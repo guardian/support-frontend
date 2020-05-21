@@ -55,7 +55,8 @@ lazy val commonSettings = Seq(
 
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "org.scalatest" %% "scalatest" % "3.2.0-M1" % "it, test"
+  "org.scalatest" %% "scalatest" % "3.2.0-M1" % "it, test",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 )
 
 lazy val root = (project in file("."))

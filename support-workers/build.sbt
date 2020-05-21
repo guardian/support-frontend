@@ -38,7 +38,8 @@ libraryDependencies ++= Seq(
   "org.scala-stm" %% "scala-stm" % "0.8",
   "io.sentry" % "sentry-logback" % "1.7.4",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
-  "com.gocardless" % "gocardless-pro" % "2.8.0"
+  "com.gocardless" % "gocardless-pro" % "2.8.0",
+  "com.gu" %% "acquisition-event-client-play26" % "4.0.29-SNAPSHOT"
 )
 
 riffRaffPackageType := assembly.value
