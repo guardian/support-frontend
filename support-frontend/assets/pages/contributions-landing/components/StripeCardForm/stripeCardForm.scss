@@ -30,3 +30,30 @@
     margin-right: 15px;
   }
 }
+
+/* Design system emulation styles */
+
+.ds-stripe-card-form-field {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+  font-family: $gu-text-sans-web;
+  margin-bottom: 4px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ds-stripe-card-input {
+  height: 34px;
+  padding: 10px 8px 0px 8px;
+  border: 2px solid gu-colour(neutral-60)
+}
+
+.ds-stripe-card-input-error {
+  border: 4px solid gu-colour(news-main);
+}
+
+.ds-stripe-card-input-small {
+  width: 30%;
+}
