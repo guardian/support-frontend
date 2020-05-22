@@ -99,45 +99,48 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
   }
 }
 
-function withProps(props: PropTypes) {
+
+const legend = (
+  <div className="secure-transaction">
+    <legend id="payment_method" className="form__legend"><h3>Payment method</h3></legend>
+    <SecureTransactionIndicator modifierClasses={['middle']} />
+  </div>
+);
+
+const renderLabelAndLogo = (paymentMethod: PaymentMethod) => (
+  <>
+    <div>{getPaymentLabel(paymentMethod)}</div>
+    {getPaymentMethodLogo(paymentMethod)}
+  </>
+);
+
+// having to do this nasty cast because Flow sucks and type guards don't work through .filter
+const getFullExistingPaymentMethods = (props: PropTypes): RecentlySignedInExistingPaymentMethod[] =>
+  ((props.existingPaymentMethods || []).filter(isUsableExistingPaymentMethod): any);
+
+const noPaymentMethodsErrorMessage =
+  (<GeneralErrorMessage
+    classModifiers={['no-valid-payments']}
+    errorHeading="Payment methods are unavailable"
+    errorReason="all_payment_methods_unavailable"
+  />);
+
+const renderControl = (props: PropTypes) => {
 
   const paymentMethods: PaymentMethod[] =
     getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
 
-  const noPaymentMethodsErrorMessage =
-    (<GeneralErrorMessage
-      classModifiers={['no-valid-payments']}
-      errorHeading="Payment methods are unavailable"
-      errorReason="all_payment_methods_unavailable"
-    />);
+  const fullExistingPaymentMethods = getFullExistingPaymentMethods(props);
 
-  // having to do this nasty cast because Flow sucks and type guards don't work through .filter
-  const fullExistingPaymentMethods: RecentlySignedInExistingPaymentMethod[] =
-    ((props.existingPaymentMethods || []).filter(isUsableExistingPaymentMethod): any);
-
-  const legend = (
-    <div className="secure-transaction">
-      <legend id="payment_method" className="form__legend"><h3>Payment method</h3></legend>
-      <SecureTransactionIndicator modifierClasses={['middle']} />
-    </div>
-  );
-
-  const renderLabelAndLogo = (paymentMethod: PaymentMethod) => (
-    <>
-      <div>{getPaymentLabel(paymentMethod)}</div>
-      {getPaymentMethodLogo(paymentMethod)}
-    </>
-  );
-
-  const renderControl = () => (
+  return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
       {legend}
       { paymentMethods.length ?
         <ul className="form__radio-group-list">
           {contributionTypeIsRecurring(props.contributionType) && !props.existingPaymentMethods && (
-            <div className="awaiting-existing-payment-options">
-              <AnimatedDots appearance="medium" />
-            </div>
+          <div className="awaiting-existing-payment-options">
+            <AnimatedDots appearance="medium" />
+          </div>
               )
             }
           {contributionTypeIsRecurring(props.contributionType) &&
@@ -200,7 +203,8 @@ function withProps(props: PropTypes) {
               props.existingPaymentMethods.length > 0 &&
               fullExistingPaymentMethods.length === 0 && (
                 <li className="form__radio-group-item">
-                  ...or <a className="reauthenticate-link" href={getReauthenticateUrl()}>re-enter your
+                  ...or
+                  <a className="reauthenticate-link" href={getReauthenticateUrl()}>re-enter your
     password
                   </a> to use one of your existing payment methods.
                 </li>
@@ -212,8 +216,35 @@ function withProps(props: PropTypes) {
 
     </fieldset>
   );
+};
 
-  const renderDesignSystemRadios = () => (
+const radioCss = {
+  '& + div': {
+    display: 'flex',
+    width: '100%',
+    margin: 0,
+    justifyContent: 'space-between',
+  },
+  '& + div svg': {
+    maxWidth: '20px',
+    minWidth: '20px',
+    minHeight: '20px',
+    maxHeight: '30px',
+    fill: '#00b2ff',
+  },
+  '&:not(:checked) + div svg': {
+    filter: 'grayscale(100%)',
+  },
+};
+
+const renderDesignSystemRadios = (props: PropTypes) => {
+
+  const paymentMethods: PaymentMethod[] =
+    getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
+
+  const fullExistingPaymentMethods = getFullExistingPaymentMethods(props);
+
+  return (
     <div
       className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}
     >
@@ -244,9 +275,7 @@ function withProps(props: PropTypes) {
                     }
                 arial-labelledby="payment_method"
                 label={getExistingPaymentMethodLabel(existingPaymentMethod)}
-                // cssOverrides={{
-                //   // copy from below
-                // }}
+                cssOverrides={radioCss}
               />
               <div className="existing-payment-option-explainer">
                     Used for your{' '}
@@ -267,21 +296,7 @@ function withProps(props: PropTypes) {
                 }}
                 checked={props.paymentMethod === paymentMethod}
                 label={renderLabelAndLogo(paymentMethod)}
-                cssOverrides={{
-                  '& + div': {
-                    display: 'flex',
-                    width: '100%',
-                    margin: 0,
-                    justifyContent: 'space-between',
-                  },
-                  '& + div svg': {
-                    maxWidth: '20px',
-                    fill: '#00b2ff',
-                  },
-                  '&:not(:checked) + div svg': {
-                    filter: 'grayscale(100%)',
-                  },
-                }}
+                cssOverrides={radioCss}
               />
           </>
           ))}
@@ -298,10 +313,13 @@ function withProps(props: PropTypes) {
         </RadioGroup>
         : noPaymentMethodsErrorMessage
       }
-    </div>
-  );
+    </div>);
+};
 
-  return this.props.designSystemTestVariant === 'ds' ? renderDesignSystemRadios() : renderControl();
+function withProps(props: PropTypes) {
+
+
+  return this.props.designSystemTestVariant === 'ds' ? renderDesignSystemRadios(props) : renderControl(props);
 }
 
 function withoutProps() {
