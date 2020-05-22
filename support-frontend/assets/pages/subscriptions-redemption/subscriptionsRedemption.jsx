@@ -29,7 +29,7 @@ const { countryGroupId } = store.getState().common.internationalisation;
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header display="guardianLogo" countryGroupId='GBPCountries' />}
+      header={<Header display="guardianLogo" countryGroupId="GBPCountries" />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />

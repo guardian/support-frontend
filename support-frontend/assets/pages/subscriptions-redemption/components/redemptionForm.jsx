@@ -5,20 +5,24 @@ import { css } from '@emotion/core';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
-import type { CorporateCustomer, State } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type {
+  RedemptionFormState,
+  RedemptionPageState,
+} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import { Input } from 'components/forms/input';
+import { compose } from 'redux';
+import { asControlled } from 'hocs/asControlled';
+import { withError } from 'hocs/withError';
+import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
-import AnchorButton from 'components/button/anchorButton';
-import { getOrigin } from 'helpers/url';
 
-function mapStateToProps(state: State) {
-  return state.page.corporateCustomer;
+function mapStateToProps(state: RedemptionPageState) {
+  return state.page.form;
 }
 
-function redeemCodeUrl(redemptionCode: string) {
-  return `${getOrigin()}/subscribe/redeem/create/${redemptionCode}`;
-}
+const InputWithError = compose(asControlled, withError)(Input);
 
-function RedemptionForm(props: CorporateCustomer) {
+function RedemptionForm(props: RedemptionFormState) {
   const formCss = css`
     min-height: 550px;
   `;
@@ -38,21 +42,24 @@ function RedemptionForm(props: CorporateCustomer) {
             ev.preventDefault();
           }}
           >
-            <FormSection title="The Guardian Digital Subscription Redemption">
+            <FormSection title="Welcome to The Guardian Digital Subscriptions">
               <div css={formCss}>
                 <p css={paraCss}>
-                  As a valued member of <strong>{props.name}</strong> we would like to invite you
-                  to set up your subscription
+                  Activate your offer with the unique access code provided
                 </p>
-                <p css={paraCss}>
-                  Your registration details will be sent to the group administrator to review
-                </p>
+                <InputWithError
+                  id="redemption-code"
+                  type="text"
+                  value={props.userCode}
+                  setValue={() => {}}
+                  error={props.error}
+                />
                 <p css={paraCss}>
                   On the next screen you will be prompted to set up a Guardian user account
                 </p>
-                <AnchorButton id="submit-button" href={redeemCodeUrl(props.redemptionCode)} >
+                <Button id="submit-button" type="submit">
                   {buttonText}
-                </AnchorButton>
+                </Button>
               </div>
             </FormSection>
           </Form>
