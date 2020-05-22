@@ -4,9 +4,9 @@ import type { Node } from 'react';
 import './stripeCardForm.scss';
 
 type PropTypes = {|
-  labelChildren: Node,
-  hintChildren?: Node,
-  inputChildren: Node,
+  label: Node,
+  hint?: Node,
+  input: Node,
   error: boolean,
 |}
 
@@ -18,13 +18,13 @@ export function StripeCardFormField(props: PropTypes) {
       <div
         className="ds-stripe-card-form-field"
       >
-        {props.labelChildren}
+        {props.label}
       </div>
-      {props.hintChildren || null}
+      {props.hint || null}
       <div
         className={`ds-stripe-card-input ${props.error ? 'ds-stripe-card-input-error' : ''}`}
       >
-        {props.inputChildren}
+        {props.input}
       </div>
     </>
   );

@@ -35,6 +35,8 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { InlineError } from '@guardian/src-inline-error';
 import { StripeCardFormField, guardianTextSansWeb } from './StripeCardFormField';
+import './stripeCardForm.scss';
+
 
 // ----- Types -----//
 
@@ -197,7 +199,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
   onBlur = () => {
     this.setState({
-      currentlySelected: null,
+      currentlySelected: null,css
     });
   };
 
@@ -405,7 +407,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
         <legend className="form__legend"><h3>Your card details</h3></legend>
         <div className="form__field">
           <label className="form__label" htmlFor="stripeCardNumberElement">
-            <span>Card number</span>
+            Card number
           </label>
           {showCards(this.props.country)}
           <span className={getClasses('CardNumber')}>
@@ -421,7 +423,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
         <div className="stripe-card-element-container__inline-fields">
           <div className="form__field">
             <label className="form__label" htmlFor="stripeCardExpiryElement">
-              <span>Expiry date</span>
+              Expiry date
             </label>
             <span className={getClasses('Expiry')}>
               <CardExpiryElement
@@ -435,7 +437,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
           </div>
           <div className="form__field">
             <label className="form__label" htmlFor="stripeCardCVCElement">
-              <span>CVC</span>
+              CVC
             </label>
             <span className={getClasses('CVC')}>
               <CardCVCElement
@@ -454,7 +456,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
           <div className="form__field">
 
             <label className="form__label" htmlFor="robot_checkbox">
-              <span>Security check</span>
+              Security check
             </label>
             <Recaptcha />
             {
@@ -475,13 +477,17 @@ class CardForm extends Component<PropTypes, StateTypes> {
         }
 
         <StripeCardFormField
-          labelChildren={
+          label={
             <>
-              Card number
+              <label
+                htmlFor="stripeCardNumberElement"
+              >
+                Card number
+              </label>
               {showCardsDs(this.props.country)}
             </>
           }
-          inputChildren={
+          input={
             <CardNumberElement
               id="stripeCardNumberElement"
               style={fieldStyleDS}
@@ -494,37 +500,28 @@ class CardForm extends Component<PropTypes, StateTypes> {
         />
 
         <div
-          css={{
-            display: 'flex',
-            marginTop: '10px',
-          }}
+
+          className="ds-stripe-card-input__expiry-security-container"
         >
-          <label
-            css={{
-              width: '30%',
-              marginRight: '8px',
-            }}
+          <div
+            className="ds-stripe-card-input__expiry"
           >
             <StripeCardFormField
-              labelChildren={
-                <>
+              label={
+                <label
+                  htmlFor="stripeCardExpiryElement"
+                >
                   Expiry date
-                </>
+                </label>
               }
-              hintChildren={
+              hint={
                 <div
-                  css={{
-                    fontSize: '15px',
-                    lineHeight: 1.5,
-                    color: '#767676',
-                    marginBottom: '4px',
-                    fontWeight: 400,
-                  }}
+                  className="ds-stripe-card-input__expiry-hint"
                 >
                   MM / YY
                 </div>
               }
-              inputChildren={
+              input={
                 <CardExpiryElement
                   id="stripeCardExpiryElement"
                   style={fieldStyleControl}
@@ -536,67 +533,33 @@ class CardForm extends Component<PropTypes, StateTypes> {
               }
               error={this.state.Expiry.name === 'Error'}
             />
-          </label>
+          </div>
 
-          <label
-            htmlFor="firstName"
-            css={{
-              width: '30%',
-              marginLeft: '8px',
-            }}
+          <div
+            className="ds-stripe-card-input__security-code"
           >
             <StripeCardFormField
-              labelChildren={
-                <>
+              label={
+                <label
+                  htmlFor="stripeCardCVCElement"
+                >
                   Security code
-                </>
+                </label>
               }
-              hintChildren={
+              hint={
                 <div
-                  css={{
-                    position: 'relative',
-                    cursor: 'pointer',
-                    zIndex: 1,
-                    '&:focus div, &:active div, &:hover div': {
-                      visibility: 'visible',
-                    },
-                    width: '18px',
-                  }}
+                  className="ds-stripe-card-input__security-code-hint"
                 >
                   <div
-                    css={{
-                      fontSize: '11px',
-                      lineHeight: 1.5,
-                      width: '14px',
-                      height: '14px',
-                      background: '#999999',
-                      fontWeight: 700,
-                      marginBottom: '9px',
-                      color: 'white',
-                      textAlign: 'center',
-                      borderRadius: '50%',
-                      padding: '0 2px 4px 2px',
-                    }}
+                    className="ds-stripe-card-input__security-code-hint-icon"
                   >
                     ?
                   </div>
                   <div
-                    css={{
-                      background: '#EDEDED',
-                      width: '224px',
-                      height: '111px',
-                      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                      visibility: 'hidden',
-                      position: 'absolute',
-                      padding: '10px',
-                      top: '-115px',
-                      left: '25px',
-                    }}
+                    className="ds-stripe-card-input__security-code-hint-tooltip"
                   >
                     <p
-                      css={{
-                        fontWeight: 900,
-                      }}
+                      className="ds-stripe-card-input__security-code-hint-tooltip-heading"
                     >
                       What&apos;s this?
                     </p>
@@ -604,7 +567,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
                   </div>
                 </div>
               }
-              inputChildren={
+              input={
                 <CardCVCElement
                   id="stripeCardCVCElement"
                   style={fieldStyleControl}
@@ -616,26 +579,21 @@ class CardForm extends Component<PropTypes, StateTypes> {
               }
               error={this.state.CVC.name === 'Error'}
             />
-          </label>
+          </div>
         </div>
         { window.guardian.recaptchaEnabled ?
           <div
-            css={{
-              marginTop: '10px',
-            }}
+            className="ds-security-check"
           >
-            <label
-              css={{
-                fontSize: '17px',
-                fontWeight: 700,
-                lineHeight: 1.5,
-                fontFamily: guardianTextSansWeb,
-                marginBottom: '4px',
-              }}
-              htmlFor="robot_checkbox"
+            <div
+              className="ds-security-check__label"
             >
-              <span>Security check</span>
-            </label>
+              <label
+                htmlFor="robot_checkbox"
+              >
+                Security check
+              </label>
+            </div>
             {
               this.props.checkoutFormHasBeenSubmitted
               && !recaptchaVerified ?
