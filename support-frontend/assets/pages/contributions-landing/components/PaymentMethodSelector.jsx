@@ -226,10 +226,12 @@ const radioCss = {
     justifyContent: 'space-between',
   },
   '& + div svg': {
-    maxWidth: '20px',
     minWidth: '20px',
+    maxWidth: '30px',
+    width: 'inherit',
     minHeight: '20px',
     maxHeight: '30px',
+    height: 'inherit',
     fill: '#00b2ff',
   },
   '&:not(:checked) + div svg': {
