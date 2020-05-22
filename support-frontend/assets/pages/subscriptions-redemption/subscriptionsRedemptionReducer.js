@@ -21,22 +21,22 @@ export type Checkout = {
   stage: string,
 }
 
-export type State = {
+export type RedemptionPageState = {
   common: CommonState,
   page: {
     checkout: Checkout,
     form: RedemptionFormState,
-    corporateCustomer: CorporateCustomer,
+    corporateCustomer: Option<CorporateCustomer>,
   }
 };
 
-const getCustomer = (): CorporateCustomer => getGlobal('corporateCustomer');
+const getCustomer = (): Option<CorporateCustomer> => getGlobal('corporateCustomer');
 const getCheckout = (): Checkout => ({
   stage: getGlobal('stage') || 'checkout',
 });
 const getForm = (): RedemptionFormState => ({
-  userCode: null,
-  error: null,
+  userCode: getGlobal('userCode'),
+  error: getGlobal('error'),
 });
 
 // ----- Export ----- //

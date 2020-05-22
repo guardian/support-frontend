@@ -49,11 +49,11 @@ class Redemption(
 
   implicit val a: AssetsResolver = assets
 
-  def getCorporateCustomer(redemptionCode: RedemptionCode): Option[CorporateCustomer] =
+  def getCorporateCustomer(redemptionCode: RedemptionCode): Either[String, CorporateCustomer] =
     if (redemptionCode == "test-code")
-      Some(CorporateCustomer("1", "Test Company", "test-code"))
+      Right(CorporateCustomer("1", "Test Company", "test-code"))
     else
-      None
+      Left("This code is not valid")
 
   def displayForm(redemptionCode: String) = NoCacheAction() {
     implicit request =>
@@ -62,24 +62,27 @@ class Redemption(
       val id = EmptyDiv("subscriptions-redemption-page")
       val js = "subscriptionsRedemptionPage.js"
       val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
+      val customerOrError = getCorporateCustomer(redemptionCode)
+      val jsCustomer = customerOrError.map(customer => s"""window.guardian.corporateCustomer = ${customer.asJson};""").getOrElse("")
+      val jsError = customerOrError.left.map(error => s"""window.guardian.error = "${error}";""").swap.getOrElse("")
 
-      getCorporateCustomer(redemptionCode).map(
-        customer =>
-          Ok(views.html.main(
-            title,
-            id,
-            Left(RefPath(js)),
-            Left(RefPath(css)),
-            fontLoaderBundle
-          ) {
-            Html(
-              s"""
-        <script type="text/javascript">
-            window.guardian.corporateCustomer = ${customer.asJson}
-        </script>
-        """)
-          })
-      ).getOrElse(NotFound)
+      Ok(views.html.main(
+        title,
+        id,
+        Left(RefPath(js)),
+        Left(RefPath(css)),
+        fontLoaderBundle
+      ) {
+        Html(
+          s"""
+          <script type="text/javascript">
+              window.guardian.userCode = "${redemptionCode}";
+              ${jsError}
+              ${jsCustomer}
+          </script>
+    """)
+      })
+
   }
 
   def bodyParser(redemptionCode: RedemptionCode): BodyParser[CreateSupportWorkersRequest] =
@@ -103,10 +106,10 @@ class Redemption(
             "dummyemail",
             None, None, None
           )
-      ).toRight(BadRequest("Error creating a CreateSupportWorkersRequest")))
+      ).toOption.toRight(BadRequest("Error creating a CreateSupportWorkersRequest")))
 
   def create(redemptionCode: String) =
-    authenticatedAction(subscriptionsClientId).async(bodyParser(redemptionCode)) {
+    authenticatedAction(subscriptionsClientId).async( bodyParser(redemptionCode)) {
       implicit request: AuthRequest[CreateSupportWorkersRequest] =>
         val userOrError = identityService.getUser(request.user.minimalUser)
         userOrError.fold(
