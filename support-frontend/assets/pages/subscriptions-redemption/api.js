@@ -11,13 +11,13 @@ type ValidationResult = {
   errorMessage: Option<string>,
 }
 
-function validate(redemptionCode: string) {
-  const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${redemptionCode}`;
+function validate(userCode: string) {
+  const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}`;
   return fetchJson(validationUrl, {}); // TODO: CSRF?
 }
 
-function doValidation(redemptionCode: string, dispatch: Dispatch<Action>) {
-  validate(redemptionCode).then((result: ValidationResult) => {
+function doValidation(userCode: string, dispatch: Dispatch<Action>) {
+  validate(userCode).then((result: ValidationResult) => {
     dispatch({ type: 'SET_ERROR', error: result.errorMessage });
   }).catch((error) => {
     dispatch({ type: 'SET_ERROR', error: `An error occurred while validating this code: ${error}` });
@@ -29,4 +29,17 @@ function validateUserCode(userCode: string, dispatch: Dispatch<Action>) {
   doValidation(userCode, dispatch);
 }
 
-export { doValidation, validateUserCode };
+function submitCode(userCode: string, dispatch: Dispatch<Action>) {
+  validate(userCode).then((result: ValidationResult) => {
+    if (result.valid) {
+      const submitUrl = `${getOrigin()}/subscribe/redeem/create/${userCode}`;
+      window.location.assign(submitUrl);
+    } else {
+      dispatch({ type: 'SET_ERROR', error: result.errorMessage });
+    }
+  }).catch((error) => {
+    dispatch({ type: 'SET_ERROR', error: `An error occurred while validating this code: ${error}` });
+  });
+}
+
+export { doValidation, validateUserCode, submitCode };
