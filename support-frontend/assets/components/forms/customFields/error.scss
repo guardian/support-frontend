@@ -28,6 +28,10 @@
   border-color: gu-colour(state-error);
 }
 
+.component-form-valid .component-input:not([type-radio]) {
+  border-color: #22874D;
+}
+
 .component-form-error {
   .StripeElement--invalid, .StripeElement--empty {
     border: 1px solid #c70000;
