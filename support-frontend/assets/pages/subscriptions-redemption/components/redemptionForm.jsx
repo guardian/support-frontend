@@ -9,12 +9,12 @@ import type { Action, RedemptionPageState } from 'pages/subscriptions-redemption
 import { Input } from 'components/forms/input';
 import { compose, type Dispatch } from 'redux';
 import { asControlled } from 'hocs/asControlled';
-import { withError } from 'hocs/withError';
 import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
 import { doValidation } from 'pages/subscriptions-redemption/api';
 import type { Option } from 'helpers/types/option';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
+import { withValidation } from 'hocs/withValidation';
 
 type PropTypes = {
   userCode: Option<string>,
@@ -37,7 +37,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
   };
 }
 
-const InputWithError = compose(asControlled, withError)(Input);
+const InputWithValidated = compose(asControlled, withValidation)(Input);
 
 function RedemptionForm(props: PropTypes) {
   const formCss = css`
@@ -48,6 +48,7 @@ function RedemptionForm(props: PropTypes) {
   `;
 
   const buttonText = props.error ? 'Validate' : 'Redeem';
+  const validationText = props.error ? null : 'This code is valid';
   const signinInstructions = doesUserAppearToBeSignedIn() ? '' :
     'On the next screen you will be prompted to set up a Guardian user account';
 
@@ -67,12 +68,13 @@ function RedemptionForm(props: PropTypes) {
                 <p css={paraCss}>
                   Activate your offer with the unique access code provided
                 </p>
-                <InputWithError
+                <InputWithValidated
                   id="redemption-code"
                   type="text"
                   value={props.userCode}
                   setValue={props.setUserCode}
                   error={props.error}
+                  valid={validationText}
                 />
                 <p css={paraCss}>
                   {signinInstructions}
