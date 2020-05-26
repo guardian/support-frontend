@@ -20,7 +20,7 @@ import RedemptionForm from 'pages/subscriptions-redemption/components/redemption
 import Header from 'components/headers/header/header';
 
 // ----- Redux Store ----- //
-const store = pageInit((s, a) => reducer(s, a), true);
+const store = pageInit(reducer, true);
 
 const { countryGroupId } = store.getState().common.internationalisation;
 
