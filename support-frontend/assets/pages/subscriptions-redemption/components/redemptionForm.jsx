@@ -5,26 +5,28 @@ import { css } from '@emotion/core';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
-import type {
-  Action,
-  CorporateCustomer,
-  RedemptionPageState,
-} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type { Action, RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { Input } from 'components/forms/input';
 import { compose, type Dispatch } from 'redux';
 import { asControlled } from 'hocs/asControlled';
 import { withError } from 'hocs/withError';
 import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
-import { fetchJson, requestOptions } from 'helpers/fetch';
-import { routes } from 'helpers/routes';
-import { logException } from 'helpers/logger';
-import { appropriateErrorMessage } from 'helpers/errorReasons';
-import { getOrigin } from 'helpers/url';
 import { doValidation } from 'pages/subscriptions-redemption/api';
+import type { Option } from 'helpers/types/option';
+
+type PropTypes = {
+  userCode: Option<string>,
+  error: Option<string>,
+  setUserCode: string => void,
+  validateCode: string => void,
+}
 
 function mapStateToProps(state: RedemptionPageState) {
-  return state.page;
+  return {
+    userCode: state.page.userCode,
+    error: state.page.error,
+  };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -36,14 +38,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 const InputWithError = compose(asControlled, withError)(Input);
 
-function redeemCodeUrl(redemptionCode: string) {
-  return `${getOrigin()}/subscribe/redeem/create/${redemptionCode}`;
-}
-
-function submit() {
-}
-
-function RedemptionForm(props: RedemptionPageState) {
+function RedemptionForm(props: PropTypes) {
   const formCss = css`
     min-height: 550px;
   `;
@@ -51,7 +46,7 @@ function RedemptionForm(props: RedemptionPageState) {
     margin-bottom: 16px;
   `;
 
-  const buttonText = 'Redeem';
+  const buttonText = props.error ? 'Validate' : 'Redeem';
   return (
     <div>
       <Content>
@@ -78,7 +73,7 @@ function RedemptionForm(props: RedemptionPageState) {
                 <p css={paraCss}>
                   On the next screen you will be prompted to set up a Guardian user account
                 </p>
-                <Button id="submit-button" onClick={() => props.validateCode(props.userCode)}>
+                <Button id="submit-button" onClick={() => props.validateCode(props.userCode || '')}>
                   {buttonText}
                 </Button>
               </div>
