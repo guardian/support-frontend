@@ -82,7 +82,7 @@ class ContributionStateDs extends Component<PropTypes, {currentInput: string, is
         id="ContributionStateDs"
         label={label}
         value={this.state.currentInput}
-        autoComplete="off"
+        autoComplete="on"
         list="states-list"
         supporting={`Start typing your ${label.toLowerCase()} or click to select from a list`}
         onChange={this.handleInputChange}
