@@ -119,6 +119,12 @@
   padding: 10px;
   top: -115px;
   left: 25px;
+  @include mq($from: mobile) {
+    top: -105px;
+    left: -110px;
+    width: 320px;
+    height: 80px;
+  }
 }
 
 .ds-stripe-card-input__security-code-hint-tooltip-heading {
