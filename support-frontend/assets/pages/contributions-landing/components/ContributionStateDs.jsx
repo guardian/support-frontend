@@ -94,7 +94,7 @@ class ContributionStateDs extends Component<PropTypes, {currentInput: string, is
         }}
       />
       <datalist id="states-list">
-        {Object.values(states).map(state => <option value={state} />)};
+        {Object.values(states).map(state => <option value={state} />)}
       </datalist>
 
     </div>
