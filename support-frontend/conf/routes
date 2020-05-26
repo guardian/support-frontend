@@ -111,6 +111,7 @@ GET  /subscribe/paper/checkout                                     controllers.P
 # redemptions
 GET  /subscribe/redeem/:redemptionCode                             controllers.RedemptionController.displayForm(redemptionCode: String)
 GET  /subscribe/redeem/create/:redemptionCode                      controllers.RedemptionController.create(redemptionCode: String)
+GET  /subscribe/redeem/validate/:redemptionCode                     controllers.RedemptionController.validateCode(redemptionCode: String)
 # POST /subscribe/redeem/:redemptionCode                             controllers.CreateSubscription.create
 # GET  /r/:redemptionCode                                            controllers.Application.permanentRedirect(location = s"/subscribe/digital/redeem${})
 

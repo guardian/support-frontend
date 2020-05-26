@@ -16,6 +16,7 @@ import com.gu.support.redemptions.redemptions.RedemptionCode
 import com.gu.support.workers
 import com.gu.support.workers.{Address, DigitalPack, Monthly, User}
 import com.sun.jndi.cosnaming.IiopUrl.Address
+import controllers.RedemptionController.{blankAddress, digitalSubscription, ophanIds}
 import play.api.mvc.{AbstractController, Action, AnyContent, BodyParser, ControllerComponents, Request, RequestHeader}
 import play.twirl.api.Html
 import services.{IdentityService, MembersDataService, TestUserService}
@@ -98,11 +99,11 @@ class RedemptionController(
           CreateSupportWorkersRequest(
             None,
             "",
-            "", RedemptionController.blankAddress, None, None, None, None, None,
-            RedemptionController.digitalSubscription(),
+            "", blankAddress, None, None, None, None, None,
+            digitalSubscription(),
             None,
             Right(CorporateRedemption(redemptionCode, corporateCustomer.accountId)), None,
-            RedemptionController.ophanIds(request), RedemptionController.referrerAcquisitionData, Set.empty[AbTest],
+            ophanIds(request), RedemptionController.referrerAcquisitionData, Set.empty[AbTest],
             "dummyemail",
             None, None, None
           )
@@ -124,6 +125,13 @@ class RedemptionController(
       RedemptionController.createUser(user, request.body, testUsers), request.uuid
     )
     Ok("test")
+  }
+
+  def validateCode(redemptionCode: String) = CachedAction(){
+    getCorporateCustomer(redemptionCode).fold(
+      errorString => Ok(errorString),
+      customer => Ok(customer.asJson)
+    )
   }
 }
 
