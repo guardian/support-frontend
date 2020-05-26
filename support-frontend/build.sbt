@@ -1,4 +1,5 @@
 import SeleniumTestConfig._
+import LibraryVersions._
 
 version := "1.0-SNAPSHOT"
 
@@ -7,8 +8,6 @@ packageSummary := "Support Play APP"
 testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
 
 testOptions in Test := Seq(Tests.Filter(unitTestFilter))
-
-import LibraryVersions.{circeVersion, awsClientVersion, jacksonVersion}
 
 resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
 
@@ -32,7 +31,7 @@ libraryDependencies ++= Seq(
   "com.gu.identity" %% "identity-auth-play" % "3.195",
   "com.gu" %% "identity-test-users" % "0.6",
   "com.google.guava" % "guava" % "25.0-jre",
-  "io.lemonlabs" %% "scala-uri" % "2.2.0",
+  "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu" %% "play-googleauth" % "0.7.6",
   "io.github.bonigarcia" % "webdrivermanager" % "3.3.0" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
