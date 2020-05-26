@@ -69,7 +69,7 @@ trait Controllers {
     appConfig.recaptchaConfigProvider
   )
 
-  lazy val redemptionController = new Redemption(
+  lazy val redemptionController = new RedemptionController(
     actionRefiners,
     assetsResolver,
     allSettingsProvider,

@@ -31,7 +31,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class Redemption(
+class RedemptionController(
   val actionRefiners: CustomActionBuilders,
   val assets: AssetsResolver,
   settingsProvider: AllSettingsProvider,
@@ -98,11 +98,11 @@ class Redemption(
           CreateSupportWorkersRequest(
             None,
             "",
-            "", Redemption.blankAddress, None, None, None, None, None,
-            Redemption.digitalSubscription(),
+            "", RedemptionController.blankAddress, None, None, None, None, None,
+            RedemptionController.digitalSubscription(),
             None,
             Right(CorporateRedemption(redemptionCode, corporateCustomer.accountId)), None,
-            Redemption.ophanIds(request), Redemption.referrerAcquisitionData, Set.empty[AbTest],
+            RedemptionController.ophanIds(request), RedemptionController.referrerAcquisitionData, Set.empty[AbTest],
             "dummyemail",
             None, None, None
           )
@@ -121,14 +121,14 @@ class Redemption(
   def createSub(request: AuthRequest[CreateSupportWorkersRequest], user: IdUser) = {
     client.createSubscription(
       request,
-      Redemption.createUser(user, request.body, testUsers), request.uuid
+      RedemptionController.createUser(user, request.body, testUsers), request.uuid
     )
     Ok("test")
   }
 }
 
 
-object Redemption {
+object RedemptionController {
   val blankAddress = workers.Address(None, None, None, None, None, Country.UK) //TODO: country
   def digitalSubscription() = DigitalPack(GBP, Monthly, Corporate) //TODO: currency
   def ophanIds(request: RequestHeader): OphanIds = {

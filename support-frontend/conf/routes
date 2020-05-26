@@ -109,8 +109,8 @@ GET  /uk/subscribe/paper/delivery                                  controllers.P
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscription.displayForm()
 
 # redemptions
-GET  /subscribe/redeem/:redemptionCode                             controllers.Redemption.displayForm(redemptionCode: String)
-GET  /subscribe/redeem/create/:redemptionCode                      controllers.Redemption.create(redemptionCode: String)
+GET  /subscribe/redeem/:redemptionCode                             controllers.RedemptionController.displayForm(redemptionCode: String)
+GET  /subscribe/redeem/create/:redemptionCode                      controllers.RedemptionController.create(redemptionCode: String)
 # POST /subscribe/redeem/:redemptionCode                             controllers.CreateSubscription.create
 # GET  /r/:redemptionCode                                            controllers.Application.permanentRedirect(location = s"/subscribe/digital/redeem${})
 
