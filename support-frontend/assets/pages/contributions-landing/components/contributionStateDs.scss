@@ -1,0 +1,28 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.state-container {
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+.state-label {
+  font-family: $gu-text-sans-web;
+  font-weight: 700;
+  line-height: 1.5;
+  font-size: 17px;
+}
+
+.state-field {
+  appearance: none;
+  background: gu-colour(neutral-100);
+  border-radius: 0;
+  transition: box-shadow .2s ease-in-out;
+  display: block;
+  margin-top: 4px;
+  width: 100%;
+  border-radius: 0px;
+  height: 44px;
+  padding: 10px 8px;
+  border: 2px solid gu-colour(neutral-60);
+  font-size: 17px;
+}
