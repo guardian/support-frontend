@@ -11,7 +11,7 @@ import { compose, type Dispatch } from 'redux';
 import { asControlled } from 'hocs/asControlled';
 import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
-import { validateUserCode } from 'pages/subscriptions-redemption/api';
+import { submitCode, validateUserCode } from 'pages/subscriptions-redemption/api';
 import type { Option } from 'helpers/types/option';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { withValidation } from 'hocs/withValidation';
@@ -20,7 +20,7 @@ type PropTypes = {
   userCode: Option<string>,
   error: Option<string>,
   setUserCode: string => void,
-  validateCode: string => void,
+  submit: string => void,
 }
 
 function mapStateToProps(state: RedemptionPageState) {
@@ -33,7 +33,7 @@ function mapStateToProps(state: RedemptionPageState) {
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
     setUserCode: (userCode: string) => validateUserCode(userCode, dispatch),
-    submit: () => submitForm(),
+    submit: (userCode: string) => submitCode(userCode, dispatch),
   };
 }
 
@@ -79,7 +79,7 @@ function RedemptionForm(props: PropTypes) {
                 <p css={paraCss}>
                   {signinInstructions}
                 </p>
-                <Button id="submit-button" onClick={() => props.validateCode(props.userCode || '')}>
+                <Button id="submit-button" onClick={() => props.submit(props.userCode || '')}>
                   Activate
                 </Button>
               </div>
