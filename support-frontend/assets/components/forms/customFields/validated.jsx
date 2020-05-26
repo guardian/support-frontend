@@ -5,9 +5,6 @@
 import React, { type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
-import { css } from '@emotion/core';
-import { success } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography/obj';
 
 // ----- Types ----- //
 export type PropsForHoc = {
@@ -38,15 +35,6 @@ function Validated({
   children,
 }: Props) {
   const Element = htmlFor ? 'label' : 'div';
-  const validLabelCss = css`
-    color: ${success.main};
-    font-size: 1rem;
-    display: block;
-    margin-top: 12px;
-    ${textSans.small({
-    fontWeight: 'bold',
-  })};
-  `;
 
   return (
     <div className={getClassName(error, valid)}>
@@ -67,7 +55,6 @@ function Validated({
         {(error !== 'Temporary COVID message') && error}
       </Element>
       <Element
-        css={validLabelCss}
         aria-hidden={!valid}
         aria-atomic="true"
         aria-live="polite"
