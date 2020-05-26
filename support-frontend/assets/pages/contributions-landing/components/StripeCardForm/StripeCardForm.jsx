@@ -34,7 +34,7 @@ import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { InlineError } from '@guardian/src-inline-error';
-import { StripeCardFormField, guardianTextSansWeb } from './StripeCardFormField';
+import { StripeCardFormField } from './StripeCardFormField';
 import './stripeCardForm.scss';
 
 
@@ -118,7 +118,7 @@ type StateTypes = {
 
 const fieldStyleControl = {
   base: {
-    fontFamily: guardianTextSansWeb,
+    fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
     fontSize: '16px',
     '::placeholder': {
       color: '#999999',
@@ -129,11 +129,8 @@ const fieldStyleControl = {
 
 const fieldStyleDS = {
   base: {
-    fontFamily: guardianTextSansWeb,
+    ...fieldStyleControl,
     fontSize: '17px',
-    '::placeholder': {
-      color: '#999999',
-    },
     lineHeight: 1.5,
   },
 };
@@ -199,7 +196,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
   onBlur = () => {
     this.setState({
-      currentlySelected: null,css
+      currentlySelected: null,
     });
   };
 
