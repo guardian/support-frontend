@@ -30,7 +30,7 @@ export type RedemptionPageState = {
 // ------- Actions ---------- //
 export type Action =
   | { type: 'SET_USER_CODE', userCode: string }
-  | { type: 'SET_ERROR', error: string }
+  | { type: 'SET_ERROR', error: Option<string> }
   | { type: 'SET_CORPORATE_CUSTOMER', corporateCustomer: CorporateCustomer }
 
 const initialState: RedemptionFormState = {

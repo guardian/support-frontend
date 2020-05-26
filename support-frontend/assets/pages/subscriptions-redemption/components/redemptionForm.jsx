@@ -11,7 +11,7 @@ import { compose, type Dispatch } from 'redux';
 import { asControlled } from 'hocs/asControlled';
 import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
-import { doValidation } from 'pages/subscriptions-redemption/api';
+import { validateUserCode } from 'pages/subscriptions-redemption/api';
 import type { Option } from 'helpers/types/option';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { withValidation } from 'hocs/withValidation';
@@ -32,8 +32,8 @@ function mapStateToProps(state: RedemptionPageState) {
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
-    setUserCode: (userCode: string) => dispatch({ type: 'SET_USER_CODE', userCode }),
-    validateCode: (code: string) => doValidation(code, dispatch),
+    setUserCode: (userCode: string) => validateUserCode(userCode, dispatch),
+    submit: () => submitForm(),
   };
 }
 
@@ -47,7 +47,6 @@ function RedemptionForm(props: PropTypes) {
     margin-bottom: 16px;
   `;
 
-  const buttonText = props.error ? 'Validate' : 'Redeem';
   const validationText = props.error ? null : 'This code is valid';
   const signinInstructions = doesUserAppearToBeSignedIn() ? '' :
     'On the next screen you will be prompted to set up a Guardian user account';
@@ -71,6 +70,7 @@ function RedemptionForm(props: PropTypes) {
                 <InputWithValidated
                   id="redemption-code"
                   type="text"
+                  autoComplete="off"
                   value={props.userCode}
                   setValue={props.setUserCode}
                   error={props.error}
@@ -80,7 +80,7 @@ function RedemptionForm(props: PropTypes) {
                   {signinInstructions}
                 </p>
                 <Button id="submit-button" onClick={() => props.validateCode(props.userCode || '')}>
-                  {buttonText}
+                  Activate
                 </Button>
               </div>
             </FormSection>
