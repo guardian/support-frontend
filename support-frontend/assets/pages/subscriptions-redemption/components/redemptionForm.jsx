@@ -5,13 +5,23 @@ import { css } from '@emotion/core';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
-import type { Action, RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type {
+  Action,
+  CorporateCustomer,
+  RedemptionPageState,
+} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { Input } from 'components/forms/input';
 import { compose, type Dispatch } from 'redux';
 import { asControlled } from 'hocs/asControlled';
 import { withError } from 'hocs/withError';
 import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
+import { fetchJson, requestOptions } from 'helpers/fetch';
+import { routes } from 'helpers/routes';
+import { logException } from 'helpers/logger';
+import { appropriateErrorMessage } from 'helpers/errorReasons';
+import { getOrigin } from 'helpers/url';
+import { doValidation } from 'pages/subscriptions-redemption/api';
 
 function mapStateToProps(state: RedemptionPageState) {
   return state.page;
@@ -20,6 +30,7 @@ function mapStateToProps(state: RedemptionPageState) {
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
     setUserCode: (userCode: string) => dispatch({ type: 'SET_USER_CODE', userCode }),
+    validateCode: (code: string) => doValidation(code, dispatch),
   };
 }
 
@@ -27,10 +38,6 @@ const InputWithError = compose(asControlled, withError)(Input);
 
 function redeemCodeUrl(redemptionCode: string) {
   return `${getOrigin()}/subscribe/redeem/create/${redemptionCode}`;
-}
-
-function validateForm() {
-
 }
 
 function submit() {
@@ -71,7 +78,7 @@ function RedemptionForm(props: RedemptionPageState) {
                 <p css={paraCss}>
                   On the next screen you will be prompted to set up a Guardian user account
                 </p>
-                <Button id="submit-button" onClick={() => console.log("test")}>
+                <Button id="submit-button" onClick={() => props.validateCode(props.userCode)}>
                   {buttonText}
                 </Button>
               </div>

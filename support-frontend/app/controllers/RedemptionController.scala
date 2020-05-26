@@ -129,7 +129,7 @@ class RedemptionController(
 
   def validateCode(redemptionCode: String) = CachedAction(){
     getCorporateCustomer(redemptionCode).fold(
-      errorString => Ok(errorString),
+      errorString => Ok(errorString.asJson),
       customer => Ok(customer.asJson)
     )
   }
