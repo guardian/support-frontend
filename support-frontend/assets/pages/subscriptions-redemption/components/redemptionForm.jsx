@@ -14,6 +14,7 @@ import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
 import { doValidation } from 'pages/subscriptions-redemption/api';
 import type { Option } from 'helpers/types/option';
+import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 
 type PropTypes = {
   userCode: Option<string>,
@@ -47,6 +48,9 @@ function RedemptionForm(props: PropTypes) {
   `;
 
   const buttonText = props.error ? 'Validate' : 'Redeem';
+  const signinInstructions = doesUserAppearToBeSignedIn() ? '' :
+    'On the next screen you will be prompted to set up a Guardian user account';
+
   return (
     <div>
       <Content>
@@ -71,7 +75,7 @@ function RedemptionForm(props: PropTypes) {
                   error={props.error}
                 />
                 <p css={paraCss}>
-                  On the next screen you will be prompted to set up a Guardian user account
+                  {signinInstructions}
                 </p>
                 <Button id="submit-button" onClick={() => props.validateCode(props.userCode || '')}>
                   {buttonText}
