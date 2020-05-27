@@ -29,6 +29,7 @@ import utils.CheckoutValidationRules
 import lib.PlayImplicits._
 import play.api.libs.streams.Accumulator
 import play.api.libs.ws.{WSRequest, WSResponse}
+import views.html.subscriptionRedemptionForm
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -50,6 +51,12 @@ class RedemptionController(
 
   implicit val a: AssetsResolver = assets
 
+  implicit val settings: AllSettings = settingsProvider.getAllSettings()
+  val title = "Support the Guardian | Redeem your code"
+  val id = EmptyDiv("subscriptions-redemption-page")
+  val js = "subscriptionsRedemptionPage.js"
+  val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
+
   def getCorporateCustomer(redemptionCode: RedemptionCode): Either[String, CorporateCustomer] =
     if (redemptionCode == "test-code")
       Right(CorporateCustomer("1", "Test Company", "test-code"))
@@ -58,31 +65,21 @@ class RedemptionController(
 
   def displayForm(redemptionCode: String) = NoCacheAction() {
     implicit request =>
-      implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      val title = "Support the Guardian | Redeem your code"
-      val id = EmptyDiv("subscriptions-redemption-page")
-      val js = "subscriptionsRedemptionPage.js"
-      val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
       val customerOrError = getCorporateCustomer(redemptionCode)
-      val jsCustomer = customerOrError.map(customer => s"""window.guardian.corporateCustomer = ${customer.asJson};""").getOrElse("")
-      val jsError = customerOrError.left.map(error => s"""window.guardian.error = "${error}";""").swap.getOrElse("")
 
-      Ok(views.html.main(
+      Ok(subscriptionRedemptionForm(
         title,
         id,
-        Left(RefPath(js)),
-        Left(RefPath(css)),
-        fontLoaderBundle
-      ) {
-        Html(
-          s"""
-          <script type="text/javascript">
-              window.guardian.userCode = "${redemptionCode}";
-              ${jsError}
-              ${jsCustomer}
-          </script>
-    """)
-      })
+        js,
+        css,
+        fontLoaderBundle,
+        None,
+        false,
+        "checkout",
+        redemptionCode,
+        customerOrError,
+        None
+      ))
 
   }
 
@@ -110,14 +107,32 @@ class RedemptionController(
       ).toOption.toRight(BadRequest("Error creating a CreateSupportWorkersRequest")))
 
   def create(redemptionCode: String) =
-    authenticatedAction(subscriptionsClientId).async( bodyParser(redemptionCode)) {
-      implicit request: AuthRequest[CreateSupportWorkersRequest] =>
+    authenticatedAction(subscriptionsClientId).async {
+      implicit request: AuthRequest[Any] =>
         val userOrError = identityService.getUser(request.user.minimalUser)
         userOrError.fold(
           BadRequest(_),
-          user => createSub(request, user)
+          user => showThankYou(redemptionCode, user)
         )
     }
+
+  def showThankYou(redemptionCode: RedemptionCode, user: IdUser)(implicit request: AuthRequest[Any]) = {
+    val customerOrError = getCorporateCustomer(redemptionCode)
+
+    Ok(subscriptionRedemptionForm(
+      title,
+      id,
+      js,
+      css,
+      fontLoaderBundle,
+      None,
+      false,
+      "thankyou",
+      redemptionCode,
+      customerOrError,
+      Some(user)
+    ))
+  }
 
   def createSub(request: AuthRequest[CreateSupportWorkersRequest], user: IdUser) = {
     client.createSubscription(
