@@ -12,17 +12,19 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
-import CheckoutStage from 'components/subscriptionCheckouts/stage';
+import CheckoutStage from './components/stage';
 
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import reducer from './subscriptionsRedemptionReducer';
 import RedemptionForm from 'pages/subscriptions-redemption/components/redemptionForm';
 import Header from 'components/headers/header/header';
+import { createSubscription } from 'pages/subscriptions-redemption/api';
 
 // ----- Redux Store ----- //
 const store = pageInit(reducer, true);
 
-const { countryGroupId } = store.getState().common.internationalisation;
+const state = store.getState();
+const { countryGroupId } = state.common.internationalisation;
 
 // ----- Render ----- //
 
@@ -45,7 +47,7 @@ const content = (
         checkoutForm={<RedemptionForm />}
         thankYouContentPending={null}
         thankYouContent={null}
-        subscriptionProduct="DigitalPack"
+        processingFunction={createSubscription}
       />
       <ConsentBanner />
     </Page>

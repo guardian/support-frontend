@@ -5,6 +5,7 @@ import actions.CustomActionBuilders.AuthRequest
 import admin.settings.{AllSettings, AllSettingsProvider}
 import akka.util.ByteString
 import assets.{AssetsResolver, RefPath, StyleContent}
+import cats.data.EitherT
 import cats.implicits._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
@@ -57,68 +58,52 @@ class RedemptionController(
   val js = "subscriptionsRedemptionPage.js"
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
-  def getCorporateCustomer(redemptionCode: RedemptionCode): Either[String, CorporateCustomer] =
+  def getCorporateCustomer(redemptionCode: RedemptionCode): EitherT[Future, String, CorporateCustomer] =
     if (redemptionCode == "test-code")
-      Right(CorporateCustomer("1", "Test Company", "test-code"))
+      EitherT.fromEither(Right(CorporateCustomer("1", "Test Company", "test-code")))
     else
-      Left("This code is not valid")
+      EitherT.fromEither(Left("This code is not valid"))
 
-  def displayForm(redemptionCode: String) = NoCacheAction() {
+  def displayForm(redemptionCode: String) = NoCacheAction().async {
     implicit request =>
-      val customerOrError = getCorporateCustomer(redemptionCode)
-
-      Ok(subscriptionRedemptionForm(
-        title,
-        id,
-        js,
-        css,
-        fontLoaderBundle,
-        None,
-        false,
-        "checkout",
-        redemptionCode,
-        customerOrError,
-        None
-      ))
+      getCorporateCustomer(redemptionCode).value.map(
+        customerOrError =>
+          Ok(subscriptionRedemptionForm(
+            title,
+            id,
+            js,
+            css,
+            fontLoaderBundle,
+            None,
+            false,
+            "checkout",
+            redemptionCode,
+            customerOrError,
+            None,
+            false
+          ))
+      )
 
   }
 
-  def bodyParser(redemptionCode: RedemptionCode): BodyParser[CreateSupportWorkersRequest] =
-    BodyParser {
-      request =>
-        Accumulator.source[ByteString].mapFuture(_ => parseRequest(redemptionCode, request))
-    }
-
-  def parseRequest(redemptionCode: RedemptionCode, request: RequestHeader) =
-    Future.successful( //TODO: move the identity call in here
-      getCorporateCustomer(redemptionCode).map(
-        corporateCustomer =>
-          CreateSupportWorkersRequest(
-            None,
-            "",
-            "", blankAddress, None, None, None, None, None,
-            digitalSubscription(),
-            None,
-            Right(CorporateRedemption(redemptionCode, corporateCustomer.accountId)), None,
-            ophanIds(request), RedemptionController.referrerAcquisitionData, Set.empty[AbTest],
-            "dummyemail",
-            None, None, None
-          )
-      ).toOption.toRight(BadRequest("Error creating a CreateSupportWorkersRequest")))
+  import cats.implicits._
 
   def create(redemptionCode: String) =
     authenticatedAction(subscriptionsClientId).async {
       implicit request: AuthRequest[Any] =>
-        val userOrError = identityService.getUser(request.user.minimalUser)
-        userOrError.fold(
-          BadRequest(_),
-          user => showThankYou(redemptionCode, user)
+        val blah = for {
+          user <- identityService.getUser(request.user.minimalUser)
+          corporateCustomer <- getCorporateCustomer(redemptionCode)
+        } yield showProcessing(redemptionCode, corporateCustomer, user)
+        blah.value.map(
+          _.fold(
+            BadRequest(_),
+            result => result
+          )
         )
     }
 
-  def showThankYou(redemptionCode: RedemptionCode, user: IdUser)(implicit request: AuthRequest[Any]) = {
-    val customerOrError = getCorporateCustomer(redemptionCode)
-
+  def showProcessing(redemptionCode: RedemptionCode, corporateCustomer: CorporateCustomer, user: IdUser)(implicit request: AuthRequest[Any]) = {
     Ok(subscriptionRedemptionForm(
       title,
       id,
@@ -127,26 +112,20 @@ class RedemptionController(
       fontLoaderBundle,
       None,
       false,
-      "thankyou",
+      "processing",
       redemptionCode,
-      customerOrError,
-      Some(user)
+      Right(corporateCustomer),
+      Some(user),
+      true
     ))
   }
 
-  def createSub(request: AuthRequest[CreateSupportWorkersRequest], user: IdUser) = {
-    client.createSubscription(
-      request,
-      RedemptionController.createUser(user, request.body, testUsers), request.uuid
-    )
-    Ok("test")
-  }
-
-  def validateCode(redemptionCode: String) = CachedAction(){
-    getCorporateCustomer(redemptionCode).fold(
-      errorString => Ok(RedemptionValidationResult(valid = false, Some(errorString)).asJson),
-      customer => Ok(RedemptionValidationResult(valid = true, None).asJson)
-    )
+  def validateCode(redemptionCode: String) = CachedAction().async {
+    getCorporateCustomer(redemptionCode).value.map(
+      _.fold(
+        errorString => Ok(RedemptionValidationResult(valid = false, Some(errorString)).asJson),
+        customer => Ok(RedemptionValidationResult(valid = true, None).asJson)
+      ))
   }
 }
 
