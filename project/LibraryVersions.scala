@@ -5,4 +5,5 @@ object LibraryVersions {
   val catsVersion = "1.4.0"
   val jacksonVersion = "2.10.1"
   val okhttpVersion = "3.10.0"
+  val scalaUriVersion = "2.2.2"
 }
