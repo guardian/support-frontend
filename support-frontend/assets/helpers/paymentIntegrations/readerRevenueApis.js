@@ -47,6 +47,7 @@ type RegularContribution = {|
 type DigitalSubscription = {|
   currency: string,
   billingPeriod: BillingPeriod,
+  productOptions: ProductOptions,
 |};
 
 type PaperSubscription = {|
@@ -75,6 +76,11 @@ type RegularDirectDebitPaymentFields = {|
   accountNumber: string,
 |};
 
+type CorporateRedemption = {|
+  redemptionCode: string,
+  corporateAccountId: string,
+|}
+
 type RegularExistingPaymentFields = {| billingAccountId: string |};
 
 export type RegularPaymentFields =
@@ -82,7 +88,8 @@ export type RegularPaymentFields =
   RegularStripePaymentIntentFields |
   RegularStripeCheckoutPaymentFields |
   RegularDirectDebitPaymentFields |
-  RegularExistingPaymentFields;
+  RegularExistingPaymentFields |
+  CorporateRedemption;
 
 export type RegularPaymentRequestAddress = {|
   country: IsoCountry,
