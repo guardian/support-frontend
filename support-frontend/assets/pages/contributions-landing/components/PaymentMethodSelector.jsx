@@ -45,6 +45,10 @@ import SvgAmazonPayLogo from 'components/svgs/amazonPayLogo';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { RadioGroup, Radio } from '@guardian/src-radio';
 
+import SvgPayPalDs from 'components/svgs/paypalDs';
+import SvgDirectDebitSymbolDs from 'components/svgs/directDebitSymbolDs';
+import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
+import SvgNewCreditCardDs from 'components/svgs/newCreditCardDs';
 
 // ----- Types ----- //
 
@@ -99,6 +103,22 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
   }
 }
 
+const getPaymentMethodLogoDs = (paymentMethod: PaymentMethod) => {
+  switch (paymentMethod) {
+    case PayPal:
+      return <SvgPayPalDs />;
+    case DirectDebit:
+    case ExistingDirectDebit:
+      return <SvgDirectDebitSymbolDs />;
+    case AmazonPay:
+      return <SvgAmazonPayLogoDs />;
+    case Stripe:
+    case ExistingCard:
+    default:
+      return <SvgNewCreditCardDs />;
+  }
+}
+
 
 const legend = (
   <div className="secure-transaction">
@@ -110,7 +130,7 @@ const legend = (
 const renderLabelAndLogo = (paymentMethod: PaymentMethod) => (
   <>
     <div>{getPaymentLabel(paymentMethod)}</div>
-    {getPaymentMethodLogo(paymentMethod)}
+    {getPaymentMethodLogoDs(paymentMethod)}
   </>
 );
 
@@ -226,13 +246,8 @@ const radioCss = {
     justifyContent: 'space-between',
   },
   '& + div svg': {
-    minWidth: '20px',
-    maxWidth: '30px',
-    width: 'inherit',
-    minHeight: '20px',
-    maxHeight: '30px',
-    height: 'inherit',
-    fill: '#00b2ff',
+    width: '36px',
+    height: '24px',
   },
   '&:not(:checked) + div svg': {
     filter: 'grayscale(100%)',
