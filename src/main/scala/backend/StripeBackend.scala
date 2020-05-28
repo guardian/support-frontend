@@ -105,7 +105,7 @@ class StripeBackend(
     def createIntent(): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] =
       stripeService.createPaymentIntent(request)
         .leftMap(err => {
-          logger.error(s"Unable to create Stripe Payment Intent ($request)", err)
+          logger.error(s"Unable to create Stripe Payment Intent ($request). User-Agent was: ${clientBrowserInfo.userAgent}", err)
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
           err
         })
