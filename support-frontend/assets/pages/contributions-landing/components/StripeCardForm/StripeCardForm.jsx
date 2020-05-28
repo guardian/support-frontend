@@ -494,6 +494,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             />
           }
           error={this.state.CardNumber.name === 'Error'}
+          focus={this.state.currentlySelected === 'CardNumber'}
         />
 
         <div
@@ -529,6 +530,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
                 />
               }
               error={this.state.Expiry.name === 'Error'}
+              focus={this.state.currentlySelected === 'Expiry'}
+
             />
           </div>
 
@@ -575,6 +578,8 @@ class CardForm extends Component<PropTypes, StateTypes> {
                 />
               }
               error={this.state.CVC.name === 'Error'}
+              focus={this.state.currentlySelected === 'CVC'}
+
             />
           </div>
         </div>
