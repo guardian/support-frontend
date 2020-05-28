@@ -48,7 +48,6 @@ type PropTypes = {|
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateBillingState: Event => void,
-  updateBillingStateDs: (string | null) => void,
   checkIfEmailHasPassword: Event => void,
   contributionType: ContributionType,
   designSystemTestVariant: LandingPageDesignSystemTestVariants,
@@ -79,9 +78,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateBillingState: (event) => { dispatch(updateBillingState(event.target.value === '' ? null : event.target.value)); },
-  updateBillingStateDs: (formattedBillingState: string | null) => {
-    dispatch(updateBillingState(formattedBillingState));
-  },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 
@@ -225,9 +221,10 @@ function withProps(props: PropTypes) {
         </div> : null
       }
       <ContributionStateDs
-        onChange={props.updateBillingStateDs}
+        onChange={props.updateBillingState}
         value={billingState}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+        isValid={checkBillingState(billingState)}
       />
     </>
   );
