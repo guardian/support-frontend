@@ -24,7 +24,6 @@ import { formatUserDate } from 'helpers/dateConversions';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { Paper } from 'helpers/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
-import './paperCheckout.scss';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
