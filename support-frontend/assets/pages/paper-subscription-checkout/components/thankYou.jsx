@@ -23,6 +23,8 @@ import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.sc
 import { formatUserDate } from 'helpers/dateConversions';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { Paper } from 'helpers/subscriptions';
+import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import './paperCheckout.scss';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
@@ -76,9 +78,8 @@ const whatNext: {[FulfilmentOptions]: Element<*>} = {
 
 
 function ThankYouContent({
-  fulfilmentOption, productOption, startDate, isPending,
+  fulfilmentOption, productOption, startDate, isPending, product,
 }: PropTypes) {
-
   return (
     <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
@@ -119,6 +120,7 @@ function ThankYouContent({
           </SansParagraph>
         </Text>
       </Content>
+      <SubscriptionsSurvey product={product} />
       <Content>
         <Asyncronously loader={import('components/subscriptionCheckouts/thankYou/marketingConsentContainer')}>
           {(MktConsent: MarketingConsent) => (
