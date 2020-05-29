@@ -8,6 +8,8 @@ import type { Option } from 'helpers/types/option';
 import type { User } from 'helpers/subscriptionsForms/user';
 import { getUser } from 'helpers/subscriptionsForms/user';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
+import MarketingConsent from 'components/marketingConsent/marketingConsent';
 
 
 export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
@@ -24,6 +26,7 @@ export type RedemptionFormState = {
   error: Option<string>,
   user: User,
   csrf: Option<Csrf>,
+  marketingConsent: MarketingConsent,
 }
 
 export type RedemptionPageState = {
@@ -45,6 +48,7 @@ const initialState: RedemptionFormState = {
   error: getGlobal('error'),
   user: getUser(),
   csrf: getGlobal('csrf'),
+  marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
 };
 
 const redemptionFormReducer = (

@@ -18,6 +18,9 @@ import ConsentBanner from '../../components/consentBanner/consentBanner';
 import reducer from './subscriptionsRedemptionReducer';
 import RedemptionForm from 'pages/subscriptions-redemption/components/redemptionForm';
 import Header from 'components/headers/header/header';
+import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
+import MarketingConsent from './marketingConsentContainer';
+import Text from 'components/text/text';
 
 // ----- Redux Store ----- //
 const store = pageInit(reducer, true);
@@ -45,7 +48,15 @@ const content = (
       <CheckoutStage
         checkoutForm={<RedemptionForm />}
         thankYouContentPending={null}
-        thankYouContent={null}
+        thankYouContent={
+          <ThankYouContent
+            countryGroupId={countryGroupId}
+            marketingConsent={
+              <MarketingConsent render={({ title, message }) => (
+                <Text title={title}>{message}</Text>)}
+              />
+            }
+          />}
       />
       <ConsentBanner />
     </Page>
