@@ -54,13 +54,9 @@ const selectCss = {
 
   '&:active': {
     border: '2px solid #007ABC',
-    outline: 0,
   },
 
-  '&:focus': {
-    ...focusHalo,
-    outline: 0,
-  },
+  '&:focus': focusHalo,
 };
 
 const errorBorderCss = {
@@ -68,6 +64,22 @@ const errorBorderCss = {
   outline: '4px solid #c70000',
   height: '44px',
   border: 0,
+};
+
+const chevronCss = {
+  float: 'right',
+  zIndex: '0',
+  position: 'absolute',
+  top: '12px',
+  right: '16px',
+  pointerEvents: 'none',
+};
+
+const chevronErrorCss = {
+  ...chevronCss,
+  path: {
+    fill: '#970000',
+  },
 };
 
 
@@ -111,10 +123,7 @@ const renderStatesField = (
       ) : null}
     <div
       css={css`
-        /* width: 100%; */
-        /* padding: 0; */
         position: relative;
-        /* margin-top: 0; */
       `}
     >
       <select
@@ -129,18 +138,7 @@ const renderStatesField = (
             .map(renderState(selectedState))}
       </select>
       <div
-        css={css`
-        float: right;
-        z-index: 0;
-        position: absolute;
-        top: 12px;
-        right: 16px;
-        pointer-events: none;
-        // TODO: change chevron colour on error only
-        path {
-          fill: #970000;
-        };
-      `}
+        css={showError ? chevronErrorCss : chevronCss}
       >
         <DownChevronDs
         />
