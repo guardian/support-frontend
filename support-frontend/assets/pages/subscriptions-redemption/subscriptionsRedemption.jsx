@@ -18,7 +18,6 @@ import ConsentBanner from '../../components/consentBanner/consentBanner';
 import reducer from './subscriptionsRedemptionReducer';
 import RedemptionForm from 'pages/subscriptions-redemption/components/redemptionForm';
 import Header from 'components/headers/header/header';
-import { createSubscription } from 'pages/subscriptions-redemption/api';
 
 // ----- Redux Store ----- //
 const store = pageInit(reducer, true);
@@ -47,7 +46,6 @@ const content = (
         checkoutForm={<RedemptionForm />}
         thankYouContentPending={null}
         thankYouContent={null}
-        processingFunction={createSubscription}
       />
       <ConsentBanner />
     </Page>

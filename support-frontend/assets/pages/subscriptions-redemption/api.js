@@ -16,6 +16,7 @@ import { Monthly } from 'helpers/billingPeriods';
 import { Corporate } from 'helpers/productPrice/productOptions';
 import type { User } from 'helpers/subscriptionsForms/user';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 
 type ValidationResult = {
   valid: boolean,
@@ -111,11 +112,10 @@ function createSubscription(
   currencyId: IsoCurrency,
   countryId: IsoCountry,
   participations: Participations,
+  csrf: Csrf,
   dispatch: Dispatch<Action>,
 ) {
   const data = buildRegularPaymentRequest(corporateCustomer, user, currencyId, countryId, participations);
-
-  //const { csrf } = state.page;
 
   const handleSubscribeResult = (result: PaymentResult) => {
     if (result.paymentStatus === 'success') {
@@ -124,14 +124,14 @@ function createSubscription(
       } else {
         dispatch(setStage('thankyou'));
       }
-    } else { dispatch(setSubmissionError(result.error)); }
+    } else { dispatch(setSubmissionError(result.error)); } // TODO: deal with this
   };
 
   postRegularPaymentRequest(
     routes.subscriptionCreate,
     data,
     participations,
-    {token: ''},
+    csrf,
     () => {},
     () => {},
   ).then(handleSubscribeResult);

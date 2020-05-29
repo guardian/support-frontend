@@ -32,6 +32,7 @@ type PropTypes = {|
   countryId: IsoCountry,
   participations: Participations,
   processingFunction: PropTypes => void,
+  csrf: Option<string>,
 |};
 
 type StagePropTypes = {
@@ -51,14 +52,21 @@ function mapStateToProps(state: RedemptionPageState) {
     currencyId: state.common.internationalisation.currencyId,
     countryId: state.common.internationalisation.countryId,
     participations: state.common.abParticipations,
+    csrf: state.page.csrf,
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
-    processingFunction: (
-      props: PropTypes
-    ) => createSubscription(props.corporateCustomer, props.user, props.currencyId, props.countryId, props.participations, dispatch)
+    processingFunction: (props: PropTypes) => createSubscription(
+      props.corporateCustomer,
+      props.user,
+      props.currencyId,
+      props.countryId,
+      props.participations,
+      props.csrf,
+      dispatch,
+    ),
   };
 }
 
