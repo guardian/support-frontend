@@ -14,20 +14,20 @@ class RedemptionITSpec extends AsyncFlatSpec with Matchers {
     GetCodeStatus.withDynamoLookup(RedemptionTableAsync.forEnv(TouchPointEnvironments.SANDBOX))
 
   "getCodeStatus" should "handle an available code" in {
-    getCodeStatus(RedemptionCode("ITTEST-AVAILABLE")).map { actual =>
-      actual should be(Right(()))
+    getCodeStatus(RedemptionCode("ITTEST-AVAILABLE")).map {
+      _ should be(Right(()))
     }
   }
 
   it should "handle an NOT available code" in {
-    getCodeStatus(RedemptionCode("ITTEST-USED")).map { actual =>
-      actual should be(Left(CodeAlreadyUsed))
+    getCodeStatus(RedemptionCode("ITTEST-USED")).map {
+      _ should be(Left(CodeAlreadyUsed))
     }
   }
 
   it should "handle an NOT valid code" in {
-    getCodeStatus(RedemptionCode("ITTEST-MISSING")).map { actual =>
-      actual should be(Left(NoSuchCode))
+    getCodeStatus(RedemptionCode("ITTEST-MISSING")).map {
+      _ should be(Left(NoSuchCode))
     }
   }
 

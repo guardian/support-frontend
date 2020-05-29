@@ -14,8 +14,8 @@ class RedemptionSpec extends AsyncFlatSpec with Matchers {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
       case "CODE" => Future.successful(Some(Map("available" -> new AttributeValue().withBOOL(true))))
     }
-    getCodeStatus(RedemptionCode("CODE")).map { actual =>
-      actual should be(Right(()))
+    getCodeStatus(RedemptionCode("CODE")).map {
+      _ should be(Right(()))
     }
   }
 
@@ -26,8 +26,8 @@ class RedemptionSpec extends AsyncFlatSpec with Matchers {
         "otherFields" -> new AttributeValue().withS("Hello!")
       )))
     }
-    getCodeStatus(RedemptionCode("CODE")).map { actual =>
-      actual should be(Right(()))
+    getCodeStatus(RedemptionCode("CODE")).map {
+      _ should be(Right(()))
     }
   }
 
@@ -35,8 +35,8 @@ class RedemptionSpec extends AsyncFlatSpec with Matchers {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
       case "CODE" => Future.successful(Some(Map("available" -> new AttributeValue().withBOOL(false))))
     }
-    getCodeStatus(RedemptionCode("CODE")).map { actual =>
-      actual should be(Left(CodeAlreadyUsed))
+    getCodeStatus(RedemptionCode("CODE")).map {
+      _ should be(Left(CodeAlreadyUsed))
     }
   }
 
@@ -44,8 +44,8 @@ class RedemptionSpec extends AsyncFlatSpec with Matchers {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
       case "CODE" => Future.successful(None)
     }
-    getCodeStatus(RedemptionCode("CODE")).map { actual =>
-      actual should be(Left(NoSuchCode))
+    getCodeStatus(RedemptionCode("CODE")).map {
+      _ should be(Left(NoSuchCode))
     }
   }
 
