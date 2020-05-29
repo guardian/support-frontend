@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { subscriptionsTermsLinks } from 'helpers/legal';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
