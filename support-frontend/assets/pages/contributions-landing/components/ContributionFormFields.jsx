@@ -222,9 +222,9 @@ function withProps(props: PropTypes) {
       }
       <ContributionStateDs
         onChange={props.updateBillingState}
-        value={billingState}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
         isValid={checkBillingState(billingState)}
+        selectedState={billingState}
       />
     </>
   );

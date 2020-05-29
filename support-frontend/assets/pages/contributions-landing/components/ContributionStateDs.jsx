@@ -140,8 +140,7 @@ const renderStatesField = (
       <div
         css={showError ? chevronErrorCss : chevronCss}
       >
-        <DownChevronDs
-        />
+        <DownChevronDs />
       </div>
     </div>
   </div>
