@@ -11,15 +11,13 @@ import io.circe.Decoder
 import io.circe.parser._
 
 import scala.collection.JavaConverters._
-import scala.concurrent.ExecutionContext
 
 class DynamoService[T](table: Table)(implicit decoder: Decoder[T]) extends LazyLogging {
   def all: Iterator[T] = {
     val items: Iterator[Item] = table.scan().iterator().asScala
-    items.flatMap {
-      i =>
-        val result = decode[T](i.toJSON)
-        result.leftMap(err => logger.warn(s"Couldn't decode a PromoCode with body ${i.toJSON}. Error was: $err"))
+    items.flatMap { item =>
+        val result = decode[T](item.toJSON)
+        result.leftMap(err => logger.warn(s"Couldn't decode a PromoCode with body ${item.toJSON}. Error was: $err"))
         result.toOption
     }
   }
@@ -33,7 +31,7 @@ object DynamoService {
     new InstanceProfileCredentialsProvider(false)
   )
 
-  def forTable[T](table: String)(implicit e: ExecutionContext, decoder: Decoder[T]): DynamoService[T] = {
+  def forTable[T](table: String)(implicit decoder: Decoder[T]): DynamoService[T] = {
     val dynamoDBClient = AmazonDynamoDBClient.builder
       .withCredentials(CredentialsProvider)
       .withRegion(Regions.EU_WEST_1)

@@ -93,4 +93,6 @@ javaOptions in Universal ++= Seq(
 
 javaOptions in Test += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
 
+scalacOptions += "-Ypartial-unification"
+
 addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
