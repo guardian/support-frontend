@@ -15,32 +15,30 @@ import type {
   Stage,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { DigitalPack } from 'helpers/subscriptions';
-import { Dispatch } from 'redux';
+import { type Dispatch } from 'redux';
 import type { User } from 'helpers/subscriptionsForms/user';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import { createSubscription } from 'pages/subscriptions-redemption/api';
+import type { Option } from 'helpers/types/option';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   stage: Stage,
+  checkoutForm: Node,
+  thankYouContentPending: Node,
+  thankYouContent: Node,
   corporateCustomer: CorporateCustomer,
   user: User,
   currencyId: IsoCurrency,
   countryId: IsoCountry,
   participations: Participations,
   processingFunction: PropTypes => void,
-  csrf: Option<string>,
+  csrf: Option<Csrf>,
 |};
-
-type StagePropTypes = {
-  stage: Stage,
-  checkoutForm: Node,
-  thankYouContentPending: Node,
-  thankYouContent: Node,
-}
 
 // ----- State/Props Maps ----- //
 
@@ -64,7 +62,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
       props.currencyId,
       props.countryId,
       props.participations,
-      props.csrf,
+      props.csrf || { token: '' },
       dispatch,
     ),
   };
@@ -72,7 +70,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 // ----- Component ----- //
 
-function CheckoutStage(props: StagePropTypes) {
+function CheckoutStage(props: PropTypes) {
   switch (props.stage) {
     case 'thankyou':
       return (

@@ -3,34 +3,44 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
-import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import AppsSection from './components/thankYou/appsSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
+import { type FormFields } from 'helpers/subscriptionsForms/formFields';
 import { DirectDebit } from 'helpers/paymentMethods';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/subscriptions';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import type { Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 
-type PropTypes = {
+export type PropTypes = {
   countryGroupId: CountryGroupId,
     ...FormFields,
+  marketingConsent: Element,
+  includePaymentCopy: boolean,
 };
 
 
 // ----- Component ----- //
 
-function ThankYouContent(props: PropTypes) {
+const getEmailCopy = (paymentMethod: Option<PaymentMethod>, includePaymentCopy: boolean) => {
+  if (paymentMethod === DirectDebit) {
+    return 'Look out for an email within three business days confirming your recurring payment. Your first payment will be taken in 14 days and will appear as \'Guardian Media Group\' on your bank statement.';
+  } else if (includePaymentCopy) {
+    return 'We have sent you an email with everything you need to know. Your first payment will be taken in 14 days.';
+  }
+  return 'We have sent you an email with everything you need to know.';
+};
 
+function ThankYouContent(props: PropTypes) {
   return (
     <div className="thank-you-stage">
       <ThankYouHero
@@ -44,11 +54,7 @@ function ThankYouContent(props: PropTypes) {
       <Content>
         <Text>
           <LargeParagraph>
-            {
-            props.paymentMethod === DirectDebit ?
-            'Look out for an email within three business days confirming your recurring payment. Your first payment will be taken in 14 days and will appear as \'Guardian Media Group\' on your bank statement.' :
-            'We have sent you an email with everything you need to know. Your first payment will be taken in 14 days.'
-          }
+            {getEmailCopy(props.paymentMethod, props.includePaymentCopy)}
           </LargeParagraph>
         </Text>
       </Content>
@@ -61,10 +67,7 @@ function ThankYouContent(props: PropTypes) {
         <AppsSection countryGroupId={props.countryGroupId} />
       </Content>
       <Content>
-        <MarketingConsent render={({ title, message }) => (
-          <Text title={title}>{message}</Text>
-        )}
-        />
+        {props.marketingConsent}
         <OptInCopy subscriptionProduct={DigitalPack} />
       </Content>
     </div>
@@ -75,4 +78,4 @@ function ThankYouContent(props: PropTypes) {
 // ----- Export ----- //
 
 
-export default connect(state => ({ ...getFormFields(state) }))(ThankYouContent);
+export default ThankYouContent;
