@@ -33,6 +33,7 @@ import views.html.helper.CSRF
 import views.html.subscriptionRedemptionForm
 
 import scala.concurrent.{ExecutionContext, Future}
+import RedemptionController._
 
 class RedemptionController(
   val actionRefiners: CustomActionBuilders,
@@ -57,12 +58,6 @@ class RedemptionController(
   val id = EmptyDiv("subscriptions-redemption-page")
   val js = "subscriptionsRedemptionPage.js"
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
-
-  def getCorporateCustomer(redemptionCode: RedemptionCode): EitherT[Future, String, CorporateCustomer] =
-    if (redemptionCode == "test-code")
-      EitherT.fromEither(Right(CorporateCustomer("1", "Test Company", "test-code")))
-    else
-      EitherT.fromEither(Left("This code is not valid"))
 
   def displayForm(redemptionCode: String) = NoCacheAction().async {
     implicit request =>
@@ -128,5 +123,13 @@ class RedemptionController(
         customer => Ok(RedemptionValidationResult(valid = true, None).asJson)
       ))
   }
+}
+
+object RedemptionController {
+  def getCorporateCustomer(redemptionCode: RedemptionCode)(implicit ec: ExecutionContext): EitherT[Future, String, CorporateCustomer] =
+    if (redemptionCode == "test-code")
+      EitherT.fromEither(Right(CorporateCustomer("1", "Test Company", "test-code")))
+    else
+      EitherT.fromEither(Left("This code is not valid"))
 }
 
