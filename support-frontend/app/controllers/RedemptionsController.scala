@@ -2,8 +2,8 @@ package controllers
 
 import actions.CustomActionBuilders
 import com.gu.support.config.{Stage, TouchPointEnvironments}
-import com.gu.support.redemption.Redemption.{RedemptionCode, validateCode}
-import com.gu.support.redemption.{Redemption, RedemptionServiceProvider}
+import com.gu.support.redemption.Redemption.RedemptionCode
+import com.gu.support.redemption.{RedemptionTableAsync, GetCodeStatus}
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -15,12 +15,18 @@ class RedemptionsController(
 )(implicit val ec: ExecutionContext) extends AbstractController(components){
   import actionRefiners._
 
-  def validate(redemptionCode: String, isTestUser: Option[Boolean]): Action[AnyContent] = NoCacheAction().async { implicit request =>
-    val dynamoClient = RedemptionServiceProvider(TouchPointEnvironments.fromStage(stage, isTestUser.getOrElse(false)))
+  def status(redemptionCode: String, isTestUser: Option[Boolean]): Action[AnyContent] = NoCacheAction().async { implicit request =>
+    val dynamoTableAsync = RedemptionTableAsync.forEnv(TouchPointEnvironments.fromStage(stage, isTestUser.getOrElse(false)))
+    val getCodeStatus = GetCodeStatus.withDynamoLookup(dynamoTableAsync)
+
     val codeToCheck = RedemptionCode(redemptionCode)
-    val out: Future[Either[validateCode.RedemptonInvalid, Unit]] = Redemption.validateCode(codeToCheck)(dynamoClient)
-    out.map(_.left.map(reason => NotFound(reason.clientCode)))
-      .map(_.fold(identity, _ => Ok("")))
+
+    val status: Future[Either[GetCodeStatus.RedemptonInvalid, Unit]] = getCodeStatus(codeToCheck)
+
+    status.map {
+      case Left(reason) => NotFound(reason.clientCode)
+      case Right(()) => Ok("")
+    }
   }
 
 }

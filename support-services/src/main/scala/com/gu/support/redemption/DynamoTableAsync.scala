@@ -1,4 +1,4 @@
-package com.gu.support.promotions.dynamo
+package com.gu.support.redemption
 
 import java.util.concurrent.{Future => JFuture}
 
@@ -7,6 +7,7 @@ import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.dynamodbv2.model._
 import com.amazonaws.services.dynamodbv2.{AmazonDynamoDBAsync, AmazonDynamoDBAsyncClient}
+import com.gu.support.promotions.dynamo.DynamoService
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.collection.JavaConverters._
@@ -35,15 +36,13 @@ class DynamoTableAsync(
   primaryKeyName: String
 )(implicit e: ExecutionContext) extends LazyLogging with DynamoLookup with DynamoUpdate {
 
-  override def lookup(primaryKeyValue: String): Future[Option[Map[String, AttributeValue]]] = {
-    val getItemRequest = new GetItemRequest(table, Map(primaryKeyName -> new AttributeValue(primaryKeyValue)).asJava)
+  override def lookup(primaryKeyValue: String): Future[Option[Map[String, AttributeValue]]] =
     AwsAsync[GetItemRequest, GetItemResult](
       dynamoDBAsyncClient.getItemAsync,
-      getItemRequest
+      new GetItemRequest(table, Map(primaryKeyName -> new AttributeValue(primaryKeyValue)).asJava)
     ).map { gIR =>
       Option(gIR.getItem).map(_.asScala.toMap)
     }
-  }
 
   override def update(primaryKeyValue: String, updateName: String, updateValue: Boolean): Future[Unit] =
     AwsAsync[UpdateItemRequest, UpdateItemResult](
