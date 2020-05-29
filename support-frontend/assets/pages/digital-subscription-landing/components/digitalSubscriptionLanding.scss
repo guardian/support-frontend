@@ -64,9 +64,6 @@ $teal-green: #006d67;
     padding-left: 0px;
   }
 
-}
-
-.hope-is-power--centered {
   @include mq($from: phablet) {
     padding-left: 20px;
     align-self: center;
@@ -87,6 +84,14 @@ $teal-green: #006d67;
   @include mq($from: leftCol) {
     width: calc(100% - 80px);
     max-width: 80.625rem;
+  }
+}
+
+.component-base-rows.component-base-rows--normal {
+  .component-customer-service {
+    @include mq($from: phablet) {
+      padding-left: 0px;
+    }
   }
 }
 
@@ -1031,7 +1036,8 @@ div.call-to-action__container {
   }
 
   h2, h3, p,
-  .component-subscription-faq__text {
+  .component-subscription-faq__text,
+  .component-subscription-terms-privacy__text {
     max-width: calc(100% - 20px);
 
     @include mq($from: mobileMedium) {

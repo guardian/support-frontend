@@ -17,6 +17,8 @@ import {
   useDotcomContactPage,
 } from 'helpers/dotcomContactPage';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+import SubscriptionTermsPrivacy
+  from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 
 import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
 
@@ -75,6 +77,8 @@ function FaqsAndHelp(props: PropTypes) {
     (
       <div className="hope-is-power__faqs">
         <div className="component-customer-service" id="qa-component-customer-service">
+          <h2>Terms and conditions</h2>
+          <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
           <h2>FAQs and Help</h2>
           <p className="component-customer-service__text">
             {children}
