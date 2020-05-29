@@ -7,6 +7,7 @@ import { getGlobal } from 'helpers/globals';
 import type { Option } from 'helpers/types/option';
 import type { User } from 'helpers/subscriptionsForms/user';
 import { getUser } from 'helpers/subscriptionsForms/user';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 
 
 export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
@@ -22,6 +23,7 @@ export type RedemptionFormState = {
   userCode: Option<string>,
   error: Option<string>,
   user: User,
+  csrf: Option<Csrf>,
 }
 
 export type RedemptionPageState = {
@@ -42,6 +44,7 @@ const initialState: RedemptionFormState = {
   userCode: getGlobal('userCode'),
   error: getGlobal('error'),
   user: getUser(),
+  csrf: getGlobal('csrf'),
 };
 
 const redemptionFormReducer = (

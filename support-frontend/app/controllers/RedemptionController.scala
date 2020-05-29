@@ -17,7 +17,6 @@ import com.gu.support.redemptions.redemptions.RedemptionCode
 import com.gu.support.workers
 import com.gu.support.workers.{Address, DigitalPack, Monthly, User}
 import com.sun.jndi.cosnaming.IiopUrl.Address
-import controllers.RedemptionController.{blankAddress, digitalSubscription, ophanIds}
 import play.api.mvc.{AbstractController, Action, AnyContent, BodyParser, ControllerComponents, Request, RequestHeader}
 import play.twirl.api.Html
 import services.{IdentityService, MembersDataService, TestUserService}
@@ -30,6 +29,7 @@ import utils.CheckoutValidationRules
 import lib.PlayImplicits._
 import play.api.libs.streams.Accumulator
 import play.api.libs.ws.{WSRequest, WSResponse}
+import views.html.helper.CSRF
 import views.html.subscriptionRedemptionForm
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -104,13 +104,14 @@ class RedemptionController(
     }
 
   def showProcessing(redemptionCode: RedemptionCode, corporateCustomer: CorporateCustomer, user: IdUser)(implicit request: AuthRequest[Any]) = {
+    val csrf = CSRF.getToken.value
     Ok(subscriptionRedemptionForm(
       title,
       id,
       js,
       css,
       fontLoaderBundle,
-      None,
+      Some(csrf),
       false,
       "processing",
       redemptionCode,
@@ -129,34 +130,3 @@ class RedemptionController(
   }
 }
 
-
-object RedemptionController {
-  val blankAddress = workers.Address(None, None, None, None, None, Country.UK) //TODO: country
-  def digitalSubscription() = DigitalPack(GBP, Monthly, Corporate) //TODO: currency
-  def ophanIds(request: RequestHeader): OphanIds = {
-    new OphanIds(
-      None, // TODO: pageview id
-      request.cookies.get("vsid").map(_.value),
-      request.cookies.get("bwid").map(_.value)
-    )
-  }
-
-  def referrerAcquisitionData = new ReferrerAcquisitionData(
-    None, None, None, None, None, None, None, None, None, None, None, None //TODO: what do we need out of this?
-  )
-
-  def createUser(user: IdUser, request: CreateSupportWorkersRequest, testUsers: TestUserService) = {
-    User(
-      id = user.id,
-      primaryEmailAddress = user.primaryEmailAddress,
-      title = request.title,
-      firstName = request.firstName,
-      lastName = request.lastName,
-      billingAddress = request.billingAddress,
-      deliveryAddress = request.deliveryAddress,
-      telephoneNumber = request.telephoneNumber,
-      isTestUser = testUsers.isTestUser(user.publicFields.displayName),
-      deliveryInstructions = request.deliveryInstructions
-    )
-  }
-}
