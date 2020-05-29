@@ -26,32 +26,13 @@ function faqLink(props: PropTypes) {
 // ----- Component ----- //
 
 function SubscriptionFaq(props: PropTypes) {
-
-  switch (props.subscriptionProduct) {
-    case 'DigitalPack':
-      return (
-        <div className="component-subscription-faq">
-          <div className="component-subscription-faq__text">
-            You may also find help in our
-            <a className="component-subscription-faq__href" href={faqLink(props)} onClick={sendTrackingEventsOnClick('onward_faq', 'DigitalPack', null)}> Frequently Asked Questions</a> and
-            in the&nbsp;
-            <a className="component-subscription-faq__href" href={subscriptionsTermsLinks.DigitalPack} onClick={sendTrackingEventsOnClick('onward_tos', 'DigitalPack', null)}>
-            Digital Subscription terms and conditions
-            </a>.
-          </div>
-        </div>
-      );
-
-    default:
-      return (
-        <div className="component-subscription-faq">
-          <div className="component-subscription-faq__text">
-            You may also find help in our
-            <a className="component-subscription-faq__href" href={faqLink(props)} onClick={sendTrackingEventsOnClick('onward_faq', props.subscriptionProduct, null)}> Frequently Asked Questions</a>.
-          </div>
-        </div>
-      );
-  }
+  return (
+    <div className="component-subscription-faq">
+      <div className="component-subscription-faq__text">
+        You may also find help in our <a className="component-subscription-faq__href" href={faqLink(props)} onClick={sendTrackingEventsOnClick('onward_faq', props.subscriptionProduct, null)}>Frequently Asked Questions</a>.
+      </div>
+    </div>
+  );
 }
 
 
