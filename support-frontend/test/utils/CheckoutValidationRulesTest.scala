@@ -1,8 +1,11 @@
+
 package utils
 
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
+import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.catalog.{Everyday, HomeDelivery}
+import com.gu.support.catalog.{Corporate, Everyday, HomeDelivery}
+import com.gu.support.redemptions.CorporateRedemption
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
@@ -132,6 +135,15 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     )
     val requestMissingAddressLineAndCity = validDigitalPackRequest.copy(billingAddress = badBillingAddress)
     DigitalPackValidation.passes(requestMissingAddressLineAndCity) shouldBe false
+  }
+
+  it should "succeed when there is a valid corporate sub" in {
+    val corporateSub = validDigitalPackRequest.copy(
+      product = DigitalPack(GBP, Monthly, Corporate),
+      paymentFields = Right(CorporateRedemption("test-code", "1"))
+    )
+
+    DigitalPackValidation.passes(corporateSub) shouldBe true
   }
 
 }
