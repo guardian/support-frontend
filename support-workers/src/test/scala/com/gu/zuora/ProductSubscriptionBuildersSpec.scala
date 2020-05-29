@@ -82,7 +82,7 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
       ReaderType.Gift,
       DEV,
       isTestUser = false,
-      contractEffectiveDate = saleDate)
+      contractEffectiveDate = saleDate).right.get
 
   lazy val nonGift = weekly.build(
     UUID.randomUUID(),
@@ -92,6 +92,6 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
     ReaderType.Direct,
     DEV,
     isTestUser = false,
-    contractEffectiveDate = saleDate)
+    contractEffectiveDate = saleDate).right.get
 
 }

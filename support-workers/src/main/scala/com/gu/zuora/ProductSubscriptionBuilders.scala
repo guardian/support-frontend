@@ -7,7 +7,7 @@ import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.fromStage
 import com.gu.support.config.{Stage, ZuoraConfig}
-import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromotionService}
+import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
@@ -51,7 +51,7 @@ object ProductSubscriptionBuilders {
       promotionService: PromotionService,
       stage: Stage,
       isTestUser: Boolean
-    ): SubscriptionData = {
+    ): Either[PromoError, SubscriptionData] = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
       val contractAcceptanceDate = contractEffectiveDate
@@ -91,7 +91,7 @@ object ProductSubscriptionBuilders {
       promotionService: PromotionService,
       stage: Stage,
       isTestUser: Boolean
-    ): SubscriptionData = {
+    ): Either[PromoError, SubscriptionData] = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
@@ -124,7 +124,7 @@ object ProductSubscriptionBuilders {
       stage: Stage,
       isTestUser: Boolean,
       contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
-    ): SubscriptionData = {
+    ): Either[PromoError, SubscriptionData] = {
 
       val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
         case Success(value) => value
@@ -207,11 +207,13 @@ trait ProductSubscriptionBuilder {
     productRatePlanId: ProductRatePlanId,
     subscriptionData: SubscriptionData
   ) = {
-    val withPromotion = for {
-      promoCode <- maybePromoCode
-      promotionWithCode <- promotionService.findPromotion(promoCode)
-    } yield promotionService.applyPromotion(promotionWithCode, country, productRatePlanId, subscriptionData, isRenewal = false)
+    val withPromotion = maybePromoCode.map { promoCode =>
+      for {
+        promotionWithCode <- promotionService.findPromotion(promoCode)
+        subscriptionWithPromotion <- promotionService.applyPromotion(promotionWithCode, country, productRatePlanId, subscriptionData, isRenewal = false)
+      } yield subscriptionWithPromotion
+    }
 
-    withPromotion.getOrElse(subscriptionData)
+    withPromotion.getOrElse(Right(subscriptionData))
   }
 }

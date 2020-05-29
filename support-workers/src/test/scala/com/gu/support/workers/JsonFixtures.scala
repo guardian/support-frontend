@@ -150,6 +150,14 @@ object JsonFixtures {
     """
       {
         "currency": "GBP",
+        "billingPeriod" : "Annual"
+      }
+    """
+
+  val digitalPackCorporateJson =
+    """
+      {
+        "currency": "GBP",
         "billingPeriod" : "Annual",
         "productOptions" : "Corporate"
       }
@@ -386,7 +394,7 @@ object JsonFixtures {
           {
             $requestIdJson,
             $userJsonNoAddress,
-            "product": $digitalPackJson,
+            "product": $digitalPackCorporateJson,
             "paymentMethod": {
               "redemptionCode": "123abc",
               "corporateAccountId": "00001"

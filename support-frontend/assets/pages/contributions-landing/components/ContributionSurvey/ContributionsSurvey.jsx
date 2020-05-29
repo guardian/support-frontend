@@ -17,7 +17,7 @@ configured below and the prop 'isRunning' needs to be set to
 
 const testimonialSurveyLink = 'https://www.surveymonkey.co.uk/r/SWLJ7JZ';
 const globalTestimonialEndDate = Date.parse('2020-05-13');
-const ausTestimonialEndDate = Date.parse('2020-05-28');
+const ausTestimonialEndDate = Date.parse('2020-07-10');
 
 type PropTypes = {|
   isRunning: boolean,

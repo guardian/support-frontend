@@ -94,7 +94,7 @@ function TermsPrivacy(props: PropTypes) {
           please visit our {privacy}.
         </div>
       </div>
-      <hr/>
+      <br />
       <div>
         {
           props.contributionType !== 'ONE_OFF' &&

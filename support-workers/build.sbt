@@ -14,12 +14,12 @@ setupGitHook := {
 
 libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "2.0.1",
-  "org.typelevel" %% "cats" % "0.9.0",
+  "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "io.symphonia" % "lambda-logging" % "1.0.1",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
-  "io.lemonlabs" %% "scala-uri" % "1.5.1",
+  "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
@@ -38,7 +38,8 @@ libraryDependencies ++= Seq(
   "org.scala-stm" %% "scala-stm" % "0.8",
   "io.sentry" % "sentry-logback" % "1.7.4",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
-  "com.gocardless" % "gocardless-pro" % "2.8.0"
+  "com.gocardless" % "gocardless-pro" % "2.8.0",
+  "com.gu" %% "acquisition-event-client-play26" % "4.0.29"
 )
 
 riffRaffPackageType := assembly.value

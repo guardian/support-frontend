@@ -55,7 +55,8 @@ lazy val commonSettings = Seq(
 
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "org.scalatest" %% "scalatest" % "3.2.0-M1" % "it, test"
+  "org.scalatest" %% "scalatest" % "3.2.0-M1" % "it, test",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 )
 
 lazy val root = (project in file("."))
@@ -70,7 +71,8 @@ lazy val root = (project in file("."))
     `support-config`,
     `support-internationalisation`,
     `support-services`,
-    `stripe-intent`
+    `stripe-intent`,
+    `support-redemptiondb`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -104,7 +106,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`)
-  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`)
+  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `support-redemptiondb`)
 
 
 lazy val `support-models` = (project in file("support-models"))
@@ -158,3 +160,6 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies,
   ).dependsOn(`support-rest`, `support-config`)
+
+lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
+  .enablePlugins(RiffRaffArtifact)
