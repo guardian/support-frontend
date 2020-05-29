@@ -117,7 +117,7 @@ const getPaymentMethodLogoDs = (paymentMethod: PaymentMethod) => {
     default:
       return <SvgNewCreditCardDs />;
   }
-}
+};
 
 
 const legend = (
