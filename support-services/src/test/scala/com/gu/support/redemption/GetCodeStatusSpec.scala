@@ -2,13 +2,12 @@ package com.gu.support.redemption
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, NoSuchCode}
-import com.gu.support.redemption.Redemption.RedemptionCode
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.Future
 
-class RedemptionSpec extends AsyncFlatSpec with Matchers {
+class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
 
   "getCodeStatus" should "handle an available code" in {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {

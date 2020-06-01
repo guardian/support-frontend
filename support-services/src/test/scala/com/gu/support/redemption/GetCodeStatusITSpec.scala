@@ -2,16 +2,15 @@ package com.gu.support.redemption
 
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, NoSuchCode}
-import com.gu.support.redemption.Redemption.RedemptionCode
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 @IntegrationTest
-class RedemptionITSpec extends AsyncFlatSpec with Matchers {
+class GetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
 
   val getCodeStatus: GetCodeStatus =
-    GetCodeStatus.withDynamoLookup(RedemptionTableAsync.forEnv(TouchPointEnvironments.SANDBOX))
+    GetCodeStatus.withDynamoLookup(RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX))
 
   "getCodeStatus" should "handle an available code" in {
     getCodeStatus(RedemptionCode("ITTEST-AVAILABLE")).map {

@@ -2,8 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import com.gu.support.config.{Stage, TouchPointEnvironments}
-import com.gu.support.redemption.Redemption.RedemptionCode
-import com.gu.support.redemption.{RedemptionTableAsync, GetCodeStatus}
+import com.gu.support.redemption.{GetCodeStatus, RedemptionCode, RedemptionTable}
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -19,7 +18,7 @@ class RedemptionsController(
     val getCodeStatus = {
       val shouldTreatAsTestUser = isTestUser.getOrElse(false)
       val touchPointEnvironment = TouchPointEnvironments.fromStage(stage, shouldTreatAsTestUser)
-      val dynamoTableAsync = RedemptionTableAsync.forEnv(touchPointEnvironment)
+      val dynamoTableAsync = RedemptionTable.forEnvAsync(touchPointEnvironment)
       GetCodeStatus.withDynamoLookup(dynamoTableAsync)
     }
 

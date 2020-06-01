@@ -1,8 +1,6 @@
 package com.gu.support.redemption
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
-import com.gu.support.redemption.Redemption.CodeStatus.{CodeIsAvailable, CodeIsUsed}
-import com.gu.support.redemption.Redemption.{CodeStatus, RedemptionCode}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
@@ -13,11 +11,11 @@ object GetCodeStatus {
   case object NoSuchCode extends RedemptonInvalid("NO_SUCH_CODE")
   case object CodeAlreadyUsed extends RedemptonInvalid("CODE_ALREADY_USED")
 
-  private def statusFromDynamoAttr(attrs: Map[String, AttributeValue]): Either[String, CodeStatus] = {
+  private def statusFromDynamoAttr(attrs: Map[String, AttributeValue]): Either[String, RedemptionTable.AvailableField] = {
     for {
-      attributeValue <- attrs.get(CodeStatus.name).toRight(s"no field 'available' in: $attrs")
+      attributeValue <- attrs.get(RedemptionTable.AvailableField.name).toRight(s"no field 'available' in: $attrs")
       available <- Option(attributeValue.getBOOL).map(Boolean2boolean).toRight(s"field 'available' wasn't a boolean: $attrs")
-    } yield CodeStatus.decoded(available)
+    } yield RedemptionTable.AvailableField.decoded(available)
   }
 
   def withDynamoLookup(dynamoLookup: DynamoLookup): GetCodeStatus = new GetCodeStatus(dynamoLookup)
@@ -31,16 +29,16 @@ class GetCodeStatus(dynamoLookup: DynamoLookup) extends WithLogging {
   def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[Either[RedemptonInvalid, Unit]] =
     (for {
       maybeAttributes <- dynamoLookup.lookup(code.value)
-      maybeCodeAvailable <- SequenceToFuture(maybeAttributes.map(statusFromDynamoAttr))
+      maybeCodeAvailable <- FlattenErrors(maybeAttributes.map(statusFromDynamoAttr))
     } yield maybeCodeAvailable match {
       case None => Left(NoSuchCode)
-      case Some(CodeIsAvailable) => Right(())
-      case Some(CodeIsUsed) => Left(CodeAlreadyUsed)
+      case Some(RedemptionTable.AvailableField.CodeIsAvailable) => Right(())
+      case Some(RedemptionTable.AvailableField.CodeIsUsed) => Left(CodeAlreadyUsed)
     }).withLoggingAsync(s"look up $code")
 
 }
 
-object SequenceToFuture {
+object FlattenErrors {
 
   def apply[A](optionEither: Option[Either[String, A]]): Future[Option[A]] =
     Future.fromTry(optionEither match {
