@@ -37,34 +37,35 @@ const renderState = (selectedState: StateProvince | null) => (state: {abbreviati
   <option value={state.abbreviation} selected={selectedState === state.abbreviation}>{state.name}</option>
 );
 
-const selectCss = {
-  appearance: 'none !important',
-  background: 'transparent',
-  transition: 'box-shadow .2s ease-in-out',
-  borderRadius: '0px',
-  fontSize: '17px',
-  width: '100%',
-  height: '48px',
-  border: '2px solid #999',
-  zIndex: 1,
-  margin: 0,
-  padding: 0,
-  outline: 0,
-  boxSizing: 'border-box',
+const selectCss = css`
+  appearance: none !important;
+  background: transparent;
+  transition: box-shadow .2s ease-in-out;
+  border-radius: 0px;
+  font-size: 17px;
+  width: 100%;
+  height: 48px;
+  border: 2px solid #999;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
 
-  '&:active': {
-    border: '2px solid #007ABC',
-  },
+  &:active {
+    border: 2px solid #007ABC;
+  };
 
-  '&:focus': focusHalo,
-};
+  &:focus {
+    ${focusHalo};
+  };
+`;
 
-const errorBorderCss = {
-  ...selectCss,
-  outline: '4px solid #c70000',
-  height: '44px',
-  border: 0,
-};
+const errorBorderCss = css`
+  outline: 4px solid #c70000;
+  height: 44px;
+  border: 0;
+`;
 
 const chevronCss = {
   float: 'right',
@@ -109,11 +110,11 @@ const renderStatesField = (
       {label}
     </label>
     <div
-      css={css`
-        font-size: 15px;
-        color: #767676;
-        margin-bottom: ${space[1]}px;
-      `}
+      css={{
+        fontSize: '15px',
+        color: '#767676',
+        marginBottom: `${space[1]}px`,
+      }}
     >Select your {label.toLowerCase()}
     </div>
     {showError ? (
@@ -122,12 +123,14 @@ const renderStatesField = (
       </InlineError>
       ) : null}
     <div
-      css={css`
-        position: relative;
-      `}
+      css={{
+        position: 'relative',
+        tabIndex: 8,
+      }}
     >
       <select
-        css={showError ? errorBorderCss : selectCss}
+        css={showError ? [selectCss, errorBorderCss] : [selectCss]}
+        // css={[errorBorderCss, selectCss]}
         id="contributionState"
         onChange={onChange}
         required
