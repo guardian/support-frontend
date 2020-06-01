@@ -3,48 +3,31 @@ package controllers
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.AuthRequest
 import admin.settings.{AllSettings, AllSettingsProvider}
-import akka.util.ByteString
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import com.gu.i18n.Country
-import com.gu.i18n.Currency.GBP
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.Corporate
-import com.gu.support.redemptions.{CorporateCustomer, CorporateRedemption}
+import com.gu.support.redemptions.CorporateCustomer
 import com.gu.support.redemptions.redemptions.RedemptionCode
-import com.gu.support.workers
-import com.gu.support.workers.{Address, DigitalPack, Monthly, User}
-import com.sun.jndi.cosnaming.IiopUrl.Address
-import play.api.mvc.{AbstractController, Action, AnyContent, BodyParser, ControllerComponents, Request, RequestHeader}
-import play.twirl.api.Html
-import services.{IdentityService, MembersDataService, TestUserService}
-import views.EmptyDiv
+import controllers.RedemptionController._
 import io.circe.syntax._
-import ophan.thrift.event.AbTest
 import play.api.libs.circe.Circe
-import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import utils.CheckoutValidationRules
-import lib.PlayImplicits._
-import play.api.libs.streams.Accumulator
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
+import services.{IdentityService, TestUserService}
+import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionRedemptionForm
 
 import scala.concurrent.{ExecutionContext, Future}
-import RedemptionController._
 
 class RedemptionController(
   val actionRefiners: CustomActionBuilders,
   val assets: AssetsResolver,
   settingsProvider: AllSettingsProvider,
   identityService: IdentityService,
-  membersDataService: MembersDataService,
   testUsers: TestUserService,
-  client: SupportWorkersClient,
   components: ControllerComponents,
-  fontLoaderBundle: Either[RefPath, StyleContent],
+  fontLoaderBundle: Either[RefPath, StyleContent]
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with Circe {
@@ -59,7 +42,7 @@ class RedemptionController(
   val js = "subscriptionsRedemptionPage.js"
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
-  def displayForm(redemptionCode: String) = NoCacheAction().async {
+  def displayForm(redemptionCode: String): Action[AnyContent] = NoCacheAction().async {
     implicit request =>
       getCorporateCustomer(redemptionCode).value.map(
         customerOrError =>
@@ -70,12 +53,12 @@ class RedemptionController(
             css,
             fontLoaderBundle,
             None,
-            false,
+            uatMode = false,
             "checkout",
             redemptionCode,
             customerOrError,
             None,
-            false
+            submitted = false
           ))
       )
 
@@ -83,7 +66,7 @@ class RedemptionController(
 
   import cats.implicits._
 
-  def create(redemptionCode: String) =
+  def create(redemptionCode: String): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async {
       implicit request: AuthRequest[Any] =>
         val blah = for {
@@ -98,7 +81,10 @@ class RedemptionController(
         )
     }
 
-  def showProcessing(redemptionCode: RedemptionCode, corporateCustomer: CorporateCustomer, user: IdUser)(implicit request: AuthRequest[Any]) = {
+  def showProcessing(
+    redemptionCode: RedemptionCode,
+    corporateCustomer: CorporateCustomer,
+    user: IdUser)(implicit request: AuthRequest[Any]): Result = {
     val csrf = CSRF.getToken.value
     Ok(subscriptionRedemptionForm(
       title,
@@ -107,16 +93,16 @@ class RedemptionController(
       css,
       fontLoaderBundle,
       Some(csrf),
-      false,
+      uatMode = false,
       "processing",
       redemptionCode,
       Right(corporateCustomer),
       Some(user),
-      true
+      submitted = true
     ))
   }
 
-  def validateCode(redemptionCode: String) = CachedAction().async {
+  def validateCode(redemptionCode: String): Action[AnyContent] = CachedAction().async {
     getCorporateCustomer(redemptionCode).value.map(
       _.fold(
         errorString => Ok(RedemptionValidationResult(valid = false, Some(errorString)).asJson),
@@ -126,7 +112,8 @@ class RedemptionController(
 }
 
 object RedemptionController {
-  def getCorporateCustomer(redemptionCode: RedemptionCode)(implicit ec: ExecutionContext): EitherT[Future, String, CorporateCustomer] =
+  def getCorporateCustomer(redemptionCode: RedemptionCode)(implicit ec: ExecutionContext):
+  EitherT[Future, String, CorporateCustomer] =
     if (redemptionCode == "test-code")
       EitherT.fromEither(Right(CorporateCustomer("1", "Test Company", "test-code")))
     else
