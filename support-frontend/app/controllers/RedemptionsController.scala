@@ -16,9 +16,12 @@ class RedemptionsController(
   import actionRefiners._
 
   def status(redemptionCode: String, isTestUser: Option[Boolean]): Action[AnyContent] = NoCacheAction().async { implicit request =>
-    val shouldTreatAsTestUser = isTestUser.getOrElse(false)
-    val dynamoTableAsync = RedemptionTableAsync.forEnv(TouchPointEnvironments.fromStage(stage, shouldTreatAsTestUser))
-    val getCodeStatus = GetCodeStatus.withDynamoLookup(dynamoTableAsync)
+    val getCodeStatus = {
+      val shouldTreatAsTestUser = isTestUser.getOrElse(false)
+      val touchPointEnvironment = TouchPointEnvironments.fromStage(stage, shouldTreatAsTestUser)
+      val dynamoTableAsync = RedemptionTableAsync.forEnv(touchPointEnvironment)
+      GetCodeStatus.withDynamoLookup(dynamoTableAsync)
+    }
 
     val codeToCheck = RedemptionCode(redemptionCode)
 
