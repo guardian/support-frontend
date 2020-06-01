@@ -31,7 +31,6 @@ import { DigitalPack } from 'helpers/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import Text from 'components/text/text';
-import Content from 'components/content/content';
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
@@ -69,7 +68,17 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={<CheckoutForm />}
-        thankYouContentPending={<ThankYouPendingContent countryGroupId={countryGroupId} />}
+        thankYouContentPending={
+          <ThankYouPendingContent
+            countryGroupId={countryGroupId}
+            marketingConsent={
+              <MarketingConsent render={({ title, message }) => (
+                <Text title={title}>{message}</Text>
+              )}
+              />
+            }
+          />
+        }
         thankYouContent={
           <ThankYouContent
             countryGroupId={countryGroupId}

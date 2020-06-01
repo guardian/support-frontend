@@ -21,6 +21,7 @@ import Header from 'components/headers/header/header';
 import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
 import MarketingConsent from './marketingConsentContainer';
 import Text from 'components/text/text';
+import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
 
 // ----- Redux Store ----- //
 const store = pageInit(reducer, true);
@@ -47,7 +48,17 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={<RedemptionForm />}
-        thankYouContentPending={null}
+        thankYouContentPending={
+          <ThankYouPendingContent
+            countryGroupId={countryGroupId}
+            marketingConsent={
+              <MarketingConsent render={({ title, message }) => (
+                <Text title={title}>{message}</Text>
+              )}
+              />
+            }
+          />
+        }
         thankYouContent={
           <ThankYouContent
             countryGroupId={countryGroupId}
