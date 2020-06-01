@@ -36,6 +36,7 @@ import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtest
 import { InlineError } from '@guardian/src-inline-error';
 import { StripeCardFormField } from './StripeCardFormField';
 import './stripeCardForm.scss';
+import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
 
 
 // ----- Types -----//
@@ -553,7 +554,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
                   <div
                     className="ds-stripe-card-input__security-code-hint-icon"
                   >
-                    ?
+                    <QuestionMarkHintIcon />
                   </div>
                   <div
                     className="ds-stripe-card-input__security-code-hint-tooltip"
