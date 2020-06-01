@@ -3,6 +3,8 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { css } from '@emotion/core';
+
 import { connect } from 'react-redux';
 
 import { getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
@@ -131,6 +133,13 @@ const renderLabelAndLogo = (paymentMethod: PaymentMethod) => (
   <>
     <div>{getPaymentLabel(paymentMethod)}</div>
     {getPaymentMethodLogoDs(paymentMethod)}
+  </>
+);
+
+const renderExistingLabelAndLogo = (existingPaymentMethod: RecentlySignedInExistingPaymentMethod) => (
+  <>
+    <div>{getExistingPaymentMethodLabel(existingPaymentMethod)}</div>
+    {getPaymentMethodLogoDs(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod))}
   </>
 );
 
@@ -291,10 +300,18 @@ const renderDesignSystemRadios = (props: PropTypes) => {
                       props.existingPaymentMethod === existingPaymentMethod
                     }
                 arial-labelledby="payment_method"
-                label={getExistingPaymentMethodLabel(existingPaymentMethod)}
+                label={renderExistingLabelAndLogo(existingPaymentMethod)}
                 cssOverrides={radioCss}
               />
-              <div className="existing-payment-option-explainer">
+              <div css={css`
+                  font-size: small;
+                  font-style: italic;
+                  margin-left: 40px;
+                  padding-bottom: 6px;
+                  color: #767676;
+                  padding-right: 40px;
+                `}
+              >
                     Used for your{' '}
                 {subscriptionsToExplainerList(existingPaymentMethod.subscriptions.map(subscriptionToExplainerPart))}
               </div>
