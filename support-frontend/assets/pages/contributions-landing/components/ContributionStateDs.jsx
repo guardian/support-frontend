@@ -62,9 +62,9 @@ const selectCss = css`
 `;
 
 const errorBorderCss = css`
-  outline: 4px solid #c70000;
-  height: 44px;
-  border: 0;
+  border: 4px solid #c70000;
+  height: 52px;
+  width: calc(100% + 3px);
 `;
 
 const chevronCss = css`
@@ -78,7 +78,7 @@ const chevronCss = css`
 
 const chevronErrorCss = css`
   path {
-    fill: #970000;
+    fill: #c70000;
   }
 `;
 
@@ -109,23 +109,26 @@ const renderStatesField = (
       {label}
     </label>
     <div
-      css={{
-        fontSize: '15px',
-        color: '#767676',
-        marginBottom: `${space[1]}px`,
-      }}
+      css={css`
+        font-size: 15px;
+        color: #767676;
+        margin-bottom: ${space[1]}px;
+      `}
     >Select your {label.toLowerCase()}
     </div>
     {showError ? (
-      <InlineError>
+      <InlineError
+        cssOverrides={css`
+          margin-bottom: 4px;
+        `}
+      >
         Please select your {label.toLowerCase()}
       </InlineError>
       ) : null}
     <div
-      css={{
-        position: 'relative',
-        tabIndex: 8,
-      }}
+      css={css`
+        position: relative;
+      `}
     >
       <select
         css={showError ? [selectCss, errorBorderCss] : selectCss}
@@ -139,7 +142,7 @@ const renderStatesField = (
             .map(renderState(selectedState))}
       </select>
       <div
-        css={showError ? [chevronCss, chevronErrorCss] : chevronCss}
+        css={showError ? [chevronErrorCss, chevronCss] : chevronCss}
       >
         <DownChevronDs />
       </div>
