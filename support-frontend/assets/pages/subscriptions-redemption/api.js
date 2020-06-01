@@ -9,7 +9,6 @@ import type { PaymentResult, RegularPaymentRequest } from 'helpers/paymentIntegr
 import { postRegularPaymentRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { setFormSubmitted, setSubmissionError } from 'helpers/subscriptionsForms/formActions';
 import { routes } from 'helpers/routes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Monthly } from 'helpers/billingPeriods';
@@ -99,7 +98,15 @@ function buildRegularPaymentRequest(
       corporateAccountId: corporateCustomer.accountId,
     },
     ophanIds: getOphanIds(),
-    referrerAcquisitionData: {},
+    referrerAcquisitionData: {
+      abTests: null,
+      campaignCode: null,
+      componentId: null,
+      componentType: null,
+      queryParameters: null, // TODO: probably need this?
+      referrerPageviewId: null,
+      source: null,
+    },
     supportAbTests: getSupportAbTests(participations),
   };
 }
@@ -124,7 +131,7 @@ function createSubscription(
       } else {
         dispatch(setStage('thankyou'));
       }
-    } else { dispatch(setSubmissionError(result.error)); } // TODO: deal with this
+    } // else { dispatch(setSubmissionError(result.error)); } // TODO: deal with this
   };
 
   postRegularPaymentRequest(
