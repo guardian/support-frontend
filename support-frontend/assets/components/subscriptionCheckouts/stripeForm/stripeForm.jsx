@@ -302,12 +302,12 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
             onChange={e => this.handleChange(e)}
           />
           { window.guardian.recaptchaEnabled ?
-          <RecaptchaWithError
-            id="robot_checkbox"
-            label="Security check"
-            style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-            error={firstError('recaptcha', this.props.allErrors)}
-          /> : null }
+            <RecaptchaWithError
+              id="robot_checkbox"
+              label="Security check"
+              style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+              error={firstError('recaptcha', this.props.allErrors)}
+            /> : null }
           <div className="component-stripe-submit-button">
             <Button id="qa-stripe-submit-button" onClick={event => this.requestSCAPaymentMethod(event)}>
               {this.props.buttonText}
