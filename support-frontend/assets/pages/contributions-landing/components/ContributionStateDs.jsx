@@ -34,7 +34,7 @@ const mapStateToProps = (state: State) => ({
 
 // ----- Render ----- //
 const renderState = (selectedState: StateProvince | null) => (state: {abbreviation: string, name: string}) => (
-  <option value={state.abbreviation} selected={selectedState === state.abbreviation}>{state.name}</option>
+  <option value={state.abbreviation} selected={selectedState === state.abbreviation}>&nbsp;&nbsp;{state.name}</option>
 );
 
 const selectCss = css`
@@ -67,21 +67,20 @@ const errorBorderCss = css`
   border: 0;
 `;
 
-const chevronCss = {
-  float: 'right',
-  zIndex: '0',
-  position: 'absolute',
-  top: '12px',
-  right: '16px',
-  pointerEvents: 'none',
-};
+const chevronCss = css`
+  float: right;
+  z-index: 0;
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  pointer-events: none;
+`;
 
-const chevronErrorCss = {
-  ...chevronCss,
-  path: {
-    fill: '#970000',
-  },
-};
+const chevronErrorCss = css`
+  path {
+    fill: #970000;
+  }
+`;
 
 
 const renderStatesField = (
@@ -129,8 +128,7 @@ const renderStatesField = (
       }}
     >
       <select
-        css={showError ? [selectCss, errorBorderCss] : [selectCss]}
-        // css={[errorBorderCss, selectCss]}
+        css={showError ? [selectCss, errorBorderCss] : selectCss}
         id="contributionState"
         onChange={onChange}
         required
@@ -141,7 +139,7 @@ const renderStatesField = (
             .map(renderState(selectedState))}
       </select>
       <div
-        css={showError ? chevronErrorCss : chevronCss}
+        css={showError ? [chevronCss, chevronErrorCss] : chevronCss}
       >
         <DownChevronDs />
       </div>
