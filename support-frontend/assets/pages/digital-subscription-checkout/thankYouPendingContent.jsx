@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import * as React from 'react';
 
 import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
@@ -11,14 +11,13 @@ import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/subscriptions';
 
 
 // ----- Component ----- //
 
-function ThankYouPendingContent(props: {countryGroupId: CountryGroupId}) {
+function ThankYouPendingContent(props: {countryGroupId: CountryGroupId, marketingConsent: React.Node }) {
 
   return (
     <div className="thank-you-stage">
@@ -58,10 +57,7 @@ function ThankYouPendingContent(props: {countryGroupId: CountryGroupId}) {
         </Text>
       </Content>
       <Content>
-        <MarketingConsent render={({ title, message }) => (
-          <Text title={title}>{message}</Text>
-        )}
-        />
+        {props.marketingConsent}
         <OptInCopy subscriptionProduct={DigitalPack} />
       </Content>
     </div>

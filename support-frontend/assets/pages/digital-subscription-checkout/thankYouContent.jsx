@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import * as React from 'react';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -12,7 +12,6 @@ import AppsSection from './components/thankYou/appsSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import { type FormFields } from 'helpers/subscriptionsForms/formFields';
 import { DirectDebit } from 'helpers/paymentMethods';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/subscriptions';
@@ -23,8 +22,8 @@ import type { Option } from 'helpers/types/option';
 
 export type PropTypes = {
   countryGroupId: CountryGroupId,
-    ...FormFields,
-  marketingConsent: Element,
+  paymentMethod: Option<PaymentMethod>,
+  marketingConsent: React.Node,
   includePaymentCopy: boolean,
 };
 
