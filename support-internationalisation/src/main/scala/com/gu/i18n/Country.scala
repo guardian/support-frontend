@@ -107,7 +107,6 @@ object Country {
       "QLD" -> "Queensland",
       "ACT" -> "Australian Capital Territory",
       "NT" -> "Northern Territory",
-      "JBT" -> "Jervis Bay Territory",
     ).toMap
   )
 
