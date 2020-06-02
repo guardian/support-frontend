@@ -22,7 +22,8 @@ class RateLimitingActionSpec extends WordSpec with MustMatchers with Results wit
       cc.executionContext,
       mockCloudWatchService,
       RateLimitingSettings(maxRequests, interval),
-      PaymentProvider.Stripe
+      PaymentProvider.Stripe,
+      "PROD"
     )
 
   def makeRequest(action: RateLimitingAction): Future[Result] =

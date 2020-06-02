@@ -31,7 +31,8 @@ class StripeController(
     cc.executionContext,
     cloudWatchService,
     RateLimitingSettings(5, 5.hours),
-    paymentProvider = PaymentProvider.Stripe
+    paymentProvider = PaymentProvider.Stripe,
+    stage = RequestEnvironments.stage
   )
 
   lazy val CorsAndRateLimitAction = CorsAction andThen RateLimitingAction

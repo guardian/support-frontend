@@ -3,7 +3,7 @@ package actions
 import com.github.blemale.scaffeine.{Cache, Scaffeine}
 import com.typesafe.scalalogging.StrictLogging
 import controllers.JsonUtils
-import model.{PaymentProvider, ResultBody}
+import model.{PaymentProvider, RequestEnvironments, ResultBody}
 import play.api.mvc._
 import services.CloudWatchService
 
@@ -26,7 +26,8 @@ class RateLimitingAction(
   val executionContext: ExecutionContext,
   cloudWatchService: CloudWatchService,
   settings: RateLimitingSettings,
-  paymentProvider: PaymentProvider
+  paymentProvider: PaymentProvider,
+  stage: String
 ) extends ActionBuilder[Request, AnyContent]
   with ActionFilter[Request] with Results with Circe with StrictLogging with JsonUtils {
 
@@ -53,19 +54,23 @@ class RateLimitingAction(
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For#Syntax
     request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption) match {
       case Some(ip) =>
-        cache.getIfPresent(ip) match {
-          case Some(count) =>
-            if (count >= settings.maxRequests) {
-              logger.info(s"Blocking request from $ip for exceeding rate-limit. Request body was: ${request.body}")
-              cloudWatchService.put("stripe-rate-limit-exceeded", paymentProvider)
-              Some(TooManyRequests(ResultBody.Error("Too many requests")))
-            } else {
-              cache.put(ip, count + 1)
+        if (stage == "PROD") {
+          cache.getIfPresent(ip) match {
+            case Some(count) =>
+              if (count >= settings.maxRequests) {
+                logger.info(s"Blocking request from $ip for exceeding rate-limit. Request body was: ${request.body}")
+                cloudWatchService.put("stripe-rate-limit-exceeded", paymentProvider)
+                Some(TooManyRequests(ResultBody.Error("Too many requests")))
+              } else {
+                cache.put(ip, count + 1)
+                None
+              }
+            case None =>
+              cache.put(ip, 1)
               None
-            }
-          case None =>
-            cache.put(ip, 1)
-            None
+          }
+        } else {
+          None
         }
       case None =>
         logger.info(s"No IP address available, X-Forwarded-For header is: ${request.headers.get("X-Forwarded-For")}")

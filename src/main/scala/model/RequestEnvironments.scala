@@ -27,7 +27,7 @@ object RequestEnvironments extends StrictLogging {
   // The rest of the app should not have a notion of "stage".
   // Switching between test & live services should happen entirely
   // through the combination of RequestEnvironments and RequestType
-  private def stage: String = stageFromFile getOrElse "DEV"
+  def stage: String = stageFromFile getOrElse "DEV"
 
   private def stageFromFile: Option[String] = {
     val file = new File("/etc/gu/stage")
