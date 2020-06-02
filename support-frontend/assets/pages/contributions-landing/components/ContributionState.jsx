@@ -84,6 +84,10 @@ const renderState = (selectedState: StateProvince | null) => (state: {abbreviati
   <option value={state.abbreviation} selected={selectedState === state.abbreviation}>{state.name}</option>
 );
 
+const renderStateDs = (selectedState: StateProvince | null) => (state: {abbreviation: string, name: string}) => (
+  <option value={state.abbreviation} selected={selectedState === state.abbreviation}>&nbsp;&nbsp;{state.name}</option>
+);
+
 const renderStatesField = (
   states: {[string]: string},
   selectedState: StateProvince | null,
@@ -167,7 +171,7 @@ const renderStatesField = (
           <option value="">&nbsp;</option>
           {Object.keys(states)
               .map(key => ({ abbreviation: key, name: states[key] }))
-              .map(renderState(selectedState))}
+              .map(renderStateDs(selectedState))}
         </select>
         <div
           css={showError ? [chevronErrorCss, chevronCss] : chevronCss}
