@@ -146,7 +146,7 @@ function getIsRemoteFromAcquisitionData(): boolean {
 
   try {
     const data = JSON.parse(queryString);
-    return data ? data.isRemote === 'true' : false;
+    return data && !!data.isRemote;
   } catch {
     console.error('Cannot parse acquisition data from query string');
     return false;
