@@ -30,7 +30,6 @@ import {
 } from '../contributionsLandingActions';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 import ContributionTextInputDs from './ContributionTextInputDs';
-import ContributionStateDs from './ContributionStateDs';
 
 
 // ----- Types ----- //
@@ -159,6 +158,7 @@ function withProps(props: PropTypes) {
         selectedState={billingState}
         isValid={checkBillingState(billingState)}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+        isDesignSystemTest={false}
       />
     </>
   );
@@ -220,11 +220,12 @@ function withProps(props: PropTypes) {
           />
         </div> : null
       }
-      <ContributionStateDs
+      <ContributionState
         onChange={props.updateBillingState}
-        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-        isValid={checkBillingState(billingState)}
         selectedState={billingState}
+        isValid={checkBillingState(billingState)}
+        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+        isDesignSystemTest
       />
     </>
   );
