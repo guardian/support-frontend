@@ -32,6 +32,7 @@ import {
 } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
+import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 
 // ----- Types ----- //
 
@@ -83,7 +84,7 @@ const StartDateCopy = ({ startDate, orderIsGift }: {startDate: Option<string>, o
 };
 
 function ThankYouContent({
-  billingPeriod, startDate, isPending, orderIsGift,
+  billingPeriod, startDate, isPending, orderIsGift, product,
 }: PropTypes) {
 
   const whatHappensNextItems = orderIsGift ?
@@ -109,7 +110,6 @@ function ThankYouContent({
         <a className="thank-you-link" href={homeDeliveryUrl}>Here&apos;s a reminder of how home delivery works</a>.
       </span>,
     ];
-
 
   return (
     <div className="thank-you-stage">
@@ -143,6 +143,7 @@ function ThankYouContent({
           </SansParagraph>
         </Text>
       </Content>
+      <SubscriptionsSurvey product={product} />
       <Content>
         <Asyncronously loader={import('components/subscriptionCheckouts/thankYou/marketingConsentContainer')}>
           {(MktConsent: MarketingConsent) => (

@@ -18,6 +18,7 @@ import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formF
 import { DirectDebit } from 'helpers/paymentMethods';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/subscriptions';
+import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 
 // ----- Types ----- //
 
@@ -26,11 +27,9 @@ type PropTypes = {
     ...FormFields,
 };
 
-
 // ----- Component ----- //
 
 function ThankYouContent(props: PropTypes) {
-
   return (
     <div className="thank-you-stage">
       <ThankYouHero
@@ -60,6 +59,7 @@ function ThankYouContent(props: PropTypes) {
         </Text>
         <AppsSection countryGroupId={props.countryGroupId} />
       </Content>
+      <SubscriptionsSurvey product={props.product} />
       <Content>
         <MarketingConsent render={({ title, message }) => (
           <Text title={title}>{message}</Text>
@@ -73,6 +73,5 @@ function ThankYouContent(props: PropTypes) {
 }
 
 // ----- Export ----- //
-
 
 export default connect(state => ({ ...getFormFields(state) }))(ThankYouContent);
