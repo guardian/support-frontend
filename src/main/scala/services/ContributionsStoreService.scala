@@ -43,7 +43,9 @@ object ContributionsStoreQueueService {
   }
 
   sealed trait Message
+
   case class NewContributionData(contributionData: ContributionData) extends Message
+
   case class RefundedPaymentId(paymentId: String) extends Message
 
   object Message {
@@ -52,14 +54,28 @@ object ContributionsStoreQueueService {
 
       Json.obj {
         message match {
-          case NewContributionData(contributionData) => "newContributionData" -> contributionData.asJson
-          case RefundedPaymentId(paymentId) => "refundedPaymentId" -> Json.fromString(paymentId)
+          case NewContributionData(contributionData) =>
+            "newContributionData" -> cleanSubdivisionCode(contributionData).asJson
+          case RefundedPaymentId(paymentId) =>
+            "refundedPaymentId" -> Json.fromString(paymentId)
         }
       }
     }
 
+
     def toJson(message: Message): Json = message.asJson
   }
+
+  private def cleanSubdivisionCode(data: ContributionData) =
+    data.copy(countrySubdivisionCode =
+      data.countrySubdivisionCode
+        .map(subdivisionCode =>
+          subdivisionCode
+            .filter(c => c.isLetterOrDigit || c.isWhitespace)
+            .replaceAll("[\n\r]", "")
+            .trim
+        )
+    )
 }
 
 class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: String = "eu-west-1")(implicit pool: SQSThreadPool)
