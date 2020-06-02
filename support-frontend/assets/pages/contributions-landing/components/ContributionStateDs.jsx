@@ -41,7 +41,6 @@ const selectCss = css`
   appearance: none !important;
   background: transparent;
   transition: box-shadow .2s ease-in-out;
-  border-radius: 0px;
   font-size: 17px;
   width: 100%;
   height: 48px;
