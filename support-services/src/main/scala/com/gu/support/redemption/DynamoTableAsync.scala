@@ -1,29 +1,36 @@
 package com.gu.support.redemption
 
-import java.util.concurrent.{Future => JFuture}
+import java.util.concurrent.CompletionException
 
-import com.amazonaws.AmazonWebServiceRequest
-import com.amazonaws.handlers.AsyncHandler
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.dynamodbv2.model._
-import com.amazonaws.services.dynamodbv2.{AmazonDynamoDBAsync, AmazonDynamoDBAsyncClient}
-import com.gu.support.promotions.dynamo.DynamoService
 import com.typesafe.scalalogging.LazyLogging
+import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
+import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, GetItemRequest, UpdateItemRequest}
 
 import scala.collection.JavaConverters._
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.compat.java8.FutureConverters._
+import scala.concurrent.{ExecutionContext, Future}
 
 object DynamoTableAsync {
+
+  val ProfileName = "membership"
+
+  lazy val CredentialsProvider =  AwsCredentialsProviderChain.builder.credentialsProviders(
+     ProfileCredentialsProvider.builder.profileName(ProfileName).build,
+     InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build
+  ).build
+
   def apply(table: String, key: String)(implicit e: ExecutionContext): DynamoTableAsync = {
-    val dynamoDBClient = AmazonDynamoDBAsyncClient.asyncBuilder
-      .withCredentials(DynamoService.CredentialsProvider)
-      .withRegion(Regions.EU_WEST_1)
-      .build()
+    val dynamoDBClient = DynamoDbAsyncClient.builder
+      .credentialsProvider(CredentialsProvider)
+      .region(Region.EU_WEST_1)
+      .build
     new DynamoTableAsync(dynamoDBClient, table, key)
   }
 }
 trait DynamoLookup {
-  def lookup(value: String): Future[Option[Map[String, AttributeValue]]]
+  def lookup(value: String): Future[Option[Map[String, Boolean]]]
 }
 
 trait DynamoUpdate {
@@ -31,52 +38,49 @@ trait DynamoUpdate {
 }
 
 class DynamoTableAsync(
-  dynamoDBAsyncClient: AmazonDynamoDBAsync,
+  dynamoDBAsyncClient: DynamoDbAsyncClient,
   table: String,
   primaryKeyName: String
 )(implicit e: ExecutionContext) extends LazyLogging with DynamoLookup with DynamoUpdate {
 
-  override def lookup(primaryKeyValue: String): Future[Option[Map[String, AttributeValue]]] =
-    AwsAsync[GetItemRequest, GetItemResult](
-      dynamoDBAsyncClient.getItemAsync,
-      new GetItemRequest(table, Map(primaryKeyName -> new AttributeValue(primaryKeyValue)).asJava)
-    ).map { gIR =>
-      Option(gIR.getItem).map(_.asScala.toMap)
+  override def lookup(primaryKeyValue: String): Future[Option[Map[String, Boolean]]] = {
+    val getItemRequest = GetItemRequest.builder
+      .tableName(table)
+      .key(Map(primaryKeyName -> AttributeValue.builder.s(primaryKeyValue).build).asJava)
+      .build
+
+    val eventualGetItemResponse = dynamoDBAsyncClient.getItem(getItemRequest).toScala.recoverWith {
+      case cex: CompletionException => Future.failed(cex.getCause)
     }
 
-  override def update(primaryKeyValue: String, updateName: String, updateValue: Boolean): Future[Unit] =
-    AwsAsync[UpdateItemRequest, UpdateItemResult](
-      dynamoDBAsyncClient.updateItemAsync,
-      new UpdateItemRequest(
-        table,
-        Map(primaryKeyName -> new AttributeValue(primaryKeyValue)).asJava,
-        Map(updateName -> new AttributeValueUpdate(new AttributeValue().withBOOL(updateValue), AttributeAction.PUT)).asJava
+    eventualGetItemResponse.map { getItemResponse =>
+      val maybeAttributes = Some(getItemResponse).collect {
+        case gir if gir.hasItem => gir.item.asScala.toMap
+      }
+      maybeAttributes.map(attributes =>
+        attributes.flatMap {
+          // only need to handle boolean values at the moment
+          case (key, value) => Option(value.bool).map(Boolean2boolean).map(bool => key -> bool)
+        }
       )
-    ).map(_ => ())
-}
-
-class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response] extends AsyncHandler[Request, Response] {
-  private val promise = Promise[Response]()
-
-  override def onError(exception: Exception): Unit = promise.failure(exception)
-
-  override def onSuccess(request: Request, result: Response): Unit = promise.success(result)
-
-  def future: Future[Response] = promise.future
-}
-
-object AwsAsync {
-
-  def apply[Request <: AmazonWebServiceRequest, Response](
-    f: (Request, AsyncHandler[Request, Response]) => JFuture[Response],
-    request: Request
-  )(implicit e: ExecutionContext): Future[Response] = {
-    val handler = new AwsAsyncHandler[Request, Response]
-    try {
-      f(request, handler)
-      handler.future.recoverWith { case e => Future.failed(new RuntimeException(s"aws call failed for $request: ${e.toString}", e)) }
-    } catch {
-      case e: Throwable => Future.failed(new RuntimeException(s"aws call failed for $request: ${e.toString}", e))
     }
+  }
+
+  override def update(primaryKeyValue: String, updateName: String, updateValue: Boolean): Future[Unit] = {
+    val updateItemRequest = UpdateItemRequest.builder
+      .tableName(table)
+      .key(Map(primaryKeyName -> AttributeValue.builder.s(primaryKeyValue).build).asJava)
+      .conditionExpression(s"attribute_exists($primaryKeyName)")
+      .updateExpression(s"""SET $updateName = :$updateName""")
+      .expressionAttributeValues(Map(
+        ":" + updateName -> AttributeValue.builder.bool(updateValue).build
+      ).asJava)
+      .build
+
+    val eventualUpdateItemResponse = dynamoDBAsyncClient.updateItem(updateItemRequest).toScala.recoverWith {
+      case cex: CompletionException => Future.failed(cex.getCause)
+    }
+
+    eventualUpdateItemResponse.map(_ => ())
   }
 }
