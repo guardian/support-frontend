@@ -2,6 +2,7 @@ package com.gu.support.redemption
 
 import java.util.concurrent.CompletionException
 
+import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
 import com.typesafe.scalalogging.LazyLogging
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
 import software.amazon.awssdk.regions.Region
@@ -33,8 +34,11 @@ trait DynamoLookup {
   def lookup(key: String): Future[Option[Map[String, Boolean]]]
 }
 
+object DynamoUpdate {
+  case class DynamoFieldUpdate(attributeName: String, attributeValue: Boolean)
+}
 trait DynamoUpdate {
-  def update(key: String, attributeToUpdate: String, newValue: Boolean): Future[Unit]
+  def update(key: String, dynamoFieldUpdate: DynamoFieldUpdate): Future[Unit]
 }
 
 class DynamoTableAsync(
@@ -66,14 +70,14 @@ class DynamoTableAsync(
     }
   }
 
-  override def update(key: String, attributeToUpdate: String, newValue: Boolean): Future[Unit] = {
+  override def update(key: String, dynamoFieldUpdate: DynamoFieldUpdate): Future[Unit] = {
     val updateItemRequest = UpdateItemRequest.builder
       .tableName(table)
       .key(Map(primaryKeyName -> AttributeValue.builder.s(key).build).asJava)
       .conditionExpression(s"attribute_exists($primaryKeyName)")
-      .updateExpression(s"""SET $attributeToUpdate = :$attributeToUpdate""")
+      .updateExpression(s"""SET ${dynamoFieldUpdate.attributeName} = :${dynamoFieldUpdate.attributeName}""")
       .expressionAttributeValues(Map(
-        ":" + attributeToUpdate -> AttributeValue.builder.bool(newValue).build
+        ":" + dynamoFieldUpdate.attributeName -> AttributeValue.builder.bool(dynamoFieldUpdate.attributeValue).build
       ).asJava)
       .build
 
