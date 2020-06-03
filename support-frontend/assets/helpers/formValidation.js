@@ -25,6 +25,7 @@ export const maxTwoDecimals: string => boolean = input => new RegExp('^\\d+\\.?\
 export const checkFirstName: (string | null) => boolean = isNotEmpty;
 export const checkLastName: (string | null) => boolean = isNotEmpty;
 export const checkBillingState: (string | null) => boolean = s => typeof s === 'string' && isNotEmpty(s);
+
 export const checkEmail: (string | null) => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(input) || isValidEmail(input);

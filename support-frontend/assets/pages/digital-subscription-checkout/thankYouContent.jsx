@@ -17,6 +17,7 @@ import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/subscriptions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { Option } from 'helpers/types/option';
+import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 
 // ----- Types ----- //
 
@@ -65,6 +66,7 @@ function ThankYouContent(props: PropTypes) {
         </Text>
         <AppsSection countryGroupId={props.countryGroupId} />
       </Content>
+      <SubscriptionsSurvey product={props.product} />
       <Content>
         {props.marketingConsent}
         <OptInCopy subscriptionProduct={DigitalPack} />

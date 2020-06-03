@@ -13,6 +13,8 @@ import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/subscriptions';
+import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
 
 // ----- Component ----- //
@@ -56,6 +58,7 @@ function ThankYouPendingContent(props: {countryGroupId: CountryGroupId, marketin
           </p>
         </Text>
       </Content>
+      <SubscriptionsSurvey product={DigitalPack} />
       <Content>
         {props.marketingConsent}
         <OptInCopy subscriptionProduct={DigitalPack} />
