@@ -1,5 +1,7 @@
 package com.gu.support.redemption
 
+import com.gu.support.redemption.DynamoLookup.DynamoBoolean
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
@@ -9,9 +11,13 @@ object GetCodeStatus {
   case object NoSuchCode extends RedemptionInvalid("NO_SUCH_CODE")
   case object CodeAlreadyUsed extends RedemptionInvalid("CODE_ALREADY_USED")
 
-  private def statusFromDynamoAttr(attrs: Map[String, Boolean]): Either[String, RedemptionTable.AvailableField] = {
+  private def statusFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, RedemptionTable.AvailableField] = {
     for {
-      available <- attrs.get(RedemptionTable.AvailableField.name).toRight(s"no boolean field 'available' in: $attrs")
+      attributeValue <- attrs.get(RedemptionTable.AvailableField.name).toRight(s"no field 'available' in: $attrs")
+      available <- attributeValue match {
+        case DynamoBoolean(bool) => Right(bool)
+        case _ => Left(s"field 'available' wasn't a boolean: $attributeValue")
+      }
     } yield RedemptionTable.AvailableField.decoded(available)
   }
 

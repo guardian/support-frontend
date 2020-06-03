@@ -1,5 +1,6 @@
 package com.gu.support.redemption
 
+import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, NoSuchCode}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -10,7 +11,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
 
   "getCodeStatus" should "handle an available code" in {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
-      case "CODE" => Future.successful(Some(Map("available" -> true)))
+      case "CODE" => Future.successful(Some(Map("available" -> DynamoBoolean(true))))
     }
     getCodeStatus(RedemptionCode("CODE")).map {
       _ should be(Right(()))
@@ -20,8 +21,8 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
   it should "handle an available code with extra attributes lying around" in {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
       case "CODE" => Future.successful(Some(Map(
-        "available" -> true,
-        "otherFields" -> false
+        "available" -> DynamoBoolean(true),
+        "otherFields" -> DynamoString("other boring info")
       )))
     }
     getCodeStatus(RedemptionCode("CODE")).map {
@@ -31,7 +32,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
 
   it should "handle an NON available code" in {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
-      case "CODE" => Future.successful(Some(Map("available" -> false)))
+      case "CODE" => Future.successful(Some(Map("available" -> DynamoBoolean(false))))
     }
     getCodeStatus(RedemptionCode("CODE")).map {
       _ should be(Left(CodeAlreadyUsed))
@@ -47,18 +48,18 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
     }
   }
 
-//  it should "handle an code with invalid attrbibute type " in {
-//    val getCodeStatus = GetCodeStatus.withDynamoLookup {
-//      case "CODE" => Future.successful(Some(Map("available" -> new AttributeValue().withS("true"))))
-//    }
-//    recoverToSucceededIf[RuntimeException] {
-//      getCodeStatus(RedemptionCode("CODE"))
-//    }
-//  }
+  it should "handle an code with invalid attrbibute type " in {
+    val getCodeStatus = GetCodeStatus.withDynamoLookup {
+      case "CODE" => Future.successful(Some(Map("available" -> DynamoString("haha not a boolean"))))
+    }
+    recoverToSucceededIf[RuntimeException] {
+      getCodeStatus(RedemptionCode("CODE"))
+    }
+  }
 
   it should "handle an  missing arrtibute code" in {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
-      case "CODE" => Future.successful(Some(Map("ASDFNQWEOIDNSDKNFNAKNDAKNSKANSDKNASDAKSND" -> true)))
+      case "CODE" => Future.successful(Some(Map("ASDFNQWEOIDNSDKNFNAKNDAKNSKANSDKNASDAKSND" -> DynamoBoolean(true))))
     }
     recoverToSucceededIf[RuntimeException] {
       getCodeStatus(RedemptionCode("CODE"))

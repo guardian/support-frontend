@@ -2,6 +2,7 @@ package com.gu.support.redemption
 
 import java.util.concurrent.CompletionException
 
+import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString, DynamoValue}
 import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
 import com.typesafe.scalalogging.LazyLogging
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
@@ -30,8 +31,14 @@ object DynamoTableAsync {
     new DynamoTableAsync(dynamoDBClient, table, key)
   }
 }
+
+object DynamoLookup {
+  sealed trait DynamoValue
+  case class DynamoBoolean(bool: Boolean) extends DynamoValue
+  case class DynamoString(string: String) extends DynamoValue
+}
 trait DynamoLookup {
-  def lookup(key: String): Future[Option[Map[String, Boolean]]]
+  def lookup(key: String): Future[Option[Map[String, DynamoValue]]]
 }
 
 object DynamoUpdate {
@@ -47,7 +54,7 @@ class DynamoTableAsync(
   primaryKeyName: String
 )(implicit e: ExecutionContext) extends LazyLogging with DynamoLookup with DynamoUpdate {
 
-  override def lookup(key: String): Future[Option[Map[String, Boolean]]] = {
+  override def lookup(key: String): Future[Option[Map[String, DynamoValue]]] = {
     val getItemRequest = GetItemRequest.builder
       .tableName(table)
       .key(Map(primaryKeyName -> AttributeValue.builder.s(key).build).asJava)
@@ -63,8 +70,9 @@ class DynamoTableAsync(
       }
       maybeAttributes.map(attributes =>
         attributes.flatMap {
-          // only need to handle boolean values at the moment
-          case (key, value) => Option(value.bool).map(Boolean2boolean).map(bool => key -> bool)
+          case (key, value) if value.bool != null => Some(key -> DynamoBoolean(value.bool))
+          case (key, value) if value.s != null => Some(key -> DynamoString(value.s))
+          case _ => None // don't need to handle others yet
         }
       )
     }
