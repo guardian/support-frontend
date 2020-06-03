@@ -24,7 +24,7 @@ class RedemptionsController(
 
     val codeToCheck = RedemptionCode(redemptionCode)
 
-    val status: Future[Either[GetCodeStatus.RedemptonInvalid, Unit]] = getCodeStatus(codeToCheck)
+    val status: Future[Either[GetCodeStatus.RedemptionInvalid, Unit]] = getCodeStatus(codeToCheck)
 
     status.map {
       case Left(reason) => NotFound(reason.clientCode)

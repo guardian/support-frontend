@@ -5,9 +5,9 @@ import scala.util.{Failure, Success}
 
 object GetCodeStatus {
 
-  sealed abstract class RedemptonInvalid(val clientCode: String)
-  case object NoSuchCode extends RedemptonInvalid("NO_SUCH_CODE")
-  case object CodeAlreadyUsed extends RedemptonInvalid("CODE_ALREADY_USED")
+  sealed abstract class RedemptionInvalid(val clientCode: String)
+  case object NoSuchCode extends RedemptionInvalid("NO_SUCH_CODE")
+  case object CodeAlreadyUsed extends RedemptionInvalid("CODE_ALREADY_USED")
 
   private def statusFromDynamoAttr(attrs: Map[String, Boolean]): Either[String, RedemptionTable.AvailableField] = {
     for {
@@ -23,7 +23,7 @@ class GetCodeStatus(dynamoLookup: DynamoLookup) extends WithLogging {
 
   import GetCodeStatus._
 
-  def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[Either[RedemptonInvalid, Unit]] =
+  def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[Either[RedemptionInvalid, Unit]] =
     (for {
       maybeAttributes <- dynamoLookup.lookup(code.value)
       maybeCodeAvailable <- FlattenErrors(maybeAttributes.map(statusFromDynamoAttr))

@@ -30,11 +30,11 @@ object DynamoTableAsync {
   }
 }
 trait DynamoLookup {
-  def lookup(value: String): Future[Option[Map[String, Boolean]]]
+  def lookup(key: String): Future[Option[Map[String, Boolean]]]
 }
 
 trait DynamoUpdate {
-  def update(primaryKeyValue: String, updateName: String, updateValue: Boolean): Future[Unit]
+  def update(key: String, attributeToUpdate: String, newValue: Boolean): Future[Unit]
 }
 
 class DynamoTableAsync(
@@ -43,10 +43,10 @@ class DynamoTableAsync(
   primaryKeyName: String
 )(implicit e: ExecutionContext) extends LazyLogging with DynamoLookup with DynamoUpdate {
 
-  override def lookup(primaryKeyValue: String): Future[Option[Map[String, Boolean]]] = {
+  override def lookup(key: String): Future[Option[Map[String, Boolean]]] = {
     val getItemRequest = GetItemRequest.builder
       .tableName(table)
-      .key(Map(primaryKeyName -> AttributeValue.builder.s(primaryKeyValue).build).asJava)
+      .key(Map(primaryKeyName -> AttributeValue.builder.s(key).build).asJava)
       .build
 
     val eventualGetItemResponse = dynamoDBAsyncClient.getItem(getItemRequest).toScala.recoverWith {
@@ -66,14 +66,14 @@ class DynamoTableAsync(
     }
   }
 
-  override def update(primaryKeyValue: String, updateName: String, updateValue: Boolean): Future[Unit] = {
+  override def update(key: String, attributeToUpdate: String, newValue: Boolean): Future[Unit] = {
     val updateItemRequest = UpdateItemRequest.builder
       .tableName(table)
-      .key(Map(primaryKeyName -> AttributeValue.builder.s(primaryKeyValue).build).asJava)
+      .key(Map(primaryKeyName -> AttributeValue.builder.s(key).build).asJava)
       .conditionExpression(s"attribute_exists($primaryKeyName)")
-      .updateExpression(s"""SET $updateName = :$updateName""")
+      .updateExpression(s"""SET $attributeToUpdate = :$attributeToUpdate""")
       .expressionAttributeValues(Map(
-        ":" + updateName -> AttributeValue.builder.bool(updateValue).build
+        ":" + attributeToUpdate -> AttributeValue.builder.bool(newValue).build
       ).asJava)
       .build
 
