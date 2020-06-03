@@ -384,6 +384,25 @@ describe('basic behaviour of init', () => {
     deleteCookie();
   });
 
+  it('Does not allocate a locally rendered epic user into the ContributionsService AB test', () => {
+    const url = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTestControl))}`;
+    window.history.pushState({}, 'Test Title', url);
+
+    const participations: Participations = abInit('GB', GBPCountries, emptySettings, {});
+
+    expect(participations.ContributionsService).toBe(undefined);
+  });
+
+  it('Allocates a remotely rendered epic user into the ContributionsService AB test', () => {
+    const data = { isRemote: true, ...acquisitionDataMockTestControl };
+    const url = `/test.html?acquisitionData=${encodeURI(JSON.stringify(data))}`;
+    window.history.pushState({}, 'Test Title', url);
+
+    const participations: Participations = abInit('GB', GBPCountries, emptySettings, {});
+
+    expect(participations.ContributionsService).toBe('remote');
+  });
+
 });
 
 describe('Correct allocation in a multi test environment', () => {

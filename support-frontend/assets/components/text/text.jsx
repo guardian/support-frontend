@@ -43,7 +43,7 @@ Text.defaultProps = {
 
 // ----- Children ----- //
 export const Title = ({ children, size }: {children: Node, size: HeadingSize}) => (
-  <Heading size={size}className="component-text__heading">{children}</Heading>
+  <Heading size={size} className="component-text__heading">{children}</Heading>
 );
 export const Callout = ({ children }: {children: Node}) => (
   <p className="component-text__callout"><strong>{children}</strong></p>
