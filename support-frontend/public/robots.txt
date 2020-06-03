@@ -8,5 +8,6 @@ Disallow: /int/subscribe/premium-tier
 Disallow: /contribute/recurring-guest
 
 Allow: /
+Allow: https://media.guim.co.uk/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png
 
 Sitemap: https://support.theguardian.com/sitemap.xml
