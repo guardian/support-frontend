@@ -11,25 +11,21 @@ import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedExce
 class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
 
   private val dynamoTableAsync: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
-  private val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE")
   val setCodeStatus =
     SetCodeStatus.withDynamoLookup(dynamoTableAsync)
   val getCodeStatus = GetCodeStatus.withDynamoLookup(dynamoTableAsync)
 
-  // the first two tests should use the same code
-  "setCodeStatus" should "set a code available" in {
+  // this is one test because it depends on external state which may not be in a particular state
+  "setCodeStatus" should "set a code available and used" in {
+    val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE")
     for {
+      _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsUsed) // get in known state
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable).map {
         _ should be(())
       }
-      a <- getCodeStatus(mutableCode).map {
+      _ <- getCodeStatus(mutableCode).map {
         _ should be(Right(()))
       }
-    } yield a
-  }
-
-  it should "set a code used" in {
-    for {
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsUsed).map {
         _ should be(())
       }
