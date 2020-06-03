@@ -32,12 +32,11 @@ export type TickerSettings = {
   tickerEndType: TickerEndType,
   currencySymbol: string,
   copy: TickerCopy,
-
 }
 
-type PropTypes = TickerSettings & {|
+type PropTypes = TickerSettings & {
   onGoalReached: () => void,
-|}
+}
 
 
 // ---- Helpers ----- //
