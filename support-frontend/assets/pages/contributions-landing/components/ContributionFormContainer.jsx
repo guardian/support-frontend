@@ -127,7 +127,7 @@ function withProps(props: PropTypes) {
             onGoalReached={props.setTickerGoalReached}
           /> : null
         }
-        {props.tickerGoalReached && campaign && campaign.tickerSettings && campaign.tickerSettings.goalReachedCopy ?
+        {props.tickerGoalReached && campaign && campaign.tickerSettings && campaign.goalReachedCopy ?
           campaign.tickerSettings.goalReachedCopy :
           <div>
             {countryGroupDetails.formMessage ?

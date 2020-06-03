@@ -10,8 +10,6 @@ import { text, withKnobs } from '@storybook/addon-knobs/src/index';
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
 
-const tickerJsonUrlInput = () => text('Ticker JSON URL', 'https://support.theguardian.com/ticker.json');
-
 const stories = storiesOf('Tickers', module)
   .addDecorator(withKnobs)
   .addDecorator(withCenterAlignment);
@@ -19,10 +17,15 @@ const stories = storiesOf('Tickers', module)
 stories.add('Contribution ticker', () => (
   <div style={{ width: '100%', maxWidth: '500px' }}>
     <ContributionTicker
-      tickerJsonUrl={tickerJsonUrlInput()}
+      tickerCountType="money"
       onGoalReached={() => {}}
-      tickerType="unlimited"
+      tickerEndType="unlimited"
       currencySymbol="£"
+      copy={{
+        countLabel: 'contributors',
+        goalReachedPrimary: 'You can still support us today',
+        goalReachedSecondary: 'thank you - we\'re over our goal',
+      }}
     />
   </div>
 ));

@@ -18,8 +18,8 @@ type StateTypes = {|
   goalReached: boolean,
 |}
 
-export type TickerEndType = 'unlimited' | 'hardstop';
-export type TickerCountType = 'money' | 'people';
+type TickerEndType = 'unlimited' | 'hardstop';
+type TickerCountType = 'money' | 'people';
 
 type TickerCopy = {
   countLabel: string,
@@ -28,7 +28,6 @@ type TickerCopy = {
 }
 
 export type TickerSettings = {
-  goalReachedCopy: React$Element<string> | null,  // If not null, the form will be replaced with this if goal reached
   tickerCountType: TickerCountType,
   tickerEndType: TickerEndType,
   currencySymbol: string,
@@ -99,7 +98,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
       ***************************************************************** */
       const initialCount = total ? total * 0.8 : 0;
 
-      const goalReached = total && goal && total >= goal;
+      const goalReached = !!total && !!goal && total >= goal;
 
       if (goalReached) {
         this.props.onGoalReached();
@@ -114,7 +113,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
         goal: goal || 0,
         count: initialCount || 0,
         dataFromServer,
-        goalReached: goalReached,
+        goalReached,
       });
 
       // Only run the number animation if the goal hasn't been reached yet
@@ -196,7 +195,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
     const classModifiers = [
       this.props.tickerEndType,
       this.state.goalReached ? 'goal-reached' : '',
-      !readyToRender ? 'hidden' : ''
+      !readyToRender ? 'hidden' : '',
     ];
 
     const baseClassName = 'contributions-landing-ticker';
