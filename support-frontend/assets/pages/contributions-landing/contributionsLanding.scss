@@ -47,6 +47,16 @@ body {
   background-color: gu-colour(sport-faded);
 }
 
+.gu-content__main.aus-moment {
+  position: relative;
+  background: linear-gradient(
+      #FFE500 50%,
+      #F3C100 50%,
+      #F3C100 80%,
+      #FF7F0F 80%
+  ) !important;
+}
+
 /*= HEADER */
 
 header[role="banner"] {
