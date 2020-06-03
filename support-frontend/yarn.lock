@@ -1915,15 +1915,15 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.14.2.tgz#b1789edbb28099f5834ce8319401142a84500d59"
   integrity sha512-e+yrYM2WRRb5C4BkJuGstTbaPTn7WS+TdKT2LoxwYBlXWSM3qrHOOFHCTc97uuEgT5E39GqzA/6oScrwmSr9BA==
 
-"@guardian/src-foundations@^0.16":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.16.1.tgz#d5e52a57012c588d146b05ded7f9fbc4a9af40d5"
-  integrity sha512-E6YDqq53gy5CoO8xFPWDBjiYiI0o+4BE1/mFcwkpWGwtpkSnxi21LhkaQ63r+KRxoDB29clc86ChbNHXw9keFA==
-
 "@guardian/src-foundations@^0.17.0":
   version "0.17.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.17.0.tgz#ea189b370fb222ef52686998fab8d8673d496a54"
   integrity sha512-Dgm/i1J3JjxZeADT6+EgT6rz3hL0OrB4KEiNerxycL2saCBS9HqtmK18io95s7eg9pUZVINq+3KwrFeB8czY3g==
+
+"@guardian/src-foundations@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-0.18.1.tgz#b49f74c650eccaf33c05413e0c192102dc939ad0"
+  integrity sha512-745xKtD818+dkHxoROgL+0y3NWIUaMBUxZWEa6cNOlDBgU/oj2WrNSVAEKojMiwii2AA5GODXxFfoSNXyVWZUg==
 
 "@guardian/src-helpers@^0.14.0":
   version "0.14.0"
@@ -1939,10 +1939,55 @@
   dependencies:
     "@guardian/src-foundations" "^0.17.0"
 
-"@guardian/src-svgs@^0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.14.0.tgz#3a5a6d385f2639aca884b5302f3d3ae6e919e290"
-  integrity sha512-ZGwVwVlX3YwG62xO1YjxaHyGFJC8Us80GPeyY8CMv5lfshYd0gGDNJN6vjUI3ssULjcP8ckGOTFcTFs3hOUrMw==
+"@guardian/src-helpers@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-0.18.1.tgz#e62aab928c92bd03d67df05ca30306294a4911e5"
+  integrity sha512-tFdrvWctRSpSnPcMjyCg2PW3o2F97g/23iY8krbjA4Fn8E3Qdiqo0JDj5Rs1TDu4a2+fmEciE0gb/hRClDZzeQ==
+  dependencies:
+    "@guardian/src-foundations" "^0.18.1"
+
+"@guardian/src-inline-error@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-inline-error/-/src-inline-error-0.17.0.tgz#fb31aca092bd7e2033e4c82887c5a24122b7bfc8"
+  integrity sha512-d+A2nO1eXxXTfREMbkNFoI9SvNLJsfVcyk8nmYecYHi5z1IOzQzOHPG6LvjwIoOtaTdvsDGcYjYyj+gHtWjnNQ==
+  dependencies:
+    "@guardian/src-helpers" "^0.17.0"
+    "@guardian/src-svgs" "^0.17.0"
+
+"@guardian/src-inline-error@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-inline-error/-/src-inline-error-0.18.1.tgz#e22ffbaa3f8d3157720ad9cd83de71618fd0a786"
+  integrity sha512-irYki3ykMQ6bvag3U+Hmb8oHkgsX29pSBkj35uEzD5xXB0k+rurKxb73aPJSyX8gPtTUluWSD6Wrkr60TFLCGg==
+  dependencies:
+    "@guardian/src-helpers" "^0.18.1"
+    "@guardian/src-svgs" "^0.18.1"
+
+"@guardian/src-radio@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-radio/-/src-radio-0.18.1.tgz#a320495d8e9aacbf2b1ce43c92031dcef5b05484"
+  integrity sha512-RdTs7n8LkaYb1txSLbFQsS6/dWPIJtvumsfhQKOHg2EqjqQWZvumOQ9zbsFamAyOE93WDx2iw0RAcE4TWvCuIQ==
+  dependencies:
+    "@guardian/src-helpers" "^0.18.1"
+    "@guardian/src-inline-error" "^0.18.1"
+    "@guardian/src-svgs" "^0.18.1"
+
+"@guardian/src-svgs@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.17.0.tgz#7fc944a0d4708d2b3102144fa8ae66c9987e4657"
+  integrity sha512-8913E5P9xEUs7zktJxx5vJBqJOw4fb4AagbAG1lWwGYqLhvSx8xw3u0U/zFydEyx/+IOGfp0xWmLaulv7o7pzw==
+
+"@guardian/src-svgs@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-0.18.1.tgz#c0935fc54cb30db78a9f59e2292328fe88637663"
+  integrity sha512-2IVZRWrpwq51yHSABMMQzHwu3IHtd1wurCV0Mc6Z8Eyo02J+BB8oxU3yFI4dEJ3ChQWpKPChuLZscar9eGUsxA==
+
+"@guardian/src-text-input@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-text-input/-/src-text-input-0.17.0.tgz#8b5a4f9385615e9fde710a518ec3db6f55a5f057"
+  integrity sha512-u9lAx1ZjvCXB9jrKyeW8zqr0AWzmOVZtcKvbcHEhxmEvmuGRrA27vnNsKt1CYlVp9kZntDztj2o+j1oFhSME1A==
+  dependencies:
+    "@guardian/src-helpers" "^0.17.0"
+    "@guardian/src-inline-error" "^0.17.0"
 
 "@guardian/src-utilities@^0.14.0":
   version "0.14.0"

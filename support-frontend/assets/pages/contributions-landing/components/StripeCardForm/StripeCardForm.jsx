@@ -32,6 +32,12 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { updateRecaptchaToken } from '../../contributionsLandingActions';
 import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
+import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
+import { InlineError } from '@guardian/src-inline-error';
+import { StripeCardFormField } from './StripeCardFormField';
+import './stripeCardForm.scss';
+import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
+
 
 // ----- Types -----//
 
@@ -59,6 +65,7 @@ type PropTypes = {|
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
   postDeploymentTestUser: string,
+  designSystemTestVariant: LandingPageDesignSystemTestVariants,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -73,6 +80,7 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
   postDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
+  designSystemTestVariant: state.common.abParticipations.landingPageDesignSystemTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -109,7 +117,7 @@ type StateTypes = {
   currentlySelected: CardFieldName | null,
 };
 
-const fieldStyle = {
+const fieldStyleControl = {
   base: {
     fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
     fontSize: '16px',
@@ -120,9 +128,17 @@ const fieldStyle = {
   },
 };
 
+const fieldStyleDS = {
+  base: {
+    ...fieldStyleControl,
+    fontSize: '17px',
+    lineHeight: 1.5,
+  },
+};
+
 const renderVerificationCopy = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
-  return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
+  return (<InlineError>Please tick to verify you&apos;re a human</InlineError>);
 };
 
 const errorMessageFromState = (state: CardFieldState): string | null =>
@@ -373,22 +389,29 @@ class CardForm extends Component<PropTypes, StateTypes> {
       return <CreditCardsROW className="form__credit-card-icons" />;
     };
 
+    const showCardsDs = (country: IsoCountry) => {
+      if (country === 'US') {
+        return <CreditCardsUS />;
+      }
+      return <CreditCardsROW />;
+    };
+
     const recaptchaVerified =
       this.props.contributionType === 'ONE_OFF' ?
         this.props.oneOffRecaptchaToken : this.props.recurringRecaptchaVerified;
 
-    return (
+    const renderControl = () => (
       <div className="form__fields">
         <legend className="form__legend"><h3>Your card details</h3></legend>
         <div className="form__field">
           <label className="form__label" htmlFor="stripeCardNumberElement">
-            <span>Card number</span>
+            Card number
           </label>
           {showCards(this.props.country)}
           <span className={getClasses('CardNumber')}>
             <CardNumberElement
               id="stripeCardNumberElement"
-              style={fieldStyle}
+              style={fieldStyleControl}
               onChange={this.onChange('CardNumber')}
               onFocus={() => this.onFocus('CardNumber')}
               onBlur={this.onBlur}
@@ -398,12 +421,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
         <div className="stripe-card-element-container__inline-fields">
           <div className="form__field">
             <label className="form__label" htmlFor="stripeCardExpiryElement">
-              <span>Expiry date</span>
+              Expiry date
             </label>
             <span className={getClasses('Expiry')}>
               <CardExpiryElement
                 id="stripeCardExpiryElement"
-                style={fieldStyle}
+                style={fieldStyleControl}
                 onChange={this.onChange('Expiry')}
                 onFocus={() => this.onFocus('Expiry')}
                 onBlur={this.onBlur}
@@ -412,12 +435,12 @@ class CardForm extends Component<PropTypes, StateTypes> {
           </div>
           <div className="form__field">
             <label className="form__label" htmlFor="stripeCardCVCElement">
-              <span>CVC</span>
+              CVC
             </label>
             <span className={getClasses('CVC')}>
               <CardCVCElement
                 id="stripeCardCVCElement"
-                style={fieldStyle}
+                style={fieldStyleControl}
                 placeholder=""
                 onChange={this.onChange('CVC')}
                 onFocus={() => this.onFocus('CVC')}
@@ -431,7 +454,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
           <div className="form__field">
 
             <label className="form__label" htmlFor="robot_checkbox">
-              <span>Security check</span>
+              Security check
             </label>
             <Recaptcha />
             {
@@ -443,6 +466,150 @@ class CardForm extends Component<PropTypes, StateTypes> {
           : null }
       </div>
     );
+
+    const renderDesignSystemStyleForm = () => (
+      <div>
+        <legend className="form__legend"><h3>Your card details</h3></legend>
+        {errorMessage ?
+          <InlineError> {errorMessage} </InlineError> : null
+        }
+
+        <StripeCardFormField
+          label={
+            <>
+              <label
+                htmlFor="stripeCardNumberElement"
+              >
+                Card number
+              </label>
+              {showCardsDs(this.props.country)}
+            </>
+          }
+          input={
+            <CardNumberElement
+              id="stripeCardNumberElement"
+              style={fieldStyleDS}
+              onChange={this.onChange('CardNumber')}
+              onFocus={() => this.onFocus('CardNumber')}
+              onBlur={this.onBlur}
+            />
+          }
+          error={this.state.CardNumber.name === 'Error'}
+          focus={this.state.currentlySelected === 'CardNumber'}
+        />
+
+        <div
+
+          className="ds-stripe-card-input__expiry-security-container"
+        >
+          <div
+            className="ds-stripe-card-input__expiry"
+          >
+            <StripeCardFormField
+              label={
+                <label
+                  htmlFor="stripeCardExpiryElement"
+                >
+                  Expiry date
+                </label>
+              }
+              hint={
+                <div
+                  className="ds-stripe-card-input__expiry-hint"
+                >
+                  MM / YY
+                </div>
+              }
+              input={
+                <CardExpiryElement
+                  id="stripeCardExpiryElement"
+                  style={fieldStyleControl}
+                  placeholder=""
+                  onChange={this.onChange('Expiry')}
+                  onFocus={() => this.onFocus('Expiry')}
+                  onBlur={this.onBlur}
+                />
+              }
+              error={this.state.Expiry.name === 'Error'}
+              focus={this.state.currentlySelected === 'Expiry'}
+
+            />
+          </div>
+
+          <div
+            className="ds-stripe-card-input__security-code"
+          >
+            <StripeCardFormField
+              label={
+                <label
+                  htmlFor="stripeCardCVCElement"
+                >
+                  Security code
+                </label>
+              }
+              hint={
+                <div
+                  className="ds-stripe-card-input__security-code-hint"
+                >
+                  <div
+                    className="ds-stripe-card-input__security-code-hint-icon"
+                  >
+                    <QuestionMarkHintIcon />
+                  </div>
+                  <div
+                    className="ds-stripe-card-input__security-code-hint-tooltip"
+                  >
+                    <p
+                      className="ds-stripe-card-input__security-code-hint-tooltip-heading"
+                    >
+                      What&apos;s this?
+                    </p>
+                    <p>The last three digits on the back of your card, above the signature</p>
+                  </div>
+                </div>
+              }
+              input={
+                <CardCVCElement
+                  id="stripeCardCVCElement"
+                  style={fieldStyleControl}
+                  placeholder=""
+                  onChange={this.onChange('CVC')}
+                  onFocus={() => this.onFocus('CVC')}
+                  onBlur={this.onBlur}
+                />
+              }
+              error={this.state.CVC.name === 'Error'}
+              focus={this.state.currentlySelected === 'CVC'}
+
+            />
+          </div>
+        </div>
+        { window.guardian.recaptchaEnabled ?
+          <div
+            className="ds-security-check"
+          >
+            <div
+              className="ds-security-check__label"
+            >
+              <label
+                htmlFor="robot_checkbox"
+              >
+                Security check
+              </label>
+            </div>
+            {
+              this.props.checkoutFormHasBeenSubmitted
+              && !recaptchaVerified ?
+                renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
+            }
+            <Recaptcha />
+          </div>
+          : null
+        }
+      </div>
+    );
+
+    return this.props.designSystemTestVariant === 'ds' ? renderDesignSystemStyleForm() : renderControl();
   }
 }
 
