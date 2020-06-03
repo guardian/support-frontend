@@ -17,7 +17,7 @@ import services.{IdentityService, TestUserService}
 import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionRedemptionForm
-
+import cats.implicits._
 import scala.concurrent.{ExecutionContext, Future}
 
 class RedemptionController(
@@ -64,16 +64,15 @@ class RedemptionController(
 
   }
 
-  import cats.implicits._
-
-  def create(redemptionCode: String): Action[AnyContent] =
+  def displayProcessing(redemptionCode: String): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async {
       implicit request: AuthRequest[Any] =>
-        val blah = for {
+        val processingPage = for {
           user <- identityService.getUser(request.user.minimalUser)
           corporateCustomer <- getCorporateCustomer(redemptionCode)
         } yield showProcessing(redemptionCode, corporateCustomer, user)
-        blah.value.map(
+
+        processingPage.value.map(
           _.fold(
             BadRequest(_),
             result => result
@@ -86,6 +85,8 @@ class RedemptionController(
     corporateCustomer: CorporateCustomer,
     user: IdUser)(implicit request: AuthRequest[Any]): Result = {
     val csrf = CSRF.getToken.value
+    val testUser = testUsers.isTestUser(user.publicFields.displayName)
+
     Ok(subscriptionRedemptionForm(
       title,
       id,
@@ -93,7 +94,7 @@ class RedemptionController(
       css,
       fontLoaderBundle,
       Some(csrf),
-      uatMode = false,
+      uatMode = testUser,
       "processing",
       redemptionCode,
       Right(corporateCustomer),
@@ -111,6 +112,8 @@ class RedemptionController(
   }
 }
 
+
+// This is just a hard coded fake for the code lookup
 object RedemptionController {
   def getCorporateCustomer(redemptionCode: RedemptionCode)(implicit ec: ExecutionContext):
   EitherT[Future, String, CorporateCustomer] =
