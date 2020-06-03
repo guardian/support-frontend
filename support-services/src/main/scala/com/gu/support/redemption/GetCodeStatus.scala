@@ -1,6 +1,7 @@
 package com.gu.support.redemption
 
-import com.gu.support.redemption.DynamoLookup.DynamoBoolean
+import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
+import com.gu.support.workers.redemption.CorporateAccountId
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
@@ -11,15 +12,23 @@ object GetCodeStatus {
   case object NoSuchCode extends RedemptionInvalid("NO_SUCH_CODE")
   case object CodeAlreadyUsed extends RedemptionInvalid("CODE_ALREADY_USED")
 
-  private def statusFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, RedemptionTable.AvailableField] = {
+  private def statusFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, RedemptionTable.AvailableField] =
     for {
-      attributeValue <- attrs.get(RedemptionTable.AvailableField.name).toRight(s"no field 'available' in: $attrs")
+      attributeValue <- attrs.get(RedemptionTable.AvailableField.name).toRight(s"no field '${RedemptionTable.AvailableField.name}' in: $attrs")
       available <- attributeValue match {
         case DynamoBoolean(bool) => Right(bool)
-        case _ => Left(s"field 'available' wasn't a boolean: $attributeValue")
+        case _ => Left(s"field '${RedemptionTable.AvailableField.name}' wasn't a boolean: $attributeValue")
       }
     } yield RedemptionTable.AvailableField.decoded(available)
-  }
+
+  private def corporateFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, CorporateAccountId] =
+    for {
+      attributeValue <- attrs.get(RedemptionTable.CorporateIdField.name).toRight(s"no field '${RedemptionTable.CorporateIdField.name}' in: $attrs")
+      corporateId <- attributeValue match {
+        case DynamoString(bool) => Right(bool)
+        case _ => Left(s"field '${RedemptionTable.CorporateIdField.name}' wasn't a string: $attributeValue")
+      }
+    } yield corporateId
 
   def withDynamoLookup(dynamoLookup: DynamoLookup): GetCodeStatus = new GetCodeStatus(dynamoLookup)
 
@@ -29,14 +38,19 @@ class GetCodeStatus(dynamoLookup: DynamoLookup) extends WithLogging {
 
   import GetCodeStatus._
 
-  def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[Either[RedemptionInvalid, Unit]] =
+  def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[Either[RedemptionInvalid, CorporateAccountId]] =
     (for {
       maybeAttributes <- dynamoLookup.lookup(code.value)
-      maybeCodeAvailable <- FlattenErrors(maybeAttributes.map(statusFromDynamoAttr))
-    } yield maybeCodeAvailable match {
+      status <- FlattenErrors(maybeAttributes.map { attributes =>
+        for {
+          available <- statusFromDynamoAttr(attributes)
+          corporateId <- corporateFromDynamoAttr(attributes)
+        } yield (available, corporateId)
+      })
+    } yield status match {
       case None => Left(NoSuchCode)
-      case Some(RedemptionTable.AvailableField.CodeIsAvailable) => Right(())
-      case Some(RedemptionTable.AvailableField.CodeIsUsed) => Left(CodeAlreadyUsed)
+      case Some((RedemptionTable.AvailableField.CodeIsAvailable, corporateId)) => Right(corporateId)
+      case Some((RedemptionTable.AvailableField.CodeIsUsed, _)) => Left(CodeAlreadyUsed)
     }).withLoggingAsync(s"look up $code")
 
 }

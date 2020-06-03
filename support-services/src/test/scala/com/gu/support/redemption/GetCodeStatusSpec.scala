@@ -11,28 +11,22 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
 
   "getCodeStatus" should "handle an available code" in {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
-      case "CODE" => Future.successful(Some(Map("available" -> DynamoBoolean(true))))
-    }
-    getCodeStatus(RedemptionCode("CODE")).map {
-      _ should be(Right(()))
-    }
-  }
-
-  it should "handle an available code with extra attributes lying around" in {
-    val getCodeStatus = GetCodeStatus.withDynamoLookup {
       case "CODE" => Future.successful(Some(Map(
         "available" -> DynamoBoolean(true),
-        "otherFields" -> DynamoString("other boring info")
+        "corporateId" -> DynamoString("1")
       )))
     }
     getCodeStatus(RedemptionCode("CODE")).map {
-      _ should be(Right(()))
+      _ should be(Right("1"))
     }
   }
 
   it should "handle an NON available code" in {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
-      case "CODE" => Future.successful(Some(Map("available" -> DynamoBoolean(false))))
+      case "CODE" => Future.successful(Some(Map(
+        "available" -> DynamoBoolean(false),
+        "corporateId" -> DynamoString("1")
+      )))
     }
     getCodeStatus(RedemptionCode("CODE")).map {
       _ should be(Left(CodeAlreadyUsed))
@@ -48,18 +42,48 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
     }
   }
 
-  it should "handle an code with invalid attrbibute type " in {
+  it should "handle an code with invalid available type " in {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
-      case "CODE" => Future.successful(Some(Map("available" -> DynamoString("haha not a boolean"))))
+      case "CODE" => Future.successful(Some(Map(
+        "available" -> DynamoString("haha not a boolean"),
+        "corporateId" -> DynamoString("1")
+      )))
     }
     recoverToSucceededIf[RuntimeException] {
       getCodeStatus(RedemptionCode("CODE"))
     }
   }
 
-  it should "handle an  missing arrtibute code" in {
+  it should "handle an code with invalid corporate id type " in {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
-      case "CODE" => Future.successful(Some(Map("ASDFNQWEOIDNSDKNFNAKNDAKNSKANSDKNASDAKSND" -> DynamoBoolean(true))))
+      case "CODE" => Future.successful(Some(Map(
+        "available" -> DynamoBoolean(true),
+        "corporateId" -> DynamoBoolean(false)
+      )))
+    }
+    recoverToSucceededIf[RuntimeException] {
+      getCodeStatus(RedemptionCode("CODE"))
+    }
+  }
+
+  it should "handle a missing attribute code - available" in {
+    val getCodeStatus = GetCodeStatus.withDynamoLookup {
+      case "CODE" => Future.successful(Some(Map(
+        "ASDFNQWEOIDNSDKNFNAKNDAKNSKANSDKNASDAKSND" -> DynamoBoolean(true),
+        "corporateId" -> DynamoString("1")
+      )))
+    }
+    recoverToSucceededIf[RuntimeException] {
+      getCodeStatus(RedemptionCode("CODE"))
+    }
+  }
+
+  it should "handle a missing attribute code - corporate id" in {
+    val getCodeStatus = GetCodeStatus.withDynamoLookup {
+      case "CODE" => Future.successful(Some(Map(
+        "ASDFNQWEOIDNSDKNFNAKNDAKNSKANSDKNASDAKSND" -> DynamoString("1"),
+        "available" -> DynamoBoolean(true)
+      )))
     }
     recoverToSucceededIf[RuntimeException] {
       getCodeStatus(RedemptionCode("CODE"))

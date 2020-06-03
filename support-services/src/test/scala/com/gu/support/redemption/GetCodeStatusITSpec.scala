@@ -14,7 +14,7 @@ class GetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
 
   "getCodeStatus" should "handle an available code" in {
     getCodeStatus(RedemptionCode("ITTEST-AVAILABLE")).map {
-      _ should be(Right(()))
+      _ should be(Right("1"))
     }
   }
 

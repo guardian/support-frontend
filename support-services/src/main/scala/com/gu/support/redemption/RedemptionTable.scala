@@ -17,6 +17,10 @@ object RedemptionTable {
   }
   sealed abstract class AvailableField(val encoded: Boolean)
 
+  object CorporateIdField {
+    val name = "corporateId"
+  }
+
   def forEnvAsync(env: TouchPointEnvironment)(implicit e: ExecutionContext): DynamoTableAsync =
     DynamoTableAsync(s"redemption-codes-${env.envValue}-PROD", primaryKey)
 
