@@ -4,37 +4,52 @@
 import React, { Component } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 import './contributionTicker.scss';
-import type { TickerType } from 'helpers/campaigns';
 
 // ---- Types ----- //
-type StateTypes = {|
-  count: number,
+type DataFromServer = {|
+  total: number,
   goal: number,
 |}
 
-type PropTypes = {|
-  // URL to fetch ticker JSON from
-  tickerJsonUrl: string,
-  onGoalReached: () => void,
-  tickerType: TickerType,
-  currencySymbol: string,
+type StateTypes = {|
+  count: number,
+  goal: number,
+  dataFromServer: DataFromServer | null,
+  goalReached: boolean,
 |}
 
-type DataFromServer = {|
-  totalContributed: number | null,
-  goal: number | null,
+export type TickerEndType = 'unlimited' | 'hardstop';
+export type TickerCountType = 'money' | 'people';
+
+type TickerCopy = {
+  countLabel: string,
+  goalReachedPrimary: string,
+  goalReachedSecondary: string,
+}
+
+export type TickerSettings = {
+  goalReachedCopy: React$Element<string> | null,  // If not null, the form will be replaced with this if goal reached
+  tickerCountType: TickerCountType,
+  tickerEndType: TickerEndType,
+  currencySymbol: string,
+  copy: TickerCopy,
+
+}
+
+type PropTypes = TickerSettings & {|
+  onGoalReached: () => void,
 |}
 
 
 // ---- Helpers ----- //
-const getInitialTickerValues = (tickerJsonUrl: string): Promise<DataFromServer> =>
-  fetch(tickerJsonUrl)
+const getInitialTickerValues = (tickerCountType: TickerCountType): Promise<DataFromServer> =>
+  fetch(tickerCountType === 'money' ? '/ticker.json' : '/supporters-ticker.json')
     .then(resp => resp.json())
     .then((data) => {
-      const totalContributed = parseInt(data.total, 10);
+      const total = parseInt(data.total, 10);
       const goal = parseInt(data.goal, 10);
 
-      return { totalContributed, goal };
+      return { total, goal };
     });
 
 /* *************************************************************
@@ -60,27 +75,19 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
   constructor(props: PropTypes) {
     super(props);
 
-    this.tickerJsonUrl = props.tickerJsonUrl;
-    this.onGoalReached = props.onGoalReached;
-    this.tickerType = props.tickerType;
-    this.classModifiers = [this.tickerType];
     this.increaseTextCounter = this.increaseTextCounter.bind(this);
-    this.goalReached = false;
-
-    this.dataFromServer = {
-      totalContributed: null,
-      goal: null,
-    };
 
     this.state = {
       count: 0,
       goal: 0,
+      dataFromServer: null,
+      goalReached: false,
     };
 
   }
 
   componentDidMount(): void {
-    getInitialTickerValues(this.tickerJsonUrl).then(({ totalContributed, goal }) => {
+    getInitialTickerValues(this.props.tickerCountType).then(({ total, goal }) => {
       /* ***************************************************************
       Starting the initial count at 80% of its total instead of 0
       affects the increaseTextCounter animation by making it shorter &
@@ -90,76 +97,73 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
       number going up as if in real time without taking a big performance
       hit or making the user bored
       ***************************************************************** */
-      const initialCount = totalContributed ? totalContributed * 0.8 : 0;
+      const initialCount = total ? total * 0.8 : 0;
 
-      if (totalContributed && goal && totalContributed >= goal) {
-        this.onGoalReached();
-        this.classModifiers.push('goal-reached');
-        this.goalReached = true;
+      const goalReached = total && goal && total >= goal;
+
+      if (goalReached) {
+        this.props.onGoalReached();
       }
+
+      const dataFromServer = {
+        total,
+        goal,
+      };
 
       this.setState({
         goal: goal || 0,
         count: initialCount || 0,
+        dataFromServer,
+        goalReached: goalReached,
       });
 
-      this.dataFromServer = {
-        totalContributed,
-        goal,
-      };
-
       // Only run the number animation if the goal hasn't been reached yet
-      if (totalContributed && goal && totalContributed < goal) {
-        window.requestAnimationFrame(this.increaseTextCounter);
+      if (!goalReached) {
+        window.requestAnimationFrame(this.increaseTextCounter(dataFromServer).bind(this));
       }
     });
   }
 
-  onGoalReached: () => void;
-  tickerJsonUrl: string;
-  tickerType: TickerType;
-  classModifiers: Array<?string>;
-  goalReached: boolean;
-  dataFromServer: DataFromServer;
-
-  increaseTextCounter = () => {
+  increaseTextCounter = (dataFromServer: DataFromServer) => () => {
     const nextCount = this.state.count + Math.floor(this.state.count / 100);
 
-    const finishedCounting = this.dataFromServer.totalContributed &&
+    const finishedCounting =
       (nextCount <= this.state.count || // count isn't going up because total is too small
-      nextCount >= this.dataFromServer.totalContributed);
-
+      nextCount >= dataFromServer.total);
+    // debugger
     if (finishedCounting) {
-      this.setState({ count: this.dataFromServer.totalContributed || 0 });
+      this.setState({ count: dataFromServer.total });
     } else {
       this.setState({ count: nextCount });
-      window.requestAnimationFrame(this.increaseTextCounter);
+      window.requestAnimationFrame(this.increaseTextCounter(dataFromServer));
     }
   };
 
   renderContributedSoFar = () => {
-    if (!this.goalReached) {
+    if (!this.state.goalReached) {
       return (
         <div className="contributions-landing-ticker__so-far">
-          <div className="contributions-landing-ticker__count">{this.props.currencySymbol}{Math.floor(this.state.count).toLocaleString()}</div>
-          <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">contributed</div>
+          <div className="contributions-landing-ticker__count">
+            {this.props.tickerCountType === 'money' ? this.props.currencySymbol : ''}{Math.floor(this.state.count).toLocaleString()}
+          </div>
+          <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">{this.props.copy.countLabel}</div>
         </div>
       );
     }
 
-    if (this.goalReached && this.tickerType === 'unlimited') {
+    if (this.state.goalReached && this.props.tickerEndType === 'unlimited') {
       return (
         <div className="contributions-landing-ticker__so-far">
-          <div className="contributions-landing-ticker__count">We&#39;ve met our goal &mdash; thank you</div>
-          <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">Contributions are still being accepted</div>
+          <div className="contributions-landing-ticker__count">{this.props.copy.goalReachedPrimary}</div>
+          <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">{this.props.copy.goalReachedSecondary}</div>
         </div>
       );
     }
 
-    if (this.goalReached && this.tickerType === 'hardstop') {
+    if (this.state.goalReached && this.props.tickerEndType === 'hardstop') {
       return (
         <div className="contributions-landing-ticker__so-far">
-          <div className="contributions-landing-ticker__count">We&#39;ve met our goal &mdash; thank you</div>
+          <div className="contributions-landing-ticker__count">{this.props.copy.goalReachedPrimary}</div>
         </div>
       );
     }
@@ -168,10 +172,10 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
   }
 
   render() {
-    const goal = this.dataFromServer.goal || 0;
-    const total = this.dataFromServer.totalContributed || 0;
+    const goal = this.state.dataFromServer ? this.state.dataFromServer.goal : 0;
+    const total = this.state.dataFromServer ? this.state.dataFromServer.total : 0;
     // If we've exceeded the goal then extend the bar 15% beyond the total
-    const end = this.tickerType === 'unlimited' && total > goal ? total + (total * 0.15) : goal;
+    const end = this.props.tickerEndType === 'unlimited' && total > goal ? total + (total * 0.15) : goal;
 
     /* *************************************************************
       `translate3d` is preferred to `translateX` because it uses the
@@ -187,21 +191,29 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
     const progressBarAnimation = `translate3d(${percentageToTranslate(total, end)}%, 0, 0)`;
     const markerAnimation = `translate3d(${((goal / end) * 100) - 100}%, 0, 0)`;
 
-    const readyToRender = (this.state && !Number.isNaN(this.state.count) && this.state.count > -1);
-    const allClassModifiers = readyToRender ? this.classModifiers : [...this.classModifiers, 'hidden'];
-    const baseClassName = 'contributions-landing-ticker';
-    const wrapperClassName = classNameWithModifiers(baseClassName, allClassModifiers);
+    const readyToRender = (!Number.isNaN(this.state.count) && this.state.count > -1);
 
-    const goalValue = (this.tickerType === 'unlimited' && total > goal) ? total : this.state.goal;
+    const classModifiers = [
+      this.props.tickerEndType,
+      this.state.goalReached ? 'goal-reached' : '',
+      !readyToRender ? 'hidden' : ''
+    ];
+
+    const baseClassName = 'contributions-landing-ticker';
+    const wrapperClassName = classNameWithModifiers(baseClassName, classModifiers);
+
+    const goalValue = (this.props.tickerEndType === 'unlimited' && total > goal) ? total : this.state.goal;
 
     return (
       <div className={wrapperClassName}>
         <div className="contributions-landing-ticker__values">
           {this.renderContributedSoFar()}
           <div className="contributions-landing-ticker__goal">
-            <div className="contributions-landing-ticker__count">{this.props.currencySymbol}{Math.floor(goalValue).toLocaleString()}</div>
+            <div className="contributions-landing-ticker__count">
+              {this.props.tickerCountType === 'money' ? this.props.currencySymbol : ''}{Math.floor(goalValue).toLocaleString()}
+            </div>
             <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">
-              { (this.tickerType === 'unlimited' && total > goal) ? 'contributed' : 'our goal' }
+              { (this.props.tickerEndType === 'unlimited' && total > goal) ? this.props.copy.countLabel : 'our goal' }
             </div>
           </div>
         </div>

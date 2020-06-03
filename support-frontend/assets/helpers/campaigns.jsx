@@ -1,15 +1,8 @@
 // @flow
 
 import type { ContributionTypes } from 'helpers/contributions';
-
-export type TickerType = 'unlimited' | 'hardstop';
-
-export type TickerSettings = {
-  goalReachedCopy: React$Element<string> | null,
-  tickerJsonUrl: string,
-  tickerType: TickerType,
-  localCurrencySymbol: string
-}
+import type { TickerSettings } from 'components/ticker/contributionTicker';
+import type {TickerCountType, TickerEndType} from "assets/components/ticker/contributionTicker";
 
 export type CampaignSettings = {
   headerCopy?: string | React$Element<string>,
@@ -27,9 +20,23 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = null;
+const currentCampaignName = 'au/contribute';
 
-export const campaigns: Campaigns = {};
+export const campaigns: Campaigns = {
+  //TODO - the rest of the campaign settings
+  [currentCampaignName]: {
+    tickerSettings: {
+      tickerCountType: 'people',
+      tickerEndType: 'unlimited',
+      currencySymbol: '£',
+      copy: {
+        countLabel: 'supporters in Australia',
+        goalReachedPrimary: 'You can still support us today',
+        goalReachedSecondary: `thank you - we're over our goal`,
+      },
+    }
+  }
+};
 
 export type CampaignName = $Keys<typeof campaigns>
 
