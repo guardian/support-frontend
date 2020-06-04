@@ -20,7 +20,6 @@ import views.html.subscriptionRedemptionForm
 import cats.implicits._
 import lib.RedirectWithEncodedQueryString
 import play.twirl.api.Html
-import views.ViewHelpers.outputJson
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -70,16 +69,15 @@ class RedemptionController(
 
   def displayThankYou(stage: String): Action[AnyContent] = authenticatedAction(subscriptionsClientId) {
     implicit request =>
-          Ok(views.html.main(
-            title = title,
-            mainElement = id,
-            mainJsBundle = Left(RefPath(js)),
-            mainStyleBundle = Left(RefPath(css)),
-            fontLoaderBundle = fontLoaderBundle,
-          ){
-            Html(s"""<script type="text/javascript">window.guardian.stage = "${stage}";</script>""")
-          }
-      )
+      Ok(views.html.main(
+        title = title,
+        mainElement = id,
+        mainJsBundle = Left(RefPath(js)),
+        mainStyleBundle = Left(RefPath(css)),
+        fontLoaderBundle = fontLoaderBundle
+      ) {
+        Html(s"""<script type="text/javascript">window.guardian.stage = "${stage}";</script>""")
+      })
   }
 
   def displayProcessing(redemptionCode: String): Action[AnyContent] =
@@ -101,7 +99,8 @@ class RedemptionController(
   def showProcessing(
     redemptionCode: RedemptionCode,
     corporateCustomer: CorporateCustomer,
-    user: IdUser)(implicit request: AuthRequest[Any]): Result = {
+    user: IdUser
+  )(implicit request: AuthRequest[Any]): Result = {
     val csrf = CSRF.getToken.value
     val testUser = testUsers.isTestUser(user.publicFields.displayName)
 
