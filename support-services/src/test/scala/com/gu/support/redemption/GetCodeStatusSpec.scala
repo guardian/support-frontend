@@ -1,7 +1,7 @@
 package com.gu.support.redemption
 
 import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
-import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, NoSuchCode}
+import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, CorporateId, NoSuchCode}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -17,7 +17,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     getCodeStatus(RedemptionCode("CODE")).map {
-      _ should be(Right("1"))
+      _ should be(Right(CorporateId("1")))
     }
   }
 

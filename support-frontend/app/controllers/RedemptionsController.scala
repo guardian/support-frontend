@@ -3,7 +3,6 @@ package controllers
 import actions.CustomActionBuilders
 import com.gu.support.config.{Stage, TouchPointEnvironments}
 import com.gu.support.redemption.{GetCodeStatus, RedemptionCode, RedemptionTable}
-import com.gu.support.workers.redemption.CorporateAccountId
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -25,11 +24,11 @@ class RedemptionsController(
 
     val codeToCheck = RedemptionCode(redemptionCode)
 
-    val status: Future[Either[GetCodeStatus.RedemptionInvalid, CorporateAccountId]] = getCodeStatus(codeToCheck)
+    val status: Future[Either[GetCodeStatus.RedemptionInvalid, _]] = getCodeStatus(codeToCheck)
 
     status.map {
       case Left(reason) => NotFound(reason.clientCode)
-      case Right(_: CorporateAccountId) => Ok("")
+      case Right(_) => Ok("")
     }
   }
 

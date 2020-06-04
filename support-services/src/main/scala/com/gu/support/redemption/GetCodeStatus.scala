@@ -1,12 +1,13 @@
 package com.gu.support.redemption
 
 import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
-import com.gu.support.workers.redemption.CorporateAccountId
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 object GetCodeStatus {
+
+  case class CorporateId(corporateIdString: String) extends AnyVal
 
   sealed abstract class RedemptionInvalid(val clientCode: String)
   case object NoSuchCode extends RedemptionInvalid("NO_SUCH_CODE")
@@ -21,11 +22,11 @@ object GetCodeStatus {
       }
     } yield RedemptionTable.AvailableField.decoded(available)
 
-  private def corporateFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, CorporateAccountId] =
+  private def corporateFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, CorporateId] =
     for {
       attributeValue <- attrs.get(RedemptionTable.CorporateIdField.name).toRight(s"no field '${RedemptionTable.CorporateIdField.name}' in: $attrs")
       corporateId <- attributeValue match {
-        case DynamoString(bool) => Right(bool)
+        case DynamoString(corporateIdString) => Right(CorporateId(corporateIdString))
         case _ => Left(s"field '${RedemptionTable.CorporateIdField.name}' wasn't a string: $attributeValue")
       }
     } yield corporateId
@@ -38,7 +39,7 @@ class GetCodeStatus(dynamoLookup: DynamoLookup) extends WithLogging {
 
   import GetCodeStatus._
 
-  def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[Either[RedemptionInvalid, CorporateAccountId]] =
+  def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[Either[RedemptionInvalid, CorporateId]] =
     (for {
       maybeAttributes <- dynamoLookup.lookup(code.value)
       status <- FlattenErrors(maybeAttributes.map { attributes =>
