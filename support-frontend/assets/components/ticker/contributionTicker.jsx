@@ -128,7 +128,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
     const finishedCounting =
       (nextCount <= this.state.count || // count isn't going up because total is too small
       nextCount >= dataFromServer.total);
-    // debugger
+
     if (finishedCounting) {
       this.setState({ count: dataFromServer.total });
     } else {
