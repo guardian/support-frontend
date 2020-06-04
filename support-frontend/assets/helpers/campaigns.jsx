@@ -25,18 +25,18 @@ const currentCampaignName = null;
 
 export const campaigns: Campaigns = {
   // TODO - the rest of the campaign settings
-  [currentCampaignName]: {
-    tickerSettings: {
-      tickerCountType: 'people',
-      tickerEndType: 'unlimited',
-      currencySymbol: '£',
-      copy: {
-        countLabel: 'supporters in Australia',
-        goalReachedPrimary: 'We\'ve hit our goal!',
-        goalReachedSecondary: 'but you can still support us',
-      },
-    },
-  },
+  // [currentCampaignName]: {
+  //   tickerSettings: {
+  //     tickerCountType: 'people',
+  //     tickerEndType: 'unlimited',
+  //     currencySymbol: '£',
+  //     copy: {
+  //       countLabel: 'supporters in Australia',
+  //       goalReachedPrimary: 'We\'ve hit our goal!',
+  //       goalReachedSecondary: 'but you can still support us',
+  //     },
+  //   },
+  // },
 };
 
 export type CampaignName = $Keys<typeof campaigns>
