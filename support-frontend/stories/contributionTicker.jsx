@@ -23,7 +23,7 @@ stories.add('Contribution ticker', () => (
       currencySymbol="£"
       copy={{
         countLabel: 'supporters in Australia',
-        goalReachedPrimary: 'We\'ve hit our goal',
+        goalReachedPrimary: 'We\'ve hit our goal!',
         goalReachedSecondary: 'but you can still support us',
       }}
     />

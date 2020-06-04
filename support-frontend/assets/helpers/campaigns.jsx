@@ -31,8 +31,8 @@ export const campaigns: Campaigns = {
       currencySymbol: '£',
       copy: {
         countLabel: 'supporters in Australia',
-        goalReachedPrimary: 'You can still support us today',
-        goalReachedSecondary: 'thank you - we\'re over our goal',
+        goalReachedPrimary: 'We\'ve hit our goal!',
+        goalReachedSecondary: 'but you can still support us',
       },
     },
   },
