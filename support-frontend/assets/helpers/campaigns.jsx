@@ -20,7 +20,8 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = 'au/contribute';
+const currentCampaignName = null;
+// const currentCampaignName = 'au/contribute';
 
 export const campaigns: Campaigns = {
   // TODO - the rest of the campaign settings
