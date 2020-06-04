@@ -109,9 +109,12 @@ GET  /uk/subscribe/paper/delivery                                  controllers.P
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscription.displayForm()
 
 # redemptions
-GET  /subscribe/redeem/:redemptionCode                             controllers.RedemptionController.displayForm(redemptionCode: String)
+GET  /subscribe/redeem/welcome/:redemptionCode                     controllers.RedemptionController.displayForm(redemptionCode: String)
 GET  /subscribe/redeem/create/:redemptionCode                      controllers.RedemptionController.displayProcessing(redemptionCode: String)
 GET  /subscribe/redeem/validate/:redemptionCode                    controllers.RedemptionController.validateCode(redemptionCode: String)
+GET  /subscribe/redeem/thankyou                                    controllers.RedemptionController.displayThankYou(stage = "thankyou")
+GET  /subscribe/redeem/thankyou-pending                            controllers.RedemptionController.displayThankYou(stage = "thankyou-pending")
+GET  /r/:redemptionCode                                            controllers.RedemptionController.redirect(redemptionCode: String)
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
 

@@ -18,6 +18,10 @@ import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionRedemptionForm
 import cats.implicits._
+import lib.RedirectWithEncodedQueryString
+import play.twirl.api.Html
+import views.ViewHelpers.outputJson
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class RedemptionController(
@@ -47,21 +51,35 @@ class RedemptionController(
       getCorporateCustomer(redemptionCode).value.map(
         customerOrError =>
           Ok(subscriptionRedemptionForm(
-            title,
-            id,
-            js,
-            css,
-            fontLoaderBundle,
-            None,
+            title = title,
+            mainElement = id,
+            js = js,
+            css = css,
+            fontLoaderBundle = fontLoaderBundle,
+            csrf = None,
             uatMode = false,
-            "checkout",
-            redemptionCode,
-            customerOrError,
-            None,
+            stage = "checkout",
+            redemptionCode = redemptionCode,
+            customerOrError = customerOrError,
+            user = None,
             submitted = false
           ))
       )
 
+  }
+
+  def displayThankYou(stage: String): Action[AnyContent] = authenticatedAction(subscriptionsClientId) {
+    implicit request =>
+          Ok(views.html.main(
+            title = title,
+            mainElement = id,
+            mainJsBundle = Left(RefPath(js)),
+            mainStyleBundle = Left(RefPath(css)),
+            fontLoaderBundle = fontLoaderBundle,
+          ){
+            Html(s"""<script type="text/javascript">window.guardian.stage = "${stage}";</script>""")
+          }
+      )
   }
 
   def displayProcessing(redemptionCode: String): Action[AnyContent] =
@@ -88,17 +106,17 @@ class RedemptionController(
     val testUser = testUsers.isTestUser(user.publicFields.displayName)
 
     Ok(subscriptionRedemptionForm(
-      title,
-      id,
-      js,
-      css,
-      fontLoaderBundle,
-      Some(csrf),
+      title = title,
+      mainElement = id,
+      js = js,
+      css = css,
+      fontLoaderBundle = fontLoaderBundle,
+      csrf = Some(csrf),
       uatMode = testUser,
-      "processing",
-      redemptionCode,
-      Right(corporateCustomer),
-      Some(user),
+      stage = "processing",
+      redemptionCode = redemptionCode,
+      customerOrError = Right(corporateCustomer),
+      user = Some(user),
       submitted = true
     ))
   }
@@ -109,6 +127,10 @@ class RedemptionController(
         errorString => Ok(RedemptionValidationResult(valid = false, Some(errorString)).asJson),
         customer => Ok(RedemptionValidationResult(valid = true, None).asJson)
       ))
+  }
+
+  def redirect(redemptionCode: RedemptionCode): Action[AnyContent] = CachedAction() { implicit request =>
+    RedirectWithEncodedQueryString(routes.RedemptionController.displayForm(redemptionCode).url, request.queryString, status = MOVED_PERMANENTLY)
   }
 }
 

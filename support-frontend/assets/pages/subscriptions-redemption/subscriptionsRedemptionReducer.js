@@ -37,8 +37,6 @@ export type RedemptionPageState = {
 export type Action =
   | { type: 'SET_USER_CODE', userCode: string }
   | { type: 'SET_ERROR', error: Option<string> }
-  | { type: 'SET_CORPORATE_CUSTOMER', corporateCustomer: CorporateCustomer }
-  | { type: 'SET_STAGE', stage: Stage }
 
 const initialState: RedemptionFormState = {
   corporateCustomer: getGlobal('corporateCustomer'),
@@ -59,10 +57,6 @@ const redemptionFormReducer = (
       return { ...previousState, userCode: action.userCode };
     case 'SET_ERROR':
       return { ...previousState, error: action.error };
-    case 'SET_CORPORATE_CUSTOMER':
-      return { ...previousState, corporateCustomer: action.corporateCustomer };
-    case 'SET_STAGE':
-      return { ...previousState, stage: action.stage };
     default:
       return previousState;
   }
