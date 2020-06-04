@@ -14,12 +14,17 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
-import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
+// ----- Types ----- //
+
+type PropTypes = {
+  countryGroupId: CountryGroupId,
+  marketingConsent: React.Node,
+};
 
 // ----- Component ----- //
 
-function ThankYouPendingContent(props: {countryGroupId: CountryGroupId, marketingConsent: React.Node }) {
+function ThankYouPendingContent(props: PropTypes) {
 
   return (
     <div className="thank-you-stage">

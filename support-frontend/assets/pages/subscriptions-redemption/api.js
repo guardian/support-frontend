@@ -1,6 +1,5 @@
 // @flow
 
-import { getOrigin } from 'helpers/url';
 import { fetchJson } from 'helpers/fetch';
 import type { Action, CorporateCustomer, Stage } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { type Dispatch } from 'redux';
@@ -8,7 +7,7 @@ import type { Option } from 'helpers/types/option';
 import type { PaymentResult, RegularPaymentRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { postRegularPaymentRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
+import { getOphanIds, getReferrerAcquisitionData, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { routes } from 'helpers/routes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Monthly } from 'helpers/billingPeriods';
@@ -16,6 +15,7 @@ import { Corporate } from 'helpers/productPrice/productOptions';
 import type { User } from 'helpers/subscriptionsForms/user';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { getOrigin } from 'helpers/url';
 
 type ValidationResult = {
   valid: boolean,
@@ -24,7 +24,7 @@ type ValidationResult = {
 
 function validate(userCode: string) {
   const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}`;
-  return fetchJson(validationUrl, {}); // TODO: CSRF?
+  return fetchJson(validationUrl, {});
 }
 
 function doValidation(userCode: string, dispatch: Dispatch<Action>) {
@@ -98,15 +98,7 @@ function buildRegularPaymentRequest(
       corporateAccountId: corporateCustomer.accountId,
     },
     ophanIds: getOphanIds(),
-    referrerAcquisitionData: {
-      abTests: null,
-      campaignCode: null,
-      componentId: null,
-      componentType: null,
-      queryParameters: null, // TODO: probably need this?
-      referrerPageviewId: null,
-      source: null,
-    },
+    referrerAcquisitionData: getReferrerAcquisitionData(),
     supportAbTests: getSupportAbTests(participations),
   };
 }

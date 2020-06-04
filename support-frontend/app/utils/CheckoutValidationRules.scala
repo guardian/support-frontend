@@ -85,7 +85,7 @@ object AddressAndCurrencyValidationRules {
 
 }
 
-object DigitalPackValidation extends LazyLogging {
+object DigitalPackValidation {
 
   import AddressAndCurrencyValidationRules._
 
