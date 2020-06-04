@@ -1,7 +1,7 @@
 // @flow
 
 import { fetchJson } from 'helpers/fetch';
-import type { Action, CorporateCustomer, Stage } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type { Action, CorporateCustomer } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { type Dispatch } from 'redux';
 import type { Option } from 'helpers/types/option';
 import type { PaymentResult, RegularPaymentRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -103,8 +103,6 @@ function buildRegularPaymentRequest(
   };
 }
 
-const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-
 function createSubscription(
   corporateCustomer: CorporateCustomer,
   user: User,
@@ -112,16 +110,17 @@ function createSubscription(
   countryId: IsoCountry,
   participations: Participations,
   csrf: Csrf,
-  dispatch: Dispatch<Action>,
 ) {
   const data = buildRegularPaymentRequest(corporateCustomer, user, currencyId, countryId, participations);
 
   const handleSubscribeResult = (result: PaymentResult) => {
     if (result.paymentStatus === 'success') {
       if (result.subscriptionCreationPending) {
-        dispatch(setStage('thankyou-pending'));
+        const thankyouUrl = `${getOrigin()}/subscribe/redeem/thankyou-pending`;
+        window.location.replace(thankyouUrl);
       } else {
-        dispatch(setStage('thankyou'));
+        const thankyouUrl = `${getOrigin()}/subscribe/redeem/thankyou`;
+        window.location.replace(thankyouUrl);
       }
     } // else { dispatch(setSubmissionError(result.error)); } // TODO: deal with this
   };
