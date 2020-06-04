@@ -59,7 +59,7 @@ function ThankYouContent(props: PropTypes) {
         </Text>
         <AppsSection countryGroupId={props.countryGroupId} />
       </Content>
-      <SubscriptionsSurvey product={props.product} />
+      <SubscriptionsSurvey product={DigitalPack} />
       <Content>
         <MarketingConsent render={({ title, message }) => (
           <Text title={title}>{message}</Text>
