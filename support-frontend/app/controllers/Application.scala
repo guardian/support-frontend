@@ -153,6 +153,9 @@ class Application(
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
 
+    val shareImageUrl =
+      "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
+
     val mainElement = assets.getSsrCacheContentsAsHtml(
       divId = s"contributions-landing-page-$countryCode",
       file = "contributions-landing.html",
@@ -183,7 +186,7 @@ class Application(
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
       geoData = geoData,
-      shareImageUrl = "https://media.guim.co.uk/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png",
+      shareImageUrl = shareImageUrl,
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey
     )
