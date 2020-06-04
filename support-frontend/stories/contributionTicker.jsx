@@ -6,7 +6,7 @@ import { storiesOf } from '@storybook/react';
 
 
 import ContributionTicker from 'components/ticker/contributionTicker';
-import { text, withKnobs } from '@storybook/addon-knobs/src/index';
+import { withKnobs } from '@storybook/addon-knobs/src/index';
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
 
