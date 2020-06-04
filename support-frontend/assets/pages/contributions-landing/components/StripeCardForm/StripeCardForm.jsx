@@ -138,8 +138,14 @@ const fieldStyleDS = {
 
 const renderVerificationCopy = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
+  return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
+};
+
+const renderVerificationCopyDs = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
+  trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
   return (<InlineError>Please tick to verify you&apos;re a human</InlineError>);
 };
+
 
 const errorMessageFromState = (state: CardFieldState): string | null =>
   (state.name === 'Error' ? state.errorMessage : null);
@@ -600,7 +606,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             {
               this.props.checkoutFormHasBeenSubmitted
               && !recaptchaVerified ?
-                renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
+                renderVerificationCopyDs(this.props.countryGroupId, this.props.contributionType) : null
             }
             <Recaptcha />
           </div>
