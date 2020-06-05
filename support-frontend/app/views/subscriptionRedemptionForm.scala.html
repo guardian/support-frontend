@@ -10,22 +10,22 @@
 
 @import io.circe.Json
 @(
-        title: String,
-        mainElement: ReactDiv,
-        js: String,
-        css: String,
-        fontLoaderBundle: Either[RefPath, StyleContent],
-        csrf: Option[String],
-        uatMode: Boolean,
-        stage: String,
-        redemptionCode: RedemptionCode,
-        customerOrError: Either[String, CorporateCustomer],
-        user: Option[IdUser],
-        submitted: Boolean,
+  title: String,
+  mainElement: ReactDiv,
+  js: String,
+  css: String,
+  fontLoaderBundle: Either[RefPath, StyleContent],
+  csrf: Option[String],
+  uatMode: Boolean,
+  stage: String,
+  redemptionCode: RedemptionCode,
+  customerOrError: Either[String, CorporateCustomer],
+  user: Option[IdUser],
+  submitted: Boolean
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
-@main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
-  <script type="text/javascript">
+  @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
+    <script type="text/javascript">
       window.guardian = window.guardian || {};
       window.guardian.stage = "@stage";
       window.guardian.userCode = "@redemptionCode";
@@ -39,5 +39,5 @@
       };
   </script>
 
-}
+  }
 
