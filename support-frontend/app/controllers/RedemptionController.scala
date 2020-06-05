@@ -18,6 +18,8 @@ import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionRedemptionForm
 import cats.implicits._
+import com.gu.monitoring.SafeLogger
+import SafeLogger._
 import lib.RedirectWithEncodedQueryString
 import play.twirl.api.Html
 
@@ -80,6 +82,24 @@ class RedemptionController(
       })
   }
 
+  def displayError(redemptionCode: RedemptionCode, error: String)(implicit request: AuthRequest[Any]): Result = {
+    SafeLogger.error(scrub"An error occurred while trying to process redemption code - ${redemptionCode}. Error was - ${error}")
+    Ok(subscriptionRedemptionForm(
+      title = title,
+      mainElement = id,
+      js = js,
+      css = css,
+      fontLoaderBundle = fontLoaderBundle,
+      csrf = None,
+      uatMode = false,
+      stage = "checkout",
+      redemptionCode = redemptionCode,
+      Left("Unfortunately we were unable to process your code, please try again later"),
+      user = None,
+      submitted = false
+    ))
+  }
+
   def displayProcessing(redemptionCode: String): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async {
       implicit request: AuthRequest[Any] =>
@@ -90,7 +110,7 @@ class RedemptionController(
 
         processingPage.value.map(
           _.fold(
-            BadRequest(_),
+            error => displayError(redemptionCode, error),
             result => result
           )
         )
