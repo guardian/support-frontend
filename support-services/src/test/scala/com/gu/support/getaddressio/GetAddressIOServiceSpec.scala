@@ -12,7 +12,7 @@ import org.scalatest.matchers.should.Matchers
 class GetAddressIOServiceSpec extends AsyncFlatSpec with Matchers {
   val service = new GetAddressIOService(GetAddressIOConfig.fromConfig(ConfigFactory.load()), RequestRunners.futureRunner)
   //This test is ignored because the test key is only valid for a few requests a day
-  "GetAddressService" should "be able to find a postcode" ignore {
+  "GetAddressService" should "be able to find a postcode" in {
     service.find("N19GU").map {
       result =>
         result.nonEmpty shouldBe true
@@ -24,7 +24,10 @@ class GetAddressIOServiceSpec extends AsyncFlatSpec with Matchers {
         address.state shouldBe  None
         address.country shouldBe Country.UK
     }
+  }
 
+  //This test is ignored because the test key is only valid for a few requests a day
+  it should "be able to find another postcode" in {
     service.find("NN13ER").map {
       result => result.head.state shouldBe Some("Northamptonshire")
     }
