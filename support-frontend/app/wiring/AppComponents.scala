@@ -64,6 +64,7 @@ trait AppComponents extends PlayComponents
     payPalOneOffController,
     directDebitController,
     promotionsController,
+    redemptionsController,
     assetController,
     faviconController
   )

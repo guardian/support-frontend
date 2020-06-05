@@ -55,6 +55,7 @@ assemblyMergeStrategy in assembly := {
   case PathList("models", xs@_*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
+  case "mime.types" => MergeStrategy.first
   case y =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(y)

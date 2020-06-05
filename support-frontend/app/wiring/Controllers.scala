@@ -216,4 +216,10 @@ trait Controllers {
     appConfig.stage
   )
 
+  lazy val redemptionsController = new RedemptionsController(
+    actionRefiners,
+    controllerComponents,
+    appConfig.stage
+  )
+
 }
