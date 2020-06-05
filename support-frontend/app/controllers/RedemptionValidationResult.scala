@@ -2,9 +2,9 @@ package controllers
 
 case class RedemptionValidationResult(valid: Boolean, errorMessage: Option[String])
 
-import com.gu.support.encoding.Codec
-import com.gu.support.encoding.Codec._
+import io.circe.Encoder
+import io.circe.generic.semiauto.deriveEncoder
 
 object RedemptionValidationResult {
-  implicit val codec: Codec[RedemptionValidationResult] = deriveCodec
+  implicit val encoder: Encoder[RedemptionValidationResult] = deriveEncoder
 }
