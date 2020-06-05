@@ -2,20 +2,24 @@ package com.gu.zuora
 
 import java.util.UUID
 
+import cats.data.EitherT
+import cats.implicits._
 import com.gu.i18n.Country
 import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.fromStage
 import com.gu.support.config.{Stage, ZuoraConfig}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
+import com.gu.support.redemption.{GetCodeStatus, RedemptionCode}
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
-import com.gu.support.workers.redemption.RedemptionData
+import com.gu.support.workers.redemption.{CorporateRedemption, RedemptionData}
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 object ProductSubscriptionBuilders {
@@ -26,23 +30,22 @@ object ProductSubscriptionBuilders {
       case None => throw new CatalogDataNotFoundException(s"RatePlanId not found for $productDescription")
     }
 
-  implicit class ContributionSubscriptionBuilder(val contribution: Contribution) extends ProductSubscriptionBuilder {
-    def build(requestId: UUID, config: ZuoraConfig): SubscriptionData = {
-      val contributionConfig = config.contributionConfig(contribution.billingPeriod)
-      buildProductSubscription(
-        requestId,
-        contributionConfig.productRatePlanId,
-        List(
-          RatePlanChargeData(
-            ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = contribution.amount) //Pass the amount the user selected into Zuora
-          )
+  def buildContributionSubscription(contribution: Contribution, requestId: UUID, config: ZuoraConfig): SubscriptionData = {
+    val contributionConfig = config.contributionConfig(contribution.billingPeriod)
+    buildProductSubscription(
+      requestId,
+      contributionConfig.productRatePlanId,
+      List(
+        RatePlanChargeData(
+          ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = contribution.amount) //Pass the amount the user selected into Zuora
         )
       )
-    }
+    )
   }
 
-  implicit class DigitalPackSubscriptionBuilder(val digitalPack: DigitalPack) extends ProductSubscriptionBuilder {
-    def build(
+  object buildDigitalPackSubscription {
+    def apply(
+      digitalPack: DigitalPack,
       requestId: UUID,
       config: ZuoraConfig,
       country: Country,
@@ -50,8 +53,9 @@ object ProductSubscriptionBuilders {
       paymentMethod: Either[PaymentMethod, RedemptionData],
       promotionService: PromotionService,
       stage: Stage,
-      isTestUser: Boolean
-    ): Either[PromoError, SubscriptionData] = {
+      isTestUser: Boolean,
+      getCodeStatus: GetCodeStatus
+    )(implicit ec: ExecutionContext): EitherT[Future, String, SubscriptionData] = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
       val contractAcceptanceDate = contractEffectiveDate
@@ -68,53 +72,74 @@ object ProductSubscriptionBuilders {
         contractEffectiveDate = contractEffectiveDate
       )
 
-      val redeemedSub = paymentMethod.fold(
-        _ => subscriptionData.subscription,
-        redemptionData => redemptionData.redeem(subscriptionData.subscription)
-      )
+      for {
+        redeemedSub <-
+          paymentMethod.fold(
+            _ => EitherT.pure[Future, String](subscriptionData.subscription),
+            redemptionData => EitherT(
+              withRedemption(subscriptionData.subscription, redemptionData, getCodeStatus)
+            ).leftMap(_.clientCode)
+          )
+        promodSub <- EitherT.fromEither[Future](
+          applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData.copy(subscription = redeemedSub))
+          .left.map(_.msg)
+        )
 
-      applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData.copy(subscription = redeemedSub))
+      } yield promodSub
     }
 
-    def maybeRedeemCode(maybeRedemptionData: Option[RedemptionData], subscriptionData: SubscriptionData): SubscriptionData = {
-      val redeemedSub = maybeRedemptionData.map(_.redeem(subscriptionData.subscription)).getOrElse(subscriptionData.subscription)
-      subscriptionData.copy(subscription = redeemedSub)
-    }
-  }
-
-  implicit class PaperSubscriptionBuilder(val paper: Paper) extends ProductSubscriptionBuilder {
-    def build(
-      requestId: UUID,
-      country: Country,
-      maybePromoCode: Option[PromoCode],
-      firstDeliveryDate: Option[LocalDate],
-      promotionService: PromotionService,
-      stage: Stage,
-      isTestUser: Boolean
-    ): Either[PromoError, SubscriptionData] = {
-
-      val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
-
-      val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
-        case Success(value) => value
-        case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
+    def withRedemption(
+      subscription: Subscription,
+      redemptionData: RedemptionData,
+      getCodeStatus: GetCodeStatus
+    )(implicit ec: ExecutionContext): Future[Either[GetCodeStatus.RedemptionInvalid, Subscription]] = {
+      val withCode = subscription.copy(redemptionCode = Some(redemptionData.redemptionCode))
+      redemptionData match {
+        case CorporateRedemption(redemptionCode, corporateAccountId) =>
+          getCodeStatus(RedemptionCode(redemptionCode)).map(_.map { corporateId =>
+            withCode.copy(
+              corporateAccountId = Some(corporateId.corporateIdString/*FIXME use the same corporate id type everywhere*/),
+              readerType = ReaderType.Corporate
+            )
+          })
       }
-
-      val productRatePlanId = validateRatePlan(paper.productRatePlan(fromStage(stage, isTestUser), fixedTerm = false), paper.describe)
-
-      val subscriptionData = buildProductSubscription(
-        requestId,
-        productRatePlanId,
-        contractAcceptanceDate = contractAcceptanceDate,
-        contractEffectiveDate = contractEffectiveDate,
-      )
-
-      applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
     }
+
   }
 
-  implicit class GuardianWeeklySubscriptionBuilder(val guardianWeekly: GuardianWeekly) extends ProductSubscriptionBuilder {
-    def build(
+  def buildPaperSubscription(
+    paper: Paper,
+    requestId: UUID,
+    country: Country,
+    maybePromoCode: Option[PromoCode],
+    firstDeliveryDate: Option[LocalDate],
+    promotionService: PromotionService,
+    stage: Stage,
+    isTestUser: Boolean
+  ): Either[PromoError, SubscriptionData] = {
+
+    val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
+
+    val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
+      case Success(value) => value
+      case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
+    }
+
+    val productRatePlanId = validateRatePlan(paper.productRatePlan(fromStage(stage, isTestUser), fixedTerm = false), paper.describe)
+
+    val subscriptionData = buildProductSubscription(
+      requestId,
+      productRatePlanId,
+      contractAcceptanceDate = contractAcceptanceDate,
+      contractEffectiveDate = contractEffectiveDate,
+    )
+
+    applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
+  }
+
+  object buildGuardianWeeklySubscription {
+    def apply(
+      guardianWeekly: GuardianWeekly,
       requestId: UUID,
       country: Country,
       maybePromoCode: Option[PromoCode],
@@ -136,7 +161,7 @@ object ProductSubscriptionBuilders {
 
       val recurringProductRatePlanId = validateRatePlan(guardianWeekly.productRatePlan(environment, fixedTerm = gift), guardianWeekly.describe)
 
-      val promotionProductRatePlanId = if(isIntroductoryPromotion(maybePromoCode)) {
+      val promotionProductRatePlanId = if (isIntroductoryPromotion(guardianWeekly.billingPeriod, maybePromoCode)) {
         guardianWeekly.introductoryRatePlan(environment).map(_.id).getOrElse(recurringProductRatePlanId)
       } else recurringProductRatePlanId
 
@@ -152,13 +177,9 @@ object ProductSubscriptionBuilders {
       applyPromoCode(promotionService, maybePromoCode, country, promotionProductRatePlanId, subscriptionData)
     }
 
-    private[this] def isIntroductoryPromotion(maybePromoCode: Option[PromoCode]) =
-      maybePromoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix) && guardianWeekly.billingPeriod == SixWeekly
+    private[this] def isIntroductoryPromotion(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode]) =
+      maybePromoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix) && billingPeriod == SixWeekly
   }
-
-}
-
-trait ProductSubscriptionBuilder {
 
   protected def buildProductSubscription(
     createdRequestId: UUID,
@@ -169,7 +190,7 @@ trait ProductSubscriptionBuilder {
     readerType: ReaderType = ReaderType.Direct,
     initialTermMonths: Int = 12
   ): SubscriptionData = {
-    val (initialTerm, autoRenew, initialTermPeriodType) = if(readerType == ReaderType.Gift)
+    val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
       (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, Day)
     else
       (12, true, Month)
@@ -216,4 +237,5 @@ trait ProductSubscriptionBuilder {
 
     withPromotion.getOrElse(Right(subscriptionData))
   }
+
 }

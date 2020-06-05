@@ -16,7 +16,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar._
 
-class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with ProductSubscriptionBuilder {
+class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
 
   "InitialTermLength" should "be correct" in {
     val termStart = new LocalDate(2019, 2, 3)
@@ -74,7 +74,8 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
   lazy val firstDeliveryDate = saleDate.plusDays(3)
 
   lazy val gift: SubscriptionData =
-    weekly.build(
+    buildGuardianWeeklySubscription(
+      weekly,
       UUID.randomUUID(),
       Country.UK, None,
       Some(firstDeliveryDate),
@@ -84,7 +85,8 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers with Pro
       isTestUser = false,
       contractEffectiveDate = saleDate).right.get
 
-  lazy val nonGift = weekly.build(
+  lazy val nonGift = buildGuardianWeeklySubscription(
+    weekly,
     UUID.randomUUID(),
     Country.UK, None,
     Some(firstDeliveryDate),

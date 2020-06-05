@@ -6,18 +6,9 @@ import com.gu.support.zuora.api.{ReaderType, Subscription}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
-abstract class RedemptionData(val redemptionCode: RedemptionCode){
-  def redeem(subscription: Subscription) = subscription.copy(redemptionCode = Some(redemptionCode))
-}
+sealed abstract class RedemptionData(val redemptionCode: RedemptionCode)
 
-case class CorporateRedemption(override val redemptionCode: RedemptionCode, corporateAccountId: CorporateAccountId) extends RedemptionData(redemptionCode) {
-  override def redeem(subscription: Subscription) =
-    super.redeem(subscription)
-      .copy(
-        corporateAccountId = Some(corporateAccountId),
-        readerType = ReaderType.Corporate
-      )
-}
+case class CorporateRedemption(override val redemptionCode: RedemptionCode, corporateAccountId: CorporateAccountId) extends RedemptionData(redemptionCode)
 
 object RedemptionData {
     import Codec.deriveCodec
