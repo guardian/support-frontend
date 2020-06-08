@@ -27,6 +27,8 @@ import TrackableButton from 'components/button/trackableButton';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import AusMomentSpreadTheWord from 'components/spreadTheWord/ausMomentSpreadTheWord';
+import { init as pageInit } from 'helpers/page/page';
+import { initReducer } from 'pages/contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -178,7 +180,11 @@ function ContributionThankYou(props: PropTypes) {
     return null;
   };
 
-  const ausMomentEnabled = window.guardian.ausMomentEnabled || false;
+  const store = pageInit(() => initReducer(), true);
+  const state = store.getState();
+  const { countryId } = state.common.internationalisation;
+  const ausMomentEnabled = window.guardian.ausMomentEnabled && countryId === 'AU';
+
   const showRecurringMessage = props.contributionType !== 'ONE_OFF' && props.paymentComplete;
 
   return (

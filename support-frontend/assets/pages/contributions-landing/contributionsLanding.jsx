@@ -43,12 +43,8 @@ if (!isDetailsSupported) {
 
 const countryGroupId: CountryGroupId = detect();
 
-const thankYouClassModifiers = ['contribution-thankyou'];
-if (window.guardian.ausMomentEnabled) {
-  thankYouClassModifiers.push('aus-moment');
-}
-
 const store = pageInit(() => initReducer(), true);
+const state = store.getState();
 
 if (!window.guardian.polyfillScriptLoaded) {
   gaEvent({
@@ -92,12 +88,17 @@ const setOneOffContributionCookie = () => {
   );
 };
 
-
 const campaignName = getCampaignName();
 
-const state = store.getState();
 const ausMomentLandingPageBackgroundVariant = state.common.abParticipations.ausMomentLandingPageBackgroundTest;
 const isAusMomentVariant = ausMomentLandingPageBackgroundVariant === 'ausColoursVariant';
+const { countryId } = state.common.internationalisation;
+const ausMomentEnabled = window.guardian.ausMomentEnabled && countryId === 'AU';
+
+const thankYouClassModifiers = [
+  'contribution-thankyou',
+  ausMomentEnabled ? 'aus-moment' : null,
+];
 
 const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
