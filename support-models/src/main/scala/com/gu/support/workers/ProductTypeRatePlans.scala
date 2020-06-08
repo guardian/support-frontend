@@ -1,7 +1,8 @@
 package com.gu.support.workers
 
-import com.gu.support.catalog.{Corporate, NoProductOptions, Product, ProductRatePlan}
+import com.gu.support.catalog.{Corporate, Product, ProductRatePlan}
 import com.gu.support.config.TouchPointEnvironment
+import com.gu.support.workers.BillingPeriod.{Quarterly, SixWeekly}
 
 
 trait ProductTypeRatePlans[P] {

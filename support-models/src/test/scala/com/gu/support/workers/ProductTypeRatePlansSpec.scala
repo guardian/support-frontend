@@ -3,6 +3,7 @@ package com.gu.support.workers
 import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery}
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
+import com.gu.support.workers.BillingPeriod.{Annual, Monthly}
 import com.gu.support.workers.ProductTypeRatePlans._
 import org.scalatest.OptionValues._
 import org.scalatest.flatspec.AsyncFlatSpec

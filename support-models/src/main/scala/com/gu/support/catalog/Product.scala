@@ -3,10 +3,9 @@ package com.gu.support.catalog
 import com.gu.i18n.CountryGroup
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX, UAT}
+import com.gu.support.workers.BillingPeriod.{Annual, Monthly, Quarterly, SixWeekly}
 import com.gu.support.workers._
 import io.circe.{Decoder, Encoder}
-
-import scala.collection.immutable
 
 sealed trait Product {
   val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[Product]]]

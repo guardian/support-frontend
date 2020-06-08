@@ -7,11 +7,11 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.Domestic
 import com.gu.support.config.Stages.DEV
 import com.gu.support.promotions.PromotionService
-import com.gu.support.workers.{GuardianWeekly, Quarterly}
+import com.gu.support.workers.BillingPeriod.Quarterly
+import com.gu.support.workers.GuardianWeekly
 import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscriptionData}
 import com.gu.zuora.ProductSubscriptionBuilders._
 import org.joda.time.LocalDate
-import org.scalatest.Assertion
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar._

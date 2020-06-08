@@ -2,6 +2,7 @@ package com.gu.support.config
 
 
 import com.gu.support.catalog.{ProductRatePlanChargeId, ProductRatePlanId}
+import com.gu.support.workers.BillingPeriod.Annual
 import com.gu.support.workers._
 import com.typesafe.config.Config
 

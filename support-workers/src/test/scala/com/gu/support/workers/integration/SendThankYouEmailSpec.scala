@@ -9,6 +9,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.catalog.{Collection, Domestic, Saturday}
+import com.gu.support.workers.BillingPeriod.{Annual, Monthly, Quarterly}
 import com.gu.support.workers.JsonFixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream

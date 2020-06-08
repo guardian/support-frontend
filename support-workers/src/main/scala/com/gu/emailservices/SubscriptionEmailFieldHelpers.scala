@@ -4,6 +4,7 @@ import java.text.DecimalFormat
 
 import com.gu.i18n.Currency
 import com.gu.support.promotions.{IntroductoryPriceBenefit, Promotion}
+import com.gu.support.workers.BillingPeriod.{Annual, Monthly, Quarterly, SixWeekly}
 import com.gu.support.workers._
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{LocalDate, Months}

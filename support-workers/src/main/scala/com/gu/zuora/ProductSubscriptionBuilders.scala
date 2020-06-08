@@ -8,9 +8,10 @@ import com.gu.i18n.Country
 import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.fromStage
-import com.gu.support.config.{Stage, ZuoraConfig}
+import com.gu.support.config.{Stage, ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
 import com.gu.support.redemption.{GetCodeStatus, RedemptionCode}
+import com.gu.support.workers.BillingPeriod.SixWeekly
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
@@ -47,21 +48,21 @@ object ProductSubscriptionBuilders {
     def apply(
       digitalPack: DigitalPack,
       requestId: UUID,
-      config: ZuoraConfig,
       country: Country,
-      maybePromoCode: Option[PromoCode],
-      paymentMethod: Either[PaymentMethod, RedemptionData],
+      paymentMethod: Either[(ZuoraDigitalPackConfig, Option[PromoCode]), RedemptionData],
       promotionService: PromotionService,
       stage: Stage,
       isTestUser: Boolean,
-      getCodeStatus: GetCodeStatus
+      getCodeStatus: GetCodeStatus,
+      now: () => LocalDate
     )(implicit ec: ExecutionContext): EitherT[Future, String, SubscriptionData] = {
 
-      val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
-      val contractAcceptanceDate = contractEffectiveDate
-        .plusDays(config.digitalPack.defaultFreeTrialPeriod)
-        .plusDays(config.digitalPack.paymentGracePeriod)
-
+      val contractEffectiveDate = now()
+      val delay = paymentMethod match {
+        case Left((config, _)) => config.defaultFreeTrialPeriod + config.paymentGracePeriod
+        case Right(_) => 0
+      }
+      val contractAcceptanceDate = contractEffectiveDate.plusDays(delay)
 
       val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(fromStage(stage, isTestUser), fixedTerm = false), digitalPack.describe)
 
@@ -72,20 +73,17 @@ object ProductSubscriptionBuilders {
         contractEffectiveDate = contractEffectiveDate
       )
 
-      for {
-        redeemedSub <-
-          paymentMethod.fold(
-            _ => EitherT.pure[Future, String](subscriptionData.subscription),
-            redemptionData => EitherT(
-              withRedemption(subscriptionData.subscription, redemptionData, getCodeStatus)
-            ).leftMap(_.clientCode)
-          )
-        promodSub <- EitherT.fromEither[Future](
-          applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData.copy(subscription = redeemedSub))
-          .left.map(_.msg)
+      paymentMethod.fold({ case (_, maybePromoCode) =>
+        EitherT.fromEither[Future](
+          applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
+            .left.map(_.msg)
         )
+        },
+        redemptionData => EitherT(
+          withRedemption(subscriptionData.subscription, redemptionData, getCodeStatus)
+        ).leftMap(_.clientCode).map(subscription => subscriptionData.copy(subscription = subscription))
+      )
 
-      } yield promodSub
     }
 
     def withRedemption(

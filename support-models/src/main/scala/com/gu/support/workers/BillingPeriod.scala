@@ -21,24 +21,25 @@ object BillingPeriod {
   implicit val keyEncoder: KeyEncoder[BillingPeriod] = (billingPeriod: BillingPeriod) => billingPeriod.toString
 
   implicit val keyDecoder: KeyDecoder[BillingPeriod]  = (key: String) => fromString(key)
-}
 
-case object Monthly extends BillingPeriod {
-  override val noun = "month"
-  override val monthsInPeriod = 1
-}
+  case object Monthly extends BillingPeriod {
+    override val noun = "month"
+    override val monthsInPeriod = 1
+  }
 
-case object Quarterly extends BillingPeriod {
-  override val noun = "quarter"
-  override val monthsInPeriod = 3
-}
+  case object Quarterly extends BillingPeriod {
+    override val noun = "quarter"
+    override val monthsInPeriod = 3
+  }
 
-case object Annual extends BillingPeriod {
-  override val noun = "year"
-  override val monthsInPeriod = 12
-}
+  case object Annual extends BillingPeriod {
+    override val noun = "year"
+    override val monthsInPeriod = 12
+  }
 
-case object SixWeekly extends BillingPeriod {
-  override val noun = "six weeks"
-  override val monthsInPeriod = 1
+  case object SixWeekly extends BillingPeriod {
+    override val noun = "six weeks"
+    override val monthsInPeriod = 1
+  }
+
 }

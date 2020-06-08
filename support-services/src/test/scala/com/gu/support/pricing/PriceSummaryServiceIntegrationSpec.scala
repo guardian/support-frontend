@@ -4,7 +4,7 @@ import com.gu.i18n.CountryGroup.{UK, US}
 import com.gu.support.catalog._
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionServiceSpec
-import com.gu.support.workers.{Annual, Quarterly}
+import com.gu.support.workers.BillingPeriod.{Annual, Quarterly}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.flatspec.AsyncFlatSpec

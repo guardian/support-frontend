@@ -2,7 +2,7 @@ package com.gu.support.promotions
 
 import com.gu.support.catalog.{GuardianWeekly, ProductRatePlan}
 import com.gu.support.config.PromotionsDiscountConfig
-import com.gu.support.workers.SixWeekly
+import com.gu.support.workers.BillingPeriod.SixWeekly
 import com.gu.support.zuora.api._
 import com.typesafe.scalalogging.LazyLogging
 

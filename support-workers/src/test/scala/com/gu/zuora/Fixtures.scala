@@ -7,6 +7,7 @@ import com.gu.stripe.StripeServiceForCurrency
 import com.gu.support.catalog
 import com.gu.support.catalog.{Everyday, HomeDelivery}
 import com.gu.support.config.TouchPointEnvironments
+import com.gu.support.workers.BillingPeriod.Monthly
 import com.gu.support.workers._
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate

@@ -3,11 +3,10 @@ package com.gu.support.workers
 import com.gu.i18n.Currency
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.RestOfWorld
-import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.workers.BillingPeriod.Annual
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 import org.scalatest.EitherValues
 import org.scalatest.flatspec.AsyncFlatSpec
 

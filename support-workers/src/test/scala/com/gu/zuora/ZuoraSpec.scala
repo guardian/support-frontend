@@ -6,13 +6,14 @@ import java.util.UUID
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
-import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId, Monthly}
-import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
+import com.gu.support.workers.BillingPeriod.Monthly
+import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
+import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.duration._
 

@@ -2,8 +2,8 @@ package com.gu.support.workers
 
 import com.gu.i18n.Currency
 import com.gu.salesforce.AddressLine
-import com.gu.salesforce.AddressLineTransformer.combinedAddressLine
-import com.gu.salesforce.AddressLineTransformer.clipForZuoraStreetNameLimit
+import com.gu.salesforce.AddressLineTransformer.{clipForZuoraStreetNameLimit, combinedAddressLine}
+import com.gu.support.workers.BillingPeriod.Monthly
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar

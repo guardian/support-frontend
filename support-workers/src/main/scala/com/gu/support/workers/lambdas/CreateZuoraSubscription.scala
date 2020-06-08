@@ -22,6 +22,7 @@ import com.gu.zuora.ProductSubscriptionBuilders._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import cats.implicits._
+import org.joda.time.{DateTimeZone, LocalDate}
 
 case class BuildSubscribeEffectError(message: String) extends RuntimeException {
   def asRetryException: RetryException =
@@ -42,8 +43,9 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     services: Services
   ): FutureHandlerResult = {
     val now = () => OffsetDateTime.now
+    val now2 = () => LocalDate.now(DateTimeZone.UTC)
     for {
-      subscriptionData <- buildSubscriptionData(state, services.promotionService, GetCodeStatus.withDynamoLookup(services.redemptionService))
+      subscriptionData <- buildSubscriptionData(state, services.promotionService, GetCodeStatus.withDynamoLookup(services.redemptionService), now2)
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
@@ -135,7 +137,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   private def buildSubscriptionData(
     state: CreateZuoraSubscriptionState,
     promotionService: => PromotionService,
-    getCodeStatus: => GetCodeStatus
+    getCodeStatus: => GetCodeStatus,
+    now: () => LocalDate
   ): Future[SubscriptionData] = {
     val isTestUser = state.user.isTestUser
     val config = zuoraConfigProvider.get(isTestUser)
@@ -146,14 +149,13 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case d: DigitalPack => buildDigitalPackSubscription(
         d,
         state.requestId,
-        config,
         state.user.billingAddress.country,
-        state.promoCode,
-        state.paymentMethod,
+        state.paymentMethod.leftMap(_ => (config.digitalPack, state.promoCode)),
         promotionService,
         stage,
         isTestUser,
-        getCodeStatus
+        getCodeStatus,
+        now
       )
       case p: Paper => EitherT.fromEither[Future](buildPaperSubscription(
         p,
