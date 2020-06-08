@@ -156,6 +156,8 @@ POST /direct-debit/check-account                                   controllers.D
 # ----- Promotions ----- #
 GET /p/:promoCode/terms                                           controllers.Promotions.terms(promoCode)
 GET /p/:promoCode                                                 controllers.Promotions.promo(promoCode)
+# ----- Redemptions ----- #
+GET /redemption/:redemptionCode/status                            controllers.RedemptionsController.status(redemptionCode, isTestUser: Option[Boolean])
 
 # ----- Verification ----- #
 

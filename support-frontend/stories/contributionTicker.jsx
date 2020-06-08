@@ -6,11 +6,9 @@ import { storiesOf } from '@storybook/react';
 
 
 import ContributionTicker from 'components/ticker/contributionTicker';
-import { text, withKnobs } from '@storybook/addon-knobs/src/index';
+import { withKnobs } from '@storybook/addon-knobs/src/index';
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
-
-const tickerJsonUrlInput = () => text('Ticker JSON URL', 'https://support.theguardian.com/ticker.json');
 
 const stories = storiesOf('Tickers', module)
   .addDecorator(withKnobs)
@@ -19,10 +17,15 @@ const stories = storiesOf('Tickers', module)
 stories.add('Contribution ticker', () => (
   <div style={{ width: '100%', maxWidth: '500px' }}>
     <ContributionTicker
-      tickerJsonUrl={tickerJsonUrlInput()}
+      tickerCountType="people"
       onGoalReached={() => {}}
-      tickerType="unlimited"
+      tickerEndType="unlimited"
       currencySymbol="£"
+      copy={{
+        countLabel: 'supporters in Australia',
+        goalReachedPrimary: 'We\'ve hit our goal!',
+        goalReachedSecondary: 'but you can still support us',
+      }}
     />
   </div>
 ));

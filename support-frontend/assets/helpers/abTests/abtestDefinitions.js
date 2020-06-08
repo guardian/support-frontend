@@ -5,9 +5,11 @@ import { USV1 } from './data/testAmountsData';
 // ----- Tests ----- //
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
 export type LandingPageDesignSystemTestVariants = 'control' | 'ds';
+export type AusMomentLandingPageBackgroundVariants = 'control' | 'ausColoursVariant';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
+const auOnlyLandingPage = '/au/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 const digitalCheckout = '/subscribe/digital/checkout';
 
@@ -100,5 +102,27 @@ export const tests: Tests = {
     referrerControlled: false,
     seed: 3,
     targetPage: contributionsLandingPageMatch,
+  },
+
+  ausMomentLandingPageBackgroundTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'ausColoursVariant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    referrerControlled: false,
+    seed: 6,
+    targetPage: auOnlyLandingPage,
   },
 };

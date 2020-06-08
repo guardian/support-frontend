@@ -46,7 +46,7 @@ object Settings {
       buf <- Either.catchNonFatal {
         val inputStream = s3.getObject(source.bucket, source.key).getObjectContent
         Source.fromInputStream(inputStream)
-      }
+      }.leftMap(ex => new RuntimeException(s"couldn't getObject content for source: $source", ex))
       settings <- fromBufferedSource(buf)
     } yield settings
 
