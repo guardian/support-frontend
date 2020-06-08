@@ -43,6 +43,9 @@ if (!isDetailsSupported) {
 
 const countryGroupId: CountryGroupId = detect();
 
+const thankYouClassModifiers = ['contribution-thankyou'];
+window.guardian.ausMomentEnabled ? thankYouClassModifiers.push(['aus-moment']) : null
+
 const store = pageInit(() => initReducer(), true);
 const state = store.getState();
 
