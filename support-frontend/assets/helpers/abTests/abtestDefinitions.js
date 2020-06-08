@@ -12,6 +12,7 @@ const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 const digitalCheckout = '/subscribe/digital/checkout';
+const { ausMomentEnabled } = window.guardian;
 
 export const tests: Tests = {
   usAmountsTest: {
@@ -120,7 +121,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: ausMomentEnabled,
     referrerControlled: false,
     seed: 6,
     targetPage: auOnlyLandingPage,
