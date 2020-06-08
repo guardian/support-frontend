@@ -135,4 +135,4 @@ function createSubscription(
   ).then(handleSubscribeResult);
 }
 
-export { doValidation, validateUserCode, submitCode, createSubscription };
+export { validateUserCode, submitCode, createSubscription };
