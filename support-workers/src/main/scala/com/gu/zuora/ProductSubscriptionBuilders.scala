@@ -10,6 +10,7 @@ import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.fromStage
 import com.gu.support.config.{Stage, ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
+import com.gu.support.redemption.GetCodeStatus.NoSuchCode
 import com.gu.support.redemption.{GetCodeStatus, RedemptionCode}
 import com.gu.support.workers.BillingPeriod.SixWeekly
 import com.gu.support.workers.GuardianWeeklyExtensions._
@@ -79,9 +80,9 @@ object ProductSubscriptionBuilders {
             .left.map(_.msg)
         )
         },
-        redemptionData => EitherT(
+        redemptionData =>
           withRedemption(subscriptionData.subscription, redemptionData, getCodeStatus)
-        ).leftMap(_.clientCode).map(subscription => subscriptionData.copy(subscription = subscription))
+            .leftMap(_.clientCode).map(subscription => subscriptionData.copy(subscription = subscription))
       )
 
     }
@@ -90,19 +91,22 @@ object ProductSubscriptionBuilders {
       subscription: Subscription,
       redemptionData: RedemptionData,
       getCodeStatus: GetCodeStatus
-    )(implicit ec: ExecutionContext): Future[Either[GetCodeStatus.RedemptionInvalid, Subscription]] = {
+    )(implicit ec: ExecutionContext): EitherT[Future, GetCodeStatus.RedemptionInvalid, Subscription] = {
       val withCode = subscription.copy(redemptionCode = Some(redemptionData.redemptionCode))
       redemptionData match {
-        case CorporateRedemption(redemptionCode, corporateAccountId) =>
-          getCodeStatus(RedemptionCode(redemptionCode)).map(_.map { corporateId =>
-            withCode.copy(
-              corporateAccountId = Some(corporateId.corporateIdString/*FIXME use the same corporate id type everywhere*/),
-              readerType = ReaderType.Corporate
-            )
-          })
+        case CorporateRedemption(redemptionCode, _) =>
+          for {
+            redemptionCode <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => NoSuchCode)
+            subscription <-
+              EitherT(getCodeStatus(redemptionCode).map(_.map { corporateId =>
+                withCode.copy(
+                  corporateAccountId = Some(corporateId.corporateIdString /*FIXME use the same corporate id type everywhere*/),
+                  readerType = ReaderType.Corporate
+                )
+              }))
+          } yield subscription
       }
     }
-
   }
 
   def buildPaperSubscription(

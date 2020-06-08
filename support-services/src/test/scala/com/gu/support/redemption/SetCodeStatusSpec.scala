@@ -13,7 +13,7 @@ class SetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       case ("CODE", DynamoFieldUpdate("available", false)) => Future.successful(())
       case _ => Future.failed(new Throwable)
     }
-    setCodeStatus(RedemptionCode("CODE"), RedemptionTable.AvailableField.CodeIsUsed).map {
+    setCodeStatus(RedemptionCode("CODE").right.get, RedemptionTable.AvailableField.CodeIsUsed).map {
       _ should be(())
     }
   }
@@ -23,7 +23,7 @@ class SetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       case ("CODE", DynamoFieldUpdate("available", true)) => Future.successful(())
       case _ => Future.failed(new Throwable)
     }
-    setCodeStatus(RedemptionCode("CODE"), RedemptionTable.AvailableField.CodeIsAvailable).map {
+    setCodeStatus(RedemptionCode("CODE").right.get, RedemptionTable.AvailableField.CodeIsAvailable).map {
       _ should be(())
     }
   }
@@ -34,7 +34,7 @@ class SetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       case _ => Future.failed(new Throwable)
     }
     recoverToSucceededIf[RuntimeException] {
-      setCodeStatus(RedemptionCode("CODE"), RedemptionTable.AvailableField.CodeIsUsed)
+      setCodeStatus(RedemptionCode("CODE").right.get, RedemptionTable.AvailableField.CodeIsUsed)
     }
   }
 

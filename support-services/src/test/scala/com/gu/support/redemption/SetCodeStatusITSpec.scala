@@ -17,7 +17,7 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
 
   // this is one test because it depends on external state which may not be in a particular state
   "setCodeStatus" should "set a code available and used" in {
-    val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE")
+    val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE").right.get
     for {
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsUsed) // get in known state
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable).map {
@@ -36,7 +36,7 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
   }
 
   "setCodeStatus" should "not set a code that doesn't exist" in {
-    val missingCode = RedemptionCode("ITTEST-MISSING")
+    val missingCode = RedemptionCode("ITTEST-MISSING").right.get
     for {
       _ <- recoverToSucceededIf[ConditionalCheckFailedException] {
         setCodeStatus(missingCode, RedemptionTable.AvailableField.CodeIsAvailable)

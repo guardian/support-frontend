@@ -41,7 +41,7 @@ class GetCodeStatus(dynamoLookup: DynamoLookup) extends WithLogging {
 
   def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[Either[RedemptionInvalid, CorporateId]] =
     (for {
-      maybeAttributes <- dynamoLookup.lookup(code.value)
+      maybeAttributes <- dynamoLookup.lookup(code.codeAsString)
       status <- FlattenErrors(maybeAttributes.map { attributes =>
         for {
           available <- statusFromDynamoAttr(attributes)
