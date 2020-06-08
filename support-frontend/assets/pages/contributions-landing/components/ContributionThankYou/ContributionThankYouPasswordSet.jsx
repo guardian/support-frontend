@@ -19,7 +19,7 @@ type PropTypes = {
 
 // ----- Render ----- //
 function ContributionThankYouPasswordSet(props: PropTypes) {
-  const ausMomentEnabled = window.guardian.ausMomentEnabled
+  const ausMomentEnabled = window.guardian.ausMomentEnabled || false;
   const title = 'You now have a Guardian account';
   const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
