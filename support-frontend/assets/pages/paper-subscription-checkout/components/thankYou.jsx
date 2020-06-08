@@ -124,11 +124,7 @@ function ThankYouContent({
         <Asyncronously loader={import('components/subscriptionCheckouts/thankYou/marketingConsentContainer')}>
           {(MktConsent: MarketingConsent) => (
 
-            <MktConsent
-              render={({ title, message }) => (
-                <Text title={title}>{message}</Text>
-              )}
-            />)
+            <MktConsent />)
           }
         </Asyncronously>
         <OptInCopy subscriptionProduct={Paper} />

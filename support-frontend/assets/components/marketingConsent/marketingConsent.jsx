@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { type Node } from 'react';
+import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
@@ -13,6 +13,7 @@ import { logException } from 'helpers/logger';
 import Button from 'components/button/button';
 import NonInteractiveButton from 'components/button/nonInteractiveButton';
 import 'components/marketingConsent/marketingConsent.scss';
+import Text from 'components/text/text';
 
 // ----- Types ----- //
 
@@ -27,7 +28,6 @@ type ButtonPropTypes = {|
 type PropTypes = {|
   ...ButtonPropTypes,
   error: boolean,
-  render: ({title: string, message: string}) => Node
 |};
 
 // ----- Render ----- //
@@ -82,10 +82,9 @@ function MarketingConsent(props: PropTypes) {
   if (checkEmail(props.email)) {
     return (
       <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
-        {props.render({
-          title: 'Contributions, subscriptions and membership',
-          message: 'Get related news and offers – whether you are a contributor, subscriber, member or would like to become one',
-        })}
+        <Text title="Contributions, subscriptions and membership">
+          Get related news and offers – whether you are a contributor, subscriber, member or would like to become one
+        </Text>
 
         {MarketingButton({
           confirmOptIn: props.confirmOptIn,
@@ -117,14 +116,6 @@ function MarketingConsent(props: PropTypes) {
 MarketingConsent.defaultProps = {
   error: false,
   requestPending: false,
-  render: ({ title, message }: {title: string, message: string}) => (
-    <div>
-      <h3 className="contribution-thank-you-block__title">{title}</h3>
-      <p className="contribution-thank-you-block__message">
-        {message}
-      </p>
-    </div>
-  ),
 };
 
 
