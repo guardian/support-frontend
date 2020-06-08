@@ -26,6 +26,7 @@ import {
 import TrackableButton from 'components/button/trackableButton';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import AusMomentSpreadTheWord from 'components/spreadTheWord/ausMomentSpreadTheWord';
 
 // ----- Types ----- //
 
@@ -177,6 +178,7 @@ function ContributionThankYou(props: PropTypes) {
     return null;
   };
 
+  const ausMomentEnabled = window.guardian.ausMomentEnabled
   const showRecurringMessage = props.contributionType !== 'ONE_OFF' && props.paymentComplete;
 
   return (
@@ -189,10 +191,11 @@ function ContributionThankYou(props: PropTypes) {
             </h3>
           </section>
         ) : null}
+        { ausMomentEnabled && <AusMomentSpreadTheWord /> }
         { renderIdentityCTA() }
         <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
-        <SpreadTheWord />
+        { !ausMomentEnabled && <SpreadTheWord /> }
         <div className="gu-content__return-link">
           <AnchorButton
             href="https://www.theguardian.com"
