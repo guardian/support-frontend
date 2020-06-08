@@ -1,15 +1,7 @@
 // @flow
 
 import type { ContributionTypes } from 'helpers/contributions';
-
-export type TickerType = 'unlimited' | 'hardstop';
-
-export type TickerSettings = {
-  goalReachedCopy: React$Element<string> | null,
-  tickerJsonUrl: string,
-  tickerType: TickerType,
-  localCurrencySymbol: string
-}
+import type { TickerSettings } from 'components/ticker/contributionTicker';
 
 export type CampaignSettings = {
   headerCopy?: string | React$Element<string>,
@@ -21,6 +13,7 @@ export type CampaignSettings = {
   backgroundImage?: string,
   extraComponent?: React$Element<string>,
   tickerSettings?: TickerSettings,
+  goalReachedCopy?: React$Element<string>, // If set, the form will be replaced with this if goal reached
 };
 
 export type Campaigns = {
@@ -28,8 +21,23 @@ export type Campaigns = {
 };
 
 const currentCampaignName = null;
+// const currentCampaignName = 'au/contribute';
 
-export const campaigns: Campaigns = {};
+export const campaigns: Campaigns = {
+  // TODO - the rest of the campaign settings
+  // [currentCampaignName]: {
+  //   tickerSettings: {
+  //     tickerCountType: 'people',
+  //     tickerEndType: 'unlimited',
+  //     currencySymbol: '£',
+  //     copy: {
+  //       countLabel: 'supporters in Australia',
+  //       goalReachedPrimary: 'We\'ve hit our goal!',
+  //       goalReachedSecondary: 'but you can still support us',
+  //     },
+  //   },
+  // },
+};
 
 export type CampaignName = $Keys<typeof campaigns>
 
