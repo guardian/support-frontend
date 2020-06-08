@@ -30,7 +30,6 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { DigitalPack } from 'helpers/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
-import Text from 'components/text/text';
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
@@ -72,10 +71,7 @@ const content = (
           <ThankYouPendingContent
             countryGroupId={countryGroupId}
             marketingConsent={
-              <MarketingConsent render={({ title, message }) => (
-                <Text title={title}>{message}</Text>
-              )}
-              />
+              <MarketingConsent />
             }
           />
         }
@@ -83,9 +79,7 @@ const content = (
           <ThankYouContent
             countryGroupId={countryGroupId}
             marketingConsent={
-              <MarketingConsent render={({ title, message }) => (
-                <Text title={title}>{message}</Text>)}
-              />
+              <MarketingConsent />
             }
           />}
         subscriptionProduct="DigitalPack"

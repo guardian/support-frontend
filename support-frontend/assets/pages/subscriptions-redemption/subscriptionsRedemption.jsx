@@ -20,7 +20,6 @@ import RedemptionForm from 'pages/subscriptions-redemption/components/redemption
 import Header from 'components/headers/header/header';
 import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
 import MarketingConsent from './marketingConsentContainer';
-import Text from 'components/text/text';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
 
 // ----- Redux Store ----- //
@@ -52,10 +51,7 @@ const content = (
           <ThankYouPendingContent
             countryGroupId={countryGroupId}
             marketingConsent={
-              <MarketingConsent render={({ title, message }) => (
-                <Text title={title}>{message}</Text>
-              )}
-              />
+              <MarketingConsent />
             }
           />
         }
@@ -63,9 +59,7 @@ const content = (
           <ThankYouContent
             countryGroupId={countryGroupId}
             marketingConsent={
-              <MarketingConsent render={({ title, message }) => (
-                <Text title={title}>{message}</Text>)}
-              />
+              <MarketingConsent />
             }
           />}
       />
