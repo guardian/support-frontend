@@ -57,8 +57,7 @@ body {
   ) !important;
 }
 
-// This selects div.gu-content__blurb and overrides the default sticky positioning
-.gu-content__main.aus-moment > :first-child > :first-child {
+.gu-content__main.aus-moment > .gu-content__content > .gu-content__blurb {
   position: static !important;
 }
 
