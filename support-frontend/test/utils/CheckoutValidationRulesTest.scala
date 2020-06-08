@@ -137,7 +137,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingAddressLineAndCity) shouldBe false
   }
 
-  it should "succeed when there is a valid corporate sub" in {
+  it should "succeed when there is a valid corporate sub" ignore {
     val corporateSub = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Corporate),
       paymentFields = Right(CorporateRedemption("test-code", "1"))
