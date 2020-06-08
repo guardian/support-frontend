@@ -11,6 +11,8 @@ import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import AusMomentSpreadTheWord from 'components/spreadTheWord/ausMomentSpreadTheWord';
+import { init as pageInit } from 'helpers/page/page';
+import { initReducer } from 'pages/contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 type PropTypes = {
@@ -19,7 +21,11 @@ type PropTypes = {
 
 // ----- Render ----- //
 function ContributionThankYouPasswordSet(props: PropTypes) {
-  const ausMomentEnabled = window.guardian.ausMomentEnabled || false;
+  const store = pageInit(() => initReducer(), true);
+  const state = store.getState();
+  const { countryId } = state.common.internationalisation;
+  const ausMomentEnabled = window.guardian.ausMomentEnabled && countryId === 'AU';
+
   const title = 'You now have a Guardian account';
   const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
