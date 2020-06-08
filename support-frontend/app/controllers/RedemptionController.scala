@@ -69,18 +69,32 @@ class RedemptionController(
 
   }
 
-  def displayThankYou(stage: String): Action[AnyContent] = authenticatedAction(subscriptionsClientId) {
-    implicit request =>
-      Ok(views.html.main(
-        title = title,
-        mainElement = id,
-        mainJsBundle = Left(RefPath(js)),
-        mainStyleBundle = Left(RefPath(css)),
-        fontLoaderBundle = fontLoaderBundle
-      ) {
-        Html(s"""<script type="text/javascript">window.guardian.stage = "${stage}";</script>""")
-      })
+  def displayThankYou(stage: String): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async {
+    implicit request: AuthRequest[Any] =>
+      identityService.getUser(request.user.minimalUser).fold(
+        error => thankYouPage(stage, None),
+        user => thankYouPage(stage, Some(user))
+      )
   }
+
+  def thankYouPage(stage:String, user: Option[IdUser])(implicit request: AuthRequest[Any]): Result =
+    Ok(views.html.main(
+      title = title,
+      mainElement = id,
+      mainJsBundle = Left(RefPath(js)),
+      mainStyleBundle = Left(RefPath(css)),
+      fontLoaderBundle = fontLoaderBundle
+    ) {
+      Html(s"""
+        <script type="text/javascript">
+          window.guardian.stage = "${stage}";
+          window.guardian.user = {
+            firstName: "${user.map(_.privateFields.firstName).getOrElse("")}",
+            lastName: "${user.map(_.privateFields.secondName).getOrElse("")}",
+            email: "${user.map(_.primaryEmailAddress).getOrElse("")}",
+          };
+        </script>""")
+    })
 
   def displayError(redemptionCode: RedemptionCode, error: String)(implicit request: AuthRequest[Any]): Result = {
     SafeLogger.error(scrub"An error occurred while trying to process redemption code - ${redemptionCode}. Error was - ${error}")
