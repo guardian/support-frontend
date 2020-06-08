@@ -12,7 +12,7 @@ const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 const digitalCheckout = '/subscribe/digital/checkout';
-const { ausMomentEnabled } = window.guardian;
+const { ausMomentEnabled } = window.guardian || false;
 
 export const tests: Tests = {
   usAmountsTest: {
