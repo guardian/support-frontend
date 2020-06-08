@@ -72,7 +72,10 @@ class RedemptionController(
   def displayThankYou(stage: String): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async {
     implicit request: AuthRequest[Any] =>
       identityService.getUser(request.user.minimalUser).fold(
-        error => thankYouPage(stage, None),
+        error => {
+          SafeLogger.error(scrub"Failed to retrieve user email for thank you page so marketing consent was not shown. Error was - ${error}")
+          thankYouPage(stage, None)
+        },
         user => thankYouPage(stage, Some(user))
       )
   }
