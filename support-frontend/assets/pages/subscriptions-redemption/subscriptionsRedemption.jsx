@@ -28,6 +28,11 @@ const store = pageInit(reducer, true);
 const state = store.getState();
 const { countryGroupId } = state.common.internationalisation;
 
+const thankyouProps = {
+  countryGroupId,
+  marketingConsent: (<MarketingConsent />),
+};
+
 // ----- Render ----- //
 
 const content = (
@@ -47,21 +52,8 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={<RedemptionForm />}
-        thankYouContentPending={
-          <ThankYouPendingContent
-            countryGroupId={countryGroupId}
-            marketingConsent={
-              <MarketingConsent />
-            }
-          />
-        }
-        thankYouContent={
-          <ThankYouContent
-            countryGroupId={countryGroupId}
-            marketingConsent={
-              <MarketingConsent />
-            }
-          />}
+        thankYouContentPending={<ThankYouPendingContent {...thankyouProps} />}
+        thankYouContent={<ThankYouContent {...thankyouProps} />}
       />
       <ConsentBanner />
     </Page>
