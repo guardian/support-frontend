@@ -33,7 +33,6 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
 import { FocusStyleManager } from '@guardian/src-utilities';
-import type { AusMomentLandingPageBackgroundVariants } from 'helpers/abTests/abtestDefinitions';
 
 
 if (!isDetailsSupported) {
@@ -91,8 +90,9 @@ const setOneOffContributionCookie = () => {
 
 const campaignName = getCampaignName();
 
-const ausMomentLandingPageBackgroundVariant = store.getState().common.abParticipations.ausMomentLandingPageBackgroundTest
-const isAusMomentVariant = ausMomentLandingPageBackgroundVariant === 'ausColoursVariant'
+const state = store.getState();
+const ausMomentLandingPageBackgroundVariant = state.common.abParticipations.ausMomentLandingPageBackgroundTest;
+const isAusMomentVariant = ausMomentLandingPageBackgroundVariant === 'ausColoursVariant';
 
 const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
