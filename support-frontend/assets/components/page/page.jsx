@@ -18,6 +18,7 @@ type PropTypes = {|
   children: Node,
   classModifiers: Array<?string>,
   backgroundImageSrc: ?string,
+  isAusMomentVariant: boolean,
 |};
 
 
@@ -34,7 +35,13 @@ export default function Page(props: PropTypes) {
     <div id={props.id} className={classNameWithModifiers('gu-content', props.classModifiers)}>
       <TimeTravelBanner />
       {props.header}
-      <main role="main" className="gu-content__main">
+      <main
+        role="main"
+        className={props.isAusMomentVariant
+          ? 'gu-content__main aus-moment'
+          : 'gu-content__main'
+        }
+      >
         {backgroundImage}
         {props.children}
       </main>
@@ -52,4 +59,5 @@ Page.defaultProps = {
   footer: null,
   classModifiers: [],
   backgroundImageSrc: null,
+  isAusMomentVariant: false,
 };

@@ -90,6 +90,10 @@ const setOneOffContributionCookie = () => {
 
 const campaignName = getCampaignName();
 
+const state = store.getState();
+const ausMomentLandingPageBackgroundVariant = state.common.abParticipations.ausMomentLandingPageBackgroundTest;
+const isAusMomentVariant = ausMomentLandingPageBackgroundVariant === 'ausColoursVariant';
+
 const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
 
@@ -104,6 +108,7 @@ const contributionsLandingPage = (campaignCodeParameter: ?string) => (
     header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
+    isAusMomentVariant={isAusMomentVariant}
   >
     <ContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
