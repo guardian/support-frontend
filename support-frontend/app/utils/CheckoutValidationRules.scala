@@ -94,7 +94,7 @@ object DigitalPackValidation {
     import createSupportWorkersRequest.product._
     import createSupportWorkersRequest.billingAddress._
 
-    val allowCorporateSubs = true
+    val allowCorporateSubs = false
 
     def isValidCorporateSub(redemptionData: RedemptionData) =
       SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&

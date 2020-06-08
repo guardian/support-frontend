@@ -182,7 +182,12 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
         country = Country.UK
       )
       val requestMissingAddressLineAndCity = validPaperRequest.copy(billingAddress = emptyAddress, deliveryAddress = Some(emptyAddress))
-      DigitalPackValidation.passes(requestMissingAddressLineAndCity) shouldBe false
+      PaperValidation.passes(requestMissingAddressLineAndCity) shouldBe false
+  }
+
+  it should "not allow corporate redemptions for paper products" in {
+    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(CorporateRedemption("test-code", "1")))
+    PaperValidation.passes(requestWithCorporateRedemption) shouldBe false
   }
 
 }
