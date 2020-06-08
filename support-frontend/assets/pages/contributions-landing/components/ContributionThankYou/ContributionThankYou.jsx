@@ -178,7 +178,7 @@ function ContributionThankYou(props: PropTypes) {
     return null;
   };
 
-  const ausMomentEnabled = window.guardian.ausMomentEnabled
+  const ausMomentEnabled = window.guardian.ausMomentEnabled || false;
   const showRecurringMessage = props.contributionType !== 'ONE_OFF' && props.paymentComplete;
 
   return (
