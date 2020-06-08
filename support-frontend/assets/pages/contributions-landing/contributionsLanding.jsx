@@ -43,6 +43,9 @@ if (!isDetailsSupported) {
 
 const countryGroupId: CountryGroupId = detect();
 
+const thankYouClassModifiers = ['contribution-thankyou'];
+window.guardian.ausMomentEnabled ? thankYouClassModifiers.push(['aus-moment']) : null
+
 const store = pageInit(() => initReducer(), true);
 
 if (!window.guardian.polyfillScriptLoaded) {
@@ -144,7 +147,7 @@ const router = (
             }
             return (
               <Page
-                classModifiers={['contribution-thankyou']}
+                classModifiers={thankYouClassModifiers}
                 header={<RoundelHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
