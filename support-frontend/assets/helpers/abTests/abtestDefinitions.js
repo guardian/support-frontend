@@ -5,7 +5,7 @@ import { USV1 } from './data/testAmountsData';
 // ----- Tests ----- //
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
 export type LandingPageDesignSystemTestVariants = 'control' | 'ds';
-export type AusMomentLandingPageBackgroundVariants = 'control' | 'stripes';
+export type AusMomentLandingPageBackgroundVariants = 'control' | 'ausColoursVariant';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
@@ -111,7 +111,7 @@ export const tests: Tests = {
         id: 'control',
       },
       {
-        id: 'stripes',
+        id: 'ausColoursVariant',
       },
     ],
     audiences: {
@@ -122,7 +122,7 @@ export const tests: Tests = {
     },
     isActive: false,
     referrerControlled: false,
-    seed: 3,
+    seed: 6,
     targetPage: auOnlyLandingPage,
   },
 };

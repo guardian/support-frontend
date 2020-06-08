@@ -57,6 +57,11 @@ body {
   ) !important;
 }
 
+// This selects div.gu-content__blurb and overrides the default sticky positioning
+.gu-content__main.aus-moment > :first-child > :first-child {
+  position: static !important;
+}
+
 /*= HEADER */
 
 header[role="banner"] {
