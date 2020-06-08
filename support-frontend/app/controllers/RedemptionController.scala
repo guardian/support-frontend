@@ -83,7 +83,8 @@ class RedemptionController(
       mainElement = id,
       mainJsBundle = Left(RefPath(js)),
       mainStyleBundle = Left(RefPath(css)),
-      fontLoaderBundle = fontLoaderBundle
+      fontLoaderBundle = fontLoaderBundle,
+      csrf = Some(CSRF.getToken.value)
     ) {
       Html(s"""
         <script type="text/javascript">
