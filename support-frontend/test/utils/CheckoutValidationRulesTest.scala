@@ -3,6 +3,7 @@ package utils
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{Everyday, HomeDelivery}
+import com.gu.support.workers.BillingPeriod.{Annual, Monthly}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec

@@ -12,7 +12,7 @@ import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
 import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
 import com.gu.support.promotions.PromoCode
-import com.gu.support.workers.Monthly
+import com.gu.support.workers.BillingPeriod.Monthly
 import com.gu.tip.Tip
 import com.typesafe.config.ConfigFactory
 import config.Configuration.MetricUrl
