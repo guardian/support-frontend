@@ -8,7 +8,6 @@ import { type Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 export type PropsForHoc = {
-  error: Option<string>,
   valid: Option<string>,
 };
 
@@ -19,17 +18,7 @@ type Props = PropsForHoc & {
 
 // ----- Component ----- //
 
-const getClassName = (error: Option<string>, valid: Option<string>) => {
-  if (error) {
-    return 'component-form-error';
-  } else if (valid) {
-    return 'component-form-valid';
-  }
-  return null;
-};
-
 function Validated({
-  error,
   valid,
   htmlFor,
   children,
@@ -37,7 +26,7 @@ function Validated({
   const Element = htmlFor ? 'label' : 'div';
 
   return (
-    <div className={getClassName(error, valid)}>
+    <div className={valid ? 'component-form-valid' : null}>
       <Element
         aria-hidden={!valid}
         aria-atomic="true"
@@ -47,7 +36,7 @@ function Validated({
       >
         {valid}
       </Element>
-      {children && children}
+      {children}
     </div>
   );
 }
