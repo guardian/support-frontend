@@ -15,6 +15,8 @@ import { submitCode, validateUserCode } from 'pages/subscriptions-redemption/api
 import type { Option } from 'helpers/types/option';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { withValidation } from 'hocs/withValidation';
+import { withError } from 'hocs/withError';
+import { withLabel } from 'hocs/withLabel';
 
 type PropTypes = {
   userCode: Option<string>,
@@ -37,7 +39,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
   };
 }
 
-const InputWithValidated = compose(asControlled, withValidation)(Input);
+const InputWithValidated = compose(asControlled, withLabel, withError, withValidation)(Input);
 
 function RedemptionForm(props: PropTypes) {
   const formCss = css`
@@ -75,6 +77,7 @@ function RedemptionForm(props: PropTypes) {
                   setValue={props.setUserCode}
                   error={props.error}
                   valid={validationText}
+                  label="Insert code"
                 />
                 <p css={paraCss}>
                   {signinInstructions}
