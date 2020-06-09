@@ -2,11 +2,11 @@ package utils
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
-import com.gu.support.workers.redemption.RedemptionData
+import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.LocalDate
 import services.stepfunctions.CreateSupportWorkersRequest
-import utils.PaidProductValidation.hasValidPaymentDetailsForPaidProduct
 
 object CheckoutValidationRules {
   def validatorFor(productType: ProductType): CreateSupportWorkersRequest => Boolean = productType match {
@@ -61,7 +61,7 @@ object AddressAndCurrencyValidationRules {
   }
 
 
-  def hasStateIfRequired(countryFromRequest: Country, stateFromRequest: Option[String], currencyFromRequest: Currency): Boolean =
+  def hasStateIfRequired(countryFromRequest: Country, stateFromRequest: Option[String]): Boolean =
     if (countryFromRequest == Country.US || countryFromRequest == Country.Canada || countryFromRequest == Country.Australia) {
       stateFromRequest.isDefined
     } else true
@@ -95,20 +95,24 @@ object DigitalPackValidation {
     import createSupportWorkersRequest.billingAddress._
 
     val allowCorporateSubs = false
-    def isCorporateSub(redemptionData: RedemptionData) =
-      allowCorporateSubs //TODO: validate redemption data, this is coming in part 2
 
-    def hasValidPaymentDetails(request: CreateSupportWorkersRequest) = paymentFields.fold(
-      paymentFields => PaidProductValidation.noEmptyPaymentFields(paymentFields),
-      redemptionData => isCorporateSub(redemptionData)
+    def isValidCorporateSub(redemptionData: RedemptionData) =
+      SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
+        hasStateIfRequired(country, state) &&
+        allowCorporateSubs //TODO: validate redemption data here? This would mean returning a Future
+
+    def isValidPaidSub(paymentFields: PaymentFields) =
+      SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
+        hasStateIfRequired(country, state) &&
+        hasPostcodeIfRequired(country, postCode) &&
+        currencyIsSupportedForCountry(country, currency) &&
+        hasAddressLine1AndCity(billingAddress) &&
+        PaidProductValidation.noEmptyPaymentFields(paymentFields)
+
+    paymentFields.fold(
+      paymentFields => isValidPaidSub(paymentFields),
+      redemptionData => isValidCorporateSub(redemptionData)
     )
-
-    SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
-      hasStateIfRequired(country, state, currency) &&
-      hasPostcodeIfRequired(country, postCode) &&
-      currencyIsSupportedForCountry(country, currency) &&
-      hasAddressLine1AndCity(billingAddress) &&
-      hasValidPaymentDetails(createSupportWorkersRequest)
   }
 }
 

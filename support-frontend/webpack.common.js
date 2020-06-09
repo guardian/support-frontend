@@ -102,6 +102,8 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     weeklySubscriptionLandingPage: 'pages/weekly-subscription-landing/weeklySubscriptionLanding.jsx',
     weeklySubscriptionCheckoutPage: 'pages/weekly-subscription-checkout/weeklySubscriptionCheckout.jsx',
 
+    subscriptionsRedemptionPage: 'pages/subscriptions-redemption/subscriptionsRedemption.jsx',
+
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',

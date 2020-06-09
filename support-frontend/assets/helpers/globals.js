@@ -4,8 +4,9 @@ import { type Settings } from 'helpers/settings';
 import type {
   PromotionCopy,
 } from 'helpers/productPrice/promotions';
+import type { Option } from 'helpers/types/option';
 
-function getGlobal<T>(path: string = ''): ?T {
+function getGlobal<T>(path: string = ''): Option<T> {
 
   const value = path
     .replace(/\[(.+?)\]/g, '.$1')

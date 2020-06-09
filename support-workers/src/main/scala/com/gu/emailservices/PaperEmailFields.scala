@@ -4,8 +4,8 @@ import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.catalog.{FulfilmentOptions, HomeDelivery, ProductOptions}
 import com.gu.support.promotions.Promotion
+import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
-import com.gu.support.workers.redemption.RedemptionData
 import org.joda.time.LocalDate
 
 case class PaperEmailFields(
