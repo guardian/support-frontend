@@ -12,18 +12,12 @@ import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import AusMomentSpreadTheWord from 'components/spreadTheWord/ausMomentSpreadTheWord';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { connect } from 'react-redux';
 
 // ----- Types ----- //
 type PropTypes = {
   countryId: IsoCountry,
   countryGroupId: CountryGroupId
 }
-
-const mapStateToProps = state => ({
-  countryId: state.common.internationalisation.countryId,
-  countryGroupId: state.common.internationalisation.countryGroupId,
-});
 
 // ----- Render ----- //
 function ContributionThankYouPasswordSet(props: PropTypes) {
@@ -64,4 +58,4 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
 }
 
 
-export default connect(mapStateToProps)(ContributionThankYouPasswordSet);
+export default ContributionThankYouPasswordSet;
