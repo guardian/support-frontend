@@ -42,27 +42,12 @@ body {
   }
 }
 
-.gu-content--contribution-thankyou.gu-content--aus-moment {
-  background: linear-gradient(
-      #FFE500 50%,
-      #F3C100 50%,
-      #F3C100 80%,
-      #FF7F0F 80%
-  ) !important;
-
-  .gu-content__main {
-    position: relative;
-    background-color: transparent;
-  }
-}
-
 .gu-content__main {
   position: relative;
   background-color: gu-colour(sport-faded);
 }
 
-.gu-content__main.aus-moment {
-  position: relative;
+.gu-content--aus-moment, .aus-moment {
   background: linear-gradient(
       #FFE500 50%,
       #F3C100 50%,

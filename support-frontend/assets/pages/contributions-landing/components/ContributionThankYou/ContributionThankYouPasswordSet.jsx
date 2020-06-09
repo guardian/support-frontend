@@ -11,20 +11,23 @@ import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import AusMomentSpreadTheWord from 'components/spreadTheWord/ausMomentSpreadTheWord';
-import { init as pageInit } from 'helpers/page/page';
-import { initReducer } from 'pages/contributions-landing/contributionsLandingReducer';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { connect } from 'react-redux';
 
 // ----- Types ----- //
 type PropTypes = {
+  countryId: IsoCountry,
   countryGroupId: CountryGroupId
 }
 
+const mapStateToProps = state => ({
+  countryId: state.common.internationalisation.countryId,
+  countryGroupId: state.common.internationalisation.countryGroupId,
+});
+
 // ----- Render ----- //
 function ContributionThankYouPasswordSet(props: PropTypes) {
-  const store = pageInit(() => initReducer(), true);
-  const state = store.getState();
-  const { countryId } = state.common.internationalisation;
-  const ausMomentEnabled = window.guardian.ausMomentEnabled && countryId === 'AU';
+  const ausMomentEnabled = window.guardian.ausMomentEnabled && props.countryId === 'AU';
 
   const title = 'You now have a Guardian account';
   const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
@@ -60,4 +63,5 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
   );
 }
 
-export default ContributionThankYouPasswordSet;
+
+export default connect(mapStateToProps)(ContributionThankYouPasswordSet);
