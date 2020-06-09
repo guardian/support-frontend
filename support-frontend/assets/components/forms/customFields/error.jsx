@@ -7,6 +7,7 @@ import React, { type Node } from 'react';
 import { type Option } from 'helpers/types/option';
 
 import './error.scss';
+import { InlineError } from '@guardian/src-inline-error';
 
 // ----- Types ----- //
 export type PropsForHoc = {
@@ -22,8 +23,8 @@ type Props = PropsForHoc & {
 function Error({ error, children }: Props) {
   return (
     <div className={error ? 'component-form-error' : null}>
-      {error && error}
-      {children && children}
+      {error && <InlineError>{error}</InlineError>}
+      {children}
     </div>
   );
 }
