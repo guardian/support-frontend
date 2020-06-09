@@ -42,20 +42,6 @@ body {
   }
 }
 
-.gu-content--contribution-thankyou.gu-content--aus-moment {
-  background: linear-gradient(
-      #FFE500 50%,
-      #F3C100 50%,
-      #F3C100 80%,
-      #FF7F0F 80%
-  ) !important;
-
-  .gu-content__main {
-    position: relative;
-    background-color: transparent;
-  }
-}
-
 .gu-content__main {
   position: relative;
   background-color: gu-colour(sport-faded);
@@ -1143,28 +1129,28 @@ form {
 }
 
 @keyframes fadeInOpacity {
-   0% {
-     background: rgba(0, 0, 0, 0);
-   }
-   50% {
-     background: rgba(0, 0, 0, 0);
-   }
-   100% {
-     background: rgba(0, 0, 0, .6);
-   }
- }
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+  50% {
+    background: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, .6);
+  }
+}
 
 @keyframes fadeInOpacityFont {
-   0% {
-     opacity: 0;
-   }
-   50% {
-     opacity: 0;
-   }
-   100% {
-     opacity: 1;
-   }
- }
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 .goal-reached__message {
   font-style: italic;
