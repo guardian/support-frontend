@@ -19,8 +19,8 @@ type Out<Props> = React$ComponentType<AugmentedProps<Props>>;
 
 function withValidation<Props: { id: Option<string> }>(Component: In<Props>): Out<Props> {
 
-  return ({ error, valid, ...props }: AugmentedProps<Props>) => (
-    <Validated htmlFor={props.id} error={error} valid={valid}>
+  return ({ valid, ...props }: AugmentedProps<Props>) => (
+    <Validated htmlFor={props.id} valid={valid}>
       <Component {...props} />
     </Validated>
   );

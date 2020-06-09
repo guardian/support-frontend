@@ -9,12 +9,13 @@ import {
   getAddressesForPostcode,
   type PostcodeFinderResult,
 } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 export type PostcodeFinderState = {|
   results: PostcodeFinderResult[],
   isLoading: boolean,
   postcode: Option<string>,
-  error: Option<string>,
+  error: Option<ErrorMessage>,
 |}
 
 export type PostcodeFinderActions =

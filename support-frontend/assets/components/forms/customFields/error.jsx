@@ -8,10 +8,11 @@ import { type Option } from 'helpers/types/option';
 
 import './error.scss';
 import { InlineError } from '@guardian/src-inline-error';
+import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 // ----- Types ----- //
 export type PropsForHoc = {
-  error: Option<string> | Option<Node>,
+  error: Option<ErrorMessage>,
 };
 
 type Props = PropsForHoc & {

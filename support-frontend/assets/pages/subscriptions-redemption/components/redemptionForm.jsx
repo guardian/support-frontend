@@ -17,10 +17,11 @@ import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { withValidation } from 'hocs/withValidation';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
+import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 type PropTypes = {
   userCode: Option<string>,
-  error: Option<string>,
+  error: Option<ErrorMessage>,
   setUserCode: string => void,
   submit: string => void,
 }
