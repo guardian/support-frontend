@@ -47,8 +47,7 @@ body {
   background-color: gu-colour(sport-faded);
 }
 
-.gu-content__main.aus-moment {
-  position: relative;
+.gu-content--aus-moment, .aus-moment {
   background: linear-gradient(
       #FFE500 50%,
       #F3C100 50%,

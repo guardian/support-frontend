@@ -10,14 +10,19 @@ import ContributionThankYouBlurb from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import AusMomentSpreadTheWord from 'components/spreadTheWord/ausMomentSpreadTheWord';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 type PropTypes = {
+  countryId: IsoCountry,
   countryGroupId: CountryGroupId
 }
 
 // ----- Render ----- //
 function ContributionThankYouPasswordSet(props: PropTypes) {
+  const ausMomentEnabled = window.guardian.ausMomentEnabled && props.countryId === 'AU';
+
   const title = 'You now have a Guardian account';
   const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
@@ -30,9 +35,10 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
             {body}
           </p>
         </section>
+        { ausMomentEnabled && <AusMomentSpreadTheWord /> }
         <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
-        <SpreadTheWord />
+        { !ausMomentEnabled && <SpreadTheWord /> }
         <div className="gu-content__return-link">
           <AnchorButton
             href="https://www.theguardian.com"
@@ -50,5 +56,6 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
     </div>
   );
 }
+
 
 export default ContributionThankYouPasswordSet;
