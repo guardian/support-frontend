@@ -1,17 +1,19 @@
 // @flow
 
 // ----- Imports ----- //
-
+import { type Node } from 'react';
 import { headOption, type Option } from 'helpers/types/option';
 
 
 // ----- Types ----- //
 
+export type ErrorMessage = string | Node;
+
 type Rule<Err> = { rule: boolean, error: Err };
 
 export type FormError<FieldType> = {
   field: FieldType,
-  message: string,
+  message: ErrorMessage,
 };
 
 
@@ -25,7 +27,7 @@ function notNull<A>(value: A): boolean {
 
 // ----- Functions ----- //
 
-function firstError<FieldType>(field: FieldType, errors: FormError<FieldType>[]): Option<string> {
+function firstError<FieldType>(field: FieldType, errors: FormError<FieldType>[]): Option<ErrorMessage> {
   const msgs = errors.filter(err => err.field === field).map(err => err.message);
   return headOption(msgs);
 }
@@ -34,7 +36,7 @@ function removeError<FieldType>(field: FieldType, formErrors: FormError<FieldTyp
   return formErrors.filter(error => error.field !== field);
 }
 
-function formError<FieldType>(field: FieldType, message: string): FormError<FieldType> {
+function formError<FieldType>(field: FieldType, message: ErrorMessage): FormError<FieldType> {
   return { field, message };
 }
 
