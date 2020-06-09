@@ -20,9 +20,9 @@ import { fetchJson, requestOptions } from 'helpers/fetch';
 import { logException } from 'helpers/logger';
 import type { Option } from 'helpers/types/option';
 import { appropriateErrorMessage } from 'helpers/errorReasons';
-import type { Csrf } from '../../../helpers/csrf/csrfReducer';
-import { trackComponentLoad } from '../../../helpers/tracking/behaviour';
-import { loadRecaptchaV2 } from '../../../helpers/recaptcha';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { loadRecaptchaV2 } from 'helpers/recaptcha';
 import { isPostDeployUser } from 'helpers/user/user';
 import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
@@ -66,10 +66,10 @@ const invalidStyles = {
 
 // Main component
 
-const CardNumberWithError = compose(withError, withLabel)(CardNumberElement);
-const CardExpiryWithError = compose(withError, withLabel)(CardExpiryElement);
-const CardCvcWithError = compose(withError, withLabel)(CardCvcElement);
-const RecaptchaWithError = compose(withError, withLabel)(Recaptcha);
+const CardNumberWithError = compose(withLabel, withError)(CardNumberElement);
+const CardExpiryWithError = compose(withLabel, withError)(CardExpiryElement);
+const CardCvcWithError = compose(withLabel, withError)(CardCvcElement);
+const RecaptchaWithError = compose(withLabel, withError)(Recaptcha);
 
 class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   constructor(props) {

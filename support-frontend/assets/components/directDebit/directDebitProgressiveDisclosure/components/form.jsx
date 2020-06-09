@@ -43,7 +43,7 @@ type PropTypes = {
   onSubmit: EventHandler,
 }
 
-const InputWithError = compose(withError, withLabel)(Input);
+const InputWithError = compose(withLabel, withError)(Input);
 const CheckBoxWithError = withError(CheckboxInput);
 
 function Form(props: PropTypes) {
