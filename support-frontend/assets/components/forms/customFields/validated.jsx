@@ -8,7 +8,6 @@ import { type Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 export type PropsForHoc = {
-  error: Option<string>,
   valid: Option<string>,
 };
 
@@ -19,17 +18,7 @@ type Props = PropsForHoc & {
 
 // ----- Component ----- //
 
-const getClassName = (error: Option<string>, valid: Option<string>) => {
-  if (error) {
-    return 'component-form-error';
-  } else if (valid) {
-    return 'component-form-valid';
-  }
-  return null;
-};
-
 function Validated({
-  error,
   valid,
   htmlFor,
   children,
@@ -37,23 +26,7 @@ function Validated({
   const Element = htmlFor ? 'label' : 'div';
 
   return (
-    <div className={getClassName(error, valid)}>
-      {children && children}
-      <Element
-        aria-hidden={!error}
-        aria-atomic="true"
-        aria-live="polite"
-        htmlFor={htmlFor}
-        className="component-form-error__error"
-      >
-        {(error === 'Temporary COVID message') && (
-          <div className="component-form-error__summary-error">
-            The address and postcode you entered is outside of our delivery area. You may want to
-            consider purchasing a <a href="/uk/subscribe/paper">voucher subscription</a>
-          </div>)
-        }
-        {(error !== 'Temporary COVID message') && error}
-      </Element>
+    <div className={valid ? 'component-form-valid' : null}>
       <Element
         aria-hidden={!valid}
         aria-atomic="true"
@@ -63,6 +36,7 @@ function Validated({
       >
         {valid}
       </Element>
+      {children}
     </div>
   );
 }

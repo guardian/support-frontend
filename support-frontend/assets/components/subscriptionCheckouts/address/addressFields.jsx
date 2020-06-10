@@ -53,9 +53,7 @@ type PropTypes<GlobalState> = {|
   ...StatePropTypes<GlobalState>,
 |}
 
-const StaticInputWithLabel = withLabel(Input);
-const InputWithLabel = asControlled(StaticInputWithLabel);
-const InputWithError = withError(InputWithLabel);
+const InputWithError = compose(asControlled, withLabel, withError)(Input);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const SelectWithError = withError(SelectWithLabel);
 const MaybeSelect = canShow(SelectWithError);
