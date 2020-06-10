@@ -10,7 +10,7 @@ import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.fromStage
 import com.gu.support.config.{Stage, ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
-import com.gu.support.redemptions.RedemptionData
+import com.gu.support.redemptions.{CorporateRedemption, RedemptionData}
 import com.gu.support.redemption.GetCodeStatus.NoSuchCode
 import com.gu.support.redemption.{GetCodeStatus, RedemptionCode}
 import com.gu.support.workers.BillingPeriod.SixWeekly
@@ -18,7 +18,6 @@ import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
-import com.gu.support.workers.redemption.{CorporateRedemption, RedemptionData}
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
