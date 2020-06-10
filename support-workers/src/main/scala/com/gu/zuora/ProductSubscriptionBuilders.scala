@@ -74,16 +74,16 @@ object ProductSubscriptionBuilders {
         contractEffectiveDate = contractEffectiveDate
       )
 
-      paymentMethod.fold({ case (_, maybePromoCode) =>
-        EitherT.fromEither[Future](
-          applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
-            .left.map(_.msg)
-        )
-        },
-        redemptionData =>
+      paymentMethod match {
+        case Left((_, maybePromoCode)) =>
+          EitherT.fromEither[Future](
+            applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
+              .left.map(_.msg)
+          )
+        case Right(redemptionData) =>
           withRedemption(subscriptionData.subscription, redemptionData, getCodeStatus)
             .leftMap(_.clientCode).map(subscription => subscriptionData.copy(subscription = subscription))
-      )
+      }
 
     }
 

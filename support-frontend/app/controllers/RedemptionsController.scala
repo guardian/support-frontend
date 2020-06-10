@@ -1,9 +1,11 @@
 package controllers
 
 import actions.CustomActionBuilders
+import cats.data.EitherT
 import com.gu.support.config.{Stage, TouchPointEnvironments}
 import com.gu.support.redemption.{GetCodeStatus, RedemptionCode, RedemptionTable}
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+import cats.implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -24,10 +26,14 @@ class RedemptionsController(
 
     val codeToCheck = RedemptionCode(redemptionCode)
 
-    val status: Future[Either[GetCodeStatus.RedemptionInvalid, _]] = getCodeStatus(codeToCheck)
+    val status: EitherT[Future, String, Unit] =
+      for {
+        codeToCheck <- EitherT.fromEither[Future](codeToCheck)
+        _ <- EitherT(getCodeStatus(codeToCheck)).leftMap(_.clientCode)
+      } yield ()
 
-    status.map {
-      case Left(reason) => NotFound(reason.clientCode)
+    status.value.map {
+      case Left(reason) => NotFound(reason)
       case Right(_) => Ok("")
     }
   }
