@@ -66,7 +66,7 @@ object ProductSubscriptionBuilders {
       subscriptionPaymentType: SubscriptionPaymentType,
       environment: TouchPointEnvironment,
       now: () => LocalDate
-    )(implicit ec: ExecutionContext): EitherT[Future, String, SubscriptionData] = {
+    )(implicit ec: ExecutionContext): EitherT[Future, Either[PromoError, GetCodeStatus.RedemptionInvalid], SubscriptionData] = {
 
       val contractEffectiveDate = now()
       val delay = subscriptionPaymentType match {
@@ -88,11 +88,12 @@ object ProductSubscriptionBuilders {
         case SubscriptionPaymentDirect(_, maybePromoCode, country, promotionService) =>
           EitherT.fromEither[Future](
             applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
-              .left.map(_.msg)
+              .left.map(Left.apply)
           )
         case SubscriptionPaymentCorporate(redemptionData, getCodeStatus) =>
           withRedemption(subscriptionData.subscription, redemptionData, getCodeStatus)
-            .leftMap(_.clientCode).map(subscription => subscriptionData.copy(subscription = subscription))
+            .map(subscription => subscriptionData.copy(subscription = subscription))
+            .leftMap(Right.apply)
       }
 
     }
