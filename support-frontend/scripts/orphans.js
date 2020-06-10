@@ -25,17 +25,18 @@ madge(baseDir, config).then((result) => {
   // filter out entryPointPaths and tests from jsOrphans
   const jsOrphansFiltered = jsOrphans.filter(orphanPath =>
     !entryPointPaths.includes(orphanPath) && path.basename(path.dirname(orphanPath)) !== testDirectoryName);
-
-  if (!jsOrphansFiltered && !scssOrphans) {
+  // filter out entryPointPaths from scssOrphans
+  const scssOrphansFiltered = scssOrphans.filter(orphanPath => !entryPointPaths.includes(orphanPath));
+  if (!jsOrphansFiltered && !scssOrphansFiltered) {
     console.log(noWarningColour('No orphan modules identified!'));
   } else {
     if (jsOrphansFiltered) {
       console.log(`${'\n'}${warningColour.bold(`${jsOrphansFiltered.length} orphan .js/.jsx modules identified...`)}`);
       jsOrphansFiltered.forEach(orphan => console.log(warningColour(orphan)));
     }
-    if (scssOrphans) {
-      console.log(`${'\n'}${warningColour.bold(`${scssOrphans.length} orphan .scss modules identified...`)}`);
-      scssOrphans.forEach(orphan => console.log(warningColour(orphan)));
+    if (scssOrphansFiltered) {
+      console.log(`${'\n'}${warningColour.bold(`${scssOrphansFiltered.length} orphan .scss modules identified...`)}`);
+      scssOrphansFiltered.forEach(orphan => console.log(warningColour(orphan)));
     }
   }
 }).catch((e) => {
