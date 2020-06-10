@@ -1,8 +1,11 @@
+
 package utils
 
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
+import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.catalog.{Everyday, HomeDelivery}
+import com.gu.support.catalog.{Corporate, Everyday, HomeDelivery}
+import com.gu.support.redemptions.CorporateRedemption
 import com.gu.support.workers.BillingPeriod.{Annual, Monthly}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
@@ -135,6 +138,15 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingAddressLineAndCity) shouldBe false
   }
 
+  it should "succeed when there is a valid corporate sub" ignore {
+    val corporateSub = validDigitalPackRequest.copy(
+      product = DigitalPack(GBP, Monthly, Corporate),
+      paymentFields = Right(CorporateRedemption("test-code", "1"))
+    )
+
+    DigitalPackValidation.passes(corporateSub) shouldBe true
+  }
+
 }
 
 class PaperValidationTest extends AnyFlatSpec with Matchers {
@@ -171,7 +183,12 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
         country = Country.UK
       )
       val requestMissingAddressLineAndCity = validPaperRequest.copy(billingAddress = emptyAddress, deliveryAddress = Some(emptyAddress))
-      DigitalPackValidation.passes(requestMissingAddressLineAndCity) shouldBe false
+      PaperValidation.passes(requestMissingAddressLineAndCity) shouldBe false
+  }
+
+  it should "not allow corporate redemptions for paper products" in {
+    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(CorporateRedemption("test-code", "1")))
+    PaperValidation.passes(requestWithCorporateRedemption) shouldBe false
   }
 
 }

@@ -121,16 +121,14 @@ function withProps(props: PropTypes) {
       <div className="gu-content__form">
         {showSecureTransactionIndicator()}
 
-        {campaign && campaign.tickerSettings && campaign.tickerSettings.tickerJsonUrl ?
+        {campaign && campaign.tickerSettings ?
           <ContributionTicker
-            tickerJsonUrl={campaign.tickerSettings.tickerJsonUrl}
+            {...campaign.tickerSettings}
             onGoalReached={props.setTickerGoalReached}
-            tickerType={campaign.tickerSettings.tickerType}
-            currencySymbol={campaign.tickerSettings.localCurrencySymbol}
           /> : null
         }
-        {props.tickerGoalReached && campaign && campaign.tickerSettings && campaign.tickerSettings.goalReachedCopy ?
-          campaign.tickerSettings.goalReachedCopy :
+        {props.tickerGoalReached && campaign && campaign.tickerSettings && campaign.goalReachedCopy ?
+          campaign.goalReachedCopy :
           <div>
             {countryGroupDetails.formMessage ?
               <div className="form-message">{countryGroupDetails.formMessage}</div> : null

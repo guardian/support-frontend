@@ -1,6 +1,6 @@
-package com.gu.support.workers
+package com.gu.support.redemptions
 
-package object redemption {
+package object redemptions {
   type RedemptionCode = String
   type CorporateAccountId = String
 }

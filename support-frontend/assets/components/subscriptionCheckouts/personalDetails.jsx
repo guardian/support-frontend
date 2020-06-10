@@ -25,7 +25,7 @@ export type PropTypes = {
 }
 
 const InputWithLabel = withLabel(Input);
-const InputWithError = compose(asControlled, withError)(InputWithLabel);
+const InputWithError = compose(asControlled, withLabel, withError)(Input);
 
 export default function PersonalDetails(props: PropTypes) {
   const emailFooter = (

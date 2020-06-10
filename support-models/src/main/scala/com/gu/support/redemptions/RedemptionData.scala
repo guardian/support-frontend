@@ -1,7 +1,8 @@
-package com.gu.support.workers.redemption
+package com.gu.support.redemptions
 
 import cats.syntax.functor._
 import com.gu.support.encoding.Codec
+import com.gu.support.redemptions.redemptions.{CorporateAccountId, RedemptionCode}
 import com.gu.support.zuora.api.{ReaderType, Subscription}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}

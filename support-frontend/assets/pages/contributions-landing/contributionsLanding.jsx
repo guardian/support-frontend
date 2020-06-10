@@ -44,6 +44,7 @@ if (!isDetailsSupported) {
 const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(() => initReducer(), true);
+const state = store.getState();
 
 if (!window.guardian.polyfillScriptLoaded) {
   gaEvent({
@@ -87,8 +88,17 @@ const setOneOffContributionCookie = () => {
   );
 };
 
-
 const campaignName = getCampaignName();
+
+const ausMomentLandingPageBackgroundVariant = state.common.abParticipations.ausMomentLandingPageBackgroundTest;
+const isAusMomentVariant = ausMomentLandingPageBackgroundVariant === 'ausColoursVariant';
+const { countryId } = state.common.internationalisation;
+const ausMomentEnabled = window.guardian.ausMomentEnabled && countryId === 'AU';
+
+const thankYouClassModifiers = [
+  'contribution-thankyou',
+  ausMomentEnabled ? 'aus-moment' : null,
+];
 
 const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
@@ -104,6 +114,7 @@ const contributionsLandingPage = (campaignCodeParameter: ?string) => (
     header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
+    isAusMomentVariant={isAusMomentVariant}
   >
     <ContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
@@ -139,7 +150,7 @@ const router = (
             }
             return (
               <Page
-                classModifiers={['contribution-thankyou']}
+                classModifiers={thankYouClassModifiers}
                 header={<RoundelHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >

@@ -15,8 +15,9 @@ configured below and the prop 'isRunning' needs to be set to
 `ContributionThankYou` and `ContributionThankYouPasswordSet`)
 *********************************************************** */
 
+const protestSurveyLink = 'https://www.surveymonkey.co.uk/r/RRPYWQJ';
 const testimonialSurveyLink = 'https://www.surveymonkey.co.uk/r/SWLJ7JZ';
-const globalTestimonialEndDate = Date.parse('2020-05-13');
+const globalTestimonialEndDate = Date.parse('2020-06-26');
 const ausTestimonialEndDate = Date.parse('2020-07-10');
 
 type PropTypes = {|
@@ -24,11 +25,18 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
 |};
 
-export default function ContributionsSurvey(props: PropTypes) {
-  const isAus = props.countryGroupId === 'AUDCountries';
-  const endDate = isAus ? ausTestimonialEndDate : globalTestimonialEndDate;
+function surveyUrl(countryGroupId): string {
+  return (countryGroupId === 'AUDCountries' ? testimonialSurveyLink : protestSurveyLink);
+}
+
+function isBeforeEndDate(countryGroupId): boolean {
+  const endDate = (countryGroupId === 'AUDCountries' ? ausTestimonialEndDate : globalTestimonialEndDate);
   const now = new Date();
-  const showSurvey = props.isRunning && now < endDate;
+  return now < endDate;
+}
+
+export default function ContributionsSurvey(props: PropTypes) {
+  const showSurvey = props.isRunning && isBeforeEndDate(props.countryGroupId);
 
   return showSurvey ? (
     <div className="contribution-thank-you-block">
@@ -37,7 +45,7 @@ export default function ContributionsSurvey(props: PropTypes) {
           Please fill out this short form to help us learn a little more about your support for The Guardian
       </p>
       <AnchorButton
-        href={testimonialSurveyLink}
+        href={surveyUrl(props.countryGroupId)}
         appearance="secondary"
         aria-label="Link to contribution survey"
       >

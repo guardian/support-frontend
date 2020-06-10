@@ -1,6 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
+import React from 'react';
 import { combineReducers, type Dispatch } from 'redux';
 
 import { fromString, type IsoCountry } from 'helpers/internationalisation/country';
@@ -122,10 +123,15 @@ const applyDeliveryAddressRules = (
   fields: FormFields,
   addressType: AddressType,
 ): FormError<FormField>[] => {
+  const error = (
+    <div className="component-form-error__summary-error">
+      The address and postcode you entered is outside of our delivery area. You may want to
+      consider purchasing a <a href="/uk/subscribe/paper">voucher subscription</a>
+    </div>);
   const homeRules = validate([
     {
       rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
-      error: formError('postCode', 'Temporary COVID message'),
+      error: formError('postCode', error),
     },
   ]);
 

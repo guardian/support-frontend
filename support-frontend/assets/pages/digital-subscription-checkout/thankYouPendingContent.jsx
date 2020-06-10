@@ -2,8 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
-import { connect } from 'react-redux';
+import * as React from 'react';
 
 import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
@@ -12,22 +11,21 @@ import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
-import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
 // ----- Types ----- //
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
-  ...FormFields,
+  marketingConsent: React.Node,
 };
 
 // ----- Component ----- //
 
 function ThankYouPendingContent(props: PropTypes) {
+
   return (
     <div className="thank-you-stage">
       <ThankYouHero
@@ -65,12 +63,9 @@ function ThankYouPendingContent(props: PropTypes) {
           </p>
         </Text>
       </Content>
-      <SubscriptionsSurvey product={props.product} />
+      <SubscriptionsSurvey product={DigitalPack} />
       <Content>
-        <MarketingConsent render={({ title, message }) => (
-          <Text title={title}>{message}</Text>
-        )}
-        />
+        {props.marketingConsent}
         <OptInCopy subscriptionProduct={DigitalPack} />
       </Content>
     </div>
@@ -80,4 +75,4 @@ function ThankYouPendingContent(props: PropTypes) {
 
 // ----- Export ----- //
 
-export default connect(state => ({ ...getFormFields(state) }))(ThankYouPendingContent);
+export default ThankYouPendingContent;

@@ -10,6 +10,7 @@ import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.fromStage
 import com.gu.support.config.{Stage, ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
+import com.gu.support.redemptions.RedemptionData
 import com.gu.support.redemption.GetCodeStatus.NoSuchCode
 import com.gu.support.redemption.{GetCodeStatus, RedemptionCode}
 import com.gu.support.workers.BillingPeriod.SixWeekly

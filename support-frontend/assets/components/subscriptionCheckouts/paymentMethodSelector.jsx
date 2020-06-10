@@ -18,13 +18,14 @@ import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmi
 import { type BillingPeriod } from 'helpers/billingPeriods';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 type PropTypes = {|
   country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
-  validationError: Option<string>,
+  validationError: Option<ErrorMessage>,
   allErrors: Array<Object>,
   billingPeriod: BillingPeriod,
   amount: number,
