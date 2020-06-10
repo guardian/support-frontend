@@ -7,12 +7,11 @@ import cats.implicits._
 import com.gu.i18n.Country
 import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
-import com.gu.support.config.TouchPointEnvironments.fromStage
-import com.gu.support.config.{Stage, ZuoraConfig, ZuoraDigitalPackConfig}
+import com.gu.support.config.{TouchPointEnvironment, ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
-import com.gu.support.redemptions.{CorporateRedemption, RedemptionData}
 import com.gu.support.redemption.GetCodeStatus.NoSuchCode
 import com.gu.support.redemption.{GetCodeStatus, RedemptionCode}
+import com.gu.support.redemptions.{CorporateRedemption, RedemptionData}
 import com.gu.support.workers.BillingPeriod.SixWeekly
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
@@ -46,26 +45,37 @@ object ProductSubscriptionBuilders {
   }
 
   object buildDigitalPackSubscription {
+
+    sealed trait SubscriptionPaymentType
+
+    case class SubscriptionPaymentDirect(
+      zuoraDigitalPackConfig: ZuoraDigitalPackConfig,
+      maybePromoCode: Option[PromoCode],
+      country: Country,
+      promotionService: PromotionService
+    ) extends SubscriptionPaymentType
+
+    case class SubscriptionPaymentCorporate(
+      redemptionData: RedemptionData,
+      getCodeStatus: GetCodeStatus
+    ) extends SubscriptionPaymentType
+
     def apply(
       digitalPack: DigitalPack,
       requestId: UUID,
-      country: Country,
-      paymentMethod: Either[(ZuoraDigitalPackConfig, Option[PromoCode]), RedemptionData],
-      promotionService: PromotionService,
-      stage: Stage,
-      isTestUser: Boolean,
-      getCodeStatus: GetCodeStatus,
+      subscriptionPaymentType: SubscriptionPaymentType,
+      environment: TouchPointEnvironment,
       now: () => LocalDate
     )(implicit ec: ExecutionContext): EitherT[Future, String, SubscriptionData] = {
 
       val contractEffectiveDate = now()
-      val delay = paymentMethod match {
-        case Left((config, _)) => config.defaultFreeTrialPeriod + config.paymentGracePeriod
-        case Right(_) => 0
+      val delay = subscriptionPaymentType match {
+        case direct: SubscriptionPaymentDirect => direct.zuoraDigitalPackConfig.defaultFreeTrialPeriod + direct.zuoraDigitalPackConfig.paymentGracePeriod
+        case _: SubscriptionPaymentCorporate => 0
       }
       val contractAcceptanceDate = contractEffectiveDate.plusDays(delay)
 
-      val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(fromStage(stage, isTestUser), fixedTerm = false), digitalPack.describe)
+      val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(environment, fixedTerm = false), digitalPack.describe)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -74,13 +84,13 @@ object ProductSubscriptionBuilders {
         contractEffectiveDate = contractEffectiveDate
       )
 
-      paymentMethod match {
-        case Left((_, maybePromoCode)) =>
+      subscriptionPaymentType match {
+        case SubscriptionPaymentDirect(_, maybePromoCode, country, promotionService) =>
           EitherT.fromEither[Future](
             applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
               .left.map(_.msg)
           )
-        case Right(redemptionData) =>
+        case SubscriptionPaymentCorporate(redemptionData, getCodeStatus) =>
           withRedemption(subscriptionData.subscription, redemptionData, getCodeStatus)
             .leftMap(_.clientCode).map(subscription => subscriptionData.copy(subscription = subscription))
       }
@@ -116,8 +126,7 @@ object ProductSubscriptionBuilders {
     maybePromoCode: Option[PromoCode],
     firstDeliveryDate: Option[LocalDate],
     promotionService: PromotionService,
-    stage: Stage,
-    isTestUser: Boolean
+    environment: TouchPointEnvironment
   ): Either[PromoError, SubscriptionData] = {
 
     val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
@@ -127,7 +136,7 @@ object ProductSubscriptionBuilders {
       case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
     }
 
-    val productRatePlanId = validateRatePlan(paper.productRatePlan(fromStage(stage, isTestUser), fixedTerm = false), paper.describe)
+    val productRatePlanId = validateRatePlan(paper.productRatePlan(environment, fixedTerm = false), paper.describe)
 
     val subscriptionData = buildProductSubscription(
       requestId,
@@ -148,8 +157,7 @@ object ProductSubscriptionBuilders {
       firstDeliveryDate: Option[LocalDate],
       promotionService: PromotionService,
       readerType: ReaderType,
-      stage: Stage,
-      isTestUser: Boolean,
+      environment: TouchPointEnvironment,
       contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
     ): Either[PromoError, SubscriptionData] = {
 
@@ -158,7 +166,6 @@ object ProductSubscriptionBuilders {
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a Guardian Weekly subscription.", e)
       }
 
-      val environment = fromStage(stage, isTestUser)
       val gift = readerType == ReaderType.Gift
 
       val recurringProductRatePlanId = validateRatePlan(guardianWeekly.productRatePlan(environment, fixedTerm = gift), guardianWeekly.describe)

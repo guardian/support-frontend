@@ -5,7 +5,7 @@ import java.util.UUID
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.Domestic
-import com.gu.support.config.Stages.DEV
+import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.BillingPeriod.Quarterly
 import com.gu.support.workers.GuardianWeekly
@@ -81,8 +81,7 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       Some(firstDeliveryDate),
       promotionService,
       ReaderType.Gift,
-      DEV,
-      isTestUser = false,
+      SANDBOX,
       contractEffectiveDate = saleDate).right.get
 
   lazy val nonGift = buildGuardianWeeklySubscription(
@@ -92,8 +91,7 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     Some(firstDeliveryDate),
     promotionService,
     ReaderType.Direct,
-    DEV,
-    isTestUser = false,
+    SANDBOX,
     contractEffectiveDate = saleDate).right.get
 
 }

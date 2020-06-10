@@ -3,14 +3,15 @@ package com.gu.support.workers.lambdas
 import java.time.OffsetDateTime
 
 import cats.data.EitherT
+import cats.implicits._
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.config.{Stage, TouchPointEnvironments}
-import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.{GetCodeStatus, RedemptionTable}
+import com.gu.support.config.TouchPointEnvironments
+import com.gu.support.promotions.PromotionService
+import com.gu.support.redemption.GetCodeStatus
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{RetryException, RetryNone}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -18,11 +19,11 @@ import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
+import com.gu.zuora.ProductSubscriptionBuilders.buildDigitalPackSubscription.{SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
+import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import cats.implicits._
-import org.joda.time.{DateTimeZone, LocalDate}
 
 case class BuildSubscribeEffectError(message: String) extends RuntimeException {
   def asRetryException: RetryException =
@@ -142,19 +143,18 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   ): Future[SubscriptionData] = {
     val isTestUser = state.user.isTestUser
     val config = zuoraConfigProvider.get(isTestUser)
-    val stage = Configuration.stage
+    val environment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
 
     val eventualErrorOrSubscriptionData = state.product match {
       case c: Contribution => EitherT.pure[Future, String](buildContributionSubscription(c, state.requestId, config))
       case d: DigitalPack => buildDigitalPackSubscription(
         d,
         state.requestId,
-        state.user.billingAddress.country,
-        state.paymentMethod.leftMap(_ => (config.digitalPack, state.promoCode)),
-        promotionService,
-        stage,
-        isTestUser,
-        getCodeStatus,
+        state.paymentMethod.fold(
+          _ => SubscriptionPaymentDirect(config.digitalPack, state.promoCode, state.user.billingAddress.country, promotionService),
+          SubscriptionPaymentCorporate(_, getCodeStatus)
+        ),
+        environment,
         now
       )
       case p: Paper => EitherT.fromEither[Future](buildPaperSubscription(
@@ -164,14 +164,9 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         state.promoCode,
         state.firstDeliveryDate,
         promotionService,
-        stage,
-        isTestUser
+        environment
       ).leftMap(_.msg))
-      case w: GuardianWeekly => {
-        val readerType: ReaderType = state.giftRecipient match  {
-          case _: Some[GiftRecipient] => ReaderType.Gift
-          case _ => ReaderType.Direct
-        }
+      case w: GuardianWeekly =>
         EitherT.fromEither[Future](buildGuardianWeeklySubscription(
           w,
           state.requestId,
@@ -179,11 +174,9 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           state.promoCode,
           state.firstDeliveryDate,
           promotionService,
-          readerType,
-          stage,
-          isTestUser
+          if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct,
+          environment
         ).leftMap(_.msg))
-      }
     }
     eventualErrorOrSubscriptionData.value.flatMap { errorOrSubscriptionData =>
       Future.fromTry(errorOrSubscriptionData.left.map(BuildSubscribeEffectError).toTry)

@@ -5,7 +5,7 @@ import java.util.UUID
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.Corporate
-import com.gu.support.config.Stages.DEV
+import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
@@ -14,6 +14,7 @@ import com.gu.support.workers.BillingPeriod.Monthly
 import com.gu.support.workers.DigitalPack
 import com.gu.support.zuora.api._
 import com.gu.zuora.ProductSubscriptionBuilders._
+import com.gu.zuora.ProductSubscriptionBuilders.buildDigitalPackSubscription.{SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -73,29 +74,23 @@ class BuildDigitalPackSubscriptionSpec extends AsyncFlatSpec with Matchers {
   lazy val corporate = buildDigitalPackSubscription(
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    Country.UK,
-    Right(CorporateRedemption("CODE", "1")),
-    promotionService,
-    DEV,
-    isTestUser = false,
-    new GetCodeStatus({
-      case "CODE" => Future.successful(Some(Map(
-        "available" -> DynamoLookup.DynamoBoolean(true),
-        "corporateId" -> DynamoLookup.DynamoString("1")
-      )))
-    }),
+    SubscriptionPaymentCorporate(
+      CorporateRedemption("CODE", "1"),
+      new GetCodeStatus({
+        case "CODE" => Future.successful(Some(Map(
+          "available" -> DynamoLookup.DynamoBoolean(true),
+          "corporateId" -> DynamoLookup.DynamoString("1")
+        )))
+      })),
+    SANDBOX,
     () => saleDate
   ).value.map(_.right.get)
 
   lazy val monthly = buildDigitalPackSubscription(
     DigitalPack(GBP, Monthly),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    Country.UK,
-    Left((ZuoraDigitalPackConfig(14, 2), None)),
-    promotionService,
-    DEV,
-    isTestUser = false,
-    new GetCodeStatus(_ => Future.failed(new Throwable)),
+    SubscriptionPaymentDirect(ZuoraDigitalPackConfig(14, 2), None, Country.UK, promotionService),
+    SANDBOX,
     () => saleDate
   ).value.map(_.right.get)
 
