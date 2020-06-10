@@ -8,14 +8,14 @@ const flattenedEntryPoints = Object.keys(entryPoints).reduce((acc, key) => ({
   ...entryPoints[key],
 }), {});
 
+const baseDir = path.join(__dirname, '..', 'assets');
+
 const config = {
-  baseDir: path.join(__dirname, '..', 'assets'),
+  baseDir,
   fileExtensions: ['js', 'jsx', 'scss'],
 };
 
-const assetsPath = path.join(__dirname, '..', 'assets');
-
-madge(assetsPath, config).then((result) => {
+madge(baseDir, config).then((result) => {
   const testDirectoryName = '__tests__';
   const warningColour = chalk.rgb(245, 123, 66);
   const noWarningColour = chalk.keyword('green');
