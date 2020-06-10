@@ -38,7 +38,7 @@ class Promotions(
     ) { promotionTerms =>
       val productLandingPage = promotionTerms.product match {
         case GuardianWeekly => routes.WeeklySubscription.weeklyGeoRedirect(promotionTerms.isGift).url
-        case DigitalPack => routes.DigitalSubscription.digitalGeoRedirect().url
+        case DigitalPack => routes.DigitalSubscriptionController.digitalGeoRedirect().url
         case Paper => routes.PaperSubscription.paper(false).url
       }
       val queryString = request.queryString + ("promoCode" -> Seq(promoCode))

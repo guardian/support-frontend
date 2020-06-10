@@ -13,7 +13,7 @@ import controllers.RedemptionController._
 import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
-import services.{IdentityService, TestUserService}
+import services.{AccessCredentials, AuthenticatedIdUser, IdentityService, MembersDataService, TestUserService}
 import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionRedemptionForm
@@ -30,12 +30,13 @@ class RedemptionController(
   val assets: AssetsResolver,
   settingsProvider: AllSettingsProvider,
   identityService: IdentityService,
+  membersDataService: MembersDataService,
   testUsers: TestUserService,
   components: ControllerComponents,
   fontLoaderBundle: Either[RefPath, StyleContent]
 )(
   implicit val ec: ExecutionContext
-) extends AbstractController(components) with Circe {
+) extends AbstractController(components) with Circe with UserDigitalSubscription {
 
   import actionRefiners._
 
@@ -121,10 +122,14 @@ class RedemptionController(
   def displayProcessing(redemptionCode: String): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async {
       implicit request: AuthRequest[Any] =>
-        val processingPage = for {
+        val processingPage: EitherT[Future, String, Result] = for {
           user <- identityService.getUser(request.user.minimalUser)
           corporateCustomer <- getCorporateCustomer(redemptionCode)
-        } yield showProcessing(redemptionCode, corporateCustomer, user)
+          hasDigipack <- EitherT.right(userHasDigitalSubscription(membersDataService, request.user))
+        } yield if (hasDigipack)
+          redirectToExistingThankYouPage
+        else
+          showProcessing(redemptionCode, corporateCustomer, user)
 
         processingPage.value.map(
           _.fold(

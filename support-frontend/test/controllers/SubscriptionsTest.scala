@@ -82,7 +82,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
-    ): DigitalSubscription = {
+    ): DigitalSubscriptionController = {
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(allSettings)
       val client = mock[SupportWorkersClient]
@@ -107,7 +107,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[Boolean])).thenReturn(prices)
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
 
-      new DigitalSubscription(
+      new DigitalSubscriptionController(
         priceSummaryServiceProvider = priceSummaryServiceProvider,
         assets = assetResolver,
         actionRefiners = actionRefiner,
