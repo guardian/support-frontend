@@ -10,6 +10,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
 const { getClassName } = require('./scripts/css');
+const entryPoints = require('./webpack.entryPoints');
 
 const cssLoaders = [{
   loader: 'postcss-loader',
@@ -85,34 +86,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
 
   context: path.resolve(__dirname, 'assets'),
 
-  entry: {
-    favicons: 'images/favicons.js',
-    showcasePage: 'pages/showcase/showcase.jsx',
-    subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
-    contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
-    fontLoader: 'helpers/fontLoader.js',
-
-    digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
-    digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.jsx',
-    digitalSubscriptionCheckoutPageThankYouExisting: 'pages/digital-subscription-checkout/thankYouExisting.jsx',
-
-    paperSubscriptionLandingPage: 'pages/paper-subscription-landing/paperSubscriptionLandingPage.jsx',
-    paperSubscriptionCheckoutPage: 'pages/paper-subscription-checkout/paperSubscriptionCheckout.jsx',
-
-    weeklySubscriptionLandingPage: 'pages/weekly-subscription-landing/weeklySubscriptionLanding.jsx',
-    weeklySubscriptionCheckoutPage: 'pages/weekly-subscription-checkout/weeklySubscriptionCheckout.jsx',
-
-    subscriptionsRedemptionPage: 'pages/subscriptions-redemption/subscriptionsRedemption.jsx',
-
-    payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
-    payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
-    googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
-    error404Page: 'pages/error/error404.jsx',
-    error500Page: 'pages/error/error500.jsx',
-    unsupportedBrowserStyles: 'stylesheets/fallback-pages/unsupportedBrowser.scss',
-    contributionsRedirectStyles: 'stylesheets/fallback-pages/contributionsRedirect.scss',
-    promotionTerms: 'pages/promotion-terms/promotionTerms.jsx',
-  },
+  entry: entryPoints.common,
 
   output: {
     path: path.resolve(__dirname, 'public/compiled-assets'),

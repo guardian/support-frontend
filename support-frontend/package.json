@@ -4,7 +4,7 @@
   "description": "Frontend for the supporter platform.",
   "scripts": {
     "clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
-    "validate": "echo 'Validating JS' && npm-run-all 'lint --fix' flow",
+    "validate": "echo 'Validating JS' && npm-run-all 'lint --fix' flow && yarn orphans",
     "flow": "flow",
     "lint": "eslint --ext .js --ext .jsx .",
     "build-dev": "webpack --config webpack.dev.js",
@@ -21,7 +21,8 @@
     "storybook-static": "build-storybook -c .storybook -o storybook-static  -s .storybook/static",
     "cache-ssr": "node scripts/ssrScript.js",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
-    "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle"
+    "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle",
+    "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js"
   },
   "browserslist": [
     "Chrome >= 49",
@@ -115,6 +116,7 @@
     "babel-loader": "^8.0.5",
     "babel-plugin-add-react-displayname": "0.0.5",
     "babel-plugin-dynamic-import-node": "^2.2.0",
+    "chalk": "^4.1.0",
     "classnames": "^2.2.6",
     "css-loader": "^1.0.0",
     "eslint": "^5.16.0",
@@ -131,6 +133,7 @@
     "jest": "^24.9.0",
     "json-sass-vars": "^3.0.0",
     "lodash": "^4.17.13",
+    "madge": "^3.9.1",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.13.1",
     "npm-run-all": "^4.1.3",
