@@ -12,7 +12,6 @@ import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, Prom
 import com.gu.support.redemption.GetCodeStatus.NoSuchCode
 import com.gu.support.redemption.{GetCodeStatus, RedemptionCode}
 import com.gu.support.redemptions.{CorporateRedemption, RedemptionData}
-import com.gu.support.workers.BillingPeriod.SixWeekly
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._

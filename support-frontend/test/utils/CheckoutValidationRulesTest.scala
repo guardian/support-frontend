@@ -6,7 +6,6 @@ import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{Corporate, Everyday, HomeDelivery}
 import com.gu.support.redemptions.CorporateRedemption
-import com.gu.support.workers.BillingPeriod.{Annual, Monthly}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec

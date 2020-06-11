@@ -5,9 +5,9 @@ import com.gu.aws.AwsCloudWatchMetricPut.{catalogFailureRequest, client}
 import com.gu.i18n.Currency
 import com.gu.support.catalog.GuardianWeekly.getProductRatePlan
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.workers.BillingPeriod
-import com.gu.support.workers.BillingPeriod.{Quarterly, SixWeekly}
+import com.gu.support.workers.{BillingPeriod, Quarterly, SixWeekly}
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.generic.auto._
 
 object CatalogService {
   def apply(environment: TouchPointEnvironment): CatalogService = new CatalogService(environment, new S3CatalogProvider(environment))

@@ -1,10 +1,10 @@
 package com.gu.support.catalog
 
 import com.gu.i18n.Currency.{GBP, USD}
-import com.gu.support.catalog.CatalogServiceSpec.serviceWithFixtures
-import com.gu.support.config.TouchPointEnvironments.PROD
-import com.gu.support.workers.BillingPeriod.{Annual, Monthly, Quarterly}
+import com.gu.support.workers.{Annual, Monthly, Quarterly}
 import io.circe.parser._
+import CatalogServiceSpec.serviceWithFixtures
+import com.gu.support.config.TouchPointEnvironments.PROD
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 

@@ -3,15 +3,15 @@ package com.gu.support.pricing
 import com.gu.i18n.CountryGroup.{Europe, UK}
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.support.catalog._
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
 import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
 import com.gu.support.promotions.ServicesFixtures.discountPromoCode
-import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
-import com.gu.support.workers.BillingPeriod.{Annual, Monthly, Quarterly, SixWeekly}
+import com.gu.support.promotions.{DefaultPromotions, DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
 import org.joda.time.Months
-import org.scalatest.Assertion
 import org.scalatest.OptionValues._
+import org.scalatest.Assertion
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 

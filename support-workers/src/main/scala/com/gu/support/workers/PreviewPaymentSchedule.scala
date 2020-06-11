@@ -1,7 +1,6 @@
 package com.gu.support.workers
 
 import com.gu.services.Services
-import com.gu.support.workers.BillingPeriod.{Annual, Monthly, Quarterly, SixWeekly}
 import com.gu.support.zuora.api.response.{Charge, PreviewSubscribeResponse}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeItem}
 import org.joda.time.LocalDate
@@ -20,7 +19,7 @@ object PreviewPaymentSchedule {
     val numberOfInvoicesToPreview: Int = billingPeriod match {
       case Monthly => 13
       case Quarterly => 5
-      case Annual => 2
+      case com.gu.support.workers.Annual => 2
       case SixWeekly => 2
     }
     singleResponseCheck(

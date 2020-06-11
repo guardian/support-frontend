@@ -9,7 +9,7 @@ import com.gu.support.catalog._
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.pricing.{PriceSummary, PriceSummaryServiceProvider}
 import com.gu.support.promotions.DefaultPromotions
-import com.gu.support.workers.BillingPeriod.{Monthly, Quarterly}
+import com.gu.support.workers.{Monthly, Quarterly}
 import config.StringsConfig
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc._

@@ -3,14 +3,13 @@ package com.gu.support.workers
 import cats.syntax.functor._
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
-import com.gu.support.catalog.{DigitalProductOptions, FulfilmentOptions, NoProductOptions, PaperProductOptions}
+import com.gu.support.catalog.{DigitalProductOptions, FulfilmentOptions, NoProductOptions, PaperProductOptions, ProductOptions}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.encoding.JsonHelpers._
-import com.gu.support.workers.BillingPeriod.Monthly
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import com.gu.support.encoding.JsonHelpers._
 
 
 sealed trait ProductType {

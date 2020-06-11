@@ -3,7 +3,6 @@ package com.gu.support.workers
 import com.gu.i18n.Currency
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.{Collection, RestOfWorld, Sunday}
-import com.gu.support.workers.BillingPeriod.{Annual, Monthly}
 import com.gu.support.workers.ProductType._
 import org.scalatest.wordspec.AnyWordSpec
 

@@ -12,11 +12,12 @@ import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.monitoring.{LambdaExecutionResult, PaymentProvider, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
+import com.gu.support.catalog.{GuardianWeekly, Contribution => _, DigitalPack => _, Paper => _, _}
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.DefaultPromotions
-import com.gu.support.workers.BillingPeriod.{Annual, Monthly, Quarterly, SixWeekly}
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendAcquisitionEventState
+import io.circe.generic.auto._
 import ophan.thrift.event.{PrintOptions, PrintProduct, Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 

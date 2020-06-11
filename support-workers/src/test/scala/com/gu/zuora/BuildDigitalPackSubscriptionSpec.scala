@@ -10,8 +10,7 @@ import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
 import com.gu.support.redemptions.CorporateRedemption
-import com.gu.support.workers.BillingPeriod.Monthly
-import com.gu.support.workers.DigitalPack
+import com.gu.support.workers.{DigitalPack, Monthly}
 import com.gu.support.zuora.api._
 import com.gu.zuora.ProductSubscriptionBuilders._
 import com.gu.zuora.ProductSubscriptionBuilders.buildDigitalPackSubscription.{SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
