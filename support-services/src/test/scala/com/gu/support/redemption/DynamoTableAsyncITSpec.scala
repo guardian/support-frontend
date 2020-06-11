@@ -13,10 +13,10 @@ class DynamoTableAsyncITSpec extends AsyncFlatSpec with Matchers {
   val table: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
 
   "lookup" should "handle all chars" in {
-    val crazyCode = """ITTEST- !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"""
-    table.lookup(crazyCode).map { lookedup =>
+    val allCharsCode = """ITTEST- !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"""
+    table.lookup(allCharsCode).map { lookedup =>
       lookedup should be(Some(Map(
-        "redemptionCode" -> DynamoString(crazyCode),
+        "redemptionCode" -> DynamoString(allCharsCode),
         "available" -> DynamoBoolean(true),
         "corporateId" -> DynamoString("1")
       )))
@@ -24,13 +24,13 @@ class DynamoTableAsyncITSpec extends AsyncFlatSpec with Matchers {
   }
 
   "update" should "handle all chars" in {
-    val crazyCode = """ITTEST-MUTABLE- !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"""
+    val allCharsMutableCode = """ITTEST-MUTABLE- !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"""
     for {
-      _ <- table.update(crazyCode, DynamoFieldUpdate("available", false)).map(_ should be(()))
-      _ <- table.update(crazyCode, DynamoFieldUpdate("available", true)).map(_ should be(()))
-      _ <- table.lookup(crazyCode).map(_.get("available") should be(DynamoBoolean(true)))
-      _ <- table.update(crazyCode, DynamoFieldUpdate("available", false)).map(_ should be(()))
-      a <- table.lookup(crazyCode).map(_.get("available") should be(DynamoBoolean(false)))
+      _ <- table.update(allCharsMutableCode, DynamoFieldUpdate("available", false)).map(_ should be(()))
+      _ <- table.update(allCharsMutableCode, DynamoFieldUpdate("available", true)).map(_ should be(()))
+      _ <- table.lookup(allCharsMutableCode).map(_.get("available") should be(DynamoBoolean(true)))
+      _ <- table.update(allCharsMutableCode, DynamoFieldUpdate("available", false)).map(_ should be(()))
+      a <- table.lookup(allCharsMutableCode).map(_.get("available") should be(DynamoBoolean(false)))
     } yield a
   }
 
