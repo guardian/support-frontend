@@ -13,7 +13,7 @@ object SetCodeStatus {
 class SetCodeStatus(dynamoUpdate: DynamoUpdate) extends WithLogging {
 
   def apply(code: RedemptionCode, codeStatus: RedemptionTable.AvailableField)(implicit e: ExecutionContext): Future[Unit] =
-    dynamoUpdate.update(code.codeAsString, DynamoFieldUpdate(RedemptionTable.AvailableField.name, codeStatus.encoded))
+    dynamoUpdate.update(code.value, DynamoFieldUpdate(RedemptionTable.AvailableField.name, codeStatus.encoded))
       .withLoggingAsync(s"marked redemption status of $code to $codeStatus")
 
 }
