@@ -19,10 +19,7 @@ import com.gu.zuora.ProductSubscriptionBuilders._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-case class BuildSubscribePromoError(message: PromoError) extends RuntimeException {
-  def asRetryException: RetryException =
-    new RetryNone(message.toString, cause = this)
-}
+case class BuildSubscribePromoError(cause: PromoError) extends RuntimeException
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
