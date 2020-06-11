@@ -122,7 +122,7 @@ class RedemptionController(
   def displayProcessing(redemptionCode: String): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async {
       implicit request: AuthRequest[Any] =>
-        val processingPage: EitherT[Future, String, Result] = for {
+        val processingPage = for {
           user <- identityService.getUser(request.user.minimalUser)
           corporateCustomer <- getCorporateCustomer(redemptionCode)
           hasDigipack <- EitherT.right(userHasDigitalSubscription(membersDataService, request.user))

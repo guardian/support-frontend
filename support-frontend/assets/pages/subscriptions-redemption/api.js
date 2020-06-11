@@ -54,7 +54,7 @@ function submitCode(userCode: string, dispatch: Dispatch<Action>) {
       dispatchError(dispatch, result.errorMessage);
     }
   }).catch((error) => {
-    dispatchError(dispatch, `An error occurred while redeeming this code: ${error}`);
+    dispatchError(dispatch, `An error occurred while validating this code: ${error}`);
   });
 }
 
