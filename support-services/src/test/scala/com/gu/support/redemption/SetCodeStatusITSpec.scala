@@ -1,7 +1,7 @@
 package com.gu.support.redemption
 
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, NoSuchCode}
+import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, CorporateId, NoSuchCode}
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -24,7 +24,7 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
         _ should be(())
       }
       _ <- getCodeStatus(mutableCode).map {
-        _ should be(Right(()))
+        _ should be(Right(CorporateId("1")))
       }
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsUsed).map {
         _ should be(())
