@@ -209,9 +209,9 @@ const paperAndDigital = (
 };
 
 const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
-  title: 'Premium App',
+  title: 'Premium access to the Guardian Live app',
   subtitle: getPrice(countryGroupId, PremiumTier, '7-day free Trial'),
-  description: 'The ad-free, Premium App, designed especially for your smartphone and tablet',
+  description: 'Ad-free live news, as it happens',
   buttons: [{
     ctaButtonText: 'Buy in App Store',
     link: getIosAppUrl(countryGroupId),
