@@ -24,8 +24,8 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
         _ should be(())
       }
       _ <- getCodeStatus(mutableCode).map {
-        _ should be(Right(CorporateId("1"))
-        )}
+        _ should be(Right(CorporateId("1")))
+      }
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsUsed).map {
         _ should be(())
       }

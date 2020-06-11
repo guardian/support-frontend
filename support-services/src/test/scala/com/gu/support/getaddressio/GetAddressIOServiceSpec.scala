@@ -24,7 +24,10 @@ class GetAddressIOServiceSpec extends AsyncFlatSpec with Matchers {
         address.state shouldBe  None
         address.country shouldBe Country.UK
     }
+  }
 
+  //This test is ignored because the test key is only valid for a few requests a day
+  it should "be able to find another postcode" ignore {
     service.find("NN13ER").map {
       result => result.head.state shouldBe Some("Northamptonshire")
     }

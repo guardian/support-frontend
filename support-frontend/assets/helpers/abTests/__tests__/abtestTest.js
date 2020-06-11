@@ -384,23 +384,23 @@ describe('basic behaviour of init', () => {
     deleteCookie();
   });
 
-  it('Does not allocate a locally rendered epic user into the ContributionsService AB test', () => {
+  it('Does not allocate a locally rendered epic user into the RemoteEpicVariants AB test', () => {
     const url = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTestControl))}`;
     window.history.pushState({}, 'Test Title', url);
 
     const participations: Participations = abInit('GB', GBPCountries, emptySettings, {});
 
-    expect(participations.ContributionsService).toBe(undefined);
+    expect(participations.RemoteEpicVariants).toBe(undefined);
   });
 
-  it('Allocates a remotely rendered epic user into the ContributionsService AB test', () => {
+  it('Allocates a remotely rendered epic user into the RemoteEpicVariants AB test', () => {
     const data = { isRemote: true, ...acquisitionDataMockTestControl };
     const url = `/test.html?acquisitionData=${encodeURI(JSON.stringify(data))}`;
     window.history.pushState({}, 'Test Title', url);
 
     const participations: Participations = abInit('GB', GBPCountries, emptySettings, {});
 
-    expect(participations.ContributionsService).toBe('remote');
+    expect(participations.RemoteEpicVariants).toBe('remote');
   });
 
 });
