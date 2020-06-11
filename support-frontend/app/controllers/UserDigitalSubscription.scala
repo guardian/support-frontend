@@ -1,10 +1,12 @@
 package controllers
 
 import actions.CustomActionBuilders.AuthRequest
+import com.gu.monitoring.SafeLogger
 import play.api.mvc.Result
 import play.api.mvc.Results._
 import play.mvc.Http.Status.FOUND
 import services.{AccessCredentials, AuthenticatedIdUser, MembersDataService}
+import SafeLogger._
 import scala.concurrent.{ExecutionContext, Future}
 
 trait UserDigitalSubscription {
@@ -15,10 +17,18 @@ trait UserDigitalSubscription {
     user.credentials match {
       case cookies: AccessCredentials.Cookies =>
         membersDataService.userAttributes(cookies).value map {
-          case Left(_) => false
+          case Left(err: MembersDataService.MembersDataServiceError) => {
+            SafeLogger.error(scrub"Got an error from members-data-api ${err}")
+            false
+          }
           case Right(response: MembersDataService.UserAttributes) => response.contentAccess.digitalPack
         }
-      case _ => Future.successful(false)
+      case _ => {
+        SafeLogger.warn(
+          s"Couldn't call members-data-api to check subscription status for user ${user.minimalUser.id} because their access cookies were missing"
+        )
+        Future.successful(false)
+      }
     }
   }
 
