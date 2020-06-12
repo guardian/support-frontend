@@ -141,41 +141,19 @@ class Application(
     ).map(_.withSettingsSurrogateKey)
   }
 
-  val ausMomentEnabled =
-    settingsProvider
-      .getAllSettings()
-      .switches
-      .experiments
-      .get("ausMomentEnabled")
-      .exists(switch => switch.state.isOn)
-
-  private def title(geoData: GeoData): String = {
-    if (geoData.countryGroup.contains(UK) && ausMomentEnabled) //TODO: change UK to Australia
-      "Guardian Australia supporters are doing something powerful"
-    else
-      "Support the Guardian | Make a Contribution"
-  }
-
-  private def description(geoData: GeoData): Option[String] = {
-    if (geoData.countryGroup.contains(UK) && ausMomentEnabled) //TODO: change UK to Australia
-      Some("Why am I supporting the Guardian? Because I believe their vital, " +
-        "independent journalism should be open and free to all. \nJoin me. With your support, we can do more.")
-    else
-      stringsConfig.contributionsLandingDescription
-  }
-
   private def shareImageUrl(geoData: GeoData): String = {
+    val ausMomentEnabled =
+      settingsProvider
+        .getAllSettings()
+        .switches
+        .experiments
+        .get("ausMomentEnabled")
+        .exists(switch => switch.state.isOn)
+
       if (geoData.countryGroup.contains(UK) && ausMomentEnabled) //TODO: change UK to Australia
         "aus moment shareimageurl" //TODO: replace with correct URL
       else
         "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
-  }
-
-  private def shareUrl(geoData: GeoData): String = {
-    if (geoData.countryGroup.contains(UK) && ausMomentEnabled) //TODO: change UK to Australia
-      "https://support.theguardian.com/au/contribute"
-    else
-      "https://support.theguardian.com/contribute"
   }
 
   //noinspection ScalaStyle
@@ -198,12 +176,12 @@ class Application(
     )
 
     views.html.contributions(
-      title = title(geoData),
+      title = "Support the Guardian | Make a Contribution",
       id = s"contributions-landing-page-$countryCode",
       mainElement = mainElement,
       js = js,
       css = css,
-      description = description(geoData),
+      description = stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = ContributionsPaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
         oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
