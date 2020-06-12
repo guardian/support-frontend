@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { line } from '@guardian/src-foundations/palette';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
@@ -43,8 +45,13 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 const InputWithValidated = compose(asControlled, withLabel, withError, withValidation)(Input);
 
 function RedemptionForm(props: PropTypes) {
-  const formCss = css`
-    min-height: 550px;
+  const instructionsDivCss = css`
+    margin-top: -15px;
+    padding: 0 ${space[3]}px;
+    hr {
+      border: 0;
+      border-top: solid 1px ${line.primary};
+    }
   `;
   const paraCss = css`
     margin-bottom: 16px;
@@ -66,7 +73,7 @@ function RedemptionForm(props: PropTypes) {
           }}
           >
             <FormSection title="Welcome to The Guardian Digital Subscriptions">
-              <div css={formCss}>
+              <div>
                 <p css={paraCss}>
                   Activate your offer with the unique access code provided
                 </p>
@@ -80,14 +87,18 @@ function RedemptionForm(props: PropTypes) {
                   valid={validationText}
                   label="Insert code"
                 />
-                <p css={paraCss}>
-                  {signinInstructions}
-                </p>
-                <Button id="submit-button" onClick={() => props.submit(props.userCode || '')}>
-                  Activate
-                </Button>
               </div>
             </FormSection>
+
+            <div css={instructionsDivCss}>
+              <hr />
+              <p css={paraCss}>
+                {signinInstructions}
+              </p>
+              <Button id="submit-button" onClick={() => props.submit(props.userCode || '')}>
+                Activate
+              </Button>
+            </div>
           </Form>
         </CheckoutLayout>
       </Content>
