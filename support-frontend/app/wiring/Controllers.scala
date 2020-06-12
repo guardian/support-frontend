@@ -52,7 +52,7 @@ trait Controllers {
     fontLoader
   )
 
-  lazy val digitalPackController = new DigitalSubscription(
+  lazy val digitalPackController = new DigitalSubscriptionController(
     priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
@@ -74,6 +74,7 @@ trait Controllers {
     assetsResolver,
     allSettingsProvider,
     identityService,
+    membersDataService,
     testUsers,
     controllerComponents,
     fontLoader

@@ -16,6 +16,7 @@ import type { User } from 'helpers/subscriptionsForms/user';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getOrigin } from 'helpers/url';
+import { appropriateErrorMessage } from 'helpers/errorReasons';
 
 type ValidationResult = {
   valid: boolean,
@@ -27,11 +28,15 @@ function validate(userCode: string) {
   return fetchJson(validationUrl, {});
 }
 
+function dispatchError(dispatch: Dispatch<Action>, error: Option<string>) {
+  dispatch({ type: 'SET_ERROR', error });
+}
+
 function doValidation(userCode: string, dispatch: Dispatch<Action>) {
   validate(userCode).then((result: ValidationResult) => {
-    dispatch({ type: 'SET_ERROR', error: result.errorMessage });
+    dispatchError(dispatch, result.errorMessage);
   }).catch((error) => {
-    dispatch({ type: 'SET_ERROR', error: `An error occurred while validating this code: ${error}` });
+    dispatchError(dispatch, `An error occurred while validating this code: ${error}`);
   });
 }
 
@@ -46,10 +51,10 @@ function submitCode(userCode: string, dispatch: Dispatch<Action>) {
       const submitUrl = `${getOrigin()}/subscribe/redeem/create/${userCode}`;
       window.location.assign(submitUrl);
     } else {
-      dispatch({ type: 'SET_ERROR', error: result.errorMessage });
+      dispatchError(dispatch, result.errorMessage);
     }
   }).catch((error) => {
-    dispatch({ type: 'SET_ERROR', error: `An error occurred while validating this code: ${error}` });
+    dispatchError(dispatch, `An error occurred while validating this code: ${error}`);
   });
 }
 
@@ -110,6 +115,7 @@ function createSubscription(
   countryId: IsoCountry,
   participations: Participations,
   csrf: Csrf,
+  dispatch: Dispatch<Action>,
 ) {
   const data = buildRegularPaymentRequest(corporateCustomer, user, currencyId, countryId, participations);
 
@@ -122,7 +128,10 @@ function createSubscription(
         const thankyouUrl = `${getOrigin()}/subscribe/redeem/thankyou`;
         window.location.replace(thankyouUrl);
       }
-    } // else { dispatch(setSubmissionError(result.error)); } // TODO: deal with this
+    } else {
+      dispatchError(dispatch, appropriateErrorMessage(result.error));
+      dispatch({ type: 'SET_STAGE', stage: 'form' });
+    }
   };
 
   postRegularPaymentRequest(

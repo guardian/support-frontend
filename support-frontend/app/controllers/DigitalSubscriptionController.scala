@@ -13,6 +13,7 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import config.{RecaptchaConfigProvider, StringsConfig}
+import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import play.twirl.api.Html
@@ -24,7 +25,7 @@ import views.html.subscriptionCheckout
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DigitalSubscription(
+class DigitalSubscriptionController(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
   val assets: AssetsResolver,
   val actionRefiners: CustomActionBuilders,
@@ -84,17 +85,6 @@ class DigitalSubscription(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-  private def userHasDigipack(user: AuthenticatedIdUser): Future[Boolean] = {
-    user.credentials match {
-      case cookies: AccessCredentials.Cookies =>
-        membersDataService.userAttributes(cookies).value map {
-          case Left(_) => false
-          case Right(response: MembersDataService.UserAttributes) => response.contentAccess.digitalPack
-        }
-      case _ => Future.successful(false)
-    }
-  }
-
   def displayForm(): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -104,8 +94,8 @@ class DigitalSubscription(
           Future.successful(InternalServerError)
         },
         user => {
-          userHasDigipack(request.user) map {
-            case true => Redirect(routes.DigitalSubscription.displayThankYouExisting().url, request.queryString, status = FOUND)
+          userHasDigitalSubscription(membersDataService, request.user) map {
+            case true => redirectToExistingThankYouPage
             case _ => Ok(digitalSubscriptionFormHtml(user))
           }
         }

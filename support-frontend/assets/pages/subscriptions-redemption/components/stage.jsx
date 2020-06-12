@@ -9,6 +9,7 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
 import type {
+  Action,
   CorporateCustomer,
   RedemptionPageState,
   Stage,
@@ -35,6 +36,7 @@ type PropTypes = {|
   countryId: IsoCountry,
   participations: Participations,
   csrf: Option<Csrf>,
+  createSub: (PropTypes) => void,
 |};
 
 // ----- State/Props Maps ----- //
@@ -51,15 +53,20 @@ function mapStateToProps(state: RedemptionPageState) {
   };
 }
 
-function createSub(props: PropTypes) {
-  createSubscription(
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+  const createSub = (props: PropTypes) => createSubscription(
     props.corporateCustomer,
     props.user,
     props.currencyId,
     props.countryId,
     props.participations,
     props.csrf || { token: '' },
+    dispatch,
   );
+
+  return {
+    createSub,
+  };
 }
 
 // ----- Component ----- //
@@ -83,7 +90,7 @@ function CheckoutStage(props: PropTypes) {
       );
 
     case 'processing':
-      createSub(props);
+      props.createSub(props);
       return (
         <div className="checkout-content">
           {props.checkoutForm}
@@ -102,4 +109,4 @@ function CheckoutStage(props: PropTypes) {
 
 // ----- Export ----- //
 
-export default connect(mapStateToProps)(CheckoutStage);
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutStage);
