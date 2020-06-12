@@ -9,7 +9,7 @@ import services.{AccessCredentials, AuthenticatedIdUser, MembersDataService}
 import SafeLogger._
 import scala.concurrent.{ExecutionContext, Future}
 
-trait UserDigitalSubscription {
+object UserDigitalSubscription {
   def userHasDigitalSubscription(
     membersDataService: MembersDataService,
     user: AuthenticatedIdUser

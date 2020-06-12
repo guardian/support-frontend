@@ -13,6 +13,7 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import config.{RecaptchaConfigProvider, StringsConfig}
+import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import play.twirl.api.Html
@@ -41,7 +42,7 @@ class DigitalSubscriptionController(
   recaptchaConfigProvider: RecaptchaConfigProvider
 )(
   implicit val ec: ExecutionContext
-) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax with UserDigitalSubscription {
+) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 

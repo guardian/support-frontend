@@ -20,6 +20,7 @@ import views.html.subscriptionRedemptionForm
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import SafeLogger._
+import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import lib.RedirectWithEncodedQueryString
 import play.twirl.api.Html
 
@@ -36,7 +37,7 @@ class RedemptionController(
   fontLoaderBundle: Either[RefPath, StyleContent]
 )(
   implicit val ec: ExecutionContext
-) extends AbstractController(components) with Circe with UserDigitalSubscription {
+) extends AbstractController(components) with Circe {
 
   import actionRefiners._
 
@@ -122,24 +123,31 @@ class RedemptionController(
   def displayProcessing(redemptionCode: String): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async {
       implicit request: AuthRequest[Any] =>
-        val processingPage: EitherT[Future, String, Result] = for {
-          user <- identityService.getUser(request.user.minimalUser)
-          corporateCustomer <- getCorporateCustomer(redemptionCode)
-          hasDigipack <- EitherT.right(userHasDigitalSubscription(membersDataService, request.user))
-        } yield if (hasDigipack)
-          redirectToExistingThankYouPage
-        else
-          showProcessing(redemptionCode, corporateCustomer, user)
-
-        processingPage.value.map(
-          _.fold(
-            error => displayError(redemptionCode, error),
-            result => result
-          )
+        userHasDigitalSubscription(membersDataService, request.user).flatMap(
+          userHasSub =>
+            if (userHasSub)
+              Future.successful(redirectToExistingThankYouPage)
+            else
+              tryToShowProcessingPage(redemptionCode)
         )
     }
 
-  def showProcessing(
+  private def tryToShowProcessingPage(redemptionCode: RedemptionCode)(implicit request: AuthRequest[Any]) = {
+    val processingPage: EitherT[Future, String, Result] = for {
+      user <- identityService.getUser(request.user.minimalUser)
+      corporateCustomer <- getCorporateCustomer(redemptionCode)
+    } yield showProcessing(redemptionCode, corporateCustomer, user)
+
+    processingPage.value.map(
+      maybeResult =>
+        maybeResult.fold(
+          error => displayError(redemptionCode, error),
+          result => result
+        )
+    )
+  }
+
+  private def showProcessing(
     redemptionCode: RedemptionCode,
     corporateCustomer: CorporateCustomer,
     user: IdUser
