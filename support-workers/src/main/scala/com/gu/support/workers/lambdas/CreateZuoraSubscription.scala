@@ -9,9 +9,9 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.GetCodeStatus
 import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
-import com.gu.support.redemptions.RedemptionData
+import com.gu.support.redemption.{GetCodeStatus, RedemptionCode, RedemptionTable, SetCodeStatus}
+import com.gu.support.redemptions.{CorporateRedemption, RedemptionData}
 import com.gu.support.workers._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api._
@@ -31,6 +31,7 @@ case class BuildSubscribeRedemptionError(cause: RedemptionInvalid) extends Runti
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
 
+  import CreateZuoraSubscription._
   import com.gu.FutureLogging._
 
   def this() = this(ServiceProvider)
@@ -58,6 +59,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         case None => subscribe(state, subscribeItem, services).map(response => toHandlerResult(state, response, previewPaymentSchedule, requestInfo))
           .withLogging("subscribe")
       }
+      _ <- updateRedemptionCode(state.paymentMethod, subscriptionData, SetCodeStatus.withDynamoLookup(services.redemptionService))
     } yield thankYouState
   }
 
@@ -206,4 +208,23 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     createdRequestId__c = state.requestId.toString,
     autoPay = state.paymentMethod.isLeft
   )
+}
+
+object CreateZuoraSubscription {
+
+  def updateRedemptionCode(
+    paymentMethod: Either[PaymentMethod, RedemptionData],
+    subscriptionData: SubscriptionData,
+    setCodeStatus: SetCodeStatus
+  ): Future[Unit] =
+    paymentMethod match {
+      case Right(rd: RedemptionData) =>
+        setCodeStatus(
+          RedemptionCode(rd.redemptionCode).right.get,
+          RedemptionTable.AvailableField.CodeIsUsed
+        )
+      case Left(_: PaymentMethod) if (subscriptionData.subscription.redemptionCode.isEmpty) => Future.successful(())
+      case _ => Future.failed(new Throwable("user redeemed a subscription but we didn't mark it as redeemed"))
+    }
+
 }
