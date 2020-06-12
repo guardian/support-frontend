@@ -2,19 +2,22 @@ package com.gu.support.workers.lambdas
 
 import java.time.OffsetDateTime
 
+import cats.data.EitherT
+import cats.implicits._
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
+import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers._
-import com.gu.support.workers.exceptions.{RetryException, RetryNone}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
+import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,12 +37,14 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     context: Context,
     services: Services
   ): FutureHandlerResult = {
-    val now = () => OffsetDateTime.now
+    val nowJavaTime = () => OffsetDateTime.now
+    val todayJodaDate = () => LocalDate.now(DateTimeZone.UTC)
     for {
-      subscribeItem <- Future.fromTry(buildSubscribeItem(state, services.promotionService).left.map(BuildSubscribePromoError).toTry)
+      subscriptionData <- buildSubscriptionData(state, services.promotionService, todayJodaDate)
+      subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
-      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
+      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, nowJavaTime)
           .withLogging("GetSubscriptionWithCurrentRequestId")
       previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
           .withLogging("PreviewPaymentSchedule")
@@ -111,61 +116,64 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.acquisitionData
     )
 
-  private def buildSubscribeItem(state: CreateZuoraSubscriptionState, promotionService: PromotionService): Either[PromoError, SubscribeItem] = {
+  private def buildSubscribeItem(state: CreateZuoraSubscriptionState, subscriptionData: SubscriptionData): SubscribeItem = {
     val billingEnabled = state.paymentMethod.isLeft
-    buildSubscriptionData(state, promotionService).map { subscriptionData =>
-      //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
-      SubscribeItem(
-        account = buildAccount(state),
-        billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
-        soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
-        paymentMethod = state.paymentMethod.left.toOption,
-        subscriptionData = subscriptionData,
-        subscribeOptions = SubscribeOptions(billingEnabled, billingEnabled)
-      )
-    }
+    //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
+    SubscribeItem(
+      account = buildAccount(state),
+      billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
+      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
+      paymentMethod = state.paymentMethod.left.toOption,
+      subscriptionData = subscriptionData,
+      subscribeOptions = SubscribeOptions(generateInvoice = billingEnabled, processPayments = billingEnabled)
+    )
   }
 
-  private def buildSubscriptionData(state: CreateZuoraSubscriptionState, promotionService: PromotionService) = {
+  private def buildSubscriptionData(
+    state: CreateZuoraSubscriptionState,
+    promotionService: => PromotionService,
+    today: () => LocalDate
+  ): Future[SubscriptionData] = {
     val isTestUser = state.user.isTestUser
     val config = zuoraConfigProvider.get(isTestUser)
-    val readerType: ReaderType = state.giftRecipient match  {
-      case _: Some[GiftRecipient] => ReaderType.Gift
-      case _ => ReaderType.Direct
-    }
-    val stage = Configuration.stage
+    val environment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
 
-    state.product match {
-      case c: Contribution => Right(c.build(state.requestId, config))
-      case d: DigitalPack => d.build(
+    val eventualErrorOrSubscriptionData = state.product match {
+      case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
+      case d: DigitalPack => buildDigitalPackSubscription(
+        d,
         state.requestId,
-        config,
+        config.digitalPack,
         state.user.billingAddress.country,
         state.promoCode,
         state.paymentMethod,
         promotionService,
-        stage,
-        isTestUser
-      )
-      case p: Paper => p.build(
+        environment,
+        today
+      ).leftMap(BuildSubscribePromoError)
+      case p: Paper => EitherT.fromEither[Future](buildPaperSubscription(
+        p,
         state.requestId,
         state.user.billingAddress.country,
         state.promoCode,
         state.firstDeliveryDate,
         promotionService,
-        stage,
-        isTestUser
-      )
-      case w: GuardianWeekly => w.build(
-        state.requestId,
-        state.user.billingAddress.country,
-        state.promoCode,
-        state.firstDeliveryDate,
-        promotionService,
-        readerType,
-        stage,
-        isTestUser
-      )
+        environment
+      ).leftMap(BuildSubscribePromoError))
+      case w: GuardianWeekly =>
+        EitherT.fromEither[Future](buildGuardianWeeklySubscription(
+          w,
+          state.requestId,
+          state.user.billingAddress.country,
+          state.promoCode,
+          state.firstDeliveryDate,
+          promotionService,
+          if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct,
+          environment
+        ).leftMap(BuildSubscribePromoError))
+    }
+    eventualErrorOrSubscriptionData.value.flatMap { errorOrSubscriptionData =>
+      Future.fromTry(errorOrSubscriptionData.toTry)
     }
   }
 
