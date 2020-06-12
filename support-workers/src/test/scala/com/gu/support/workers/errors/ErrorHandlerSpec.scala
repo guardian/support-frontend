@@ -7,7 +7,6 @@ import com.gu.rest.{CodeBody, WebServiceClientError}
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
 import com.gu.stripe.StripeError
-import com.gu.support.workers.exceptions.RetryImplicits._
 import com.gu.support.workers.exceptions._
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.ParsingFailure
@@ -59,8 +58,8 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
 
   "asRetryException method" should "allow us to work out retries" in {
     //General
-    new SocketTimeoutException().asRetryException shouldBe a[RetryUnlimited]
-    new ParsingFailure("Invalid Json", new Throwable()).asRetryException shouldBe a[RetryNone]
+    ErrorHandler.toRetryException(new SocketTimeoutException()) shouldBe a[RetryUnlimited]
+    ErrorHandler.toRetryException(new ParsingFailure("Invalid Json", new Throwable())) shouldBe a[RetryNone]
 
     //Salesforce
     new SalesforceErrorResponse("test", expiredAuthenticationCode).asRetryException shouldBe a[RetryUnlimited]
@@ -69,10 +68,10 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
     new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryNone]
 
     //Stripe
-    new StripeError("card_error", "").asRetryException shouldBe a[RetryNone]
-    new StripeError("invalid_request_error", "").asRetryException shouldBe a[RetryNone]
-    new StripeError("api_error", "").asRetryException shouldBe a[RetryUnlimited]
-    new StripeError("rate_limit_error", "").asRetryException shouldBe a[RetryUnlimited]
+    ErrorHandler.fromStripeError(new StripeError("card_error", "")) shouldBe a[RetryNone]
+    ErrorHandler.fromStripeError(new StripeError("invalid_request_error", "")) shouldBe a[RetryNone]
+    ErrorHandler.fromStripeError(new StripeError("api_error", "")) shouldBe a[RetryUnlimited]
+    ErrorHandler.fromStripeError(new StripeError("rate_limit_error", "")) shouldBe a[RetryUnlimited]
 
     //PayPal
     PayPalError(500, "").asRetryException shouldBe a[RetryUnlimited]
