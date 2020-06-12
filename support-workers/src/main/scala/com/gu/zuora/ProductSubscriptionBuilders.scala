@@ -64,10 +64,10 @@ object ProductSubscriptionBuilders {
       requestId: UUID,
       subscriptionPaymentType: SubscriptionPaymentType,
       environment: TouchPointEnvironment,
-      now: () => LocalDate
+      today: () => LocalDate
     )(implicit ec: ExecutionContext): EitherT[Future, Either[PromoError, GetCodeStatus.RedemptionInvalid], SubscriptionData] = {
 
-      val contractEffectiveDate = now()
+      val contractEffectiveDate = today()
       val delay = subscriptionPaymentType match {
         case direct: SubscriptionPaymentDirect => direct.zuoraDigitalPackConfig.defaultFreeTrialPeriod + direct.zuoraDigitalPackConfig.paymentGracePeriod
         case _: SubscriptionPaymentCorporate => 0
