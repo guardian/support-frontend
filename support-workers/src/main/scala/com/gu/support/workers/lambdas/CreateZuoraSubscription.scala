@@ -1,7 +1,5 @@
 package com.gu.support.workers.lambdas
 
-import java.time.OffsetDateTime
-
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.lambda.runtime.Context
@@ -15,14 +13,13 @@ import com.gu.support.redemption.GetCodeStatus
 import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
-import com.gu.support.workers.exceptions.{RetryException, RetryNone}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
 import com.gu.zuora.ProductSubscriptionBuilders.buildDigitalPackSubscription.{SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
-import org.joda.time.{DateTimeZone, LocalDate}
+import org.joda.time.{DateTime, DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -44,14 +41,14 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     context: Context,
     services: Services
   ): FutureHandlerResult = {
-    val nowJavaTime = () => OffsetDateTime.now
-    val todayJodaDate = () => LocalDate.now(DateTimeZone.UTC)
+    val now = () => DateTime.now(DateTimeZone.UTC)
+    val today = () => LocalDate.now(DateTimeZone.UTC)
     for {
-      subscriptionData <- buildSubscriptionData(state, services.promotionService, GetCodeStatus.withDynamoLookup(services.redemptionService), todayJodaDate)
+      subscriptionData <- buildSubscriptionData(state, services.promotionService, GetCodeStatus.withDynamoLookup(services.redemptionService), today)
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
-      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, nowJavaTime)
+      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
           .withLogging("GetSubscriptionWithCurrentRequestId")
       previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
           .withLogging("PreviewPaymentSchedule")
