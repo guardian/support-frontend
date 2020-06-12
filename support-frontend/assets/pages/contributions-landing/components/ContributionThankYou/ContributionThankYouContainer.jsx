@@ -26,7 +26,7 @@ const mapStateToProps = state => ({
   thankYouPageStage: state.page.form.thankYouPageStage,
   countryId: state.common.internationalisation.countryId,
   countryGroupId: state.common.internationalisation.countryGroupId,
-  email: state.page.form.formData.email
+  email: state.page.form.formData.email,
 });
 
 // ----- Render ----- //
@@ -44,7 +44,11 @@ function ContributionThankYouContainer(props: PropTypes) {
       <ContributionThankYou countryGroupId={props.countryGroupId} email={props.email} />
     ),
     thankYouPasswordSet: (
-      <ContributionThankYouPasswordSet countryId={props.countryId} countryGroupId={props.countryGroupId} email={props.email}/>
+      <ContributionThankYouPasswordSet
+        countryId={props.countryId}
+        countryGroupId={props.countryGroupId}
+        email={props.email}
+      />
     ),
   };
 
