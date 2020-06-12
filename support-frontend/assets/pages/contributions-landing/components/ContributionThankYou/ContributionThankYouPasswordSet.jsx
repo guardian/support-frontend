@@ -16,7 +16,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 // ----- Types ----- //
 type PropTypes = {
   countryId: IsoCountry,
-  countryGroupId: CountryGroupId
+  countryGroupId: CountryGroupId,
+  email: string
 }
 
 // ----- Render ----- //
@@ -35,7 +36,7 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
             {body}
           </p>
         </section>
-        { ausMomentEnabled && <AusMomentSpreadTheWord /> }
+        { ausMomentEnabled && <AusMomentSpreadTheWord email={props.email} /> }
         <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
         { !ausMomentEnabled && <SpreadTheWord /> }
