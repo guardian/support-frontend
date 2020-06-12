@@ -5,6 +5,7 @@
 import React, { type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
+import { InlineSuccess } from '@guardian/src-user-feedback';
 
 // ----- Types ----- //
 export type PropsForHoc = {
@@ -34,7 +35,7 @@ function Validated({
         htmlFor={htmlFor}
         className="component-form-valid__valid"
       >
-        {valid}
+        <InlineSuccess>{valid}</InlineSuccess>
       </Element>
       {children}
     </div>
