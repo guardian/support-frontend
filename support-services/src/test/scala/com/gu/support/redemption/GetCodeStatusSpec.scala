@@ -16,7 +16,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
         "corporateId" -> DynamoString("1")
       )))
     }
-    getCodeStatus(RedemptionCode("CODE")).map {
+    getCodeStatus(RedemptionCode("CODE").right.get).map {
       _ should be(Right(CorporateId("1")))
     }
   }
@@ -28,7 +28,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
         "corporateId" -> DynamoString("1")
       )))
     }
-    getCodeStatus(RedemptionCode("CODE")).map {
+    getCodeStatus(RedemptionCode("CODE").right.get).map {
       _ should be(Left(CodeAlreadyUsed))
     }
   }
@@ -37,7 +37,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
     val getCodeStatus = GetCodeStatus.withDynamoLookup {
       case "CODE" => Future.successful(None)
     }
-    getCodeStatus(RedemptionCode("CODE")).map {
+    getCodeStatus(RedemptionCode("CODE").right.get).map {
       _ should be(Left(NoSuchCode))
     }
   }
@@ -50,7 +50,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      getCodeStatus(RedemptionCode("CODE"))
+      getCodeStatus(RedemptionCode("CODE").right.get)
     }
   }
 
@@ -62,7 +62,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      getCodeStatus(RedemptionCode("CODE"))
+      getCodeStatus(RedemptionCode("CODE").right.get)
     }
   }
 
@@ -74,7 +74,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      getCodeStatus(RedemptionCode("CODE"))
+      getCodeStatus(RedemptionCode("CODE").right.get)
     }
   }
 
@@ -86,7 +86,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      getCodeStatus(RedemptionCode("CODE"))
+      getCodeStatus(RedemptionCode("CODE").right.get)
     }
   }
 
@@ -95,7 +95,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       case "CODE" => Future.failed(new RuntimeException("test exception"))
     }
     recoverToSucceededIf[RuntimeException] {
-      getCodeStatus(RedemptionCode("CODE"))
+      getCodeStatus(RedemptionCode("CODE").right.get)
     }
   }
 

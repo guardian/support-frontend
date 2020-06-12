@@ -5,8 +5,9 @@ import java.time.OffsetDateTime
 
 import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvider}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.support.catalog.GuardianWeekly
+import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
+import com.gu.support.redemption.RedemptionTable
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -88,6 +89,8 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
 
   val realPromotionService = new PromotionService(promotionsConfigProvider.get())
 
+  val realRedemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(Stages.DEV))
+
   val mockZuoraService = {
     val mockZuora = mock[ZuoraService]
     // Need to return None from the Zuora service `getRecurringSubscription`
@@ -109,6 +112,8 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     (s => s.zuoraService,
       mockZuoraService),
     (s => s.promotionService,
-      realPromotionService)
+      realPromotionService),
+    (s => s.redemptionService,
+      realRedemptionService)
   )
 }

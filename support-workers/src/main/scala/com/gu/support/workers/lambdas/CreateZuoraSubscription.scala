@@ -11,18 +11,25 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.redemption.GetCodeStatus
+import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
+import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
+import com.gu.support.workers.exceptions.{RetryException, RetryNone}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
+import com.gu.zuora.ProductSubscriptionBuilders.buildDigitalPackSubscription.{SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
 import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 case class BuildSubscribePromoError(cause: PromoError) extends RuntimeException
+
+case class BuildSubscribeRedemptionError(cause: RedemptionInvalid) extends RuntimeException
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
@@ -40,7 +47,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val nowJavaTime = () => OffsetDateTime.now
     val todayJodaDate = () => LocalDate.now(DateTimeZone.UTC)
     for {
-      subscriptionData <- buildSubscriptionData(state, services.promotionService, todayJodaDate)
+      subscriptionData <- buildSubscriptionData(state, services.promotionService, GetCodeStatus.withDynamoLookup(services.redemptionService), todayJodaDate)
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
@@ -132,6 +139,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   private def buildSubscriptionData(
     state: CreateZuoraSubscriptionState,
     promotionService: => PromotionService,
+    getCodeStatus: => GetCodeStatus,
     today: () => LocalDate
   ): Future[SubscriptionData] = {
     val isTestUser = state.user.isTestUser
@@ -143,14 +151,13 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case d: DigitalPack => buildDigitalPackSubscription(
         d,
         state.requestId,
-        config.digitalPack,
-        state.user.billingAddress.country,
-        state.promoCode,
-        state.paymentMethod,
-        promotionService,
+        state.paymentMethod match {
+          case Left(_: PaymentMethod) => SubscriptionPaymentDirect(config.digitalPack, state.promoCode, state.user.billingAddress.country, promotionService)
+          case Right(rd: RedemptionData) => SubscriptionPaymentCorporate(rd, getCodeStatus)
+        },
         environment,
         today
-      ).leftMap(BuildSubscribePromoError)
+      ).leftMap(_.fold(BuildSubscribePromoError, BuildSubscribeRedemptionError))
       case p: Paper => EitherT.fromEither[Future](buildPaperSubscription(
         p,
         state.requestId,

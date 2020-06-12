@@ -7,7 +7,9 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.SalesforceService
 import com.gu.stripe.StripeService
+import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
+import com.gu.support.redemption.RedemptionTable
 import com.gu.zuora.ZuoraService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -30,5 +32,6 @@ class Services(isTestUser: Boolean) {
   lazy val acquisitionService = AcquisitionServiceBuilder.build(isTestUser)
   lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
   lazy val goCardlessService = new GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
+  lazy val redemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(stage, isTestUser))
 }
 

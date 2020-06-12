@@ -9,7 +9,9 @@ import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironment, ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
-import com.gu.support.redemptions.RedemptionData
+import com.gu.support.redemption.GetCodeStatus.NoSuchCode
+import com.gu.support.redemption.{GetCodeStatus, RedemptionCode}
+import com.gu.support.redemptions.{CorporateRedemption, RedemptionData}
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
@@ -43,22 +45,34 @@ object ProductSubscriptionBuilders {
 
   object buildDigitalPackSubscription {
 
+    sealed trait SubscriptionPaymentType
+
+    case class SubscriptionPaymentDirect(
+      zuoraDigitalPackConfig: ZuoraDigitalPackConfig,
+      maybePromoCode: Option[PromoCode],
+      country: Country,
+      promotionService: PromotionService
+    ) extends SubscriptionPaymentType
+
+    case class SubscriptionPaymentCorporate(
+      redemptionData: RedemptionData,
+      getCodeStatus: GetCodeStatus
+    ) extends SubscriptionPaymentType
+
     def apply(
       digitalPack: DigitalPack,
       requestId: UUID,
-      zuoraDigitalPackConfig: ZuoraDigitalPackConfig,
-      country: Country,
-      maybePromoCode: Option[PromoCode],
-      paymentMethod: Either[PaymentMethod, RedemptionData],
-      promotionService: PromotionService,
+      subscriptionPaymentType: SubscriptionPaymentType,
       environment: TouchPointEnvironment,
       today: () => LocalDate
-    )(implicit ec: ExecutionContext): EitherT[Future, PromoError, SubscriptionData] = {
+    )(implicit ec: ExecutionContext): EitherT[Future, Either[PromoError, GetCodeStatus.RedemptionInvalid], SubscriptionData] = {
 
       val contractEffectiveDate = today()
-      val contractAcceptanceDate = contractEffectiveDate
-        .plusDays(zuoraDigitalPackConfig.defaultFreeTrialPeriod)
-        .plusDays(zuoraDigitalPackConfig.paymentGracePeriod)
+      val delay = subscriptionPaymentType match {
+        case direct: SubscriptionPaymentDirect => direct.zuoraDigitalPackConfig.defaultFreeTrialPeriod + direct.zuoraDigitalPackConfig.paymentGracePeriod
+        case _: SubscriptionPaymentCorporate => 0
+      }
+      val contractAcceptanceDate = contractEffectiveDate.plusDays(delay)
 
       val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(environment, fixedTerm = false), digitalPack.describe)
 
@@ -69,16 +83,40 @@ object ProductSubscriptionBuilders {
         contractEffectiveDate = contractEffectiveDate
       )
 
-      val redeemedSub = paymentMethod.fold(
-        _ => subscriptionData.subscription,
-        redemptionData => redemptionData.redeem(subscriptionData.subscription)
-      )
+      subscriptionPaymentType match {
+        case SubscriptionPaymentDirect(_, maybePromoCode, country, promotionService) =>
+          EitherT.fromEither[Future](
+            applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
+              .left.map(Left.apply)
+          )
+        case SubscriptionPaymentCorporate(redemptionData, getCodeStatus) =>
+          withRedemption(subscriptionData.subscription, redemptionData, getCodeStatus)
+            .map(subscription => subscriptionData.copy(subscription = subscription))
+            .leftMap(Right.apply)
+      }
 
-      EitherT.fromEither[Future](
-      applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData.copy(subscription = redeemedSub))
-      )
     }
 
+    def withRedemption(
+      subscription: Subscription,
+      redemptionData: RedemptionData,
+      getCodeStatus: GetCodeStatus
+    )(implicit ec: ExecutionContext): EitherT[Future, GetCodeStatus.RedemptionInvalid, Subscription] = {
+      val withCode = subscription.copy(redemptionCode = Some(redemptionData.redemptionCode))
+      redemptionData match {
+        case CorporateRedemption(redemptionCode, _) =>
+          for {
+            redemptionCode <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => NoSuchCode)
+            subscription <-
+              EitherT(getCodeStatus(redemptionCode).map(_.map { corporateId =>
+                withCode.copy(
+                  corporateAccountId = Some(corporateId.corporateIdString /*FIXME use the same corporate id type everywhere*/),
+                  readerType = ReaderType.Corporate
+                )
+              }))
+          } yield subscription
+      }
+    }
   }
 
   def buildPaperSubscription(
