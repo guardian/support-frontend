@@ -37,14 +37,14 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     context: Context,
     services: Services
   ): FutureHandlerResult = {
-    val now = () => OffsetDateTime.now
-    val now2 = () => LocalDate.now(DateTimeZone.UTC)
+    val nowJavaTime = () => OffsetDateTime.now
+    val todayJodaDate = () => LocalDate.now(DateTimeZone.UTC)
     for {
-      subscriptionData <- buildSubscriptionData(state, services.promotionService, now2)
+      subscriptionData <- buildSubscriptionData(state, services.promotionService, todayJodaDate)
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
-      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
+      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, nowJavaTime)
           .withLogging("GetSubscriptionWithCurrentRequestId")
       previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
           .withLogging("PreviewPaymentSchedule")
@@ -132,7 +132,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   private def buildSubscriptionData(
     state: CreateZuoraSubscriptionState,
     promotionService: => PromotionService,
-    now: () => LocalDate
+    today: () => LocalDate
   ): Future[SubscriptionData] = {
     val isTestUser = state.user.isTestUser
     val config = zuoraConfigProvider.get(isTestUser)
@@ -149,7 +149,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         state.paymentMethod,
         promotionService,
         environment,
-        now
+        today
       ).leftMap(BuildSubscribePromoError)
       case p: Paper => EitherT.fromEither[Future](buildPaperSubscription(
         p,

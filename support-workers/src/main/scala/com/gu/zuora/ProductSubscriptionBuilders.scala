@@ -52,10 +52,10 @@ object ProductSubscriptionBuilders {
       paymentMethod: Either[PaymentMethod, RedemptionData],
       promotionService: PromotionService,
       environment: TouchPointEnvironment,
-      now: () => LocalDate
+      today: () => LocalDate
     )(implicit ec: ExecutionContext): EitherT[Future, PromoError, SubscriptionData] = {
 
-      val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
+      val contractEffectiveDate = today()
       val contractAcceptanceDate = contractEffectiveDate
         .plusDays(zuoraDigitalPackConfig.defaultFreeTrialPeriod)
         .plusDays(zuoraDigitalPackConfig.paymentGracePeriod)
