@@ -19,7 +19,7 @@
     },
     "tap": {
       "guardian/devtools": {
-        "revision": "3b36cf6abae1b19c647beb30fd42ef8b1325da72"
+        "revision": "2d60a611b3029011019b6cb9d3e27d53408dcdfd"
       }
     },
     "brew": {
@@ -54,9 +54,9 @@
   "system": {
     "macos": {
       "mojave": {
-        "HOMEBREW_VERSION": "2.4.0-33-g91b4d45",
+        "HOMEBREW_VERSION": "2.4.0-41-g0125c4c",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "5d99450cff46993700113e7326a320bc81f56919",
+        "Homebrew/homebrew-core": "c21e2f4c6d52c7fe3abc101fc7bb56cb1e8dbf05",
         "CLT": "10.3.0.0.1.1562985497",
         "Xcode": "11.3.1",
         "macOS": "10.14.6"

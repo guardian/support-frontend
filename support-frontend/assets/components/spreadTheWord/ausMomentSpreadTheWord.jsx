@@ -10,26 +10,17 @@ import { isProd } from 'helpers/url';
 
 type PropTypes = {| email: string|};
 
-/* The comment below overrides the default ESLint rule to allow necessary bitwise operators */
-/* eslint no-bitwise: ["error", { "allow": ["<<", "|=", ">>>"] }] */
-const generateSharingCode = (date: Date) => {
-  const salt = Math.floor((Math.random() * 100) + 1);
-  const s = date.toISOString() + salt;
-  let hash = 0;
-  let i;
-  let chr;
-  for (i = 0; i < s.length; i += 1) {
-    chr = s.charCodeAt(i);
-    hash = ((hash << 5) - hash) + chr; hash |= 0;
-  }
-  return (hash >>> 0);
+const generateSharingCode = () => {
+  const salt = Math.floor((Math.random() * 100) + 1).toString(36)
+  const timestamp = new Date().getTime().toString(36)
+  return (salt + timestamp).toUpperCase()
 };
 
 const sharingCodeEndpoint = isProd()
   ? 'https://contribution-referrals.support.guardianapis.com/referral'
   : 'https://contribution-referrals-code.support.guardianapis.com/referral';
 
-const postSharingCode = (endPoint: string, sharingCode: number, email: string) => {
+const postSharingCode = (endPoint: string, sharingCode: string, email: string) => {
   fetch(endPoint, {
     method: 'POST',
     headers: {
@@ -46,8 +37,7 @@ const postSharingCode = (endPoint: string, sharingCode: number, email: string) =
 };
 
 export default function AusMomentSpreadTheWord(props: PropTypes) {
-  const date = new Date();
-  const sharingCode = generateSharingCode(date);
+  const sharingCode = generateSharingCode();
   postSharingCode(sharingCodeEndpoint, sharingCode, props.email);
 
   const title = 'Share your support';
