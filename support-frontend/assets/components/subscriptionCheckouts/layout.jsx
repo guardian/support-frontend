@@ -8,19 +8,34 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 type PropTypes = {
   children: Node,
   aside: ?Node,
+  footerAside: ?Node,
 };
-const CheckoutLayout = ({ children, aside }: PropTypes) => (
-  <div className={[styles.root, aside ? styles.withAside : null].join(' ')}>
-    {aside &&
+const CheckoutLayout = ({ children, aside, footerAside }: PropTypes) => {
+  let mainClass = styles.root;
+  if (aside) {
+    mainClass = [styles.root, styles.withAside].join(' ');
+  } else if (footerAside) {
+    mainClass = [styles.root, styles.withFooterAside].join(' ');
+  }
+  return (
+    <div className={mainClass}>
+      {aside &&
       <div className={styles.aside}>
         {aside}
       </div>
-    }
-    <div className={styles.form}>
-      {children}
+      }
+      <div className={styles.form}>
+        {children}
+      </div>
+      {footerAside &&
+      <div className={styles.footerAside}>
+        {footerAside}
+      </div>
+      }
     </div>
-  </div>
-);
+  );
+};
+
 CheckoutLayout.defaultProps = {
   aside: null,
 };
