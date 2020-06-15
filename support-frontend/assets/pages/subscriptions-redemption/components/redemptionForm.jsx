@@ -64,7 +64,7 @@ function RedemptionForm(props: PropTypes) {
   return (
     <div>
       <Content>
-        <CheckoutLayout aside={(
+        <CheckoutLayout footerAside={(
           <ProductSummary />
         )}
         >
