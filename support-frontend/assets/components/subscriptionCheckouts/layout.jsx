@@ -38,6 +38,7 @@ const CheckoutLayout = ({ children, aside, footerAside }: PropTypes) => {
 
 CheckoutLayout.defaultProps = {
   aside: null,
+  footerAside: null,
 };
 
 const Content = ({ children }: {children: Node}) => (

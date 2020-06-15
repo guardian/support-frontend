@@ -7,16 +7,16 @@ import { from, until } from '@guardian/src-foundations/mq';
 export const wrapper = css`
   background-color: ${background.primary};
   color: ${text.primary};
-  ${until.desktop} {
-    padding: ${space[3]}px;
-  }
+  // ${until.desktop} {
+  //   padding: ${space[3]}px;
+  // }
   ${until.tablet} {
-    box-shadow: 0px 4px 4px ${border.secondary};
+    //box-shadow: 0px 4px 4px ${border.secondary};
   }
 `;
 
 export const contentBlock = css`
-  display: flex;
+  display: block;
   width: 100%;
 
   ${from.tablet} {
@@ -27,26 +27,36 @@ export const contentBlock = css`
 export const imageContainer = css`
   display: inline-flex;
   align-items: flex-start;
-  width: calc(100%-30px);
+  width: calc(100% - 30px);
   padding: 15px 10px 0 15px;
-  background-color: ${neutral['97']};
+  background-color: ${neutral['60']};
 
   img {
-    width: 100%;
+    width: 90%;
     height: auto;
+    margin-left: auto;
+    margin-right: auto;
 
   }
 
   ${until.tablet} {
-    width: 65px;
-    height: 73px;
-    padding-top: 8px;
-    padding-left: 8px;
-    overflow: hidden;
-    img {
-      width: 200%;
-      align-items: flex-end;
-    }
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 20px;
+    padding: 8px 8px 0;
+
+  }
+`;
+
+export const untilTablet = css`
+  ${from.tablet} {
+    display: none;
+  }
+`;
+
+export const fromTablet = css`
+  ${until.tablet} {
+    display: none;
   }
 `;
 
@@ -62,8 +72,8 @@ export const textBlock = css`
   }
 
   h3 {
-    ${body.medium({ fontWeight: 'bold' })};
-    margin: -5px 0 -3px;
+    ${headline.xxsmall({ fontWeight: 'bold' })};
+    margin: 8px 0 2px;
     ${from.desktop} {
       ${headline.xxsmall({ fontWeight: 'bold' })};
       margin-top: 0;
@@ -90,22 +100,13 @@ export const textBlock = css`
   }
 `;
 
-export const endSummary = css`
-  display: none;
-
-  ${from.desktop} {
-    display: block;
-  }
-`;
-
-
 export const list = css`
+  color: ${text.primary};
+  border-top: 1px solid ${border.secondary};
+  margin: ${space[3]}px;
+  padding-top: ${space[3]}px;
   ${from.desktop} {
-    color: ${text.primary};
     width: calc(100%-${space[3]}px * 2);
-    margin: ${space[3]}px;
-    padding-top: ${space[3]}px;
-    border-top: 1px solid ${border.secondary};
   }
 
   li {

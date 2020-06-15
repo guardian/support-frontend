@@ -3,6 +3,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import { line } from '@guardian/src-foundations/palette';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
@@ -48,6 +49,9 @@ function RedemptionForm(props: PropTypes) {
   const instructionsDivCss = css`
     margin-top: -15px;
     padding: 0 ${space[3]}px;
+    ${from.tablet} {
+      min-height: 350px;
+    }
     hr {
       border: 0;
       border-top: solid 1px ${line.primary};
