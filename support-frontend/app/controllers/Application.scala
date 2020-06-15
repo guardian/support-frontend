@@ -150,8 +150,8 @@ class Application(
         .get("ausMomentEnabled")
         .exists(switch => switch.state.isOn)
 
-      if (geoData.countryGroup.contains(UK) && ausMomentEnabled) //TODO: change UK to Australia
-        "aus moment shareimageurl" //TODO: replace with correct URL
+       if (geoData.countryGroup.contains(Australia) && ausMomentEnabled)
+        " https://i.guim.co.uk/img/media/32cd8c7234c391a7b96c8e91945af9b2e9711631/0_0_1000_525/1000.jpg?quality=85&s=5d69b3ed574a58361e1bce4f4a121b45"
       else
         "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
   }
