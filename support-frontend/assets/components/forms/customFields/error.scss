@@ -10,17 +10,6 @@
   }
 }
 
-.component-form-valid__valid {
-  @include gu-fontset-explainer;
-  color: #22874D;
-  display: block;
-  margin-top: $gu-v-spacing;
-
-  @include mq($from: mobileMedium) {
-    width: 80%;
-  }
-}
-
 .component-form-error__error {
   margin-top: $gu-v-spacing;
 }
@@ -37,10 +26,6 @@
 
 .component-form-error .component-input:not([type-radio]) {
   border-color: gu-colour(state-error);
-}
-
-.component-form-valid .component-input:not([type-radio]) {
-  border-color: #22874D;
 }
 
 .component-form-error {

@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
+import { css } from '@emotion/core';
 
 import { type Option } from 'helpers/types/option';
 import { InlineSuccess } from '@guardian/src-user-feedback';
@@ -17,6 +18,12 @@ type Props = PropsForHoc & {
   children?: Option<Node>,
 };
 
+const mainCss = css`
+  .component-input:not([type-radio]) {
+    border-color: #22874D;
+  }
+`;
+
 // ----- Component ----- //
 
 function Validated({
@@ -27,7 +34,7 @@ function Validated({
   const Element = htmlFor ? 'label' : 'div';
 
   return (
-    <div className={valid ? 'component-form-valid' : null}>
+    <div css={mainCss}>
       <Element
         aria-hidden={!valid}
         aria-atomic="true"
@@ -35,7 +42,7 @@ function Validated({
         htmlFor={htmlFor}
         className="component-form-valid__valid"
       >
-        <InlineSuccess>{valid}</InlineSuccess>
+        {valid && <InlineSuccess>{valid}</InlineSuccess>}
       </Element>
       {children}
     </div>
