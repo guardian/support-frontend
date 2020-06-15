@@ -1,6 +1,6 @@
 package controllers
 
-import actions.CustomActionBuilders
+import actions.{CacheControl, CustomActionBuilders}
 import actions.CustomActionBuilders.AuthRequest
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
@@ -68,7 +68,7 @@ class RedemptionController(
             customerOrError = customerOrError,
             user = None,
             submitted = false
-          ))
+          )).withHeaders(CacheControl.noCache)
       )
 
   }

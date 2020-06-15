@@ -7,12 +7,6 @@ import { from, until } from '@guardian/src-foundations/mq';
 export const wrapper = css`
   background-color: ${background.primary};
   color: ${text.primary};
-  // ${until.desktop} {
-  //   padding: ${space[3]}px;
-  // }
-  ${until.tablet} {
-    //box-shadow: 0px 4px 4px ${border.secondary};
-  }
 `;
 
 export const contentBlock = css`
@@ -32,7 +26,7 @@ export const imageContainer = css`
   background-color: ${neutral['60']};
 
   img {
-    width: 90%;
+    width: 100%;
     height: auto;
     margin-left: auto;
     margin-right: auto;
