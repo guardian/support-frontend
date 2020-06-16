@@ -155,7 +155,6 @@ class Application(
         "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
   }
 
-  //noinspection ScalaStyle
   private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],
                                 campaignCode: Option[String], guestAccountCreationToken: Option[String])
                                (implicit request: RequestHeader, settings: AllSettings) = {
