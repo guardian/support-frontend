@@ -28,6 +28,10 @@
   border-color: gu-colour(state-error);
 }
 
+.component-form-error .component-input:not([type-radio]):focus {
+  outline: 4px solid gu-colour(state-error);
+}
+
 .component-form-error {
   .StripeElement--invalid, .StripeElement--empty {
     border: 1px solid #c70000;
