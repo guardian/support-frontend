@@ -13,7 +13,7 @@ import com.gu.support.redemptions.CorporateRedemption
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.response._
-import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
+import com.gu.support.zuora.api.{PreviewSubscribeRequest, ReaderType, SubscribeRequest}
 import com.gu.support.zuora.domain
 import com.gu.zuora.ZuoraSubscribeService
 import org.joda.time.{DateTime, LocalDate}
@@ -58,11 +58,19 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       override def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[domain.DomainSubscription]] = Future(List())
       // should not do a preview against zuora for corp/free subs
       override def previewSubscribe(previewSubscribeRequest: PreviewSubscribeRequest): Future[List[PreviewSubscribeResponse]] = ???
-      override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
-        subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode match {
-          case Some("TESTCODE") => Future.successful(List(SubscribeResponseAccount("accountcorp", "subcorp", 135.67f, "ididcorp", 246.67f, "acidcorp", true)))
-          case _ => ???
+      override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] = {
+        val maybeRedemptionCode = subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode
+        val paymentType = subscribeRequest.subscribes.head.paymentMethod.isDefined
+        val autoPay = subscribeRequest.subscribes.head.account.autoPay
+        val readerType = subscribeRequest.subscribes.head.subscriptionData.subscription.readerType
+        val ratePlan = subscribeRequest.subscribes.head.subscriptionData.ratePlanData.head.ratePlan.productRatePlanId
+        val actual = (maybeRedemptionCode, paymentType, autoPay, readerType, ratePlan)
+        actual match {
+          case (Some("TESTCODE"), false, false, ReaderType.Corporate, "2c92c0f971c65dfe0171c6c1f86e603c") =>
+            Future.successful(List(SubscribeResponseAccount("accountcorp", "subcorp", 135.67f, "ididcorp", 246.67f, "acidcorp", true)))
+          case _ => Future.failed(new Throwable(s"subscribe request: $actual"))
         }
+      }
     }
 
     val result = CreateZuoraSubscription(
@@ -114,13 +122,19 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
         )
       ))
       // ideally should also check we called zuora with the right post data
-      override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
-        subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode match {
-          case None => Future.successful(List(
-            SubscribeResponseAccount("accountdigi", "subdigi", 135.67f, "ididdigi", 246.67f, "aciddigi", true)
-          ))
-          case _ => ???
+      override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] = {
+        val maybeRedemptionCode = subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode
+        val paymentType = subscribeRequest.subscribes.head.paymentMethod.get.`type`
+        val autoPay = subscribeRequest.subscribes.head.account.autoPay
+        val readerType = subscribeRequest.subscribes.head.subscriptionData.subscription.readerType
+        val ratePlan = subscribeRequest.subscribes.head.subscriptionData.ratePlanData.head.ratePlan.productRatePlanId
+        val actual = (maybeRedemptionCode, paymentType, autoPay, readerType, ratePlan)
+        actual match {
+          case (None, "PayPal", true, ReaderType.Direct, "2c92c0f84bbfec8b014bc655f4852d9d") =>
+            Future.successful(List(SubscribeResponseAccount("accountdigi", "subdigi", 135.67f, "ididdigi", 246.67f, "aciddigi", true)))
+          case _ => Future.failed(new Throwable(s"subscribe request: $actual"))
         }
+      }
     }
 
     val result = CreateZuoraSubscription(
