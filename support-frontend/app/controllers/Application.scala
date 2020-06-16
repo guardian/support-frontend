@@ -141,9 +141,23 @@ class Application(
     ).map(_.withSettingsSurrogateKey)
   }
 
+  private def shareImageUrl(geoData: GeoData, settings: AllSettings): String = {
+    val ausMomentEnabled =
+      settings
+        .switches
+        .experiments
+        .get("ausMomentEnabled")
+        .exists(switch => switch.state.isOn)
+
+      if (geoData.countryGroup.contains(Australia) && ausMomentEnabled)
+        " https://i.guim.co.uk/img/media/32cd8c7234c391a7b96c8e91945af9b2e9711631/0_0_1000_525/1000.jpg?quality=85&s=5d69b3ed574a58361e1bce4f4a121b45"
+      else
+        "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
+  }
+
   private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],
-    campaignCode: Option[String], guestAccountCreationToken: Option[String])
-    (implicit request: RequestHeader, settings: AllSettings) = {
+                                campaignCode: Option[String], guestAccountCreationToken: Option[String])
+                               (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
     val css = elementForStage(RefPath("contributionsLandingPage.css"))
@@ -152,9 +166,6 @@ class Application(
 
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
-
-    val shareImageUrl =
-      "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
 
     val mainElement = assets.getSsrCacheContentsAsHtml(
       divId = s"contributions-landing-page-$countryCode",
@@ -186,7 +197,7 @@ class Application(
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
       geoData = geoData,
-      shareImageUrl = shareImageUrl,
+      shareImageUrl = shareImageUrl(geoData, settings),
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey
     )
