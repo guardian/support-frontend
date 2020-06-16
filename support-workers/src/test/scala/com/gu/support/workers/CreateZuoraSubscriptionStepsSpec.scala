@@ -4,15 +4,10 @@ import java.util.UUID
 
 import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
-import com.gu.support.catalog.Corporate
 import com.gu.support.config.{ZuoraConfig, ZuoraDigitalPackConfig}
-import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
-import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
-import com.gu.support.redemption.{DynamoLookup, DynamoUpdate}
-import com.gu.support.redemptions.CorporateRedemption
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
-import com.gu.support.zuora.api.response.{Charge, InvoiceDataItem, PreviewSubscribeResponse, SubscribeResponseAccount, ZuoraAccountNumber}
+import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.support.zuora.domain
 import com.gu.zuora.ZuoraSubscribeService

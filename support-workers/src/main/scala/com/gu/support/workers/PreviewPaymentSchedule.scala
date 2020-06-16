@@ -1,9 +1,8 @@
 package com.gu.support.workers
 
-import com.gu.services.Services
 import com.gu.support.zuora.api.response.{Charge, PreviewSubscribeResponse}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeItem}
-import com.gu.zuora.{ZuoraService, ZuoraSubscribeService}
+import com.gu.zuora.ZuoraSubscribeService
 import org.joda.time.LocalDate
 
 import scala.concurrent.ExecutionContext.Implicits.global

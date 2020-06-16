@@ -5,7 +5,7 @@ import java.util.UUID
 import cats.implicits._
 import com.gu.FutureLogging.LogImplicitFuture
 import com.gu.support.zuora.domain.{CreatedRequestId, DomainSubscription}
-import com.gu.zuora.{ZuoraService, ZuoraSubscribeService}
+import com.gu.zuora.ZuoraSubscribeService
 import org.joda.time.DateTime
 
 import scala.concurrent.{ExecutionContext, Future}
