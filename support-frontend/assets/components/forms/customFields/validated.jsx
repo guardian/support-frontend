@@ -7,6 +7,7 @@ import { css } from '@emotion/core';
 
 import { type Option } from 'helpers/types/option';
 import { InlineSuccess } from '@guardian/src-user-feedback';
+import { success } from '@guardian/src-foundations';
 
 // ----- Types ----- //
 export type PropsForHoc = {
@@ -20,7 +21,10 @@ type Props = PropsForHoc & {
 
 const mainCss = css`
   .component-input:not([type-radio]) {
-    border-color: #22874D;
+    border-color: ${success['400']};
+  }
+  .component-input:not([type-radio]):focus {
+    outline: 4px solid ${success['400']};
   }
 `;
 
@@ -34,7 +38,7 @@ function Validated({
   const Element = htmlFor ? 'label' : 'div';
 
   return (
-    <div css={mainCss}>
+    <div css={valid ? mainCss : null}>
       <Element
         aria-hidden={!valid}
         aria-atomic="true"
