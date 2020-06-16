@@ -81,7 +81,7 @@ object CreateZuoraSubscription {
         case None => subscribe(subscribeItem, zuoraService).map(response => toHandlerResult(state, response, paymentMethodWithPaymentSchedule, requestInfo))
           .withLogging("subscribe")
       }
-      _ <- updateRedemptionCode(state.paymentMethod, subscriptionData, SetCodeStatus.withDynamoLookup(redemptionService))
+      _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, subscriptionData, SetCodeStatus.withDynamoLookup(redemptionService))
     } yield thankYouState
   }
 
@@ -232,19 +232,18 @@ object CreateZuoraSubscription {
     autoPay = state.paymentMethod.isLeft
   )
 
-  def updateRedemptionCode(
+  def updateRedemptionCodeIfApplicable(
     paymentMethod: Either[PaymentMethod, RedemptionData],
     subscriptionData: SubscriptionData,
     setCodeStatus: SetCodeStatus
   ): Future[Unit] =
-    paymentMethod match {
-      case Right(rd: RedemptionData) =>
+    paymentMethod.toOption match {
+      case Some(rd: RedemptionData) =>
         setCodeStatus(
           RedemptionCode(rd.redemptionCode).right.get,
           RedemptionTable.AvailableField.CodeIsUsed
         )
-      case Left(_: PaymentMethod) if (subscriptionData.subscription.redemptionCode.isEmpty) => Future.successful(())
-      case _ => Future.failed(new Throwable("user redeemed a subscription but we didn't mark it as redeemed"))
+      case None => Future.successful(())
     }
 
 }

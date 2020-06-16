@@ -59,7 +59,10 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       // should not do a preview against zuora for corp/free subs
       override def previewSubscribe(previewSubscribeRequest: PreviewSubscribeRequest): Future[List[PreviewSubscribeResponse]] = ???
       override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
-        Future.successful(List(SubscribeResponseAccount("accountcorp", "subcorp", 135.67f, "ididcorp", 246.67f, "acidcorp", true)))
+        subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode match {
+          case Some("TESTCODE") => Future.successful(List(SubscribeResponseAccount("accountcorp", "subcorp", 135.67f, "ididcorp", 246.67f, "acidcorp", true)))
+          case _ => ???
+        }
     }
 
     val result = CreateZuoraSubscription(
@@ -111,9 +114,13 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
         )
       ))
       // ideally should also check we called zuora with the right post data
-      override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] = Future.successful(List(
-        SubscribeResponseAccount("accountdigi", "subdigi", 135.67f, "ididdigi", 246.67f, "aciddigi", true)
-      ))
+      override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
+        subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode match {
+          case None => Future.successful(List(
+            SubscribeResponseAccount("accountdigi", "subdigi", 135.67f, "ididdigi", 246.67f, "aciddigi", true)
+          ))
+          case _ => ???
+        }
     }
 
     val result = CreateZuoraSubscription(
