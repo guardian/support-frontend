@@ -32,8 +32,6 @@ case class BuildSubscribeRedemptionError(cause: RedemptionInvalid) extends Runti
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
 
-  import CreateZuoraSubscription._
-
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
@@ -49,13 +47,13 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val zuoraService = services.zuoraService
     val isTestUser = state.user.isTestUser
     val config: ZuoraConfig = zuoraConfigProvider.get(isTestUser)
-    doStepsFromDeps(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, config)
+    CreateZuoraSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, config)
   }
 }
 object CreateZuoraSubscription {
   import com.gu.FutureLogging._
 
-  def doStepsFromDeps(
+  def apply(
     state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
     now: () => DateTime,

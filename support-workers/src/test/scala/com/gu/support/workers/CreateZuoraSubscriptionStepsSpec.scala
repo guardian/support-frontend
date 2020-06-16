@@ -52,7 +52,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       ))
     }
 
-    val result = CreateZuoraSubscription.doStepsFromDeps(
+    val result = CreateZuoraSubscription(
       state = state,
       requestInfo = RequestInfo(false, false, Nil, false),
       now = () => new DateTime(2020, 6, 15, 16, 28, 57),
