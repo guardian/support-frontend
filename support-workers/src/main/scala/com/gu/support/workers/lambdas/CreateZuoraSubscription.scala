@@ -9,7 +9,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.{DynamoLookup, DynamoUpdate, GetCodeStatus}
+import com.gu.support.redemption.{DynamoLookup, DynamoUpdate, GetCodeStatus, RedemptionCode, RedemptionTable, SetCodeStatus}
 import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
@@ -81,6 +81,7 @@ object CreateZuoraSubscription {
         case None => subscribe(subscribeItem, zuoraService).map(response => toHandlerResult(state, response, paymentMethodWithPaymentSchedule, requestInfo))
           .withLogging("subscribe")
       }
+      _ <- updateRedemptionCode(state.paymentMethod, subscriptionData, SetCodeStatus.withDynamoLookup(redemptionService))
     } yield thankYouState
   }
 
@@ -230,4 +231,20 @@ object CreateZuoraSubscription {
     createdRequestId__c = state.requestId.toString,
     autoPay = state.paymentMethod.isLeft
   )
+
+  def updateRedemptionCode(
+    paymentMethod: Either[PaymentMethod, RedemptionData],
+    subscriptionData: SubscriptionData,
+    setCodeStatus: SetCodeStatus
+  ): Future[Unit] =
+    paymentMethod match {
+      case Right(rd: RedemptionData) =>
+        setCodeStatus(
+          RedemptionCode(rd.redemptionCode).right.get,
+          RedemptionTable.AvailableField.CodeIsUsed
+        )
+      case Left(_: PaymentMethod) if (subscriptionData.subscription.redemptionCode.isEmpty) => Future.successful(())
+      case _ => Future.failed(new Throwable("user redeemed a subscription but we didn't mark it as redeemed"))
+    }
+
 }

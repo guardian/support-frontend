@@ -4,7 +4,12 @@ import java.util.UUID
 
 import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
+import com.gu.support.catalog.Corporate
 import com.gu.support.config.{ZuoraConfig, ZuoraDigitalPackConfig}
+import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
+import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
+import com.gu.support.redemption.{DynamoLookup, DynamoUpdate}
+import com.gu.support.redemptions.CorporateRedemption
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.response._
@@ -18,6 +23,65 @@ import org.scalatest.matchers.should.Matchers
 import scala.concurrent.Future
 
 class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
+
+  it should "create a Digital Pack corporate subscription" in {
+
+    val state = CreateZuoraSubscriptionState(
+      requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+      user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
+      giftRecipient = None,
+      product = DigitalPack(Currency.GBP, null /* !*/, Corporate),
+      paymentMethod = Right(CorporateRedemption(redemptionCode = "TESTCODE", corporateAccountId = "1")),
+      firstDeliveryDate = None,
+      promoCode = None,
+      salesforceContacts = SalesforceContactRecords(
+        buyer = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+        giftRecipient = None
+      ),
+      acquisitionData = None
+    )
+
+
+    var dynamoUpdates: List[(String, DynamoUpdate.DynamoFieldUpdate)] = Nil
+    val dyanmoDb = new DynamoLookup with DynamoUpdate {
+      override def lookup(key: String): Future[Option[Map[String, DynamoLookup.DynamoValue]]] = key match {
+        case "TESTCODE" => Future.successful(Some(Map("available" -> DynamoBoolean(true), "corporateId" -> DynamoString("1"))))
+      }
+      override def update(key: String, dynamoFieldUpdate: DynamoUpdate.DynamoFieldUpdate): Future[Unit] = {
+        dynamoUpdates = (key, dynamoFieldUpdate) :: dynamoUpdates
+        Future.successful(())
+      }
+    }
+
+    val zuora = new ZuoraSubscribeService {
+      override def getAccountFields(identityId: IdentityId, now: DateTime): Future[List[domain.DomainAccount]] = Future(List())
+      override def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[domain.DomainSubscription]] = Future(List())
+      // should not do a preview against zuora for corp/free subs
+      override def previewSubscribe(previewSubscribeRequest: PreviewSubscribeRequest): Future[List[PreviewSubscribeResponse]] = ???
+      override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
+        Future.successful(List(SubscribeResponseAccount("accountcorp", "subcorp", 135.67f, "ididcorp", 246.67f, "acidcorp", true)))
+    }
+
+    val result = CreateZuoraSubscription(
+      state,
+      RequestInfo(false, false, Nil, false),
+      () => new DateTime(2020, 6, 15, 16, 28, 57),
+      () => new LocalDate(2020, 6, 15),
+      null,
+      dyanmoDb,
+      zuora,
+      ZuoraConfig(null, null, null, null, null, null)
+    )
+
+    result.map { handlerResult =>
+      withClue(handlerResult) {
+        dynamoUpdates should be(List("TESTCODE" -> DynamoFieldUpdate("available", false)))
+        handlerResult.value.accountNumber should be("accountcorp")
+        handlerResult.value.subscriptionNumber should be("subcorp")
+        handlerResult.value.paymentMethod.isRight should be(true) // it's still a corp sub!
+      }
+    }
+  }
 
   it should "create a Digital Pack standard (paid) subscription" in {
 
