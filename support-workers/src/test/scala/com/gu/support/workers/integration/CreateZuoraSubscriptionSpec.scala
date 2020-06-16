@@ -1,7 +1,6 @@
 package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
-import java.time.OffsetDateTime
 
 import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvider}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
@@ -19,6 +18,7 @@ import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.ZuoraService
+import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
@@ -96,7 +96,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     // Need to return None from the Zuora service `getRecurringSubscription`
     // method or the subscribe step gets skipped
     // if these methods weren't coupled into one class then we could pass them separately and avoid reflection
-    when(mockZuora.getAccountFields(any[IdentityId], any[OffsetDateTime]))
+    when(mockZuora.getAccountFields(any[IdentityId], any[DateTime]))
       .thenReturn(Future.successful(Nil))
     when(mockZuora.getSubscriptions(any[ZuoraAccountNumber]))
       .thenReturn(Future.successful(Nil))

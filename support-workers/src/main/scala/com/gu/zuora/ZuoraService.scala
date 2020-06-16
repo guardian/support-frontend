@@ -1,8 +1,5 @@
 package com.gu.zuora
 
-import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, OffsetDateTime}
-
 import cats.data.OptionT
 import cats.implicits._
 import com.gu.okhttp.RequestRunners.FutureHttpClient
@@ -16,6 +13,8 @@ import io.circe
 import io.circe.Decoder
 import io.circe.parser.decode
 import io.circe.syntax._
+import org.joda.time.DateTime
+import org.joda.time.format.ISODateTimeFormat
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,12 +31,10 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
   def getAccount(accountNumber: String): Future[GetAccountResponse] =
     get[GetAccountResponse](s"accounts/$accountNumber", authHeaders)
 
-  def getAccountFields(identityId: IdentityId, now: OffsetDateTime): Future[List[DomainAccount]] = {
-    val recentDays = 28 // the step functions only try for 1 day, so 28 would be ample to find subs already created in this execution
-    val recently = now.minusDays(recentDays).format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+  def getAccountFields(identityId: IdentityId, now: DateTime): Future[List[DomainAccount]] = {
     // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
     val queryData = QueryData(
-      s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}' and UpdatedDate > '$recently'"
+      s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}' and ${ZuoraService.updatedClause(now)}"
     )
     postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(DomainAccount.fromAccountRecord))
   }
@@ -84,5 +81,15 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     //The Zuora api docs say that the subscribe action returns
     //a ZuoraErrorResponse but actually it returns a list of those.
     decode[List[ZuoraErrorResponse]](responseBody).map(_.head)
+
+}
+
+object ZuoraService {
+
+  def updatedClause(now: DateTime): String = {
+    val recentDays = 28 // the step functions only try for 1 day, so 28 would be ample to find subs already created in this execution
+    val recently = now.minusDays(recentDays).toString(ISODateTimeFormat.dateTimeNoMillis())
+    s"UpdatedDate > '$recently'"
+  }
 
 }

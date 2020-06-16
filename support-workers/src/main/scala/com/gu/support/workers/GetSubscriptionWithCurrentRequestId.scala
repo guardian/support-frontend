@@ -1,15 +1,14 @@
 package com.gu.support.workers
 
-import java.time.OffsetDateTime
 import java.util.UUID
 
 import cats.implicits._
 import com.gu.FutureLogging.LogImplicitFuture
 import com.gu.support.zuora.domain.{CreatedRequestId, DomainSubscription}
 import com.gu.zuora.ZuoraService
+import org.joda.time.DateTime
 
 import scala.concurrent.{ExecutionContext, Future}
-
 
 object GetSubscriptionWithCurrentRequestId {
 
@@ -18,7 +17,7 @@ object GetSubscriptionWithCurrentRequestId {
     requestId: UUID,
     identityId: IdentityId,
     billingPeriod: BillingPeriod,
-    now: () => OffsetDateTime
+    now: () => DateTime
   )(implicit ec: ExecutionContext): Future[Option[DomainSubscription]] = for {
     accountNumbers <- zuoraService.getAccountFields(identityId, now())
       .withLogging("getAccountFields")
