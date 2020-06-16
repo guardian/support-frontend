@@ -396,7 +396,7 @@ object JsonFixtures {
             $userJsonNoAddress,
             "product": $digitalPackCorporateJson,
             "paymentMethod": {
-              "redemptionCode": "ITTEST-AVAILABLE",
+              "redemptionCode": "ITTEST-MUTABLE",
               "corporateAccountId": "1"
             },
             "salesForceContact": $salesforceContactJson,

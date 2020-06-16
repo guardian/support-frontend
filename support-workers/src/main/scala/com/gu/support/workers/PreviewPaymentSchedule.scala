@@ -3,6 +3,7 @@ package com.gu.support.workers
 import com.gu.services.Services
 import com.gu.support.zuora.api.response.{Charge, PreviewSubscribeResponse}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeItem}
+import com.gu.zuora.{ZuoraService, ZuoraSubscribeService}
 import org.joda.time.LocalDate
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -13,7 +14,7 @@ object PreviewPaymentSchedule {
   def apply(
     subscribeItem: SubscribeItem,
     billingPeriod: BillingPeriod,
-    services: Services,
+    zuoraService: ZuoraSubscribeService,
     singleResponseCheck: Future[List[PreviewSubscribeResponse]] => Future[PreviewSubscribeResponse]
   ): Future[PaymentSchedule] = {
     val numberOfInvoicesToPreview: Int = billingPeriod match {
@@ -23,7 +24,7 @@ object PreviewPaymentSchedule {
       case SixWeekly => 2
     }
     singleResponseCheck(
-      services.zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfInvoicesToPreview))
+      zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfInvoicesToPreview))
     ).map(response => paymentSchedule(response.invoiceData.flatMap(_.invoiceItem)))
   }
 

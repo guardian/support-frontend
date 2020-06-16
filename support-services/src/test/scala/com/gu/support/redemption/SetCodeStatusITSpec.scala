@@ -11,8 +11,7 @@ import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedExce
 class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
 
   private val dynamoTableAsync: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
-  val setCodeStatus =
-    SetCodeStatus.withDynamoLookup(dynamoTableAsync)
+  val setCodeStatus = SetCodeStatus.withDynamoLookup(dynamoTableAsync)
   val getCodeStatus = GetCodeStatus.withDynamoLookup(dynamoTableAsync)
 
   // this is one test because it depends on external state which may not be in a particular state
