@@ -55,7 +55,7 @@ const socialMedia: {
   },
   linkedin: {
     link: referralCodeQueryParameter =>
-      `http://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%3FausAcquisitionData%3Dthankyou_linkedin_${referralCodeQueryParameter || ''}`,
+      `https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%3FausAcquisitionData%3Dthankyou_linkedin_${referralCodeQueryParameter || ''}`,
     svg: <SvgLinkedin />,
     a11yHint: 'Share on linkedin',
     windowFeatures: SocialWindowFeatures,
