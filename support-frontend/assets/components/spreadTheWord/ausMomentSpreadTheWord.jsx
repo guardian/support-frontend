@@ -11,9 +11,9 @@ import { isProd } from 'helpers/url';
 type PropTypes = {| email: string|};
 
 const generateSharingCode = () => {
-  const salt = Math.floor((Math.random() * 100) + 1).toString(36)
-  const timestamp = new Date().getTime().toString(36)
-  return (salt + timestamp).toUpperCase()
+  const salt = Math.floor((Math.random() * 100) + 1).toString(36);
+  const timestamp = new Date().getTime().toString(36);
+  return (salt + timestamp).toUpperCase();
 };
 
 const sharingCodeEndpoint = isProd()
@@ -55,5 +55,4 @@ export default function AusMomentSpreadTheWord(props: PropTypes) {
       </div>
     </div>
   );
-
 }
