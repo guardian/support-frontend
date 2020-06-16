@@ -41,8 +41,7 @@ const socialMedia: {
 } = {
   facebook: {
     link: referralCodeQueryParameter =>
-      // `https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%3FacquisitionData%3Dthankyou_facebook_${referralCodeQueryParameter || ''}`,
-      `https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.thegulocal.com%2Fau%2Fcontribute%3FausAcquisitionData%3Dthankyou_facebook_${referralCodeQueryParameter || ''}`,
+      `https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.theguardian.com%2Fcontribute%3FausAcquisitionData%3Dthankyou_facebook_${referralCodeQueryParameter || ''}`,
     svg: <SvgFacebook />,
     a11yHint: 'Share on facebook',
     windowFeatures: SocialWindowFeatures,
