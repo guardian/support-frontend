@@ -21,7 +21,7 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = window.guardian.ausMomentEnabled ? 'au/contribute' : null;
+const currentCampaignName = window && window.guardian && window.guardian.ausMomentEnabled ? 'au/contribute' : null;
 
 export const campaigns: Campaigns = currentCampaignName ? {
   // TODO - the rest of the campaign settings
