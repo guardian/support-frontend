@@ -144,6 +144,6 @@ export const tests: Tests = {
     referrerControlled: false,
     seed: 7,
     targetPage: digitalCheckout,
-    optimizeId: '',
+    optimizeId: 'tdBE5yqdR0aQ19E06j1zRA',
   },
 };
