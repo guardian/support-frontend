@@ -267,7 +267,9 @@ function deserialiseAusMomentAcquisitionData(serialised: string): Object {
   return {
     componentId: `${page}_${socialPlatform}`,
     source: 'SOCIAL',
-    campaignCode: referralCode,
+    queryParameters: {
+      referralCode,
+    },
   };
 }
 
