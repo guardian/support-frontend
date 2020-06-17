@@ -8,13 +8,13 @@ import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
-import config.{Configuration, RecaptchaConfigProvider, StringsConfig}
+import config.{RecaptchaConfigProvider, StringsConfig}
 import cookies.ServersideAbTestCookie
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.mvc._
@@ -141,7 +141,7 @@ class Application(
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def shareImageUrl(geoData: GeoData, settings: AllSettings): String = {
+  private def shareImageUrl(settings: AllSettings): String = {
     val ausMomentEnabled =
       settings
         .switches
@@ -149,8 +149,8 @@ class Application(
         .get("ausMomentEnabled")
         .exists(switch => switch.state.isOn)
 
-      if (geoData.countryGroup.contains(Australia) && ausMomentEnabled)
-        " https://i.guim.co.uk/img/media/32cd8c7234c391a7b96c8e91945af9b2e9711631/0_0_1000_525/1000.jpg?quality=85&s=5d69b3ed574a58361e1bce4f4a121b45"
+      if (ausMomentEnabled)
+        "https://i.guim.co.uk/img/media/32cd8c7234c391a7b96c8e91945af9b2e9711631/0_0_1000_525/1000.jpg?quality=85&s=5d69b3ed574a58361e1bce4f4a121b45"
       else
         "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
   }
@@ -197,7 +197,7 @@ class Application(
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,
       geoData = geoData,
-      shareImageUrl = shareImageUrl(geoData, settings),
+      shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey
     )
