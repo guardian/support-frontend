@@ -176,12 +176,11 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     getQueryParameter('REFPVID');
 
   // Override default campaign code assignment for Aus Moment 2020
-  const ausMomentEnabled = window.guardian.ausMomentEnabled || false
-  const pathname = window.location.pathname || ''
+  const ausMomentEnabled = window.guardian.ausMomentEnabled || false;
+  const pathname = window.location.pathname || '';
   const campaignCode = (pathname === '/au/contribute' && ausMomentEnabled)
     ? 'Aus_moment_2020'
     : getCampaignName() || acquisitionData.campaignCode || getQueryParameter('INTCMP');
-
 
   const parameterExclusions =
     ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency'];
@@ -271,9 +270,12 @@ function deserialiseAusMomentAcquisitionData(serialised: string): Object {
   return {
     componentId: `${page}_${socialPlatform}`,
     source: 'SOCIAL',
-    queryParameters: {
-      referralCode,
-    },
+    queryParameters: [
+      {
+        name: 'referralCode',
+        value: referralCode,
+      },
+    ],
   };
 }
 
