@@ -59,6 +59,7 @@ export type PaymentAPIAcquisitionData = {|
   source: ?string,
   abTests: ?AcquisitionABTest[],
   gaId: ?string,
+  queryParameters: ?AcquisitionQueryParameters,
 |};
 
 // ----- Setup ----- //
@@ -245,6 +246,7 @@ function derivePaymentApiAcquisitionData(
     source: referrerAcquisitionData.source,
     abTests,
     gaId: getCookie('_ga'),
+    queryParameters: referrerAcquisitionData.queryParameters,
   };
 }
 
