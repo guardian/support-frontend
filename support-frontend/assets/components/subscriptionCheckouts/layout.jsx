@@ -12,10 +12,8 @@ type PropTypes = {
 };
 const CheckoutLayout = ({ children, aside, footerAside }: PropTypes) => {
   let mainClass = styles.root;
-  if (aside) {
+  if (aside || footerAside) {
     mainClass = [styles.root, styles.withAside].join(' ');
-  } else if (footerAside) {
-    mainClass = [styles.root, styles.withFooterAside].join(' ');
   }
   return (
     <div className={mainClass}>

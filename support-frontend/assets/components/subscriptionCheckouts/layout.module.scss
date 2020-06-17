@@ -31,35 +31,26 @@
     flex: 0 0 auto;
     width: 100%;
   }
-  .aside {
-    position: sticky;
-    top: 0;
-    z-index: 99;
-    width: 100%;
-    border-bottom: 1px solid gu-colour(neutral-86);
-    @include mq($from: leftCol) {
-      border-right: 1px solid gu-colour(neutral-86);
-    }
+}
+
+.aside {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  width: 100%;
+  border-bottom: 1px solid gu-colour(neutral-86);
+  @include mq($from: leftCol) {
+    border-right: 1px solid gu-colour(neutral-86);
   }
 }
 
-.withFooterAside {
-  @include mq($from:tablet) {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-  }
-  .form {
-    flex: 0 0 auto;
-    width: 100%;
-  }
-  .footerAside {
-    z-index: 99;
-    width: 100%;
-    border-bottom: 1px solid gu-colour(neutral-86);
-    @include mq($from: leftCol) {
-      border-right: 1px solid gu-colour(neutral-86);
-    }
+.footerAside {
+  z-index: 99;
+  width: 100%;
+  border-bottom: 1px solid gu-colour(neutral-86);
+  @include mq($from: leftCol) {
+    border-right: 1px solid gu-colour(neutral-86);
   }
 }
+
 
