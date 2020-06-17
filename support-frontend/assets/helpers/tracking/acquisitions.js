@@ -59,11 +59,13 @@ export type PaymentAPIAcquisitionData = {|
   source: ?string,
   abTests: ?AcquisitionABTest[],
   gaId: ?string,
+  queryParameters: ?AcquisitionQueryParameters,
 |};
 
 // ----- Setup ----- //
 
 const ACQUISITIONS_PARAM = 'acquisitionData';
+const AUS_MOMENT_ACQUISITIONS_PARAM = 'ausAcquisitionData';
 const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 
 
@@ -244,6 +246,7 @@ function derivePaymentApiAcquisitionData(
     source: referrerAcquisitionData.source,
     abTests,
     gaId: getCookie('_ga'),
+    queryParameters: referrerAcquisitionData.queryParameters,
   };
 }
 
@@ -261,11 +264,27 @@ function deriveSubsAcquisitionData(
 
 }
 
+function deserialiseAusMomentAcquisitionData(serialised: string): Object {
+  const [page, socialPlatform, referralCode] = serialised.split('_');
+  return {
+    componentId: `${page}_${socialPlatform}`,
+    source: 'SOCIAL',
+    queryParameters: [
+      {
+        name: 'referralCode',
+        value: referralCode,
+      },
+    ],
+  };
+}
+
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
 function getReferrerAcquisitionData(): ReferrerAcquisitionData {
 
-  const paramData = deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
+  const paramData = getQueryParameter(AUS_MOMENT_ACQUISITIONS_PARAM)
+    ? deserialiseAusMomentAcquisitionData(getQueryParameter(AUS_MOMENT_ACQUISITIONS_PARAM) || '')
+    : deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
   // Read from param, or read from sessionStorage, or build minimal version.
   const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || undefined);
