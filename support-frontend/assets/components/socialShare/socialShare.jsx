@@ -104,7 +104,7 @@ function SocialShare(props: PropTypes) {
 }
 
 SocialShare.defaultProps = {
-  referralCode: '',
+  referralCode: undefined,
 };
 
 export default SocialShare;
