@@ -21,7 +21,7 @@
   }
 }
 
-.withAside {  
+.withAside {
   @include mq($from:tablet) {
     display: flex;
     flex-direction: row-reverse;
@@ -31,15 +31,20 @@
     flex: 0 0 auto;
     width: 100%;
   }
-  .aside {
-    position: sticky;
-    top: 0;
-    z-index: 999;  
-    width: 100%;
-    border-bottom: 1px solid gu-colour(neutral-86);
-    @include mq($from: leftCol) {
-      border-right: 1px solid gu-colour(neutral-86);
-    }  
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+}
+
+.aside {
+  z-index: 99;
+  width: 100%;
+  border-bottom: 1px solid gu-colour(neutral-86);
+  @include mq($from: leftCol) {
+    border-right: 1px solid gu-colour(neutral-86);
   }
 }
+
 

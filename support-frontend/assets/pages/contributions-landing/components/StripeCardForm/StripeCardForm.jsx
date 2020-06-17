@@ -33,7 +33,7 @@ import { updateRecaptchaToken } from '../../contributionsLandingActions';
 import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
-import { InlineError } from '@guardian/src-inline-error';
+import { InlineError } from '@guardian/src-user-feedback';
 import { StripeCardFormField } from './StripeCardFormField';
 import './stripeCardForm.scss';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';

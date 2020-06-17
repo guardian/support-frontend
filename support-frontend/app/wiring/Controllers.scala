@@ -77,7 +77,8 @@ trait Controllers {
     membersDataService,
     testUsers,
     controllerComponents,
-    fontLoader
+    fontLoader,
+    authAction
   )
 
   lazy val paperController = new PaperSubscription(

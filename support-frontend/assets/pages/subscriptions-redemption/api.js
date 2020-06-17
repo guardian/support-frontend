@@ -24,6 +24,9 @@ type ValidationResult = {
 }
 
 function validate(userCode: string) {
+  if (userCode === '') {
+    return Promise.resolve({ valid: false, errorMessage: 'Please enter your code' });
+  }
   const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}`;
   return fetchJson(validationUrl, {});
 }
