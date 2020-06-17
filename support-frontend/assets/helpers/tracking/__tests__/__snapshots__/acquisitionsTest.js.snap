@@ -29,6 +29,16 @@ Object {
   "gaId": null,
   "pageviewId": "123456",
   "platform": "SUPPORT",
+  "queryParameters": Array [
+    Object {
+      "name": "param1",
+      "value": "value1",
+    },
+    Object {
+      "name": "param2",
+      "value": "value2",
+    },
+  ],
   "referrerPageviewId": "123456",
   "referrerUrl": "https://example.com",
   "source": "exampleSource",
