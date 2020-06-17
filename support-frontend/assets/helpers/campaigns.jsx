@@ -42,19 +42,19 @@ export const campaigns: Campaigns = {
 
 export type CampaignName = $Keys<typeof campaigns>
 
-export function getCampaignCode(): ?string {
-  const name = getCampaignName();
-  if (name) {
-    return campaigns[name].campaignCode;
-  }
-  return undefined;
-}
-
 export function getCampaignName(): ?CampaignName {
   if (currentCampaignName) {
     return window.guardian.forceCampaign || window.location.pathname.endsWith(`/${currentCampaignName}`) ?
       currentCampaignName :
       undefined;
+  }
+  return undefined;
+}
+
+export function getCampaignCode(): ?string {
+  const name = getCampaignName();
+  if (name) {
+    return campaigns[name].campaignCode;
   }
   return undefined;
 }
