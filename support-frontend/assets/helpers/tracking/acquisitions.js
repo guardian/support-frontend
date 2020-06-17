@@ -175,9 +175,13 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
   const referrerPageviewId = acquisitionData.referrerPageviewId ||
     getQueryParameter('REFPVID');
 
-  // This was how referrer pageview id used to be passed.
-  const campaignCode =
-    getCampaignName() || acquisitionData.campaignCode || getQueryParameter('INTCMP');
+  // Override default campaign code assignment for Aus Moment 2020
+  const ausMomentEnabled = window.guardian.ausMomentEnabled || false
+  const pathname = window.location.pathname || ''
+  const campaignCode = (pathname === '/au/contribute' && ausMomentEnabled)
+    ? 'Aus_moment_2020'
+    : getCampaignName() || acquisitionData.campaignCode || getQueryParameter('INTCMP');
+
 
   const parameterExclusions =
     ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency'];
