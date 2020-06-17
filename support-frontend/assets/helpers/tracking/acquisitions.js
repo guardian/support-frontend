@@ -10,7 +10,7 @@ import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
-import { getCampaignName } from 'helpers/campaigns';
+import { getCampaignCode } from 'helpers/campaigns';
 
 // ----- Types ----- //
 
@@ -176,7 +176,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
 
   // This was how referrer pageview id used to be passed.
   const campaignCode =
-    getCampaignName() || acquisitionData.campaignCode || getQueryParameter('INTCMP');
+    getCampaignCode() || acquisitionData.campaignCode || getQueryParameter('INTCMP');
 
   const parameterExclusions =
     ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency'];
