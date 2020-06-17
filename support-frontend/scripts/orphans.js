@@ -12,7 +12,11 @@ const baseDir = path.join(__dirname, '..', 'assets');
 
 const config = {
   baseDir,
-  fileExtensions: ['js', 'jsx', 'scss'],
+  fileExtensions: [
+    'js',
+    'jsx',
+    // 'scss' // TODO: reinstate .scss orphans lookup
+  ],
 };
 
 madge(baseDir, config).then((result) => {
@@ -30,11 +34,11 @@ madge(baseDir, config).then((result) => {
   if (!jsOrphansFiltered && !scssOrphansFiltered) {
     console.log(noWarningColour('No orphan modules identified!'));
   } else {
-    if (jsOrphansFiltered) {
+    if (jsOrphansFiltered.length) {
       console.log(`${'\n'}${warningColour.bold(`${jsOrphansFiltered.length} orphan .js/.jsx modules identified...`)}`);
       jsOrphansFiltered.forEach(orphan => console.log(warningColour(orphan)));
     }
-    if (scssOrphansFiltered) {
+    if (scssOrphansFiltered.length) {
       console.log(`${'\n'}${warningColour.bold(`${scssOrphansFiltered.length} orphan .scss modules identified...`)}`);
       scssOrphansFiltered.forEach(orphan => console.log(warningColour(orphan)));
     }
