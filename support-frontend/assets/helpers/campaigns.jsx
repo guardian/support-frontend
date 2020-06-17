@@ -23,7 +23,7 @@ export type Campaigns = {
 
 const currentCampaignName = window.guardian.ausMomentEnabled ? 'au/contribute' : null;
 
-export const campaigns: Campaigns = {
+export const campaigns: Campaigns = currentCampaignName ? {
   // TODO - the rest of the campaign settings
   [currentCampaignName]: {
     campaignCode: 'Aus_moment_2020',
@@ -38,7 +38,7 @@ export const campaigns: Campaigns = {
       },
     },
   },
-};
+} : {};
 
 export type CampaignName = $Keys<typeof campaigns>
 
