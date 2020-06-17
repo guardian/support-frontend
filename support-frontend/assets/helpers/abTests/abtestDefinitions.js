@@ -123,4 +123,27 @@ export const tests: Tests = {
     seed: 6,
     targetPage: auOnlyLandingPage,
   },
+
+  removeDigiSubAddressTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'noAddress',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    seed: 7,
+    targetPage: digitalCheckout,
+    optimizeId: '',
+  },
 };
