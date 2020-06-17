@@ -5,30 +5,29 @@ import React, { type Node } from 'react';
 import styles from './layout.module.scss';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
+type AsideWrapPosition = 'top' | 'bottom';
+
 type PropTypes = {
   children: Node,
   aside: ?Node,
-  footerAside: ?Node,
+  wrapPosition: ?AsideWrapPosition,
 };
-const CheckoutLayout = ({ children, aside, footerAside }: PropTypes) => {
-  let mainClass = styles.root;
-  if (aside || footerAside) {
-    mainClass = [styles.root, styles.withAside].join(' ');
-  }
+const CheckoutLayout = ({ children, aside, wrapPosition }: PropTypes) => {
+  const mainClass = [styles.root, aside ? styles.withAside : null].join(' ');
   return (
     <div className={mainClass}>
-      {aside &&
-      <div className={styles.aside}>
-        {aside}
-      </div>
+      {aside && wrapPosition === 'top' &&
+        <div className={`${styles.aside} ${styles.sticky}`}>
+          {aside}
+        </div>
       }
       <div className={styles.form}>
         {children}
       </div>
-      {footerAside &&
-      <div className={styles.footerAside}>
-        {footerAside}
-      </div>
+      {aside && wrapPosition === 'bottom' &&
+        <div className={styles.aside}>
+          {aside}
+        </div>
       }
     </div>
   );
@@ -36,7 +35,7 @@ const CheckoutLayout = ({ children, aside, footerAside }: PropTypes) => {
 
 CheckoutLayout.defaultProps = {
   aside: null,
-  footerAside: null,
+  wrapPosition: 'top',
 };
 
 const Content = ({ children }: {children: Node}) => (

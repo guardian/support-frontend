@@ -68,9 +68,11 @@ function RedemptionForm(props: PropTypes) {
   return (
     <div>
       <Content>
-        <CheckoutLayout footerAside={(
-          <ProductSummary />
-        )}
+        <CheckoutLayout
+          wrapPosition="bottom"
+          aside={(
+            <ProductSummary />
+          )}
         >
           <Form onSubmit={(ev) => {
             ev.preventDefault();
