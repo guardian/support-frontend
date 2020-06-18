@@ -2,6 +2,7 @@
 
 import type { ContributionTypes } from 'helpers/contributions';
 import type { TickerSettings } from 'components/ticker/contributionTicker';
+import ausMomentEnabled from 'helpers/ausMoment';
 
 export type CampaignSettings = {
   campaignCode: string,
@@ -21,7 +22,7 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = window && window.guardian && window.guardian.ausMomentEnabled ? 'au/contribute' : null;
+const currentCampaignName = ausMomentEnabled('AU') ? 'au/contribute' : null;
 
 export const campaigns: Campaigns = currentCampaignName ? {
   // TODO - the rest of the campaign settings

@@ -1,8 +1,9 @@
 // @flow
 
 import { getQueryParameter } from 'helpers/url';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
-const ausMomentEnabled = (countryId: string = '') => {
+const ausMomentEnabled = (countryId: IsoCountry) => {
   const manualToggle = Boolean(getQueryParameter('ausMomentEnabled', ''));
   const momentSwitchedOn = (window && window.guardian && window.guardian.ausMomentEnabled);
   const inAustralia = countryId === 'AU';
