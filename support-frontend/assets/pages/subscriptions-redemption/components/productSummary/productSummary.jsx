@@ -20,10 +20,11 @@ function ProductSummary() {
           />
         </div>
         <div css={styles.textBlock}>
-          <h3>What&apos;s included in my Digital Subscription?</h3>
+          <h3 css={styles.fromTablet}>What&apos;s included in my Digital Subscription?</h3>
+          <h3 css={styles.untilTablet}>What&apos;s included in my subscription?</h3>
         </div>
       </div>
-      <div css={styles.endSummary}>
+      <div>
         <ul css={styles.list}>
           <li>
             <Dot /><div css={styles.listMain}>The Guardian Daily</div>

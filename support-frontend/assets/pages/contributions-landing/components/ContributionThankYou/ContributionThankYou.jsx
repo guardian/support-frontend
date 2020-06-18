@@ -52,7 +52,6 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
   isSignedIn: state.page.user.isSignedIn,
-  email: state.page.form.formData.email,
   csrf: state.page.csrf.token,
   emailValidated: state.page.user.emailValidated,
   paymentComplete: state.page.form.paymentComplete,
@@ -191,7 +190,7 @@ function ContributionThankYou(props: PropTypes) {
             </h3>
           </section>
         ) : null}
-        { ausMomentEnabled(props.countryId) && <AusMomentSpreadTheWord /> }
+        { ausMomentEnabled(props.countryId) && <AusMomentSpreadTheWord email={props.email} /> }
         { renderIdentityCTA() }
         <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />

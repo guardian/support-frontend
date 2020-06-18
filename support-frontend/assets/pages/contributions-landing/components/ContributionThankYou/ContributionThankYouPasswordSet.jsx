@@ -17,7 +17,8 @@ import ausMomentEnabled from 'helpers/ausMoment';
 // ----- Types ----- //
 type PropTypes = {
   countryId: IsoCountry,
-  countryGroupId: CountryGroupId
+  countryGroupId: CountryGroupId,
+  email: string
 }
 
 // ----- Render ----- //
@@ -34,7 +35,7 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
             {body}
           </p>
         </section>
-        { ausMomentEnabled(props.countryId) && <AusMomentSpreadTheWord /> }
+        { ausMomentEnabled(props.countryId) && <AusMomentSpreadTheWord email={props.email} /> }
         <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
         { !ausMomentEnabled(props.countryId) && <SpreadTheWord /> }

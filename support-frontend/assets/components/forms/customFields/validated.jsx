@@ -3,8 +3,11 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
+import { css } from '@emotion/core';
 
 import { type Option } from 'helpers/types/option';
+import { InlineSuccess } from '@guardian/src-user-feedback';
+import { success } from '@guardian/src-foundations';
 
 // ----- Types ----- //
 export type PropsForHoc = {
@@ -16,6 +19,15 @@ type Props = PropsForHoc & {
   children?: Option<Node>,
 };
 
+const mainCss = css`
+  .component-input:not([type-radio]) {
+    border-color: ${success['400']};
+  }
+  .component-input:not([type-radio]):focus {
+    outline: 4px solid ${success['400']};
+  }
+`;
+
 // ----- Component ----- //
 
 function Validated({
@@ -26,7 +38,7 @@ function Validated({
   const Element = htmlFor ? 'label' : 'div';
 
   return (
-    <div className={valid ? 'component-form-valid' : null}>
+    <div css={valid ? mainCss : null}>
       <Element
         aria-hidden={!valid}
         aria-atomic="true"
@@ -34,7 +46,7 @@ function Validated({
         htmlFor={htmlFor}
         className="component-form-valid__valid"
       >
-        {valid}
+        {valid && <InlineSuccess>{valid}</InlineSuccess>}
       </Element>
       {children}
     </div>

@@ -17,7 +17,8 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 type PropTypes = {|
   thankYouPageStage: ThankYouPageStage,
   countryId: IsoCountry,
-  countryGroupId: CountryGroupId
+  countryGroupId: CountryGroupId,
+  email: string
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -25,6 +26,7 @@ const mapStateToProps = state => ({
   thankYouPageStage: state.page.form.thankYouPageStage,
   countryId: state.common.internationalisation.countryId,
   countryGroupId: state.common.internationalisation.countryGroupId,
+  email: state.page.form.formData.email,
 });
 
 // ----- Render ----- //
@@ -33,16 +35,20 @@ function ContributionThankYouContainer(props: PropTypes) {
 
   const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
     thankYou: (
-      <ContributionThankYou countryGroupId={props.countryGroupId} />
+      <ContributionThankYou countryGroupId={props.countryGroupId} email={props.email} />
     ),
     thankYouSetPassword: (
       <ContributionThankYouSetPassword />
     ),
     thankYouPasswordDeclinedToSet: (
-      <ContributionThankYou countryGroupId={props.countryGroupId} />
+      <ContributionThankYou countryGroupId={props.countryGroupId} email={props.email} />
     ),
     thankYouPasswordSet: (
-      <ContributionThankYouPasswordSet countryId={props.countryId} countryGroupId={props.countryGroupId} />
+      <ContributionThankYouPasswordSet
+        countryId={props.countryId}
+        countryGroupId={props.countryGroupId}
+        email={props.email}
+      />
     ),
   };
 

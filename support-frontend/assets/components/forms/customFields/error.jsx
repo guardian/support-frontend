@@ -7,7 +7,7 @@ import React, { type Node } from 'react';
 import { type Option } from 'helpers/types/option';
 
 import './error.scss';
-import { InlineError } from '@guardian/src-inline-error';
+import { InlineError } from '@guardian/src-user-feedback';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 // ----- Types ----- //

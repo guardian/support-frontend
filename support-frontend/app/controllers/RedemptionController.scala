@@ -1,6 +1,6 @@
 package controllers
 
-import actions.CustomActionBuilders
+import actions.{CacheControl, CustomActionBuilders}
 import actions.CustomActionBuilders.AuthRequest
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
@@ -20,6 +20,7 @@ import views.html.subscriptionRedemptionForm
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import SafeLogger._
+import com.gu.googleauth.AuthAction
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import lib.RedirectWithEncodedQueryString
 import play.twirl.api.Html
@@ -34,7 +35,8 @@ class RedemptionController(
   membersDataService: MembersDataService,
   testUsers: TestUserService,
   components: ControllerComponents,
-  fontLoaderBundle: Either[RefPath, StyleContent]
+  fontLoaderBundle: Either[RefPath, StyleContent],
+  googleAuthAction: AuthAction[AnyContent]
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with Circe {
@@ -49,7 +51,7 @@ class RedemptionController(
   val js = "subscriptionsRedemptionPage.js"
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
-  def displayForm(redemptionCode: String): Action[AnyContent] = NoCacheAction().async {
+  def displayForm(redemptionCode: String): Action[AnyContent] = googleAuthAction.async {
     implicit request =>
       getCorporateCustomer(redemptionCode).value.map(
         customerOrError =>
@@ -66,7 +68,7 @@ class RedemptionController(
             customerOrError = customerOrError,
             user = None,
             submitted = false
-          ))
+          )).withHeaders(CacheControl.noCache)
       )
 
   }

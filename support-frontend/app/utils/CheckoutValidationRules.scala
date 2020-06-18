@@ -94,12 +94,10 @@ object DigitalPackValidation {
     import createSupportWorkersRequest.product._
     import createSupportWorkersRequest.billingAddress._
 
-    val allowCorporateSubs = false
 
     def isValidCorporateSub(redemptionData: RedemptionData) =
       SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
-        hasStateIfRequired(country, state) &&
-        allowCorporateSubs //TODO: validate redemption data here? This would mean returning a Future
+        hasStateIfRequired(country, state)
 
     def isValidPaidSub(paymentFields: PaymentFields) =
       SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&

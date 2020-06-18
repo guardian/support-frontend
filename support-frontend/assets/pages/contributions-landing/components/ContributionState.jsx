@@ -11,7 +11,7 @@ import { type CountryGroupId, type CountryGroup, countryGroups, AUDCountries } f
 import { classNameWithModifiers } from 'helpers/utilities';
 import { Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import SvgGlobe from 'components/svgs/globe';
-import { InlineError } from '@guardian/src-inline-error';
+import { InlineError } from '@guardian/src-user-feedback';
 import DownChevronDs from 'components/svgs/downChevronDs';
 import { focusHalo } from '@guardian/src-foundations/accessibility';
 import { space } from '@guardian/src-foundations';

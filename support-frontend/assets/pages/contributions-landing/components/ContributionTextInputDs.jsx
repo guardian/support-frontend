@@ -74,7 +74,6 @@ export default function ContributionTextInputDs(props: PropTypes) {
           error={showError && props.errorMessage}
           supporting={props.supporting}
           cssOverrides={{
-            width: 'calc(100% - 20px)',
             ...cssInvalid,
           }}
         />
