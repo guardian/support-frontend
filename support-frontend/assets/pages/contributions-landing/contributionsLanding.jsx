@@ -33,6 +33,7 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
 import { FocusStyleManager } from '@guardian/src-utilities';
+import ausMomentEnabled from 'helpers/ausMoment';
 
 
 if (!isDetailsSupported) {
@@ -92,12 +93,10 @@ const campaignName = getCampaignName();
 
 const ausMomentLandingPageBackgroundVariant = state.common.abParticipations.ausMomentLandingPageBackgroundTest;
 const isAusMomentVariant = ausMomentLandingPageBackgroundVariant === 'ausColoursVariant';
-const { countryId } = state.common.internationalisation;
-const ausMomentEnabled = window.guardian.ausMomentEnabled && countryId === 'AU';
 
 const thankYouClassModifiers = [
   'contribution-thankyou',
-  ausMomentEnabled ? 'aus-moment' : null,
+  ausMomentEnabled() ? 'aus-moment' : null,
 ];
 
 const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
