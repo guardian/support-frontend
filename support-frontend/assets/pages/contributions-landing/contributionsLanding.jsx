@@ -93,10 +93,11 @@ const campaignName = getCampaignName();
 
 const ausMomentLandingPageBackgroundVariant = state.common.abParticipations.ausMomentLandingPageBackgroundTest;
 const isAusMomentVariant = ausMomentLandingPageBackgroundVariant === 'ausColoursVariant';
+const { countryId } = state.common.internationalisation;
 
 const thankYouClassModifiers = [
   'contribution-thankyou',
-  ausMomentEnabled() ? 'aus-moment' : null,
+  ausMomentEnabled(countryId) ? 'aus-moment' : null,
 ];
 
 const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
