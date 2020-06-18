@@ -18,8 +18,19 @@ import org.joda.time.format.ISODateTimeFormat
 
 import scala.concurrent.{ExecutionContext, Future}
 
+trait ZuoraSubscribeService {
+
+  def getAccountFields(identityId: IdentityId, now: DateTime): Future[List[DomainAccount]]
+
+  def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[DomainSubscription]]
+
+  def previewSubscribe(previewSubscribeRequest: PreviewSubscribeRequest): Future[List[PreviewSubscribeResponse]]
+
+  def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]]
+}
+
 class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: Option[String] = None)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[ZuoraErrorResponse] {
+  extends WebServiceHelper[ZuoraErrorResponse] with ZuoraSubscribeService {
 
   override val wsUrl: String = baseUrl.getOrElse(config.url)
   override val httpClient: FutureHttpClient = client
@@ -31,7 +42,7 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
   def getAccount(accountNumber: String): Future[GetAccountResponse] =
     get[GetAccountResponse](s"accounts/$accountNumber", authHeaders)
 
-  def getAccountFields(identityId: IdentityId, now: DateTime): Future[List[DomainAccount]] = {
+  override def getAccountFields(identityId: IdentityId, now: DateTime): Future[List[DomainAccount]] = {
     // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
     val queryData = QueryData(
       s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}' and ${ZuoraService.updatedClause(now)}"
@@ -42,15 +53,15 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
   def getObjectAccount(accountId:String): Future[GetObjectAccountResponse] =
     get[GetObjectAccountResponse](s"object/account/$accountId", authHeaders)
 
-  def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[DomainSubscription]] =
+  override def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[DomainSubscription]] =
     get[SubscriptionsResponse](s"subscriptions/accounts/${accountNumber.value}", authHeaders).map { subscriptionsResponse =>
       subscriptionsResponse.subscriptions.map(DomainSubscription.fromSubscription)
     }
 
-  def previewSubscribe(previewSubscribeRequest: PreviewSubscribeRequest): Future[List[PreviewSubscribeResponse]] =
+  override def previewSubscribe(previewSubscribeRequest: PreviewSubscribeRequest): Future[List[PreviewSubscribeResponse]] =
     postJson[List[PreviewSubscribeResponse]]("action/subscribe", previewSubscribeRequest.asJson, authHeaders)
 
-  def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
+  override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
     postJson[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson, authHeaders)
 
   def getPaymentMethod(paymentMethodId: String): Future[GetPaymentMethodResponse] =

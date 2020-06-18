@@ -7,9 +7,9 @@ import com.gu.config.Configuration
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.config.TouchPointEnvironments
+import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.GetCodeStatus
+import com.gu.support.redemption.{DynamoLookup, DynamoUpdate, GetCodeStatus}
 import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
@@ -19,6 +19,7 @@ import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
 import com.gu.zuora.ProductSubscriptionBuilders.buildDigitalPackSubscription.{SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
+import com.gu.zuora.ZuoraSubscribeService
 import org.joda.time.{DateTime, DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,8 +32,6 @@ case class BuildSubscribeRedemptionError(cause: RedemptionInvalid) extends Runti
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
 
-  import com.gu.FutureLogging._
-
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
@@ -43,19 +42,43 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   ): FutureHandlerResult = {
     val now = () => DateTime.now(DateTimeZone.UTC)
     val today = () => LocalDate.now(DateTimeZone.UTC)
+    val promotionService = services.promotionService
+    val redemptionService = services.redemptionService
+    val zuoraService = services.zuoraService
+    val isTestUser = state.user.isTestUser
+    val config: ZuoraConfig = zuoraConfigProvider.get(isTestUser)
+    CreateZuoraSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, config)
+  }
+}
+object CreateZuoraSubscription {
+  import com.gu.FutureLogging._
+
+  def apply(
+    state: CreateZuoraSubscriptionState,
+    requestInfo: RequestInfo,
+    now: () => DateTime,
+    today: () => LocalDate,
+    promotionService: PromotionService,
+    redemptionService: DynamoLookup with DynamoUpdate,
+    zuoraService: ZuoraSubscribeService,
+    config: ZuoraConfig
+  ): Future[HandlerResult[SendThankYouEmailState]] = {
     for {
-      subscriptionData <- buildSubscriptionData(state, services.promotionService, GetCodeStatus.withDynamoLookup(services.redemptionService), today)
+      subscriptionData <- buildSubscriptionData(state, promotionService, GetCodeStatus.withDynamoLookup(redemptionService), today, config)
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
-      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(services.zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
-          .withLogging("GetSubscriptionWithCurrentRequestId")
-      previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
-          .withLogging("PreviewPaymentSchedule")
+      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
+        .withLogging("GetSubscriptionWithCurrentRequestId")
+      paymentMethodWithPaymentSchedule <-
+        state.paymentMethod.leftMap(pm =>
+          PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, zuoraService, checkSingleResponse)
+            .withLogging("PreviewPaymentSchedule").map(ps => (pm, ps))
+        ).leftSequence
       thankYouState <- maybeDomainSubscription match {
-        case Some(domainSubscription) => skipSubscribe(state, requestInfo, previewPaymentSchedule, domainSubscription)
-            .withLogging("skipSubscribe")
-        case None => subscribe(state, subscribeItem, services).map(response => toHandlerResult(state, response, previewPaymentSchedule, requestInfo))
+        case Some(domainSubscription) => skipSubscribe(state, requestInfo, paymentMethodWithPaymentSchedule, domainSubscription)
+          .withLogging("skipSubscribe")
+        case None => subscribe(subscribeItem, zuoraService).map(response => toHandlerResult(state, response, paymentMethodWithPaymentSchedule, requestInfo))
           .withLogging("subscribe")
       }
     } yield thankYouState
@@ -64,13 +87,13 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   def skipSubscribe(
     state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
-    previewedPaymentSchedule: PaymentSchedule,
+    paymentMethodWithPaymentSchedule: Either[(PaymentMethod, PaymentSchedule), RedemptionData],
     subscription: DomainSubscription
-  ): FutureHandlerResult = {
+  ): Future[HandlerResult[SendThankYouEmailState]] = {
     val message = "Skipping subscribe for user because a subscription has already been created for this request"
     SafeLogger.info(message)
     Future.successful(HandlerResult(
-      getEmailState(state, subscription.accountNumber, subscription.subscriptionNumber, previewedPaymentSchedule),
+      getEmailState(state, subscription.accountNumber, subscription.subscriptionNumber, paymentMethodWithPaymentSchedule),
       requestInfo.appendMessage(message)
     ))
   }
@@ -88,35 +111,36 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     }
   }
 
-  def subscribe(state: CreateZuoraSubscriptionState, subscribeItem: SubscribeItem, services: Services): Future[SubscribeResponseAccount] =
-    singleSubscribe(services.zuoraService.subscribe)(subscribeItem)
+  def subscribe(subscribeItem: SubscribeItem, zuoraService: ZuoraSubscribeService): Future[SubscribeResponseAccount] =
+    singleSubscribe(zuoraService.subscribe)(subscribeItem)
 
   def toHandlerResult(
     state: CreateZuoraSubscriptionState,
     response: SubscribeResponseAccount,
-    previewedPaymentSchedule: PaymentSchedule,
+    paymentMethodWithPaymentSchedule: Either[(PaymentMethod, PaymentSchedule), RedemptionData],
     requestInfo: RequestInfo
   ): HandlerResult[SendThankYouEmailState] =
-    HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber, previewedPaymentSchedule), requestInfo)
+    HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber, paymentMethodWithPaymentSchedule), requestInfo)
 
   private def getEmailState(
     state: CreateZuoraSubscriptionState,
     accountNumber: ZuoraAccountNumber,
     subscriptionNumber: ZuoraSubscriptionNumber,
-    paymentSchedule: PaymentSchedule
+    paymentMethodWithPaymentSchedule: Either[(PaymentMethod, PaymentSchedule), RedemptionData]
   ) =
     SendThankYouEmailState(
       state.requestId,
       state.user,
       state.giftRecipient,
       state.product,
-      state.paymentMethod,
+      paymentMethodWithPaymentSchedule.left.map(_._1),
       state.firstDeliveryDate,
       state.promoCode,
       state.salesforceContacts.buyer,
       accountNumber.value,
       subscriptionNumber.value,
-      paymentSchedule,
+      paymentMethodWithPaymentSchedule
+        .left.toOption.map(_._2).getOrElse(PaymentSchedule(List())),//TODO SendThankYou email will only need payment schedule for paid subs
       state.acquisitionData
     )
 
@@ -137,10 +161,10 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     state: CreateZuoraSubscriptionState,
     promotionService: => PromotionService,
     getCodeStatus: => GetCodeStatus,
-    today: () => LocalDate
+    today: () => LocalDate,
+    config: ZuoraConfig
   ): Future[SubscriptionData] = {
     val isTestUser = state.user.isTestUser
-    val config = zuoraConfigProvider.get(isTestUser)
     val environment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
 
     val eventualErrorOrSubscriptionData = state.product match {

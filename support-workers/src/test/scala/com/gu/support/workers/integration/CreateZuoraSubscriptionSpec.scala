@@ -6,7 +6,7 @@ import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvide
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
-import com.gu.support.redemption.RedemptionTable
+import com.gu.support.redemption.{DynamoTableAsync, RedemptionCode, RedemptionTable, SetCodeStatus}
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -42,7 +42,12 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   }
 
   it should "create a Digital Pack corporate subscription" in {
-    createSubscription(createDigiPackCorporateSubscriptionJson)
+    val dynamoTableAsync: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
+    val setCodeStatus = SetCodeStatus.withDynamoLookup(dynamoTableAsync)
+    val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE").right.get
+    setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable).flatMap { _ =>
+      createSubscription(createDigiPackCorporateSubscriptionJson)
+    }
   }
 
   it should "create a Digital Pack subscription with a discount" in {
