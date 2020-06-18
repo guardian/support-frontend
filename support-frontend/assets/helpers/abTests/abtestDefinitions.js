@@ -1,6 +1,7 @@
 // @flow
 import type { Tests } from './abtest';
 import { USV1 } from './data/testAmountsData';
+import ausMomentEnabled from 'helpers/ausMoment';
 
 // ----- Tests ----- //
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
@@ -12,9 +13,6 @@ const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 const digitalCheckout = '/subscribe/digital/checkout';
-const ausMomentEnabled = (
-  window && window.guardian && window.guardian.ausMomentEnabled
-) || false;
 
 export const tests: Tests = {
   usAmountsTest: {
@@ -120,7 +118,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: ausMomentEnabled,
+    isActive: ausMomentEnabled('AU'),
     referrerControlled: false,
     seed: 6,
     targetPage: auOnlyLandingPage,
