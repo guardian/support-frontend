@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unused-prop-types */
 // @flow
 import React, { Component, type Node } from 'react';
-import AdFreeSectionC from 'components/adFreeSectionC/adFreeSectionC';
+import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import GridPicture from 'components/gridPicture/gridPicture';
 import cx from 'classnames';
@@ -225,7 +225,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
             product="app"
           />
           <Plus />
-          <AdFreeSectionC />
+          <AdFreeSection />
         </section>
       </div>
     );
