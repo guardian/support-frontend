@@ -89,9 +89,6 @@ export const tests: Tests = {
     type: 'OTHER',
     variants: [
       {
-        id: 'control',
-      },
-      {
         id: 'ds',
       },
     ],
@@ -110,6 +107,9 @@ export const tests: Tests = {
   ausMomentLandingPageBackgroundTest: {
     type: 'OTHER',
     variants: [
+      {
+        id: 'control',
+      },
       {
         id: 'ausColoursVariant',
       },
