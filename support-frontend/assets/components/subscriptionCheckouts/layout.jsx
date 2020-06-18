@@ -9,14 +9,18 @@ type AsideWrapPosition = 'top' | 'bottom';
 
 type PropTypes = {
   children: Node,
-  aside: ?Node,
+  aside: Node,
   wrapPosition: ?AsideWrapPosition,
 };
 const CheckoutLayout = ({ children, aside, wrapPosition }: PropTypes) => {
-  const mainClass = [styles.root, aside ? styles.withAside : null].join(' ');
+  const mainClass = [
+    styles.root,
+    wrapPosition === 'bottom' ? styles.asideBottom : styles.asideTop,
+  ].join(' ');
+
   return (
     <div className={mainClass}>
-      {aside && wrapPosition === 'top' &&
+      {wrapPosition === 'top' &&
         <div className={`${styles.aside} ${styles.sticky}`}>
           {aside}
         </div>
@@ -24,7 +28,7 @@ const CheckoutLayout = ({ children, aside, wrapPosition }: PropTypes) => {
       <div className={styles.form}>
         {children}
       </div>
-      {aside && wrapPosition === 'bottom' &&
+      {wrapPosition === 'bottom' &&
         <div className={styles.aside}>
           {aside}
         </div>
@@ -34,7 +38,6 @@ const CheckoutLayout = ({ children, aside, wrapPosition }: PropTypes) => {
 };
 
 CheckoutLayout.defaultProps = {
-  aside: null,
   wrapPosition: 'top',
 };
 
