@@ -4,7 +4,7 @@ import { USV1 } from './data/testAmountsData';
 
 // ----- Tests ----- //
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
-export type LandingPageDesignSystemTestVariants = 'control' | 'ds';
+export type LandingPageDesignSystemTestVariants = 'ds';
 export type AusMomentLandingPageBackgroundVariants = 'control' | 'ausColoursVariant';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
@@ -88,9 +88,6 @@ export const tests: Tests = {
   landingPageDesignSystemTest: {
     type: 'OTHER',
     variants: [
-      {
-        id: 'control',
-      },
       {
         id: 'ds',
       },
