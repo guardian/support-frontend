@@ -3,9 +3,10 @@ package controllers
 import actions.CustomActionBuilders
 import cats.data.EitherT
 import com.gu.support.config.{Stage, TouchPointEnvironments}
-import com.gu.support.redemption.{GetCodeStatus, RedemptionCode, RedemptionTable}
+import com.gu.support.redemption.{GetCodeStatus, RedemptionTable}
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import cats.implicits._
+import com.gu.support.redemptions.RedemptionCode
 
 import scala.concurrent.{ExecutionContext, Future}
 

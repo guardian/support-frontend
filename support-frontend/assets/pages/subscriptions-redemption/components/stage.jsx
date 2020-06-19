@@ -10,7 +10,6 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
 import type {
   Action,
-  CorporateCustomer,
   RedemptionPageState,
   Stage,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
@@ -30,7 +29,7 @@ type PropTypes = {|
   checkoutForm: Node,
   thankYouContentPending: Node,
   thankYouContent: Node,
-  corporateCustomer: CorporateCustomer,
+  userCode: string,
   user: User,
   currencyId: IsoCurrency,
   countryId: IsoCountry,
@@ -44,7 +43,7 @@ type PropTypes = {|
 function mapStateToProps(state: RedemptionPageState) {
   return {
     stage: state.page.stage,
-    corporateCustomer: state.page.corporateCustomer,
+    userCode: state.page.userCode,
     user: state.page.user,
     currencyId: state.common.internationalisation.currencyId,
     countryId: state.common.internationalisation.countryId,
@@ -55,7 +54,7 @@ function mapStateToProps(state: RedemptionPageState) {
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   const createSub = (props: PropTypes) => createSubscription(
-    props.corporateCustomer,
+    props.userCode,
     props.user,
     props.currencyId,
     props.countryId,

@@ -9,9 +9,9 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.{DynamoLookup, DynamoUpdate, GetCodeStatus, RedemptionCode, RedemptionTable, SetCodeStatus}
+import com.gu.support.redemption.{DynamoLookup, DynamoUpdate, GetCodeStatus, RedemptionTable, SetCodeStatus}
 import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
-import com.gu.support.redemptions.RedemptionData
+import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api._
@@ -81,7 +81,7 @@ object CreateZuoraSubscription {
         case None => subscribe(subscribeItem, zuoraService).map(response => toHandlerResult(state, response, paymentMethodWithPaymentSchedule, requestInfo))
           .withLogging("subscribe")
       }
-      _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, subscriptionData, SetCodeStatus.withDynamoLookup(redemptionService))
+      _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, SetCodeStatus.withDynamoLookup(redemptionService))
     } yield thankYouState
   }
 
@@ -234,13 +234,12 @@ object CreateZuoraSubscription {
 
   def updateRedemptionCodeIfApplicable(
     paymentMethod: Either[PaymentMethod, RedemptionData],
-    subscriptionData: SubscriptionData,
     setCodeStatus: SetCodeStatus
   ): Future[Unit] =
     paymentMethod.toOption match {
       case Some(rd: RedemptionData) =>
         setCodeStatus(
-          RedemptionCode(rd.redemptionCode).right.get,
+          rd.redemptionCode,
           RedemptionTable.AvailableField.CodeIsUsed
         )
       case None => Future.successful(())

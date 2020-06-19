@@ -2,10 +2,9 @@
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import com.gu.identity.model.{User => IdUser}
 @import com.gu.support.encoding.CustomCodecs._
-@import com.gu.support.redemptions.redemptions.RedemptionCode
+@import com.gu.support.redemptions.redemptions.RawRedemptionCode
 @import helper.CSRF
 @import views.ReactDiv
-@import com.gu.support.redemptions.CorporateCustomer
 @import io.circe.syntax._
 
 @import io.circe.Json
@@ -18,8 +17,8 @@
   csrf: Option[String],
   uatMode: Boolean,
   stage: String,
-  redemptionCode: RedemptionCode,
-  customerOrError: Either[String, CorporateCustomer],
+  redemptionCode: RawRedemptionCode,
+  maybeRedemptionError: Option[String],
   user: Option[IdUser],
   submitted: Boolean
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
@@ -28,10 +27,9 @@
     <script type="text/javascript">
       window.guardian = window.guardian || {};
       window.guardian.stage = "@stage";
-      window.guardian.userCode = "@redemptionCode";
-      window.guardian.error = "@customerOrError.left.getOrElse("")";
+      window.guardian.userCode = "@Html(redemptionCode.replaceAll(""""""", """\\""""))";
+      window.guardian.error = "@Html(maybeRedemptionError.getOrElse("").replaceAll(""""""", """\\""""))";
       window.guardian.submitted = @submitted;
-      window.guardian.corporateCustomer = @Html(customerOrError.right.map(_.asJson.noSpaces).getOrElse(Json.Null.noSpaces));
       window.guardian.user = {
         firstName: "@user.map(_.privateFields.firstName).getOrElse("")",
         lastName: "@user.map(_.privateFields.secondName).getOrElse("")",

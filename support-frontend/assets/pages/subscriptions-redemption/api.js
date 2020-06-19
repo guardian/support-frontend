@@ -1,7 +1,7 @@
 // @flow
 
 import { fetchJson } from 'helpers/fetch';
-import type { Action, CorporateCustomer } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type { Action } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { type Dispatch } from 'redux';
 import type { Option } from 'helpers/types/option';
 import type { PaymentResult, RegularPaymentRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -62,7 +62,7 @@ function submitCode(userCode: string, dispatch: Dispatch<Action>) {
 }
 
 function buildRegularPaymentRequest(
-  corporateCustomer: CorporateCustomer,
+  userCode: string,
   user: User,
   currencyId: IsoCurrency,
   countryId: IsoCountry,
@@ -102,8 +102,7 @@ function buildRegularPaymentRequest(
     product,
     firstDeliveryDate: null,
     paymentFields: {
-      redemptionCode: corporateCustomer.redemptionCode,
-      corporateAccountId: corporateCustomer.accountId,
+      redemptionCode: userCode,
     },
     ophanIds: getOphanIds(),
     referrerAcquisitionData: getReferrerAcquisitionData(),
@@ -112,7 +111,7 @@ function buildRegularPaymentRequest(
 }
 
 function createSubscription(
-  corporateCustomer: CorporateCustomer,
+  userCode: string,
   user: User,
   currencyId: IsoCurrency,
   countryId: IsoCountry,
@@ -120,7 +119,7 @@ function createSubscription(
   csrf: Csrf,
   dispatch: Dispatch<Action>,
 ) {
-  const data = buildRegularPaymentRequest(corporateCustomer, user, currencyId, countryId, participations);
+  const data = buildRegularPaymentRequest(userCode, user, currencyId, countryId, participations);
 
   const handleSubscribeResult = (result: PaymentResult) => {
     if (result.paymentStatus === 'success') {

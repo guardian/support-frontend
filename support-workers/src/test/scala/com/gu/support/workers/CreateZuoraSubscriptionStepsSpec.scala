@@ -9,7 +9,7 @@ import com.gu.support.config.{ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
 import com.gu.support.redemption.{DynamoLookup, DynamoUpdate}
-import com.gu.support.redemptions.CorporateRedemption
+import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode}
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.response._
@@ -31,7 +31,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, null /* !*/, Corporate),
-      paymentMethod = Right(CorporateRedemption(redemptionCode = "TESTCODE", corporateAccountId = "1")),
+      paymentMethod = Right(CorporateRedemption(RedemptionCode("TESTCODE").right.get)),
       firstDeliveryDate = None,
       promoCode = None,
       salesforceContacts = SalesforceContactRecords(

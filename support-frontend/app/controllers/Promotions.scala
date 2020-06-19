@@ -3,7 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper}
+import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper}
 import com.gu.support.config.Stage
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
@@ -40,6 +40,7 @@ class Promotions(
         case GuardianWeekly => routes.WeeklySubscription.weeklyGeoRedirect(promotionTerms.isGift).url
         case DigitalPack => routes.DigitalSubscriptionController.digitalGeoRedirect().url
         case Paper => routes.PaperSubscription.paper(false).url
+        case Contribution => routes.Application.contributeGeoRedirect("").url
       }
       val queryString = request.queryString + ("promoCode" -> Seq(promoCode))
       RedirectWithEncodedQueryString(productLandingPage, queryString, MOVED_PERMANENTLY)

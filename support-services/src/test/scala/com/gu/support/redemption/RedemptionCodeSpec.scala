@@ -1,5 +1,6 @@
 package com.gu.support.redemption
 
+import com.gu.support.redemptions.RedemptionCode
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
