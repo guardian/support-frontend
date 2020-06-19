@@ -171,11 +171,9 @@ class RedemptionController(
   }
 
   def validateCode(redemptionCode: RawRedemptionCode): Action[AnyContent] = CachedAction().async {
-    getCorporateCustomer(redemptionCode).value.map(
-      _.fold(
-        errorString => Ok(RedemptionValidationResult(valid = false, Some(errorString)).asJson),
-        (_: Unit) => Ok(RedemptionValidationResult(valid = true, None).asJson)
-      ))
+    getCorporateCustomer(redemptionCode).fold(Some.apply, _ => None).map(
+      maybeError => Ok(RedemptionValidationResult(valid = maybeError.isEmpty, maybeError).asJson)
+    )
   }
 
   def redirect(redemptionCode: RawRedemptionCode): Action[AnyContent] = CachedAction() { implicit request =>
