@@ -28,6 +28,8 @@ export const campaigns: Campaigns = currentCampaignName ? {
   // TODO - the rest of the campaign settings
   [currentCampaignName]: {
     campaignCode: 'Aus_moment_2020',
+    headerCopy: 'You’re doing something powerful',
+    contributeCopy: 'Help us grow our community of supporters in Australia and reach our ambitious goal. Every contribution you make, however big or small, helps sustain our open, independent journalism for the long term.',
     tickerSettings: {
       tickerCountType: 'people',
       tickerEndType: 'unlimited',
