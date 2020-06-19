@@ -52,12 +52,8 @@ class RedemptionController(
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = googleAuthAction.async {
     implicit request =>
-      val eventualErrorOrUnit = for {
-        redemptionCode <- EitherT.fromEither[Future](RedemptionCode(redemptionCode))
-        _ <- getCorporateCustomer(redemptionCode)
-      } yield ()
-      eventualErrorOrUnit.value.map(
-        errorOrUnit =>
+      getCorporateCustomer(redemptionCode).fold(Some.apply, _ => None).map(
+        maybeError =>
           Ok(subscriptionRedemptionForm(
             title = title,
             mainElement = id,
@@ -68,7 +64,7 @@ class RedemptionController(
             uatMode = false,
             stage = "checkout",
             redemptionCode = redemptionCode,
-            maybeRedemptionError = errorOrUnit.left.toOption,
+            maybeRedemptionError = maybeError,
             user = None,
             submitted = false
           )).withHeaders(CacheControl.noCache)
@@ -86,7 +82,7 @@ class RedemptionController(
       )
   }
 
-  def thankYouPage(stage:String, user: Option[IdUser])(implicit request: AuthRequest[Any]): Result =
+  def thankYouPage(stage: String, user: Option[IdUser])(implicit request: AuthRequest[Any]): Result =
     Ok(views.html.main(
       title = title,
       mainElement = id,
@@ -136,9 +132,8 @@ class RedemptionController(
         )
     }
 
-  private def tryToShowProcessingPage(rawRedemptionCode: RawRedemptionCode)(implicit request: AuthRequest[Any]) = {
+  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode)(implicit request: AuthRequest[Any]) = {
     val processingPage: EitherT[Future, String, Result] = for {
-      redemptionCode <- EitherT.fromEither[Future](RedemptionCode(rawRedemptionCode))
       user <- identityService.getUser(request.user.minimalUser)
       _ <- getCorporateCustomer(redemptionCode)
     } yield showProcessing(redemptionCode, user)
@@ -146,14 +141,14 @@ class RedemptionController(
     processingPage.value.map(
       maybeResult =>
         maybeResult.fold(
-          error => displayError(rawRedemptionCode, error),
+          error => displayError(redemptionCode, error),
           result => result
         )
     )
   }
 
   private def showProcessing(
-    redemptionCode: RedemptionCode,
+    redemptionCode: RawRedemptionCode,
     user: IdUser
   )(implicit request: AuthRequest[Any]): Result = {
     val csrf = CSRF.getToken.value
@@ -168,7 +163,7 @@ class RedemptionController(
       csrf = Some(csrf),
       uatMode = testUser,
       stage = "processing",
-      redemptionCode = redemptionCode.value,
+      redemptionCode = redemptionCode,
       maybeRedemptionError = None,
       user = Some(user),
       submitted = true
@@ -176,11 +171,7 @@ class RedemptionController(
   }
 
   def validateCode(redemptionCode: RawRedemptionCode): Action[AnyContent] = CachedAction().async {
-    val eventualErrorOrUnit = for {
-      redemptionCode <- EitherT.fromEither[Future](RedemptionCode(redemptionCode))
-      _ <- getCorporateCustomer(redemptionCode)
-    } yield ()
-    eventualErrorOrUnit.value.map(
+    getCorporateCustomer(redemptionCode).value.map(
       _.fold(
         errorString => Ok(RedemptionValidationResult(valid = false, Some(errorString)).asJson),
         (_: Unit) => Ok(RedemptionValidationResult(valid = true, None).asJson)
@@ -195,11 +186,14 @@ class RedemptionController(
 
 // This is just a hard coded fake for the code lookup
 object RedemptionController {
-  def getCorporateCustomer(redemptionCode: RedemptionCode)(implicit ec: ExecutionContext):
-  EitherT[Future, String, Unit] =
-    if (redemptionCode.value == "TEST-CODE")
-      EitherT.fromEither(Right(()))
+  def getCorporateCustomer(redemptionCode: RawRedemptionCode)(implicit ec: ExecutionContext):
+  EitherT[Future, String, Unit] = for {
+    redemptionCode <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => "Please check the code and try again")
+    _ <- if (redemptionCode.value == "TEST-CODE")
+      EitherT.fromEither[Future].apply[String, Unit](Right(()))
     else
-      EitherT.fromEither(Left("This code is not valid"))
+      EitherT.fromEither[Future](Left("This code is not valid"))
+  } yield ()
+
 }
 
