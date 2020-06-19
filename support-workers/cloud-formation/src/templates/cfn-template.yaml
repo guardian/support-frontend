@@ -28,11 +28,17 @@ Mappings:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      RedemptionTables:
+      - arn:aws:dynamodb:*:*:table/redemption-codes-DEV-PROD
+      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT-PROD
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE
     PROD:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      RedemptionTables:
+      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT-PROD
+      - arn:aws:dynamodb:*:*:table/redemption-codes-PROD-PROD
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD
 Resources:
   LambdaExecutionRole:
@@ -101,6 +107,14 @@ Resources:
               - dynamodb:Query
               - dynamodb:DescribeTable
               Resource: !FindInMap [StageVariables, !Ref Stage, DynamoDBTables]
+        - PolicyName: DynamoRedemptions
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+              - dynamodb:GetItem
+              - dynamodb:UpdateItem
+              Resource: !FindInMap [StageVariables, !Ref Stage, RedemptionTables]
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
