@@ -121,6 +121,10 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
+  def ausMomentMap(): Action[AnyContent] = NoCacheAction() { implicit request =>
+    Ok(views.html.ausMomentMap())
+  }
+
   def contributionsLanding(
     countryCode: String,
     campaignCode: String
