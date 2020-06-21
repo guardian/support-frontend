@@ -1,0 +1,166 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+:root {
+  /*Guardian Colours*/
+  --brand-400: #052962;
+  --brand-alt-400: #FFE500;
+  --brand-alt-200: #F3C100;
+  --neutral-7: #121212;
+  --neutral-20: #333333;
+  --neutral-86: #DCDCDC;
+  --neutral-93: #EDEDED;
+  --sport-500: #00B2FF;
+  --news-500: #FF5943;
+  --news-300: #AB0613;
+  --opinion-500: #FF7F0F;
+  --opinion-300: #BD5318;
+  --green-400: #22874D;
+
+  /* State and territory colours */
+  --western-australia: var(--brand-400);
+  --northern-territory: var(--brand-400);
+  --queensland: var(--brand-400);
+  --new-south-wales: var(--brand-400);
+  --australian-capital-territory: var(--brand-400);
+  --victoria: var(--brand-400);
+  --tasmania: var(--brand-400);
+  --south-australia: var(--brand-400);
+
+  /* Not selected */
+  --not-selected:  var(--opinion-500);
+}
+
+body {
+  margin: 0;
+}
+
+#header-wrapper {
+  position: static;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: 0;
+  background-color: var(--brand-400);
+  height: 116px;
+}
+
+#header {
+  position: absolute;
+  left: 90px;
+  top: 15px;
+  font-family: "Guardian Headline", serif;
+  font-weight: 900;
+  font-size: 36px;
+  color: var(--neutral-93);
+}
+
+.button {
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+  position: absolute;
+  left: 90px;
+  top: 65px;
+  border: 1px solid white;
+  border-radius: 1.3125rem;
+  color: white;
+  font-family: "Guardian Text Sans", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 5px 20px;
+  line-height: 21px;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.button:hover {
+  background-color: white;
+  color: var(--brand-400)
+}
+
+#logo {
+  position: absolute;
+  right: 92px;
+  top: 11px;
+}
+
+.svg-wrapper {
+  margin-top: 32px;
+  margin-left: 80px;
+  display: inline-block;
+  position: relative;
+  height: 615px;
+  width: 655px;
+  vertical-align: middle;
+
+  /*resize: both;*/
+  /*overflow: auto;*/
+  /*border: 1px solid var(--neutral-93);*/
+}
+
+.svg-content {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.map {
+  cursor: pointer;
+  fill: var(--not-selected);
+}
+
+.label {
+  cursor: pointer;
+  fill: var(--neutral-7)
+}
+
+.label.light.hover, .label.light.selected {
+  fill: white;
+}
+
+.label.dark.hover, .label.dark.selected {
+  fill: var(--neutral-7);
+}
+
+/* Western Australia */
+.map.hover[data-territory="western-australia"], .map.selected[data-territory="western-australia"] {
+  fill: var(--western-australia)
+}
+
+/* Northern Territory */
+.map.hover[data-territory="northern-territory"], .map.selected[data-territory="northern-territory"] {
+  fill: var(--northern-territory)
+}
+
+/* Queensland */
+.map.hover[data-territory="queensland"], .map.selected[data-territory="queensland"] {
+  fill: var(--queensland)
+}
+
+/* New South Wales */
+.map.hover[data-territory="new-south-wales"], .map.selected[data-territory="new-south-wales"] {
+  fill: var(--new-south-wales)
+}
+
+/* Australian Capital Territory */
+.map.hover[data-territory="australian-capital-territory"], .map.selected[data-territory="australian-capital-territory"] {
+  fill: var(--australian-capital-territory)
+}
+
+/* Victoria */
+.map.hover[data-territory="victoria"], .map.selected[data-territory="victoria"] {
+  fill: var(--victoria)
+}
+
+/* Tasmania */
+.map.hover[data-territory="tasmania"], .map.selected[data-territory="tasmania"] {
+  fill: var(--tasmania)
+}
+
+/* South Australia */
+.map.hover[data-territory="south-australia"], .map.selected[data-territory="south-australia"] {
+  fill: var(--south-australia)
+}
+

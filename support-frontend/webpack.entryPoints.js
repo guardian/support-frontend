@@ -21,6 +21,7 @@ module.exports = {
     unsupportedBrowserStyles: 'stylesheets/fallback-pages/unsupportedBrowser.scss',
     contributionsRedirectStyles: 'stylesheets/fallback-pages/contributionsRedirect.scss',
     promotionTerms: 'pages/promotion-terms/promotionTerms.jsx',
+    ausMomentMap: 'pages/aus-moment-map/ausMomentMap.jsx',
   },
   ssr: {
     ssrPages: 'helpers/ssrPages.js',

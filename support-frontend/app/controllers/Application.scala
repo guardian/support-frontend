@@ -18,9 +18,12 @@ import cookies.ServersideAbTestCookie
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.mvc._
+import play.twirl.api.Html
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.FastlyGEOIP._
+import views.EmptyDiv
+import views.ViewHelpers.outputJson
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -121,10 +124,6 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def ausMomentMap(): Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.ausMomentMap())
-  }
-
   def contributionsLanding(
     countryCode: String,
     campaignCode: String
@@ -219,6 +218,20 @@ class Application(
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
     )()).withSettingsSurrogateKey
   }
+
+  def ausMomentMap(): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    Ok(views.html.main(
+      title = "Aus Moment Map",
+      mainElement = assets.getSsrCacheContentsAsHtml("aus-moment-map", "aus-moment-map.html"),
+      mainJsBundle = Left(RefPath("ausMomentMap.js")),
+      mainStyleBundle = Left(RefPath("ausMomentMap.css")),
+      fontLoaderBundle = fontLoaderBundle,
+      description = stringsConfig.contributionsLandingDescription,
+      canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
+    )()).withSettingsSurrogateKey
+  }
+
 
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
