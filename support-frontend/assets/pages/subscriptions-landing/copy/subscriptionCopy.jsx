@@ -18,7 +18,7 @@ import {
   getIosAppUrl,
   getSubsLinks,
 } from 'helpers/externalLinks';
-import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
+import trackAppStoreLink from 'helpers/tracking/appCtaTracking';
 // images
 import GuardianWeeklyPackShot
   from 'components/packshots/guardian-weekly-packshot';
