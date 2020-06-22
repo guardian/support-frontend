@@ -3,6 +3,7 @@
 $brand-main: gu-colour(brand-main);
 $neutral-7: gu-colour(neutral-7);
 $neutral-20: gu-colour(neutral-20);
+$neutral-86: gu-colour(neutral-86);
 $neutral-93: gu-colour(neutral-93);
 $neutral-100: gu-colour(neutral-100);
 $opinion-bright: gu-colour(opinion-bright);
@@ -12,7 +13,6 @@ body {
 }
 
 #header-wrapper {
-  position: static;
   top: 0;
   left: 0;
   width: 100%;
@@ -63,9 +63,9 @@ body {
 }
 
 .svg-wrapper {
-  margin-top: 32px;
-  margin-left: 80px;
-  display: inline-block;
+  //margin-top: 32px;
+  //margin-left: 80px;
+  display: block;
   position: relative;
   height: auto;
   width: 650px;
@@ -74,7 +74,7 @@ body {
 
 .svg-content {
   display: inline-block;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
 }
@@ -99,4 +99,76 @@ body {
 
 .map.hover, .map.selected {
   fill: $brand-main;
+}
+
+.map-caption {
+  font-family: "Guardian Text Sans", sans-serif;
+  font-size: 17px;
+  text-align: center;
+  margin-top: 2em;
+  float: bottom;
+}
+
+.left {
+  text-align: center;
+  float: left;
+  max-width: 50%;
+  overflow-x: hidden;
+  padding: 2em;
+  margin-top: 1em;
+  box-sizing: border-box;
+}
+
+.right {
+  text-align: left;
+  float: right;
+  max-width: 50%;
+  overflow-x: hidden;
+  padding: 5em;
+  margin-top: 1em;
+  box-sizing: border-box;
+}
+
+h2.blurb {
+  text-align: left;
+  font-family: "GT Guardian Titlepiece", Georgia, serif;
+  font-weight: bold;
+  font-size: 48px;
+  color: $neutral-7;
+  line-height: 100%;
+}
+
+p.blurb {
+  text-align: left;
+  font-family: "Guardian Text Egyptian Web", Georgia, serif;
+  color: $neutral-20;
+  font-size: 17.5px;
+  line-height: 135%;
+  margin-top: -1em;
+}
+
+.supporters-total {
+  font-family: "GT Guardian Titlepiece", Georgia, serif;
+  font-weight: bold;
+  line-height: 115%;
+  font-size: 30px;
+  color: $neutral-7;
+}
+
+.supporters-total-caption {
+  font-family: "Guardian Text Sans", sans-serif;
+  font-size: 17.5px;
+  line-height: 135%;
+  margin-top: -1.25em;
+  color: $neutral-20;
+}
+
+.social-links {
+  display: none !important;
+  position: relative;
+  float: bottom;
+  margin: 10em auto 0;
+  width: 90%;
+  height: 88px;
+  border-top: 1px solid $neutral-86;
 }

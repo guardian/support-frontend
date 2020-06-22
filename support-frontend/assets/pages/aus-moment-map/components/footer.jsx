@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
 
-export const Footer = () => (
-  <div />
+export const SocialLinks = () => (
+  <div className="social-links" />
 );
