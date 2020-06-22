@@ -30,12 +30,15 @@ const mapStateToProps = state => ({
 
 const ContributionThankYouBlurb = (props: PropTypes) => {
   const { firstName, thankYouPageStage } = props;
-  const controlHeaderText = () => (firstName && firstName.length < 10 && firstName.trim() !== '') ?
-    `Thank\xa0you\xa0${firstName}\nfor\xa0your\xa0valuable\ncontribution` : 'Thank\xa0you\xa0for\nyour\xa0valuable\ncontribution';
+  const showName = (firstName && firstName.length < 10 && firstName.trim() !== '');
 
-  const ausMomentHeaderText = 'Thank you – you’ve done something powerful';
+  const controlHeaderText = () => (showName ?
+    `Thank\xa0you\xa0${firstName}\nfor\xa0your\xa0valuable\ncontribution` : 'Thank\xa0you\xa0for\nyour\xa0valuable\ncontribution');
 
-  const headerText = ausMomentEnabled(props.countryId) ? ausMomentHeaderText : controlHeaderText();
+  const ausMomentHeaderText = () => (showName ?
+    `Thank\xa0you\xa0${firstName}\xa0– you’ve done something powerful` : 'Thank\xa0you\xa0– you’ve done something powerful');
+
+  const headerText = ausMomentEnabled(props.countryId) ? ausMomentHeaderText() : controlHeaderText();
 
   return (
     <div className="gu-content__blurb gu-content__blurb--thank-you">
