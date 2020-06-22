@@ -6,10 +6,9 @@ import { renderPage } from 'helpers/render';
 import './ausMomentMap.scss';
 import { Header } from 'pages/aus-moment-map/components/header';
 import { Map } from 'pages/aus-moment-map/components/map';
-import { SocialLinks } from 'pages/aus-moment-map/components/footer';
+import { SocialLinks } from 'pages/aus-moment-map/components/social-links';
 
 // ----- Render ----- //
-
 const content = (
   <div>
     <Header />

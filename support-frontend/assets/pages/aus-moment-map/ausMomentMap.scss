@@ -146,6 +146,7 @@ p.blurb {
 }
 
 .social-links {
+  position: relative;
   margin: 3em auto 0;
   display: block;
   float: none;
@@ -153,6 +154,28 @@ p.blurb {
   height: 88px;
   bottom: 10px;
   border-top: 1px solid $neutral-86;
+  box-sizing: border-box;
+  padding-top: 2px;
+}
+
+.social-link {
+  cursor: pointer;
+  padding: 2px;
+}
+
+.social-share {
+  position: absolute;
+  right: 0;
+}
+
+.social-share-number {
+  font-family: "Guardian Text Sans", sans-serif;
+  font-weight: bold;
+  font-size: 17px;
+  text-align: right;
+  position: absolute;
+  right: 0;
+  top: 6px;
 }
 
 .main {
