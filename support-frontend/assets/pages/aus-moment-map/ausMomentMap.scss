@@ -9,7 +9,10 @@ $neutral-100: gu-colour(neutral-100);
 $opinion-bright: gu-colour(opinion-bright);
 
 body {
+  width: 100%;
+  overflow-x: hidden;
   margin: 0;
+  padding: 0;
 }
 
 #header-wrapper {
@@ -22,7 +25,7 @@ body {
 }
 
 #header {
-  position: absolute;
+  position: relative;
   left: 90px;
   top: 15px;
   font-family: "Guardian Headline", serif;
@@ -63,18 +66,18 @@ body {
 }
 
 .svg-wrapper {
-  //margin-top: 32px;
-  //margin-left: 80px;
-  display: block;
+  display: inline-block;
   position: relative;
-  height: auto;
-  width: 650px;
+  width: 100%;
+  padding-bottom: 95%;
   vertical-align: middle;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .svg-content {
   display: inline-block;
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
 }
@@ -106,27 +109,6 @@ body {
   font-size: 17px;
   text-align: center;
   margin-top: 2em;
-  float: bottom;
-}
-
-.left {
-  text-align: center;
-  float: left;
-  max-width: 50%;
-  overflow-x: hidden;
-  padding: 2em;
-  margin-top: 1em;
-  box-sizing: border-box;
-}
-
-.right {
-  text-align: left;
-  float: right;
-  max-width: 50%;
-  overflow-x: hidden;
-  padding: 5em;
-  margin-top: 1em;
-  box-sizing: border-box;
 }
 
 h2.blurb {
@@ -166,9 +148,39 @@ p.blurb {
 .social-links {
   display: none !important;
   position: relative;
-  float: bottom;
-  margin: 10em auto 0;
+  float: none;
   width: 90%;
   height: 88px;
+  bottom: 10px;
   border-top: 1px solid $neutral-86;
+}
+
+.main {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.left {
+  left: 0;
+  height: 100%;
+  display: inline-block;
+  text-align: center;
+  width: 50%;
+  overflow-x: hidden;
+  padding: 2em;
+  margin-top: 1em;
+  box-sizing: border-box;
+}
+
+.right {
+  right: 0;
+  height: 100%;
+  display: inline-block;
+  text-align: left;
+  width: 50%;
+  overflow-x: hidden;
+  padding: 5em;
+  margin-top: 1em;
+  box-sizing: border-box;
 }
