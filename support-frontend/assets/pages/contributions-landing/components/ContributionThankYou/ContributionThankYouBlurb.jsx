@@ -27,7 +27,7 @@ const mapStateToProps = state => ({
 
 const ContributionThankYouBlurb = (props: PropTypes) => {
   const { firstName, thankYouPageStage } = props;
-  const headerText = (firstName && firstName.trim() !== '') ?
+  const headerText = (firstName && firstName.length < 10 && firstName.trim() !== '') ?
     `Thank\xa0you\xa0${firstName}\nfor\xa0your\xa0valuable\ncontribution` : 'Thank\xa0you\xa0for\na\xa0valuable\ncontribution';
 
   return (
