@@ -10,15 +10,8 @@ object RedemptionCode {
     val validCharsSet = validChars.flatMap { case (from, to) => (from to to) }.toSet
     if (value.forall(validCharsSet.contains))
       Right(new RedemptionCode(value))
-    else {
-      val groupsDesc = validChars.map {
-        case (from, to) if from == to => s""""$from""""
-        case (from, to) => s"$from-$to"
-      }
-      val withSep = groupsDesc.foldRight(List[String]()) { case (next, soFar) => if (soFar.isEmpty) List(" and ", next) else ", " :: next :: soFar }
-      val description = withSep.tail.mkString
-      Left(s"redemption code must only include $description")
-    }
+    else
+      Left(s"redemption code must only include A-Z, 0-9 and '-'")
   }
 
   implicit val encoder: Encoder[RedemptionCode] = Encoder.encodeString.contramap(_.value)

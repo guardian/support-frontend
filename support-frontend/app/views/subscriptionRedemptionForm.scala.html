@@ -8,6 +8,7 @@
 @import io.circe.syntax._
 
 @import io.circe.Json
+@import views.JsStringLiteral
 @(
   title: String,
   mainElement: ReactDiv,
@@ -26,14 +27,14 @@
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
     <script type="text/javascript">
       window.guardian = window.guardian || {};
-      window.guardian.stage = "@stage";
-      window.guardian.userCode = "@Html(redemptionCode.replaceAll(""""""", """\\""""))";
-      window.guardian.error = "@Html(maybeRedemptionError.getOrElse("").replaceAll(""""""", """\\""""))";
+      window.guardian.stage = @JsStringLiteral(stage);
+      window.guardian.userCode = @JsStringLiteral(redemptionCode);
+      window.guardian.error = @JsStringLiteral.fromOption(maybeRedemptionError);
       window.guardian.submitted = @submitted;
       window.guardian.user = {
-        firstName: "@user.map(_.privateFields.firstName).getOrElse("")",
-        lastName: "@user.map(_.privateFields.secondName).getOrElse("")",
-        email: "@user.map(_.primaryEmailAddress).getOrElse("")",
+        firstName: @JsStringLiteral.fromOption(user.flatMap(_.privateFields.firstName)),
+        lastName: @JsStringLiteral.fromOption(user.flatMap(_.privateFields.secondName)),
+        email: @JsStringLiteral.fromOption(user.map(_.primaryEmailAddress)),
       };
   </script>
 
