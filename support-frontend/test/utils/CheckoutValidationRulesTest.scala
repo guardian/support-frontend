@@ -63,37 +63,37 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
-  it should "also fail if the country is Australia and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
-      product = DigitalPack(Currency.AUD, Monthly)
-    )
-    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
-  }
-
-  it should "also fail if the country is United Kingdom and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
-      product = DigitalPack(Currency.GBP, Monthly)
-    )
-    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
-  }
-
-  it should "also fail if the country is United States and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
-      product = DigitalPack(Currency.USD, Monthly)
-    )
-    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
-  }
-
-  it should "also fail if the country is Canada and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
-      product = DigitalPack(Currency.CAD, Monthly)
-    )
-    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
-  }
+//  it should "also fail if the country is Australia and there is no postcode" in {
+//    val requestMissingPostcode = validDigitalPackRequest.copy(
+//      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
+//      product = DigitalPack(Currency.AUD, Monthly)
+//    )
+//    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+//  }
+//
+//  it should "also fail if the country is United Kingdom and there is no postcode" in {
+//    val requestMissingPostcode = validDigitalPackRequest.copy(
+//      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
+//      product = DigitalPack(Currency.GBP, Monthly)
+//    )
+//    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+//  }
+//
+//  it should "also fail if the country is United States and there is no postcode" in {
+//    val requestMissingPostcode = validDigitalPackRequest.copy(
+//      billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
+//      product = DigitalPack(Currency.USD, Monthly)
+//    )
+//    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+//  }
+//
+//  it should "also fail if the country is Canada and there is no postcode" in {
+//    val requestMissingPostcode = validDigitalPackRequest.copy(
+//      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
+//      product = DigitalPack(Currency.CAD, Monthly)
+//    )
+//    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+//  }
 
   it should "also allow a missing postcode in other countries" in {
     val requestMissingPostcode = validDigitalPackRequest.copy(
