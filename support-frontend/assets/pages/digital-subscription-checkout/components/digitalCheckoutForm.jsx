@@ -39,8 +39,7 @@ import {
 } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import DigitalPaymentTerms from './digitalPaymentTerms';
-import { withStore as withStoreLoqate } from 'components/subscriptionCheckouts/addressSearch/addressComponent';
-import { withStore as withStoreControl } from 'components/subscriptionCheckouts/address/addressFields';
+import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { DigitalPack } from 'helpers/subscriptions';
@@ -134,8 +133,7 @@ function mapDispatchToProps() {
   };
 }
 
-const LocateAddress = withStoreLoqate(countries, 'billing', getBillingAddress);
-const ControlAddress = withStoreControl(countries, 'billing', getBillingAddress);
+const Address = withStore(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 
@@ -149,7 +147,14 @@ function DigitalCheckoutForm(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
-  const Address = props.participations.fancyAddressTest === 'loqate' ? LocateAddress : ControlAddress;
+  const maybeAddress = props.participations.removeDigiSubAddressTest === 'noAddress' ?
+    null :
+    (
+      <FormSection title="Address">
+        <Address />
+      </FormSection>
+    );
+
 
   return (
     <Content>
@@ -189,9 +194,7 @@ function DigitalCheckoutForm(props: PropTypes) {
               signOut={props.signOut}
             />
           </FormSection>
-          <FormSection title="Address">
-            <Address />
-          </FormSection>
+          {maybeAddress}
           <PaymentMethodSelector
             country={props.country}
             paymentMethod={props.paymentMethod}
