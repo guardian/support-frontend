@@ -276,7 +276,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
-            "paymentMethod": {"redemptionCode": "fakeCode", "corporateAccountId": "00001"},
+            "paymentMethod": {"redemptionCode": "FAKECODE"},
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
             }

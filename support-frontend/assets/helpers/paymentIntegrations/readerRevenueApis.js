@@ -78,7 +78,6 @@ type RegularDirectDebitPaymentFields = {|
 
 type CorporateRedemption = {|
   redemptionCode: string,
-  corporateAccountId: string,
 |}
 
 type RegularExistingPaymentFields = {| billingAccountId: string |};

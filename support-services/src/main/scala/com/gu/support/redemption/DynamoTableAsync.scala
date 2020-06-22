@@ -5,7 +5,7 @@ import java.util.concurrent.CompletionException
 import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString, DynamoValue}
 import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
 import com.typesafe.scalalogging.LazyLogging
-import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, GetItemRequest, UpdateItemRequest}
@@ -19,8 +19,9 @@ object DynamoTableAsync {
   val ProfileName = "membership"
 
   lazy val CredentialsProvider =  AwsCredentialsProviderChain.builder.credentialsProviders(
-     ProfileCredentialsProvider.builder.profileName(ProfileName).build,
-     InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build
+    ProfileCredentialsProvider.builder.profileName(ProfileName).build,
+    InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,
+    EnvironmentVariableCredentialsProvider.create()
   ).build
 
   def apply(table: String, key: String)(implicit e: ExecutionContext): DynamoTableAsync = {

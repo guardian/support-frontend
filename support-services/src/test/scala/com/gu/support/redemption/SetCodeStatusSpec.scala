@@ -1,6 +1,7 @@
 package com.gu.support.redemption
 
 import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
+import com.gu.support.redemptions.RedemptionCode
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
