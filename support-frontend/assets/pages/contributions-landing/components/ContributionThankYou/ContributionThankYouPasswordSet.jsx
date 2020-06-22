@@ -52,7 +52,7 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
         </div>
       </div>
 
-      <ContributionThankYouBlurb />
+      <ContributionThankYouBlurb countryId={props.countryId} />
     </div>
   );
 }

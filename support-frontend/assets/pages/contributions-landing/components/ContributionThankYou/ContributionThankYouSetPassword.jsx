@@ -95,7 +95,7 @@ function ContributionThankYouSetPassword(props: PropTypes) {
         </section>
       </div>
 
-      <ContributionThankYouBlurb />
+      <ContributionThankYouBlurb countryId={props.countryCode} />
     </div>
   );
 }
