@@ -14,8 +14,8 @@ const content = (
     <Header />
     <Map />
   </div>
-)
+);
 
 renderPage(content, 'aus-moment-map');
 
-export { content }
+export { content };
