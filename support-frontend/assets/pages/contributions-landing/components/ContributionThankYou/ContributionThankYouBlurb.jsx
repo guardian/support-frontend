@@ -40,7 +40,7 @@ const ContributionThankYouBlurb = (props: PropTypes) => {
   return (
     <div className="gu-content__blurb gu-content__blurb--thank-you">
       <h1 className="gu-content__blurb-header">{headerText}</h1>
-      {thankYouPageStage !== 'thankYouSetPassword' && ausMomentEnabled(props.countryId) &&
+      {thankYouPageStage !== 'thankYouSetPassword' && !ausMomentEnabled(props.countryId) &&
       <p className="gu-content__blurb-blurb gu-content__blurb-blurb--thank-you">
         {'Here are some additional ways that you can support us, and improve your experience with the Guardian.'}
       </p>
