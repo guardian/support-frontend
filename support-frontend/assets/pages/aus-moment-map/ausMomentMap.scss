@@ -106,7 +106,7 @@ body {
 
 .map-caption {
   font-family: "Guardian Text Sans", sans-serif;
-  font-size: 17px;
+  font-size: 17.5px;
   text-align: center;
   margin-top: 2em;
 }
@@ -146,8 +146,8 @@ p.blurb {
 }
 
 .social-links {
-  display: none !important;
-  position: relative;
+  margin: 3em auto 0;
+  display: block;
   float: none;
   width: 90%;
   height: 88px;
