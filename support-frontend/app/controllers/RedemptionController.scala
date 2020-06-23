@@ -1,5 +1,7 @@
 package controllers
 
+import java.util.Locale
+
 import actions.CustomActionBuilders.AuthRequest
 import actions.{CacheControl, CustomActionBuilders}
 import admin.settings.{AllSettings, AllSettingsProvider}
@@ -10,9 +12,9 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
-import controllers.RedemptionController._
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import io.circe.syntax._
 import lib.RedirectWithEncodedQueryString
@@ -35,7 +37,8 @@ class RedemptionController(
   testUsers: TestUserService,
   components: ControllerComponents,
   fontLoaderBundle: Either[RefPath, StyleContent],
-  googleAuthAction: AuthAction[AnyContent]
+  googleAuthAction: AuthAction[AnyContent],
+  dynamoLookup: Boolean => DynamoLookup
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with Circe {
@@ -50,26 +53,49 @@ class RedemptionController(
   val js = "subscriptionsRedemptionPage.js"
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
-  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = googleAuthAction.async {
+  val getCorporateCustomer = new GetCorporateCustomer(dynamoLookup)
+
+  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = (googleAuthAction andThen maybeAuthenticatedAction()).async {
     implicit request =>
-      getCorporateCustomer(redemptionCode).fold(Some.apply, _ => None).map(
-        maybeError =>
-          Ok(subscriptionRedemptionForm(
-            title = title,
-            mainElement = id,
-            js = js,
-            css = css,
-            fontLoaderBundle = fontLoaderBundle,
-            csrf = None,
-            uatMode = false,
-            stage = "checkout",
-            redemptionCode = redemptionCode,
-            maybeRedemptionError = maybeError,
-            user = None,
-            submitted = false
-          )).withHeaders(CacheControl.noCache)
-      )
-    }
+      for {
+        whyIsTestUser <- request.user match {
+          case None =>
+            val maybeCookie = request.cookies.get("_test_username")
+            val isTestUser = testUsers.isTestUser(maybeCookie.map(_.value))
+            Future.successful(if (isTestUser) Some("Cookie _test_username is set to a test user token") else None)
+          case Some(authenticatedIdUser) =>
+            identityService.getUser(authenticatedIdUser.minimalUser).fold({message =>
+              SafeLogger.error(scrub"could not fetch user - assuming normal backend: $message")
+              None
+            }, { fullUser =>
+              if (testUsers.isTestUser(fullUser.publicFields.displayName))
+                Some("Your identity displayName is a test user token")
+              else
+                None
+            })
+        }
+        normalisedCode = redemptionCode.toUpperCase(Locale.UK)
+        form <- getCorporateCustomer(normalisedCode, whyIsTestUser.isDefined).fold(Some.apply, _ => None).map(
+          maybeError =>
+            Ok(subscriptionRedemptionForm(
+              title = title,
+              mainElement = id,
+              js = js,
+              css = css,
+              fontLoaderBundle = fontLoaderBundle,
+              csrf = None,
+              uatMode = false,
+              stage = "checkout",
+              redemptionCode = normalisedCode,
+              maybeRedemptionError = maybeError,
+              user = None,
+              submitted = false,
+              whyIsTestUser = whyIsTestUser
+            ))
+        )
+      } yield form
+
+  }
 
   def displayThankYou(stage: String): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async {
     implicit request: AuthRequest[Any] =>
@@ -102,7 +128,7 @@ class RedemptionController(
         </script>""")
     })
 
-  def displayError(redemptionCode: RawRedemptionCode, error: String)(implicit request: AuthRequest[Any]): Result = {
+  def displayError(redemptionCode: RawRedemptionCode, error: String, whyIsTestUser: Option[String])(implicit request: AuthRequest[Any]): Result = {
     SafeLogger.error(scrub"An error occurred while trying to process redemption code - ${redemptionCode}. Error was - ${error}")
     Ok(subscriptionRedemptionForm(
       title = title,
@@ -116,7 +142,8 @@ class RedemptionController(
       redemptionCode = redemptionCode,
       Some("Unfortunately we were unable to process your code, please try again later"),
       user = None,
-      submitted = false
+      submitted = false,
+      whyIsTestUser = whyIsTestUser
     ))
   }
 
@@ -127,21 +154,29 @@ class RedemptionController(
           userHasSub =>
             if (userHasSub)
               Future.successful(redirectToExistingThankYouPage)
-            else
-              tryToShowProcessingPage(redemptionCode)
+            else {
+              identityService.getUser(request.user.minimalUser).map { fullUser =>
+                testUsers.isTestUser(fullUser.publicFields.displayName)
+              }.value.flatMap{
+                case Left(message) =>
+                  SafeLogger.error(scrub"could not fetch user: $message")
+                  Future.successful(InternalServerError("could not fetch user"))
+                case Right(isTestUser) => tryToShowProcessingPage(redemptionCode, if (isTestUser) Some("identity displayName") else None)
+              }
+            }
         )
     }
 
-  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode)(implicit request: AuthRequest[Any]) = {
+  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode, whyIsTestUser: Option[String])(implicit request: AuthRequest[Any]) = {
     val processingPage: EitherT[Future, String, Result] = for {
       user <- identityService.getUser(request.user.minimalUser)
-      _ <- getCorporateCustomer(redemptionCode)
+      _ <- getCorporateCustomer(redemptionCode, whyIsTestUser.isDefined)
     } yield showProcessing(redemptionCode, user)
 
     processingPage.value.map(
       maybeResult =>
         maybeResult.fold(
-          error => displayError(redemptionCode, error),
+          error => displayError(redemptionCode, error, whyIsTestUser),
           result => result
         )
     )
@@ -152,7 +187,11 @@ class RedemptionController(
     user: IdUser
   )(implicit request: AuthRequest[Any]): Result = {
     val csrf = CSRF.getToken.value
-    val testUser = testUsers.isTestUser(user.publicFields.displayName)
+    val whyIsTestUser = if (testUsers.isTestUser(user.publicFields.displayName))
+      Some("identity displayName")
+    else
+      None
+
 
     Ok(subscriptionRedemptionForm(
       title = title,
@@ -161,17 +200,18 @@ class RedemptionController(
       css = css,
       fontLoaderBundle = fontLoaderBundle,
       csrf = Some(csrf),
-      uatMode = testUser,
+      uatMode = whyIsTestUser.isDefined,
       stage = "processing",
       redemptionCode = redemptionCode,
       maybeRedemptionError = None,
       user = Some(user),
-      submitted = true
+      submitted = true,
+      whyIsTestUser = whyIsTestUser
     ))
   }
 
-  def validateCode(redemptionCode: RawRedemptionCode): Action[AnyContent] = CachedAction().async {
-    getCorporateCustomer(redemptionCode).fold(Some.apply, _ => None).map(
+  def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] = CachedAction().async {
+    getCorporateCustomer(redemptionCode, isTestUser.getOrElse(false)).fold(Some.apply, _ => None).map(
       maybeError => Ok(RedemptionValidationResult(valid = maybeError.isEmpty, maybeError).asJson)
     )
   }
@@ -183,15 +223,19 @@ class RedemptionController(
 
 
 // This is just a hard coded fake for the code lookup
-object RedemptionController {
-  def getCorporateCustomer(redemptionCode: RawRedemptionCode)(implicit ec: ExecutionContext):
-  EitherT[Future, String, Unit] = for {
-    redemptionCode <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => "Please check the code and try again")
-    _ <- if (redemptionCode.value == "TEST-CODE")
-      EitherT.fromEither[Future].apply[String, Unit](Right(()))
-    else
-      EitherT.fromEither[Future](Left("This code is not valid"))
-  } yield ()
+class GetCorporateCustomer(dynamoLookup: Boolean => DynamoLookup) {
+
+  def apply(redemptionCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
+    val getCodeStatus = GetCodeStatus.withDynamoLookup(dynamoLookup(isTestUser))
+
+    for {
+      codeToCheck <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => "Please check the code and try again")
+      _ <- EitherT(getCodeStatus(codeToCheck)).leftMap {
+        case GetCodeStatus.NoSuchCode => "Please check the code and try again"
+        case GetCodeStatus.CodeAlreadyUsed => "Your code has already been redeemed"
+      }
+    } yield ()
+  }
 
 }
 

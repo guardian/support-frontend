@@ -21,7 +21,8 @@
   redemptionCode: RawRedemptionCode,
   maybeRedemptionError: Option[String],
   user: Option[IdUser],
-  submitted: Boolean
+  submitted: Boolean,
+  whyIsTestUser: Option[String]
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
@@ -36,6 +37,7 @@
         lastName: @JsStringLiteral.fromOption(user.flatMap(_.privateFields.secondName)),
         email: @JsStringLiteral.fromOption(user.map(_.primaryEmailAddress)),
       };
+      window.guardian.whyIsTestUser = @JsStringLiteral.fromOption(whyIsTestUser);
   </script>
 
   }
