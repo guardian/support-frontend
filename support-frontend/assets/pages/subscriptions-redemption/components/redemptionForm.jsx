@@ -9,18 +9,14 @@ import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
 import type { Action, RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
-import { Input } from 'components/forms/input';
-import { compose, type Dispatch } from 'redux';
-import { asControlled } from 'hocs/asControlled';
+import { type Dispatch } from 'redux';
 import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
 import { submitCode, validateUserCode } from 'pages/subscriptions-redemption/api';
 import type { Option } from 'helpers/types/option';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
-import { withValidation } from 'hocs/withValidation';
-import { withError } from 'hocs/withError';
-import { withLabel } from 'hocs/withLabel';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
+import { TextInput } from '@guardian/src-text-input';
 
 type PropTypes = {
   userCode: Option<string>,
@@ -42,8 +38,6 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     submit: (userCode: string) => submitCode(userCode, dispatch),
   };
 }
-
-const InputWithValidated = compose(asControlled, withLabel, withError, withValidation)(Input);
 
 function RedemptionForm(props: PropTypes) {
   const instructionsDivCss = css`
@@ -78,19 +72,17 @@ function RedemptionForm(props: PropTypes) {
             ev.preventDefault();
           }}
           >
-            <FormSection title="Welcome to The Guardian Digital Subscriptions">
+            <FormSection title="Welcome to The Guardian Subscriptions">
               <div>
                 <p css={paraCss}>
                   Activate your offer with the unique access code provided
                 </p>
-                <InputWithValidated
-                  id="redemption-code"
-                  type="text"
+                <TextInput
                   autoComplete="off"
                   value={props.userCode}
-                  setValue={props.setUserCode}
+                  onChange={e => props.setUserCode(e.target.value)}
                   error={props.error}
-                  valid={validationText}
+                  success={validationText}
                   label="Insert code"
                 />
               </div>
