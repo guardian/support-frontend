@@ -1,5 +1,7 @@
 package controllers
 
+import java.io.FileInputStream
+
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
@@ -17,6 +19,7 @@ import config.{RecaptchaConfigProvider, StringsConfig}
 import cookies.ServersideAbTestCookie
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
+import play.api.libs.json.Json
 import play.api.mvc._
 import play.twirl.api.Html
 import services.{IdentityService, MembersDataService, PaymentAPIService}
@@ -122,6 +125,14 @@ class Application(
     BrowserCheck.logUserAgent(request)
     SafeLogger.info("Redirecting to unsupported-browser page")
     Ok(views.html.unsupportedBrowserPage())
+  }
+
+  def testimonials: Action[AnyContent] = NoCacheAction() { implicit request =>
+    val file = "/Users/michael_jacobson/code/testimonials.json"
+    val stream = new FileInputStream(file)
+    val json = try {  Json.parse(stream) } finally { stream.close() }
+
+    Ok(json).as("application/json")
   }
 
   def contributionsLanding(
