@@ -61,7 +61,7 @@ region = eu-west-1" > "$path/$filename"
   fi
 }
 
-install_homebrew() {
+install_homebrew_if_mac() {
   if mac && ! installed brew; then
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
@@ -141,7 +141,7 @@ main () {
   check_encryption
   create_aws_config
   install_node
-  install_homebrew
+  install_homebrew_if_mac
   install_brew_deps
   setup_nginx
   install_jdk
