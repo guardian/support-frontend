@@ -61,6 +61,10 @@ describe('thirdPartyTrackingConsent', () => {
   });
 
   describe('should return the correct ThirdPartyTrackingConsent for NON-US users', () => {
+    beforeEach(() => {
+      detectCountry.mockReturnValue('GB');
+    });
+
     it('if getCookie returns a value starting with 1', () => {
       getCookie.mockReturnValue('1.54321');
 
