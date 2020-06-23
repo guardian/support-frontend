@@ -11,10 +11,14 @@ import SvgChevron from 'components/svgs/chevron';
 import GridImage from 'components/gridImage/gridImage';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getDiscountCopy } from './discountCopy';
-import './joyOfPrint.scss';
 import type { State } from 'pages/paper-subscription-landing/paperSubscriptionLandingPageReducer';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 import type { DiscountCopy } from 'pages/paper-subscription-landing/components/hero/discountCopy';
+import { campaignHeader, campaignCopy, graphicOuter, graphicInner, graphic, badge } from './campaignHeaderStyles';
+
+// We need to preserve this little bit of scss but hope to gradually move it out
+import './campaignHeader.scss';
+
 
 type PropTypes = {
   discountCopy: DiscountCopy,
@@ -30,7 +34,7 @@ const mapStateToProps = (state: State) => {
 
 const Roundel = (props: { roundelCopy: string[] }) => (
   props.roundelCopy.length > 0 ?
-    <div className="sale-joy-of-print-badge">
+    <div css={badge}>
       <div>
         {props.roundelCopy.map(copy => <span>{ copy }</span>)}
       </div>
@@ -46,21 +50,21 @@ const CampaignHeader = (props: PropTypes) => (
     content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
   >
-    <div className="sale-joy-of-print">
-      <div className="sale-joy-of-print-copy">
+    <div css={campaignHeader}>
+      <div css={campaignCopy}>
         <h2><span>Subscribe to The Guardian</span><br /><span>and The Observer</span></h2>
         <p>Choose from a range of packages to suit you</p>
       </div>
     </div>
-    <div className="sale-joy-of-print-graphic-outer">
-      <div className="sale-joy-of-print-graphic-inner">
+    <div css={graphicOuter}>
+      <div css={graphicInner}>
         <Roundel roundelCopy={props.discountCopy.roundel} />
-        <div className="sale-joy-of-print-graphic">
+        <div css={graphic}>
           <GridImage
-            gridId="printShowcase"
-            srcSizes={[1000, 500]}
+            gridId="printCampaignHero"
+            srcSizes={[500]}
             sizes="(max-width: 740px) 100vw, 800px"
-            imgType="jpg"
+            imgType="png"
             altText="Newspapers"
           />
         </div>
