@@ -5,11 +5,6 @@
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { ContributionTypes } from 'helpers/contributions';
-import {
-  type ThirdPartyTrackingConsent,
-  writeTrackingConsentCookie,
-} from '../tracking/thirdPartyTrackingConsent';
-
 
 // ----- Types ----- //
 
