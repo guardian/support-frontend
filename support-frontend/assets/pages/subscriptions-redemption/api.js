@@ -28,8 +28,7 @@ function validate(userCode: string) {
   if (userCode === '') {
     return Promise.resolve({ valid: false, errorMessage: 'Please enter your code' });
   }
-  const whyIsTestUser = getGlobal<string>('whyIsTestUser');
-  const isTestUser: boolean = !!whyIsTestUser && whyIsTestUser !== '';
+  const isTestUser: boolean = !!getGlobal<string>('isTestUser');
   const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}${isTestUser ? '?isTestUser=true' : ''}`;
   return fetchJson(validationUrl, {});
 }

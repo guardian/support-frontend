@@ -63,9 +63,9 @@ class RedemptionController(
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = (googleAuthAction andThen maybeAuthenticatedAction()).async {
     implicit request =>
       for {
-        whyIsTestUser <- testUserFromRequest.getTestUserStatus(request)
+        isTestUser <- testUserFromRequest.isTestUser(request)
         normalisedCode = redemptionCode.toUpperCase(Locale.UK)
-        form <- getCorporateCustomer(redemptionCode, whyIsTestUser.isDefined).fold(Some.apply, _ => None).map(
+        form <- getCorporateCustomer(redemptionCode, isTestUser).fold(Some.apply, _ => None).map(
           maybeError =>
             Ok(subscriptionRedemptionForm(
               title = title,
@@ -74,7 +74,7 @@ class RedemptionController(
               css = css,
               fontLoaderBundle = fontLoaderBundle,
               csrf = None,
-              whyIsTestUser = whyIsTestUser,
+              isTestUser = isTestUser,
               stage = "checkout",
               redemptionCode = normalisedCode,
               maybeRedemptionError = maybeError,
@@ -117,7 +117,7 @@ class RedemptionController(
         </script>""")
     })
 
-  def displayError(redemptionCode: RawRedemptionCode, error: String, whyIsTestUser: Option[String])(implicit request: AuthRequest[Any]): Result = {
+  def displayError(redemptionCode: RawRedemptionCode, error: String, isTestUser: Boolean)(implicit request: AuthRequest[Any]): Result = {
     SafeLogger.error(scrub"An error occurred while trying to process redemption code - ${redemptionCode}. Error was - ${error}")
     Ok(subscriptionRedemptionForm(
       title = title,
@@ -126,7 +126,7 @@ class RedemptionController(
       css = css,
       fontLoaderBundle = fontLoaderBundle,
       csrf = None,
-      whyIsTestUser = whyIsTestUser,
+      isTestUser = isTestUser,
       stage = "checkout",
       redemptionCode = redemptionCode,
       Some("Unfortunately we were unable to process your code, please try again later"),
@@ -153,16 +153,16 @@ class RedemptionController(
         )
     }
 
-  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode, whyIsTestUser: Option[String])(implicit request: AuthRequest[Any]) = {
+  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode, isTestUser: Boolean)(implicit request: AuthRequest[Any]) = {
     val processingPage: EitherT[Future, String, Result] = for {
       user <- identityService.getUser(request.user.minimalUser)
-      _ <- getCorporateCustomer(redemptionCode, whyIsTestUser.isDefined)
+      _ <- getCorporateCustomer(redemptionCode, isTestUser)
     } yield showProcessing(redemptionCode, user)
 
     processingPage.value.map(
       maybeResult =>
         maybeResult.fold(
-          error => displayError(redemptionCode, error, whyIsTestUser),
+          error => displayError(redemptionCode, error, isTestUser),
           result => result
         )
     )
@@ -179,7 +179,7 @@ class RedemptionController(
       css = css,
       fontLoaderBundle = fontLoaderBundle,
       csrf = Some(CSRF.getToken.value),
-      whyIsTestUser = testUserFromRequest.fromIdUser(user),
+      isTestUser = testUserFromRequest.fromIdUser(user),
       stage = "processing",
       redemptionCode = redemptionCode,
       maybeRedemptionError = None,
@@ -200,7 +200,7 @@ class RedemptionController(
 
 class TestUserFromRequest(identityService: IdentityService, testUsers: TestUserService) {
 
-  def getTestUserStatus(request: OptionalAuthRequest[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): Future[Option[String]] =
+  def isTestUser(request: OptionalAuthRequest[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): Future[Boolean] =
     request.user.map { authenticatedIdUser =>
       identityService.getUser(authenticatedIdUser.minimalUser)
     } match {
@@ -209,24 +209,20 @@ class TestUserFromRequest(identityService: IdentityService, testUsers: TestUserS
         eventualErrorOrUser.fold(
           message => {
             SafeLogger.error(scrub"could not fetch user - assuming normal backend: $message")
-            None
+            false
           },
           fromIdUser
         )
     }
 
-  def fromCookies(cookies: Cookies): Option[String] = {
-    val maybeCookie = cookies.get("_test_username")
-    val isTestUser = testUsers.isTestUser(maybeCookie.map(_.value))
-    if (isTestUser) Some(s"Cookie _test_username is set to a test user token: ${maybeCookie.getOrElse("")}") else None
+  def fromCookies(cookies: Cookies): Boolean = {
+    val maybeCookieValue = cookies.get("_test_username").map(_.value)
+    testUsers.isTestUser(maybeCookieValue)
   }
 
-  def fromIdUser(user: IdUser): Option[String] = {
+  def fromIdUser(user: IdUser): Boolean = {
     val displayName = user.publicFields.displayName
-    if (testUsers.isTestUser(displayName))
-      Some(s"Your identity displayName is a test user token: $displayName")
-    else
-      None
+    testUsers.isTestUser(displayName)
   }
 
 }
