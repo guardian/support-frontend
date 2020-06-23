@@ -12,7 +12,6 @@ import type { Action } from 'helpers/page/commonActions';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import type { ThirdPartyTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 
 export type Internationalisation = {|
   currencyId: IsoCurrency,
@@ -26,7 +25,6 @@ export type CommonState = {
   otherQueryParams: Array<[string, string]>,
   abParticipations: Participations,
   settings: Settings,
-  trackingConsent: ThirdPartyTrackingConsent,
   internationalisation: Internationalisation,
   existingPaymentMethods?: ExistingPaymentMethod[],
 };
