@@ -48,38 +48,6 @@ const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => {
   return Promise.resolve(Unset);
 };
 
-// const getTrackingConsent = (): ThirdPartyTrackingConsent => {
-//   if (trackingConsent) {
-//     return trackingConsent;
-//   }
-
-//   // default to trackingConsent to Unset
-//   trackingConsent = Unset;
-
-//   const countryId: IsoCountry = detectCountry();
-
-//   if (countryId === 'US') {
-//     onIabConsentNotification((consentState) => {
-//       // In CCPA mode consentState true means user has OptedOut
-//       trackingConsent = consentState ? OptedOut : OptedIn;
-//     });
-//   } else {
-//     const cookieVal: ?string = getCookie(ConsentCookieName);
-
-//     if (cookieVal) {
-//       const consentVal = cookieVal.split('.')[0];
-
-//       if (consentVal === '1') {
-//         trackingConsent = OptedIn;
-//       } else if (consentVal === '0') {
-//         trackingConsent = OptedOut;
-//       }
-//     }
-//   }
-
-//   return trackingConsent;
-// };
-
 const writeTrackingConsentCookie = (newTrackingConsent: ThirdPartyTrackingConsent) => {
   if (newTrackingConsent !== Unset) {
     const cookie = [newTrackingConsent === OptedIn ? '1' : '0', Date.now()].join('.');
