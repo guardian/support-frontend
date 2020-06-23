@@ -58,20 +58,23 @@ class RedemptionController(
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
   val getCorporateCustomer = new GetCorporateCustomer(dynamoLookup)
+  val testUserFromRequest = new TestUserFromRequest(testUsers)
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = (googleAuthAction andThen maybeAuthenticatedAction()).async {
     implicit request =>
       for {
-        whyIsTestUser <- request.user match {
-          case None =>
-            val maybeCookie = request.cookies.get("_test_username")
-            val isTestUser = testUsers.isTestUser(maybeCookie.map(_.value))
-            Future.successful(if (isTestUser) Some("Cookie _test_username is set to a test user token") else None)
-          case Some(authenticatedIdUser) =>
-            identityService.getUser(authenticatedIdUser.minimalUser).fold({message =>
-              SafeLogger.error(scrub"could not fetch user - assuming normal backend: $message")
-              None
-            }, whyMaybeTestUser)
+        whyIsTestUser <- request.user.map { authenticatedIdUser =>
+          identityService.getUser(authenticatedIdUser.minimalUser)
+        } match {
+          case None => Future.successful(testUserFromRequest.fromCookies(request.cookies))
+          case Some(eventualErrorOrUser) =>
+            eventualErrorOrUser.fold(
+              message => {
+                SafeLogger.error(scrub"could not fetch user - assuming normal backend: $message")
+                None
+              },
+              testUserFromRequest.fromIdUser
+            )
         }
         normalisedCode = redemptionCode.toUpperCase(Locale.UK)
         form <- getCorporateCustomer(normalisedCode, whyIsTestUser.isDefined).fold(Some.apply, _ => None).map(
@@ -156,7 +159,7 @@ class RedemptionController(
                 case Left(message) =>
                   SafeLogger.error(scrub"could not fetch user: $message")
                   Future.successful(InternalServerError("could not fetch user"))
-                case Right(fullUser) => tryToShowProcessingPage(redemptionCode, whyMaybeTestUser(fullUser))
+                case Right(fullUser) => tryToShowProcessingPage(redemptionCode, testUserFromRequest.fromIdUser(fullUser))
               }
             }
         )
@@ -188,20 +191,13 @@ class RedemptionController(
       css = css,
       fontLoaderBundle = fontLoaderBundle,
       csrf = Some(CSRF.getToken.value),
-      whyIsTestUser = whyMaybeTestUser(user),
+      whyIsTestUser = testUserFromRequest.fromIdUser(user),
       stage = "processing",
       redemptionCode = redemptionCode,
       maybeRedemptionError = None,
       user = Some(user),
       submitted = true
     ))
-
-  private def whyMaybeTestUser(user: IdUser): Option[String] = {
-    if (testUsers.isTestUser(user.publicFields.displayName))
-      Some("Your identity displayName is a test user token")
-    else
-      None
-  }
 
   def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] = CachedAction().async {
     getCorporateCustomer(redemptionCode, isTestUser.getOrElse(false)).fold(Some.apply, _ => None).map(
@@ -214,6 +210,23 @@ class RedemptionController(
   }
 }
 
+class TestUserFromRequest(testUsers: TestUserService) {
+
+  def fromCookies(cookies: Cookies): Option[String] = {
+    val maybeCookie = cookies.get("_test_username")
+    val isTestUser = testUsers.isTestUser(maybeCookie.map(_.value))
+    if (isTestUser) Some(s"Cookie _test_username is set to a test user token: ${maybeCookie.getOrElse("")}") else None
+  }
+
+  def fromIdUser(user: IdUser): Option[String] = {
+    val displayName = user.publicFields.displayName
+    if (testUsers.isTestUser(displayName))
+      Some(s"Your identity displayName is a test user token: $displayName")
+    else
+      None
+  }
+
+}
 
 // This is just a hard coded fake for the code lookup
 class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
