@@ -69,6 +69,7 @@
     "@emotion/babel-preset-css-prop": "^10.0.27",
     "@emotion/cache": "^10.0.29",
     "@emotion/core": "^10.0.27",
+    "@guardian/consent-management-platform": "^3.4.3",
     "@emotion/serialize": "^0.11.16",
     "@guardian/pasteup": "^1.0.0-alpha.7",
     "@guardian/src-accordion": "^2.0.0",

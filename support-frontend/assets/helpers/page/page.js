@@ -40,9 +40,9 @@ import {
   detect as detectCountryGroup,
 } from 'helpers/internationalisation/countryGroup';
 import { trackAbTests } from 'helpers/tracking/ophan';
-import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
+import { init as initCMP } from '@guardian/consent-management-platform';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -91,8 +91,6 @@ function buildInitialState(
   const amountsWithParticipationOverrides = settings.amounts ?
     overrideAmountsForParticipations(abParticipations, settings.amounts) : settings.amounts;
 
-  const trackingConsent = getTrackingConsent();
-
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
@@ -100,7 +98,6 @@ function buildInitialState(
     internationalisation,
     abParticipations,
     settings: { ...settings, amounts: amountsWithParticipationOverrides },
-    trackingConsent,
   };
 
 }
@@ -134,11 +131,21 @@ function init<S, A>(
   pageReducer?: CommonState => Reducer<S, A> | null,
   thunk?: boolean = false,
 ): Store<*, *, *> {
-
   try {
+    const countryId: IsoCountry = detectCountry();
+
+    /**
+     * Initialise CMP as early as possible so
+     * subsequent call to onIabConsentNotification
+     * returns the correct consentState based on
+     * useCcpa flag.
+    * */
+    initCMP({
+      useCcpa: countryId === 'US',
+    });
+
     const settings = getSettings();
     const countryGroupId: CountryGroupId = detectCountryGroup();
-    const countryId: IsoCountry = detectCountry();
     const currencyId: IsoCurrency = detectCurrency(countryGroupId);
     const participations: Participations = abTest.init(countryId, countryGroupId, settings);
     analyticsInitialisation(participations);

@@ -60,10 +60,6 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
         return { ...state, existingPaymentMethods: action.existingPaymentMethods };
       }
 
-      case 'SET_TRACKING_CONSENT': {
-        return { ...state, trackingConsent: action.trackingConsent };
-      }
-
       case 'SET_CONTRIBUTION_TYPES': {
         return {
           ...state,
