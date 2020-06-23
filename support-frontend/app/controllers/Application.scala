@@ -128,7 +128,8 @@ class Application(
   }
 
   def testimonials: Action[AnyContent] = NoCacheAction() { implicit request =>
-    val file = "/Users/michael_jacobson/code/testimonials.json"
+    val user = System.getProperty("user.name")
+    val file = s"/Users/$user/code/testimonials.json"
     val stream = new FileInputStream(file)
     val json = try {  Json.parse(stream) } finally { stream.close() }
 
