@@ -2,8 +2,8 @@ package controllers
 
 import java.util.Locale
 
+import actions.CustomActionBuilders
 import actions.CustomActionBuilders.AuthRequest
-import actions.{CacheControl, CustomActionBuilders}
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
@@ -12,7 +12,7 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.redemption.{DynamoLookup, DynamoTableAsync, GetCodeStatus}
+import com.gu.support.redemption.{DynamoTableAsync, GetCodeStatus}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
@@ -71,12 +71,7 @@ class RedemptionController(
             identityService.getUser(authenticatedIdUser.minimalUser).fold({message =>
               SafeLogger.error(scrub"could not fetch user - assuming normal backend: $message")
               None
-            }, { fullUser =>
-              if (testUsers.isTestUser(fullUser.publicFields.displayName))
-                Some("Your identity displayName is a test user token")
-              else
-                None
-            })
+            }, whyMaybeTestUser)
         }
         normalisedCode = redemptionCode.toUpperCase(Locale.UK)
         form <- getCorporateCustomer(normalisedCode, whyIsTestUser.isDefined).fold(Some.apply, _ => None).map(
@@ -88,13 +83,12 @@ class RedemptionController(
               css = css,
               fontLoaderBundle = fontLoaderBundle,
               csrf = None,
-              uatMode = false,
+              whyIsTestUser = whyIsTestUser,
               stage = "checkout",
               redemptionCode = normalisedCode,
               maybeRedemptionError = maybeError,
               user = None,
-              submitted = false,
-              whyIsTestUser = whyIsTestUser
+              submitted = false
             ))
         )
       } yield form
@@ -141,13 +135,12 @@ class RedemptionController(
       css = css,
       fontLoaderBundle = fontLoaderBundle,
       csrf = None,
-      uatMode = false,
+      whyIsTestUser = whyIsTestUser,
       stage = "checkout",
       redemptionCode = redemptionCode,
       Some("Unfortunately we were unable to process your code, please try again later"),
       user = None,
-      submitted = false,
-      whyIsTestUser = whyIsTestUser
+      submitted = false
     ))
   }
 
@@ -159,13 +152,11 @@ class RedemptionController(
             if (userHasSub)
               Future.successful(redirectToExistingThankYouPage)
             else {
-              identityService.getUser(request.user.minimalUser).map { fullUser =>
-                testUsers.isTestUser(fullUser.publicFields.displayName)
-              }.value.flatMap{
+              identityService.getUser(request.user.minimalUser).value.flatMap{
                 case Left(message) =>
                   SafeLogger.error(scrub"could not fetch user: $message")
                   Future.successful(InternalServerError("could not fetch user"))
-                case Right(isTestUser) => tryToShowProcessingPage(redemptionCode, if (isTestUser) Some("identity displayName") else None)
+                case Right(fullUser) => tryToShowProcessingPage(redemptionCode, whyMaybeTestUser(fullUser))
               }
             }
         )
@@ -189,29 +180,27 @@ class RedemptionController(
   private def showProcessing(
     redemptionCode: RawRedemptionCode,
     user: IdUser
-  )(implicit request: AuthRequest[Any]): Result = {
-    val csrf = CSRF.getToken.value
-    val whyIsTestUser = if (testUsers.isTestUser(user.publicFields.displayName))
-      Some("identity displayName")
-    else
-      None
-
-
+  )(implicit request: AuthRequest[Any]): Result =
     Ok(subscriptionRedemptionForm(
       title = title,
       mainElement = id,
       js = js,
       css = css,
       fontLoaderBundle = fontLoaderBundle,
-      csrf = Some(csrf),
-      uatMode = whyIsTestUser.isDefined,
+      csrf = Some(CSRF.getToken.value),
+      whyIsTestUser = whyMaybeTestUser(user),
       stage = "processing",
       redemptionCode = redemptionCode,
       maybeRedemptionError = None,
       user = Some(user),
-      submitted = true,
-      whyIsTestUser = whyIsTestUser
+      submitted = true
     ))
+
+  private def whyMaybeTestUser(user: IdUser): Option[String] = {
+    if (testUsers.isTestUser(user.publicFields.displayName))
+      Some("Your identity displayName is a test user token")
+    else
+      None
   }
 
   def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] = CachedAction().async {

@@ -16,13 +16,12 @@
   css: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
   csrf: Option[String],
-  uatMode: Boolean,
+  whyIsTestUser: Option[String],
   stage: String,
   redemptionCode: RawRedemptionCode,
   maybeRedemptionError: Option[String],
   user: Option[IdUser],
-  submitted: Boolean,
-  whyIsTestUser: Option[String]
+  submitted: Boolean
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
