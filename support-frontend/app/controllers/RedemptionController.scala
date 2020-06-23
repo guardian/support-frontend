@@ -3,7 +3,7 @@ package controllers
 import java.util.Locale
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.AuthRequest
+import actions.CustomActionBuilders.{AuthRequest, OptionalAuthRequest}
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
@@ -58,26 +58,14 @@ class RedemptionController(
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
   val getCorporateCustomer = new GetCorporateCustomer(dynamoLookup)
-  val testUserFromRequest = new TestUserFromRequest(testUsers)
+  val testUserFromRequest = new TestUserFromRequest(identityService, testUsers)
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = (googleAuthAction andThen maybeAuthenticatedAction()).async {
     implicit request =>
       for {
-        whyIsTestUser <- request.user.map { authenticatedIdUser =>
-          identityService.getUser(authenticatedIdUser.minimalUser)
-        } match {
-          case None => Future.successful(testUserFromRequest.fromCookies(request.cookies))
-          case Some(eventualErrorOrUser) =>
-            eventualErrorOrUser.fold(
-              message => {
-                SafeLogger.error(scrub"could not fetch user - assuming normal backend: $message")
-                None
-              },
-              testUserFromRequest.fromIdUser
-            )
-        }
+        whyIsTestUser <- testUserFromRequest.getTestUserStatus(request)
         normalisedCode = redemptionCode.toUpperCase(Locale.UK)
-        form <- getCorporateCustomer(normalisedCode, whyIsTestUser.isDefined).fold(Some.apply, _ => None).map(
+        form <- getCorporateCustomer(redemptionCode, whyIsTestUser.isDefined).fold(Some.apply, _ => None).map(
           maybeError =>
             Ok(subscriptionRedemptionForm(
               title = title,
@@ -210,7 +198,22 @@ class RedemptionController(
   }
 }
 
-class TestUserFromRequest(testUsers: TestUserService) {
+class TestUserFromRequest(identityService: IdentityService, testUsers: TestUserService) {
+
+  def getTestUserStatus(request: OptionalAuthRequest[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): Future[Option[String]] =
+    request.user.map { authenticatedIdUser =>
+      identityService.getUser(authenticatedIdUser.minimalUser)
+    } match {
+      case None => Future.successful(fromCookies(request.cookies))
+      case Some(eventualErrorOrUser) =>
+        eventualErrorOrUser.fold(
+          message => {
+            SafeLogger.error(scrub"could not fetch user - assuming normal backend: $message")
+            None
+          },
+          fromIdUser
+        )
+    }
 
   def fromCookies(cookies: Cookies): Option[String] = {
     val maybeCookie = cookies.get("_test_username")
@@ -228,7 +231,6 @@ class TestUserFromRequest(testUsers: TestUserService) {
 
 }
 
-// This is just a hard coded fake for the code lookup
 class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
 
   def apply(redemptionCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {

@@ -59,8 +59,7 @@ trait Services {
   lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
 
   val dynamoTableAsync: DynamoTableAsyncForUser = { isTestUser =>
-    val touchPointEnvironment = TouchPointEnvironments.fromStage(appConfig.stage, isTestUser)
-    RedemptionTable.forEnvAsync(touchPointEnvironment)
+    RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(appConfig.stage, isTestUser))
   }
 
 }
