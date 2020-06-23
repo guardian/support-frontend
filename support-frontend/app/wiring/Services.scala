@@ -8,6 +8,7 @@ import com.gu.support.getaddressio.GetAddressIOService
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.PromotionServiceProvider
 import com.gu.support.redemption.RedemptionTable
+import controllers.DynamoTableAsyncForUser
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
@@ -57,8 +58,9 @@ trait Services {
 
   lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
 
-  val dynamoTableAsync = (isTestUser: Boolean) => {
+  val dynamoTableAsync: DynamoTableAsyncForUser = { isTestUser =>
     val touchPointEnvironment = TouchPointEnvironments.fromStage(appConfig.stage, isTestUser)
     RedemptionTable.forEnvAsync(touchPointEnvironment)
   }
+
 }

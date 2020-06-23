@@ -12,7 +12,7 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
+import com.gu.support.redemption.{DynamoLookup, DynamoTableAsync, GetCodeStatus}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
@@ -28,6 +28,10 @@ import views.html.subscriptionRedemptionForm
 
 import scala.concurrent.{ExecutionContext, Future}
 
+trait DynamoTableAsyncForUser {
+  def apply(isTestUser: Boolean): DynamoTableAsync
+}
+
 class RedemptionController(
   val actionRefiners: CustomActionBuilders,
   val assets: AssetsResolver,
@@ -38,7 +42,7 @@ class RedemptionController(
   components: ControllerComponents,
   fontLoaderBundle: Either[RefPath, StyleContent],
   googleAuthAction: AuthAction[AnyContent],
-  dynamoLookup: Boolean => DynamoLookup
+  dynamoLookup: DynamoTableAsyncForUser
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with Circe {
@@ -223,7 +227,7 @@ class RedemptionController(
 
 
 // This is just a hard coded fake for the code lookup
-class GetCorporateCustomer(dynamoLookup: Boolean => DynamoLookup) {
+class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
 
   def apply(redemptionCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
     val getCodeStatus = GetCodeStatus.withDynamoLookup(dynamoLookup(isTestUser))
