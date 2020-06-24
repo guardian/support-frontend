@@ -31,6 +31,10 @@ jest.mock('helpers/cookie', () => ({
   get: jest.fn(),
 }));
 
+jest.mock('helpers/logger', () => ({
+  logException: jest.fn(),
+}));
+
 // ----- Tests ----- //
 
 describe('thirdPartyTrackingConsent', () => {
@@ -56,6 +60,24 @@ describe('thirdPartyTrackingConsent', () => {
 
       return getTrackingConsent().then((trackingConsent) => {
         expect(trackingConsent).toBe(OptedIn);
+      });
+    });
+
+    it('if onIabConsentNotification does not return a valid CCPA consentState', () => {
+      onIabConsentNotification.mockImplementation(callback => callback('foo'));
+
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedOut);
+      });
+    });
+
+    it('if onIabConsentNotification throws an error', () => {
+      onIabConsentNotification.mockImplementation(() => {
+        throw new Error('fail');
+      });
+
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedOut);
       });
     });
   });

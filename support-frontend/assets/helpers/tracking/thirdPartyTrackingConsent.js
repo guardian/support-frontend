@@ -6,6 +6,7 @@ import {
   detect as detectCountry,
   type IsoCountry,
 } from 'helpers/internationalisation/country';
+import { logException } from 'helpers/logger';
 
 const ConsentCookieName = 'GU_TK';
 const DaysToLive = 30 * 18;
@@ -25,11 +26,21 @@ const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => {
     return new Promise((resolve) => {
       onIabConsentNotification((consentState: boolean) => {
         /**
-         * In CCPA mode consentState is a boolean
-         * and a value of true means the user has OptedOut
-        * */
-        resolve(consentState ? OptedOut : OptedIn);
+         * In CCPA mode consentState will be a boolean.
+         * In non-CCPA mode consentState will be an Object.
+         * Check whether consentState is valid (a boolean).
+         * */
+        if (typeof consentState !== 'boolean') {
+          throw new Error('consentState not a boolean');
+        } else {
+          // consentState true means the user has OptedOut
+          resolve(consentState ? OptedOut : OptedIn);
+        }
       });
+    }).catch((err) => {
+      logException(`CCPA: ${err}`);
+      // fallback to OptedOut if there's an issue getting consentState
+      return Promise.resolve(OptedOut);
     });
   }
 
