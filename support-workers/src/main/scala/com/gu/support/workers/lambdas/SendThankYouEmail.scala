@@ -39,7 +39,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
   }
 
   def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentMethod match {
-    case Left(_: DirectDebitPaymentMethod) =>
+    case Left((_: DirectDebitPaymentMethod, _)) =>
       zuoraService.getMandateIdFromAccountNumber(state.accountNumber)
     case _ => Future.successful(None)
   }
@@ -69,14 +69,13 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           name = state.user.firstName,
           billingPeriod = state.product.billingPeriod,
           sfContactId = SfContactId(state.salesForceContact.Id),
-          paymentMethod = state.paymentMethod,
+          paymentMethod = state.paymentMethod.left.map(_._1),
           directDebitMandateId = directDebitMandateId
         )
         case d: DigitalPack => DigitalPackEmailFields(
           subscriptionNumber = state.subscriptionNumber,
           billingPeriod = d.billingPeriod,
           user = state.user,
-          paymentSchedule = state.paymentSchedule,
           currency = d.currency,
           paymentMethod = state.paymentMethod,
           sfContactId = SfContactId(state.salesForceContact.Id),
@@ -89,10 +88,10 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           productOptions = p.productOptions,
           billingPeriod = p.billingPeriod,
           user = state.user,
-          paymentSchedule = state.paymentSchedule,
+          paymentSchedule = state.paymentMethod.left.toOption.map(_._2).getOrElse(PaymentSchedule(List())),
           firstDeliveryDate = state.firstDeliveryDate,
           currency = p.currency,
-          paymentMethod = state.paymentMethod,
+          paymentMethod = state.paymentMethod.left.map(_._1),
           sfContactId = SfContactId(state.salesForceContact.Id),
           directDebitMandateId = directDebitMandateId,
           promotion = maybePromotion,
@@ -104,10 +103,10 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
             fulfilmentOptions = g.fulfilmentOptions,
             billingPeriod = g.billingPeriod,
             user = state.user,
-            paymentSchedule = state.paymentSchedule,
+            paymentSchedule = state.paymentMethod.left.toOption.map(_._2).getOrElse(PaymentSchedule(List())),
             firstDeliveryDate = state.firstDeliveryDate,
             currency = g.currency,
-            paymentMethod = state.paymentMethod,
+            paymentMethod = state.paymentMethod.left.map(_._1),
             sfContactId = SfContactId(state.salesForceContact.Id),
             directDebitMandateId = directDebitMandateId,
             promotion = maybePromotion,

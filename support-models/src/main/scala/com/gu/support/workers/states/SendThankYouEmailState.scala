@@ -13,13 +13,12 @@ case class SendThankYouEmailState(
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
-  paymentMethod: Either[PaymentMethod, RedemptionData],
+  paymentMethod: Either[(PaymentMethod, PaymentSchedule), RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   salesForceContact: SalesforceContactRecord,
   accountNumber: String,
   subscriptionNumber: String,
-  paymentSchedule: PaymentSchedule,
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
 

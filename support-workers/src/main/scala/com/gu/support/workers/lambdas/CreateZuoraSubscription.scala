@@ -134,14 +134,12 @@ object CreateZuoraSubscription {
       state.user,
       state.giftRecipient,
       state.product,
-      paymentMethodWithPaymentSchedule.left.map(_._1),
+      paymentMethodWithPaymentSchedule,
       state.firstDeliveryDate,
       state.promoCode,
       state.salesforceContacts.buyer,
       accountNumber.value,
       subscriptionNumber.value,
-      paymentMethodWithPaymentSchedule
-        .left.toOption.map(_._2).getOrElse(PaymentSchedule(List())),//TODO SendThankYou email will only need payment schedule for paid subs
       state.acquisitionData
     )
 
