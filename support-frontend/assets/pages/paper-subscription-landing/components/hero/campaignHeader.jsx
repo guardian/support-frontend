@@ -14,7 +14,18 @@ import { getDiscountCopy } from './discountCopy';
 import type { State } from 'pages/paper-subscription-landing/paperSubscriptionLandingPageReducer';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 import type { DiscountCopy } from 'pages/paper-subscription-landing/components/hero/discountCopy';
-import { campaignHeader, campaignCopy, graphicOuter, graphicInner, graphic, badge } from './campaignHeaderStyles';
+import {
+  campaignHeader,
+  campaignCopy,
+  heading,
+  headingLineOne,
+  headingLineTwo,
+  subheading,
+  graphicOuter,
+  graphicInner,
+  graphic,
+  badge,
+} from './campaignHeaderStyles';
 
 // We need to preserve this little bit of scss but hope to gradually move it out
 import './campaignHeader.scss';
@@ -52,8 +63,11 @@ const CampaignHeader = (props: PropTypes) => (
   >
     <div css={campaignHeader}>
       <div css={campaignCopy}>
-        <h2><span>Subscribe to The Guardian</span><br /><span>and The Observer</span></h2>
-        <p>Choose from a range of packages to suit you</p>
+        <h2 css={heading}>
+          <span css={headingLineOne}>Subscribe to The Guardian</span><br />
+          <span css={headingLineTwo}>and The Observer</span>
+        </h2>
+        <p css={subheading}>Choose from a range of packages to suit you</p>
       </div>
     </div>
     <div css={graphicOuter}>
