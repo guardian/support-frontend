@@ -4,9 +4,14 @@ import React, { type Node } from 'react';
 
 import styles from './layout.module.scss';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
-import { space } from '@guardian/src-foundations';
+import {
+  asideBottomCss,
+  asideCss,
+  asideTopCss,
+  formCss,
+  mainCss,
+  stickyCss,
+} from 'components/subscriptionCheckouts/layoutStyles';
 
 type AsideWrapPosition = 'top' | 'bottom';
 
@@ -16,41 +21,17 @@ type PropTypes = {
   wrapPosition: ?AsideWrapPosition,
 };
 
-const asideCss = css`
-  z-index: 99;
-  width: 100%;
-  border-bottom: 1px solid gu-colour(neutral-86);
-  ${from.leftCol} {
-    border-right: 1px solid gu-colour(neutral-86);
-  }
-`;
-
-const mainCss = css`
-  max-width: ${space[280]}px;
-  ${from.tablet} {
-    display: flex;
-    align-items: flex-start;
-  }
-  .form {
-    flex: 0 0 auto;
-    width: 100%;
-  }
-`;
-
 const CheckoutLayout = ({ children, aside, wrapPosition }: PropTypes) => {
-  const mainClass = [
-    styles.root,
-    wrapPosition === 'bottom' ? styles.asideBottom : styles.asideTop,
-  ].join(' ');
+  const wrapCss = wrapPosition === 'bottom' ? asideBottomCss : asideTopCss;
 
   return (
-    <div className={mainClass}>
+    <div css={[mainCss, wrapCss]}>
       {wrapPosition === 'top' &&
-        <div className={`${styles.aside} ${styles.sticky}`}>
+        <div css={[asideCss, stickyCss]}>
           {aside}
         </div>
       }
-      <div className={styles.form}>
+      <div css={formCss}>
         {children}
       </div>
       {wrapPosition === 'bottom' &&
