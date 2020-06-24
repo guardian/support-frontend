@@ -78,7 +78,8 @@ trait Controllers {
     testUsers,
     controllerComponents,
     fontLoader,
-    authAction
+    authAction,
+    dynamoTableAsync
   )
 
   lazy val paperController = new PaperSubscription(
@@ -225,12 +226,6 @@ trait Controllers {
     controllerComponents,
     fontLoader,
     allSettingsProvider,
-    appConfig.stage
-  )
-
-  lazy val redemptionsController = new RedemptionsController(
-    actionRefiners,
-    controllerComponents,
     appConfig.stage
   )
 

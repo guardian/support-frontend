@@ -16,7 +16,7 @@
   css: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
   csrf: Option[String],
-  uatMode: Boolean,
+  isTestUser: Boolean,
   stage: String,
   redemptionCode: RawRedemptionCode,
   maybeRedemptionError: Option[String],
@@ -36,6 +36,7 @@
         lastName: @JsStringLiteral.fromOption(user.flatMap(_.privateFields.secondName)),
         email: @JsStringLiteral.fromOption(user.map(_.primaryEmailAddress)),
       };
+      window.guardian.isTestUser = @isTestUser;
   </script>
 
   }

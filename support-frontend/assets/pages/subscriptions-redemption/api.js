@@ -17,6 +17,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getOrigin } from 'helpers/url';
 import { appropriateErrorMessage } from 'helpers/errorReasons';
+import { getGlobal } from '../../helpers/globals';
 
 type ValidationResult = {
   valid: boolean,
@@ -27,7 +28,8 @@ function validate(userCode: string) {
   if (userCode === '') {
     return Promise.resolve({ valid: false, errorMessage: 'Please enter your code' });
   }
-  const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}`;
+  const isTestUser: boolean = !!getGlobal<string>('isTestUser');
+  const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}${isTestUser ? '?isTestUser=true' : ''}`;
   return fetchJson(validationUrl, {});
 }
 

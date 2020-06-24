@@ -3,9 +3,12 @@ package wiring
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import com.gu.okhttp.RequestRunners
+import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.getaddressio.GetAddressIOService
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.PromotionServiceProvider
+import com.gu.support.redemption.RedemptionTable
+import controllers.DynamoTableAsyncForUser
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
@@ -54,4 +57,9 @@ trait Services {
   lazy val getAddressIOService: GetAddressIOService = new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
 
   lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
+
+  val dynamoTableAsync: DynamoTableAsyncForUser = { isTestUser =>
+    RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(appConfig.stage, isTestUser))
+  }
+
 }
