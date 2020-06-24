@@ -142,30 +142,21 @@ class RedemptionController(
           userHasSub =>
             if (userHasSub)
               Future.successful(redirectToExistingThankYouPage)
-            else {
-              identityService.getUser(request.user.minimalUser).value.flatMap{
-                case Left(message) =>
-                  SafeLogger.error(scrub"could not fetch user: $message")
-                  Future.successful(InternalServerError("could not fetch user"))
-                case Right(fullUser) => tryToShowProcessingPage(redemptionCode, testUserFromRequest.fromIdUser(fullUser))
-              }
-            }
+            else
+              tryToShowProcessingPage(redemptionCode)
         )
     }
 
-  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode, isTestUser: Boolean)(implicit request: AuthRequest[Any]) = {
-    val processingPage: EitherT[Future, String, Result] = for {
-      user <- identityService.getUser(request.user.minimalUser)
-      _ <- getCorporateCustomer(redemptionCode, isTestUser)
+  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode)(implicit request: AuthRequest[Any]) = {
+    val processingPage: EitherT[Future, (String, Boolean), Result] = for {
+      user <- identityService.getUser(request.user.minimalUser).leftMap((_, false))
+      isTestUser = testUserFromRequest.fromIdUser(user)
+      _ <- getCorporateCustomer(redemptionCode, isTestUser).leftMap((_, isTestUser))
     } yield showProcessing(redemptionCode, user)
 
-    processingPage.value.map(
-      maybeResult =>
-        maybeResult.fold(
-          error => displayError(redemptionCode, error, isTestUser),
-          result => result
-        )
-    )
+    processingPage.leftMap {
+      case (error, isTestUser) => displayError(redemptionCode, error, isTestUser)
+    }.merge
   }
 
   private def showProcessing(
