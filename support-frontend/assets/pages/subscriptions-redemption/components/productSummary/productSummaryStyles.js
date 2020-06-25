@@ -19,7 +19,7 @@ export const imageContainer = css`
   align-items: flex-start;
   width: calc(100% - 30px);
   padding: ${space[4]}px ${space[4]}px 0 ${space[4]}px;
-  background-color: ${neutral['60']};
+  background-color: ${neutral['97']};
 
   img {
     width: 100%;

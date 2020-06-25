@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
+import { Button } from '@guardian/src-button';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { line } from '@guardian/src-foundations/palette';
@@ -10,7 +12,6 @@ import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
 import type { Action, RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { type Dispatch } from 'redux';
-import Button from 'components/button/button';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
 import { submitCode, validateUserCode } from 'pages/subscriptions-redemption/api';
 import type { Option } from 'helpers/types/option';
@@ -56,8 +57,10 @@ function RedemptionForm(props: PropTypes) {
   `;
 
   const validationText = props.error ? null : 'This code is valid';
-  const signinInstructions = doesUserAppearToBeSignedIn() ? '' :
+  const signedIn = doesUserAppearToBeSignedIn();
+  const signinInstructions = signedIn ? '' :
     'On the next screen you will be prompted to set up a Guardian user account';
+  const buttonText = signedIn ? 'Activate' : 'Continue';
 
   return (
     <div>
@@ -93,8 +96,13 @@ function RedemptionForm(props: PropTypes) {
               <p css={paraCss}>
                 {signinInstructions}
               </p>
-              <Button id="submit-button" onClick={() => props.submit(props.userCode || '')}>
-                Activate
+              <Button
+                onClick={() => props.submit(props.userCode || '')}
+                showIcon
+                iconSide="right"
+                icon={<SvgArrowRightStraight />}
+              >
+                {buttonText}
               </Button>
             </div>
           </Form>
