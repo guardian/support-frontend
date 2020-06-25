@@ -164,6 +164,10 @@ p.blurb {
   padding: 2px;
 }
 
+.social-link:hover > circle:first-child {
+  fill: $neutral-86;
+}
+
 .social-share {
   position: absolute;
   right: 0;

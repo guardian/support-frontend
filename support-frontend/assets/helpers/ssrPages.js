@@ -1,7 +1,7 @@
 // @flow
 import { renderToString } from 'react-dom/server';
 import { content as showcase } from 'pages/showcase/showcase';
-import { content as ausMomentMap } from 'pages/aus-moment-map/ausMomentMap';
+import { AusMomentMap } from 'pages/aus-moment-map/ausMomentMap';
 import { EmptyContributionsLandingPage } from 'pages/contributions-landing/EmptyContributionsLandingPage';
 
 const render = content => renderToString(content);
@@ -17,6 +17,6 @@ export const pages = [
   },
   {
     filename: 'aus-moment-map.html',
-    html: render(ausMomentMap),
+    html: render(AusMomentMap()),
   },
 ];
