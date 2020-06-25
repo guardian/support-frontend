@@ -21,6 +21,8 @@ import org.joda.time.DateTime
 
 import scala.concurrent.Future
 
+case class StateNotValidException(message: String) extends RuntimeException(message)
+
 class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendThankYouEmailState, SendMessageResult](servicesProvider) {
 
@@ -39,7 +41,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
   }
 
   def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentOrRedemptionData match {
-    case Left(_: PaymentMethodWithSchedule) =>
+    case Left(PaymentMethodWithSchedule(_: DirectDebitPaymentMethod, _)) =>
       zuoraService.getMandateIdFromAccountNumber(state.accountNumber)
     case _ => Future.successful(None)
   }
@@ -58,34 +60,35 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
       productRatePlanId
     )
 
-    val subscriptionEmailFields: Either[String, SubscriptionEmailFields] = state.product match {
-      case c: Contribution => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift contribution").map(paymentMethodWithSchedule => SubscriptionEmailFields.wrap(
-        ContributionEmailFields(
-          created = DateTime.now(),
-          amount = c.amount,
-          paymentMethod = paymentMethodWithSchedule.paymentMethod
+    val subscriptionEmailFields: Either[String, SubscriptionEmailFields] =
+      state.product match {
+        case c: Contribution => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift contribution").map(paymentMethodWithSchedule => SubscriptionEmailFields.wrap(
+          ContributionEmailFields(
+            created = DateTime.now(),
+            amount = c.amount,
+            paymentMethod = paymentMethodWithSchedule.paymentMethod
+          )
+        ))
+        case _: DigitalPack => Right(DigitalPackEmailFields(
+          paidSubPaymentData = state.paymentOrRedemptionData.left.toOption,
+        ))
+        case p: Paper => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
+          PaperEmailFields(
+            fulfilmentOptions = p.fulfilmentOptions,
+            productOptions = p.productOptions,
+            firstDeliveryDate = state.firstDeliveryDate,
+            paymentMethodWithSchedule = paymentMethodWithSchedule,
+            state.giftRecipient
+          )
         )
-      ))
-      case _: DigitalPack => Right(DigitalPackEmailFields(
-        paymentMethod = state.paymentOrRedemptionData,
-      ))
-      case p: Paper => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
-        PaperEmailFields(
-          fulfilmentOptions = p.fulfilmentOptions,
-          productOptions = p.productOptions,
-          firstDeliveryDate = state.firstDeliveryDate,
-          paymentMethodWithSchedule = paymentMethodWithSchedule,
-          state.giftRecipient
+        case g: GuardianWeekly => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift GW yet").map(paymentMethodWithSchedule =>
+          GuardianWeeklyEmailFields(
+            fulfilmentOptions = g.fulfilmentOptions,
+            firstDeliveryDate = state.firstDeliveryDate,
+            paymentMethodWithSchedule = paymentMethodWithSchedule,
+            state.giftRecipient
+          )
         )
-      )
-      case g: GuardianWeekly => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift GW yet").map(paymentMethodWithSchedule =>
-        GuardianWeeklyEmailFields(
-          fulfilmentOptions = g.fulfilmentOptions,
-          firstDeliveryDate = state.firstDeliveryDate,
-          paymentMethodWithSchedule = paymentMethodWithSchedule,
-          state.giftRecipient
-        )
-      )
     }
     subscriptionEmailFields match {
       case Right(subscriptionEmailFields) =>
@@ -101,7 +104,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
             directDebitMandateId = directDebitMandateId
           )
         )
-      case Left(error) => Future.failed(new Throwable(s"RETRY NONE TODO, $error"))
+      case Left(error) => Future.failed(new StateNotValidException(s"State was not valid, $error"))
     }
   }
 

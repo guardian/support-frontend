@@ -4,7 +4,6 @@ import com.gu.emailservices.SubscriptionEmailFieldHelpers._
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.promotions.Promotion
-import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.states.PaymentMethodWithSchedule
 
@@ -39,7 +38,7 @@ import com.gu.support.workers.states.PaymentMethodWithSchedule
 //}
 
 case class DigitalPackEmailFields(
-  paymentMethod: Either[PaymentMethodWithSchedule, RedemptionData]
+  paidSubPaymentData: Option[PaymentMethodWithSchedule]
 ) extends SubscriptionEmailFields {
 
   override def apply(
@@ -80,8 +79,8 @@ case class DigitalPackEmailFields(
         "EmailAddress" -> user.primaryEmailAddress,
         "First Name" -> user.firstName,
         "Last Name" -> user.lastName,
-      ) ++ (paymentMethod match {
-        case Left(PaymentMethodWithSchedule(pm, paymentSchedule)) =>
+      ) ++ (paidSubPaymentData match {
+        case Some(PaymentMethodWithSchedule(pm, paymentSchedule)) =>
           paymentFields(pm) ++ List(
             "Subscription term" -> billingPeriod.noun,
             "Payment amount" -> SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),
@@ -95,12 +94,12 @@ case class DigitalPackEmailFields(
             "Trial period" -> "14", //TODO: depends on Promo code or zuora config
             "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
           )
-        case Right(rd) => List(
+        case None /*Corporate*/ => List(
           "Subscription details" -> "Group subscription"
         )
       })
 
-      override def payload: String = super.payload(user.primaryEmailAddress, if (paymentMethod.isLeft) "digipack" else "digipack-corp")
+      override def payload: String = super.payload(user.primaryEmailAddress, if (paidSubPaymentData.isDefined) "digipack" else "digipack-corp")
 
       override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
     }

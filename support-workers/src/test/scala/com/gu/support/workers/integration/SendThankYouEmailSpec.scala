@@ -118,7 +118,7 @@ object SendThankYouEmailManualTest {
     val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
     val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
     val ef = DigitalPackEmailFields(
-      Left(PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))))
+      paidSubPaymentData = Some(PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))))
     ).apply(
       "A-S00045678",
       None
@@ -138,7 +138,7 @@ object SendThankYouEmailManualTest {
     val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
     val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
     val ef = DigitalPackEmailFields(
-      Right(CorporateRedemption(RedemptionCode("CORPCODE").right.get))
+      paidSubPaymentData = None
     ).apply(
       "A-S00045678",
       None
