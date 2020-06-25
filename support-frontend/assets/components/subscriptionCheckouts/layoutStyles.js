@@ -2,11 +2,10 @@
 
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
-import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
 
 export const mainCss = css`
-  max-width: ${space[280]}px;
+  max-width: 1120px;
   ${from.tablet} {
     display: flex;
     align-items: flex-start;
