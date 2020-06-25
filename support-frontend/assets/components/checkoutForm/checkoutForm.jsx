@@ -3,6 +3,8 @@
 import React, { type Node, type Element, type ChildrenArray } from 'react';
 import { type Option } from 'helpers/types/option';
 import Heading, { type HeadingSize } from 'components/heading/heading';
+import { type SerializedStyles } from '@emotion/core';
+
 
 import './checkoutForm.scss';
 
@@ -17,16 +19,19 @@ type FormSectionPropTypes = {|
   children: Node,
   headingSize: HeadingSize,
   border: 'full' | 'bottom' | 'top' | 'none',
+  cssOverrides?: Option<SerializedStyles>,
 |};
 
 const FormSection = ({
-  children, title, headingSize, border, id,
+  children, title, headingSize, border, id, cssOverrides,
 }: FormSectionPropTypes) => (
-  <div id={id} className={`component-checkout-form-section component-checkout-form-section--${border}`}>
-    <div className="component-checkout-form-section__wrap">
-      {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
-      {children}
-    </div>
+  <div
+    id={id}
+    className={`component-checkout-form-section component-checkout-form-section--${border} component-checkout-form-section__wrap`}
+    css={cssOverrides}
+  >
+    {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
+    {children}
   </div>
 );
 
@@ -35,6 +40,7 @@ FormSection.defaultProps = {
   title: null,
   border: 'full',
   id: '',
+  cssOverrides: null,
 };
 
 // Hidden version of form section

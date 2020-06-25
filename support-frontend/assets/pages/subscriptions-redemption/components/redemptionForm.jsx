@@ -8,7 +8,7 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { line } from '@guardian/src-foundations/palette';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
-import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
+import Form from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
 import type { Action, RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { type Dispatch } from 'redux';
@@ -18,6 +18,7 @@ import type { Option } from 'helpers/types/option';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 import { TextInput } from '@guardian/src-text-input';
+import { headline } from '@guardian/src-foundations/typography/obj';
 
 type PropTypes = {
   userCode: Option<string>,
@@ -41,11 +42,14 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 }
 
 function RedemptionForm(props: PropTypes) {
+  const mainCss = css`
+    padding: ${space[2]}px;
+  `;
   const instructionsDivCss = css`
-    margin-top: -15px;
-    padding: 0 ${space[3]}px;
+    margin-top: -10px;
+    padding: ${space[2]}px;
     ${from.tablet} {
-      min-height: 350px;
+      min-height: 475px;
     }
     hr {
       border: 0;
@@ -54,6 +58,9 @@ function RedemptionForm(props: PropTypes) {
   `;
   const paraCss = css`
     margin-bottom: 16px;
+  `;
+  const headingCss = css`
+    ${headline.xsmall({ fontWeight: 'bold' })}
   `;
 
   const validationText = props.error ? null : 'This code is valid';
@@ -75,7 +82,8 @@ function RedemptionForm(props: PropTypes) {
             ev.preventDefault();
           }}
           >
-            <FormSection title="Welcome to The Guardian Subscriptions">
+            <div css={mainCss}>
+              <h2 css={headingCss}>Welcome to The Guardian Subscriptions</h2>
               <div>
                 <p css={paraCss}>
                   Activate your offer with the unique access code provided
@@ -87,10 +95,10 @@ function RedemptionForm(props: PropTypes) {
                   error={props.error}
                   success={validationText}
                   label="Insert code"
+                  css={css`max-width: 300px`}
                 />
               </div>
-            </FormSection>
-
+            </div>
             <div css={instructionsDivCss}>
               <hr />
               <p css={paraCss}>
