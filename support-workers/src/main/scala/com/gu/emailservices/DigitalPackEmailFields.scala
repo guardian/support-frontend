@@ -38,30 +38,6 @@ import com.gu.support.workers.states.PaymentMethodWithSchedule
 //  "DataExtensionName": "digipack"
 //}
 
-trait AllProductsEmailFields {
-
-  def apply(
-    billingPeriod: BillingPeriod,
-    user: User,
-    currency: Currency,
-    sfContactId: SfContactId,
-    directDebitMandateId: Option[String],
-  ): EmailFields
-
-}
-object SubscriptionEmailFields {
-  def wrap(allProductsEmailFields: AllProductsEmailFields): SubscriptionEmailFields = (_: String, _: Option[Promotion]) =>
-    allProductsEmailFields
-}
-trait SubscriptionEmailFields {
-
-  def apply(
-    subscriptionNumber: String,
-    promotion: Option[Promotion] = None
-  ): AllProductsEmailFields
-
-}
-
 case class DigitalPackEmailFields(
   paymentMethod: Either[PaymentMethodWithSchedule, RedemptionData]
 ) extends SubscriptionEmailFields {
