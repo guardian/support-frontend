@@ -324,9 +324,9 @@ object JsonFixtures {
        |  },
        |  "accountNumber": "A-00123",
        |  "subscriptionNumber": "A-S12345678",
-       |  "paymentMethod": [
-         |  $stripePaymentMethod,
-         |  {
+       |  "paymentOrRedemptionData": {
+         |  "paymentMethod": $stripePaymentMethod,
+         |  "paymentSchedule": {
          |    "payments": [
          |      {
          |        "date": "2019-01-14",
@@ -342,7 +342,7 @@ object JsonFixtures {
          |      }
          |    ]
          |  }
-       |  ]
+       |  }
        |}
      """.stripMargin
 

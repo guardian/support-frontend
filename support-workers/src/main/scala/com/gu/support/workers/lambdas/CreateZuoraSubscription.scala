@@ -13,7 +13,7 @@ import com.gu.support.redemption.{DynamoLookup, DynamoUpdate, GetCodeStatus, Red
 import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers._
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
@@ -65,45 +65,39 @@ object CreateZuoraSubscription {
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     for {
       subscriptionData <- buildSubscriptionData(state, promotionService, GetCodeStatus.withDynamoLookup(redemptionService), today, config)
+          .withLogging("subscription data")
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
       maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
         .withLogging("GetSubscriptionWithCurrentRequestId")
-      paymentMethodWithPaymentSchedule <-
+      paymentOrRedemptionData <-
         state.paymentMethod.leftMap(pm =>
           PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, zuoraService, checkSingleResponse)
-            .withLogging("PreviewPaymentSchedule").map(ps => (pm, ps))
+            .withLogging("PreviewPaymentSchedule").map(ps => PaymentMethodWithSchedule(pm, ps))
         ).leftSequence
-      thankYouState <- maybeDomainSubscription match {
-        case Some(domainSubscription) => skipSubscribe(state, requestInfo, paymentMethodWithPaymentSchedule, domainSubscription)
-          .withLogging("skipSubscribe")
-        case None => subscribe(subscribeItem, zuoraService).map(response => toHandlerResult(state, response, paymentMethodWithPaymentSchedule, requestInfo))
-          .withLogging("subscribe")
-      }
+      (account, sub, info) <- subscribeIfApplicable(requestInfo, zuoraService, subscribeItem, maybeDomainSubscription)
+        .withLogging("subscribe")
       _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, SetCodeStatus.withDynamoLookup(redemptionService))
-    } yield thankYouState
+    } yield HandlerResult(getEmailState(state, account, sub, paymentOrRedemptionData), info)
   }
 
-  def skipSubscribe(
-    state: CreateZuoraSubscriptionState,
+  private def subscribeIfApplicable(
     requestInfo: RequestInfo,
-    paymentMethodWithPaymentSchedule: Either[(PaymentMethod, PaymentSchedule), RedemptionData],
-    subscription: DomainSubscription
-  ): Future[HandlerResult[SendThankYouEmailState]] = {
-    val message = "Skipping subscribe for user because a subscription has already been created for this request"
-    SafeLogger.info(message)
-    Future.successful(HandlerResult(
-      getEmailState(state, subscription.accountNumber, subscription.subscriptionNumber, paymentMethodWithPaymentSchedule),
-      requestInfo.appendMessage(message)
-    ))
-  }
-
-  def singleSubscribe(
-    multiSubscribe: SubscribeRequest => Future[List[SubscribeResponseAccount]]
-  ): SubscribeItem => Future[SubscribeResponseAccount] = { subscribeItem =>
-    checkSingleResponse(multiSubscribe(SubscribeRequest(List(subscribeItem))))
-  }
+    zuoraService: ZuoraSubscribeService,
+    subscribeItem: SubscribeItem,
+    maybeDomainSubscription: Option[DomainSubscription]
+  ): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber, RequestInfo)] =
+    maybeDomainSubscription match {
+      case Some(domainSubscription) => {
+        val message = "Skipping subscribe for user because a subscription has already been created for this request"
+        SafeLogger.info(message)
+        Future.successful((domainSubscription.accountNumber, domainSubscription.subscriptionNumber, requestInfo.appendMessage(message)))
+      }
+      case None => checkSingleResponse(zuoraService.subscribe(SubscribeRequest(List(subscribeItem)))).map { response =>
+        (response.domainAccountNumber, response.domainSubscriptionNumber, requestInfo)
+      }
+    }
 
   def checkSingleResponse[ResponseItem](response: Future[List[ResponseItem]]): Future[ResponseItem] = {
     response.flatMap {
@@ -112,29 +106,18 @@ object CreateZuoraSubscription {
     }
   }
 
-  def subscribe(subscribeItem: SubscribeItem, zuoraService: ZuoraSubscribeService): Future[SubscribeResponseAccount] =
-    singleSubscribe(zuoraService.subscribe)(subscribeItem)
-
-  def toHandlerResult(
-    state: CreateZuoraSubscriptionState,
-    response: SubscribeResponseAccount,
-    paymentMethodWithPaymentSchedule: Either[(PaymentMethod, PaymentSchedule), RedemptionData],
-    requestInfo: RequestInfo
-  ): HandlerResult[SendThankYouEmailState] =
-    HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber, paymentMethodWithPaymentSchedule), requestInfo)
-
   private def getEmailState(
     state: CreateZuoraSubscriptionState,
     accountNumber: ZuoraAccountNumber,
     subscriptionNumber: ZuoraSubscriptionNumber,
-    paymentMethodWithPaymentSchedule: Either[(PaymentMethod, PaymentSchedule), RedemptionData]
+    paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData]
   ) =
     SendThankYouEmailState(
       state.requestId,
       state.user,
       state.giftRecipient,
       state.product,
-      paymentMethodWithPaymentSchedule,
+      paymentOrRedemptionData,
       state.firstDeliveryDate,
       state.promoCode,
       state.salesforceContacts.buyer,

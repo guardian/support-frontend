@@ -4,9 +4,9 @@ import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices._
+import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
-import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.catalog.{Collection, Domestic, Saturday}
 import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode}
@@ -16,6 +16,7 @@ import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.integration.TestData.directDebitPaymentMethod
 import com.gu.support.workers.lambdas.SendThankYouEmail
+import com.gu.support.workers.states.PaymentMethodWithSchedule
 import com.gu.test.tags.objects.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json
@@ -43,16 +44,16 @@ class SendThankYouEmailSpec extends LambdaSpec {
 
   "EmailFields" should "include Direct Debit fields in the payload" in {
     val mandateId = "65HK26E"
+    val user = User("1234", "", None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
     val ef = ContributionEmailFields(
-      "",
       new DateTime(1999, 12, 31, 11, 59),
       20,
-      Currency.GBP,
-      "UK",
-      "",
+      directDebitPaymentMethod
+    ).apply(
       Monthly,
+      user,
+      GBP,
       SfContactId("sfContactId"),
-      Left(directDebitPaymentMethod),
       Some(mandateId)
     )
     val resultJson = parse(ef.payload)
@@ -96,12 +97,17 @@ object SendThankYouEmailManualTest {
 
   def sendContributionEmail() {
     val mandateId = "65HK26E"
+    val user = User("1234", addressToSendTo, None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
     val ef = ContributionEmailFields(
-      addressToSendTo,
       new DateTime(1999, 12, 31, 11, 59),
       20,
-      Currency.GBP,
-      "UK", "", Monthly, salesforceContactId, Left(directDebitPaymentMethod), Some(mandateId)
+      directDebitPaymentMethod
+    ).apply(
+      Monthly,
+      user,
+      GBP,
+      salesforceContactId,
+      Some(mandateId)
     )
     val service = new EmailService
     service.send(ef)
@@ -112,11 +118,14 @@ object SendThankYouEmailManualTest {
     val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
     val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
     val ef = DigitalPackEmailFields(
+      Left(PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))))
+    ).apply(
       "A-S00045678",
+      None
+    ).apply(
       Annual,
       user,
       GBP,
-      Left((directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))))),
       salesforceContactId,
       Some(mandateId)
     )
@@ -129,11 +138,14 @@ object SendThankYouEmailManualTest {
     val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
     val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
     val ef = DigitalPackEmailFields(
+      Right(CorporateRedemption(RedemptionCode("CORPCODE").right.get))
+    ).apply(
       "A-S00045678",
+      None
+    ).apply(
       Annual,
       user,
       GBP,
-      Right(CorporateRedemption(RedemptionCode("CORPCODE").right.get)),
       salesforceContactId,
       Some(mandateId)
     )
@@ -161,15 +173,17 @@ object SendThankYouEmailManualTest {
       deliveryAddress = Some(billingAddressWithCountry)
     )
     val ef = PaperEmailFields(
-      "A-S00045678",
       Collection,
       Saturday,
+      Some(new LocalDate(2019, 3, 26)),
+      PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79)))),
+    ).apply(
+      "A-S00045678",
+      None
+    ).apply(
       Monthly,
       user,
-      PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
-      Some(new LocalDate(2019, 3, 26)),
       GBP,
-      Left(directDebitPaymentMethod),
       salesforceContactId,
       Some(mandateId)
     )
@@ -197,19 +211,21 @@ object SendThankYouEmailManualTest {
       deliveryAddress = Some(billingAddressWithCountry)
     )
     val ef = GuardianWeeklyEmailFields(
-      "A-S00045678",
       Domestic,
-      Quarterly,
-      user,
-      PaymentSchedule(List(
+      Some(new LocalDate(2019, 3, 26)),
+      PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(
         Payment(new LocalDate(2019, 3, 25), 37.50),
         Payment(new LocalDate(2019, 6, 25), 37.50)
-      )),
-      Some(new LocalDate(2019, 3, 26)),
+      ))),
+    ).apply(
+      "A-S00045678",
+      None
+    ).apply(
+      Quarterly,
+      user,
       GBP,
-      Left(directDebitPaymentMethod),
       salesforceContactId,
-      Some(mandateId),
+      Some(mandateId)
     )
     val service = new EmailService
     service.send(ef)
@@ -235,17 +251,19 @@ object SendThankYouEmailManualTest {
       deliveryAddress = Some(billingAddressWithCountry)
     )
     val ef = GuardianWeeklyEmailFields(
-      "A-S00045678",
       Domestic,
+      Some(new LocalDate(2019, 3, 26)),
+      PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))),
+      giftRecipient = Some(GiftRecipient(None, "Earl", "Palmer", None))
+    ).apply(
+      "A-S00045678",
+      None
+    ).apply(
       Quarterly,
       user,
-      PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50))),
-      Some(new LocalDate(2019, 3, 26)),
       GBP,
-      Left(directDebitPaymentMethod),
       salesforceContactId,
-      Some(mandateId),
-      giftRecipient = Some(GiftRecipient(None, "Earl", "Palmer", None))
+      Some(mandateId)
     )
     val service = new EmailService
     service.send(ef)

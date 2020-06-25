@@ -13,7 +13,7 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.{PromoCode, Promotion, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
-import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.states.{PaymentMethodWithSchedule, SendThankYouEmailState}
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._
@@ -38,8 +38,8 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     } yield HandlerResult(emailResult, requestInfo)
   }
 
-  def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentMethod match {
-    case Left((_: DirectDebitPaymentMethod, _)) =>
+  def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentOrRedemptionData match {
+    case Left(_: PaymentMethodWithSchedule) =>
       zuoraService.getMandateIdFromAccountNumber(state.accountNumber)
     case _ => Future.successful(None)
   }
@@ -50,7 +50,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
   }
 
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
-    val productRatePlanId =  getProductRatePlanId(state.product, state.user.isTestUser, state.giftRecipient.isDefined)
+    val productRatePlanId = getProductRatePlanId(state.product, state.user.isTestUser, state.giftRecipient.isDefined)
     val maybePromotion = getAppliedPromotion(
       servicesProvider.forUser(state.user.isTestUser).promotionService,
       state.promoCode,
@@ -58,62 +58,51 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
       productRatePlanId
     )
 
-    thankYouEmailService.send(
-      state.product match {
-        case c: Contribution => ContributionEmailFields(
-          email = state.user.primaryEmailAddress,
+    val subscriptionEmailFields: Either[String, SubscriptionEmailFields] = state.product match {
+      case c: Contribution => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift contribution").map(paymentMethodWithSchedule => SubscriptionEmailFields.wrap(
+        ContributionEmailFields(
           created = DateTime.now(),
           amount = c.amount,
-          currency = c.currency,
-          edition = state.user.billingAddress.country.alpha2,
-          name = state.user.firstName,
-          billingPeriod = state.product.billingPeriod,
-          sfContactId = SfContactId(state.salesForceContact.Id),
-          paymentMethod = state.paymentMethod.left.map(_._1),
-          directDebitMandateId = directDebitMandateId
+          paymentMethod = paymentMethodWithSchedule.paymentMethod
         )
-        case d: DigitalPack => DigitalPackEmailFields(
-          subscriptionNumber = state.subscriptionNumber,
-          billingPeriod = d.billingPeriod,
-          user = state.user,
-          currency = d.currency,
-          paymentMethod = state.paymentMethod,
-          sfContactId = SfContactId(state.salesForceContact.Id),
-          directDebitMandateId = directDebitMandateId,
-          promotion = maybePromotion
-        )
-        case p: Paper => PaperEmailFields(
-          subscriptionNumber = state.subscriptionNumber,
+      ))
+      case _: DigitalPack => Right(DigitalPackEmailFields(
+        paymentMethod = state.paymentOrRedemptionData,
+      ))
+      case p: Paper => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
+        PaperEmailFields(
           fulfilmentOptions = p.fulfilmentOptions,
           productOptions = p.productOptions,
-          billingPeriod = p.billingPeriod,
-          user = state.user,
-          paymentSchedule = state.paymentMethod.left.toOption.map(_._2).getOrElse(PaymentSchedule(List())),
           firstDeliveryDate = state.firstDeliveryDate,
-          currency = p.currency,
-          paymentMethod = state.paymentMethod.left.map(_._1),
-          sfContactId = SfContactId(state.salesForceContact.Id),
-          directDebitMandateId = directDebitMandateId,
-          promotion = maybePromotion,
+          paymentMethodWithSchedule = paymentMethodWithSchedule,
           state.giftRecipient
         )
-        case g: GuardianWeekly =>
-          GuardianWeeklyEmailFields(
-            subscriptionNumber = state.subscriptionNumber,
-            fulfilmentOptions = g.fulfilmentOptions,
-            billingPeriod = g.billingPeriod,
+      )
+      case g: GuardianWeekly => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift GW yet").map(paymentMethodWithSchedule =>
+        GuardianWeeklyEmailFields(
+          fulfilmentOptions = g.fulfilmentOptions,
+          firstDeliveryDate = state.firstDeliveryDate,
+          paymentMethodWithSchedule = paymentMethodWithSchedule,
+          state.giftRecipient
+        )
+      )
+    }
+    subscriptionEmailFields match {
+      case Right(subscriptionEmailFields) =>
+        thankYouEmailService.send(
+          subscriptionEmailFields(
+            state.subscriptionNumber,
+            maybePromotion
+          )(
+            billingPeriod = state.product.billingPeriod,
             user = state.user,
-            paymentSchedule = state.paymentMethod.left.toOption.map(_._2).getOrElse(PaymentSchedule(List())),
-            firstDeliveryDate = state.firstDeliveryDate,
-            currency = g.currency,
-            paymentMethod = state.paymentMethod.left.map(_._1),
+            currency = state.product.currency,
             sfContactId = SfContactId(state.salesForceContact.Id),
-            directDebitMandateId = directDebitMandateId,
-            promotion = maybePromotion,
-            state.giftRecipient
+            directDebitMandateId = directDebitMandateId
           )
-      }
-    )
+        )
+      case Left(error) => Future.failed(new Throwable(s"RETRY NONE TODO, $error"))
+    }
   }
 
    private def getAppliedPromotion(

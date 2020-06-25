@@ -206,9 +206,9 @@ object Fixtures {
        |  },
        |  "accountNumber": "A-123",
        |  "subscriptionNumber": "A-S123",
-       |  "paymentMethod": [
-         |   $stripePaymentMethod,
-         |  {
+       |  "paymentOrRedemptionData": {
+       |    "paymentMethod": $stripePaymentMethod,
+       |    "paymentSchedule": {
          |    "payments": [
          |      {
          |        "date": "2019-01-14",
@@ -224,7 +224,7 @@ object Fixtures {
          |      }
          |    ]
          |  }
-       |  ]
+       |  }
        |}
      """.stripMargin
 
