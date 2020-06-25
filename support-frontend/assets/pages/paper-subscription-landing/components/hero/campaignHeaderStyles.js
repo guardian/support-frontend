@@ -1,5 +1,5 @@
 import { css } from '@emotion/core';
-import { from, until } from '@guardian/src-foundations/mq';
+import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { brand, brandAlt } from '@guardian/src-foundations/palette';
 import { headline, body } from '@guardian/src-foundations/typography';
@@ -53,22 +53,6 @@ export const heading = css`
   }
 `;
 
-export const headingLineOne = css`
-  position: relative;
-  z-index: 5;
-`;
-
-export const headingLineTwo = css`
-  ${until.leftCol} {
-    display: block;
-    width: 400px;
-  }
-
-  ${until.desktop} {
-    width: 300px;
-  }
-`;
-
 export const subheading = css`
   ${headline.xxxsmall({ fontWeight: 'bold' })};
 
@@ -78,7 +62,6 @@ export const subheading = css`
 
   ${from.desktop} {
     ${headline.xsmall({ fontWeight: 'bold' })};
-    max-width: 80%;
   }
 
   ${from.leftCol} {

@@ -18,8 +18,6 @@ import {
   campaignHeader,
   campaignCopy,
   heading,
-  headingLineOne,
-  headingLineTwo,
   subheading,
   graphicOuter,
   graphicInner,
@@ -64,8 +62,8 @@ const CampaignHeader = (props: PropTypes) => (
     <div css={campaignHeader}>
       <div css={campaignCopy}>
         <h2 css={heading}>
-          <span css={headingLineOne}>Subscribe to The Guardian</span><br />
-          <span css={headingLineTwo}>and The Observer</span>
+          <span>Subscribe to The Guardian</span><br />
+          <span>and The Observer</span>
         </h2>
         <p css={subheading}>Choose from a range of packages to suit you</p>
       </div>
