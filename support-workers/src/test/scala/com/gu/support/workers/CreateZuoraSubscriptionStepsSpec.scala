@@ -89,7 +89,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
         dynamoUpdates should be(List("TESTCODE" -> DynamoFieldUpdate("available", false)))
         handlerResult.value.accountNumber should be("accountcorp")
         handlerResult.value.subscriptionNumber should be("subcorp")
-        handlerResult.value.paymentMethod.isRight should be(true) // it's still a corp sub!
+        handlerResult.value.paymentOrRedemptionData.isRight should be(true) // it's still a corp sub!
       }
     }
   }
@@ -152,7 +152,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       withClue(handlerResult) {
         handlerResult.value.accountNumber should be("accountdigi")
         handlerResult.value.subscriptionNumber should be("subdigi")
-        handlerResult.value.paymentMethod.isLeft should be(true) // it's still marked as a paid sub!
+        handlerResult.value.paymentOrRedemptionData.isLeft should be(true) // it's still marked as a paid sub!
       }
     }
   }

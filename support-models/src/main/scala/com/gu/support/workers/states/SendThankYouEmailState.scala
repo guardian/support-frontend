@@ -13,13 +13,12 @@ case class SendThankYouEmailState(
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
-  paymentMethod: Either[PaymentMethod, RedemptionData],
+  paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   salesForceContact: SalesforceContactRecord,
   accountNumber: String,
   subscriptionNumber: String,
-  paymentSchedule: PaymentSchedule,
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
 
@@ -31,3 +30,7 @@ object SendThankYouEmailState {
   implicit val codec: Codec[SendThankYouEmailState] = deriveCodec
 }
 
+case class PaymentMethodWithSchedule(paymentMethod: PaymentMethod, paymentSchedule: PaymentSchedule)
+object PaymentMethodWithSchedule {
+  implicit val codec: Codec[PaymentMethodWithSchedule] = deriveCodec
+}

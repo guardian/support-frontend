@@ -1,32 +1,28 @@
 package com.gu.emailservices
 
 import com.gu.i18n.Currency
-import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.promotions.Promotion
-import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
+import com.gu.support.workers.states.PaymentMethodWithSchedule
 import org.joda.time.LocalDate
 
-//noinspection ScalaStyle
 object PaperFieldsGenerator {
 
   def fieldsFor(
     subscriptionNumber: String,
     billingPeriod: BillingPeriod,
     user: User,
-    paymentSchedule: PaymentSchedule,
     firstDeliveryDate: Option[LocalDate],
     currency: Currency,
-    paymentMethod: Either[PaymentMethod, RedemptionData],
-    sfContactId: SfContactId,
+    paymentMethodWithSchedule: PaymentMethodWithSchedule,
     directDebitMandateId: Option[String],
     promotion: Option[Promotion],
     giftRecipient: Option[GiftRecipient]
   ): List[(String, String)] = {
 
-    val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date
+    val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).date
 
-    val paymentFields = getPaymentFields(paymentMethod, directDebitMandateId)
+    val paymentFields = getPaymentFields(paymentMethodWithSchedule.paymentMethod, directDebitMandateId)
 
     val deliveryAddressFields = getAddressFields(user)
 
@@ -46,7 +42,7 @@ object PaperFieldsGenerator {
       "last_name" -> user.lastName,
       "date_of_first_paper" -> SubscriptionEmailFieldHelpers.formatDate(firstDeliveryDate.getOrElse(firstPaymentDate)),
       "date_of_first_payment" -> SubscriptionEmailFieldHelpers.formatDate(firstPaymentDate),
-      "subscription_rate" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion, giftRecipient.isDefined)
+      "subscription_rate" -> SubscriptionEmailFieldHelpers.describe(paymentMethodWithSchedule.paymentSchedule, billingPeriod, currency, promotion, giftRecipient.isDefined)
     ) ++ paymentFields ++ deliveryAddressFields ++ giftRecipientFields
 
     fields
@@ -65,26 +61,25 @@ object PaperFieldsGenerator {
   }
 
   protected def getPaymentFields(
-    paymentMethod: Either[PaymentMethod, RedemptionData],
+    paymentMethod: PaymentMethod,
     directDebitMandateId: Option[String]
   ): Seq[(String, String)] = paymentMethod match {
-    case Left(dd: DirectDebitPaymentMethod) => List(
+    case dd: DirectDebitPaymentMethod => List(
       "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
       "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
       "account_holder" -> dd.bankTransferAccountName,
       "payment_method" -> "Direct Debit",
       "mandate_id" -> directDebitMandateId.getOrElse("")
     )
-    case Left(dd: ClonedDirectDebitPaymentMethod) => List(
+    case dd: ClonedDirectDebitPaymentMethod => List(
       "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
       "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
       "account_holder" -> dd.bankTransferAccountName,
       "payment_method" -> "Direct Debit",
       "mandate_id" -> dd.mandateId
     )
-    case Left(_: CreditCardReferenceTransaction) => List("payment_method" -> "Credit/Debit Card")
-    case Left(_: PayPalReferenceTransaction) => List("payment_method" -> "PayPal")
-    case Right(_) => Nil
+    case _: CreditCardReferenceTransaction => List("payment_method" -> "Credit/Debit Card")
+    case _: PayPalReferenceTransaction => List("payment_method" -> "PayPal")
   }
 
 }

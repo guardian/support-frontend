@@ -1,13 +1,14 @@
 package com.gu.support.workers
 
-import com.gu.i18n.Currency
+import java.util.UUID
+
+import com.gu.i18n.{Country, Currency}
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.RestOfWorld
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
+import org.joda.time.LocalDate
 import org.scalatest.EitherValues
 import org.scalatest.flatspec.AsyncFlatSpec
 
@@ -49,6 +50,28 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
 
   "SendThankYouEmailState" should "deserialise correctly" in {
     testDecoding[SendThankYouEmailState](thankYouEmailJson())
+  }
+
+  it should "roundtrip successfully" in {
+
+    val state = SendThankYouEmailState(
+      requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+      user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
+      giftRecipient = None,
+      product = DigitalPack(Currency.GBP, Monthly),
+      paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
+        PayPalReferenceTransaction("baid", "me@somewhere.com"),
+        PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
+      )),
+      firstDeliveryDate = None,
+      promoCode = None,
+      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+      acquisitionData = None,
+      accountNumber = "123ac",
+      subscriptionNumber = "123sub"
+    )
+
+    testRoundTripSerialisation[SendThankYouEmailState](state)
   }
 
   "FailureHandlerState" should "deserialise correctly from any lambda" in {
