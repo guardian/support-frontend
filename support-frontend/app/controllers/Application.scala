@@ -128,9 +128,9 @@ class Application(
   }
 
   def testimonials: Action[AnyContent] = NoCacheAction() { implicit request =>
-    val user = System.getProperty("user.name")
-    val file = s"/Users/$user/code/testimonials.json"
-    val stream = new FileInputStream(file)
+    val canonicalPathToAppRoot = new java.io.File(".").getCanonicalPath
+    val testimonials = s"$canonicalPathToAppRoot/support-frontend/assets/pages/aus-moment-map/mock-testimonials.json"
+    val stream = new FileInputStream(testimonials)
     val json = try {  Json.parse(stream) } finally { stream.close() }
 
     Ok(json).as("application/json")
