@@ -21,6 +21,8 @@ import org.joda.time.DateTime
 
 import scala.concurrent.Future
 
+case class StateNotValidException(message: String) extends RuntimeException(message)
+
 class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendThankYouEmailState, SendMessageResult](servicesProvider) {
 
@@ -99,7 +101,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
             directDebitMandateId = directDebitMandateId
           )
         )
-      case Left(error) => Future.failed(new Throwable(s"RETRY NONE TODO, $error"))
+      case Left(error) => Future.failed(new StateNotValidException(s"State was not valid, $error"))
     }
   }
 

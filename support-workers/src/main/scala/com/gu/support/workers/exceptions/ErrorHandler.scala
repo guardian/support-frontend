@@ -9,7 +9,7 @@ import com.gu.paypal.PayPalError
 import com.gu.rest.{WebServiceClientError, WebServiceHelperError}
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.stripe.StripeError
-import com.gu.support.workers.lambdas.{BuildSubscribePromoError, BuildSubscribeRedemptionError}
+import com.gu.support.workers.lambdas.{BuildSubscribePromoError, BuildSubscribeRedemptionError, StateNotValidException}
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
 import io.circe.syntax._
 import io.circe.{DecodingFailure, ParsingFailure}
@@ -35,6 +35,7 @@ object ErrorHandler {
       case e: AnalyticsServiceError => fromOphanServiceError(e)
       case e: BuildSubscribePromoError => new RetryNone(e.cause.msg, cause = e)
       case e: BuildSubscribeRedemptionError => new RetryNone(e.cause.clientCode, cause = e)
+      case e: StateNotValidException => new RetryNone(e.message, cause = e)
       case wshe: WebServiceHelperError[_] if wshe.cause.isInstanceOf[DecodingFailure] =>
         // if we fail to parse SalesForce response or any JSON response, it means something failed
         // or we had malformed input, so we should not retry again.
