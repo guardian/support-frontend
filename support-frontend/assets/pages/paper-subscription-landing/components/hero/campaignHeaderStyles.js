@@ -17,17 +17,6 @@ export const campaignCopy = css`
 
   ${from.phablet} {
     margin-top: 2rem;
-  }
-
-  ${from.desktop} {
-    margin-top: 3rem;
-  }
-
-  ${from.leftCol} {
-    margin-top: 5rem;
-  }
-
-  ${from.phablet} {
     font-size: 35px;
     line-height: 1;
     display: block;
@@ -36,6 +25,14 @@ export const campaignCopy = css`
 
   ${from.tablet} {
     padding-left: 0;
+  }
+
+  ${from.desktop} {
+    margin-top: 3rem;
+  }
+
+  ${from.leftCol} {
+    margin-top: 5rem;
   }
 `;
 
