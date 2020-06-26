@@ -63,7 +63,7 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     testEncodeToDifferentState(createZuoraSubscriptionState, failureHandlerState)
     testEncodeToDifferentState(createSalesforceContactState, failureHandlerState)
     testEncodeToDifferentState(createPaymentMethodState, failureHandlerState)
-    testEncodeToDifferentState(sendAcquisitionEventState, failureHandlerState)
+    // sendAcquisitionEventState is never serialised directly so doesn't need testing
   }
 
   "SendAcquisitionEventStateImpl" should "deserialise correctly from SendThankYouEmailState state" in {
@@ -138,7 +138,7 @@ object StatesTestData {
     paymentSchedule = PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
   )
 
-  val sendAcquisitionEventState = SendAcquisitionEventStateImpl(
+  val sendAcquisitionEventState: SendAcquisitionEventState = SendAcquisitionEventStateImpl(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
