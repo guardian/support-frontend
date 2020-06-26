@@ -13,8 +13,6 @@ case class FailureHandlerState(
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
   paymentProvider: PaymentProvider,
-//  paymentFields: Option[Either[PaymentFields, RedemptionData]], //Will be present if CreatePaymentMethod failed
-//  paymentMethod: Option[Either[PaymentMethod, RedemptionData]], //Will be present if anything after CreatePaymentMethod failed
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode]
 ) extends FailableState
@@ -26,8 +24,6 @@ trait FailableState extends StepFunctionUserState {
   def giftRecipient: Option[GiftRecipient]
   def product: ProductType
   def paymentProvider: PaymentProvider
-//  paymentFields: Option[Either[PaymentFields, RedemptionData]], //Will be present if CreatePaymentMethod failed
-//  paymentMethod: Option[Either[PaymentMethod, RedemptionData]], //Will be present if anything after CreatePaymentMethod failed
 }
 
 import com.gu.support.encoding.Codec
