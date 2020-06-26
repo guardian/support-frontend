@@ -27,6 +27,10 @@ global.navigator = {
 
 global.Image = function image() { return this; };
 
+// CCPA stub
+// eslint-disable-next-line no-underscore-dangle
+global.__uspapi = () => {};
+
 // -------------- Write pages to file ----------------
 
 // eslint-disable-next-line
