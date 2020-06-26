@@ -37,28 +37,33 @@ export const campaignCopy = css`
 `;
 
 export const heading = css`
-  ${headline.small({ fontWeight: 'bold' })};
+  ${headline.small()};
+  font-weight: bold;
   color: ${brand[400]};
   margin-bottom: ${space[3]}px;
 
   ${from.desktop} {
-    ${headline.medium({ fontWeight: 'bold' })};
+    ${headline.medium()};
+    font-weight: bold;
   }
 
   ${from.leftCol} {
-    ${headline.large({ fontWeight: 'bold' })};
+    ${headline.large()};
+    font-weight: bold;
   }
 `;
 
 export const subheading = css`
-  ${headline.xxxsmall({ fontWeight: 'bold' })};
+  ${headline.xxxsmall()};
+  font-weight: bold;
 
   ${from.phablet} {
     max-width: 80%;
   }
 
   ${from.desktop} {
-    ${headline.xsmall({ fontWeight: 'bold' })};
+    ${headline.xsmall()};
+    font-weight: bold;
   }
 
   ${from.leftCol} {
