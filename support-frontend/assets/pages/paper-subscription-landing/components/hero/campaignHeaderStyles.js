@@ -111,7 +111,6 @@ export const graphic = css`
   }
 `;
 
-
 export const badge = css`
   position: relative;
   margin-bottom: -2rem;
@@ -124,10 +123,11 @@ export const badge = css`
   color: ${brand[400]};
   text-align: center;
   border-radius: 50%;
-  line-height: 1;
-  ${body.small({ fontWeight: 'bold' })};
+  ${body.small()};
+  font-weight: bold;
   width: 7.5rem;
   height: 7.5rem;
+  padding-top: ${space[1]}px;
 
   ${from.mobileMedium} {
     margin-bottom: -3rem;
@@ -135,7 +135,8 @@ export const badge = css`
 
   ${from.desktop} {
     justify-content: flex-end;
-    ${headline.xxsmall({ fontWeight: 'bold' })};
+    ${headline.xxsmall()};
+    font-weight: bold;
     width: 10rem;
     height: 10rem;
     padding-bottom: ${space[6]}px;
@@ -150,34 +151,30 @@ export const badge = css`
 
   span {
     display: block;
-    line-height: 0.5;
   }
 
   span:first-of-type {
-    margin-bottom: ${space[2]}px;
-
-    ${from.leftCol} {
-      margin-bottom: 0;
-    }
+    margin-bottom: 0.3rem;
   }
 
   span:nth-child(2) {
-    ${headline.large({ fontWeight: 'bold' })}
+    ${headline.large()}
+    font-weight: bold;
+    line-height: 65%;
     position: relative;
-    font-variant-numeric: lining-nums;
-    -moz-font-feature-settings: "lnum";
-    -webkit-font-feature-settings: "lnum";
-    font-feature-settings: "lnum";
-    margin-top: ${space[1]}px;
+    margin-bottom: 0.2rem;
 
     ${from.desktop} {
-      ${headline.xlarge({ fontWeight: 'bold' })}
+      ${headline.xlarge()}
+      line-height: 75%;
+      font-weight: bold;
       font-size: 3rem;
+      margin-bottom: 0.2rem;
     }
 
     ${from.leftCol} {
       font-size: 4rem;
-      top: 0.3rem;
+      margin-bottom: 0.4rem;
     }
   }
 `;
