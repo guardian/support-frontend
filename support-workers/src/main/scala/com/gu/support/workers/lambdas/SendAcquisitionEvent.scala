@@ -10,7 +10,7 @@ import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client, paymentSuccessRequest}
 import com.gu.config.Configuration
 import com.gu.i18n.Country
-import com.gu.monitoring.{LambdaExecutionResult, PaymentProvider, SafeLogger, Success}
+import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{GuardianWeekly, Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.encoding.CustomCodecs._
@@ -40,6 +40,8 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   ): FutureHandlerResult = {
     SafeLogger.info(s"Sending acquisition event to ophan: ${state.toString}")
 
+    val maybePaymentMethod = state.paymentMethod.left.toOption
+
     // Log the result of this execution to Elasticsearch
     LambdaExecutionResult.logResult(
       LambdaExecutionResult(
@@ -47,7 +49,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         Success,
         state.user.isTestUser,
         state.product,
-        Some(PaymentProvider.fromPaymentMethod(state.paymentMethod)),
+        PaymentProvider.fromPaymentMethod(maybePaymentMethod),
         state.firstDeliveryDate,
         state.giftRecipient.isDefined,
         state.promoCode,

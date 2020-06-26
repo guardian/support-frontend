@@ -42,6 +42,7 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
           user = state.user,
           giftRecipient = state.giftRecipient,
           product = state.product,
+          paymentProvider = PaymentProvider.fromPaymentMethod(Some(paymentMethod)),
           paymentMethod = Left(paymentMethod),
           firstDeliveryDate = None,
           promoCode = None,

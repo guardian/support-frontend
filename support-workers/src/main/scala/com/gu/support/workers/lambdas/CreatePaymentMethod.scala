@@ -65,6 +65,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.user,
       state.giftRecipient,
       state.product,
+      PaymentProvider.fromPaymentMethod(paymentMethod.left.toOption),
       paymentMethod,
       state.firstDeliveryDate,
       state.promoCode,

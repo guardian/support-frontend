@@ -13,11 +13,12 @@ case class CreatePaymentMethodState(
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
+  paymentProvider: PaymentProvider,
   paymentFields: Either[PaymentFields, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]
-) extends StepFunctionUserState
+) extends FailableState
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._

@@ -7,13 +7,14 @@ import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.{User, _}
 
 case class PreparePaymentMethodForReuseState(
-    requestId: UUID,
-    product: ProductType,
-    paymentFields: ExistingPaymentFields,
-    user: User,
-    giftRecipient: Option[GiftRecipient],
-    acquisitionData: Option[AcquisitionData]
-  ) extends StepFunctionUserState
+  requestId: UUID,
+  product: ProductType,
+  paymentProvider: PaymentProvider,
+  paymentFields: ExistingPaymentFields,
+  user: User,
+  giftRecipient: Option[GiftRecipient],
+  acquisitionData: Option[AcquisitionData]
+) extends FailableState
 
 import com.gu.support.encoding.Codec
 

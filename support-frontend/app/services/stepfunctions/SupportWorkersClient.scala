@@ -129,6 +129,7 @@ class SupportWorkersClient(
       user = user,
       giftRecipient = getGiftRecipient(request.body),
       product = request.body.product,
+      paymentProvider = PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption),
       paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.body.ophanIds,

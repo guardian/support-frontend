@@ -12,11 +12,23 @@ case class FailureHandlerState(
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
-  paymentFields: Option[Either[PaymentFields, RedemptionData]], //Will be present if CreatePaymentMethod failed
-  paymentMethod: Option[Either[PaymentMethod, RedemptionData]], //Will be present if anything after CreatePaymentMethod failed
+  paymentProvider: PaymentProvider,
+//  paymentFields: Option[Either[PaymentFields, RedemptionData]], //Will be present if CreatePaymentMethod failed
+//  paymentMethod: Option[Either[PaymentMethod, RedemptionData]], //Will be present if anything after CreatePaymentMethod failed
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode]
-) extends StepFunctionUserState
+) extends FailableState
+
+trait FailableState extends StepFunctionUserState {
+  // only required fields needed here
+  def requestId: UUID
+  def user: User
+  def giftRecipient: Option[GiftRecipient]
+  def product: ProductType
+  def paymentProvider: PaymentProvider
+//  paymentFields: Option[Either[PaymentFields, RedemptionData]], //Will be present if CreatePaymentMethod failed
+//  paymentMethod: Option[Either[PaymentMethod, RedemptionData]], //Will be present if anything after CreatePaymentMethod failed
+}
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._

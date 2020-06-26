@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.RequestInfo
+import com.gu.support.workers.{PaymentProvider, RequestInfo}
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 
@@ -41,6 +41,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user,
       state.giftRecipient,
       state.product,
+      PaymentProvider.fromPaymentMethod(state.paymentMethod.left.toOption),
       state.paymentMethod,
       state.firstDeliveryDate,
       state.promoCode,
