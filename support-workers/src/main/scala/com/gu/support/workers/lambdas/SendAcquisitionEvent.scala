@@ -197,7 +197,8 @@ object SendAcquisitionEvent {
         Some(Set(
           if (stateAndInfo.requestInfo.accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
           if (isSixForSix(stateAndInfo)) Some("guardian-weekly-six-for-six") else None,
-          stateAndInfo.state.giftRecipient.map(_ => "gift-subscription")
+          stateAndInfo.state.giftRecipient.map(_ => "gift-subscription"),
+          stateAndInfo.state.paymentMethod.right.map(_ => "corporate-subscription").toOption
         ).flatten)
 
       def isSixForSix(stateAndInfo: SendAcquisitionEventStateAndRequestInfo) =
