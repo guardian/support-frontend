@@ -13,6 +13,14 @@ val commonSettings: Seq[SettingsDefinition] = Seq(
 
 resolvers += Resolver.sonatypeRepo("releases")
 
+lazy val root = (project in file("."))
+  .aggregate(models, client)
+  .settings(
+    licenses += ("MIT", url("http://opensource.org/licenses/MIT")),// to keep bintrayEnsureLicenses happy
+    sourceDirectory := baseDirectory.value / "dummy",
+    publishArtifact := false,
+    bintrayReleaseOnPublish := false
+  )
 
 lazy val models = (project in file("models"))
   .settings(commonSettings: _*)
