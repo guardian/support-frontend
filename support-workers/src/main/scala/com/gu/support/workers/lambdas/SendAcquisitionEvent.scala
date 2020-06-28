@@ -40,8 +40,6 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   ): FutureHandlerResult = {
     SafeLogger.info(s"Sending acquisition event to ophan: ${state.toString}")
 
-    val maybePaymentMethod = state.paymentMethod.left.toOption
-
     // Log the result of this execution to Elasticsearch
     LambdaExecutionResult.logResult(
       LambdaExecutionResult(
