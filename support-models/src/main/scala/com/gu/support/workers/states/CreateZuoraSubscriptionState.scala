@@ -20,7 +20,7 @@ case class CreateZuoraSubscriptionState(
   promoCode: Option[PromoCode],
   salesforceContacts: SalesforceContactRecords,
   acquisitionData: Option[AcquisitionData]
-) extends FailableState
+) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._

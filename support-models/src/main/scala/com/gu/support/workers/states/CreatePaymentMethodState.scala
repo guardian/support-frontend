@@ -18,7 +18,7 @@ case class CreatePaymentMethodState(
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]
-) extends FailableState
+) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._

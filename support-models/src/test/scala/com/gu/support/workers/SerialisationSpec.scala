@@ -75,7 +75,7 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
 }
 object StatesTestData {
 
-  val failureHandlerState = FailureHandlerState(
+  val failureHandlerState: FailureHandlerState = FailureHandlerStateImpl(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,

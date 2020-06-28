@@ -48,16 +48,4 @@ object PaymentProvider {
     case None /* Corporate*/ => RedemptionNoProvider
   }
 
-  def fromPaymentMethod(paymentMethod: Option[PaymentMethod]): PaymentProvider = paymentMethod match {
-    case Some(creditCardPayment: CreditCardReferenceTransaction) =>
-      creditCardPayment.stripePaymentType match {
-        case Some(StripePaymentType.StripeApplePay) => StripeApplePay
-        case _ => Stripe
-      }
-    case Some(_: PayPalReferenceTransaction) => PayPal
-    case Some(_: DirectDebitPaymentMethod) => DirectDebit
-    case Some(_: ClonedDirectDebitPaymentMethod) => Existing
-    case None /*Corporate*/=> RedemptionNoProvider
-  }
-
 }

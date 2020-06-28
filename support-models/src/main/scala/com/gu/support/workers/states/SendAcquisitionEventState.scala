@@ -11,7 +11,7 @@ import org.joda.time.LocalDate
 
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
-trait SendAcquisitionEventState extends FailableState {
+trait SendAcquisitionEventState extends FailureHandlerState {
   def requestId: UUID
   def giftRecipient: Option[GiftRecipient]
   def product: ProductType
@@ -38,5 +38,4 @@ import com.gu.support.encoding.Codec._
 
 object SendAcquisitionEventState {
   implicit val decoder: Decoder[SendAcquisitionEventState] = deriveDecoder[SendAcquisitionEventStateImpl].map(identity)
-//  implicit val codec: Codec[SendAcquisitionEventState] = deriveCodec[SendAcquisitionEventStateImpl]
 }

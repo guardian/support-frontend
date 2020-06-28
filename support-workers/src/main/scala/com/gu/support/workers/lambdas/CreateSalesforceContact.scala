@@ -41,7 +41,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user,
       state.giftRecipient,
       state.product,
-      PaymentProvider.fromPaymentMethod(state.paymentMethod.left.toOption),
+      state.paymentProvider,
       state.paymentMethod,
       state.firstDeliveryDate,
       state.promoCode,

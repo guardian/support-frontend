@@ -49,7 +49,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         Success,
         state.user.isTestUser,
         state.product,
-        PaymentProvider.fromPaymentMethod(maybePaymentMethod),
+        state.paymentProvider,
         state.firstDeliveryDate,
         state.giftRecipient.isDefined,
         state.promoCode,
