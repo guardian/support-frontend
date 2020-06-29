@@ -61,6 +61,7 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
       user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, Monthly),
+      paymentProvider = PayPal,
       paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
         PayPalReferenceTransaction("baid", "me@somewhere.com"),
         PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
@@ -149,14 +150,16 @@ object StatesTestData {
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
     paymentProvider = StripeApplePay,
-    paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
+    paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
+      PayPalReferenceTransaction("baid", "me@somewhere.com"),
+      PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
+    )),
     firstDeliveryDate = None,
     promoCode = None,
     salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     acquisitionData = None,
     accountNumber = "123ac",
-    subscriptionNumber = "123sub",
-    paymentSchedule = PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
+    subscriptionNumber = "123sub"
   )
 
   val sendAcquisitionEventState: SendAcquisitionEventState = SendAcquisitionEventStateImpl(
@@ -165,7 +168,10 @@ object StatesTestData {
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
     paymentProvider = StripeApplePay,
-    paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
+    paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
+      PayPalReferenceTransaction("baid", "me@somewhere.com"),
+      PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
+    )),
     firstDeliveryDate = None,
     promoCode = None,
     acquisitionData = None

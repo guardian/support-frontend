@@ -66,7 +66,8 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       _ => HandlerResult((), requestInfo)
     )
 
-    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.paymentMethod.left.toOption.map(paymentProviderFromPaymentMethod), state.product)
+    val maybePaymentProvider = state.paymentOrRedemptionData.left.toOption.map(_.paymentMethod).map(paymentProviderFromPaymentMethod)
+    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, maybePaymentProvider, state.product)
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
     result
@@ -171,7 +172,7 @@ object SendAcquisitionEvent {
               paymentFrequency = paymentFrequencyFromBillingPeriod(stateAndInfo.state.product.billingPeriod),
               currency = stateAndInfo.state.product.currency.iso,
               amount = productAmount,
-              paymentProvider = stateAndInfo.state.paymentMethod.left.toOption.map(paymentProviderFromPaymentMethod),
+              paymentProvider = stateAndInfo.state.paymentOrRedemptionData.left.toOption.map(_.paymentMethod).map(paymentProviderFromPaymentMethod),
               // Currently only passing through at most one campaign code
               campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
               abTests = Some(thrift.AbTestInfo(
@@ -198,7 +199,7 @@ object SendAcquisitionEvent {
           if (stateAndInfo.requestInfo.accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
           if (isSixForSix(stateAndInfo)) Some("guardian-weekly-six-for-six") else None,
           stateAndInfo.state.giftRecipient.map(_ => "gift-subscription"),
-          stateAndInfo.state.paymentMethod.right.map(_ => "corporate-subscription").toOption
+          stateAndInfo.state.paymentOrRedemptionData.right.map(_ => "corporate-subscription").toOption
         ).flatten)
 
       def isSixForSix(stateAndInfo: SendAcquisitionEventStateAndRequestInfo) =

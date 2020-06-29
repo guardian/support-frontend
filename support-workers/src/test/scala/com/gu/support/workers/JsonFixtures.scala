@@ -597,7 +597,25 @@ object JsonFixtures {
           ${userJson()},
           "product": ${contribution(currency = GBP)},
           "paymentProvider": "Stripe",
-          "paymentMethod": $stripePaymentMethod,
+          "paymentOrRedemptionData": {
+            "paymentMethod": $stripePaymentMethod,
+            "paymentSchedule": {
+              "payments": [
+                {
+                  "date": "2019-01-14",
+                  "amount": 11.99
+                },
+                {
+                  "date": "2019-02-14",
+                  "amount": 11.99
+                },
+                {
+                  "date": "2019-03-14",
+                  "amount": 11.99
+                }
+              ]
+            }
+          },
           "acquisitionData": $acquisitionData
         }"""
   )
