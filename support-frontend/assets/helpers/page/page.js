@@ -135,14 +135,15 @@ function init<S, A>(
     const countryId: IsoCountry = detectCountry();
 
     /**
-     * Initialise CMP as early as possible so
+     * If in US initialise CMP as early as possible so
      * subsequent call to onIabConsentNotification
-     * returns the correct consentState based on
-     * useCcpa flag.
+     * returns the correct consentState.
     * */
-    initCMP({
-      useCcpa: countryId === 'US',
-    });
+    if (countryId === 'US') {
+      initCMP({
+        useCcpa: true,
+      });
+    }
 
     const settings = getSettings();
     const countryGroupId: CountryGroupId = detectCountryGroup();
