@@ -134,6 +134,7 @@ object CreateZuoraSubscription {
       state.user,
       state.giftRecipient,
       state.product,
+      state.paymentProvider,
       paymentMethodWithPaymentSchedule.left.map(_._1),
       state.firstDeliveryDate,
       state.promoCode,
