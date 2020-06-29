@@ -35,61 +35,12 @@ object LambdaExecutionStatus {
   implicit val encoder: Encoder[LambdaExecutionStatus] = Encoder.encodeString.contramap[LambdaExecutionStatus](_.toString)
 }
 
-sealed trait PaymentProvider
-
-case object Stripe extends PaymentProvider
-
-case object StripeApplePay extends PaymentProvider
-
-case object PayPal extends PaymentProvider
-
-case object DirectDebit extends PaymentProvider
-
-case object Existing extends PaymentProvider
-
-case object RedemptionNoProvider extends PaymentProvider
-
-object PaymentProvider {
-  def fromString(code: String): Option[PaymentProvider] = {
-    List(Stripe, PayPal, DirectDebit, Existing).find(_.getClass.getSimpleName == s"$code$$")
-  }
-
-  implicit val decoder: Decoder[PaymentProvider] =
-    Decoder.decodeString.emap(code => PaymentProvider.fromString(code).toRight(s"unrecognised payment provider '$code'"))
-
-  implicit val encoder: Encoder[PaymentProvider] = Encoder.encodeString.contramap[PaymentProvider](_.toString)
-
-  def fromPaymentFields(paymentFields: Either[PaymentFields, RedemptionData]): PaymentProvider = paymentFields match {
-    case Left(stripe: StripePaymentFields) => stripe.stripePaymentType match {
-      case Some(StripePaymentType.StripeApplePay) => StripeApplePay
-      case _ => Stripe
-    }
-    case Left(_: PayPalPaymentFields) => PayPal
-    case Left(_: DirectDebitPaymentFields) => DirectDebit
-    case Left(_: ExistingPaymentFields) => Existing
-    case Right(_) => RedemptionNoProvider
-  }
-
-  def fromPaymentMethod(paymentMethod: Either[PaymentMethod, RedemptionData]): PaymentProvider = paymentMethod match {
-    case Left(creditCardPayment: CreditCardReferenceTransaction) =>
-      creditCardPayment.stripePaymentType match {
-        case Some(StripePaymentType.StripeApplePay) => StripeApplePay
-        case _ => Stripe
-      }
-    case Left(_: PayPalReferenceTransaction) => PayPal
-    case Left(_: DirectDebitPaymentMethod) => DirectDebit
-    case Left(_: ClonedDirectDebitPaymentMethod) => Existing
-    case Right(_) => RedemptionNoProvider
-  }
-
-}
-
 case class LambdaExecutionResult(
   requestId: UUID,
   status: LambdaExecutionStatus,
   isTestUser: Boolean,
   product: ProductType,
-  paymentDetails: Option[PaymentProvider],
+  paymentDetails: PaymentProvider,
   firstDeliveryDate: Option[LocalDate],
   isGift: Boolean,
   promoCode: Option[PromoCode],

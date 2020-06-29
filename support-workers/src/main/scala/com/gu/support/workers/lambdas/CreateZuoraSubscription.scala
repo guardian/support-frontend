@@ -117,6 +117,7 @@ object CreateZuoraSubscription {
       state.user,
       state.giftRecipient,
       state.product,
+      state.paymentProvider,
       paymentOrRedemptionData,
       state.firstDeliveryDate,
       state.promoCode,

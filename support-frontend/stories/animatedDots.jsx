@@ -6,7 +6,7 @@ import { storiesOf } from '@storybook/react';
 
 
 import AnimatedDots from 'components/spinners/animatedDots';
-import { radios, withKnobs } from '@storybook/addon-knobs/src/index';
+import { radios, withKnobs } from '@storybook/addon-knobs';
 
 
 const appearanceKnob = () => radios('Appearance', ['light', 'dark'], 'light');

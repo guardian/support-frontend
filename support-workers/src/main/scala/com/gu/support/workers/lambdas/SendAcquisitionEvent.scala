@@ -10,7 +10,7 @@ import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client, paymentSuccessRequest}
 import com.gu.config.Configuration
 import com.gu.i18n.Country
-import com.gu.monitoring.{LambdaExecutionResult, PaymentProvider, SafeLogger, Success}
+import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{GuardianWeekly, Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.encoding.CustomCodecs._
@@ -47,7 +47,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         Success,
         state.user.isTestUser,
         state.product,
-        Some(PaymentProvider.fromPaymentMethod(state.paymentMethod)),
+        state.paymentProvider,
         state.firstDeliveryDate,
         state.giftRecipient.isDefined,
         state.promoCode,
@@ -66,7 +66,8 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       _ => HandlerResult((), requestInfo)
     )
 
-    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.paymentMethod.left.toOption.map(paymentProviderFromPaymentMethod), state.product)
+    val maybePaymentProvider = state.paymentOrRedemptionData.left.toOption.map(_.paymentMethod).map(paymentProviderFromPaymentMethod)
+    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, maybePaymentProvider, state.product)
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
     result
@@ -171,7 +172,7 @@ object SendAcquisitionEvent {
               paymentFrequency = paymentFrequencyFromBillingPeriod(stateAndInfo.state.product.billingPeriod),
               currency = stateAndInfo.state.product.currency.iso,
               amount = productAmount,
-              paymentProvider = stateAndInfo.state.paymentMethod.left.toOption.map(paymentProviderFromPaymentMethod),
+              paymentProvider = stateAndInfo.state.paymentOrRedemptionData.left.toOption.map(_.paymentMethod).map(paymentProviderFromPaymentMethod),
               // Currently only passing through at most one campaign code
               campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
               abTests = Some(thrift.AbTestInfo(
@@ -197,7 +198,8 @@ object SendAcquisitionEvent {
         Some(Set(
           if (stateAndInfo.requestInfo.accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
           if (isSixForSix(stateAndInfo)) Some("guardian-weekly-six-for-six") else None,
-          stateAndInfo.state.giftRecipient.map(_ => "gift-subscription")
+          stateAndInfo.state.giftRecipient.map(_ => "gift-subscription"),
+          stateAndInfo.state.paymentOrRedemptionData.right.map(_ => "corporate-subscription").toOption
         ).flatten)
 
       def isSixForSix(stateAndInfo: SendAcquisitionEventStateAndRequestInfo) =

@@ -4,7 +4,6 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices._
 import com.gu.helpers.FutureExtensions._
-import com.gu.monitoring.PaymentProvider.{fromPaymentFields, fromPaymentMethod}
 import com.gu.monitoring.{Error, IgnoredError, LambdaExecutionResult, LambdaExecutionStatus, PaymentFailure, SafeLogger}
 import com.gu.stripe.StripeError
 import com.gu.support.encoding.CustomCodecs._
@@ -93,9 +92,6 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     checkoutFailureReason: CheckoutFailureReason,
     error: Option[ExecutionError]
   ): Unit = {
-    val maybePaymentProvider = state.paymentMethod.map(fromPaymentMethod)
-      .orElse(state.paymentFields.map(fromPaymentFields))
-
     // Log the result of this execution to Elasticsearch
     LambdaExecutionResult.logResult(
       LambdaExecutionResult(
@@ -103,7 +99,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
         status,
         state.user.isTestUser,
         state.product,
-        maybePaymentProvider,
+        state.paymentProvider,
         state.firstDeliveryDate,
         state.giftRecipient.isDefined,
         state.promoCode,

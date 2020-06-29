@@ -5,23 +5,33 @@ import java.util.UUID
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.{PaymentMethod, User, _}
+import com.gu.support.workers.{User, _}
+import io.circe.Decoder
+import io.circe.generic.semiauto.deriveDecoder
 import org.joda.time.LocalDate
 
-case class SendAcquisitionEventState(
+trait SendAcquisitionEventState extends FailureHandlerState {
+  def requestId: UUID
+  def giftRecipient: Option[GiftRecipient]
+  def product: ProductType
+  def paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData]
+  def firstDeliveryDate: Option[LocalDate]
+  def promoCode: Option[PromoCode]
+  def acquisitionData: Option[AcquisitionData]
+}
+
+case class SendAcquisitionEventStateImpl(
   requestId: UUID,
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
-  paymentMethod: Either[PaymentMethod, RedemptionData],
+  paymentProvider: PaymentProvider,
+  paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]
-) extends StepFunctionUserState
-
-import com.gu.support.encoding.Codec
-import com.gu.support.encoding.Codec._
+) extends SendAcquisitionEventState
 
 object SendAcquisitionEventState {
-  implicit val codec: Codec[SendAcquisitionEventState] = deriveCodec
+  implicit val decoder: Decoder[SendAcquisitionEventState] = deriveDecoder[SendAcquisitionEventStateImpl].map(identity)
 }
