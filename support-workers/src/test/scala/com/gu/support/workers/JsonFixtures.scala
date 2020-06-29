@@ -326,28 +326,30 @@ object JsonFixtures {
        |  ${userJson()},
        |  "product": $product,
        |  "paymentProvider": "Stripe",
-       |  "paymentMethod": $stripePaymentMethod,
        |  "salesForceContact": {
        |    "Id": "sfContactId123",
        |    "AccountId": "sfAccountId321"
        |  },
        |  "accountNumber": "A-00123",
        |  "subscriptionNumber": "A-S12345678",
-       |  "paymentSchedule": {
-       |    "payments": [
-       |      {
-       |        "date": "2019-01-14",
-       |        "amount": 11.99
-       |      },
-       |      {
-       |        "date": "2019-02-14",
-       |        "amount": 11.99
-       |      },
-       |      {
-       |        "date": "2019-03-14",
-       |        "amount": 11.99
-       |      }
-       |    ]
+       |  "paymentOrRedemptionData": {
+         |  "paymentMethod": $stripePaymentMethod,
+         |  "paymentSchedule": {
+         |    "payments": [
+         |      {
+         |        "date": "2019-01-14",
+         |        "amount": 11.99
+         |      },
+         |      {
+         |        "date": "2019-02-14",
+         |        "amount": 11.99
+         |      },
+         |      {
+         |        "date": "2019-03-14",
+         |        "amount": 11.99
+         |      }
+         |    ]
+         |  }
        |  }
        |}
      """.stripMargin
@@ -595,7 +597,25 @@ object JsonFixtures {
           ${userJson()},
           "product": ${contribution(currency = GBP)},
           "paymentProvider": "Stripe",
-          "paymentMethod": $stripePaymentMethod,
+          "paymentOrRedemptionData": {
+            "paymentMethod": $stripePaymentMethod,
+            "paymentSchedule": {
+              "payments": [
+                {
+                  "date": "2019-01-14",
+                  "amount": 11.99
+                },
+                {
+                  "date": "2019-02-14",
+                  "amount": 11.99
+                },
+                {
+                  "date": "2019-03-14",
+                  "amount": 11.99
+                }
+              ]
+            }
+          },
           "acquisitionData": $acquisitionData
         }"""
   )

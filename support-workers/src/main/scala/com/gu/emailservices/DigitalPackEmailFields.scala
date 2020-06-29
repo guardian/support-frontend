@@ -6,6 +6,7 @@ import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.promotions.Promotion
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
+import com.gu.support.workers.states.PaymentMethodWithSchedule
 
 // Output Json should look like this:
 //
@@ -38,35 +39,41 @@ import com.gu.support.workers._
 //}
 
 case class DigitalPackEmailFields(
+  paymentMethodWithSchedule: PaymentMethodWithSchedule
+) extends SubscriptionEmailFields {
+
+  import paymentMethodWithSchedule._
+
+  override def apply(
     subscriptionNumber: String,
-    billingPeriod: BillingPeriod,
-    user: User,
-    paymentSchedule: PaymentSchedule,
-    currency: Currency,
-    paymentMethod: Either[PaymentMethod, RedemptionData],
-    sfContactId: SfContactId,
-    directDebitMandateId: Option[String] = None,
     promotion: Option[Promotion] = None
-) extends EmailFields {
+  ): AllProductsEmailFields = new AllProductsEmailFields {
+
+    override def apply(
+      billingPeriod: BillingPeriod,
+      user: User,
+      currency: Currency,
+      sfContactId: SfContactId,
+      directDebitMandateId: Option[String],
+    ): EmailFields = new EmailFields {
 
   val paymentFields = paymentMethod match {
-    case Left(dd: DirectDebitPaymentMethod) => List(
+    case dd: DirectDebitPaymentMethod => List(
       "Account number" -> mask(dd.bankTransferAccountNumber),
       "Sort Code" -> hyphenate(dd.bankCode),
       "Account Name" -> dd.bankTransferAccountName,
       "Default payment method" -> "Direct Debit",
       "MandateID" -> directDebitMandateId.getOrElse("")
     )
-    case Left(dd: ClonedDirectDebitPaymentMethod) => List(
+    case dd: ClonedDirectDebitPaymentMethod => List(
       "Sort Code" -> hyphenate(dd.bankCode),
       "Account number" -> mask(dd.bankTransferAccountNumber),
       "Account Name" -> dd.bankTransferAccountName,
       "Default payment method" -> "Direct Debit",
       "MandateID" -> dd.mandateId
     )
-    case Left(_: CreditCardReferenceTransaction) => List("Default payment method" -> "Credit/Debit Card")
-    case Left(_: PayPalReferenceTransaction) => Seq("Default payment method" -> "PayPal")
-    case Right(redemptionData) => Nil
+    case _: CreditCardReferenceTransaction => List("Default payment method" -> "Credit/Debit Card")
+    case _: PayPalReferenceTransaction => Seq("Default payment method" -> "PayPal")
   }
 
   override val fields = List(
@@ -87,6 +94,8 @@ case class DigitalPackEmailFields(
     "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
   ) ++ paymentFields
 
-  override def payload: String = super.payload(user.primaryEmailAddress, "digipack")
-  override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
+      override def payload: String = super.payload(user.primaryEmailAddress, "digipack")
+      override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
+    }
+  }
 }

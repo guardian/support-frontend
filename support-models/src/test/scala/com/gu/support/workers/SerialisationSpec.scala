@@ -9,7 +9,6 @@ import com.gu.support.catalog.RestOfWorld
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 import org.joda.time.LocalDate
 import org.scalatest.EitherValues
 import org.scalatest.flatspec.AnyFlatSpec
@@ -53,6 +52,29 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
 
   "SendThankYouEmailState" should "deserialise correctly" in {
     testDecoding[SendThankYouEmailState](thankYouEmailJson())
+  }
+
+  it should "roundtrip successfully" in {
+
+    val state = SendThankYouEmailState(
+      requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+      user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
+      giftRecipient = None,
+      product = DigitalPack(Currency.GBP, Monthly),
+      paymentProvider = PayPal,
+      paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
+        PayPalReferenceTransaction("baid", "me@somewhere.com"),
+        PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
+      )),
+      firstDeliveryDate = None,
+      promoCode = None,
+      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+      acquisitionData = None,
+      accountNumber = "123ac",
+      subscriptionNumber = "123sub"
+    )
+
+    testRoundTripSerialisation[SendThankYouEmailState](state)
   }
 
   "FailureHandlerState" should "deserialise correctly from any lambda" in {
@@ -128,14 +150,16 @@ object StatesTestData {
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
     paymentProvider = StripeApplePay,
-    paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
+    paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
+      PayPalReferenceTransaction("baid", "me@somewhere.com"),
+      PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
+    )),
     firstDeliveryDate = None,
     promoCode = None,
     salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     acquisitionData = None,
     accountNumber = "123ac",
-    subscriptionNumber = "123sub",
-    paymentSchedule = PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
+    subscriptionNumber = "123sub"
   )
 
   val sendAcquisitionEventState: SendAcquisitionEventState = SendAcquisitionEventStateImpl(
@@ -144,7 +168,10 @@ object StatesTestData {
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
     paymentProvider = StripeApplePay,
-    paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
+    paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
+      PayPalReferenceTransaction("baid", "me@somewhere.com"),
+      PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
+    )),
     firstDeliveryDate = None,
     promoCode = None,
     acquisitionData = None

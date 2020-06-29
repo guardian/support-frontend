@@ -207,28 +207,30 @@ object Fixtures {
        |  $userJson,
        |  "product": $product,
        |  "paymentProvider": "PayPal",
-       |  "paymentMethod": $stripePaymentMethod,
        |  "salesForceContact": {
        |    "Id": "123",
        |    "AccountId": "123"
        |  },
        |  "accountNumber": "A-123",
        |  "subscriptionNumber": "A-S123",
-       |  "paymentSchedule": {
-       |    "payments": [
-       |      {
-       |        "date": "2019-01-14",
-       |        "amount": 11.99
-       |      },
-       |      {
-       |        "date": "2019-02-14",
-       |        "amount": 11.99
-       |      },
-       |      {
-       |        "date": "2019-03-14",
-       |        "amount": 11.99
-       |      }
-       |    ]
+       |  "paymentOrRedemptionData": {
+       |    "paymentMethod": $stripePaymentMethod,
+       |    "paymentSchedule": {
+         |    "payments": [
+         |      {
+         |        "date": "2019-01-14",
+         |        "amount": 11.99
+         |      },
+         |      {
+         |        "date": "2019-02-14",
+         |        "amount": 11.99
+         |      },
+         |      {
+         |        "date": "2019-03-14",
+         |        "amount": 11.99
+         |      }
+         |    ]
+         |  }
        |  }
        |}
      """.stripMargin
