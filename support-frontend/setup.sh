@@ -61,7 +61,7 @@ region = eu-west-1" > "$path/$filename"
   fi
 }
 
-install_homebrew() {
+install_homebrew_if_mac() {
   if mac && ! installed brew; then
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
@@ -77,23 +77,21 @@ install_jdk() {
   fi
 }
 
+install_nvm() {
+  if linux && ! installed curl; then
+    sudo apt-get install -y curl
+  fi
+  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+  EXTRA_STEPS+=("Add https://git.io/vKTnK to your .bash_profile")
+}
+
 install_node() {
   if ! nvm_installed; then
-    if linux; then
-      if ! installed curl; then
-        sudo apt-get install -y curl
-      fi
-    fi
-
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
-    nvm install
-    EXTRA_STEPS+=("Add https://git.io/vKTnK to your .bash_profile")
-  else
-    if ! nvm_available; then
-      source_nvm
-    fi
-    nvm install
+    install_nvm
+  elif ! nvm_available; then
+    source_nvm
   fi
+  nvm install
 }
 
 setup_nginx() {
@@ -141,7 +139,7 @@ main () {
   check_encryption
   create_aws_config
   install_node
-  install_homebrew
+  install_homebrew_if_mac
   install_brew_deps
   setup_nginx
   install_jdk
