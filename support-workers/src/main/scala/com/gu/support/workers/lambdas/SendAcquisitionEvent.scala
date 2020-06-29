@@ -10,7 +10,7 @@ import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client, paymentSuccessRequest}
 import com.gu.config.Configuration
 import com.gu.i18n.Country
-import com.gu.monitoring.{LambdaExecutionResult, PaymentProvider, SafeLogger, Success}
+import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{GuardianWeekly, Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.encoding.CustomCodecs._
@@ -47,7 +47,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         Success,
         state.user.isTestUser,
         state.product,
-        Some(PaymentProvider.fromPaymentMethod(state.paymentMethod)),
+        state.paymentProvider,
         state.firstDeliveryDate,
         state.giftRecipient.isDefined,
         state.promoCode,
@@ -197,7 +197,8 @@ object SendAcquisitionEvent {
         Some(Set(
           if (stateAndInfo.requestInfo.accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
           if (isSixForSix(stateAndInfo)) Some("guardian-weekly-six-for-six") else None,
-          stateAndInfo.state.giftRecipient.map(_ => "gift-subscription")
+          stateAndInfo.state.giftRecipient.map(_ => "gift-subscription"),
+          stateAndInfo.state.paymentMethod.right.map(_ => "corporate-subscription").toOption
         ).flatten)
 
       def isSixForSix(stateAndInfo: SendAcquisitionEventStateAndRequestInfo) =

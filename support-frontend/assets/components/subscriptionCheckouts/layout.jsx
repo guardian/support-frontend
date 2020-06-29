@@ -4,6 +4,14 @@ import React, { type Node } from 'react';
 
 import styles from './layout.module.scss';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import {
+  asideBottomCss,
+  asideCss,
+  asideTopCss,
+  formCss,
+  mainCss,
+  stickyCss,
+} from 'components/subscriptionCheckouts/layoutStyles';
 
 type AsideWrapPosition = 'top' | 'bottom';
 
@@ -12,24 +20,22 @@ type PropTypes = {
   aside: Node,
   wrapPosition: ?AsideWrapPosition,
 };
+
 const CheckoutLayout = ({ children, aside, wrapPosition }: PropTypes) => {
-  const mainClass = [
-    styles.root,
-    wrapPosition === 'bottom' ? styles.asideBottom : styles.asideTop,
-  ].join(' ');
+  const wrapCss = wrapPosition === 'bottom' ? asideBottomCss : asideTopCss;
 
   return (
-    <div className={mainClass}>
+    <div css={[mainCss, wrapCss]}>
       {wrapPosition === 'top' &&
-        <div className={`${styles.aside} ${styles.sticky}`}>
+        <div css={[asideCss, stickyCss]}>
           {aside}
         </div>
       }
-      <div className={styles.form}>
+      <div css={formCss}>
         {children}
       </div>
       {wrapPosition === 'bottom' &&
-        <div className={styles.aside}>
+        <div css={asideCss}>
           {aside}
         </div>
       }

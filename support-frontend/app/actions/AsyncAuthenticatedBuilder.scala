@@ -1,10 +1,13 @@
 package actions
 
+import cats.data.EitherT
 import services.AsyncAuthenticationService.logUserAuthenticationError
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
+import cats.implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 // scalastyle:off
 // This is based on AuthenticatedBuilder in https://github.com/playframework/playframework/blob/1ca9d0af237ac45a011671b2e036d726cd05e4e7/core/play/src/main/scala/play/api/mvc/Security.scala
@@ -30,11 +33,15 @@ class AsyncAuthenticatedBuilder[U](
     * Authenticate the given block.
     */
   def authenticate[A](request: Request[A], block: AuthenticatedRequest[A, U] => Future[Result]): Future[Result] = {
-    userinfo(request)
-      .flatMap(user => block(new AuthenticatedRequest(user, request)))
-      .recover { case err =>
-        logUserAuthenticationError(err)
-        onUnauthorized(request)
-      }
+    val result = for {
+      user <- EitherT(userinfo(request).transform {
+        case Success(result) => Success(Right(result))
+        case Failure(err) =>
+          logUserAuthenticationError(err)
+          Success(Left(onUnauthorized(request)))
+      })
+      chainedBlockResult <- EitherT.right[Result](block(new AuthenticatedRequest(user, request)))
+    } yield chainedBlockResult
+    result.merge
   }
 }

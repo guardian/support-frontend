@@ -13,6 +13,7 @@ case class SendThankYouEmailState(
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
+  paymentProvider: PaymentProvider,
   paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
@@ -20,7 +21,7 @@ case class SendThankYouEmailState(
   accountNumber: String,
   subscriptionNumber: String,
   acquisitionData: Option[AcquisitionData]
-) extends StepFunctionUserState
+) extends SendAcquisitionEventState
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._

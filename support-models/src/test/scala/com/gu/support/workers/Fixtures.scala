@@ -143,6 +143,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           "product": ${contribution(currency = currency)},
+          "paymentProvider": "PayPal",
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -152,6 +153,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           "product": ${contribution(amount = amount, billingPeriod = billingPeriod)},
+          "paymentProvider": "PayPal",
           "paymentFields": $stripeJson,
           "sessionId": "testingToken",
           "acquisitionData": $acquisitionData
@@ -162,6 +164,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           $digitalPackProductJson,
+          "paymentProvider": "PayPal",
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -171,6 +174,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           $digitalPackProductJson,
+          "paymentProvider": "PayPal",
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -180,6 +184,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           $guardianWeeklyJson,
+          "paymentProvider": "PayPal",
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -190,6 +195,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": ${contribution()},
+            "paymentProvider": "PayPal",
             "paymentMethod": $payPalPaymentMethod,
             "acquisitionData": $acquisitionData
           }
@@ -200,6 +206,7 @@ object Fixtures {
        |  $requestIdJson,
        |  $userJson,
        |  "product": $product,
+       |  "paymentProvider": "PayPal",
        |  "salesForceContact": {
        |    "Id": "123",
        |    "AccountId": "123"
@@ -255,6 +262,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": ${contribution(billingPeriod = billingPeriod)},
+            "paymentProvider": "PayPal",
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
@@ -266,6 +274,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
+            "paymentProvider": "PayPal",
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
@@ -278,6 +287,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
+            "paymentProvider": "PayPal",
             "paymentMethod": {"redemptionCode": "FAKECODE"},
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
