@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 import React from 'react'
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { renderPage } from 'helpers/render';
 import './ausMomentMap.scss';
 import { Header } from 'pages/aus-moment-map/components/header';
@@ -12,14 +12,26 @@ import { Testimonials } from 'pages/aus-moment-map/components/testimonials';
 
 // ----- Render ----- //
 const AusMomentMap = () => {
+  const mapControls = useAnimation()
+  const runAnimation = () => {
+    mapControls.start({
+      width: '40%'
+    })
+  }
+
+  const handleClick = (e) => {
+    const elementClassList = e.target.classList
+    elementClassList.contains('map') || elementClassList.contains('label') ? runAnimation() : null
+  }
+
   return (
-    <div>
+    <div onClick={handleClick}>
       <Header />
       <div className="main">
-        <div className="left">
+        <motion.div className="left" animate={mapControls}>
           <Map />
           <p className="map-caption">Tap the map to read messages from supporters</p>
-        </div>
+        </motion.div>
           <div className="right">
           <Testimonials />
         </div>
@@ -29,6 +41,6 @@ const AusMomentMap = () => {
   )
 };
 
-renderPage(AusMomentMap(), 'aus-moment-map');
+renderPage(<AusMomentMap />, 'aus-moment-map');
 
 export { AusMomentMap };
