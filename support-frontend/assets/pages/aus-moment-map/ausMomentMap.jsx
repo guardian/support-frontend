@@ -13,10 +13,10 @@ import { Testimonials } from 'pages/aus-moment-map/components/testimonials';
 // ----- Render ----- //
 const AusMomentMap = () => {
   const mapControls = useAnimation()
+  const socialLinksControls = useAnimation()
   const runAnimation = () => {
-    mapControls.start({
-      width: '40%'
-    })
+    mapControls.start({width: '40%'})
+    socialLinksControls.start({y: 200, visibility: 'hidden'})
   }
 
   const handleClick = (e) => {
@@ -28,15 +28,17 @@ const AusMomentMap = () => {
     <div onClick={handleClick}>
       <Header />
       <div className="main">
-        <motion.div className="left" animate={mapControls}>
+        <motion.div className="left" animate={mapControls} positionTransition>
           <Map />
           <p className="map-caption">Tap the map to read messages from supporters</p>
         </motion.div>
-          <div className="right">
+        <div className="right">
           <Testimonials />
+          <SocialLinks />
         </div>
       </div>
-      <SocialLinks />
+      <motion.div animate={socialLinksControls} positionTransition>
+      </motion.div>
     </div>
   )
 };
