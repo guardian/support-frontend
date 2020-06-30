@@ -1,6 +1,5 @@
 // @flow
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { getTrackingConsent, writeTrackingConsentCookie, type ThirdPartyTrackingConsent } from '../../helpers/tracking/thirdPartyTrackingConsent';
 import {
   OptedIn,

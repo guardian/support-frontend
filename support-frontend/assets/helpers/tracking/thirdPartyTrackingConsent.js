@@ -33,6 +33,7 @@ const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => {
         }
       });
     }).catch((err) => {
+      console.log('***** ERR *****', err);
       logException(`CCPA: ${err}`);
       // fallback to OptedOut if there's an issue getting consentState
       return Promise.resolve(OptedOut);
