@@ -60,33 +60,36 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
       productRatePlanId
     )
 
-    val subscriptionEmailFields: Either[String, SubscriptionEmailFields] = state.paymentOrRedemptionData.left.toOption.toRight("can't send a corporate/gift email yet").map(paymentMethodWithSchedule =>
+    val subscriptionEmailFields: Either[String, SubscriptionEmailFields] =
       state.product match {
-        case c: Contribution => SubscriptionEmailFields.wrap(
+        case c: Contribution => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift contribution").map(paymentMethodWithSchedule => SubscriptionEmailFields.wrap(
           ContributionEmailFields(
             created = DateTime.now(),
             amount = c.amount,
             paymentMethod = paymentMethodWithSchedule.paymentMethod
           )
+        ))
+        case _: DigitalPack => Right(DigitalPackEmailFields(
+          paidSubPaymentData = state.paymentOrRedemptionData.left.toOption,
+        ))
+        case p: Paper => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
+          PaperEmailFields(
+            fulfilmentOptions = p.fulfilmentOptions,
+            productOptions = p.productOptions,
+            firstDeliveryDate = state.firstDeliveryDate,
+            paymentMethodWithSchedule = paymentMethodWithSchedule,
+            state.giftRecipient
+          )
         )
-        case _: DigitalPack => DigitalPackEmailFields(
-          paymentMethodWithSchedule = paymentMethodWithSchedule,
+        case g: GuardianWeekly => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift GW yet").map(paymentMethodWithSchedule =>
+          GuardianWeeklyEmailFields(
+            fulfilmentOptions = g.fulfilmentOptions,
+            firstDeliveryDate = state.firstDeliveryDate,
+            paymentMethodWithSchedule = paymentMethodWithSchedule,
+            state.giftRecipient
+          )
         )
-        case p: Paper => PaperEmailFields(
-          fulfilmentOptions = p.fulfilmentOptions,
-          productOptions = p.productOptions,
-          firstDeliveryDate = state.firstDeliveryDate,
-          paymentMethodWithSchedule = paymentMethodWithSchedule,
-          state.giftRecipient
-        )
-        case g: GuardianWeekly => GuardianWeeklyEmailFields(
-          fulfilmentOptions = g.fulfilmentOptions,
-          firstDeliveryDate = state.firstDeliveryDate,
-          paymentMethodWithSchedule = paymentMethodWithSchedule,
-          state.giftRecipient
-        )
-      }
-    )
+    }
     subscriptionEmailFields match {
       case Right(subscriptionEmailFields) =>
         thankYouEmailService.send(

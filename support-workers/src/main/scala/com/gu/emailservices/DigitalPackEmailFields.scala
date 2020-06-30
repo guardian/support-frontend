@@ -4,7 +4,6 @@ import com.gu.emailservices.SubscriptionEmailFieldHelpers._
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.promotions.Promotion
-import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.states.PaymentMethodWithSchedule
 
@@ -39,10 +38,8 @@ import com.gu.support.workers.states.PaymentMethodWithSchedule
 //}
 
 case class DigitalPackEmailFields(
-  paymentMethodWithSchedule: PaymentMethodWithSchedule
+  paidSubPaymentData: Option[PaymentMethodWithSchedule]
 ) extends SubscriptionEmailFields {
-
-  import paymentMethodWithSchedule._
 
   override def apply(
     subscriptionNumber: String,
@@ -57,44 +54,53 @@ case class DigitalPackEmailFields(
       directDebitMandateId: Option[String],
     ): EmailFields = new EmailFields {
 
-  val paymentFields = paymentMethod match {
-    case dd: DirectDebitPaymentMethod => List(
-      "Account number" -> mask(dd.bankTransferAccountNumber),
-      "Sort Code" -> hyphenate(dd.bankCode),
-      "Account Name" -> dd.bankTransferAccountName,
-      "Default payment method" -> "Direct Debit",
-      "MandateID" -> directDebitMandateId.getOrElse("")
-    )
-    case dd: ClonedDirectDebitPaymentMethod => List(
-      "Sort Code" -> hyphenate(dd.bankCode),
-      "Account number" -> mask(dd.bankTransferAccountNumber),
-      "Account Name" -> dd.bankTransferAccountName,
-      "Default payment method" -> "Direct Debit",
-      "MandateID" -> dd.mandateId
-    )
-    case _: CreditCardReferenceTransaction => List("Default payment method" -> "Credit/Debit Card")
-    case _: PayPalReferenceTransaction => Seq("Default payment method" -> "PayPal")
-  }
+      private def paymentFields(paymentMethod: PaymentMethod): Seq[(String, String)] =
+        paymentMethod match {
+          case dd: DirectDebitPaymentMethod => List(
+            "Account number" -> mask(dd.bankTransferAccountNumber),
+            "Sort Code" -> hyphenate(dd.bankCode),
+            "Account Name" -> dd.bankTransferAccountName,
+            "Default payment method" -> "Direct Debit",
+            "MandateID" -> directDebitMandateId.getOrElse("")
+          )
+          case dd: ClonedDirectDebitPaymentMethod => List(
+            "Sort Code" -> hyphenate(dd.bankCode),
+            "Account number" -> mask(dd.bankTransferAccountNumber),
+            "Account Name" -> dd.bankTransferAccountName,
+            "Default payment method" -> "Direct Debit",
+            "MandateID" -> dd.mandateId
+          )
+          case _: CreditCardReferenceTransaction => List("Default payment method" -> "Credit/Debit Card")
+          case _: PayPalReferenceTransaction => Seq("Default payment method" -> "PayPal")
+        }
 
-  override val fields = List(
-    "ZuoraSubscriberId" -> subscriptionNumber,
-    "EmailAddress" -> user.primaryEmailAddress,
-    "Subscription term" -> billingPeriod.noun,
-    "Payment amount" -> SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),
-    "First Name" -> user.firstName,
-    "Last Name" -> user.lastName,
-    "Address 1" -> "", //TODO: Remove this from Braze template
-    "Address 2" -> "", //TODO: Remove this from Braze template
-    "City" -> "", //TODO: Remove this from Braze template
-    "Post Code" -> "", //TODO: Remove this from Braze template
-    "Country" -> user.billingAddress.country.name,
-    "Date of first payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
-    "Currency" -> currency.glyph,
-    "Trial period" -> "14", //TODO: depends on Promo code
-    "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
-  ) ++ paymentFields
+      override val fields = List(
+        "ZuoraSubscriberId" -> subscriptionNumber,
+        "EmailAddress" -> user.primaryEmailAddress,
+        "First Name" -> user.firstName,
+        "Last Name" -> user.lastName,
+      ) ++ (paidSubPaymentData match {
+        case Some(PaymentMethodWithSchedule(pm, paymentSchedule)) =>
+          paymentFields(pm) ++ List(
+            "Subscription term" -> billingPeriod.noun,
+            "Payment amount" -> SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),
+            "Address 1" -> "", //TODO: Remove this from Braze template
+            "Address 2" -> "", //TODO: Remove this from Braze template
+            "City" -> "", //TODO: Remove this from Braze template
+            "Post Code" -> "", //TODO: Remove this from Braze template
+            "Country" -> user.billingAddress.country.name,
+            "Date of first payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
+            "Currency" -> currency.glyph,
+            "Trial period" -> "14", //TODO: depends on Promo code or zuora config
+            "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
+          )
+        case None /*Corporate*/ => List(
+          "Subscription details" -> "Group subscription"
+        )
+      })
 
-      override def payload: String = super.payload(user.primaryEmailAddress, "digipack")
+      override def payload: String = super.payload(user.primaryEmailAddress, if (paidSubPaymentData.isDefined) "digipack" else "digipack-corp")
+
       override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
     }
   }
