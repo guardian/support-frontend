@@ -42,6 +42,7 @@ import {
 import { trackAbTests } from 'helpers/tracking/ophan';
 import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
+import { ccpaEnabled } from 'helpers/tracking/ccpa';
 import { init as initCMP } from '@guardian/consent-management-platform';
 
 if (process.env.NODE_ENV === 'DEV') {
@@ -132,19 +133,19 @@ function init<S, A>(
   thunk?: boolean = false,
 ): Store<*, *, *> {
   try {
-    const countryId: IsoCountry = detectCountry();
-
     /**
-     * If in US initialise CMP as early as possible so
-     * subsequent call to onIabConsentNotification
-     * returns the correct consentState.
+     * If ccpaEnabled initialise CCPA CMP as early
+     * as possible so subsequent call so
+     * onIabConsentNotification returns the correct
+     * consentState.
     * */
-    if (countryId === 'US') {
+    if (ccpaEnabled()) {
       initCMP({
         useCcpa: true,
       });
     }
 
+    const countryId: IsoCountry = detectCountry();
     const settings = getSettings();
     const countryGroupId: CountryGroupId = detectCountryGroup();
     const currencyId: IsoCurrency = detectCurrency(countryGroupId);

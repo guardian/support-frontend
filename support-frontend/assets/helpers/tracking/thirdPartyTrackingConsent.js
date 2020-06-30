@@ -2,11 +2,8 @@
 
 import { onIabConsentNotification } from '@guardian/consent-management-platform';
 import { get as getCookie, set as setCookie } from '../cookie';
-import {
-  detect as detectCountry,
-  type IsoCountry,
-} from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
+import { ccpaEnabled } from 'helpers/tracking/ccpa';
 
 const ConsentCookieName = 'GU_TK';
 const DaysToLive = 30 * 18;
@@ -20,9 +17,7 @@ export type ThirdPartyTrackingConsent = typeof OptedIn
   | typeof Unset;
 
 const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => {
-  const countryId: IsoCountry = detectCountry();
-
-  if (countryId === 'US') {
+  if (ccpaEnabled()) {
     return new Promise((resolve) => {
       onIabConsentNotification((consentState: boolean) => {
         /**

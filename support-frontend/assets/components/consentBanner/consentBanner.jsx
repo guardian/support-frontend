@@ -12,23 +12,13 @@ import Button from 'components/button/button';
 import Text from 'components/text/text';
 import styles from 'components/consentBanner/consentBanner.module.scss';
 import { isPostDeployUser } from 'helpers/user/user';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-
-export type PropTypes = {
-  countryId: IsoCountry
-}
+import { ccpaEnabled } from 'helpers/tracking/ccpa';
 
 type StateTypes = {
   showBanner: boolean,
 }
 
-function mapStateToProps(state) {
-  return {
-    countryId: state.common.internationalisation.countryId,
-  };
-}
-
-class ConsentBanner extends Component<PropTypes, StateTypes> {
+class ConsentBanner extends Component<{}, StateTypes> {
   constructor() {
     super();
     this.state = {
@@ -44,9 +34,8 @@ class ConsentBanner extends Component<PropTypes, StateTypes> {
 
   render() {
     const { showBanner } = this.state;
-    const { countryId } = this.props;
 
-    if (countryId !== 'US' && showBanner && !isPostDeployUser()) {
+    if (!ccpaEnabled() && showBanner && !isPostDeployUser()) {
       return (
         <div className={styles.root}>
           <div className={styles.copy}>
@@ -92,4 +81,4 @@ class ConsentBanner extends Component<PropTypes, StateTypes> {
   }
 }
 
-export default connect(mapStateToProps)(ConsentBanner);
+export default ConsentBanner;

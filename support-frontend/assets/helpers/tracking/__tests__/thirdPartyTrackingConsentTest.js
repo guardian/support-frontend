@@ -2,8 +2,8 @@
 // ----- Imports ----- //
 
 import {
-  detect as _detectCountry,
-} from 'helpers/internationalisation/country';
+  ccpaEnabled as _ccpaEnabledy,
+} from 'helpers/tracking/ccpa';
 import {
   onIabConsentNotification as _onIabConsentNotification,
 } from '@guardian/consent-management-platform';
@@ -15,12 +15,12 @@ import {
   Unset,
 } from '../thirdPartyTrackingConsent';
 
-const detectCountry: any = _detectCountry;
+const ccpaEnabled: any = _ccpaEnabledy;
 const getCookie: any = _getCookie;
 const onIabConsentNotification: any = _onIabConsentNotification;
 
-jest.mock('helpers/internationalisation/country', () => ({
-  detect: jest.fn(),
+jest.mock('helpers/tracking/ccpa', () => ({
+  ccpaEnabled: jest.fn(),
 }));
 
 jest.mock('@guardian/consent-management-platform', () => ({
@@ -42,9 +42,9 @@ describe('thirdPartyTrackingConsent', () => {
     jest.resetAllMocks();
   });
 
-  describe('should return the correct ThirdPartyTrackingConsent for US users', () => {
+  describe('should return the correct ThirdPartyTrackingConsent if ccpaEnabled is true', () => {
     beforeEach(() => {
-      detectCountry.mockReturnValue('US');
+      ccpaEnabled.mockReturnValue(true);
     });
 
     it('if CCPA consentState is true', () => {
@@ -82,9 +82,9 @@ describe('thirdPartyTrackingConsent', () => {
     });
   });
 
-  describe('should return the correct ThirdPartyTrackingConsent for NON-US users', () => {
+  describe('should return the correct ThirdPartyTrackingConsent if ccpaEnabled is false', () => {
     beforeEach(() => {
-      detectCountry.mockReturnValue('GB');
+      ccpaEnabled.mockReturnValue(false);
     });
 
     it('if getCookie returns a value starting with 1', () => {
