@@ -22,7 +22,7 @@ object RedemptionTable {
   }
 
   def forEnvAsync(env: TouchPointEnvironment)(implicit e: ExecutionContext): DynamoTableAsync =
-    DynamoTableAsync(s"redemption-codes-${env.envValue}-PROD", primaryKey)
+    DynamoTableAsync(s"redemption-codes-${env.envValue}", primaryKey)
 
 }
 
