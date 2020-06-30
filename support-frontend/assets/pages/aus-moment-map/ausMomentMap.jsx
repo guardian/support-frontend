@@ -13,10 +13,8 @@ import { Testimonials } from 'pages/aus-moment-map/components/testimonials';
 // ----- Render ----- //
 const AusMomentMap = () => {
   const mapControls = useAnimation()
-  const socialLinksControls = useAnimation()
   const runAnimation = () => {
     mapControls.start({width: '40%'})
-    socialLinksControls.start({y: 200, visibility: 'hidden'})
   }
 
   const handleClick = (e) => {
@@ -37,8 +35,6 @@ const AusMomentMap = () => {
           <SocialLinks />
         </div>
       </div>
-      <motion.div animate={socialLinksControls} positionTransition>
-      </motion.div>
     </div>
   )
 };
