@@ -2,17 +2,40 @@
 
 // ----- Imports ----- //
 import React from 'react';
-import { useAnimation, motion } from 'framer-motion';
+import type { AuState } from 'helpers/internationalisation/country';
+
+type Testimonial = {
+  name: string,
+  city: string,
+  body: string,
+}
+
+type TestimonialsCollection = {
+  [AuState]: Array<Testimonial>
+}
 
 // ----- Render ----- //
 export const Testimonials = () => {
   const [supporters, setSupporters] = React.useState(0)
+  const [testimonials, setTestimonials] = React.useState<TestimonialsCollection>(null)
+
+  const supportersCountEndpoint = '/supporters-ticker.json'
+  const testimonialsEndpoint = 'https://interactive.guim.co.uk/docsdata/18tKS4fsHcEo__gdAwp3UySA3-FVje72_adHBZBhWjXE.json'
 
   React.useEffect(() => {
-    fetch('/supporters-ticker.json')
+    fetch(testimonialsEndpoint)
       .then(response => response.json())
-      .then((data) => setSupporters(data.total));
+      .then(data => data['sheets'])
+      .then(testimonialsData => setTestimonials(testimonialsData))
   }, [])
+
+  React.useEffect(() => {
+    fetch(supportersCountEndpoint)
+      .then(response => response.json())
+      .then(data => setSupporters(data.total));
+  }, [])
+
+  console.log(testimonials)
 
   return (
     <div>

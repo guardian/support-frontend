@@ -35,17 +35,20 @@ const AusMomentMap = () => {
 
   const resetToInitial = () => {
     document.querySelectorAll('.selected').forEach(t => t.classList.remove('selected'));
-    runAnimation('initial')
+    runAnimation('initial');
+    setSelectedTerritory(null)
   }
 
   const handleClick = (e) => {
-    const elementClassList = e.target.classList
-    const isMap = elementClassList.contains('map') || elementClassList.contains('label')
-    const isMain = elementClassList.contains('main')
+    const elementClassList = e.target.classList;
+    const isPartOfMap = elementClassList.contains('map') || elementClassList.contains('label');
+    const isWhitespace = elementClassList.contains('main');
 
-    if (isMap) {
+    if (isPartOfMap) {
+      const selectedTerritory = e.target.getAttribute('data-territory');
+      setSelectedTerritory(selectedTerritory)
       runAnimation('active')
-    } else if (isMain) {
+    } else if (isWhitespace) {
       resetToInitial()
     }
   }
@@ -79,6 +82,11 @@ const AusMomentMap = () => {
             positionTransition
           >
             <CloseButton onClick={handleCloseButtonClick}/>
+            <h2 className="blurb">
+              <span className="selected-territory">{selectedTerritory}</span>
+              <br />
+              Why do you support Guardian&nbsp;Australia?
+            </h2>
           </motion.div>
         </div>
       </div>

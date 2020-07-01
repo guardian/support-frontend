@@ -111,7 +111,7 @@ body {
   text-align: center;
 }
 
-h2.blurb {
+h2.blurb, h2.selected-territory {
   text-align: left;
   font-family: "GT Guardian Titlepiece", Georgia, serif;
   font-weight: bold;
@@ -213,8 +213,7 @@ p.blurb {
 }
 
 .testimonials-overlay {
-  //overflow-y: scroll;
-  border: 1px solid $neutral-93;
+  //border-left: 1px solid $neutral-93;
   background-color: $neutral-100;
   position: absolute;
   right: -57.5vw;
@@ -227,10 +226,18 @@ p.blurb {
 .close-button {
   cursor: pointer;
   position: absolute;
-  right: 15px;
-  top: 15px;
+  right: 30px;
+  top: 30px;
 }
 
-.close-button:hover {
-
+span.selected-territory {
+  background-color: $neutral-93;
+  color: $brand-main;
+  display: inline-block;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: center;
+  top: -10px;
+  left: 0;
 }

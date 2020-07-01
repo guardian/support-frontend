@@ -54,7 +54,7 @@
   "system": {
     "macos": {
       "mojave": {
-        "HOMEBREW_VERSION": "2.4.2-67-g1ff10f9",
+        "HOMEBREW_VERSION": "2.4.2-154-g8c8f2df",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "1d46c48a6aff5762214daa255df0b3ad1eb4eec6",
         "CLT": "10.3.0.0.1.1562985497",

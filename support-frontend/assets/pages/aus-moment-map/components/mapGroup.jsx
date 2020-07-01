@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { motion, useAnimation } from 'framer-motion';
 import { MapPath } from 'pages/aus-moment-map/components/mapPath';
 
 type PropTypes = {|

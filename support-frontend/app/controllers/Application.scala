@@ -127,15 +127,6 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def testimonials: Action[AnyContent] = NoCacheAction() { implicit request =>
-    val canonicalPathToAppRoot = new java.io.File(".").getCanonicalPath
-    val testimonials = s"$canonicalPathToAppRoot/support-frontend/assets/pages/aus-moment-map/mock-testimonials.json"
-    val stream = new FileInputStream(testimonials)
-    val json = try {  Json.parse(stream) } finally { stream.close() }
-
-    Ok(json).as("application/json")
-  }
-
   def contributionsLanding(
     countryCode: String,
     campaignCode: String

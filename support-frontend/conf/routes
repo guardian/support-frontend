@@ -55,7 +55,6 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.A
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
 GET  /map                                                          controllers.Application.ausMomentMap()
-GET  /testimonials                                                 controllers.Application.testimonials()
 
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
