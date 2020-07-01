@@ -11,7 +11,7 @@ $opinion-faded: gu-colour(opinion-faded);
 
 body {
   width: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
   margin: 0;
   padding: 0;
 }
@@ -69,8 +69,8 @@ body {
 .svg-wrapper {
   display: inline-block;
   position: relative;
-  width: 75%;
-  padding-bottom: 72.5%;
+  width: 85%;
+  padding-bottom: 80%;
   vertical-align: middle;
   overflow: hidden;
   box-sizing: border-box;
@@ -109,7 +109,6 @@ body {
   font-family: "Guardian Text Sans", sans-serif;
   font-size: 17.5px;
   text-align: center;
-  //margin-top: 2em;
 }
 
 h2.blurb {
@@ -187,6 +186,7 @@ p.blurb {
   display: flex;
   position: relative;
   width: 100%;
+  max-height: 50%;
 }
 
 .left {
@@ -210,4 +210,27 @@ p.blurb {
   padding: 5em;
   margin-top: -1em;
   box-sizing: border-box;
+}
+
+.testimonials-overlay {
+  //overflow-y: scroll;
+  border: 1px solid $neutral-93;
+  background-color: $neutral-100;
+  position: absolute;
+  right: -57.5vw;
+  top: 0;
+  width: 57.5vw;
+  height: 100%;
+  z-index: 200;
+}
+
+.close-button {
+  cursor: pointer;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+
+.close-button:hover {
+
 }
