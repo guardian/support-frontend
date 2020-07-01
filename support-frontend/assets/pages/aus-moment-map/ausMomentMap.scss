@@ -233,8 +233,8 @@ p.blurb {
 .close-button {
   cursor: pointer;
   position: absolute;
-  right: 30px;
-  top: 30px;
+  right: 10%;
+  top: 5%;
 }
 
 span.selected-territory {
@@ -253,4 +253,10 @@ span.selected-territory {
   width: 100%;
   box-sizing: border-box;
   text-align: left;
+}
+
+.testimonials-wrapper {
+  border-top: 1px solid $neutral-93;
+  width: 90%;
+  display: flex;
 }
