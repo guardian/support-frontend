@@ -8,7 +8,7 @@ import './ausMomentMap.scss';
 import { Header } from 'pages/aus-moment-map/components/header';
 import { Map } from 'pages/aus-moment-map/components/map';
 import { SocialLinks } from 'pages/aus-moment-map/components/social-links';
-import { Testimonials } from 'pages/aus-moment-map/components/testimonials';
+import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
 import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 
@@ -85,8 +85,7 @@ const AusMomentMap = () => {
           <p className="map-caption">Tap the map to read messages from supporters</p>
         </motion.div>
         <div className="right">
-          <Testimonials />
-          <SocialLinks />
+          <Blurb slim={false}/>
           <motion.div
             className="testimonials-overlay"
             animate={testimonialsControls}
