@@ -28,7 +28,7 @@ import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import ContributionTextInputDs from './ContributionTextInputDs';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 
-import { until } from '@guardian/src-foundations/mq';
+import { from, until } from '@guardian/src-foundations/mq';
 import { css } from '@emotion/core';
 
 
@@ -85,6 +85,9 @@ const choiceCardGroupOverrides = css`
   }
 
   > div > label {
+    ${from.tablet} {
+      max-width: 100px;
+    }
     margin-top: 8px !important;
   }
 `;
