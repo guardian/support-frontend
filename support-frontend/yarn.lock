@@ -2379,10 +2379,10 @@
     camelcase "^5.0.0"
     prettier "^1.13.7"
 
-"@guardian/consent-management-platform@3.4.3":
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-3.4.3.tgz#1d4c51fab20f443cb788acedb62b40eb6289da55"
-  integrity sha512-mDs01NIfW49T4KxY50EEbehAWhbuY+NqGoIS3E+gaA3xlXSnoJIAVBCw4/D6hymvIXlsaZbTyen8TaDgwWqLcA==
+"@guardian/consent-management-platform@3.4.4":
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-3.4.4.tgz#9f74a3068dcdcc3d8152a59b4eae1a4de0a074ef"
+  integrity sha512-U+3F/iOCNpOQEWtgHdBEJB23B8N5JEBOVAa5C6bR2b+hSLybUB31dHthHyL6yUDQczTpnXwY8+EW09sH7m3wfw==
   dependencies:
     consent-string "1.5.2"
     js-cookie "2.2.1"
