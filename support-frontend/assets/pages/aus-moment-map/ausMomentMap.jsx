@@ -85,7 +85,7 @@ const AusMomentMap = () => {
           className="left"
           animate={mapControls}
           variants={mapVariants}
-          transition={{type: "tween", duration: .2}}
+          transition={{type: "tween", duration: .25}}
           positionTransition
         >
           <Map />
@@ -100,7 +100,7 @@ const AusMomentMap = () => {
             className="testimonials-overlay"
             animate={testimonialsControls}
             variants={testimonialsVariants}
-            transition={{type: "tween", duration: .2}}
+            transition={{type: "tween", duration: .25}}
             positionTransition
           >
             <CloseButton onClick={handleCloseButtonClick}/>
@@ -109,9 +109,7 @@ const AusMomentMap = () => {
               <br />
               Why do you support Guardian&nbsp;Australia?
             </h2>
-            <div className="testimonials-wrapper">
-
-            </div>
+            <div className="testimonials-wrapper" />
           </motion.div>
         </div>
       </div>

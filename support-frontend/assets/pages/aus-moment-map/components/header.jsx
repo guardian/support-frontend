@@ -5,7 +5,8 @@ export const Header = () => (
   <div id="header-wrapper">
     <div id="header">Do something powerful today</div>
     <a href="https://support.theguardian.com/au/contribute" target="_blank" rel="noopener noreferrer">
-      <div className="button">Support the Guardian</div>
+      <div className="button standard">Support the Guardian</div>
+      <div className="button mobile">Support us</div>
     </a>
     <a href="https://www.theguardian.com/au">
       <svg id="logo" width="295" height="95" viewBox="0 0 295 95" fill="none">
