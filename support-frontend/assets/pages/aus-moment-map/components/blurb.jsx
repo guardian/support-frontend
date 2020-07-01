@@ -18,7 +18,7 @@ export const Blurb = (props: PropTypes) => {
   }, [])
 
   return (
-    <div>
+    <div className="blurb-wrapper">
       <div>
         <h2 className="blurb">Hear from Guardian supporters across Australia</h2>
         {!props.slim &&

@@ -10,7 +10,9 @@ $opinion-bright: gu-colour(opinion-bright);
 $opinion-faded: gu-colour(opinion-faded);
 
 body {
-  width: 100%;
+  width: 100vw;
+  left: 0;
+  top: 0;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
@@ -200,6 +202,12 @@ p.blurb {
   margin-top: 1.5em;
 }
 
+.left-padded-inner {
+  display: none;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
 .right {
   right: 0;
   height: 100%;
@@ -207,17 +215,17 @@ p.blurb {
   text-align: left;
   width: 45%;
   overflow-x: hidden;
-  padding: 5em;
-  margin-top: -1em;
+  padding: 5%;
+  margin-left: -3%;
   box-sizing: border-box;
 }
 
 .testimonials-overlay {
   background-color: $neutral-100;
   position: absolute;
-  right: -57.5vw;
+  right: -58vw;
   top: 0;
-  width: 57.5vw;
+  width: 58vw;
   height: 100%;
   z-index: 200;
 }
@@ -239,4 +247,10 @@ span.selected-territory {
   vertical-align: center;
   top: -10px;
   left: 0;
+}
+
+.blurb-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
 }

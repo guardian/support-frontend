@@ -30,6 +30,7 @@ const AusMomentMap = () => {
 
   const mapControls = useAnimation()
   const testimonialsControls = useAnimation()
+  const blurbControls = useAnimation()
 
   const mapVariants = {
     initial: {width: '55%'},
@@ -37,13 +38,19 @@ const AusMomentMap = () => {
   }
 
   const testimonialsVariants = {
-    initial: {x: "57.5vw"},
-    active: {x: "-57.5vw"}
+    initial: {x: "58vw"},
+    active: {x: "-58vw"}
+  }
+
+  const blurbVariants = {
+    initial: {display: 'none'},
+    active: {display: 'block'}
   }
 
   const runAnimation = (variant) => {
     testimonialsControls.start(variant)
     mapControls.start(variant)
+    blurbControls.start(variant)
   }
 
   const resetToInitial = () => {
@@ -83,6 +90,9 @@ const AusMomentMap = () => {
         >
           <Map />
           <p className="map-caption">Tap the map to read messages from supporters</p>
+          <motion.div className="left-padded-inner" animate={blurbControls} variants={blurbVariants}>
+            <Blurb slim={true}/>
+          </motion.div>
         </motion.div>
         <div className="right">
           <Blurb slim={false}/>
