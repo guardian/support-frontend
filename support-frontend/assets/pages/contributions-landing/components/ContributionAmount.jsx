@@ -28,6 +28,9 @@ import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import ContributionTextInputDs from './ContributionTextInputDs';
 import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 
+import { from, until } from '@guardian/src-foundations/mq';
+import { css } from '@emotion/core';
+
 
 // ----- Types ----- //
 
@@ -72,6 +75,22 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(updateOtherAmount(amount, contributionType));
   },
 });
+
+const choiceCardGroupOverrides = css`
+  > div {
+    ${until.leftCol} {
+      flex-wrap: wrap;
+    }
+    margin-top: -8px;
+  }
+
+  > div > label {
+    ${from.tablet} {
+      max-width: 100px;
+    }
+    margin-top: 8px !important;
+  }
+`;
 
 // ----- Render ----- //
 
@@ -179,6 +198,7 @@ function withProps(props: PropTypes) {
     <>
       <ChoiceCardGroup
         name="amounts"
+        css={choiceCardGroupOverrides}
       >
         {validAmounts.map((amount: Amount) => (
           <ChoiceCard
