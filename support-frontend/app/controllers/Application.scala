@@ -233,7 +233,7 @@ class Application(
       description = stringsConfig.contributionsLandingDescription,
       canonicalLink = Some(buildCanonicalShowcaseLink("uk")),
       shareImageUrl = Some(
-        "https://i.guim.co.uk/img/media/32cd8c7234c391a7b96c8e91945af9b2e9711631/0_0_1000_525/1000.jpg?width=1000&quality=85&s=5642438dcf4fdbdc59cf67ec703865cc"
+        "https://i.guim.co.uk/img/media/70568a26c6b1189e71df1db012851fb2c08041dd/0_0_1000_525/1000.png?width=1000&quality=85&s=3250db6a5518355cdcb5428b741dfa3b"
       )
     )()).withSettingsSurrogateKey
   }
