@@ -12,7 +12,7 @@ export const Blurb = (props: PropTypes) => {
   const supportersCount = useSupportersCount();
 
   return (
-    (<div>
+    <div className="blurb-wrapper">
       <div>
         <h2 className="blurb">Hear from Guardian supporters across Australia</h2>
         {!props.slim &&
@@ -25,6 +25,5 @@ export const Blurb = (props: PropTypes) => {
         </div>}
       </div>
       <SocialLinks />
-    </div>)
-  );
+    </div>);
 };
