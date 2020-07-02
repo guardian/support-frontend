@@ -57,7 +57,7 @@ lazy val commonSettings = Seq(
 
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "org.scalatest" %% "scalatest" % "3.2.0-M1" % "it, test",
+  "org.scalatest" %% "scalatest" % "3.2.0" % "it, test",// if the following PR is merged in v3.2.1, remove "-eU" parameter from options above - PR https://github.com/scalatest/scalatest/pull/1842
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 )
 
