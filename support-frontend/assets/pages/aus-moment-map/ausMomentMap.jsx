@@ -11,7 +11,7 @@ import { SocialLinks } from 'pages/aus-moment-map/components/social-links';
 import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
 import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
-import {Testimonials} from "./components/testimonials";
+import { TestimonialsContainer } from './components/testimonialsContainer';
 
 // ----- Custom hooks ----- //
 
@@ -46,7 +46,7 @@ const useWindowWidth = () => {
   }, []);
 
   return windowWidth;
-}
+};
 
 // ----- Render ----- //
 const AusMomentMap = () => {
@@ -61,14 +61,10 @@ const AusMomentMap = () => {
     tablet: 740,
     desktop: 980,
     leftCol: 1140,
-    wide: 1300
-  }
-  const windowWidthIsGreaterThan = (breakpoint) => {
-    return windowWidth >= breakpoints[breakpoint]
-  }
-  const windowWidthIsLessThan = (breakpoint) => {
-    return windowWidth < breakpoints[breakpoint]
-  }
+    wide: 1300,
+  };
+  const windowWidthIsGreaterThan = breakpoint => windowWidth >= breakpoints[breakpoint];
+  const windowWidthIsLessThan = breakpoint => windowWidth < breakpoints[breakpoint];
 
   const mapControls = useAnimation();
   const testimonialsControls = useAnimation();
@@ -148,7 +144,7 @@ const AusMomentMap = () => {
             positionTransition
           >
             <CloseButton onClick={handleCloseButtonClick} />
-            <Testimonials testimonialsCollection={testimonials} selectedTerritory={selectedTerritory} />
+            <TestimonialsContainer testimonialsCollection={testimonials} selectedTerritory={selectedTerritory} />
           </motion.div>
         </div>
       </div>

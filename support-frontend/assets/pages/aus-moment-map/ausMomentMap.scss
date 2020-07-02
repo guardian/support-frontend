@@ -43,11 +43,10 @@ body {
 }
 
 .button {
+  display: inline-block;
   text-decoration: none;
   cursor: pointer;
   text-align: center;
-  position: absolute;
-  top: 65px;
   border: 1px solid gu-colour(neutral-100);
   border-radius: 1.3125rem;
   color: gu-colour(neutral-100);
@@ -67,6 +66,8 @@ body {
 }
 
 .button.standard {
+  position: absolute;
+  top: 65px;
   @include mq($until:tablet) {
     display: none;
   }
@@ -78,6 +79,12 @@ body {
   @include mq($from:tablet) {
     display: none;
   }
+}
+
+.button-cta {
+  background-color: #E05E00;
+  margin-top: 16px;
+  padding: 8px 20px;
 }
 
 #logo {
@@ -142,7 +149,7 @@ body {
 
 h2.blurb, h2.selected-territory {
   text-align: left;
-  font-family: "GT Guardian Titlepiece", Georgia, serif;
+  font-family: $gu-titlepiece;
   font-weight: bold;
   font-size: 48px;
   color: gu-colour(neutral-7);
@@ -168,7 +175,7 @@ p.blurb {
 }
 
 .supporters-total {
-  font-family: "GT Guardian Titlepiece", Georgia, serif;
+  font-family: $gu-titlepiece;
   font-weight: bold;
   line-height: 115%;
   font-size: 30px;
@@ -221,6 +228,7 @@ p.blurb {
 
 .main {
   align-items: center;
+  border: 1px solid blue;
   display: flex;
   position: relative;
   overflow-x: hidden;
@@ -235,6 +243,7 @@ p.blurb {
 }
 
 .left {
+  border: 1px solid red;
   left: 0;
   height: 100%;
   display: inline-block;
@@ -255,12 +264,13 @@ p.blurb {
 }
 
 .right {
+  border: 1px solid green;
   right: 0;
   height: 100%;
   display: inline-block;
   text-align: left;
   width: 45%;
-  overflow-x: hidden;
+  overflow: hidden;
   padding: 5%;
   box-sizing: border-box;
   @include mq($until: desktop) {
@@ -279,10 +289,10 @@ p.blurb {
   @include mq($from: desktop) {
     position: absolute;
     right: -58vw;
+    width: 58vw;
   }
 
   top: 0;
-  width: 58vw;
   height: 100%;
   z-index: 200;
 }
@@ -332,4 +342,60 @@ span.selected-territory {
   border-top: 1px solid gu-colour(neutral-93);
   width: 90%;
   display: flex;
+}
+
+
+.testimonials-for-territory {
+  display: flex;
+  flex-direction: column;
+
+  @include mq($from: tablet) {
+    flex-direction: row;
+  }
+}
+
+.testimonials-first-column {
+  > .testimonial-component:nth-child(even) {
+    background-color: gu-colour(neutral-97);
+  }
+}
+
+.testimonials-second-column {
+  @include mq($from: tablet) {
+    margin-left: 12px;
+  }
+  > .testimonial-component:nth-child(odd) {
+    background-color: gu-colour(neutral-97);
+  }
+}
+
+.testimonial-component {
+  margin-top: 12px;
+  border: 1px solid gu-colour(neutral-86);
+  padding: 12px;
+  font-family: $gu-text-egyptian-web;
+  font-size: 17px;
+}
+
+.testimonial-component-details {
+  margin-top: 4px;
+  font-weight: 800;
+}
+
+.testimonial-cta {
+  margin-top: 12px;
+  background-color: #FEF9F5;
+  border: 1px solid #E05E00;
+  padding: 12px;
+
+  h3 {
+    font-family: $gu-headline;
+    font-size: 20px;
+    margin: 0px;
+
+  }
+
+  p {
+    margin: 4px 0 0 0;
+  }
 }
