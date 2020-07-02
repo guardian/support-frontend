@@ -228,7 +228,6 @@ p.blurb {
 
 .main {
   align-items: center;
-  border: 1px solid blue;
   display: flex;
   position: relative;
   overflow-x: hidden;
@@ -243,7 +242,6 @@ p.blurb {
 }
 
 .left {
-  border: 1px solid red;
   left: 0;
   height: 100%;
   display: inline-block;
@@ -264,7 +262,6 @@ p.blurb {
 }
 
 .right {
-  border: 1px solid green;
   right: 0;
   height: 100%;
   display: inline-block;
@@ -281,6 +278,7 @@ p.blurb {
 
 .testimonials-overlay {
   background-color: gu-colour(neutral-100);
+  overflow: scroll;
 
   @include mq($until: desktop) {
 
@@ -352,6 +350,12 @@ span.selected-territory {
   @include mq($from: tablet) {
     flex-direction: row;
   }
+
+  @include mq($from: desktop) {
+    flex-direction: row;
+    margin-right: 10%;
+  }
+
 }
 
 .testimonials-first-column {

@@ -32,6 +32,17 @@ const TestimonialComponent = (props: TestimonialComponentProps) => (
   </div>
 );
 
+const TERRITORY_CODE_TO_FULL_NAME = {
+  QLD: 'Queensland',
+  NSW: 'New South Wales',
+  NT: 'Northern Territory',
+  SA: 'South Australia',
+  TAS: 'Tasmania',
+  VIC: 'Victoria',
+  WA: 'Western Australia',
+  ACT: 'Australian Capital Territory',
+};
+
 type TestimonialsForTerritoryProps = {
   territory: string,
   testimonials: Array<Testimonial>
@@ -49,14 +60,21 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
   secondColumn.splice(ctaIndex, 0, <TestimonialCta />);
 
   return (
-    <div className="testimonials-for-territory">
-      <div className="testimonials-first-column">
-        {props.testimonials.slice(0, midPointIndex + 1).map(testimonial => (
-          <TestimonialComponent testimonial={testimonial} />
+    <div>
+      <h2 className="blurb">
+        <span className="selected-territory">{TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
+        <br />
+          Why do you support Guardian&nbsp;Australia?
+      </h2>
+      <div className="testimonials-for-territory">
+        <div className="testimonials-first-column">
+          {props.testimonials.slice(0, midPointIndex + 1).map(testimonial => (
+            <TestimonialComponent testimonial={testimonial} />
         ))}
-      </div>
-      <div className="testimonials-second-column">
-        {secondColumn}
+        </div>
+        <div className="testimonials-second-column">
+          {secondColumn}
+        </div>
       </div>
     </div>
   );
@@ -71,16 +89,11 @@ type Props = {
 export const TestimonialsContainer = (props: Props) => {
   if (props.selectedTerritory) {
     return (
-      <>
-        <h2 className="blurb">
-          <span className="selected-territory">{props.selectedTerritory}</span>
-          <br />
-          Why do you support Guardian&nbsp;Australia?
-        </h2>
+      <div className="testimonials-container">
         { Object.keys(props.testimonialsCollection).map(territory => (
           <TestimonialsForTerritory testimonials={props.testimonialsCollection[territory]} territory={territory} />
         ))}
-      </>
+      </div>
     );
   }
   return null;
