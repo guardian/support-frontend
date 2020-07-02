@@ -12,6 +12,8 @@ import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
 import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 
+// ----- Custom hooks ----- //
+
 const useTestimonials = () => {
   const [testimonials, setTestimonials] = React.useState<TestimonialsCollection>(null);
   const testimonialsEndpoint = 'https://interactive.guim.co.uk/docsdata/18tKS4fsHcEo__gdAwp3UySA3-FVje72_adHBZBhWjXE.json';
@@ -26,12 +28,46 @@ const useTestimonials = () => {
   return testimonials;
 };
 
+const useWindowWidth = () => {
+  function getWindowWidth() {
+    return window.innerWidth;
+  }
+
+  const [windowWidth, setWindowWidth] = React.useState(getWindowWidth);
+
+  React.useEffect(() => {
+    function handleResize() {
+      setWindowWidth(getWindowWidth());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowWidth;
+}
+
 // ----- Render ----- //
 const AusMomentMap = () => {
   const [selectedTerritory, setSelectedTerritory] = React.useState(null);
   const testimonials = useTestimonials();
-
-  console.log(testimonials);
+  const windowWidth = useWindowWidth();
+  const breakpoints = {
+    mobile: 320,
+    mobileMedium: 375,
+    mobileLandscape: 480,
+    phablet: 660,
+    tablet: 740,
+    desktop: 980,
+    leftCol: 1140,
+    wide: 1300
+  }
+  const from = (breakpoint) => {
+    return windowWidth >= breakpoints[breakpoint]
+  }
+  const until = (breakpoint) => {
+    return windowWidth < breakpoints[breakpoint]
+  }
 
   const mapControls = useAnimation();
   const testimonialsControls = useAnimation();
