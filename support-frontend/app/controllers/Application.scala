@@ -231,7 +231,10 @@ class Application(
       mainStyleBundle = Left(RefPath("ausMomentMap.css")),
       fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.contributionsLandingDescription,
-      canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
+      canonicalLink = Some(buildCanonicalShowcaseLink("uk")),
+      shareImageUrl = Some(
+        "https://i.guim.co.uk/img/media/32cd8c7234c391a7b96c8e91945af9b2e9711631/0_0_1000_525/1000.jpg?width=1000&quality=85&s=5642438dcf4fdbdc59cf67ec703865cc"
+      )
     )()).withSettingsSurrogateKey
   }
 
