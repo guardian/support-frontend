@@ -3,7 +3,20 @@
 // ----- Imports ----- //
 import React from 'react';
 import { SocialLinks } from 'pages/aus-moment-map/components/social-links';
-import useSupportersCount from '../hooks/useSupportersCount';
+
+
+const useSupportersCount = () => {
+  const [supportersCount, setSupportersCount] = React.useState(0);
+  const supportersCountEndpoint = '/supporters-ticker.json';
+
+  React.useEffect(() => {
+    fetch(supportersCountEndpoint)
+      .then(response => response.json())
+      .then(data => setSupportersCount(data.total));
+  }, []);
+
+  return supportersCount;
+};
 
 type PropTypes = {| slim: boolean |}
 
