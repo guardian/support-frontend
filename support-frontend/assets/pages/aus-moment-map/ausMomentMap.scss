@@ -271,8 +271,16 @@ p.blurb {
 
 .testimonials-overlay {
   background-color: gu-colour(neutral-100);
-  position: absolute;
-  right: -58vw;
+
+  @include mq($until: desktop) {
+
+  }
+
+  @include mq($from: desktop) {
+    position: absolute;
+    right: -58vw;
+  }
+
   top: 0;
   width: 58vw;
   height: 100%;
@@ -284,6 +292,9 @@ p.blurb {
   position: absolute;
   right: 10%;
   top: 5%;
+  @include mq($until: desktop) {
+    display: none;
+  }
 }
 
 .close-button > path {

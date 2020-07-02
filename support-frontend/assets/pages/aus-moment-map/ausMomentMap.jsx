@@ -11,6 +11,7 @@ import { SocialLinks } from 'pages/aus-moment-map/components/social-links';
 import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
 import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
+import {Testimonials} from "./components/testimonials";
 
 // ----- Custom hooks ----- //
 
@@ -62,10 +63,10 @@ const AusMomentMap = () => {
     leftCol: 1140,
     wide: 1300
   }
-  const from = (breakpoint) => {
+  const windowWidthIsGreaterThan = (breakpoint) => {
     return windowWidth >= breakpoints[breakpoint]
   }
-  const until = (breakpoint) => {
+  const windowWidthIsLessThan = (breakpoint) => {
     return windowWidth < breakpoints[breakpoint]
   }
 
@@ -89,9 +90,11 @@ const AusMomentMap = () => {
   };
 
   const runAnimation = (variant) => {
-    testimonialsControls.start(variant);
-    mapControls.start(variant);
-    blurbControls.start(variant);
+    if (windowWidthIsGreaterThan('desktop')) {
+      testimonialsControls.start(variant);
+      mapControls.start(variant);
+      blurbControls.start(variant);
+    }
   };
 
   const resetToInitial = () => {
@@ -145,12 +148,7 @@ const AusMomentMap = () => {
             positionTransition
           >
             <CloseButton onClick={handleCloseButtonClick} />
-            <h2 className="blurb">
-              <span className="selected-territory">{selectedTerritory}</span>
-              <br />
-              Why do you support Guardian&nbsp;Australia?
-            </h2>
-            <div className="testimonials-wrapper" />
+            <Testimonials testimonialsCollection={testimonials} selectedTerritory={selectedTerritory} />
           </motion.div>
         </div>
       </div>
