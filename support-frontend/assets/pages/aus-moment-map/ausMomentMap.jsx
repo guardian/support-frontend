@@ -7,11 +7,11 @@ import { renderPage } from 'helpers/render';
 import './ausMomentMap.scss';
 import { Header } from 'pages/aus-moment-map/components/header';
 import { Map } from 'pages/aus-moment-map/components/map';
-import { SocialLinks } from 'pages/aus-moment-map/components/social-links';
 import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
 import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 import { TestimonialsContainer } from './components/testimonialsContainer';
+import { useWindowWidth } from "./hooks/useWindowWidth";
 
 // ----- Custom hooks ----- //
 
@@ -29,42 +29,11 @@ const useTestimonials = () => {
   return testimonials;
 };
 
-const useWindowWidth = () => {
-  function getWindowWidth() {
-    return window.innerWidth;
-  }
-
-  const [windowWidth, setWindowWidth] = React.useState(getWindowWidth);
-
-  React.useEffect(() => {
-    function handleResize() {
-      setWindowWidth(getWindowWidth());
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowWidth;
-};
-
 // ----- Render ----- //
 const AusMomentMap = () => {
   const [selectedTerritory, setSelectedTerritory] = React.useState(null);
   const testimonials = useTestimonials();
-  const windowWidth = useWindowWidth();
-  const breakpoints = {
-    mobile: 320,
-    mobileMedium: 375,
-    mobileLandscape: 480,
-    phablet: 660,
-    tablet: 740,
-    desktop: 980,
-    leftCol: 1140,
-    wide: 1300,
-  };
-  const windowWidthIsGreaterThan = breakpoint => windowWidth >= breakpoints[breakpoint];
-  const windowWidthIsLessThan = breakpoint => windowWidth < breakpoints[breakpoint];
+  const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
   const mapControls = useAnimation();
   const testimonialsControls = useAnimation();
