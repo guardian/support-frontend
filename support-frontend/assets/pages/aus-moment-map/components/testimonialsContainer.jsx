@@ -64,22 +64,22 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   React.useEffect(() => {
     if (ref.current && props.selectedTerritory === props.territory) {
-      ref.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
+      // ref.current.scrollIntoView({
+      //   behavior: 'smooth',
+      //   block: 'start',
+      // });
     }
   }, [props.selectedTerritory]);
 
 
   return (
-    <div ref={ref}>
+    <div className="testimonials-for-territory" ref={ref}>
       <h2 className="blurb">
         <span className="selected-territory">{TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
         <br />
           Why do you support Guardian&nbsp;Australia?
       </h2>
-      <div className="testimonials-for-territory">
+      <div className="testimonials-columns-container">
         <div className="testimonials-first-column">
           {props.testimonials.slice(0, midPointIndex + 1).map(testimonial => (
             <TestimonialComponent testimonial={testimonial} />
