@@ -20,17 +20,20 @@ type TestimonialComponentProps = {
   testimonial: Testimonial
 }
 
-const TestimonialComponent = (props: TestimonialComponentProps) => (
-  <div className="testimonial-component">
-    <div>
+const TestimonialComponent = (props: TestimonialComponentProps) => {
+  const city = props.testimonial.city ? `, ${props.testimonial.city}` : '';
+  return (
+    <div className="testimonial-component">
+      <div>
       &#8220;{props.testimonial.body}&#8221;
+      </div>
+      <div className="testimonial-component-details">
+        {props.testimonial.name}
+        {city}
+      </div>
     </div>
-    <div className="testimonial-component-details">
-      {props.testimonial.name}{', '}
-      {props.testimonial.city}
-    </div>
-  </div>
-);
+  );
+};
 
 const TERRITORY_CODE_TO_FULL_NAME = {
   QLD: 'Queensland',
