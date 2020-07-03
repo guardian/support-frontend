@@ -298,17 +298,13 @@ p.blurb {
 
 .testimonials-overlay {
   background-color: gu-colour(neutral-100);
-  overflow: scroll;
-
-  @include mq($until: desktop) {
-
-  }
+  overflow: hidden;
 
   @include mq($from: desktop) {
     position: absolute;
-    top: 48px;
-    right: -58vw;
-    width: 58vw;
+    //padding-top: 48px;
+    right: -59vw;
+    width: 59vw;
   }
 
   top: 0;
@@ -364,11 +360,14 @@ span.selected-territory {
 }
 
 .testimonials-container {
-  margin-top: -48px;
   padding-bottom: 48px;
+  padding-left: 1vw;
+  max-height: 100%;
+  overflow-y: scroll;
 }
 
 .testimonials-for-territory {
+  padding-top: 48px;
   margin-top: 48px;
 }
 

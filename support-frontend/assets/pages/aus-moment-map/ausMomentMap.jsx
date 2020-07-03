@@ -45,8 +45,8 @@ const AusMomentMap = () => {
   };
 
   const testimonialsVariants = {
-    initial: { x: '58vw' },
-    active: { x: '-58vw' },
+    initial: { x: '59vw' },
+    active: { x: '-59vw' },
   };
 
   const blurbVariants = {

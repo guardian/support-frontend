@@ -67,10 +67,10 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   React.useEffect(() => {
     if (ref.current && props.selectedTerritory === props.territory) {
-      // ref.current.scrollIntoView({
-      //   behavior: 'smooth',
-      //   block: 'start',
-      // });
+      ref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
   }, [props.selectedTerritory]);
 
