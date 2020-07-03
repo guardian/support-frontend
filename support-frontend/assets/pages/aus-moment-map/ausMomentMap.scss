@@ -388,12 +388,22 @@ span.selected-territory {
 }
 
 .testimonials-first-column {
+  width: 100%;
+  @include mq($from:tablet) {
+    width: 50%;
+  }
+
   > .testimonial-component:nth-child(even) {
     background-color: gu-colour(neutral-97);
   }
 }
 
 .testimonials-second-column {
+  width: 100%;
+  @include mq($from:tablet) {
+    width: 50%;
+  }
+
   @include mq($from: tablet) {
     margin-left: 12px;
   }
