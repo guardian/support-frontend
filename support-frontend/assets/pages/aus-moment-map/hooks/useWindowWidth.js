@@ -1,4 +1,17 @@
-import * as React from "preact/compat";
+import React from 'react';
+
+const breakpoints = {
+  mobile: 320,
+  mobileMedium: 375,
+  mobileLandscape: 480,
+  phablet: 660,
+  tablet: 740,
+  desktop: 980,
+  leftCol: 1140,
+  wide: 1300,
+};
+
+type Breakpoint = $Keys<typeof breakpoints>;
 
 export const useWindowWidth = () => {
   function getWindowWidth() {
@@ -16,18 +29,8 @@ export const useWindowWidth = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const breakpoints = {
-    mobile: 320,
-    mobileMedium: 375,
-    mobileLandscape: 480,
-    phablet: 660,
-    tablet: 740,
-    desktop: 980,
-    leftCol: 1140,
-    wide: 1300,
-  };
-  const windowWidthIsGreaterThan = breakpoint => windowWidth >= breakpoints[breakpoint];
-  const windowWidthIsLessThan = breakpoint => windowWidth < breakpoints[breakpoint];
+  const windowWidthIsGreaterThan = (breakpoint: Breakpoint) => windowWidth >= breakpoints[breakpoint];
+  const windowWidthIsLessThan = (breakpoint: Breakpoint) => windowWidth < breakpoints[breakpoint];
 
   return { windowWidthIsGreaterThan, windowWidthIsLessThan };
 };
