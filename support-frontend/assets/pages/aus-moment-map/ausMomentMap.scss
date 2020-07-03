@@ -10,6 +10,12 @@ body {
   padding: 0;
 }
 
+.map-page {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 #header-wrapper {
   top: 0;
   left: 0;
@@ -60,17 +66,17 @@ body {
   box-sizing: border-box;
 }
 
-.button:hover {
-  background-color: gu-colour(neutral-100);
-  color: gu-colour(brand-main);
-}
-
 .button.standard {
   position: absolute;
   top: 65px;
   @include mq($until:tablet) {
     display: none;
   }
+}
+
+.button.standard:hover {
+  background-color: gu-colour(neutral-100);
+  color: gu-colour(brand-main);
 }
 
 .button.mobile {
@@ -85,6 +91,10 @@ body {
   background-color: #E05E00;
   margin-top: 16px;
   padding: 8px 20px;
+
+  &:hover {
+    background-color: #BD5318;
+  }
 }
 
 #logo {
@@ -165,6 +175,10 @@ h2.blurb {
   }
 }
 
+h2.blurb-slim {
+  font-size: 38px;
+}
+
 p.blurb {
   text-align: left;
   font-family: "Guardian Text Egyptian Web", Georgia, serif;
@@ -227,10 +241,11 @@ p.blurb {
 }
 
 .main {
+  flex-grow: 1;
   align-items: center;
   display: flex;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
   width: 100%;
   max-width: 100vw;
   box-sizing: border-box;
@@ -249,7 +264,7 @@ p.blurb {
   width: 55%;
   overflow-x: hidden;
   box-sizing: border-box;
-  margin-top: 1.5em;
+  padding-top: 1.5em;
   @include mq($until: desktop) {
     width: 100%;
   }
@@ -286,6 +301,7 @@ p.blurb {
 
   @include mq($from: desktop) {
     position: absolute;
+    top: 48px;
     right: -58vw;
     width: 58vw;
   }

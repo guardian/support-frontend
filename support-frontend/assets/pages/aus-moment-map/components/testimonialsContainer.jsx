@@ -45,7 +45,8 @@ const TERRITORY_CODE_TO_FULL_NAME = {
 
 type TestimonialsForTerritoryProps = {
   territory: string,
-  testimonials: Array<Testimonial>
+  testimonials: Array<Testimonial>,
+  selectedTerritory: string,
 }
 
 const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
@@ -59,8 +60,20 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   secondColumn.splice(ctaIndex, 0, <TestimonialCta />);
 
+  const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    if (ref.current && props.selectedTerritory === props.territory) {
+      ref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, [props.selectedTerritory]);
+
+
   return (
-    <div>
+    <div ref={ref}>
       <h2 className="blurb">
         <span className="selected-territory">{TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
         <br />
@@ -91,7 +104,7 @@ export const TestimonialsContainer = (props: Props) => {
     return (
       <div className="testimonials-container">
         { Object.keys(props.testimonialsCollection).map(territory => (
-          <TestimonialsForTerritory testimonials={props.testimonialsCollection[territory]} territory={territory} />
+          <TestimonialsForTerritory testimonials={props.testimonialsCollection[territory]} territory={territory} selectedTerritory={props.selectedTerritory} />
         ))}
       </div>
     );

@@ -118,7 +118,7 @@ const AusMomentMap = () => {
   };
 
   return (
-    <div onClick={handleClick}>
+    <div className="map-page" onClick={handleClick}>
       <Header />
       <div className="main">
         <motion.div

@@ -27,7 +27,7 @@ export const Blurb = (props: PropTypes) => {
   return (
     <div className="blurb-wrapper">
       <div>
-        <h2 className="blurb">Hear from Guardian supporters across Australia</h2>
+        <h2 className={`blurb ${props.slim ? 'blurb-slim' : ''}`}>Hear from Guardian supporters across Australia</h2>
         {!props.slim &&
         <div>
           <p className="blurb">
