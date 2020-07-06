@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 import React from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { renderPage } from 'helpers/render';
 import './ausMomentMap.scss';
 import { Header } from 'pages/aus-moment-map/components/header';
@@ -37,7 +37,7 @@ const territories = [
   'SA',
   'TAS',
   'VIC',
-  'WA'
+  'WA',
 ];
 
 // ----- Render ----- //
@@ -45,13 +45,12 @@ const AusMomentMap = () => {
   const [selectedTerritory, setSelectedTerritory] = React.useState(null);
   const [shouldScrollIntoView, setShouldScrollIntoView] = React.useState(false);
   const testimonials = useTestimonials();
-  // $FlowIgnore
-  const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
+  const { windowWidthIsGreaterThan } = useWindowWidth();
 
   React.useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
-        setSelectedTerritory(null)
+        setSelectedTerritory(null);
       }
 
       // TODO - hint
@@ -60,7 +59,7 @@ const AusMomentMap = () => {
           const index = (territories.indexOf(selectedTerritory) + 1) % territories.length;
           setSelectedTerritory(territories[index]);
         } else {
-          setSelectedTerritory(territories[0])
+          setSelectedTerritory(territories[0]);
         }
         setShouldScrollIntoView(true);
       }
@@ -87,10 +86,9 @@ const AusMomentMap = () => {
   };
 
   const animationVariant = () =>
-    (windowWidthIsGreaterThan('desktop') && selectedTerritory) ? 'active' : 'initial'
+    ((windowWidthIsGreaterThan('desktop') && selectedTerritory) ? 'active' : 'initial');
 
   return (
-    // $FlowIgnore - keyup event is handled in an effect hook
     <div className="map-page">
       <Header />
       <div className="main">
@@ -98,8 +96,8 @@ const AusMomentMap = () => {
           className="left"
           variants={mapVariants}
           animate={animationVariant()}
-          initial={"initial"}
-          transition={{ type: 'tween', duration: .2 }}
+          initial="initial"
+          transition={{ type: 'tween', duration: 0.2 }}
           positionTransition
         >
           <Map
@@ -112,7 +110,7 @@ const AusMomentMap = () => {
           <p className="map-caption">Tap the map to read messages from supporters</p>
           <motion.div
             className="left-padded-inner"
-            transition={{ type: 'tween', duration: .2 }}
+            transition={{ type: 'tween', duration: 0.2 }}
             animate={animationVariant()}
             initial="initial"
             variants={blurbVariants}
@@ -125,9 +123,9 @@ const AusMomentMap = () => {
           <motion.div
             className="testimonials-overlay"
             animate={animationVariant()}
-            initial={"initial"}
+            initial="initial"
             variants={testimonialsVariants}
-            transition={{ type: 'tween', duration: .2 }}
+            transition={{ type: 'tween', duration: 0.2 }}
             positionTransition
           >
             <CloseButton onClick={() => setSelectedTerritory(null)} />

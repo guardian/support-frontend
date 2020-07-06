@@ -8,13 +8,12 @@ type PropTypes = {|
   labelPath: string,
   mapPaths: Array<string>,
   selectedTerritory: string,
-  onClick: function,
+  onClick: string => void,
 |};
 
 export const MapGroup = (props: PropTypes) => {
   const labelPath = (
     <MapPath
-      territory={props.name}
       d={props.labelPath}
       type={props.labelContrast ? 'label light' : 'label dark'}
     />

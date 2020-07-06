@@ -1,3 +1,5 @@
+// @flow
+
 import type { AuState } from 'helpers/internationalisation/country';
 
 export type Testimonial = {

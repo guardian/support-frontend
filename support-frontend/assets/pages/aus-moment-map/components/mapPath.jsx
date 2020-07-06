@@ -3,7 +3,6 @@ import React from 'react';
 
 type PropTypes = {|
   d: string,
-  territory: string,
   type: string,
 |};
 
