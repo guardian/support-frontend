@@ -72,6 +72,11 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   const ref = React.useRef(null);
 
+  // console.log('----------------------')
+  // console.log(ref.current)
+  // console.log(props.selectedTerritory)
+  // console.log('----------------------')
+
   React.useEffect(() => {
     if (ref.current && props.selectedTerritory === props.territory) {
       ref.current.scrollIntoView({
@@ -82,7 +87,7 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
   }, [props.selectedTerritory]);
 
   return (
-    <div className="testimonials-for-territory" ref={ref}>
+    <div className="testimonials-for-territory" ref={ref} id={props.territory}>
       <div className="testimonials-for-territory-header">
         <div className="testimonials-for-territory-header-text-and-icon-container">
           <LocationMarker />
