@@ -94,7 +94,7 @@ const AusMomentMap = () => {
           className="left"
           animate={mapControls}
           variants={mapVariants}
-          transition={{ type: 'tween', duration: 0.2 }}
+          transition={{ type: 'tween', duration: .2 }}
           positionTransition
         >
           <Map />
@@ -109,7 +109,7 @@ const AusMomentMap = () => {
             className="testimonials-overlay"
             animate={testimonialsControls}
             variants={testimonialsVariants}
-            transition={{ type: 'tween', duration: 0.2 }}
+            transition={{ type: 'tween', duration: .2}}
             positionTransition
           >
             <CloseButton onClick={handleCloseButtonClick} />

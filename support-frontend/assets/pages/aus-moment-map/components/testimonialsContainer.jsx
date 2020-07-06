@@ -72,19 +72,18 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   const ref = React.useRef(null);
 
-  // console.log('----------------------')
-  // console.log(ref.current)
-  // console.log(props.selectedTerritory)
-  // console.log('----------------------')
-
   React.useEffect(() => {
     if (ref.current && props.selectedTerritory === props.territory) {
-      ref.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
+      const offsetTop = ref.current.offsetTop
+      const testimonialsContainer = ref.current.parentNode;
+      testimonialsContainer.scroll(0, offsetTop)
+      // ref.current.scrollIntoView(true);
+      // ref.current.scrollIntoView({
+      //   behavior: 'smooth',
+      //   block: 'start',
+      // });
     }
-  }, [props.selectedTerritory]);
+  }, [ref.current, props.selectedTerritory]);
 
   return (
     <div className="testimonials-for-territory" ref={ref} id={props.territory}>
@@ -95,13 +94,8 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
             {TERRITORY_CODE_TO_FULL_NAME[props.territory]}
           </h2>
         </div>
-        <p>Why do you support Guardian Australia?</p>
+        <p>Why do you support Guardian&nbsp;Australia?</p>
       </div>
-      {/* <h2 className="blurb">
-        <span className="selected-territory">{TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
-        <br />
-          Why do you support Guardian&nbsp;Australia?
-      </h2> */}
       <div className="testimonials-columns-container">
         <div className="testimonials-first-column">
           {props.testimonials.slice(0, midPointIndex + 1).map(testimonial => (

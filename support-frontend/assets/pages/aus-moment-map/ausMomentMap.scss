@@ -181,6 +181,7 @@ h2.blurb {
 
 h2.blurb-slim {
   font-size: 38px;
+  margin-top: 30px;
 }
 
 p.blurb {
@@ -189,7 +190,8 @@ p.blurb {
   color: gu-colour(neutral-20);
   font-size: 17.5px;
   line-height: 135%;
-  margin-top: -1em;
+  margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .supporters-total {
@@ -204,7 +206,7 @@ p.blurb {
   font-family: $gu-text-sans-web;
   font-size: 17.5px;
   line-height: 135%;
-  margin-top: -1.25em;
+  //margin-top: -1.25em;
   color: gu-colour(neutral-20);
 }
 
@@ -241,7 +243,7 @@ p.blurb {
   text-align: right;
   position: absolute;
   right: 0;
-  top: 6px;
+  top: 15px;
 }
 
 .main {
@@ -289,7 +291,7 @@ p.blurb {
   text-align: left;
   width: 45%;
   overflow: hidden;
-  padding: 5%;
+  padding: 5% 5% 5% 0;
   box-sizing: border-box;
   @include mq($until: desktop) {
     width: 100%;
@@ -303,7 +305,6 @@ p.blurb {
 
   @include mq($from: desktop) {
     position: absolute;
-    //padding-top: 48px;
     right: -59vw;
     width: 59vw;
   }
@@ -314,6 +315,7 @@ p.blurb {
 }
 
 .close-button {
+  z-index: 300;
   cursor: pointer;
   position: absolute;
   right: 10%;
@@ -370,6 +372,7 @@ span.selected-territory {
   padding-bottom: 48px;
   max-height: 100%;
   overflow-y: scroll;
+  position: relative;
 }
 
 .testimonials-for-territory {
@@ -380,6 +383,7 @@ span.selected-territory {
 .testimonials-for-territory-header {
   padding: 0 12px 4px 12px;
   border-bottom: 2px solid #052962;
+  line-height: 1;
   h2 {
     margin: 0 0 0 12px;
     font-family: $gu-text-egyptian-web;
