@@ -48,9 +48,10 @@ const TERRITORY_CODE_TO_FULL_NAME = {
 
 type TestimonialsForTerritoryProps = {
   territory: string,
+  shouldScrollIntoView: boolean,
   testimonials: Array<Testimonial>,
   selectedTerritory: string,
-  onScrollCallback: function,
+  setSelectedTerritory: function,
 }
 
 const LocationMarker = () => (
@@ -82,14 +83,14 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
       testimonialsContainer.addEventListener('scroll', () => {
         if (testimonialsContainer.scrollTop >= offsetTop
           && testimonialsContainer.scrollTop < (offsetTop + offsetHeight)) {
-          props.onScrollCallback(props.territory)
+          props.setSelectedTerritory(props.territory)
         }
       })
     }
   }, [ref.current])
 
   React.useEffect(() => {
-    if (ref.current && props.selectedTerritory === props.territory) {
+    if (ref.current && props.selectedTerritory === props.territory && props.shouldScrollIntoView) {
       const offsetTop = ref.current.offsetTop
       const testimonialsContainer = ref.current.parentNode;
       testimonialsContainer.scroll(0, offsetTop)
@@ -122,7 +123,8 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 type Props = {
   testimonialsCollection: TestimonialsCollection,
   selectedTerritory: string | null,
-  onScrollCallback: function,
+  shouldScrollIntoView: boolean,
+  setSelectedTerritory: function,
 };
 
 export const TestimonialsContainer = (props: Props) => {
@@ -133,8 +135,9 @@ export const TestimonialsContainer = (props: Props) => {
           <TestimonialsForTerritory
             testimonials={props.testimonialsCollection[territory]}
             territory={territory}
+            shouldScrollIntoView={props.shouldScrollIntoView}
             selectedTerritory={props.selectedTerritory}
-            onScrollCallback={props.onScrollCallback}
+            setSelectedTerritory={props.setSelectedTerritory}
           />
         ))}
       </div>

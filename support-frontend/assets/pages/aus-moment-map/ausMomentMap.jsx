@@ -32,6 +32,7 @@ const useTestimonials = () => {
 // ----- Render ----- //
 const AusMomentMap = () => {
   const [selectedTerritory, setSelectedTerritory] = React.useState(null);
+  const [shouldScrollIntoView, setShouldScrollIntoView] = React.useState(false);
   const testimonials = useTestimonials();
   const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
@@ -95,7 +96,10 @@ const AusMomentMap = () => {
           transition={{ type: 'tween', duration: .2 }}
           positionTransition
         >
-          <Map selectedTerritory={selectedTerritory} onClick={setSelectedTerritory}/>
+          <Map selectedTerritory={selectedTerritory} onClick={territory => {
+            setSelectedTerritory(territory);
+            setShouldScrollIntoView(true);
+          }}/>
           <p className="map-caption">Tap the map to read messages from supporters</p>
           <motion.div className="left-padded-inner" animate={blurbControls} variants={blurbVariants}>
             <Blurb slim />
@@ -114,7 +118,11 @@ const AusMomentMap = () => {
             <TestimonialsContainer
               testimonialsCollection={testimonials}
               selectedTerritory={selectedTerritory}
-              onScrollCallback={setSelectedTerritory}
+              shouldScrollIntoView={shouldScrollIntoView}
+              setSelectedTerritory={territory => {
+                setSelectedTerritory(territory);
+                setShouldScrollIntoView(false);
+              }}
             />
           </motion.div>
         </div>
