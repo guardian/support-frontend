@@ -80,14 +80,18 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
       const offsetHeight = ref.current.offsetHeight
       const testimonialsContainer = ref.current.parentNode;
 
-      testimonialsContainer.addEventListener('scroll', () => {
+      const onScroll = () => {
         if (testimonialsContainer.scrollTop >= offsetTop
           && testimonialsContainer.scrollTop < (offsetTop + offsetHeight)) {
           props.setSelectedTerritory(props.territory)
         }
-      })
+      };
+
+      testimonialsContainer.addEventListener('scroll', onScroll);
+
+      return () => testimonialsContainer.removeEventListener('scroll', onScroll);
     }
-  }, [ref.current])
+  }, [ref.current]);
 
   React.useEffect(() => {
     if (ref.current && props.selectedTerritory === props.territory && props.shouldScrollIntoView) {
