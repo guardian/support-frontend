@@ -127,6 +127,20 @@ body {
   left: 0;
 }
 
+.label-full {
+  display: none;
+
+  @include mq($from:tablet) {
+    display: inline-block;
+  }
+}
+
+.label-abbr {
+  @include mq($from:tablet) {
+    display: none;
+  }
+}
+
 .map {
   cursor: pointer;
   fill: gu-colour(opinion-bright);

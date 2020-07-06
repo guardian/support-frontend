@@ -1,14 +1,13 @@
 // @flow
 import React from 'react';
-import { WesternAustralia } from 'pages/aus-moment-map/components/territories/westernAustralia';
-import { NorthernTerritory } from 'pages/aus-moment-map/components/territories/northernTerritory';
-import { Queensland } from 'pages/aus-moment-map/components/territories/queensland';
-import { NewSouthWales } from 'pages/aus-moment-map/components/territories/newSouthWales';
-import { AustralianCapitalTerritory } from 'pages/aus-moment-map/components/territories/australianCapitalTerritory';
-import { Victoria } from 'pages/aus-moment-map/components/territories/victoria';
-import { Tasmania } from 'pages/aus-moment-map/components/territories/tasmania';
-import { SouthAustralia } from 'pages/aus-moment-map/components/territories/southAustralia';
-
+import VictoriaSvg from './territories/victoriaSvg';
+import NewSouthWalesSvg from './territories/newSouthWalesSvg';
+import ActSvg from './territories/actSvg';
+import QueenslandSvg from './territories/queenslandSvg';
+import SouthAustraliaSvg from './territories/southAustraliaSvg';
+import WesternAustraliaSvg from './territories/westernAustraliaSvg';
+import TasmaniaSvg from './territories/tasmaniaSvg';
+import NorthernTerritorySvg from './territories/northernTerritorySvg';
 
 type MapProps = {
   selectedTerritory: string,
@@ -17,15 +16,15 @@ type MapProps = {
 
 export const Map = (props: MapProps) => (
   <div className="svg-wrapper">
-    <svg className="svg-content" viewBox="0 0 700 645" fill="none" preserveAspectRatio="xMinYMin meet">
-      <WesternAustralia selectedTerritory={props.selectedTerritory} onClick={props.setSelectedTerritory} />
-      <NorthernTerritory selectedTerritory={props.selectedTerritory} onClick={props.setSelectedTerritory} />
-      <Queensland selectedTerritory={props.selectedTerritory} onClick={props.setSelectedTerritory} />
-      <NewSouthWales selectedTerritory={props.selectedTerritory} onClick={props.setSelectedTerritory} />
-      <AustralianCapitalTerritory selectedTerritory={props.selectedTerritory} onClick={props.setSelectedTerritory} />
-      <Victoria selectedTerritory={props.selectedTerritory} onClick={props.setSelectedTerritory} />
-      <Tasmania selectedTerritory={props.selectedTerritory} onClick={props.setSelectedTerritory} />
-      <SouthAustralia selectedTerritory={props.selectedTerritory} onClick={props.setSelectedTerritory} />
+    <svg className="svg-content" viewBox="0 0 694 645" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <VictoriaSvg />
+      <NewSouthWalesSvg />
+      <ActSvg />
+      <QueenslandSvg />
+      <SouthAustraliaSvg />
+      <WesternAustraliaSvg />
+      <TasmaniaSvg />
+      <NorthernTerritorySvg />
     </svg>
   </div>
 );
