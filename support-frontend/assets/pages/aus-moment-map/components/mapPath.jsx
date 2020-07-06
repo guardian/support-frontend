@@ -7,11 +7,9 @@ type PropTypes = {|
   type: string,
 |};
 
-export const MapPath = (props: PropTypes) => {
-  return (
-    <path
-      className={props.type}
-      d={props.d}
-    />
-  );
-};
+export const MapPath = (props: PropTypes) => (
+  <path
+    className={props.type}
+    d={props.d}
+  />
+);

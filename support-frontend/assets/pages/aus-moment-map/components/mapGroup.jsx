@@ -21,11 +21,11 @@ export const MapGroup = (props: PropTypes) => {
   );
 
   const clickHandler = () => {
-    props.onClick(props.name)
-  }
+    props.onClick(props.name);
+  };
 
   const mapPaths = props.mapPaths.map(path => <MapPath territory={props.name} d={path} type="map" />);
-  const isSelected = props.selectedTerritory === props.name
+  const isSelected = props.selectedTerritory === props.name;
 
   return (
     <g onClick={clickHandler} className={isSelected ? 'map-group selected' : 'map-group'}>

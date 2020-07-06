@@ -76,14 +76,14 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   React.useEffect(() => {
     if (ref.current) {
-      const offsetTop = ref.current.offsetTop
-      const offsetHeight = ref.current.offsetHeight
+      const { offsetTop } = ref.current;
+      const { offsetHeight } = ref.current;
       const testimonialsContainer = ref.current.parentNode;
 
       const onScroll = () => {
         if (testimonialsContainer.scrollTop >= offsetTop
           && testimonialsContainer.scrollTop < (offsetTop + offsetHeight)) {
-          props.setSelectedTerritory(props.territory)
+          props.setSelectedTerritory(props.territory);
         }
       };
 
@@ -95,9 +95,9 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   React.useEffect(() => {
     if (ref.current && props.selectedTerritory === props.territory && props.shouldScrollIntoView) {
-      const offsetTop = ref.current.offsetTop
+      const { offsetTop } = ref.current;
       const testimonialsContainer = ref.current.parentNode;
-      testimonialsContainer.scroll(0, offsetTop)
+      testimonialsContainer.scroll(0, offsetTop);
     }
   }, [ref.current, props.selectedTerritory]);
 

@@ -7,7 +7,7 @@ const links = {
   email: 'mailto:test@guardian.co.uk',
 };
 
-const iconColour = '#E05E00'
+const iconColour = '#E05E00';
 
 export const SocialLinks = () => (
   <div className="social-links">

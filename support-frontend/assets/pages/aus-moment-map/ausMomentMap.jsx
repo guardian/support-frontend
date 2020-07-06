@@ -11,7 +11,7 @@ import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
 import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 import { TestimonialsContainer } from './components/testimonialsContainer';
-import { useWindowWidth } from "./hooks/useWindowWidth";
+import { useWindowWidth } from './hooks/useWindowWidth';
 
 // ----- Custom hooks ----- //
 
@@ -29,12 +29,47 @@ const useTestimonials = () => {
   return testimonials;
 };
 
+const territories = [
+  'ACT',
+  'NSW',
+  'NT',
+  'QLD',
+  'SA',
+  'TAS',
+  'VIC',
+  'WA'
+];
+
 // ----- Render ----- //
 const AusMomentMap = () => {
   const [selectedTerritory, setSelectedTerritory] = React.useState(null);
   const [shouldScrollIntoView, setShouldScrollIntoView] = React.useState(false);
   const testimonials = useTestimonials();
+  // $FlowIgnore
   const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
+
+  React.useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        resetToInitial()
+      }
+
+      // TODO - hint
+      if (e.key === 'Right' || e.key === 'ArrowRight') {
+        if (selectedTerritory) {
+          const index = (territories.indexOf(selectedTerritory) + 1) % territories.length;
+          setSelectedTerritory(territories[index]);
+        } else {
+          setSelectedTerritory(territories[0])
+        }
+        setShouldScrollIntoView(true);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [selectedTerritory]);
 
   const mapControls = useAnimation();
   const testimonialsControls = useAnimation();
@@ -72,20 +107,14 @@ const AusMomentMap = () => {
   const handleClick = (e) => {
     const elementClassList = e.target.classList;
     const isPartOfMap = elementClassList.contains('map') || elementClassList.contains('label');
-    const isWhitespace = elementClassList.contains('main');
 
     if (isPartOfMap) {
       runAnimation('active');
-    } else if (isWhitespace) {
-      resetToInitial();
     }
   };
 
-  const handleCloseButtonClick = () => {
-    resetToInitial();
-  };
-
   return (
+    // $FlowIgnore - keyup event is handled in an effect hook
     <div className="map-page" onClick={handleClick}>
       <Header />
       <div className="main">
@@ -93,13 +122,16 @@ const AusMomentMap = () => {
           className="left"
           animate={mapControls}
           variants={mapVariants}
-          transition={{ type: 'tween', duration: .2 }}
+          transition={{ type: 'tween', duration: 0.2 }}
           positionTransition
         >
-          <Map selectedTerritory={selectedTerritory} onClick={territory => {
-            setSelectedTerritory(territory);
-            setShouldScrollIntoView(true);
-          }}/>
+          <Map
+            selectedTerritory={selectedTerritory}
+            setSelectedTerritory={(territory) => {
+              setSelectedTerritory(territory);
+              setShouldScrollIntoView(true);
+            }}
+          />
           <p className="map-caption">Tap the map to read messages from supporters</p>
           <motion.div className="left-padded-inner" animate={blurbControls} variants={blurbVariants}>
             <Blurb slim />
@@ -111,15 +143,15 @@ const AusMomentMap = () => {
             className="testimonials-overlay"
             animate={testimonialsControls}
             variants={testimonialsVariants}
-            transition={{ type: 'tween', duration: .2}}
+            transition={{ type: 'tween', duration: 0.2 }}
             positionTransition
           >
-            <CloseButton onClick={handleCloseButtonClick} />
+            <CloseButton onClick={resetToInitial} />
             <TestimonialsContainer
               testimonialsCollection={testimonials}
               selectedTerritory={selectedTerritory}
               shouldScrollIntoView={shouldScrollIntoView}
-              setSelectedTerritory={territory => {
+              setSelectedTerritory={(territory) => {
                 setSelectedTerritory(territory);
                 setShouldScrollIntoView(false);
               }}
