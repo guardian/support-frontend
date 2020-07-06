@@ -1,8 +1,8 @@
 // @flow
 
-import React from 'react';
-import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
-import { Testimonial } from '../types/testimonials';
+// $FlowIgnore
+import * as React from 'preact/compat';
+import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/types/testimonials';
 
 const TestimonialCta = () => (
   <div className="testimonial-cta">

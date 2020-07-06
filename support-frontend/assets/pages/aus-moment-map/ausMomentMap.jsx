@@ -1,7 +1,8 @@
 // @flow
 
 // ----- Imports ----- //
-import React from 'react';
+// $FlowIgnore
+import * as React from 'preact/compat';
 import { motion } from 'framer-motion';
 import { renderPage } from 'helpers/render';
 import './ausMomentMap.scss';
@@ -9,7 +10,7 @@ import { Header } from 'pages/aus-moment-map/components/header';
 import { Map } from 'pages/aus-moment-map/components/map';
 import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
-import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
+import { type TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 import { TestimonialsContainer } from './components/testimonialsContainer';
 import { useWindowWidth } from './hooks/useWindowWidth';
 

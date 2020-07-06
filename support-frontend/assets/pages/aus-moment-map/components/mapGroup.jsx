@@ -23,7 +23,7 @@ export const MapGroup = (props: PropTypes) => {
     props.onClick(props.name);
   };
 
-  const mapPaths = props.mapPaths.map(path => <MapPath territory={props.name} d={path} type="map" />);
+  const mapPaths = props.mapPaths.map(path => <MapPath d={path} type="map" />);
   const isSelected = props.selectedTerritory === props.name;
 
   return (

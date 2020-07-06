@@ -1,7 +1,8 @@
 // @flow
 
 // ----- Imports ----- //
-import React from 'react';
+// $FlowIgnore
+import * as React from 'preact/compat';
 import { SocialLinks } from 'pages/aus-moment-map/components/social-links';
 
 
