@@ -8,8 +8,6 @@ import { connect } from 'react-redux';
 import { config, type AmountsRegions, type Amount, type ContributionType, getAmount } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-  type Currency,
-  type SpokenCurrency,
   type IsoCurrency,
   currencies,
   spokenCurrencies,
@@ -17,13 +15,8 @@ import {
 } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { EURCountries, GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { formatAmount } from 'helpers/checkouts';
-import SvgDollar from 'components/svgs/dollar';
-import SvgEuro from 'components/svgs/euro';
-import SvgPound from 'components/svgs/pound';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
-import ContributionTextInput from './ContributionTextInput';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import ContributionTextInputDs from './ContributionTextInputDs';
 
@@ -99,31 +92,6 @@ const isSelected = (amount: Amount, props: PropTypes) => {
   return amount.isDefault;
 };
 
-const renderAmount = (
-  currency: Currency,
-  spokenCurrency: SpokenCurrency,
-  props: PropTypes,
-) =>
-  (amount: Amount) => (
-    <li className="form__radio-group-item">
-      <input
-        id={`contributionAmount-${amount.value}`}
-        className="form__radio-group-input"
-        type="radio"
-        name="contributionAmount"
-        value={amount.value}
-        /* eslint-disable react/prop-types */
-        checked={isSelected(amount, props)}
-        onChange={
-          props.selectAmount(amount, props.countryGroupId, props.contributionType)
-        }
-      />
-      <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
-        {formatAmount(currency, spokenCurrency, amount, false)}
-      </label>
-    </li>
-  );
-
 const renderEmptyAmount = (id: string) => (
   <li className="form__radio-group-item amounts__placeholder">
     <input
@@ -135,14 +103,6 @@ const renderEmptyAmount = (id: string) => (
     <label htmlFor={`contributionAmount-${id}`} className="form__radio-group-label">&nbsp;</label>
   </li>
 );
-
-const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> => {
-  switch (countryGroupId) {
-    case GBPCountries: return <SvgPound />;
-    case EURCountries: return <SvgEuro />;
-    default: return <SvgDollar />;
-  }
-};
 
 const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
   if (amount < 1 && countryGroupId === 'GBPCountries') {

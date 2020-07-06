@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 
 import { usStates, caStates, type StateProvince, auStates } from 'helpers/internationalisation/country';
 import { type CountryGroupId, type CountryGroup, countryGroups, AUDCountries } from 'helpers/internationalisation/countryGroup';
-import { classNameWithModifiers } from 'helpers/utilities';
 import { Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { InlineError } from '@guardian/src-user-feedback';
 import DownChevronDs from 'components/svgs/downChevronDs';
@@ -88,68 +87,66 @@ const renderStatesField = (
   onChange: (Event => void) | false,
   showError: boolean,
   label: string,
-) => {
-  return (
-    <div
-      css={css`
+) => (
+  <div
+    css={css`
         margin-top: 12px;
         margin-bottom: 4px;
         position: relative;
       `}
-    >
-      <label
-        htmlFor="contributionState"
-        css={css`
+  >
+    <label
+      htmlFor="contributionState"
+      css={css`
           font-family: $gu-text-sans-web;
           font-weight: 700;
           line-height: 1.5;
           font-size: 17px;
         `}
-      >
-        {label}
-      </label>
-      <div
-        css={css`
+    >
+      {label}
+    </label>
+    <div
+      css={css`
           font-size: 15px;
           color: #767676;
           margin-bottom: ${space[1]}px;
         `}
-      >Select your {label.toLowerCase()}
-      </div>
-      {showError ? (
-        <InlineError
-          cssOverrides={css`
+    >Select your {label.toLowerCase()}
+    </div>
+    {showError ? (
+      <InlineError
+        cssOverrides={css`
             margin-bottom: 4px;
           `}
-        >
+      >
           Please select your {label.toLowerCase()}
-        </InlineError>
+      </InlineError>
         ) : null}
-      <div
-        css={css`
+    <div
+      css={css`
           position: relative;
         `}
+    >
+      <select
+        css={showError ? [selectCss, errorBorderCss] : selectCss}
+        id="contributionState"
+        onChange={onChange}
+        required
       >
-        <select
-          css={showError ? [selectCss, errorBorderCss] : selectCss}
-          id="contributionState"
-          onChange={onChange}
-          required
-        >
-          <option value="">&nbsp;</option>
-          {Object.keys(states)
+        <option value="">&nbsp;</option>
+        {Object.keys(states)
               .map(key => ({ abbreviation: key, name: states[key] }))
               .map(renderState(selectedState))}
-        </select>
-        <div
-          css={showError ? [chevronErrorCss, chevronCss] : chevronCss}
-        >
-          <DownChevronDs />
-        </div>
+      </select>
+      <div
+        css={showError ? [chevronErrorCss, chevronCss] : chevronCss}
+      >
+        <DownChevronDs />
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
