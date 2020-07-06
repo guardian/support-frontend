@@ -20,7 +20,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   private val otherAmount = id("contributionOther")
 
-  private val stripeSelector = cssSelector(".form__radio-group-label[for='paymentMethodSelector-Stripe']")
+  private val stripeSelector = id("paymentMethodSelector-Stripe")
   private val payPalSelector = id("paymentMethodSelector-PayPal")
   private val stateSelector = id("contributionState")
 
