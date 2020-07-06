@@ -154,7 +154,6 @@ function withProps(props: PropTypes) {
           selectedState={billingState}
           isValid={checkBillingState(billingState)}
           formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-          isDesignSystemTest
         />
       </>
     </div>
