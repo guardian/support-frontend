@@ -74,8 +74,6 @@ const AusMomentMap = () => {
     const isWhitespace = elementClassList.contains('main');
 
     if (isPartOfMap) {
-      const selectedTerritory = e.target.getAttribute('data-territory');
-      setSelectedTerritory(selectedTerritory);
       runAnimation('active');
     } else if (isWhitespace) {
       resetToInitial();
@@ -97,7 +95,7 @@ const AusMomentMap = () => {
           transition={{ type: 'tween', duration: .2 }}
           positionTransition
         >
-          <Map />
+          <Map selectedTerritory={selectedTerritory} onClick={setSelectedTerritory}/>
           <p className="map-caption">Tap the map to read messages from supporters</p>
           <motion.div className="left-padded-inner" animate={blurbControls} variants={blurbVariants}>
             <Blurb slim />
@@ -113,7 +111,11 @@ const AusMomentMap = () => {
             positionTransition
           >
             <CloseButton onClick={handleCloseButtonClick} />
-            <TestimonialsContainer testimonialsCollection={testimonials} selectedTerritory={selectedTerritory} />
+            <TestimonialsContainer
+              testimonialsCollection={testimonials}
+              selectedTerritory={selectedTerritory}
+              onScrollCallback={setSelectedTerritory}
+            />
           </motion.div>
         </div>
       </div>

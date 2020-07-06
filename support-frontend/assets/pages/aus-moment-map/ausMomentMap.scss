@@ -137,16 +137,14 @@ body {
   fill: gu-colour(neutral-7);
 }
 
-.label.light.hover, .label.light.selected {
-  fill: gu-colour(neutral-100);
-}
+g.map-group:hover, g.map-group.selected {
+  .label.light {
+    fill: gu-colour(neutral-100);
+  }
 
-.label.dark.hover, .label.dark.selected {
-  fill: gu-colour(neutral-7);
-}
-
-.map.hover, .map.selected {
-  fill: gu-colour(brand-main);
+  .map {
+    fill: gu-colour(brand-main);
+  }
 }
 
 .map-caption {
@@ -376,8 +374,7 @@ span.selected-territory {
 }
 
 .testimonials-for-territory {
-  padding-top: 48px;
-  margin-top: 48px;
+  padding-top: 50px;
 }
 
 .testimonials-for-territory-header {

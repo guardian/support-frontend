@@ -6,7 +6,9 @@ type PropTypes = {|
   name: string,
   labelContrast: boolean,
   labelPath: string,
-  mapPaths: Array<string>
+  mapPaths: Array<string>,
+  selectedTerritory: string,
+  onClick: function,
 |};
 
 export const MapGroup = (props: PropTypes) => {
@@ -18,10 +20,15 @@ export const MapGroup = (props: PropTypes) => {
     />
   );
 
+  const clickHandler = () => {
+    props.onClick(props.name)
+  }
+
   const mapPaths = props.mapPaths.map(path => <MapPath territory={props.name} d={path} type="map" />);
+  const isSelected = props.selectedTerritory === props.name
 
   return (
-    <g>
+    <g onClick={clickHandler} className={isSelected ? 'map-group selected' : 'map-group'}>
       { mapPaths }
       { labelPath }
     </g>
