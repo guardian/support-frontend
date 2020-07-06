@@ -6,7 +6,6 @@ import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internatio
 
 // ----- Tests ----- //
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
-export type LandingPageDesignSystemTestVariants = 'ds';
 export type AusMomentLandingPageBackgroundVariants = 'control' | 'ausColoursVariant';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
@@ -82,25 +81,6 @@ export const tests: Tests = {
     seed: 3,
     targetPage: digitalCheckout,
     optimizeId: '3sSS81FKT6SXawegvxyK-A',
-  },
-
-  landingPageDesignSystemTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'ds',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 3,
-    targetPage: contributionsLandingPageMatch,
   },
 
   ausMomentLandingPageBackgroundTest: {

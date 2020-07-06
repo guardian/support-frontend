@@ -26,7 +26,6 @@ import { selectAmount, updateOtherAmount } from '../contributionsLandingActions'
 import ContributionTextInput from './ContributionTextInput';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import ContributionTextInputDs from './ContributionTextInputDs';
-import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 import { from, until } from '@guardian/src-foundations/mq';
 import { css } from '@emotion/core';
@@ -46,7 +45,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  designSystemTestVariant: LandingPageDesignSystemTestVariants,
 |};
 
 
@@ -61,7 +59,6 @@ const mapStateToProps = state => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  designSystemTestVariant: state.common.abParticipations.landingPageDesignSystemTest,
 
 });
 
@@ -223,32 +220,7 @@ function withProps(props: PropTypes) {
   </>
   );
 
-  const renderControlOtherField = () => (
-    <ContributionTextInput
-      id="contributionOther"
-      name="contribution-other-amount"
-      type="number"
-      label="Other amount"
-      value={otherAmount}
-      icon={iconForCountryGroup(props.countryGroupId)}
-      onInput={e => updateAmount(
-      (e.target: any).value,
-      props.countryGroupId,
-      props.contributionType,
-    )}
-      isValid={checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
-      formHasBeenSubmitted={(checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked)}
-      errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
-      autoComplete="off"
-      step={0.01}
-      min={min}
-      max={max}
-      autoFocus
-      required
-    />
-  );
-
-  const renderDsOtherField = () => (
+  const renderOtherField = () => (
     <ContributionTextInputDs
       id="contributionOther"
       name="contribution-other-amount"
@@ -272,45 +244,13 @@ function withProps(props: PropTypes) {
     />
   );
 
-  const renderOther = () => {
-    if (props.designSystemTestVariant === 'ds') {
-      return renderDsOtherField();
-    }
-    return renderControlOtherField();
-  };
-
-  /* eslint-disable no-unused-vars */
-  // leaving in place as this is still in active development:
-  const renderControl = () => (
-    <ul className="form__radio-group-list">
-      {validAmounts.map(renderAmount(
-        currencies[props.currency],
-        spokenCurrencies[props.currency],
-        props,
-      ))}
-      <li className="form__radio-group-item">
-        <input
-          id="contributionAmount-other"
-          className="form__radio-group-input"
-          type="radio"
-          name="contributionAmount"
-          value="other"
-          checked={showOther}
-          onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
-        />
-        <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
-      </li>
-    </ul>
-  );
-  /* eslint-enable no-unused-vars */
-
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
 
       {renderChoiceCards()}
 
-      {showOther && renderOther()}
+      {showOther && renderOtherField()}
 
       {showWeeklyBreakdown ? (
         <p className="amount-per-week-breakdown">
