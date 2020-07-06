@@ -1,3 +1,5 @@
+## Logging
+
 All step functions executions are logged to Elasticsearch to allow easy querying and analysis.
 
 The way that this works is 
@@ -36,3 +38,12 @@ PUT _ingest/pipeline/extractJsonPipeline
     ]
 }
 ```
+
+## Setup
+This is set up according to https://aws.amazon.com/premiumsupport/knowledge-center/kibana-outside-vpc-nginx-elasticsearch/
+
+To add users you need to add them to the cogito pool.  This should be checked and cleaned out regularly.
+
+You can access the SSH on the nginx proxy:
+
+`ssm ssh -x -p membership --ssm-tunnel --tags support-logs,support,PROD`
