@@ -19,10 +19,6 @@ Resources:
       VpcId: !Ref VpcId
       SecurityGroupIngress:
       - IpProtocol: tcp
-        FromPort: 22
-        ToPort: 22
-        CidrIp: 77.91.248.0/21
-      - IpProtocol: tcp
         FromPort: 443
         ToPort: 443
         SourceSecurityGroupId: !Ref ProxyLoadBalancerSecurityGroup
