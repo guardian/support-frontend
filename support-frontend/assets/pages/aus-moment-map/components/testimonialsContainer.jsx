@@ -52,12 +52,19 @@ type TestimonialsForTerritoryProps = {
   selectedTerritory: string,
 }
 
+const LocationMarker = () => (
+  <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M12 5.99998C12 6.82498 11.85 7.69997 11.5 8.64997L6.49998 21.9999H5.49998L0.549998 8.59997C0.249999 7.79997 0 6.87498 0 5.99998C0 2.69999 2.69999 0 5.99998 0C9.29997 0 12 2.69999 12 5.99998ZM1.74999 5.99998C1.74999 8.32497 3.67499 10.25 5.99998 10.25C8.32497 10.25 10.25 8.32497 10.25 5.99998C10.25 3.67499 8.32497 1.74999 5.99998 1.74999C3.67499 1.74999 1.74999 3.67499 1.74999 5.99998Z" fill="#052962" />
+  </svg>
+);
+
+
 const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
   const midPointIndex = Math.ceil(props.testimonials.length / 2) - 1;
 
-  const secondColumn = props.testimonials.slice(midPointIndex + 1).map(testimonial => (
-    <TestimonialComponent testimonial={testimonial} />
-  ));
+  const secondColumn = props.testimonials
+    .slice(midPointIndex + 1)
+    .map(testimonial => <TestimonialComponent testimonial={testimonial} />);
 
   const ctaIndex = secondColumn.length < 5 ? secondColumn.length : 3;
 
@@ -74,40 +81,49 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
     }
   }, [props.selectedTerritory]);
 
-
   return (
     <div className="testimonials-for-territory" ref={ref}>
-      <h2 className="blurb">
+      <div className="testimonials-for-territory-header">
+        <div className="testimonials-for-territory-header-text-and-icon-container">
+          <LocationMarker />
+          <h2>
+            {TERRITORY_CODE_TO_FULL_NAME[props.territory]}
+          </h2>
+        </div>
+        <p>Why do you support Guardian Australia?</p>
+      </div>
+      {/* <h2 className="blurb">
         <span className="selected-territory">{TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
         <br />
           Why do you support Guardian&nbsp;Australia?
-      </h2>
+      </h2> */}
       <div className="testimonials-columns-container">
         <div className="testimonials-first-column">
           {props.testimonials.slice(0, midPointIndex + 1).map(testimonial => (
             <TestimonialComponent testimonial={testimonial} />
-        ))}
+          ))}
         </div>
-        <div className="testimonials-second-column">
-          {secondColumn}
-        </div>
+        <div className="testimonials-second-column">{secondColumn}</div>
       </div>
     </div>
   );
-
 };
 
 type Props = {
   testimonialsCollection: TestimonialsCollection,
-  selectedTerritory: string | null,
-}
+  selectedTerritory: string | null
+};
 
 export const TestimonialsContainer = (props: Props) => {
   if (props.selectedTerritory) {
     return (
       <div className="testimonials-container">
-        { Object.keys(props.testimonialsCollection).map(territory => (
-          <TestimonialsForTerritory testimonials={props.testimonialsCollection[territory]} territory={territory} selectedTerritory={props.selectedTerritory} />
+        {Object.keys(props.testimonialsCollection).map(territory => (
+          <TestimonialsForTerritory
+            testimonials={props.testimonialsCollection[territory]}
+            territory={territory}
+            selectedTerritory={props.selectedTerritory}
+          />
         ))}
       </div>
     );
