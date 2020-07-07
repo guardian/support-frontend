@@ -71,8 +71,10 @@ const AusMomentMap = () => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [selectedTerritory]);
 
+  const animationTransition = { type: 'tween', duration: 1 };
+
   const mapVariants = {
-    initial: { width: '55%' },
+    initial: { width: '100%' },
     active: { width: '40%' },
   };
 
@@ -98,7 +100,7 @@ const AusMomentMap = () => {
           variants={mapVariants}
           animate={animationVariant()}
           initial="initial"
-          transition={{ type: 'tween', duration: 0.2 }}
+          transition={animationTransition}
           positionTransition
         >
           <Map
@@ -111,7 +113,7 @@ const AusMomentMap = () => {
           <p className="map-caption">Tap the map to read messages from supporters</p>
           <motion.div
             className="left-padded-inner"
-            transition={{ type: 'tween', duration: 0.2 }}
+            transition={animationTransition}
             animate={animationVariant()}
             initial="initial"
             variants={blurbVariants}
@@ -126,7 +128,7 @@ const AusMomentMap = () => {
             animate={animationVariant()}
             initial="initial"
             variants={testimonialsVariants}
-            transition={{ type: 'tween', duration: 0.2 }}
+            transition={animationTransition}
             positionTransition
           >
             <CloseButton onClick={() => setSelectedTerritory(null)} />
