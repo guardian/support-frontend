@@ -93,69 +93,67 @@ function withProps(props: PropTypes) {
   return (
     <div className="form-fields">
       <h3 className="hidden-heading">Your details</h3>
-      <>
-        <ContributionTextInputDs
-          id="contributionEmail"
-          name="contribution-email"
-          label="Email address"
-          value={email}
-          type="email"
-          autoComplete="email"
-          supporting="example@domain.com"
-          onInput={props.updateEmail}
-          onChange={props.checkIfEmailHasPassword}
-          isValid={checkEmail(email)}
-          pattern={emailRegexPattern}
-          formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-          errorMessage="Please provide a valid email address"
-          required
-          disabled={isSignedIn}
-        />
-        <Signout isSignedIn />
-        <MustSignIn
-          isSignedIn={props.isSignedIn}
-          userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
-          contributionType={props.contributionType}
-          checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
-          email={props.email}
-        />
-        {props.contributionType !== 'ONE_OFF' ?
-          <div>
-            <ContributionTextInputDs
-              id="contributionFirstName"
-              name="contribution-fname"
-              label="First name"
-              value={firstName}
-              autoComplete="given-name"
-              autoCapitalize="words"
-              onInput={props.updateFirstName}
-              isValid={checkFirstName(firstName)}
-              formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-              errorMessage="Please provide your first name"
-              required
-            />
-            <ContributionTextInputDs
-              id="contributionLastName"
-              name="contribution-lname"
-              label="Last name"
-              value={lastName}
-              autoComplete="family-name"
-              autoCapitalize="words"
-              onInput={props.updateLastName}
-              isValid={checkLastName(lastName)}
-              formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-              errorMessage="Please provide your last name"
-              required
-            />
-          </div> : null
-        }
-        <ContributionState
-          onChange={props.updateBillingState}
-          selectedState={billingState}
-          isValid={checkBillingState(billingState)}
-          formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-        />
-      </>
+      <ContributionTextInputDs
+        id="contributionEmail"
+        name="contribution-email"
+        label="Email address"
+        value={email}
+        type="email"
+        autoComplete="email"
+        supporting="example@domain.com"
+        onInput={props.updateEmail}
+        onChange={props.checkIfEmailHasPassword}
+        isValid={checkEmail(email)}
+        pattern={emailRegexPattern}
+        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+        errorMessage="Please provide a valid email address"
+        required
+        disabled={isSignedIn}
+      />
+      <Signout isSignedIn />
+      <MustSignIn
+        isSignedIn={props.isSignedIn}
+        userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
+        contributionType={props.contributionType}
+        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+        email={props.email}
+      />
+      {props.contributionType !== 'ONE_OFF' ?
+        <div>
+          <ContributionTextInputDs
+            id="contributionFirstName"
+            name="contribution-fname"
+            label="First name"
+            value={firstName}
+            autoComplete="given-name"
+            autoCapitalize="words"
+            onInput={props.updateFirstName}
+            isValid={checkFirstName(firstName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your first name"
+            required
+          />
+          <ContributionTextInputDs
+            id="contributionLastName"
+            name="contribution-lname"
+            label="Last name"
+            value={lastName}
+            autoComplete="family-name"
+            autoCapitalize="words"
+            onInput={props.updateLastName}
+            isValid={checkLastName(lastName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your last name"
+            required
+          />
+        </div> : null
+      }
+      <ContributionState
+        onChange={props.updateBillingState}
+        selectedState={billingState}
+        isValid={checkBillingState(billingState)}
+        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+      />
     </div>
   );
 }
