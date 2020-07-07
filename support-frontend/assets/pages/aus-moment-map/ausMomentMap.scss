@@ -322,18 +322,16 @@ p.blurb {
 }
 
 .testimonials-overlay {
-  background-color: gu-colour(neutral-100);
-  overflow: hidden;
-
   @include mq($from: desktop) {
+    background-color: gu-colour(neutral-100);
+    overflow: hidden;
     position: absolute;
     right: -59vw;
     width: 59vw;
+    top: 0;
+    height: 100%;
+    z-index: 200;
   }
-
-  top: 0;
-  height: 100%;
-  z-index: 200;
 }
 
 .close-button {
@@ -533,15 +531,17 @@ span.selected-territory {
 }
 
 .padded-multiline {
-  line-height: 1.2;
-  margin-left: -0.25rem !important;
-}
+  @include mq($from:desktop) {
+    line-height: 1.2;
+    margin-left: -0.25rem !important;
 
-.padded-multiline span {
-  background-color: gu-colour(neutral-93);
-  color: gu-colour(brand-main);
-  display: inline;
-  padding: 0.25rem;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+    span {
+      background-color: gu-colour(neutral-93);
+      color: gu-colour(brand-main);
+      display: inline;
+      padding: 0.25rem;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+  }
 }

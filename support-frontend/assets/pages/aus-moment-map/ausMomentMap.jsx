@@ -91,6 +91,17 @@ const AusMomentMap = () => {
   const animationVariant = () =>
     ((windowWidthIsGreaterThan('desktop') && selectedTerritory) ? 'active' : 'initial');
 
+  const testimonialsProps = () => {
+    if (windowWidthIsGreaterThan('desktop')) {
+      return {
+        animate: animationVariant(),
+        variants: testimonialsVariants,
+        transition: animationTransition,
+        positionTransition: true
+      }
+    }
+  }
+
   return (
     <div className="map-page">
       <Header />
@@ -99,7 +110,6 @@ const AusMomentMap = () => {
           className="left"
           variants={mapVariants}
           animate={animationVariant()}
-          initial="initial"
           transition={animationTransition}
           positionTransition
         >
@@ -115,7 +125,6 @@ const AusMomentMap = () => {
             className="left-padded-inner"
             transition={animationTransition}
             animate={animationVariant()}
-            initial="initial"
             variants={blurbVariants}
           >
             <Blurb slim />
@@ -125,11 +134,7 @@ const AusMomentMap = () => {
           <Blurb slim={false} />
           <motion.div
             className="testimonials-overlay"
-            animate={animationVariant()}
-            initial="initial"
-            variants={testimonialsVariants}
-            transition={animationTransition}
-            positionTransition
+            {...testimonialsProps()}
           >
             <CloseButton onClick={() => setSelectedTerritory(null)} />
             <TestimonialsContainer
