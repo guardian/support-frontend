@@ -228,7 +228,7 @@ class Application(
   def ausMomentMap(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
-      title = "Aus Moment Map",
+      title = "Guardian Supporters Map",
       mainElement = assets.getSsrCacheContentsAsHtml("aus-moment-map", "aus-moment-map.html"),
       mainJsBundle = Left(RefPath("ausMomentMap.js")),
       mainStyleBundle = Left(RefPath("ausMomentMap.css")),
