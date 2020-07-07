@@ -221,6 +221,9 @@ class Application(
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
     )()).withSettingsSurrogateKey
   }
+  
+  val ausMomentMapSocialImageUrl =
+    "https://i.guim.co.uk/img/media/84bf6a5c9535827ff4c307941cf3147fb2fb63c8/0_0_2000_1050/1000.png?width=1000&quality=85&s=2f7dc4ee733fee7117358fbbb1fa057f"
 
   def ausMomentMap(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -233,7 +236,7 @@ class Application(
       description = stringsConfig.contributionsLandingDescription,
       canonicalLink = Some(buildCanonicalShowcaseLink("uk")),
       shareImageUrl = Some(
-        "https://i.guim.co.uk/img/media/84bf6a5c9535827ff4c307941cf3147fb2fb63c8/0_0_2000_1050/1000.png?width=1000&quality=85&s=2f7dc4ee733fee7117358fbbb1fa057f"
+        ausMomentMapSocialImageUrl
       )
     )()).withSettingsSurrogateKey
   }
