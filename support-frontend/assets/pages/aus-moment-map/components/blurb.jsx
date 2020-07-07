@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 // $FlowIgnore
 import * as React from 'preact/compat';
-import { SocialLinks } from 'pages/aus-moment-map/components/social-links';
+import { SocialLinks } from 'pages/aus-moment-map/components/socialLinks';
 
 
 const useSupportersCount = () => {
