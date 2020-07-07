@@ -71,7 +71,7 @@ const AusMomentMap = () => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [selectedTerritory]);
 
-  const animationTransition = { type: 'tween', duration: 1 };
+  const animationTransition = { type: 'tween', duration: 0.2 };
 
   const mapVariants = {
     initial: { width: '100%' },
