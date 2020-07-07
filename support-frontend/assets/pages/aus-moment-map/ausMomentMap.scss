@@ -127,23 +127,51 @@ body {
   left: 0;
 }
 
-.map {
+.territory {
   cursor: pointer;
-  fill: gu-colour(opinion-bright);
-}
 
-.label {
-  cursor: pointer;
-  fill: gu-colour(neutral-7);
-}
+  .territory-landmass {
+    color: gu-colour(opinion-bright);
 
-g.map-group:hover, g.map-group.selected {
-  .label.light {
-    fill: gu-colour(neutral-100);
   }
 
-  .map {
-    fill: gu-colour(brand-main);
+  .territory-label {
+    color: gu-colour(neutral-7);
+  }
+
+  .territory-label-full {
+    display: none;
+
+    @include mq($from:tablet) {
+      display: inline-block;
+    }
+  }
+
+  .territory-label-abbr {
+    @include mq($from:tablet) {
+      display: none;
+    }
+}
+
+
+  &:hover {
+    .territory-landmass {
+      color: gu-colour(brand-main);
+    }
+
+    .territory-label-on-landmass {
+      color: gu-colour(neutral-100);
+    }
+  }
+}
+
+.territory-selected {
+  .territory-landmass {
+    color: gu-colour(brand-main);
+  }
+
+  .territory-label-on-landmass {
+    color: gu-colour(neutral-100);
   }
 }
 
