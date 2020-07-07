@@ -401,14 +401,18 @@ span.selected-territory {
   position: relative;
 }
 
-.testimonials-for-territory {
-  padding-top: 50px;
+.testimonials-for-territory:last-child {
+  padding-bottom: 500px;
 }
 
 .testimonials-for-territory-header {
   padding: 0 12px 4px 12px;
   border-bottom: 2px solid #052962;
   line-height: 1;
+  position: sticky;
+  top: 0;
+  background-color: white;
+
   h2 {
     margin: 0 0 0 12px;
     font-family: $gu-text-egyptian-web;
@@ -431,7 +435,6 @@ span.selected-territory {
     display: none;
     @include mq($from:desktop) {
       margin-top: 0;
-      margin-bottom: 33px;
       display: block;
       font-family: $gu-titlepiece;
       font-weight: bold;
@@ -445,7 +448,7 @@ span.selected-territory {
   }
 
   @include mq($from:desktop) {
-    padding: 0;
+    padding: 50px 0 20px 0;
     border-bottom: none;
   }
 }
