@@ -43,8 +43,8 @@ Mappings:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       RedemptionTables:
-      - arn:aws:dynamodb:*:*:table/redemption-codes-DEV-PROD
-      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT-PROD
+      - arn:aws:dynamodb:*:*:table/redemption-codes-DEV
+      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
     PROD:
       MaxInstances: 6
       MinInstances: 3
@@ -55,8 +55,8 @@ Mappings:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       RedemptionTables:
-      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT-PROD
-      - arn:aws:dynamodb:*:*:table/redemption-codes-PROD-PROD
+      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
+      - arn:aws:dynamodb:*:*:table/redemption-codes-PROD
   Constants:
     Alarm:
       Process: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit

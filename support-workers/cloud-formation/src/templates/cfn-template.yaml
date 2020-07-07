@@ -29,16 +29,16 @@ Mappings:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       RedemptionTables:
-      - arn:aws:dynamodb:*:*:table/redemption-codes-DEV-PROD
-      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT-PROD
+      - arn:aws:dynamodb:*:*:table/redemption-codes-DEV
+      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE
     PROD:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       RedemptionTables:
-      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT-PROD
-      - arn:aws:dynamodb:*:*:table/redemption-codes-PROD-PROD
+      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
+      - arn:aws:dynamodb:*:*:table/redemption-codes-PROD
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD
 Resources:
   LambdaExecutionRole:
