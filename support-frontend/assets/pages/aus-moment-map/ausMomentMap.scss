@@ -418,8 +418,6 @@ span.selected-territory {
       margin: 0;
       font-family: $gu-titlepiece;
       font-size: 48px;
-      background-color: gu-colour(neutral-93);
-      color: gu-colour(brand-main);
       padding-bottom: 10px;
       padding-left: 5px;
       padding-right: 5px;
@@ -531,4 +529,18 @@ span.selected-territory {
   p {
     margin: 4px 0 0 0;
   }
+}
+
+.padded-multiline {
+  line-height: 1.2;
+  margin-left: -0.25rem !important;
+}
+
+.padded-multiline span {
+  background-color: gu-colour(neutral-93);
+  color: gu-colour(brand-main);
+  display: inline;
+  padding: 0.25rem;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }

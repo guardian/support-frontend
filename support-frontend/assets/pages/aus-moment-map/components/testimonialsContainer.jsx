@@ -108,8 +108,8 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
       <div className="testimonials-for-territory-header">
         <div className="testimonials-for-territory-header-text-and-icon-container">
           <LocationMarker />
-          <h2>
-            {TERRITORY_CODE_TO_FULL_NAME[props.territory]}
+          <h2 className="padded-multiline">
+            <span>{TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
           </h2>
         </div>
         <p>Why do you support Guardian&nbsp;Australia?</p>
