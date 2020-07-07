@@ -1,15 +1,16 @@
 // @flow
 
 // ----- Imports ----- //
-import React from 'react';
-import { motion, useAnimation } from 'framer-motion';
+// $FlowIgnore
+import * as React from 'preact/compat';
+import { motion } from 'framer-motion';
 import { renderPage } from 'helpers/render';
 import './ausMomentMap.scss';
 import { Header } from 'pages/aus-moment-map/components/header';
 import { Map } from 'pages/aus-moment-map/components/map';
 import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
-import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
+import { type TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 import { TestimonialsContainer } from './components/testimonialsContainer';
 import { useWindowWidth } from './hooks/useWindowWidth';
 
@@ -37,7 +38,7 @@ const territories = [
   'SA',
   'TAS',
   'VIC',
-  'WA'
+  'WA',
 ];
 
 // ----- Render ----- //
@@ -45,13 +46,12 @@ const AusMomentMap = () => {
   const [selectedTerritory, setSelectedTerritory] = React.useState(null);
   const [shouldScrollIntoView, setShouldScrollIntoView] = React.useState(false);
   const testimonials = useTestimonials();
-  // $FlowIgnore
-  const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
+  const { windowWidthIsGreaterThan } = useWindowWidth();
 
   React.useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
-        resetToInitial()
+        setSelectedTerritory(null);
       }
 
       // TODO - hint
@@ -60,7 +60,7 @@ const AusMomentMap = () => {
           const index = (territories.indexOf(selectedTerritory) + 1) % territories.length;
           setSelectedTerritory(territories[index]);
         } else {
-          setSelectedTerritory(territories[0])
+          setSelectedTerritory(territories[0]);
         }
         setShouldScrollIntoView(true);
       }
@@ -70,10 +70,6 @@ const AusMomentMap = () => {
 
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [selectedTerritory]);
-
-  const mapControls = useAnimation();
-  const testimonialsControls = useAnimation();
-  const blurbControls = useAnimation();
 
   const mapVariants = {
     initial: { width: '55%' },
@@ -90,38 +86,18 @@ const AusMomentMap = () => {
     active: { display: 'block' },
   };
 
-  const runAnimation = (variant) => {
-    if (windowWidthIsGreaterThan('desktop')) {
-      testimonialsControls.start(variant);
-      mapControls.start(variant);
-      blurbControls.start(variant);
-    }
-  };
-
-  const resetToInitial = () => {
-    document.querySelectorAll('.selected').forEach(t => t.classList.remove('selected'));
-    runAnimation('initial');
-    setSelectedTerritory(null);
-  };
-
-  const handleClick = (e) => {
-    const elementClassList = e.target.classList;
-    const isPartOfMap = elementClassList.contains('map') || elementClassList.contains('label');
-
-    if (isPartOfMap) {
-      runAnimation('active');
-    }
-  };
+  const animationVariant = () =>
+    ((windowWidthIsGreaterThan('desktop') && selectedTerritory) ? 'active' : 'initial');
 
   return (
-    // $FlowIgnore - keyup event is handled in an effect hook
-    <div className="map-page" onClick={handleClick}>
+    <div className="map-page">
       <Header />
       <div className="main">
         <motion.div
           className="left"
-          animate={mapControls}
           variants={mapVariants}
+          animate={animationVariant()}
+          initial="initial"
           transition={{ type: 'tween', duration: 0.2 }}
           positionTransition
         >
@@ -133,7 +109,13 @@ const AusMomentMap = () => {
             }}
           />
           <p className="map-caption">Tap the map to read messages from supporters</p>
-          <motion.div className="left-padded-inner" animate={blurbControls} variants={blurbVariants}>
+          <motion.div
+            className="left-padded-inner"
+            transition={{ type: 'tween', duration: 0.2 }}
+            animate={animationVariant()}
+            initial="initial"
+            variants={blurbVariants}
+          >
             <Blurb slim />
           </motion.div>
         </motion.div>
@@ -141,12 +123,13 @@ const AusMomentMap = () => {
           <Blurb slim={false} />
           <motion.div
             className="testimonials-overlay"
-            animate={testimonialsControls}
+            animate={animationVariant()}
+            initial="initial"
             variants={testimonialsVariants}
             transition={{ type: 'tween', duration: 0.2 }}
             positionTransition
           >
-            <CloseButton onClick={resetToInitial} />
+            <CloseButton onClick={() => setSelectedTerritory(null)} />
             <TestimonialsContainer
               testimonialsCollection={testimonials}
               selectedTerritory={selectedTerritory}

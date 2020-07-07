@@ -23,7 +23,7 @@ const TerritorySvgContainer = (props: TerritorySvgContainerProps) => (
 
 type MapProps = {
   selectedTerritory: string,
-  setSelectedTerritory: (string) => void,
+  setSelectedTerritory: string => void,
 }
 
 export const Map = (props: MapProps) => (

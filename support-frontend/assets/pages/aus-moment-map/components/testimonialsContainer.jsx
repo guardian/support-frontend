@@ -1,8 +1,8 @@
 // @flow
 
-import React from 'react';
-import { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
-import { Testimonial } from '../types/testimonials';
+// $FlowIgnore
+import * as React from 'preact/compat';
+import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/types/testimonials';
 
 const TestimonialCta = () => (
   <div className="testimonial-cta">
@@ -10,7 +10,7 @@ const TestimonialCta = () => (
     <p>
     If you’re a contributor or subscriber, we would love to hear from you
     </p>
-    <a href="#" target="_blank" rel="noopener noreferrer">
+    <a href="https://www.surveymonkey.co.uk/r/C93WWTC" target="_blank" rel="noopener noreferrer">
       <div className="button button-cta">Add your message</div>
     </a>
   </div>
@@ -51,7 +51,7 @@ type TestimonialsForTerritoryProps = {
   shouldScrollIntoView: boolean,
   testimonials: Array<Testimonial>,
   selectedTerritory: string,
-  setSelectedTerritory: function,
+  setSelectedTerritory: string => void,
 }
 
 const LocationMarker = () => (
@@ -91,6 +91,8 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
       return () => testimonialsContainer.removeEventListener('scroll', onScroll);
     }
+    return () => {};
+
   }, [ref.current]);
 
   React.useEffect(() => {
@@ -128,7 +130,7 @@ type Props = {
   testimonialsCollection: TestimonialsCollection,
   selectedTerritory: string | null,
   shouldScrollIntoView: boolean,
-  setSelectedTerritory: function,
+  setSelectedTerritory: string => void,
 };
 
 export const TestimonialsContainer = (props: Props) => {
