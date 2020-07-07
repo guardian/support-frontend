@@ -1,10 +1,13 @@
 // @flow
 import React from 'react';
 
+const contributeUrl =
+  "https://support.theguardian.com/contribute?acquisitionData=%7B%22source%22%3A%22GUARDIAN_WEB%22%2C%22componentType%22%3A%22ACQUISITIONS_OTHER%22%2C%22componentId%22%3A%22aus_moment_2020_map%22%2C%22campaignCode%22%3A%22Aus_moment_2020%22%7D&INTCMP=Aus_moment_2020";
+
 export const Header = () => (
   <div id="header-wrapper">
     <div id="header">Do something powerful today</div>
-    <a href="https://support.theguardian.com/au/contribute" target="_blank" rel="noopener noreferrer">
+    <a href={contributeUrl} target="_blank" rel="noopener noreferrer">
       <div className="button standard">Support the Guardian</div>
       <div className="button mobile">Support us</div>
     </a>
