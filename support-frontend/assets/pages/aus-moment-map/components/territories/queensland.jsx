@@ -4,7 +4,7 @@ import { MapGroup } from 'pages/aus-moment-map/components/mapGroup';
 
 type Props = {
   selectedTerritory: string,
-  onClick: function,
+  onClick: string => void,
 }
 
 export const Queensland = (props: Props) => {

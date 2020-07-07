@@ -1,6 +1,8 @@
+// @flow
+
 import React from 'react';
 
-type PropTypes = {|onClick: function|};
+type PropTypes = {|onClick: () => void|};
 
 export const CloseButton = (props: PropTypes) => (
   <svg

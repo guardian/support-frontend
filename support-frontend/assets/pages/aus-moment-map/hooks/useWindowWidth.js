@@ -1,6 +1,7 @@
 // @flow
 
-import React from 'react';
+// $FlowIgnore
+import * as React from 'preact/compat';
 
 const breakpoints = {
   mobile: 320,

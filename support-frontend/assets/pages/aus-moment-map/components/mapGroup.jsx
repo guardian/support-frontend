@@ -8,13 +8,12 @@ type PropTypes = {|
   labelPath: string,
   mapPaths: Array<string>,
   selectedTerritory: string,
-  onClick: function,
+  onClick: string => void,
 |};
 
 export const MapGroup = (props: PropTypes) => {
   const labelPath = (
     <MapPath
-      territory={props.name}
       d={props.labelPath}
       type={props.labelContrast ? 'label light' : 'label dark'}
     />
@@ -24,7 +23,7 @@ export const MapGroup = (props: PropTypes) => {
     props.onClick(props.name);
   };
 
-  const mapPaths = props.mapPaths.map(path => <MapPath territory={props.name} d={path} type="map" />);
+  const mapPaths = props.mapPaths.map(path => <MapPath d={path} type="map" />);
   const isSelected = props.selectedTerritory === props.name;
 
   return (

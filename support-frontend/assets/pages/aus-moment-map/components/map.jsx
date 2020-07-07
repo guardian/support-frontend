@@ -12,7 +12,7 @@ import { SouthAustralia } from 'pages/aus-moment-map/components/territories/sout
 
 type MapProps = {
   selectedTerritory: string,
-  setSelectedTerritory: function,
+  setSelectedTerritory: string => void,
 }
 
 export const Map = (props: MapProps) => (
