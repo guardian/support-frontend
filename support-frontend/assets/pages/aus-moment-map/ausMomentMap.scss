@@ -12,8 +12,6 @@ body {
 }
 
 .map-page {
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
   height: 100vh;
 }
@@ -274,7 +272,6 @@ p.blurb {
 }
 
 .main {
-  flex-grow: 1;
   align-items: center;
   display: flex;
   position: relative;
@@ -285,9 +282,6 @@ p.blurb {
     align-items: flex-start;
     align-content: flex-start;
     flex-direction: column-reverse;
-  }
-  @include mq($from: desktop) {
-    // overflow: hidden;
   }
 }
 
