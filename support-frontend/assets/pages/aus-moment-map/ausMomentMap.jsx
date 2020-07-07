@@ -31,8 +31,8 @@ const useTestimonials = () => {
 };
 
 const territories = [
-  'ACT',
   'NSW',
+  'ACT',
   'NT',
   'QLD',
   'SA',
