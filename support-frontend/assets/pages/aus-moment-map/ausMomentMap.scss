@@ -49,6 +49,20 @@ body {
   display: block;
 }
 
+.header-cta-text-full {
+  display: none;
+  @include mq($from:tablet) {
+    display: block;
+  }
+}
+
+.header-cta-text-short {
+  display: block;
+  @include mq($from:tablet) {
+    display: none;
+  }
+}
+
 .button {
   display: inline-block;
   text-decoration: none;
