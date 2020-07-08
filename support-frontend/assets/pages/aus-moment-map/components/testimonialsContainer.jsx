@@ -2,7 +2,9 @@
 
 // $FlowIgnore
 import * as React from 'preact/compat';
+import { LinkButton } from '@guardian/src-button';
 import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/types/testimonials';
+
 
 const TestimonialCta = () => (
   <div className="testimonial-cta">
@@ -10,9 +12,15 @@ const TestimonialCta = () => (
     <p>
     If you’re a contributor or subscriber, we would love to hear from you
     </p>
-    <a href="https://www.surveymonkey.co.uk/r/C93WWTC" target="_blank" rel="noopener noreferrer">
-      <div className="button button-cta">Add your message</div>
-    </a>
+
+    <LinkButton
+      className="testimonial-cta-link-button"
+      priority="primary"
+      size="small"
+      href="https://www.surveymonkey.co.uk/r/C93WWTC"
+    >
+      Add your message
+    </LinkButton>
   </div>
 );
 

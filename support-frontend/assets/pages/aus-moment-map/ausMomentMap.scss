@@ -63,6 +63,15 @@ body {
   }
 }
 
+.testimonial-cta-link-button {
+  margin-top: 16px;
+  background: #E05E00 !important;
+
+  &:hover {
+    background: #BD5318 !important;
+  }
+}
+
 .button {
   display: inline-block;
   text-decoration: none;

@@ -57,6 +57,7 @@ const GuardianLogoSvg = () => (
   </svg>
 );
 
+
 export const Header = () => (
   <div id="header-wrapper">
     <div>
