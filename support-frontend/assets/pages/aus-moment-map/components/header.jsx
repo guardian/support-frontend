@@ -57,7 +57,6 @@ const GuardianLogoSvg = () => (
   </svg>
 );
 
-
 export const Header = () => (
   <div id="header-wrapper">
     <div>
@@ -67,6 +66,7 @@ export const Header = () => (
           priority="tertiary"
           size="small"
           href={contributeUrl}
+          target="_blank"
         >
           <span className="header-cta-text-full">Support the Guardian</span>
           <span className="header-cta-text-short">Support us</span>

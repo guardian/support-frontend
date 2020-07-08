@@ -18,6 +18,7 @@ const TestimonialCta = () => (
       priority="primary"
       size="small"
       href="https://www.surveymonkey.co.uk/r/C93WWTC"
+      target="_blank"
     >
       Add your message
     </LinkButton>
