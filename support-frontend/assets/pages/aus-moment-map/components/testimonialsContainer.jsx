@@ -3,6 +3,7 @@
 // $FlowIgnore
 import * as React from 'preact/compat';
 import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/types/testimonials';
+import { useWindowWidth } from '../hooks/useWindowWidth';
 
 const TestimonialCta = () => (
   <div className="testimonial-cta">
@@ -134,20 +135,24 @@ type Props = {
 };
 
 export const TestimonialsContainer = (props: Props) => {
+  const { windowWidthIsLessThan } = useWindowWidth();
+
   if (props.testimonialsCollection) {
-    return (
-      <div className="testimonials-container">
-        {Object.keys(props.testimonialsCollection).map(territory => (
-          <TestimonialsForTerritory
-            testimonials={props.testimonialsCollection[territory]}
-            territory={territory}
-            shouldScrollIntoView={props.shouldScrollIntoView}
-            selectedTerritory={props.selectedTerritory}
-            setSelectedTerritory={props.setSelectedTerritory}
-          />
+    if (props.selectedTerritory || windowWidthIsLessThan('desktop')) {
+      return (
+        <div className="testimonials-container">
+          {Object.keys(props.testimonialsCollection).map(territory => (
+            <TestimonialsForTerritory
+              testimonials={props.testimonialsCollection[territory]}
+              territory={territory}
+              shouldScrollIntoView={props.shouldScrollIntoView}
+              selectedTerritory={props.selectedTerritory}
+              setSelectedTerritory={props.setSelectedTerritory}
+            />
         ))}
-      </div>
-    );
+        </div>
+      );
+    }
   }
   return null;
 };
