@@ -57,6 +57,7 @@ function RedemptionForm(props: PropTypes) {
     }
   `;
   const paraCss = css`
+    margin-top: 8px;
     margin-bottom: 16px;
   `;
   const headingCss = css`
