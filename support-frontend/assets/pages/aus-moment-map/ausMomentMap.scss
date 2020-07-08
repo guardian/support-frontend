@@ -285,7 +285,7 @@ p.blurb {
   @include mq($until: desktop) {
     align-items: flex-start;
     align-content: flex-start;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 }
 
