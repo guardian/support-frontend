@@ -413,7 +413,7 @@ span.selected-territory {
 }
 
 .testimonials-for-territory-header {
-  padding: 0 12px 4px 12px;
+  padding: 35px 12px 4px 12px;
   border-bottom: 2px solid #052962;
   line-height: 1;
   position: sticky;
@@ -449,7 +449,7 @@ span.selected-territory {
   }
 
   @include mq($from:tablet) {
-    padding: 0 34px 4px 34px;
+    padding: 60px 34px 4px 34px;
   }
 
   @include mq($from:desktop) {
