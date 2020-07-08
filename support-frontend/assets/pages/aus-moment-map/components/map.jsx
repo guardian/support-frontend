@@ -1,5 +1,5 @@
 // @flow
-import * as React from 'react';
+import * as React from 'preact/compat';
 import VictoriaSvg from './territories/victoriaSvg';
 import NewSouthWalesSvg from './territories/newSouthWalesSvg';
 import ActSvg from './territories/actSvg';
@@ -33,40 +33,72 @@ type MapProps = {
   setSelectedTerritory: string => void,
 }
 
-export const Map = (props: MapProps) => (
-  <div className="svg-wrapper">
-    <svg className="svg-content" viewBox="0 0 694 645" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <TerritorySvgContainer onClick={() => props.setSelectedTerritory('VIC')} isSelected={props.selectedTerritory === 'VIC'}>
-        <VictoriaSvg />
-      </TerritorySvgContainer>
+export const Map = (props: MapProps) => {
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    if (ref.current) {
+      const self = ref.current;
+      const parent = self.parentNode
+      const clone = self.cloneNode(true);
+      clone.style.visibility = 'hidden';
 
-      <TerritorySvgContainer onClick={() => props.setSelectedTerritory('NSW')} isSelected={props.selectedTerritory === 'NSW'}>
-        <NewSouthWalesSvg />
-      </TerritorySvgContainer>
+      const onScroll = () => {
+        const atOrPastTop = self.classList.contains('sticky')
+          ? clone.getBoundingClientRect().top <= 0
+          : self.getBoundingClientRect().top <= 0
 
-      <TerritorySvgContainer onClick={() => props.setSelectedTerritory('ACT')} isSelected={props.selectedTerritory === 'ACT'}>
-        <ActSvg />
-      </TerritorySvgContainer>
+        if (atOrPastTop) {
+          self.classList.add('sticky')
+          parent.appendChild(clone)
+        } else {
+          self.classList.remove('sticky')
+          parent.removeChild(clone)
+        }
+      };
 
-      <TerritorySvgContainer onClick={() => props.setSelectedTerritory('QLD')} isSelected={props.selectedTerritory === 'QLD'}>
-        <QueenslandSvg />
-      </TerritorySvgContainer>
+      document.addEventListener('scroll', onScroll);
+      return () => document.removeEventListener('scroll', onScroll);
+    }
 
-      <TerritorySvgContainer onClick={() => props.setSelectedTerritory('SA')} isSelected={props.selectedTerritory === 'SA'}>
-        <SouthAustraliaSvg />
-      </TerritorySvgContainer>
+    return () => {};
 
-      <TerritorySvgContainer onClick={() => props.setSelectedTerritory('WA')} isSelected={props.selectedTerritory === 'WA'}>
-        <WesternAustraliaSvg />
-      </TerritorySvgContainer>
+  }, [ref.current]);
 
-      <TerritorySvgContainer onClick={() => props.setSelectedTerritory('TAS')} isSelected={props.selectedTerritory === 'TAS'}>
-        <TasmaniaSvg />
-      </TerritorySvgContainer>
+  return (
+    <div className="svg-wrapper" ref={ref}>
+      <svg className="svg-content" viewBox="0 0 694 645" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('VIC')} isSelected={props.selectedTerritory === 'VIC'}>
+          <VictoriaSvg />
+        </TerritorySvgContainer>
 
-      <TerritorySvgContainer onClick={() => props.setSelectedTerritory('NT')} isSelected={props.selectedTerritory === 'NT'}>
-        <NorthernTerritorySvg />
-      </TerritorySvgContainer>
-    </svg>
-  </div>
-);
+        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('NSW')} isSelected={props.selectedTerritory === 'NSW'}>
+          <NewSouthWalesSvg />
+        </TerritorySvgContainer>
+
+        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('ACT')} isSelected={props.selectedTerritory === 'ACT'}>
+          <ActSvg />
+        </TerritorySvgContainer>
+
+        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('QLD')} isSelected={props.selectedTerritory === 'QLD'}>
+          <QueenslandSvg />
+        </TerritorySvgContainer>
+
+        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('SA')} isSelected={props.selectedTerritory === 'SA'}>
+          <SouthAustraliaSvg />
+        </TerritorySvgContainer>
+
+        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('WA')} isSelected={props.selectedTerritory === 'WA'}>
+          <WesternAustraliaSvg />
+        </TerritorySvgContainer>
+
+        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('TAS')} isSelected={props.selectedTerritory === 'TAS'}>
+          <TasmaniaSvg />
+        </TerritorySvgContainer>
+
+        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('NT')} isSelected={props.selectedTerritory === 'NT'}>
+          <NorthernTerritorySvg />
+        </TerritorySvgContainer>
+      </svg>
+    </div>
+  )
+}

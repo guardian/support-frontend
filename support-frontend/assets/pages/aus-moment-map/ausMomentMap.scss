@@ -124,6 +124,20 @@ body {
   box-sizing: border-box;
 }
 
+.svg-wrapper.sticky {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  text-align: center;
+  z-index: 500 !important;
+
+  .svg-content {
+    background-color: white !important;
+    width: 50% !important;
+  }
+}
+
 .svg-content {
   display: inline-block;
   position: absolute;
@@ -455,6 +469,7 @@ span.selected-territory {
 .testimonials-for-territory-header-text-and-icon-container {
   display: flex;
   align-items: center;
+  margin-top: 50px;
 
   svg {
     @include mq($from:desktop) {

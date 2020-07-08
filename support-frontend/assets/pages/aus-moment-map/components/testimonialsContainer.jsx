@@ -82,7 +82,6 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
         windowWidthIsGreaterThan('desktop') ? parentNode : document.documentElement
 
       const onScroll = () => {
-        console.log('test')
         if (testimonialsContainer.scrollTop >= offsetTop
           && testimonialsContainer.scrollTop < (offsetTop + offsetHeight)) {
           props.setSelectedTerritory(props.territory);
