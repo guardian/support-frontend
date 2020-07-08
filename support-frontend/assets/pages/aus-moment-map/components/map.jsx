@@ -40,7 +40,7 @@ export const Map = (props: MapProps) => {
       const self = ref.current;
       const parent = self.parentNode
       const clone = self.cloneNode(true);
-      clone.style.visibility = 'hidden';
+      clone.classList.add('clone');
 
       const onScroll = () => {
         const atOrPastTop = self.classList.contains('sticky')
@@ -65,40 +65,43 @@ export const Map = (props: MapProps) => {
   }, [ref.current]);
 
   return (
-    <div className="svg-wrapper" ref={ref}>
-      <svg className="svg-content" viewBox="0 0 694 645" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('VIC')} isSelected={props.selectedTerritory === 'VIC'}>
-          <VictoriaSvg />
-        </TerritorySvgContainer>
+    <div className="map" ref={ref}>
+      <div className="map-background" />
+      <div className="svg-wrapper">
+        <svg className="svg-content" viewBox="0 0 694 645" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <TerritorySvgContainer onClick={() => props.setSelectedTerritory('VIC')} isSelected={props.selectedTerritory === 'VIC'}>
+            <VictoriaSvg />
+          </TerritorySvgContainer>
 
-        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('NSW')} isSelected={props.selectedTerritory === 'NSW'}>
-          <NewSouthWalesSvg />
-        </TerritorySvgContainer>
+          <TerritorySvgContainer onClick={() => props.setSelectedTerritory('NSW')} isSelected={props.selectedTerritory === 'NSW'}>
+            <NewSouthWalesSvg />
+          </TerritorySvgContainer>
 
-        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('ACT')} isSelected={props.selectedTerritory === 'ACT'}>
-          <ActSvg />
-        </TerritorySvgContainer>
+          <TerritorySvgContainer onClick={() => props.setSelectedTerritory('ACT')} isSelected={props.selectedTerritory === 'ACT'}>
+            <ActSvg />
+          </TerritorySvgContainer>
 
-        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('QLD')} isSelected={props.selectedTerritory === 'QLD'}>
-          <QueenslandSvg />
-        </TerritorySvgContainer>
+          <TerritorySvgContainer onClick={() => props.setSelectedTerritory('QLD')} isSelected={props.selectedTerritory === 'QLD'}>
+            <QueenslandSvg />
+          </TerritorySvgContainer>
 
-        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('SA')} isSelected={props.selectedTerritory === 'SA'}>
-          <SouthAustraliaSvg />
-        </TerritorySvgContainer>
+          <TerritorySvgContainer onClick={() => props.setSelectedTerritory('SA')} isSelected={props.selectedTerritory === 'SA'}>
+            <SouthAustraliaSvg />
+          </TerritorySvgContainer>
 
-        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('WA')} isSelected={props.selectedTerritory === 'WA'}>
-          <WesternAustraliaSvg />
-        </TerritorySvgContainer>
+          <TerritorySvgContainer onClick={() => props.setSelectedTerritory('WA')} isSelected={props.selectedTerritory === 'WA'}>
+            <WesternAustraliaSvg />
+          </TerritorySvgContainer>
 
-        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('TAS')} isSelected={props.selectedTerritory === 'TAS'}>
-          <TasmaniaSvg />
-        </TerritorySvgContainer>
+          <TerritorySvgContainer onClick={() => props.setSelectedTerritory('TAS')} isSelected={props.selectedTerritory === 'TAS'}>
+            <TasmaniaSvg />
+          </TerritorySvgContainer>
 
-        <TerritorySvgContainer onClick={() => props.setSelectedTerritory('NT')} isSelected={props.selectedTerritory === 'NT'}>
-          <NorthernTerritorySvg />
-        </TerritorySvgContainer>
-      </svg>
+          <TerritorySvgContainer onClick={() => props.setSelectedTerritory('NT')} isSelected={props.selectedTerritory === 'NT'}>
+            <NorthernTerritorySvg />
+          </TerritorySvgContainer>
+        </svg>
+      </div>
     </div>
   )
 }
