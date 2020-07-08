@@ -85,13 +85,23 @@ body {
   }
 }
 
-.button-cta {
+.button-cta-primary {
   background-color: #E05E00;
   margin-top: 16px;
   padding: 8px 20px;
 
   &:hover {
     background-color: #BD5318;
+  }
+}
+
+.button-cta-secondary {
+  background-color: #052962;
+  margin-top: 16px;
+  padding: 8px 20px;
+
+  &:hover {
+    background-color: #041F4A;
   }
 }
 
@@ -517,8 +527,6 @@ span.selected-territory {
 
 .testimonial-cta {
   margin-top: 12px;
-  background-color: #FEF9F5;
-  border: 1px solid #E05E00;
   padding: 12px;
 
   h3 {
@@ -530,6 +538,19 @@ span.selected-territory {
 
   p {
     margin: 4px 0 0 0;
+  }
+}
+
+.testimonial-cta-primary {
+  background-color: #FEF9F5;
+  border: 1px solid #E05E00;
+}
+
+.testimonial-cta-secondary {
+  background-color: gu-colour(neutral-97);
+  border: 1px solid gu-colour(neutral-86);
+  @include mq($from: tablet) {
+    display: none;
   }
 }
 

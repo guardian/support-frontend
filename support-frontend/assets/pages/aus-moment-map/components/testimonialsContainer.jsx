@@ -5,14 +5,27 @@ import * as React from 'preact/compat';
 import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/types/testimonials';
 import { useWindowWidth } from '../hooks/useWindowWidth';
 
-const TestimonialCta = () => (
-  <div className="testimonial-cta">
+const TestimonialCtaPrimary = () => (
+  <div className="testimonial-cta testimonial-cta-primary">
     <h3>Are you a supporter?</h3>
     <p>
     If you’re a contributor or subscriber, we would love to hear from you
     </p>
     <a href="https://www.surveymonkey.co.uk/r/C93WWTC" target="_blank" rel="noopener noreferrer">
-      <div className="button button-cta">Add your message</div>
+      <div className="button button-cta-primary">Add your message</div>
+    </a>
+  </div>
+);
+
+const TestimonialCtaSecondary = () => (
+  <div className="testimonial-cta testimonial-cta-secondary">
+    <h3>Do something powerful today</h3>
+    <a
+      href="https://support.theguardian.com/contribute?acquisitionData=%7B%22source%22%3A%22GUARDIAN_WEB%22%2C%22componentType%22%3A%22ACQUISITIONS_OTHER%22%2C%22componentId%22%3A%22aus_moment_2020_map%22%2C%22campaignCode%22%3A%22Aus_moment_2020%22%7D&INTCMP=Aus_moment_2020"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <div className="button button-cta-secondary">Support the Guardian</div>
     </a>
   </div>
 );
@@ -71,7 +84,8 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   const ctaIndex = secondColumn.length < 5 ? secondColumn.length : 3;
 
-  secondColumn.splice(ctaIndex, 0, <TestimonialCta />);
+  secondColumn.splice(ctaIndex, 0, <TestimonialCtaPrimary />);
+  secondColumn.push(<TestimonialCtaSecondary />);
 
   const ref = React.useRef(null);
 
