@@ -45,10 +45,6 @@ body {
   }
 }
 
-.link-button {
-  display: block;
-}
-
 .header-cta-text-full {
   display: none;
   @include mq($from:tablet) {
@@ -69,52 +65,6 @@ body {
 
   &:hover {
     background: #BD5318 !important;
-  }
-}
-
-.button {
-  display: inline-block;
-  text-decoration: none;
-  cursor: pointer;
-  text-align: center;
-  border: 1px solid gu-colour(neutral-100);
-  border-radius: 1.3125rem;
-  color: gu-colour(neutral-100);
-  font-family: $gu-text-sans-web;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  padding: 5px 20px;
-  line-height: 21px;
-  background: transparent;
-  box-sizing: border-box;
-}
-
-.button.standard {
-  top: 65px;
-  @include mq($until:tablet) {
-    display: none;
-  }
-}
-
-.button.standard:hover {
-  background-color: gu-colour(neutral-100);
-  color: gu-colour(brand-main);
-}
-
-.button.mobile {
-  @include mq($from:tablet) {
-    display: none;
-  }
-}
-
-.button-cta {
-  background-color: #E05E00;
-  margin-top: 16px;
-  padding: 8px 20px;
-
-  &:hover {
-    background-color: #BD5318;
   }
 }
 
