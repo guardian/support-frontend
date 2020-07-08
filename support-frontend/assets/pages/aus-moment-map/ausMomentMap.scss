@@ -291,15 +291,15 @@ p.blurb {
 
 .left {
   left: 0;
-  height: 100%;
   width: 100%;
   display: inline-block;
   text-align: center;
-  overflow-x: hidden;
   box-sizing: border-box;
   padding-top: 1.5em;
   @include mq($from: desktop) {
+    height: 100%;
     max-width: 50vw;
+    overflow-x: hidden;
   }
 }
 

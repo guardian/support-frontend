@@ -134,7 +134,7 @@ type Props = {
 };
 
 export const TestimonialsContainer = (props: Props) => {
-  if (props.selectedTerritory) {
+  if (props.testimonialsCollection) {
     return (
       <div className="testimonials-container">
         {Object.keys(props.testimonialsCollection).map(territory => (

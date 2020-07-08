@@ -46,7 +46,7 @@ const AusMomentMap = () => {
   const [selectedTerritory, setSelectedTerritory] = React.useState(null);
   const [shouldScrollIntoView, setShouldScrollIntoView] = React.useState(false);
   const testimonials = useTestimonials();
-  const { windowWidthIsGreaterThan } = useWindowWidth();
+  const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
   React.useEffect(() => {
     const onKeyDown = (e) => {
@@ -97,10 +97,10 @@ const AusMomentMap = () => {
         animate: animationVariant(),
         variants: testimonialsVariants,
         transition: animationTransition,
-        positionTransition: true
-      }
+        positionTransition: true,
+      };
     }
-  }
+  };
 
   return (
     <div className="map-page">
@@ -113,6 +113,7 @@ const AusMomentMap = () => {
           transition={animationTransition}
           positionTransition
         >
+          { windowWidthIsLessThan('desktop') && <Blurb /> }
           <Map
             selectedTerritory={selectedTerritory}
             setSelectedTerritory={(territory) => {
@@ -131,7 +132,7 @@ const AusMomentMap = () => {
           </motion.div>
         </motion.div>
         <div className="right">
-          <Blurb slim={false} />
+          { windowWidthIsGreaterThan('desktop') && <Blurb slim={false} /> }
           <motion.div
             className="testimonials-overlay"
             {...testimonialsProps()}
