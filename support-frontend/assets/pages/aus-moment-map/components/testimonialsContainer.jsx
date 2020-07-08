@@ -61,8 +61,8 @@ const LocationMarker = () => (
   </svg>
 );
 
-
 const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
+  const { windowWidthIsGreaterThan } = useWindowWidth();
   const midPointIndex = Math.ceil(props.testimonials.length / 2) - 1;
 
   const secondColumn = props.testimonials
@@ -77,11 +77,12 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   React.useEffect(() => {
     if (ref.current) {
-      const { offsetTop } = ref.current;
-      const { offsetHeight } = ref.current;
-      const testimonialsContainer = ref.current.parentNode;
+      const { offsetTop, offsetHeight, parentNode } = ref.current;
+      const testimonialsContainer =
+        windowWidthIsGreaterThan('desktop') ? parentNode : document.documentElement
 
       const onScroll = () => {
+        console.log('test')
         if (testimonialsContainer.scrollTop >= offsetTop
           && testimonialsContainer.scrollTop < (offsetTop + offsetHeight)) {
           props.setSelectedTerritory(props.territory);
@@ -97,10 +98,12 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
   }, [ref.current]);
 
   React.useEffect(() => {
-    if (ref.current && props.selectedTerritory === props.territory && props.shouldScrollIntoView) {
-      const { offsetTop } = ref.current;
-      const testimonialsContainer = ref.current.parentNode;
-      testimonialsContainer.scroll(0, offsetTop);
+    if (windowWidthIsGreaterThan('desktop')) {
+      if (ref.current && props.selectedTerritory === props.territory && props.shouldScrollIntoView) {
+        const { offsetTop } = ref.current;
+        const testimonialsContainer = ref.current.parentNode;
+        testimonialsContainer.scroll(0, offsetTop);
+      }
     }
   }, [ref.current, props.selectedTerritory]);
 

@@ -14,8 +14,10 @@ body {
 .map-page {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
   height: 100vh;
+  @include mq($from:desktop) {
+    overflow-x: hidden;
+  }
 }
 
 #header-wrapper {
@@ -394,8 +396,10 @@ span.selected-territory {
 .testimonials-container {
   padding-bottom: 48px;
   max-height: 100%;
-  overflow-y: scroll;
   position: relative;
+  @include mq($from:desktop) {
+    overflow-y: scroll;
+  }
 }
 
 .testimonials-for-territory:last-child {
