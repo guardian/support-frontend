@@ -130,11 +130,22 @@ body {
 }
 
 .territory {
-  cursor: pointer;
+  @include mq($from:desktop) {
+    cursor: pointer;
+
+    &:hover {
+      .territory-landmass {
+        color: gu-colour(brand-main);
+      }
+
+      .territory-label-on-landmass {
+        color: gu-colour(neutral-100);
+      }
+    }
+  }
 
   .territory-landmass {
     color: gu-colour(opinion-bright);
-
   }
 
   .territory-label {
@@ -152,17 +163,6 @@ body {
   .territory-label-abbr {
     @include mq($from:tablet) {
       display: none;
-    }
-}
-
-
-  &:hover {
-    .territory-landmass {
-      color: gu-colour(brand-main);
-    }
-
-    .territory-label-on-landmass {
-      color: gu-colour(neutral-100);
     }
   }
 }

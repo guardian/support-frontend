@@ -8,6 +8,7 @@ import SouthAustraliaSvg from './territories/southAustraliaSvg';
 import WesternAustraliaSvg from './territories/westernAustraliaSvg';
 import TasmaniaSvg from './territories/tasmaniaSvg';
 import NorthernTerritorySvg from './territories/northernTerritorySvg';
+import { useWindowWidth } from "../hooks/useWindowWidth";
 
 type TerritorySvgContainerProps = {
   onClick: () => void,
@@ -15,11 +16,17 @@ type TerritorySvgContainerProps = {
   children: React.Node,
 }
 
-const TerritorySvgContainer = (props: TerritorySvgContainerProps) => (
-  <g className={`territory ${props.isSelected ? 'territory-selected' : ''}`} onClick={props.onClick}>
-    { props.children }
-  </g>
-);
+const TerritorySvgContainer = (props: TerritorySvgContainerProps) => {
+  const { windowWidthIsGreaterThan } = useWindowWidth();
+  return (
+    <g
+      className={`territory ${props.isSelected ? 'territory-selected' : ''}`}
+      onClick={windowWidthIsGreaterThan('desktop') ? props.onClick : null}
+    >
+      { props.children }
+    </g>
+  )
+};
 
 type MapProps = {
   selectedTerritory: string,
