@@ -39,7 +39,6 @@ import {
   type CountryGroupId,
   detect as detectCountryGroup,
 } from 'helpers/internationalisation/countryGroup';
-import storeReferrer from 'helpers/tracking/awin';
 import { trackAbTests } from 'helpers/tracking/ophan';
 import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 import { getSettings } from 'helpers/globals';
@@ -64,7 +63,6 @@ export type ReduxState<PageState> = {|
 function analyticsInitialisation(participations: Participations): void {
   if (!(doNotTrack())) {
     googleTagManager.init(participations);
-    storeReferrer();
     ophan.init();
     trackAbTests(participations);
   }
