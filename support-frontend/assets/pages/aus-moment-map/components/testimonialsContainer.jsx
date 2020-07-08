@@ -19,6 +19,7 @@ const TestimonialCta = () => (
       size="small"
       href="https://www.surveymonkey.co.uk/r/C93WWTC"
       target="_blank"
+      rel="noopener noreferrer"
     >
       Add your message
     </LinkButton>

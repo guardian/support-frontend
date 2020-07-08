@@ -67,6 +67,7 @@ export const Header = () => (
           size="small"
           href={contributeUrl}
           target="_blank"
+          rel="noopener noreferrer"
         >
           <span className="header-cta-text-full">Support the Guardian</span>
           <span className="header-cta-text-short">Support us</span>
