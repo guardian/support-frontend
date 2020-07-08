@@ -38,7 +38,9 @@ export const Map = (props: MapProps) => {
   React.useEffect(() => {
     if (ref.current) {
       const self = ref.current;
-      const parent = self.parentNode
+      const parent = self.parentNode;
+      const background = self.querySelector('.map-background');
+      const svg = self.querySelector('.svg-content');
       const clone = self.cloneNode(true);
       clone.classList.add('clone');
 
@@ -50,9 +52,11 @@ export const Map = (props: MapProps) => {
         if (atOrPastTop) {
           self.classList.add('sticky')
           parent.appendChild(clone)
+          background.style.height = `${svg.clientHeight + 10}px`;
         } else {
           self.classList.remove('sticky')
           parent.removeChild(clone)
+          background.style.height = '0'
         }
       };
 

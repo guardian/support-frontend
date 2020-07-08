@@ -137,12 +137,13 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 40%;
+    height: 0;
   }
 
   .svg-wrapper {
     top: 0;
     width: 40%;
+    overflow: hidden;
   }
 }
 
@@ -456,9 +457,10 @@ span.selected-territory {
       margin: 0;
       font-family: $gu-titlepiece;
       font-size: 48px;
-      padding-bottom: 10px;
-      padding-left: 5px;
-      padding-right: 5px;
+      padding: 0 5px 10px 5px;
+      //padding-bottom: 10px;
+      //padding-left: 5px;
+      //padding-right: 5px;
     }
   }
 
@@ -487,7 +489,9 @@ span.selected-territory {
 .testimonials-for-territory-header-text-and-icon-container {
   display: flex;
   align-items: center;
-  margin-top: 50px;
+  @include mq($until:desktop) {
+    margin-top: 50px;
+  }
 
   svg {
     @include mq($from:desktop) {
