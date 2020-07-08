@@ -92,15 +92,14 @@ const AusMomentMap = () => {
     ((windowWidthIsGreaterThan('desktop') && selectedTerritory) ? 'active' : 'initial');
 
   const testimonialsProps = () => {
-    return null;
-    // if (windowWidthIsGreaterThan('desktop')) {
-    //   return {
-    //     animate: animationVariant(),
-    //     variants: testimonialsVariants,
-    //     transition: animationTransition,
-    //     positionTransition: true
-    //   }
-    // }
+    if (windowWidthIsGreaterThan('desktop')) {
+      return {
+        animate: animationVariant(),
+        variants: testimonialsVariants,
+        transition: animationTransition,
+        positionTransition: true
+      }
+    }
   }
 
   return (
