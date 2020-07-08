@@ -72,6 +72,7 @@
     "@emotion/serialize": "^0.11.16",
     "@guardian/pasteup": "^1.0.0-alpha.7",
     "@guardian/src-accordion": "^1.4.0",
+    "@guardian/src-button": "^1.4.0",
     "@guardian/src-choice-card": "^1.4.0",
     "@guardian/src-foundations": "^1.4.0",
     "@guardian/src-radio": "^1.4.0",

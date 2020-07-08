@@ -554,6 +554,11 @@ span.selected-territory {
   }
 }
 
+.testimonials-read-more-button-container {
+  margin-top: 12px;
+  margin-left: 12px;
+}
+
 .padded-multiline {
   @include mq($from:desktop) {
     line-height: 1.2;

@@ -3,6 +3,7 @@
 // $FlowIgnore
 import * as React from 'preact/compat';
 import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/types/testimonials';
+import { Button } from '@guardian/src-button';
 import { useWindowWidth } from '../hooks/useWindowWidth';
 
 const TestimonialCtaPrimary = () => (
@@ -76,7 +77,11 @@ const LocationMarker = () => (
 
 
 const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
+  const { windowWidthIsGreaterThan } = useWindowWidth();
+
   const midPointIndex = Math.ceil(props.testimonials.length / 2) - 1;
+
+  const firstColumn = props.testimonials.slice(0, midPointIndex + 1).map(testimonial => <TestimonialComponent testimonial={testimonial} />);
 
   const secondColumn = props.testimonials
     .slice(midPointIndex + 1)
@@ -129,17 +134,60 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
         </div>
         <p>Why do you support Guardian&nbsp;Australia?</p>
       </div>
-      <div className="testimonials-columns-container">
-        <div className="testimonials-first-column">
-          {props.testimonials.slice(0, midPointIndex + 1).map(testimonial => (
-            <TestimonialComponent testimonial={testimonial} />
-          ))}
-        </div>
-        <div className="testimonials-second-column">{secondColumn}</div>
-      </div>
+      { windowWidthIsGreaterThan('tablet')
+        ? <TestimonialsTwoColumns firstColumn={firstColumn} secondColumn={secondColumn} />
+        : <TestimonialsExpandableSingleColumn testimonials={[...firstColumn, ...secondColumn]} /> }
     </div>
   );
 };
+
+type TestimonialsExpandableSingleColumnProps = {
+  testimonials: Array<React.Node>
+}
+
+const UNEXPANDED_NUMBER_OF_TESTIMONIALS = 3;
+
+const TestimonialsExpandableSingleColumn = (props: TestimonialsExpandableSingleColumnProps) => {
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const testimonials = isExpanded ? props.testimonials : props.testimonials.slice(0, UNEXPANDED_NUMBER_OF_TESTIMONIALS);
+  return (
+    <>
+      <div className="testimonials-columns-container">
+        <div className="testimonials-first-column">
+          {testimonials}
+        </div>
+      </div>
+      <div className="testimonials-read-more-button-container">
+        <Button
+          priority="tertiary"
+          size="small"
+          onClick={() => {
+                setIsExpanded(!isExpanded);
+            }}
+        >
+          { isExpanded ? 'Read less' : 'Read more'}
+        </Button>
+      </div>
+    </>
+  );
+};
+
+type TestimonialTwoColumnsProps = {
+  firstColumn: Array<React.Node>,
+  secondColumn: Array<React.Node>,
+}
+
+const TestimonialsTwoColumns = (props: TestimonialTwoColumnsProps) => (
+  <div className="testimonials-columns-container">
+    <div className="testimonials-first-column">
+      {props.firstColumn}
+    </div>
+    <div className="testimonials-second-column">
+      {props.secondColumn}
+    </div>
+  </div>
+);
 
 type Props = {
   testimonialsCollection: TestimonialsCollection,
