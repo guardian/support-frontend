@@ -159,15 +159,16 @@ const TestimonialsExpandableSingleColumn = (props: TestimonialsExpandableSingleC
         </div>
       </div>
       <div className="testimonials-read-more-button-container">
+        {!isExpanded &&
         <Button
           priority="tertiary"
           size="small"
           onClick={() => {
-                setIsExpanded(!isExpanded);
+                setIsExpanded(true);
             }}
         >
-          { isExpanded ? 'Read less' : 'Read more'}
-        </Button>
+          Read more
+        </Button>}
       </div>
     </>
   );
