@@ -89,20 +89,32 @@ const AusMomentMap = () => {
     active: { display: 'block' },
   };
 
-  const animationVariant = () => {
-    if (windowWidthIsGreaterThan('desktop')) {
-      return selectedTerritory ? 'active' : 'initial';
-    }
-    return 'mobile';
+  const animationVariant = () =>
+    ((windowWidthIsGreaterThan('desktop') && selectedTerritory) ? 'active' : 'initial');
 
+  const testimonialsProps = () => {
+    if (windowWidthIsGreaterThan('desktop')) {
+      return {
+        animate: animationVariant(),
+        variants: testimonialsVariants,
+        transition: animationTransition,
+        positionTransition: true,
+      };
+    }
+    return null;
   };
 
-  const testimonialsProps = () => ({
-    animate: animationVariant(),
-    variants: testimonialsVariants,
-    transition: animationTransition,
-    positionTransition: true,
-  });
+  const createTestimonialsContainer = () => (
+    <TestimonialsContainer
+      testimonialsCollection={testimonials}
+      selectedTerritory={selectedTerritory}
+      shouldScrollIntoView={shouldScrollIntoView}
+      setSelectedTerritory={(territory) => {
+                setSelectedTerritory(territory);
+                setShouldScrollIntoView(false);
+              }}
+    />
+  );
 
   return (
     <div className="map-page">
@@ -135,21 +147,18 @@ const AusMomentMap = () => {
         </motion.div>
         <div className="right">
           { windowWidthIsGreaterThan('desktop') && <Blurb slim={false} /> }
-          <motion.div
-            className="testimonials-overlay"
-            {...testimonialsProps()}
-          >
-            <CloseButton onClick={() => setSelectedTerritory(null)} />
-            <TestimonialsContainer
-              testimonialsCollection={testimonials}
-              selectedTerritory={selectedTerritory}
-              shouldScrollIntoView={shouldScrollIntoView}
-              setSelectedTerritory={(territory) => {
-                setSelectedTerritory(territory);
-                setShouldScrollIntoView(false);
-              }}
-            />
-          </motion.div>
+          { windowWidthIsGreaterThan('desktop') ?
+            <motion.div
+              className="testimonials-overlay"
+              {...testimonialsProps()}
+            >
+              <CloseButton onClick={() => setSelectedTerritory(null)} />
+              {createTestimonialsContainer()}
+            </motion.div> :
+            <div>
+              {createTestimonialsContainer()}
+            </div>
+          }
         </div>
       </div>
     </div>
