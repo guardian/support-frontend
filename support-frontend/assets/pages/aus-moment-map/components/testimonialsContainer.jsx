@@ -4,17 +4,18 @@
 import * as React from 'preact/compat';
 import { LinkButton } from '@guardian/src-button';
 import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/types/testimonials';
+import { Button } from '@guardian/src-button';
+import { useWindowWidth } from '../hooks/useWindowWidth';
 
-
-const TestimonialCta = () => (
-  <div className="testimonial-cta">
+const TestimonialCtaPrimary = () => (
+  <div className="testimonial-cta testimonial-cta-primary">
     <h3>Are you a supporter?</h3>
     <p>
     If you’re a contributor or subscriber, we would love to hear from you
     </p>
 
     <LinkButton
-      className="testimonial-cta-link-button"
+      className="testimonial-cta-primary-link-button"
       priority="primary"
       size="small"
       href="https://www.surveymonkey.co.uk/r/C93WWTC"
@@ -22,6 +23,22 @@ const TestimonialCta = () => (
       rel="noopener noreferrer"
     >
       Add your message
+    </LinkButton>
+  </div>
+);
+
+const TestimonialCtaSecondary = () => (
+  <div className="testimonial-cta testimonial-cta-secondary">
+    <h3>Do something powerful today</h3>
+
+    <LinkButton
+      className="testimonial-cta-secondary-link-button"
+      priority="primary"
+      size="small"
+      href="https://support.theguardian.com/contribute?acquisitionData=%7B%22source%22%3A%22GUARDIAN_WEB%22%2C%22componentType%22%3A%22ACQUISITIONS_OTHER%22%2C%22componentId%22%3A%22aus_moment_2020_map%22%2C%22campaignCode%22%3A%22Aus_moment_2020%22%7D&INTCMP=Aus_moment_2020"
+      target="_blank"
+      rel="noopener noreferrer"
+    >Support the Guardian
     </LinkButton>
   </div>
 );
@@ -70,9 +87,13 @@ const LocationMarker = () => (
   </svg>
 );
 
-
 const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
+  const { windowWidthIsGreaterThan } = useWindowWidth();
+
   const midPointIndex = Math.ceil(props.testimonials.length / 2) - 1;
+
+  const firstColumn = props.testimonials.slice(0, midPointIndex + 1)
+    .map(testimonial => <TestimonialComponent testimonial={testimonial} />);
 
   const secondColumn = props.testimonials
     .slice(midPointIndex + 1)
@@ -80,36 +101,41 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   const ctaIndex = secondColumn.length < 5 ? secondColumn.length : 3;
 
-  secondColumn.splice(ctaIndex, 0, <TestimonialCta />);
+  secondColumn.splice(ctaIndex, 0, <TestimonialCtaPrimary />);
+  secondColumn.push(<TestimonialCtaSecondary />);
 
   const ref = React.useRef(null);
 
   React.useEffect(() => {
     if (ref.current) {
-      const { offsetTop } = ref.current;
-      const { offsetHeight } = ref.current;
-      const testimonialsContainer = ref.current.parentNode;
+      const { offsetTop, offsetHeight, parentNode } = ref.current;
+      const testimonialsContainer =
+        windowWidthIsGreaterThan('desktop') ? parentNode : document.documentElement;
 
-      const onScroll = () => {
-        if (testimonialsContainer.scrollTop >= offsetTop
+      if (testimonialsContainer) {
+        const onScroll = () => {
+          if (testimonialsContainer.scrollTop >= offsetTop
           && testimonialsContainer.scrollTop < (offsetTop + offsetHeight)) {
-          props.setSelectedTerritory(props.territory);
-        }
-      };
+            props.setSelectedTerritory(props.territory);
+          }
+        };
 
-      testimonialsContainer.addEventListener('scroll', onScroll);
+        testimonialsContainer.addEventListener('scroll', onScroll);
 
-      return () => testimonialsContainer.removeEventListener('scroll', onScroll);
+        return () => testimonialsContainer.removeEventListener('scroll', onScroll);
+      }
     }
     return () => {};
 
   }, [ref.current]);
 
   React.useEffect(() => {
-    if (ref.current && props.selectedTerritory === props.territory && props.shouldScrollIntoView) {
-      const { offsetTop } = ref.current;
-      const testimonialsContainer = ref.current.parentNode;
-      testimonialsContainer.scroll(0, offsetTop);
+    if (windowWidthIsGreaterThan('desktop')) {
+      if (ref.current && props.selectedTerritory === props.territory && props.shouldScrollIntoView) {
+        const { offsetTop } = ref.current;
+        const testimonialsContainer = ref.current.parentNode;
+        testimonialsContainer.scroll(0, offsetTop);
+      }
     }
   }, [ref.current, props.selectedTerritory]);
 
@@ -124,17 +150,61 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
         </div>
         <p>Why do you support Guardian&nbsp;Australia?</p>
       </div>
-      <div className="testimonials-columns-container">
-        <div className="testimonials-first-column">
-          {props.testimonials.slice(0, midPointIndex + 1).map(testimonial => (
-            <TestimonialComponent testimonial={testimonial} />
-          ))}
-        </div>
-        <div className="testimonials-second-column">{secondColumn}</div>
-      </div>
+      { windowWidthIsGreaterThan('tablet')
+        ? <TestimonialsTwoColumns firstColumn={firstColumn} secondColumn={secondColumn} />
+        : <TestimonialsExpandableSingleColumn testimonials={[...firstColumn, ...secondColumn]} /> }
     </div>
   );
 };
+
+type TestimonialsExpandableSingleColumnProps = {
+  testimonials: Array<React.Node>
+}
+
+const UNEXPANDED_NUMBER_OF_TESTIMONIALS = 3;
+
+const TestimonialsExpandableSingleColumn = (props: TestimonialsExpandableSingleColumnProps) => {
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const testimonials = isExpanded ? props.testimonials : props.testimonials.slice(0, UNEXPANDED_NUMBER_OF_TESTIMONIALS);
+  return (
+    <>
+      <div className="testimonials-columns-container">
+        <div className="testimonials-first-column">
+          {testimonials}
+        </div>
+      </div>
+      <div className="testimonials-read-more-button-container">
+        {!isExpanded &&
+        <Button
+          priority="tertiary"
+          size="small"
+          onClick={() => {
+                setIsExpanded(true);
+            }}
+        >
+          Read more
+        </Button>}
+      </div>
+    </>
+  );
+};
+
+type TestimonialTwoColumnsProps = {
+  firstColumn: Array<React.Node>,
+  secondColumn: Array<React.Node>,
+}
+
+const TestimonialsTwoColumns = (props: TestimonialTwoColumnsProps) => (
+  <div className="testimonials-columns-container">
+    <div className="testimonials-first-column">
+      {props.firstColumn}
+    </div>
+    <div className="testimonials-second-column">
+      {props.secondColumn}
+    </div>
+  </div>
+);
 
 type Props = {
   testimonialsCollection: TestimonialsCollection,
@@ -144,20 +214,24 @@ type Props = {
 };
 
 export const TestimonialsContainer = (props: Props) => {
-  if (props.selectedTerritory) {
-    return (
-      <div className="testimonials-container">
-        {Object.keys(props.testimonialsCollection).map(territory => (
-          <TestimonialsForTerritory
-            testimonials={props.testimonialsCollection[territory]}
-            territory={territory}
-            shouldScrollIntoView={props.shouldScrollIntoView}
-            selectedTerritory={props.selectedTerritory}
-            setSelectedTerritory={props.setSelectedTerritory}
-          />
+  const { windowWidthIsLessThan } = useWindowWidth();
+
+  if (props.testimonialsCollection) {
+    if (props.selectedTerritory || windowWidthIsLessThan('desktop')) {
+      return (
+        <div className="testimonials-container">
+          {Object.keys(props.testimonialsCollection).map(territory => (
+            <TestimonialsForTerritory
+              testimonials={props.testimonialsCollection[territory]}
+              territory={territory}
+              shouldScrollIntoView={props.shouldScrollIntoView}
+              selectedTerritory={props.selectedTerritory}
+              setSelectedTerritory={props.setSelectedTerritory}
+            />
         ))}
-      </div>
-    );
+        </div>
+      );
+    }
   }
   return null;
 };

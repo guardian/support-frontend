@@ -14,8 +14,10 @@ body {
 .map-page {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
   height: 100vh;
+  @include mq($from:desktop) {
+    overflow-x: hidden;
+  }
 }
 
 #header-wrapper {
@@ -59,12 +61,27 @@ body {
   }
 }
 
-.testimonial-cta-link-button {
+.testimonial-cta-primary-link-button {
+  background-color: #E05E00;
   margin-top: 16px;
   background: #E05E00 !important;
 
   &:hover {
     background: #BD5318 !important;
+  }
+}
+
+.testimonial-cta-secondary-link-button {
+  margin-top: 16px;
+}
+
+.button-cta-secondary {
+  background-color: #052962;
+  margin-top: 16px;
+  padding: 8px 20px;
+
+  &:hover {
+    background-color: #041F4A;
   }
 }
 
@@ -82,6 +99,38 @@ body {
 
   svg {
     display: block;
+  }
+}
+
+.map {
+  @include mq($until:desktop) {
+    width: 100%;
+  }
+}
+
+.clone {
+  visibility: hidden;
+}
+
+.map.sticky {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  text-align: center;
+  z-index: 500 !important;
+
+  .map-background {
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+  }
+
+  .svg-wrapper {
+    top: 0;
+    width: 40%;
   }
 }
 
@@ -103,11 +152,22 @@ body {
 }
 
 .territory {
-  cursor: pointer;
+  @include mq($from:desktop) {
+    cursor: pointer;
+
+    &:hover {
+      .territory-landmass {
+        color: gu-colour(brand-main);
+      }
+
+      .territory-label-on-landmass {
+        color: gu-colour(neutral-100);
+      }
+    }
+  }
 
   .territory-landmass {
     color: gu-colour(opinion-bright);
-
   }
 
   .territory-label {
@@ -125,17 +185,6 @@ body {
   .territory-label-abbr {
     @include mq($from:tablet) {
       display: none;
-    }
-}
-
-
-  &:hover {
-    .territory-landmass {
-      color: gu-colour(brand-main);
-    }
-
-    .territory-label-on-landmass {
-      color: gu-colour(neutral-100);
     }
   }
 }
@@ -258,21 +307,21 @@ p.blurb {
   @include mq($until: desktop) {
     align-items: flex-start;
     align-content: flex-start;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 }
 
 .left {
   left: 0;
-  height: 100%;
   width: 100%;
   display: inline-block;
   text-align: center;
-  overflow-x: hidden;
   box-sizing: border-box;
   padding-top: 1.5em;
   @include mq($from: desktop) {
+    height: 100%;
     max-width: 50vw;
+    overflow-x: hidden;
   }
 }
 
@@ -298,18 +347,16 @@ p.blurb {
 }
 
 .testimonials-overlay {
-  background-color: gu-colour(neutral-100);
-  overflow: hidden;
-
   @include mq($from: desktop) {
+    background-color: gu-colour(neutral-100);
+    overflow: hidden;
     position: absolute;
     right: -59vw;
     width: 59vw;
+    top: 0;
+    height: 100%;
+    z-index: 200;
   }
-
-  top: 0;
-  height: 100%;
-  z-index: 200;
 }
 
 .close-button {
@@ -369,8 +416,10 @@ span.selected-territory {
 .testimonials-container {
   padding-bottom: 48px;
   max-height: 100%;
-  overflow-y: scroll;
   position: relative;
+  @include mq($from:desktop) {
+    overflow-y: scroll;
+  }
 }
 
 .testimonials-for-territory:last-child {
@@ -378,7 +427,7 @@ span.selected-territory {
 }
 
 .testimonials-for-territory-header {
-  padding: 0 12px 4px 12px;
+  padding: 35px 12px 4px 12px;
   border-bottom: 2px solid #052962;
   line-height: 1;
   position: sticky;
@@ -389,6 +438,7 @@ span.selected-territory {
     margin: 0 0 0 12px;
     font-family: $gu-text-egyptian-web;
     font-size: 24px;
+    font-weight: 800;
     color: #052962;
 
     @include mq($from:desktop) {
@@ -414,7 +464,7 @@ span.selected-territory {
   }
 
   @include mq($from:tablet) {
-    padding: 0 34px 4px 34px;
+    padding: 60px 34px 4px 34px;
   }
 
   @include mq($from:desktop) {
@@ -426,6 +476,7 @@ span.selected-territory {
 .testimonials-for-territory-header-text-and-icon-container {
   display: flex;
   align-items: center;
+  margin-top: 50px;
 
   svg {
     @include mq($from:desktop) {
@@ -492,8 +543,6 @@ span.selected-territory {
 
 .testimonial-cta {
   margin-top: 12px;
-  background-color: #FEF9F5;
-  border: 1px solid #E05E00;
   padding: 12px;
 
   h3 {
@@ -508,16 +557,36 @@ span.selected-territory {
   }
 }
 
-.padded-multiline {
-  line-height: 1.2;
-  margin-left: -0.25rem !important;
+.testimonial-cta-primary {
+  background-color: #FEF9F5;
+  border: 1px solid #E05E00;
 }
 
-.padded-multiline span {
-  background-color: gu-colour(neutral-93);
-  color: gu-colour(brand-main);
-  display: inline;
-  padding: 0.25rem;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+.testimonial-cta-secondary {
+  background-color: gu-colour(neutral-97);
+  border: 1px solid gu-colour(neutral-86);
+  @include mq($from: tablet) {
+    display: none;
+  }
+}
+
+.testimonials-read-more-button-container {
+  margin-top: 12px;
+  margin-left: 12px;
+}
+
+.padded-multiline {
+  @include mq($from:desktop) {
+    line-height: 1.2;
+    margin-left: -0.25rem !important;
+
+    span {
+      background-color: gu-colour(neutral-93);
+      color: gu-colour(brand-main);
+      display: inline;
+      padding: 0.25rem;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+  }
 }

@@ -46,7 +46,7 @@ const AusMomentMap = () => {
   const [selectedTerritory, setSelectedTerritory] = React.useState(null);
   const [shouldScrollIntoView, setShouldScrollIntoView] = React.useState(false);
   const testimonials = useTestimonials();
-  const { windowWidthIsGreaterThan } = useWindowWidth();
+  const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
   React.useEffect(() => {
     const onKeyDown = (e) => {
@@ -91,6 +91,18 @@ const AusMomentMap = () => {
   const animationVariant = () =>
     ((windowWidthIsGreaterThan('desktop') && selectedTerritory) ? 'active' : 'initial');
 
+  const testimonialsProps = () => {
+    if (windowWidthIsGreaterThan('desktop')) {
+      return {
+        animate: animationVariant(),
+        variants: testimonialsVariants,
+        transition: animationTransition,
+        positionTransition: true,
+      };
+    }
+    return null;
+  };
+
   return (
     <div className="map-page">
       <Header />
@@ -99,10 +111,10 @@ const AusMomentMap = () => {
           className="left"
           variants={mapVariants}
           animate={animationVariant()}
-          initial="initial"
           transition={animationTransition}
           positionTransition
         >
+          { windowWidthIsLessThan('desktop') && <Blurb /> }
           <Map
             selectedTerritory={selectedTerritory}
             setSelectedTerritory={(territory) => {
@@ -115,21 +127,16 @@ const AusMomentMap = () => {
             className="left-padded-inner"
             transition={animationTransition}
             animate={animationVariant()}
-            initial="initial"
             variants={blurbVariants}
           >
             <Blurb slim />
           </motion.div>
         </motion.div>
         <div className="right">
-          <Blurb slim={false} />
+          { windowWidthIsGreaterThan('desktop') && <Blurb slim={false} /> }
           <motion.div
             className="testimonials-overlay"
-            animate={animationVariant()}
-            initial="initial"
-            variants={testimonialsVariants}
-            transition={animationTransition}
-            positionTransition
+            {...testimonialsProps()}
           >
             <CloseButton onClick={() => setSelectedTerritory(null)} />
             <TestimonialsContainer
