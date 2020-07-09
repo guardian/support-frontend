@@ -7,6 +7,7 @@ import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/t
 import { Button } from '@guardian/src-button';
 import { useWindowWidth } from '../hooks/useWindowWidth';
 import { contributeUrl } from '../utils';
+import { Map } from './map';
 
 const TestimonialCtaPrimary = () => (
   <div className="testimonial-cta testimonial-cta-primary">
@@ -80,6 +81,7 @@ type TestimonialsForTerritoryProps = {
   testimonials: Array<Testimonial>,
   selectedTerritory: string,
   setSelectedTerritory: string => void,
+  mapRef: React.Ref<typeof Map>,
 }
 
 const LocationMarker = () => (
@@ -115,17 +117,43 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
         parentNode: testimonialsContainer,
       } = ref.current;
 
-      if (testimonialsContainer) {
-        const onScroll = () => {
-          if (testimonialsContainer.scrollTop >= offsetTop
-          && testimonialsContainer.scrollTop < (offsetTop + offsetHeight)) {
-            props.setSelectedTerritory(props.territory);
-          }
-        };
+      const firstEl = ref.current.querySelector('.testimonial-component-details');
 
-        testimonialsContainer.addEventListener('scroll', onScroll);
-        return () => testimonialsContainer.removeEventListener('scroll', onScroll);
-      }
+      const observer = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach(entry => {
+            console.log(props.territory, entry.isIntersecting)
+            if (entry.isIntersecting) {
+              console.log(entry)
+              props.setSelectedTerritory(props.territory);
+            } else if (props.selectedTerritory === props.territory) {
+              props.setSelectedTerritory(null);
+            }
+          });
+        },
+        {
+          // root: props.mapRef.current
+          // threshold: 0.5
+        }
+      );
+
+      observer.observe(firstEl)
+
+      // const scrollingContainer = windowWidthIsGreaterThan('desktop') ? testimonialsContainer : window;
+      //
+      // if (scrollingContainer) {
+      //   console.log("setting up")
+      //   const onScroll = () => {
+      //     console.log("onScroll", scrollingContainer.scrollTop, offsetTop, offsetTop + offsetHeight)
+      //     if (scrollingContainer.scrollTop >= offsetTop
+      //     && scrollingContainer.scrollTop < (offsetTop + offsetHeight)) {
+      //       props.setSelectedTerritory(props.territory);
+      //     }
+      //   };
+      //
+      //   scrollingContainer.addEventListener('scroll', onScroll);
+      //   return () => scrollingContainer.removeEventListener('scroll', onScroll);
+      // }
     }
     return () => {};
 
@@ -212,6 +240,7 @@ type Props = {
   selectedTerritory: string | null,
   shouldScrollIntoView: boolean,
   setSelectedTerritory: string => void,
+  mapRef: React.Ref<typeof Map>,
 };
 
 export const TestimonialsContainer = React.forwardRef((props: Props, ref: React.Ref<typeof TestimonialsContainer>) => {
@@ -233,6 +262,7 @@ export const TestimonialsContainer = React.forwardRef((props: Props, ref: React.
                 shouldScrollIntoView={props.shouldScrollIntoView}
                 selectedTerritory={props.selectedTerritory}
                 setSelectedTerritory={props.setSelectedTerritory}
+                mapRef={props.mapRef}
               />
           ))}
           </div>

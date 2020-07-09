@@ -161,6 +161,7 @@ const AusMomentMap = () => {
         setShouldScrollIntoView(false);
       }}
       ref={testimonialsContainerRef}
+      mapRef={mapRef}
     />
   );
 
