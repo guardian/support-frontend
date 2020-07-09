@@ -52,11 +52,11 @@ const AusMomentMap = () => {
 
   React.useEffect(() => {
     if (mapRef.current && testimonialsContainerRef.current) {
-      // const testimonialsContainer = testimonialsContainerRef.current;
+      const testimonialsContainer = testimonialsContainerRef.current;
       const map = mapRef.current;
       const parent = map.parentNode;
       const background = map.querySelector('.map-background');
-      // const svgWrapper = map.querySelector('.svg-wrapper');
+      const svgWrapper = map.querySelector('.svg-wrapper');
       const svgContent = map.querySelector('.svg-content');
       const clone = map.cloneNode(true);
 
@@ -80,7 +80,9 @@ const AusMomentMap = () => {
         }
       };
 
-      const handleTestimonialsContainer = () => {};
+      const handleTestimonialsContainer = () => {
+
+      };
 
       const onScroll = () => {
         handleMap();
