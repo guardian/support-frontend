@@ -45,8 +45,47 @@ const territories = [
 const AusMomentMap = () => {
   const [selectedTerritory, setSelectedTerritory] = React.useState(null);
   const [shouldScrollIntoView, setShouldScrollIntoView] = React.useState(false);
+  const mapRef = React.useRef(null);
+  const testimonialsContainerRef = React.useRef(null);
   const testimonials = useTestimonials();
   const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
+
+  React.useEffect(() => {
+    if (mapRef.current && testimonialsContainerRef.current) {
+      // const testimonialsContainer = testimonialsContainerRef.current;
+
+      const map = mapRef.current;
+      const parent = map.parentNode;
+      const background = map.querySelector('.map-background');
+      const svg = map.querySelector('.svg-content');
+      const clone = map.cloneNode(true);
+      clone.classList.add('clone');
+
+      const onScroll = () => {
+        const atOrPastTop = map.classList.contains('sticky')
+          ? clone.getBoundingClientRect().top <= 0
+          : map.getBoundingClientRect().top <= 0;
+
+        if (atOrPastTop) {
+          map.classList.add('sticky');
+          parent.appendChild(clone);
+          background.style.height = `${svg.clientHeight + 10}px`;
+        } else {
+          map.classList.remove('sticky');
+          if (parent.querySelector('.clone')) {
+            parent.removeChild(clone);
+          }
+          background.style.height = '0';
+        }
+      };
+
+      document.addEventListener('scroll', onScroll);
+      return () => document.removeEventListener('scroll', onScroll);
+    }
+
+    return () => {};
+
+  }, [mapRef.current, testimonialsContainerRef.current]);
 
   React.useEffect(() => {
     const onKeyDown = (e) => {
@@ -79,7 +118,6 @@ const AusMomentMap = () => {
   };
 
   const testimonialsVariants = {
-    mobile: { x: '0vw' },
     initial: { x: '59vw' },
     active: { x: '-59vw' },
   };
@@ -104,18 +142,6 @@ const AusMomentMap = () => {
     return null;
   };
 
-  const createTestimonialsContainer = () => (
-    <TestimonialsContainer
-      testimonialsCollection={testimonials}
-      selectedTerritory={selectedTerritory}
-      shouldScrollIntoView={shouldScrollIntoView}
-      setSelectedTerritory={(territory) => {
-                setSelectedTerritory(territory);
-                setShouldScrollIntoView(false);
-              }}
-    />
-  );
-
   return (
     <div className="map-page">
       <Header />
@@ -134,6 +160,7 @@ const AusMomentMap = () => {
               setSelectedTerritory(territory);
               setShouldScrollIntoView(true);
             }}
+            ref={mapRef}
           />
           <p className="map-caption">Tap the map to read messages from supporters</p>
           <motion.div
@@ -146,19 +173,23 @@ const AusMomentMap = () => {
           </motion.div>
         </motion.div>
         <div className="right">
-          { windowWidthIsGreaterThan('desktop') && <Blurb slim={false} /> }
-          { windowWidthIsGreaterThan('desktop') ?
-            <motion.div
-              className="testimonials-overlay"
-              {...testimonialsProps()}
-            >
-              <CloseButton onClick={() => setSelectedTerritory(null)} />
-              {createTestimonialsContainer()}
-            </motion.div> :
-            <div>
-              {createTestimonialsContainer()}
-            </div>
-          }
+          { windowWidthIsGreaterThan('desktop') && <Blurb /> }
+          <motion.div
+            className="testimonials-overlay"
+            {...testimonialsProps()}
+          >
+            <CloseButton onClick={() => setSelectedTerritory(null)} />
+            <TestimonialsContainer
+              testimonialsCollection={testimonials}
+              selectedTerritory={selectedTerritory}
+              shouldScrollIntoView={shouldScrollIntoView}
+              setSelectedTerritory={(territory) => {
+                setSelectedTerritory(territory);
+                setShouldScrollIntoView(false);
+              }}
+              ref={testimonialsContainerRef}
+            />
+          </motion.div>
         </div>
       </div>
     </div>

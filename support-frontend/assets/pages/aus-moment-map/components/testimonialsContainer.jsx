@@ -108,9 +108,11 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   React.useEffect(() => {
     if (ref.current) {
-      const { offsetTop, offsetHeight, parentNode } = ref.current;
-      const testimonialsContainer =
-        windowWidthIsGreaterThan('desktop') ? parentNode : document.documentElement;
+      const {
+        offsetTop,
+        offsetHeight,
+        parentNode: testimonialsContainer,
+      } = ref.current;
 
       if (testimonialsContainer) {
         const onScroll = () => {
@@ -121,7 +123,6 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
         };
 
         testimonialsContainer.addEventListener('scroll', onScroll);
-
         return () => testimonialsContainer.removeEventListener('scroll', onScroll);
       }
     }
@@ -213,13 +214,13 @@ type Props = {
   setSelectedTerritory: string => void,
 };
 
-export const TestimonialsContainer = (props: Props) => {
+export const TestimonialsContainer = React.forwardRef((props: Props, ref: React.Ref<typeof TestimonialsContainer>) => {
   const { windowWidthIsLessThan } = useWindowWidth();
 
   if (props.testimonialsCollection) {
     if (props.selectedTerritory || windowWidthIsLessThan('desktop')) {
       return (
-        <div className="testimonials-container">
+        <div className="testimonials-container" ref={ref}>
           {Object.keys(props.testimonialsCollection).map(territory => (
             <TestimonialsForTerritory
               testimonials={props.testimonialsCollection[territory]}
@@ -234,4 +235,4 @@ export const TestimonialsContainer = (props: Props) => {
     }
   }
   return null;
-};
+});

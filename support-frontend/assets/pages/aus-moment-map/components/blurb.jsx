@@ -19,7 +19,7 @@ const useSupportersCount = () => {
   return supportersCount;
 };
 
-type PropTypes = {| slim: boolean |}
+type PropTypes = {| slim?: boolean |}
 
 // ----- Render ----- //
 export const Blurb = (props: PropTypes) => {
@@ -43,4 +43,8 @@ export const Blurb = (props: PropTypes) => {
       </div>
       <SocialLinks />
     </div>);
+};
+
+Blurb.defaultProps = {
+  slim: false,
 };
