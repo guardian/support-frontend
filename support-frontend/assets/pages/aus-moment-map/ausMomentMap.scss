@@ -296,21 +296,6 @@ p.blurb {
   fill: gu-colour(neutral-86);
 }
 
-.social-share {
-  position: absolute;
-  right: 0;
-}
-
-.social-share-number {
-  font-family: $gu-text-sans-web;
-  font-weight: bold;
-  font-size: 17px;
-  text-align: right;
-  position: absolute;
-  right: 0;
-  top: 15px;
-}
-
 .main {
   flex-grow: 1;
   align-items: center;
