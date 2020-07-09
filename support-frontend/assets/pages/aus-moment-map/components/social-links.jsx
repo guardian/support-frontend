@@ -11,7 +11,7 @@ const iconColour = '#E05E00';
 
 export const SocialLinks = () => (
   <div className="social-links">
-      <a href={links.facebook} target="_blank" rel="noopener noreferrer">
+    <a href={links.facebook} target="_blank" rel="noopener noreferrer">
       <svg className="social-link" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="18" cy="18" r="17.5882" stroke="#DCDCDC" strokeWidth="0.823529" />
         <path fillRule="evenodd" clipRule="evenodd" d="M16.3469 13.9626V16.2354H14V18.7444H16.3469V26.2354H19.1734V18.7444H21.4861L22 16.2354H19.1734V14.2354C19.1734 13.1263 19.7902 12.7444 20.5953 12.7444H22L21.9143 10.3626C21.212 10.2899 20.6638 10.2354 19.8587 10.2354C17.8544 10.2354 16.3469 11.5626 16.3469 13.9626Z" fill={iconColour} />

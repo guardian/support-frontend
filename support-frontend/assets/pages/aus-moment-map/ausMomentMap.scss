@@ -47,53 +47,41 @@ body {
   }
 }
 
-.link-button {
-  display: block;
-}
-
-.button {
-  display: inline-block;
-  text-decoration: none;
-  cursor: pointer;
-  text-align: center;
-  border: 1px solid gu-colour(neutral-100);
-  border-radius: 1.3125rem;
-  color: gu-colour(neutral-100);
-  font-family: $gu-text-sans-web;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  padding: 5px 20px;
-  line-height: 21px;
-  background: transparent;
-  box-sizing: border-box;
-}
-
-.button.standard {
-  top: 65px;
-  @include mq($until:tablet) {
-    display: none;
+.header-cta-text-full {
+  display: none;
+  @include mq($from:tablet) {
+    display: block;
   }
 }
 
-.button.standard:hover {
-  background-color: gu-colour(neutral-100);
-  color: gu-colour(brand-main);
-}
-
-.button.mobile {
+.header-cta-text-short {
+  display: block;
   @include mq($from:tablet) {
     display: none;
   }
 }
 
-.button-cta {
+.testimonial-cta-primary-link-button {
   background-color: #E05E00;
+  margin-top: 16px;
+  background: #E05E00 !important;
+
+  &:hover {
+    background: #BD5318 !important;
+  }
+}
+
+.testimonial-cta-secondary-link-button {
+  margin-top: 16px;
+}
+
+.button-cta-secondary {
+  background-color: #052962;
   margin-top: 16px;
   padding: 8px 20px;
 
   &:hover {
-    background-color: #BD5318;
+    background-color: #041F4A;
   }
 }
 
@@ -440,7 +428,7 @@ span.selected-territory {
 }
 
 .testimonials-for-territory-header {
-  padding: 0 12px 4px 12px;
+  padding: 35px 12px 4px 12px;
   border-bottom: 2px solid #052962;
   line-height: 1;
   position: sticky;
@@ -451,6 +439,7 @@ span.selected-territory {
     margin: 0 0 0 12px;
     font-family: $gu-text-egyptian-web;
     font-size: 24px;
+    font-weight: 800;
     color: #052962;
 
     @include mq($from:desktop) {
@@ -477,7 +466,7 @@ span.selected-territory {
   }
 
   @include mq($from:tablet) {
-    padding: 0 34px 4px 34px;
+    padding: 60px 34px 4px 34px;
   }
 
   @include mq($from:desktop) {
@@ -558,8 +547,6 @@ span.selected-territory {
 
 .testimonial-cta {
   margin-top: 12px;
-  background-color: #FEF9F5;
-  border: 1px solid #E05E00;
   padding: 12px;
 
   h3 {
@@ -572,6 +559,24 @@ span.selected-territory {
   p {
     margin: 4px 0 0 0;
   }
+}
+
+.testimonial-cta-primary {
+  background-color: #FEF9F5;
+  border: 1px solid #E05E00;
+}
+
+.testimonial-cta-secondary {
+  background-color: gu-colour(neutral-97);
+  border: 1px solid gu-colour(neutral-86);
+  @include mq($from: tablet) {
+    display: none;
+  }
+}
+
+.testimonials-read-more-button-container {
+  margin-top: 12px;
+  margin-left: 12px;
 }
 
 .padded-multiline {
