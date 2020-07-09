@@ -24,7 +24,7 @@ const TerritorySvgContainer = (props: TerritorySvgContainerProps) => {
   return (
     <g
       className={`territory ${props.isSelected ? 'territory-selected' : ''}`}
-      onClick={windowWidthIsGreaterThan('desktop') ? props.onClick : null}
+      onClick={windowWidthIsGreaterThan('tablet') ? props.onClick : null}
     >
       { props.children }
     </g>

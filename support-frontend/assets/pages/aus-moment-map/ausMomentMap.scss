@@ -167,7 +167,7 @@ body {
 }
 
 .territory {
-  @include mq($from:desktop) {
+  @include mq($from:tablet) {
     cursor: pointer;
 
     &:hover {
