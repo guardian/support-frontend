@@ -3,11 +3,11 @@ import React from 'react';
 
 const twitterCopy = 'Hear%20from%20supporters%20across%20Australia%3A%20as%20the%20Guardian%20grows%20its%20community%20and%20reaches%20more%20people%2C%20many%20readers%20have%20shared%20their%20reason%20for%20supporting%20them%20financially.%20Read%20their%20messages%20here';
 const emailHeadline = 'Hear%20from%20Guardian%20supporters%20across%20Australia';
-const emailBody = 'Guardian%20Australia%20is%20growing%20its%20community%20and%20reaching%20more%20people%20than%20ever%20before.%20Many%20readers%20have%20shared%20their%20reason%20for%20supporting%20them%20financially%2C%20and%20you%20can%20read%20their%20messages%20here%3A%0A%0Ahttps%3A%2F%2Fsupport.theguardian.com%2Fmap';
+const emailBody = 'Guardian%20Australia%20is%20growing%20its%20community%20and%20reaching%20more%20people%20than%20ever%20before.%20Many%20readers%20have%20shared%20their%20reason%20for%20supporting%20them%20financially%2C%20and%20you%20can%20read%20their%20messages%20here%3A%0A%0Ahttps%3A%2F%2Fsupport.theguardian.com%2Faus-2020-map';
 
 const links = {
-  facebook: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.theguardian.com%2Fmap?acquisitionData=%7B%22source%22%3A%22SOCIAL%22%2C%22campaignCode%22%3A%22Aus_moment_2020%22%2C%22componentId%22%3A%22component-social-facebook%22%7D&INTCMP=component-social-facebook',
-  twitter: `https://twitter.com/intent/tweet?INTCMP=component-social-twitter&url=https%3A%2F%2Fsupport.theguardian.com%2Fmap%3Fhashtags=supporttheguardian&text=${twitterCopy}`,
+  facebook: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.theguardian.com%2Faus-2020-map?acquisitionData=%7B%22source%22%3A%22SOCIAL%22%2C%22campaignCode%22%3A%22Aus_moment_2020%22%2C%22componentId%22%3A%22component-social-facebook%22%7D&INTCMP=component-social-facebook',
+  twitter: `https://twitter.com/intent/tweet?INTCMP=component-social-twitter&url=https%3A%2F%2Fsupport.theguardian.com%2Faus-2020-map%3Fhashtags=supporttheguardian&text=${twitterCopy}`,
   email: `mailto:?subject=${emailHeadline}&body=${emailBody}?INTCMP=component-social-email`,
 };
 
