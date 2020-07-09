@@ -81,7 +81,8 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   const midPointIndex = Math.ceil(props.testimonials.length / 2) - 1;
 
-  const firstColumn = props.testimonials.slice(0, midPointIndex + 1).map(testimonial => <TestimonialComponent testimonial={testimonial} />);
+  const firstColumn = props.testimonials.slice(0, midPointIndex + 1)
+    .map(testimonial => <TestimonialComponent testimonial={testimonial} />);
 
   const secondColumn = props.testimonials
     .slice(midPointIndex + 1)
