@@ -53,15 +53,16 @@ const AusMomentMap = () => {
   React.useEffect(() => {
     if (mapRef.current && testimonialsContainerRef.current) {
       // const testimonialsContainer = testimonialsContainerRef.current;
-
       const map = mapRef.current;
       const parent = map.parentNode;
       const background = map.querySelector('.map-background');
-      const svg = map.querySelector('.svg-content');
+      // const svgWrapper = map.querySelector('.svg-wrapper');
+      const svgContent = map.querySelector('.svg-content');
       const clone = map.cloneNode(true);
+
       clone.classList.add('clone');
 
-      const onScroll = () => {
+      const handleMap = () => {
         const atOrPastTop = map.classList.contains('sticky')
           ? clone.getBoundingClientRect().top <= 0
           : map.getBoundingClientRect().top <= 0;
@@ -69,7 +70,7 @@ const AusMomentMap = () => {
         if (atOrPastTop) {
           map.classList.add('sticky');
           parent.appendChild(clone);
-          background.style.height = `${svg.clientHeight + 10}px`;
+          background.style.height = `${svgContent.clientHeight + 10}px`;
         } else {
           map.classList.remove('sticky');
           if (parent.querySelector('.clone')) {
@@ -77,6 +78,13 @@ const AusMomentMap = () => {
           }
           background.style.height = '0';
         }
+      };
+
+      const handleTestimonialsContainer = () => {};
+
+      const onScroll = () => {
+        handleMap();
+        handleTestimonialsContainer();
       };
 
       document.addEventListener('scroll', onScroll);

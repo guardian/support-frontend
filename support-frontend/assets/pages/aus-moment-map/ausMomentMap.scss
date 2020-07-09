@@ -132,7 +132,7 @@ body {
 
   .svg-wrapper {
     top: 0;
-    width: 40%;
+    width: 35%;
     overflow: hidden;
   }
 
@@ -428,6 +428,16 @@ span.selected-territory {
   padding-bottom: 500px;
 }
 
+.testimonials-for-territory:first-child {
+  .testimonials-for-territory-header {
+    padding-top: 10px;
+
+    .testimonials-for-territory-header-text-and-icon-container {
+      margin-top: 10px;
+    }
+  }
+}
+
 .testimonials-for-territory-header {
   padding: 35px 12px 4px 12px;
   border-bottom: 2px solid #052962;
@@ -448,9 +458,6 @@ span.selected-territory {
       font-family: $gu-titlepiece;
       font-size: 48px;
       padding: 0 5px 10px 5px;
-      //padding-bottom: 10px;
-      //padding-left: 5px;
-      //padding-right: 5px;
     }
   }
 
