@@ -1,4 +1,6 @@
 // @flow
+
+// $FlowIgnore
 import * as React from 'preact/compat';
 import VictoriaSvg from './territories/victoriaSvg';
 import NewSouthWalesSvg from './territories/newSouthWalesSvg';
@@ -8,7 +10,7 @@ import SouthAustraliaSvg from './territories/southAustraliaSvg';
 import WesternAustraliaSvg from './territories/westernAustraliaSvg';
 import TasmaniaSvg from './territories/tasmaniaSvg';
 import NorthernTerritorySvg from './territories/northernTerritorySvg';
-import { useWindowWidth } from "../hooks/useWindowWidth";
+import { useWindowWidth } from '../hooks/useWindowWidth';
 
 type TerritorySvgContainerProps = {
   onClick: () => void,
@@ -25,7 +27,7 @@ const TerritorySvgContainer = (props: TerritorySvgContainerProps) => {
     >
       { props.children }
     </g>
-  )
+  );
 };
 
 type MapProps = {
@@ -47,16 +49,16 @@ export const Map = (props: MapProps) => {
       const onScroll = () => {
         const atOrPastTop = self.classList.contains('sticky')
           ? clone.getBoundingClientRect().top <= 0
-          : self.getBoundingClientRect().top <= 0
+          : self.getBoundingClientRect().top <= 0;
 
         if (atOrPastTop) {
-          self.classList.add('sticky')
-          parent.appendChild(clone)
+          self.classList.add('sticky');
+          parent.appendChild(clone);
           background.style.height = `${svg.clientHeight + 10}px`;
         } else {
-          self.classList.remove('sticky')
-          parent.removeChild(clone)
-          background.style.height = '0'
+          self.classList.remove('sticky');
+          parent.removeChild(clone);
+          background.style.height = '0';
         }
       };
 
@@ -107,5 +109,5 @@ export const Map = (props: MapProps) => {
         </svg>
       </div>
     </div>
-  )
-}
+  );
+};
