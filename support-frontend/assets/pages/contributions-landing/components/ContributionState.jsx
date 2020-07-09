@@ -8,9 +8,7 @@ import { connect } from 'react-redux';
 
 import { usStates, caStates, type StateProvince, auStates } from 'helpers/internationalisation/country';
 import { type CountryGroupId, type CountryGroup, countryGroups, AUDCountries } from 'helpers/internationalisation/countryGroup';
-import { classNameWithModifiers } from 'helpers/utilities';
 import { Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
-import SvgGlobe from 'components/svgs/globe';
 import { InlineError } from '@guardian/src-user-feedback';
 import DownChevronDs from 'components/svgs/downChevronDs';
 import { focusHalo } from '@guardian/src-foundations/accessibility';
@@ -26,7 +24,6 @@ type PropTypes = {|
   isValid: boolean,
   formHasBeenSubmitted: boolean,
   contributionType: string,
-  isDesignSystemTest: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -81,10 +78,6 @@ const chevronErrorCss = css`
 `;
 
 const renderState = (selectedState: StateProvince | null) => (state: {abbreviation: string, name: string}) => (
-  <option value={state.abbreviation} selected={selectedState === state.abbreviation}>{state.name}</option>
-);
-
-const renderStateDs = (selectedState: StateProvince | null) => (state: {abbreviation: string, name: string}) => (
   <option value={state.abbreviation} selected={selectedState === state.abbreviation}>&nbsp;&nbsp;{state.name}</option>
 );
 
@@ -94,105 +87,75 @@ const renderStatesField = (
   onChange: (Event => void) | false,
   showError: boolean,
   label: string,
-  isDesignSystemTest: boolean,
-) => {
-
-  const renderStatesFieldControl = (
-    <div className={classNameWithModifiers('form__field', ['contribution-state'])}>
-      <label className="form__label" htmlFor="contributionState">
-        {label}
-      </label>
-      <span className="form__input-with-icon">
-        <select id="contributionState" className={classNameWithModifiers('form__input', selectedState ? [] : ['placeholder'])} onChange={onChange} required>
-          <option value="">Please select your {label.toLowerCase()}</option>
-          {Object.keys(states)
-            .map(key => ({ abbreviation: key, name: states[key] }))
-            .map(renderState(selectedState))}
-        </select>
-        <span className="form__icon">
-          <SvgGlobe />
-        </span>
-      </span>
-      {showError ? (
-        <div className="form__error">
-          Please provide a {label.toLowerCase()}
-        </div>
-        ) : null}
-    </div>
-  );
-
-  const renderStatesFieldDs = (
-    <div
-      css={css`
+) => (
+  <div
+    css={css`
         margin-top: 12px;
         margin-bottom: 4px;
         position: relative;
       `}
-    >
-      <label
-        htmlFor="contributionState"
-        css={css`
+  >
+    <label
+      htmlFor="contributionState"
+      css={css`
           font-family: $gu-text-sans-web;
           font-weight: 700;
           line-height: 1.5;
           font-size: 17px;
         `}
-      >
-        {label}
-      </label>
-      <div
-        css={css`
+    >
+      {label}
+    </label>
+    <div
+      css={css`
           font-size: 15px;
           color: #767676;
           margin-bottom: ${space[1]}px;
         `}
-      >Select your {label.toLowerCase()}
-      </div>
-      {showError ? (
-        <InlineError
-          cssOverrides={css`
+    >Select your {label.toLowerCase()}
+    </div>
+    {showError ? (
+      <InlineError
+        cssOverrides={css`
             margin-bottom: 4px;
           `}
-        >
+      >
           Please select your {label.toLowerCase()}
-        </InlineError>
+      </InlineError>
         ) : null}
-      <div
-        css={css`
+    <div
+      css={css`
           position: relative;
         `}
+    >
+      <select
+        css={showError ? [selectCss, errorBorderCss] : selectCss}
+        id="contributionState"
+        onChange={onChange}
+        required
       >
-        <select
-          css={showError ? [selectCss, errorBorderCss] : selectCss}
-          id="contributionState"
-          onChange={onChange}
-          required
-        >
-          <option value="">&nbsp;</option>
-          {Object.keys(states)
+        <option value="">&nbsp;</option>
+        {Object.keys(states)
               .map(key => ({ abbreviation: key, name: states[key] }))
-              .map(renderStateDs(selectedState))}
-        </select>
-        <div
-          css={showError ? [chevronErrorCss, chevronCss] : chevronCss}
-        >
-          <DownChevronDs />
-        </div>
+              .map(renderState(selectedState))}
+      </select>
+      <div
+        css={showError ? [chevronErrorCss, chevronCss] : chevronCss}
+      >
+        <DownChevronDs />
       </div>
     </div>
-  );
-
-  return (isDesignSystemTest ? renderStatesFieldDs : renderStatesFieldControl);
-};
+  </div>
+);
 
 function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   if (props.contributionType !== 'ONE_OFF') {
     switch (props.countryGroupId) {
       case UnitedStates:
-        return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State', props.isDesignSystemTest);
+        return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
       case Canada:
-        return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province', props.isDesignSystemTest);
+        return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
       case AUDCountries: {
         // Don't show states if the user is GEO-IP'd to one of the non AU countries that use AUD.
         if (window.guardian && window.guardian.geoip) {
@@ -202,7 +165,7 @@ function ContributionState(props: PropTypes) {
             return null;
           }
         }
-        return renderStatesField(auStates, props.selectedState, props.onChange, showError, 'State / Territory', props.isDesignSystemTest);
+        return renderStatesField(auStates, props.selectedState, props.onChange, showError, 'State / Territory');
       }
       default:
         return null;
