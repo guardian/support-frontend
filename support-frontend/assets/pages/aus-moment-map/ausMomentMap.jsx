@@ -100,6 +100,7 @@ const AusMomentMap = () => {
         positionTransition: true,
       };
     }
+    return null;
   };
 
   return (
