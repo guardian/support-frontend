@@ -10,5 +10,4 @@ const ActSvg = () => (
     </g>
   </>
 );
-
 export default ActSvg;

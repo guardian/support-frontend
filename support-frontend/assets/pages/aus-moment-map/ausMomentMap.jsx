@@ -118,6 +118,7 @@ const AusMomentMap = () => {
   };
 
   const testimonialsVariants = {
+    mobile: { x: '0vw' },
     initial: { x: '59vw' },
     active: { x: '-59vw' },
   };
@@ -141,6 +142,20 @@ const AusMomentMap = () => {
     }
     return null;
   };
+
+  const createTestimonialsContainer = () => (
+    <TestimonialsContainer
+      testimonialsCollection={testimonials}
+      selectedTerritory={selectedTerritory}
+      shouldScrollIntoView={shouldScrollIntoView}
+      setSelectedTerritory={(territory) => {
+        setSelectedTerritory(territory);
+        setShouldScrollIntoView(false);
+      }}
+      ref={testimonialsContainerRef}
+    />
+  );
+
 
   return (
     <div className="map-page">
@@ -174,22 +189,18 @@ const AusMomentMap = () => {
         </motion.div>
         <div className="right">
           { windowWidthIsGreaterThan('desktop') && <Blurb /> }
-          <motion.div
-            className="testimonials-overlay"
-            {...testimonialsProps()}
-          >
-            <CloseButton onClick={() => setSelectedTerritory(null)} />
-            <TestimonialsContainer
-              testimonialsCollection={testimonials}
-              selectedTerritory={selectedTerritory}
-              shouldScrollIntoView={shouldScrollIntoView}
-              setSelectedTerritory={(territory) => {
-                setSelectedTerritory(territory);
-                setShouldScrollIntoView(false);
-              }}
-              ref={testimonialsContainerRef}
-            />
-          </motion.div>
+          { windowWidthIsGreaterThan('desktop') ?
+            <motion.div
+              className="testimonials-overlay"
+              {...testimonialsProps()}
+            >
+              <CloseButton onClick={() => setSelectedTerritory(null)} />
+              {createTestimonialsContainer()}
+            </motion.div> :
+            <div>
+              {createTestimonialsContainer()}
+            </div>
+          }
         </div>
       </div>
     </div>
