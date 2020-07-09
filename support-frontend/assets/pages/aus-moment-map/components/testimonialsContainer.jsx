@@ -150,8 +150,7 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
             <span>{TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
           </h2>
         </div>
-        <p>Why do you support Guardian&nbsp;Australia?</p>
-      </div>
+        </div>
       { windowWidthIsGreaterThan('tablet')
         ? <TestimonialsTwoColumns firstColumn={firstColumn} secondColumn={secondColumn} />
         : <TestimonialsExpandableSingleColumn testimonials={[...firstColumn, ...secondColumn]} /> }
@@ -221,17 +220,23 @@ export const TestimonialsContainer = React.forwardRef((props: Props, ref: React.
   if (props.testimonialsCollection) {
     if (props.selectedTerritory || windowWidthIsLessThan('desktop')) {
       return (
-        <div className="testimonials-container" ref={ref}>
-          {Object.keys(props.testimonialsCollection).map(territory => (
-            <TestimonialsForTerritory
-              testimonials={props.testimonialsCollection[territory]}
-              territory={territory}
-              shouldScrollIntoView={props.shouldScrollIntoView}
-              selectedTerritory={props.selectedTerritory}
-              setSelectedTerritory={props.setSelectedTerritory}
-            />
-        ))}
-        </div>
+        <>
+          <div className="testimonials-container-header">
+            Why do you support Guardian&nbsp;Australia?
+          </div>
+
+          <div className="testimonials-container" ref={ref}>
+            {Object.keys(props.testimonialsCollection).map(territory => (
+              <TestimonialsForTerritory
+                testimonials={props.testimonialsCollection[territory]}
+                territory={territory}
+                shouldScrollIntoView={props.shouldScrollIntoView}
+                selectedTerritory={props.selectedTerritory}
+                setSelectedTerritory={props.setSelectedTerritory}
+              />
+          ))}
+          </div>
+        </>
       );
     }
   }
