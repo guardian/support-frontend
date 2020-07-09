@@ -13,6 +13,7 @@ body {
 
 .map-page {
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   height: 100vh;
   @include mq($from:desktop) {
@@ -22,6 +23,7 @@ body {
 
 #header-wrapper {
   display: flex;
+  flex-shrink: 0;
   width: 100%;
   max-width: 100vw;
   border: 0;
@@ -313,6 +315,7 @@ p.blurb {
   flex-grow: 1;
   align-items: center;
   display: flex;
+  flex-shrink: 0;
   position: relative;
   width: 100%;
   max-width: 100vw;
@@ -424,6 +427,7 @@ span.selected-territory {
   border-top: 1px solid gu-colour(neutral-93);
   width: 90%;
   display: flex;
+  flex-shrink: 0;
 }
 
 .testimonials-container {
@@ -489,6 +493,7 @@ span.selected-territory {
 
 .testimonials-for-territory-header-text-and-icon-container {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   @include mq($until:desktop) {
     margin-top: 50px;
@@ -504,6 +509,7 @@ span.selected-territory {
 .testimonials-columns-container {
   padding: 0 12px;
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
 
   @include mq($from: tablet) {
