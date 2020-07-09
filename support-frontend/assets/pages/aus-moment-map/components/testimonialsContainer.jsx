@@ -98,18 +98,20 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
     if (ref.current) {
       const { offsetTop, offsetHeight, parentNode } = ref.current;
       const testimonialsContainer =
-        windowWidthIsGreaterThan('desktop') ? parentNode : document.documentElement
+        windowWidthIsGreaterThan('desktop') ? parentNode : document.documentElement;
 
-      const onScroll = () => {
-        if (testimonialsContainer.scrollTop >= offsetTop
+      if (testimonialsContainer) {
+        const onScroll = () => {
+          if (testimonialsContainer.scrollTop >= offsetTop
           && testimonialsContainer.scrollTop < (offsetTop + offsetHeight)) {
-          props.setSelectedTerritory(props.territory);
-        }
-      };
+            props.setSelectedTerritory(props.territory);
+          }
+        };
 
-      testimonialsContainer.addEventListener('scroll', onScroll);
+        testimonialsContainer.addEventListener('scroll', onScroll);
 
-      return () => testimonialsContainer.removeEventListener('scroll', onScroll);
+        return () => testimonialsContainer.removeEventListener('scroll', onScroll);
+      }
     }
     return () => {};
 
