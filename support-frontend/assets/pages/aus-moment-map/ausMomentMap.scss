@@ -133,6 +133,18 @@ body {
     width: 40%;
     overflow: hidden;
   }
+
+  .territory-label-full {
+    display: none;
+  }
+
+  .territory-label-abbr {
+    display: none;
+
+    @include mq($from: tablet) {
+      display: block;
+    }
+  }
 }
 
 .svg-wrapper {
