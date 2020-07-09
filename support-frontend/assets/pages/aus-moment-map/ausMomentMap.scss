@@ -14,8 +14,10 @@ body {
 .map-page {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
   height: 100vh;
+  @include mq($from:desktop) {
+    overflow-x: hidden;
+  }
 }
 
 #header-wrapper {
@@ -122,6 +124,38 @@ body {
   }
 }
 
+.map {
+  @include mq($until:desktop) {
+    width: 100%;
+  }
+}
+
+.clone {
+  visibility: hidden;
+}
+
+.map.sticky {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  text-align: center;
+  z-index: 500 !important;
+
+  .map-background {
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+  }
+
+  .svg-wrapper {
+    top: 0;
+    width: 40%;
+  }
+}
+
 .svg-wrapper {
   display: inline-block;
   position: relative;
@@ -140,11 +174,22 @@ body {
 }
 
 .territory {
-  cursor: pointer;
+  @include mq($from:desktop) {
+    cursor: pointer;
+
+    &:hover {
+      .territory-landmass {
+        color: gu-colour(brand-main);
+      }
+
+      .territory-label-on-landmass {
+        color: gu-colour(neutral-100);
+      }
+    }
+  }
 
   .territory-landmass {
     color: gu-colour(opinion-bright);
-
   }
 
   .territory-label {
@@ -162,17 +207,6 @@ body {
   .territory-label-abbr {
     @include mq($from:tablet) {
       display: none;
-    }
-}
-
-
-  &:hover {
-    .territory-landmass {
-      color: gu-colour(brand-main);
-    }
-
-    .territory-label-on-landmass {
-      color: gu-colour(neutral-100);
     }
   }
 }
@@ -404,8 +438,10 @@ span.selected-territory {
 .testimonials-container {
   padding-bottom: 48px;
   max-height: 100%;
-  overflow-y: scroll;
   position: relative;
+  @include mq($from:desktop) {
+    overflow-y: scroll;
+  }
 }
 
 .testimonials-for-territory:last-child {
@@ -462,6 +498,7 @@ span.selected-territory {
 .testimonials-for-territory-header-text-and-icon-container {
   display: flex;
   align-items: center;
+  margin-top: 50px;
 
   svg {
     @include mq($from:desktop) {
