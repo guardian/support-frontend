@@ -79,6 +79,7 @@ const AusMomentMap = () => {
   };
 
   const testimonialsVariants = {
+    mobile: { x: '0vw' },
     initial: { x: '59vw' },
     active: { x: '-59vw' },
   };
@@ -88,20 +89,20 @@ const AusMomentMap = () => {
     active: { display: 'block' },
   };
 
-  const animationVariant = () =>
-    ((windowWidthIsGreaterThan('desktop') && selectedTerritory) ? 'active' : 'initial');
-
-  const testimonialsProps = () => {
+  const animationVariant = () => {
     if (windowWidthIsGreaterThan('desktop')) {
-      return {
-        animate: animationVariant(),
-        variants: testimonialsVariants,
-        transition: animationTransition,
-        positionTransition: true,
-      };
+      return selectedTerritory ? 'active' : 'initial';
     }
-    return null;
+    return 'mobile';
+
   };
+
+  const testimonialsProps = () => ({
+    animate: animationVariant(),
+    variants: testimonialsVariants,
+    transition: animationTransition,
+    positionTransition: true,
+  });
 
   return (
     <div className="map-page">
