@@ -6,6 +6,7 @@ import { LinkButton } from '@guardian/src-button';
 import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/types/testimonials';
 import { Button } from '@guardian/src-button';
 import { useWindowWidth } from '../hooks/useWindowWidth';
+import { contributeUrl } from '../utils';
 
 const TestimonialCtaPrimary = () => (
   <div className="testimonial-cta testimonial-cta-primary">
@@ -35,7 +36,7 @@ const TestimonialCtaSecondary = () => (
       className="testimonial-cta-secondary-link-button"
       priority="primary"
       size="small"
-      href="https://support.theguardian.com/contribute?acquisitionData=%7B%22source%22%3A%22GUARDIAN_WEB%22%2C%22componentType%22%3A%22ACQUISITIONS_OTHER%22%2C%22componentId%22%3A%22aus_moment_2020_map%22%2C%22campaignCode%22%3A%22Aus_moment_2020%22%7D&INTCMP=Aus_moment_2020"
+      href={contributeUrl('Aus_Moment_2020_map_inline')}
       target="_blank"
       rel="noopener noreferrer"
     >Support the Guardian
