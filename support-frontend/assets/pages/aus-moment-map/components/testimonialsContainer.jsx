@@ -75,7 +75,6 @@ const LocationMarker = () => (
   </svg>
 );
 
-
 const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
   const { windowWidthIsGreaterThan } = useWindowWidth();
 
@@ -96,9 +95,9 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 
   React.useEffect(() => {
     if (ref.current) {
-      const { offsetTop } = ref.current;
-      const { offsetHeight } = ref.current;
-      const testimonialsContainer = ref.current.parentNode;
+      const { offsetTop, offsetHeight, parentNode } = ref.current;
+      const testimonialsContainer =
+        windowWidthIsGreaterThan('desktop') ? parentNode : document.documentElement
 
       const onScroll = () => {
         if (testimonialsContainer.scrollTop >= offsetTop
@@ -116,10 +115,12 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
   }, [ref.current]);
 
   React.useEffect(() => {
-    if (ref.current && props.selectedTerritory === props.territory && props.shouldScrollIntoView) {
-      const { offsetTop } = ref.current;
-      const testimonialsContainer = ref.current.parentNode;
-      testimonialsContainer.scroll(0, offsetTop);
+    if (windowWidthIsGreaterThan('desktop')) {
+      if (ref.current && props.selectedTerritory === props.territory && props.shouldScrollIntoView) {
+        const { offsetTop } = ref.current;
+        const testimonialsContainer = ref.current.parentNode;
+        testimonialsContainer.scroll(0, offsetTop);
+      }
     }
   }, [ref.current, props.selectedTerritory]);
 
