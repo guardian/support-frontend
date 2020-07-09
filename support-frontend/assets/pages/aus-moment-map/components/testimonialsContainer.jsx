@@ -150,7 +150,7 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
             <span>{TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
           </h2>
         </div>
-        </div>
+      </div>
       { windowWidthIsGreaterThan('tablet')
         ? <TestimonialsTwoColumns firstColumn={firstColumn} secondColumn={secondColumn} />
         : <TestimonialsExpandableSingleColumn testimonials={[...firstColumn, ...secondColumn]} /> }
