@@ -2,6 +2,7 @@
 
 // $FlowIgnore
 import * as React from 'preact/compat';
+import { LinkButton } from '@guardian/src-button';
 import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/types/testimonials';
 import { Button } from '@guardian/src-button';
 import { useWindowWidth } from '../hooks/useWindowWidth';
@@ -12,22 +13,33 @@ const TestimonialCtaPrimary = () => (
     <p>
     If you’re a contributor or subscriber, we would love to hear from you
     </p>
-    <a href="https://www.surveymonkey.co.uk/r/C93WWTC" target="_blank" rel="noopener noreferrer">
-      <div className="button button-cta-primary">Add your message</div>
-    </a>
+
+    <LinkButton
+      className="testimonial-cta-primary-link-button"
+      priority="primary"
+      size="small"
+      href="https://www.surveymonkey.co.uk/r/C93WWTC"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Add your message
+    </LinkButton>
   </div>
 );
 
 const TestimonialCtaSecondary = () => (
   <div className="testimonial-cta testimonial-cta-secondary">
     <h3>Do something powerful today</h3>
-    <a
+
+    <LinkButton
+      className="testimonial-cta-secondary-link-button"
+      priority="primary"
+      size="small"
       href="https://support.theguardian.com/contribute?acquisitionData=%7B%22source%22%3A%22GUARDIAN_WEB%22%2C%22componentType%22%3A%22ACQUISITIONS_OTHER%22%2C%22componentId%22%3A%22aus_moment_2020_map%22%2C%22campaignCode%22%3A%22Aus_moment_2020%22%7D&INTCMP=Aus_moment_2020"
       target="_blank"
       rel="noopener noreferrer"
-    >
-      <div className="button button-cta-secondary">Support the Guardian</div>
-    </a>
+    >Support the Guardian
+    </LinkButton>
   </div>
 );
 

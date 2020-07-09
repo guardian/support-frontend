@@ -47,54 +47,32 @@ body {
   }
 }
 
-.link-button {
-  display: block;
-}
-
-.button {
-  display: inline-block;
-  text-decoration: none;
-  cursor: pointer;
-  text-align: center;
-  border: 1px solid gu-colour(neutral-100);
-  border-radius: 1.3125rem;
-  color: gu-colour(neutral-100);
-  font-family: $gu-text-sans-web;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  padding: 5px 20px;
-  line-height: 21px;
-  background: transparent;
-  box-sizing: border-box;
-}
-
-.button.standard {
-  top: 65px;
-  @include mq($until:tablet) {
-    display: none;
+.header-cta-text-full {
+  display: none;
+  @include mq($from:tablet) {
+    display: block;
   }
 }
 
-.button.standard:hover {
-  background-color: gu-colour(neutral-100);
-  color: gu-colour(brand-main);
-}
-
-.button.mobile {
+.header-cta-text-short {
+  display: block;
   @include mq($from:tablet) {
     display: none;
   }
 }
 
-.button-cta-primary {
+.testimonial-cta-primary-link-button {
   background-color: #E05E00;
   margin-top: 16px;
-  padding: 8px 20px;
+  background: #E05E00 !important;
 
   &:hover {
-    background-color: #BD5318;
+    background: #BD5318 !important;
   }
+}
+
+.testimonial-cta-secondary-link-button {
+  margin-top: 16px;
 }
 
 .button-cta-secondary {
