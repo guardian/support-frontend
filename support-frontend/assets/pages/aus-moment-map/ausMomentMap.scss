@@ -501,6 +501,8 @@ span.selected-territory {
   @include mq($from:desktop) {
     padding: 12px 0 20px 0;
     border-bottom: none;
+    position: sticky;
+    top: 0;
   }
 }
 
