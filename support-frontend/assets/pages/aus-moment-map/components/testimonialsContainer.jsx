@@ -166,13 +166,16 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
     }
   }, [ref.current, props.selectedTerritory]);
 
+  const displayName = props.territory === 'ACT' && windowWidthIsLessThan('mobileMedium') ? props.territory :
+    TERRITORY_CODE_TO_FULL_NAME[props.territory];
+
   return (
     <div className="testimonials-for-territory" ref={ref} id={props.territory}>
       <div className="testimonials-for-territory-header">
         <div className="testimonials-for-territory-header-text-and-icon-container">
           <LocationMarker />
           <h2 className="padded-multiline">
-            <span>{props.territory === 'ACT' ? 'ACT' : TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
+            <span>{displayName}</span>
           </h2>
         </div>
       </div>
