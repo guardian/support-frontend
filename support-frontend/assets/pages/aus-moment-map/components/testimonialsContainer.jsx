@@ -7,7 +7,6 @@ import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/t
 import { Button } from '@guardian/src-button';
 import { useWindowWidth } from '../hooks/useWindowWidth';
 import { contributeUrl } from '../utils';
-import { Map } from './map';
 
 const TestimonialCtaPrimary = () => (
   <div className="testimonial-cta testimonial-cta-primary">
@@ -80,8 +79,7 @@ type TestimonialsForTerritoryProps = {
   shouldScrollIntoView: boolean,
   testimonials: Array<Testimonial>,
   selectedTerritory: string,
-  setSelectedTerritory: string => void,
-  mapRef: React.Ref<typeof Map>,
+  setSelectedTerritory: (string | null) => void,
 }
 
 const LocationMarker = () => (
@@ -130,25 +128,21 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
           return () => testimonialsContainer.removeEventListener('scroll', onScroll);
         }
       } else {
-        const col = ref.current.querySelector('.testimonials-columns-container');
+        const columnsContainer = ref.current.querySelector('.testimonials-columns-container');
 
-        const observe = (el) => {
-          const observer = new IntersectionObserver(
-            (entries, observer) => {
-              entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                  props.setSelectedTerritory(props.territory);
-                } else if (props.selectedTerritory === props.territory) {
-                  props.setSelectedTerritory(null);
-                }
-              });
-            },
-            {}
-          );
-          observer.observe(el)
-        };
-
-        observe(col)
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                props.setSelectedTerritory(props.territory);
+              } else if (props.selectedTerritory === props.territory) {
+                props.setSelectedTerritory(null);
+              }
+            });
+          },
+          {},
+        );
+        observer.observe(columnsContainer);
       }
     }
     return () => {};
@@ -235,8 +229,7 @@ type Props = {
   testimonialsCollection: TestimonialsCollection,
   selectedTerritory: string | null,
   shouldScrollIntoView: boolean,
-  setSelectedTerritory: string => void,
-  mapRef: React.Ref<typeof Map>,
+  setSelectedTerritory: (string | null) => void,
 };
 
 export const TestimonialsContainer = React.forwardRef((props: Props, ref: React.Ref<typeof TestimonialsContainer>) => {
@@ -258,7 +251,6 @@ export const TestimonialsContainer = React.forwardRef((props: Props, ref: React.
                 shouldScrollIntoView={props.shouldScrollIntoView}
                 selectedTerritory={props.selectedTerritory}
                 setSelectedTerritory={props.setSelectedTerritory}
-                mapRef={props.mapRef}
               />
           ))}
           </div>
