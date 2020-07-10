@@ -3,6 +3,7 @@ import React from 'react';
 const ActSvg = () => (
   <>
     <g className="territory-landmass">
+      <rect x="580" y="471" width="132" height="50" fill="#C4C4C4" fillOpacity="0" />
       <path d="M594.6 491.699L591 493.699L590 496.399V498.999L591.4 499.599V502.399L591.6 502.099L592.7 498.299L593.3 494.699L595.2 492.699H595.3H595.2L594.6 491.699Z" fill="currentColor" />
     </g>
     <g className="territory-label">
