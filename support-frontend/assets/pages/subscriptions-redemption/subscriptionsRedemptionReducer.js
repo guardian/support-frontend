@@ -12,15 +12,9 @@ import { marketingConsentReducerFor, type State as MarketingConsentState } from 
 
 
 export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
-export type CorporateCustomer = {
-  redemptionCode: string,
-  accountId: string,
-  name: string,
-}
 
 export type RedemptionFormState = {
   stage: Stage,
-  corporateCustomer: Option<CorporateCustomer>,
   userCode: Option<string>,
   error: Option<string>,
   user: User,
@@ -40,7 +34,6 @@ export type Action =
   | { type: 'SET_STAGE', stage: Stage }
 
 const initialState: RedemptionFormState = {
-  corporateCustomer: getGlobal('corporateCustomer'),
   stage: getGlobal('stage') || 'form',
   userCode: getGlobal('userCode'),
   error: getGlobal('error'),

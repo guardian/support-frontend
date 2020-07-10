@@ -22,6 +22,13 @@ trait SerialisationTestHelpers extends Matchers {
     val json = t.asJson
     assertDecodingSucceeded(json.as[T], (decoded: T) => decoded shouldEqual t)
   }
+
+  def testEncodeToDifferentState[STATE: Encoder, TARGETSTATE: Decoder](state: STATE, targetState: TARGETSTATE): Assertion =
+    state.asJson.as[TARGETSTATE].fold(
+      e => fail(e.getMessage),
+      result => result should be(targetState)
+    )
+
 }
 
 object SerialisationTestHelpers extends SerialisationTestHelpers

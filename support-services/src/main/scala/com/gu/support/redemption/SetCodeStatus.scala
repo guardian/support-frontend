@@ -1,6 +1,7 @@
 package com.gu.support.redemption
 
 import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
+import com.gu.support.redemptions.RedemptionCode
 
 import scala.concurrent.{ExecutionContext, Future}
 

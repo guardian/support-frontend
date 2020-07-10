@@ -102,9 +102,9 @@ object DigitalPackValidation {
     def isValidPaidSub(paymentFields: PaymentFields) =
       SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
         hasStateIfRequired(country, state) &&
-        hasPostcodeIfRequired(country, postCode) &&
+        //hasAddressLine1AndCity(billingAddress) &&
+        //hasPostcodeIfRequired(country, postCode) &&
         currencyIsSupportedForCountry(country, currency) &&
-        hasAddressLine1AndCity(billingAddress) &&
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
     paymentFields.fold(

@@ -6,6 +6,18 @@ Parameters:
     AllowedValues:
       - CODE
       - PROD
+
+Mappings:
+  StageMap:
+    CODE:
+      TableDEV: "redemption-codes-DEV-CODE"
+      TableUAT: "redemption-codes-UAT-CODE"
+      TablePROD: "redemption-codes-PROD-CODE"
+    PROD:
+      TableDEV: "redemption-codes-DEV"
+      TableUAT: "redemption-codes-UAT"
+      TablePROD: "redemption-codes-PROD"
+
 Resources:
   RedemptionCodeDynamoTableDEV:
     Type: AWS::DynamoDB::Table
@@ -17,7 +29,7 @@ Resources:
       KeySchema:
         - AttributeName: "redemptionCode"
           KeyType: "HASH"
-      TableName: !Sub redemption-codes-DEV-${Stage}
+      TableName: !FindInMap [ StageMap, !Ref Stage, TableDEV ]
   RedemptionCodeDynamoTableUAT:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -28,7 +40,7 @@ Resources:
       KeySchema:
         - AttributeName: "redemptionCode"
           KeyType: "HASH"
-      TableName: !Sub redemption-codes-UAT-${Stage}
+      TableName: !FindInMap [ StageMap, !Ref Stage, TableUAT ]
   RedemptionCodeDynamoTablePROD:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -39,7 +51,7 @@ Resources:
       KeySchema:
         - AttributeName: "redemptionCode"
           KeyType: "HASH"
-      TableName: !Sub redemption-codes-PROD-${Stage}
+      TableName: !FindInMap [ StageMap, !Ref Stage, TablePROD ]
 Outputs:
   DynamoArnOutDEV:
     Description: ARN for DEV dynamo table

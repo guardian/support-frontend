@@ -20,6 +20,7 @@ import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscripti
 type PropTypes = {
   countryGroupId: CountryGroupId,
   marketingConsent: React.Node,
+  includePaymentCopy: boolean,
 };
 
 // ----- Component ----- //
@@ -63,7 +64,10 @@ function ThankYouPendingContent(props: PropTypes) {
           </p>
         </Text>
       </Content>
-      <SubscriptionsSurvey product={DigitalPack} />
+      {props.includePaymentCopy ?
+        <SubscriptionsSurvey product={DigitalPack}/>
+        : null
+      }
       <Content>
         {props.marketingConsent}
         <OptInCopy subscriptionProduct={DigitalPack} />

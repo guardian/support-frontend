@@ -1,7 +1,7 @@
 // @flow
 
 import { fetchJson } from 'helpers/fetch';
-import type { Action, CorporateCustomer } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type { Action } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { type Dispatch } from 'redux';
 import type { Option } from 'helpers/types/option';
 import type { PaymentResult, RegularPaymentRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -17,6 +17,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getOrigin } from 'helpers/url';
 import { appropriateErrorMessage } from 'helpers/errorReasons';
+import { getGlobal } from '../../helpers/globals';
 
 type ValidationResult = {
   valid: boolean,
@@ -27,7 +28,8 @@ function validate(userCode: string) {
   if (userCode === '') {
     return Promise.resolve({ valid: false, errorMessage: 'Please enter your code' });
   }
-  const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}`;
+  const isTestUser: boolean = !!getGlobal<string>('isTestUser');
+  const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}${isTestUser ? '?isTestUser=true' : ''}`;
   return fetchJson(validationUrl, {});
 }
 
@@ -62,7 +64,7 @@ function submitCode(userCode: string, dispatch: Dispatch<Action>) {
 }
 
 function buildRegularPaymentRequest(
-  corporateCustomer: CorporateCustomer,
+  userCode: string,
   user: User,
   currencyId: IsoCurrency,
   countryId: IsoCountry,
@@ -102,8 +104,7 @@ function buildRegularPaymentRequest(
     product,
     firstDeliveryDate: null,
     paymentFields: {
-      redemptionCode: corporateCustomer.redemptionCode,
-      corporateAccountId: corporateCustomer.accountId,
+      redemptionCode: userCode,
     },
     ophanIds: getOphanIds(),
     referrerAcquisitionData: getReferrerAcquisitionData(),
@@ -112,7 +113,7 @@ function buildRegularPaymentRequest(
 }
 
 function createSubscription(
-  corporateCustomer: CorporateCustomer,
+  userCode: string,
   user: User,
   currencyId: IsoCurrency,
   countryId: IsoCountry,
@@ -120,7 +121,7 @@ function createSubscription(
   csrf: Csrf,
   dispatch: Dispatch<Action>,
 ) {
-  const data = buildRegularPaymentRequest(corporateCustomer, user, currencyId, countryId, participations);
+  const data = buildRegularPaymentRequest(userCode, user, currencyId, countryId, participations);
 
   const handleSubscribeResult = (result: PaymentResult) => {
     if (result.paymentStatus === 'success') {

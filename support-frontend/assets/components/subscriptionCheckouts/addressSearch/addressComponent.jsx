@@ -1,5 +1,7 @@
 // @flow
 
+// ------ Do not delete this component for the moment even though it is unused, we may use it in future ------- //
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';

@@ -10,8 +10,8 @@ import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironment, ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
 import com.gu.support.redemption.GetCodeStatus.NoSuchCode
-import com.gu.support.redemption.{GetCodeStatus, RedemptionCode}
-import com.gu.support.redemptions.{CorporateRedemption, RedemptionData}
+import com.gu.support.redemption.GetCodeStatus
+import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode, RedemptionData}
 import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
@@ -102,15 +102,14 @@ object ProductSubscriptionBuilders {
       redemptionData: RedemptionData,
       getCodeStatus: GetCodeStatus
     )(implicit ec: ExecutionContext): EitherT[Future, GetCodeStatus.RedemptionInvalid, Subscription] = {
-      val withCode = subscription.copy(redemptionCode = Some(redemptionData.redemptionCode))
+      val withCode = subscription.copy(redemptionCode = Some(redemptionData.redemptionCode.value))
       redemptionData match {
-        case CorporateRedemption(redemptionCode, _) =>
+        case CorporateRedemption(redemptionCode) =>
           for {
-            redemptionCode <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => NoSuchCode)
             subscription <-
               EitherT(getCodeStatus(redemptionCode).map(_.map { corporateId =>
                 withCode.copy(
-                  corporateAccountId = Some(corporateId.corporateIdString /*FIXME use the same corporate id type everywhere*/),
+                  corporateAccountId = Some(corporateId.corporateIdString),
                   readerType = ReaderType.Corporate
                 )
               }))

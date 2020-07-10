@@ -2,13 +2,13 @@
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import com.gu.identity.model.{User => IdUser}
 @import com.gu.support.encoding.CustomCodecs._
-@import com.gu.support.redemptions.redemptions.RedemptionCode
+@import com.gu.support.redemptions.redemptions.RawRedemptionCode
 @import helper.CSRF
 @import views.ReactDiv
-@import com.gu.support.redemptions.CorporateCustomer
 @import io.circe.syntax._
 
 @import io.circe.Json
+@import views.JsStringLiteral
 @(
   title: String,
   mainElement: ReactDiv,
@@ -16,10 +16,10 @@
   css: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
   csrf: Option[String],
-  uatMode: Boolean,
+  isTestUser: Boolean,
   stage: String,
-  redemptionCode: RedemptionCode,
-  customerOrError: Either[String, CorporateCustomer],
+  redemptionCode: RawRedemptionCode,
+  maybeRedemptionError: Option[String],
   user: Option[IdUser],
   submitted: Boolean
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
@@ -27,16 +27,16 @@
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
     <script type="text/javascript">
       window.guardian = window.guardian || {};
-      window.guardian.stage = "@stage";
-      window.guardian.userCode = "@redemptionCode";
-      window.guardian.error = "@customerOrError.left.getOrElse("")";
+      window.guardian.stage = @JsStringLiteral(stage);
+      window.guardian.userCode = @JsStringLiteral(redemptionCode);
+      window.guardian.error = @JsStringLiteral.fromOption(maybeRedemptionError);
       window.guardian.submitted = @submitted;
-      window.guardian.corporateCustomer = @Html(customerOrError.right.map(_.asJson.noSpaces).getOrElse(Json.Null.noSpaces));
       window.guardian.user = {
-        firstName: "@user.map(_.privateFields.firstName).getOrElse("")",
-        lastName: "@user.map(_.privateFields.secondName).getOrElse("")",
-        email: "@user.map(_.primaryEmailAddress).getOrElse("")",
+        firstName: @JsStringLiteral.fromOption(user.flatMap(_.privateFields.firstName)),
+        lastName: @JsStringLiteral.fromOption(user.flatMap(_.privateFields.secondName)),
+        email: @JsStringLiteral.fromOption(user.map(_.primaryEmailAddress)),
       };
+      window.guardian.isTestUser = @isTestUser;
   </script>
 
   }

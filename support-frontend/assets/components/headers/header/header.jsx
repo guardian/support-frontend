@@ -6,6 +6,7 @@ import React, { Component, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getGlobal } from 'helpers/globals';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
@@ -25,6 +26,7 @@ export type PropTypes = {|
 export type State = {|
   fitsLinksInOneRow: boolean,
   fitsLinksAtAll: boolean,
+  isTestUser: ?boolean,
 |};
 
 
@@ -39,9 +41,11 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
   ];
   const fitsLinksAtAll = containerWidth - menuWidth > 0;
   const fitsLinksInOneRow = fitsLinksAtAll && (logoLeft - containerLeft - menuWidth > 0);
+  const isTestUser = getGlobal<boolean>('isTestUser');
   return ({
     fitsLinksInOneRow,
     fitsLinksAtAll,
+    isTestUser,
   });
 };
 
@@ -84,6 +88,7 @@ export default class Header extends Component<PropTypes, State> {
   state = {
     fitsLinksInOneRow: false,
     fitsLinksAtAll: false,
+    isTestUser: getGlobal<boolean>('isTestUser'),
   };
 
   componentDidMount() {
@@ -110,7 +115,7 @@ export default class Header extends Component<PropTypes, State> {
 
   render() {
     const { utility, display, countryGroupId } = this.props;
-    const { fitsLinksInOneRow, fitsLinksAtAll } = this.state;
+    const { fitsLinksInOneRow, fitsLinksAtAll, isTestUser } = this.state;
 
     return (
       <header
@@ -123,6 +128,11 @@ export default class Header extends Component<PropTypes, State> {
           ])
         }
       >
+        {!!isTestUser &&
+          <div className="test-user-banner">
+            <span>You are a test user</span>
+          </div>
+        }
         <div className="component-header__wrapper" ref={(el) => { this.containerRef = el; }}>
           <div className="component-header__row">
             <TopNav

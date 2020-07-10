@@ -5,7 +5,7 @@ import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{Corporate, Everyday, HomeDelivery}
-import com.gu.support.redemptions.CorporateRedemption
+import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
@@ -63,37 +63,37 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
-  it should "also fail if the country is Australia and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
-      product = DigitalPack(Currency.AUD, Monthly)
-    )
-    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
-  }
-
-  it should "also fail if the country is United Kingdom and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
-      product = DigitalPack(Currency.GBP, Monthly)
-    )
-    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
-  }
-
-  it should "also fail if the country is United States and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
-      product = DigitalPack(Currency.USD, Monthly)
-    )
-    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
-  }
-
-  it should "also fail if the country is Canada and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
-      product = DigitalPack(Currency.CAD, Monthly)
-    )
-    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
-  }
+//  it should "also fail if the country is Australia and there is no postcode" in {
+//    val requestMissingPostcode = validDigitalPackRequest.copy(
+//      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
+//      product = DigitalPack(Currency.AUD, Monthly)
+//    )
+//    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+//  }
+//
+//  it should "also fail if the country is United Kingdom and there is no postcode" in {
+//    val requestMissingPostcode = validDigitalPackRequest.copy(
+//      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
+//      product = DigitalPack(Currency.GBP, Monthly)
+//    )
+//    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+//  }
+//
+//  it should "also fail if the country is United States and there is no postcode" in {
+//    val requestMissingPostcode = validDigitalPackRequest.copy(
+//      billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
+//      product = DigitalPack(Currency.USD, Monthly)
+//    )
+//    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+//  }
+//
+//  it should "also fail if the country is Canada and there is no postcode" in {
+//    val requestMissingPostcode = validDigitalPackRequest.copy(
+//      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
+//      product = DigitalPack(Currency.CAD, Monthly)
+//    )
+//    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+//  }
 
   it should "also allow a missing postcode in other countries" in {
     val requestMissingPostcode = validDigitalPackRequest.copy(
@@ -140,7 +140,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid corporate sub" ignore {
     val corporateSub = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Corporate),
-      paymentFields = Right(CorporateRedemption("test-code", "1"))
+      paymentFields = Right(CorporateRedemption(RedemptionCode("test-code").right.get))
     )
 
     DigitalPackValidation.passes(corporateSub) shouldBe true
@@ -186,7 +186,7 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "not allow corporate redemptions for paper products" in {
-    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(CorporateRedemption("test-code", "1")))
+    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(CorporateRedemption(RedemptionCode("TEST-CODE").right.get)))
     PaperValidation.passes(requestWithCorporateRedemption) shouldBe false
   }
 

@@ -38,13 +38,15 @@ type Error<T> = {
 type AnyErrorType = Error<AddressFormField> | Error<FormField>;
 
 function checkoutValidation(state: CheckoutState): AnyErrorType[] {
+  const shouldValidateAddress = state.common.abParticipations.removeDigiSubAddressTest !== 'noAddress';
+  const addressErrors = shouldValidateAddress ? applyBillingAddressRules(getBillingAddressFields(state), 'billing') : [];
   return [
     ({
       errors: applyCheckoutRules(getFormFields(state)),
       errorAction: setFormErrors,
     }: Error<FormField>),
     ({
-      errors: applyBillingAddressRules(getBillingAddressFields(state), 'billing'),
+      errors: addressErrors,
       errorAction: setAddressFormErrorsFor('billing'),
     }: Error<AddressFormField>),
   ].filter(({ errors }) => errors.length > 0);

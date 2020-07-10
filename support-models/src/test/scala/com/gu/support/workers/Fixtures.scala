@@ -143,6 +143,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           "product": ${contribution(currency = currency)},
+          "paymentProvider": "PayPal",
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -152,6 +153,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           "product": ${contribution(amount = amount, billingPeriod = billingPeriod)},
+          "paymentProvider": "PayPal",
           "paymentFields": $stripeJson,
           "sessionId": "testingToken",
           "acquisitionData": $acquisitionData
@@ -162,6 +164,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           $digitalPackProductJson,
+          "paymentProvider": "PayPal",
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -171,6 +174,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           $digitalPackProductJson,
+          "paymentProvider": "PayPal",
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -180,6 +184,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           $guardianWeeklyJson,
+          "paymentProvider": "PayPal",
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -190,6 +195,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": ${contribution()},
+            "paymentProvider": "PayPal",
             "paymentMethod": $payPalPaymentMethod,
             "acquisitionData": $acquisitionData
           }
@@ -200,28 +206,31 @@ object Fixtures {
        |  $requestIdJson,
        |  $userJson,
        |  "product": $product,
-       |  "paymentMethod": $stripePaymentMethod,
+       |  "paymentProvider": "PayPal",
        |  "salesForceContact": {
        |    "Id": "123",
        |    "AccountId": "123"
        |  },
        |  "accountNumber": "A-123",
        |  "subscriptionNumber": "A-S123",
-       |  "paymentSchedule": {
-       |    "payments": [
-       |      {
-       |        "date": "2019-01-14",
-       |        "amount": 11.99
-       |      },
-       |      {
-       |        "date": "2019-02-14",
-       |        "amount": 11.99
-       |      },
-       |      {
-       |        "date": "2019-03-14",
-       |        "amount": 11.99
-       |      }
-       |    ]
+       |  "paymentOrRedemptionData": {
+       |    "paymentMethod": $stripePaymentMethod,
+       |    "paymentSchedule": {
+         |    "payments": [
+         |      {
+         |        "date": "2019-01-14",
+         |        "amount": 11.99
+         |      },
+         |      {
+         |        "date": "2019-02-14",
+         |        "amount": 11.99
+         |      },
+         |      {
+         |        "date": "2019-03-14",
+         |        "amount": 11.99
+         |      }
+         |    ]
+         |  }
        |  }
        |}
      """.stripMargin
@@ -253,6 +262,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": ${contribution(billingPeriod = billingPeriod)},
+            "paymentProvider": "PayPal",
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
@@ -264,6 +274,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
+            "paymentProvider": "PayPal",
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
@@ -276,7 +287,8 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
-            "paymentMethod": {"redemptionCode": "fakeCode", "corporateAccountId": "00001"},
+            "paymentProvider": "PayPal",
+            "paymentMethod": {"redemptionCode": "FAKECODE"},
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
             }

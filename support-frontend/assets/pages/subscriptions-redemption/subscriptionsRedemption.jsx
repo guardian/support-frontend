@@ -52,7 +52,7 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={<RedemptionForm />}
-        thankYouContentPending={<ThankYouPendingContent {...thankyouProps} />}
+        thankYouContentPending={<ThankYouPendingContent includePaymentCopy={false} {...thankyouProps} />}
         thankYouContent={<ThankYouContent {...thankyouProps} />}
       />
       <ConsentBanner />

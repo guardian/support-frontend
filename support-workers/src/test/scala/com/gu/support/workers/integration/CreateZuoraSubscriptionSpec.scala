@@ -6,7 +6,8 @@ import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvide
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
-import com.gu.support.redemption.{DynamoTableAsync, GetCodeStatus, RedemptionCode, RedemptionTable, SetCodeStatus}
+import com.gu.support.redemption.{DynamoTableAsync, GetCodeStatus, RedemptionTable, SetCodeStatus}
+import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream

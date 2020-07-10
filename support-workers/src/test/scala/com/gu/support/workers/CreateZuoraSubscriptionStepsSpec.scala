@@ -9,7 +9,7 @@ import com.gu.support.config.{ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
 import com.gu.support.redemption.{DynamoLookup, DynamoUpdate}
-import com.gu.support.redemptions.CorporateRedemption
+import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode}
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.response._
@@ -31,7 +31,8 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, null /* !*/, Corporate),
-      paymentMethod = Right(CorporateRedemption(redemptionCode = "TESTCODE", corporateAccountId = "1")),
+      RedemptionNoProvider,
+      paymentMethod = Right(CorporateRedemption(RedemptionCode("TESTCODE").right.get)),
       firstDeliveryDate = None,
       promoCode = None,
       salesforceContacts = SalesforceContactRecords(
@@ -89,7 +90,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
         dynamoUpdates should be(List("TESTCODE" -> DynamoFieldUpdate("available", false)))
         handlerResult.value.accountNumber should be("accountcorp")
         handlerResult.value.subscriptionNumber should be("subcorp")
-        handlerResult.value.paymentMethod.isRight should be(true) // it's still a corp sub!
+        handlerResult.value.paymentOrRedemptionData.isRight should be(true) // it's still a corp sub!
       }
     }
   }
@@ -101,6 +102,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, Monthly),
+      PayPal,
       paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
       firstDeliveryDate = None,
       promoCode = None,
@@ -152,7 +154,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       withClue(handlerResult) {
         handlerResult.value.accountNumber should be("accountdigi")
         handlerResult.value.subscriptionNumber should be("subdigi")
-        handlerResult.value.paymentMethod.isLeft should be(true) // it's still marked as a paid sub!
+        handlerResult.value.paymentOrRedemptionData.isLeft should be(true) // it's still marked as a paid sub!
       }
     }
   }

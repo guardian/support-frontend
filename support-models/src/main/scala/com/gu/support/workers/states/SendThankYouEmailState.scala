@@ -13,15 +13,15 @@ case class SendThankYouEmailState(
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
-  paymentMethod: Either[PaymentMethod, RedemptionData],
+  paymentProvider: PaymentProvider,
+  paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   salesForceContact: SalesforceContactRecord,
   accountNumber: String,
   subscriptionNumber: String,
-  paymentSchedule: PaymentSchedule,
   acquisitionData: Option[AcquisitionData]
-) extends StepFunctionUserState
+) extends SendAcquisitionEventState
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
@@ -31,3 +31,7 @@ object SendThankYouEmailState {
   implicit val codec: Codec[SendThankYouEmailState] = deriveCodec
 }
 
+case class PaymentMethodWithSchedule(paymentMethod: PaymentMethod, paymentSchedule: PaymentSchedule)
+object PaymentMethodWithSchedule {
+  implicit val codec: Codec[PaymentMethodWithSchedule] = deriveCodec
+}

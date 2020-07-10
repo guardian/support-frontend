@@ -114,11 +114,6 @@ Resources:
                     # Update cookie domain and path
                     proxy_cookie_domain vpc-support-elk-domain-vcesheatvi6xspmp4sd6dnfkq4.eu-west-1.es.amazonaws.com $host;
 
-                    proxy_set_header Accept-Encoding "";
-                    sub_filter_types *;
-                    sub_filter vpc-support-elk-domain-vcesheatvi6xspmp4sd6dnfkq4.eu-west-1.es.amazonaws.com $host;
-                    sub_filter_once off;
-
                     # Response buffer settings
                     proxy_buffer_size 128k;
                     proxy_buffers 4 256k;
