@@ -641,6 +641,7 @@ span.selected-territory {
 }
 
 .midpoint-ctas {
+  margin: 38px 12px 0 12px;
   @include mq($from: tablet) {
     display: none;
   }
