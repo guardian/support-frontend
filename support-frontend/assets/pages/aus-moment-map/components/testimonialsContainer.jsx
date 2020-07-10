@@ -117,48 +117,39 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
         parentNode: testimonialsContainer,
       } = ref.current;
 
-      const firstEl = ref.current.querySelector('.testimonial-component:first-child');
-      const lastEl = ref.current.querySelector('.testimonial-component:last-child');
+      if (windowWidthIsGreaterThan('desktop')) {
+        if (testimonialsContainer) {
+          const onScroll = () => {
+            if (testimonialsContainer.scrollTop >= offsetTop
+              && testimonialsContainer.scrollTop < (offsetTop + offsetHeight)) {
+              props.setSelectedTerritory(props.territory);
+            }
+          };
 
-      const observe = (el) => {
-        const observer = new IntersectionObserver(
-          (entries, observer) => {
-            entries.forEach(entry => {
-              console.log(props.territory, entry.isIntersecting)
-              if (entry.isIntersecting) {
-                console.log(entry)
-                props.setSelectedTerritory(props.territory);
-              } else if (props.selectedTerritory === props.territory) {
-                // props.setSelectedTerritory(null);
-              }
-            });
-          },
-          {
-            // root: props.mapRef.current
-            // threshold: 0.5
-          }
-        );
-        observer.observe(el)
-      };
+          testimonialsContainer.addEventListener('scroll', onScroll);
+          return () => testimonialsContainer.removeEventListener('scroll', onScroll);
+        }
+      } else {
+        const col = ref.current.querySelector('.testimonials-columns-container');
 
-      // observe(firstEl)
-      // observe(lastEl)
+        const observe = (el) => {
+          const observer = new IntersectionObserver(
+            (entries, observer) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  props.setSelectedTerritory(props.territory);
+                } else if (props.selectedTerritory === props.territory) {
+                  props.setSelectedTerritory(null);
+                }
+              });
+            },
+            {}
+          );
+          observer.observe(el)
+        };
 
-      // const scrollingContainer = windowWidthIsGreaterThan('desktop') ? testimonialsContainer : window;
-      //
-      // if (scrollingContainer) {
-      //   console.log("setting up")
-      //   const onScroll = () => {
-      //     console.log("onScroll", scrollingContainer.scrollTop, offsetTop, offsetTop + offsetHeight)
-      //     if (scrollingContainer.scrollTop >= offsetTop
-      //     && scrollingContainer.scrollTop < (offsetTop + offsetHeight)) {
-      //       props.setSelectedTerritory(props.territory);
-      //     }
-      //   };
-      //
-      //   scrollingContainer.addEventListener('scroll', onScroll);
-      //   return () => scrollingContainer.removeEventListener('scroll', onScroll);
-      // }
+        observe(col)
+      }
     }
     return () => {};
 
