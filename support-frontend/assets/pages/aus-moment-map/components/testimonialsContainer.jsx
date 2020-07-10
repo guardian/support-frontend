@@ -89,7 +89,7 @@ const LocationMarker = () => (
 );
 
 const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
-  const { windowWidthIsGreaterThan } = useWindowWidth();
+  const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
   const midPointIndex = Math.ceil(props.testimonials.length / 2) - 1;
 
@@ -106,6 +106,27 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
   secondColumn.push(<TestimonialCtaSecondary />);
 
   const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    if (ref.current) {
+      const onScroll = () => {
+        const testimonialsHeader = ref.current.querySelector('.testimonials-for-territory-header');
+
+        if (windowWidthIsLessThan('desktop')) {
+          if (ref.current.getBoundingClientRect().top <= 10) {
+            testimonialsHeader.classList.add('sticky');
+          } else {
+            testimonialsHeader.classList.remove('sticky');
+          }
+        }
+      };
+
+      document.addEventListener('scroll', onScroll);
+      return () => document.removeEventListener('scroll', onScroll);
+    }
+
+    return () => {};
+  }, [ref.current]);
 
   React.useEffect(() => {
     if (ref.current) {
@@ -207,6 +228,34 @@ const TestimonialsTwoColumns = (props: TestimonialTwoColumnsProps) => (
   </div>
 );
 
+const TestimonialsContainerHeader = () => {
+  const self = React.useRef(null);
+  React.useEffect(() => {
+    if (self.current) {
+      const parent = self.current.parentNode;
+
+      const handleScroll = () => {
+        if (parent.getBoundingClientRect().top <= 0) {
+          self.current.classList.add('sticky');
+        } else {
+          self.current.classList.remove('sticky');
+        }
+      };
+
+      document.addEventListener('scroll', handleScroll);
+      return () => document.removeEventListener('scroll', handleScroll);
+    }
+
+    return () => {};
+  }, [self.current]);
+
+  return (
+    <div className="testimonials-container-header" ref={self}>
+      Why do you support<br />Guardian&nbsp;Australia?
+    </div>
+  );
+};
+
 type Props = {
   testimonialsCollection: TestimonialsCollection,
   selectedTerritory: string | null,
@@ -221,9 +270,7 @@ export const TestimonialsContainer = React.forwardRef((props: Props, ref: React.
     if (props.selectedTerritory || windowWidthIsLessThan('desktop')) {
       return (
         <>
-          <div className="testimonials-container-header">
-            Why do you support<br />Guardian&nbsp;Australia?
-          </div>
+          <TestimonialsContainerHeader />
 
           <div className="testimonials-container" ref={ref}>
             {Object.keys(props.testimonialsCollection).map(territory => (

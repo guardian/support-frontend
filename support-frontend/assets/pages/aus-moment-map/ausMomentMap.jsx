@@ -51,53 +51,6 @@ const AusMomentMap = () => {
   const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
   React.useEffect(() => {
-    if (mapRef.current && testimonialsContainerRef.current) {
-      const testimonialsContainer = testimonialsContainerRef.current;
-      const map = mapRef.current;
-      const parent = map.parentNode;
-      const background = map.querySelector('.map-background');
-      const svgWrapper = map.querySelector('.svg-wrapper');
-      const svgContent = map.querySelector('.svg-content');
-      const clone = map.cloneNode(true);
-
-      clone.classList.add('clone');
-
-      const handleMap = () => {
-        const atOrPastTop = map.classList.contains('sticky')
-          ? clone.getBoundingClientRect().top <= 0
-          : map.getBoundingClientRect().top <= 0;
-
-        if (atOrPastTop) {
-          map.classList.add('sticky');
-          parent.appendChild(clone);
-          background.style.height = `${svgContent.clientHeight + 10}px`;
-        } else {
-          map.classList.remove('sticky');
-          if (parent.querySelector('.clone')) {
-            parent.removeChild(clone);
-          }
-          background.style.height = '0';
-        }
-      };
-
-      const handleTestimonialsContainer = () => {
-
-      };
-
-      const onScroll = () => {
-        handleMap();
-        handleTestimonialsContainer();
-      };
-
-      document.addEventListener('scroll', onScroll);
-      return () => document.removeEventListener('scroll', onScroll);
-    }
-
-    return () => {};
-
-  }, [mapRef.current, testimonialsContainerRef.current]);
-
-  React.useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
         setSelectedTerritory(null);

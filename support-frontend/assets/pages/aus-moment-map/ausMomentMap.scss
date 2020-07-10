@@ -132,7 +132,7 @@ body {
 
   .svg-wrapper {
     top: 0;
-    width: 40%;
+    width: 35%;
     overflow: hidden;
   }
 
@@ -167,7 +167,7 @@ body {
 }
 
 .territory {
-  @include mq($from:tablet) {
+  @include mq($from:desktop) {
     cursor: pointer;
 
     &:hover {
@@ -424,6 +424,17 @@ span.selected-territory {
   }
 }
 
+.testimonials-container-header.sticky {
+  @include mq($until:desktop) {
+    padding: 0 12px 4px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: white;
+    z-index: 600;
+  }
+}
+
 .testimonials-container-header {
   padding: 35px 12px 4px 0;
   line-height: 1;
@@ -435,9 +446,11 @@ span.selected-territory {
   color: gu-colour(neutral-7);
   margin-top: 0;
 
-  display: none;
-  @include mq($from:desktop) {
-    display: block;
+  @include mq($until:desktop) {
+    font-family: $gu-text-egyptian-web;
+    font-size: 30px;
+    text-align: left;
+    padding-left: 12px;
   }
 }
 
@@ -445,12 +458,20 @@ span.selected-territory {
   padding-bottom: 500px;
 }
 
+.testimonials-for-territory:first-child {
+  margin-top: 0;
+}
+
+.testimonials-for-territory {
+  @include mq($until:desktop) {
+    margin-top: 50px;
+  }
+}
+
 .testimonials-for-territory-header {
   padding: 12px 12px 4px 12px;
   border-bottom: 2px solid #052962;
   line-height: 1;
-  position: sticky;
-  top: 0;
   background-color: white;
 
   h2 {
@@ -478,13 +499,17 @@ span.selected-territory {
   }
 }
 
+.testimonials-for-territory-header.sticky {
+  width: 100%;
+  background-color: white;
+  top: 30px;
+  position: fixed;
+}
+
 .testimonials-for-territory-header-text-and-icon-container {
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  @include mq($until:desktop) {
-    margin-top: 50px;
-  }
 
   svg {
     @include mq($from:desktop) {
