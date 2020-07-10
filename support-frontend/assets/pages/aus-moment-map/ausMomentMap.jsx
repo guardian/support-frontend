@@ -51,6 +51,12 @@ const AusMomentMap = () => {
   const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
   React.useEffect(() => {
+    if (windowWidthIsLessThan('desktop')) {
+      setSelectedTerritory(null)
+    }
+  })
+
+  React.useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
         setSelectedTerritory(null);

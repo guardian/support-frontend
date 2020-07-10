@@ -460,7 +460,9 @@ span.selected-territory {
 }
 
 .testimonials-for-territory:last-child {
-  padding-bottom: 500px;
+  @include mq($from:desktop) {
+    padding-bottom: 500px;
+  }
 }
 
 .testimonials-for-territory:first-child {
