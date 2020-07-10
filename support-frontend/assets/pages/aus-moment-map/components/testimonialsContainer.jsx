@@ -117,27 +117,32 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
         parentNode: testimonialsContainer,
       } = ref.current;
 
-      const firstEl = ref.current.querySelector('.testimonial-component-details');
+      const firstEl = ref.current.querySelector('.testimonial-component:first-child');
+      const lastEl = ref.current.querySelector('.testimonial-component:last-child');
 
-      const observer = new IntersectionObserver(
-        (entries, observer) => {
-          entries.forEach(entry => {
-            console.log(props.territory, entry.isIntersecting)
-            if (entry.isIntersecting) {
-              console.log(entry)
-              props.setSelectedTerritory(props.territory);
-            } else if (props.selectedTerritory === props.territory) {
-              props.setSelectedTerritory(null);
-            }
-          });
-        },
-        {
-          // root: props.mapRef.current
-          // threshold: 0.5
-        }
-      );
+      const observe = (el) => {
+        const observer = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach(entry => {
+              console.log(props.territory, entry.isIntersecting)
+              if (entry.isIntersecting) {
+                console.log(entry)
+                props.setSelectedTerritory(props.territory);
+              } else if (props.selectedTerritory === props.territory) {
+                // props.setSelectedTerritory(null);
+              }
+            });
+          },
+          {
+            // root: props.mapRef.current
+            // threshold: 0.5
+          }
+        );
+        observer.observe(el)
+      };
 
-      observer.observe(firstEl)
+      // observe(firstEl)
+      // observe(lastEl)
 
       // const scrollingContainer = windowWidthIsGreaterThan('desktop') ? testimonialsContainer : window;
       //
