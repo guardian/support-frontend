@@ -222,7 +222,7 @@ export const TestimonialsContainer = React.forwardRef((props: Props, ref: React.
       return (
         <>
           <div className="testimonials-container-header">
-            Why do you support Guardian&nbsp;Australia?
+            Why do you support<br />Guardian&nbsp;Australia?
           </div>
 
           <div className="testimonials-container" ref={ref}>
