@@ -639,3 +639,9 @@ span.selected-territory {
     }
   }
 }
+
+.midpoint-ctas {
+  @include mq($from: tablet) {
+    display: none;
+  }
+}

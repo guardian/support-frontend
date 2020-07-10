@@ -172,7 +172,7 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
         <div className="testimonials-for-territory-header-text-and-icon-container">
           <LocationMarker />
           <h2 className="padded-multiline">
-            <span>{TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
+            <span>{props.territory === 'ACT' ? 'ACT' : TERRITORY_CODE_TO_FULL_NAME[props.territory]}</span>
           </h2>
         </div>
       </div>
@@ -272,20 +272,30 @@ export const TestimonialsContainer = React.forwardRef((props: Props, ref: React.
 
   if (props.testimonialsCollection) {
     if (props.selectedTerritory || windowWidthIsLessThan('desktop')) {
+
+      const testimonialsForTerritories = Object.keys(props.testimonialsCollection).map(territory => (
+        <TestimonialsForTerritory
+          testimonials={props.testimonialsCollection[territory]}
+          territory={territory}
+          shouldScrollIntoView={props.shouldScrollIntoView}
+          selectedTerritory={props.selectedTerritory}
+          setSelectedTerritory={props.setSelectedTerritory}
+        />
+      ));
+      const midPointCtas = (
+        <div className="midpoint-ctas">
+          <TestimonialCtaPrimary />
+          <TestimonialCtaSecondary />
+        </div>
+      );
+      testimonialsForTerritories.splice(4, 0, midPointCtas);
+
       return (
         <>
           <TestimonialsContainerHeader />
 
           <div className="testimonials-container" ref={ref}>
-            {Object.keys(props.testimonialsCollection).map(territory => (
-              <TestimonialsForTerritory
-                testimonials={props.testimonialsCollection[territory]}
-                territory={territory}
-                shouldScrollIntoView={props.shouldScrollIntoView}
-                selectedTerritory={props.selectedTerritory}
-                setSelectedTerritory={props.setSelectedTerritory}
-              />
-          ))}
+            {testimonialsForTerritories}
           </div>
         </>
       );
