@@ -1,7 +1,5 @@
 package controllers
 
-import java.io.FileInputStream
-
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
@@ -19,14 +17,10 @@ import config.{RecaptchaConfigProvider, StringsConfig}
 import cookies.ServersideAbTestCookie
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
-import play.api.libs.json.Json
 import play.api.mvc._
-import play.twirl.api.Html
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.FastlyGEOIP._
-import views.EmptyDiv
-import views.ViewHelpers.outputJson
 
 import scala.concurrent.{ExecutionContext, Future}
 
