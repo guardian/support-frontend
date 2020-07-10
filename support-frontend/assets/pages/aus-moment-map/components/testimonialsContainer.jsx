@@ -111,12 +111,16 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
     if (ref.current) {
       const onScroll = () => {
         const testimonialsHeader = ref.current.querySelector('.testimonials-for-territory-header');
+        const testimonialsContainer = testimonialsHeader.parentNode.parentNode.parentNode;
+        const testimonialsContainerHeader = testimonialsContainer.querySelector('.testimonials-container-header');
 
         if (windowWidthIsLessThan('desktop')) {
-          if (ref.current.getBoundingClientRect().top <= 10) {
+          if (ref.current.getBoundingClientRect().top <= testimonialsContainerHeader.clientHeight) {
             testimonialsHeader.classList.add('sticky');
+            testimonialsHeader.style.top = `${testimonialsContainerHeader.clientHeight}px`;
           } else {
             testimonialsHeader.classList.remove('sticky');
+            testimonialsHeader.style.top = 'initial';
           }
         }
       };
@@ -251,7 +255,7 @@ const TestimonialsContainerHeader = () => {
 
   return (
     <div className="testimonials-container-header" ref={self}>
-      Why do you support<br />Guardian&nbsp;Australia?
+      Why do you support <br />Guardian&nbsp;Australia?
     </div>
   );
 };
