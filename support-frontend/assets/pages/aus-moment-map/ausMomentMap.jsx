@@ -52,9 +52,9 @@ const AusMomentMap = () => {
 
   React.useEffect(() => {
     if (windowWidthIsLessThan('desktop')) {
-      setSelectedTerritory(null)
+      setSelectedTerritory(null);
     }
-  })
+  });
 
   React.useEffect(() => {
     const onKeyDown = (e) => {
