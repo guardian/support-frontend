@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 // $FlowIgnore
 import * as React from 'preact/compat';
+import * as ophan from 'ophan';
 import { motion } from 'framer-motion';
 import { renderPage } from 'helpers/render';
 import './ausMomentMap.scss';
@@ -49,6 +50,8 @@ const AusMomentMap = () => {
   const testimonialsContainerRef = React.useRef(null);
   const testimonials = useTestimonials();
   const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
+
+  ophan.init();
 
   React.useEffect(() => {
     if (windowWidthIsLessThan('desktop')) {
