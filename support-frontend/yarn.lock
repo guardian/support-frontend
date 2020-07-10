@@ -2403,6 +2403,14 @@
   dependencies:
     "@guardian/src-helpers" "^1.4.0"
 
+"@guardian/src-button@^1.4.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-button/-/src-button-1.7.0.tgz#0ba09507fb7b8139a91219687e2ab683a244927b"
+  integrity sha512-7pBcQacry78o1Sk04glRighMeBWoErrlNTUYGO/MzVaBRkZ3Chk62MJEB6Zl3hmJE6C/xpFahSSEPirdLnivGA==
+  dependencies:
+    "@guardian/src-helpers" "^1.7.0"
+    "@guardian/src-icons" "^1.7.0"
+
 "@guardian/src-choice-card@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-choice-card/-/src-choice-card-1.4.0.tgz#bd6a2b9fa58961c141253fcefbb74a0f64c55769"
@@ -2416,6 +2424,11 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-1.4.0.tgz#f26e3fb6d2da1d08dcb8042d00bec3bcc8cddbc3"
   integrity sha512-FH9TBLVQph13bfY0jfqXetXWCxDHIhOUHVuSsdEgxVGAIKgdv0ocju9JoYwRnZvk+RJlekXO/EEESnS+u8yYgQ==
 
+"@guardian/src-foundations@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-1.7.0.tgz#e1f77733fb1f87602fd0804c341530b4d7e14f1c"
+  integrity sha512-Z6IfviYodW7vNkDtxW7Atbkd50nY8ixGWfbDQ1vA59+69DzCcP3UsUlPLBPYWNPTjpAYct1dmJcwx4LAVPDuEA==
+
 "@guardian/src-helpers@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-1.4.0.tgz#137aac157fdf493e4ccfcabe517dd2cd5d7bd927"
@@ -2423,10 +2436,22 @@
   dependencies:
     "@guardian/src-foundations" "^1.4.0"
 
+"@guardian/src-helpers@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-1.7.0.tgz#941cef51cd64e520eaecef89514b2adb57a31708"
+  integrity sha512-bBcUz7B1fNfDewyy4BDOr28DBzlT5tF6UTD+yGSW4lenW/YTXGOBqkSS9aqeIza3G1shoasoHuiQkXXjHsKAbg==
+  dependencies:
+    "@guardian/src-foundations" "^1.7.0"
+
 "@guardian/src-icons@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-1.4.0.tgz#3159d034a3c42bf94bdf88384dac95f9c8708173"
   integrity sha512-0j2QRPNjhRePicB/2aZp79OyRtPA3ftf1e/9oareisHUfn3jcvDDFeP3xkHXmv5SoMobG4GwWUepb0VNYvELnQ==
+
+"@guardian/src-icons@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-1.7.0.tgz#c905ec8a2698cf05223917372c0bea2daf7c7389"
+  integrity sha512-hX89pvk1UM7s155Lgqh04NzbqU7tR4X8phqZ16O/syMC6p7BnmxkkM6PJ77Eu8blAwhdttzsoAlAGiB6nrcw9g==
 
 "@guardian/src-radio@^1.4.0":
   version "1.4.0"
@@ -8057,6 +8082,30 @@ fragment-cache@^0.2.1:
   integrity sha1-QpD60n8T6Jvn8zeZxrxaCr//DRk=
   dependencies:
     map-cache "^0.2.2"
+
+framer-motion@^1.11.1:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-1.11.1.tgz#b031d1556a78854e0989b8c7e96418c6e15aa474"
+  integrity sha512-CP6aYLPSivAWkq9UoSurefHBggxG85IT8ObYyWYkcZppgtjHzpwRzhaA8P0ljMGRqtcpeQAIybiGgPioBPlOSw==
+  dependencies:
+    "@popmotion/easing" "^1.0.2"
+    "@popmotion/popcorn" "^0.4.2"
+    framesync "^4.0.4"
+    hey-listen "^1.0.8"
+    popmotion "9.0.0-beta-8"
+    style-value-types "^3.1.6"
+    stylefire "^7.0.2"
+    tslib "^1.10.0"
+  optionalDependencies:
+    "@emotion/is-prop-valid" "^0.8.2"
+
+framesync@^4.0.0, framesync@^4.0.1, framesync@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/framesync/-/framesync-4.0.4.tgz#79c42c0118f26821c078570db0ff81fb863516a2"
+  integrity sha512-mdP0WvVHe0/qA62KG2LFUAOiWLng5GLpscRlwzBxu2VXOp6B8hNs5C5XlFigsMgrfDrr2YbqTsgdWZTc4RXRMQ==
+  dependencies:
+    hey-listen "^1.0.8"
+    tslib "^1.10.0"
 
 fresh@0.5.2:
   version "0.5.2"

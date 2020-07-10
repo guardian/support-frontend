@@ -215,6 +215,26 @@ class Application(
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
     )()).withSettingsSurrogateKey
   }
+  
+  val ausMomentMapSocialImageUrl =
+    "https://i.guim.co.uk/img/media/84bf6a5c9535827ff4c307941cf3147fb2fb63c8/0_0_2000_1050/1000.png?width=1000&quality=85&s=2f7dc4ee733fee7117358fbbb1fa057f"
+
+  def ausMomentMap(): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    Ok(views.html.main(
+      title = "Guardian Supporters Map",
+      mainElement = assets.getSsrCacheContentsAsHtml("aus-moment-map", "aus-moment-map.html"),
+      mainJsBundle = Left(RefPath("ausMomentMap.js")),
+      mainStyleBundle = Left(RefPath("ausMomentMap.css")),
+      fontLoaderBundle = fontLoaderBundle,
+      description = stringsConfig.contributionsLandingDescription,
+      canonicalLink = Some(buildCanonicalShowcaseLink("uk")),
+      shareImageUrl = Some(
+        ausMomentMapSocialImageUrl
+      )
+    )()).withSettingsSurrogateKey
+  }
+
 
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
