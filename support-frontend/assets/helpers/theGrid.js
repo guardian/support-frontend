@@ -73,7 +73,7 @@ export const imageCatalogue: {
   AppPremiumTier: 'dc9769250c22ca60da65a14e89676f59e82d46f5/0_0_1998_1338',
   showcaseAusProtest: 'b666c821d9b3e1085a2e07daeeb17fdeb82a077e/0_794_5472_2228',
   showcaseAusScottMorrison: 'd2d362b1aa48d477c3798ffe9d9c6954c3b1eea4/0_493_7173_2207',
-  showcaseAusDetainees: '2c4ad048e2a2225e24b7414cd84c31b227a75270/313_0_1656_1656',
+  showcaseAusRuby: 'fc763dd8e3e7c8921fc2c593faa95f9f232435dd/288_0_3029_3031',
   showcaseAusAboriginal: 'b6e5c3e0d820e434a2907c4a89b8d52e13383435/0_44_3648_2188',
   showcaseUSTrump: '155025cc185b096d6038d1afd6b0881a367a7d05/647_0_2835_2835',
   showcaseUSProtest: '59eac0881f08224bdfac24d212f9f88c70a99c41/0_137_5134_3081',
