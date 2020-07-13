@@ -82,7 +82,7 @@ export type ProductCopy = {
 
 const abTest = null;
 
-const getPrice = (countryGroupId: CountryGroupId, product: SubscriptionProduct, alternativeText: string) => {
+const getPrice = (countryGroupId: CountryGroupId, product: SubscriptionProduct) => {
 
   if (flashSaleIsActive(product, countryGroupId)) {
     return getDisplayFlashSalePrice(product, countryGroupId, Monthly);
@@ -92,7 +92,7 @@ const getPrice = (countryGroupId: CountryGroupId, product: SubscriptionProduct, 
     return `${displayPrice(product, countryGroupId)}`;
   }
 
-  return alternativeText;
+  return '';
 };
 
 const getDisplayPrice = (
@@ -196,7 +196,7 @@ const paperAndDigital = (
   ).PaperAndDigital;
   return {
     title: 'Paper+Digital',
-    subtitle: `from ${getPrice(countryGroupId, PaperAndDigital, '')}`,
+    subtitle: `from ${getPrice(countryGroupId, PaperAndDigital)}`,
     description: 'All the benefits of a paper subscription, plus access to the digital subscription',
     buttons: [{
       ctaButtonText: 'Find out more',
@@ -210,7 +210,7 @@ const paperAndDigital = (
 
 const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
   title: 'Premium access to the Guardian Live app',
-  subtitle: getPrice(countryGroupId, PremiumTier, '7-day free Trial'),
+  subtitle: '7-day free Trial',
   description: 'Ad-free live news, as it happens',
   buttons: [{
     ctaButtonText: 'Buy in App Store',
