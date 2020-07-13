@@ -12,9 +12,9 @@ export const regionalContent = {
         who have gone unheard, and to helping bring about a more hopeful future.
       </span>),
     images: {
-      first: 'showcaseUKChris',
+      first: 'showcaseUKProtest',
       second: 'showcaseUKBrexit',
-      third: 'showcaseUKFloods',
+      third: 'showcaseUKPPE',
       fourth: 'showcaseUKWindrushGroup',
     },
   },
