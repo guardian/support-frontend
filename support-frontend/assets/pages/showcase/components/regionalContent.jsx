@@ -38,7 +38,7 @@ export const regionalContent = {
     caption: 'From reproductive rights to the climate crisis; from the unchecked power of Big Tech to the fast-approaching 2020 election, and the changes it could bring for the nation and the world, Guardian US is committed to reporting the big issues of the day with honesty and integrity, to giving a voice to those who have previously gone unheard, and helping bring about a more hopeful future.',
     images: {
       first: 'showcaseUSTrump',
-      second: 'showcaseUSZuckerberg',
+      second: 'showcaseUSLiberty',
       third: 'showcaseUSCongresswomen',
       fourth: 'showcaseUSProtest',
     },
