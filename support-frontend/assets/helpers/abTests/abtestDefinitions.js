@@ -1,6 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
-import { USV1 } from './data/testAmountsData';
+import { USV1, AusAmounts } from './data/testAmountsData';
 import ausMomentEnabled from 'helpers/ausMoment';
 import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
@@ -127,5 +127,28 @@ export const tests: Tests = {
     canRun: () => detectCountryGroupId() === GBPCountries,
     targetPage: digitalCheckout,
     optimizeId: 'tdBE5yqdR0aQ19E06j1zRA',
+  },
+
+  auAmountsTest: {
+    type: 'AMOUNTS',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'V1',
+        amountsRegions: AusAmounts,
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: auOnlyLandingPage,
+    seed: 8,
   },
 };
