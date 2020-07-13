@@ -7,7 +7,6 @@ import {
   GuardianWeekly,
   Paper,
   PaperAndDigital,
-  PremiumTier,
   sendTrackingEventsOnClick,
   subscriptionPricesForDefaultBillingPeriod,
   type SubscriptionProduct,
