@@ -1,7 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
 import { USV1, AusAmounts } from './data/testAmountsData';
-import ausMomentEnabled from 'helpers/ausMoment';
 import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
