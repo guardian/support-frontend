@@ -1,12 +1,10 @@
 // @flow
 import type { Tests } from './abtest';
 import { USV1, AusAmounts } from './data/testAmountsData';
-import ausMomentEnabled from 'helpers/ausMoment';
 import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
-export type AusMomentLandingPageBackgroundVariants = 'control' | 'ausColoursVariant';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
@@ -81,28 +79,6 @@ export const tests: Tests = {
     seed: 3,
     targetPage: digitalCheckout,
     optimizeId: '3sSS81FKT6SXawegvxyK-A',
-  },
-
-  ausMomentLandingPageBackgroundTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'ausColoursVariant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: ausMomentEnabled('AU'),
-    referrerControlled: false,
-    seed: 6,
-    targetPage: auOnlyLandingPage,
   },
 
   removeDigiSubAddressTest: {

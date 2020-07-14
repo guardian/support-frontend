@@ -91,8 +91,6 @@ const setOneOffContributionCookie = () => {
 
 const campaignName = getCampaignName();
 
-const ausMomentLandingPageBackgroundVariant = state.common.abParticipations.ausMomentLandingPageBackgroundTest;
-const isAusMomentVariant = ausMomentLandingPageBackgroundVariant === 'ausColoursVariant';
 const { countryId } = state.common.internationalisation;
 
 const thankYouClassModifiers = [
@@ -114,7 +112,7 @@ const contributionsLandingPage = (campaignCodeParameter: ?string) => (
     header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
-    isAusMomentVariant={isAusMomentVariant}
+    isAusMomentVariant={ausMomentEnabled(countryId)}
   >
     <ContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
