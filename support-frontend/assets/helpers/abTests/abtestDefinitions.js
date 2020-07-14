@@ -1,13 +1,10 @@
 // @flow
 import type { Tests } from './abtest';
-import { USV1 } from './data/testAmountsData';
-import ausMomentEnabled from 'helpers/ausMoment';
+import { USV1, AusAmounts } from './data/testAmountsData';
 import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
 export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
-export type LandingPageDesignSystemTestVariants = 'ds';
-export type AusMomentLandingPageBackgroundVariants = 'control' | 'ausColoursVariant';
 
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
@@ -84,47 +81,6 @@ export const tests: Tests = {
     optimizeId: '3sSS81FKT6SXawegvxyK-A',
   },
 
-  landingPageDesignSystemTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'ds',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 3,
-    targetPage: contributionsLandingPageMatch,
-  },
-
-  ausMomentLandingPageBackgroundTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'ausColoursVariant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: ausMomentEnabled('AU'),
-    referrerControlled: false,
-    seed: 6,
-    targetPage: auOnlyLandingPage,
-  },
-
   removeDigiSubAddressTest: {
     type: 'OTHER',
     variants: [
@@ -147,5 +103,28 @@ export const tests: Tests = {
     canRun: () => detectCountryGroupId() === GBPCountries,
     targetPage: digitalCheckout,
     optimizeId: 'tdBE5yqdR0aQ19E06j1zRA',
+  },
+
+  auAmountsTest: {
+    type: 'AMOUNTS',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'V1',
+        amountsRegions: AusAmounts,
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: auOnlyLandingPage,
+    seed: 8,
   },
 };

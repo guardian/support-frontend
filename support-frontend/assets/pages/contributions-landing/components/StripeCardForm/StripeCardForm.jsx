@@ -32,7 +32,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { updateRecaptchaToken } from '../../contributionsLandingActions';
 import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
-import type { LandingPageDesignSystemTestVariants } from 'helpers/abTests/abtestDefinitions';
 import { InlineError } from '@guardian/src-user-feedback';
 import { StripeCardFormField } from './StripeCardFormField';
 import './stripeCardForm.scss';
@@ -65,7 +64,6 @@ type PropTypes = {|
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
   postDeploymentTestUser: string,
-  designSystemTestVariant: LandingPageDesignSystemTestVariants,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -80,7 +78,6 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
   postDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-  designSystemTestVariant: state.common.abParticipations.landingPageDesignSystemTest,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -137,11 +134,6 @@ const fieldStyleDS = {
 };
 
 const renderVerificationCopy = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
-  trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
-  return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
-};
-
-const renderVerificationCopyDs = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
   return (<InlineError>Please tick to verify you&apos;re a human</InlineError>);
 };
@@ -324,15 +316,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
     });
   }
 
-  getFieldBorderClass = (fieldName: CardFieldName): string => {
-    if (this.state.currentlySelected === fieldName) {
-      return 'form__input-enabled';
-    } else if (this.state[fieldName].name === 'Error') {
-      return 'form__input--invalid';
-    }
-    return '';
-  };
-
   handleStripeError(errorData: any): void {
     this.props.setPaymentWaiting(false);
 
@@ -385,17 +368,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
 
     const errorMessage: ?string = fieldError || incompleteMessage();
 
-    const getClasses = (fieldName: CardFieldName): string =>
-      `form__input ${this.getFieldBorderClass(fieldName)}`;
-
     const showCards = (country: IsoCountry) => {
-      if (country === 'US') {
-        return <CreditCardsUS className="form__credit-card-icons" />;
-      }
-      return <CreditCardsROW className="form__credit-card-icons" />;
-    };
-
-    const showCardsDs = (country: IsoCountry) => {
       if (country === 'US') {
         return <CreditCardsUS />;
       }
@@ -406,74 +379,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
       this.props.contributionType === 'ONE_OFF' ?
         this.props.oneOffRecaptchaToken : this.props.recurringRecaptchaVerified;
 
-    const renderControl = () => (
-      <div className="form__fields">
-        <legend className="form__legend"><h3>Your card details</h3></legend>
-        <div className="form__field">
-          <label className="form__label" htmlFor="stripeCardNumberElement">
-            Card number
-          </label>
-          {showCards(this.props.country)}
-          <span className={getClasses('CardNumber')}>
-            <CardNumberElement
-              id="stripeCardNumberElement"
-              style={fieldStyleControl}
-              onChange={this.onChange('CardNumber')}
-              onFocus={() => this.onFocus('CardNumber')}
-              onBlur={this.onBlur}
-            />
-          </span>
-        </div>
-        <div className="stripe-card-element-container__inline-fields">
-          <div className="form__field">
-            <label className="form__label" htmlFor="stripeCardExpiryElement">
-              Expiry date
-            </label>
-            <span className={getClasses('Expiry')}>
-              <CardExpiryElement
-                id="stripeCardExpiryElement"
-                style={fieldStyleControl}
-                onChange={this.onChange('Expiry')}
-                onFocus={() => this.onFocus('Expiry')}
-                onBlur={this.onBlur}
-              />
-            </span>
-          </div>
-          <div className="form__field">
-            <label className="form__label" htmlFor="stripeCardCVCElement">
-              CVC
-            </label>
-            <span className={getClasses('CVC')}>
-              <CardCVCElement
-                id="stripeCardCVCElement"
-                style={fieldStyleControl}
-                placeholder=""
-                onChange={this.onChange('CVC')}
-                onFocus={() => this.onFocus('CVC')}
-                onBlur={this.onBlur}
-              />
-            </span>
-          </div>
-        </div>
-        {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
-        { window.guardian.recaptchaEnabled ?
-          <div className="form__field">
-
-            <label className="form__label" htmlFor="robot_checkbox">
-              Security check
-            </label>
-            <Recaptcha />
-            {
-              this.props.checkoutFormHasBeenSubmitted
-              && !recaptchaVerified ?
-                renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
-            }
-          </div>
-          : null }
-      </div>
-    );
-
-    const renderDesignSystemStyleForm = () => (
+    return (
       <div>
         <legend className="form__legend"><h3>Your card details</h3></legend>
         {errorMessage ?
@@ -488,7 +394,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
               >
                 Card number
               </label>
-              {showCardsDs(this.props.country)}
+              {showCards(this.props.country)}
             </>
           }
           input={
@@ -606,7 +512,7 @@ class CardForm extends Component<PropTypes, StateTypes> {
             {
               this.props.checkoutFormHasBeenSubmitted
               && !recaptchaVerified ?
-                renderVerificationCopyDs(this.props.countryGroupId, this.props.contributionType) : null
+                renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
             }
             <Recaptcha />
           </div>
@@ -614,8 +520,6 @@ class CardForm extends Component<PropTypes, StateTypes> {
         }
       </div>
     );
-
-    return this.props.designSystemTestVariant === 'ds' ? renderDesignSystemStyleForm() : renderControl();
   }
 }
 

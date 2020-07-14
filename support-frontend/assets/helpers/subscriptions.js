@@ -66,35 +66,8 @@ export const subscriptionPricesForDefaultBillingPeriod: {
     [CountryGroupId]: number,
   }
 } = {
-  PremiumTier: {
-    GBPCountries: 5.99,
-    UnitedStates: 6.99,
-    AUDCountries: 7.99,
-    International: 5.99,
-  },
-  DigitalPack: {
-    GBPCountries: 11.99,
-    UnitedStates: 19.99,
-    AUDCountries: 21.50,
-    International: 19.99,
-  },
-  GuardianWeekly: {
-    GBPCountries: 37.50,
-    EURCountries: 61.30,
-    UnitedStates: 75,
-    Canada: 80,
-    AUDCountries: 97.50,
-    NZDCountries: 123,
-    International: 81.30,
-  },
-  Paper: {
-    GBPCountries: 10.79,
-  },
   PaperAndDigital: {
     GBPCountries: 21.99,
-  },
-  DailyEdition: {
-    GBPCountries: 11.99,
   },
 };
 
