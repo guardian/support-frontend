@@ -19,17 +19,18 @@ export type CampaignSettings = {
 };
 
 export type Campaigns = {
-  [string]: CampaignSettings,
+  [string]: (goalReached: boolean) => CampaignSettings,
 };
 
 const currentCampaignName = ausMomentEnabled('AU') ? 'au/contribute' : null;
 
 export const campaigns: Campaigns = currentCampaignName ? {
-  // TODO - the rest of the campaign settings
-  [currentCampaignName]: {
+  [currentCampaignName]: (goalReached: boolean) => ({
     campaignCode: 'Aus_moment_2020',
     headerCopy: 'You’re doing something powerful',
-    contributeCopy: 'Help us grow our community of supporters in Australia and reach our ambitious goal. Every contribution you make, however big or small, helps sustain our open, independent journalism for the long term.',
+    contributeCopy: goalReached ?
+      'We’ve surpassed our ambitious goal of 150,000 supporters in Australia, and together we can do even more. Every contribution you make, however big or small, helps sustain our open, independent journalism for the long term.' :
+      'Help us grow our community of supporters in Australia and reach our ambitious goal. Every contribution you make, however big or small, helps sustain our open, independent journalism for the long term.',
     tickerSettings: {
       tickerCountType: 'people',
       tickerEndType: 'unlimited',
@@ -40,7 +41,7 @@ export const campaigns: Campaigns = currentCampaignName ? {
         goalReachedSecondary: 'but you can still support us',
       },
     },
-  },
+  }),
 } : {};
 
 export type CampaignName = $Keys<typeof campaigns>

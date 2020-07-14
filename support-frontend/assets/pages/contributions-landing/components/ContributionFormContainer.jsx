@@ -15,6 +15,7 @@ import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import type { CampaignSettings } from 'helpers/campaigns';
 
 
 // ----- Types ----- //
@@ -70,12 +71,14 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   contributeCopy: defaultContributeCopy,
 };
 
-const campaignName = getCampaignName();
-const campaign = campaignName && campaigns[campaignName] ? campaigns[campaignName] : null;
-
 // ----- Render ----- //
 
 function withProps(props: PropTypes) {
+
+  const campaignName = getCampaignName();
+  const campaignSettings: ?CampaignSettings = campaignName && campaigns[campaignName] ?
+    campaigns[campaignName](props.tickerGoalReached) :
+    null;
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     props.setPaymentIsWaiting(true);
@@ -84,7 +87,7 @@ function withProps(props: PropTypes) {
 
   const countryGroupDetails = {
     ...defaultHeaderCopyAndContributeCopy,
-    ...campaign || {},
+    ...campaignSettings || {},
   };
 
   const showSecureTransactionIndicator = () => <SecureTransactionIndicator modifierClasses={['top']} />;
@@ -97,7 +100,7 @@ function withProps(props: PropTypes) {
     return (<Redirect to={props.thankYouRoute} push={false} />);
   }
 
-  if (props.campaignCodeParameter && !campaign) {
+  if (props.campaignCodeParameter && !campaignSettings) {
     // A campaign code was supplied in the url path, but it's not a valid campaign
     return (
       <Redirect
@@ -121,14 +124,15 @@ function withProps(props: PropTypes) {
       <div className="gu-content__form">
         {showSecureTransactionIndicator()}
 
-        {campaign && campaign.tickerSettings ?
+        {campaignSettings && campaignSettings.tickerSettings ?
           <ContributionTicker
-            {...campaign.tickerSettings}
+            {...campaignSettings.tickerSettings}
             onGoalReached={props.setTickerGoalReached}
           /> : null
         }
-        {props.tickerGoalReached && campaign && campaign.tickerSettings && campaign.goalReachedCopy ?
-          campaign.goalReachedCopy :
+        {props.tickerGoalReached &&
+         campaignSettings && campaignSettings.tickerSettings && campaignSettings.goalReachedCopy ?
+          campaignSettings.goalReachedCopy :
           <div>
             {countryGroupDetails.formMessage ?
               <div className="form-message">{countryGroupDetails.formMessage}</div> : null
@@ -139,7 +143,7 @@ function withProps(props: PropTypes) {
           </div>
         }
       </div>
-      {campaign && campaign.extraComponent}
+      {campaignSettings && campaignSettings.extraComponent}
       <DirectDebitPopUpForm
         buttonText="Contribute with Direct Debit"
         onPaymentAuthorisation={onPaymentAuthorisation}
