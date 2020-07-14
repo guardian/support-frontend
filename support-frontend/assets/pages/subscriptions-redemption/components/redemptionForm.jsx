@@ -61,7 +61,8 @@ function RedemptionForm(props: PropTypes) {
     margin-bottom: 16px;
   `;
   const headingCss = css`
-    ${headline.xsmall({ fontWeight: 'bold' })}
+    ${headline.xsmall({ fontWeight: 'bold' })};
+    margin-bottom: 16px;
   `;
 
   const validationText = props.error ? null : 'This code is valid';
@@ -84,11 +85,8 @@ function RedemptionForm(props: PropTypes) {
           }}
           >
             <div css={mainCss}>
-              <h2 css={headingCss}>Welcome to The Guardian Subscriptions</h2>
+              <h2 css={headingCss}>Enjoy your Digital Subscription from The Guardian</h2>
               <div>
-                <p css={paraCss}>
-                  Activate your offer with the unique access code provided
-                </p>
                 <TextInput
                   autoComplete="off"
                   value={props.userCode}
