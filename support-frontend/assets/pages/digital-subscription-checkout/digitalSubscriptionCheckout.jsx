@@ -72,7 +72,7 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={<CheckoutForm />}
-        thankYouContentPending={<ThankYouPendingContent includePaymentCopy={true} {...thankyouProps} />}
+        thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
         thankYouContent={<ThankYouContent {...thankyouProps} />}
         subscriptionProduct="DigitalPack"
       />

@@ -67,7 +67,7 @@ function ThankYouContent(props: PropTypes) {
         <AppsSection countryGroupId={props.countryGroupId} />
       </Content>
       {props.includePaymentCopy ?
-        <SubscriptionsSurvey product={DigitalPack}/>
+        <SubscriptionsSurvey product={DigitalPack} />
         : null
       }
       <Content>
