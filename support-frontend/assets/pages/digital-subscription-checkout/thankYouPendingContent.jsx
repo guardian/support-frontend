@@ -65,7 +65,7 @@ function ThankYouPendingContent(props: PropTypes) {
         </Text>
       </Content>
       {props.includePaymentCopy ?
-        <SubscriptionsSurvey product={DigitalPack}/>
+        <SubscriptionsSurvey product={DigitalPack} />
         : null
       }
       <Content>
