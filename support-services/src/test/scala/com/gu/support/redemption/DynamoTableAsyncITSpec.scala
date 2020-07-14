@@ -18,7 +18,8 @@ class DynamoTableAsyncITSpec extends AsyncFlatSpec with Matchers {
       lookedup should be(Some(Map(
         "redemptionCode" -> DynamoString(allCharsCode),
         "available" -> DynamoBoolean(true),
-        "corporateId" -> DynamoString("1")
+        "corporateId" -> DynamoString("1"),
+        "type" -> DynamoString("Corporate")
       )))
     }
   }
