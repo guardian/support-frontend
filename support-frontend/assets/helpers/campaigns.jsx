@@ -58,10 +58,10 @@ export function getCampaignSettings(): CampaignSettings | null {
   return null;
 }
 
-export function getCampaignCode(): ?string {
+export function getCampaignCode(): string | null {
   const campaignSettings = getCampaignSettings();
   if (campaignSettings) {
     return campaignSettings.campaignCode;
   }
-  return undefined;
+  return null;
 }

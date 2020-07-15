@@ -17,7 +17,7 @@ import type { CampaignSettings } from 'helpers/campaigns';
 type PropTypes = {|
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
-  campaignSettings: ?CampaignSettings,
+  campaignSettings: CampaignSettings | null,
 |};
 
 // ----- Component ----- //
