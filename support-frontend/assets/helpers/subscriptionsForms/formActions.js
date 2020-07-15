@@ -95,7 +95,6 @@ const formActionCreators = {
     return dispatch({
       type: 'SET_PAYMENT_METHOD',
       paymentMethod,
-      country: state.common.internationalisation.countryId,
     });
   },
   setBillingAddressIsSame: (isSame: boolean): Action => ({
