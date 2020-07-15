@@ -93,7 +93,6 @@ type PropTypes = {|
   setBillingCountry: Function,
   billingAddressErrors: Array<Object>,
   deliveryAddressErrors: Array<Object>,
-  country: IsoCountry,
   isTestUser: boolean,
   validateForm: () => Function,
   csrf: Csrf,
@@ -118,7 +117,6 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     deliveryAddressErrors: state.page.deliveryAddress.fields.formErrors,
     billingAddressErrors: state.page.billingAddress.fields.formErrors,
     isTestUser: state.page.checkout.isTestUser,
-    country: state.common.internationalisation.countryId,
     csrf: state.page.csrf,
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
@@ -308,7 +306,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
             title="Your card details"
           >
             <StripeProviderForCountry
-              country={props.country}
+              country={props.billingCountry}
               isTestUser={props.isTestUser}
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
