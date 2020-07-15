@@ -56,8 +56,7 @@ function RedemptionForm(props: PropTypes) {
       border-top: solid 1px ${line.primary};
     }
   `;
-  const paraCss = css`
-    margin-top: 8px;
+  const hrCss = css`
     margin-bottom: 16px;
   `;
   const headingCss = css`
@@ -67,9 +66,7 @@ function RedemptionForm(props: PropTypes) {
 
   const validationText = props.error ? null : 'This code is valid';
   const signedIn = doesUserAppearToBeSignedIn();
-  const signinInstructions = signedIn ? '' :
-    'On the next screen you will be prompted to set up a Guardian user account';
-  const buttonText = signedIn ? 'Activate' : 'Continue';
+  const buttonText = signedIn ? 'Activate' : 'Continue to account setup';
 
   return (
     <div>
@@ -99,10 +96,7 @@ function RedemptionForm(props: PropTypes) {
               </div>
             </div>
             <div css={instructionsDivCss}>
-              <hr />
-              <p css={paraCss}>
-                {signinInstructions}
-              </p>
+              <hr css={hrCss} />
               <Button
                 onClick={() => props.submit(props.userCode || '')}
                 showIcon
