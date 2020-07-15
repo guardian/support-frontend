@@ -2,7 +2,7 @@ package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvider}
+import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.promotions.PromotionService
@@ -52,9 +52,11 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
 
   }
 
-  val realZuoraService = new ZuoraService(zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
+  val realConfig = Configuration.load()
 
-  val realPromotionService = new PromotionService(promotionsConfigProvider.get(false))
+  val realZuoraService = new ZuoraService(realConfig.zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
+
+  val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get(false))
 
   val mockZuoraService = {
     val mockZuora = mock[ZuoraService]

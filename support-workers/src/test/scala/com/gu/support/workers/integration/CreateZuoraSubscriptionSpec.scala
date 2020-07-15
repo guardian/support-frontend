@@ -2,7 +2,7 @@ package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvider}
+import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
@@ -94,9 +94,11 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     }
   }
 
-  val realZuoraService = new ZuoraService(zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
+  val realConfig = Configuration.load()
+  
+  val realZuoraService = new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
 
-  val realPromotionService = new PromotionService(promotionsConfigProvider.get())
+  val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())
 
   val realRedemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(Stages.DEV))
 
@@ -123,6 +125,8 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     (s => s.promotionService,
       realPromotionService),
     (s => s.redemptionService,
-      realRedemptionService)
+      realRedemptionService),
+    (s => s.config,
+      realConfig)
   )
 }

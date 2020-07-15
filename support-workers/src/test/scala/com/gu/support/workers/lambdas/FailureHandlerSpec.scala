@@ -3,6 +3,7 @@ package com.gu.support.workers.lambdas
 import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.CheckoutFailureReasons.{AccountMismatch, PaymentMethodUnacceptable, Unknown}
@@ -171,7 +172,7 @@ object FailureHandlerManualTest extends Matchers {
 
   def sendFailureEmail() {
     //This test will send a failure email to the address below - useful for quickly testing changes
-    val service = new EmailService
+    val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "rupert.bates@theguardian.com"
     service
       .send(FailedContributionEmailFields(email, IdentityUserId("identityId")))
@@ -190,7 +191,7 @@ object DigiPackFailureHandlerManualTest extends Matchers {
 
   def sendFailureEmail() {
     //This test will send a failure email to the address below - useful for quickly testing changes
-    val service = new EmailService
+    val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
       .send(FailedDigitalPackEmailFields(email, IdentityUserId("identityId")))
@@ -211,7 +212,7 @@ object GuardianWeeklyFailureHandlerTest extends Matchers {
 
   def sendFailureEmail() {
     //This test will send a failure email to the address below - useful for quickly testing changes
-    val service = new EmailService
+    val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
       .send(FailedGuardianWeeklyEmailFields(email, IdentityUserId("identityId")))
@@ -233,7 +234,7 @@ object PrintFailureHandlerTest extends Matchers {
 
   def sendFailureEmail() {
     //This test will send a failure email to the address below - useful for quickly testing changes
-    val service = new EmailService
+    val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
       .send(FailedPaperEmailFields(email, IdentityUserId("identityId")))

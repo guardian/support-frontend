@@ -40,7 +40,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   )
 
   "AuthService" should "be able to retrieve an authtoken" in {
-    val authService = new AuthService(Configuration.salesforceConfigProvider.get())
+    val authService = new AuthService(Configuration.load().salesforceConfigProvider.get())
 
     authService.authorize.map { auth =>
       auth.access_token.length should be > 0
@@ -48,7 +48,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "reuse that token" in {
-    val config = Configuration.salesforceConfigProvider.get()
+    val config = Configuration.load().salesforceConfigProvider.get()
 
     val futureAuths = for {
       auth <- AuthService.getAuth(config)
@@ -62,11 +62,11 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "get a different auth token for each stage" in {
-    val config = Configuration.salesforceConfigProvider.get()
+    val config = Configuration.load().salesforceConfigProvider.get()
 
     val futureAuths = for {
-      devAuth <- AuthService.getAuth(Configuration.salesforceConfigProvider.get())
-      uatAuth <- AuthService.getAuth(Configuration.salesforceConfigProvider.get(true))
+      devAuth <- AuthService.getAuth(Configuration.load().salesforceConfigProvider.get())
+      uatAuth <- AuthService.getAuth(Configuration.load().salesforceConfigProvider.get(true))
     } yield (devAuth, uatAuth)
 
     futureAuths.map { auths: (Authentication, Authentication) =>
@@ -75,7 +75,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   "SalesforceService" should "be able to upsert a customer" in {
-    val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
+    val service = new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
 
     service.upsert(customer).map { response: SalesforceContactResponse =>
       response.Success shouldBe true
@@ -85,7 +85,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "be able to upsert a customer that has optional fields" in {
-    val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
+    val service = new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
 
     val upsertData = customer.copy(
       OtherStreet = Some(street),
@@ -107,7 +107,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "be able to add a related contact record" in {
-    val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
+    val service = new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
 
     val name = "integration-test-recipient"
     val upsertData = DeliveryContact(

@@ -2,7 +2,7 @@ package com.gu.zuora
 
 import java.util.UUID
 
-import com.gu.config.Configuration.zuoraConfigProvider
+import com.gu.config.Configuration
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId, Monthly}
@@ -19,7 +19,7 @@ import scala.concurrent.duration._
 @IntegrationTest
 class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
-  def uatService: ZuoraService = new ZuoraService(zuoraConfigProvider.get(true), RequestRunners.configurableFutureRunner(30.seconds))
+  def uatService: ZuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(true), RequestRunners.configurableFutureRunner(30.seconds))
 
   // actual sub "CreatedDate": "2017-12-07T15:47:21.000+00:00",
   val earlyDate = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeZone.UTC)
@@ -48,7 +48,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
     uatService.getSubscriptions(ZuoraAccountNumber("A00071408")).map {
       response =>
         response.nonEmpty should be(true)
-        response.head.ratePlans.head.productRatePlanId should be(zuoraConfigProvider.get(true).monthlyContribution.productRatePlanId)
+        response.head.ratePlans.head.productRatePlanId should be(Configuration.load().zuoraConfigProvider.get(true).monthlyContribution.productRatePlanId)
     }
   }
 
@@ -135,7 +135,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   def doRequest(request: Either[PreviewSubscribeRequest, SubscribeRequest]) = {
     //Accounts will be created (or previewed) in Sandbox
-    val zuoraService = new ZuoraService(zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
+    val zuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
     val futureResponse = request.fold(zuoraService.previewSubscribe, zuoraService.subscribe)
     futureResponse.map {
       response =>

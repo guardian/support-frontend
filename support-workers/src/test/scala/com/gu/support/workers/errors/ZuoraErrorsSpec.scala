@@ -24,7 +24,7 @@ import scala.concurrent.duration._
 class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with MockServicesCreator with RecoverMethods with MockContext {
 
   "Subscribe request with invalid term type" should "fail with a ZuoraErrorResponse" in {
-    val zuoraService = new ZuoraService(Configuration.zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
+    val zuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
     recoverToSucceededIf[ZuoraErrorResponse] {
       zuoraService.subscribe(invalidSubscriptionRequest).map {
         response =>
@@ -34,7 +34,7 @@ class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with M
   }
 
   "Subscribe request with incorrect PaymentMethod" should "fail with a ZuoraErrorResponse" in {
-    val zuoraService = new ZuoraService(Configuration.zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
+    val zuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
     recoverToSucceededIf[ZuoraErrorResponse] {
       zuoraService.subscribe(incorrectPaymentMethod).map {
         response =>
@@ -159,11 +159,15 @@ class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with M
     assertion
   }
 
+  val realConfig = Configuration.load()
+
   private val timeoutServices = errorServices(None, 1.milliseconds)
 
-  def errorServices(baseUrl: Option[String], timeout: Duration = 10.seconds): ServiceProvider = mockService(
-    s => s.zuoraService,
-    new ZuoraService(Configuration.zuoraConfigProvider.get(), configurableFutureRunner(timeout), baseUrl)
+  def errorServices(baseUrl: Option[String], timeout: Duration = 10.seconds): ServiceProvider = mockServices[Any](
+    (s => s.zuoraService,
+      new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(timeout), baseUrl)),
+    (s => s.config,
+      realConfig)
   )
 
 }

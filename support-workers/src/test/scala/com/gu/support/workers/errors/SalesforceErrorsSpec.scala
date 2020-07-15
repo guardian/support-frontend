@@ -58,7 +58,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
   }
 
   "SalesforceService" should "throw a SalesforceErrorResponse if authentication has expired" in {
-    val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds)) {
+    val service = new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds)) {
       //Don't add the authentication headers to simulate an expired auth token
       override def addAuthenticationToRequest(auth: Authentication, req: Request.Builder): Request.Builder =
         req.url(s"${auth.instance_url}/$upsertEndpoint") //We still need to set the base url

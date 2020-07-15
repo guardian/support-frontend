@@ -4,11 +4,14 @@ import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.support.config._
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.util.Try
 
 object Configuration {
+
+  def load(): Configuration = new Configuration(loadConfig)
+
   val loadFromS3: Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG"))
     .getOrElse("TRUE").toBoolean)
     .getOrElse(true) //Should we load config from S3
@@ -19,9 +22,16 @@ object Configuration {
 
   SafeLogger.info(s"Load from S3: $loadFromS3, Stage: $stage")
 
-  val config = PrivateConfigLoader
-    .forEnvironment(loadFromS3)
-    .load(stage, ConfigFactory.load())
+  // this is static so it persists between lambda executions, but lazy so it doesn't cause a fatal error at class loading time
+  private lazy val loadConfig = PrivateConfigLoader
+    .forEnvironment(Configuration.loadFromS3)
+    .load(Configuration.stage, ConfigFactory.load())
+
+}
+
+case class Configuration(config: Config) {
+
+  import Configuration.stage
 
   val stripeConfigProvider = new StripeConfigProvider(config, stage)
   val payPalConfigProvider = new PayPalConfigProvider(config, stage)

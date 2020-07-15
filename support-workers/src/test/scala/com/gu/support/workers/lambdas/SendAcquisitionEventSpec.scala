@@ -13,6 +13,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import cats.implicits._
+import com.gu.config.Configuration
 
 import scala.concurrent.Future
 
@@ -40,7 +41,7 @@ object MockAcquisitionHelper extends MockitoSugar {
     //Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val acquisitionService = AcquisitionServiceBuilder.build(isTestService = true)
+    val acquisitionService = AcquisitionServiceBuilder.build(Configuration.load().kinesisStreamName, isTestService = true)
 
     when(services.acquisitionService).thenReturn(acquisitionService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)

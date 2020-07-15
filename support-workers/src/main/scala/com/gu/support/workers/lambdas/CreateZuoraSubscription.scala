@@ -4,7 +4,6 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
-import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
@@ -46,7 +45,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val redemptionService = services.redemptionService
     val zuoraService = services.zuoraService
     val isTestUser = state.user.isTestUser
-    val config: ZuoraConfig = zuoraConfigProvider.get(isTestUser)
+    val config: ZuoraConfig = services.config.zuoraConfigProvider.get(isTestUser)
     CreateZuoraSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, config)
   }
 }

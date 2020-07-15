@@ -46,11 +46,11 @@ class PayPalErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
 
   lazy private val timeOutServices = mockService(
     s => s.payPalService,
-    new PayPalService(Configuration.payPalConfigProvider.get(), RequestRunners.configurableFutureRunner(1.milliseconds))
+    new PayPalService(Configuration.load().payPalConfigProvider.get(), RequestRunners.configurableFutureRunner(1.milliseconds))
   )
 
   private def errorServices(baseUrl: String) = {
-    val conf = Configuration.payPalConfigProvider.get()
+    val conf = Configuration.load().payPalConfigProvider.get()
     val mockConfig = PayPalConfig(conf.payPalEnvironment, conf.NVPVersion, baseUrl, conf.user, conf.password, conf.signature)
     val payPal = new PayPalService(mockConfig, RequestRunners.configurableFutureRunner(10.seconds))
     mockService(
