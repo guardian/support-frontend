@@ -47,7 +47,7 @@ import { setExistingPaymentMethods, setContributionTypes } from 'helpers/page/co
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
-import { campaigns, getCampaignName } from 'helpers/campaigns';
+import { getCampaignSettings } from 'helpers/campaigns';
 import { stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
 import { loadRecaptchaV2 } from '../../helpers/recaptcha';
 
@@ -198,9 +198,9 @@ function selectInitialAmounts(state: State, dispatch: Function) {
 
 // Override the settings from the server if contributionTypes are defined in url params or campaign settings
 function getContributionTypes(state: State): ContributionTypes {
-  const campaignName = getCampaignName();
-  if (campaignName && campaigns[campaignName] && campaigns[campaignName].contributionTypes) {
-    return campaigns[campaignName].contributionTypes;
+  const campaignSettings = getCampaignSettings();
+  if (campaignSettings && campaignSettings.contributionTypes) {
+    return campaignSettings.contributionTypes;
   }
 
   return getValidContributionTypesFromUrlOrElse(state.common.settings.contributionTypes);

@@ -21,7 +21,7 @@ import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
-import { campaigns, getCampaignName } from 'helpers/campaigns';
+import { getCampaignSettings } from 'helpers/campaigns';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { ContributionFormContainer } from './components/ContributionFormContainer';
@@ -89,7 +89,7 @@ const setOneOffContributionCookie = () => {
   );
 };
 
-const campaignName = getCampaignName();
+const campaignSettings = getCampaignSettings();
 
 const { countryId } = state.common.internationalisation;
 
@@ -98,11 +98,11 @@ const thankYouClassModifiers = [
   ausMomentEnabled(countryId) ? 'aus-moment' : null,
 ];
 
-const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
-  campaigns[campaignName].cssModifiers : [];
+const cssModifiers = campaignSettings && campaignSettings.cssModifiers ?
+  campaignSettings.cssModifiers : [];
 
-const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
-  campaigns[campaignName].backgroundImage : null;
+const backgroundImageSrc = campaignSettings && campaignSettings.backgroundImage ?
+  campaignSettings.backgroundImage : null;
 
 FocusStyleManager.onlyShowFocusOnTabs(); // https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility
 

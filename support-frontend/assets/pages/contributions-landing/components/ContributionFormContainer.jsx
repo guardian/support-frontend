@@ -9,13 +9,12 @@ import { type CountryGroupId, countryGroups } from 'helpers/internationalisation
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import ContributionTicker from 'components/ticker/contributionTicker';
-import { campaigns, getCampaignName } from 'helpers/campaigns';
+import { getCampaignSettings } from 'helpers/campaigns';
 import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type { CampaignSettings } from 'helpers/campaigns';
 
 
 // ----- Types ----- //
@@ -75,10 +74,8 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 
 function withProps(props: PropTypes) {
 
-  const campaignName = getCampaignName();
-  const campaignSettings: ?CampaignSettings = campaignName && campaigns[campaignName] ?
-    campaigns[campaignName](props.tickerGoalReached) :
-    null;
+  const campaignSettings = getCampaignSettings();
+  const campaignCopy = campaignSettings ? campaignSettings.copy(props.tickerGoalReached) : null;
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     props.setPaymentIsWaiting(true);
@@ -87,7 +84,7 @@ function withProps(props: PropTypes) {
 
   const countryGroupDetails = {
     ...defaultHeaderCopyAndContributeCopy,
-    ...campaignSettings || {},
+    ...campaignCopy || {},
   };
 
   const showSecureTransactionIndicator = () => <SecureTransactionIndicator modifierClasses={['top']} />;
@@ -139,6 +136,7 @@ function withProps(props: PropTypes) {
             }
             <ContributionForm
               onPaymentAuthorisation={onPaymentAuthorisation}
+              campaignSettings={campaignSettings}
             />
           </div>
         }

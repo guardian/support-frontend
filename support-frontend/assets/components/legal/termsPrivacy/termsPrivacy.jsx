@@ -8,8 +8,8 @@ import { privacyLink, contributionsTermsLinks, philanthropyContactEmail } from '
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, fromCountryGroupId, currencies } from 'helpers/internationalisation/currency';
 import type { ContributionType } from 'helpers/contributions';
-import { type CampaignName, campaigns } from 'helpers/campaigns';
 import './termsPrivacy.scss';
+import type { CampaignSettings } from 'helpers/campaigns';
 
 
 // ---- Types ----- //
@@ -17,7 +17,7 @@ import './termsPrivacy.scss';
 type PropTypes = {|
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
-  campaignName: ?CampaignName,
+  campaignSettings: ?CampaignSettings,
 |};
 
 // ----- Component ----- //
@@ -72,8 +72,8 @@ function TermsPrivacy(props: PropTypes) {
     </div>
   );
 
-  if (props.campaignName && campaigns[props.campaignName] && campaigns[props.campaignName].termsAndConditions) {
-    return campaigns[props.campaignName].termsAndConditions(
+  if (props.campaignSettings && props.campaignSettings.termsAndConditions) {
+    return props.campaignSettings.termsAndConditions(
       contributionsTermsLinks[props.countryGroupId],
       philanthropyContactEmail[props.countryGroupId],
     );
