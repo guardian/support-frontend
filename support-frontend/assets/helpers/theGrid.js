@@ -81,7 +81,7 @@ export const imageCatalogue: {
   showcaseUSLiberty: 'e0533f914968b4645a985be89d35af9c9723957b/0_319_4467_1336',
   showcaseUKBrexit: '1806ede9cbb6b5b421f862b81a01bc1cb688ca48/6_1618_4250_927',
   showcaseUKProtest: '27533ba5ee9c8ca57e38e57b8bc588a7f455c98b/960_0_3840_3840',
-  showcaseUKPPE: '3ac495c62288501c9e2e76a03a00e4ee5a80b5c3/0_0_5760_3456',
+  showcaseUKPPE: '3ac495c62288501c9e2e76a03a00e4ee5a80b5c3/0_294_5760_2022',
   showcaseUKWindrushGroup: '2ec9dab8f39d1e9b12b9c7625b5ad2b058f3420b/1175_287_3335_3335',
   subscriptionFeature: '432b55d4401dde2b58f6ce61e7c9ddf50958962a/0_0_1584_954',
   subscriptionWeekly1: 'cf47a92149f2b347fcd43e825e6e48c6601820f5/0_0_798_675',
