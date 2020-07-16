@@ -25,7 +25,7 @@ object Configuration {
   // this is static so it persists between lambda executions, but lazy so it doesn't cause a fatal error at class loading time
   private lazy val loadConfig = PrivateConfigLoader
     .forEnvironment(Configuration.loadFromS3)
-    .load(Configuration.stage, ConfigFactory.load())
+    .load(Configuration.stage, ConfigFactory.load(this.getClass.getClassLoader))
 
 }
 
