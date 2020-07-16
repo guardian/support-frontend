@@ -77,6 +77,7 @@ import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidati
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import Total from 'components/subscriptionCheckouts/total/total';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 // ----- Types ----- //
 
@@ -330,6 +331,10 @@ function WeeklyCheckoutForm(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
+          <GeneralErrorMessage
+            errorReason={props.submissionError}
+            errorHeading={submissionErrorHeading}
+          />
           <Total
             price={price.price}
             currency={props.currencyId}
