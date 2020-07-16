@@ -79,6 +79,7 @@ import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payP
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 // ----- Styles ----- //
 
@@ -360,6 +361,10 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
+          <GeneralErrorMessage
+            errorReason={props.submissionError}
+            errorHeading={submissionErrorHeading}
+          />
           <Total
             price={price.price}
             currency={props.currencyId}
