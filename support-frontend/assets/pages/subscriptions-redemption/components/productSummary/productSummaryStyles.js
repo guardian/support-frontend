@@ -1,7 +1,7 @@
 import { css } from '@emotion/core';
 import { headline, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { background, border, neutral, text } from '@guardian/src-foundations/palette';
+import { background, border, text } from '@guardian/src-foundations/palette';
 import { from, until } from '@guardian/src-foundations/mq';
 
 export const wrapper = css`
@@ -19,7 +19,7 @@ export const imageContainer = css`
   align-items: flex-start;
   width: calc(100% - 30px);
   padding: ${space[4]}px ${space[4]}px 0;
-  background-color: ${neutral['97']};
+  background-color: ${background.secondary};
 
   img {
     width: 100%;
@@ -50,7 +50,8 @@ export const fromTablet = css`
 
 export const textBlock = css`
   h3 {
-    ${headline.xxsmall({ fontWeight: 'bold' })};
+    ${headline.xxsmall()};
+    font-weight: bold;
     margin: ${space[2]}px ${space[2]}px 2px;
   }
 `;

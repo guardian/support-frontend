@@ -60,7 +60,8 @@ function RedemptionForm(props: PropTypes) {
     margin-bottom: 16px;
   `;
   const headingCss = css`
-    ${headline.xsmall({ fontWeight: 'bold' })};
+    ${headline.xsmall()};
+    font-weight: bold;
     margin-bottom: 16px;
   `;
 
