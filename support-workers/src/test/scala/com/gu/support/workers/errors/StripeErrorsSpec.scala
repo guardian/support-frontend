@@ -101,13 +101,13 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
   private lazy val timeoutServices = mockService(
     s => s.stripeService,
     //Create a stripe service which will timeout after 1 millisecond
-    new StripeService(Configuration.stripeConfigProvider.get(), configurableFutureRunner(1.milliseconds))
+    new StripeService(Configuration.load().stripeConfigProvider.get(), configurableFutureRunner(1.milliseconds))
   )
 
   def errorServices(baseUrl: String): ServiceProvider = {
     mockService(
       s => s.stripeService,
-      new StripeService(Configuration.stripeConfigProvider.get(), configurableFutureRunner(10.seconds), baseUrl)
+      new StripeService(Configuration.load().stripeConfigProvider.get(), configurableFutureRunner(10.seconds), baseUrl)
     )
   }
 

@@ -2,11 +2,11 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.helpers.FutureExtensions._
 import com.gu.monitoring.{Error, IgnoredError, LambdaExecutionResult, LambdaExecutionStatus, PaymentFailure, SafeLogger}
 import com.gu.stripe.StripeError
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.CheckoutFailureReasons._
 import com.gu.support.workers._
@@ -14,7 +14,6 @@ import com.gu.support.workers.lambdas.FailureHandler.{extractUnderlyingError, to
 import com.gu.support.workers.states.{CheckoutFailureState, FailureHandlerState}
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
-import io.circe.generic.auto._
 import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -22,7 +21,7 @@ import scala.concurrent.Future
 
 class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerState, CheckoutFailureState] {
 
-  def this() = this(new EmailService)
+  def this() = this(new EmailService(Configuration.load().contributionThanksQueueName))
 
   override protected def handlerFuture(
     state: FailureHandlerState,

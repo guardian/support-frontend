@@ -83,7 +83,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
   }
 
   "StripeService" should "throw a card_declined StripeError" taggedAs IntegrationTest in {
-    val service = new StripeService(Configuration.stripeConfigProvider.get(true), configurableFutureRunner(40.seconds)).withCurrency(GBP)
+    val service = new StripeService(Configuration.load().stripeConfigProvider.get(true), configurableFutureRunner(40.seconds)).withCurrency(GBP)
     val ex = recoverToExceptionIf[StripeError] {
       service.createCustomerFromToken("tok_chargeDeclined")
     }

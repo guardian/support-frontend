@@ -9,7 +9,7 @@ import com.gu.support.config.Stages
 
 object AcquisitionServiceBuilder {
 
-  def build(isTestService: Boolean): com.gu.acquisition.services.AcquisitionService =
+  def build(kinesisStreamName: String, isTestService: Boolean): com.gu.acquisition.services.AcquisitionService =
     if (isTestService) {
       com.gu.acquisition.services.MockAcquisitionService
     } else {
@@ -22,8 +22,8 @@ object AcquisitionServiceBuilder {
             InstanceProfileCredentialsProvider.getInstance()
           )
 
-          Ec2OrLocalConfig(credentialsProvider, Configuration.kinesisStreamName)
-        } else LambdaConfig(Configuration.kinesisStreamName)
+          Ec2OrLocalConfig(credentialsProvider, kinesisStreamName)
+        } else LambdaConfig(kinesisStreamName)
       }
 
       com.gu.acquisition.services.AcquisitionService.prod(config)(RequestRunners.client)

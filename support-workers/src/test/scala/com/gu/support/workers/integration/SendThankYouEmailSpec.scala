@@ -3,6 +3,7 @@ package com.gu.support.workers.integration
 import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
@@ -95,6 +96,8 @@ object SendThankYouEmailManualTest {
     sendWeeklySubscriptionGiftEmail()
   }
 
+  val realConfig = Configuration.load()
+
   def sendContributionEmail() {
     val mandateId = "65HK26E"
     val user = User("1234", addressToSendTo, None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
@@ -109,7 +112,7 @@ object SendThankYouEmailManualTest {
       salesforceContactId,
       Some(mandateId)
     )
-    val service = new EmailService
+    val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
   }
 
@@ -129,7 +132,7 @@ object SendThankYouEmailManualTest {
       salesforceContactId,
       Some(mandateId)
     )
-    val service = new EmailService
+    val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
   }
 
@@ -149,7 +152,7 @@ object SendThankYouEmailManualTest {
       salesforceContactId,
       Some(mandateId)
     )
-    val service = new EmailService
+    val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
   }
 
@@ -187,7 +190,7 @@ object SendThankYouEmailManualTest {
       salesforceContactId,
       Some(mandateId)
     )
-    val service = new EmailService
+    val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
   }
 
@@ -227,7 +230,7 @@ object SendThankYouEmailManualTest {
       salesforceContactId,
       Some(mandateId)
     )
-    val service = new EmailService
+    val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
   }
 
@@ -265,7 +268,7 @@ object SendThankYouEmailManualTest {
       salesforceContactId,
       Some(mandateId)
     )
-    val service = new EmailService
+    val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
   }
 

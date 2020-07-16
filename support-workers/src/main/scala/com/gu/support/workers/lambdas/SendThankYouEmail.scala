@@ -23,10 +23,10 @@ import scala.concurrent.Future
 
 case class StateNotValidException(message: String) extends RuntimeException(message)
 
-class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: ServiceProvider = ServiceProvider)
+class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendThankYouEmailState, SendMessageResult](servicesProvider) {
 
-  def this() = this(new EmailService)
+  def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
     state: SendThankYouEmailState,
@@ -34,9 +34,10 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     context: Context,
     services: Services
   ): FutureHandlerResult = {
+    val thankYouEmailService: EmailService = new EmailService(services.config.contributionThanksQueueName)
     for {
       mandateId <- fetchDirectDebitMandateId(state, services.zuoraService)
-      emailResult <- sendEmail(state, mandateId)
+      emailResult <- sendEmail(thankYouEmailService, state, mandateId)
     } yield HandlerResult(emailResult, requestInfo)
   }
 
@@ -51,7 +52,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     product.productRatePlan(touchpointEnvironment, isGift).map(_.id).getOrElse("")
   }
 
-  def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
+  def sendEmail(thankYouEmailService: EmailService, state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
     val productRatePlanId = getProductRatePlanId(state.product, state.user.isTestUser, state.giftRecipient.isDefined)
     val maybePromotion = getAppliedPromotion(
       servicesProvider.forUser(state.user.isTestUser).promotionService,
