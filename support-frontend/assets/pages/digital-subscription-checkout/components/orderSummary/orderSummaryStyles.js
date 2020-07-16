@@ -11,7 +11,7 @@ export const wrapper = css`
     padding: ${space[3]}px;
   }
   ${until.tablet} {
-    box-shadow: 0px 4px 4px ${border.secondary};
+    box-shadow: 0 4px 4px ${border.secondary};
   }
 `;
 
@@ -61,8 +61,8 @@ export const contentBlock = css`
 export const imageContainer = css`
   display: inline-flex;
   align-items: flex-start;
-  width: calc(100%-30px);
-  padding: 15px 10px 0 15px;
+  width: calc(100% - 30px);
+  padding: ${space[4]}px ${space[3]}px 0;
   background-color: ${neutral['97']};
 
   img {

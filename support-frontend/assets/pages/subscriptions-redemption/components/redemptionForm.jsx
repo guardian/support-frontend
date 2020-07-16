@@ -2,25 +2,23 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
+import { Button } from '@guardian/src-button';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { line } from '@guardian/src-foundations/palette';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
-import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
+import Form from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
 import type { Action, RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
-import { Input } from 'components/forms/input';
-import { compose, type Dispatch } from 'redux';
-import { asControlled } from 'hocs/asControlled';
-import Button from 'components/button/button';
+import { type Dispatch } from 'redux';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
 import { submitCode, validateUserCode } from 'pages/subscriptions-redemption/api';
 import type { Option } from 'helpers/types/option';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
-import { withValidation } from 'hocs/withValidation';
-import { withError } from 'hocs/withError';
-import { withLabel } from 'hocs/withLabel';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
+import { TextInput } from '@guardian/src-text-input';
+import { headline } from '@guardian/src-foundations/typography/obj';
 
 type PropTypes = {
   userCode: Option<string>,
@@ -43,27 +41,33 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
   };
 }
 
-const InputWithValidated = compose(asControlled, withLabel, withError, withValidation)(Input);
-
 function RedemptionForm(props: PropTypes) {
+  const mainCss = css`
+    padding: ${space[2]}px;
+  `;
   const instructionsDivCss = css`
-    margin-top: -15px;
-    padding: 0 ${space[3]}px;
+    margin-top: -10px;
+    padding: ${space[2]}px;
     ${from.tablet} {
-      min-height: 350px;
+      min-height: 475px;
     }
     hr {
       border: 0;
       border-top: solid 1px ${line.primary};
     }
   `;
-  const paraCss = css`
+  const hrCss = css`
+    margin-bottom: 16px;
+  `;
+  const headingCss = css`
+    ${headline.xsmall()};
+    font-weight: bold;
     margin-bottom: 16px;
   `;
 
   const validationText = props.error ? null : 'This code is valid';
-  const signinInstructions = doesUserAppearToBeSignedIn() ? '' :
-    'On the next screen you will be prompted to set up a Guardian user account';
+  const signedIn = doesUserAppearToBeSignedIn();
+  const buttonText = signedIn ? 'Activate' : 'Continue to account setup';
 
   return (
     <div>
@@ -78,31 +82,29 @@ function RedemptionForm(props: PropTypes) {
             ev.preventDefault();
           }}
           >
-            <FormSection title="Welcome to The Guardian Digital Subscriptions">
+            <div css={mainCss}>
+              <h2 css={headingCss}>Enjoy your Digital Subscription from The Guardian</h2>
               <div>
-                <p css={paraCss}>
-                  Activate your offer with the unique access code provided
-                </p>
-                <InputWithValidated
-                  id="redemption-code"
-                  type="text"
+                <TextInput
                   autoComplete="off"
                   value={props.userCode}
-                  setValue={props.setUserCode}
+                  onChange={e => props.setUserCode(e.target.value)}
                   error={props.error}
-                  valid={validationText}
+                  success={validationText}
                   label="Insert code"
+                  css={css`max-width: 300px`}
                 />
               </div>
-            </FormSection>
-
+            </div>
             <div css={instructionsDivCss}>
-              <hr />
-              <p css={paraCss}>
-                {signinInstructions}
-              </p>
-              <Button id="submit-button" onClick={() => props.submit(props.userCode || '')}>
-                Activate
+              <hr css={hrCss} />
+              <Button
+                onClick={() => props.submit(props.userCode || '')}
+                showIcon
+                iconSide="right"
+                icon={<SvgArrowRightStraight />}
+              >
+                {buttonText}
               </Button>
             </div>
           </Form>
