@@ -26,6 +26,8 @@ case class StateNotValidException(message: String) extends RuntimeException(mess
 class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendThankYouEmailState, SendMessageResult](servicesProvider) {
 
+  def this() = this(ServiceProvider)
+
   override protected def servicesHandler(
     state: SendThankYouEmailState,
     requestInfo: RequestInfo,
