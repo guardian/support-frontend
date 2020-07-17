@@ -1,6 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
-import { USV1, AusAmounts, UkAmountsV1, UkAmountsV2 } from './data/testAmountsData';
+import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
 import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
@@ -138,10 +138,6 @@ export const tests: Tests = {
       {
         id: 'V1',
         amountsRegions: UkAmountsV1,
-      },
-      {
-        id: 'V2',
-        amountsRegions: UkAmountsV2,
       },
     ],
     audiences: {

@@ -21,11 +21,3 @@ export const UkAmountsV1 = {
     ANNUAL: [{ value: '75', isDefault: true }, { value: '150' }, { value: '300' }, { value: '500' }],
   },
 };
-
-export const UkAmountsV2 = {
-  GBPCountries: {
-    ONE_OFF: [{ value: '52' }, { value: '104', isDefault: true }, { value: '150' }, { value: '300' }],
-    MONTHLY: [{ value: '4.34' }, { value: '13', isDefault: true }, { value: '21.68' }],
-    ANNUAL: [{ value: '104' }, { value: '156', isDefault: true }, { value: '208' }, { value: '260' }],
-  },
-};
