@@ -1,6 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
-import { USV1, AusAmounts } from './data/testAmountsData';
+import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
 import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
@@ -9,6 +9,7 @@ export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
 const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
+const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 const digitalCheckout = '/subscribe/digital/checkout';
 
@@ -126,5 +127,28 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: auOnlyLandingPage,
     seed: 8,
+  },
+
+  ukAmountsTest: {
+    type: 'AMOUNTS',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'V1',
+        amountsRegions: UkAmountsV1,
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: ukOnlyLandingPage,
+    seed: 9,
   },
 };
