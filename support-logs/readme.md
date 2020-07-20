@@ -47,3 +47,6 @@ To add users you need to add them to the cogito pool.  This should be checked an
 You can access the SSH on the nginx proxy:
 
 `ssm ssh -x -p membership --ssm-tunnel --tags support-logs,support,PROD`
+
+More info about SSM including how to install it is available here:
+https://github.com/guardian/ssm-scala
