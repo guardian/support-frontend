@@ -113,7 +113,11 @@
         }
       }
 
-      @include mq($from: tablet, $until: desktop) {
+      @include mq($from: tablet, $until: leftCol) {
+        .component-text {
+          max-width: 75%;
+        }
+
         .component-content__image {
           right: -200px;
         }
@@ -123,9 +127,9 @@
         }
       }
 
-      @include mq($from: desktop, $until: leftCol) {
-        .component-content__image {
-          right: -200px;
+      @include mq($from: leftCol) {
+        .component-text {
+          max-width: 60%;
         }
       }
     }
