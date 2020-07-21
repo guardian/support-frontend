@@ -43,11 +43,10 @@ import {
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
-import type { StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
+import type { StripeAccount } from 'helpers/stripe';
 import type { ErrorReason } from 'helpers/errorReasons';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { toHumanReadableContributionType, getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
-import type { StripePaymentRequestButtonTestVariants } from 'helpers/abTests/abtestDefinitions';
 import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
 
@@ -83,7 +82,6 @@ type PropTypes = {|
   setPaymentWaiting: (isWaiting: boolean) => Action,
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
-  abTestButtonVsNoButton: StripePaymentRequestButtonTestVariants,
   csrf: CsrfState,
 |};
 
@@ -99,7 +97,6 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
   switches: state.common.settings.switches,
-  abTestButtonVsNoButton: state.common.abParticipations.stripePaymentRequestButtonVsNoButton,
   csrf: state.page.csrf,
 });
 
@@ -342,14 +339,9 @@ function initialisePaymentRequest(props: PropTypes) {
   paymentRequest.canMakePayment().then((result) => {
     const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
     if (paymentMethod) {
-      if (paymentMethod === 'StripeApplePay' || props.abTestButtonVsNoButton === 'button') {
-        trackComponentLoad(`${paymentMethod}-displayed`);
-        props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
-        setUpPaymentListenerSca(props, paymentRequest, paymentMethod);
-      } else {
-        trackComponentLoad(`${paymentMethod}-hidden`);
-        props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
-      }
+      trackComponentLoad(`${paymentMethod}-displayed`);
+      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
+      setUpPaymentListenerSca(props, paymentRequest, paymentMethod);
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }
