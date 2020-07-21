@@ -115,7 +115,7 @@
 
       @include mq($from: tablet, $until: leftCol) {
         .component-text {
-          max-width: 80%;
+          max-width: 75%;
         }
 
         .component-content__image {
