@@ -5,13 +5,15 @@ import scala.sys.process._
 
 skip in publish := true
 
-lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
+lazy val integrationTestSettings: Seq[Def.Setting[_]] = Project.inConfig(IntegrationTest)(baseAssemblySettings) ++ Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
   javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
   resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"),
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
-  testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eU")
+  testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
+  test in (IntegrationTest, assembly) := {},
+  aggregate in (IntegrationTest, assembly) := false
 )
 
 lazy val release = Seq[ReleaseStep](
@@ -74,7 +76,8 @@ lazy val root = (project in file("."))
     `support-internationalisation`,
     `support-services`,
     `stripe-intent`,
-    `support-redemptiondb`
+    `support-redemptiondb`,
+    `it-test-runner`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -108,7 +111,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`)
-  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `support-redemptiondb`)
+  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`)
 
 
 lazy val `support-models` = (project in file("support-models"))
@@ -166,3 +169,12 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
 
 lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
   .enablePlugins(RiffRaffArtifact)
+
+lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
+  .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
+//  .configs(IntegrationTest)
+  .settings(
+//    commonSettings,
+//    integrationTestSettings,
+//    libraryDependencies ++= commonDependencies
+  )//.dependsOn(`support-workers`)

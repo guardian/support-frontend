@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Installing yarn
 YARN_VERSION="0.27.5"
@@ -20,3 +21,7 @@ cd cloud-formation/src
 ../../${YARN_LOCATION}/dist/bin/yarn run build-cfn
 
 
+# build scala
+./sbt "project support-workers" it:assembly \
+"project it-test-runner" riffRaffUpload \
+"project support-redemptiondb" riffRaffUpload

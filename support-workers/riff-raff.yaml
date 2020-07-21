@@ -20,3 +20,7 @@ deployments:
         - "-PreparePaymentMethodForReuseLambda-"
       fileName: support-workers.jar
     dependencies: [cfn]
+  it-tests:
+    type: aws-s3
+    parameters:
+      bucket: support-frontend-dist

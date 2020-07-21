@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda for running the IT tests. Depends on the support workers deployment pushing out the JAR file.
+
+Parameters:
+  Stage:
+    Description: Stage name
+    Type: String
+    AllowedValues:
+      - PROD
+      - CODE
+    Default: CODE
+
+Mappings:
+  Constants:
+    Alarm:
+      Process: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+
+Conditions:
+  ProdOnlyResource: !Equals [!Ref Stage, PROD]
+
+Resources:
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Runs the IT tests
+      FunctionName:
+        !Sub it-tests-${Stage}
+      Handler: com.gu.RunITTests::apply
+      CodeUri:
+        Bucket: support-workers-dist
+        Key: !Sub support/${Stage}/it-tests/it-tests.jar
+      MemorySize: 2048
+      Runtime: java8
+      Timeout: 300
+      Environment:
+        Variables:
+          Stage: !Ref Stage
+      Events:
+        RerunTests:
+          Type: Schedule
+          Properties:
+            Schedule: 'rate(1 hour)'
+            Description: run the tests regularly so we know if they're broken
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+                - lambda:InvokeFunction
+              Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/it-tests-${Stage}:log-stream:*"
+        - Statement:
+            - Effect: Allow
+              Action: s3:GetObject
+              Resource: !Sub arn:aws:s3:::support-workers-dist/${Stage}/support-workers-it.jar
+
+  ITTestFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: ProdOnlyResource
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Join
+        - ' '
+        - - 'non urgent'
+          - 'main branch'
+          - 'IT Tests are failing'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Test system has issues or a broken test has been merged.'
+          - !FindInMap [ Constants, Alarm, Process ]
+      Namespace: support-frontend
+      MetricName: it-test-failed
+      Dimensions:
+        - Name: Stage
+          Value: !Ref Stage
+      Statistic: Sum
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 0
+      EvaluationPeriods: 1
+      Period: 60
