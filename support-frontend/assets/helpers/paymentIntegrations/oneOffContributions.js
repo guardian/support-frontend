@@ -160,9 +160,6 @@ const handleOneOffExecution = (result: Promise<Object>) => (
 const postOneOffAmazonPayExecutePaymentRequest = (data: AmazonPayData) =>
   handleOneOffExecution(postToPaymentApi(data, '/contribute/one-off/amazon-pay/execute-payment'));
 
-const postOneOffStripeExecutePaymentRequest = (data: StripeChargeData) =>
-  handleOneOffExecution(postToPaymentApi(data, '/contribute/one-off/stripe/execute-payment'));
-
 // Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
 const processStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,
@@ -210,7 +207,6 @@ function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Pr
 }
 
 export {
-  postOneOffStripeExecutePaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
   processStripePaymentIntentRequest,
   postOneOffAmazonPayExecutePaymentRequest,

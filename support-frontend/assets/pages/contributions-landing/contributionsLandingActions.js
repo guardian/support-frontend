@@ -30,7 +30,6 @@ import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
-  postOneOffStripeExecutePaymentRequest,
   processStripePaymentIntentRequest,
   postOneOffAmazonPayExecutePaymentRequest,
 } from 'helpers/paymentIntegrations/oneOffContributions';
@@ -549,18 +548,6 @@ const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
   (dispatch: Dispatch<Action>): void => {
     dispatch(onCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
   };
-
-const executeStripeOneOffPayment = (
-  data: StripeChargeData,
-  setGuestToken: (string) => void,
-  setThankYouPage: (ThankYouPageStage) => void,
-  paymentAuthorisation: PaymentAuthorisation,
-) =>
-  (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-    dispatch(onPaymentResult(
-      postOneOffStripeExecutePaymentRequest(data)(setGuestToken, setThankYouPage),
-      paymentAuthorisation,
-    ));
 
 const makeCreateStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,

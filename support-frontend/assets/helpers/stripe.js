@@ -1,7 +1,8 @@
 // @flow
-import {logException} from 'helpers/logger';
-import {type PaymentMethod, Stripe} from 'helpers/paymentMethods';
-import type {IsoCountry} from 'helpers/internationalisation/country';
+import { logException } from 'helpers/logger';
+import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { ContributionType } from 'helpers/contributions';
 
 const setupStripe = (setStripeHasLoaded: () => void) => {
   if (window.Stripe) {

@@ -1,8 +1,8 @@
 // @flow
 
 // ----- Imports ----- //
+
 import { type Store } from 'redux';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import { setupAmazonPay } from 'helpers/paymentIntegrations/amazonPay';
@@ -14,12 +14,10 @@ import {
   getContributionTypeFromUrl,
   getPaymentMethodFromSession,
   getValidPaymentMethods,
-  type ThirdPartyPaymentLibrary,
   getValidContributionTypesFromUrlOrElse,
 } from 'helpers/checkouts';
 import { type ContributionType, contributionTypeAvailable } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   type Action,
   checkIfEmailHasPassword,
@@ -30,7 +28,6 @@ import {
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { Stripe } from 'helpers/paymentMethods';
 import {
   isUsableExistingPaymentMethod,
   mapExistingPaymentMethodToPaymentMethod, sendGetExistingPaymentMethodsRequest,
@@ -41,7 +38,6 @@ import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { getCampaignSettings } from 'helpers/campaigns';
-import { stripeAccountForContributionType } from 'helpers/stripe';
 import { loadRecaptchaV2 } from '../../helpers/recaptcha';
 
 // ----- Functions ----- //

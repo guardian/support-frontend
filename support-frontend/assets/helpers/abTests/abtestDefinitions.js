@@ -5,7 +5,6 @@ import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internatio
 
 // ----- Tests ----- //
 
-const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
