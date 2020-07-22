@@ -23,6 +23,7 @@ pushd cloud-formation/src
 popd
 
 # build scala
+cd ..
 ./sbt "project support-workers" it:assembly \
 "project it-test-runner" riffRaffUpload \
 "project support-redemptiondb" riffRaffUpload
