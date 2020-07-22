@@ -42,6 +42,8 @@ Resources:
           Properties:
             Schedule: 'rate(1 hour)'
             Description: run the tests regularly so we know if they're broken
+      EventInvokeConfig:
+        MaximumRetryAttempts: 0
       Policies:
         - Statement:
             - Effect: Allow
@@ -55,6 +57,10 @@ Resources:
             - Effect: Allow
               Action: s3:GetObject
               Resource: !Sub arn:aws:s3:::support-workers-dist/support/${Stage}/it-tests/support-workers-it.jar
+        - Statement:
+            - Effect: Allow
+              Action: cloudwatch:PutMetricData
+              Resource: "*"
 
         - Statement:
             - Effect: Allow
