@@ -8,9 +8,10 @@ import { connect } from 'react-redux';
 
 import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/heroPicture';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, HomeDelivery, DigitalVoucher } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/content';
@@ -32,8 +33,17 @@ import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formF
 type PropTypes = {
     ...FormFields,
     isPending: boolean,
+    useDigitalVoucher: boolean,
 };
 
+// ----- Map State/Props ----- //
+
+function mapStateToProps(state: WithDeliveryCheckoutState) {
+  return {
+    ...getFormFields(state),
+    useDigitalVoucher: state.common.settings.useDigitalVoucher,
+  };
+}
 
 // ----- Component ----- //
 
@@ -73,12 +83,42 @@ const whatNext: {[FulfilmentOptions]: Element<*>} = {
       </p>
     </Text>
   ),
+  [DigitalVoucher]: (
+    <Text title="What happens next?">
+      <p>
+        <OrderedList items={[
+          <span>
+            Keep an eye on your inbox. You should receive an email confirming the details of your subscription,
+            and another email shortly afterwards that contains details of how you can pick up your papers from today!
+          </span>,
+          <span>
+            You will receive your Subscription Card in your subscriber pack in the post, along with your home
+            delivery letter.
+          </span>,
+          <span>
+            Visit your chosen participating newsagent to pick up your paper using your Subscription Card, or
+            arrange a delivery using home your delivery letter.
+          </span>,
+          ]}
+        />
+
+      </p>
+    </Text>
+  ),
 };
+
+function WhatNext(fulfilmentOption, useDigitalVoucher = false) {
+  if (useDigitalVoucher && fulfilmentOption === Collection) {
+    return whatNext[DigitalVoucher];
+  }
+  return whatNext[fulfilmentOption];
+}
 
 
 function ThankYouContent({
-  fulfilmentOption, productOption, startDate, isPending, product,
+  fulfilmentOption, productOption, startDate, isPending, product, useDigitalVoucher,
 }: PropTypes) {
+  const hideStartDate = fulfilmentOption === Collection && useDigitalVoucher;
   return (
     <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
@@ -104,12 +144,12 @@ function ThankYouContent({
             </Text>
           )
         }
-        {startDate &&
+        {(startDate && !hideStartDate) &&
           <Text title={fulfilmentOption === HomeDelivery ? 'You will receive your newspapers from' : 'You can start using your vouchers from'}>
             <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
           </Text>
         }
-        {whatNext[fulfilmentOption]}
+        {WhatNext(fulfilmentOption, useDigitalVoucher)}
       </Content>
       <Content>
         <Text>
@@ -137,4 +177,4 @@ function ThankYouContent({
 // ----- Export ----- //
 
 
-export default connect(state => ({ ...getFormFields(state) }))(ThankYouContent);
+export default connect(mapStateToProps)(ThankYouContent);
