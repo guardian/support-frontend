@@ -54,7 +54,7 @@ Resources:
         - Statement:
             - Effect: Allow
               Action: s3:GetObject
-              Resource: !Sub arn:aws:s3:::support-workers-dist/support/${Stage}/support-workers/support-workers-it.jar
+              Resource: !Sub arn:aws:s3:::support-workers-dist/support/${Stage}/it-tests/support-workers-it.jar
 
   ITTestFailureAlarm:
     Type: AWS::CloudWatch::Alarm
