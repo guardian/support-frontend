@@ -7,19 +7,20 @@ YARN_LOCATION="tools/${YARN_VERSION}"
 
 if [ ! -d "$YARN_LOCATION" ]; then
 	mkdir -p ${YARN_LOCATION}
-	cd ${YARN_LOCATION}/
+	pushd ${YARN_LOCATION}/
 	wget -qO- https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz | tar zvx
-	cd ../..
+	popd
 fi
 
 # Installing packages via yarn
-cd cloud-formation/src
+pushd cloud-formation/src
 
 ../../${YARN_LOCATION}/dist/bin/yarn install
 
 #Build CloudFormation
 ../../${YARN_LOCATION}/dist/bin/yarn run build-cfn
 
+popd
 
 # build scala
 ./sbt "project support-workers" it:assembly \
