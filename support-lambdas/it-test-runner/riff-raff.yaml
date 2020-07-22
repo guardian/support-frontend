@@ -11,6 +11,6 @@ deployments:
     parameters:
       bucket: support-workers-dist
       functionNames:
-        - "-ItTestRunner-"
+        - "-it-tests-"
       fileName: it-test-runner.jar
     dependencies: [cfn]
