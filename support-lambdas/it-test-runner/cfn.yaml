@@ -29,7 +29,7 @@ Resources:
       Handler: com.gu.RunITTests::apply
       CodeUri:
         Bucket: support-workers-dist
-        Key: !Sub support/${Stage}/it-tests/it-tests.jar
+        Key: !Sub support/${Stage}/it-test-runner/it-test-runner.jar
       MemorySize: 2048
       Runtime: java8
       Timeout: 300
@@ -54,7 +54,7 @@ Resources:
         - Statement:
             - Effect: Allow
               Action: s3:GetObject
-              Resource: !Sub arn:aws:s3:::support-workers-dist/${Stage}/support-workers-it.jar
+              Resource: !Sub arn:aws:s3:::support-workers-dist/support/${Stage}/support-workers/support-workers-it.jar
 
   ITTestFailureAlarm:
     Type: AWS::CloudWatch::Alarm

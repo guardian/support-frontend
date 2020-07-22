@@ -177,4 +177,4 @@ lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
 //    commonSettings,
 //    integrationTestSettings,
 //    libraryDependencies ++= commonDependencies
-  )//.dependsOn(`support-workers`)
+  ).dependsOn(`support-services`)// todo very excessive

@@ -13,7 +13,9 @@ import org.scalatest.tools.Runner
 
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
-
+class RunITTests {
+  def apply() = RunITTests.apply()
+}
 object RunITTests {
 
   lazy val stage = System.getenv().asScala.toMap.getOrElse("Stage", "DEV")
