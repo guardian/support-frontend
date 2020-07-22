@@ -23,5 +23,5 @@ deployments:
   it-tests:
     type: aws-s3
     parameters:
-      bucket: support-frontend-dist
+      bucket: support-workers-dist
       cacheControl: private
