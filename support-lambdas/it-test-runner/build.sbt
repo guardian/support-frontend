@@ -7,6 +7,8 @@ version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 
 libraryDependencies ++= Seq(
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "io.symphonia" % "lambda-logging" % "1.0.3",
   "org.scalatest" %% "scalatest" % "3.2.0" // not a "Test" dependency, it's an actual one
 )
 

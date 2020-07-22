@@ -14,11 +14,13 @@ import org.scalatest.tools.Runner
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 class RunITTests {
-  def apply() = RunITTests.apply()
+  // Referenced in Cloudformation
+  def apply(): String = RunITTests.apply()
 }
 object RunITTests {
 
   lazy val stage = System.getenv().asScala.toMap.getOrElse("Stage", "DEV")
+  // todo should we also check the build id to make sure support-workers deploy is keeping the remote jar in sync?
 
   def main(args: Array[String]): Unit = {
     apply()
@@ -26,26 +28,31 @@ object RunITTests {
 
   val tempJar = "/tmp/support-workers-it.jar"
 
-  // Referenced in Cloudformation
-  def apply(): Unit = {
+  def apply(): String = {
     val exists = new File(tempJar).exists()
     val result = for {
       _ <- if (exists) Success(()) else {
-        val bucket = s"support-workers-dist/support/${stage}/support-workers"
-        val catalog = new GetObjectRequest(bucket, "support-workers-it.jar")
+        val bucket = "support-workers-dist"
+        val s3File = s"support/${stage}/it-tests/support-workers-it.jar"
+        println(s"getting s3 file: $bucket / $s3File")
+        val catalog = new GetObjectRequest(bucket, s3File)
         fetchJson(catalog)
       }
       a = Array(
         "-R", tempJar,
         "-e",
+        "-q", "Spec",//otherwise we get an out of memory metaspace error - the jar is way too big
         "-C", "com.gu.ITTestReporter"
       )
-      _ <- Try(Runner.main(a))
+      _ <- Try(Runner.main(a)) // unfortunately calls System.exit(1) if any tests fail...
     } yield ()
     result match {
       case Failure(exception) => println(s"Failed with exception ${exception.toString}")
         exception.printStackTrace(System.out)
+        System.exit(9)
+        "not possible"
       case _ => println("RAN OK!")
+        "Finshed and RAN OK!"
     }
 //    val jarLoc = "support-workers/target/scala-2.12/support-workers-it.jar"
   }

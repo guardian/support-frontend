@@ -56,6 +56,22 @@ Resources:
               Action: s3:GetObject
               Resource: !Sub arn:aws:s3:::support-workers-dist/support/${Stage}/it-tests/support-workers-it.jar
 
+        - Statement:
+            - Effect: Allow
+              Action: s3:GetObject
+              Resource: !Sub arn:aws:s3:::support-workers-private/CODE/support-workers.private.conf
+
+        - Statement:
+            - Effect: Allow
+              Action: dynamodb:Scan
+              Resource: arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:UpdateItem
+              Resource: arn:aws:dynamodb:*:*:table/redemption-codes-DEV
+
   ITTestFailureAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: ProdOnlyResource
