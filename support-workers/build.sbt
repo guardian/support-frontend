@@ -62,6 +62,7 @@ assemblyMergeStrategy in assembly := {
     oldStrategy(y)
 }
 
+Project.inConfig(IntegrationTest)(baseAssemblySettings)
 assemblyJarName in (IntegrationTest, assembly) := s"${name.value}-it.jar"
 assemblyMergeStrategy in (IntegrationTest, assembly) := {
   case PathList("models", xs@_*) => MergeStrategy.discard
@@ -73,8 +74,5 @@ assemblyMergeStrategy in (IntegrationTest, assembly) := {
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(y)
 }
-
-
-
-
-
+assembly / test := {}
+assembly / aggregate := false

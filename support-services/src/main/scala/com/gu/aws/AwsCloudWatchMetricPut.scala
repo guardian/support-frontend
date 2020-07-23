@@ -23,10 +23,9 @@ object AwsCloudWatchMetricPut {
   case class MetricDimensionValue(value: String) extends AnyVal
 
   case class MetricRequest(
-    namespace: MetricNamespace,
-    name: MetricName,
-    dimensions: Map[MetricDimensionName, MetricDimensionValue],
-    value: Double = 1.0
+      namespace: MetricNamespace,
+      name: MetricName,
+      dimensions: Map[MetricDimensionName, MetricDimensionValue]
   )
 
   def apply(client: AmazonCloudWatch)(request: MetricRequest): Try[Unit] = {
@@ -45,7 +44,7 @@ object AwsCloudWatchMetricPut {
               .withValue(value.value)
           )
       }
-    metricDatum1.setValue(request.value)
+    metricDatum1.setValue(1.00)
     metricDatum1.setUnit(StandardUnit.Count)
     putMetricDataRequest.getMetricData.add(metricDatum1)
     Try(client.putMetricData(putMetricDataRequest)).map(_ => Unit)

@@ -26,7 +26,7 @@ Resources:
       Description: Runs the IT tests
       FunctionName:
         !Sub support-it-tests-${Stage}
-      Handler: com.gu.RunITTests::apply
+      Handler: com.gu.RunITTests::handleRequest
       CodeUri:
         Bucket: support-workers-dist
         Key: !Sub support/${Stage}/it-test-runner/it-test-runner.jar

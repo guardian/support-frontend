@@ -1,21 +1,24 @@
 package com.gu
 
-import java.io.File
-import java.nio.file.{CopyOption, Files, StandardCopyOption}
+import java.io.{File, InputStream, OutputStream}
+import java.nio.file.Files
 
+import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import com.amazonaws.services.s3.model.GetObjectRequest
-import com.gu.aws.AwsCloudWatchMetricPut
-import com.gu.aws.AwsCloudWatchMetricPut.{MetricDimensionName, MetricDimensionValue, MetricName, MetricNamespace, MetricRequest}
-import com.gu.support.catalog.AwsS3Client
+import com.gu.aws.AwsCloudWatchMetricPut._
+import com.gu.aws.{AwsCloudWatchMetricPut, AwsS3Client}
 import org.scalatest.Reporter
-import org.scalatest.events.{Event, RunAborted, RunCompleted, TestFailed, TestSucceeded}
+import org.scalatest.events.{Event, RunAborted, RunCompleted, TestFailed}
 import org.scalatest.tools.Runner
 
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
-class RunITTests {
+class RunITTests extends RequestStreamHandler {
+
   // Referenced in Cloudformation
-  def apply(): String = RunITTests.apply()
+  override def handleRequest(input: InputStream, output: OutputStream, context: Context): Unit =
+    RunITTests.apply(context.getLogger.log(_: String))
+
 }
 object RunITTests {
 
@@ -23,18 +26,20 @@ object RunITTests {
   // todo should we also check the build id to make sure support-workers deploy is keeping the remote jar in sync?
 
   def main(args: Array[String]): Unit = {
-    apply()
+    apply(println)
   }
+  var logger: String => Unit = null
 
   val tempJar = "/tmp/support-workers-it.jar"
 
-  def apply(): String = {
+  def apply(log: String => Unit): String = {
+    logger = log
     val exists = new File(tempJar).exists()
     val result = for {
       _ <- if (exists) Success(()) else {
         val bucket = "support-workers-dist"
         val s3File = s"support/${stage}/it-tests/support-workers-it.jar"
-        println(s"getting s3 file: $bucket / $s3File")
+        log(s"getting s3 file: $bucket / $s3File")
         val catalog = new GetObjectRequest(bucket, s3File)
         fetchJson(catalog)
       }
@@ -47,14 +52,13 @@ object RunITTests {
       _ <- Try(Runner.main(a)) // unfortunately calls System.exit(1) if any tests fail...
     } yield ()
     result match {
-      case Failure(exception) => println(s"Failed with exception ${exception.toString}")
+      case Failure(exception) => log(s"Failed with exception ${exception.toString}")
         exception.printStackTrace(System.out)
         System.exit(9)
         "not possible"
-      case _ => println("RAN OK!")
+      case _ => log("RAN OK!")
         "Finshed and RAN OK!"
     }
-//    val jarLoc = "support-workers/target/scala-2.12/support-workers-it.jar"
   }
 
   def fetchJson(request: GetObjectRequest): Try[Unit] =
@@ -77,19 +81,21 @@ class ITTestReporter extends Reporter {
     )
   )
 
+  val log = RunITTests.logger
+
   override def apply(event: Event): Unit = {
     event match {
       case _: TestFailed =>
-        println(s"TEST FAILED - sending metric: $event")
+        log(s"TEST FAILED - sending metric: $event")
         putMetric(MetricName("it-test-failed"), 1.0)
       case _: RunAborted =>
-        println(s"RUN ABORTED - sending metric: $event")
+        log(s"RUN ABORTED - sending metric: $event")
         putMetric(MetricName("it-test-failed"), 999999.0)
       case runCompleted: RunCompleted =>
-        println(s"RUN COMPLETED - sending metric: $event")
+        log(s"RUN COMPLETED - sending metric: $event")
         putMetric(MetricName("it-test-succeeded"), runCompleted.summary.map(_.testsSucceededCount.toDouble).getOrElse(0.0))
       case _ =>
-        println(s"event: $event")
+        log(s"event: $event")
     }
   }
 }

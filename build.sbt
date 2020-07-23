@@ -5,15 +5,12 @@ import scala.sys.process._
 
 skip in publish := true
 
-lazy val integrationTestSettings: Seq[Def.Setting[_]] = Project.inConfig(IntegrationTest)(baseAssemblySettings) ++ Defaults.itSettings ++ Seq(
+lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
   javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
   resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"),
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
-  testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
-  test in (IntegrationTest, assembly) := {},
-  aggregate in (IntegrationTest, assembly) := false
+  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eU")
 )
 
 lazy val release = Seq[ReleaseStep](
@@ -172,9 +169,3 @@ lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
 
 lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
-//  .configs(IntegrationTest)
-  .settings(
-//    commonSettings,
-//    integrationTestSettings,
-//    libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-services`)// todo very excessive
