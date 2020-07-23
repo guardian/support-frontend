@@ -65,7 +65,7 @@ Resources:
         - Statement:
             - Effect: Allow
               Action: s3:GetObject
-              Resource: !Sub arn:aws:s3:::support-workers-private/CODE/support-workers.private.conf
+              Resource: arn:aws:s3:::support-workers-private/CODE/support-workers.private.conf
 
         - Statement:
             - Effect: Allow
@@ -78,6 +78,13 @@ Resources:
                 - dynamodb:UpdateItem
               Resource: arn:aws:dynamodb:*:*:table/redemption-codes-DEV
 
+  LambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: LambdaFunction
+    Properties:
+      LogGroupName: !Sub /aws/lambda/support-it-tests-${Stage}
+      RetentionInDays: 90
+
   ITTestFailureAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: ProdOnlyResource
@@ -86,12 +93,11 @@ Resources:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Join
         - ' '
-        - - 'non urgent'
-          - 'main branch'
+        - - 'non urgent -'
           - 'IT Tests are failing'
       AlarmDescription: !Join
         - ' '
-        - - 'Impact - Test system has issues or a broken test has been merged.'
+        - - 'Impact - There may be improperly tested code in PROD or DEV test data is broken.'
           - !FindInMap [ Constants, Alarm, Process ]
       Namespace: support-frontend
       MetricName: it-test-failed
@@ -103,3 +109,50 @@ Resources:
       Threshold: 0
       EvaluationPeriods: 1
       Period: 60
+
+  ITTestNotRunningAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: ProdOnlyResource
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Join
+        - ' '
+        - - 'non urgent -'
+          - 'IT Tests are not running'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - we are not aware of integration test pass/fail status'
+          - !FindInMap [ Constants, Alarm, Process ]
+      Metrics:
+        - Id: total
+          Expression: "SUM([FILL(m1,0),FILL(m2,0)])"
+          Label: ITTestsCount
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: support-frontend
+              MetricName: it-test-succeeded
+              Dimensions:
+                - Name: Stage
+                  Value: !Ref Stage
+            Stat: Sum
+            Period: 900
+            Unit: Count
+        - Id: m2
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: support-frontend
+              MetricName: it-test-failed
+              Dimensions:
+                - Name: Stage
+                  Value: !Ref Stage
+            Stat: Sum
+            Period: 900
+            Unit: Count
+      ComparisonOperator: LessThanThreshold
+      Threshold: 100
+      EvaluationPeriods: 5
+      TreatMissingData: breaching
