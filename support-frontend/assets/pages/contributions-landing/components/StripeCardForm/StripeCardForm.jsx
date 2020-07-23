@@ -2,8 +2,9 @@
 
 // ----- Imports ----- //
 
-import React, { Component } from 'react';
-import { CardCVCElement, CardExpiryElement, CardNumberElement, injectStripe } from 'react-stripe-elements';
+import React from 'react';
+import {CardCvcElement, CardExpiryElement, CardNumberElement} from '@stripe/react-stripe-js';
+import * as stripeJs from '@stripe/react-stripe-js';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
@@ -32,21 +33,15 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { updateRecaptchaToken } from '../../contributionsLandingActions';
 import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
-import { InlineError } from '@guardian/src-user-feedback';
-import { StripeCardFormField } from './StripeCardFormField';
-import './stripeCardForm.scss';
-import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
-
 
 // ----- Types -----//
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  stripe: Object, // Available through the injectStripe 'Higher-Order Component'
   onPaymentAuthorised: (paymentMethodId: string) => Promise<PaymentResult>,
   paymentFailure: (paymentError: ErrorReason) => Action,
   contributionType: ContributionType,
-  setCreateStripePaymentMethod: ((email: string) => void) => Action,
+  setCreateStripePaymentMethod: ((clientSecret: string | null) => void) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   setPaymentWaiting: (isWaiting: boolean) => Action,
   paymentWaiting: boolean,
@@ -88,7 +83,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
       paymentMethodId,
     })),
   paymentFailure: (paymentError: ErrorReason) => dispatch(paymentFailure(paymentError)),
-  setCreateStripePaymentMethod: (createStripePaymentMethod: (email: string) => void) =>
+  setCreateStripePaymentMethod: (createStripePaymentMethod: (clientSecret: string | null) => void) =>
     dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
   setHandleStripe3DS: (handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>) =>
     dispatch(setHandleStripe3DS(handleStripe3DS)),
@@ -114,7 +109,7 @@ type StateTypes = {
   currentlySelected: CardFieldName | null,
 };
 
-const fieldStyleControl = {
+const fieldStyle = {
   base: {
     fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
     fontSize: '16px',
@@ -125,155 +120,205 @@ const fieldStyleControl = {
   },
 };
 
-const fieldStyleDS = {
-  base: {
-    ...fieldStyleControl,
-    fontSize: '17px',
-    lineHeight: 1.5,
-  },
-};
-
 const renderVerificationCopy = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
-  return (<InlineError>Please tick to verify you&apos;re a human</InlineError>);
+  return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
 };
-
 
 const errorMessageFromState = (state: CardFieldState): string | null =>
   (state.name === 'Error' ? state.errorMessage : null);
 
-class CardForm extends Component<PropTypes, StateTypes> {
+// TODO - utils?
+const usePrevious = (value) => {
+  const ref = React.useRef();
+  React.useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+};
 
-  constructor(props: PropTypes) {
-    super(props);
+const CardForm = (props: PropTypes) => {
 
-    this.state = {
-      CardNumber: { name: 'Incomplete' },
-      Expiry: { name: 'Incomplete' },
-      CVC: { name: 'Incomplete' },
-      currentlySelected: null,
-    };
-  }
+  /**
+   * Hooks and state
+   */
+  const [currentlySelected, setCurrentlySelected] = React.useState<CardFieldName | null>(null);
+  const [fieldStates, setFieldStates] = React.useState<{[CardFieldName]: CardFieldState}>({
+    CardNumber: { name: 'Incomplete' },
+    Expiry: { name: 'Incomplete' },
+    CVC: { name: 'Incomplete' },
+  });
+  const stripe = stripeJs.useStripe();
+  const elements = stripeJs.useElements();
 
-  componentDidMount(): void {
-    if (this.props.contributionType === 'ONE_OFF') {
-      this.setupOneOffHandlers();
-    } else {
-      this.setupRecurringHandlers();
+  React.useEffect(() => {
+    if (stripe && elements) {
+      if (props.contributionType === 'ONE_OFF') {
+        setupOneOffHandlers();
+      } else {
+        setupRecurringHandlers();
+      }
     }
-  }
+  }, [stripe, elements, props.contributionType]);
 
   // If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
   // then go ahead and process the recurring contribution
-  componentDidUpdate(prevProps): void {
-    const clientSecretHasUpdated = !prevProps.setupIntentClientSecret && this.props.setupIntentClientSecret;
-    if (this.props.paymentWaiting && clientSecretHasUpdated && this.props.setupIntentClientSecret) {
-      this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
+  const previousSetupIntentClientSecret = usePrevious(props.setupIntentClientSecret);
+  React.useEffect(() => {
+    const clientSecretHasUpdated = !previousSetupIntentClientSecret && props.setupIntentClientSecret;
+    if (props.paymentWaiting && clientSecretHasUpdated && props.setupIntentClientSecret) {
+      debugger
+      handleCardSetupForRecurring(props.setupIntentClientSecret);
     }
-  }
+  }, [props.setupIntentClientSecret]);
 
-  onChange = (fieldName: CardFieldName) => (update) => {
-    let newFieldState = { name: 'Incomplete' };
+  React.useEffect(() => {
+    const formIsComplete =
+      fieldStates.CardNumber.name === 'Complete' &&
+      fieldStates.Expiry.name === 'Complete' &&
+      fieldStates.CVC.name === 'Complete';
 
-    if (update.error) {
-      newFieldState = { name: 'Error', errorMessage: update.error.message };
-    } else if (update.complete) {
-      newFieldState = { name: 'Complete' };
+    if (formIsComplete) {
+      props.setStripeCardFormComplete(formIsComplete);
     }
+  }, [fieldStates]);
 
-    this.setState(
-      { [fieldName]: newFieldState },
-      () => this.props.setStripeCardFormComplete(this.formIsComplete()),
-    );
-  };
+  /**
+   * Handlers
+   */
+  const onChange = (fieldName: CardFieldName) => (update) => {
+    const newFieldState = () => {
+      if (update.error) return { name: 'Error', errorMessage: update.error.message };
+      if (update.complete) return { name: 'Complete' };
+      return { name: 'Incomplete' };
+    };
 
-  onFocus = (fieldName: CardFieldName) => {
-    this.setState({
-      currentlySelected: fieldName,
-    });
-  };
-
-  onBlur = () => {
-    this.setState({
-      currentlySelected: null,
+    setFieldStates({
+      ...fieldStates,
+      [fieldName]: newFieldState()
     });
   };
 
   // Creates a new setupIntent upon recaptcha verification
-  setupRecurringRecaptchaCallback = () => {
+  const setupRecurringRecaptchaCallback = () => {
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
-        this.props.setStripeRecurringRecaptchaVerified(true);
+        props.setStripeRecurringRecaptchaVerified(true);
+        console.log("getting client secret")
 
         fetchJson(
           routes.stripeSetupIntentRecaptcha,
           requestOptions(
-            { token, stripePublicKey: this.props.stripeKey },
+            { token, stripePublicKey: props.stripeKey },
             'same-origin',
             'POST',
-            this.props.csrf,
+            props.csrf,
           ),
         )
           .then((json) => {
             if (json.client_secret) {
+              console.log("got client secret")
               trackComponentLoad('contributions-recaptcha-verified');
 
-              this.props.setStripeSetupIntentClientSecret(json.client_secret);
+              props.setStripeSetupIntentClientSecret(json.client_secret);
             } else {
               throw new Error(`Missing client_secret field in server response: ${JSON.stringify(json)}`);
             }
           })
           .catch((err) => {
             logException(`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err}`);
-            this.props.paymentFailure('internal_error');
-            this.props.setPaymentWaiting(false);
+            props.paymentFailure('internal_error');
+            props.setPaymentWaiting(false);
           });
       },
     });
   };
 
-  setupRecaptchaTokenForOneOff = () => {
+  const setupRecaptchaTokenForOneOff = () => {
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
-        this.props.setOneOffRecaptchaToken(token);
+        props.setOneOffRecaptchaToken(token);
       },
     });
   };
 
-  setupRecurringHandlers(): void {
+  const setupOneOffHandlers = (): void => {
+    if (window.guardian.recaptchaEnabled) {
+      if (window.grecaptcha && window.grecaptcha.render) {
+        setupRecaptchaTokenForOneOff();
+      } else {
+        window.v2OnloadCallback = setupRecaptchaTokenForOneOff;
+      }
+    }
+
+    props.setCreateStripePaymentMethod(() => {
+      props.setPaymentWaiting(true);
+
+      const cardElement = elements.getElement(CardNumberElement);
+
+      stripe.createPaymentMethod({type: 'card', card: cardElement}).then((result) => {
+        if (result.error) {
+          handleStripeError(result.error);
+        } else {
+          props.onPaymentAuthorised(result.paymentMethod.id);
+        }
+      });
+    });
+
+    props.setHandleStripe3DS((clientSecret: string) => {
+      trackComponentLoad('stripe-3ds');
+      return stripe.handleCardAction(clientSecret);
+    });
+  };
+
+  const handleCardSetupForRecurring = (clientSecret: string): void => {
+    const cardElement = elements.getElement(CardNumberElement);
+    stripe.handleCardSetup(clientSecret, cardElement).then((result) => {
+      if (result.error) {
+        handleStripeError(result.error);
+      } else {
+        props.onPaymentAuthorised(result.setupIntent.payment_method);
+      }
+    });
+  };
+
+  const setupRecurringHandlers = (): void => {
     // Start by requesting the client_secret for a new Payment Method.
     // Note - because this value is requested asynchronously when the component loads,
     // it's possible for it to arrive after the user clicks 'Contribute'.
     // This is handled in the callback below by checking the value of paymentWaiting.
     if (window.guardian.recaptchaEnabled) {
       if (window.grecaptcha && window.grecaptcha.render) {
-        this.setupRecurringRecaptchaCallback();
+        setupRecurringRecaptchaCallback();
       } else {
-        window.v2OnloadCallback = this.setupRecurringRecaptchaCallback;
+        window.v2OnloadCallback = setupRecurringRecaptchaCallback;
       }
     }
 
-    this.props.setCreateStripePaymentMethod(() => {
-      this.props.setPaymentWaiting(true);
+    props.setCreateStripePaymentMethod((clientSecret: string | null) => {
+      props.setPaymentWaiting(true);
+      console.log("recurring handler")
+      debugger
 
       // Post-deploy tests bypass recaptcha, and no verification happens server-side for the test Stripe account
-      if (!window.guardian.recaptchaEnabled || this.props.postDeploymentTestUser) {
+      if (!window.guardian.recaptchaEnabled || props.postDeploymentTestUser) {
         fetchJson(
           routes.stripeSetupIntentRecaptcha,
           requestOptions(
-            { token: 'post-deploy-token', stripePublicKey: this.props.stripeKey },
+            {token: 'post-deploy-token', stripePublicKey: props.stripeKey},
             'same-origin',
             'POST',
-            this.props.csrf,
+            props.csrf,
           ),
         )
           .then((json) => {
+            debugger
             if (json.client_secret) {
-              this.handleCardSetupForRecurring(json.client_secret);
+              handleCardSetupForRecurring(json.client_secret);
             } else {
               throw new Error(`Missing client_secret field in server response: ${JSON.stringify(json)}`);
             }
@@ -283,247 +328,145 @@ class CardForm extends Component<PropTypes, StateTypes> {
       /* Recaptcha verification is required for setupIntent creation.
       If setupIntentClientSecret is ready then complete the payment now.
       If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
-      if (this.props.setupIntentClientSecret) {
-        this.handleCardSetupForRecurring(this.props.setupIntentClientSecret);
+      if (clientSecret) {
+        debugger
+        handleCardSetupForRecurring(clientSecret);
       }
     });
-  }
+  };
 
-  setupOneOffHandlers(): void {
-    if (window.guardian.recaptchaEnabled) {
-      if (window.grecaptcha && window.grecaptcha.render) {
-        this.setupRecaptchaTokenForOneOff();
-      } else {
-        window.v2OnloadCallback = this.setupRecaptchaTokenForOneOff;
-      }
-    }
-
-    this.props.setCreateStripePaymentMethod(() => {
-      this.props.setPaymentWaiting(true);
-
-      this.props.stripe.createPaymentMethod('card').then((result) => {
-        if (result.error) {
-          this.handleStripeError(result.error);
-        } else {
-          this.props.onPaymentAuthorised(result.paymentMethod.id);
-        }
-      });
-    });
-
-    this.props.setHandleStripe3DS((clientSecret: string) => {
-      trackComponentLoad('stripe-3ds');
-      return this.props.stripe.handleCardAction(clientSecret);
-    });
-  }
-
-  handleStripeError(errorData: any): void {
-    this.props.setPaymentWaiting(false);
+  const handleStripeError = (errorData: any): void => {
+    props.setPaymentWaiting(false);
 
     logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
 
     if (errorData.type === 'validation_error') {
       // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
       // happen then display a generic error about card details
-      this.props.paymentFailure('payment_details_incorrect');
+      props.paymentFailure('payment_details_incorrect');
     } else {
       // This is probably a Stripe or network problem
-      this.props.paymentFailure('payment_provider_unavailable');
+      props.paymentFailure('payment_provider_unavailable');
     }
-  }
+  };
 
-  handleCardSetupForRecurring(clientSecret: string): void {
-    this.props.stripe.handleCardSetup(clientSecret).then((result) => {
-      if (result.error) {
-        this.handleStripeError(result.error);
-      } else {
-        this.props.onPaymentAuthorised(result.setupIntent.payment_method);
-      }
-    });
-  }
+  /**
+   * Rendering
+   * TODO - DESIGN SYSTEM
+   */
 
-  formIsComplete = () =>
-    this.state.CardNumber.name === 'Complete' &&
-    this.state.Expiry.name === 'Complete' &&
-    this.state.CVC.name === 'Complete';
+  console.log("client secret?", props.setupIntentClientSecret)
 
-  render() {
-    const fieldError: ?string =
-      errorMessageFromState(this.state.CardNumber) ||
-      errorMessageFromState(this.state.Expiry) ||
-      errorMessageFromState(this.state.CVC);
+  const fieldError: ?string =
+    errorMessageFromState(fieldStates.CardNumber) ||
+    errorMessageFromState(fieldStates.Expiry) ||
+    errorMessageFromState(fieldStates.CVC);
 
-    const incompleteMessage = (): ?string => {
-      if (
-        this.props.checkoutFormHasBeenSubmitted &&
-        (
-          this.state.CardNumber.name === 'Incomplete' ||
-          this.state.Expiry.name === 'Incomplete' ||
-          this.state.CVC.name === 'Incomplete'
-        )
-      ) {
-        return 'Please complete your card details';
-      }
-      return undefined;
-    };
+  const incompleteMessage = (): ?string => {
+    if (
+      props.checkoutFormHasBeenSubmitted &&
+      (
+        fieldStates.CardNumber.name === 'Incomplete' ||
+        fieldStates.Expiry.name === 'Incomplete' ||
+        fieldStates.CVC.name === 'Incomplete'
+      )
+    ) {
+      return 'Please complete your card details';
+    }
+    return undefined;
+  };
 
-    const errorMessage: ?string = fieldError || incompleteMessage();
+  const errorMessage: ?string = fieldError || incompleteMessage();
 
-    const showCards = (country: IsoCountry) => {
-      if (country === 'US') {
-        return <CreditCardsUS />;
-      }
-      return <CreditCardsROW />;
-    };
+  const getFieldBorderClass = (fieldName: CardFieldName): string => {
+    if (currentlySelected === fieldName) {
+      return 'form__input-enabled';
+    } else if (fieldStates[fieldName].name === 'Error') {
+      return 'form__input--invalid';
+    }
+    return '';
+  };
 
-    const recaptchaVerified =
-      this.props.contributionType === 'ONE_OFF' ?
-        this.props.oneOffRecaptchaToken : this.props.recurringRecaptchaVerified;
+  const getClasses = (fieldName: CardFieldName): string =>
+    `form__input ${getFieldBorderClass(fieldName)}`;
 
-    return (
-      <div>
-        <legend className="form__legend"><h3>Your card details</h3></legend>
-        {errorMessage ?
-          <InlineError> {errorMessage} </InlineError> : null
-        }
+  const showCards = (country: IsoCountry) => {
+    if (country === 'US') {
+      return <CreditCardsUS className="form__credit-card-icons" />;
+    }
+    return <CreditCardsROW className="form__credit-card-icons" />;
+  };
 
-        <StripeCardFormField
-          label={
-            <>
-              <label
-                htmlFor="stripeCardNumberElement"
-              >
-                Card number
-              </label>
-              {showCards(this.props.country)}
-            </>
-          }
-          input={
+  const recaptchaVerified =
+    props.contributionType === 'ONE_OFF' ?
+      props.oneOffRecaptchaToken : props.recurringRecaptchaVerified;
+
+  return (
+    <div className="form__fields">
+      <legend className="form__legend"><h3>Your card details</h3></legend>
+      <div className="form__field">
+        <label className="form__label" htmlFor="stripeCardNumberElement">
+          <span>Card number</span>
+        </label>
+        {showCards(props.country)}
+        <span className={getClasses('CardNumber')}>
             <CardNumberElement
               id="stripeCardNumberElement"
-              style={fieldStyleDS}
-              onChange={this.onChange('CardNumber')}
-              onFocus={() => this.onFocus('CardNumber')}
-              onBlur={this.onBlur}
+              style={fieldStyle}
+              onChange={onChange('CardNumber')}
+              onFocus={() => setCurrentlySelected('CardNumber')}
+              onBlur={setCurrentlySelected(null)}
             />
-          }
-          error={this.state.CardNumber.name === 'Error'}
-          focus={this.state.currentlySelected === 'CardNumber'}
-        />
-
-        <div
-
-          className="ds-stripe-card-input__expiry-security-container"
-        >
-          <div
-            className="ds-stripe-card-input__expiry"
-          >
-            <StripeCardFormField
-              label={
-                <label
-                  htmlFor="stripeCardExpiryElement"
-                >
-                  Expiry date
-                </label>
-              }
-              hint={
-                <div
-                  className="ds-stripe-card-input__expiry-hint"
-                >
-                  MM / YY
-                </div>
-              }
-              input={
-                <CardExpiryElement
-                  id="stripeCardExpiryElement"
-                  style={fieldStyleControl}
-                  placeholder=""
-                  onChange={this.onChange('Expiry')}
-                  onFocus={() => this.onFocus('Expiry')}
-                  onBlur={this.onBlur}
-                />
-              }
-              error={this.state.Expiry.name === 'Error'}
-              focus={this.state.currentlySelected === 'Expiry'}
-
-            />
-          </div>
-
-          <div
-            className="ds-stripe-card-input__security-code"
-          >
-            <StripeCardFormField
-              label={
-                <label
-                  htmlFor="stripeCardCVCElement"
-                >
-                  Security code
-                </label>
-              }
-              hint={
-                <div
-                  className="ds-stripe-card-input__security-code-hint"
-                >
-                  <div
-                    className="ds-stripe-card-input__security-code-hint-icon"
-                  >
-                    <QuestionMarkHintIcon />
-                  </div>
-                  <div
-                    className="ds-stripe-card-input__security-code-hint-tooltip"
-                  >
-                    <p
-                      className="ds-stripe-card-input__security-code-hint-tooltip-heading"
-                    >
-                      What&apos;s this?
-                    </p>
-                    <p>The last three digits on the back of your card, above the signature</p>
-                  </div>
-                </div>
-              }
-              input={
-                <CardCVCElement
-                  id="stripeCardCVCElement"
-                  style={fieldStyleControl}
-                  placeholder=""
-                  onChange={this.onChange('CVC')}
-                  onFocus={() => this.onFocus('CVC')}
-                  onBlur={this.onBlur}
-                />
-              }
-              error={this.state.CVC.name === 'Error'}
-              focus={this.state.currentlySelected === 'CVC'}
-
-            />
-          </div>
-        </div>
-        { window.guardian.recaptchaEnabled ?
-          <div
-            className="ds-security-check"
-          >
-            <div
-              className="ds-security-check__label"
-            >
-              <label
-                htmlFor="robot_checkbox"
-              >
-                Security check
-              </label>
-            </div>
-            {
-              this.props.checkoutFormHasBeenSubmitted
-              && !recaptchaVerified ?
-                renderVerificationCopy(this.props.countryGroupId, this.props.contributionType) : null
-            }
-            <Recaptcha />
-          </div>
-          : null
-        }
+          </span>
       </div>
-    );
-  }
-}
+      <div className="stripe-card-element-container__inline-fields">
+        <div className="form__field">
+          <label className="form__label" htmlFor="stripeCardExpiryElement">
+            <span>Expiry date</span>
+          </label>
+          <span className={getClasses('Expiry')}>
+              <CardExpiryElement
+                id="stripeCardExpiryElement"
+                style={fieldStyle}
+                onChange={onChange('Expiry')}
+                onFocus={() => setCurrentlySelected('Expiry')}
+                onBlur={setCurrentlySelected(null)}
+              />
+            </span>
+        </div>
+        <div className="form__field">
+          <label className="form__label" htmlFor="stripeCardCVCElement">
+            <span>CVC</span>
+          </label>
+          <span className={getClasses('CVC')}>
+              <CardCvcElement
+                id="stripeCardCVCElement"
+                style={fieldStyle}
+                placeholder=""
+                onChange={onChange('CVC')}
+                onFocus={() => setCurrentlySelected('CVC')}
+                onBlur={setCurrentlySelected(null)}
+              />
+            </span>
+        </div>
+      </div>
+      {errorMessage ? <div className="form__error">{errorMessage}</div> : null}
+      { window.guardian.recaptchaEnabled ?
+        <div className="form__field">
 
-const StripeCardForm =
-  injectStripe(connect(mapStateToProps, mapDispatchToProps)(CardForm));
+          <label className="form__label" htmlFor="robot_checkbox">
+            <span>Security check</span>
+          </label>
+          <Recaptcha />
+          {
+            props.checkoutFormHasBeenSubmitted
+            && !recaptchaVerified ?
+              renderVerificationCopy(props.countryGroupId, props.contributionType) : null
+          }
+        </div>
+        : null }
+    </div>
+  );
+};
 
-export default StripeCardForm;
+export default connect(mapStateToProps, mapDispatchToProps)(CardForm);

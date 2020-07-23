@@ -3,7 +3,8 @@
 
 import React, { Component } from 'react';
 import { compose } from 'redux';
-import { injectStripe } from 'react-stripe-elements';
+// import { injectStripe } from 'react-stripe-elements';
+import {ElementsConsumer} from '@stripe/react-stripe-js';
 import Button from 'components/button/button';
 import { ErrorSummary } from '../submitFormErrorSummary';
 import {
@@ -11,7 +12,7 @@ import {
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
-import { CardNumberElement, CardExpiryElement, CardCvcElement } from 'react-stripe-elements';
+import {CardCvcElement, CardExpiryElement, CardNumberElement} from '@stripe/react-stripe-js';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 
@@ -71,7 +72,7 @@ const CardExpiryWithError = compose(withLabel, withError)(CardExpiryElement);
 const CardCvcWithError = compose(withLabel, withError)(CardCvcElement);
 const RecaptchaWithError = compose(withLabel, withError)(Recaptcha);
 
-class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
+const StripeForm = (stripe) => class extends Component<StripeFormPropTypes, StateTypes> {
   constructor(props) {
     super(props);
     this.state = {
@@ -234,7 +235,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   }
 
   handleCardSetup(clientSecret: Option<string>): Promise<string> {
-    return this.props.stripe.handleCardSetup(clientSecret).then((result) => {
+    return stripe.handleCardSetup(clientSecret).then((result) => {
       if (result.error) {
         this.handleStripeError(result.error);
         return Promise.resolve(result.error);
@@ -262,7 +263,7 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
     this.handleCardErrors();
     this.checkRecaptcha();
 
-    if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
+    if (stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
 
       this.handleCardSetup(this.state.setupIntentClientSecret).then((paymentMethod) => {
         this.props.setStripePaymentMethod(paymentMethod);
@@ -322,4 +323,12 @@ class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
   }
 }
 
-export default injectStripe(StripeForm);
+const StripeFormWithStripe = () =>
+  <ElementsConsumer>
+    {({stripe}) => (
+      injectStripe(StripeForm(stripe))
+    )}
+  </ElementsConsumer>;
+
+export default StripeFormWithStripe;
+// export default injectStripe(StripeForm);

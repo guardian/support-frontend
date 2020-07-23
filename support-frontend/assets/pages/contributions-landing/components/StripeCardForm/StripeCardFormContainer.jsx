@@ -3,7 +3,9 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { StripeProvider, Elements } from 'react-stripe-elements';
+import {Elements} from '@stripe/react-stripe-js';
+import * as stripeJs from "@stripe/stripe-js";
+
 import StripeCardForm from './StripeCardForm';
 import { getStripeKey, stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -27,44 +29,52 @@ type PropTypes = {|
   stripeHasLoaded: boolean,
 |};
 
-class StripeCardFormContainer extends React.Component<PropTypes, void> {
+const StripeCardFormContainer = (props: PropTypes) => {
+  const [stripe, setStripe] = React.useState<Stripe | null>(null);
 
-  componentDidMount(): void {
-    if (!this.props.stripeHasLoaded) { setupStripe(this.props.setStripeHasLoaded); }
-  }
+  React.useEffect(() => {
+    if (!props.stripeHasLoaded) {
+      setupStripe(props.setStripeHasLoaded);
+    } else if (stripe === null) {
 
-  render() {
-    if (this.props.paymentMethod === Stripe) {
-      if (this.props.stripeHasLoaded) {
+      const stripeAccount = stripeAccountForContributionType[props.contributionType];
+      const stripeKey = getStripeKey(
+        stripeAccount,
+        props.country,
+        props.isTestUser,
+      );
 
-        const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
-
-        const stripeKey = getStripeKey(
-          stripeAccount,
-          this.props.country,
-          this.props.isTestUser,
-        );
-
-        /**
-         * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
-         * Instead, we must create separate instances for ONE_OFF and REGULAR.
-         */
-        return (
-          <div className="stripe-card-element-container">
-            <StripeProvider apiKey={stripeKey} key={stripeAccount}>
-              <Elements>
-                <StripeCardForm stripeKey={stripeKey} />
-              </Elements>
-            </StripeProvider>
-          </div>
-        );
-      }
-      return <AnimatedDots appearance="dark" />;
-
+      stripeJs.loadStripe(stripeKey).then(setStripe);
     }
-    return null;
+  });
+
+  if (props.paymentMethod === Stripe) {
+    if (props.stripeHasLoaded && stripe) {
+
+      const stripeAccount = stripeAccountForContributionType[props.contributionType];
+
+      const stripeKey = getStripeKey(
+        stripeAccount,
+        props.country,
+        props.isTestUser,
+      );
+
+      /**
+       * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
+       * Instead, we must create separate instances for ONE_OFF and REGULAR.
+       */
+      return (
+        <div className="stripe-card-element-container">
+          <Elements stripe={stripe} key={stripeKey}>
+            <StripeCardForm stripeKey={stripeKey}/>
+          </Elements>
+        </div>
+      );
+    }
+    return <AnimatedDots appearance="dark" />;
 
   }
-}
+  return null;
+};
 
 export default StripeCardFormContainer;

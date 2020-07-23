@@ -5,7 +5,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
-import { injectStripe, PaymentRequestButtonElement } from 'react-stripe-elements';
+// import { injectStripe, PaymentRequestButtonElement } from 'react-stripe-elements';
+import {PaymentRequestButtonElement} from '@stripe/react-stripe-js';
+import {ElementsConsumer} from '@stripe/react-stripe-js';
+import * as stripeJs from "@stripe/stripe-js";
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -55,7 +58,7 @@ import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  stripe: Object,
+  stripe: stripeJs.Stripe,
   country: IsoCountry,
   currency: IsoCurrency,
   selectedAmounts: SelectedAmounts,
@@ -375,7 +378,7 @@ const paymentButtonStyle = {
 
 
 // ---- Component ----- //
-function PaymentRequestButton(props: PropTypes) {
+const PaymentRequestButton = (props: PropTypes) => {
 
   // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
   // until the async canMakePayment() function has been called on the stripePaymentRequestObject object.
@@ -408,7 +411,7 @@ function PaymentRequestButton(props: PropTypes) {
 
       {
         props.stripePaymentRequestButtonData.paymentError &&
-        <GeneralErrorMessage errorReason={props.stripePaymentRequestButtonData.paymentError} />
+        <GeneralErrorMessage errorReason={props.stripePaymentRequestButtonData.paymentError}/>
       }
 
       <div className="stripe-payment-request-button__divider">
@@ -422,7 +425,13 @@ function PaymentRequestButton(props: PropTypes) {
 
 // ----- Default props----- //
 
-const StripePaymentRequestButton =
-  injectStripe(connect(mapStateToProps, mapDispatchToProps)(PaymentRequestButton));
+// const StripePaymentRequestButton = () =>
+//   <ElementsConsumer>
+//     {({stripe}) =>
+//       PaymentRequestButton(stripe)
+//       // connect(mapStateToProps, mapDispatchToProps)(PaymentRequestButton(stripe))
+//     }
+//   </ElementsConsumer>;
+// injectStripe(connect(mapStateToProps, mapDispatchToProps)(PaymentRequestButton));
 
-export default StripePaymentRequestButton;
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentRequestButton);

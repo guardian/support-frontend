@@ -5,7 +5,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { Elements, StripeProvider } from 'react-stripe-elements';
+import {Elements} from '@stripe/react-stripe-js';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   getStripeKey,
@@ -52,6 +52,8 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
       const apiKey = getStripeKey(stripeAccount, this.props.country, this.props.isTestUser);
       const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
 
+      const stripe = Stripe(apiKey);
+
       /**
        * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
        * Instead, we must create separate instances for ONE_OFF and REGULAR.
@@ -61,15 +63,16 @@ class StripePaymentRequestButtonContainer extends React.Component<PropTypes, voi
        */
       return (
         <div className="stripe-payment-request-button">
-          <StripeProvider apiKey={apiKey} key={stripeAccount}>
-            <Elements>
+          {/*<StripeProvider apiKey={apiKey} key={stripeAccount}>*/}
+            <Elements stripe={stripe}>
               <StripePaymentRequestButton
                 stripeAccount={stripeAccount}
                 amount={amount}
                 stripeKey={apiKey}
+                stripe={stripe}
               />
             </Elements>
-          </StripeProvider>
+          {/*</StripeProvider>*/}
         </div>
       );
     }

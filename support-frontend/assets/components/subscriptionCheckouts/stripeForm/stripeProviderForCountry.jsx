@@ -1,7 +1,9 @@
 // @flow
 
 import React from 'react';
-import { Elements, StripeProvider } from 'react-stripe-elements';
+// import { Elements, StripeProvider } from 'react-stripe-elements';
+import {Elements} from '@stripe/react-stripe-js';
+import * as stripeJs from "@stripe/stripe-js";
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { type StripeFormPropTypes } from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
@@ -17,20 +19,19 @@ type PropTypes = {
 
 function StripeProviderForCountry(props: PropTypes) {
   const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
+  const stripe = stripeJs.Stripe(stripeKey);
   return (
-    <StripeProvider apiKey={stripeKey} key={stripeKey}>
-      <Elements>
-        <StripeForm
-          submitForm={props.submitForm}
-          allErrors={props.allErrors}
-          stripeKey={stripeKey}
-          setStripePaymentMethod={props.setStripePaymentMethod}
-          validateForm={props.validateForm}
-          buttonText={props.buttonText}
-          csrf={props.csrf}
-        />
+    <Elements stripe={stripe}>
+      <StripeForm
+        submitForm={props.submitForm}
+        allErrors={props.allErrors}
+        stripeKey={stripeKey}
+        setStripePaymentMethod={props.setStripePaymentMethod}
+        validateForm={props.validateForm}
+        buttonText={props.buttonText}
+        csrf={props.csrf}
+      />
       </Elements>
-    </StripeProvider>
   );
 }
 
