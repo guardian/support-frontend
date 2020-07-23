@@ -10,7 +10,8 @@ lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ S
   javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
   resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"),
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eU")
+  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
+  testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eU")
 )
 
 lazy val release = Seq[ReleaseStep](
