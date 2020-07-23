@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React, { Children, type Node } from 'react';
-import { css } from '@emotion/core';
 
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
@@ -32,6 +31,8 @@ type PropTypes = {|
 function Footer({
   disclaimer, privacyPolicy, children, countryGroupId, appearance,
 }: PropTypes) {
+
+  // It would probably be helpful to replace the Content and Rows components with emotion
 
   return (
     <footer css={componentFooter} role="contentinfo">
