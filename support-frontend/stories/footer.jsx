@@ -4,10 +4,10 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 
-import Footer from 'components/footer/footer';
 import { withKnobs } from '@storybook/addon-knobs';
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
+import Footer from 'components/footerCompliant/footer';
 import SubscriptionTermsPrivacy
   from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import CustomerService from 'components/customerService/customerService';
