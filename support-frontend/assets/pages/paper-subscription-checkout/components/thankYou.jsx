@@ -2,13 +2,13 @@
 
 // ----- Imports ----- //
 
-import React, { type Element } from 'react';
+import React from 'react';
 
 import { connect } from 'react-redux';
 
 import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/heroPicture';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { Collection, HomeDelivery, DigitalVoucher } from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -47,71 +47,47 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 
 // ----- Component ----- //
 
-const whatNext: {[FulfilmentOptions]: Element<*>} = {
-  [HomeDelivery]: (
-    <Text title="What happens next?">
-      <OrderedList items={[
-        <span>
-          Look out for an email from us confirming your subscription.
-          It has everything you need to know about how manage it in the future.
-        </span>,
-        <span>
-          Your newspaper will be delivered to your door.
-        </span>,
-        ]}
-      />
-
-    </Text>
-  ),
-  [Collection]: (
-    <Text title="What happens next?">
-      <p>
-        <OrderedList items={[
-          <span>
-            Look out for an email from us confirming your subscription.
-            It has everything you need to know about how to manage it in the future.
-          </span>,
-          <span>
-            You will receive your personalised book of vouchers.
-          </span>,
-          <span>
-            Exchange your voucher for a newspaper at your newsagent or wherever you buy your paper
-          </span>,
-          ]}
-        />
-
-      </p>
-    </Text>
-  ),
-  [DigitalVoucher]: (
-    <Text title="What happens next?">
-      <p>
-        <OrderedList items={[
-          <span>
-            Keep an eye on your inbox. You should receive an email confirming the details of your subscription,
-            and another email shortly afterwards that contains details of how you can pick up your papers from today!
-          </span>,
-          <span>
-            You will receive your Subscription Card in your subscriber pack in the post, along with your home
-            delivery letter.
-          </span>,
-          <span>
-            Visit your chosen participating newsagent to pick up your paper using your Subscription Card, or
-            arrange a home delivery using your delivery letter.
-          </span>,
-          ]}
-        />
-
-      </p>
-    </Text>
-  ),
+const whatNextText: { [FulfilmentOptions]: { [key: string]: Array<string> } } = {
+  [HomeDelivery]: {
+    default: [
+      `Look out for an email from us confirming your subscription.
+        It has everything you need to know about how manage it in the future.`,
+      'Your newspaper will be delivered to your door.',
+    ],
+  },
+  [Collection]: {
+    default: [
+      `Look out for an email from us confirming your subscription.
+        It has everything you need to know about how to manage it in the future.`,
+      'You will receive your personalised book of vouchers.',
+      'Exchange your voucher for a newspaper at your newsagent or wherever you buy your paper',
+    ],
+    digitalVoucher: [
+      `Keep an eye on your inbox. You should receive an email confirming the details of your subscription,
+        and another email shortly afterwards that contains details of how you can pick up your papers from today!`,
+      `You will receive your Subscription Card in your subscriber pack in the post, along with your home
+        delivery letter.`,
+      `Visit your chosen participating newsagent to pick up your paper using your Subscription Card, or
+        arrange a home delivery using your delivery letter.`,
+    ],
+  },
 };
 
+function whatNextElement(textItems) {
+  return (
+    <Text title="What happens next?">
+      <p>
+        <OrderedList items={textItems.map(item => <span>{item}</span>)} />
+      </p>
+    </Text>
+  );
+}
+
 function WhatNext(fulfilmentOption, useDigitalVoucher = false) {
-  if (useDigitalVoucher && fulfilmentOption === Collection) {
-    return whatNext[DigitalVoucher];
+  if (fulfilmentOption === Collection && useDigitalVoucher) {
+    return whatNextElement(whatNextText[Collection].digitalVoucher);
   }
-  return whatNext[fulfilmentOption];
+  return whatNextElement(whatNextText[fulfilmentOption].default);
 }
 
 

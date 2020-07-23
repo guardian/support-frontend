@@ -6,7 +6,6 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 const HomeDelivery: 'HomeDelivery' = 'HomeDelivery';
 const Collection: 'Collection' = 'Collection';
-const DigitalVoucher: 'DigitalVoucher' = 'DigitalVoucher';
 const Domestic: 'Domestic' = 'Domestic';
 const RestOfWorld: 'RestOfWorld' = 'RestOfWorld';
 const NoFulfilmentOptions: 'NoFulfilmentOptions' = 'NoFulfilmentOptions';
@@ -23,9 +22,8 @@ export type FulfilmentOptions =
   | typeof Domestic
   | typeof RestOfWorld
   | typeof NoFulfilmentOptions
-  | typeof DigitalVoucher
 
-export { HomeDelivery, Collection, DigitalVoucher, Domestic, RestOfWorld, NoFulfilmentOptions };
+export { HomeDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions };
 
 const getWeeklyFulfilmentOption = (country: IsoCountry) =>
   (countryGroups.International.countries.includes(country)
