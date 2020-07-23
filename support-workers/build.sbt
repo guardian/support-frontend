@@ -74,5 +74,5 @@ assemblyMergeStrategy in (IntegrationTest, assembly) := {
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(y)
 }
-assembly / test := {}
-assembly / aggregate := false
+IntegrationTest / assembly / test := {}
+IntegrationTest / assembly / aggregate := false
