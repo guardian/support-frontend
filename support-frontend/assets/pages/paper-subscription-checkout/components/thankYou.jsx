@@ -97,7 +97,7 @@ const whatNext: {[FulfilmentOptions]: Element<*>} = {
           </span>,
           <span>
             Visit your chosen participating newsagent to pick up your paper using your Subscription Card, or
-            arrange a delivery using home your delivery letter.
+            arrange a home delivery using your delivery letter.
           </span>,
           ]}
         />
