@@ -167,7 +167,6 @@ const CardForm = (props: PropTypes) => {
   React.useEffect(() => {
     const clientSecretHasUpdated = !previousSetupIntentClientSecret && props.setupIntentClientSecret;
     if (props.paymentWaiting && clientSecretHasUpdated && props.setupIntentClientSecret) {
-      debugger
       handleCardSetupForRecurring(props.setupIntentClientSecret);
     }
   }, [props.setupIntentClientSecret]);
@@ -206,7 +205,6 @@ const CardForm = (props: PropTypes) => {
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
         props.setStripeRecurringRecaptchaVerified(true);
-        console.log("getting client secret")
 
         fetchJson(
           routes.stripeSetupIntentRecaptcha,
@@ -219,7 +217,6 @@ const CardForm = (props: PropTypes) => {
         )
           .then((json) => {
             if (json.client_secret) {
-              console.log("got client secret")
               trackComponentLoad('contributions-recaptcha-verified');
 
               props.setStripeSetupIntentClientSecret(json.client_secret);
@@ -301,8 +298,6 @@ const CardForm = (props: PropTypes) => {
 
     props.setCreateStripePaymentMethod((clientSecret: string | null) => {
       props.setPaymentWaiting(true);
-      console.log("recurring handler")
-      debugger
 
       // Post-deploy tests bypass recaptcha, and no verification happens server-side for the test Stripe account
       if (!window.guardian.recaptchaEnabled || props.postDeploymentTestUser) {
@@ -316,7 +311,6 @@ const CardForm = (props: PropTypes) => {
           ),
         )
           .then((json) => {
-            debugger
             if (json.client_secret) {
               handleCardSetupForRecurring(json.client_secret);
             } else {
@@ -329,7 +323,6 @@ const CardForm = (props: PropTypes) => {
       If setupIntentClientSecret is ready then complete the payment now.
       If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
       if (clientSecret) {
-        debugger
         handleCardSetupForRecurring(clientSecret);
       }
     });
@@ -354,8 +347,6 @@ const CardForm = (props: PropTypes) => {
    * Rendering
    * TODO - DESIGN SYSTEM
    */
-
-  console.log("client secret?", props.setupIntentClientSecret)
 
   const fieldError: ?string =
     errorMessageFromState(fieldStates.CardNumber) ||
