@@ -31,6 +31,7 @@ type PropTypes = {|
 |};
 
 const StripeCardFormContainer = (props: PropTypes) => {
+  // Create separate Stripe objects for REGULAR and ONE_OFF
   const [stripeObjects, setStripeObjects] = React.useState<{[StripeAccount]: stripeJs.Stripe | null}>({
     REGULAR: null,
     ONE_OFF: null,
@@ -47,7 +48,6 @@ const StripeCardFormContainer = (props: PropTypes) => {
     if (!props.stripeHasLoaded) {
       setupStripe(props.setStripeHasLoaded);
     } else if (stripeObjects[stripeAccount] === null) {
-      console.log('loading stripe', stripeAccount);
 
       stripeJs.loadStripe(stripeKey).then(newStripe =>
         setStripeObjects( prevData => ({

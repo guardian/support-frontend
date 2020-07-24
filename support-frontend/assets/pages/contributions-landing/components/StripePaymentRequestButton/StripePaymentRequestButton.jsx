@@ -381,7 +381,6 @@ const PaymentRequestButton = (props: PropTypes) => {
   const stripe = stripeJs.useStripe();
 
   React.useEffect(() => {
-    console.log('new PaymentRequestButton', props.stripeAccount);
     // Call canMakePayment on the paymentRequest object only once, once the stripe object is ready
     if (stripe) {
       initialisePaymentRequest({ ...props }, stripe);
