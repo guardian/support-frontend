@@ -7,9 +7,9 @@ import * as stripeJs from '@stripe/stripe-js';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type {FormError} from "helpers/subscriptionsForms/validation";
-import type {FormField} from "helpers/subscriptionsForms/formFields";
-import type {Csrf} from "helpers/csrf/csrfReducer";
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { FormField } from 'helpers/subscriptionsForms/formFields';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 
 // Types
 

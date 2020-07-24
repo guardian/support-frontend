@@ -54,6 +54,11 @@ type CardFieldsData = {
   cardCvc: CardFieldData,
 }
 
+type CardError = {
+  field: string,
+  message: string
+}
+
 // Styles for stripe elements
 
 const baseStyles = {
@@ -79,7 +84,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
   /**
    * State
    */
-  const [cardErrors, setCardErrors] = React.useState<Array<Object>>([]);
+  const [cardErrors, setCardErrors] = React.useState<Array<CardError>>([]);
   const [setupIntentClientSecret, setSetupIntentClientSecret] = React.useState<Option<string>>(null);
   const [paymentWaiting, setPaymentWaiting] = React.useState<boolean>(false);
   const [recaptchaCompleted, setRecaptchaCompleted] = React.useState<boolean>(false);
@@ -128,10 +133,10 @@ const StripeForm = (props: StripeFormPropTypes) => {
     if (errorData.type === 'validation_error') {
       // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
       // happen then display a generic error about card details
-      setCardErrors([...cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_details_incorrect') }]);
+      setCardErrors(prevData => [...prevData, { field: 'cardNumber', message: appropriateErrorMessage('payment_details_incorrect') }]);
     } else {
       // This is probably a Stripe or network problem
-      setCardErrors([...cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_provider_unavailable') }]);
+      setCardErrors(prevData => [...prevData, { field: 'cardNumber', message: appropriateErrorMessage('payment_provider_unavailable') }]);
     }
   };
 
@@ -169,7 +174,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
       }).catch((error) => {
         logException(`Error getting Stripe client secret for subscription: ${error}`);
 
-        setCardErrors([...cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }]);
+        setCardErrors(prevData => [...prevData, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }]);
       });
   };
 
@@ -201,21 +206,21 @@ const StripeForm = (props: StripeFormPropTypes) => {
     // eslint-disable-next-line array-callback-return
     ['cardNumber', 'cardExpiry', 'cardCvc'].map((field) => {
       if (cardFieldsData[field].empty === true) {
-        setCardFieldsData({
-          ...cardFieldsData,
+        setCardFieldsData(prevData => ({
+          ...prevData,
           [field]: {
-            ...cardFieldsData[field],
+            ...prevData[field],
             error: cardFieldsData[field].errorEmpty,
           },
-        });
+        }));
       } else if (!cardFieldsData[field].complete) {
-        setCardFieldsData({
-          ...cardFieldsData,
+        setCardFieldsData(prevData => ({
+          ...prevData,
           [field]: {
-            ...cardFieldsData[field],
-            error: cardFieldsData[field].errorIncomplete,
+            ...prevData[field],
+            error: prevData[field].errorIncomplete,
           },
-        });
+        }));
       }
       setCardErrors(getAllCardErrors());
     });
@@ -223,22 +228,22 @@ const StripeForm = (props: StripeFormPropTypes) => {
 
   const handleChange = (event) => {
     if (cardFieldsData[event.elementType].error) {
-      setCardFieldsData({
-        ...cardFieldsData,
+      setCardFieldsData(prevData => ({
+        ...prevData,
         [event.elementType]: {
-          ...cardFieldsData[event.elementType],
+          ...prevData[event.elementType],
           error: '',
         },
-      });
+      }));
     } else {
-      setCardFieldsData({
-        ...cardFieldsData,
+      setCardFieldsData(prevData => ({
+        ...prevData,
         [event.elementType]: {
-          ...cardFieldsData[event.elementType],
+          ...prevData[event.elementType],
           complete: event.complete,
           empty: event.empty,
         },
-      });
+      }));
     }
   };
 

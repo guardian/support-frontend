@@ -60,10 +60,12 @@ const StripePaymentRequestButtonContainer = (props: PropTypes) => {
     } else if (stripeObjects[stripeAccount] === null) {
       console.log('loading stripe', stripeAccount);
 
-      stripeJs.loadStripe(stripeKey).then(newStripe => setStripeObjects({
-        ...stripeObjects,
-        [stripeAccount]: newStripe,
-      }));
+      stripeJs.loadStripe(stripeKey).then(newStripe =>
+        setStripeObjects(prevData => ({
+          ...prevData,
+          [stripeAccount]: newStripe,
+        }))
+      );
     }
   }, [props.stripeHasLoaded, props.contributionType]);
 
