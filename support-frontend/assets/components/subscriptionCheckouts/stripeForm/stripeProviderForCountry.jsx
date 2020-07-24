@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-// import { Elements, StripeProvider } from 'react-stripe-elements';
 import {Elements} from '@stripe/react-stripe-js';
 import * as stripeJs from "@stripe/stripe-js";
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
@@ -19,7 +18,7 @@ type PropTypes = {
 
 function StripeProviderForCountry(props: PropTypes) {
   const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
-  const stripe = stripeJs.Stripe(stripeKey);
+  const stripe = stripeJs.loadStripe(stripeKey);
   return (
     <Elements stripe={stripe}>
       <StripeForm

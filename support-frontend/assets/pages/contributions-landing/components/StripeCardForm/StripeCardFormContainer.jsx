@@ -30,7 +30,7 @@ type PropTypes = {|
 |};
 
 const StripeCardFormContainer = (props: PropTypes) => {
-  const [stripeObjects, setStripeObjects] = React.useState<{[StripeAccount]: Stripe | null}>({
+  const [stripeObjects, setStripeObjects] = React.useState<{[StripeAccount]: stripeJs.Stripe | null}>({
     REGULAR: null,
     ONE_OFF: null
   });
@@ -56,11 +56,11 @@ const StripeCardFormContainer = (props: PropTypes) => {
   }, [props.stripeHasLoaded, props.contributionType]);
 
   if (props.paymentMethod === Stripe) {
-    if (props.stripeHasLoaded && stripeObjects) {
+    if (stripeObjects[stripeAccount]) {
 
       /**
-       * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
-       * Instead, we must create separate instances for ONE_OFF and REGULAR.
+       * The `key` attribute is necessary here because you cannot update the stripe object on the Elements.
+       * Instead, we create separate instances for ONE_OFF and REGULAR
        */
       return (
         <div className="stripe-card-element-container" key={stripeAccount}>
