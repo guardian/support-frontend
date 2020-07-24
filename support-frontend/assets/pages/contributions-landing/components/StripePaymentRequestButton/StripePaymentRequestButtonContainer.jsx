@@ -10,7 +10,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   getStripeKey,
   stripeAccountForContributionType,
-} from 'helpers/paymentIntegrations/stripeCheckout';
+} from 'helpers/stripe';
 import type {
   ContributionType,
   OtherAmounts,

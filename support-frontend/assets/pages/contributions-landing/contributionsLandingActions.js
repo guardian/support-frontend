@@ -15,7 +15,7 @@ import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'help
 import { type IsoCountry, type StateProvince, stateProvinceFromString, findIsoCountry } from 'helpers/internationalisation/country';
 import type {
   RegularPaymentRequest,
-  StripeCheckoutAuthorisation, StripePaymentIntentAuthorisation, StripePaymentMethod,
+  StripePaymentIntentAuthorisation, StripePaymentMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type AmazonPayAuthorisation,
@@ -30,7 +30,6 @@ import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
-  postOneOffStripeExecutePaymentRequest,
   processStripePaymentIntentRequest,
   postOneOffAmazonPayExecutePaymentRequest,
 } from 'helpers/paymentIntegrations/oneOffContributions';
@@ -50,7 +49,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
-import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
+import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/stripe';
 import type { Option } from 'helpers/types/option';
 
 export type Action =
@@ -329,7 +328,6 @@ const stripeOneOffRecaptchaToken = (state: State): string => {
 
 const buildStripeChargeDataFromAuthorisation = (
   stripePaymentMethod: StripePaymentMethod,
-  token: string,
   state: State,
 ): StripeChargeData => ({
   paymentData: {
@@ -339,7 +337,6 @@ const buildStripeChargeDataFromAuthorisation = (
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
     ),
-    token,
     email: state.page.form.formData.email || '',
     stripePaymentMethod,
   },
@@ -355,21 +352,11 @@ const buildStripeChargeDataFromAuthorisation = (
   recaptchaToken: stripeOneOffRecaptchaToken(state),
 });
 
-const stripeChargeDataFromCheckoutAuthorisation = (
-  authorisation: StripeCheckoutAuthorisation,
-  state: State,
-): StripeChargeData => buildStripeChargeDataFromAuthorisation(
-  authorisation.stripePaymentMethod,
-  authorisation.token,
-  state,
-);
-
 const stripeChargeDataFromPaymentIntentAuthorisation = (
   authorisation: StripePaymentIntentAuthorisation,
   state: State,
 ): StripeChargeData => buildStripeChargeDataFromAuthorisation(
   authorisation.stripePaymentMethod,
-  'token-deprecated',
   state,
 );
 
@@ -562,18 +549,6 @@ const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
     dispatch(onCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
   };
 
-const executeStripeOneOffPayment = (
-  data: StripeChargeData,
-  setGuestToken: (string) => void,
-  setThankYouPage: (ThankYouPageStage) => void,
-  paymentAuthorisation: PaymentAuthorisation,
-) =>
-  (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-    dispatch(onPaymentResult(
-      postOneOffStripeExecutePaymentRequest(data)(setGuestToken, setThankYouPage),
-      paymentAuthorisation,
-    ));
-
 const makeCreateStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,
   setGuestToken: (string) => void,
@@ -652,15 +627,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
       if (paymentAuthorisation.paymentMethod === Stripe) {
-        if (paymentAuthorisation.token) {
-          return dispatch(executeStripeOneOffPayment(
-            stripeChargeDataFromCheckoutAuthorisation(paymentAuthorisation, state),
-            (token: string) => dispatch(setGuestAccountCreationToken(token)),
-            (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-            paymentAuthorisation,
-          ));
-        }
-
         if (paymentAuthorisation.paymentMethodId) {
           const { handle3DS } = state.page.form.stripeCardFormData;
           if (handle3DS) {
@@ -680,7 +646,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
           logException('Stripe 3DS handler unavailable');
           return Promise.resolve(error);
         }
-        logException('Invalid payment authorisation: missing paymentMethodId or token for Stripe one-off contribution');
+        logException('Invalid payment authorisation: missing paymentMethodId for Stripe one-off contribution');
         return Promise.resolve(error);
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);

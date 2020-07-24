@@ -5,7 +5,7 @@
 import React from 'react';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import StripeCardForm from './StripeCardForm';
-import { getStripeKey, stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
+import { getStripeKey, stripeAccountForContributionType } from 'helpers/stripe';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ContributionType } from 'helpers/contributions';

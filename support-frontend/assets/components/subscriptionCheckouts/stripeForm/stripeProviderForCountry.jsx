@@ -4,7 +4,7 @@ import React from 'react';
 import { Elements, StripeProvider } from 'react-stripe-elements';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { type StripeFormPropTypes } from 'components/subscriptionCheckouts/stripeForm/stripeForm';
-import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
+import { getStripeKey } from 'helpers/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 // Types
