@@ -185,8 +185,8 @@ const StripeForm = (props: StripeFormPropTypes) => {
       callback: (token) => {
         trackComponentLoad('subscriptions-recaptcha-client-token-received');
         setRecaptchaCompleted(true);
-        // TODO - this is wrong:
-        // props.allErrors = props.allErrors.filter(error => error.field !== 'recaptcha');
+        // TODO - why are we mutating props here?
+        props.allErrors = props.allErrors.filter(error => error.field !== 'recaptcha');
         fetchPaymentIntent(token);
       },
     });
@@ -252,7 +252,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
       !isPostDeployUser() &&
       !recaptchaCompleted &&
       !props.allErrors.find(error => error.field === 'recaptcha')) {
-      // TODO - does this work?!
+      // TODO - why are we mutating props here?
       props.allErrors.push({
         field: 'recaptcha',
         message: 'Please check the \'I am not a robot\' checkbox',
