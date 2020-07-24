@@ -57,7 +57,7 @@ object RunITTests {
         System.exit(9)
         "not possible"
       case _ => log("RAN OK!")
-        "Finshed and RAN OK!"
+        "Finished and RAN OK!" // this won't happen because Runner calls System.exit
     }
   }
 
