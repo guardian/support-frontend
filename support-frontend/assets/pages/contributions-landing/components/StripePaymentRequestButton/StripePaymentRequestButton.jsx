@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
-import {PaymentRequestButtonElement} from '@stripe/react-stripe-js';
+import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
@@ -276,7 +276,12 @@ function onPayment(
   }
 }
 
-function setUpPaymentListenerSca(props: PropTypes, stripe: stripeJs.Stripe, paymentRequest: Object, stripePaymentMethod: StripePaymentMethod) {
+function setUpPaymentListenerSca(
+  props: PropTypes,
+  stripe: stripeJs.Stripe,
+  paymentRequest: Object,
+  stripePaymentMethod: StripePaymentMethod,
+) {
   paymentRequest.on('paymentmethod', ({ complete, paymentMethod, ...data }) => {
 
     const processPayment = () => {
@@ -375,7 +380,7 @@ const PaymentRequestButton = (props: PropTypes) => {
   const stripe = stripeJs.useStripe();
 
   React.useEffect(() => {
-    console.log("new PaymentRequestButton", props.stripeAccount)
+    console.log('new PaymentRequestButton', props.stripeAccount);
     // Call canMakePayment on the paymentRequest object only once, once the stripe object is ready
     if (stripe) {
       initialisePaymentRequest({ ...props }, stripe);
@@ -397,7 +402,7 @@ const PaymentRequestButton = (props: PropTypes) => {
     >
       <PaymentRequestButtonElement
         options={{
-          paymentRequest: props.stripePaymentRequestButtonData.stripePaymentRequestObject
+          paymentRequest: props.stripePaymentRequestButtonData.stripePaymentRequestObject,
         }}
         className="stripe-payment-request-button__button"
         style={paymentButtonStyle}
@@ -408,7 +413,7 @@ const PaymentRequestButton = (props: PropTypes) => {
 
       {
         props.stripePaymentRequestButtonData.paymentError &&
-        <GeneralErrorMessage errorReason={props.stripePaymentRequestButtonData.paymentError}/>
+        <GeneralErrorMessage errorReason={props.stripePaymentRequestButtonData.paymentError} />
       }
 
       <div className="stripe-payment-request-button__divider">

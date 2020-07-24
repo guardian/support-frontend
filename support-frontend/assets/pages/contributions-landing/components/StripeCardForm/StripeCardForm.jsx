@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import {CardCvcElement, CardExpiryElement, CardNumberElement} from '@stripe/react-stripe-js';
+import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
@@ -104,11 +104,6 @@ type CardFieldState =
 
 type CardFieldName = 'CardNumber' | 'Expiry' | 'CVC';
 
-type StateTypes = {
-  [CardFieldName]: CardFieldState,
-  currentlySelected: CardFieldName | null,
-};
-
 const fieldStyle = {
   base: {
     fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
@@ -140,7 +135,7 @@ const usePrevious = (value) => {
 const CardForm = (props: PropTypes) => {
 
   /**
-   * Hooks and state
+   * State
    */
   const [currentlySelected, setCurrentlySelected] = React.useState<CardFieldName | null>(null);
   const [fieldStates, setFieldStates] = React.useState<{[CardFieldName]: CardFieldState}>({
@@ -151,51 +146,35 @@ const CardForm = (props: PropTypes) => {
   const stripe = stripeJs.useStripe();
   const elements = stripeJs.useElements();
 
-  React.useEffect(() => {
-    if (stripe && elements) {
-      if (props.contributionType === 'ONE_OFF') {
-        setupOneOffHandlers();
-      } else {
-        setupRecurringHandlers();
-      }
-    }
-  }, [stripe, elements, props.contributionType]);
-
-  // If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
-  // then go ahead and process the recurring contribution
-  const previousSetupIntentClientSecret = usePrevious(props.setupIntentClientSecret);
-  React.useEffect(() => {
-    const clientSecretHasUpdated = !previousSetupIntentClientSecret && props.setupIntentClientSecret;
-    if (props.paymentWaiting && clientSecretHasUpdated && props.setupIntentClientSecret) {
-      handleCardSetupForRecurring(props.setupIntentClientSecret);
-    }
-  }, [props.setupIntentClientSecret]);
-
-  React.useEffect(() => {
-    const formIsComplete =
-      fieldStates.CardNumber.name === 'Complete' &&
-      fieldStates.Expiry.name === 'Complete' &&
-      fieldStates.CVC.name === 'Complete';
-
-    if (formIsComplete) {
-      props.setStripeCardFormComplete(formIsComplete);
-    }
-  }, [fieldStates]);
-
   /**
    * Handlers
    */
   const onChange = (fieldName: CardFieldName) => (update) => {
     const newFieldState = () => {
-      if (update.error) return { name: 'Error', errorMessage: update.error.message };
-      if (update.complete) return { name: 'Complete' };
+      if (update.error) { return { name: 'Error', errorMessage: update.error.message }; }
+      if (update.complete) { return { name: 'Complete' }; }
       return { name: 'Incomplete' };
     };
 
     setFieldStates({
       ...fieldStates,
-      [fieldName]: newFieldState()
+      [fieldName]: newFieldState(),
     });
+  };
+
+  const handleStripeError = (errorData: any): void => {
+    props.setPaymentWaiting(false);
+
+    logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
+
+    if (errorData.type === 'validation_error') {
+      // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
+      // happen then display a generic error about card details
+      props.paymentFailure('payment_details_incorrect');
+    } else {
+      // This is probably a Stripe or network problem
+      props.paymentFailure('payment_provider_unavailable');
+    }
   };
 
   // Creates a new setupIntent upon recaptcha verification
@@ -257,7 +236,7 @@ const CardForm = (props: PropTypes) => {
 
       const cardElement = elements.getElement(CardNumberElement);
 
-      stripe.createPaymentMethod({type: 'card', card: cardElement}).then((result) => {
+      stripe.createPaymentMethod({ type: 'card', card: cardElement }).then((result) => {
         if (result.error) {
           handleStripeError(result.error);
         } else {
@@ -304,7 +283,7 @@ const CardForm = (props: PropTypes) => {
         fetchJson(
           routes.stripeSetupIntentRecaptcha,
           requestOptions(
-            {token: 'post-deploy-token', stripePublicKey: props.stripeKey},
+            { token: 'post-deploy-token', stripePublicKey: props.stripeKey },
             'same-origin',
             'POST',
             props.csrf,
@@ -328,20 +307,40 @@ const CardForm = (props: PropTypes) => {
     });
   };
 
-  const handleStripeError = (errorData: any): void => {
-    props.setPaymentWaiting(false);
+  /**
+   * Hooks
+   */
 
-    logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
-
-    if (errorData.type === 'validation_error') {
-      // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
-      // happen then display a generic error about card details
-      props.paymentFailure('payment_details_incorrect');
-    } else {
-      // This is probably a Stripe or network problem
-      props.paymentFailure('payment_provider_unavailable');
+  React.useEffect(() => {
+    if (stripe && elements) {
+      if (props.contributionType === 'ONE_OFF') {
+        setupOneOffHandlers();
+      } else {
+        setupRecurringHandlers();
+      }
     }
-  };
+  }, [stripe, elements, props.contributionType]);
+
+  // If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
+  // then go ahead and process the recurring contribution
+  const previousSetupIntentClientSecret = usePrevious(props.setupIntentClientSecret);
+  React.useEffect(() => {
+    const clientSecretHasUpdated = !previousSetupIntentClientSecret && props.setupIntentClientSecret;
+    if (props.paymentWaiting && clientSecretHasUpdated && props.setupIntentClientSecret) {
+      handleCardSetupForRecurring(props.setupIntentClientSecret);
+    }
+  }, [props.setupIntentClientSecret]);
+
+  React.useEffect(() => {
+    const formIsComplete =
+      fieldStates.CardNumber.name === 'Complete' &&
+      fieldStates.Expiry.name === 'Complete' &&
+      fieldStates.CVC.name === 'Complete';
+
+    if (formIsComplete) {
+      props.setStripeCardFormComplete(formIsComplete);
+    }
+  }, [fieldStates]);
 
   /**
    * Rendering
@@ -401,14 +400,14 @@ const CardForm = (props: PropTypes) => {
         </label>
         {showCards(props.country)}
         <span className={getClasses('CardNumber')}>
-            <CardNumberElement
-              id="stripeCardNumberElement"
-              style={fieldStyle}
-              onChange={onChange('CardNumber')}
-              onFocus={() => setCurrentlySelected('CardNumber')}
-              onBlur={setCurrentlySelected(null)}
-            />
-          </span>
+          <CardNumberElement
+            id="stripeCardNumberElement"
+            style={fieldStyle}
+            onChange={onChange('CardNumber')}
+            onFocus={() => setCurrentlySelected('CardNumber')}
+            onBlur={setCurrentlySelected(null)}
+          />
+        </span>
       </div>
       <div className="stripe-card-element-container__inline-fields">
         <div className="form__field">
@@ -416,29 +415,29 @@ const CardForm = (props: PropTypes) => {
             <span>Expiry date</span>
           </label>
           <span className={getClasses('Expiry')}>
-              <CardExpiryElement
-                id="stripeCardExpiryElement"
-                style={fieldStyle}
-                onChange={onChange('Expiry')}
-                onFocus={() => setCurrentlySelected('Expiry')}
-                onBlur={setCurrentlySelected(null)}
-              />
-            </span>
+            <CardExpiryElement
+              id="stripeCardExpiryElement"
+              style={fieldStyle}
+              onChange={onChange('Expiry')}
+              onFocus={() => setCurrentlySelected('Expiry')}
+              onBlur={setCurrentlySelected(null)}
+            />
+          </span>
         </div>
         <div className="form__field">
           <label className="form__label" htmlFor="stripeCardCVCElement">
             <span>CVC</span>
           </label>
           <span className={getClasses('CVC')}>
-              <CardCvcElement
-                id="stripeCardCVCElement"
-                style={fieldStyle}
-                placeholder=""
-                onChange={onChange('CVC')}
-                onFocus={() => setCurrentlySelected('CVC')}
-                onBlur={setCurrentlySelected(null)}
-              />
-            </span>
+            <CardCvcElement
+              id="stripeCardCVCElement"
+              style={fieldStyle}
+              placeholder=""
+              onChange={onChange('CVC')}
+              onFocus={() => setCurrentlySelected('CVC')}
+              onBlur={setCurrentlySelected(null)}
+            />
+          </span>
         </div>
       </div>
       {errorMessage ? <div className="form__error">{errorMessage}</div> : null}

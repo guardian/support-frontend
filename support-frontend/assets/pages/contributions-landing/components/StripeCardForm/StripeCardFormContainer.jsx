@@ -3,8 +3,8 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import {Elements} from '@stripe/react-stripe-js';
-import * as stripeJs from "@stripe/stripe-js";
+import { Elements } from '@stripe/react-stripe-js';
+import * as stripeJs from '@stripe/stripe-js';
 
 import StripeCardForm from './StripeCardForm';
 import { getStripeKey, stripeAccountForContributionType, StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
@@ -32,7 +32,7 @@ type PropTypes = {|
 const StripeCardFormContainer = (props: PropTypes) => {
   const [stripeObjects, setStripeObjects] = React.useState<{[StripeAccount]: stripeJs.Stripe | null}>({
     REGULAR: null,
-    ONE_OFF: null
+    ONE_OFF: null,
   });
 
   const stripeAccount = stripeAccountForContributionType[props.contributionType];
@@ -46,11 +46,11 @@ const StripeCardFormContainer = (props: PropTypes) => {
     if (!props.stripeHasLoaded) {
       setupStripe(props.setStripeHasLoaded);
     } else if (stripeObjects[stripeAccount] === null) {
-      console.log("loading stripe", stripeAccount)
+      console.log('loading stripe', stripeAccount);
 
       stripeJs.loadStripe(stripeKey).then(newStripe => setStripeObjects({
         ...stripeObjects,
-        [stripeAccount]: newStripe
+        [stripeAccount]: newStripe,
       }));
     }
   }, [props.stripeHasLoaded, props.contributionType]);
@@ -65,7 +65,7 @@ const StripeCardFormContainer = (props: PropTypes) => {
       return (
         <div className="stripe-card-element-container" key={stripeAccount}>
           <Elements stripe={stripeObjects[stripeAccount]}>
-            <StripeCardForm stripeKey={stripeKey}/>
+            <StripeCardForm stripeKey={stripeKey} />
           </Elements>
         </div>
       );

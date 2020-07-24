@@ -11,7 +11,7 @@ import {
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
-import {CardCvcElement, CardExpiryElement, CardNumberElement} from '@stripe/react-stripe-js';
+import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 
@@ -30,7 +30,6 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 // Types
 
 export type StripeFormPropTypes = {
-  stripe: Object,
   allErrors: FormError<FormField>[],
   stripeKey: string,
   setStripePaymentMethod: Function,
@@ -77,7 +76,7 @@ const RecaptchaWithError = compose(withLabel, withError)(Recaptcha);
 
 const StripeForm = (props: StripeFormPropTypes) => {
   /**
-   * Hooks and state
+   * State
    */
   const [cardErrors, setCardErrors] = React.useState<Array<Object>>([]);
   const [setupIntentClientSecret, setSetupIntentClientSecret] = React.useState<Option<string>>(null);
@@ -104,50 +103,46 @@ const StripeForm = (props: StripeFormPropTypes) => {
       error: '',
       errorEmpty: 'Please enter a CVC number',
       errorIncomplete: 'Please enter a valid CVC number',
-    }
+    },
   });
 
   const stripe = stripeJs.useStripe();
-
-  React.useEffect(() => {
-    setupRecurringHandlers();
-    loadRecaptchaV2();
-  }, []);
 
   /**
    * Handlers
    */
 
-  const getAllCardErrors = () => ['cardNumber', 'cardExpiry', 'cardCvc'].reduce((cardErrors, field) => {
+  const getAllCardErrors = () => ['cardNumber', 'cardExpiry', 'cardCvc'].reduce((acc, field) => {
     if (cardFieldsData[field].error.length > 0) {
-      cardErrors.push({ field: [field], message: cardFieldsData[field].error });
+      acc.push({ field: [field], message: cardFieldsData[field].error });
     }
-    return cardErrors;
+    return acc;
   }, []);
 
-  // Creates a new setupIntent upon recaptcha verification
-  const setupRecurringRecaptchaCallback = () => {
-    window.grecaptcha.render('robot_checkbox', {
-      sitekey: window.guardian.v2recaptchaPublicKey,
-      callback: (token) => {
-        trackComponentLoad('subscriptions-recaptcha-client-token-received');
-        setRecaptchaCompleted(true);
-        // TODO - this is wrong:
-        //props.allErrors = props.allErrors.filter(error => error.field !== 'recaptcha');
-        fetchPaymentIntent(token);
-      },
-    });
-  };
+  const handleStripeError = (errorData: any): void => {
+    setPaymentWaiting(false);
 
-  const setupRecurringHandlers = (): void => {
-    if (!window.guardian.recaptchaEnabled || isPostDeployUser()) {
-      fetchPaymentIntent('dummy');
-    } else if (window.grecaptcha && window.grecaptcha.render) {
-      setupRecurringRecaptchaCallback();
+    logException(`Error creating Payment Method: ${errorData}`);
+
+    if (errorData.type === 'validation_error') {
+      // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
+      // happen then display a generic error about card details
+      setCardErrors([...cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_details_incorrect') }]);
     } else {
-      window.v2OnloadCallback = setupRecurringRecaptchaCallback;
+      // This is probably a Stripe or network problem
+      setCardErrors([...cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_provider_unavailable') }]);
     }
   };
+
+  const handleCardSetup = (clientSecret: Option<string>): Promise<string> =>
+    stripe.handleCardSetup(clientSecret).then((result) => {
+      if (result.error) {
+        handleStripeError(result.error);
+        return Promise.resolve(result.error);
+      }
+      return result.setupIntent.payment_method;
+
+    });
 
   const fetchPaymentIntent = (token) => {
     fetchJson(
@@ -173,10 +168,32 @@ const StripeForm = (props: StripeFormPropTypes) => {
       }).catch((error) => {
         logException(`Error getting Stripe client secret for subscription: ${error}`);
 
-        setCardErrors(
-          [...cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }]
-        );
+        setCardErrors([...cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }]);
       });
+  };
+
+  // Creates a new setupIntent upon recaptcha verification
+  const setupRecurringRecaptchaCallback = () => {
+    window.grecaptcha.render('robot_checkbox', {
+      sitekey: window.guardian.v2recaptchaPublicKey,
+      callback: (token) => {
+        trackComponentLoad('subscriptions-recaptcha-client-token-received');
+        setRecaptchaCompleted(true);
+        // TODO - this is wrong:
+        // props.allErrors = props.allErrors.filter(error => error.field !== 'recaptcha');
+        fetchPaymentIntent(token);
+      },
+    });
+  };
+
+  const setupRecurringHandlers = (): void => {
+    if (!window.guardian.recaptchaEnabled || isPostDeployUser()) {
+      fetchPaymentIntent('dummy');
+    } else if (window.grecaptcha && window.grecaptcha.render) {
+      setupRecurringRecaptchaCallback();
+    } else {
+      window.v2OnloadCallback = setupRecurringRecaptchaCallback;
+    }
   };
 
   const handleCardErrors = () => {
@@ -224,32 +241,6 @@ const StripeForm = (props: StripeFormPropTypes) => {
     }
   };
 
-  const handleStripeError = (errorData: any): void => {
-    setPaymentWaiting(false);
-
-    logException(`Error creating Payment Method: ${errorData}`);
-
-    if (errorData.type === 'validation_error') {
-      // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
-      // happen then display a generic error about card details
-      setCardErrors([...cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_details_incorrect') }]);
-    } else {
-      // This is probably a Stripe or network problem
-      setCardErrors([...cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_provider_unavailable') }]);
-    }
-  };
-
-  const handleCardSetup = (clientSecret: Option<string>): Promise<string> => {
-    return stripe.handleCardSetup(clientSecret).then((result) => {
-      if (result.error) {
-        handleStripeError(result.error);
-        return Promise.resolve(result.error);
-      }
-      return result.setupIntent.payment_method;
-
-    });
-  };
-
   const checkRecaptcha = () => {
     if (window.guardian.recaptchaEnabled &&
       !isPostDeployUser() &&
@@ -276,6 +267,15 @@ const StripeForm = (props: StripeFormPropTypes) => {
       }).then(() => props.submitForm());
     }
   };
+
+  /**
+   * Hooks
+   */
+
+  React.useEffect(() => {
+    setupRecurringHandlers();
+    loadRecaptchaV2();
+  }, []);
 
   /**
    * Rendering
