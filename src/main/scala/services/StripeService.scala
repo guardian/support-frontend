@@ -31,7 +31,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
   private val requestOptions = RequestOptions.builder().setApiKey(config.secretKey).build()
 
   // https://stripe.com/docs/api/java#create_charge
-  private def getChargeParams(data: StripeRequest) =
+  private def getChargeParams(data: LegacyStripeChargeRequest) =
     Map[String, AnyRef](
       "amount" -> new Integer((data.paymentData.amount * 100).toInt), //-- stripe amount must be in pence
       "currency" -> data.paymentData.currency.entryName,

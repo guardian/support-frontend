@@ -37,6 +37,7 @@ class StripeController(
 
   lazy val CorsAndRateLimitAction = CorsAction andThen RateLimitingAction
 
+  // Stripe Checkout handler, still required for mobile apps payments
   def executePayment: Action[LegacyStripeChargeRequest] = CorsAndRateLimitAction.async(circe.json[LegacyStripeChargeRequest]) { request =>
     stripeBackendProvider.getInstanceFor(request)
       .createCharge(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))

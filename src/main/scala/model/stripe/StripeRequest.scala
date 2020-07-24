@@ -45,7 +45,7 @@ object StripeJsonDecoder {
       stripePublicKey <- downField("publicKey").as[Option[StripePublicKey]]
     } yield {
       LegacyStripeChargeRequest(
-        paymentData = StripePaymentData(
+        paymentData = LegacyStripePaymentData(
           email = email,
           currency = Currency.withName(currency),
           amount = amount,
@@ -90,13 +90,28 @@ object NonEmptyString {
   implicit val encoder: Encoder[NonEmptyString] = Encoder.encodeString.contramap(_.value)
 }
 
-// https://stripe.com/docs/api/java#create_charge
+trait BaseStripePaymentData {
+  def email: NonEmptyString
+  def currency: Currency
+  def amount: BigDecimal
+  def stripePaymentMethod: Option[StripePaymentMethod]
+}
+
 @JsonCodec case class StripePaymentData(
-  email: NonEmptyString,  //for receipt_email
+  email: NonEmptyString,
   currency: Currency,
   amount: BigDecimal,
-  token: NonEmptyString,  //This field will be deprecated once the migration to Stripe Payment Intents is complete
-  stripePaymentMethod: Option[StripePaymentMethod])
+  stripePaymentMethod: Option[StripePaymentMethod]
+) extends BaseStripePaymentData
+
+// Supports Stripe Checkout tokens
+@JsonCodec case class LegacyStripePaymentData(
+  email: NonEmptyString,
+  currency: Currency,
+  amount: BigDecimal,
+  stripePaymentMethod: Option[StripePaymentMethod],
+  token: NonEmptyString,
+) extends BaseStripePaymentData
 
 sealed trait StripePaymentMethod extends EnumEntry
 
@@ -118,16 +133,16 @@ object StripePublicKey {
 }
 
 // Trait for modelling client requests for Stripe payments. This file can be simplified once we have moved away from
-// the Stripe Charges API.
+// the Stripe Charges API, but it's still required for mobile apps payments.
 sealed trait StripeRequest {
-  val paymentData: StripePaymentData      //data required to create a Stripe payment
+  val paymentData: BaseStripePaymentData  //data required to create a Stripe payment
   val acquisitionData: AcquisitionData    //data required to create an acquisition event (used for analytics)
   val publicKey: Option[StripePublicKey]  //required to determine which Stripe service to use
 }
 
 // Legacy model for Stripe Charges API
 case class LegacyStripeChargeRequest(
-  paymentData: StripePaymentData,
+  paymentData: LegacyStripePaymentData,
   acquisitionData: AcquisitionData,
   publicKey: Option[StripePublicKey]) extends StripeRequest
 

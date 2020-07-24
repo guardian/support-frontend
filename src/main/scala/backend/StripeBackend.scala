@@ -47,7 +47,7 @@ class StripeBackend(
       .map(s => s.enableRecaptchaFrontend.exists(_.isOn) && s.enableRecaptchaBackend.exists(_.isOn))
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
-  // Legacy handler for the Stripe Charges API
+  // Legacy handler for the Stripe Charges API. Still required for mobile apps payments
   def createCharge(chargeData: LegacyStripeChargeRequest, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
     stripeService.createCharge(chargeData)
       .leftMap(err => {
