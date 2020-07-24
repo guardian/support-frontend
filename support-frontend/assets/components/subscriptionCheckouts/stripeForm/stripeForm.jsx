@@ -45,10 +45,10 @@ type CardFieldData = {
   errorIncomplete: string,
 }
 
+type CardFieldName = 'cardNumber' | 'cardExpiry' | 'cardCvc';
+
 type CardFieldsData = {
-  cardNumber: CardFieldData,
-  cardExpiry: CardFieldData,
-  cardCvc: CardFieldData,
+  [CardFieldName]: CardFieldData,
 }
 
 // Styles for stripe elements
@@ -76,11 +76,11 @@ const StripeForm = (props: StripeFormPropTypes) => {
   /**
    * State
    */
-  const [cardErrors, setCardErrors] = React.useState<Array<FormError>>([]);
+  const [cardErrors, setCardErrors] = React.useState<Array<FormError<CardFieldName>>>([]);
   const [setupIntentClientSecret, setSetupIntentClientSecret] = React.useState<Option<string>>(null);
   const [paymentWaiting, setPaymentWaiting] = React.useState<boolean>(false);
   const [recaptchaCompleted, setRecaptchaCompleted] = React.useState<boolean>(false);
-  const [recaptchaError, setRecaptchaError] = React.useState<FormError | null>(null);
+  const [recaptchaError, setRecaptchaError] = React.useState<FormError<'recaptcha'> | null>(null);
   const [cardFieldsData, setCardFieldsData] = React.useState<CardFieldsData>({
     cardNumber: {
       complete: false,
