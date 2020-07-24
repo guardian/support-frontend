@@ -7,10 +7,7 @@ import { compose } from 'redux';
 import * as stripeJs from '@stripe/react-stripe-js';
 import Button from 'components/button/button';
 import { ErrorSummary } from '../submitFormErrorSummary';
-import {
-  firstError,
-  type FormError,
-} from 'helpers/subscriptionsForms/validation';
+import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import { withError } from 'hocs/withError';
@@ -54,11 +51,6 @@ type CardFieldsData = {
   cardCvc: CardFieldData,
 }
 
-type CardError = {
-  field: string,
-  message: string
-}
-
 // Styles for stripe elements
 
 const baseStyles = {
@@ -84,10 +76,11 @@ const StripeForm = (props: StripeFormPropTypes) => {
   /**
    * State
    */
-  const [cardErrors, setCardErrors] = React.useState<Array<CardError>>([]);
+  const [cardErrors, setCardErrors] = React.useState<Array<FormError>>([]);
   const [setupIntentClientSecret, setSetupIntentClientSecret] = React.useState<Option<string>>(null);
   const [paymentWaiting, setPaymentWaiting] = React.useState<boolean>(false);
   const [recaptchaCompleted, setRecaptchaCompleted] = React.useState<boolean>(false);
+  const [recaptchaError, setRecaptchaError] = React.useState<FormError | null>(null);
   const [cardFieldsData, setCardFieldsData] = React.useState<CardFieldsData>({
     cardNumber: {
       complete: false,
@@ -185,8 +178,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
       callback: (token) => {
         trackComponentLoad('subscriptions-recaptcha-client-token-received');
         setRecaptchaCompleted(true);
-        // TODO - why are we mutating props here?
-        props.allErrors = props.allErrors.filter(error => error.field !== 'recaptcha');
+        setRecaptchaError(null);
         fetchPaymentIntent(token);
       },
     });
@@ -251,9 +243,8 @@ const StripeForm = (props: StripeFormPropTypes) => {
     if (window.guardian.recaptchaEnabled &&
       !isPostDeployUser() &&
       !recaptchaCompleted &&
-      !props.allErrors.find(error => error.field === 'recaptcha')) {
-      // TODO - why are we mutating props here?
-      props.allErrors.push({
+      recaptchaError === null) {
+      setRecaptchaError({
         field: 'recaptcha',
         message: 'Please check the \'I am not a robot\' checkbox',
       });
@@ -296,7 +287,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
           error={cardFieldsData.cardNumber.error}
           label="Card number"
           options={{
-            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } }
+            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } },
           }}
           onChange={e => handleChange(e)}
         />
@@ -305,7 +296,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
           error={cardFieldsData.cardExpiry.error}
           label="Expiry date"
           options={{
-            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } }
+            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } },
           }}
           onChange={e => handleChange(e)}
         />
@@ -314,7 +305,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
           error={cardFieldsData.cardCvc.error}
           label="CVC"
           options={{
-            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } }
+            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } },
           }}
           onChange={e => handleChange(e)}
         />
@@ -322,7 +313,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
           <RecaptchaWithError
             id="robot_checkbox"
             label="Security check"
-            error={firstError('recaptcha', props.allErrors)}
+            error={recaptchaError}
           /> : null }
         <div className="component-stripe-submit-button">
           <Button id="qa-stripe-submit-button" onClick={event => requestSCAPaymentMethod(event)}>
@@ -330,7 +321,12 @@ const StripeForm = (props: StripeFormPropTypes) => {
           </Button>
         </div>
         {(cardErrors.length > 0 || props.allErrors.length > 0)
-        && <ErrorSummary errors={[...props.allErrors, ...cardErrors]} />}
+        && <ErrorSummary errors={[
+          ...props.allErrors,
+          ...cardErrors,
+          recaptchaError ? [recaptchaError] : [],
+        ]}
+        />}
       </fieldset>
     )}
     </span>
