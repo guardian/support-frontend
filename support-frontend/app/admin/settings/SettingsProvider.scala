@@ -7,12 +7,12 @@ import admin.settings.SettingsProvider._
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
-import com.amazonaws.services.s3.AmazonS3
-import config.{Configuration, FastlyConfig}
-import io.circe.Decoder
+import com.gu.aws.AwsS3Client
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Configuration.MetricUrl
+import config.{Configuration, FastlyConfig}
+import io.circe.Decoder
 import play.api.libs.ws.WSClient
 import play.api.mvc.Result
 import services.fastly.FastlyService
@@ -49,7 +49,7 @@ object AllSettingsProvider {
   import admin.settings.Amounts.amountsDecoder
   import admin.settings.ContributionTypes.contributionTypesDecoder
 
-  def fromConfig(config: Configuration)(implicit client: AmazonS3, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
+  def fromConfig(config: Configuration)(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
       amountsProvider <- SettingsProvider.fromAppConfig[AmountsRegions](config.settingsSources.amounts, config)
@@ -78,7 +78,7 @@ class S3SettingsProvider[T: Decoder] private (
     initialSettings: T,
     source: SettingsSource.S3,
     fastlyService: Option[FastlyService]
-)(implicit ec: ExecutionContext, s3Client: AmazonS3, system: ActorSystem) extends SettingsProvider[T] {
+)(implicit ec: ExecutionContext, s3Client: AwsS3Client, system: ActorSystem) extends SettingsProvider[T] {
 
   private val cachedSettings = new AtomicReference[T](initialSettings)
 
@@ -125,7 +125,7 @@ object S3SettingsProvider {
 
   def fromS3[T: Decoder](s3: SettingsSource.S3, fastlyConfig: Option[FastlyConfig])(
     implicit
-    client: AmazonS3,
+    client: AwsS3Client,
     system: ActorSystem,
     wsClient: WSClient
   ): Either[Throwable, SettingsProvider[T]] = {
@@ -149,7 +149,7 @@ object S3SettingsProvider {
 object SettingsProvider {
 
   def fromAppConfig[T: Decoder](settingsSource: SettingsSource, config: Configuration)
-                               (implicit client: AmazonS3, system: ActorSystem, wsClient: WSClient): Either[Throwable, SettingsProvider[T]] = {
+                               (implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, SettingsProvider[T]] = {
     SafeLogger.info(s"loading settings from $settingsSource")
     settingsSource match {
       case s3: SettingsSource.S3 => S3SettingsProvider.fromS3[T](s3, config.fastlyConfig)

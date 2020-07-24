@@ -4,7 +4,7 @@ import java.io.{File, InputStream, OutputStream}
 import java.nio.file.Files
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
-import com.amazonaws.services.s3.model.GetObjectRequest
+import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.AwsCloudWatchMetricPut._
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsS3Client}
 import org.scalatest.Reporter
@@ -37,10 +37,9 @@ object RunITTests {
     val exists = new File(tempJar).exists()
     val result = for {
       _ <- if (exists) Success(()) else {
-        val bucket = "support-workers-dist"
-        val s3File = s"support/${stage}/it-tests/support-workers-it.jar"
-        log(s"getting s3 file: $bucket / $s3File")
-        val catalog = new GetObjectRequest(bucket, s3File)
+        val bucket = "s3://support-workers-dist/support/${stage}/it-tests/support-workers-it.jar"
+        log(s"getting s3 file: $bucket")
+        val catalog = new AmazonS3URI(bucket)
         fetchJson(catalog)
       }
       a = Array(
@@ -61,12 +60,11 @@ object RunITTests {
     }
   }
 
-  def fetchJson(request: GetObjectRequest): Try[Unit] =
-    for {
-      s3Stream <- AwsS3Client.fetchObject(AwsS3Client.s3, request)
-      _ <- Try(Files.copy(s3Stream, new File(tempJar).toPath))
-      _ <- Try(s3Stream.close())
-    } yield ()
+  def fetchJson(request: AmazonS3URI): Try[Unit] =
+    AwsS3Client.withStream({
+      Files.copy(_, new File(tempJar).toPath)
+    })(request)
+      .map(_ => ())
 
 }
 

@@ -1,9 +1,12 @@
-import sbt.Keys.{publishTo, resolvers, scalaVersion}
-import SeleniumTestConfig.{SeleniumTest, seleniumTestFilter, unitTestFilter}
+import SeleniumTestConfig.SeleniumTest
+import sbt.Keys.{publishTo, resolvers, scalaVersion, updateOptions}
 import sbtrelease.ReleaseStateTransformations._
+
 import scala.sys.process._
 
 skip in publish := true
+
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.0"// if the following PR is merged in v3.2.1, remove "-eU" parameter from options above - PR https://github.com/scalatest/scalatest/pull/1842
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
@@ -11,7 +14,8 @@ lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ S
   resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"),
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
-  testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eU")
+  testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
+  libraryDependencies += scalatest % "it",
 )
 
 lazy val release = Seq[ReleaseStep](
@@ -29,10 +33,23 @@ lazy val release = Seq[ReleaseStep](
   pushChanges
 )
 
-lazy val commonSettings = Seq(
+inThisBuild(Seq(
   organization := "com.gu",
   scalaVersion := "2.12.10",
-  resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
+  dependencyStats / aggregate := false,
+  dependencyTree / aggregate := false,
+  // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
+  updateOptions := updateOptions.value.withCachedResolution(true),
+))
+
+lazy val commonSettings = Seq(
+  resolvers ++= Seq(
+    Resolver.sonatypeRepo("releases"), // libraries that haven't yet synced to maven central
+    Resolver.bintrayRepo("guardian", "ophan"), //event producer library
+  ),
+)
+
+lazy val releaseSettings = Seq(
   isSnapshot := false,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -49,15 +66,11 @@ lazy val commonSettings = Seq(
     url("https://github.com/guardian/support-frontend"),
     "scm:git:git@github.com:guardian/support-frontend.git"
   )),
-  // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
-  updateOptions := updateOptions.value.withCachedResolution(true),
-  dependencyStats / aggregate := false,
-  dependencyTree / aggregate := false
 )
 
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "org.scalatest" %% "scalatest" % "3.2.0" % "it, test",// if the following PR is merged in v3.2.1, remove "-eU" parameter from options above - PR https://github.com/scalatest/scalatest/pull/1842
+  scalatest % "test",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 )
 
@@ -75,7 +88,9 @@ lazy val root = (project in file("."))
     `support-services`,
     `stripe-intent`,
     `support-redemptiondb`,
-    `it-test-runner`
+    `it-test-runner`,
+    `module-aws`,
+    `module-rest`,
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -116,6 +131,7 @@ lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
+    releaseSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-internationalisation`)
@@ -125,6 +141,7 @@ lazy val `support-config` = (project in file("support-config"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
+    releaseSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-models`, `support-internationalisation`)
@@ -134,16 +151,21 @@ lazy val `support-services` = (project in file("support-services"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
+    releaseSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-internationalisation`, `support-models`, `support-config`, `support-rest`)
-  .aggregate(`support-internationalisation`, `support-models`, `support-config`, `support-rest`)
+  ).dependsOn(`support-internationalisation`, `support-models`, `support-config`, `module-rest`, `module-aws`)
+  .aggregate(`support-internationalisation`, `support-models`, `support-config`, `module-rest`, `module-aws`)
 
-lazy val `support-rest` = (project in file("support-rest"))
-  .configs(IntegrationTest)
+lazy val `module-rest` = (project in file("support-modules/rest"))
   .settings(
     commonSettings,
-    integrationTestSettings,
+    libraryDependencies ++= commonDependencies
+  )
+
+lazy val `module-aws` = (project in file("support-modules/aws"))
+  .settings(
+    commonSettings,
     libraryDependencies ++= commonDependencies
   )
 
@@ -151,6 +173,7 @@ lazy val `support-internationalisation` = (project in file("support-internationa
   .configs(IntegrationTest)
   .settings(
     commonSettings,
+    releaseSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   )
@@ -162,11 +185,12 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
     commonSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies,
-  ).dependsOn(`support-rest`, `support-config`)
-  .aggregate(`support-rest`, `support-config`)
+  ).dependsOn(`module-rest`, `support-config`, `module-aws`)
+  .aggregate(`module-rest`, `support-config`, `module-aws`)
 
 lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
   .enablePlugins(RiffRaffArtifact)
 
 lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
+  .dependsOn(`module-aws`)
