@@ -14,7 +14,7 @@ Parameters:
 Mappings:
   Constants:
     Alarm:
-      Process: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      Process: See the wiki at https://github.com/guardian/support-frontend/wiki/Automated-IT-Tests
 
 Conditions:
   ProdOnlyResource: !Equals [!Ref Stage, PROD]
