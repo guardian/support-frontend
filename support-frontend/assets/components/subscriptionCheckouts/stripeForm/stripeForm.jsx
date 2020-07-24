@@ -295,28 +295,33 @@ const StripeForm = (props: StripeFormPropTypes) => {
           id="card-number"
           error={cardFieldsData.cardNumber.error}
           label="Card number"
-          style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+          options={{
+            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } }
+          }}
           onChange={e => handleChange(e)}
         />
         <CardExpiryWithError
           id="card-expiry"
           error={cardFieldsData.cardExpiry.error}
           label="Expiry date"
-          style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+          options={{
+            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } }
+          }}
           onChange={e => handleChange(e)}
         />
         <CardCvcWithError
           id="cvc"
           error={cardFieldsData.cardCvc.error}
           label="CVC"
-          style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
+          options={{
+            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } }
+          }}
           onChange={e => handleChange(e)}
         />
         { window.guardian.recaptchaEnabled ?
           <RecaptchaWithError
             id="robot_checkbox"
             label="Security check"
-            style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
             error={firstError('recaptcha', props.allErrors)}
           /> : null }
         <div className="component-stripe-submit-button">
