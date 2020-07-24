@@ -2,7 +2,8 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+// $FlowIgnore - required for hooks
+import * as React from 'preact/compat';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { connect } from 'react-redux';

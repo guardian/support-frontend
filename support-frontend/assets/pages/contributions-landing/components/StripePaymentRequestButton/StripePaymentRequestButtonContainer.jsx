@@ -4,13 +4,14 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+// $FlowIgnore - required for hooks
+import * as React from 'preact/compat';
 import { Elements } from '@stripe/react-stripe-js';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   getStripeKey,
   stripeAccountForContributionType,
-  StripeAccount,
+  type StripeAccount,
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import type {
   ContributionType,

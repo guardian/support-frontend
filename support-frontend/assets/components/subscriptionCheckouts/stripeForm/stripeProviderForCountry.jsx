@@ -1,19 +1,27 @@
 // @flow
 
-import React from 'react';
+// $FlowIgnore - required for hooks
+import * as React from 'preact/compat';
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
-import { type StripeFormPropTypes } from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type {FormError} from "helpers/subscriptionsForms/validation";
+import type {FormField} from "helpers/subscriptionsForms/formFields";
+import type {Csrf} from "helpers/csrf/csrfReducer";
 
 // Types
 
 type PropTypes = {
-  ...StripeFormPropTypes,
   country: IsoCountry,
   isTestUser: boolean,
+  allErrors: FormError<FormField>[],
+  setStripePaymentMethod: Function,
+  submitForm: Function,
+  validateForm: Function,
+  buttonText: string,
+  csrf: Csrf,
 };
 
 function StripeProviderForCountry(props: PropTypes) {

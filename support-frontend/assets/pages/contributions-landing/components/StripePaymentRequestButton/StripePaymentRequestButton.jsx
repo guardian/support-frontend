@@ -2,7 +2,8 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+// $FlowIgnore - required for hooks
+import * as React from 'preact/compat';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
@@ -55,7 +56,7 @@ import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
 // ----- Types -----//
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {|
+type PropTypes = {
   country: IsoCountry,
   currency: IsoCurrency,
   selectedAmounts: SelectedAmounts,
@@ -85,7 +86,7 @@ type PropTypes = {|
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   abTestButtonVsNoButton: StripePaymentRequestButtonTestVariants,
   csrf: CsrfState,
-|};
+};
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   selectedAmounts: state.page.form.selectedAmounts,

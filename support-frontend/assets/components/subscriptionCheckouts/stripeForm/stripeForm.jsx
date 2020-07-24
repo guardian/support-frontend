@@ -1,7 +1,8 @@
 /* eslint-disable react/no-unused-state */
 // @flow
 
-import React from 'react';
+// $FlowIgnore - required for hooks
+import * as React from 'preact/compat';
 import { compose } from 'redux';
 import * as stripeJs from '@stripe/react-stripe-js';
 import Button from 'components/button/button';
