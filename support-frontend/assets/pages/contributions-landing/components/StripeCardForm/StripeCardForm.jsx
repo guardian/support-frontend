@@ -405,7 +405,7 @@ const CardForm = (props: PropTypes) => {
           <CardNumberElement
             id="stripeCardNumberElement"
             options={{
-              style: fieldStyle
+              style: fieldStyle,
             }}
             onChange={onChange('CardNumber')}
             onFocus={() => setCurrentlySelected('CardNumber')}
@@ -442,7 +442,7 @@ const CardForm = (props: PropTypes) => {
               <CardExpiryElement
                 id="stripeCardExpiryElement"
                 options={{
-                  style: fieldStyle
+                  style: fieldStyle,
                 }}
                 placeholder=""
                 onChange={onChange('Expiry')}
@@ -492,7 +492,7 @@ const CardForm = (props: PropTypes) => {
               <CardCvcElement
                 id="stripeCardCVCElement"
                 options={{
-                  style: fieldStyle
+                  style: fieldStyle,
                 }}
                 placeholder=""
                 onChange={onChange('CVC')}

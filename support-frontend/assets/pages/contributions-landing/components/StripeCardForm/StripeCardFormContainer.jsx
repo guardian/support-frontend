@@ -50,11 +50,10 @@ const StripeCardFormContainer = (props: PropTypes) => {
     } else if (stripeObjects[stripeAccount] === null) {
 
       stripeJs.loadStripe(stripeKey).then(newStripe =>
-        setStripeObjects( prevData => ({
+        setStripeObjects(prevData => ({
           ...prevData,
           [stripeAccount]: newStripe,
-        }))
-      );
+        })));
     }
   }, [props.stripeHasLoaded, props.contributionType]);
 

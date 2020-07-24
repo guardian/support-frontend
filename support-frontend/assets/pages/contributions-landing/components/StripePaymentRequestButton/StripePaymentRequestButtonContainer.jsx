@@ -64,8 +64,7 @@ const StripePaymentRequestButtonContainer = (props: PropTypes) => {
         setStripeObjects(prevData => ({
           ...prevData,
           [stripeAccount]: newStripe,
-        }))
-      );
+        })));
     }
   }, [props.stripeHasLoaded, props.contributionType]);
 
