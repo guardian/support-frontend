@@ -106,6 +106,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
   });
 
   const stripe = stripeJs.useStripe();
+  const elements = stripeJs.useElements();
 
   /**
    * Handlers
@@ -133,8 +134,9 @@ const StripeForm = (props: StripeFormPropTypes) => {
     }
   };
 
-  const handleCardSetup = (clientSecret: Option<string>): Promise<string> =>
-    stripe.handleCardSetup(clientSecret).then((result) => {
+  const handleCardSetup = (clientSecret: Option<string>): Promise<string> => {
+    const cardElement = elements.getElement(CardNumberElement);
+    return stripe.handleCardSetup(clientSecret, cardElement).then((result) => {
       if (result.error) {
         handleStripeError(result.error);
         return Promise.resolve(result.error);
@@ -142,6 +144,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
       return result.setupIntent.payment_method;
 
     });
+  };
 
   const fetchPaymentIntent = (token) => {
     fetchJson(
