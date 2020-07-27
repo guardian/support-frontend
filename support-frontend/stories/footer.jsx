@@ -19,7 +19,7 @@ const stories = storiesOf('Footer', module)
   .addDecorator(withCenterAlignment);
 
 stories.add('Footer', () => (
-  <div style={{ width: '100%', maxWidth: '1200px' }}>
+  <div style={{ width: '100%', maxWidth: '1700px' }}>
     <Footer>
       <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
       <CustomerService

@@ -14,6 +14,9 @@ import Rows from '../base/rows';
 import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
 
 import { componentFooter, copyright } from './footerStyles';
+import FooterContainer from './containers/container';
+import FooterLinksList from './links/linksList';
+import FooterLink from './links/link';
 
 // ----- Props ----- //
 
@@ -37,7 +40,7 @@ function Footer({
   return (
     <footer css={componentFooter} role="contentinfo">
       {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
-        <Content appearance={appearance}>
+        <FooterContainer leftBorder>
           <div>
             <Rows>
               {privacyPolicy &&
@@ -50,11 +53,19 @@ function Footer({
               {disclaimer && <ContribLegal countryGroupId={countryGroupId} />}
             </Rows>
           </div>
-        </Content>
+        </FooterContainer>
       }
-      <Content border appearance={appearance}>
+      <FooterContainer leftBorder>
+        <FooterLinksList>
+          <FooterLink href="/">Privacy Policy</FooterLink>
+          <FooterLink href="/">Contact us</FooterLink>
+          <FooterLink href="/">FAQs</FooterLink>
+          <FooterLink href="/">Terms & Conditions</FooterLink>
+        </FooterLinksList>
+      </FooterContainer>
+      <FooterContainer>
         <span css={copyright}>{copyrightNotice}</span>
-      </Content>
+      </FooterContainer>
     </footer>
   );
 
