@@ -25,10 +25,18 @@ type PropTypes = {
 };
 
 function StripeProviderForCountry(props: PropTypes) {
+  const [stripeObject, setStripeObject] = React.useState<stripeJs.Stripe | null>(null);
+
   const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
-  const stripe = stripeJs.loadStripe(stripeKey);
+
+  React.useEffect(() => {
+    if (stripeObject === null) {
+      stripeJs.loadStripe(stripeKey).then(setStripeObject);
+    }
+  }, []);
+
   return (
-    <Elements stripe={stripe}>
+    <Elements stripe={stripeObject}>
       <StripeForm
         submitForm={props.submitForm}
         allErrors={props.allErrors}
