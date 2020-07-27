@@ -84,10 +84,11 @@ function whatNextElement(textItems) {
 }
 
 function WhatNext(fulfilmentOption, useDigitalVoucher = false) {
+  let textItems = whatNextText[fulfilmentOption].default;
   if (fulfilmentOption === Collection && useDigitalVoucher) {
-    return whatNextElement(whatNextText[Collection].digitalVoucher);
+    textItems = whatNextText[Collection].digitalVoucher;
   }
-  return whatNextElement(whatNextText[fulfilmentOption].default);
+  return whatNextElement(textItems);
 }
 
 
