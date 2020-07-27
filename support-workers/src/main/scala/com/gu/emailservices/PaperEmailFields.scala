@@ -2,7 +2,7 @@ package com.gu.emailservices
 
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
-import com.gu.support.catalog.{FulfilmentOptions, HomeDelivery, ProductOptions}
+import com.gu.support.catalog.{FulfilmentOptions, HomeDelivery, Paper, ProductOptions}
 import com.gu.support.promotions.Promotion
 import com.gu.support.workers._
 import com.gu.support.workers.states.PaymentMethodWithSchedule
@@ -33,7 +33,7 @@ case class PaperEmailFields(
 
       val dataExtension: String = fulfilmentOptions match {
         case HomeDelivery => "paper-delivery"
-        case _ => "paper-voucher"
+        case _ => if (Paper.useDigitalVoucher) "paper-subscription-card" else "paper-voucher"
       }
 
       override val fields: List[(String, String)] = PaperFieldsGenerator.fieldsFor(

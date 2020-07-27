@@ -1,14 +1,10 @@
 // @flow
 
 // ----- Imports ----- //
+
 import { type Store } from 'redux';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
-import {
-  loadStripe,
-  setupStripeCheckout,
-} from 'helpers/paymentIntegrations/stripeCheckout';
 import { setupAmazonPay } from 'helpers/paymentIntegrations/amazonPay';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
@@ -18,26 +14,20 @@ import {
   getContributionTypeFromUrl,
   getPaymentMethodFromSession,
   getValidPaymentMethods,
-  type ThirdPartyPaymentLibrary,
   getValidContributionTypesFromUrlOrElse,
 } from 'helpers/checkouts';
 import { type ContributionType, contributionTypeAvailable } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   type Action,
   checkIfEmailHasPassword,
-  onThirdPartyPaymentAuthorised,
-  paymentWaiting,
   selectAmount, setGuestAccountCreationToken,
-  setThirdPartyPaymentLibrary,
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
   setThankYouPageStage,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { Stripe } from 'helpers/paymentMethods';
 import {
   isUsableExistingPaymentMethod,
   mapExistingPaymentMethodToPaymentMethod, sendGetExistingPaymentMethodsRequest,
@@ -48,7 +38,6 @@ import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { getCampaignSettings } from 'helpers/campaigns';
-import { stripeAccountForContributionType } from 'helpers/paymentIntegrations/stripeCheckout';
 import { loadRecaptchaV2 } from '../../helpers/recaptcha';
 
 // ----- Functions ----- //
@@ -87,92 +76,40 @@ function getInitialContributionType(
     contributionTypes[countryGroupId][0].contributionType;
 }
 
-// Stripe checkout is currently still used by the Payment Request button only
-function initialiseStripeCheckout(
-  onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void,
-  contributionType: ContributionType,
-  currencyId: IsoCurrency,
-  countryId: IsoCountry,
-  isTestUser: boolean,
-  dispatch: Function,
-) {
-  const library: ThirdPartyPaymentLibrary =
-    setupStripeCheckout(
-      onPaymentAuthorisation,
-      stripeAccountForContributionType[contributionType],
-      currencyId,
-      countryId,
-      isTestUser,
-    );
-
-  dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
-}
-
-
 function initialisePaymentMethods(
   state: State,
   dispatch: Function,
   contributionTypes: ContributionTypes,
 ) {
 
-  const { countryId, currencyId, countryGroupId } = state.common.internationalisation;
-  const { switches } = state.common.settings;
+  const { currencyId, countryGroupId } = state.common.internationalisation;
   const isTestUser = !!state.page.user.isTestUser;
 
-  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
-    dispatch(paymentWaiting(true));
-    dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation));
-  };
+  setupAmazonPay(countryGroupId, dispatch, isTestUser);
 
-
-  if (getQueryParameter('stripe-checkout-js') !== 'no') {
-    loadStripe().then(() => {
-      contributionTypes[countryGroupId].forEach((contributionTypeSetting) => {
-        const validPayments = getValidPaymentMethods(
-          contributionTypeSetting.contributionType,
-          switches,
-          countryId,
-        );
-        // Stripe Payment Intents is currently only for one-offs, so always initialise Stripe Checkout for now
-        if (validPayments.includes(Stripe)) {
-          initialiseStripeCheckout(
-            onPaymentAuthorisation,
-            contributionTypeSetting.contributionType,
-            currencyId,
-            countryId,
-            isTestUser,
-            dispatch,
-          );
+  // initiate fetch of existing payment methods
+  const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
+  const existingDirectDebitON = isSwitchOn('recurringPaymentMethods.existingDirectDebit');
+  const existingCardON = isSwitchOn('recurringPaymentMethods.existingCard');
+  const existingPaymentsEnabledViaUrlParam = getQueryParameter('displayExistingPaymentOptions') === 'true';
+  if (userAppearsLoggedIn && (existingCardON || existingDirectDebitON) && existingPaymentsEnabledViaUrlParam) {
+    sendGetExistingPaymentMethodsRequest(
+      currencyId,
+      (allExistingPaymentMethods: ExistingPaymentMethod[]) => {
+        const switchedOnExistingPaymentMethods = allExistingPaymentMethods.filter(existingPaymentMethod => (
+          (existingPaymentMethod.paymentType === 'Card' && existingCardON) ||
+          (existingPaymentMethod.paymentType === 'DirectDebit' && existingDirectDebitON)
+        ));
+        dispatch(setExistingPaymentMethods(switchedOnExistingPaymentMethods));
+        const firstExistingPaymentMethod = (switchedOnExistingPaymentMethods[0]: any);
+        if (firstExistingPaymentMethod && isUsableExistingPaymentMethod(firstExistingPaymentMethod)) {
+          dispatch(updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(firstExistingPaymentMethod)));
+          dispatch(updateSelectedExistingPaymentMethod(firstExistingPaymentMethod));
         }
-      });
-    });
-
-    setupAmazonPay(countryGroupId, dispatch, isTestUser);
-
-    // initiate fetch of existing payment methods
-    const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
-    const existingDirectDebitON = isSwitchOn('recurringPaymentMethods.existingDirectDebit');
-    const existingCardON = isSwitchOn('recurringPaymentMethods.existingCard');
-    const existingPaymentsEnabledViaUrlParam = getQueryParameter('displayExistingPaymentOptions') === 'true';
-    if (userAppearsLoggedIn && (existingCardON || existingDirectDebitON) && existingPaymentsEnabledViaUrlParam) {
-      sendGetExistingPaymentMethodsRequest(
-        currencyId,
-        (allExistingPaymentMethods: ExistingPaymentMethod[]) => {
-          const switchedOnExistingPaymentMethods = allExistingPaymentMethods.filter(existingPaymentMethod => (
-            (existingPaymentMethod.paymentType === 'Card' && existingCardON) ||
-            (existingPaymentMethod.paymentType === 'DirectDebit' && existingDirectDebitON)
-          ));
-          dispatch(setExistingPaymentMethods(switchedOnExistingPaymentMethods));
-          const firstExistingPaymentMethod = (switchedOnExistingPaymentMethods[0]: any);
-          if (firstExistingPaymentMethod && isUsableExistingPaymentMethod(firstExistingPaymentMethod)) {
-            dispatch(updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(firstExistingPaymentMethod)));
-            dispatch(updateSelectedExistingPaymentMethod(firstExistingPaymentMethod));
-          }
-        },
-      );
-    } else {
-      dispatch(setExistingPaymentMethods([]));
-    }
+      },
+    );
+  } else {
+    dispatch(setExistingPaymentMethods([]));
   }
 
   const recurringContributionsAvailable = contributionTypeAvailable('MONTHLY', countryGroupId, contributionTypes)

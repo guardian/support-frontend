@@ -65,10 +65,6 @@ type RegularStripePaymentIntentFields = {|
   paymentMethod: string, // The ID of the Stripe Payment Method
   stripePaymentType: StripePaymentMethod, // The type of Stripe payment, e.g. Apple Pay
 |};
-type RegularStripeCheckoutPaymentFields = {|
-  stripeToken: string,
-  stripePaymentType: StripePaymentMethod,
-|};
 
 type RegularDirectDebitPaymentFields = {|
   accountHolderName: string,
@@ -85,7 +81,6 @@ type RegularExistingPaymentFields = {| billingAccountId: string |};
 export type RegularPaymentFields =
   RegularPayPalPaymentFields |
   RegularStripePaymentIntentFields |
-  RegularStripeCheckoutPaymentFields |
   RegularDirectDebitPaymentFields |
   RegularExistingPaymentFields |
   CorporateRedemption;
@@ -123,13 +118,6 @@ export type RegularPaymentRequest = {|
   debugInfo?: string,
 |};
 
-// Stripe checkout is currently still used by Payment Request button and recurring
-export type StripeCheckoutAuthorisation = {|
-  paymentMethod: typeof Stripe,
-  stripePaymentMethod: StripePaymentMethod,
-  token: string,
-|};
-
 export type StripePaymentIntentAuthorisation = {|
   paymentMethod: typeof Stripe,
   stripePaymentMethod: StripePaymentMethod,
@@ -165,7 +153,6 @@ export type AmazonPayAuthorisation = {|
 // immediately executes the payment, and recurring, where it ultimately ends up in Zuora
 // which uses it to execute payments in the future.
 export type PaymentAuthorisation =
-  StripeCheckoutAuthorisation |
   StripePaymentIntentAuthorisation |
   PayPalAuthorisation |
   DirectDebitAuthorisation |
@@ -195,11 +182,6 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
       if (authorisation.paymentMethodId) {
         return {
           paymentMethod: authorisation.paymentMethodId,
-          stripePaymentType: authorisation.stripePaymentMethod,
-        };
-      } else if (authorisation.token) {
-        return {
-          stripeToken: authorisation.token,
           stripePaymentType: authorisation.stripePaymentMethod,
         };
       }

@@ -12,7 +12,7 @@ import {
   getStripeKey,
   stripeAccountForContributionType,
   type StripeAccount,
-} from 'helpers/paymentIntegrations/stripeCheckout';
+} from 'helpers/stripe';
 import type {
   ContributionType,
   OtherAmounts,

@@ -4,9 +4,7 @@ import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
 import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
-export type StripePaymentRequestButtonTestVariants = 'control' | 'button';
 
-const contributionsLandingPageMatch = '/(uk|us|eu|au|ca|nz|int)/contribute(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
@@ -35,28 +33,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: usOnlyLandingPage,
     seed: 5,
-  },
-
-  stripePaymentRequestButtonVsNoButton: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'button',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 2,
-    targetPage: contributionsLandingPageMatch,
   },
 
   fancyAddressTest: {

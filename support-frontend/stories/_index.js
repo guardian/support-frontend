@@ -5,6 +5,7 @@ module.exports = () => {
   require('./colours.jsx');
   require('./button.jsx');
   require('./dialog.jsx');
+  require('./footer.jsx');
   require('./form.jsx');
   require('./header.jsx');
   require('./menu.jsx');

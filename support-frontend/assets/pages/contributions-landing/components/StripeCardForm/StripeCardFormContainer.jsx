@@ -8,7 +8,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 
 import StripeCardForm from './StripeCardForm';
-import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/paymentIntegrations/stripeCheckout';
+import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/stripe';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ContributionType } from 'helpers/contributions';
