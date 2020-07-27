@@ -31,6 +31,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.3",
