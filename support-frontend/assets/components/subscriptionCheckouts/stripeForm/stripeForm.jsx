@@ -255,7 +255,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
     handleCardErrors();
     checkRecaptcha();
 
-    if (stripe && props.allErrors.length === 0 && cardErrors.length === 0 && !recaptchaError ) {
+    if (stripe && props.allErrors.length === 0 && cardErrors.length === 0 && !recaptchaError) {
       if (setupIntentClientSecret) {
         handleCardSetup(setupIntentClientSecret)
           .then(props.setStripePaymentMethod)
@@ -338,7 +338,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
             {props.buttonText}
           </Button>
         </div>
-        { errors.length > 0 && <ErrorSummary errors={errors}/> }
+        { errors.length > 0 && <ErrorSummary errors={errors} /> }
       </fieldset>
     )}
     </span>
