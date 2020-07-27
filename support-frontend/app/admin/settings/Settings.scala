@@ -27,6 +27,8 @@ case class AllSettings(
 )
 
 object AllSettings {
+  import Amounts._  // intellij doesn't think this is needed, but it is
+  import ContributionTypes._
 
   implicit val metricUrlEncoder: Encoder[MetricUrl] = Encoder.encodeString.contramap(_.value)
   implicit val metricUrlDecoder: Decoder[MetricUrl] = Decoder.decodeString.map(MetricUrl)
