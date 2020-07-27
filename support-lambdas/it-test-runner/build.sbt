@@ -10,8 +10,8 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   // This is required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion % "provided",
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion % "provided",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "io.symphonia" % "lambda-logging" % "1.0.3",
   "org.scalatest" %% "scalatest" % "3.2.0" // not a "Test" dependency, it's an actual one
