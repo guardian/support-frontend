@@ -8,15 +8,13 @@ import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import Content, { type Appearance } from 'components/content/content';
 
 import Rows from '../base/rows';
 import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
 
-import { componentFooter, copyright } from './footerStyles';
+import { backToTopLink, componentFooter, copyright, linksList, link } from './footerStyles';
 import FooterContainer from './containers/container';
-import FooterLinksList from './links/linksList';
-import FooterLink from './links/link';
+import { BackToTop } from './BackToTop';
 
 // ----- Props ----- //
 
@@ -25,14 +23,13 @@ type PropTypes = {|
   disclaimer: boolean,
   countryGroupId: CountryGroupId,
   children: Node,
-  appearance: Appearance,
 |};
 
 
 // ----- Component ----- //
 
 function Footer({
-  disclaimer, privacyPolicy, children, countryGroupId, appearance,
+  disclaimer, privacyPolicy, children, countryGroupId,
 }: PropTypes) {
 
   // It would probably be helpful to replace the Content and Rows components with emotion
@@ -40,7 +37,7 @@ function Footer({
   return (
     <footer css={componentFooter} role="contentinfo">
       {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
-        <FooterContainer leftBorder>
+        <FooterContainer border paddingTop>
           <div>
             <Rows>
               {privacyPolicy &&
@@ -55,15 +52,26 @@ function Footer({
           </div>
         </FooterContainer>
       }
-      <FooterContainer leftBorder>
-        <FooterLinksList>
-          <FooterLink href="/">Privacy Policy</FooterLink>
-          <FooterLink href="/">Contact us</FooterLink>
-          <FooterLink href="/">FAQs</FooterLink>
-          <FooterLink href="/">Terms & Conditions</FooterLink>
-        </FooterLinksList>
+      <FooterContainer border>
+        <ul css={linksList}>
+          <li css={link}>
+            <a href="/">Privacy Policy</a>
+          </li>
+          <li css={link}>
+            <a href="/">Contact us</a>
+          </li>
+          <li css={link}>
+            <a href="/">FAQs</a>
+          </li>
+          <li css={link}>
+            <a href="/">Terms & Conditions</a>
+          </li>
+        </ul>
+        <div css={backToTopLink}>
+          <BackToTop />
+        </div>
       </FooterContainer>
-      <FooterContainer>
+      <FooterContainer paddingTop>
         <span css={copyright}>{copyrightNotice}</span>
       </FooterContainer>
     </footer>
@@ -77,7 +85,6 @@ function Footer({
 Footer.defaultProps = {
   privacyPolicy: false,
   disclaimer: false,
-  appearance: 'feature',
   countryGroupId: GBPCountries,
   children: [],
 };

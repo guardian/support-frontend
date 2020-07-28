@@ -6,14 +6,15 @@ import React, { type Node } from 'react';
 import { WithMargins, Content } from './containerStyles';
 
 type PropTypes = {|
-  leftBorder: boolean,
+  border: boolean,
+  paddingTop: boolean,
   children: Node
 |}
 
-function FooterContainer({ leftBorder, children }: PropTypes) {
+function FooterContainer({ border, paddingTop, children }: PropTypes) {
   return (
     <WithMargins before after>
-      <Content leftBorder={leftBorder}>
+      <Content border={border} paddingTop={paddingTop}>
         {children}
       </Content>
     </WithMargins>
@@ -21,7 +22,8 @@ function FooterContainer({ leftBorder, children }: PropTypes) {
 }
 
 FooterContainer.defaultProps = {
-  leftBorder: false,
+  border: false,
+  paddingTop: false,
 };
 
 export default FooterContainer;

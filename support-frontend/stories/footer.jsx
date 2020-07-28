@@ -5,7 +5,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import { withKnobs } from '@storybook/addon-knobs';
-import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
+import { withVerticalCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
 import Footer from 'components/footerCompliant/footer';
 import SubscriptionTermsPrivacy
@@ -16,10 +16,10 @@ import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 const stories = storiesOf('Footer', module)
   .addDecorator(withKnobs)
-  .addDecorator(withCenterAlignment);
+  .addDecorator(withVerticalCenterAlignment);
 
 stories.add('Footer', () => (
-  <div style={{ width: '100%', maxWidth: '1700px' }}>
+  <div style={{ width: '100%' }}>
     <Footer>
       <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
       <CustomerService
