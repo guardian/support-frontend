@@ -37,10 +37,9 @@ object RunITTests {
     val exists = new File(tempJar).exists()
     val result = for {
       _ <- if (exists) Success(()) else {
-        val bucket = "s3://support-workers-dist/support/${stage}/it-tests/support-workers-it.jar"
-        log(s"getting s3 file: $bucket")
-        val catalog = new AmazonS3URI(bucket)
-        fetchJson(catalog)
+        val jarUrl = s"s3://support-workers-dist/support/${stage}/it-tests/support-workers-it.jar"
+        log(s"getting s3 file: $jarUrl")
+        copyJar(new AmazonS3URI(jarUrl))
       }
       a = Array(
         "-R", tempJar,
@@ -60,7 +59,7 @@ object RunITTests {
     }
   }
 
-  def fetchJson(request: AmazonS3URI): Try[Unit] =
+  def copyJar(request: AmazonS3URI): Try[Unit] =
     AwsS3Client.withStream({
       Files.copy(_, new File(tempJar).toPath)
     })(request)
