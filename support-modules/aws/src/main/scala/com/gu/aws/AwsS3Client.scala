@@ -17,17 +17,14 @@ object AwsS3Client extends AwsS3Client {
       .withCredentials(CredentialsProvider)
       .build()
 
-  def withStream[A](block: InputStream => A)(uri: AmazonS3URI): Try[A] =
-    Try(s3.getObject(uri.getBucket, uri.getKey).getObjectContent).map { stream =>
-      try {
-        block(stream)
-      } finally {
-        stream.close()
-      }
-    }
+  def withStream[RESULT](block: InputStream => Try[RESULT])(uri: AmazonS3URI): Try[RESULT] = for {
+    stream <- Try(s3.getObject(uri.getBucket, uri.getKey).getObjectContent)
+    result <- block(stream)
+    _ = stream.close()
+  } yield result
 
   // convenience method below
-  def fetchAsString: AmazonS3URI => Try[String] = withStream(Source.fromInputStream(_).mkString)
+  def fetchAsString: AmazonS3URI => Try[String] = withStream(is => Try(Source.fromInputStream(is).mkString))
 
 }
 trait AwsS3Client {

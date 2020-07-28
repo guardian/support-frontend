@@ -60,10 +60,9 @@ object RunITTests {
   }
 
   def copyJar(request: AmazonS3URI): Try[Unit] =
-    AwsS3Client.withStream({
-      Files.copy(_, new File(tempJar).toPath)
-    })(request)
-      .map(_ => ())
+    AwsS3Client.withStream { is =>
+      Try(Files.copy(is, new File(tempJar).toPath)).map(_ => ())
+    }(request)
 
 }
 
