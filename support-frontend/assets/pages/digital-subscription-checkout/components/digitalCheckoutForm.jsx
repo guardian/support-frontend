@@ -147,15 +147,6 @@ function DigitalCheckoutForm(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
-  const maybeAddress = props.participations.removeDigiSubAddressTest === 'noAddress' ?
-    null :
-    (
-      <FormSection title="Address">
-        <Address />
-      </FormSection>
-    );
-
-
   return (
     <Content>
       <CheckoutLayout aside={(
@@ -194,7 +185,9 @@ function DigitalCheckoutForm(props: PropTypes) {
               signOut={props.signOut}
             />
           </FormSection>
-          {maybeAddress}
+          <FormSection title="Address">
+            <Address />
+          </FormSection>
           <PaymentMethodSelector
             country={props.country}
             paymentMethod={props.paymentMethod}
