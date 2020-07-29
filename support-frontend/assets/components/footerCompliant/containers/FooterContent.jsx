@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
-import { WithMargins, Content } from './containerStyles';
+import { WithMargins, Content } from './contentStyles';
 
 type PropTypes = {|
   border: boolean,
@@ -11,7 +11,7 @@ type PropTypes = {|
   children: Node
 |}
 
-function FooterContainer({ border, paddingTop, children }: PropTypes) {
+function FooterContent({ border, paddingTop, children }: PropTypes) {
   return (
     <WithMargins before after>
       <Content border={border} paddingTop={paddingTop}>
@@ -21,9 +21,9 @@ function FooterContainer({ border, paddingTop, children }: PropTypes) {
   );
 }
 
-FooterContainer.defaultProps = {
+FooterContent.defaultProps = {
   border: false,
   paddingTop: false,
 };
 
-export default FooterContainer;
+export default FooterContent;

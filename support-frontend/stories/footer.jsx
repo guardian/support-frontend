@@ -7,7 +7,7 @@ import { storiesOf } from '@storybook/react';
 import { boolean, withKnobs } from '@storybook/addon-knobs';
 import { withVerticalCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
-import Footer from 'components/footerCompliant/footer';
+import Footer from 'components/footerCompliant/Footer';
 import SubscriptionTermsPrivacy
   from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import CustomerService from 'components/customerService/customerService';
@@ -19,7 +19,7 @@ const stories = storiesOf('Footer', module)
   .addDecorator(withVerticalCenterAlignment);
 
 stories.add('Footer', () => {
-  const contents = boolean('Show T&Cs?', true);
+  const contents = boolean('Show contents', true);
   return (
     <div style={{ width: '100%' }}>
       <Footer>
