@@ -35,53 +35,6 @@ export const tests: Tests = {
     seed: 5,
   },
 
-  fancyAddressTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'loqate',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: false,
-    referrerControlled: false,
-    seed: 3,
-    targetPage: digitalCheckout,
-    optimizeId: '3sSS81FKT6SXawegvxyK-A',
-  },
-
-  removeDigiSubAddressTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'noAddress',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 7,
-    canRun: () => detectCountryGroupId() === GBPCountries,
-    targetPage: digitalCheckout,
-    optimizeId: 'tdBE5yqdR0aQ19E06j1zRA',
-  },
-
   auAmountsTest: {
     type: 'AMOUNTS',
     variants: [
