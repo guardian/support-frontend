@@ -2,7 +2,6 @@
 
 import type { ContributionTypes } from 'helpers/contributions';
 import type { TickerSettings } from 'components/ticker/contributionTicker';
-import ausMomentEnabled from 'helpers/ausMoment';
 
 type CampaignCopy = {
   headerCopy?: string | React$Element<string>,
@@ -22,7 +21,7 @@ export type CampaignSettings = {
   goalReachedCopy?: React$Element<string>, // If set, the form will be replaced with this if goal reached
 };
 
-const currentCampaignPath: string | null = ausMomentEnabled('AU') ? 'au/contribute' : null;
+const currentCampaignPath: string | null = null;
 
 export const campaign: CampaignSettings = ({
   campaignCode: 'Aus_moment_2020',

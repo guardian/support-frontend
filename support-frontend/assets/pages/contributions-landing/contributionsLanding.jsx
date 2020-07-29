@@ -33,7 +33,6 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
 import { FocusStyleManager } from '@guardian/src-utilities';
-import ausMomentEnabled from 'helpers/ausMoment';
 
 
 if (!isDetailsSupported) {
@@ -45,7 +44,6 @@ if (!isDetailsSupported) {
 const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(() => initReducer(), true);
-const state = store.getState();
 
 if (!window.guardian.polyfillScriptLoaded) {
   gaEvent({
@@ -91,12 +89,7 @@ const setOneOffContributionCookie = () => {
 
 const campaignSettings = getCampaignSettings();
 
-const { countryId } = state.common.internationalisation;
-
-const thankYouClassModifiers = [
-  'contribution-thankyou',
-  ausMomentEnabled(countryId) ? 'aus-moment' : null,
-];
+const thankYouClassModifiers = ['contribution-thankyou'];
 
 const cssModifiers = campaignSettings && campaignSettings.cssModifiers ?
   campaignSettings.cssModifiers : [];
@@ -112,7 +105,6 @@ const contributionsLandingPage = (campaignCodeParameter: ?string) => (
     header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
     backgroundImageSrc={backgroundImageSrc}
-    isAusMomentVariant={ausMomentEnabled(countryId)}
   >
     <ContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}

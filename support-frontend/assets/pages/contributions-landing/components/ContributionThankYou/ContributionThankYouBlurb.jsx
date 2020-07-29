@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { ThankYouPageStage } from 'pages/contributions-landing/contributionsLandingReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import ausMomentEnabled from 'helpers/ausMoment';
 
 // ----- Types ----- //
 
@@ -32,18 +31,13 @@ const ContributionThankYouBlurb = (props: PropTypes) => {
   const { firstName, thankYouPageStage } = props;
   const showName = (firstName && firstName.length < 10 && firstName.trim() !== '');
 
-  const controlHeaderText = () => (showName ?
-    `Thank\xa0you\xa0${firstName}\nfor\xa0your\xa0valuable\ncontribution` : 'Thank\xa0you\xa0for\nyour\xa0valuable\ncontribution');
-
-  const ausMomentHeaderText = () => (showName ?
-    `Thank\xa0you\xa0${firstName}\xa0– you’ve done something powerful` : 'Thank\xa0you\xa0– you’ve done something powerful');
-
-  const headerText = ausMomentEnabled(props.countryId) ? ausMomentHeaderText() : controlHeaderText();
+  const headerText = showName ?
+    `Thank\xa0you\xa0${firstName}\nfor\xa0your\xa0valuable\ncontribution` : 'Thank\xa0you\xa0for\nyour\xa0valuable\ncontribution';
 
   return (
     <div className="gu-content__blurb gu-content__blurb--thank-you">
       <h1 className="gu-content__blurb-header">{headerText}</h1>
-      {thankYouPageStage !== 'thankYouSetPassword' && !ausMomentEnabled(props.countryId) &&
+      {thankYouPageStage !== 'thankYouSetPassword' &&
       <p className="gu-content__blurb-blurb gu-content__blurb-blurb--thank-you">
         {'Here are some additional ways that you can support us, and improve your experience with the Guardian.'}
       </p>
