@@ -5,7 +5,8 @@ import java.nio.file.{Files, Paths}
 
 import admin.ServersideAbTest
 import cats.implicits._
-import com.amazonaws.services.s3.AmazonS3
+import com.amazonaws.services.s3.AmazonS3URI
+import com.gu.aws.AwsS3Client
 import com.gu.support.config.Stage
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
@@ -15,7 +16,7 @@ import config.Configuration.MetricUrl
 import io.circe.parser._
 import io.circe.{Decoder, Encoder}
 
-import scala.io.{BufferedSource, Source}
+import scala.io.Source
 import scala.util.Try
 
 case class AllSettings(
@@ -35,19 +36,13 @@ object AllSettings {
 }
 
 object Settings {
-  private def fromBufferedSource[T: Decoder](buf: BufferedSource): Either[Throwable, T] = {
-    val settings = decode[T](buf.mkString)
-    Try(buf.close())
-    settings
-  }
 
-  def fromS3[T: Decoder](source: SettingsSource.S3)(implicit s3: AmazonS3): Either[Throwable, T] =
+  def fromS3[T: Decoder](source: SettingsSource.S3)(implicit s3: AwsS3Client): Either[Throwable, T] =
     for {
-      buf <- Either.catchNonFatal {
-        val inputStream = s3.getObject(source.bucket, source.key).getObjectContent
-        Source.fromInputStream(inputStream)
-      }.leftMap(ex => new RuntimeException(s"couldn't getObject content for source: $source", ex))
-      settings <- fromBufferedSource(buf)
+      buf <-
+        s3.fetchAsString(new AmazonS3URI("s3://" + source.bucket + "/" + source.key)).toEither
+      .leftMap(ex => new RuntimeException(s"couldn't getObject content for source: $source", ex))
+      settings <- decode[T](buf)
     } yield settings
 
   def fromLocalFile[T: Decoder](source: SettingsSource.LocalFile): Either[Throwable, T] =
@@ -55,7 +50,8 @@ object Settings {
       buf <- Either.catchNonFatal {
         Source.fromFile(source.path)
       }
-      settings <- fromBufferedSource(buf)
+      settings <- decode[T](buf.mkString)
+      _ <- Try(buf.close()).toEither
     } yield settings
 }
 

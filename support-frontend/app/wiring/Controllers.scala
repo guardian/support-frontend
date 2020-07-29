@@ -2,11 +2,10 @@ package wiring
 
 import assets.RefPath
 import com.gu.aws.AwsCloudWatchMetricPut
-import com.gu.aws.AwsCloudWatchMetricPut.{client, setupWarningRequest}
+import com.gu.aws.AwsCloudWatchMetricSetup.setupWarningRequest
 import controllers.{CSSElementForStage, _}
 import lib.ErrorController
 import play.api.BuiltInComponentsFromContext
-import services.RecaptchaService
 
 trait Controllers {
 
@@ -201,7 +200,7 @@ trait Controllers {
     actionRefiners,
     appConfig.guardianDomain,
     appConfig.identity.webappUrl,
-    () => AwsCloudWatchMetricPut(client)(setupWarningRequest(appConfig.stage))
+    () => AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(setupWarningRequest(appConfig.stage))
   )
 
   lazy val directDebitController = new DirectDebit(

@@ -1,13 +1,11 @@
 package com.gu.support.catalog
 
-import com.gu.aws.AwsCloudWatchMetricPut
-import com.gu.aws.AwsCloudWatchMetricPut.{catalogFailureRequest, client}
+import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.i18n.Currency
 import com.gu.support.catalog.GuardianWeekly.getProductRatePlan
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers.{BillingPeriod, Quarterly, SixWeekly}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 
 object CatalogService {
   def apply(environment: TouchPointEnvironment): CatalogService = new CatalogService(environment, new S3CatalogProvider(environment))
@@ -53,7 +51,7 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
       attempt.fold(
         err => {
           logger.error(s"Failed to load the catalog, error was: $err")
-          AwsCloudWatchMetricPut(client)(catalogFailureRequest(environment))
+          AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(AwsCloudWatchMetricSetup.catalogFailureRequest(environment))
           None
         },
         c => {

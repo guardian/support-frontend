@@ -1,6 +1,6 @@
-import LibraryVersions.{awsClientVersion, catsVersion, circeVersion, okhttpVersion}
+import LibraryVersions.{catsVersion, circeVersion, okhttpVersion}
 
-name := "support-rest"
+name := "module-rest"
 
 description := "Scala library to provide shared services to Guardian Support projects."
 
