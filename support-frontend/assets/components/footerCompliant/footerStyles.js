@@ -44,10 +44,6 @@ export const linksList = css`
 export const link = css`
   padding: ${space[2]}px ${space[1]}px;
 
-  & a {
-    text-decoration: none;
-  }
-
   ${until.tablet} {
     &:nth-of-type(2n) {
       padding-bottom: ${space[9]}px;
