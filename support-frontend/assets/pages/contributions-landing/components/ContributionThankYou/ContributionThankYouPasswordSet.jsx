@@ -16,7 +16,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 type PropTypes = {
   countryId: IsoCountry,
   countryGroupId: CountryGroupId,
-  email: string
 }
 
 // ----- Render ----- //
