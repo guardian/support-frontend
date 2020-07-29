@@ -10,6 +10,7 @@ import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from
 import AnimatedDots from 'components/spinners/animatedDots';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { createAuthenticationEventParams } from 'helpers/tracking/identityComponentEvent';
 
 // ---- Types ----- //
 
@@ -29,7 +30,7 @@ function buildUrl(email: string): string {
   const encodedReturn = encodeURIComponent(window.location);
   const encodedEmail = encodeURIComponent(email);
 
-  return `https://profile.${getBaseDomain()}/signin/current?returnUrl=${encodedReturn}&email=${encodedEmail}`;
+  return `https://profile.${getBaseDomain()}/signin/current?returnUrl=${encodedReturn}&email=${encodedEmail}&${createAuthenticationEventParams('signin_to_contribute')}`;
 
 }
 
