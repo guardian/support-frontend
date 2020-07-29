@@ -55,16 +55,16 @@ function Footer({
       <FooterContent border>
         <ul css={linksList}>
           <li css={link}>
-            <a href="/">Privacy Policy</a>
+            <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>
           </li>
           <li css={link}>
-            <a href="/">Contact us</a>
+            <a href="https://www.theguardian.com/help/contact-us">Contact us</a>
           </li>
           <li css={link}>
-            <a href="/">FAQs</a>
+            <a href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions">FAQs</a>
           </li>
           <li css={link}>
-            <a href="/">Terms & Conditions</a>
+            <a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">Terms & Conditions</a>
           </li>
         </ul>
       </FooterContent>
