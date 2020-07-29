@@ -67,11 +67,11 @@ function Footer({
             <a href="/">Terms & Conditions</a>
           </li>
         </ul>
+      </FooterContainer>
+      <FooterContainer paddingTop>
         <div css={backToTopLink}>
           <BackToTop />
         </div>
-      </FooterContainer>
-      <FooterContainer paddingTop>
         <span css={copyright}>{copyrightNotice}</span>
       </FooterContainer>
     </footer>

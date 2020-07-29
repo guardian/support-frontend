@@ -3,7 +3,7 @@
 import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography';
 import { brand, neutral, brandText, brandAlt } from '@guardian/src-foundations/palette';
-import { from } from '@guardian/src-foundations/mq';
+import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 
 export const componentFooter = css`
@@ -13,7 +13,6 @@ export const componentFooter = css`
   color: ${neutral[100]};
   a {
     color: ${brandText.anchorPrimary};
-    /* text-decoration: underline; */
     :hover {
       text-decoration: underline;
       color: ${brandAlt[400]};
@@ -23,6 +22,9 @@ export const componentFooter = css`
 
 export const copyright = css`
   font-size: 12px;
+  ${until.tablet} {
+    padding-top: ${space[3]}px;
+  }
 `;
 
 export const linksList = css`
@@ -30,9 +32,11 @@ export const linksList = css`
   list-style: none;
   columns: 2;
   column-rule: 1px solid ${brand[600]};
+  column-gap: ${space[12]}px;
 
   ${from.tablet} {
     columns: none;
+    column-gap: 0;
     display: flex;
   }
 `;
@@ -42,6 +46,12 @@ export const link = css`
 
   & a {
     text-decoration: none;
+  }
+
+  ${until.tablet} {
+    &:nth-of-type(2n) {
+      padding-bottom: ${space[9]}px;
+    }
   }
 
   ${from.tablet} {
@@ -63,8 +73,8 @@ export const backToTopLink = css`
   position: absolute;
   padding: ${space[1]}px;
   right: ${space[2]}px;
-  bottom: 0;
-  transform: translateY(50%);
+  top: 0;
+  transform: translateY(-50%);
 
   & a:hover {
     text-decoration: none;
