@@ -1,7 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
 import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
-import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
 
@@ -9,7 +8,6 @@ const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
-const digitalCheckout = '/subscribe/digital/checkout';
 
 export const tests: Tests = {
   usAmountsTest: {
