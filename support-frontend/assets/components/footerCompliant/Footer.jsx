@@ -87,6 +87,7 @@ Footer.defaultProps = {
   privacyPolicy: false,
   disclaimer: false,
   faqsLink: 'https://www.theguardian.com/help',
+  termsConditionsLink: '',
   countryGroupId: GBPCountries,
   children: [],
 };
