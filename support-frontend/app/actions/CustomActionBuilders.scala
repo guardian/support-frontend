@@ -8,7 +8,6 @@ import play.api.mvc._
 import play.filters.csrf._
 import services.{AsyncAuthenticationService, AuthenticatedIdUser}
 import utils.FastlyGEOIP
-import lib.AuthenticationComponentEvent._
 import scala.concurrent.ExecutionContext
 
 object CustomActionBuilders {
@@ -44,7 +43,7 @@ class CustomActionBuilders(
       idSkipConfirmation &
       idSkipValidationReturn &
       "clientId" -> clientId &
-      createAuthenticationComponentEventTuple(SigninRedirectForSupporters)).toString
+      "componentEventParams" -> "componentType=identityauthentication&componentId=signin_redirect_for_supporters").toString
 
   def onUnauthenticated(identityClientId: String): RequestHeader => Result = request => {
     SeeOther(idWebAppRegisterUrl(request.uri, identityClientId))
