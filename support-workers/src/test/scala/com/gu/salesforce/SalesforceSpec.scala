@@ -106,7 +106,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  it should "be able to add a related contact record" in {
+  it should "be able to add a related contact record" ignore {
     val service = new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
 
     val name = "integration-test-recipient"
