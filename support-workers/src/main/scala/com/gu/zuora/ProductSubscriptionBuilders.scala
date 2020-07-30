@@ -16,6 +16,7 @@ import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
+import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
@@ -74,7 +75,7 @@ object ProductSubscriptionBuilders {
       }
       val contractAcceptanceDate = contractEffectiveDate.plusDays(delay)
 
-      val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(environment, fixedTerm = false), digitalPack.describe)
+      val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(environment, Direct), digitalPack.describe)
 
       val subscriptionData = buildProductSubscription(
         requestId,
@@ -135,7 +136,7 @@ object ProductSubscriptionBuilders {
       case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
     }
 
-    val productRatePlanId = validateRatePlan(paper.productRatePlan(environment, fixedTerm = false), paper.describe)
+    val productRatePlanId = validateRatePlan(paper.productRatePlan(environment, Direct), paper.describe)
 
     val subscriptionData = buildProductSubscription(
       requestId,
@@ -165,9 +166,7 @@ object ProductSubscriptionBuilders {
         case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a Guardian Weekly subscription.", e)
       }
 
-      val gift = readerType == ReaderType.Gift
-
-      val recurringProductRatePlanId = validateRatePlan(guardianWeekly.productRatePlan(environment, fixedTerm = gift), guardianWeekly.describe)
+      val recurringProductRatePlanId = validateRatePlan(guardianWeekly.productRatePlan(environment, readerType), guardianWeekly.describe)
 
       val promotionProductRatePlanId = if (isIntroductoryPromotion(guardianWeekly.billingPeriod, maybePromoCode)) {
         guardianWeekly.introductoryRatePlan(environment).map(_.id).getOrElse(recurringProductRatePlanId)

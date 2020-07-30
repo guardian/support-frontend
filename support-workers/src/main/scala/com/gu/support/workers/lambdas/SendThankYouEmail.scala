@@ -14,6 +14,8 @@ import com.gu.support.promotions.{PromoCode, Promotion, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers._
 import com.gu.support.workers.states.{PaymentMethodWithSchedule, SendThankYouEmailState}
+import com.gu.support.zuora.api.ReaderType
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._
@@ -47,13 +49,14 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
     case _ => Future.successful(None)
   }
 
-  def getProductRatePlanId(product: ProductType, isTestUser: Boolean, isGift: Boolean): ProductRatePlanId = {
+  def getProductRatePlanId(product: ProductType, isTestUser: Boolean, readerType: ReaderType): ProductRatePlanId = {
     val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
-    product.productRatePlan(touchpointEnvironment, isGift).map(_.id).getOrElse("")
+    product.productRatePlan(touchpointEnvironment, readerType).map(_.id).getOrElse("")
   }
 
   def sendEmail(thankYouEmailService: EmailService, state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
-    val productRatePlanId = getProductRatePlanId(state.product, state.user.isTestUser, state.giftRecipient.isDefined)
+    val readerType = if (state.giftRecipient.isDefined) Gift else Direct
+    val productRatePlanId = getProductRatePlanId(state.product, state.user.isTestUser, readerType)
     val maybePromotion = getAppliedPromotion(
       servicesProvider.forUser(state.user.isTestUser).promotionService,
       state.promoCode,

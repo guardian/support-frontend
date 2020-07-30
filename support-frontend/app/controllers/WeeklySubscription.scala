@@ -15,6 +15,7 @@ import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.{DefaultPromotions, ProductPromotionCopy, PromotionServiceProvider}
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.{RecaptchaConfigProvider, StringsConfig}
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -79,7 +80,8 @@ class WeeklySubscription(
       DefaultPromotions.GuardianWeekly.NonGift.all
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val promoCodes = defaultPromos ++ queryPromos
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, orderIsAGift)
+    val readerType = if (orderIsAGift) Gift else Direct
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, readerType)
     // To see if there is any promotional copy in place for this page we need to get a country in the current region (country group)
     // this is because promotions apply to countries not regions. We can use any country however because the promo tool UI only deals
     // with regions and then adds all the countries for that region to the promotion
@@ -143,6 +145,7 @@ class WeeklySubscription(
     else
       DefaultPromotions.GuardianWeekly.NonGift.all
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ defaultPromos
+    val readerType = if (orderIsAGift) Gift else Direct
 
     subscriptionCheckout(
       title,
@@ -153,7 +156,7 @@ class WeeklySubscription(
       Some(csrf),
       idUser,
       uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(GuardianWeekly, promoCodes, orderIsAGift),
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(GuardianWeekly, promoCodes, readerType),
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
