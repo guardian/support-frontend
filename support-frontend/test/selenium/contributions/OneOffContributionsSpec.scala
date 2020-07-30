@@ -52,10 +52,10 @@ class OneOffContributionsSpec extends AnyFeatureSpec
       When("the user selects the one-time option")
       landingPage.clickOneOff
 
-      And("he/she clicks the other-amount button")
+      And("they click the other-amount button")
       landingPage.clickOtherAmount
 
-      And("he/she manually enters an amount in the other-amount field")
+      And("they manually enter an amount in the other-amount field")
       landingPage.enterAmount(stripePayment)
 
       Given("that the user selects to pay with Stripe")
