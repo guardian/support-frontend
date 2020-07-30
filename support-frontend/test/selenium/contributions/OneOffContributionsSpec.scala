@@ -58,9 +58,6 @@ class OneOffContributionsSpec extends AnyFeatureSpec
       And("he/she manually enters an amount in the other-amount field")
       landingPage.enterAmount(stripePayment)
 
-      Given("The user fills in their details correctly")
-      landingPage.fillInPersonalDetails(hasNameFields = false)
-
       Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")
       landingPage.selectStripePayment()

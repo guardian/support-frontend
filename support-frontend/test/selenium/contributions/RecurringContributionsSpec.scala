@@ -39,10 +39,6 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       When("the user selects the monthly option")
       landingPage.clickMonthly
 
-      Given("The user fills in their details correctly")
-      landingPage.clearForm(hasNameFields = true)
-      landingPage.fillInPersonalDetails(hasNameFields = true)
-
       Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")
       landingPage.selectStripePayment()
@@ -77,8 +73,6 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       landingPage.clickAnnual
 
       Given("The user fills in their details correctly")
-      landingPage.clearForm(hasNameFields = true)
-      landingPage.fillInPersonalDetails(hasNameFields = true)
       landingPage.selectState
 
       Given("that the user selects to pay with Stripe")

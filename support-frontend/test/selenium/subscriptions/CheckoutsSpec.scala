@@ -8,7 +8,6 @@ import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen, Ignore}
 import selenium.subscriptions.pages._
 import selenium.util._
 
-@Ignore
 class CheckoutsSpec extends AnyFeatureSpec
   with GivenWhenThen
   with BeforeAndAfter
@@ -34,26 +33,26 @@ class CheckoutsSpec extends AnyFeatureSpec
     driverConfig.quit()
   }
 
-   Feature("Digital Pack checkout") {
-     Scenario("Stripe checkout") {
-       testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
-     }
-   }
+  Feature("Digital Pack checkout") {
+    Scenario("User already logged in - Stripe checkout") {
+      testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
+    }
+  }
 
   Feature("Paper checkout") {
-    Scenario("Direct Debit checkout") {
+    Scenario("User already logged in - Direct Debit checkout") {
       testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
     }
   }
 
   Feature("Guardian Weekly checkout") {
-    Scenario("Direct Debit checkout") {
+    Scenario("User already logged in - Direct Debit checkout") {
       testCheckout("Guardian Weekly", new GuardianWeeklyCheckout, new WeeklyProductPage, payWithDirectDebit)
     }
   }
 
   Feature("Guardian Weekly gift checkout") {
-    Scenario("Stripe checkout") {
+    Scenario("User already logged in - Stripe checkout") {
       testCheckout("Guardian Weekly gift", new GuardianWeeklyGiftCheckout, new WeeklyGiftProductPage, payWithStripe)
     }
   }
@@ -66,25 +65,6 @@ class CheckoutsSpec extends AnyFeatureSpec
 
     Given(s"that a user goes to the $checkoutName checkout page")
     goTo(checkoutPage)
-
-    Then("they should be redirected to register as an Identity user")
-    val register = Register(testUser, "digital")
-    assert(register.firstPageHasLoaded)
-
-    Given("that the user fills in their email address")
-    register.fillInEmail()
-
-    When("they click the next button")
-    register.next()
-
-    Then("they should be taken to the second register page")
-    assert(register.secondPageHasLoaded)
-
-    Given("that the user fills in the rest of their details")
-    register.fillInPersonalDetails()
-
-    When("they click the create account button")
-    register.createAccount()
 
     Then(s"they should be redirected to the $checkoutName checkout page")
     assert(checkoutPage.pageHasLoaded)
