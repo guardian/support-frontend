@@ -17,3 +17,5 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
 )
+
+resolvers ++= Seq(Resolver.bintrayRepo("guardian", "ophan")) //event producer library

@@ -2,6 +2,7 @@ package wiring
 
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
+import com.gu.aws.AwsS3Client
 import com.gu.okhttp.RequestRunners
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.getaddressio.GetAddressIOService
@@ -12,7 +13,6 @@ import controllers.DynamoTableAsyncForUser
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
-import services.aws.AwsS3Client.s3
 import services.paypal.PayPalNvpServiceProvider
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 
@@ -20,6 +20,7 @@ trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
 
   implicit private val implicitWs = wsClient
+  implicit private val s3Client: AwsS3Client = AwsS3Client
 
   lazy val membersDataService = MembersDataService(appConfig.membersDataServiceApiUrl)
 

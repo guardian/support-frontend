@@ -2,8 +2,8 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.AllSettingsProvider
-import com.gu.aws.AwsCloudWatchMetricPut
-import com.gu.aws.AwsCloudWatchMetricPut.{client, createSetupIntentRequest}
+import com.gu.aws.AwsCloudWatchMetricPut.client
+import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.support.config.{Stage, StripeConfig}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
@@ -52,7 +52,7 @@ class StripeController(
 
     val v2RecaptchaToken = request.body.token
 
-    val cloudwatchEvent = createSetupIntentRequest(stage, "v2Recaptcha")
+    val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "v2Recaptcha")
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
     val testPublicKeys = Set(testStripeConfig.australiaAccount.publicKey,
@@ -87,7 +87,7 @@ class StripeController(
 
   def createSetupIntentPRB: Action[SetupIntentRequest] = PrivateAction.async(circe.json[SetupIntentRequest]) { implicit request =>
 
-    val cloudwatchEvent = createSetupIntentRequest(stage, "PRB-CSRF-only")
+    val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "PRB-CSRF-only")
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
     stripeService(request.body.stripePublicKey).fold(
@@ -102,7 +102,7 @@ class StripeController(
   // This endpoint is deprecated
   def createSetupIntentWithAuth: Action[AnyContent] = Action.async {
     implicit request =>
-      val cloudwatchEvent = createSetupIntentRequest(stage, "Deprecated-AuthorisedEndpoint");
+      val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "Deprecated-AuthorisedEndpoint");
       AwsCloudWatchMetricPut(client)(cloudwatchEvent)
       Future.successful(Gone)
   }

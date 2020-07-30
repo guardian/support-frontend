@@ -7,17 +7,15 @@ import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.aws.AwsCloudWatchMetricPut
-import com.gu.aws.AwsCloudWatchMetricPut.{client, paymentSuccessRequest}
+import com.gu.aws.AwsCloudWatchMetricSetup.paymentSuccessRequest
 import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.catalog.{GuardianWeekly, Contribution => _, DigitalPack => _, Paper => _, _}
-import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendAcquisitionEventState
-import io.circe.generic.auto._
 import ophan.thrift.event.{PrintOptions, PrintProduct, Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 
@@ -68,7 +66,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
     val maybePaymentProvider = state.paymentOrRedemptionData.left.toOption.map(_.paymentMethod).map(paymentProviderFromPaymentMethod)
     val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, maybePaymentProvider, state.product)
-    AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+    AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
 
     result
   }

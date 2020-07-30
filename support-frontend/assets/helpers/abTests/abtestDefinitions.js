@@ -1,7 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
 import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
-import { detect as detectCountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Tests ----- //
 
@@ -9,7 +8,6 @@ const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
-const digitalCheckout = '/subscribe/digital/checkout';
 
 export const tests: Tests = {
   usAmountsTest: {
@@ -33,53 +31,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: usOnlyLandingPage,
     seed: 5,
-  },
-
-  fancyAddressTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'loqate',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: false,
-    referrerControlled: false,
-    seed: 3,
-    targetPage: digitalCheckout,
-    optimizeId: '3sSS81FKT6SXawegvxyK-A',
-  },
-
-  removeDigiSubAddressTest: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'noAddress',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    seed: 7,
-    canRun: () => detectCountryGroupId() === GBPCountries,
-    targetPage: digitalCheckout,
-    optimizeId: 'tdBE5yqdR0aQ19E06j1zRA',
   },
 
   auAmountsTest: {
