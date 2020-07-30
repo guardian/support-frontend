@@ -72,7 +72,7 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       When("the user selects the annual option")
       landingPage.clickAnnual
 
-      Given("The user fills in their details correctly")
+      Given("the user fills in their details correctly")
       landingPage.selectState
 
       Given("that the user selects to pay with Stripe")

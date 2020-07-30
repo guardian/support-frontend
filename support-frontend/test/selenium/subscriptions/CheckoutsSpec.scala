@@ -69,7 +69,7 @@ class CheckoutsSpec extends AnyFeatureSpec
     Then(s"they should be redirected to the $checkoutName checkout page")
     assert(checkoutPage.pageHasLoaded)
 
-    Given("The user fills in their details correctly")
+    Given("the user fills in their details correctly")
     checkoutPage.fillForm()
 
     paymentFunction(checkoutPage)
