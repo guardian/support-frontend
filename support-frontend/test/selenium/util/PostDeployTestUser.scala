@@ -14,10 +14,6 @@ trait TestUser {
 
 class PostDeployTestUser(driverConfig: DriverConfig) extends TestUser {
 
-  private val testUsers = TestUsernames(
-    com.gu.identity.testing.usernames.Encoder.withSecret(Config.testUsersSecret),
-    recency = ofDays(2)
-  )
   private val client = new OkHttpClient()
   private val requestToIdapi = new Request.Builder()
     .url(Config.idapiNewTestUserUrl)
@@ -39,6 +35,6 @@ class PostDeployTestUser(driverConfig: DriverConfig) extends TestUser {
     }
   }
 
-  val username = testUsers.generate()
+  val username = "postDeployTestUser"
   addTestUserCookies(username)
 }

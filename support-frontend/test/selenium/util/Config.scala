@@ -21,7 +21,6 @@ object Config {
 
   val paypalSandbox = conf.getString("paypal.sandbox.url")
 
-  val testUsersSecret = conf.getString("identity.test.users.secret")
   val idapiNewTestUserUrl = conf.getString("idapi.newTestUser.url")
 
   val idapiClientAccessTokenName = conf.getString("idapi.clientAccessToken.name")
