@@ -21,6 +21,8 @@ import { BackToTop } from './BackToTop';
 type PropTypes = {|
   privacyPolicy: boolean,
   disclaimer: boolean,
+  faqsLink: string,
+  termsConditionsLink: string,
   countryGroupId: CountryGroupId,
   children: Node,
 |};
@@ -29,11 +31,8 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function Footer({
-  disclaimer, privacyPolicy, children, countryGroupId,
+  disclaimer, privacyPolicy, children, countryGroupId, faqsLink, termsConditionsLink,
 }: PropTypes) {
-
-  // It would probably be helpful to replace the Content and Rows components with emotion
-
   return (
     <footer css={componentFooter} role="contentinfo">
       {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
@@ -61,11 +60,13 @@ function Footer({
             <a href="https://www.theguardian.com/help/contact-us">Contact us</a>
           </li>
           <li css={link}>
-            <a href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions">FAQs</a>
+            <a href={faqsLink}>FAQs</a>
           </li>
-          <li css={link}>
-            <a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">Terms & Conditions</a>
-          </li>
+          {termsConditionsLink &&
+            <li css={link}>
+              <a href={termsConditionsLink}>Terms & Conditions</a>
+            </li>
+          }
         </ul>
       </FooterContent>
       <FooterContent paddingTop>
@@ -85,6 +86,7 @@ function Footer({
 Footer.defaultProps = {
   privacyPolicy: false,
   disclaimer: false,
+  faqsLink: 'https://www.theguardian.com/help',
   countryGroupId: GBPCountries,
   children: [],
 };
