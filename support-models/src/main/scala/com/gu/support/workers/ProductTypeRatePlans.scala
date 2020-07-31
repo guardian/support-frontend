@@ -39,13 +39,13 @@ object ProductTypeRatePlans {
     )
   }
 
-  implicit val digitalRatePlan: ProductTypeRatePlans[DigitalPack] = (product: DigitalPack, environment: TouchPointEnvironment, fixedTerm) =>
+  implicit val digitalRatePlan: ProductTypeRatePlans[DigitalPack] = (product: DigitalPack, environment: TouchPointEnvironment, readerType) =>
     product.catalogType.ratePlans.getOrElse(environment, Nil).find(productRatePlan =>
       (productRatePlan.billingPeriod == product.billingPeriod && productRatePlan.readerType == product.readerType) ||
         (productRatePlan.readerType == Corporate && product.readerType == Corporate) // We don't care about the billing period for corporates
     )
 
-  implicit val paperRatePlan: ProductTypeRatePlans[Paper] = (product: Paper, environment: TouchPointEnvironment, fixedTerm) =>
+  implicit val paperRatePlan: ProductTypeRatePlans[Paper] = (product: Paper, environment: TouchPointEnvironment, readerType) =>
     product.catalogType.ratePlans.getOrElse(environment, Nil).find(productRatePlan =>
       productRatePlan.productOptions == product.productOptions &&
         productRatePlan.fulfilmentOptions == product.fulfilmentOptions
