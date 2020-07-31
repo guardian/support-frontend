@@ -7,7 +7,7 @@ import com.gu.support.promotions._
 import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.workers.BillingPeriod
 import com.gu.support.zuora.api.ReaderType
-import com.gu.support.zuora.api.ReaderType.Direct
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.Months
 
 import scala.math.BigDecimal.RoundingMode
@@ -73,7 +73,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       price.value,
       saving,
       price.currency,
-      productRatePlan.readerType,
+      productRatePlan.readerType == Gift,
       promotionSummaries
     )
   }

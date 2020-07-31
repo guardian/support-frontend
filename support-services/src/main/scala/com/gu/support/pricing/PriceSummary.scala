@@ -9,7 +9,7 @@ case class PriceSummary(
   price: BigDecimal,
   savingVsRetail: Option[Int],
   currency: Currency,
-  readerType: ReaderType,
+  fixedTerm: Boolean,
   promotions: List[PromotionSummary]
 )
 
