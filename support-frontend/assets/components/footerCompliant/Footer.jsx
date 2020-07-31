@@ -3,6 +3,8 @@
 // ----- Imports ----- //
 
 import React, { Children, type Node } from 'react';
+import { ThemeProvider } from 'emotion-theming';
+import { Link, linkBrand } from '@guardian/src-link';
 
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
@@ -52,22 +54,24 @@ function Footer({
         </FooterContent>
       }
       <FooterContent border>
-        <ul css={linksList}>
-          <li css={link}>
-            <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>
-          </li>
-          <li css={link}>
-            <a href="https://www.theguardian.com/help/contact-us">Contact us</a>
-          </li>
-          <li css={link}>
-            <a href={faqsLink}>FAQs</a>
-          </li>
-          {termsConditionsLink &&
+        <ThemeProvider theme={linkBrand}>
+          <ul css={linksList}>
             <li css={link}>
-              <a href={termsConditionsLink}>Terms & Conditions</a>
+              <Link subdued href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</Link>
             </li>
-          }
-        </ul>
+            <li css={link}>
+              <Link subdued href="https://www.theguardian.com/help/contact-us">Contact us</Link>
+            </li>
+            <li css={link}>
+              <Link subdued href={faqsLink}>FAQs</Link>
+            </li>
+            {termsConditionsLink &&
+              <li css={link}>
+                <Link subdued href={termsConditionsLink}>Terms & Conditions</Link>
+              </li>
+            }
+          </ul>
+        </ThemeProvider>
       </FooterContent>
       <FooterContent paddingTop>
         <div css={backToTopLink}>

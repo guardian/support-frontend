@@ -2,15 +2,17 @@
 
 import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography';
-import { brand, neutral, brandText, brandAlt } from '@guardian/src-foundations/palette';
+import { brand, neutral, brandText, brandAlt, brandBackground } from '@guardian/src-foundations/palette';
 import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 
 export const componentFooter = css`
-  background-color: ${brand[400]};
+  background-color: ${brandBackground.primary};
   ${textSans.small()};
   font-weight: 400;
   color: ${neutral[100]};
+
+  /* TODO: Check if we can remove this; depends on styles applied to the legal text passed in */
   a {
     color: ${brandText.anchorPrimary};
     :hover {
@@ -44,10 +46,6 @@ export const linksList = css`
 export const link = css`
   padding: ${space[2]}px ${space[1]}px;
 
-  & a {
-    text-decoration: none;
-  }
-
   ${until.tablet} {
     &:nth-of-type(2n) {
       padding-bottom: ${space[9]}px;
@@ -69,7 +67,7 @@ export const link = css`
 `;
 
 export const backToTopLink = css`
-  background-color: ${brand[400]};
+  background-color: ${brandBackground.primary};
   position: absolute;
   padding: ${space[1]}px;
   right: ${space[2]}px;
