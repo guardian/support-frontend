@@ -4,16 +4,16 @@ import java.security.SecureRandom
 
 import com.gu.support.redemption.generator.ConstructCode.GenerateGiftCode
 
-object GiftGenerator {
+object GiftCodeGenerator {
 
-  lazy val randomGiftCodes = {
+  lazy val randomGiftCodes: Iterator[GenerateGiftCode] = {
     val gen = new SecureRandom()
     val ints = Iterator.continually(gen.nextInt())
     apply(ints)
   }
 
   def apply(random: Iterator[Int]): Iterator[GenerateGiftCode] =
-    IntsToTypableString(random).map(ConstructCode.apply)
+    CodeSuffixGenerator(random).map(ConstructCode.apply)
 
 }
 
@@ -43,10 +43,10 @@ object ConstructCode {
   }
 
   trait GenerateGiftCode {
-    def apply(duration: GiftDuration): GiftCode
+    def withDuration(duration: GiftDuration): GiftCode
   }
 
-  def apply(code: IntsToTypableString.Code): GenerateGiftCode =
+  def apply(code: CodeSuffixGenerator.CodeSuffix): GenerateGiftCode =
     (duration: GiftDuration) => {
       val init = prefix + duration.code + "-"
       GiftCode(init + code.value).get
@@ -54,31 +54,27 @@ object ConstructCode {
 
 }
 
-object IntsToTypableString {
+object CodeSuffixGenerator {
 
-  case class Code private(value: String) extends AnyVal
-  object Code {
-    def apply(value: String): Option[Code] =
+  case class CodeSuffix private(value: String) extends AnyVal
+  object CodeSuffix {
+    def apply(value: String): Option[CodeSuffix] =
       Some(value)
         .filter(_.matches(raw"""[a-km-z02-9]{6}"""))
-        .map(new Code(_))
+        .map(new CodeSuffix(_))
   }
 
-  def apply(random: Iterator[Int]): Iterator[Code] = {
-    random
+  def apply(random: Iterator[Int]): Iterator[CodeSuffix] =
+    random.grouped(6).map(codeFromGroup).map(CodeSuffix.apply).map(_.get)
+
+  def codeFromGroup(groupedInts: Seq[Int]): String = {
+    val chars = groupedInts
       .map(int => java.lang.Integer.toString(int, 34).last)
       .map {
         case '1' => 'y'
         case 'l' => 'z'
         case other => other
       }
-      .grouped(6)
-      .map(_.toArray)
-      .map(new String(_))
-      .map(Code.apply)
-      .map(_.get)
-
-
+    new String(chars.toArray)
   }
-
 }
