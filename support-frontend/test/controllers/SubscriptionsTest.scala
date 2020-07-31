@@ -142,7 +142,12 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedOutActionRefiner)
       status(result) mustBe 303
-      header("Location", result).value must startWith("https://identity-url.local")
+      header("Location", result).value must be("https://identity-url.local/signin?" +
+        "returnUrl=/&" +
+        "skipConfirmation=true&" +
+        "skipValidationReturn=true&" +
+        "clientId=subscriptions&" +
+        "componentEventParams=componentType%3Didentityauthentication%26componentId%3Dsignin_redirect_for_supporters")
     }
 
     "redirect user with a dp to ty page" in new DigitalSubscriptionsDisplayForm {

@@ -28,6 +28,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import AusMomentSpreadTheWord from 'components/spreadTheWord/ausMomentSpreadTheWord';
 import ausMomentEnabled from 'helpers/ausMoment';
+import { createAuthenticationEventParams } from 'helpers/tracking/identityComponentEvent';
 
 // ----- Types ----- //
 
@@ -87,7 +88,7 @@ const createSignInLink = (email: string, csrf: string, contributionType: Contrib
     .then((data) => {
       if (data && data.signInLink) {
         trackComponentClick(`sign-into-the-guardian-link-${contributionType}`);
-        window.location.href = data.signInLink;
+        window.location.href = `${data.signInLink}&${createAuthenticationEventParams('contribution_thankyou_signin')}`;
       } else {
         throw new Error('Encrypted sign in link missing from identity service response');
       }
@@ -95,7 +96,7 @@ const createSignInLink = (email: string, csrf: string, contributionType: Contrib
     .catch((error) => {
       console.error(error);
       trackComponentClick(`sign-into-the-guardian-link-error-${contributionType}`);
-      window.location.href = 'https://profile.theguardian.com/signin';
+      window.location.href = `https://profile.theguardian.com/signin?${createAuthenticationEventParams('contribution_thankyou_signin')}`;
     });
 };
 
