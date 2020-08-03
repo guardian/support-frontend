@@ -1,4 +1,5 @@
 @import admin.settings.AllSettings
+@import admin.ServersideAbTest
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import com.gu.i18n.Country
 @import com.gu.identity.model.{User => IdUser}
@@ -8,6 +9,7 @@
 @import models.GeoData
 @import controllers.ContributionsPaymentMethodConfigs
 
+@import admin.ServersideAbTest.Participation
 @(
   title: String,
   id: String,
@@ -26,6 +28,7 @@
   shareImageUrl: String,
   shareUrl: String,
   v2recaptchaConfigPublicKey: String,
+  participation: Option[Participation]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl)) {
@@ -115,5 +118,5 @@
   window.guardian.recaptchaEnabled = @settings.switches.enableRecaptchaFrontend.isOn
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
   </script>
-  <script defer id="stripe-js" src="https://js.stripe.com/v3/?advancedFraudSignals=false"></script>
+  <script defer id="stripe-js" src=@{s"https://js.stripe.com/v3/${if (participation.contains(ServersideAbTest.Variant)) "?advancedFraudSignals=false" else ""}"}></script>"
 }
