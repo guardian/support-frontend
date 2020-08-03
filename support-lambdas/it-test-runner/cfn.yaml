@@ -154,5 +154,5 @@ Resources:
             Unit: Count
       ComparisonOperator: LessThanThreshold
       Threshold: 100
-      EvaluationPeriods: 25
+      EvaluationPeriods: 24
       TreatMissingData: breaching
