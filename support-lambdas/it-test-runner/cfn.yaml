@@ -138,7 +138,7 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 900
+            Period: 3600
             Unit: Count
         - Id: m2
           ReturnData: false
@@ -150,9 +150,9 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 900
+            Period: 3600
             Unit: Count
       ComparisonOperator: LessThanThreshold
       Threshold: 100
-      EvaluationPeriods: 5
+      EvaluationPeriods: 25
       TreatMissingData: breaching
