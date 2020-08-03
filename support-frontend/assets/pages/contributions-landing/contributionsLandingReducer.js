@@ -85,6 +85,7 @@ export type AmazonPayLibrary = {
 }
 
 export type AmazonPayData = {
+  hasBegunLoading: boolean,
   amazonPayLibrary: AmazonPayLibrary,
   walletWidgetReady: boolean,
   orderReferenceId: string | null,
@@ -93,12 +94,19 @@ export type AmazonPayData = {
   fatalError: boolean,
 }
 
+export type PayPalData = {
+  hasBegunLoading: boolean,
+  hasLoaded: boolean,
+  buttonReady: boolean,
+}
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries, // TODO clean up when rest of Stripe Checkout is removed
   amazonPayData: AmazonPayData,
+  payPalData: PayPalData,
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
@@ -114,8 +122,6 @@ type FormState = {
   guestAccountCreationToken: ?string,
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,
-  payPalHasLoaded: boolean,
-  payPalButtonReady: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
@@ -158,6 +164,7 @@ function createFormReducer() {
       },
     },
     amazonPayData: {
+      hasBegunLoading: false,
       amazonPayLibrary: {
         amazonLoginObject: null,
         amazonPaymentsObject: null,
@@ -168,6 +175,11 @@ function createFormReducer() {
       paymentSelected: false,
       hasAccessToken: false,
       fatalError: false,
+    },
+    payPalData: {
+      hasBegunLoading: false,
+      hasLoaded: false,
+      buttonReady: false,
     },
     formData: {
       firstName: null,
@@ -216,8 +228,6 @@ function createFormReducer() {
     paymentError: null,
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
-    payPalHasLoaded: false,
-    payPalButtonReady: false,
     hasSeenDirectDebitThankYouCopy: false,
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
@@ -258,6 +268,15 @@ function createFormReducer() {
               ...state.thirdPartyPaymentLibraries.ANNUAL,
               ...action.thirdPartyPaymentLibraryByContrib.ANNUAL,
             },
+          },
+        };
+
+      case 'SET_AMAZON_PAY_HAS_BEGUN_LOADING':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            hasBegunLoading: true,
           },
         };
 
@@ -462,11 +481,32 @@ function createFormReducer() {
       case 'UPDATE_USER_FORM_DATA':
         return { ...state, formData: { ...state.formData, ...action.userFormData } };
 
+      case 'SET_PAYPAL_HAS_BEGUN_LOADING':
+        return {
+          ...state,
+          payPalData: {
+            ...state.payPalData,
+            hasBegunLoading: true,
+          },
+        };
+
       case 'SET_PAYPAL_HAS_LOADED':
-        return { ...state, payPalHasLoaded: true };
+        return {
+          ...state,
+          payPalData: {
+            ...state.payPalData,
+            hasLoaded: true,
+          },
+        };
 
       case 'UPDATE_PAYPAL_BUTTON_READY':
-        return { ...state, payPalButtonReady: action.ready };
+        return {
+          ...state,
+          payPalData: {
+            ...state.payPalData,
+            buttonReady: action.ready,
+          },
+        };
 
       case 'SET_TICKER_GOAL_REACHED':
         return { ...state, tickerGoalReached: true };

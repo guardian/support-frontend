@@ -133,7 +133,7 @@ function enableOrDisableForm() {
       && userCanContributeWithoutSigningIn
       && (!recaptchaRequired || recaptchaVerified);
 
-    dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalButtonReady));
+    dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalData.buttonReady));
   };
 }
 

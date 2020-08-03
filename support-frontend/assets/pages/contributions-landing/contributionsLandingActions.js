@@ -46,11 +46,15 @@ import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalA
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { AmazonPay, DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/stripe';
 import type { Option } from 'helpers/types/option';
+import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setupAmazonPay } from 'helpers/paymentIntegrations/amazonPay';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -64,6 +68,7 @@ export type Action =
   | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
+  | { type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING' }
   | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
   | { type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT', amazonPaymentsObject: Object }
   | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY', isReady: boolean }
@@ -93,6 +98,7 @@ export type Action =
   | { type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete: boolean }
   | { type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret: string }
   | { type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified: boolean }
+  | { type: 'SET_PAYPAL_HAS_BEGUN_LOADING' }
   | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -102,6 +108,8 @@ export type Action =
   | { type: 'UPDATE_PAYPAL_BUTTON_READY', ready: boolean }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
+
+const setPayPalHasBegunLoading = (): Action => ({ type: 'SET_PAYPAL_HAS_BEGUN_LOADING' });
 
 const updatePayPalButtonReady = (ready: boolean): Action =>
   ({ type: 'UPDATE_PAYPAL_BUTTON_READY', ready });
@@ -222,6 +230,8 @@ const setThirdPartyPaymentLibrary =
     thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
   });
 
+const setAmazonPayHasBegunLoading = (): Action => ({ type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING' });
+
 const setAmazonPayLoginObject = (amazonLoginObject: Object): Action => ({
   type: 'SET_AMAZON_PAY_LOGIN_OBJECT',
   amazonLoginObject,
@@ -251,6 +261,29 @@ const setUserTypeFromIdentityResponse =
         ({ type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse })));
     };
 
+// We defer loading 3rd party payment SDKs until the user selects one, or one is selected by default
+const loadPaymentSdkIfNecessary = (
+  paymentMethod: PaymentMethod,
+  contributionType: ContributionType,
+  countryGroupId: CountryGroupId,
+  isTestUser: boolean,
+  payPalHasBegunLoading: boolean,
+  amazonPayHasBegunLoading: boolean,
+) => (dispatch: Function): void => {
+  if (
+    paymentMethod === PayPal &&
+    contributionType !== 'ONE_OFF' &&
+    !payPalHasBegunLoading
+  ) {
+    dispatch(setPayPalHasBegunLoading());
+    loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
+  }
+
+  if (paymentMethod === AmazonPay && !amazonPayHasBegunLoading) {
+    dispatch(setAmazonPayHasBegunLoading());
+    setupAmazonPay(countryGroupId, dispatch, isTestUser);
+  }
+};
 
 const updateContributionTypeAndPaymentMethod =
   (contributionType: ContributionType, paymentMethodToSelect: PaymentMethod) =>
@@ -731,6 +764,7 @@ export {
   updateBillingCountry,
   updateUserFormData,
   setThirdPartyPaymentLibrary,
+  setAmazonPayHasBegunLoading,
   setAmazonPayLoginObject,
   setAmazonPayPaymentsObject,
   setAmazonPayWalletWidgetReady,
@@ -766,6 +800,8 @@ export {
   setStripeCardFormComplete,
   setStripeSetupIntentClientSecret,
   setStripeRecurringRecaptchaVerified,
+  setPayPalHasBegunLoading,
   updatePayPalButtonReady,
   updateRecaptchaToken,
+  loadPaymentSdkIfNecessary,
 };
