@@ -270,18 +270,20 @@ const loadPaymentSdkIfNecessary = (
   payPalHasBegunLoading: boolean,
   amazonPayHasBegunLoading: boolean,
 ) => (dispatch: Function): void => {
-  if (
-    paymentMethod === PayPal &&
-    contributionType !== 'ONE_OFF' &&
-    !payPalHasBegunLoading
-  ) {
-    dispatch(setPayPalHasBegunLoading());
-    loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
-  }
-
-  if (paymentMethod === AmazonPay && !amazonPayHasBegunLoading) {
-    dispatch(setAmazonPayHasBegunLoading());
-    setupAmazonPay(countryGroupId, dispatch, isTestUser);
+  switch (paymentMethod) {
+    case PayPal:
+      if (contributionType !== 'ONE_OFF' && !payPalHasBegunLoading) {
+        dispatch(setPayPalHasBegunLoading());
+        loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
+      }
+      break;
+    case AmazonPay:
+      if (!amazonPayHasBegunLoading) {
+        dispatch(setAmazonPayHasBegunLoading());
+        setupAmazonPay(countryGroupId, dispatch, isTestUser);
+      }
+      break;
+    default:
   }
 };
 
