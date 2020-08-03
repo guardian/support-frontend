@@ -2,6 +2,7 @@ package com.gu.support.pricing
 
 import com.gu.i18n.Currency
 import com.gu.support.promotions._
+import com.gu.support.zuora.api.ReaderType
 
 
 case class PriceSummary(

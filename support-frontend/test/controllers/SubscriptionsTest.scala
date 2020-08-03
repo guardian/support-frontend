@@ -13,6 +13,8 @@ import com.gu.support.config._
 import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.Monthly
+import com.gu.support.zuora.api.ReaderType
+import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.tip.Tip
 import com.typesafe.config.ConfigFactory
 import config.Configuration.MetricUrl
@@ -104,7 +106,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
                 Map(GBP -> PriceSummary(10, None, GBP, fixedTerm = false, Nil))))))
       val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
       val priceSummaryService = mock[PriceSummaryService]
-      when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[Boolean])).thenReturn(prices)
+      when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[ReaderType])).thenReturn(prices)
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
 
       new DigitalSubscriptionController(

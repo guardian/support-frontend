@@ -5,6 +5,7 @@ import com.gu.support.catalog._
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionServiceSpec
 import com.gu.support.workers.{Annual, Quarterly}
+import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -21,11 +22,11 @@ class PriceSummaryServiceIntegrationSpec  extends AsyncFlatSpec with Matchers wi
     result(UK)(Domestic)(NoProductOptions).size shouldBe 3
   }
 
-  it should "return fixed term prices" in {
-    val fixed = service.getPrices(GuardianWeekly, Nil, fixedTerm = true)
-    fixed.size shouldBe 7
-    fixed(US)(RestOfWorld)(NoProductOptions).size shouldBe 2 // Annual and three month
-    fixed(US)(RestOfWorld)(NoProductOptions).find(_._1 == Annual) shouldBe defined
-    fixed(US)(RestOfWorld)(NoProductOptions).find(_._1 == Quarterly) shouldBe defined
+  it should "return gift prices" in {
+    val gift = service.getPrices(GuardianWeekly, Nil, Gift)
+    gift.size shouldBe 7
+    gift(US)(RestOfWorld)(NoProductOptions).size shouldBe 2 // Annual and three month
+    gift(US)(RestOfWorld)(NoProductOptions).find(_._1 == Annual) shouldBe defined
+    gift(US)(RestOfWorld)(NoProductOptions).find(_._1 == Quarterly) shouldBe defined
   }
 }

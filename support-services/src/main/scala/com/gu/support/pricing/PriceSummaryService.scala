@@ -6,6 +6,8 @@ import com.gu.support.pricing.PriceSummaryService.{getDiscountedPrice, getNumber
 import com.gu.support.promotions._
 import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.workers.BillingPeriod
+import com.gu.support.zuora.api.ReaderType
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.Months
 
 import scala.math.BigDecimal.RoundingMode
@@ -13,11 +15,11 @@ import scala.math.BigDecimal.RoundingMode
 class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
-  def getPrices[T <: Product](product: T, promoCodes: List[PromoCode], fixedTerm: Boolean = false): ProductPrices = {
+  def getPrices[T <: Product](product: T, promoCodes: List[PromoCode], readerType: ReaderType = Direct): ProductPrices = {
     val promotions = promotionService.findPromotions(promoCodes)
     product.supportedCountries(catalogService.environment).map(
       countryGroup =>
-        countryGroup -> getPricesForCountryGroup(product, countryGroup, promotions, fixedTerm)
+        countryGroup -> getPricesForCountryGroup(product, countryGroup, promotions, readerType)
     ).toMap
   }
 
@@ -26,9 +28,9 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
     product: T,
     countryGroup: CountryGroup,
     promotions: List[PromotionWithCode],
-    fixedTerm: Boolean = false
+    readerType: ReaderType = Direct
   ): CountryGroupPrices = {
-    val ratePlans = product.ratePlans(catalogService.environment).filter(_.fixedTerm == fixedTerm)
+    val ratePlans = product.ratePlans(catalogService.environment).filter(_.readerType == readerType)
     val grouped = ratePlans.groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
       case (keys, productRatePlans) =>
         val priceSummaries = for {
@@ -71,7 +73,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       price.value,
       saving,
       price.currency,
-      productRatePlan.fixedTerm,
+      productRatePlan.readerType == Gift,
       promotionSummaries
     )
   }

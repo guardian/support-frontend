@@ -3,6 +3,7 @@ package com.gu.support.promotions
 import com.gu.support.catalog.{DigitalPack, Product}
 import com.gu.support.config.{Stage, TouchPointEnvironments}
 import com.gu.support.encoding.Codec
+import com.gu.support.zuora.api.ReaderType.Gift
 import org.joda.time.DateTime
 
 case class PromotionTerms(
@@ -43,7 +44,7 @@ object PromotionTerms {
     val isGift = product
       .getProductRatePlans(environment)
       .filter(productRatePlan => includedProductRatePlanIds.contains(productRatePlan.id))
-      .forall(_.fixedTerm)
+      .forall(_.readerType == Gift)
 
     PromotionTerms(
       promotion.promoCode,

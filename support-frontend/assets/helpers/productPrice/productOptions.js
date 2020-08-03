@@ -3,7 +3,6 @@
 // describes options relating to a product itself - only relevant for paper currently
 
 const NoProductOptions: 'NoProductOptions' = 'NoProductOptions';
-const Corporate: 'Corporate' = 'Corporate';
 const Saturday: 'Saturday' = 'Saturday';
 const SaturdayPlus: 'SaturdayPlus' = 'SaturdayPlus';
 const Sunday: 'Sunday' = 'Sunday';
@@ -17,7 +16,6 @@ const EverydayPlus: 'EverydayPlus' = 'EverydayPlus';
 
 export type ProductOptions =
   typeof NoProductOptions
-  | typeof Corporate
   | typeof Saturday
   | typeof SaturdayPlus
   | typeof Sunday
@@ -36,16 +34,11 @@ export type PaperProductOptions =
   | typeof Sixday
   | typeof Everyday;
 
-export type DigitalProductOptions =
-  | typeof Corporate
-  | typeof NoProductOptions
-
 
 const ActivePaperProductTypes = [Everyday, Sixday, Weekend, Sunday];
 
 export {
   NoProductOptions,
-  Corporate,
   Saturday,
   SaturdayPlus,
   Sunday,

@@ -5,6 +5,7 @@ import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.config.TouchPointEnvironments.PROD
 import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
 import com.gu.support.workers.Annual
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
@@ -39,14 +40,17 @@ object ServicesFixtures {
   val tracking = PromotionWithCode(trackingPromoCode, promotion(validProductRatePlanIds, trackingPromoCode, tracking = true))
   val renewal = PromotionWithCode(renewalPromoCode, promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true))
   val guardianWeeklyAnnual = promotion(
-    GuardianWeekly.getProductRatePlans(TouchPointEnvironments.PROD).filter(ratePlan => ratePlan.billingPeriod == Annual && !ratePlan.fixedTerm).map(_.id),
+    GuardianWeekly
+      .getProductRatePlans(TouchPointEnvironments.PROD)
+      .filter(ratePlan => ratePlan.billingPeriod == Annual && ratePlan.readerType == Direct)
+      .map(_.id),
     NonGift.tenAnnual,
     Some(DiscountBenefit(10, Some(Months.TWELVE)))
   )
   val guardianWeeklyAnnualGift = guardianWeeklyAnnual.copy(
     appliesTo = AppliesTo.ukOnly(
       GuardianWeekly.getProductRatePlans(TouchPointEnvironments.PROD)
-        .filter(ratePlan => ratePlan.billingPeriod == Annual && ratePlan.fixedTerm)
+        .filter(ratePlan => ratePlan.billingPeriod == Annual && ratePlan.readerType == Gift)
         .map(_.id).toSet
     )
   )

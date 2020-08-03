@@ -4,13 +4,13 @@ import java.util.UUID
 
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
-import com.gu.support.catalog.Corporate
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
 import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode}
 import com.gu.support.workers.{DigitalPack, Monthly}
+import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api._
 import com.gu.zuora.ProductSubscriptionBuilders._
 import com.gu.zuora.ProductSubscriptionBuilders.buildDigitalPackSubscription.{SubscriptionPaymentCorporate, SubscriptionPaymentDirect}

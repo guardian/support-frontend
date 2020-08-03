@@ -4,9 +4,10 @@ package utils
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.catalog.{Corporate, Everyday, HomeDelivery}
+import com.gu.support.catalog.{Everyday, HomeDelivery}
 import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode}
 import com.gu.support.workers._
+import com.gu.support.zuora.api.ReaderType.Corporate
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

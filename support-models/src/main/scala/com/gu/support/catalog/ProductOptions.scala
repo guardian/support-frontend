@@ -8,11 +8,7 @@ sealed trait ProductOptions
 
 sealed trait PaperProductOptions extends ProductOptions
 
-sealed trait DigitalProductOptions extends ProductOptions
-
-case object NoProductOptions extends ProductOptions with DigitalProductOptions
-
-case object Corporate extends DigitalProductOptions
+case object NoProductOptions extends ProductOptions
 
 case object Saturday extends PaperProductOptions
 
@@ -35,7 +31,7 @@ case object EverydayPlus extends PaperProductOptions
 case object Everyday extends PaperProductOptions
 
 object ProductOptions {
-  val allProductOptions = DigitalProductOptions.productOptions ++ PaperProductOptions.productOptions
+  val allProductOptions = NoProductOptions :: PaperProductOptions.productOptions
 
   def fromString[T](code: String, productOptions: List[T]): Option[T] = productOptions.find(_.getClass.getSimpleName == s"$code$$")
 
@@ -49,18 +45,9 @@ object ProductOptions {
   implicit val keyDecoder: KeyDecoder[ProductOptions] = (key: String) => fromString(key, allProductOptions)
 }
 
-object DigitalProductOptions {
-  val productOptions: List[catalog.DigitalProductOptions] = List(Corporate, NoProductOptions)
-
-  implicit val decoder: Decoder[DigitalProductOptions] =
-    Decoder.decodeString.emap(code => fromString(code, productOptions).toRight(s"unrecognised product options '$code'"))
-
-  implicit val encode: Encoder[DigitalProductOptions] = Encoder.encodeString.contramap[DigitalProductOptions](_.toString)
-
-}
-
 object PaperProductOptions {
-  val productOptions: List[PaperProductOptions] = List(Saturday, SaturdayPlus, Sunday, SundayPlus, Weekend, WeekendPlus, Sixday, SixdayPlus, Everyday, EverydayPlus)
+  val productOptions: List[PaperProductOptions] =
+    List(Saturday, SaturdayPlus, Sunday, SundayPlus, Weekend, WeekendPlus, Sixday, SixdayPlus, Everyday, EverydayPlus)
 
   implicit val decoder: Decoder[PaperProductOptions] =
     Decoder.decodeString.emap(code => fromString(code, productOptions).toRight(s"unrecognised product options '$code'"))

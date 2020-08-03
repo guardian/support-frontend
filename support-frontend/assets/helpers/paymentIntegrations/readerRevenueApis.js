@@ -32,6 +32,7 @@ import {
   AmazonPay,
 } from 'helpers/paymentMethods';
 import type { Title } from 'helpers/user/details';
+import type { ReaderType } from 'helpers/productPrice/readerType';
 
 // ----- Types ----- //
 
@@ -47,7 +48,7 @@ type RegularContribution = {|
 type DigitalSubscription = {|
   currency: string,
   billingPeriod: BillingPeriod,
-  productOptions: ProductOptions,
+  readerType: ReaderType,
 |};
 
 type PaperSubscription = {|

@@ -3,13 +3,15 @@ package com.gu.support.workers
 import cats.syntax.functor._
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
-import com.gu.support.catalog.{DigitalProductOptions, FulfilmentOptions, NoProductOptions, PaperProductOptions, ProductOptions}
+import com.gu.support.catalog.{FulfilmentOptions, PaperProductOptions}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
+import com.gu.support.encoding.JsonHelpers._
+import com.gu.support.zuora.api.ReaderType
+import com.gu.support.zuora.api.ReaderType.Direct
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import com.gu.support.encoding.JsonHelpers._
 
 
 sealed trait ProductType {
@@ -33,7 +35,7 @@ case class Contribution(
 case class DigitalPack(
   currency: Currency,
   billingPeriod: BillingPeriod,
-  productOptions: DigitalProductOptions = NoProductOptions
+  readerType: ReaderType = Direct
 ) extends ProductType {
   override val catalogType = com.gu.support.catalog.DigitalPack
   override def describe: String = s"$billingPeriod-DigitalPack-$currency"
@@ -61,7 +63,7 @@ case class GuardianWeekly(
 object ProductType {
   import com.gu.support.encoding.CustomCodecs._
   implicit val decoderDigital: Decoder[DigitalPack] = deriveDecoder[DigitalPack]
-    .prepare(_.withFocus(_.mapObject(_.checkKeyExists("productOptions", Json.fromString("NoProductOptions")))))
+    .prepare(_.withFocus(_.mapObject(_.checkKeyExists("readerType", Json.fromString("Direct")))))
   implicit val encoderDigital: Encoder[DigitalPack] = deriveEncoder
   implicit val codecContribution: Codec[Contribution] = deriveCodec
   implicit val codecPaper: Codec[Paper] = deriveCodec
