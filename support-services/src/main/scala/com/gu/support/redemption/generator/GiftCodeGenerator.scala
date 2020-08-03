@@ -2,18 +2,18 @@ package com.gu.support.redemption.generator
 
 import java.security.SecureRandom
 
-import com.gu.support.redemption.generator.ConstructCode.GenerateGiftCode
+import com.gu.support.redemption.generator.CodeBuilder.GenerateGiftCode
 
 object GiftCodeGenerator {
 
   lazy val randomGiftCodes: Iterator[GenerateGiftCode] = {
     val gen = new SecureRandom()
     val ints = Iterator.continually(gen.nextInt())
-    apply(ints)
+    fromRandom(ints)
   }
 
-  def apply(random: Iterator[Int]): Iterator[GenerateGiftCode] =
-    CodeSuffixGenerator(random).map(ConstructCode.apply)
+  def fromRandom(random: Iterator[Int]): Iterator[GenerateGiftCode] =
+    CodeSuffixGenerator.generate(random).map(CodeBuilder.build)
 
 }
 
@@ -29,7 +29,7 @@ object GiftDuration {
 
 }
 
-object ConstructCode {
+object CodeBuilder {
 
   private val prefix = "gd"
 
@@ -46,7 +46,7 @@ object ConstructCode {
     def withDuration(duration: GiftDuration): GiftCode
   }
 
-  def apply(code: CodeSuffixGenerator.CodeSuffix): GenerateGiftCode =
+  def build(code: CodeSuffixGenerator.CodeSuffix): GenerateGiftCode =
     (duration: GiftDuration) => {
       val init = prefix + duration.code + "-"
       GiftCode(init + code.value).get
@@ -64,10 +64,10 @@ object CodeSuffixGenerator {
         .map(new CodeSuffix(_))
   }
 
-  def apply(random: Iterator[Int]): Iterator[CodeSuffix] =
+  def generate(random: Iterator[Int]): Iterator[CodeSuffix] =
     random.grouped(6).map(codeFromGroup).map(CodeSuffix.apply).map(_.get)
 
-  def codeFromGroup(groupedInts: Seq[Int]): String = {
+  private[generator] def codeFromGroup(groupedInts: Seq[Int]): String = {
     val chars = groupedInts
       .map(int => java.lang.Integer.toString(int, 34).last)
       .map {
