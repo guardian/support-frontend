@@ -11,7 +11,7 @@ import { getOphanIds, getReferrerAcquisitionData, getSupportAbTests } from 'help
 import { routes } from 'helpers/routes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Monthly } from 'helpers/billingPeriods';
-import { Corporate } from 'helpers/productPrice/productOptions';
+import { Corporate } from 'helpers/productPrice/readerType';
 import type { User } from 'helpers/subscriptionsForms/user';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
@@ -79,7 +79,7 @@ function buildRegularPaymentRequest(
   const product = {
     currency: currencyId,
     billingPeriod: Monthly,
-    productOptions: Corporate,
+    readerType: Corporate,
   };
 
   return {
