@@ -44,6 +44,7 @@ export const linksList = css`
 
   ${from.tablet} {
     display: flex;
+    grid-column-gap: 0;
   }
 `;
 
