@@ -13,7 +13,7 @@ object ServersideAbTestCookie {
     value = participation.toString,
     secure = true,
     httpOnly = false,
-    domain = Some(s"support${domain.value}")
+    domain = Some(s"${domain.value}")
   )
 
   def exists(request: RequestHeader): Boolean = request.cookies.exists(_.name == name)
@@ -21,23 +21,18 @@ object ServersideAbTestCookie {
 
   def addTo(result: Result, domain: GuardianDomain, participation: Participation): Result =
     result.withCookies(create(domain, participation))
+
+  def withServersideAbTestCookie(
+    request: RequestHeader,
+    participation: ServersideAbTest.Participation,
+    domain: GuardianDomain
+  ): Result => Result =
+    result => {
+      // Don't overwrite the cookie if we had one in the request
+      if (!ServersideAbTestCookie.exists(request)) {
+        ServersideAbTestCookie.addTo(result, domain, participation)
+      } else {
+        result
+      }
+    }
 }
-
-trait ServersideAbTestCookie {
-
-  implicit class ResultSyntax(result: Result){
-//    def withServersideAbTestCookie(
-//      request: RequestHeader,
-//      participation: ServersideAbTest.Participation,
-//      domain: GuardianDomain
-//    ): Result = {
-//      // Don't overwrite the cookie if we had one in the request
-//      if (!ServersideAbTestCookie.exists(request)) {
-//        ServersideAbTestCookie.addTo(result, domain, participation)
-//      } else {
-//        result
-//      }
-//    }
-  }
-}
-

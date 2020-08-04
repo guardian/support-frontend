@@ -137,6 +137,13 @@ function getParticipationsFromUrl(): ?Participations {
   return null;
 }
 
+function getServerSideTests(): ?Participations {
+  if (window.guardian.serverSideTests) {
+    return window.guardian.serverSideTests
+  }
+  return null;
+}
+
 function getIsRemoteFromAcquisitionData(): boolean {
   const queryString = getQueryParameter('acquisitionData');
 
@@ -336,8 +343,10 @@ const init = (
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  const combinedParticipations: Participations = { ...participations, ...urlParticipations };
+  const serverSideParticipations: ?Participations = getServerSideTests();
+  const combinedParticipations: Participations = { ...participations, ...urlParticipations, ...serverSideParticipations };
   setLocalStorageParticipations(combinedParticipations);
+  console.log(combinedParticipations)
 
   return combinedParticipations;
 };

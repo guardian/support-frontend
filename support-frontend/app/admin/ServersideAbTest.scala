@@ -7,7 +7,7 @@ import scala.util.Random
 object ServersideAbTest {
   // Serverside A/B tests currently only support a single concurrent test
   // running to 100% audience with a 50%/50% split
-  def getParticipation(implicit request: RequestHeader): Participation = {
+  def getParticipation(request: RequestHeader): Participation = {
     ServersideAbTestCookie.get(request).flatMap(_.value match {
       case "Control" => Some(Control)
       case "Variant" => Some(Variant)
@@ -20,4 +20,15 @@ object ServersideAbTest {
   sealed trait Participation
   case object Control extends Participation
   case object Variant extends Participation
+
+  case class ContributionsServerSideTests(
+    stripeFraudDetection: Participation
+  )
+
+  object ContributionsServerSideTests {
+    def assign: ContributionsServerSideTests = ContributionsServerSideTests(
+      stripeFraudDetection = computeParticipation
+    )
+  }
+
 }

@@ -1,5 +1,5 @@
 @import admin.settings.AllSettings
-@import admin.ServersideAbTest
+@import admin.ServersideAbTest.{ContributionsServerSideTests, Variant}
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import com.gu.i18n.Country
 @import com.gu.identity.model.{User => IdUser}
@@ -9,7 +9,6 @@
 @import models.GeoData
 @import controllers.ContributionsPaymentMethodConfigs
 
-@import admin.ServersideAbTest.Participation
 @(
   title: String,
   id: String,
@@ -28,7 +27,7 @@
   shareImageUrl: String,
   shareUrl: String,
   v2recaptchaConfigPublicKey: String,
-  participation: Option[Participation]
+  serverSideTests: ContributionsServerSideTests
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl)) {
@@ -116,7 +115,8 @@
   window.guardian.ausMomentEnabled = @settings.switches.experiments.get("ausMomentEnabled").exists(_.isOn)
 
   window.guardian.recaptchaEnabled = @settings.switches.enableRecaptchaFrontend.isOn
-  window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
+  window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey";
+  window.guardian.serverSideTests = @serverSideTests;
   </script>
-  <script defer id="stripe-js" src=@{s"https://js.stripe.com/v3/${if (participation.contains(ServersideAbTest.Variant)) "?advancedFraudSignals=false" else ""}"}></script>"
+  <script defer id="stripe-js" src=@{s"https://js.stripe.com/v3/${if (serverSideTests.stripeFraudDetection == Variant) "?advancedFraudSignals=false" else ""}"}></script>"
 }
