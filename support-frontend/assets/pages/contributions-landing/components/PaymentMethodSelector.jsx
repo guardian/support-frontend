@@ -72,6 +72,7 @@ type PropTypes = {|
   amazonPayHasBegunLoading: boolean,
   loadPayPalExpressSdk: (contributionType: ContributionType) => (dispatch: Function) => void,
   loadAmazonPaySdk: (countryGroupId: CountryGroupId, isTestUser: boolean) => (dispatch: Function) => void,
+  checkoutFormHasBeenSubmitted: boolean,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -87,6 +88,7 @@ const mapStateToProps = (state: State) => ({
   switches: state.common.settings.switches,
   payPalHasBegunLoading: state.page.form.payPalData.hasBegunLoading,
   amazonPayHasBegunLoading: state.page.form.amazonPayData.hasBegunLoading,
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
 const mapDispatchToProps = {
@@ -205,13 +207,15 @@ function withProps(props: PropTypes) {
 
   const fullExistingPaymentMethods = getFullExistingPaymentMethods(props);
 
+  const showErrorMessage = props.checkoutFormHasBeenSubmitted && props.paymentMethod === 'None';
+
   return (
     <div
       className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}
     >
       {legend}
       { paymentMethods.length ?
-        <RadioGroup className="form__radio-group-list">
+        <RadioGroup className="form__radio-group-list" error={showErrorMessage && 'Please select a payment method'}>
           {contributionTypeIsRecurring(props.contributionType) && !props.existingPaymentMethods && (
             <div className="awaiting-existing-payment-options">
               <AnimatedDots appearance="medium" />
@@ -253,20 +257,18 @@ function withProps(props: PropTypes) {
             </>
           ))}
           {paymentMethods.map(paymentMethod => (
-            <>
-              <Radio
-                id={`paymentMethodSelector-${paymentMethod}`}
-                name="paymentMethodSelector"
-                type="radio"
-                value={paymentMethod}
-                onChange={() => {
+            <Radio
+              id={`paymentMethodSelector-${paymentMethod}`}
+              name="paymentMethodSelector"
+              type="radio"
+              value={paymentMethod}
+              onChange={() => {
                   onPaymentMethodUpdate(paymentMethod, props);
                 }}
-                checked={props.paymentMethod === paymentMethod}
-                label={renderLabelAndLogo(paymentMethod)}
-                cssOverrides={radioCss}
-              />
-            </>
+              checked={props.paymentMethod === paymentMethod}
+              label={renderLabelAndLogo(paymentMethod)}
+              cssOverrides={radioCss}
+            />
           ))}
           {
             contributionTypeIsRecurring(props.contributionType) &&
