@@ -1,6 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.ServersideAbTest.generateParticipations
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
@@ -14,7 +15,6 @@ import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
 import config.{RecaptchaConfigProvider, StringsConfig}
-import cookies.ServersideAbTestCookie
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.mvc._
@@ -54,7 +54,7 @@ class Application(
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components)
-  with SettingsSurrogateKeySyntax with CanonicalLinks with StrictLogging with ServersideAbTestCookie {
+  with SettingsSurrogateKeySyntax with CanonicalLinks with StrictLogging {
 
   import actionRefiners._
 
@@ -136,9 +136,9 @@ class Application(
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](user => identityService.getUser(user.minimalUser)).fold(
-      _ => Ok(contributionsHtml(countryCode, geoData, None, campaignCodeOption, guestAccountCreationToken)),
-      user => Ok(contributionsHtml(countryCode, geoData, user, campaignCodeOption, guestAccountCreationToken))
-    ).map(_.withSettingsSurrogateKey)
+        _ => Ok(contributionsHtml(countryCode, geoData, None, campaignCodeOption, guestAccountCreationToken)),
+        user => Ok(contributionsHtml(countryCode, geoData, user, campaignCodeOption, guestAccountCreationToken))
+      ).map(_.withSettingsSurrogateKey)
   }
 
   private def shareImageUrl(settings: AllSettings): String = {
@@ -173,6 +173,8 @@ class Application(
       classes = Some(classes)
     )
 
+    val serversideTests = generateParticipations(List("stripeFraudDetection"))
+
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"contributions-landing-page-$countryCode",
@@ -199,7 +201,8 @@ class Application(
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey,
+      serversideTests = serversideTests
     )
   }
 
