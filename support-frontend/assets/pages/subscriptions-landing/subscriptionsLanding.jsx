@@ -12,7 +12,6 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import ConsentBanner from 'components/consentBanner/consentBanner';
 import './subscriptionsLanding.scss';
 
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
@@ -51,7 +50,6 @@ const content = (
       }
     >
       <SubscriptionLandingContent />
-      <ConsentBanner />
     </Page>
   </Provider>
 );

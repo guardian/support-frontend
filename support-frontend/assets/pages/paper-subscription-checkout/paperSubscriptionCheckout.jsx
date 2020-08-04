@@ -16,7 +16,6 @@ import ThankYouContent from './components/thankYou';
 import CheckoutForm
   from 'pages/paper-subscription-checkout/components/paperCheckoutForm';
 import './_legacyImports.scss';
-import ConsentBanner from '../../components/consentBanner/consentBanner';
 import {
   getFulfilmentOption,
   getProductOption,
@@ -76,7 +75,6 @@ const content = (
         thankYouContent={<ThankYouContent isPending={false} />}
         subscriptionProduct="Paper"
       />
-      <ConsentBanner />
     </Page>
   </Provider>
 );
