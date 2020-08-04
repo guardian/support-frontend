@@ -273,9 +273,11 @@ const StripeForm = (props: StripeFormPropTypes) => {
    */
 
   React.useEffect(() => {
-    setupRecurringHandlers();
-    loadRecaptchaV2();
-  }, []);
+    if (stripe) {
+      setupRecurringHandlers();
+      loadRecaptchaV2();
+    }
+  }, [stripe]);
 
   React.useEffect(() => {
     if (paymentWaiting && setupIntentClientSecret) {
