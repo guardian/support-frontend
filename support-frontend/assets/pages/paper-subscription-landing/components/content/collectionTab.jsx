@@ -7,10 +7,10 @@ import React from 'react';
 import Content from 'components/content/content';
 import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
-import { sendClickedEvent } from 'helpers/tracking/clickTracking';
+// import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
-import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpers';
+import { ContentForm, type ContentTabPropTypes } from './helpers';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
