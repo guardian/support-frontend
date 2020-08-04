@@ -5,11 +5,8 @@ import { logException } from 'helpers/logger';
 
 const OptedIn: 'OptedIn' = 'OptedIn';
 const OptedOut: 'OptedOut' = 'OptedOut';
-const Unset: 'Unset' = 'Unset';
 
-export type ThirdPartyTrackingConsent = typeof OptedIn
-  | typeof OptedOut
-  | typeof Unset;
+export type ThirdPartyTrackingConsent = typeof OptedIn | typeof OptedOut;
 
 type ConsentVector = {
     [key: string]: boolean;
@@ -43,4 +40,4 @@ const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => new Promise
   return Promise.resolve(OptedOut);
 });
 
-export { getTrackingConsent, OptedIn, OptedOut, Unset };
+export { getTrackingConsent, OptedIn, OptedOut };
