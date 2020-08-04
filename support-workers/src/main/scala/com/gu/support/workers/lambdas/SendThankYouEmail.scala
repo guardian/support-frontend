@@ -64,20 +64,20 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
       productRatePlanId
     )
 
-    val subscriptionEmailFields: Either[String, SubscriptionEmailFields] =
+    val subscriptionEmailFields: Either[String, SubscriptionEmailFieldsBuilder] =
       state.product match {
-        case c: Contribution => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift contribution").map(paymentMethodWithSchedule => SubscriptionEmailFields.wrap(
-          ContributionEmailFields(
+        case c: Contribution => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift contribution").map(paymentMethodWithSchedule => SubscriptionEmailFieldsBuilder.wrap(
+          ContributionEmailFieldsBuilder(
             created = DateTime.now(),
             amount = c.amount,
             paymentMethod = paymentMethodWithSchedule.paymentMethod
           )
         ))
-        case _: DigitalPack => Right(DigitalPackEmailFields(
+        case _: DigitalPack => Right(DigitalPackEmailFieldsBuilder(
           paidSubPaymentData = state.paymentOrRedemptionData.left.toOption,
         ))
         case p: Paper => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
-          PaperEmailFields(
+          PaperEmailFieldsBuilder(
             fulfilmentOptions = p.fulfilmentOptions,
             productOptions = p.productOptions,
             firstDeliveryDate = state.firstDeliveryDate,
@@ -86,7 +86,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
           )
         )
         case g: GuardianWeekly => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift GW yet").map(paymentMethodWithSchedule =>
-          GuardianWeeklyEmailFields(
+          GuardianWeeklyEmailFieldsBuilder(
             fulfilmentOptions = g.fulfilmentOptions,
             firstDeliveryDate = state.firstDeliveryDate,
             paymentMethodWithSchedule = paymentMethodWithSchedule,
@@ -97,10 +97,10 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
     subscriptionEmailFields match {
       case Right(subscriptionEmailFields) =>
         thankYouEmailService.send(
-          subscriptionEmailFields(
+          subscriptionEmailFields.buildWith(
             state.subscriptionNumber,
             maybePromotion
-          )(
+          ).buildWith(
             billingPeriod = state.product.billingPeriod,
             user = state.user,
             currency = state.product.currency,

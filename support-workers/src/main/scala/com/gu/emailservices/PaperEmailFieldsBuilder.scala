@@ -1,41 +1,42 @@
 package com.gu.emailservices
 
-import com.gu.emailservices.SubscriptionEmailFieldHelpers.formatDate
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
-import com.gu.support.catalog.FulfilmentOptions
+import com.gu.support.catalog.{FulfilmentOptions, HomeDelivery, Paper, ProductOptions}
 import com.gu.support.promotions.Promotion
 import com.gu.support.workers._
 import com.gu.support.workers.states.PaymentMethodWithSchedule
 import org.joda.time.LocalDate
 
-import scala.collection.immutable
-
-case class GuardianWeeklyEmailFields(
+case class PaperEmailFieldsBuilder(
   fulfilmentOptions: FulfilmentOptions,
+  productOptions: ProductOptions,
   firstDeliveryDate: Option[LocalDate],
   paymentMethodWithSchedule: PaymentMethodWithSchedule,
   giftRecipient: Option[GiftRecipient] = None
-) extends SubscriptionEmailFields {
+) extends SubscriptionEmailFieldsBuilder {
 
-  override def apply(
+  override def buildWith(
     subscriptionNumber: String,
     promotion: Option[Promotion] = None
-  ): AllProductsEmailFields = new AllProductsEmailFields {
+  ): AllProductsEmailFieldsBuilder = new AllProductsEmailFieldsBuilder {
 
-    def apply(
+    override def buildWith(
       billingPeriod: BillingPeriod,
       user: User,
       currency: Currency,
       sfContactId: SfContactId,
       directDebitMandateId: Option[String],
-    ): EmailFields = new EmailFields {
+    ): EmailFields = {
 
-      val additionalFields: immutable.Seq[(String, String)] = paymentMethodWithSchedule.paymentSchedule.payments.lift(1).map(
-        payment => List("date_of_second_payment" -> formatDate(payment.date))
-      ).getOrElse(Nil)
+      val additionalFields = List("package" -> productOptions.toString)
 
-      override val fields: List[(String, String)] = PaperFieldsGenerator.fieldsFor(
+      val dataExtension: String = fulfilmentOptions match {
+        case HomeDelivery => "paper-delivery"
+        case _ => if (Paper.useDigitalVoucher) "paper-subscription-card" else "paper-voucher"
+      }
+
+      val fields: List[(String, String)] = PaperFieldsGenerator.fieldsFor(
         subscriptionNumber,
         billingPeriod,
         user,
@@ -47,10 +48,7 @@ case class GuardianWeeklyEmailFields(
         giftRecipient
       ) ++ additionalFields
 
-      override def payload: String = super.payload(user.primaryEmailAddress, "guardian-weekly")
-
-      override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
+      EmailFields(fields, Left(sfContactId), user.primaryEmailAddress, dataExtension)
     }
-
   }
 }

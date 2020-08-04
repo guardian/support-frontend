@@ -46,11 +46,11 @@ class SendThankYouEmailSpec extends LambdaSpec {
   "EmailFields" should "include Direct Debit fields in the payload" in {
     val mandateId = "65HK26E"
     val user = User("1234", "", None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
-    val ef = ContributionEmailFields(
+    val ef = ContributionEmailFieldsBuilder(
       new DateTime(1999, 12, 31, 11, 59),
       20,
       directDebitPaymentMethod
-    ).apply(
+    ).buildWith(
       Monthly,
       user,
       GBP,
@@ -101,11 +101,11 @@ object SendThankYouEmailManualTest {
   def sendContributionEmail() {
     val mandateId = "65HK26E"
     val user = User("1234", addressToSendTo, None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
-    val ef = ContributionEmailFields(
+    val ef = ContributionEmailFieldsBuilder(
       new DateTime(1999, 12, 31, 11, 59),
       20,
       directDebitPaymentMethod
-    ).apply(
+    ).buildWith(
       Monthly,
       user,
       GBP,
@@ -120,12 +120,12 @@ object SendThankYouEmailManualTest {
     val mandateId = "65HK26E"
     val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
     val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
-    val ef = DigitalPackEmailFields(
+    val ef = DigitalPackEmailFieldsBuilder(
       paidSubPaymentData = Some(PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))))
-    ).apply(
+    ).buildWith(
       "A-S00045678",
       None
-    ).apply(
+    ).buildWith(
       Annual,
       user,
       GBP,
@@ -140,12 +140,12 @@ object SendThankYouEmailManualTest {
     val mandateId = "65HK26E"
     val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
     val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
-    val ef = DigitalPackEmailFields(
+    val ef = DigitalPackEmailFieldsBuilder(
       paidSubPaymentData = None
-    ).apply(
+    ).buildWith(
       "A-S00045678",
       None
-    ).apply(
+    ).buildWith(
       Annual,
       user,
       GBP,
@@ -175,15 +175,15 @@ object SendThankYouEmailManualTest {
       billingAddress = billingAddressWithCountry,
       deliveryAddress = Some(billingAddressWithCountry)
     )
-    val ef = PaperEmailFields(
+    val ef = PaperEmailFieldsBuilder(
       Collection,
       Saturday,
       Some(new LocalDate(2019, 3, 26)),
       PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79)))),
-    ).apply(
+    ).buildWith(
       "A-S00045678",
       None
-    ).apply(
+    ).buildWith(
       Monthly,
       user,
       GBP,
@@ -213,17 +213,17 @@ object SendThankYouEmailManualTest {
       billingAddress = billingAddressWithCountry,
       deliveryAddress = Some(billingAddressWithCountry)
     )
-    val ef = GuardianWeeklyEmailFields(
+    val ef = GuardianWeeklyEmailFieldsBuilder(
       Domestic,
       Some(new LocalDate(2019, 3, 26)),
       PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(
         Payment(new LocalDate(2019, 3, 25), 37.50),
         Payment(new LocalDate(2019, 6, 25), 37.50)
       ))),
-    ).apply(
+    ).buildWith(
       "A-S00045678",
       None
-    ).apply(
+    ).buildWith(
       Quarterly,
       user,
       GBP,
@@ -253,15 +253,15 @@ object SendThankYouEmailManualTest {
       billingAddress = billingAddressWithCountry,
       deliveryAddress = Some(billingAddressWithCountry)
     )
-    val ef = GuardianWeeklyEmailFields(
+    val ef = GuardianWeeklyEmailFieldsBuilder(
       Domestic,
       Some(new LocalDate(2019, 3, 26)),
       PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))),
       giftRecipient = Some(GiftRecipient(None, "Earl", "Palmer", None))
-    ).apply(
+    ).buildWith(
       "A-S00045678",
       None
-    ).apply(
+    ).buildWith(
       Quarterly,
       user,
       GBP,

@@ -15,14 +15,14 @@ case class EmailPayload(To: EmailPayloadTo, DataExtensionName: String, SfContact
 
 case class IdentityUserId(id: String)
 
-trait EmailFields {
+case class EmailFields(
+  fields: List[(String, String)],
+  userId: Either[SfContactId, IdentityUserId],
+  email: String,
+  dataExtensionName: String
+) {
 
-  val fields: List[(String, String)] = Nil
-
-  def payload: String
-  def userId: Either[SfContactId, IdentityUserId]
-
-  protected def payload(email: String, dataExtensionName: String): String = {
+  def payload: String = {
     EmailPayload(
       To = EmailPayloadTo(
         Address = email,
@@ -36,9 +36,9 @@ trait EmailFields {
 
 }
 
-trait AllProductsEmailFields {
+trait AllProductsEmailFieldsBuilder {
 
-  def apply(
+  def buildWith(
     billingPeriod: BillingPeriod,
     user: User,
     currency: Currency,
@@ -47,15 +47,15 @@ trait AllProductsEmailFields {
   ): EmailFields
 
 }
-object SubscriptionEmailFields {
-  def wrap(allProductsEmailFields: AllProductsEmailFields): SubscriptionEmailFields = (_: String, _: Option[Promotion]) =>
+object SubscriptionEmailFieldsBuilder {
+  def wrap(allProductsEmailFields: AllProductsEmailFieldsBuilder): SubscriptionEmailFieldsBuilder = (_: String, _: Option[Promotion]) =>
     allProductsEmailFields
 }
-trait SubscriptionEmailFields {
+trait SubscriptionEmailFieldsBuilder {
 
-  def apply(
+  def buildWith(
     subscriptionNumber: String,
     promotion: Option[Promotion] = None
-  ): AllProductsEmailFields
+  ): AllProductsEmailFieldsBuilder
 
 }

@@ -121,9 +121,9 @@ class FailureHandlerIT extends AsyncLambdaSpec with MockContext {
     val emailService = mock[EmailService]
     val result = mock[SendMessageResult]
 
-    val testFields = FailedDigitalPackEmailFields("test@gu.com", IdentityUserId("30001643"))
+    val testFields = FailedEmailFields.digitalPack("test@gu.com", IdentityUserId("30001643"))
 
-    when(emailService.send(any[FailedDigitalPackEmailFields])).thenReturn(Future.successful(result))
+    when(emailService.send(any[EmailFields])).thenReturn(Future.successful(result))
 
     val failureHandler = new FailureHandler(emailService)
 
@@ -175,7 +175,7 @@ object FailureHandlerManualTest extends Matchers {
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "rupert.bates@theguardian.com"
     service
-      .send(FailedContributionEmailFields(email, IdentityUserId("identityId")))
+      .send(FailedEmailFields.contribution(email, IdentityUserId("identityId")))
       .map(result => result.getMessageId should not be "")
   }
 
@@ -194,7 +194,7 @@ object DigiPackFailureHandlerManualTest extends Matchers {
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
-      .send(FailedDigitalPackEmailFields(email, IdentityUserId("identityId")))
+      .send(FailedEmailFields.digitalPack(email, IdentityUserId("identityId")))
       .map { result =>
         result.getMessageId should not be ""
         sys.exit(0)
@@ -215,7 +215,7 @@ object GuardianWeeklyFailureHandlerTest extends Matchers {
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
-      .send(FailedGuardianWeeklyEmailFields(email, IdentityUserId("identityId")))
+      .send(FailedEmailFields.guardianWeekly(email, IdentityUserId("identityId")))
       .map { result =>
         result.getMessageId should not be ""
         sys.exit(0)
@@ -237,7 +237,7 @@ object PrintFailureHandlerTest extends Matchers {
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
-      .send(FailedPaperEmailFields(email, IdentityUserId("identityId")))
+      .send(FailedEmailFields.paper(email, IdentityUserId("identityId")))
       .map { result =>
         result.getMessageId should not be ""
         sys.exit(0)

@@ -1,8 +1,20 @@
 package com.gu.emailservices
 
-import com.gu.salesforce.Salesforce.SfContactId
+object FailedEmailFields {
 
-case class FailedContributionEmailFields(email: String, identityUserId: IdentityUserId) extends EmailFields {
-  override def payload: String = super.payload(email, "contribution-failed")
-  override def userId: Either[SfContactId, IdentityUserId] = Right(identityUserId)
+  def contribution(email: String, identityUserId: IdentityUserId): EmailFields =
+    failedEmailFields("contribution-failed", email, identityUserId)
+
+  def digitalPack(email: String, identityUserId: IdentityUserId): EmailFields =
+    failedEmailFields("digipack-failed", email, identityUserId)
+
+  def guardianWeekly(email: String, identityUserId: IdentityUserId): EmailFields =
+    failedEmailFields("guardian-weekly-failed", email, identityUserId)
+
+  def paper(email: String, identityUserId: IdentityUserId): EmailFields =
+    failedEmailFields("paper-failed", email, identityUserId)
+
+  private def failedEmailFields(dataExtensionName: String, email: String, identityUserId: IdentityUserId): EmailFields =
+    EmailFields(Nil, Right(identityUserId), email, dataExtensionName)
+
 }
