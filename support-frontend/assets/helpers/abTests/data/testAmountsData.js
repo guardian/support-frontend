@@ -8,7 +8,7 @@ export const USV1 = {
 
 export const AusAmounts = {
   AUDCountries: {
-    ONE_OFF: [{ value: '100' }, { value: '150', isDefault: true }, { value: '250' }, { value: '500' }],
+    ONE_OFF: [{ value: '60' }, { value: '100', isDefault: true }, { value: '250' }, { value: '500' }],
     MONTHLY: [{ value: '10' }, { value: '25', isDefault: true }, { value: '50' }],
     ANNUAL: [{ value: '100', isDefault: true }, { value: '250' }, { value: '500' }, { value: '1000' }],
   },

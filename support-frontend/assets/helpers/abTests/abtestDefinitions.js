@@ -34,7 +34,7 @@ export const tests: Tests = {
     seed: 5,
   },
 
-  auAmountsTest: {
+  auAmountsTest2: {
     type: 'AMOUNTS',
     variants: [
       {
@@ -54,7 +54,7 @@ export const tests: Tests = {
     isActive: true,
     referrerControlled: false,
     targetPage: auOnlyLandingPage,
-    seed: 8,
+    seed: 10,
   },
 
   ukAmountsTest: {
