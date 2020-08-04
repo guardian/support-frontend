@@ -22,7 +22,7 @@ import {
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
   setThankYouPageStage,
-  loadPaymentSdkIfNecessary,
+  loadPayPalExpressSdk, loadAmazonPaySdk,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -37,6 +37,7 @@ import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { getCampaignSettings } from 'helpers/campaigns';
 import { loadRecaptchaV2 } from '../../helpers/recaptcha';
+import { AmazonPay, PayPal } from 'helpers/paymentMethods';
 
 // ----- Functions ----- //
 
@@ -141,14 +142,16 @@ function selectInitialContributionTypeAndPaymentMethod(
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
-  dispatch(loadPaymentSdkIfNecessary(
-    paymentMethod,
-    contributionType,
-    countryGroupId,
-    state.page.user.isTestUser || false,
-    false,
-    false,
-  ));
+
+  switch (paymentMethod) {
+    case PayPal:
+      dispatch(loadPayPalExpressSdk(contributionType));
+      break;
+    case AmazonPay:
+      dispatch(loadAmazonPaySdk(countryGroupId, state.page.user.isTestUser || false));
+      break;
+    default:
+  }
 }
 
 const init = (store: Store<State, Action, Function>) => {

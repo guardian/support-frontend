@@ -46,7 +46,7 @@ import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalA
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { AmazonPay, DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/stripe';
@@ -262,29 +262,15 @@ const setUserTypeFromIdentityResponse =
     };
 
 // We defer loading 3rd party payment SDKs until the user selects one, or one is selected by default
-const loadPaymentSdkIfNecessary = (
-  paymentMethod: PaymentMethod,
-  contributionType: ContributionType,
-  countryGroupId: CountryGroupId,
-  isTestUser: boolean,
-  payPalHasBegunLoading: boolean,
-  amazonPayHasBegunLoading: boolean,
-) => (dispatch: Function): void => {
-  switch (paymentMethod) {
-    case PayPal:
-      if (contributionType !== 'ONE_OFF' && !payPalHasBegunLoading) {
-        dispatch(setPayPalHasBegunLoading());
-        loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
-      }
-      break;
-    case AmazonPay:
-      if (!amazonPayHasBegunLoading) {
-        dispatch(setAmazonPayHasBegunLoading());
-        setupAmazonPay(countryGroupId, dispatch, isTestUser);
-      }
-      break;
-    default:
+const loadPayPalExpressSdk = (contributionType: ContributionType) => (dispatch: Function): void => {
+  if (contributionType !== 'ONE_OFF') {
+    dispatch(setPayPalHasBegunLoading());
+    loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
   }
+};
+const loadAmazonPaySdk = (countryGroupId: CountryGroupId, isTestUser: boolean) => (dispatch: Function): void => {
+  dispatch(setAmazonPayHasBegunLoading());
+  setupAmazonPay(countryGroupId, dispatch, isTestUser);
 };
 
 const updateContributionTypeAndPaymentMethod =
@@ -805,5 +791,6 @@ export {
   setPayPalHasBegunLoading,
   updatePayPalButtonReady,
   updateRecaptchaToken,
-  loadPaymentSdkIfNecessary,
+  loadPayPalExpressSdk,
+  loadAmazonPaySdk,
 };

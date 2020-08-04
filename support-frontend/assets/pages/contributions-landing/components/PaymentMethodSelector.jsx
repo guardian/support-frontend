@@ -27,7 +27,7 @@ import {
   type Action,
   updatePaymentMethod,
   updateSelectedExistingPaymentMethod,
-  loadPaymentSdkIfNecessary,
+  loadPayPalExpressSdk, loadAmazonPaySdk,
 } from '../contributionsLandingActions';
 import { isUsableExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type {
@@ -70,14 +70,8 @@ type PropTypes = {|
   switches: Switches,
   payPalHasBegunLoading: boolean,
   amazonPayHasBegunLoading: boolean,
-  loadPaymentSdkIfNecessary: (
-    paymentMethod: PaymentMethod,
-    contributionType: ContributionType,
-    countryGroupId: CountryGroupId,
-    isTestUser: boolean,
-    payPalHasBegunLoading: boolean,
-    amazonPayHasBegunLoading: boolean,
-  ) => (dispatch: Function) => void
+  loadPayPalExpressSdk: (contributionType: ContributionType) => (dispatch: Function) => void,
+  loadAmazonPaySdk: (countryGroupId: CountryGroupId, isTestUser: boolean) => (dispatch: Function) => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -98,7 +92,8 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = {
   updatePaymentMethod,
   updateSelectedExistingPaymentMethod,
-  loadPaymentSdkIfNecessary,
+  loadPayPalExpressSdk,
+  loadAmazonPaySdk,
 };
 
 // ----- Render ----- //
@@ -185,14 +180,20 @@ const radioCss = {
 };
 
 const onPaymentMethodUpdate = (paymentMethod: PaymentMethod, props: PropTypes) => {
-  props.loadPaymentSdkIfNecessary(
-    paymentMethod,
-    props.contributionType,
-    props.countryGroupId,
-    props.isTestUser,
-    props.payPalHasBegunLoading,
-    props.amazonPayHasBegunLoading,
-  );
+  switch (paymentMethod) {
+    case PayPal:
+      if (!props.payPalHasBegunLoading) {
+        loadPayPalExpressSdk(props.contributionType);
+      }
+      break;
+    case AmazonPay:
+      if (!props.amazonPayHasBegunLoading) {
+        loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
+      }
+      break;
+    default:
+  }
+
   props.updatePaymentMethod(paymentMethod);
   props.updateSelectedExistingPaymentMethod(undefined);
 };
