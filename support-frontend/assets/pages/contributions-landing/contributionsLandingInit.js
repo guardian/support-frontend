@@ -3,9 +3,6 @@
 // ----- Imports ----- //
 
 import { type Store } from 'redux';
-import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
-import { setupAmazonPay } from 'helpers/paymentIntegrations/amazonPay';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import { getQueryParameter } from 'helpers/url';
@@ -16,7 +13,7 @@ import {
   getValidPaymentMethods,
   getValidContributionTypesFromUrlOrElse,
 } from 'helpers/checkouts';
-import { type ContributionType, contributionTypeAvailable } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type Action,
@@ -25,6 +22,7 @@ import {
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
   setThankYouPageStage,
+  loadPayPalExpressSdk, loadAmazonPaySdk,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -39,6 +37,7 @@ import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { getCampaignSettings } from 'helpers/campaigns';
 import { loadRecaptchaV2 } from '../../helpers/recaptcha';
+import { AmazonPay, PayPal } from 'helpers/paymentMethods';
 
 // ----- Functions ----- //
 
@@ -79,13 +78,8 @@ function getInitialContributionType(
 function initialisePaymentMethods(
   state: State,
   dispatch: Function,
-  contributionTypes: ContributionTypes,
 ) {
-
-  const { currencyId, countryGroupId } = state.common.internationalisation;
-  const isTestUser = !!state.page.user.isTestUser;
-
-  setupAmazonPay(countryGroupId, dispatch, isTestUser);
+  const { currencyId } = state.common.internationalisation;
 
   // initiate fetch of existing payment methods
   const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
@@ -110,13 +104,6 @@ function initialisePaymentMethods(
     );
   } else {
     dispatch(setExistingPaymentMethods([]));
-  }
-
-  const recurringContributionsAvailable = contributionTypeAvailable('MONTHLY', countryGroupId, contributionTypes)
-    || contributionTypeAvailable('ANNUAL', countryGroupId, contributionTypes);
-
-  if (getQueryParameter('paypal-js') !== 'no' && recurringContributionsAvailable) {
-    loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
   }
 }
 
@@ -155,6 +142,16 @@ function selectInitialContributionTypeAndPaymentMethod(
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
+
+  switch (paymentMethod) {
+    case PayPal:
+      dispatch(loadPayPalExpressSdk(contributionType));
+      break;
+    case AmazonPay:
+      dispatch(loadAmazonPaySdk(countryGroupId, state.page.user.isTestUser || false));
+      break;
+    default:
+  }
 }
 
 const init = (store: Store<State, Action, Function>) => {
@@ -166,7 +163,7 @@ const init = (store: Store<State, Action, Function>) => {
   const contributionTypes = getContributionTypes(state);
   dispatch(setContributionTypes(contributionTypes));
 
-  initialisePaymentMethods(state, dispatch, contributionTypes);
+  initialisePaymentMethods(state, dispatch);
 
   // This will be in window.guardian if it has come from a PayPal one-off contribution,
   // where it is returned by the Payment API to the backend, flashed into the session to preserve

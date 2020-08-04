@@ -27,6 +27,7 @@ import {
   type Action,
   updatePaymentMethod,
   updateSelectedExistingPaymentMethod,
+  loadPayPalExpressSdk, loadAmazonPaySdk,
 } from '../contributionsLandingActions';
 import { isUsableExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type {
@@ -50,12 +51,14 @@ import SvgPayPalDs from 'components/svgs/paypalDs';
 import SvgDirectDebitSymbolDs from 'components/svgs/directDebitSymbolDs';
 import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgNewCreditCardDs from 'components/svgs/newCreditCardDs';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   countryId: IsoCountry,
+  countryGroupId: CountryGroupId,
   contributionType: ContributionType,
   currency: IsoCurrency,
   existingPaymentMethods: ExistingPaymentMethod[] | typeof undefined,
@@ -65,11 +68,16 @@ type PropTypes = {|
   updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   isTestUser: boolean,
   switches: Switches,
+  payPalHasBegunLoading: boolean,
+  amazonPayHasBegunLoading: boolean,
+  loadPayPalExpressSdk: (contributionType: ContributionType) => (dispatch: Function) => void,
+  loadAmazonPaySdk: (countryGroupId: CountryGroupId, isTestUser: boolean) => (dispatch: Function) => void,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
+  countryGroupId: state.common.internationalisation.countryGroupId,
   currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
   existingPaymentMethods: state.common.existingPaymentMethods,
@@ -77,11 +85,15 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
+  payPalHasBegunLoading: state.page.form.payPalData.hasBegunLoading,
+  amazonPayHasBegunLoading: state.page.form.amazonPayData.hasBegunLoading,
 });
 
 const mapDispatchToProps = {
   updatePaymentMethod,
   updateSelectedExistingPaymentMethod,
+  loadPayPalExpressSdk,
+  loadAmazonPaySdk,
 };
 
 // ----- Render ----- //
@@ -167,6 +179,25 @@ const radioCss = {
   },
 };
 
+const onPaymentMethodUpdate = (paymentMethod: PaymentMethod, props: PropTypes) => {
+  switch (paymentMethod) {
+    case PayPal:
+      if (!props.payPalHasBegunLoading) {
+        props.loadPayPalExpressSdk(props.contributionType);
+      }
+      break;
+    case AmazonPay:
+      if (!props.amazonPayHasBegunLoading) {
+        props.loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
+      }
+      break;
+    default:
+  }
+
+  props.updatePaymentMethod(paymentMethod);
+  props.updateSelectedExistingPaymentMethod(undefined);
+};
+
 
 function withProps(props: PropTypes) {
   const paymentMethods: PaymentMethod[] =
@@ -229,8 +260,7 @@ function withProps(props: PropTypes) {
                 type="radio"
                 value={paymentMethod}
                 onChange={() => {
-                  props.updatePaymentMethod(paymentMethod);
-                  props.updateSelectedExistingPaymentMethod(undefined);
+                  onPaymentMethodUpdate(paymentMethod, props);
                 }}
                 checked={props.paymentMethod === paymentMethod}
                 label={renderLabelAndLogo(paymentMethod)}

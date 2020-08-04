@@ -13,6 +13,7 @@ import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/readerReve
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPal } from 'helpers/paymentMethods';
 import { type Action, updatePayPalButtonReady } from 'pages/contributions-landing/contributionsLandingActions';
+import AnimatedDots from 'components/spinners/animatedDots';
 
 type PropTypes = {|
   onPaymentAuthorisation: Function,
@@ -47,7 +48,7 @@ const PayPalExpressButtonComponent = (props: PropTypes) => {
 
   // hasLoaded determines whether window.paypal is available
   if (!props.hasLoaded) {
-    return null;
+    return <AnimatedDots appearance="dark" />;
   }
 
   // This element contains an iframe which contains the actual button

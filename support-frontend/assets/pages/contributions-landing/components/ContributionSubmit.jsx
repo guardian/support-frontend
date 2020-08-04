@@ -57,7 +57,7 @@ function mapStateToProps(state: State) {
     otherAmount: state.page.form.formData.otherAmounts[contributionType].amount,
     currencyId: state.common.internationalisation.currencyId,
     csrf: state.page.csrf,
-    payPalHasLoaded: state.page.form.payPalHasLoaded,
+    payPalHasLoaded: state.page.form.payPalData.hasLoaded,
     isTestUser: state.page.user.isTestUser,
     formIsSubmittable: state.page.form.formIsSubmittable,
     amount: getAmount(
