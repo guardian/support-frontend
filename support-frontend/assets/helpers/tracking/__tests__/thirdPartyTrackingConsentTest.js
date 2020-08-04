@@ -1,35 +1,20 @@
 // @flow
 // ----- Imports ----- //
 
-// import {
-//   ccpaEnabled as _ccpaEnabledy,
-// } from 'helpers/tracking/ccpa';
 import {
   onConsentChange as _onConsentChange,
-// onIabConsentNotification as _onIabConsentNotification,
 } from '@guardian/consent-management-platform';
-// import { get as _getCookie } from 'helpers/cookie';
 import {
   getTrackingConsent,
   OptedIn,
   OptedOut,
 } from '../thirdPartyTrackingConsent';
 
-// const ccpaEnabled: any = _ccpaEnabledy;
-// const getCookie: any = _getCookie;
 const onConsentChange: any = _onConsentChange;
-
-// jest.mock('helpers/tracking/ccpa', () => ({
-//   ccpaEnabled: jest.fn(),
-// }));
 
 jest.mock('@guardian/consent-management-platform', () => ({
   onConsentChange: jest.fn(),
 }));
-
-// jest.mock('helpers/cookie', () => ({
-//   get: jest.fn(),
-// }));
 
 jest.mock('helpers/logger', () => ({
   logException: jest.fn(),
