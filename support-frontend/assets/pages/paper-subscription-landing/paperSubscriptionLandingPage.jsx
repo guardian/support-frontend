@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
-import Footer from 'components/footer/footer';
+import Footer from 'components/footerCompliant/Footer';
 import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 
@@ -45,7 +45,7 @@ const content = (
   <Provider store={store}>
     <Page
       header={<Header countryGroupId={GBPCountries} />}
-      footer={<Footer />}
+      footer={<Footer privacyPolicy />}
     >
       <CampaignHeader />
       {paperHasDeliveryEnabled() &&

@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
-import FooterContainer from 'components/footer/footerContainer';
+import FooterContainer from 'components/footerCompliant/footerContainer';
 import { detect, type CountryGroupId, AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 

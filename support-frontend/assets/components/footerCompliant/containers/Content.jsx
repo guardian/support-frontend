@@ -9,6 +9,7 @@ import { brand } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 
 type PropTypes = {|
+  className: string,
   paddingTop: boolean,
   border: boolean,
   children: Node,
@@ -19,7 +20,7 @@ const paddingStyle = css`
 `;
 
 const borderStyle = css`
-  ${from.leftCol} {
+  ${from.tablet} {
     border-left: 1px solid ${brand[600]}; border-right: 1px solid ${brand[600]};
   }
 `;
@@ -34,9 +35,13 @@ const contentStyle = css`
   border-bottom: 1px solid ${brand[600]};
 `;
 
-export function Content({ border, paddingTop, children }: PropTypes) {
+export function Content({
+  className, border, paddingTop, children,
+}: PropTypes) {
   return (
-    <div css={[
+    <div
+      className={className}
+      css={[
       contentStyle,
       paddingTop ? paddingStyle : '',
       border ? borderStyle : '',
