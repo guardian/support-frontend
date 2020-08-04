@@ -10,6 +10,7 @@ import { type IsoCurrency, fromCountryGroupId, currencies } from 'helpers/intern
 import type { ContributionType } from 'helpers/contributions';
 import './termsPrivacy.scss';
 import type { CampaignSettings } from 'helpers/campaigns';
+import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 
 // ---- Types ----- //
@@ -79,6 +80,19 @@ function TermsPrivacy(props: PropTypes) {
     );
   }
 
+  const isUSContributor = props.countryGroupId === 'UnitedStates';
+  const isNotOneOffContribution = props.contributionType !== 'ONE_OFF';
+  const referrerAcquisitionData = getReferrerAcquisitionData();
+  const sourceIsNotAppleNews = referrerAcquisitionData.source !== 'APPLE_NEWS';
+  const sourceIsNotGoogleAMP = referrerAcquisitionData.source !== 'GOOGLE_AMP';
+
+  const shouldShowPhilanthropicAsk = (
+    isUSContributor &&
+    isNotOneOffContribution &&
+    sourceIsNotAppleNews &&
+    sourceIsNotGoogleAMP
+  );
+
   return (
     <>
       <div className="component-terms-privacy">
@@ -96,10 +110,7 @@ function TermsPrivacy(props: PropTypes) {
       </div>
       <br />
       <div>
-        {
-          props.contributionType !== 'ONE_OFF' &&
-          (props.countryGroupId === 'UnitedStates') ? patronAndPhilanthropicAskText : patronText
-        }
+        { shouldShowPhilanthropicAsk ? patronAndPhilanthropicAskText : patronText }
       </div>
     </>
   );
