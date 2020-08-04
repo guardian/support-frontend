@@ -10,8 +10,9 @@ import { space } from '@guardian/src-foundations';
 
 type PropTypes = {|
   className: string,
-  paddingTop: boolean,
-  border: boolean,
+  centred?: boolean,
+  paddingTop?: boolean,
+  border?: boolean,
   children: Node,
 |}
 
@@ -21,6 +22,12 @@ const paddingStyle = css`
 
 const borderStyle = css`
   ${from.tablet} {
+    border-left: 1px solid ${brand[600]}; border-right: 1px solid ${brand[600]};
+  }
+`;
+
+const borderStyleCentred = css`
+  ${from.wide} {
     border-left: 1px solid ${brand[600]}; border-right: 1px solid ${brand[600]};
   }
 `;
@@ -36,18 +43,30 @@ const contentStyle = css`
 `;
 
 export function Content({
-  className, border, paddingTop, children,
+  className, centred, border, paddingTop, children,
 }: PropTypes) {
+  let borderStylesToApply = '';
+  if (border && centred) {
+    borderStylesToApply = borderStyleCentred;
+  } else if (border) {
+    borderStylesToApply = borderStyle;
+  }
   return (
     <div
       className={className}
       css={[
       contentStyle,
       paddingTop ? paddingStyle : '',
-      border ? borderStyle : '',
+      borderStylesToApply,
     ]}
     >
       {children}
     </div>
   );
 }
+
+Content.defaultProps = {
+  centred: false,
+  border: false,
+  paddingTop: false,
+};

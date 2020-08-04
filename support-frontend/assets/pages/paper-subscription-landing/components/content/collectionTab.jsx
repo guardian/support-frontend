@@ -71,23 +71,6 @@ const CollectionTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropType
   <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
     <ContentVoucherFaqBlock />
     <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your voucher subscription package below" />
-    {/* <ContentHelpBlock
-      faqLink={
-        <a
-          href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
-          onClick={sendClickedEvent('paper_subscription_collection_page-subscription_faq_link')}
-        >
-        Subscriptions FAQs
-        </a>
-      }
-      telephoneLink={
-        <a
-          href="tel:+4403303336767"
-          onClick={sendClickedEvent('paper_subscription_collection_page-telephone_link')}
-        >0330 333 6767
-        </a>
-      }
-    /> */}
   </div>
 );
 export default CollectionTab;

@@ -12,7 +12,8 @@ export const componentFooter = css`
   font-weight: 400;
   color: ${neutral[100]};
 
-  /* TODO: Check if we can remove this; depends on styles applied to the legal text passed in */
+  /* TODO: Check if we can remove this; depends on styles applied to the legal text passed in
+    Preferably switch to the Link component in Source for all links- current display property means we can't use it as of 2.0 */
   a {
     color: ${brandText.anchorPrimary};
     :hover {
@@ -32,13 +33,16 @@ export const copyright = css`
 export const linksList = css`
   width: 100%;
   list-style: none;
-  columns: 2;
-  column-rule: 1px solid ${brand[600]};
-  column-gap: ${space[12]}px;
+  display: grid;
+  grid-column-gap: ${space[5]}px;
+  grid-template: repeat(2, 1fr) / repeat(2, 1fr);
+  grid-auto-flow: column;
+
+  ${until.tablet} {
+    padding-bottom: ${space[9]}px;
+  }
 
   ${from.tablet} {
-    columns: none;
-    column-gap: 0;
     display: flex;
   }
 `;
@@ -47,8 +51,11 @@ export const link = css`
   padding: ${space[2]}px ${space[1]}px;
 
   ${until.tablet} {
-    &:nth-of-type(2n) {
-      padding-bottom: ${space[9]}px;
+    /* Select only the first two elements
+    https://css-tricks.com/useful-nth-child-recipies/#select-only-the-first-five */
+    &:nth-of-type(-n+2) {
+      padding-right: ${space[5]}px;
+      border-right: 1px solid ${brand[600]};
     }
   }
 

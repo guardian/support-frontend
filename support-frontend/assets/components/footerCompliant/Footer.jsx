@@ -21,6 +21,7 @@ import { BackToTop } from './BackToTop';
 // ----- Props ----- //
 
 type PropTypes = {|
+  centred: boolean,
   privacyPolicy: boolean,
   disclaimer: boolean,
   faqsLink: string,
@@ -33,12 +34,13 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function Footer({
-  disclaimer, privacyPolicy, children, countryGroupId, faqsLink, termsConditionsLink,
+  centred, disclaimer, privacyPolicy, children, countryGroupId, faqsLink, termsConditionsLink,
 }: PropTypes) {
   return (
     <footer css={componentFooter} role="contentinfo">
-      {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
-        <FooterContent border paddingTop>
+      <ThemeProvider theme={linkBrand}>
+        {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
+        <FooterContent border paddingTop centred={centred}>
           <div>
             <Rows>
               {privacyPolicy &&
@@ -53,8 +55,7 @@ function Footer({
           </div>
         </FooterContent>
       }
-      <FooterContent border>
-        <ThemeProvider theme={linkBrand}>
+        <FooterContent border centred={centred}>
           <ul css={linksList}>
             <li css={link}>
               <Link subdued href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</Link>
@@ -66,19 +67,19 @@ function Footer({
               <Link subdued href={faqsLink}>FAQs</Link>
             </li>
             {termsConditionsLink &&
-              <li css={link}>
-                <Link subdued href={termsConditionsLink}>Terms & Conditions</Link>
-              </li>
+            <li css={link}>
+              <Link subdued href={termsConditionsLink}>Terms & Conditions</Link>
+            </li>
             }
           </ul>
-        </ThemeProvider>
-      </FooterContent>
-      <FooterContent paddingTop>
-        <div css={backToTopLink}>
-          <BackToTop />
-        </div>
-        <span css={copyright}>{copyrightNotice}</span>
-      </FooterContent>
+        </FooterContent>
+        <FooterContent paddingTop centred={centred}>
+          <div css={backToTopLink}>
+            <BackToTop />
+          </div>
+          <span css={copyright}>{copyrightNotice}</span>
+        </FooterContent>
+      </ThemeProvider>
     </footer>
   );
 
@@ -88,6 +89,7 @@ function Footer({
 // ----- Default Props ----- //
 
 Footer.defaultProps = {
+  centred: false,
   privacyPolicy: false,
   disclaimer: false,
   faqsLink: 'https://www.theguardian.com/help',

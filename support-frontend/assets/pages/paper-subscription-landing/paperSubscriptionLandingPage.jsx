@@ -39,13 +39,18 @@ const store = pageInit(() => reducer(fulfilment), true);
 const state = store.getState();
 const { useDigitalVoucher } = state.common.settings;
 
+const paperSubsFooter = (
+  <Footer privacyPolicy faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions">
+    <p>For full Guardian and Observer voucher and home delivery terms and conditions, see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions">here</a>.</p>
+  </Footer>);
+
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <Page
       header={<Header countryGroupId={GBPCountries} />}
-      footer={<Footer privacyPolicy />}
+      footer={paperSubsFooter}
     >
       <CampaignHeader />
       {paperHasDeliveryEnabled() &&

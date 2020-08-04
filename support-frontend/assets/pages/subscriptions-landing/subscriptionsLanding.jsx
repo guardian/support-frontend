@@ -46,7 +46,9 @@ const content = (
   <Provider store={store}>
     <Page
       header={<Header />}
-      footer={<FooterContainer disclaimer privacyPolicy />}
+      footer={
+        <FooterContainer faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions" centred disclaimer privacyPolicy />
+      }
     >
       <SubscriptionLandingContent />
       <ConsentBanner />
