@@ -1,7 +1,8 @@
 package com.gu.support.pricing
 
-import com.gu.i18n.CountryGroup.{Europe, UK}
-import com.gu.i18n.Currency.{EUR, GBP}
+import com.gu.i18n.CountryGroup
+import com.gu.i18n.CountryGroup.{Europe, UK, US}
+import com.gu.i18n.Currency.{EUR, GBP, USD}
 import com.gu.support.catalog._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
@@ -9,6 +10,7 @@ import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
 import com.gu.support.promotions.ServicesFixtures.discountPromoCode
 import com.gu.support.promotions.{DefaultPromotions, DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
+import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import org.joda.time.Months
 import org.scalatest.OptionValues._
 import org.scalatest.Assertion
@@ -32,6 +34,23 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(8.39)
     digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 119
     digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).promotions.head.discountedPrice shouldBe Some(110.07)
+  }
+
+  it should "find the correct plans for the ReaderType" in {
+    val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+
+    val dsGifts = service.getPrices(DigitalPack, Nil, Gift)
+    dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Quarterly)(GBP).price shouldBe 33.99
+    dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 119
+
+    val dsCorporate = service.getPrices(DigitalPack, Nil, Corporate)
+    dsCorporate(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 0
+
+    val weeklyGifts = service.getPrices(GuardianWeekly, Nil, Gift)
+    weeklyGifts(US)(Domestic)(NoProductOptions)(Annual)(USD).price shouldBe 300
+
+    val paperGifts = service.getPrices(Paper, Nil, Gift)
+    paperGifts(UK).size shouldBe 0 // There is no gift product for Paper
   }
 
   it should "return correct prices for Guardian Weekly" in {
