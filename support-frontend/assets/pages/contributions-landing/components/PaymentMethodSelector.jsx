@@ -183,12 +183,12 @@ const onPaymentMethodUpdate = (paymentMethod: PaymentMethod, props: PropTypes) =
   switch (paymentMethod) {
     case PayPal:
       if (!props.payPalHasBegunLoading) {
-        loadPayPalExpressSdk(props.contributionType);
+        props.loadPayPalExpressSdk(props.contributionType);
       }
       break;
     case AmazonPay:
       if (!props.amazonPayHasBegunLoading) {
-        loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
+        props.loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
       }
       break;
     default:
