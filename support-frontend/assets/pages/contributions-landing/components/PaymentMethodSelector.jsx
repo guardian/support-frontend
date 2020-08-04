@@ -224,7 +224,6 @@ function withProps(props: PropTypes) {
           }
           {contributionTypeIsRecurring(props.contributionType) &&
           fullExistingPaymentMethods.map((existingPaymentMethod: RecentlySignedInExistingPaymentMethod) => (
-            // TODO: check is this gets error state.
             <>
               <Radio
                 id={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
