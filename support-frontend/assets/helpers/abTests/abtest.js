@@ -138,7 +138,7 @@ function getParticipationsFromUrl(): ?Participations {
 }
 
 function getServerSideParticipations(): ?Participations {
-  if (window.guardian.serversideTests) {
+  if (window && window.guardian && window.guardian.serversideTests) {
     return window.guardian.serversideTests;
   }
   return null;
