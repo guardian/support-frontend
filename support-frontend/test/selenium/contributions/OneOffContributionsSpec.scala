@@ -41,7 +41,7 @@ class OneOffContributionsSpec extends AnyFeatureSpec
     Scenario("One-off contribution sign-up with Stripe - AUD") {
 
       val stripePayment = 22.55
-      val testUser = new PostDeployTestUser(driverConfig)
+      val testUser = new PostDeployTestUserContribs(driverConfig)
       val landingPage = ContributionsLanding("au", testUser)
       val contributionThankYou = new ContributionThankYou("au")
 
@@ -57,6 +57,9 @@ class OneOffContributionsSpec extends AnyFeatureSpec
 
       And("they manually enter an amount in the other-amount field")
       landingPage.enterAmount(stripePayment)
+
+      Given("The user fills in their details correctly")
+      landingPage.fillInPersonalDetails(hasNameFields = false)
 
       Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")

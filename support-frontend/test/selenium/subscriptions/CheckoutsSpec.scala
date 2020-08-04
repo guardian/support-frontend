@@ -58,7 +58,7 @@ class CheckoutsSpec extends AnyFeatureSpec
   }
 
   def testCheckout(checkoutName: String, checkoutPage: CheckoutPage, productPage: ProductPage, paymentFunction: CheckoutPage => Unit): Unit = {
-    val testUser = new PostDeployTestUser(driverConfig)
+    val testUser = new PostDeployTestUserSubs(driverConfig)
 
     Given("that a user goes to the UK product page")
     goTo(productPage)

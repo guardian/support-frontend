@@ -58,7 +58,7 @@ class ProductPagesSpec extends AnyFeatureSpec
 
   Feature("Digital Pack product page") {
     Scenario("Basic loading") {
-      val testUser = new PostDeployTestUser(driverConfig)
+      val testUser = new PostDeployTestUserSubs(driverConfig)
       testPageLoads(new DigitalPackProductPage())
     }
   }

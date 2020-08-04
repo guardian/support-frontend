@@ -12,7 +12,24 @@ trait TestUser {
   val username: String
 }
 
-class PostDeployTestUser(driverConfig: DriverConfig) extends TestUser {
+class PostDeployTestUserContribs(driverConfig: DriverConfig) extends TestUser {
+
+  private val testUsers = TestUsernames(
+    com.gu.identity.testing.usernames.Encoder.withSecret(Config.testUsersSecret),
+    recency = ofDays(2)
+  )
+
+  private def addTestUserCookies(testUsername: String) = {
+    driverConfig.addCookie(name = "pre-signin-test-user", value = testUsername)
+    driverConfig.addCookie(name = "_test_username", value = testUsername, domain = Some(Config.guardianDomain))
+    driverConfig.addCookie(name = "_post_deploy_user", value = "true") // This enables the tests to use the mocked payment services
+  }
+
+  val username = testUsers.generate()
+  addTestUserCookies(username)
+}
+
+class PostDeployTestUserSubs(driverConfig: DriverConfig) extends TestUser {
 
   private val client = new OkHttpClient()
   private val requestToIdapi = new Request.Builder()
@@ -28,6 +45,7 @@ class PostDeployTestUser(driverConfig: DriverConfig) extends TestUser {
     driverConfig.addCookie(name = "pre-signin-test-user", value = testUsername)
     driverConfig.addCookie(name = "_test_username", value = testUsername, domain = Some(Config.guardianDomain))
     driverConfig.addCookie(name = "_post_deploy_user", value = "true") // This enables the tests to use the mocked payment services
+    driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
     for (n <- 0 until 3) {
       val cookie_name = cursor.downField("values").downN(n).downField("key").as[String].right.get
       val cookie_value = cursor.downField("values").downN(n).downField("value").as[String].right.get
