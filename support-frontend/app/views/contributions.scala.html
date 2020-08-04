@@ -1,4 +1,5 @@
 @import admin.settings.AllSettings
+@import admin.ServersideAbTest.{Participation, Variant}
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import com.gu.i18n.Country
 @import com.gu.identity.model.{User => IdUser}
@@ -26,9 +27,10 @@
   shareImageUrl: String,
   shareUrl: String,
   v2recaptchaConfigPublicKey: String,
+  serversideTests: Map[String, Participation] = Map()
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
-@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl)) {
+@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl), serversideTests = serversideTests) {
   <script type="text/javascript">
   window.guardian = window.guardian || {};
   @idUser.map { user =>
@@ -113,7 +115,7 @@
   window.guardian.ausMomentEnabled = @settings.switches.experiments.get("ausMomentEnabled").exists(_.isOn)
 
   window.guardian.recaptchaEnabled = @settings.switches.enableRecaptchaFrontend.isOn
-  window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
+  window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey";
   </script>
-  <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
+  <script defer id="stripe-js" src=@{s"https://js.stripe.com/v3/${if (serversideTests.get("stripeFraudDetection").contains(Variant)) "?advancedFraudSignals=false" else ""}"}></script>"
 }
