@@ -220,8 +220,7 @@ case object Paper extends Product {
 case object GuardianWeekly extends Product {
   private def domestic(
     id: String,
-    billingPeriod:
-    BillingPeriod,
+    billingPeriod: BillingPeriod,
     description: String,
     productRatePlanChargeId: Option[String] = None,
     readerType: ReaderType = Direct
@@ -232,8 +231,7 @@ case object GuardianWeekly extends Product {
 
   private def restOfWorld(
     id: String,
-    billingPeriod:
-    BillingPeriod,
+    billingPeriod: BillingPeriod,
     description: String,
     productRatePlanChargeId: Option[String] = None,
     readerType: ReaderType = Direct
