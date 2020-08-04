@@ -19,7 +19,6 @@ import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import ThankYouContent from './components/thankYou';
 import WeeklyCheckoutForm from './components/weeklyCheckoutForm';
 import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
-import ConsentBanner from '../../components/consentBanner/consentBanner';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { GuardianWeekly } from 'helpers/subscriptions';
@@ -79,7 +78,6 @@ const content = (
         thankYouContent={<ThankYouContent isPending={false} orderIsGift={orderIsAGift} />}
         subscriptionProduct="GuardianWeekly"
       />
-      <ConsentBanner />
     </Page>
   </Provider>
 );

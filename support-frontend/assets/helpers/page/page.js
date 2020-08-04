@@ -42,9 +42,7 @@ import {
 import { trackAbTests } from 'helpers/tracking/ophan';
 import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
-import { ccpaEnabled } from 'helpers/tracking/ccpa';
-import { getGlobal } from 'helpers/globals';
-import { isPostDeployUser } from 'helpers/user/user';
+import { cmp } from '@guardian/consent-management-platform';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -134,20 +132,12 @@ function init<S, A>(
   thunk?: boolean = false,
 ): Store<*, *, *> {
   try {
-    /**
-     * Dynamically load @guardian/consent-management-platform
-     * on condition we're not server side rendering (ssr) the page.
-     * @guardian/consent-management-platform breaks ssr otherwise.
-     */
-    if (!getGlobal('ssr') && ccpaEnabled() && !isPostDeployUser()) {
-      import('@guardian/consent-management-platform').then((cmp) => {
-        cmp.init({
-          useCcpa: true,
-        });
-      });
-    }
-
     const countryId: IsoCountry = detectCountry();
+
+    cmp.init({
+      isInUsa: countryId === 'US',
+    });
+
     const settings = getSettings();
     const countryGroupId: CountryGroupId = detectCountryGroup();
     const currencyId: IsoCurrency = detectCurrency(countryGroupId);

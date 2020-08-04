@@ -21,7 +21,6 @@ import CheckoutForm
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import './digitalSubscriptionCheckout.scss';
-import ConsentBanner from '../../components/consentBanner/consentBanner';
 import { getQueryParameter } from 'helpers/url';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { Monthly } from 'helpers/billingPeriods';
@@ -76,7 +75,6 @@ const content = (
         thankYouContent={<ThankYouContent {...thankyouProps} />}
         subscriptionProduct="DigitalPack"
       />
-      <ConsentBanner />
     </Page>
   </Provider>
 );

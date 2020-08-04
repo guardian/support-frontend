@@ -25,8 +25,6 @@ import Hero from './components/hero';
 import CtaSubscribe from './components/ctaSubscribe';
 import CtaContribute from './components/ctaContribute';
 import OtherProducts from './components/otherProducts';
-import ConsentBanner from 'components/consentBanner/consentBanner';
-
 import './showcase.scss';
 import { Provider } from 'react-redux';
 
@@ -70,7 +68,6 @@ const content = (
       <CtaSubscribe />
       <CtaContribute />
       {countryGroupId === 'GBPCountries' && <OtherProducts />}
-      <ConsentBanner />
     </Page>
   </Provider>
 );
