@@ -87,68 +87,64 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 function withProps(props: PropTypes) {
 
-  if (props.paymentMethod !== 'None') {
-    // if all payment methods are switched off, do not display the button
-    const formClassName = 'form--contribution';
-    const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
-    const amazonPaymentReady = () =>
-      !props.amazonPayData.fatalError && props.amazonPayData.orderReferenceId && props.amazonPayData.paymentSelected;
+  // if all payment methods are switched off, do not display the button
+  const formClassName = 'form--contribution';
+  const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
+  const amazonPaymentReady = () =>
+    !props.amazonPayData.fatalError && props.amazonPayData.orderReferenceId && props.amazonPayData.paymentSelected;
 
-    const submitButtonCopy = getContributeButtonCopyWithPaymentType(
-      props.contributionType,
-      props.otherAmount,
-      props.selectedAmounts,
-      props.currency,
-      props.paymentMethod,
-    );
+  const submitButtonCopy = getContributeButtonCopyWithPaymentType(
+    props.contributionType,
+    props.otherAmount,
+    props.selectedAmounts,
+    props.currency,
+    props.paymentMethod,
+  );
 
-    const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?
-      <AmazonPayWallet isTestUser={props.isTestUser} /> :
-      <AmazonPayLoginButton />);
+  const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?
+    <AmazonPayWallet isTestUser={props.isTestUser} /> :
+    <AmazonPayLoginButton />);
 
-    // We have to show/hide PayPalExpressButton rather than conditionally rendering it
-    // because we don't want to destroy and replace the iframe each time.
-    // See PayPalExpressButton for more info.
-    return (
+  // We have to show/hide PayPalExpressButton rather than conditionally rendering it
+  // because we don't want to destroy and replace the iframe each time.
+  // See PayPalExpressButton for more info.
+  return (
+    <div
+      className="form__submit"
+    >
+      {showPayPalRecurringButton && (
       <div
-        className="form__submit"
+        id="component-paypal-button-checkout"
+        className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
       >
-        {showPayPalRecurringButton && (
-          <div
-            id="component-paypal-button-checkout"
-            className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
-          >
-            <PayPalExpressButton
-              onPaymentAuthorisation={props.onPaymentAuthorisation}
-              csrf={props.csrf}
-              currencyId={props.currencyId}
-              hasLoaded={props.payPalHasLoaded}
-              canOpen={() => props.formIsSubmittable}
-              onClick={() => props.sendFormSubmitEventForPayPalRecurring()}
-              formClassName={formClassName}
-              isTestUser={props.isTestUser}
-              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-              amount={props.amount}
-              billingPeriod={props.billingPeriod}
-            />
-          </div>
-        )}
-        { !props.amazonPayData.fatalError && props.paymentMethod === AmazonPay && getAmazonPayComponent() }
-
-        {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
-          <Button
-            type="submit"
-            aria-label={submitButtonCopy}
-            disabled={props.isWaiting}
-            postDeploymentTestID="contributions-landing-submit-contribution-button"
-          >
-            {submitButtonCopy}
-          </Button> : null }
+        <PayPalExpressButton
+          onPaymentAuthorisation={props.onPaymentAuthorisation}
+          csrf={props.csrf}
+          currencyId={props.currencyId}
+          hasLoaded={props.payPalHasLoaded}
+          canOpen={() => props.formIsSubmittable}
+          onClick={() => props.sendFormSubmitEventForPayPalRecurring()}
+          formClassName={formClassName}
+          isTestUser={props.isTestUser}
+          setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+          amount={props.amount}
+          billingPeriod={props.billingPeriod}
+        />
       </div>
-    );
-  }
+        )}
+      { !props.amazonPayData.fatalError && props.paymentMethod === AmazonPay && getAmazonPayComponent() }
 
-  return null;
+      {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
+        <Button
+          type="submit"
+          aria-label={submitButtonCopy}
+          disabled={props.isWaiting}
+          postDeploymentTestID="contributions-landing-submit-contribution-button"
+        >
+          {submitButtonCopy}
+        </Button> : null }
+    </div>
+  );
 }
 
 function withoutProps() {

@@ -7,6 +7,7 @@ import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
+const allLandingPages = '/??/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
@@ -77,5 +78,27 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: ukOnlyLandingPage,
     seed: 9,
+  },
+
+  defaultPaymentMethodTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'noDefault',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: allLandingPages,
+    seed: 1,
   },
 };

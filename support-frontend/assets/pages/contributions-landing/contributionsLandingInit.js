@@ -45,15 +45,20 @@ function getInitialPaymentMethod(
   contributionType: ContributionType,
   countryId: IsoCountry,
   switches: Switches,
+  state: State,
 ): PaymentMethod {
   const paymentMethodFromSession = getPaymentMethodFromSession();
   const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
 
-  return (
-    paymentMethodFromSession && validPaymentMethods.includes(getPaymentMethodFromSession())
-      ? paymentMethodFromSession
-      : validPaymentMethods[0] || 'None'
-  );
+  if (state.common.abParticipations.defaultPaymentMethodTest === 'control') {
+    return (
+      paymentMethodFromSession && validPaymentMethods.includes(getPaymentMethodFromSession())
+        ? paymentMethodFromSession
+        : validPaymentMethods[0] || 'None'
+    );
+  }
+
+  return 'None';
 }
 
 function getInitialContributionType(
@@ -140,7 +145,7 @@ function selectInitialContributionTypeAndPaymentMethod(
   const { switches } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
-  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
+  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches, state);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 
   switch (paymentMethod) {
