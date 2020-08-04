@@ -1,4 +1,5 @@
- @import admin.settings.AllSettings
+@import admin.settings.AllSettings
+@import admin.ServersideAbTest.{Participation, asJsonString}
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import views.{EmptyDiv, Preload, ReactDiv, SSRContent}
 @import scala.util.Random
@@ -14,6 +15,7 @@
   csrf: Option[String] = None,
   shareImageUrl: Option[String] = None,
   shareUrl: Option[String] = None,
+  serversideTests: Map[String,Participation] = Map()
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
@@ -61,6 +63,8 @@
     }
 
     @settingsScript(settings)
+
+    <script>window.guardian.serversideTests = @Html(asJsonString(serversideTests))</script>
 
     <title>@title</title>
     <meta property="og:title" content="@title"/>

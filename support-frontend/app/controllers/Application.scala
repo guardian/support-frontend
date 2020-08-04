@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.ContributionsServersideTests
+import admin.ServersideAbTest.generateParticipations
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
@@ -23,7 +23,6 @@ import utils.BrowserCheck
 import utils.FastlyGEOIP._
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Random
 
 case class ContributionsPaymentMethodConfigs(
   oneOffDefaultStripeConfig: StripeConfig,
@@ -174,7 +173,7 @@ class Application(
       classes = Some(classes)
     )
 
-    val serverSideTests = ContributionsServersideTests.assign
+    val serversideTests = generateParticipations(List("stripeFraudDetection"))
 
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
@@ -203,7 +202,7 @@ class Application(
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey,
-      serverSideTests = serverSideTests
+      serversideTests = serversideTests
     )
   }
 

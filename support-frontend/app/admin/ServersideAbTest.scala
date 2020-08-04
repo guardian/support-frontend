@@ -8,6 +8,9 @@ object ServersideAbTest {
   // Serverside A/B tests currently only support a single concurrent test
   // running to 100% audience with a 50%/50% split
 
+  def generateParticipations(testNames: List[String]): Map[String, Participation] =
+    testNames.map(_ -> computeParticipation).toMap
+
   def computeParticipation: Participation = if (Random.nextBoolean) Control else Variant
 
   sealed trait Participation
@@ -20,18 +23,9 @@ object ServersideAbTest {
       case Variant => "Variant"
     }
   }
-}
-
-case class ContributionsServersideTests(stripeFraudDetection: Participation)
-
-object ContributionsServersideTests {
-  def assign: ContributionsServersideTests = ContributionsServersideTests(
-    stripeFraudDetection = ServersideAbTest.computeParticipation
-  )
 
   import io.circe.syntax._
-  import io.circe.generic.auto._
-  implicit val encoder = Encoder[ContributionsServersideTests]
+  implicit val encoder = Encoder[Map[String,Participation]]
 
-  val asJsonString: ContributionsServersideTests => String = _.asJson.noSpaces
+  val asJsonString: Map[String,Participation] => String = _.asJson.noSpaces
 }
