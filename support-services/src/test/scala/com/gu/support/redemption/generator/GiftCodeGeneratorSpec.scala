@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 class GiftCodeGeneratorSpec extends AnyFlatSpec with Matchers {
 
   it should "work in the basic case" in {
-    val giftCode = GiftCodeGenerator.fromRandom(Iterator.continually(0)).next.withDuration(GiftDuration.Gift3Month)
+    val giftCode = GiftCodeGenerator.fromInts(Iterator.continually(0)).next.withDuration(GiftDuration.Gift3Month)
     giftCode.value should be("gd03-000000")
   }
 

@@ -9,10 +9,10 @@ object GiftCodeGenerator {
   lazy val randomGiftCodes: Iterator[GenerateGiftCode] = {
     val gen = new SecureRandom()
     val ints = Iterator.continually(gen.nextInt())
-    fromRandom(ints)
+    fromInts(ints)
   }
 
-  def fromRandom(random: Iterator[Int]): Iterator[GenerateGiftCode] =
+  def fromInts(random: Iterator[Int]): Iterator[GenerateGiftCode] =
     CodeSuffixGenerator.generate(random).map(CodeBuilder.build)
 
 }
