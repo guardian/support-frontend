@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { css } from '@emotion/core';
 
 import { connect } from 'react-redux';
 
@@ -223,24 +224,37 @@ function withProps(props: PropTypes) {
           }
           {contributionTypeIsRecurring(props.contributionType) &&
           fullExistingPaymentMethods.map((existingPaymentMethod: RecentlySignedInExistingPaymentMethod) => (
-            <Radio
-              id={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
-              name="paymentMethodSelector"
-              type="radio"
-              value={existingPaymentMethod}
-              onChange={() => {
+            <>
+              <Radio
+                id={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
+                name="paymentMethodSelector"
+                type="radio"
+                value={existingPaymentMethod}
+                onChange={() => {
                   props.updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod));
                   props.updateSelectedExistingPaymentMethod(existingPaymentMethod);
                 }}
-              checked={
+                checked={
                   props.paymentMethod === mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod) &&
                   props.existingPaymentMethod === existingPaymentMethod
                 }
-              arial-labelledby="payment_method"
-              label={renderExistingLabelAndLogo(existingPaymentMethod)}
-              cssOverrides={radioCss}
-              supporting={`Used for your ${subscriptionsToExplainerList(existingPaymentMethod.subscriptions.map(subscriptionToExplainerPart))}`}
-            />
+                arial-labelledby="payment_method"
+                label={renderExistingLabelAndLogo(existingPaymentMethod)}
+                cssOverrides={radioCss}
+              />
+              <div css={css`
+                  font-size: small;
+                  font-style: italic;
+                  margin-left: 40px;
+                  padding-bottom: 6px;
+                  color: #767676;
+                  padding-right: 40px;
+                `}
+              >
+                Used for your{' '}
+                {subscriptionsToExplainerList(existingPaymentMethod.subscriptions.map(subscriptionToExplainerPart))}
+              </div>
+            </>
           ))}
           {paymentMethods.map(paymentMethod => (
             <Radio
