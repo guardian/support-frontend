@@ -20,18 +20,6 @@ const paddingStyle = css`
   padding-top: ${space[4]}px;
 `;
 
-const borderStyle = css`
-  ${from.tablet} {
-    border-left: 1px solid ${brand[600]}; border-right: 1px solid ${brand[600]};
-  }
-`;
-
-const borderStyleCentred = css`
-  ${from.wide} {
-    border-left: 1px solid ${brand[600]}; border-right: 1px solid ${brand[600]};
-  }
-`;
-
 const contentStyle = css`
   position: relative;
   display: flex;
@@ -42,22 +30,25 @@ const contentStyle = css`
   border-bottom: 1px solid ${brand[600]};
 `;
 
+function getBorderStyling(centred = false) {
+  const breakpoint = centred ? from.wide : from.tablet;
+  return css`
+    ${breakpoint} {
+      border-left: 1px solid ${brand[600]}; border-right: 1px solid ${brand[600]};
+    }
+  `;
+}
+
 export function Content({
   className, centred, border, paddingTop, children,
 }: PropTypes) {
-  let borderStylesToApply = '';
-  if (border && centred) {
-    borderStylesToApply = borderStyleCentred;
-  } else if (border) {
-    borderStylesToApply = borderStyle;
-  }
   return (
     <div
       className={className}
       css={[
       contentStyle,
       paddingTop ? paddingStyle : '',
-      borderStylesToApply,
+      border ? getBorderStyling(centred) : '',
     ]}
     >
       {children}
