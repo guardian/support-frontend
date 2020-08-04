@@ -1,18 +1,35 @@
 // @flow
 // ----- Imports ----- //
 
+// import {
+//   ccpaEnabled as _ccpaEnabledy,
+// } from 'helpers/tracking/ccpa';
 import {
   onConsentChange as _onConsentChange,
+// onIabConsentNotification as _onIabConsentNotification,
 } from '@guardian/consent-management-platform';
+// import { get as _getCookie } from 'helpers/cookie';
 import {
-  onConsentChangeEvent,
+  getTrackingConsent,
+  OptedIn,
+  OptedOut,
 } from '../thirdPartyTrackingConsent';
 
+// const ccpaEnabled: any = _ccpaEnabledy;
+// const getCookie: any = _getCookie;
 const onConsentChange: any = _onConsentChange;
+
+// jest.mock('helpers/tracking/ccpa', () => ({
+//   ccpaEnabled: jest.fn(),
+// }));
 
 jest.mock('@guardian/consent-management-platform', () => ({
   onConsentChange: jest.fn(),
 }));
+
+// jest.mock('helpers/cookie', () => ({
+//   get: jest.fn(),
+// }));
 
 jest.mock('helpers/logger', () => ({
   logException: jest.fn(),
@@ -23,144 +40,87 @@ jest.mock('helpers/logger', () => ({
 describe('thirdPartyTrackingConsent', () => {
   let dummyCallback;
 
-  beforeEach(() => {
-    dummyCallback = jest.fn();
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  it('should call dummyCallback with false if onConsentChange throws an error', () => {
+  it('should return OptedOut as ThirdPartyTrackingConsent if onConsentChange throws an error', () => {
     onConsentChange.mockImplementation(() => {
       throw new Error('fail');
     });
 
-    return onConsentChangeEvent(dummyCallback, {
-      foo: 12345,
-      bar: 54321,
-    }).then(() => {
-      expect(dummyCallback).toBeCalledWith({
-        foo: false,
-        bar: false,
-      });
+    return getTrackingConsent().then((trackingConsent) => {
+      expect(trackingConsent).toBe(OptedOut);
     });
   });
 
-  describe('CCPA mode', () => {
-    it('calls dummyCallback with false if CCPA doNotSell is true', () => {
+  describe('should return the correct ThirdPartyTrackingConsent if ccpa mode', () => {
+    it('OptedOut if CCPA doNotSell is true', () => {
       onConsentChange.mockImplementation(callback => callback({
         ccpa: {
           doNotSell: true,
         },
       }));
 
-      return onConsentChangeEvent(dummyCallback, {
-        foo: 12345,
-        bar: 54321,
-      }).then(() => {
-        expect(dummyCallback).toBeCalledWith({
-          foo: false,
-          bar: false,
-        });
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedOut);
       });
     });
 
-    it('calls dummyCallback with true if CCPA doNotSell is false', () => {
+    it('OptedIn if CCPA doNotSell is false', () => {
       onConsentChange.mockImplementation(callback => callback({
         ccpa: {
           doNotSell: false,
         },
       }));
 
-      return onConsentChangeEvent(dummyCallback, {
-        foo: 12345,
-        bar: 54321,
-      }).then(() => {
-        expect(dummyCallback).toBeCalledWith({
-          foo: true,
-          bar: true,
-        });
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedIn);
       });
     });
   });
 
-  describe('TCFv2 mode', () => {
-    describe('when vendorIds provided', () => {
-      it('calls dummyCallback with correct state for each vendor present in vendorConsents', () => {
-        onConsentChange.mockImplementation(callback => callback({
-          tcfv2: {
-            consents: {
-              0: true,
-              1: true,
-              2: true,
-            },
-            vendorConsents: {
-              12345: true,
-              54321: false,
-            },
+  describe('should return the correct ThirdPartyTrackingConsent if TCFv2 mode', () => {
+    it('OptedOut if all consents are false', () => {
+      onConsentChange.mockImplementation(callback => callback({
+        tcfv2: {
+          consents: {
+            0: false,
+            1: false,
+            2: false,
           },
-        }));
+        },
+      }));
 
-        return onConsentChangeEvent(dummyCallback, {
-          foo: 12345,
-          bar: 54321,
-        }).then(() => {
-          expect(dummyCallback).toBeCalledWith({
-            foo: true,
-            bar: false,
-          });
-        });
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedOut);
       });
 
-      it('calls dummyCallback with correct true state from consents if vendor not present in vendorConsents', () => {
-        onConsentChange.mockImplementation(callback => callback({
-          tcfv2: {
-            consents: {
-              0: true,
-              1: true,
-              2: true,
-            },
-            vendorConsents: {
-              12345: true,
-            },
+    it('OptedOut if some consents are false', () => {
+      onConsentChange.mockImplementation(callback => callback({
+        tcfv2: {
+          consents: {
+            0: true,
+            1: true,
+            2: false,
           },
-        }));
+        },
+      }));
 
-        return onConsentChangeEvent(dummyCallback, {
-          foo: 12345,
-          bar: 54321,
-        }).then(() => {
-          expect(dummyCallback).toBeCalledWith({
-            foo: true,
-            bar: true,
-          });
-        });
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedOut);
       });
+    });
 
-      it('calls dummyCallback with correct false state from consents if vendor not present in vendorConsents', () => {
-        onConsentChange.mockImplementation(callback => callback({
-          tcfv2: {
-            consents: {
-              0: false,
-              1: true,
-              2: true,
-            },
-            vendorConsents: {
-              12345: true,
-            },
+    it('OptedIn if all consents are true', () => {
+      onConsentChange.mockImplementation(callback => callback({
+        tcfv2: {
+          consents: {
+            0: true,
+            1: true,
+            2: true,
           },
-        }));
+        },
+      }));
 
-        return onConsentChangeEvent(dummyCallback, {
-          foo: 12345,
-          bar: 54321,
-        }).then(() => {
-          expect(dummyCallback).toBeCalledWith({
-            foo: true,
-            bar: false,
-          });
-        });
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedIn);
       });
     });
   });
