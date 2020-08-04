@@ -2378,6 +2378,18 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-1.8.0.tgz#4b2276d849917471c3cc46e25fd952eb35c3e40a"
   integrity sha512-BACintj3ECSejTrl+HHoyflnXKbDvmgh3VrzZLy6NDTOT/LIk0SH0m7k2jwEpcABAaQpa1qyTtPAgehCJuaj3g==
 
+"@guardian/src-foundations@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-1.9.1.tgz#5a78f2a60e8138d42c781c6cdfc3d465d4c3c27a"
+  integrity sha512-gC8fjZPt7gq8r0bqlaaWRGqpeKQMnBPPDpj9Hvvc4/9usWdJhLVYJmLLCOz9l0L5nvawu52jwW68KJLCoxE1zQ==
+
+"@guardian/src-helpers@^1.6.0":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-1.9.1.tgz#4a87fb4364d7eee8fba3946fb2d8b597eac61035"
+  integrity sha512-3FiBxezg0JwNxJpvMHsvw2qYNyUn4P+7gQQcqtk8JMFQSeBtnlOQpwmKxjkm/eHzwoAk4l08Vc/fnWI3nPIEPQ==
+  dependencies:
+    "@guardian/src-foundations" "^1.9.1"
+
 "@guardian/src-helpers@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-1.8.0.tgz#8c4ad4689cf1725e758aec66da1fc2252f3127a3"
@@ -2389,6 +2401,13 @@
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-1.8.0.tgz#fdfc1d8164c74f0586198a11c8b64ad1f545c602"
   integrity sha512-ZRLEfKXrNXO6Ol4WM8KYzvmnQFu1XmcHk3ZLleFpkgjM9bDJb+dAHbq4qzVDDNPv/6BqR3UyE0aoIANcgNpoHQ==
+
+"@guardian/src-link@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-link/-/src-link-1.6.0.tgz#c5fde21c87eb11596be73ba21d5e49b063791e52"
+  integrity sha512-Vx+OdfkFTBepZKi06o2i8Xk0KTP1Kwh4BIgcYHJ0X+TSCSJt5Ubm0cwZZS5qrmYgiynFYrYK8fAlw/MNTrv1IQ==
+  dependencies:
+    "@guardian/src-helpers" "^1.6.0"
 
 "@guardian/src-radio@^1.6.0":
   version "1.8.0"

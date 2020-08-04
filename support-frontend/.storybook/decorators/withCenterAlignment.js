@@ -10,8 +10,19 @@ const styles = {
   justifyContent: 'center',
 };
 
+const stylesWithoutPadding = {
+  ...styles,
+  padding: null,
+}
+
 export const withCenterAlignment = (storyFn) => (
   <div style={styles}>
     { storyFn() }
   </div>
 );
+
+export const withVerticalCenterAlignment = (storyFn) => (
+  <div style={stylesWithoutPadding}>
+    { storyFn() }
+  </div>
+)
