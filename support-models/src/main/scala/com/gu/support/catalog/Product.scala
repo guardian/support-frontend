@@ -218,224 +218,73 @@ case object Paper extends Product {
 }
 
 case object GuardianWeekly extends Product {
-  private def productRatePlan(
+  private def domestic(
     id: String,
     billingPeriod:
     BillingPeriod,
-    fulfilmentOptions: FulfilmentOptions,
     description: String,
     productRatePlanChargeId: Option[String] = None,
     readerType: ReaderType = Direct
   ) = ProductRatePlan(
-    id, billingPeriod, fulfilmentOptions, NoProductOptions, description,
+    id, billingPeriod, Domestic, NoProductOptions, description,
+    productRatePlanChargeId = productRatePlanChargeId, readerType = readerType
+  )
+
+  private def restOfWorld(
+    id: String,
+    billingPeriod:
+    BillingPeriod,
+    description: String,
+    productRatePlanChargeId: Option[String] = None,
+    readerType: ReaderType = Direct
+  ) = ProductRatePlan(
+    id, billingPeriod, RestOfWorld, NoProductOptions, description,
     productRatePlanChargeId = productRatePlanChargeId, readerType = readerType
   )
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianWeekly.type]]] =
     Map(
       PROD -> List(
-        productRatePlan(
-          "2c92a0086619bf8901661ab545f51b21",
-          SixWeekly,
-          RestOfWorld,
-          "Guardian Weekly 6 for 6, rest of world delivery",
-          productRatePlanChargeId = Some("2c92a0086619bf8901661ab546091b23")
-        ),
-        productRatePlan(
-          "2c92a0fe6619b4b601661ab300222651",
-          Annual,
-          RestOfWorld,
-          "Guardian Weekly annual, rest of world delivery"
-        ),
-        productRatePlan(
-          "2c92a0ff67cebd140167f0a2f66a12eb",
-          Annual,
-          RestOfWorld,
-          "Guardian Weekly one year, rest of world delivery",
-          readerType = Gift
-        ),
-        productRatePlan(
-          "2c92a0086619bf8901661ab02752722f",
-          Quarterly,
-          RestOfWorld,
-          "Guardian Weekly quarterly, rest of world delivery"
-        ),
-        productRatePlan(
-          "2c92a0076dd9892e016df8503e7c6c48",
-          Quarterly,
-          RestOfWorld,
-          "Guardian Weekly three month, rest of world delivery",
-          readerType = Gift
-        ),
-        productRatePlan(
-          "2c92a0086619bf8901661aaac94257fe",
-          SixWeekly,
-          Domestic,
-          "Guardian Weekly 6 for 6, domestic delivery",
-          productRatePlanChargeId = Some("2c92a0086619bf8901661aaac95d5800")
-        ),
-        productRatePlan(
-          "2c92a0fe6619b4b901661aa8e66c1692",
-          Annual,
-          Domestic,
-          "Guardian Weekly annual, domestic delivery"
-        ),
-        productRatePlan(
-          "2c92a0ff67cebd0d0167f0a1a834234e",
-          Annual,
-          Domestic,
-          "Guardian Weekly one year, domestic delivery",
-          readerType = Gift
-        ),
-        productRatePlan(
-          "2c92a0fe6619b4b301661aa494392ee2",
-          Quarterly,
-          Domestic,
-          "Guardian Weekly quarterly, domestic delivery"
-        ),
-        productRatePlan(
-          "2c92a00e6dd988e2016df85387417498",
-          Quarterly,
-          Domestic,
-          "Guardian Weekly three months, domestic delivery",
-          readerType = Gift)
-
+        restOfWorld("2c92a0086619bf8901661ab545f51b21", SixWeekly, "Guardian Weekly 6 for 6, rest of world delivery",
+          productRatePlanChargeId = Some("2c92a0086619bf8901661ab546091b23")),
+        restOfWorld("2c92a0fe6619b4b601661ab300222651", Annual, "Guardian Weekly annual, rest of world delivery"),
+        restOfWorld("2c92a0ff67cebd140167f0a2f66a12eb", Annual, "Guardian Weekly one year, rest of world delivery", readerType = Gift),
+        restOfWorld("2c92a0086619bf8901661ab02752722f", Quarterly, "Guardian Weekly quarterly, rest of world delivery"),
+        restOfWorld("2c92a0076dd9892e016df8503e7c6c48", Quarterly, "Guardian Weekly three month, rest of world delivery", readerType = Gift),
+        domestic("2c92a0086619bf8901661aaac94257fe", SixWeekly, "Guardian Weekly 6 for 6, domestic delivery",
+          productRatePlanChargeId = Some("2c92a0086619bf8901661aaac95d5800")),
+        domestic("2c92a0fe6619b4b901661aa8e66c1692", Annual, "Guardian Weekly annual, domestic delivery"),
+        domestic("2c92a0ff67cebd0d0167f0a1a834234e", Annual, "Guardian Weekly one year, domestic delivery", readerType = Gift),
+        domestic("2c92a0fe6619b4b301661aa494392ee2", Quarterly, "Guardian Weekly quarterly, domestic delivery"),
+        domestic("2c92a00e6dd988e2016df85387417498", Quarterly, "Guardian Weekly three months, domestic delivery", readerType = Gift)
       ),
       UAT -> List(
-        productRatePlan(
-          "2c92c0f9660fc4c70166109dfd08092c",
-          SixWeekly,
-          RestOfWorld,
-          "Guardian Weekly 6 for 6, rest of world delivery",
-          productRatePlanChargeId = Some("2c92c0f9660fc4c70166109dfd17092e")
-        ),
-        productRatePlan(
-          "2c92c0f9660fc4d70166109a2eb0607c",
-          Annual,
-          RestOfWorld,
-          "Guardian Weekly annual, rest of world delivery"
-        ),
-        productRatePlan(
-          "2c92c0f967caee360167f044cd0d4adc",
-          Annual,
-          RestOfWorld,
-          "Guardian Weekly one year, rest of world delivery",
-          readerType = Gift
-        ),
-        productRatePlan(
-          "2c92c0f9660fc4d70166109c01465f10",
-          Quarterly,
-          RestOfWorld,
-          "Guardian Weekly quarterly, rest of world delivery"
-        ),
-        productRatePlan(
-          "2c92c0f96df75b5a016df84084fb356d",
-          Quarterly,
-          RestOfWorld,
-          "Guardian Weekly three months, rest of world delivery",
-          readerType = Gift
-        ),
-        productRatePlan(
-          "2c92c0f8660fb5dd016610858eb90658",
-          SixWeekly,
-          Domestic,
-          "Guardian Weekly 6 for 6, domestic delivery",
-          productRatePlanChargeId = Some("2c92c0f8660fb5dd016610858ed3065a")
-        ),
-        productRatePlan(
-          "2c92c0f9660fc4d70166107fa5412641",
-          Annual,
-          Domestic,
-          "Guardian Weekly annual, domestic delivery"
-        ),
-        productRatePlan(
-          "2c92c0f867cae0700167f043870d6d0e",
-          Annual,
-          Domestic,
-          "Guardian Weekly one year, domestic delivery",
-          readerType = Gift
-        ),
-        productRatePlan(
-          "2c92c0f8660fb5d601661081ea010391",
-          Quarterly,
-          Domestic,
-          "Guardian Weekly quarterly, domestic delivery"
-        ),
-        productRatePlan(
-          "2c92c0f96df75b51016df8444f36362f",
-          Quarterly,
-          Domestic,
-          "Guardian Weekly three months, domestic delivery",
-          readerType = Gift)
-
+        restOfWorld("2c92c0f9660fc4c70166109dfd08092c", SixWeekly, "Guardian Weekly 6 for 6, rest of world delivery",
+          productRatePlanChargeId = Some("2c92c0f9660fc4c70166109dfd17092e")),
+        restOfWorld("2c92c0f9660fc4d70166109a2eb0607c", Annual, "Guardian Weekly annual, rest of world delivery"),
+        restOfWorld("2c92c0f967caee360167f044cd0d4adc", Annual, "Guardian Weekly one year, rest of world delivery", readerType = Gift),
+        restOfWorld("2c92c0f9660fc4d70166109c01465f10", Quarterly, "Guardian Weekly quarterly, rest of world delivery"),
+        restOfWorld("2c92c0f96df75b5a016df84084fb356d", Quarterly, "Guardian Weekly three months, rest of world delivery", readerType = Gift),
+        domestic("2c92c0f8660fb5dd016610858eb90658", SixWeekly, "Guardian Weekly 6 for 6, domestic delivery",
+          productRatePlanChargeId = Some("2c92c0f8660fb5dd016610858ed3065a")),
+        domestic("2c92c0f9660fc4d70166107fa5412641", Annual, "Guardian Weekly annual, domestic delivery"),
+        domestic("2c92c0f867cae0700167f043870d6d0e", Annual, "Guardian Weekly one year, domestic delivery", readerType = Gift),
+        domestic("2c92c0f8660fb5d601661081ea010391", Quarterly, "Guardian Weekly quarterly, domestic delivery"),
+        domestic("2c92c0f96df75b51016df8444f36362f", Quarterly, "Guardian Weekly three months, domestic delivery", readerType = Gift)
       ),
       SANDBOX -> List(
-        productRatePlan(
-          "2c92c0f965f2122101660fbc75a16c38",
-          SixWeekly,
-          RestOfWorld,
-          "Guardian Weekly 6 for 6, rest of world delivery",
-          productRatePlanChargeId = Some("2c92c0f965f2122101660fbc75ba6c3c")
-        ),
-        productRatePlan(
-          "2c92c0f965f2122101660fb33ed24a45",
-          Annual,
-          RestOfWorld,
-          "Guardian Weekly annual, rest of world delivery"
-        ),
-        productRatePlan(
-          "2c92c0f967caee410167eff78e7b5244",
-          Annual,
-          RestOfWorld,
-          "Guardian Weekly one year, rest of world delivery",
-          readerType = Gift
-        ),
-        productRatePlan(
-          "2c92c0f965f2122101660fb81b745a06",
-          Quarterly,
-          RestOfWorld,
-          "Guardian Weekly quarterly, rest of world delivery"
-        ),
-        productRatePlan(
-          "2c92c0f96df75b5a016df81ba1c62609",
-          Quarterly,
-          RestOfWorld,
-          "Guardian Weekly three months, rest of world delivery",
-          readerType = Gift
-        ),
-        productRatePlan(
-          "2c92c0f965f212210165f69b94c92d66",
-          SixWeekly,
-          Domestic,
-          "Guardian Weekly 6 for 6, domestic delivery",
-          productRatePlanChargeId = Some("2c92c0f865f204440165f69f407d66f1")
-        ),
-        productRatePlan(
-          "2c92c0f965d280590165f16b1b9946c2",
-          Annual,
-          Domestic,
-          "Guardian Weekly annual, domestic delivery"
-        ),
-        productRatePlan(
-          "2c92c0f867cae0700167eff921734f7b",
-          Annual,
-          Domestic,
-          "Guardian Weekly one year, domestic delivery",
-          readerType = Gift
-        ),
-        productRatePlan(
-          "2c92c0f965dc30640165f150c0956859",
-          Quarterly,
-          Domestic,
-          "Guardian Weekly quarterly, domestic delivery"
-        ),
-        productRatePlan(
-          "2c92c0f96ded216a016df491134d4091",
-          Quarterly,
-          Domestic,
-          "Guardian Weekly three months, domestic delivery",
-          readerType = Gift
-        ),
+        restOfWorld("2c92c0f965f2122101660fbc75a16c38", SixWeekly, "Guardian Weekly 6 for 6, rest of world delivery",
+          productRatePlanChargeId = Some("2c92c0f965f2122101660fbc75ba6c3c")),
+        restOfWorld("2c92c0f965f2122101660fb33ed24a45", Annual, "Guardian Weekly annual, rest of world delivery"),
+        restOfWorld("2c92c0f967caee410167eff78e7b5244", Annual, "Guardian Weekly one year, rest of world delivery", readerType = Gift),
+        restOfWorld("2c92c0f965f2122101660fb81b745a06", Quarterly, "Guardian Weekly quarterly, rest of world delivery"),
+        restOfWorld("2c92c0f96df75b5a016df81ba1c62609", Quarterly, "Guardian Weekly three months, rest of world delivery", readerType = Gift),
+        domestic("2c92c0f965f212210165f69b94c92d66", SixWeekly, "Guardian Weekly 6 for 6, domestic delivery",
+          productRatePlanChargeId = Some("2c92c0f865f204440165f69f407d66f1")),
+        domestic("2c92c0f965d280590165f16b1b9946c2", Annual, "Guardian Weekly annual, domestic delivery"),
+        domestic("2c92c0f867cae0700167eff921734f7b", Annual, "Guardian Weekly one year, domestic delivery", readerType = Gift),
+        domestic("2c92c0f965dc30640165f150c0956859", Quarterly, "Guardian Weekly quarterly, domestic delivery"),
+        domestic("2c92c0f96ded216a016df491134d4091", Quarterly, "Guardian Weekly three months, domestic delivery", readerType = Gift),
       )
     )
 }
