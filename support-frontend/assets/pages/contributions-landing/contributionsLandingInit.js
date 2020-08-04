@@ -101,7 +101,13 @@ function initialisePaymentMethods(
         ));
         dispatch(setExistingPaymentMethods(switchedOnExistingPaymentMethods));
         const firstExistingPaymentMethod = (switchedOnExistingPaymentMethods[0]: any);
-        if (firstExistingPaymentMethod && isUsableExistingPaymentMethod(firstExistingPaymentMethod)) {
+        const allowDefaultSelectedPaymentMethod = state.common.abParticipations.defaultPaymentMethodTest === 'control';
+
+        if (
+          allowDefaultSelectedPaymentMethod &&
+          firstExistingPaymentMethod &&
+          isUsableExistingPaymentMethod(firstExistingPaymentMethod)
+        ) {
           dispatch(updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(firstExistingPaymentMethod)));
           dispatch(updateSelectedExistingPaymentMethod(firstExistingPaymentMethod));
         }
