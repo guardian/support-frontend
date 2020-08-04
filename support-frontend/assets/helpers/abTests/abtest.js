@@ -137,9 +137,9 @@ function getParticipationsFromUrl(): ?Participations {
   return null;
 }
 
-function getServerSideTests(): ?Participations {
-  if (window.guardian.serverSideTests) {
-    return window.guardian.serverSideTests
+function getServerSideParticipations(): ?Participations {
+  if (window.guardian.serversideTests) {
+    return window.guardian.serversideTests;
   }
   return null;
 }
@@ -343,10 +343,13 @@ const init = (
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  const serverSideParticipations: ?Participations = getServerSideTests();
-  const combinedParticipations: Participations = { ...participations, ...urlParticipations, ...serverSideParticipations };
+  const serverSideParticipations: ?Participations = getServerSideParticipations();
+  const combinedParticipations: Participations = {
+    ...participations,
+    ...urlParticipations,
+    ...serverSideParticipations
+  };
   setLocalStorageParticipations(combinedParticipations);
-  console.log(combinedParticipations)
 
   return combinedParticipations;
 };

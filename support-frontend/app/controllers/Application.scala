@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.ServersideAbTest.ContributionsServerSideTests
+import admin.ContributionsServersideTests
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
@@ -174,7 +174,7 @@ class Application(
       classes = Some(classes)
     )
 
-    val serverSideAbTests = ContributionsServerSideTests.assign
+    val serverSideTests = ContributionsServersideTests.assign
 
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
@@ -203,7 +203,7 @@ class Application(
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey,
-      serverSideTests = serverSideAbTests
+      serverSideTests = serverSideTests
     )
   }
 
