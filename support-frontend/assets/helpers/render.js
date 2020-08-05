@@ -60,10 +60,10 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
       } else {
         ReactDOM.render(content, element, callBack);
       }
-      setTimeout(function () {
+      setTimeout(() => {
         if (window.location.hash) {
           const hashElement = document.getElementById(window.location.hash.substr(1));
-          hashElement && hashElement.scrollIntoView();
+          if (hashElement) { hashElement.scrollIntoView(); }
         }
       }, 1000);
     } catch (e) {
