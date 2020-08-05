@@ -14,6 +14,7 @@ import {
   OptedOut,
   Unset,
 } from '../thirdPartyTrackingConsent';
+import { logException } from 'helpers/logger';
 
 const ccpaEnabled: any = _ccpaEnabledy;
 const getCookie: any = _getCookie;
@@ -78,6 +79,7 @@ describe('thirdPartyTrackingConsent', () => {
 
       return getTrackingConsent().then((trackingConsent) => {
         expect(trackingConsent).toBe(OptedOut);
+        expect(logException).toHaveBeenLastCalledWith('CCPA: fail');
       });
     });
   });

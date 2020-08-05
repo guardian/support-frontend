@@ -12,6 +12,7 @@ global.URLSearchParams = require('url').URLSearchParams;
 global.window = window;
 global.window.guardian = {
   settings: {},
+  ssr: true,
 };
 
 global.localStorage = {
@@ -26,10 +27,6 @@ global.navigator = {
 };
 
 global.Image = function image() { return this; };
-
-// CCPA stub
-// eslint-disable-next-line no-underscore-dangle
-global.__uspapi = () => {};
 
 // -------------- Write pages to file ----------------
 
