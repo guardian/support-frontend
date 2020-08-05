@@ -10,7 +10,6 @@ import { type IsoCurrency, fromCountryGroupId, currencies } from 'helpers/intern
 import type { ContributionType } from 'helpers/contributions';
 import './termsPrivacy.scss';
 import type { CampaignSettings } from 'helpers/campaigns';
-import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 
 // ---- Types ----- //
@@ -19,6 +18,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
   campaignSettings: CampaignSettings | null,
+  referrerSource: ?string,
 |};
 
 // ----- Component ----- //
@@ -82,9 +82,8 @@ function TermsPrivacy(props: PropTypes) {
 
   const isUSContributor = props.countryGroupId === 'UnitedStates';
   const isNotOneOffContribution = props.contributionType !== 'ONE_OFF';
-  const referrerAcquisitionData = getReferrerAcquisitionData();
-  const sourceIsNotAppleNews = referrerAcquisitionData.source !== 'APPLE_NEWS';
-  const sourceIsNotGoogleAMP = referrerAcquisitionData.source !== 'GOOGLE_AMP';
+  const sourceIsNotAppleNews = props.referrerSource !== 'APPLE_NEWS';
+  const sourceIsNotGoogleAMP = props.referrerSource !== 'GOOGLE_AMP';
 
   const shouldShowPhilanthropicAsk = (
     isUSContributor &&
