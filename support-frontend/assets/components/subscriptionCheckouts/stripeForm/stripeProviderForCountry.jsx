@@ -1,7 +1,7 @@
 // @flow
 
 // $FlowIgnore - required for hooks
-import React, { useEffect, useState } from 'preact/compat';
+import React, { useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
