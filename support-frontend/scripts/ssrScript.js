@@ -12,6 +12,7 @@ global.URLSearchParams = require('url').URLSearchParams;
 global.window = window;
 global.window.guardian = {
   settings: {},
+  ssr: true,
 };
 
 global.localStorage = {

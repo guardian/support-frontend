@@ -7,7 +7,7 @@ import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { getTrackingConsent } from './thirdPartyTrackingConsent';
+import { getTrackingConsent, type ThirdPartyTrackingConsent } from './thirdPartyTrackingConsent';
 import { maybeTrack } from './doNotTrack';
 import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
@@ -145,26 +145,31 @@ function getData(
   event: EventType,
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
-) {
-  const orderId = getOrderId();
-  const value = getContributionValue();
-  const currency = getCurrency();
-  return {
-    event,
-    // orderId anonymously identifies this user in this session.
-    // We need this to prevent page refreshes on conversion pages being
-    // treated as new conversions
-    orderId,
-    currency,
-    value,
-    paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
-    campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-    campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-    internalCampaignCode: getQueryParameter('INTCMP') || undefined,
-    experience: getVariantsAsString(participations),
-    paymentRequestApiStatus,
-    thirdPartyTrackingConsent: getTrackingConsent(),
-  };
+): Promise<Object> {
+
+  return getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
+    const orderId = getOrderId();
+    const value = getContributionValue();
+    const currency = getCurrency();
+
+    return {
+      event,
+      // orderId anonymously identifies this user in this session.
+      // We need this to prevent page refreshes on conversion pages being
+      // treated as new conversions
+      orderId,
+      currency,
+      value,
+      thirdPartyTrackingConsent,
+      paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
+      campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+      campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+      internalCampaignCode: getQueryParameter('INTCMP') || undefined,
+      experience: getVariantsAsString(participations),
+      paymentRequestApiStatus,
+    };
+  });
+
 }
 
 function sendData(
@@ -173,11 +178,11 @@ function sendData(
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
   maybeTrack(() => {
-    try {
-      push(getData(event, participations, paymentRequestApiStatus));
-    } catch (e) {
-      console.log(`Error in GTM tracking ${e}`);
-    }
+    getData(event, participations, paymentRequestApiStatus).then((dataToPush) => {
+      push(dataToPush);
+    }).catch((err) => {
+      console.log(`Error in GTM tracking ${err}`);
+    });
   });
 }
 

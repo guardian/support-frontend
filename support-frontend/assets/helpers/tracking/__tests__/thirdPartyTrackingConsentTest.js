@@ -1,34 +1,116 @@
 // @flow
-
 // ----- Imports ----- //
 
 import {
-  ConsentCookieName,
-  getTrackingConsent, OptedIn, OptedOut, Unset,
+  ccpaEnabled as _ccpaEnabledy,
+} from 'helpers/tracking/ccpa';
+import {
+  onIabConsentNotification as _onIabConsentNotification,
+} from '@guardian/consent-management-platform';
+import { get as _getCookie } from 'helpers/cookie';
+import {
+  getTrackingConsent,
+  OptedIn,
+  OptedOut,
+  Unset,
 } from '../thirdPartyTrackingConsent';
+import { logException } from 'helpers/logger';
+
+const ccpaEnabled: any = _ccpaEnabledy;
+const getCookie: any = _getCookie;
+const onIabConsentNotification: any = _onIabConsentNotification;
+
+jest.mock('helpers/tracking/ccpa', () => ({
+  ccpaEnabled: jest.fn(),
+}));
+
+jest.mock('@guardian/consent-management-platform', () => ({
+  onIabConsentNotification: jest.fn(),
+}));
+
+jest.mock('helpers/cookie', () => ({
+  get: jest.fn(),
+}));
+
+jest.mock('helpers/logger', () => ({
+  logException: jest.fn(),
+}));
 
 // ----- Tests ----- //
 
-jest.mock('ophan', () => ({ viewId: '123456' }));
-
 describe('thirdPartyTrackingConsent', () => {
-  it('should return the correct ThirdPartyTrackingConsent', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
-    // When no cookie is present the value should be 'Unset'
-    expect(getTrackingConsent()).toEqual(Unset);
-
-    // When the cookie is present with a value starting with 1 the
-    // user has opted in
-    Object.defineProperty(window.document, 'cookie', {
-      writable: true,
-      value: `${ConsentCookieName}=1.1234567`,
+  describe('should return the correct ThirdPartyTrackingConsent if ccpaEnabled is true', () => {
+    beforeEach(() => {
+      ccpaEnabled.mockReturnValue(true);
     });
-    expect(getTrackingConsent()).toEqual(OptedIn);
 
+    it('if CCPA consentState is true', () => {
+      onIabConsentNotification.mockImplementation(callback => callback(true));
 
-    // When the cookie is present with a value starting with 0 the
-    // user has opted out
-    window.document.cookie = `${ConsentCookieName}=0.1234567`;
-    expect(getTrackingConsent()).toEqual(OptedOut);
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedOut);
+      });
+    });
+
+    it('if CCPA consentState is false', () => {
+      onIabConsentNotification.mockImplementation(callback => callback(false));
+
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedIn);
+      });
+    });
+
+    it('if onIabConsentNotification does not return a valid CCPA consentState', () => {
+      onIabConsentNotification.mockImplementation(callback => callback('foo'));
+
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedOut);
+      });
+    });
+
+    it('if onIabConsentNotification throws an error', () => {
+      onIabConsentNotification.mockImplementation(() => {
+        throw new Error('fail');
+      });
+
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedOut);
+        expect(logException).toHaveBeenLastCalledWith('CCPA: fail');
+      });
+    });
+  });
+
+  describe('should return the correct ThirdPartyTrackingConsent if ccpaEnabled is false', () => {
+    beforeEach(() => {
+      ccpaEnabled.mockReturnValue(false);
+    });
+
+    it('if getCookie returns a value starting with 1', () => {
+      getCookie.mockReturnValue('1.54321');
+
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedIn);
+      });
+    });
+
+    it('if getCookie returns a value starting with 0', () => {
+      getCookie.mockReturnValue('0.54321');
+
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(OptedOut);
+      });
+    });
+
+    it('if getCookie returns a null value', () => {
+      getCookie.mockReturnValue(null);
+
+      return getTrackingConsent().then((trackingConsent) => {
+        expect(trackingConsent).toBe(Unset);
+      });
+    });
   });
 });
