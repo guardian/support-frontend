@@ -45,8 +45,8 @@ function Footer({
             <Rows>
               {privacyPolicy &&
               <div className="component-footer__privacy-policy-text">
-                To find out what personal data we collect and how we use it, please visit our
-                <a href={privacyLink}> Privacy Policy</a>.
+                To find out what personal data we collect and how we use it, please visit our{' '}
+                <a href={privacyLink}>Privacy Policy</a>.
               </div>
               }
               {children}
