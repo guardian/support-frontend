@@ -1,6 +1,5 @@
 // @flow
 
-// import { onConsentChange } from '@guardian/consent-management-platform';
 import { logException } from 'helpers/logger';
 import { getGlobal } from 'helpers/globals';
 

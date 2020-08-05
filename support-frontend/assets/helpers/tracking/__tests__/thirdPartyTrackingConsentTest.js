@@ -24,7 +24,7 @@ jest.mock('helpers/logger', () => ({
 
 describe('thirdPartyTrackingConsent', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('should return OptedOut as ThirdPartyTrackingConsent if onConsentChange throws an error', () => {
