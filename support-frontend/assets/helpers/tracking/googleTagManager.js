@@ -148,9 +148,6 @@ function getData(
 ): Promise<Object> {
 
   return getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
-
-    console.log('thirdPartyTrackingConsent --->', thirdPartyTrackingConsent);
-
     const orderId = getOrderId();
     const value = getContributionValue();
     const currency = getCurrency();

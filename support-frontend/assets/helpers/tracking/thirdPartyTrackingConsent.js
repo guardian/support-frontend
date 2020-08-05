@@ -27,7 +27,6 @@ const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => {
     return new Promise((resolve) => {
       import('@guardian/consent-management-platform').then(({ onIabConsentNotification }) => {
         onIabConsentNotification((consentState: boolean) => {
-          console.log('consentState --->', consentState);
           /**
            * In CCPA mode consentState will be a boolean.
            * In non-CCPA mode consentState will be an Object.
