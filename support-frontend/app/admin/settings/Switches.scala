@@ -9,8 +9,7 @@ case class Switches(
   useDotcomContactPage: Option[SwitchState],
   enableRecaptchaBackend: SwitchState,
   enableRecaptchaFrontend: SwitchState,
-  experiments: Map[String, ExperimentSwitch],
-  ccpaEnabled: SwitchState
+  experiments: Map[String, ExperimentSwitch]
 )
 
 object Switches {
