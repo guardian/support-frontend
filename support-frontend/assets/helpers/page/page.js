@@ -44,6 +44,7 @@ import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
 import { ccpaEnabled } from 'helpers/tracking/ccpa';
 import { getGlobal } from 'helpers/globals';
+import { isPostDeployUser } from 'helpers/user/user';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -138,7 +139,7 @@ function init<S, A>(
      * on condition we're not server side rendering (ssr) the page.
      * @guardian/consent-management-platform breaks ssr otherwise.
      */
-    if (!getGlobal('ssr') && ccpaEnabled()) {
+    if (!getGlobal('ssr') && ccpaEnabled() && !isPostDeployUser()) {
       import('@guardian/consent-management-platform').then((cmp) => {
         cmp.init({
           useCcpa: true,
