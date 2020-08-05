@@ -2,7 +2,7 @@
 // @flow
 
 // $FlowIgnore - required for hooks
-import * as React from 'preact/compat';
+import React, { useEffect, useState } from 'preact/compat';
 import { compose } from 'redux';
 import * as stripeJs from '@stripe/react-stripe-js';
 import Button from 'components/button/button';
@@ -76,12 +76,12 @@ const StripeForm = (props: StripeFormPropTypes) => {
   /**
    * State
    */
-  const [cardErrors, setCardErrors] = React.useState<FormError<CardFieldName>[]>([]);
-  const [setupIntentClientSecret, setSetupIntentClientSecret] = React.useState<Option<string>>(null);
-  const [paymentWaiting, setPaymentWaiting] = React.useState<boolean>(false);
-  const [recaptchaCompleted, setRecaptchaCompleted] = React.useState<boolean>(false);
-  const [recaptchaError, setRecaptchaError] = React.useState<FormError<'recaptcha'> | null>(null);
-  const [cardFieldsData, setCardFieldsData] = React.useState<CardFieldsData>({
+  const [cardErrors, setCardErrors] = useState<FormError<CardFieldName>[]>([]);
+  const [setupIntentClientSecret, setSetupIntentClientSecret] = useState<Option<string>>(null);
+  const [paymentWaiting, setPaymentWaiting] = useState<boolean>(false);
+  const [recaptchaCompleted, setRecaptchaCompleted] = useState<boolean>(false);
+  const [recaptchaError, setRecaptchaError] = useState<FormError<'recaptcha'> | null>(null);
+  const [cardFieldsData, setCardFieldsData] = useState<CardFieldsData>({
     cardNumber: {
       complete: false,
       empty: true,
@@ -272,14 +272,14 @@ const StripeForm = (props: StripeFormPropTypes) => {
    * Hooks
    */
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (stripe) {
       setupRecurringHandlers();
       loadRecaptchaV2();
     }
   }, [stripe]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (paymentWaiting && setupIntentClientSecret) {
       // User has already completed the form and clicked the button, so go ahead and complete the subscription
       handleCardSetup(setupIntentClientSecret)

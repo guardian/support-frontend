@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 // $FlowIgnore - required for hooks
-import * as React from 'preact/compat';
+import React, { useEffect, useState, useRef } from 'preact/compat';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { connect } from 'react-redux';
@@ -130,8 +130,8 @@ const errorMessageFromState = (state: CardFieldState): string | null =>
 
 // Hook for monitoring the previous state of a prop
 const usePrevious = (value) => {
-  const ref = React.useRef();
-  React.useEffect(() => {
+  const ref = useRef();
+  useEffect(() => {
     ref.current = value;
   });
   return ref.current;
@@ -142,8 +142,8 @@ const CardForm = (props: PropTypes) => {
   /**
    * State
    */
-  const [currentlySelected, setCurrentlySelected] = React.useState<CardFieldName | null>(null);
-  const [fieldStates, setFieldStates] = React.useState<{[CardFieldName]: CardFieldState}>({
+  const [currentlySelected, setCurrentlySelected] = useState<CardFieldName | null>(null);
+  const [fieldStates, setFieldStates] = useState<{[CardFieldName]: CardFieldState}>({
     CardNumber: { name: 'Incomplete' },
     Expiry: { name: 'Incomplete' },
     CVC: { name: 'Incomplete' },
@@ -316,7 +316,7 @@ const CardForm = (props: PropTypes) => {
    * Hooks
    */
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (stripe && elements) {
       if (props.contributionType === 'ONE_OFF') {
         setupOneOffHandlers();
@@ -329,14 +329,14 @@ const CardForm = (props: PropTypes) => {
   // If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
   // then go ahead and process the recurring contribution
   const previousSetupIntentClientSecret = usePrevious(props.setupIntentClientSecret);
-  React.useEffect(() => {
+  useEffect(() => {
     const clientSecretHasUpdated = !previousSetupIntentClientSecret && props.setupIntentClientSecret;
     if (props.paymentWaiting && clientSecretHasUpdated && props.setupIntentClientSecret) {
       handleCardSetupForRecurring(props.setupIntentClientSecret);
     }
   }, [props.setupIntentClientSecret]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const formIsComplete =
       fieldStates.CardNumber.name === 'Complete' &&
       fieldStates.Expiry.name === 'Complete' &&

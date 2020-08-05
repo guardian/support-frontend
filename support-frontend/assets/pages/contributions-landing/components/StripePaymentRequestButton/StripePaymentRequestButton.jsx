@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 // $FlowIgnore - required for hooks
-import * as React from 'preact/compat';
+import React, { useEffect } from 'preact/compat';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
@@ -377,7 +377,7 @@ const PaymentRequestButton = (props: PropTypes) => {
 
   const stripe = stripeJs.useStripe();
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Call canMakePayment on the paymentRequest object only once, once the stripe object is ready
     if (stripe) {
       initialisePaymentRequest({ ...props }, stripe);

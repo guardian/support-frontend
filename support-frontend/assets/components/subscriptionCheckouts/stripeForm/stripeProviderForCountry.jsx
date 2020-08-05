@@ -1,7 +1,7 @@
 // @flow
 
 // $FlowIgnore - required for hooks
-import * as React from 'preact/compat';
+import React, { useEffect, useState } from 'preact/compat';
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
@@ -25,11 +25,11 @@ type PropTypes = {
 };
 
 function StripeProviderForCountry(props: PropTypes) {
-  const [stripeObject, setStripeObject] = React.useState<stripeJs.Stripe | null>(null);
+  const [stripeObject, setStripeObject] = useState<stripeJs.Stripe | null>(null);
 
   const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (stripeObject === null) {
       stripeJs.loadStripe(stripeKey).then(setStripeObject);
     }

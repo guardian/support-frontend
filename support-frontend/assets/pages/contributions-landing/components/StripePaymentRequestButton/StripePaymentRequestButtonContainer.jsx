@@ -5,7 +5,7 @@
 // ----- Imports ----- //
 
 // $FlowIgnore - required for hooks
-import * as React from 'preact/compat';
+import React, { useEffect, useState } from 'preact/compat';
 import { Elements } from '@stripe/react-stripe-js';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
@@ -43,7 +43,7 @@ type PropTypes = {|
 
 const StripePaymentRequestButtonContainer = (props: PropTypes) => {
   // Create separate Stripe objects for REGULAR and ONE_OFF
-  const [stripeObjects, setStripeObjects] = React.useState<{[StripeAccount]: stripeJs.Stripe | null}>({
+  const [stripeObjects, setStripeObjects] = useState<{[StripeAccount]: stripeJs.Stripe | null}>({
     REGULAR: null,
     ONE_OFF: null,
   });
@@ -55,7 +55,7 @@ const StripePaymentRequestButtonContainer = (props: PropTypes) => {
     props.isTestUser,
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!props.stripeHasLoaded) {
       setupStripe(props.setStripeHasLoaded);
     } else if (stripeObjects[stripeAccount] === null) {
