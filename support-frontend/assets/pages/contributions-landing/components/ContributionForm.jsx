@@ -84,6 +84,7 @@ type PropTypes = {|
   amazonPayOrderReferenceId: string | null,
   checkoutFormHasBeenSubmitted: boolean,
   campaignSettings: CampaignSettings | null,
+  referrerSource: ?string,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -116,6 +117,7 @@ const mapStateToProps = (state: State) => ({
   stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  referrerSource: state.common.referrerAcquisitionData.source,
 });
 
 
@@ -270,6 +272,7 @@ function withProps(props: PropTypes) {
         countryGroupId={props.countryGroupId}
         contributionType={props.contributionType}
         campaignSettings={props.campaignSettings}
+        referrerSource={props.referrerSource}
       />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
