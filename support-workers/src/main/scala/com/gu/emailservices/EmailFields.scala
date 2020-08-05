@@ -36,26 +36,16 @@ case class EmailFields(
 
 }
 
-trait AllProductsEmailFieldsBuilder {
+case class AllProductsEmailFields(
+  billingPeriod: BillingPeriod,
+  user: User,
+  currency: Currency,
+  sfContactId: SfContactId,
+  directDebitMandateId: Option[String],
+)
 
-  def buildWith(
-    billingPeriod: BillingPeriod,
-    user: User,
-    currency: Currency,
-    sfContactId: SfContactId,
-    directDebitMandateId: Option[String],
-  ): EmailFields
-
-}
-object SubscriptionEmailFieldsBuilder {
-  def wrap(allProductsEmailFields: AllProductsEmailFieldsBuilder): SubscriptionEmailFieldsBuilder = (_: String, _: Option[Promotion]) =>
-    allProductsEmailFields
-}
-trait SubscriptionEmailFieldsBuilder {
-
-  def buildWith(
-    subscriptionNumber: String,
-    promotion: Option[Promotion] = None
-  ): AllProductsEmailFieldsBuilder
-
-}
+case class SubscriptionEmailFields(
+  allProductsEmailFields: AllProductsEmailFields,
+  subscriptionNumber: String,
+  promotion: Option[Promotion] = None
+)

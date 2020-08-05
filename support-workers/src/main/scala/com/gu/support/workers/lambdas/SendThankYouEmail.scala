@@ -39,7 +39,9 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
     val thankYouEmailService: EmailService = new EmailService(services.config.contributionThanksQueueName)
     for {
       mandateId <- fetchDirectDebitMandateId(state, services.zuoraService)
-      emailResult <- sendEmail(thankYouEmailService, state, mandateId)
+      emailFields <- Future.fromTry(buildEmail(state, mandateId)
+        .left.map(error => new StateNotValidException(s"State was not valid, $error")).toTry)
+      emailResult <- thankYouEmailService.send(emailFields)
     } yield HandlerResult(emailResult, requestInfo)
   }
 
@@ -49,12 +51,56 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
     case _ => Future.successful(None)
   }
 
-  def getProductRatePlanId(product: ProductType, isTestUser: Boolean, readerType: ReaderType): ProductRatePlanId = {
-    val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
-    product.productRatePlan(touchpointEnvironment, readerType).map(_.id).getOrElse("")
+  def buildEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Either[String, EmailFields] =
+    state.product match {
+      case c: Contribution =>
+        state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift contribution").map(paymentMethodWithSchedule =>
+          ContributionEmailFields.build(
+            getAllProductEmailFields(state, directDebitMandateId),
+            created = DateTime.now(),
+            amount = c.amount,
+            paymentMethod = paymentMethodWithSchedule.paymentMethod
+          )
+        )
+      case _: DigitalPack => Right(DigitalPackEmailFields.build(
+        getSubscriptionEmailFields(state, directDebitMandateId),
+        paidSubPaymentData = state.paymentOrRedemptionData.left.toOption,
+      ))
+      case p: Paper =>
+        state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
+          PaperEmailFields.build(
+            getSubscriptionEmailFields(state, directDebitMandateId),
+            fulfilmentOptions = p.fulfilmentOptions,
+            productOptions = p.productOptions,
+            firstDeliveryDate = state.firstDeliveryDate,
+            paymentMethodWithSchedule = paymentMethodWithSchedule,
+            state.giftRecipient
+          )
+        )
+      case g: GuardianWeekly =>
+        state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift GW yet").map(paymentMethodWithSchedule =>
+          GuardianWeeklyEmailFields.build(
+            getSubscriptionEmailFields(state, directDebitMandateId),
+            fulfilmentOptions = g.fulfilmentOptions,
+            firstDeliveryDate = state.firstDeliveryDate,
+            paymentMethodWithSchedule = paymentMethodWithSchedule,
+            state.giftRecipient
+          )
+        )
+    }
+
+  private def getAllProductEmailFields(state: SendThankYouEmailState, directDebitMandateId: Option[String]) = {
+    AllProductsEmailFields(
+      billingPeriod = state.product.billingPeriod,
+      user = state.user,
+      currency = state.product.currency,
+      sfContactId = SfContactId(state.salesForceContact.Id),
+      directDebitMandateId = directDebitMandateId
+    )
   }
 
-  def sendEmail(thankYouEmailService: EmailService, state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
+  private def getSubscriptionEmailFields(state: SendThankYouEmailState, directDebitMandateId: Option[String]) = {
+
     val readerType = if (state.giftRecipient.isDefined) Gift else Direct
     val productRatePlanId = getProductRatePlanId(state.product, state.user.isTestUser, readerType)
     val maybePromotion = getAppliedPromotion(
@@ -64,55 +110,20 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
       productRatePlanId
     )
 
-    val subscriptionEmailFields: Either[String, SubscriptionEmailFieldsBuilder] =
-      state.product match {
-        case c: Contribution => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift contribution").map(paymentMethodWithSchedule => SubscriptionEmailFieldsBuilder.wrap(
-          ContributionEmailFieldsBuilder(
-            created = DateTime.now(),
-            amount = c.amount,
-            paymentMethod = paymentMethodWithSchedule.paymentMethod
-          )
-        ))
-        case _: DigitalPack => Right(DigitalPackEmailFieldsBuilder(
-          paidSubPaymentData = state.paymentOrRedemptionData.left.toOption,
-        ))
-        case p: Paper => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
-          PaperEmailFieldsBuilder(
-            fulfilmentOptions = p.fulfilmentOptions,
-            productOptions = p.productOptions,
-            firstDeliveryDate = state.firstDeliveryDate,
-            paymentMethodWithSchedule = paymentMethodWithSchedule,
-            state.giftRecipient
-          )
-        )
-        case g: GuardianWeekly => state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift GW yet").map(paymentMethodWithSchedule =>
-          GuardianWeeklyEmailFieldsBuilder(
-            fulfilmentOptions = g.fulfilmentOptions,
-            firstDeliveryDate = state.firstDeliveryDate,
-            paymentMethodWithSchedule = paymentMethodWithSchedule,
-            state.giftRecipient
-          )
-        )
-    }
-    subscriptionEmailFields match {
-      case Right(subscriptionEmailFields) =>
-        thankYouEmailService.send(
-          subscriptionEmailFields.buildWith(
-            state.subscriptionNumber,
-            maybePromotion
-          ).buildWith(
-            billingPeriod = state.product.billingPeriod,
-            user = state.user,
-            currency = state.product.currency,
-            sfContactId = SfContactId(state.salesForceContact.Id),
-            directDebitMandateId = directDebitMandateId
-          )
-        )
-      case Left(error) => Future.failed(new StateNotValidException(s"State was not valid, $error"))
-    }
+    SubscriptionEmailFields(
+      getAllProductEmailFields(state, directDebitMandateId),
+      state.subscriptionNumber,
+      maybePromotion
+    )
+
   }
 
-   private def getAppliedPromotion(
+  def getProductRatePlanId(product: ProductType, isTestUser: Boolean, readerType: ReaderType): ProductRatePlanId = {
+    val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
+    product.productRatePlan(touchpointEnvironment, readerType).map(_.id).getOrElse("")
+  }
+
+  private def getAppliedPromotion(
      promotionService: PromotionService,
      maybePromoCode: Option[PromoCode],
      country: Country,

@@ -1,56 +1,41 @@
 package com.gu.emailservices
 
-import com.gu.emailservices.DigitalPackEmailFieldsBuilder._
 import com.gu.emailservices.SubscriptionEmailFieldHelpers._
 import com.gu.i18n.Currency
-import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.promotions.Promotion
 import com.gu.support.workers._
 import com.gu.support.workers.states.PaymentMethodWithSchedule
 
-case class DigitalPackEmailFieldsBuilder(
-  paidSubPaymentData: Option[PaymentMethodWithSchedule]
-) extends SubscriptionEmailFieldsBuilder {
+object DigitalPackEmailFields {
 
-  override def buildWith(
-    subscriptionNumber: String,
-    promotion: Option[Promotion] = None
-  ): AllProductsEmailFieldsBuilder = new AllProductsEmailFieldsBuilder {
+  def build(
+    subscriptionEmailFields: SubscriptionEmailFields,
+    paidSubPaymentData: Option[PaymentMethodWithSchedule]
+  ): EmailFields = {
+    import subscriptionEmailFields._
+    import allProductsEmailFields._
 
-    override def buildWith(
-      billingPeriod: BillingPeriod,
-      user: User,
-      currency: Currency,
-      sfContactId: SfContactId,
-      directDebitMandateId: Option[String],
-    ): EmailFields = {
+    val fieldsForReaderType =
+      paidSubPaymentData match {
+        case Some(PaymentMethodWithSchedule(pm, paymentSchedule)) =>
+          paymentFields(pm, directDebitMandateId) ++
+            directReaderFields(promotion, billingPeriod, user, currency, paymentSchedule)
+        case None /*Corporate*/ => List(
+          "Subscription details" -> "Group subscription"
+        )
+      }
 
-      val fieldsForReaderType =
-        paidSubPaymentData match {
-          case Some(PaymentMethodWithSchedule(pm, paymentSchedule)) =>
-            paymentFields(pm, directDebitMandateId) ++
-              directReaderFields(promotion, billingPeriod, user, currency, paymentSchedule)
-          case None /*Corporate*/ => List(
-            "Subscription details" -> "Group subscription"
-          )
-        }
+    val fields = List(
+      "ZuoraSubscriberId" -> subscriptionNumber,
+      "EmailAddress" -> user.primaryEmailAddress,
+      "First Name" -> user.firstName,
+      "Last Name" -> user.lastName,
+    ) ++ fieldsForReaderType
 
-      val fields = List(
-        "ZuoraSubscriberId" -> subscriptionNumber,
-        "EmailAddress" -> user.primaryEmailAddress,
-        "First Name" -> user.firstName,
-        "Last Name" -> user.lastName,
-      ) ++ fieldsForReaderType
+    val dataExtensionName = if (paidSubPaymentData.isDefined) "digipack" else "digipack-corp"
 
-      val dataExtensionName = if (paidSubPaymentData.isDefined) "digipack" else "digipack-corp"
-
-      EmailFields(fields, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
-    }
+    EmailFields(fields, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
   }
-
-}
-
-object DigitalPackEmailFieldsBuilder {
 
   def paymentFields(paymentMethod: PaymentMethod, directDebitMandateId: Option[String]): Seq[(String, String)] =
     paymentMethod match {
