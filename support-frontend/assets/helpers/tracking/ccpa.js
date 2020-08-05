@@ -6,7 +6,7 @@ import {
   detect as detectCountry,
   type IsoCountry,
 } from 'helpers/internationalisation/country';
-import { isTestSwitchedOn } from 'helpers/globals';
+// import { isTestSwitchedOn } from 'helpers/globals';
 
 // ----- Functions ----- //
 
