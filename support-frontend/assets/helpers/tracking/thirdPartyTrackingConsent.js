@@ -1,6 +1,5 @@
 // @flow
 
-// import { onIabConsentNotification } from '@guardian/consent-management-platform';
 import { get as getCookie, set as setCookie } from '../cookie';
 import { logException } from 'helpers/logger';
 import { ccpaEnabled } from 'helpers/tracking/ccpa';
