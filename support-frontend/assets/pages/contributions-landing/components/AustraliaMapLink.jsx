@@ -1,8 +1,8 @@
 // @flow
 
-import React from "react";
-import { ThemeProvider } from 'emotion-theming'
-import { LinkButton, buttonBrandAlt } from '@guardian/src-button'
+import React from 'react';
+import { ThemeProvider } from 'emotion-theming';
+import { LinkButton, buttonBrandAlt } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 
 const AustraliaMapLink = () => (
@@ -17,7 +17,7 @@ const AustraliaMapLink = () => (
         target="_blank"
         icon={<SvgArrowRightStraight />}
         iconSide="right"
-        nudgeIcon={true}
+        nudgeIcon
         href="https://support.theguardian.com/aus-2020-map?INTCMP=thankyou-page-aus-map-cta"
       >
         View the map

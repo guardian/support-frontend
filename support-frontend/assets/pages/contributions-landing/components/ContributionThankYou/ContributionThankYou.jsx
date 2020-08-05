@@ -193,7 +193,7 @@ function ContributionThankYou(props: PropTypes) {
         { renderIdentityCTA() }
         <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
-        { props.countryId == 'AU' && <AustraliaMapLink />}
+        { props.countryId === 'AU' && <AustraliaMapLink />}
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
