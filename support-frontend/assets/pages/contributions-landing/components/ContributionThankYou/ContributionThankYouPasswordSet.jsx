@@ -10,15 +10,12 @@ import ContributionThankYouBlurb from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import AusMomentSpreadTheWord from 'components/spreadTheWord/ausMomentSpreadTheWord';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import ausMomentEnabled from 'helpers/ausMoment';
 
 // ----- Types ----- //
 type PropTypes = {
   countryId: IsoCountry,
   countryGroupId: CountryGroupId,
-  email: string
 }
 
 // ----- Render ----- //
@@ -35,10 +32,9 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
             {body}
           </p>
         </section>
-        { ausMomentEnabled(props.countryId) && <AusMomentSpreadTheWord email={props.email} /> }
         <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
-        { !ausMomentEnabled(props.countryId) && <SpreadTheWord /> }
+        <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
             href="https://www.theguardian.com"

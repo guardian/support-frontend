@@ -26,8 +26,6 @@ import {
 import TrackableButton from 'components/button/trackableButton';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import AusMomentSpreadTheWord from 'components/spreadTheWord/ausMomentSpreadTheWord';
-import ausMomentEnabled from 'helpers/ausMoment';
 import { createAuthenticationEventParams } from 'helpers/tracking/identityComponentEvent';
 
 // ----- Types ----- //
@@ -191,11 +189,10 @@ function ContributionThankYou(props: PropTypes) {
             </h3>
           </section>
         ) : null}
-        { ausMomentEnabled(props.countryId) && <AusMomentSpreadTheWord email={props.email} /> }
         { renderIdentityCTA() }
         <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
-        { !ausMomentEnabled(props.countryId) && <SpreadTheWord /> }
+        <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
             href="https://www.theguardian.com"

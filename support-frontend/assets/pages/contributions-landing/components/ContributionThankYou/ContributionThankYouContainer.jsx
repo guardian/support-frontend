@@ -47,7 +47,6 @@ function ContributionThankYouContainer(props: PropTypes) {
       <ContributionThankYouPasswordSet
         countryId={props.countryId}
         countryGroupId={props.countryGroupId}
-        email={props.email}
       />
     ),
   };

@@ -18,7 +18,6 @@ type PropTypes = {|
   children: Node,
   classModifiers: Array<?string>,
   backgroundImageSrc: ?string,
-  isAusMomentVariant: boolean,
 |};
 
 
@@ -37,10 +36,7 @@ export default function Page(props: PropTypes) {
       {props.header}
       <main
         role="main"
-        className={props.isAusMomentVariant
-          ? 'gu-content__main aus-moment'
-          : 'gu-content__main'
-        }
+        className="gu-content__main"
       >
         {backgroundImage}
         {props.children}
@@ -59,5 +55,4 @@ Page.defaultProps = {
   footer: null,
   classModifiers: [],
   backgroundImageSrc: null,
-  isAusMomentVariant: false,
 };
