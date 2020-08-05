@@ -27,6 +27,7 @@ import TrackableButton from 'components/button/trackableButton';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { createAuthenticationEventParams } from 'helpers/tracking/identityComponentEvent';
+import AustraliaMapLink from 'pages/contributions-landing/components/AustraliaMapLink';
 
 // ----- Types ----- //
 
@@ -192,6 +193,7 @@ function ContributionThankYou(props: PropTypes) {
         { renderIdentityCTA() }
         <ContributionSurvey isRunning countryGroupId={props.countryGroupId} />
         <MarketingConsent />
+        { props.countryId === 'AU' && <AustraliaMapLink />}
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton

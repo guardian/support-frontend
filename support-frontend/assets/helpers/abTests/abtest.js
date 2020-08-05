@@ -347,7 +347,7 @@ const init = (
   const combinedParticipations: Participations = {
     ...participations,
     ...urlParticipations,
-    ...serverSideParticipations
+    ...serverSideParticipations,
   };
   setLocalStorageParticipations(combinedParticipations);
 
