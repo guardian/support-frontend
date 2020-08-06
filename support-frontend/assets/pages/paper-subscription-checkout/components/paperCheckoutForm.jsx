@@ -298,7 +298,7 @@ function PaperCheckoutForm(props: PropTypes) {
               </FormSection>
               : null
           }
-          {props.useDigitalVoucher === false ? (
+          {!props.useDigitalVoucher ? (
             <FormSection title="When would you like your subscription to start?">
               <Rows>
                 <FieldsetWithError
