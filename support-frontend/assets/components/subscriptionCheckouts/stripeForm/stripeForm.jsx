@@ -2,7 +2,7 @@
 // @flow
 
 // $FlowIgnore - required for hooks
-import React, { useEffect, useState } from 'preact/compat';
+import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import * as stripeJs from '@stripe/react-stripe-js';
 import Button from 'components/button/button';

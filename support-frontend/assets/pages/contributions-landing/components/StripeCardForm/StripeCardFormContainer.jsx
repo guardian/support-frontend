@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 // $FlowIgnore - required for hooks
-import * as React from 'preact/compat';
+import * as React from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 

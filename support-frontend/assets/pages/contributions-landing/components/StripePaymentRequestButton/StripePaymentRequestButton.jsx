@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 // $FlowIgnore - required for hooks
-import React, { useEffect } from 'preact/compat';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
