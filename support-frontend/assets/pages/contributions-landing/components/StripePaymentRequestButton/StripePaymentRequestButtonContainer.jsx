@@ -4,6 +4,7 @@
 
 // ----- Imports ----- //
 
+// We import from preact/compat here rather than react because flow doesn't like it if the child component uses redux
 // $FlowIgnore - required for hooks
 import React, { useEffect, useState } from 'preact/compat';
 import { Elements } from '@stripe/react-stripe-js';
