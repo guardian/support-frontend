@@ -73,7 +73,7 @@ function Footer({
             }
           </ul>
         </FooterContent>
-        <FooterContent paddingTop centred={centred}>
+        <FooterContent centred={centred}>
           <div css={backToTopLink}>
             <BackToTop />
           </div>

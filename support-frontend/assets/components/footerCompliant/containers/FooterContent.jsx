@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
-// import { WithMargins } from './WithMargins';
 import { Content } from './Content';
 
 type PropTypes = {|

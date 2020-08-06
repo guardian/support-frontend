@@ -17,7 +17,7 @@ type PropTypes = {|
 |}
 
 const paddingStyle = css`
-  padding-top: ${space[4]}px;
+  padding-top: ${space[2]}px;
 `;
 
 const contentStyle = css`
@@ -25,9 +25,12 @@ const contentStyle = css`
   display: flex;
   flex-grow: 1;
   flex-basis: ${space[24] * 10}px;
-  padding: 0 ${space[5]}px;
-  padding-bottom: ${space[4]}px;
-  border-bottom: 1px solid ${brand[600]};
+  padding: 0 ${space[5]}px ${space[4]}px;
+  /* padding-bottom: ${space[4]}px; */
+
+  .component-left-margin-section:not(:last-of-type) & {
+    border-bottom: 1px solid ${brand[600]};
+  }
 `;
 
 function getBorderStyling(centred = false) {

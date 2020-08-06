@@ -47,7 +47,7 @@ const content = (
     <Page
       header={<Header />}
       footer={
-        <FooterContainer faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions" centred disclaimer privacyPolicy />
+        <FooterContainer faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions" centred privacyPolicy />
       }
     >
       <SubscriptionLandingContent />

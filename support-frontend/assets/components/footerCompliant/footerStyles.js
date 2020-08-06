@@ -7,6 +7,10 @@ import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 
 export const componentFooter = css`
+  &, & *, & *:before, & *:after {
+    box-sizing: border-box;
+  }
+
   background-color: ${brandBackground.primary};
   ${textSans.small()};
   font-weight: 400;
@@ -24,9 +28,9 @@ export const componentFooter = css`
 `;
 
 export const copyright = css`
-  font-size: 12px;
+  font-size: ${textSans.xsmall()};
   ${until.tablet} {
-    padding-top: ${space[3]}px;
+    padding-top: ${space[5]}px;
   }
 `;
 
@@ -37,10 +41,7 @@ export const linksList = css`
   grid-column-gap: ${space[5]}px;
   grid-template: repeat(2, 1fr) / repeat(2, 1fr);
   grid-auto-flow: column;
-
-  ${until.tablet} {
-    padding-bottom: ${space[9]}px;
-  }
+  padding-bottom: ${space[1]}px;
 
   ${from.tablet} {
     display: flex;
@@ -77,7 +78,7 @@ export const link = css`
 export const backToTopLink = css`
   background-color: ${brandBackground.primary};
   position: absolute;
-  padding: ${space[1]}px;
+  padding: 0 ${space[1]}px;
   right: ${space[2]}px;
   top: 0;
   transform: translateY(-50%);
