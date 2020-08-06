@@ -40,9 +40,10 @@ const state = store.getState();
 const { useDigitalVoucher } = state.common.settings;
 
 const paperSubsFooter = (
-  <Footer privacyPolicy faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions">
-    <p>For full Guardian and Observer voucher and home delivery terms and conditions, see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions">here</a>.</p>
-  </Footer>);
+  <Footer
+    faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+    termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
+  />);
 
 // ----- Render ----- //
 
