@@ -26,12 +26,12 @@ import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
+import { getPaperProductPrice } from 'helpers/productPrice/paperProductPrices';
 import {
   getShortDescription,
   getTitle,
 } from '../../paper-subscription-landing/helpers/products';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
@@ -50,7 +50,6 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
@@ -73,7 +72,12 @@ import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidati
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { type Option } from 'helpers/types/option';
-import Total from 'components/subscriptionCheckouts/total/total';
+import { Paper } from 'helpers/subscriptions';
+import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import EndSummaryMobile from 'components/subscriptionCheckouts/endSummary/endSummaryMobile';
+import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 
 // ----- Types ----- //
 
@@ -97,6 +101,8 @@ type PropTypes = {|
   setupRecurringPayPalPayment: Function,
   amount: number,
   useDigitalVoucher: Option<boolean>,
+  productOption: ProductOptions,
+  fulfilmentOption: FulfilmentOptions,
 |};
 
 // ----- Map State/Props ----- //
@@ -115,7 +121,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
     useDigitalVoucher: state.common.settings.useDigitalVoucher,
-    amount: getProductPrice(
+    amount: getPaperProductPrice(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
@@ -159,38 +165,63 @@ function PaperCheckoutForm(props: PropTypes) {
   const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
+  const title = `${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`;
+  const description = getShortDescription(props.productOption);
+  const productPrice = getPaperProductPrice(
+    props.productPrices,
+    props.fulfilmentOption,
+    props.productOption,
+  );
+
+  const subsCardOrderSummary = (<OrderSummary
+    image={
+      <GridImage
+        gridId="checkoutPackshotPaperGraunVoucher"
+        srcSizes={[696, 500]}
+        sizes="(max-width: 740px) 50vw, 696"
+        imgType="png"
+        altText=""
+      />}
+    title={title}
+    description={description}
+    productPrice={productPrice}
+    billingPeriod="Monthly"
+    changeSubscription={routes.digitalSubscriptionLanding}
+    productType={Paper}
+  />);
+
+  const regularOrderSummary = (<Summary
+    image={
+      <GridImage
+        gridId="checkoutPackshotPaperGraunVoucher"
+        srcSizes={[696, 500]}
+        sizes="(max-width: 740px) 50vw, 696"
+        imgType="png"
+        altText=""
+      />
+    }
+    title={title}
+    description={description}
+    productPrice={productPrice}
+    dataList={[
+      {
+        title: 'Delivery method',
+        value: fulfilmentOptionName,
+      },
+    ]}
+    billingPeriod="Monthly"
+    changeSubscription={routes.paperSubscriptionProductChoices}
+    product={Paper}
+  />);
 
   return (
     <Content modifierClasses={['your-details']}>
-      <Layout aside={(
-        <Summary
-          image={
-            <GridImage
-              gridId="checkoutPackshotPaperGraunVoucher"
-              srcSizes={[696, 500]}
-              sizes="(max-width: 740px) 50vw, 696"
-              imgType="png"
-              altText=""
-            />
-          }
-          title={`${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`}
-          description={getShortDescription(props.productOption)}
-          productPrice={getProductPrice(
-            props.productPrices,
-            props.fulfilmentOption,
-            props.productOption,
-          )}
-          dataList={[
-            {
-              title: 'Delivery method',
-              value: fulfilmentOptionName,
-            },
-          ]}
-          billingPeriod="Monthly"
-          changeSubscription={routes.paperSubscriptionProductChoices}
-          product={props.product}
-        />
-      )}
+      <Layout
+        aside={
+          (props.fulfilmentOption === Collection && props.useDigitalVoucher === true) ?
+            subsCardOrderSummary :
+            regularOrderSummary
+        }
       >
         <Form onSubmit={(ev) => {
           ev.preventDefault();
@@ -267,6 +298,7 @@ function PaperCheckoutForm(props: PropTypes) {
               </FormSection>
               : null
           }
+          {!props.useDigitalVoucher && (
           <FormSection title="When would you like your subscription to start?">
             <Rows>
               <FieldsetWithError
@@ -297,7 +329,7 @@ function PaperCheckoutForm(props: PropTypes) {
                 </p>
               </Text>
             </Rows>
-          </FormSection>
+          </FormSection>)}
           <PaymentMethodSelector
             country="GB"
             paymentMethod={props.paymentMethod}
@@ -349,11 +381,10 @@ function PaperCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <Total
-            price={props.amount}
-            currency={props.currencyId}
-          />
-          <PaymentTerms paymentMethod={props.paymentMethod} />
+          {props.useDigitalVoucher && props.fulfilmentOption === Collection && (
+            <EndSummaryMobile product={props.product} />
+          )}
+          <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>

@@ -22,6 +22,32 @@ import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/vouche
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { formatMachineDate } from 'helpers/dateConversions';
 
+const additionalDays = [
+  {
+    Everyday: 8, Sixday: 8, Weekend: 13, Sunday: 14,
+  }, // Sunday
+  {
+    Everyday: 10, Sixday: 10, Weekend: 12, Sunday: 13,
+  }, // Monday
+  {
+    Everyday: 9, Sixday: 9, Weekend: 11, Sunday: 12,
+  }, // Tuesday
+  {
+    Everyday: 8, Sixday: 8, Weekend: 10, Sunday: 11,
+  }, // Wednesday
+  {
+    Everyday: 11, Sixday: 11, Weekend: 16, Sunday: 17,
+  }, // Thursday
+  {
+    Everyday: 10, Sixday: 10, Weekend: 15, Sunday: 16,
+  }, // Friday
+  {
+    Everyday: 9, Sixday: 9, Weekend: 14, Sunday: 15,
+  }, // Saturday
+];
+
+const monthText = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 function getProductOption(): PaperProductOptions {
   const productInUrl = getQueryParameter('product');
   // $FlowIgnore - flow doesn't recognise that we've checked the value of productInUrl
@@ -41,5 +67,15 @@ function getDays(fulfilmentOption: FulfilmentOptions, productOption: ProductOpti
 const getStartDate = (fulfilmentOption: FulfilmentOptions, productOption: ProductOptions) =>
   formatMachineDate(getDays(fulfilmentOption, productOption)[0]) || null;
 
+const getPaymentStartDate = (date: Date, productOption: PaperProductOptions) => {
+  const day = new Date(date).getDay();
+  const delay = additionalDays[day][productOption];
+  const milsInADay = 1000 * 60 * 60 * 24;
+  const delayInMils = delay * milsInADay;
+  const startDate = new Date(date + delayInMils);
+  const machineDateArray = formatMachineDate(startDate).split('-');
+  return `${machineDateArray[2]} ${monthText[startDate.getMonth()]} ${machineDateArray[0]}`;
+};
 
-export { getProductOption, getFulfilmentOption, getDays, getStartDate };
+
+export { getProductOption, getFulfilmentOption, getDays, getStartDate, getPaymentStartDate };

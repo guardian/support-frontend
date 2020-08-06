@@ -5,7 +5,8 @@ import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { border, background } from '@guardian/src-foundations/palette';
-import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
+import EndSummaryDigital from 'components/subscriptionCheckouts/endSummary/endSummaryDigital';
+import EndSummaryPrint from 'components/subscriptionCheckouts/endSummary/endSummaryPrint';
 
 const endSummaryMobile = css`
   display: block;
@@ -22,10 +23,14 @@ const endSummaryMobile = css`
   }
 `;
 
-function EndSummaryMobile() {
+type EndSummaryMobileProps = {
+  product: SubscriptionProducts,
+}
+
+function EndSummaryMobile({ product }: EndSummaryMobileProps) {
   return (
     <span css={endSummaryMobile}>
-      <EndSummary />
+      {product === 'Digital' ? <EndSummaryDigital /> : <EndSummaryPrint />}
     </span>
   );
 }

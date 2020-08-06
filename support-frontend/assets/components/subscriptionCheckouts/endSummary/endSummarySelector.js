@@ -1,11 +1,13 @@
 // @flow
 
 import { getProductPrice } from 'helpers/productPrice/productPrices';
+import { getPaperProductPrice } from 'helpers/productPrice/paperProductPrices';
 
 import { type Option } from 'helpers/types/option';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
+import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/options';
 
 export type EndSummaryProps = {
   priceDescription: string,
@@ -19,19 +21,32 @@ const getPromotion = (productPrice: ProductPrice): Option<?string> =>
     : null);
 
 function mapStateToProps(state: CheckoutState): EndSummaryProps {
-  const { billingPeriod, productPrices } = state.page.checkout;
+  const {
+    billingPeriod, productPrices, fulfilmentOption, productOption, product,
+  } = state.page.checkout;
 
-  const productPrice = getProductPrice(
-    productPrices,
-    state.common.internationalisation.countryId,
-    billingPeriod,
-  );
+  const productPrice = (product === 'Paper') ?
+    getPaperProductPrice(
+      productPrices,
+      fulfilmentOption,
+      productOption,
+    ) :
+
+    getProductPrice(
+      productPrices,
+      state.common.internationalisation.countryId,
+      billingPeriod,
+    );
 
   const digitalBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
+
+  const timeNow = Date.now();
+  const paymentStartDate = getPaymentStartDate(timeNow, productOption);
 
   return {
     priceDescription: getBillingDescription(productPrice, digitalBillingPeriod),
     promotion: getPromotion(productPrice),
+    paymentStartDate,
   };
 }
 

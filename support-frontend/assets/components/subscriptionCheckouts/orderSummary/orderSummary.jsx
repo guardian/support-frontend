@@ -6,10 +6,13 @@ import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
-import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
+import { type SubscriptionProduct, DigitalPack } from 'helpers/subscriptions';
+import EndSummaryDigital from 'components/subscriptionCheckouts/endSummary/endSummaryDigital';
+import EndSummaryPrint from 'components/subscriptionCheckouts/endSummary/endSummaryPrint';
 import * as styles from './orderSummaryStyles';
 
 type PropTypes = {
+  productType: SubscriptionProduct,
   billingPeriod: DigitalBillingPeriod,
   // eslint-disable-next-line react/no-unused-prop-types
   changeSubscription?: string | null,
@@ -33,11 +36,11 @@ function OrderSummary(props: PropTypes) {
         <div css={styles.textBlock}>
           <h3>{props.title}</h3>
           <p>{priceString}</p>
-          <span>14 day free trial</span>
+          {props.productType === DigitalPack && <span>14 day free trial</span>}
         </div>
       </div>
       <div css={styles.endSummary}>
-        <EndSummary />
+        {props.productType === DigitalPack ? <EndSummaryDigital /> : <EndSummaryPrint />}
       </div>
     </aside>
   );

@@ -10,7 +10,7 @@ import {
 } from 'helpers/subscriptions';
 import {
   finalPrice,
-  getProductPrice,
+  getPaperProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
@@ -108,7 +108,7 @@ const getPlans = (
         price: flashSaleIsActive(Paper) ? getPriceStr(price) : getRegularPriceStr(price),
         offer: getOfferText(price, productOption),
         saving: flashSaleIsActive(Paper)
-          ? getSavingStr(getProductPrice(productPrices, fulfilmentOption, productOption))
+          ? getSavingStr(getPaperProductPrice(productPrices, fulfilmentOption, productOption))
           : null,
       },
     };

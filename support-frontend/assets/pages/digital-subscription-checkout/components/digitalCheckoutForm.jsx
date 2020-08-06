@@ -20,7 +20,7 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
+import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
 import {
   type Action,
   type FormActionCreators,
@@ -38,7 +38,7 @@ import {
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import DigitalPaymentTerms from './digitalPaymentTerms';
+import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
@@ -59,7 +59,7 @@ import GeneralErrorMessage
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { routes } from 'helpers/routes';
-import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
+import EndSummaryMobile from 'components/subscriptionCheckouts/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Types ----- //
@@ -165,6 +165,7 @@ function DigitalCheckoutForm(props: PropTypes) {
           productPrice={productPrice}
           billingPeriod={props.billingPeriod}
           changeSubscription={routes.digitalSubscriptionLanding}
+          productType={DigitalPack}
         />)}
       >
         <Form onSubmit={(ev) => {
@@ -239,8 +240,8 @@ function DigitalCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <EndSummaryMobile />
-          <DigitalPaymentTerms
+          <EndSummaryMobile product="Digital" />
+          <DirectDebitPaymentTerms
             paymentMethod={props.paymentMethod}
           />
         </Form>

@@ -7,7 +7,7 @@ import mapStateToProps, { type EndSummaryProps } from './endSummarySelector';
 
 const Dot = () => <div css={styles.dot} />;
 
-function EndSummary({ promotion, priceDescription }: EndSummaryProps) {
+function EndSummaryDigital({ promotion, priceDescription }: EndSummaryProps) {
   return (
     <ul css={styles.list}>
       <li>
@@ -27,4 +27,4 @@ function EndSummary({ promotion, priceDescription }: EndSummaryProps) {
   );
 }
 
-export default connect(mapStateToProps)(EndSummary);
+export default connect(mapStateToProps)(EndSummaryDigital);
