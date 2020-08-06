@@ -7,6 +7,8 @@ import { space } from '@guardian/src-foundations';
 import { border, background } from '@guardian/src-foundations/palette';
 import EndSummaryDigital from 'components/subscriptionCheckouts/endSummary/endSummaryDigital';
 import EndSummaryPrint from 'components/subscriptionCheckouts/endSummary/endSummaryPrint';
+import { type SubscriptionProduct } from 'helpers/subscriptions';
+import { DigitalPack } from 'helpers/subscriptions';
 
 const endSummaryMobile = css`
   display: block;
@@ -24,13 +26,17 @@ const endSummaryMobile = css`
 `;
 
 type EndSummaryMobileProps = {
-  product: SubscriptionProducts,
+  product: SubscriptionProduct,
 }
 
 function EndSummaryMobile({ product }: EndSummaryMobileProps) {
   return (
     <span css={endSummaryMobile}>
-      {product === 'Digital' ? <EndSummaryDigital /> : <EndSummaryPrint />}
+
+      {
+        // $FlowFixMe
+        product === DigitalPack ? <EndSummaryDigital /> : <EndSummaryPrint paymentStartDate={null} />
+      }
     </span>
   );
 }

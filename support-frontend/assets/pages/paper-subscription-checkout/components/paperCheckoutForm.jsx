@@ -298,15 +298,15 @@ function PaperCheckoutForm(props: PropTypes) {
               </FormSection>
               : null
           }
-          {!props.useDigitalVoucher && (
-          <FormSection title="When would you like your subscription to start?">
-            <Rows>
-              <FieldsetWithError
-                id="startDate"
-                error={firstError('startDate', props.formErrors)}
-                legend="When would you like your subscription to start?"
-              >
-                {days.map((day) => {
+          {props.useDigitalVoucher === false ? (
+            <FormSection title="When would you like your subscription to start?">
+              <Rows>
+                <FieldsetWithError
+                  id="startDate"
+                  error={firstError('startDate', props.formErrors)}
+                  legend="When would you like your subscription to start?"
+                >
+                  {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
                     <RadioInput
@@ -318,18 +318,18 @@ function PaperCheckoutForm(props: PropTypes) {
                     />
                   );
                 })}
-              </FieldsetWithError>
-              <Text className="component-text__paddingTop">
-                <p>
+                </FieldsetWithError>
+                <Text className="component-text__paddingTop">
+                  <p>
                   We will take the first payment on the
                   date you receive your {(props.fulfilmentOption === HomeDelivery || !props.useDigitalVoucher) && 'first'} {fulfilmentOptionDescriptor.toLowerCase()}.
-                </p>
-                <p>
+                  </p>
+                  <p>
                  Subscription start dates are automatically selected to be the earliest we can fulfil your order.
-                </p>
-              </Text>
-            </Rows>
-          </FormSection>)}
+                  </p>
+                </Text>
+              </Rows>
+            </FormSection>) : null}
           <PaymentMethodSelector
             country="GB"
             paymentMethod={props.paymentMethod}
@@ -381,9 +381,9 @@ function PaperCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          {props.useDigitalVoucher && props.fulfilmentOption === Collection && (
+          {props.useDigitalVoucher && props.fulfilmentOption === Collection ? (
             <EndSummaryMobile product={props.product} />
-          )}
+          ) : null}
           <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>

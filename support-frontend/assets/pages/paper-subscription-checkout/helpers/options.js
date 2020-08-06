@@ -22,6 +22,8 @@ import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/vouche
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { formatMachineDate } from 'helpers/dateConversions';
 
+export type PaperSubscriptions = 'Everyday' | 'Sixday' | 'Weekend' | 'Sunday' | null;
+
 const additionalDays = [
   {
     Everyday: 8, Sixday: 8, Weekend: 13, Sunday: 14,
@@ -67,7 +69,10 @@ function getDays(fulfilmentOption: FulfilmentOptions, productOption: ProductOpti
 const getStartDate = (fulfilmentOption: FulfilmentOptions, productOption: ProductOptions) =>
   formatMachineDate(getDays(fulfilmentOption, productOption)[0]) || null;
 
-const getPaymentStartDate = (date: Date, productOption: PaperProductOptions) => {
+const getPaymentStartDate = (date: number, productOption: PaperSubscriptions) => {
+  if (!productOption) {
+    return 'date not available';
+  }
   const day = new Date(date).getDay();
   const delay = additionalDays[day][productOption];
   const milsInADay = 1000 * 60 * 60 * 24;

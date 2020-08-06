@@ -240,7 +240,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <EndSummaryMobile product="Digital" />
+          <EndSummaryMobile product={DigitalPack} />
           <DirectDebitPaymentTerms
             paymentMethod={props.paymentMethod}
           />

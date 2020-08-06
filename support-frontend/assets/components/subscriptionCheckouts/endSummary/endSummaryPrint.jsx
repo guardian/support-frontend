@@ -51,7 +51,7 @@ const dot = css`
 const Dot = () => <div css={dot} />;
 
 type EndSummaryPrintProps = {
-  paymentStartDate: Date,
+  paymentStartDate: Date | null,
 }
 
 function EndSummaryPrint({ paymentStartDate }: EndSummaryPrintProps) {

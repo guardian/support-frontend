@@ -40,7 +40,7 @@ function OrderSummary(props: PropTypes) {
         </div>
       </div>
       <div css={styles.endSummary}>
-        {props.productType === DigitalPack ? <EndSummaryDigital /> : <EndSummaryPrint />}
+        {props.productType === DigitalPack ? <EndSummaryDigital /> : <EndSummaryPrint paymentStartDate={null} />}
       </div>
     </aside>
   );
