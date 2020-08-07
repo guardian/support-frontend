@@ -1,8 +1,8 @@
 // @flow
 
 // ----- Imports ----- //
-
-import React, { type Node } from 'react';
+// $FlowIgnore - required for hooks
+import React, { type Node, useEffect } from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -29,6 +29,15 @@ export default function Page(props: PropTypes) {
       <img className="background-image" alt="landing page background illustration" src={props.backgroundImageSrc} />
     </div>
   ) : null;
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      if (window.location.hash) {
+        const hashElement = document.getElementById(window.location.hash.substr(1));
+        if (hashElement) { hashElement.scrollIntoView(); }
+      }
+    });
+  }, []);
 
   return (
     <div id={props.id} className={classNameWithModifiers('gu-content', props.classModifiers)}>
