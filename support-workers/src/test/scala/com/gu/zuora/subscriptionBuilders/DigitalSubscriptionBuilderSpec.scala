@@ -71,7 +71,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val corporate = DigitalSubscriptionBuilder.build(
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SubscriptionPaymentCorporate(
+    SubscriptionRedemption(
       CorporateRedemption(RedemptionCode("CODE").right.get),
       new GetCodeStatus({
         case "CODE" => Future.successful(Some(Map(
@@ -86,7 +86,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val monthly = DigitalSubscriptionBuilder.build(
     DigitalPack(GBP, Monthly),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SubscriptionPaymentDirect(ZuoraDigitalPackConfig(14, 2), None, Country.UK, promotionService),
+    SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Country.UK, promotionService),
     SANDBOX,
     () => saleDate
   ).value.map(_.right.get)
