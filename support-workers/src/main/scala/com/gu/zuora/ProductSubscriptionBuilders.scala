@@ -40,7 +40,8 @@ object ProductSubscriptionBuilders {
         RatePlanChargeData(
           ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = contribution.amount) //Pass the amount the user selected into Zuora
         )
-      )
+      ),
+      readerType = Direct
     )
   }
 
@@ -75,13 +76,14 @@ object ProductSubscriptionBuilders {
       }
       val contractAcceptanceDate = contractEffectiveDate.plusDays(delay)
 
-      val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(environment, Direct), digitalPack.describe)
+      val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(environment, digitalPack.readerType), digitalPack.describe)
 
       val subscriptionData = buildProductSubscription(
         requestId,
         productRatePlanId,
         contractAcceptanceDate = contractAcceptanceDate,
-        contractEffectiveDate = contractEffectiveDate
+        contractEffectiveDate = contractEffectiveDate,
+        readerType = digitalPack.readerType
       )
 
       subscriptionPaymentType match {
@@ -143,6 +145,7 @@ object ProductSubscriptionBuilders {
       productRatePlanId,
       contractAcceptanceDate = contractAcceptanceDate,
       contractEffectiveDate = contractEffectiveDate,
+      readerType = Direct
     )
 
     applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
@@ -194,7 +197,7 @@ object ProductSubscriptionBuilders {
     ratePlanCharges: List[RatePlanChargeData] = Nil,
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
     contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    readerType: ReaderType = ReaderType.Direct,
+    readerType: ReaderType,
     initialTermMonths: Int = 12
   ): SubscriptionData = {
     val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
