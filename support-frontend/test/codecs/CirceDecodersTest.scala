@@ -121,7 +121,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |    },
           |    "useDotcomContactPage": "Off",
           |    "enableRecaptchaFrontend": "Off",
-          |    "enableRecaptchaBackend": "Off",
+          |    "enableRecaptchaBackend": "Off"
           |  },
           |  "amounts": {
           |    "GBPCountries": {
