@@ -1,8 +1,8 @@
 // @flow
 
 // ----- Imports ----- //
-
-import React, { type Node } from 'react';
+// $FlowIgnore - required for hooks
+import React, { type Node, useEffect } from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -31,7 +31,7 @@ export default function Page(props: PropTypes) {
     </div>
   ) : null;
 
-  React.useEffect(() => {
+  useEffect(() => {
     requestAnimationFrame(() => {
       if (window.location.hash) {
         const hashElement = document.getElementById(window.location.hash.substr(1));
