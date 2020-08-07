@@ -234,7 +234,6 @@ object SendThankYouEmailManualTest {
         "A-S00045678",
         None
       ),
-      Domestic,
       Some(new LocalDate(2019, 3, 26)),
       PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(
         Payment(new LocalDate(2019, 3, 25), 37.50),
@@ -276,7 +275,6 @@ object SendThankYouEmailManualTest {
         "A-S00045678",
         None
       ),
-      Domestic,
       Some(new LocalDate(2019, 3, 26)),
       PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))),
       giftRecipient = Some(GiftRecipient(None, "Earl", "Palmer", None))

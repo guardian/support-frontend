@@ -11,7 +11,6 @@ import scala.collection.immutable
 object GuardianWeeklyEmailFields {
   def build(
     subscriptionEmailFields: SubscriptionEmailFields,
-    fulfilmentOptions: FulfilmentOptions,
     firstDeliveryDate: Option[LocalDate],
     paymentMethodWithSchedule: PaymentMethodWithSchedule,
     giftRecipient: Option[GiftRecipient] = None

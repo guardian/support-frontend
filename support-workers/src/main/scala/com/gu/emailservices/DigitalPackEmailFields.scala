@@ -67,10 +67,6 @@ object DigitalPackEmailFields {
     List(
       "Subscription term" -> billingPeriod.noun,
       "Payment amount" -> SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),
-      "Address 1" -> "", //TODO: Remove this from Braze template
-      "Address 2" -> "", //TODO: Remove this from Braze template
-      "City" -> "", //TODO: Remove this from Braze template
-      "Post Code" -> "", //TODO: Remove this from Braze template
       "Country" -> user.billingAddress.country.name,
       "Date of first payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
       "Currency" -> currency.glyph,

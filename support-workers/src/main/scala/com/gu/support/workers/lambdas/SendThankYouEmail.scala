@@ -77,11 +77,10 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
             state.giftRecipient
           )
         )
-      case g: GuardianWeekly =>
+      case _: GuardianWeekly =>
         state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift GW yet").map(paymentMethodWithSchedule =>
           GuardianWeeklyEmailFields.build(
             getSubscriptionEmailFields(state, directDebitMandateId),
-            fulfilmentOptions = g.fulfilmentOptions,
             firstDeliveryDate = state.firstDeliveryDate,
             paymentMethodWithSchedule = paymentMethodWithSchedule,
             state.giftRecipient
