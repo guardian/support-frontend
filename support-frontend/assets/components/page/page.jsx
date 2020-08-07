@@ -31,14 +31,14 @@ export default function Page(props: PropTypes) {
     </div>
   ) : null;
 
-    React.useEffect(() => {
-      // setTimeout(() => {
-        if (window.location.hash) {
-          const hashElement = document.getElementById(window.location.hash.substr(1));
-          if (hashElement) { hashElement.scrollIntoView(); }
-        }
-      // }, 1);
-    }, []);
+  React.useEffect(() => {
+    requestAnimationFrame(() => {
+      if (window.location.hash) {
+        const hashElement = document.getElementById(window.location.hash.substr(1));
+        if (hashElement) { hashElement.scrollIntoView(); }
+      }
+    });
+  }, []);
 
   return (
     <div id={props.id} className={classNameWithModifiers('gu-content', props.classModifiers)}>
