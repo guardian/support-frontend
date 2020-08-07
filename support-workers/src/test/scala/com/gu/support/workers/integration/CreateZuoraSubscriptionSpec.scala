@@ -62,6 +62,10 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
   }
 
+  it should "create a Digital Pack gift subscription" in {
+    createSubscription(createDigiPackGiftSubscriptionJson)
+  }
+
   it should "create an everyday paper subscription" in {
     createSubscription(createEverydayPaperSubscriptionJson)
   }
@@ -95,7 +99,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   }
 
   val realConfig = Configuration.load()
-  
+
   val realZuoraService = new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
 
   val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())

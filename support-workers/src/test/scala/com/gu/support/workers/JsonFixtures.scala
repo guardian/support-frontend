@@ -41,7 +41,7 @@ object JsonFixtures {
         }
     """
 
-  def userJsonNoAddress =
+  def userJsonNoAddress: String =
     s"""
       "user":{
           "id": "$idId",
@@ -159,7 +159,16 @@ object JsonFixtures {
       {
         "currency": "GBP",
         "billingPeriod" : "Annual",
-        "productOptions" : "Corporate"
+        "readerType" : "Corporate"
+      }
+    """
+
+  val digitalPackGiftJson =
+    """
+      {
+        "currency": "GBP",
+        "billingPeriod" : "Annual",
+        "readerType" : "Gift"
       }
     """
 
@@ -296,7 +305,7 @@ object JsonFixtures {
     s"""
           {
             $requestIdJson,
-            ${userJson(	"200001969")},
+            ${userJson("200001969")},
             "product": ${contribution()},
             "paymentProvider": "PayPal",
             "paymentMethod": $payPalPaymentMethod
@@ -415,7 +424,18 @@ object JsonFixtures {
             $salesforceContactsJson
             }
         """
-
+  val createDigiPackGiftSubscriptionJson =
+    s"""
+          {
+            $requestIdJson,
+            $userJsonNoAddress,
+            "product": $digitalPackGiftJson,
+            "paymentProvider": "RedemptionNoProvider",
+            "paymentMethod": $stripePaymentMethod,
+            "salesForceContact": $salesforceContactJson,
+            $salesforceContactsJson
+            }
+        """
 
   val createDigiPackSubscriptionWithPromoJson =
     s"""
