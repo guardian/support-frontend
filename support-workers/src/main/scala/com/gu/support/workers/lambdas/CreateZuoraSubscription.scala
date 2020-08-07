@@ -8,17 +8,17 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.{DynamoLookup, DynamoUpdate, GetCodeStatus, RedemptionTable, SetCodeStatus}
 import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
-import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
+import com.gu.support.redemption._
+import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
-import com.gu.zuora.ProductSubscriptionBuilders._
-import com.gu.zuora.ProductSubscriptionBuilders.buildDigitalPackSubscription.{SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
 import com.gu.zuora.ZuoraSubscribeService
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.buildContributionSubscription
+import com.gu.zuora.subscriptionBuilders.{DigitalSubscriptionBuilder, GuardianWeeklySubscriptionBuilder, PaperSubscriptionBuilder, ProductSubscriptionBuilders, SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
 import org.joda.time.{DateTime, DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -151,7 +151,7 @@ object CreateZuoraSubscription {
 
     val eventualErrorOrSubscriptionData = state.product match {
       case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
-      case d: DigitalPack => buildDigitalPackSubscription(
+      case d: DigitalPack => DigitalSubscriptionBuilder.build(
         d,
         state.requestId,
         state.paymentMethod match {
@@ -161,7 +161,7 @@ object CreateZuoraSubscription {
         environment,
         today
       ).leftMap(_.fold(BuildSubscribePromoError, BuildSubscribeRedemptionError))
-      case p: Paper => EitherT.fromEither[Future](buildPaperSubscription(
+      case p: Paper => EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
         p,
         state.requestId,
         state.user.billingAddress.country,
@@ -171,7 +171,7 @@ object CreateZuoraSubscription {
         environment
       ).leftMap(BuildSubscribePromoError))
       case w: GuardianWeekly =>
-        EitherT.fromEither[Future](buildGuardianWeeklySubscription(
+        EitherT.fromEither[Future](GuardianWeeklySubscriptionBuilder.build(
           w,
           state.requestId,
           state.user.billingAddress.country,

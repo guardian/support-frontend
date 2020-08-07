@@ -1,4 +1,4 @@
-package com.gu.zuora
+package com.gu.zuora.subscriptionBuilders
 
 import java.util.UUID
 
@@ -9,7 +9,7 @@ import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.{GuardianWeekly, Quarterly}
 import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscriptionData}
-import com.gu.zuora.ProductSubscriptionBuilders._
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -73,7 +73,7 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   lazy val firstDeliveryDate = saleDate.plusDays(3)
 
   lazy val gift: SubscriptionData =
-    buildGuardianWeeklySubscription(
+    GuardianWeeklySubscriptionBuilder.build(
       weekly,
       UUID.randomUUID(),
       Country.UK, None,
@@ -83,7 +83,7 @@ class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       SANDBOX,
       contractEffectiveDate = saleDate).right.get
 
-  lazy val nonGift = buildGuardianWeeklySubscription(
+  lazy val nonGift = GuardianWeeklySubscriptionBuilder.build(
     weekly,
     UUID.randomUUID(),
     Country.UK, None,

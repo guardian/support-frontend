@@ -1,4 +1,4 @@
-package com.gu.zuora
+package com.gu.zuora.subscriptionBuilders
 
 import java.util.UUID
 
@@ -12,8 +12,6 @@ import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode}
 import com.gu.support.workers.{DigitalPack, Monthly}
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api._
-import com.gu.zuora.ProductSubscriptionBuilders._
-import com.gu.zuora.ProductSubscriptionBuilders.buildDigitalPackSubscription.{SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -21,7 +19,7 @@ import org.scalatestplus.mockito.MockitoSugar._
 
 import scala.concurrent.Future
 
-class BuildDigitalPackSubscriptionSpec extends AsyncFlatSpec with Matchers {
+class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   "SubscriptionData for a corporate subscription" should "be correct" in
     corporate.map { subData =>
@@ -70,7 +68,7 @@ class BuildDigitalPackSubscriptionSpec extends AsyncFlatSpec with Matchers {
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
 
-  lazy val corporate = buildDigitalPackSubscription(
+  lazy val corporate = DigitalSubscriptionBuilder.build(
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionPaymentCorporate(
@@ -85,7 +83,7 @@ class BuildDigitalPackSubscriptionSpec extends AsyncFlatSpec with Matchers {
     () => saleDate
   ).value.map(_.right.get)
 
-  lazy val monthly = buildDigitalPackSubscription(
+  lazy val monthly = DigitalSubscriptionBuilder.build(
     DigitalPack(GBP, Monthly),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionPaymentDirect(ZuoraDigitalPackConfig(14, 2), None, Country.UK, promotionService),
