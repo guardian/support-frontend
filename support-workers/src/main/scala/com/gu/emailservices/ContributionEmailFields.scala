@@ -1,26 +1,34 @@
 package com.gu.emailservices
 
 import com.gu.emailservices.SubscriptionEmailFieldHelpers.{formatDate, hyphenate, mask}
-import com.gu.i18n.Currency
-import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers._
 import org.joda.time.DateTime
 
-case class ContributionEmailFields(
-  created: DateTime,
-  amount: BigDecimal,
-  paymentMethod: PaymentMethod
-) extends AllProductsEmailFields {
+object ContributionEmailFields {
 
-  def apply(
-    billingPeriod: BillingPeriod,
-    user: User,
-    currency: Currency,
-    sfContactId: SfContactId,
-    directDebitMandateId: Option[String],
-  ): EmailFields = new EmailFields {
+  def build(
+    allProductsEmailFields: AllProductsEmailFields,
+    created: DateTime,
+    amount: BigDecimal,
+    paymentMethod: PaymentMethod
+  ): EmailFields = {
+    import allProductsEmailFields._
 
-    val paymentFields = paymentMethod match {
+    val fields = List(
+      "EmailAddress" -> user.primaryEmailAddress,
+      "created" -> created.toString,
+      "amount" -> amount.toString,
+      "currency" -> currency.identifier,
+      "edition" -> user.billingAddress.country.alpha2,
+      "name" -> user.firstName,
+      "product" -> s"${billingPeriod.toString.toLowerCase}-contribution"
+    ) ++ getPaymentFields(paymentMethod, directDebitMandateId, created)
+
+    EmailFields(fields, Left(sfContactId), user.primaryEmailAddress, "regular-contribution-thank-you")
+  }
+
+  def getPaymentFields(paymentMethod: PaymentMethod, directDebitMandateId: Option[String], created: DateTime): Seq[(String, String)] = {
+    paymentMethod match {
       case dd: DirectDebitPaymentMethod => List(
         "account name" -> dd.bankTransferAccountName,
         "account number" -> mask(dd.bankTransferAccountNumber),
@@ -40,19 +48,5 @@ case class ContributionEmailFields(
       case _: PayPalReferenceTransaction => List("payment method" -> "PayPal")
       case _: CreditCardReferenceTransaction => List("payment method" -> "credit / debit card")
     }
-
-    override val fields = List(
-      "EmailAddress" -> user.primaryEmailAddress,
-      "created" -> created.toString,
-      "amount" -> amount.toString,
-      "currency" -> currency.identifier,
-      "edition" -> user.billingAddress.country.alpha2,
-      "name" -> user.firstName,
-      "product" -> s"${billingPeriod.toString.toLowerCase}-contribution"
-    ) ++ paymentFields
-
-    override def payload: String = super.payload(user.primaryEmailAddress, "regular-contribution-thank-you")
-
-    override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
   }
 }

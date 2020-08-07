@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
+import com.gu.emailservices
 import com.gu.emailservices._
 import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
@@ -46,16 +47,17 @@ class SendThankYouEmailSpec extends LambdaSpec {
   "EmailFields" should "include Direct Debit fields in the payload" in {
     val mandateId = "65HK26E"
     val user = User("1234", "", None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
-    val ef = ContributionEmailFields(
+    val ef = ContributionEmailFields.build(
+      AllProductsEmailFields(
+        Monthly,
+        user,
+        GBP,
+        SfContactId("sfContactId"),
+        Some(mandateId)
+      ),
       new DateTime(1999, 12, 31, 11, 59),
       20,
       directDebitPaymentMethod
-    ).apply(
-      Monthly,
-      user,
-      GBP,
-      SfContactId("sfContactId"),
-      Some(mandateId)
     )
     val resultJson = parse(ef.payload)
 
@@ -101,16 +103,17 @@ object SendThankYouEmailManualTest {
   def sendContributionEmail() {
     val mandateId = "65HK26E"
     val user = User("1234", addressToSendTo, None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
-    val ef = ContributionEmailFields(
+    val ef = ContributionEmailFields.build(
+      AllProductsEmailFields(
+        Monthly,
+        user,
+        GBP,
+        salesforceContactId,
+        Some(mandateId)
+      ),
       new DateTime(1999, 12, 31, 11, 59),
       20,
       directDebitPaymentMethod
-    ).apply(
-      Monthly,
-      user,
-      GBP,
-      salesforceContactId,
-      Some(mandateId)
     )
     val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
@@ -120,17 +123,19 @@ object SendThankYouEmailManualTest {
     val mandateId = "65HK26E"
     val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
     val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
-    val ef = DigitalPackEmailFields(
+    val ef = DigitalPackEmailFields.build(
+      SubscriptionEmailFields(
+        AllProductsEmailFields(
+          Annual,
+          user,
+          GBP,
+          salesforceContactId,
+          Some(mandateId)
+        ),
+        "A-S00045678",
+        None
+      ),
       paidSubPaymentData = Some(PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))))
-    ).apply(
-      "A-S00045678",
-      None
-    ).apply(
-      Annual,
-      user,
-      GBP,
-      salesforceContactId,
-      Some(mandateId)
     )
     val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
@@ -140,17 +145,19 @@ object SendThankYouEmailManualTest {
     val mandateId = "65HK26E"
     val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
     val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
-    val ef = DigitalPackEmailFields(
+    val ef = DigitalPackEmailFields.build(
+      SubscriptionEmailFields(
+        AllProductsEmailFields(
+          Annual,
+          user,
+          GBP,
+          salesforceContactId,
+          Some(mandateId)
+        ),
+        "A-S00045678",
+        None
+      ),
       paidSubPaymentData = None
-    ).apply(
-      "A-S00045678",
-      None
-    ).apply(
-      Annual,
-      user,
-      GBP,
-      salesforceContactId,
-      Some(mandateId)
     )
     val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
@@ -175,20 +182,22 @@ object SendThankYouEmailManualTest {
       billingAddress = billingAddressWithCountry,
       deliveryAddress = Some(billingAddressWithCountry)
     )
-    val ef = PaperEmailFields(
+    val ef = PaperEmailFields.build(
+      SubscriptionEmailFields(
+        AllProductsEmailFields(
+          Monthly,
+          user,
+          GBP,
+          salesforceContactId,
+          Some(mandateId)
+        ),
+        "A-S00045678",
+        None
+      ),
       Collection,
       Saturday,
       Some(new LocalDate(2019, 3, 26)),
       PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79)))),
-    ).apply(
-      "A-S00045678",
-      None
-    ).apply(
-      Monthly,
-      user,
-      GBP,
-      salesforceContactId,
-      Some(mandateId)
     )
     val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
@@ -213,22 +222,23 @@ object SendThankYouEmailManualTest {
       billingAddress = billingAddressWithCountry,
       deliveryAddress = Some(billingAddressWithCountry)
     )
-    val ef = GuardianWeeklyEmailFields(
-      Domestic,
+    val ef = GuardianWeeklyEmailFields.build(
+      SubscriptionEmailFields(
+        AllProductsEmailFields(
+          Quarterly,
+          user,
+          GBP,
+          salesforceContactId,
+          Some(mandateId)
+        ),
+        "A-S00045678",
+        None
+      ),
       Some(new LocalDate(2019, 3, 26)),
       PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(
         Payment(new LocalDate(2019, 3, 25), 37.50),
         Payment(new LocalDate(2019, 6, 25), 37.50)
       ))),
-    ).apply(
-      "A-S00045678",
-      None
-    ).apply(
-      Quarterly,
-      user,
-      GBP,
-      salesforceContactId,
-      Some(mandateId)
     )
     val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
@@ -253,21 +263,23 @@ object SendThankYouEmailManualTest {
       billingAddress = billingAddressWithCountry,
       deliveryAddress = Some(billingAddressWithCountry)
     )
-    val ef = GuardianWeeklyEmailFields(
-      Domestic,
+    val ef = GuardianWeeklyEmailFields.build(
+      SubscriptionEmailFields(
+        AllProductsEmailFields(
+          Quarterly,
+          user,
+          GBP,
+          salesforceContactId,
+          Some(mandateId)
+        ),
+        "A-S00045678",
+        None
+      ),
       Some(new LocalDate(2019, 3, 26)),
       PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))),
       giftRecipient = Some(GiftRecipient(None, "Earl", "Palmer", None))
-    ).apply(
-      "A-S00045678",
-      None
-    ).apply(
-      Quarterly,
-      user,
-      GBP,
-      salesforceContactId,
-      Some(mandateId)
     )
+
     val service = new EmailService(realConfig.contributionThanksQueueName)
     service.send(ef)
   }
