@@ -9,11 +9,7 @@ import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import Footer from 'components/footer/footer';
-import CustomerService from 'components/customerService/customerService';
-import SubscriptionTermsPrivacy
-  from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+import Footer from 'components/footerCompliant/Footer';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import ThankYouContent from './components/thankYou';
@@ -52,8 +48,6 @@ const store = pageInit(
   true,
 );
 
-const { countryGroupId } = store.getState().common.internationalisation;
-
 // ----- Render ----- //
 
 const content = (
@@ -61,15 +55,10 @@ const content = (
     <Page
       header={<HeaderWrapper />}
       footer={
-        <Footer>
-          <SubscriptionTermsPrivacy subscriptionProduct="Paper" />
-          <CustomerService
-            selectedCountryGroup={countryGroupId}
-            subscriptionProduct="Paper"
-            paperFulfilmentOptions={fulfilmentOption}
-          />
-          <SubscriptionFaq subscriptionProduct="Paper" />
-        </Footer>
+        <Footer
+          faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+          termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
+        />
       }
     >
       <CheckoutStage
