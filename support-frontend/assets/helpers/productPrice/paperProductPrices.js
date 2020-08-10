@@ -21,7 +21,7 @@ import {
 const country = 'GB';
 const billingPeriod = Monthly;
 
-function getPaperProductPrice(
+function getProductPrice(
   productPrices: ProductPrices,
   fulfilmentOption: ?FulfilmentOptions,
   productOption: ?ProductOptions,
@@ -66,4 +66,4 @@ function getMaxSavingVsRetail(productPrices: ProductPrices): number {
   return Math.max(...allSavings);
 }
 
-export { getPaperProductPrice, finalPrice, getMaxSavingVsRetail };
+export { getProductPrice, finalPrice, getMaxSavingVsRetail };

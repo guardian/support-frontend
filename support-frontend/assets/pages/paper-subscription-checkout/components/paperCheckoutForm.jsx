@@ -26,7 +26,7 @@ import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getPaperProductPrice } from 'helpers/productPrice/paperProductPrices';
+import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
 import {
   getShortDescription,
   getTitle,
@@ -122,7 +122,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
     useDigitalVoucher: state.common.settings.useDigitalVoucher,
-    amount: getPaperProductPrice(
+    amount: getProductPrice(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
@@ -179,7 +179,7 @@ function PaperCheckoutForm(props: PropTypes) {
     'Sorry we could not process your payment';
   const title = `${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`;
   const description = getShortDescription(props.productOption);
-  const productPrice = getPaperProductPrice(
+  const productPrice = getProductPrice(
     props.productPrices,
     props.fulfilmentOption,
     props.productOption,
