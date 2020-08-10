@@ -10,6 +10,7 @@ import { type SubscriptionProduct, DigitalPack } from 'helpers/subscriptions';
 import EndSummaryDigital from 'components/subscriptionCheckouts/endSummary/endSummaryDigital';
 import EndSummaryPrint from 'components/subscriptionCheckouts/endSummary/endSummaryPrint';
 import * as styles from './orderSummaryStyles';
+import { type Option } from 'helpers/types/option';
 
 type PropTypes = {
   productType: SubscriptionProduct,
@@ -19,9 +20,10 @@ type PropTypes = {
   image: $Call<GridImageType, GridImg>,
   productPrice: ProductPrice,
   title: string,
+  paymentStartDate?: Option<string>,
 };
 
-function OrderSummary(props: PropTypes) {
+const OrderSummary = (props: PropTypes) => {
 
   const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
 
@@ -40,14 +42,18 @@ function OrderSummary(props: PropTypes) {
         </div>
       </div>
       <div css={styles.endSummary}>
-        {props.productType === DigitalPack ? <EndSummaryDigital /> : <EndSummaryPrint paymentStartDate={null} />}
+        {props.productType === DigitalPack ?
+          <EndSummaryDigital /> :
+          <EndSummaryPrint paymentStartDate={props.paymentStartDate || 'date to be confirmed'} />
+        }
       </div>
     </aside>
   );
-}
+};
 
 OrderSummary.defaultProps = {
   changeSubscription: '',
+  paymentStartDate: 'date to be confirmed',
 };
 
 export default OrderSummary;

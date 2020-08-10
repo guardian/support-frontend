@@ -74,10 +74,11 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { type Option } from 'helpers/types/option';
 import { Paper } from 'helpers/subscriptions';
 import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import EndSummaryMobile from 'components/subscriptionCheckouts/endSummary/endSummaryMobile';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
+import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 
 // ----- Types ----- //
 
@@ -101,7 +102,7 @@ type PropTypes = {|
   setupRecurringPayPalPayment: Function,
   amount: number,
   useDigitalVoucher: Option<boolean>,
-  productOption: ProductOptions,
+  productOption: ActivePaperProducts,
   fulfilmentOption: FulfilmentOptions,
 |};
 
@@ -145,6 +146,17 @@ function mapDispatchToProps() {
   };
 }
 
+function getAndSetStartDateForSubsCard(productOption: ActivePaperProducts, setStartDateInState) {
+  const timeNow = Date.now();
+  const subsCardStartDate = getPaymentStartDate(timeNow, productOption);
+  setStartDateInState(formatMachineDate(subsCardStartDate));
+
+  return {
+    subsCardStartDate,
+    formattedStartDate: getFormattedStartDate(getPaymentStartDate(timeNow, productOption)),
+  };
+}
+
 // ----- Form Fields ----- //
 
 const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
@@ -172,6 +184,12 @@ function PaperCheckoutForm(props: PropTypes) {
     props.fulfilmentOption,
     props.productOption,
   );
+  const subsCardStartDates = props.useDigitalVoucher ?
+    getAndSetStartDateForSubsCard(props.productOption, props.setStartDate) :
+    {
+      subsCardStartDate: '',
+      formattedStartDate: '',
+    };
 
   const subsCardOrderSummary = (<OrderSummary
     image={
@@ -188,6 +206,7 @@ function PaperCheckoutForm(props: PropTypes) {
     billingPeriod="Monthly"
     changeSubscription={routes.digitalSubscriptionLanding}
     productType={Paper}
+    paymentStartDate={subsCardStartDates.formattedStartDate}
   />);
 
   const regularOrderSummary = (<Summary
@@ -382,7 +401,7 @@ function PaperCheckoutForm(props: PropTypes) {
             errorHeading={submissionErrorHeading}
           />
           {props.useDigitalVoucher && props.fulfilmentOption === Collection ? (
-            <EndSummaryMobile product={props.product} />
+            <EndSummaryMobile product={props.product} paymentStartDate={subsCardStartDates.formattedStartDate} />
           ) : null}
           <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
         </Form>

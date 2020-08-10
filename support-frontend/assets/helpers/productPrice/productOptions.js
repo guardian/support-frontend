@@ -37,6 +37,8 @@ export type PaperProductOptions =
 
 const ActivePaperProductTypes = [Everyday, Sixday, Weekend, Sunday];
 
+export type ActivePaperProducts = typeof Everyday | typeof Sixday | typeof Weekend | typeof Sunday;
+
 export {
   NoProductOptions,
   Saturday,

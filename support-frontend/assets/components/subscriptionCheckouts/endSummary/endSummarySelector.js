@@ -7,7 +7,6 @@ import { type Option } from 'helpers/types/option';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
-import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/options';
 
 export type EndSummaryProps = {
   priceDescription: Option<?string>,
@@ -40,15 +39,9 @@ function mapStateToProps(state: CheckoutState): EndSummaryProps {
 
   const digitalBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
 
-  const livePaperSubscriptionOption = productOption === 'Everyday' || productOption === 'Sixday' || productOption === 'Weekend' || productOption === 'Sunday' ? productOption : null;
-
-  const timeNow = Date.now();
-  const paymentStartDate = getPaymentStartDate(timeNow, livePaperSubscriptionOption);
-
   return {
     priceDescription: getBillingDescription(productPrice, digitalBillingPeriod),
     promotion: getPromotion(productPrice),
-    paymentStartDate,
   };
 }
 

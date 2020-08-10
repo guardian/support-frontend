@@ -9,6 +9,7 @@ import EndSummaryDigital from 'components/subscriptionCheckouts/endSummary/endSu
 import EndSummaryPrint from 'components/subscriptionCheckouts/endSummary/endSummaryPrint';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { DigitalPack } from 'helpers/subscriptions';
+import { type Option } from 'helpers/types/option';
 
 const endSummaryMobile = css`
   display: block;
@@ -27,18 +28,23 @@ const endSummaryMobile = css`
 
 type EndSummaryMobileProps = {
   product: SubscriptionProduct,
+  paymentStartDate?: Option<string>,
 }
 
-function EndSummaryMobile({ product }: EndSummaryMobileProps) {
+function EndSummaryMobile({ product, paymentStartDate }: EndSummaryMobileProps) {
   return (
     <span css={endSummaryMobile}>
 
-      {
-        // $FlowFixMe
-        product === DigitalPack ? <EndSummaryDigital /> : <EndSummaryPrint paymentStartDate={null} />
+      {product === DigitalPack ?
+        <EndSummaryDigital /> :
+        <EndSummaryPrint paymentStartDate={paymentStartDate || 'date to be confirmed'} />
       }
     </span>
   );
 }
+
+EndSummaryMobile.defaultProps = {
+  paymentStartDate: null,
+};
 
 export default EndSummaryMobile;

@@ -8,6 +8,7 @@ import { textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { text, border, background } from '@guardian/src-foundations/palette';
+import { type Option } from 'helpers/types/option';
 
 const list = css`
   ${from.desktop} {
@@ -23,15 +24,22 @@ const listItem = css`
   margin-bottom: ${space[4]}px;
 `;
 
-const listFirst = css`
-  ${textSans.medium()};
+const spaceAfter = css`
+  margin-bottom: ${space[3]}px;
 `;
 
 const listMain = css`
-  ${textSans.medium()};
+  ${textSans.medium({ fontWeight: 'bold' })};
   margin-left: ${space[3]}px;
   display: inline-block;
   max-width: 90%;
+`;
+
+const subText = css`
+  display: block;
+  ${textSans.medium()};
+  margin-left: ${space[5]}px;
+  line-height: 135%;
 `;
 
 const bold = css`
@@ -51,23 +59,20 @@ const dot = css`
 const Dot = () => <div css={dot} />;
 
 type EndSummaryPrintProps = {
-  paymentStartDate: Date | null,
+  paymentStartDate: string,
+  priceDescription: Option<?string>,
+  promotion: Option<?string>,
 }
 
-function EndSummaryPrint({ paymentStartDate }: EndSummaryPrintProps) {
+function EndSummaryPrint({ promotion, priceDescription, paymentStartDate }: EndSummaryPrintProps) {
   return (
     <ul css={list}>
-      <li css={listItem}>
-        <div css={listFirst}>Your first payment will be on <span css={bold}>{paymentStartDate}</span></div>
+      <li css={spaceAfter}>
+        <Dot /><div css={listMain}>{promotion || priceDescription}</div>
       </li>
       <li css={listItem}>
-        <Dot /><div css={listMain}>Your subscription card will arrive in the post before the payment date</div>
-      </li>
-      <li css={listItem}>
-        <Dot />
-        <div css={listMain}>
-          In case you receive your card earlier, no payment with be charged before this date
-        </div>
+        <Dot /><div css={listMain}>Your first payment will be on <span css={bold}>{paymentStartDate}</span></div>
+        <span css={subText}>Your subscription card will arrive in the post before the payment date</span>
       </li>
       <li css={listItem}>
         <Dot /><div css={listMain}>You can cancel any time</div>
