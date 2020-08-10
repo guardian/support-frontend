@@ -60,15 +60,14 @@ const Dot = () => <div css={dot} />;
 
 type EndSummaryPrintProps = {
   paymentStartDate: string,
-  priceDescription: Option<?string>,
-  promotion: Option<?string>,
+  priceDescription: Option<string>,
 }
 
-function EndSummaryPrint({ promotion, priceDescription, paymentStartDate }: EndSummaryPrintProps) {
+function EndSummaryPrint({ priceDescription, paymentStartDate }: EndSummaryPrintProps) {
   return (
     <ul css={list}>
       <li css={spaceAfter}>
-        <Dot /><div css={listMain}>{promotion || priceDescription}</div>
+        <Dot /><div css={listMain}>You&apos;ll pay {priceDescription}</div>
       </li>
       <li css={listItem}>
         <Dot /><div css={listMain}>Your first payment will be on <span css={bold}>{paymentStartDate}</span></div>
