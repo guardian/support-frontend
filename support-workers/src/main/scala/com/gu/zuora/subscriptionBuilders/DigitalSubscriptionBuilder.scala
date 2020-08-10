@@ -12,6 +12,7 @@ import com.gu.support.redemption.GetCodeStatus
 import com.gu.support.redemptions.{CorporateRedemption, RedemptionData}
 import com.gu.support.workers.DigitalPack
 import com.gu.support.workers.ProductTypeRatePlans._
+import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api.{ReaderType, Subscription, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCode, buildProductSubscription, validateRatePlan}
 import org.joda.time.LocalDate
@@ -41,7 +42,10 @@ object DigitalSubscriptionBuilder {
     readerType: ReaderType,
     purchase: SubscriptionPurchase
   )(implicit ec: ExecutionContext): EitherT[Future, Either[PromoError, GetCodeStatus.RedemptionInvalid], SubscriptionData] = {
-    val delay = purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod
+    val delay = if(readerType == Direct)
+      purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod
+    else 0 // Gift purchases don't have a free trial period
+
     val contractAcceptanceDate = contractEffectiveDate.plusDays(delay)
 
     val subscriptionData = buildProductSubscription(
