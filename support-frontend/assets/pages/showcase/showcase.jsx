@@ -8,7 +8,7 @@ import { renderPage } from 'helpers/render';
 
 import Page from 'components/page/page';
 
-import Footer from 'components/footer/footer';
+import Footer from 'components/footerCompliant/Footer';
 import Heading from 'components/heading/heading';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -57,7 +57,7 @@ const state = store.getState();
 
 const content = (
   <Provider store={store}>
-    <Page header={<CountrySwitcherHeader />} footer={<Footer />}>
+    <Page header={<CountrySwitcherHeader />} footer={<Footer disclaimer />}>
       <Hero countryGroupId={state.common.internationalisation.countryGroupId} />
       <WhySupportMatters />
       <BreakingHeadlines />
