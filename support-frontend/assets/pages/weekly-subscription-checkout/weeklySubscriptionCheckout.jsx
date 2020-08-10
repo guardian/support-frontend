@@ -9,11 +9,11 @@ import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import Footer from 'components/footer/footer';
-import CustomerService from 'components/customerService/customerService';
-import SubscriptionTermsPrivacy
-  from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+import Footer from 'components/footerCompliant/Footer';
+// import CustomerService from 'components/customerService/customerService';
+// import SubscriptionTermsPrivacy
+//   from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
+// import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import ThankYouContent from './components/thankYou';
@@ -30,6 +30,8 @@ import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/delive
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { formatMachineDate } from 'helpers/dateConversions';
+import { promotionTermsUrl } from 'helpers/routes';
+
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 
 // ----- Redux Store ----- //
@@ -53,8 +55,21 @@ const store = pageInit(
   true,
 );
 
-const { countryGroupId } = store.getState().common.internationalisation;
 const { orderIsAGift } = store.getState().page.checkout;
+
+const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
+const promoTerms = promotionTermsUrl(defaultPromo);
+
+const WeeklyFooter = (
+  <Footer
+    faqsLink="https://www.theguardian.com/help/2012/jan/19/guardian-weekly-faqs"
+    termsConditionsLink="https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions"
+  >
+    <h3>Promotion terms and conditions</h3>
+    <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full annual promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTerms}>here</a>.
+    </p>
+  </Footer>);
+
 
 // ----- Render ----- //
 
@@ -62,16 +77,7 @@ const content = (
   <Provider store={store}>
     <Page
       header={<HeaderWrapper />}
-      footer={
-        <Footer>
-          <SubscriptionTermsPrivacy subscriptionProduct="GuardianWeekly" />
-          <CustomerService
-            selectedCountryGroup={countryGroupId}
-            subscriptionProduct="GuardianWeekly"
-          />
-          <SubscriptionFaq subscriptionProduct="GuardianWeekly" />
-        </Footer>
-      }
+      footer={WeeklyFooter}
     >
       <CheckoutStage
         checkoutForm={orderIsAGift ? <WeeklyCheckoutFormGifting /> : <WeeklyCheckoutForm />}
