@@ -17,12 +17,9 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { formatAmount } from 'helpers/checkouts';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
-import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
+import { type State } from '../contributionsLandingReducer';
 import ContributionTextInputDs from './ContributionTextInputDs';
-
-import { from, until } from '@guardian/src-foundations/mq';
-import { css } from '@emotion/core';
-
+import ContributionAmountChoices from './ContributionAmountChoices';
 
 // ----- Types ----- //
 
@@ -38,10 +35,11 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+  shouldShowFrequencyButtons: boolean,
 |};
 
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
@@ -52,7 +50,7 @@ const mapStateToProps = state => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-
+  shouldShowFrequencyButtons: state.common.abParticipations.landingPageRetentionR1 === 'variant 2',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -65,32 +63,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(updateOtherAmount(amount, contributionType));
   },
 });
-
-const choiceCardGroupOverrides = css`
-  > div {
-    ${until.leftCol} {
-      flex-wrap: wrap;
-    }
-    margin-top: -8px;
-  }
-
-  > div > label {
-    ${from.tablet} {
-      max-width: 100px;
-    }
-    margin-top: 8px !important;
-  }
-`;
-
-// ----- Render ----- //
-
-const isSelected = (amount: Amount, props: PropTypes) => {
-  if (props.selectedAmounts[props.contributionType]) {
-    return props.selectedAmounts[props.contributionType] !== 'other' &&
-      amount.value === props.selectedAmounts[props.contributionType].value;
-  }
-  return amount.isDefault;
-};
 
 const renderEmptyAmount = (id: string) => (
   <li className="form__radio-group-item amounts__placeholder">
@@ -150,36 +122,6 @@ function withProps(props: PropTypes) {
   } = props;
   const updateAmount = props.updateOtherAmount;
 
-
-  const renderChoiceCards = () => (
-    <>
-      <ChoiceCardGroup
-        name="amounts"
-        css={choiceCardGroupOverrides}
-      >
-        {validAmounts.map((amount: Amount) => (
-          <ChoiceCard
-            id={`contributionAmount-${amount.value}`}
-            name="contributionAmount"
-            value={amount.value}
-            checked={isSelected(amount, props)}
-            onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType)}
-            label={formatAmount(currencies[props.currency], spokenCurrencies[props.currency], amount, false)}
-          />
-        ))
-      }
-        <ChoiceCard
-          id="contributionAmount-other"
-          name="contributionAmount"
-          value="other"
-          checked={showOther}
-          onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
-          label="Other"
-        />
-      </ChoiceCardGroup>
-  </>
-  );
-
   const renderOtherField = () => (
     <ContributionTextInputDs
       id="contributionOther"
@@ -208,7 +150,16 @@ function withProps(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
 
-      {renderChoiceCards()}
+      <ContributionAmountChoices
+        countryGroupId={props.countryGroupId}
+        currency={props.currency}
+        contributionType={props.contributionType}
+        validAmounts={validAmounts}
+        showOther={showOther}
+        selectedAmounts={props.selectedAmounts}
+        selectAmount={props.selectAmount}
+        shouldShowFrequencyButtons={props.shouldShowFrequencyButtons}
+      />
 
       {showOther && renderOtherField()}
 
