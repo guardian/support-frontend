@@ -57,11 +57,6 @@ function Footer({
       }
         <FooterContent border centred={centred}>
           <ul css={linksList}>
-            {termsConditionsLink &&
-            <li css={link}>
-              <Link subdued href={termsConditionsLink}>Terms & Conditions</Link>
-            </li>
-            }
             <li css={link}>
               <Link subdued href={faqsLink}>FAQs</Link>
             </li>
@@ -71,6 +66,11 @@ function Footer({
             <li css={link}>
               <Link subdued href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</Link>
             </li>
+            {termsConditionsLink &&
+              <li css={link}>
+                <Link subdued href={termsConditionsLink}>Terms & Conditions</Link>
+              </li>
+            }
           </ul>
         </FooterContent>
         <FooterContent centred={centred}>
