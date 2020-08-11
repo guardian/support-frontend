@@ -23,8 +23,6 @@ type ConsentState = {
     };
 }
 
-let onConsentChangeFromLib: ?(state: ConsentState) => void;
-
 const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => new Promise((resolve, reject) => {
   /**
    * Dynamically load @guardian/consent-management-platform
@@ -61,41 +59,28 @@ const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => new Promise
 });
 
 const onConsentChangeEvent = (fn: (thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => void): void => {
-  console.log('*** onConsentChangeEvent ***');
-
   /**
    * Dynamically load @guardian/consent-management-platform
    * on condition we're not server side rendering (ssr) the page.
    * @guardian/consent-management-platform breaks ssr otherwise.
    */
   if (!getGlobal('ssr')) {
-    const fnWithConsentState = (state: ConsentState) => {
-      console.log('fnWithConsentState', state);
-      const consentGranted = state.ccpa ?
-        !state.ccpa.doNotSell : state.tcfv2 && Object.values(state.tcfv2.consents).every(Boolean);
+    import('@guardian/consent-management-platform').then(({
+      onConsentChange,
+    }) => {
+      onConsentChange((state: ConsentState) => {
+        console.log('*** onConsentChange ***');
 
-      if (consentGranted) {
-        fn(OptedIn);
-      } else {
-        fn(OptedOut);
-      }
-    };
+        const consentGranted = state.ccpa ?
+          !state.ccpa.doNotSell : state.tcfv2 && Object.values(state.tcfv2.consents).every(Boolean);
 
-    if (onConsentChangeFromLib) {
-      console.log('FAIL');
-      onConsentChangeFromLib(fnWithConsentState);
-    } else {
-      import('@guardian/consent-management-platform').then(({
-        onConsentChange,
-      }) => {
-        onConsentChange(() => {
-          console.log('*** do sutin ***');
-        });
-        // onConsentChangeFromLib = onConsentChange;
-        // onConsentChangeFromLib(fnWithConsentState);
-        // console.log('onConsentChangeFromLib --->', onConsentChangeFromLib);
+        if (consentGranted) {
+          fn(OptedIn);
+        } else {
+          fn(OptedOut);
+        }
       });
-    }
+    });
   } else {
     fn(OptedOut);
   }

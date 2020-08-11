@@ -18,44 +18,46 @@ let scriptAdded: boolean = false;
  * which has the 'async' attribute.
  */
 
-/**
- * The callback passed to onConsentChangeEvent is called
- * each time consent changes. EG. if a user consents via the CMP.
- */
-onConsentChangeEvent((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
+ export const init = () => {
   /**
-   * update userHasGrantedConsent value when
-   * consent changes via the CMP library.
+   * The callback passed to onConsentChangeEvent is called
+   * each time consent changes. EG. if a user consents via the CMP.
    */
-  userHasGrantedConsent = thirdPartyTrackingConsent === OptedIn;
+  onConsentChangeEvent((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
+    /**
+     * update userHasGrantedConsent value when
+     * consent changes via the CMP library.
+     */
+    userHasGrantedConsent = thirdPartyTrackingConsent === OptedIn;
 
-  console.log('userHasGrantedConsent --->', userHasGrantedConsent);
-  console.log('scriptAdded --->', scriptAdded);
+    console.log('userHasGrantedConsent --->', userHasGrantedConsent);
+    console.log('scriptAdded --->', scriptAdded);
 
-  if (userHasGrantedConsent && !scriptAdded) {
-    (function (w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({
-        'gtm.start':
-          new Date().getTime(),
-        event: 'gtm.js'
-      });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true;
-      j.src =
-        // $FlowFixMe
-        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-      /**
-       * set scriptAdded to true so we don't try and add more than once
-       * if a user toggles there consent state.
-      */
-      scriptAdded = true;
-    })(window, document, 'script', 'googleTagManagerDataLayer', 'GTM-W6GJ68L');
-  }
-});
+    if (userHasGrantedConsent && !scriptAdded) {
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+          'gtm.start':
+            new Date().getTime(),
+          event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src =
+          // $FlowFixMe
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+        /**
+         * set scriptAdded to true so we don't try and add more than once
+         * if a user toggles there consent state.
+        */
+        scriptAdded = true;
+      })(window, document, 'script', 'googleTagManagerDataLayer', 'GTM-W6GJ68L');
+    }
+  });
+}
 
 /* eslint-enable */
 // End Google Tag Manager
