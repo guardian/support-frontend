@@ -29,6 +29,10 @@ import { getQueryParameter } from 'helpers/url';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import {
+  getProductPrice,
+} from 'helpers/productPrice/productPrices';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { formatMachineDate } from 'helpers/dateConversions';
 import { promotionTermsUrl } from 'helpers/routes';
 
@@ -55,10 +59,16 @@ const store = pageInit(
   true,
 );
 
-const { orderIsAGift } = store.getState().page.checkout;
 
+const {
+  orderIsAGift, billingPeriod, productPrices, fulfilmentOption, productOption,
+} = store.getState().page.checkout;
+const { countryId } = store.getState().common.internationalisation;
+
+const productPrice = getProductPrice(productPrices, countryId, billingPeriod, fulfilmentOption, productOption);
+const appliedPromo = getAppliedPromo(productPrice.promotions);
 const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
-const promoTerms = promotionTermsUrl(defaultPromo);
+const promoTerms = promotionTermsUrl(appliedPromo ? appliedPromo.promoCode : defaultPromo);
 
 const WeeklyFooter = (
   <Footer
