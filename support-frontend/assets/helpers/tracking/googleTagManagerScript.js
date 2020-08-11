@@ -10,7 +10,7 @@ import { getTrackingConsent, type ThirdPartyTrackingConsent, OptedIn } from './t
  * 'main bundle' (see page.js), which is loaded and executed
  * before this 'googleTagManagerScript bundle'. This is due to the
  * script ordering in main.scala.html, where the googleTagManagerScript
- * script has the 'defer' attriubute and comes after the main bundle
+ * script has the 'defer' attribute and comes after the main bundle
  * which has the 'async' attribute.
  */
 getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
