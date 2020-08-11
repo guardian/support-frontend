@@ -7,7 +7,7 @@ import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { getTrackingConsent, type ThirdPartyTrackingConsent } from './thirdPartyTrackingConsent';
+import { getTrackingConsent, type ThirdPartyTrackingConsent, OptedIn } from './thirdPartyTrackingConsent';
 import { maybeTrack } from './doNotTrack';
 import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
@@ -33,6 +33,14 @@ type GaEventData = {
 const gaPropertyId = 'UA-51507017-5';
 
 // ----- Functions ----- //
+
+function trackWithConsentCheck(trackingFunction: () => void): void {
+  getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
+    if (thirdPartyTrackingConsent === OptedIn) {
+      maybeTrack(trackingFunction);
+    }
+  });
+}
 
 function getOrderId() {
   let value = storage.getSession('orderId');
@@ -177,7 +185,7 @@ function sendData(
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
-  maybeTrack(() => {
+  trackWithConsentCheck(() => {
     getData(event, participations, paymentRequestApiStatus).then((dataToPush) => {
       push(dataToPush);
     }).catch((err) => {
@@ -210,7 +218,7 @@ function successfulConversion(participations: Participations) {
 }
 
 function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
-  maybeTrack(() => {
+  trackWithConsentCheck(() => {
     push({
       event: 'GAEvent',
       eventCategory: gaEventData.category,
