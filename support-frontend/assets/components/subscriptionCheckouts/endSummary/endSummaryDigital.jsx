@@ -3,11 +3,16 @@
 import React from 'react';
 import * as styles from './endSummaryStyles';
 import { connect } from 'react-redux';
-import mapStateToProps, { type EndSummaryProps } from './endSummarySelector';
+import mapStateToProps from './endSummarySelector';
+
+export type EndSummaryDigitalProps = {
+  priceDescription: string,
+  promotion: string,
+}
 
 const Dot = () => <div css={styles.dot} />;
 
-function EndSummaryDigital({ promotion, priceDescription }: EndSummaryProps) {
+function EndSummaryDigital({ promotion, priceDescription }: EndSummaryDigitalProps) {
   return (
     <ul css={styles.list}>
       <li>

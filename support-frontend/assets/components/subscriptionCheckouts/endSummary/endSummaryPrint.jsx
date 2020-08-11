@@ -8,7 +8,6 @@ import { textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { text, border, background } from '@guardian/src-foundations/palette';
-import { type Option } from 'helpers/types/option';
 
 const list = css`
   ${from.desktop} {
@@ -22,10 +21,6 @@ const list = css`
 
 const listItem = css`
   margin-bottom: ${space[4]}px;
-`;
-
-const spaceAfter = css`
-  margin-bottom: ${space[3]}px;
 `;
 
 const listMain = css`
@@ -60,15 +55,23 @@ const Dot = () => <div css={dot} />;
 
 type EndSummaryPrintProps = {
   paymentStartDate: string,
-  priceDescription: Option<string>,
+  priceDescription: string,
+  promotion: string | null,
 }
 
-function EndSummaryPrint({ priceDescription, paymentStartDate }: EndSummaryPrintProps) {
+function EndSummaryPrint({ priceDescription, paymentStartDate, promotion }: EndSummaryPrintProps) {
   return (
     <ul css={list}>
-      <li css={spaceAfter}>
-        <Dot /><div css={listMain}>You&apos;ll pay {priceDescription}</div>
-      </li>
+      {promotion ? (
+        <li css={listItem}>
+          <Dot /><div css={listMain}>{promotion}</div>
+          <span css={subText}>Then you&apos;ll pay {priceDescription}</span>
+        </li>
+      ) : (
+        <li css={listItem}>
+          <Dot /><div css={listMain}>You&apos;ll pay {priceDescription}</div>
+        </li>
+      )}
       <li css={listItem}>
         <Dot /><div css={listMain}>Your first payment will be on <span css={bold}>{paymentStartDate}</span></div>
         <span css={subText}>Your subscription card will arrive in the post before the payment date</span>
