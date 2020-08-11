@@ -184,8 +184,8 @@ function PaperCheckoutForm(props: PropTypes) {
     props.fulfilmentOption,
     props.productOption,
   );
- const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
-  const subsCardStartDates =  isSubscriptionCard ?
+  const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
+  const subsCardStartDates = isSubscriptionCard ?
     getAndSetStartDateForSubsCard(props.productOption, props.setStartDate) :
     {
       subsCardStartDate: '',
@@ -235,13 +235,7 @@ function PaperCheckoutForm(props: PropTypes) {
 
   return (
     <Content modifierClasses={['your-details']}>
-      <Layout
-        aside={
-          (props.fulfilmentOption === Collection && props.useDigitalVoucher === true) ?
-            subsCardOrderSummary :
-            regularOrderSummary
-        }
-      >
+      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : regularOrderSummary}>
         <Form onSubmit={(ev) => {
           ev.preventDefault();
           props.submitForm();
@@ -400,7 +394,7 @@ function PaperCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          {props.useDigitalVoucher && props.fulfilmentOption === Collection ? (
+          {isSubscriptionCard ? (
             <EndSummaryMobile product={props.product} paymentStartDate={subsCardStartDates.formattedStartDate} />
           ) : null}
           <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
