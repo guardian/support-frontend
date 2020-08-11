@@ -34,7 +34,7 @@ const gaPropertyId = 'UA-51507017-5';
 
 // ----- Functions ----- //
 
-function trackWithConsentCheck(trackingFunction: () => void): void {
+function runWithConsentCheck(trackingFunction: () => void): void {
   getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
     if (thirdPartyTrackingConsent === OptedIn) {
       maybeTrack(trackingFunction);
@@ -153,31 +153,34 @@ function getData(
   event: EventType,
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
-): Promise<Object> {
+): Object {
+  const orderId = getOrderId();
+  const value = getContributionValue();
+  const currency = getCurrency();
 
-  return getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
-    const orderId = getOrderId();
-    const value = getContributionValue();
-    const currency = getCurrency();
-
-    return {
-      event,
-      // orderId anonymously identifies this user in this session.
-      // We need this to prevent page refreshes on conversion pages being
-      // treated as new conversions
-      orderId,
-      currency,
-      value,
-      thirdPartyTrackingConsent,
-      paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
-      campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-      campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-      internalCampaignCode: getQueryParameter('INTCMP') || undefined,
-      experience: getVariantsAsString(participations),
-      paymentRequestApiStatus,
-    };
-  });
-
+  return {
+    event,
+    /**
+     * orderId anonymously identifies this user in this session.
+     * We need this to prevent page refreshes on conversion pages being
+     * treated as new conversions
+     * */
+    orderId,
+    currency,
+    value,
+    /**
+     * getData is only executed via runWithConsentCheck when user has
+     * OptedIn to tracking, so we can hardcode thirdPartyTrackingConsent
+     * to OptedIn.
+     * */
+    thirdPartyTrackingConsent: OptedIn,
+    paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
+    campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+    campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+    internalCampaignCode: getQueryParameter('INTCMP') || undefined,
+    experience: getVariantsAsString(participations),
+    paymentRequestApiStatus,
+  };
 }
 
 function sendData(
@@ -185,12 +188,9 @@ function sendData(
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
-  trackWithConsentCheck(() => {
-    getData(event, participations, paymentRequestApiStatus).then((dataToPush) => {
-      push(dataToPush);
-    }).catch((err) => {
-      console.log(`Error in GTM tracking ${err}`);
-    });
+  runWithConsentCheck(() => {
+    const dataToPush = getData(event, participations, paymentRequestApiStatus);
+    push(dataToPush);
   });
 }
 
@@ -206,7 +206,6 @@ function pushToDataLayer(event: EventType, participations: Participations) {
   } catch (e) {
     sendData(event, participations, 'PromiseNotSupported');
   }
-
 }
 
 function init(participations: Participations) {
@@ -218,7 +217,7 @@ function successfulConversion(participations: Participations) {
 }
 
 function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
-  trackWithConsentCheck(() => {
+  runWithConsentCheck(() => {
     push({
       event: 'GAEvent',
       eventCategory: gaEventData.category,
