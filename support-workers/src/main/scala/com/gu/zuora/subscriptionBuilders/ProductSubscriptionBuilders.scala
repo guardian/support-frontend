@@ -42,12 +42,14 @@ object ProductSubscriptionBuilders {
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
     contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
     readerType: ReaderType,
-    initialTermMonths: Int = 12
+    autoRenew: Boolean = true,
+    initialTerm: Int = 12,
+    initialTermPeriodType: PeriodType = Month
   ): SubscriptionData = {
-    val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
-      (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, Day)
-    else
-      (12, true, Month)
+//    val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
+//      (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, Day)
+//    else
+//      (12, true, Month)
 
     SubscriptionData(
       List(
@@ -68,11 +70,6 @@ object ProductSubscriptionBuilders {
         initialTermPeriodType = initialTermPeriodType,
       )
     )
-  }
-
-  def initialTermInDays(contractEffectiveDate: LocalDate, contractAcceptanceDate: LocalDate, termLengthMonths: Int): Int = {
-    val termEnd = contractAcceptanceDate.plusMonths(termLengthMonths)
-    Days.daysBetween(contractEffectiveDate, termEnd).getDays
   }
 
   def applyPromoCode(

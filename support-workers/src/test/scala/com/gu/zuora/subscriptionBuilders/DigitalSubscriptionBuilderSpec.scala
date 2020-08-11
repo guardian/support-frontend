@@ -19,6 +19,7 @@ import org.scalatestplus.mockito.MockitoSugar._
 
 import scala.concurrent.Future
 
+//noinspection RedundantDefaultArgument
 class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   "SubscriptionData for a corporate subscription" should "be correct" in
@@ -86,7 +87,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val monthly = DigitalSubscriptionBuilder.build(
     DigitalPack(GBP, Monthly),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Country.UK, promotionService),
+    SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Monthly, Country.UK, promotionService),
     SANDBOX,
     () => saleDate
   ).value.map(_.right.get)
