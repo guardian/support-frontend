@@ -1,20 +1,38 @@
 // Google Tag Manager
 /* eslint-disable */
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
-import { getTrackingConsent, type ThirdPartyTrackingConsent, OptedIn } from './thirdPartyTrackingConsent';
+import { getTrackingConsent, type ThirdPartyTrackingConsent, OptedIn, onConsentChangeEvent } from './thirdPartyTrackingConsent';
 
+// Default userHasGrantedConsent to false
+let userHasGrantedConsent: boolean = false;
+// Default scriptAdded to false
+let scriptAdded: boolean = false;
 
 /**
- * getTrackingConsent() will only resolve if cmp.init()
- * has already been called. cmp.init() is called in a seperate
+ * onConsentChangeEvent() will only execute the callback it receives
+ * if cmp.init() has already been called. cmp.init() is called in a seperate
  * 'main bundle' (see page.js), which is loaded and executed
  * before this 'googleTagManagerScript bundle'. This is due to the
  * script ordering in main.scala.html, where the googleTagManagerScript
  * script has the 'defer' attribute and comes after the main bundle
  * which has the 'async' attribute.
  */
-getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
-  if(!doNotTrack() && thirdPartyTrackingConsent === OptedIn) {
+
+/**
+ * The callback passed to onConsentChangeEvent is called
+ * each time consent changes. EG. if a user consents via the CMP.
+ */
+onConsentChangeEvent((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
+  /**
+   * update userHasGrantedConsent value when
+   * consent changes via the CMP library.
+   */
+  userHasGrantedConsent = thirdPartyTrackingConsent === OptedIn;
+
+  console.log('userHasGrantedConsent --->', userHasGrantedConsent);
+  console.log('scriptAdded --->', scriptAdded);
+
+  if (userHasGrantedConsent && !scriptAdded) {
     (function (w, d, s, l, i) {
       w[l] = w[l] || [];
       w[l].push({
@@ -30,9 +48,14 @@ getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent)
         // $FlowFixMe
         'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
       f.parentNode.insertBefore(j, f);
+      /**
+       * set scriptAdded to true so we don't try and add more than once
+       * if a user toggles there consent state.
+      */
+      scriptAdded = true;
     })(window, document, 'script', 'googleTagManagerDataLayer', 'GTM-W6GJ68L');
   }
-})
+});
 
 /* eslint-enable */
 // End Google Tag Manager

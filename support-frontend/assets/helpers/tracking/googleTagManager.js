@@ -7,7 +7,7 @@ import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { getTrackingConsent, type ThirdPartyTrackingConsent, OptedIn } from './thirdPartyTrackingConsent';
+import { getTrackingConsent, OptedIn, OptedOut, onConsentChangeEvent, type ThirdPartyTrackingConsent } from './thirdPartyTrackingConsent';
 import { maybeTrack } from './doNotTrack';
 import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
@@ -32,15 +32,13 @@ type GaEventData = {
 
 const gaPropertyId = 'UA-51507017-5';
 
-// ----- Functions ----- //
+// Default userHasGrantedConsent to false
+const userHasGrantedConsent: boolean = false;
+// We store tracking events in these queues when userHasGrantedConsent is false
+const googleTagManagerDataQueue: Array<() => void> = [];
+const googleAnalyticsEventQueue: Array<() => void> = [];
 
-function runWithConsentCheck(trackingFunction: () => void): void {
-  getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
-    if (thirdPartyTrackingConsent === OptedIn) {
-      maybeTrack(trackingFunction);
-    }
-  });
-}
+// ----- Functions ----- //
 
 function getOrderId() {
   let value = storage.getSession('orderId');
@@ -188,10 +186,21 @@ function sendData(
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
-  runWithConsentCheck(() => {
-    const dataToPush = getData(event, participations, paymentRequestApiStatus);
+  const dataToPush = getData(event, participations, paymentRequestApiStatus);
+
+  const pushDataToGTM = () => {
     push(dataToPush);
-  });
+  };
+
+  /**
+   * If userHasGrantedConsent process event immediately,
+   * else add to googleTagManagerDataQueue.
+   */
+  if (userHasGrantedConsent) {
+    pushDataToGTM();
+  } else {
+    googleTagManagerDataQueue.push(pushDataToGTM);
+  }
 }
 
 function pushToDataLayer(event: EventType, participations: Participations) {
@@ -209,7 +218,35 @@ function pushToDataLayer(event: EventType, participations: Participations) {
 }
 
 function init(participations: Participations) {
-  pushToDataLayer('DataLayerReady', participations);
+  // /**
+  //  * The callback passed to onConsentChangeEvent is called
+  //  * each time consent changes. EG. if a user consents via the CMP.
+  //  */
+  // onConsentChangeEvent((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
+  //   /**
+  //    * update userHasGrantedConsent value when
+  //    * consent changes via the CMP library.
+  //    */
+  //   userHasGrantedConsent = thirdPartyTrackingConsent === OptedIn;
+
+  //   /**
+  //    * Process pending events in googleAnalyticsEventQueue and
+  //    * googleTagManagerDataQueue if userHasGrantedConsent. This clears
+  //    * the queues as it executes each function in them.
+  //    */
+  //   if (userHasGrantedConsent) {
+  //     while (googleAnalyticsEventQueue.length > 0) {
+  //       const queuedEvent = googleAnalyticsEventQueue.shift();
+  //       queuedEvent();
+  //     }
+  //     while (googleTagManagerDataQueue.length > 0) {
+  //       const queuedEvent = googleTagManagerDataQueue.shift();
+  //       queuedEvent();
+  //     }
+  //   }
+  // });
+
+  // pushToDataLayer('DataLayerReady', participations);
 }
 
 function successfulConversion(participations: Participations) {
@@ -217,7 +254,7 @@ function successfulConversion(participations: Participations) {
 }
 
 function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
-  runWithConsentCheck(() => {
+  const pushEventToGA = () => {
     push({
       event: 'GAEvent',
       eventCategory: gaEventData.category,
@@ -225,7 +262,17 @@ function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
       eventLabel: gaEventData.label,
       ...additionalFields,
     });
-  });
+  };
+
+  /**
+   * If userHasGrantedConsent process event immediately,
+   * else add to googleAnalyticsEventQueue.
+   */
+  if (userHasGrantedConsent) {
+    pushEventToGA();
+  } else {
+    googleAnalyticsEventQueue.push(pushEventToGA);
+  }
 }
 
 function appStoreCtaClick() {

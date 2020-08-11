@@ -23,6 +23,8 @@ type ConsentState = {
     };
 }
 
+let onConsentChangeFromLib: ?(state: ConsentState) => void;
+
 const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => new Promise((resolve, reject) => {
   /**
    * Dynamically load @guardian/consent-management-platform
@@ -59,26 +61,41 @@ const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => new Promise
 });
 
 const onConsentChangeEvent = (fn: (thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => void): void => {
+  console.log('*** onConsentChangeEvent ***');
+
   /**
    * Dynamically load @guardian/consent-management-platform
    * on condition we're not server side rendering (ssr) the page.
    * @guardian/consent-management-platform breaks ssr otherwise.
    */
   if (!getGlobal('ssr')) {
-    import('@guardian/consent-management-platform').then(({
-      onConsentChange,
-    }) => {
-      onConsentChange((state: ConsentState) => {
-        const consentGranted = state.ccpa ?
-          !state.ccpa.doNotSell : state.tcfv2 && Object.values(state.tcfv2.consents).every(Boolean);
+    const fnWithConsentState = (state: ConsentState) => {
+      console.log('fnWithConsentState', state);
+      const consentGranted = state.ccpa ?
+        !state.ccpa.doNotSell : state.tcfv2 && Object.values(state.tcfv2.consents).every(Boolean);
 
-        if (consentGranted) {
-          fn(OptedIn);
-        } else {
-          fn(OptedOut);
-        }
+      if (consentGranted) {
+        fn(OptedIn);
+      } else {
+        fn(OptedOut);
+      }
+    };
+
+    if (onConsentChangeFromLib) {
+      console.log('FAIL');
+      onConsentChangeFromLib(fnWithConsentState);
+    } else {
+      import('@guardian/consent-management-platform').then(({
+        onConsentChange,
+      }) => {
+        onConsentChange(() => {
+          console.log('*** do sutin ***');
+        });
+        // onConsentChangeFromLib = onConsentChange;
+        // onConsentChangeFromLib(fnWithConsentState);
+        // console.log('onConsentChangeFromLib --->', onConsentChangeFromLib);
       });
-    });
+    }
   } else {
     fn(OptedOut);
   }
