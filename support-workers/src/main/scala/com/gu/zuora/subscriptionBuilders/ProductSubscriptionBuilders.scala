@@ -46,10 +46,6 @@ object ProductSubscriptionBuilders {
     initialTerm: Int = 12,
     initialTermPeriodType: PeriodType = Month
   ): SubscriptionData = {
-//    val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
-//      (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, initialTermMonths), false, Day)
-//    else
-//      (12, true, Month)
 
     SubscriptionData(
       List(
