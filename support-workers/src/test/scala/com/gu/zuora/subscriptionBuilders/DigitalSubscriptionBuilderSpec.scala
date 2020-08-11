@@ -91,4 +91,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     () => saleDate
   ).value.map(_.right.get)
 
+  //TODO: test all cases
+
 }

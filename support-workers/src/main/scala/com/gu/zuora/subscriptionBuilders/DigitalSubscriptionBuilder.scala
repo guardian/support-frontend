@@ -9,6 +9,7 @@ import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.redemption.GetCodeStatus
+import com.gu.support.redemption.GetCodeStatus.{InvalidReaderType, RedemptionInvalid}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.DigitalPack
 import com.gu.support.workers.ProductTypeRatePlans._
@@ -35,7 +36,7 @@ case class SubscriptionRedemption(
 
 object DigitalSubscriptionBuilder {
 
-  type BuildResult = EitherT[Future, Either[PromoError, GetCodeStatus.RedemptionInvalid], SubscriptionData]
+  type BuildResult = EitherT[Future, Either[PromoError, RedemptionInvalid], SubscriptionData]
 
   def build(
     digitalPack: DigitalPack,
@@ -107,13 +108,8 @@ object DigitalSubscriptionBuilder {
         redemption.redemptionData.redemptionCode,
         redemption.getCodeStatus
       )
-      case _ => buildCorporateRedemption( //TODO: error
-        contractEffectiveDate,
-        productRatePlanId,
-        requestId,
-        redemption.redemptionData.redemptionCode,
-        redemption.getCodeStatus
-      )
+      case _ => val errorType: Either[PromoError, RedemptionInvalid] = Right(InvalidReaderType)
+        EitherT.leftT(errorType)
     }
 
   }
