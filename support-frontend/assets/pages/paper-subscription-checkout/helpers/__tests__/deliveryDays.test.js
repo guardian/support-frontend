@@ -118,16 +118,16 @@ describe('deliveryDays', () => {
     it('Should return the correct payment start date', () => {
       const today = 1596727469480;
       const day = getFormattedStartDate(getPaymentStartDate(today, Everyday));
-      expect(day).toBe('17 Aug 2020');
+      expect(day).toBe('17 August 2020');
 
       const day1 = getFormattedStartDate(getPaymentStartDate(today, Sixday));
-      expect(day1).toBe('17 Aug 2020');
+      expect(day1).toBe('17 August 2020');
 
       const day2 = getFormattedStartDate(getPaymentStartDate(today, Weekend));
-      expect(day2).toBe('22 Aug 2020');
+      expect(day2).toBe('22 August 2020');
 
       const day3 = getFormattedStartDate(getPaymentStartDate(today, Sunday));
-      expect(day3).toBe('23 Aug 2020');
+      expect(day3).toBe('23 August 2020');
     });
 
   });
