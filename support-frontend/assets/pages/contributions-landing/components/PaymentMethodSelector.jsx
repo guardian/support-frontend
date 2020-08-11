@@ -52,6 +52,7 @@ import SvgDirectDebitSymbolDs from 'components/svgs/directDebitSymbolDs';
 import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgNewCreditCardDs from 'components/svgs/newCreditCardDs';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import ContributionChoicesHeader from './ContributionChoicesHeader';
 
 // ----- Types ----- //
 
@@ -135,7 +136,7 @@ const getPaymentMethodLogoDs = (paymentMethod: PaymentMethod) => {
 
 const legend = (
   <div className="secure-transaction">
-    <legend id="payment_method" className="form__legend"><h3>Payment method</h3></legend>
+    <legend id="payment_method"><ContributionChoicesHeader>Payment Method</ContributionChoicesHeader></legend>
     <SecureTransactionIndicator modifierClasses={['middle']} />
   </div>
 );

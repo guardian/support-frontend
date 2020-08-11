@@ -7,6 +7,7 @@ import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
+const allBarUkLandingPages = '/((?!uk).)*/contribute(/.*)?$';
 const allLandingPages = '/??/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
@@ -100,5 +101,33 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: allLandingPages,
     seed: 1,
+  },
+
+  landingPageRetentionR1: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant 1',
+      },
+      {
+        id: 'variant 2',
+      },
+      {
+        id: 'variant 3',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: allBarUkLandingPages,
+    seed: 2,
   },
 };
