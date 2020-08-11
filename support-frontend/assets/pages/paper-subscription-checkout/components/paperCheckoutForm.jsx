@@ -73,10 +73,10 @@ import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payP
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { type Option } from 'helpers/types/option';
 import { Paper } from 'helpers/subscriptions';
-import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
+import OrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import EndSummaryMobile from 'components/subscriptionCheckouts/endSummary/endSummaryMobile';
+import EndSummaryMobile from 'pages/paper-subscription-checkout/components/endSummary/endSummaryMobile';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 
@@ -395,7 +395,7 @@ function PaperCheckoutForm(props: PropTypes) {
             errorHeading={submissionErrorHeading}
           />
           {isSubscriptionCard ? (
-            <EndSummaryMobile product={props.product} paymentStartDate={subsCardStartDates.formattedStartDate} />
+            <EndSummaryMobile paymentStartDate={subsCardStartDates.formattedStartDate} />
           ) : null}
           <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
