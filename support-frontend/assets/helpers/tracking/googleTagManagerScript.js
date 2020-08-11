@@ -3,6 +3,16 @@
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
 import { getTrackingConsent, type ThirdPartyTrackingConsent, OptedIn } from './thirdPartyTrackingConsent';
 
+
+/**
+ * getTrackingConsent() will only resolve if cmp.init()
+ * has already been called. cmp.init() is called in a seperate
+ * 'main bundle' (see page.js), which is loaded and executed
+ * before this 'googleTagManagerScript bundle'. This is due to the
+ * script ordering in main.scala.html, where the googleTagManagerScript
+ * script has the 'defer' attriubute and comes after the main bundle
+ * which has the 'async' attribute.
+ */
 getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
   if(!doNotTrack() && thirdPartyTrackingConsent === OptedIn) {
     (function (w, d, s, l, i) {
