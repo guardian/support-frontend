@@ -9,8 +9,8 @@ import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
-import com.gu.support.workers.{DigitalPack, Monthly}
-import com.gu.support.zuora.api.ReaderType.Corporate
+import com.gu.support.workers.{DigitalPack, Monthly, Quarterly}
+import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -22,7 +22,7 @@ import scala.concurrent.Future
 //noinspection RedundantDefaultArgument
 class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
-  "SubscriptionData for a corporate subscription" should "be correct" in
+  "SubscriptionData for a corporate subscription redemption" should "be correct" in
     corporate.map { subData =>
       subData shouldBe SubscriptionData(
         List(RatePlanData(RatePlan("2c92c0f971c65dfe0171c6c1f86e603c"), List(), List())),
@@ -66,6 +66,21 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       )
     }
 
+  "SubscriptionData for a 3 monthly gift subscription purchase" should "be correct" in
+    threeMonthGiftPurchase.map { subData =>
+      subData.ratePlanData shouldBe List(RatePlanData(RatePlan("2c92c0f873ad73b60173b534ca586129"), List(), List()))
+      import subData.subscription._
+      autoRenew shouldBe false
+      contractAcceptanceDate shouldBe saleDate
+      readerType shouldBe Gift
+      redemptionCode.isDefined shouldBe true
+      redemptionCode.get.substring(0, 4) shouldBe "gd03"
+      initialTerm shouldBe 3 //TODO: RB check that this is correct
+      initialTermPeriodType shouldBe Month
+      promoCode shouldBe None
+      corporateAccountId shouldBe None
+    }
+
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
 
@@ -92,6 +107,14 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     () => saleDate
   ).value.map(_.right.get)
 
-  //TODO: test all cases
+  lazy val threeMonthGiftPurchase = DigitalSubscriptionBuilder.build(
+    DigitalPack(GBP, Quarterly, Gift),
+    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+    SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Quarterly, Country.UK, promotionService),
+    SANDBOX,
+    () => saleDate
+  ).value.map(_.right.get)
+
+  //TODO: RB test all cases
 
 }

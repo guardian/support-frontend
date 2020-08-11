@@ -64,18 +64,22 @@ object DigitalSubscriptionBuilder {
     readerType: ReaderType,
     purchase: SubscriptionPurchase
   )(implicit ec: ExecutionContext): BuildResult = {
-    val delay = if (readerType == Direct)
-      purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod
-    else 0 // Gift purchases don't have a free trial period
 
-    val contractAcceptanceDate = today.plusDays(delay)
+    val (contractAcceptanceDelay, autoRenew, initialTerm) = if (readerType == Gift)
+      (0, false, purchase.billingPeriod.monthsInPeriod)
+    else
+      (purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod, true, 12)
+
+    val contractAcceptanceDate = today.plusDays(contractAcceptanceDelay)
 
     val subscriptionData = buildProductSubscription(
       requestId,
       productRatePlanId,
       contractAcceptanceDate = contractAcceptanceDate,
       contractEffectiveDate = today,
-      readerType = readerType
+      readerType = readerType,
+      autoRenew = autoRenew,
+      initialTerm = initialTerm
     )
 
     val withRedemptionCode = generateRedemptionCode(readerType, purchase.billingPeriod, subscriptionData)
@@ -159,7 +163,7 @@ object DigitalSubscriptionBuilder {
     requestId: UUID,
     redemptionCode: RedemptionCode,
   )(implicit ec: ExecutionContext): BuildResult = {
-    // TODO: implement this
+    // TODO: RB implement this
     val errorType: Either[PromoError, RedemptionInvalid] = Right(InvalidReaderType)
     EitherT.leftT(errorType)
   }
