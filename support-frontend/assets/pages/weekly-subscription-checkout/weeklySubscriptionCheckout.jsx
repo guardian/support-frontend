@@ -9,7 +9,7 @@ import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import Footer from 'components/footerCompliant/Footer';
+import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
 // import CustomerService from 'components/customerService/customerService';
 // import SubscriptionTermsPrivacy
 //   from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
@@ -68,18 +68,7 @@ const { countryId } = store.getState().common.internationalisation;
 const productPrice = getProductPrice(productPrices, countryId, billingPeriod, fulfilmentOption, productOption);
 const appliedPromo = getAppliedPromo(productPrice.promotions);
 const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
-const promoTerms = promotionTermsUrl(appliedPromo ? appliedPromo.promoCode : defaultPromo);
-
-const WeeklyFooter = (
-  <Footer
-    faqsLink="https://www.theguardian.com/help/2012/jan/19/guardian-weekly-faqs"
-    termsConditionsLink="https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions"
-  >
-    <h3>Promotion terms and conditions</h3>
-    <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full annual promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTerms}>here</a>.
-    </p>
-  </Footer>);
-
+const promoTermsLink = promotionTermsUrl(appliedPromo ? appliedPromo.promoCode : defaultPromo);
 
 // ----- Render ----- //
 
@@ -87,7 +76,7 @@ const content = (
   <Provider store={store}>
     <Page
       header={<HeaderWrapper />}
-      footer={WeeklyFooter}
+      footer={<WeeklyFooter promoTermsLink={promoTermsLink} />}
     >
       <CheckoutStage
         checkoutForm={orderIsAGift ? <WeeklyCheckoutFormGifting /> : <WeeklyCheckoutForm />}

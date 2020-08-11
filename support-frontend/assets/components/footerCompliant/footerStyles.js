@@ -87,3 +87,7 @@ export const backToTopLink = css`
     text-decoration: none;
   }
 `;
+
+export const footerTextHeading = css`
+  ${textSans.small({ fontWeight: 'bold' })};
+`;
