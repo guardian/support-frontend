@@ -18,6 +18,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { formatAmount } from 'helpers/checkouts';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { type State } from '../contributionsLandingReducer';
+import ContributionChoicesHeader from './ContributionChoicesHeader';
 import ContributionTextInputDs from './ContributionTextInputDs';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import ContributionAmountRecurringNotification from './ContributionAmountRecurringNotification';
@@ -38,6 +39,7 @@ type PropTypes = {|
   stripePaymentRequestButtonClicked: boolean,
   shouldShowRecurringNotification: boolean,
   shouldShowFrequencyButtons: boolean,
+  shouldShowChoiceHeader: boolean,
 |};
 
 
@@ -54,6 +56,7 @@ const mapStateToProps = (state: State) => ({
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
   shouldShowRecurringNotification: state.common.abParticipations.landingPageRetentionR1 === 'variant 1',
   shouldShowFrequencyButtons: state.common.abParticipations.landingPageRetentionR1 === 'variant 2',
+  shouldShowChoiceHeader: state.common.abParticipations.landingPageRetentionR1 === 'variant 3',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -169,6 +172,10 @@ function withProps(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
+
+      {props.shouldShowChoiceHeader && (
+        <ContributionChoicesHeader>Amount</ContributionChoicesHeader>
+      )}
 
       <ContributionAmountChoices
         countryGroupId={props.countryGroupId}

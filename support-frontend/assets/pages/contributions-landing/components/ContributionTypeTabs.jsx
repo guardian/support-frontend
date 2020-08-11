@@ -23,6 +23,7 @@ import type {
   ContributionTypeSetting,
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
+import ContributionChoicesHeader from './ContributionChoicesHeader';
 
 // ----- Types ----- //
 
@@ -33,6 +34,7 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
+  shouldShowChoiceHeader: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -41,6 +43,7 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
+  shouldShowChoiceHeader: state.common.abParticipations.landingPageRetentionR1 === 'variant 3',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -128,6 +131,10 @@ function withProps(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
+      {props.shouldShowChoiceHeader && (
+        <ContributionChoicesHeader>Frequency</ContributionChoicesHeader>
+      )}
+
       {renderChoiceCards()}
     </fieldset>
   );
