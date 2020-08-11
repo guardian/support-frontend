@@ -8,7 +8,7 @@ import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
-import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode}
+import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.{DigitalPack, Monthly}
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api._
@@ -72,7 +72,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionRedemption(
-      CorporateRedemption(RedemptionCode("CODE").right.get),
+      RedemptionData(RedemptionCode("CODE").right.get),
       new GetCodeStatus({
         case "CODE" => Future.successful(Some(Map(
           "available" -> DynamoLookup.DynamoBoolean(true),
