@@ -335,7 +335,7 @@ function PaperCheckoutForm(props: PropTypes) {
                 <Text className="component-text__paddingTop">
                   <p>
                   We will take the first payment on the
-                  date you receive your {(props.fulfilmentOption === HomeDelivery || !props.useDigitalVoucher) && 'first'} {fulfilmentOptionDescriptor.toLowerCase()}.
+                  date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
                   </p>
                   <p>
                  Subscription start dates are automatically selected to be the earliest we can fulfil your order.
