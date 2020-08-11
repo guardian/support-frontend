@@ -20,6 +20,7 @@ import { selectAmount, updateOtherAmount } from '../contributionsLandingActions'
 import { type State } from '../contributionsLandingReducer';
 import ContributionTextInputDs from './ContributionTextInputDs';
 import ContributionAmountChoices from './ContributionAmountChoices';
+import ContributionAmountRecurringNotification from './ContributionAmountRecurringNotification';
 
 // ----- Types ----- //
 
@@ -35,6 +36,7 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+  shouldShowRecurringNotification: boolean,
   shouldShowFrequencyButtons: boolean,
 |};
 
@@ -50,6 +52,7 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
+  shouldShowRecurringNotification: state.common.abParticipations.landingPageRetentionR1 === 'variant 1',
   shouldShowFrequencyButtons: state.common.abParticipations.landingPageRetentionR1 === 'variant 2',
 });
 
@@ -109,7 +112,6 @@ export const getAmountPerWeekBreakdown = (
 function withProps(props: PropTypes) {
   const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
-  const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
@@ -121,6 +123,24 @@ function withProps(props: PropTypes) {
     checkOtherAmount, checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
   } = props;
   const updateAmount = props.updateOtherAmount;
+  const selectedAmount = getAmount(
+    props.selectedAmounts,
+    props.otherAmounts,
+    props.contributionType,
+  );
+  const formattedSelectedAmount = formatAmount(
+    currencies[props.currency],
+    spokenCurrencies[props.currency],
+    { value: selectedAmount.toString(), isDefault: false },
+    false,
+  );
+  const showRecurringNotification =
+    props.shouldShowRecurringNotification &&
+    !Number.isNaN(selectedAmount) &&
+    props.contributionType !== 'ONE_OFF';
+  const showWeeklyBreakdown =
+    props.contributionType !== 'ONE_OFF' &&
+    !props.shouldShowRecurringNotification;
 
   const renderOtherField = () => (
     <ContributionTextInputDs
@@ -162,6 +182,11 @@ function withProps(props: PropTypes) {
       />
 
       {showOther && renderOtherField()}
+
+      { showRecurringNotification && <ContributionAmountRecurringNotification
+        formattedAmount={formattedSelectedAmount}
+        contributionType={props.contributionType}
+      />}
 
       {showWeeklyBreakdown ? (
         <p className="amount-per-week-breakdown">
