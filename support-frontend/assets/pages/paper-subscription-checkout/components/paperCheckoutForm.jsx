@@ -184,7 +184,8 @@ function PaperCheckoutForm(props: PropTypes) {
     props.fulfilmentOption,
     props.productOption,
   );
-  const subsCardStartDates = props.useDigitalVoucher && props.fulfilmentOption === Collection ?
+ const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
+  const subsCardStartDates =  isSubscriptionCard ?
     getAndSetStartDateForSubsCard(props.productOption, props.setStartDate) :
     {
       subsCardStartDate: '',
