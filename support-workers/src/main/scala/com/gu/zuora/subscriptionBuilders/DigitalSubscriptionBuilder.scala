@@ -10,9 +10,10 @@ import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.redemption.GetCodeStatus
 import com.gu.support.redemption.GetCodeStatus.{InvalidReaderType, RedemptionInvalid}
+import com.gu.support.redemption.generator.{GiftCodeGenerator, GiftDuration}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
-import com.gu.support.workers.DigitalPack
 import com.gu.support.workers.ProductTypeRatePlans._
+import com.gu.support.workers.{BillingPeriod, DigitalPack}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import com.gu.support.zuora.api.{ReaderType, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCode, buildProductSubscription, validateRatePlan}
@@ -25,6 +26,7 @@ sealed trait SubscriptionPaymentType
 case class SubscriptionPurchase(
   config: ZuoraDigitalPackConfig,
   maybePromoCode: Option[PromoCode],
+  billingPeriod: BillingPeriod,
   country: Country,
   promotionService: PromotionService
 ) extends SubscriptionPaymentType
@@ -62,7 +64,7 @@ object DigitalSubscriptionBuilder {
     readerType: ReaderType,
     purchase: SubscriptionPurchase
   )(implicit ec: ExecutionContext): BuildResult = {
-    val delay = if(readerType == Direct)
+    val delay = if (readerType == Direct)
       purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod
     else 0 // Gift purchases don't have a free trial period
 
@@ -76,10 +78,21 @@ object DigitalSubscriptionBuilder {
       readerType = readerType
     )
 
-    EitherT.fromEither[Future](
-    applyPromoCode(purchase.promotionService, purchase.maybePromoCode, purchase.country, productRatePlanId, subscriptionData)
-      .left.map(Left.apply)
-    )
+    val withRedemptionCode = generateRedemptionCode(readerType, purchase.billingPeriod, subscriptionData)
+    val withPromoApplied = applyPromoCode(purchase.promotionService, purchase.maybePromoCode, purchase.country, productRatePlanId, withRedemptionCode)
+
+    EitherT.fromEither[Future](withPromoApplied.left.map(Left.apply))
+  }
+
+  def generateRedemptionCode(readerType: ReaderType, billingPeriod: BillingPeriod, subscriptionData: SubscriptionData) = {
+    if (readerType == Gift) {
+      val code = GiftCodeGenerator.randomGiftCodes.next().withDuration(GiftDuration.fromBillingPeriod(billingPeriod))
+      subscriptionData.copy(
+        subscription = subscriptionData.subscription.copy(redemptionCode = Some(code.value))
+      )
+    }
+    else
+      subscriptionData
   }
 
   def buildRedemption(
@@ -145,7 +158,7 @@ object DigitalSubscriptionBuilder {
     productRatePlanId: ProductRatePlanId,
     requestId: UUID,
     redemptionCode: RedemptionCode,
-  ) = {
+  )(implicit ec: ExecutionContext): BuildResult = {
     // TODO: implement this
     val errorType: Either[PromoError, RedemptionInvalid] = Right(InvalidReaderType)
     EitherT.leftT(errorType)

@@ -3,6 +3,7 @@ package com.gu.support.redemption.generator
 import java.security.SecureRandom
 
 import com.gu.support.redemption.generator.CodeBuilder.GenerateGiftCode
+import com.gu.support.workers.{Annual, BillingPeriod, Quarterly}
 
 object GiftCodeGenerator {
 
@@ -26,6 +27,11 @@ object GiftDuration {
   case object Gift6Month extends GiftDuration("06")
 
   case object Gift12Month extends GiftDuration("12")
+
+  def fromBillingPeriod = (billingPeriod: BillingPeriod) => billingPeriod match {
+    case Quarterly => Gift3Month
+    case Annual => Gift12Month
+  }
 
 }
 

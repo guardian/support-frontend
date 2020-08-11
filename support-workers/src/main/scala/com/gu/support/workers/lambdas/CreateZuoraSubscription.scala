@@ -155,7 +155,13 @@ object CreateZuoraSubscription {
         d,
         state.requestId,
         state.paymentMethod match {
-          case Left(_: PaymentMethod) => SubscriptionPurchase(config.digitalPack, state.promoCode, state.user.billingAddress.country, promotionService)
+          case Left(_: PaymentMethod) => SubscriptionPurchase(
+            config.digitalPack,
+            state.promoCode,
+            state.product.billingPeriod,
+            state.user.billingAddress.country,
+            promotionService
+          )
           case Right(rd: RedemptionData) => SubscriptionRedemption(rd, getCodeStatus)
         },
         environment,
