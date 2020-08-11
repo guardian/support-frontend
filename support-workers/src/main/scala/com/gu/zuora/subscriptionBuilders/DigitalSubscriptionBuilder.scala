@@ -45,21 +45,18 @@ object DigitalSubscriptionBuilder {
     environment: TouchPointEnvironment,
     today: () => LocalDate
   )(implicit ec: ExecutionContext): BuildResult = {
-
-    val contractEffectiveDate = today()
     val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(environment, digitalPack.readerType), digitalPack.describe)
 
     subscriptionPaymentType match {
       case purchase: SubscriptionPurchase =>
-        buildPurchase(contractEffectiveDate, productRatePlanId, requestId, digitalPack.readerType, purchase)
+        buildPurchase(today(), productRatePlanId, requestId, digitalPack.readerType, purchase)
       case redemption: SubscriptionRedemption =>
-        buildRedemption(contractEffectiveDate, productRatePlanId, requestId, digitalPack.readerType, redemption)
+        buildRedemption(today(), productRatePlanId, requestId, digitalPack.readerType, redemption)
     }
-
   }
 
   def buildPurchase(
-    contractEffectiveDate: LocalDate,
+    today: LocalDate,
     productRatePlanId: ProductRatePlanId,
     requestId: UUID,
     readerType: ReaderType,
@@ -69,13 +66,13 @@ object DigitalSubscriptionBuilder {
       purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod
     else 0 // Gift purchases don't have a free trial period
 
-    val contractAcceptanceDate = contractEffectiveDate.plusDays(delay)
+    val contractAcceptanceDate = today.plusDays(delay)
 
     val subscriptionData = buildProductSubscription(
       requestId,
       productRatePlanId,
       contractAcceptanceDate = contractAcceptanceDate,
-      contractEffectiveDate = contractEffectiveDate,
+      contractEffectiveDate = today,
       readerType = readerType
     )
 
@@ -86,7 +83,7 @@ object DigitalSubscriptionBuilder {
   }
 
   def buildRedemption(
-    contractEffectiveDate: LocalDate,
+    today: LocalDate,
     productRatePlanId: ProductRatePlanId,
     requestId: UUID,
     readerType: ReaderType,
@@ -95,27 +92,25 @@ object DigitalSubscriptionBuilder {
 
     readerType match {
       case Corporate => buildCorporateRedemption(
-        contractEffectiveDate,
+        today,
         productRatePlanId,
         requestId,
         redemption.redemptionData.redemptionCode,
         redemption.getCodeStatus
       )
-      case Gift => buildCorporateRedemption( //TODO: gift redemption
-        contractEffectiveDate,
+      case Gift => buildGiftRedemption(
+        today,
         productRatePlanId,
         requestId,
         redemption.redemptionData.redemptionCode,
-        redemption.getCodeStatus
       )
       case _ => val errorType: Either[PromoError, RedemptionInvalid] = Right(InvalidReaderType)
         EitherT.leftT(errorType)
     }
-
   }
 
   def buildCorporateRedemption(
-    contractEffectiveDate: LocalDate,
+    today: LocalDate,
     productRatePlanId: ProductRatePlanId,
     requestId: UUID,
     redemptionCode: RedemptionCode,
@@ -124,8 +119,8 @@ object DigitalSubscriptionBuilder {
     val subscriptionData = buildProductSubscription(
       requestId,
       productRatePlanId,
-      contractAcceptanceDate = contractEffectiveDate,
-      contractEffectiveDate = contractEffectiveDate,
+      contractAcceptanceDate = today,
+      contractEffectiveDate = today,
       readerType = Corporate
     )
 
@@ -145,6 +140,14 @@ object DigitalSubscriptionBuilder {
       .leftMap(Right.apply)
   }
 
-  def buildGiftRedemption() = {}
-
+  def buildGiftRedemption(
+    today: LocalDate,
+    productRatePlanId: ProductRatePlanId,
+    requestId: UUID,
+    redemptionCode: RedemptionCode,
+  ) = {
+    // TODO: implement this
+    val errorType: Either[PromoError, RedemptionInvalid] = Right(InvalidReaderType)
+    EitherT.leftT(errorType)
+  }
 }
