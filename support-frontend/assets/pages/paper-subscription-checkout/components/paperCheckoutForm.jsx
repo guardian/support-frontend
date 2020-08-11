@@ -201,7 +201,6 @@ function PaperCheckoutForm(props: PropTypes) {
         altText=""
       />}
     title={title}
-    description={description}
     productPrice={productPrice}
     billingPeriod="Monthly"
     changeSubscription={routes.digitalSubscriptionLanding}
