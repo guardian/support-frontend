@@ -35,6 +35,7 @@ const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => new Promise
     }) => {
       try {
         onConsentChange((state: ConsentState) => {
+          console.log('****', state);
           const consentGranted = state.ccpa ?
             !state.ccpa.doNotSell : state.tcfv2 && Object.values(state.tcfv2.consents).every(Boolean);
 
@@ -57,4 +58,30 @@ const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => new Promise
   return Promise.resolve(OptedOut);
 });
 
-export { getTrackingConsent, OptedIn, OptedOut };
+const onConsentChangeEvent = (fn: (thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => void): void => {
+  /**
+   * Dynamically load @guardian/consent-management-platform
+   * on condition we're not server side rendering (ssr) the page.
+   * @guardian/consent-management-platform breaks ssr otherwise.
+   */
+  if (!getGlobal('ssr')) {
+    import('@guardian/consent-management-platform').then(({
+      onConsentChange,
+    }) => {
+      onConsentChange((state: ConsentState) => {
+        const consentGranted = state.ccpa ?
+          !state.ccpa.doNotSell : state.tcfv2 && Object.values(state.tcfv2.consents).every(Boolean);
+
+        if (consentGranted) {
+          fn(OptedIn);
+        } else {
+          fn(OptedOut);
+        }
+      });
+    });
+  } else {
+    fn(OptedOut);
+  }
+};
+
+export { getTrackingConsent, onConsentChangeEvent, OptedIn, OptedOut };
