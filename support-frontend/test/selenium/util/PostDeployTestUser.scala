@@ -5,8 +5,11 @@ import java.time.Duration.ofDays
 import com.gu.identity.testing.usernames.TestUsernames
 
 import okhttp3.{OkHttpClient, Request, RequestBody, MediaType, Response}
-import io.circe.{Json, HCursor, Decoder}
+import io.circe.generic.semiauto.deriveDecoder
+import io.circe.{Json, Decoder, DecodingFailure}
 import io.circe.parser.parse
+
+import org.slf4j.LoggerFactory
 
 trait TestUser {
   val username: String
@@ -31,28 +34,56 @@ class PostDeployTestUserContribs(driverConfig: DriverConfig) extends TestUser {
 
 class PostDeployTestUserSubs(driverConfig: DriverConfig) extends TestUser {
 
-  private val client = new OkHttpClient()
-  private val requestToIdapi = new Request.Builder()
-    .url(Config.idapiNewTestUserUrl)
-    .addHeader(Config.idapiClientAccessTokenName, Config.idapiClientAccessTokenSecret)
-    .post(RequestBody.create(MediaType.parse("application/json"), "{}"))
-    .build()
-  private val response = client.newCall(requestToIdapi).execute()
-  private val responseBodyAsJson = parse(response.body().string()).getOrElse(Json.Null)
-  private val cursor = responseBodyAsJson.hcursor
-
   private def addTestUserCookies(testUsername: String) = {
     driverConfig.addCookie(name = "pre-signin-test-user", value = testUsername)
     driverConfig.addCookie(name = "_test_username", value = testUsername, domain = Some(Config.guardianDomain))
     driverConfig.addCookie(name = "_post_deploy_user", value = "true") // This enables the tests to use the mocked payment services
     driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
-    for (n <- 0 until 3) {
-      val cookie_name = cursor.downField("values").downN(n).downField("key").as[String].right.get
-      val cookie_value = cursor.downField("values").downN(n).downField("value").as[String].right.get
-      driverConfig.addCookie(name = cookie_name, value = cookie_value)
+    IdapiRequest.decodeCookies.foreach { cookie =>
+      driverConfig.addCookie(name = cookie.key, value = cookie.value)
     }
   }
 
   val username = "postDeployTestUser"
   addTestUserCookies(username)
+}
+
+case class Cookie(key: String, value: String)
+
+object Cookie {
+  implicit val decoder: Decoder[Cookie] = deriveDecoder[Cookie]
+}
+
+case class IdapiSuccessfulResponse(values: List[Cookie])
+
+object IdapiSuccessfulResponse {
+  implicit val decoder: Decoder[IdapiSuccessfulResponse] = deriveDecoder[IdapiSuccessfulResponse]
+}
+
+object IdapiRequest {
+
+  private val client = new OkHttpClient()
+
+  private def logger = LoggerFactory.getLogger(this.getClass)
+
+  private val request: Request = new Request.Builder()
+    .url(Config.idapiNewTestUserUrl)
+    .addHeader(Config.idapiClientAccessTokenName, Config.idapiClientAccessTokenSecret)
+    .post(RequestBody.create(MediaType.parse("application/json"), "{}"))
+    .build()
+
+  private def getResult: Json = {
+    val response: Response = client.newCall(request).execute()
+    parse(response.body().string()).getOrElse(Json.Null)
+  }
+
+  def decodeCookies: List[Cookie] = {
+    val responseDecoded: Either[DecodingFailure, IdapiSuccessfulResponse] = getResult.as[IdapiSuccessfulResponse]
+    var cookies = List[Cookie]()
+    responseDecoded match {
+      case Left(l) => logger.error(s"Failed to decode IDAPI response: ${l}")
+      case Right(r) => cookies = r.values
+    }
+    cookies
+  }
 }
