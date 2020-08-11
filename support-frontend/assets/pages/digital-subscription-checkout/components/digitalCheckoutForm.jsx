@@ -20,7 +20,7 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import OrderSummary from 'components/subscriptionCheckouts/orderSummary/orderSummary';
+import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
 import {
   type Action,
   type FormActionCreators,
@@ -59,7 +59,7 @@ import GeneralErrorMessage
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { routes } from 'helpers/routes';
-import EndSummaryMobile from 'components/subscriptionCheckouts/endSummary/endSummaryMobile';
+import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Types ----- //
@@ -165,7 +165,6 @@ function DigitalCheckoutForm(props: PropTypes) {
           productPrice={productPrice}
           billingPeriod={props.billingPeriod}
           changeSubscription={routes.digitalSubscriptionLanding}
-          productType={DigitalPack}
         />)}
       >
         <Form onSubmit={(ev) => {
@@ -240,7 +239,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <EndSummaryMobile product={DigitalPack} />
+          <EndSummaryMobile />
           <DirectDebitPaymentTerms
             paymentMethod={props.paymentMethod}
           />
