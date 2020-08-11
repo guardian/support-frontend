@@ -11,6 +11,8 @@ import { getTrackingConsent, OptedIn, OptedOut, onConsentChangeEvent, type Third
 import { maybeTrack } from './doNotTrack';
 import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
+let scriptAdded: boolean = false;
+
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent' | 'AppStoreCtaClick';
 
@@ -33,7 +35,7 @@ type GaEventData = {
 const gaPropertyId = 'UA-51507017-5';
 
 // Default userHasGrantedConsent to false
-const userHasGrantedConsent: boolean = false;
+let userHasGrantedConsent: boolean = false;
 // We store tracking events in these queues when userHasGrantedConsent is false
 const googleTagManagerDataQueue: Array<() => void> = [];
 const googleAnalyticsEventQueue: Array<() => void> = [];
@@ -218,35 +220,60 @@ function pushToDataLayer(event: EventType, participations: Participations) {
 }
 
 function init(participations: Participations) {
-  // /**
-  //  * The callback passed to onConsentChangeEvent is called
-  //  * each time consent changes. EG. if a user consents via the CMP.
-  //  */
-  // onConsentChangeEvent((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
-  //   /**
-  //    * update userHasGrantedConsent value when
-  //    * consent changes via the CMP library.
-  //    */
-  //   userHasGrantedConsent = thirdPartyTrackingConsent === OptedIn;
+  /**
+   * The callback passed to onConsentChangeEvent is called
+   * each time consent changes. EG. if a user consents via the CMP.
+   */
+  onConsentChangeEvent((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
+    /**
+     * update userHasGrantedConsent value when
+     * consent changes via the CMP library.
+     */
+    userHasGrantedConsent = thirdPartyTrackingConsent === OptedIn;
 
-  //   /**
-  //    * Process pending events in googleAnalyticsEventQueue and
-  //    * googleTagManagerDataQueue if userHasGrantedConsent. This clears
-  //    * the queues as it executes each function in them.
-  //    */
-  //   if (userHasGrantedConsent) {
-  //     while (googleAnalyticsEventQueue.length > 0) {
-  //       const queuedEvent = googleAnalyticsEventQueue.shift();
-  //       queuedEvent();
-  //     }
-  //     while (googleTagManagerDataQueue.length > 0) {
-  //       const queuedEvent = googleTagManagerDataQueue.shift();
-  //       queuedEvent();
-  //     }
-  //   }
-  // });
+    /**
+     * Process pending events in googleAnalyticsEventQueue and
+     * googleTagManagerDataQueue if userHasGrantedConsent. This clears
+     * the queues as it executes each function in them.
+     */
+    if (userHasGrantedConsent) {
+      if (!scriptAdded) {
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({
+            'gtm.start':
+              new Date().getTime(),
+            event: 'gtm.js',
+          });
+          const f = d.getElementsByTagName(s)[0];
+          const j = d.createElement(s);
+          const dl = l != 'dataLayer' ? `&l=${l}` : '';
+          j.async = true;
+          j.src =
+            // $FlowFixMe
+            `https://www.googletagmanager.com/gtm.js?id=${i}${dl}`;
+          f.parentNode.insertBefore(j, f);
+          /**
+           * set scriptAdded to true so we don't try and add more than once
+           * if a user toggles there consent state.
+          */
+          scriptAdded = true;
+        }(window, document, 'script', 'googleTagManagerDataLayer', 'GTM-W6GJ68L'));
+      }
 
-  // pushToDataLayer('DataLayerReady', participations);
+      while (googleAnalyticsEventQueue.length > 0) {
+        const queuedEvent = googleAnalyticsEventQueue.shift();
+        queuedEvent();
+      }
+
+      while (googleTagManagerDataQueue.length > 0) {
+        const queuedEvent = googleTagManagerDataQueue.shift();
+        queuedEvent();
+      }
+    }
+  });
+
+  pushToDataLayer('DataLayerReady', participations);
 }
 
 function successfulConversion(participations: Participations) {
