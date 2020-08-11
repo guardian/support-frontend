@@ -317,7 +317,7 @@ function PaperCheckoutForm(props: PropTypes) {
               </FormSection>
               : null
           }
-          {!props.useDigitalVoucher || props.fulfilmentOption === HomeDelivery ? (
+          {!isSubscriptionCard ? (
             <FormSection title="When would you like your subscription to start?">
               <Rows>
                 <FieldsetWithError
