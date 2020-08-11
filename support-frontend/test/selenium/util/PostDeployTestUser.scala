@@ -48,13 +48,13 @@ class PostDeployTestUserSubs(driverConfig: DriverConfig) extends TestUser {
   addTestUserCookies(username)
 }
 
-case class Cookie(key: String, value: String)
+case class IdapiCookie(key: String, value: String)
 
-object Cookie {
-  implicit val decoder: Decoder[Cookie] = deriveDecoder[Cookie]
+object IdapiCookie {
+  implicit val decoder: Decoder[IdapiCookie] = deriveDecoder[IdapiCookie]
 }
 
-case class IdapiSuccessfulResponse(values: List[Cookie])
+case class IdapiSuccessfulResponse(values: List[IdapiCookie])
 
 object IdapiSuccessfulResponse {
   implicit val decoder: Decoder[IdapiSuccessfulResponse] = deriveDecoder[IdapiSuccessfulResponse]
@@ -77,9 +77,9 @@ object IdapiRequest {
     parse(response.body().string()).getOrElse(Json.Null)
   }
 
-  def decodeCookies: List[Cookie] = {
+  def decodeCookies: List[IdapiCookie] = {
     val responseDecoded: Either[DecodingFailure, IdapiSuccessfulResponse] = getResult.as[IdapiSuccessfulResponse]
-    var cookies = List[Cookie]()
+    var cookies = List[IdapiCookie]()
     responseDecoded match {
       case Left(l) => logger.error(s"Failed to decode IDAPI response: ${l}")
       case Right(r) => cookies = r.values
