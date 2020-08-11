@@ -6,7 +6,8 @@ import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
-import { type SubscriptionProduct, DigitalPack } from 'helpers/subscriptions';
+import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
+import { type SubscriptionProduct, DigitalPack, Paper } from 'helpers/subscriptions';
 import EndSummaryDigital from 'components/subscriptionCheckouts/endSummary/endSummaryDigital';
 import EndSummaryPrint from 'components/subscriptionCheckouts/endSummary/endSummaryPrint';
 import * as styles from './orderSummaryStyles';
@@ -25,7 +26,9 @@ type PropTypes = {
 
 const OrderSummary = (props: PropTypes) => {
 
-  const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
+  const priceString = props.productType === Paper ?
+    `You'll pay ${getPriceDescription(props.productPrice, props.billingPeriod)}` :
+    getBillingDescription(props.productPrice, props.billingPeriod);
 
   return (
     <aside css={styles.wrapper}>
