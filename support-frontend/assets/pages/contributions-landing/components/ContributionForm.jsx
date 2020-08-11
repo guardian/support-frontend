@@ -80,7 +80,8 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   isTestUser: boolean,
   country: IsoCountry,
-  createStripePaymentMethod: () => void,
+  createStripePaymentMethod: (clientSecret: string | null) => void,
+  stripeClientSecret: string | null,
   amazonPayOrderReferenceId: string | null,
   checkoutFormHasBeenSubmitted: boolean,
   campaignSettings: CampaignSettings | null,
@@ -103,6 +104,7 @@ const mapStateToProps = (state: State) => ({
   existingPaymentMethod: state.page.form.existingPaymentMethod,
   thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
   createStripePaymentMethod: state.page.form.stripeCardFormData.createPaymentMethod,
+  stripeClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
   contributionType: state.page.form.contributionType,
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
@@ -140,7 +142,7 @@ const formHandlersForRecurring = {
   },
   Stripe: (props: PropTypes) => {
     if (props.createStripePaymentMethod) {
-      props.createStripePaymentMethod();
+      props.createStripePaymentMethod(props.stripeClientSecret);
     }
   },
   DirectDebit: (props: PropTypes) => {
@@ -161,7 +163,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
     Stripe: (props: PropTypes) => {
       if (props.createStripePaymentMethod) {
-        props.createStripePaymentMethod();
+        props.createStripePaymentMethod(null);
       }
     },
     PayPal: (props: PropTypes) => {

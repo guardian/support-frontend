@@ -1,17 +1,15 @@
 /* eslint-disable react/no-unused-state */
 // @flow
 
-import React, { Component } from 'react';
+// $FlowIgnore - required for hooks
+import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
-import { injectStripe } from 'react-stripe-elements';
+import * as stripeJs from '@stripe/react-stripe-js';
 import Button from 'components/button/button';
 import { ErrorSummary } from '../submitFormErrorSummary';
-import {
-  firstError,
-  type FormError,
-} from 'helpers/subscriptionsForms/validation';
+import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
-import { CardNumberElement, CardExpiryElement, CardCvcElement } from 'react-stripe-elements';
+import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 
@@ -30,7 +28,6 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 // Types
 
 export type StripeFormPropTypes = {
-  stripe: Object,
   allErrors: FormError<FormField>[],
   stripeKey: string,
   setStripePaymentMethod: Function,
@@ -40,14 +37,18 @@ export type StripeFormPropTypes = {
   csrf: Csrf,
 }
 
-type StateTypes = {
-  cardNumber: Object,
-  cardExpiry: Object,
-  cardCvc: Object,
-  cardErrors: Array<Object>,
-  setupIntentClientSecret: Option<string>,
-  paymentWaiting: boolean,
-  recaptchaCompleted: boolean,
+type CardFieldData = {
+  complete: boolean,
+  empty: boolean,
+  error: string,
+  errorEmpty: string,
+  errorIncomplete: string,
+}
+
+type CardFieldName = 'cardNumber' | 'cardExpiry' | 'cardCvc';
+
+type CardFieldsData = {
+  [CardFieldName]: CardFieldData,
 }
 
 // Styles for stripe elements
@@ -71,255 +72,279 @@ const CardExpiryWithError = compose(withLabel, withError)(CardExpiryElement);
 const CardCvcWithError = compose(withLabel, withError)(CardCvcElement);
 const RecaptchaWithError = compose(withLabel, withError)(Recaptcha);
 
-class StripeForm extends Component<StripeFormPropTypes, StateTypes> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      cardNumber: {
-        complete: false,
-        empty: true,
-        error: '',
-        errorEmpty: 'Please enter a card number',
-        errorIncomplete: 'Please enter a valid card number',
-      },
-      cardExpiry: {
-        complete: false,
-        empty: true,
-        error: '',
-        errorEmpty: 'Please enter an expiry date',
-        errorIncomplete: 'Please enter a valid expiry date',
-      },
-      cardCvc: {
-        complete: false,
-        empty: true,
-        error: '',
-        errorEmpty: 'Please enter a CVC number',
-        errorIncomplete: 'Please enter a valid CVC number',
-      },
-      cardErrors: [],
-      setupIntentClientSecret: null,
-      paymentWaiting: false,
-      recaptchaCompleted: false,
-    };
-  }
+const StripeForm = (props: StripeFormPropTypes) => {
+  /**
+   * State
+   */
+  const [cardErrors, setCardErrors] = useState<FormError<CardFieldName>[]>([]);
+  const [setupIntentClientSecret, setSetupIntentClientSecret] = useState<Option<string>>(null);
+  const [paymentWaiting, setPaymentWaiting] = useState<boolean>(false);
+  const [recaptchaCompleted, setRecaptchaCompleted] = useState<boolean>(false);
+  const [recaptchaError, setRecaptchaError] = useState<FormError<'recaptcha'> | null>(null);
+  const [cardFieldsData, setCardFieldsData] = useState<CardFieldsData>({
+    cardNumber: {
+      complete: false,
+      empty: true,
+      error: '',
+      errorEmpty: 'Please enter a card number',
+      errorIncomplete: 'Please enter a valid card number',
+    },
+    cardExpiry: {
+      complete: false,
+      empty: true,
+      error: '',
+      errorEmpty: 'Please enter an expiry date',
+      errorIncomplete: 'Please enter a valid expiry date',
+    },
+    cardCvc: {
+      complete: false,
+      empty: true,
+      error: '',
+      errorEmpty: 'Please enter a CVC number',
+      errorIncomplete: 'Please enter a valid CVC number',
+    },
+  });
 
+  const stripe = stripeJs.useStripe();
+  const elements = stripeJs.useElements();
 
-  componentDidMount() {
-    this.setupRecurringHandlers();
-    loadRecaptchaV2();
-  }
+  /**
+   * Handlers
+   */
 
-  getAllCardErrors = () => ['cardNumber', 'cardExpiry', 'cardCvc'].reduce((cardErrors, field) => {
-    if (this.state[field].error.length > 0) {
-      cardErrors.push({ field: [field], message: this.state[field].error });
+  const getAllCardErrors = () => ['cardNumber', 'cardExpiry', 'cardCvc'].reduce((acc, field) => {
+    if (cardFieldsData[field].error.length > 0) {
+      acc.push({ field: [field], message: cardFieldsData[field].error });
     }
-    return cardErrors;
+    return acc;
   }, []);
 
-  // Creates a new setupIntent upon recaptcha verification
-  setupRecurringRecaptchaCallback = () => {
-    window.grecaptcha.render('robot_checkbox', {
-      sitekey: window.guardian.v2recaptchaPublicKey,
-      callback: (token) => {
-        trackComponentLoad('subscriptions-recaptcha-client-token-received');
-        this.recaptchaCompleted();
-        this.fetchPaymentIntent(token);
-      },
+  const handleStripeError = (errorData: any): void => {
+    setPaymentWaiting(false);
+
+    logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
+
+    if (errorData.type === 'validation_error') {
+      // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
+      // happen then display a generic error about card details
+      setCardErrors(prevData => [...prevData, { field: 'cardNumber', message: appropriateErrorMessage('payment_details_incorrect') }]);
+    } else {
+      // This is probably a Stripe or network problem
+      setCardErrors(prevData => [...prevData, { field: 'cardNumber', message: appropriateErrorMessage('payment_provider_unavailable') }]);
+    }
+  };
+
+  const handleCardSetup = (clientSecret: Option<string>): Promise<string> => {
+    const cardElement = elements.getElement(CardNumberElement);
+    return stripe.handleCardSetup(clientSecret, cardElement).then((result) => {
+      if (result.error) {
+        handleStripeError(result.error);
+        return Promise.resolve(result.error);
+      }
+      return result.setupIntent.payment_method;
+
     });
   };
 
-  setupRecurringHandlers(): void {
-    if (!window.guardian.recaptchaEnabled || isPostDeployUser()) {
-      this.fetchPaymentIntent('dummy');
-    } else if (window.grecaptcha && window.grecaptcha.render) {
-      this.setupRecurringRecaptchaCallback();
-    } else {
-      window.v2OnloadCallback = this.setupRecurringRecaptchaCallback;
-    }
-  }
-
-  fetchPaymentIntent(token) {
+  const fetchPaymentIntent = (token) => {
     fetchJson(
       routes.stripeSetupIntentRecaptcha,
       requestOptions(
-        { token, stripePublicKey: this.props.stripeKey },
+        { token, stripePublicKey: props.stripeKey },
         'same-origin',
         'POST',
-        this.props.csrf,
+        props.csrf,
       ),
     )
       .then((result) => {
         if (result.client_secret) {
-          this.setState({ setupIntentClientSecret: result.client_secret });
-
-          // If user has already clicked submit then handle card setup now
-          if (this.state.paymentWaiting) {
-            this.handleCardSetup(result.client_secret);
-          }
+          setSetupIntentClientSecret(result.client_secret);
         } else {
           throw new Error(`Missing client_secret field in response from ${routes.stripeSetupIntentRecaptcha}`);
         }
       }).catch((error) => {
         logException(`Error getting Stripe client secret for subscription: ${error}`);
 
-        this.setState({
-          cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }],
-        });
+        setCardErrors(prevData => [...prevData, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }]);
       });
-  }
+  };
 
-  recaptchaCompleted() {
-    this.setState({ recaptchaCompleted: true });
-    this.props.allErrors = this.props.allErrors.filter(error => error.field !== 'recaptcha');
-  }
-
-  handleCardErrors = () => {
-    // eslint-disable-next-line array-callback-return
-    ['cardNumber', 'cardExpiry', 'cardCvc'].map((field) => {
-      if (this.state[field].empty === true) {
-        this.setState({
-          [field]: {
-            ...this.state[field],
-            error: this.state[field].errorEmpty,
-          },
-        });
-      } else if (!this.state[field].complete) {
-        this.setState({
-          [field]: {
-            ...this.state[field],
-            error: this.state[field].errorIncomplete,
-          },
-        });
-      }
-      this.setState({ cardErrors: this.getAllCardErrors() });
+  // Creates a new setupIntent upon recaptcha verification
+  const setupRecurringRecaptchaCallback = () => {
+    window.grecaptcha.render('robot_checkbox', {
+      sitekey: window.guardian.v2recaptchaPublicKey,
+      callback: (token) => {
+        trackComponentLoad('subscriptions-recaptcha-client-token-received');
+        setRecaptchaCompleted(true);
+        setRecaptchaError(null);
+        fetchPaymentIntent(token);
+      },
     });
   };
 
-  handleChange = (event) => {
-    if (this.state[event.elementType].error) {
-      this.setState({
+  const setupRecurringHandlers = (): void => {
+    if (!window.guardian.recaptchaEnabled || isPostDeployUser()) {
+      fetchPaymentIntent('dummy');
+    } else if (window.grecaptcha && window.grecaptcha.render) {
+      setupRecurringRecaptchaCallback();
+    } else {
+      window.v2OnloadCallback = setupRecurringRecaptchaCallback;
+    }
+  };
+
+  const handleCardErrors = () => {
+    // eslint-disable-next-line array-callback-return
+    ['cardNumber', 'cardExpiry', 'cardCvc'].map((field) => {
+      if (cardFieldsData[field].empty === true) {
+        setCardFieldsData(prevData => ({
+          ...prevData,
+          [field]: {
+            ...prevData[field],
+            error: cardFieldsData[field].errorEmpty,
+          },
+        }));
+      } else if (!cardFieldsData[field].complete) {
+        setCardFieldsData(prevData => ({
+          ...prevData,
+          [field]: {
+            ...prevData[field],
+            error: prevData[field].errorIncomplete,
+          },
+        }));
+      }
+      setCardErrors(getAllCardErrors());
+    });
+  };
+
+  const handleChange = (event) => {
+    if (cardFieldsData[event.elementType].error) {
+      setCardFieldsData(prevData => ({
+        ...prevData,
         [event.elementType]: {
-          ...this.state[event.elementType],
+          ...prevData[event.elementType],
           error: '',
         },
-      });
+      }));
     } else {
-      this.setState({
+      setCardFieldsData(prevData => ({
+        ...prevData,
         [event.elementType]: {
-          ...this.state[event.elementType],
+          ...prevData[event.elementType],
           complete: event.complete,
           empty: event.empty,
         },
-      });
+      }));
     }
   };
 
-  handleStripeError(errorData: any): void {
-    this.setState({ paymentWaiting: false });
-
-    logException(`Error creating Payment Method: ${errorData}`);
-
-    if (errorData.type === 'validation_error') {
-      // This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
-      // happen then display a generic error about card details
-      this.setState({
-        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_details_incorrect') }],
-      });
-    } else {
-      // This is probably a Stripe or network problem
-      this.setState({
-        cardErrors: [...this.state.cardErrors, { field: 'cardNumber', message: appropriateErrorMessage('payment_provider_unavailable') }],
-      });
-    }
-  }
-
-  handleCardSetup(clientSecret: Option<string>): Promise<string> {
-    return this.props.stripe.handleCardSetup(clientSecret).then((result) => {
-      if (result.error) {
-        this.handleStripeError(result.error);
-        return Promise.resolve(result.error);
-      }
-      return result.setupIntent.payment_method;
-
-    });
-  }
-
-  checkRecaptcha() {
+  const checkRecaptcha = () => {
     if (window.guardian.recaptchaEnabled &&
       !isPostDeployUser() &&
-      !this.state.recaptchaCompleted &&
-      !this.props.allErrors.find(error => error.field === 'recaptcha')) {
-      this.props.allErrors.push({
+      !recaptchaCompleted &&
+      recaptchaError === null) {
+      setRecaptchaError({
         field: 'recaptcha',
         message: 'Please check the \'I am not a robot\' checkbox',
       });
     }
-  }
+  };
 
-  requestSCAPaymentMethod = (event) => {
+  const requestSCAPaymentMethod = (event) => {
     event.preventDefault();
-    this.props.validateForm();
-    this.handleCardErrors();
-    this.checkRecaptcha();
+    props.validateForm();
+    handleCardErrors();
+    checkRecaptcha();
 
-    if (this.props.stripe && this.props.allErrors.length === 0 && this.state.cardErrors.length === 0) {
-
-      this.handleCardSetup(this.state.setupIntentClientSecret).then((paymentMethod) => {
-        this.props.setStripePaymentMethod(paymentMethod);
-      }).then(() => this.props.submitForm());
+    if (stripe && props.allErrors.length === 0 && cardErrors.length === 0 && !recaptchaError) {
+      if (setupIntentClientSecret) {
+        handleCardSetup(setupIntentClientSecret)
+          .then(props.setStripePaymentMethod)
+          .then(() => props.submitForm());
+      } else if (recaptchaCompleted) {
+        // User has completed the form and recaptcha, but we're still waiting for the setupIntentClientSecret to
+        // come back. A hook will complete subscription once the setupIntentClientSecret is available.
+        setPaymentWaiting(true);
+      }
     }
   };
 
-  render() {
-    const { stripe } = this.props;
+  /**
+   * Hooks
+   */
+
+  useEffect(() => {
     if (stripe) {
-      stripe.elements();
+      setupRecurringHandlers();
+      loadRecaptchaV2();
     }
+  }, [stripe]);
 
-    return (
-      <span>
-        {stripe && (
-        <fieldset>
-          <CardNumberWithError
-            id="card-number"
-            error={this.state.cardNumber.error}
-            label="Card number"
-            style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-            onChange={e => this.handleChange(e)}
-          />
-          <CardExpiryWithError
-            id="card-expiry"
-            error={this.state.cardExpiry.error}
-            label="Expiry date"
-            style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-            onChange={e => this.handleChange(e)}
-          />
-          <CardCvcWithError
-            id="cvc"
-            error={this.state.cardCvc.error}
-            label="CVC"
-            style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-            onChange={e => this.handleChange(e)}
-          />
-          { window.guardian.recaptchaEnabled ?
-            <RecaptchaWithError
-              id="robot_checkbox"
-              label="Security check"
-              style={{ base: { ...baseStyles }, invalid: { ...invalidStyles } }}
-              error={firstError('recaptcha', this.props.allErrors)}
-            /> : null }
-          <div className="component-stripe-submit-button">
-            <Button id="qa-stripe-submit-button" onClick={event => this.requestSCAPaymentMethod(event)}>
-              {this.props.buttonText}
-            </Button>
-          </div>
-          {(this.state.cardErrors.length > 0 || this.props.allErrors.length > 0)
-          && <ErrorSummary errors={[...this.props.allErrors, ...this.state.cardErrors]} />}
-        </fieldset>
-      )}
-      </span>
-    );
-  }
-}
+  useEffect(() => {
+    if (paymentWaiting && setupIntentClientSecret) {
+      // User has already completed the form and clicked the button, so go ahead and complete the subscription
+      handleCardSetup(setupIntentClientSecret)
+        .then(props.setStripePaymentMethod)
+        .then(() => props.submitForm());
+    }
+  }, [setupIntentClientSecret]);
 
-export default injectStripe(StripeForm);
+  /**
+   * Rendering
+   */
+
+  const errors = [
+    ...props.allErrors,
+    ...cardErrors,
+    ...(recaptchaError ? [recaptchaError] : []),
+  ];
+
+  return (
+    <span>
+      {stripe && (
+      <fieldset>
+        <CardNumberWithError
+          id="card-number"
+          error={cardFieldsData.cardNumber.error}
+          label="Card number"
+          options={{
+            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } },
+          }}
+          onChange={e => handleChange(e)}
+        />
+        <CardExpiryWithError
+          id="card-expiry"
+          error={cardFieldsData.cardExpiry.error}
+          label="Expiry date"
+          options={{
+            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } },
+          }}
+          onChange={e => handleChange(e)}
+        />
+        <CardCvcWithError
+          id="cvc"
+          error={cardFieldsData.cardCvc.error}
+          label="CVC"
+          options={{
+            style: { base: { ...baseStyles }, invalid: { ...invalidStyles } },
+          }}
+          onChange={e => handleChange(e)}
+        />
+        { window.guardian.recaptchaEnabled ?
+          <RecaptchaWithError
+            id="robot_checkbox"
+            label="Security check"
+            error={recaptchaError && recaptchaError.message}
+          /> : null }
+        <div className="component-stripe-submit-button">
+          <Button id="qa-stripe-submit-button" onClick={event => requestSCAPaymentMethod(event)}>
+            {props.buttonText}
+          </Button>
+        </div>
+        { errors.length > 0 && <ErrorSummary errors={errors} /> }
+      </fieldset>
+    )}
+    </span>
+  );
+};
+
+export default StripeForm;

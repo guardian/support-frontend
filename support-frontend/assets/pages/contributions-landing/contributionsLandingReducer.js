@@ -75,7 +75,7 @@ export type StripeCardFormData = {
   setupIntentClientSecret: string | null,
   recurringRecaptchaVerified: boolean,
   // These callbacks must be initialised after the StripeCardForm component has been created
-  createPaymentMethod: ((email: string) => void) | null,
+  createPaymentMethod: ((clientSecret: string | null) => void) | null,
   handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null, // For single only
 }
 

@@ -93,7 +93,7 @@ export type Action =
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR', paymentError: ErrorReason, stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
-  | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (email: string) => void }
+  | { type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod: (clientSecret: string | null) => void }
   | { type: 'SET_HANDLE_STRIPE_3DS', handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult> }
   | { type: 'SET_STRIPE_CARD_FORM_COMPLETE', isComplete: boolean }
   | { type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET', setupIntentClientSecret: string }
@@ -302,7 +302,7 @@ const checkIfEmailHasPassword = (email: string) =>
 
 const setTickerGoalReached = (): Action => ({ type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: true });
 
-const setCreateStripePaymentMethod = (createStripePaymentMethod: (email: string) => void): Action =>
+const setCreateStripePaymentMethod = (createStripePaymentMethod: (clientSecret: string | null) => void): Action =>
   ({ type: 'SET_CREATE_STRIPE_PAYMENT_METHOD', createStripePaymentMethod });
 
 const setHandleStripe3DS = (handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>): Action =>

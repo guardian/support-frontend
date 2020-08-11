@@ -4,12 +4,15 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
-import { Elements, StripeProvider } from 'react-stripe-elements';
+// We import from preact/compat here rather than react because flow doesn't like it if the child component uses redux
+// $FlowIgnore - required for hooks
+import React, { useEffect, useState } from 'preact/compat';
+import { Elements } from '@stripe/react-stripe-js';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   getStripeKey,
   stripeAccountForContributionType,
+  type StripeAccount,
 } from 'helpers/stripe';
 import type {
   ContributionType,
@@ -21,6 +24,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import { setupStripe } from 'helpers/stripe';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
+import * as stripeJs from '@stripe/stripe-js';
 
 // ----- Types -----//
 
@@ -38,43 +42,55 @@ type PropTypes = {|
 
 // ----- Component ----- //
 
-class StripePaymentRequestButtonContainer extends React.Component<PropTypes, void> {
+const StripePaymentRequestButtonContainer = (props: PropTypes) => {
+  // Create separate Stripe objects for REGULAR and ONE_OFF
+  const [stripeObjects, setStripeObjects] = useState<{[StripeAccount]: stripeJs.Stripe | null}>({
+    REGULAR: null,
+    ONE_OFF: null,
+  });
 
-  componentDidMount(): void {
-    if (!this.props.stripeHasLoaded) { setupStripe(this.props.setStripeHasLoaded); }
-  }
+  const stripeAccount = stripeAccountForContributionType[props.contributionType];
+  const stripeKey = getStripeKey(
+    stripeAccount,
+    props.country,
+    props.isTestUser,
+  );
 
-  render() {
-    const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(this.props.country);
+  useEffect(() => {
+    if (!props.stripeHasLoaded) {
+      setupStripe(props.setStripeHasLoaded);
+    } else if (stripeObjects[stripeAccount] === null) {
 
-    if (showStripePaymentRequestButton && this.props.stripeHasLoaded) {
-      const stripeAccount = stripeAccountForContributionType[this.props.contributionType];
-      const apiKey = getStripeKey(stripeAccount, this.props.country, this.props.isTestUser);
-      const amount = getAmount(this.props.selectedAmounts, this.props.otherAmounts, this.props.contributionType);
-
-      /**
-       * The `key` attribute is necessary here because you cannot modify the apiKey on StripeProvider.
-       * Instead, we must create separate instances for ONE_OFF and REGULAR.
-       *
-       * This means that e.g. switching from monthly to one-off would cause it to create a new ONE_OFF StripeProvider
-       * with new children. However, switching back to monthly/annual would not then re-create the REGULAR instance.
-       */
-      return (
-        <div className="stripe-payment-request-button">
-          <StripeProvider apiKey={apiKey} key={stripeAccount}>
-            <Elements>
-              <StripePaymentRequestButton
-                stripeAccount={stripeAccount}
-                amount={amount}
-                stripeKey={apiKey}
-              />
-            </Elements>
-          </StripeProvider>
-        </div>
-      );
+      stripeJs.loadStripe(stripeKey).then(newStripe =>
+        setStripeObjects(prevData => ({
+          ...prevData,
+          [stripeAccount]: newStripe,
+        })));
     }
-    return null;
+  }, [props.stripeHasLoaded, props.contributionType]);
+
+  const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country);
+
+  if (showStripePaymentRequestButton && stripeObjects[stripeAccount]) {
+    const amount = getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType);
+
+    /**
+     * The `key` attribute is necessary here because you cannot update the stripe object on the Elements.
+     * Instead, we create separate instances for ONE_OFF and REGULAR
+     */
+    return (
+      <div className="stripe-payment-request-button" key={stripeAccount}>
+        <Elements stripe={stripeObjects[stripeAccount]}>
+          <StripePaymentRequestButton
+            stripeAccount={stripeAccount}
+            amount={amount}
+            stripeKey={stripeKey}
+          />
+        </Elements>
+      </div>
+    );
   }
-}
+  return null;
+};
 
 export default StripePaymentRequestButtonContainer;
