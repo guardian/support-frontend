@@ -20,7 +20,7 @@ type PropTypes = {
   paymentStartDate?: Option<string>,
 };
 
-const OrderSummary = (props: PropTypes) => {
+function OrderSummary(props: PropTypes) {
 
   const priceString =
     `You'll pay ${getPriceDescription(props.productPrice, props.billingPeriod)}`;
@@ -43,7 +43,7 @@ const OrderSummary = (props: PropTypes) => {
       </div>
     </aside>
   );
-};
+}
 
 OrderSummary.defaultProps = {
   changeSubscription: '',

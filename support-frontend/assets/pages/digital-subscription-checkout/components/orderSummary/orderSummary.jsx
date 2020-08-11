@@ -18,7 +18,7 @@ type PropTypes = {
   title: string,
 };
 
-const OrderSummary = (props: PropTypes) => {
+function OrderSummary(props: PropTypes) {
 
   const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
 
@@ -41,7 +41,7 @@ const OrderSummary = (props: PropTypes) => {
       </div>
     </aside>
   );
-};
+}
 
 OrderSummary.defaultProps = {
   changeSubscription: '',
