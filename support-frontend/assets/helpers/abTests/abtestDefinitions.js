@@ -7,8 +7,7 @@ import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
-// TODO: replace this with correct regex
-const allBarUkLandingPages = '/us/contribute(/.*)?$';
+const allBarUkLandingPages = '/((?!uk).)*/contribute(/.*)?$';
 const allLandingPages = '/??/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
