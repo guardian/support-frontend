@@ -27,7 +27,7 @@ const additionalDays = [
   }, // Saturday
 ];
 
-const monthText = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const monthText = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const milsInADay = 1000 * 60 * 60 * 24;
 
 const getFormattedStartDate = (startDate: Date) => {
