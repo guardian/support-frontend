@@ -7,7 +7,7 @@ import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { OptedIn, onConsentChangeEvent, type ThirdPartyTrackingConsent } from './thirdPartyTrackingConsent';
+import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
 // ----- Types ----- //
@@ -28,6 +28,16 @@ type GaEventData = {
   action: string,
   label: ?string,
 }
+
+const googleAnalyticsKey = 'googleAnalytics';
+const googleTagManagerKey = 'googleTagManager';
+
+const sourcePointVendorIds: {
+  [key: string]: string
+} = {
+  [googleAnalyticsKey]: '5e542b3a4cd8884eb41b5a72',
+  [googleTagManagerKey]: '5e952f6107d9d20c88e7c975',
+};
 
 const gaPropertyId = 'UA-51507017-5';
 
@@ -169,10 +179,10 @@ function getData(
     value,
     /**
      * getData is only executed via runWithConsentCheck when user has
-     * OptedIn to tracking, so we can hardcode thirdPartyTrackingConsent
-     * to OptedIn.
+     * Opted In to tracking, so we can hardcode thirdPartyTrackingConsent
+     * to "OptedIn".
      * */
-    thirdPartyTrackingConsent: OptedIn,
+    thirdPartyTrackingConsent: 'OptedIn',
     paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
     campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
     campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
@@ -264,12 +274,24 @@ function init(participations: Participations) {
     * The callback will receive the user's consent as the parameter
     * "thirdPartyTrackingConsent".
   */
-  onConsentChangeEvent((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
+  onConsentChangeEvent((thirdPartyTrackingConsent: boolean | {
+    [key: string]: boolean
+  }) => {
+    console.log('thirdPartyTrackingConsent --->', thirdPartyTrackingConsent);
     /**
       * Update userHasGrantedConsent value when
       * consent changes via the CMP library.
     */
-    userHasGrantedConsent = thirdPartyTrackingConsent === OptedIn;
+    if (typeof thirdPartyTrackingConsent === 'boolean') {
+      userHasGrantedConsent = thirdPartyTrackingConsent;
+    } else {
+      /**
+       * For now userHasGrantedConsent will be true only
+       * if user has consented to BOTH GoogleTagManager and GoogleAnalytics
+       */
+      userHasGrantedConsent =
+        thirdPartyTrackingConsent[googleAnalyticsKey] && thirdPartyTrackingConsent[googleTagManagerKey];
+    }
 
     if (userHasGrantedConsent) {
       if (!scriptAdded) {
@@ -287,7 +309,7 @@ function init(participations: Participations) {
         processQueues();
       }
     }
-  });
+  }, sourcePointVendorIds);
 
   pushToDataLayer('DataLayerReady', participations);
 }
