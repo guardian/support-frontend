@@ -7,6 +7,10 @@ import { daysTillNextDelivery, getHomeDeliveryDays } from '../homeDeliveryDays';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { canDeliverOnNextDeliveryDay } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { DeliveryDays } from 'helpers/subscriptionsForms/deliveryDays';
+import { getFormattedStartDate, getPaymentStartDate } from '../subsCardDays';
+import { Everyday, Sixday, Weekend, Sunday } from 'helpers/productPrice/productOptions';
+
+jest.mock('ophan', () => {});
 
 // ----- Tests ----- //
 const monday = 1551075752198; /* 2019-02-25 */
@@ -110,5 +114,22 @@ describe('deliveryDays', () => {
     });
   });
 
+  describe('getPaymentStartDate', () => {
+    it('Should return the correct payment start date', () => {
+      const today = 1596727469480;
+      const day = getFormattedStartDate(getPaymentStartDate(today, Everyday));
+      expect(day).toBe('17 August 2020');
+
+      const day1 = getFormattedStartDate(getPaymentStartDate(today, Sixday));
+      expect(day1).toBe('17 August 2020');
+
+      const day2 = getFormattedStartDate(getPaymentStartDate(today, Weekend));
+      expect(day2).toBe('22 August 2020');
+
+      const day3 = getFormattedStartDate(getPaymentStartDate(today, Sunday));
+      expect(day3).toBe('23 August 2020');
+    });
+
+  });
 
 });

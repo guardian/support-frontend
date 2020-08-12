@@ -8,7 +8,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { type Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit } from 'helpers/paymentMethods';
-import DirectDebitTerms from 'components/subscriptionCheckouts/directDebitTerms';
+import DirectDebitTerms from './directDebitTerms';
 
 const directDebitSection = css`
   display: block;
@@ -31,7 +31,7 @@ const borderTop = css`
   }
 `;
 
-export default function DigitalPaymentTerms(props: {
+export default function DirectDebitPaymentTerms(props: {
   paymentMethod: Option<PaymentMethod>,
 }) {
   return props.paymentMethod === DirectDebit

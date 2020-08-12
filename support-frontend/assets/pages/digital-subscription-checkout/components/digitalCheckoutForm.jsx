@@ -38,7 +38,7 @@ import {
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import DigitalPaymentTerms from './digitalPaymentTerms';
+import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
@@ -239,7 +239,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             errorHeading={submissionErrorHeading}
           />
           <EndSummaryMobile />
-          <DigitalPaymentTerms
+          <DirectDebitPaymentTerms
             paymentMethod={props.paymentMethod}
           />
         </Form>

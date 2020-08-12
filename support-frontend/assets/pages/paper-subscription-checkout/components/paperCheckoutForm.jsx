@@ -31,7 +31,7 @@ import {
   getShortDescription,
   getTitle,
 } from '../../paper-subscription-landing/helpers/products';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
@@ -50,7 +50,6 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
@@ -73,7 +72,13 @@ import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidati
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { type Option } from 'helpers/types/option';
-import Total from 'components/subscriptionCheckouts/total/total';
+import { Paper } from 'helpers/subscriptions';
+import OrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
+import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import EndSummaryMobile from 'pages/paper-subscription-checkout/components/endSummary/endSummaryMobile';
+import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
+import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 
 // ----- Types ----- //
 
@@ -97,6 +102,8 @@ type PropTypes = {|
   setupRecurringPayPalPayment: Function,
   amount: number,
   useDigitalVoucher: Option<boolean>,
+  productOption: ActivePaperProducts,
+  fulfilmentOption: FulfilmentOptions,
 |};
 
 // ----- Map State/Props ----- //
@@ -139,6 +146,17 @@ function mapDispatchToProps() {
   };
 }
 
+function getAndSetStartDateForSubsCard(productOption: ActivePaperProducts, setStartDateInState) {
+  const timeNow = Date.now();
+  const subsCardStartDate = getPaymentStartDate(timeNow, productOption);
+  setStartDateInState(formatMachineDate(subsCardStartDate));
+
+  return {
+    subsCardStartDate,
+    formattedStartDate: getFormattedStartDate(getPaymentStartDate(timeNow, productOption)),
+  };
+}
+
 // ----- Form Fields ----- //
 
 const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
@@ -159,39 +177,65 @@ function PaperCheckoutForm(props: PropTypes) {
   const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
+  const title = `${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`;
+  const description = getShortDescription(props.productOption);
+  const productPrice = getProductPrice(
+    props.productPrices,
+    props.fulfilmentOption,
+    props.productOption,
+  );
+  const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
+  const subsCardStartDates = isSubscriptionCard ?
+    getAndSetStartDateForSubsCard(props.productOption, props.setStartDate) :
+    {
+      subsCardStartDate: '',
+      formattedStartDate: '',
+    };
+
+  const subsCardOrderSummary = (<OrderSummary
+    image={
+      <GridImage
+        gridId="checkoutPackshotPaperGraunVoucher"
+        srcSizes={[696, 500]}
+        sizes="(max-width: 740px) 50vw, 696"
+        imgType="png"
+        altText=""
+      />}
+    title={title}
+    productPrice={productPrice}
+    billingPeriod="Monthly"
+    changeSubscription={routes.digitalSubscriptionLanding}
+    productType={Paper}
+    paymentStartDate={subsCardStartDates.formattedStartDate}
+  />);
+
+  const regularOrderSummary = (<Summary
+    image={
+      <GridImage
+        gridId="checkoutPackshotPaperGraunVoucher"
+        srcSizes={[696, 500]}
+        sizes="(max-width: 740px) 50vw, 696"
+        imgType="png"
+        altText=""
+      />
+    }
+    title={title}
+    description={description}
+    productPrice={productPrice}
+    dataList={[
+      {
+        title: 'Delivery method',
+        value: fulfilmentOptionName,
+      },
+    ]}
+    billingPeriod="Monthly"
+    changeSubscription={routes.paperSubscriptionProductChoices}
+    product={Paper}
+  />);
 
   return (
     <Content modifierClasses={['your-details']}>
-      <Layout aside={(
-        <Summary
-          image={
-            <GridImage
-              gridId="checkoutPackshotPaperGraunVoucher"
-              srcSizes={[696, 500]}
-              sizes="(max-width: 740px) 50vw, 696"
-              imgType="png"
-              altText=""
-            />
-          }
-          title={`${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`}
-          description={getShortDescription(props.productOption)}
-          productPrice={getProductPrice(
-            props.productPrices,
-            props.fulfilmentOption,
-            props.productOption,
-          )}
-          dataList={[
-            {
-              title: 'Delivery method',
-              value: fulfilmentOptionName,
-            },
-          ]}
-          billingPeriod="Monthly"
-          changeSubscription={routes.paperSubscriptionProductChoices}
-          product={props.product}
-        />
-      )}
-      >
+      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : regularOrderSummary}>
         <Form onSubmit={(ev) => {
           ev.preventDefault();
           props.submitForm();
@@ -267,14 +311,15 @@ function PaperCheckoutForm(props: PropTypes) {
               </FormSection>
               : null
           }
-          <FormSection title="When would you like your subscription to start?">
-            <Rows>
-              <FieldsetWithError
-                id="startDate"
-                error={firstError('startDate', props.formErrors)}
-                legend="When would you like your subscription to start?"
-              >
-                {days.map((day) => {
+          {!isSubscriptionCard ? (
+            <FormSection title="When would you like your subscription to start?">
+              <Rows>
+                <FieldsetWithError
+                  id="startDate"
+                  error={firstError('startDate', props.formErrors)}
+                  legend="When would you like your subscription to start?"
+                >
+                  {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
                     <RadioInput
@@ -286,18 +331,18 @@ function PaperCheckoutForm(props: PropTypes) {
                     />
                   );
                 })}
-              </FieldsetWithError>
-              <Text className="component-text__paddingTop">
-                <p>
+                </FieldsetWithError>
+                <Text className="component-text__paddingTop">
+                  <p>
                   We will take the first payment on the
-                  date you receive your {(props.fulfilmentOption === HomeDelivery || !props.useDigitalVoucher) && 'first'} {fulfilmentOptionDescriptor.toLowerCase()}.
-                </p>
-                <p>
+                  date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
+                  </p>
+                  <p>
                  Subscription start dates are automatically selected to be the earliest we can fulfil your order.
-                </p>
-              </Text>
-            </Rows>
-          </FormSection>
+                  </p>
+                </Text>
+              </Rows>
+            </FormSection>) : null}
           <PaymentMethodSelector
             country="GB"
             paymentMethod={props.paymentMethod}
@@ -349,11 +394,10 @@ function PaperCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <Total
-            price={props.amount}
-            currency={props.currencyId}
-          />
-          <PaymentTerms paymentMethod={props.paymentMethod} />
+          {isSubscriptionCard ? (
+            <EndSummaryMobile paymentStartDate={subsCardStartDates.formattedStartDate} />
+          ) : null}
+          <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>

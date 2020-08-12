@@ -41,5 +41,4 @@ function getDays(fulfilmentOption: FulfilmentOptions, productOption: ProductOpti
 const getStartDate = (fulfilmentOption: FulfilmentOptions, productOption: ProductOptions) =>
   formatMachineDate(getDays(fulfilmentOption, productOption)[0]) || null;
 
-
 export { getProductOption, getFulfilmentOption, getDays, getStartDate };

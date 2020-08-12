@@ -2,7 +2,7 @@
 
 import { type ProductPrice, getProductPrice } from 'helpers/productPrice/productPrices';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
+import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 
 const getPromotion = (productPrice: ProductPrice): string | null =>
   (productPrice.promotions && productPrice.promotions.length > 0
@@ -11,7 +11,7 @@ const getPromotion = (productPrice: ProductPrice): string | null =>
 
 function mapStateToProps(state: CheckoutState) {
   const {
-    billingPeriod, productPrices,
+    billingPeriod, productPrices, fulfilmentOption, productOption,
   } = state.page.checkout;
 
   const productPrice =
@@ -19,12 +19,12 @@ function mapStateToProps(state: CheckoutState) {
       productPrices,
       state.common.internationalisation.countryId,
       billingPeriod,
+      fulfilmentOption,
+      productOption,
     );
 
-  const digitalBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
-
   return {
-    priceDescription: getBillingDescription(productPrice, digitalBillingPeriod),
+    priceDescription: getPriceDescription(productPrice, billingPeriod),
     promotion: getPromotion(productPrice),
   };
 }
