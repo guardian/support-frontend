@@ -18,11 +18,16 @@ type ConsentState = {
 }
 
 const onConsentChangeEvent =
-  (onConsentChangeCallback: (thirdPartyTrackingConsent: boolean | {
+  (onConsentChangeCallback: (thirdPartyTrackingConsent: {
     [key: string]: boolean
-  }) => void, sourcePointVendorIds: ?{
+  }) => void, sourcePointVendorIds: {
     [key: string]: string
   }): Promise<void> => {
+    let consentGranted = Object.keys(sourcePointVendorIds).reduce((accumulator, vendorKey) => ({
+      ...accumulator,
+      [vendorKey]: false,
+    }), {});
+
     /**
      * Dynamically load @guardian/consent-management-platform
      * on condition we're not server side rendering (ssr) the page.
@@ -43,68 +48,55 @@ const onConsentChangeEvent =
         */
         try {
           onConsentChange((state: ConsentState) => {
-            let consentGranted: boolean | {
-              [key: string]: boolean
-            } = false;
-
             if (state.ccpa) {
-              consentGranted = !state.ccpa.doNotSell;
+              consentGranted = Object.keys(sourcePointVendorIds).reduce((accumulator, vendorKey) => ({
+                ...accumulator,
+                [vendorKey]: state.ccpa ? !state.ccpa.doNotSell : false,
+              }), {});
             } else if (state.tcfv2) {
-              if (
-                sourcePointVendorIds &&
-                state.tcfv2.vendorConsents
-              ) {
-                /**
-                 * Loop over sourcePointVendorIds and pull
-                 * vendor specific consent from state.
-                 */
-                consentGranted = Object.keys(sourcePointVendorIds).reduce((accumulator, vendorKey) => {
-                  if (sourcePointVendorIds) {
-                    const vendorId = sourcePointVendorIds[vendorKey];
+              /**
+               * Loop over sourcePointVendorIds and pull
+               * vendor specific consent from state.
+              */
+              consentGranted = Object.keys(sourcePointVendorIds).reduce((accumulator, vendorKey) => {
+                const vendorId = sourcePointVendorIds[vendorKey];
 
-                    if (
-                      state.tcfv2 &&
-                      state.tcfv2.vendorConsents &&
-                      state.tcfv2.vendorConsents[vendorId] !== undefined
-                    ) {
-                      return {
-                        ...accumulator,
-                        [vendorKey]: state.tcfv2.vendorConsents[vendorId],
-                      };
-                    }
-
-                    return {
-                      ...accumulator,
-                      [vendorKey]: state.tcfv2 ? Object.values(state.tcfv2.consents).every(Boolean) : false,
-                    };
-                  }
-
+                if (
+                  state.tcfv2 &&
+                  state.tcfv2.vendorConsents &&
+                  state.tcfv2.vendorConsents[vendorId] !== undefined
+                ) {
                   return {
                     ...accumulator,
+                    [vendorKey]: state.tcfv2.vendorConsents[vendorId],
                   };
-                }, {});
-              } else {
+                }
+
                 /**
-                 * If sourcePointVendorIds is undefined fallback
+                 * If vendorId not in state.tcfv2.vendorConsents fallback
                  * to all 10 purposes having to be true for consentGranted to be
                  * true
-                 */
-                consentGranted = Object.values(state.tcfv2.consents).every(Boolean);
-              }
+                */
+                return {
+                  ...accumulator,
+                  [vendorKey]: state.tcfv2 ? Object.values(state.tcfv2.consents).every(Boolean) : false,
+                };
+              }, {});
             }
 
             onConsentChangeCallback(consentGranted);
           });
         } catch (err) {
           logException(`CCPA: ${err}`);
-          // fallback to consentGranted false in case of an error
-          onConsentChangeCallback(false);
+          // fallback to default consentGranted of false for all vendors in case of an error
+          onConsentChangeCallback(consentGranted);
         }
       });
     }
 
-    // fallback to consentGranted false if server side rendering
-    onConsentChangeCallback(false);
+    // fallback to default consentGranted of false for all vendors if server side rendering
+    onConsentChangeCallback(consentGranted);
+
     // return Promise.resolve() for unit tests
     return Promise.resolve();
   };

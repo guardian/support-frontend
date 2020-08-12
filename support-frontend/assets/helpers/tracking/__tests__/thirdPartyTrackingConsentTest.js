@@ -36,8 +36,14 @@ describe('thirdPartyTrackingConsent', () => {
       throw new Error('fail');
     });
 
-    return onConsentChangeEvent(dummyCallback).then(() => {
-      expect(dummyCallback).toBeCalledWith(false);
+    return onConsentChangeEvent(dummyCallback, {
+      foo: 12345,
+      bar: 54321,
+    }).then(() => {
+      expect(dummyCallback).toBeCalledWith({
+        foo: false,
+        bar: false,
+      });
     });
   });
 
@@ -49,8 +55,14 @@ describe('thirdPartyTrackingConsent', () => {
         },
       }));
 
-      return onConsentChangeEvent(dummyCallback).then(() => {
-        expect(dummyCallback).toBeCalledWith(false);
+      return onConsentChangeEvent(dummyCallback, {
+        foo: 12345,
+        bar: 54321,
+      }).then(() => {
+        expect(dummyCallback).toBeCalledWith({
+          foo: false,
+          bar: false,
+        });
       });
     });
 
@@ -61,8 +73,14 @@ describe('thirdPartyTrackingConsent', () => {
         },
       }));
 
-      return onConsentChangeEvent(dummyCallback).then(() => {
-        expect(dummyCallback).toBeCalledWith(true);
+      return onConsentChangeEvent(dummyCallback, {
+        foo: 12345,
+        bar: 54321,
+      }).then(() => {
+        expect(dummyCallback).toBeCalledWith({
+          foo: true,
+          bar: true,
+        });
       });
     });
   });
@@ -142,57 +160,6 @@ describe('thirdPartyTrackingConsent', () => {
             foo: true,
             bar: false,
           });
-        });
-      });
-    });
-
-
-    describe('when NO sourcepointVendorIds provided', () => {
-      it('calls dummyCallback with false if all consents are false', () => {
-        onConsentChange.mockImplementation(callback => callback({
-          tcfv2: {
-            consents: {
-              0: false,
-              1: false,
-              2: false,
-            },
-          },
-        }));
-
-        return onConsentChangeEvent(dummyCallback).then(() => {
-          expect(dummyCallback).toBeCalledWith(false);
-        });
-      });
-
-      it('calls dummyCallback with false if some consents are false', () => {
-        onConsentChange.mockImplementation(callback => callback({
-          tcfv2: {
-            consents: {
-              0: true,
-              1: true,
-              2: false,
-            },
-          },
-        }));
-
-        return onConsentChangeEvent(dummyCallback).then(() => {
-          expect(dummyCallback).toBeCalledWith(false);
-        });
-      });
-
-      it('calls dummyCallback with true if all consents are true', () => {
-        onConsentChange.mockImplementation(callback => callback({
-          tcfv2: {
-            consents: {
-              0: true,
-              1: true,
-              2: true,
-            },
-          },
-        }));
-
-        return onConsentChangeEvent(dummyCallback).then(() => {
-          expect(dummyCallback).toBeCalledWith(true);
         });
       });
     });
