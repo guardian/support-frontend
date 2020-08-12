@@ -10,8 +10,6 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import { OptedIn, onConsentChangeEvent, type ThirdPartyTrackingConsent } from './thirdPartyTrackingConsent';
 import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
-let scriptAdded: boolean = false;
-
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent' | 'AppStoreCtaClick';
 
@@ -33,6 +31,8 @@ type GaEventData = {
 
 const gaPropertyId = 'UA-51507017-5';
 
+// Default scriptAdded to false
+let scriptAdded: boolean = false;
 // Default userHasGrantedConsent to false
 let userHasGrantedConsent: boolean = false;
 // We store tracking events in these queues when userHasGrantedConsent is false
