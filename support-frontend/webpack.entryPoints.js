@@ -15,7 +15,6 @@ module.exports = {
     subscriptionsRedemptionPage: 'pages/subscriptions-redemption/subscriptionsRedemption.jsx',
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
-    googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
     error404Page: 'pages/error/error404.jsx',
     error500Page: 'pages/error/error500.jsx',
     unsupportedBrowserStyles: 'stylesheets/fallback-pages/unsupportedBrowser.scss',
