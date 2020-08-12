@@ -198,10 +198,8 @@ function sendData(
    * else add to googleTagManagerDataQueue.
    */
   if (userHasGrantedConsent) {
-    console.log('*** sendData consent granted ***');
     pushDataToGTM();
   } else {
-    console.log('*** sendData consent not granted ***');
     googleTagManagerDataQueue.push(pushDataToGTM);
   }
 }
@@ -221,9 +219,6 @@ function pushToDataLayer(event: EventType, participations: Participations) {
 }
 
 function processQueues() {
-  console.log('processQueues googleAnalyticsEventQueue --->', googleAnalyticsEventQueue);
-  console.log('processQueues googleTagManagerDataQueue --->', googleTagManagerDataQueue);
-
   while (googleAnalyticsEventQueue.length > 0) {
     const queuedEvent = googleAnalyticsEventQueue.shift();
     queuedEvent();
@@ -317,10 +312,8 @@ function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
    * else add to googleAnalyticsEventQueue.
    */
   if (userHasGrantedConsent) {
-    console.log('*** gaEvent consent not granted ***');
     pushEventToGA();
   } else {
-    console.log('*** gaEvent consent not granted ***');
     googleAnalyticsEventQueue.push(pushEventToGA);
   }
 }
