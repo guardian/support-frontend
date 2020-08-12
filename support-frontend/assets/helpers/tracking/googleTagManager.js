@@ -7,8 +7,7 @@ import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { getTrackingConsent, OptedIn, OptedOut, onConsentChangeEvent, type ThirdPartyTrackingConsent } from './thirdPartyTrackingConsent';
-import { maybeTrack } from './doNotTrack';
+import { OptedIn, onConsentChangeEvent, type ThirdPartyTrackingConsent } from './thirdPartyTrackingConsent';
 import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
 let scriptAdded: boolean = false;
@@ -199,8 +198,10 @@ function sendData(
    * else add to googleTagManagerDataQueue.
    */
   if (userHasGrantedConsent) {
+    console.log('*** sendData consent granted ***');
     pushDataToGTM();
   } else {
+    console.log('*** sendData consent not granted ***');
     googleTagManagerDataQueue.push(pushDataToGTM);
   }
 }
@@ -219,56 +220,76 @@ function pushToDataLayer(event: EventType, participations: Participations) {
   }
 }
 
+function processQueues() {
+  console.log('processQueues googleAnalyticsEventQueue --->', googleAnalyticsEventQueue);
+  console.log('processQueues googleTagManagerDataQueue --->', googleTagManagerDataQueue);
+
+  while (googleAnalyticsEventQueue.length > 0) {
+    const queuedEvent = googleAnalyticsEventQueue.shift();
+    queuedEvent();
+  }
+
+  while (googleTagManagerDataQueue.length > 0) {
+    const queuedEvent = googleTagManagerDataQueue.shift();
+    queuedEvent();
+  }
+}
+
+function addTagManagerScript() {
+  window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
+
+  window.googleTagManagerDataLayer.push({
+    'gtm.start': new Date().getTime(),
+    event: 'gtm.js',
+  });
+
+  const firstScript = document.getElementsByTagName('script')[0];
+  const googleTagManagerScript = document.createElement('script');
+
+  googleTagManagerScript.defer = true;
+  googleTagManagerScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-W6GJ68L&l=googleTagManagerDataLayer';
+  /**
+   * After Google Tag Manager has loaded we can
+   * process pending events in googleAnalyticsEventQueue and
+   * googleTagManagerDataQueue if userHasGrantedConsent. This also
+   * clears the queues as it executes each function in them.
+  */
+  googleTagManagerScript.onload = processQueues;
+
+  if (firstScript && firstScript.parentNode) {
+    firstScript.parentNode.insertBefore(googleTagManagerScript, firstScript);
+    scriptAdded = true;
+  }
+}
+
 function init(participations: Participations) {
   /**
-   * The callback passed to onConsentChangeEvent is called
-   * each time consent changes. EG. if a user consents via the CMP.
-   */
+    * The callback passed to onConsentChangeEvent is called
+    * each time consent changes. EG. if a user consents via the CMP.
+    * The callback will receive the user's consent as the parameter
+    * "thirdPartyTrackingConsent".
+  */
   onConsentChangeEvent((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
     /**
-     * update userHasGrantedConsent value when
-     * consent changes via the CMP library.
-     */
+      * Update userHasGrantedConsent value when
+      * consent changes via the CMP library.
+    */
     userHasGrantedConsent = thirdPartyTrackingConsent === OptedIn;
 
-    /**
-     * Process pending events in googleAnalyticsEventQueue and
-     * googleTagManagerDataQueue if userHasGrantedConsent. This clears
-     * the queues as it executes each function in them.
-     */
     if (userHasGrantedConsent) {
       if (!scriptAdded) {
-        (function (w, d, s, l, i) {
-          w[l] = w[l] || [];
-          w[l].push({
-            'gtm.start':
-              new Date().getTime(),
-            event: 'gtm.js',
-          });
-          const f = d.getElementsByTagName(s)[0];
-          const j = d.createElement(s);
-          const dl = l != 'dataLayer' ? `&l=${l}` : '';
-          j.async = true;
-          j.src =
-            // $FlowFixMe
-            `https://www.googletagmanager.com/gtm.js?id=${i}${dl}`;
-          f.parentNode.insertBefore(j, f);
-          /**
-           * set scriptAdded to true so we don't try and add more than once
-           * if a user toggles there consent state.
-          */
-          scriptAdded = true;
-        }(window, document, 'script', 'googleTagManagerDataLayer', 'GTM-W6GJ68L'));
-      }
-
-      while (googleAnalyticsEventQueue.length > 0) {
-        const queuedEvent = googleAnalyticsEventQueue.shift();
-        queuedEvent();
-      }
-
-      while (googleTagManagerDataQueue.length > 0) {
-        const queuedEvent = googleTagManagerDataQueue.shift();
-        queuedEvent();
+        /**
+          * Add Google Tag Manager script to the page
+          * If it hasn't been added already.
+        */
+        addTagManagerScript();
+      } else {
+        /**
+          * If Google Tag Manager script has benn added already process pending events
+          * in googleAnalyticsEventQueue and googleTagManagerDataQueue. This also
+          * clears the queues as it executes each function in them.
+        */
+        processQueues();
       }
     }
   });
@@ -296,8 +317,10 @@ function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
    * else add to googleAnalyticsEventQueue.
    */
   if (userHasGrantedConsent) {
+    console.log('*** gaEvent consent not granted ***');
     pushEventToGA();
   } else {
+    console.log('*** gaEvent consent not granted ***');
     googleAnalyticsEventQueue.push(pushEventToGA);
   }
 }
