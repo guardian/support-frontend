@@ -127,7 +127,7 @@ function getParticipationsFromUrl(): ?Participations {
 
   if (hashUrl.startsWith('#ab-')) {
 
-    const [testId, variant] = hashUrl.substr(4).split('=');
+    const [testId, variant] = decodeURI(hashUrl.substr(4)).split('=');
     const test = {};
     test[testId] = variant;
 
