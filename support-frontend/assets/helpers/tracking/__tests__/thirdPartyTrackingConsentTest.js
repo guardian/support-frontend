@@ -5,7 +5,7 @@ import {
   onConsentChange as _onConsentChange,
 } from '@guardian/consent-management-platform';
 import {
-  getTrackingConsent,
+  onConsentChangeEvent,
   OptedIn,
   OptedOut,
 } from '../thirdPartyTrackingConsent';
@@ -23,6 +23,12 @@ jest.mock('helpers/logger', () => ({
 // ----- Tests ----- //
 
 describe('thirdPartyTrackingConsent', () => {
+  let dummyCallback;
+
+  beforeEach(() => {
+    dummyCallback = jest.fn();
+  });
+
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -32,8 +38,8 @@ describe('thirdPartyTrackingConsent', () => {
       throw new Error('fail');
     });
 
-    return getTrackingConsent().then((trackingConsent) => {
-      expect(trackingConsent).toBe(OptedOut);
+    return onConsentChangeEvent(dummyCallback).then(() => {
+      expect(dummyCallback).toBeCalledWith(OptedOut);
     });
   });
 
@@ -45,8 +51,8 @@ describe('thirdPartyTrackingConsent', () => {
         },
       }));
 
-      return getTrackingConsent().then((trackingConsent) => {
-        expect(trackingConsent).toBe(OptedOut);
+      return onConsentChangeEvent(dummyCallback).then(() => {
+        expect(dummyCallback).toBeCalledWith(OptedOut);
       });
     });
 
@@ -57,8 +63,8 @@ describe('thirdPartyTrackingConsent', () => {
         },
       }));
 
-      return getTrackingConsent().then((trackingConsent) => {
-        expect(trackingConsent).toBe(OptedIn);
+      return onConsentChangeEvent(dummyCallback).then(() => {
+        expect(dummyCallback).toBeCalledWith(OptedIn);
       });
     });
   });
@@ -75,8 +81,8 @@ describe('thirdPartyTrackingConsent', () => {
         },
       }));
 
-      return getTrackingConsent().then((trackingConsent) => {
-        expect(trackingConsent).toBe(OptedOut);
+      return onConsentChangeEvent(dummyCallback).then(() => {
+        expect(dummyCallback).toBeCalledWith(OptedOut);
       });
     });
 
@@ -91,8 +97,8 @@ describe('thirdPartyTrackingConsent', () => {
         },
       }));
 
-      return getTrackingConsent().then((trackingConsent) => {
-        expect(trackingConsent).toBe(OptedOut);
+      return onConsentChangeEvent(dummyCallback).then(() => {
+        expect(dummyCallback).toBeCalledWith(OptedOut);
       });
     });
 
@@ -107,8 +113,8 @@ describe('thirdPartyTrackingConsent', () => {
         },
       }));
 
-      return getTrackingConsent().then((trackingConsent) => {
-        expect(trackingConsent).toBe(OptedIn);
+      return onConsentChangeEvent(dummyCallback).then(() => {
+        expect(dummyCallback).toBeCalledWith(OptedIn);
       });
     });
   });

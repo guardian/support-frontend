@@ -7,8 +7,7 @@ import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { getTrackingConsent, type ThirdPartyTrackingConsent, OptedIn } from './thirdPartyTrackingConsent';
-import { maybeTrack } from './doNotTrack';
+import { OptedIn, onConsentChangeEvent, type ThirdPartyTrackingConsent } from './thirdPartyTrackingConsent';
 import { DirectDebit, type PaymentMethod, PayPal } from '../paymentMethods';
 
 // ----- Types ----- //
@@ -32,15 +31,15 @@ type GaEventData = {
 
 const gaPropertyId = 'UA-51507017-5';
 
-// ----- Functions ----- //
+// Default scriptAdded to false
+let scriptAdded: boolean = false;
+// Default userHasGrantedConsent to false
+let userHasGrantedConsent: boolean = false;
+// We store tracking events in these queues when userHasGrantedConsent is false
+const googleTagManagerDataQueue: Array<() => void> = [];
+const googleAnalyticsEventQueue: Array<() => void> = [];
 
-function runWithConsentCheck(trackingFunction: () => void): void {
-  getTrackingConsent().then((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
-    if (thirdPartyTrackingConsent === OptedIn) {
-      maybeTrack(trackingFunction);
-    }
-  });
-}
+// ----- Functions ----- //
 
 function getOrderId() {
   let value = storage.getSession('orderId');
@@ -188,10 +187,23 @@ function sendData(
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
-  runWithConsentCheck(() => {
-    const dataToPush = getData(event, participations, paymentRequestApiStatus);
+  const dataToPush = getData(event, participations, paymentRequestApiStatus);
+
+  const pushDataToGTM = () => {
     push(dataToPush);
-  });
+  };
+
+  /**
+   * If userHasGrantedConsent process event immediately,
+   * else add to googleTagManagerDataQueue.
+   */
+  if (userHasGrantedConsent) {
+    console.log('*** sendData consent granted ***');
+    pushDataToGTM();
+  } else {
+    console.log('*** sendData consent not granted ***');
+    googleTagManagerDataQueue.push(pushDataToGTM);
+  }
 }
 
 function pushToDataLayer(event: EventType, participations: Participations) {
@@ -208,7 +220,80 @@ function pushToDataLayer(event: EventType, participations: Participations) {
   }
 }
 
+function processQueues() {
+  console.log('processQueues googleAnalyticsEventQueue --->', googleAnalyticsEventQueue);
+  console.log('processQueues googleTagManagerDataQueue --->', googleTagManagerDataQueue);
+
+  while (googleAnalyticsEventQueue.length > 0) {
+    const queuedEvent = googleAnalyticsEventQueue.shift();
+    queuedEvent();
+  }
+
+  while (googleTagManagerDataQueue.length > 0) {
+    const queuedEvent = googleTagManagerDataQueue.shift();
+    queuedEvent();
+  }
+}
+
+function addTagManagerScript() {
+  window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
+
+  window.googleTagManagerDataLayer.push({
+    'gtm.start': new Date().getTime(),
+    event: 'gtm.js',
+  });
+
+  const firstScript = document.getElementsByTagName('script')[0];
+  const googleTagManagerScript = document.createElement('script');
+
+  googleTagManagerScript.defer = true;
+  googleTagManagerScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-W6GJ68L&l=googleTagManagerDataLayer';
+  /**
+   * After Google Tag Manager has loaded we can
+   * process pending events in googleAnalyticsEventQueue and
+   * googleTagManagerDataQueue if userHasGrantedConsent. This also
+   * clears the queues as it executes each function in them.
+  */
+  googleTagManagerScript.onload = processQueues;
+
+  if (firstScript && firstScript.parentNode) {
+    firstScript.parentNode.insertBefore(googleTagManagerScript, firstScript);
+    scriptAdded = true;
+  }
+}
+
 function init(participations: Participations) {
+  /**
+    * The callback passed to onConsentChangeEvent is called
+    * each time consent changes. EG. if a user consents via the CMP.
+    * The callback will receive the user's consent as the parameter
+    * "thirdPartyTrackingConsent".
+  */
+  onConsentChangeEvent((thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => {
+    /**
+      * Update userHasGrantedConsent value when
+      * consent changes via the CMP library.
+    */
+    userHasGrantedConsent = thirdPartyTrackingConsent === OptedIn;
+
+    if (userHasGrantedConsent) {
+      if (!scriptAdded) {
+        /**
+          * Add Google Tag Manager script to the page
+          * If it hasn't been added already.
+        */
+        addTagManagerScript();
+      } else {
+        /**
+          * If Google Tag Manager script has benn added already process pending events
+          * in googleAnalyticsEventQueue and googleTagManagerDataQueue. This also
+          * clears the queues as it executes each function in them.
+        */
+        processQueues();
+      }
+    }
+  });
+
   pushToDataLayer('DataLayerReady', participations);
 }
 
@@ -217,7 +302,7 @@ function successfulConversion(participations: Participations) {
 }
 
 function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
-  runWithConsentCheck(() => {
+  const pushEventToGA = () => {
     push({
       event: 'GAEvent',
       eventCategory: gaEventData.category,
@@ -225,7 +310,19 @@ function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
       eventLabel: gaEventData.label,
       ...additionalFields,
     });
-  });
+  };
+
+  /**
+   * If userHasGrantedConsent process event immediately,
+   * else add to googleAnalyticsEventQueue.
+   */
+  if (userHasGrantedConsent) {
+    console.log('*** gaEvent consent not granted ***');
+    pushEventToGA();
+  } else {
+    console.log('*** gaEvent consent not granted ***');
+    googleAnalyticsEventQueue.push(pushEventToGA);
+  }
 }
 
 function appStoreCtaClick() {

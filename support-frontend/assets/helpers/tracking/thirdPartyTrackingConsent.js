@@ -1,5 +1,4 @@
 // @flow
-
 import { logException } from 'helpers/logger';
 import { getGlobal } from 'helpers/globals';
 
@@ -23,38 +22,48 @@ type ConsentState = {
     };
 }
 
-const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => new Promise((resolve, reject) => {
-  /**
-   * Dynamically load @guardian/consent-management-platform
-   * on condition we're not server side rendering (ssr) the page.
-   * @guardian/consent-management-platform breaks ssr otherwise.
-   */
-  if (!getGlobal('ssr')) {
-    import('@guardian/consent-management-platform').then(({
-      onConsentChange,
-    }) => {
-      try {
-        onConsentChange((state: ConsentState) => {
-          const consentGranted = state.ccpa ?
-            !state.ccpa.doNotSell : state.tcfv2 && Object.values(state.tcfv2.consents).every(Boolean);
+const onConsentChangeEvent =
+  (onConsentChangeCallback: (thirdPartyTrackingConsent: ThirdPartyTrackingConsent) => void): Promise<void> => {
+    /**
+     * Dynamically load @guardian/consent-management-platform
+     * on condition we're not server side rendering (ssr) the page.
+     * @guardian/consent-management-platform breaks ssr otherwise.
+     */
+    if (!getGlobal('ssr')) {
+      // return async import for unit tests
+      return import('@guardian/consent-management-platform').then(({
+        onConsentChange,
+      }) => {
+        /**
+          * @guardian/consent-management-platform exports a function
+          * onConsentChange, this takes a callback, which is called
+          * each time consent changes. EG. if a user consents via the CMP.
+          * The callback will receive the user's consent as the parameter
+          * "state". We take process the state and call onConsentChangeCallback
+          * with the correct ThirdPartyTrackingConsent.
+        */
+        try {
+          onConsentChange((state: ConsentState) => {
+            const consentGranted = state.ccpa ?
+              !state.ccpa.doNotSell : state.tcfv2 && Object.values(state.tcfv2.consents).every(Boolean);
 
-          if (consentGranted) {
-            resolve(OptedIn);
-          } else {
-            resolve(OptedOut);
-          }
-        });
-      } catch (err) {
-        reject(err);
-      }
-    });
-  } else {
-    resolve(OptedOut);
-  }
-}).catch((err) => {
-  logException(`CCPA: ${err}`);
-  // fallback to OptedOut if there's an issue getting consentState
-  return Promise.resolve(OptedOut);
-});
+            if (consentGranted) {
+              onConsentChangeCallback(OptedIn);
+            } else {
+              onConsentChangeCallback(OptedOut);
+            }
+          });
+        } catch (err) {
+          logException(`CCPA: ${err}`);
+          onConsentChangeCallback(OptedOut);
+        }
+      });
+    }
 
-export { getTrackingConsent, OptedIn, OptedOut };
+    onConsentChangeCallback(OptedOut);
+
+    // return Promise.resolve() for unit tests
+    return Promise.resolve();
+  };
+
+export { onConsentChangeEvent, OptedIn, OptedOut };
