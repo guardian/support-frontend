@@ -274,24 +274,17 @@ function init(participations: Participations) {
     * The callback will receive the user's consent as the parameter
     * "thirdPartyTrackingConsent".
   */
-  onConsentChangeEvent((thirdPartyTrackingConsent: boolean | {
+  onConsentChangeEvent((thirdPartyTrackingConsent: {
     [key: string]: boolean
   }) => {
-    console.log('thirdPartyTrackingConsent --->', thirdPartyTrackingConsent);
     /**
       * Update userHasGrantedConsent value when
       * consent changes via the CMP library.
+      * For now userHasGrantedConsent will be true only
+      * if user has consented to BOTH GoogleTagManager and GoogleAnalytics
     */
-    if (typeof thirdPartyTrackingConsent === 'boolean') {
-      userHasGrantedConsent = thirdPartyTrackingConsent;
-    } else {
-      /**
-       * For now userHasGrantedConsent will be true only
-       * if user has consented to BOTH GoogleTagManager and GoogleAnalytics
-       */
-      userHasGrantedConsent =
+    userHasGrantedConsent =
         thirdPartyTrackingConsent[googleAnalyticsKey] && thirdPartyTrackingConsent[googleTagManagerKey];
-    }
 
     if (userHasGrantedConsent) {
       if (!scriptAdded) {
