@@ -15,7 +15,7 @@ type ContributionAmountLabelProps = {
 
 const container = css`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-top: ${space[3]}px;
   padding: ${space[1]}px ${space[3]}px;
   ${textSans.medium()}
@@ -30,12 +30,17 @@ const container = css`
 `;
 
 const svgContainer = css`
-  width: 22px;
-  height: 22px;
   display: flex;
   svg {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
     fill: ${brand[400]};
   }
+`;
+
+const textContainer = css`
+  margin-top: 2px;
 `;
 
 const ContributionAmountRecurringNotification = ({
@@ -55,7 +60,7 @@ const ContributionAmountRecurringNotification = ({
       <div css={svgContainer}>
         <SvgInfo />
       </div>
-      <div>
+      <div css={textContainer}>
         Every {frequency} you&apos;ll contribute {formattedAmount}.
       </div>
     </div>
