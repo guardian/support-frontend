@@ -20,13 +20,8 @@ class PostDeployTestUser(driverConfig: DriverConfig, bypassRecaptchaCookies: Opt
     driverConfig.addCookie(name = "_test_username", value = testUsername, domain = Some(Config.guardianDomain))
     driverConfig.addCookie(name = "_post_deploy_user", value = "true") // This enables the tests to use the mocked payment services
     driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
-    bypassRecaptchaCookies match {
-      case None => 
-      case Some(cookies) => {
-        cookies.foreach {cookie =>
-          driverConfig.addCookie(name = cookie.key, value = cookie.value)
-        }
-      }
+    bypassRecaptchaCookies.toList.flatten.foreach { cookie =>
+      driverConfig.addCookie(name = cookie.key, value = cookie.value)
     }
   }
 

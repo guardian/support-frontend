@@ -7,6 +7,8 @@ import io.circe.parser.parse
 
 import org.slf4j.LoggerFactory
 
+import cats.syntax.either._
+
 object IdapiTestUserRequest {
 
   private val client = new OkHttpClient()
@@ -22,9 +24,8 @@ object IdapiTestUserRequest {
   private def getResult(): Either[String, Json] = {
     val response: Response = client.newCall(request).execute()
     val body: String = response.body().string()
-    parse(body) match {
-      case Left(error) => Left(s"Could not parse $body as JSON from response with code ${response.code()}: $error")
-      case Right(json) => Right(json)
+    parse(body).leftMap { error =>
+      s"Could not parse $body as JSON from response with code ${response.code()}: $error"
     }
   }
 
