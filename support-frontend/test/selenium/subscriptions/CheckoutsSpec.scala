@@ -58,7 +58,10 @@ class CheckoutsSpec extends AnyFeatureSpec
   }
 
   def testCheckout(checkoutName: String, checkoutPage: CheckoutPage, productPage: ProductPage, paymentFunction: CheckoutPage => Unit): Unit = {
-    val testUser = new PostDeployTestUserSubs(driverConfig)
+    val testUser = IdapiBypassRecaptchaRequest.getCookies match {
+      case Left(error) => fail(error)
+      case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies))
+    }
 
     Given("that a user goes to the UK product page")
     goTo(productPage)

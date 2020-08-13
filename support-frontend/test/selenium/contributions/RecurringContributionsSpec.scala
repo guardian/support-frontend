@@ -27,7 +27,7 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
 
     Scenario("Monthly contribution sign-up with Stripe - GBP") {
 
-      val testUser = new PostDeployTestUserContribs(driverConfig)
+      val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("uk", testUser)
 
       val contributionThankYou = new ContributionThankYou("uk")
@@ -65,7 +65,7 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
 
     Scenario("Annual contribution sign-up with Stripe - USD") {
 
-      val testUser = new PostDeployTestUserContribs(driverConfig)
+      val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("us", testUser)
       val contributionThankYou = new ContributionThankYou("us")
 

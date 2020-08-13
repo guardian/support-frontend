@@ -41,7 +41,7 @@ class OneOffContributionsSpec extends AnyFeatureSpec
     Scenario("One-off contribution sign-up with Stripe - AUD") {
 
       val stripePayment = 22.55
-      val testUser = new PostDeployTestUserContribs(driverConfig)
+      val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("au", testUser)
       val contributionThankYou = new ContributionThankYou("au")
 
