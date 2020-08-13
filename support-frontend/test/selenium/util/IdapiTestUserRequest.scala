@@ -7,7 +7,7 @@ import io.circe.parser.parse
 
 import org.slf4j.LoggerFactory
 
-object IdapiBypassRecaptchaRequest {
+object IdapiTestUserRequest {
 
   private val client = new OkHttpClient()
 

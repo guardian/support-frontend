@@ -58,7 +58,7 @@ class ProductPagesSpec extends AnyFeatureSpec
 
   Feature("Digital Pack product page") {
     Scenario("Basic loading") {
-      val testUser = IdapiBypassRecaptchaRequest.getCookies match {
+      val testUser = IdapiTestUserRequest.getCookies match {
         case Left(error) => fail(error)
         case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies))
       }
