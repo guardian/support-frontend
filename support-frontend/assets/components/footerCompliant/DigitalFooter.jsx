@@ -40,7 +40,7 @@ const getPromoUrl = (
 const MaybeLink = (props: {href: Option<string>, text: string}) =>
   (props.href ? <a href={props.href}>{props.text}</a> : null);
 
-const TermsAndConditions = (props: PropTypes) => {
+function DigitalFooter(props: PropTypes) {
   const annualUrl = getPromoUrl(props.productPrices, props.country, Annual);
   const monthlyUrl = getPromoUrl(props.productPrices, props.country, Monthly);
   const multipleOffers: boolean = !!(annualUrl && monthlyUrl);
@@ -60,6 +60,6 @@ const TermsAndConditions = (props: PropTypes) => {
           &nbsp;offer{multipleOffers ? 's' : ''}.
       </p>
     </Footer>);
-};
+}
 
-export default connect(mapStateToProps)(TermsAndConditions);
+export default connect(mapStateToProps)(DigitalFooter);
