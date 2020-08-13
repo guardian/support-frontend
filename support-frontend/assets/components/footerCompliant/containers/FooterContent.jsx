@@ -6,19 +6,21 @@ import React, { type Node } from 'react';
 import { Content } from './Content';
 
 type PropTypes = {|
-  centred?: boolean,
-  border?: boolean,
-  paddingTop?: boolean,
+  appearance: {
+    centred?: boolean,
+    border?: boolean,
+    paddingTop?: boolean,
+  },
   children: Node
 |}
 
 function FooterContent({
-  centred, border, paddingTop, children,
+  appearance, children,
 }: PropTypes) {
   return (
     <div className="component-left-margin-section">
       <div className="component-left-margin-section__content">
-        <Content className="component-content__content" centred={centred} border={border} paddingTop={paddingTop}>
+        <Content className="component-content__content" appearance={appearance}>
           {children}
         </Content>
       </div>
@@ -27,9 +29,11 @@ function FooterContent({
 }
 
 FooterContent.defaultProps = {
-  centred: false,
-  border: false,
-  paddingTop: false,
+  appearance: {
+    centred: false,
+    border: false,
+    paddingTop: false,
+  },
 };
 
 export default FooterContent;

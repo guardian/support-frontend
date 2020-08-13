@@ -10,9 +10,11 @@ import { space } from '@guardian/src-foundations';
 
 type PropTypes = {|
   className: string,
-  centred?: boolean,
-  paddingTop?: boolean,
-  border?: boolean,
+  appearance: {
+    centred?: boolean,
+    paddingTop?: boolean,
+    border?: boolean,
+  },
   children: Node,
 |}
 
@@ -43,8 +45,9 @@ function getBorderStyling(centred = false) {
 }
 
 export function Content({
-  className, centred, border, paddingTop, children,
+  className, appearance, children,
 }: PropTypes) {
+  const { centred, border, paddingTop } = appearance;
   return (
     <div
       className={className}
@@ -60,7 +63,9 @@ export function Content({
 }
 
 Content.defaultProps = {
-  centred: false,
-  border: false,
-  paddingTop: false,
+  appearance: {
+    centred: false,
+    border: false,
+    paddingTop: false,
+  },
 };

@@ -40,7 +40,7 @@ function Footer({
     <footer css={componentFooter} role="contentinfo">
       <ThemeProvider theme={linkBrand}>
         {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
-        <FooterContent border paddingTop centred={centred}>
+        <FooterContent appearance={{ border: true, paddingTop: true, centred }}>
           <div>
             <Rows>
               {privacyPolicy &&
@@ -55,7 +55,7 @@ function Footer({
           </div>
         </FooterContent>
       }
-        <FooterContent border centred={centred}>
+        <FooterContent appearance={{ border: true, centred }}>
           <ul css={linksList}>
             <li css={link}>
               <Link subdued href={faqsLink}>FAQs</Link>
@@ -73,7 +73,7 @@ function Footer({
             }
           </ul>
         </FooterContent>
-        <FooterContent centred={centred}>
+        <FooterContent appearance={{ centred }}>
           <div css={backToTopLink}>
             <BackToTop />
           </div>
