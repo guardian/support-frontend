@@ -4,15 +4,13 @@ import sbtrelease.ReleaseStateTransformations._
 
 import scala.sys.process._
 
-val scalatest = "org.scalatest" %% "scalatest" % "3.2.0"// if the following PR is merged in v3.2.1, remove "-eU" parameter from options above - PR https://github.com/scalatest/scalatest/pull/1842
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.1"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
   javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
   resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"),
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
-  testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
   libraryDependencies += scalatest % "it",
 )
 
