@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
-import Footer from 'components/footer/footer';
+import Footer from 'components/footerCompliant/Footer';
 import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 
@@ -39,13 +39,19 @@ const store = pageInit(() => reducer(fulfilment), true);
 const state = store.getState();
 const { useDigitalVoucher } = state.common.settings;
 
+const paperSubsFooter = (
+  <Footer
+    faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+    termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
+  />);
+
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <Page
       header={<Header countryGroupId={GBPCountries} />}
-      footer={<Footer />}
+      footer={paperSubsFooter}
     >
       <CampaignHeader />
       {paperHasDeliveryEnabled() &&

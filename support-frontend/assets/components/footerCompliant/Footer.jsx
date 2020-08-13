@@ -21,6 +21,7 @@ import { BackToTop } from './BackToTop';
 // ----- Props ----- //
 
 type PropTypes = {|
+  centred: boolean,
   privacyPolicy: boolean,
   disclaimer: boolean,
   faqsLink: string,
@@ -33,18 +34,19 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function Footer({
-  disclaimer, privacyPolicy, children, countryGroupId, faqsLink, termsConditionsLink,
+  centred, disclaimer, privacyPolicy, children, countryGroupId, faqsLink, termsConditionsLink,
 }: PropTypes) {
   return (
     <footer css={componentFooter} role="contentinfo">
-      {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
-        <FooterContent border paddingTop>
+      <ThemeProvider theme={linkBrand}>
+        {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
+        <FooterContent appearance={{ border: true, paddingTop: true, centred }}>
           <div>
             <Rows>
               {privacyPolicy &&
               <div className="component-footer__privacy-policy-text">
-                To find out what personal data we collect and how we use it, please visit our
-                <a href={privacyLink}> Privacy Policy</a>.
+                To find out what personal data we collect and how we use it, please visit our{' '}
+                <a href={privacyLink}>Privacy Policy</a>.
               </div>
               }
               {children}
@@ -53,17 +55,16 @@ function Footer({
           </div>
         </FooterContent>
       }
-      <FooterContent border>
-        <ThemeProvider theme={linkBrand}>
+        <FooterContent appearance={{ border: true, centred }}>
           <ul css={linksList}>
             <li css={link}>
-              <Link subdued href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</Link>
+              <Link subdued href={faqsLink}>FAQs</Link>
             </li>
             <li css={link}>
               <Link subdued href="https://www.theguardian.com/help/contact-us">Contact us</Link>
             </li>
             <li css={link}>
-              <Link subdued href={faqsLink}>FAQs</Link>
+              <Link subdued href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</Link>
             </li>
             {termsConditionsLink &&
               <li css={link}>
@@ -71,14 +72,14 @@ function Footer({
               </li>
             }
           </ul>
-        </ThemeProvider>
-      </FooterContent>
-      <FooterContent paddingTop>
-        <div css={backToTopLink}>
-          <BackToTop />
-        </div>
-        <span css={copyright}>{copyrightNotice}</span>
-      </FooterContent>
+        </FooterContent>
+        <FooterContent appearance={{ centred }}>
+          <div css={backToTopLink}>
+            <BackToTop />
+          </div>
+          <span css={copyright}>{copyrightNotice}</span>
+        </FooterContent>
+      </ThemeProvider>
     </footer>
   );
 
@@ -88,6 +89,7 @@ function Footer({
 // ----- Default Props ----- //
 
 Footer.defaultProps = {
+  centred: false,
   privacyPolicy: false,
   disclaimer: false,
   faqsLink: 'https://www.theguardian.com/help',
