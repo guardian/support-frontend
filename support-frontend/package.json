@@ -95,6 +95,7 @@
     "marked": "^1.1.0",
     "ophan-tracker-js": "^1.3.17",
     "react-axe": "^3.3.0",
+    "react-date-picker": "^8.0.1",
     "react-redux": "^5.1.1",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.0",

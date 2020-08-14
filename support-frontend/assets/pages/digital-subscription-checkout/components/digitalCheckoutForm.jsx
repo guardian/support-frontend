@@ -4,7 +4,8 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
+import { type Dispatch, compose } from 'redux';
+import DatePicker from 'react-date-picker';
 
 import {
   firstError,
@@ -61,6 +62,9 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { routes } from 'helpers/routes';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
+import { TextArea } from 'components/forms/textArea';
+import { asControlled } from 'hocs/asControlled';
+import { withLabel } from 'hocs/withLabel';
 
 // ----- Types ----- //
 
@@ -134,6 +138,7 @@ function mapDispatchToProps() {
 }
 
 const Address = withStore(countries, 'billing', getBillingAddress);
+const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
 
 // ----- Component ----- //
 
@@ -187,6 +192,23 @@ function DigitalCheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection title="Address">
             <Address />
+          </FormSection>
+          <FormSection title="Personalise your gift">
+            <TextAreaWithLabel
+              id="gift-message"
+              label="Gift message"
+              maxlength={400}
+              value={props.giftMessage}
+              setValue={props.setGiftMessage}
+              optional
+            />
+          </FormSection>
+          <FormSection title="Gift start date">
+            <DatePicker
+              value={props.giftStartDate}
+              onChange={date => props.setDigitalGiftStartDate(date)}
+            />
+
           </FormSection>
           <PaymentMethodSelector
             country={props.country}
