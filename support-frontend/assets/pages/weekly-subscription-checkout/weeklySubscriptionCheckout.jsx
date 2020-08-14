@@ -10,10 +10,6 @@ import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
-// import CustomerService from 'components/customerService/customerService';
-// import SubscriptionTermsPrivacy
-//   from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-// import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import ThankYouContent from './components/thankYou';

@@ -10,10 +10,6 @@ import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
-// import CustomerService from 'components/customerService/customerService';
-// import SubscriptionTermsPrivacy
-//   from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-// import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouPendingContent from './thankYouPendingContent';
 import CheckoutForm
