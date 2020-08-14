@@ -7,10 +7,7 @@ import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import Footer from 'components/footer/footer';
-import CustomerService from 'components/customerService/customerService';
-import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+import Footer from 'components/footerCompliant/Footer';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from './components/stage';
 
@@ -40,15 +37,10 @@ const content = (
     <Page
       header={<Header display="guardianLogo" countryGroupId="GBPCountries" />}
       footer={
-        <Footer>
-          <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
-          <CustomerService
-            selectedCountryGroup={countryGroupId}
-            subscriptionProduct="DigitalPack"
-            paperFulfilmentOptions={null}
-          />
-          <SubscriptionFaq subscriptionProduct="DigitalPack" />
-        </Footer>}
+        <Footer
+          faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+          termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
+        />}
     >
       <CheckoutStage
         checkoutForm={<RedemptionForm />}

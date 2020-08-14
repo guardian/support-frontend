@@ -7,7 +7,7 @@ import { ThemeProvider } from 'emotion-theming';
 import { Link, linkBrand } from '@guardian/src-link';
 
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
-import { privacyLink, copyrightNotice } from 'helpers/legal';
+import { copyrightNotice } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
@@ -22,7 +22,6 @@ import { BackToTop } from './BackToTop';
 
 type PropTypes = {|
   centred: boolean,
-  privacyPolicy: boolean,
   disclaimer: boolean,
   faqsLink: string,
   termsConditionsLink: string,
@@ -34,21 +33,15 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function Footer({
-  centred, disclaimer, privacyPolicy, children, countryGroupId, faqsLink, termsConditionsLink,
+  centred, disclaimer, children, countryGroupId, faqsLink, termsConditionsLink,
 }: PropTypes) {
   return (
     <footer css={componentFooter} role="contentinfo">
       <ThemeProvider theme={linkBrand}>
-        {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
+        {(disclaimer || Children.count(children) > 0) &&
         <FooterContent appearance={{ border: true, paddingTop: true, centred }}>
           <div>
             <Rows>
-              {privacyPolicy &&
-              <div className="component-footer__privacy-policy-text">
-                To find out what personal data we collect and how we use it, please visit our{' '}
-                <a href={privacyLink}>Privacy Policy</a>.
-              </div>
-              }
               {children}
               {disclaimer && <ContribLegal countryGroupId={countryGroupId} />}
             </Rows>
@@ -90,7 +83,6 @@ function Footer({
 
 Footer.defaultProps = {
   centred: false,
-  privacyPolicy: false,
   disclaimer: false,
   faqsLink: 'https://www.theguardian.com/help',
   termsConditionsLink: '',

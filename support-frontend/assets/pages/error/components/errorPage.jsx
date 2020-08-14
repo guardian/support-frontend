@@ -6,7 +6,7 @@ import React from 'react';
 
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
-import Footer from 'components/footer/footer';
+import Footer from 'components/footerCompliant/Footer';
 import SquaresIntroduction from 'components/introduction/squaresIntroduction';
 import PageSection from 'components/pageSection/pageSection';
 import Rows from 'components/base/rows';

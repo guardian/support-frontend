@@ -7,7 +7,7 @@ import { init as pageInit } from 'helpers/page/page';
 import type { State } from './promotionTermsReducer';
 import reducer from './promotionTermsReducer';
 import Page from 'components/page/page';
-import Footer from 'components/footer/footer';
+import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import { Provider } from 'react-redux';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
@@ -34,4 +34,3 @@ const PromotionTermsPage = (props: State) => (
 );
 
 renderPage(PromotionTermsPage(store.getState()), 'promotion-terms');
-
