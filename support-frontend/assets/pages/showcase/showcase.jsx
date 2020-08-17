@@ -57,7 +57,7 @@ const state = store.getState();
 
 const content = (
   <Provider store={store}>
-    <Page header={<CountrySwitcherHeader />} footer={<Footer disclaimer />}>
+    <Page header={<CountrySwitcherHeader />} footer={<Footer faqsLink="" />}>
       <Hero countryGroupId={state.common.internationalisation.countryGroupId} />
       <WhySupportMatters />
       <BreakingHeadlines />
