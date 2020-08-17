@@ -20,10 +20,10 @@ type ConsentState = {
 const onConsentChangeEvent =
   (onConsentChangeCallback: (thirdPartyTrackingConsent: {
     [key: string]: boolean
-  }) => void, sourcePointVendorIds: {
+  }) => void, vendorIds: {
     [key: string]: string
   }): Promise<void> => {
-    let consentGranted = Object.keys(sourcePointVendorIds).reduce((accumulator, vendorKey) => ({
+    let consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => ({
       ...accumulator,
       [vendorKey]: false,
     }), {});
@@ -49,17 +49,17 @@ const onConsentChangeEvent =
         try {
           onConsentChange((state: ConsentState) => {
             if (state.ccpa) {
-              consentGranted = Object.keys(sourcePointVendorIds).reduce((accumulator, vendorKey) => ({
+              consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => ({
                 ...accumulator,
                 [vendorKey]: state.ccpa ? !state.ccpa.doNotSell : false,
               }), {});
             } else if (state.tcfv2) {
               /**
-               * Loop over sourcePointVendorIds and pull
+               * Loop over vendorIds and pull
                * vendor specific consent from state.
               */
-              consentGranted = Object.keys(sourcePointVendorIds).reduce((accumulator, vendorKey) => {
-                const vendorId = sourcePointVendorIds[vendorKey];
+              consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => {
+                const vendorId = vendorIds[vendorKey];
 
                 if (
                   state.tcfv2 &&

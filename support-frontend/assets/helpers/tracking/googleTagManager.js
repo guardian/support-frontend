@@ -32,7 +32,7 @@ type GaEventData = {
 const googleAnalyticsKey = 'googleAnalytics';
 const googleTagManagerKey = 'googleTagManager';
 
-const sourcePointVendorIds: {
+const vendorIds: {
   [key: string]: string
 } = {
   [googleAnalyticsKey]: '5e542b3a4cd8884eb41b5a72',
@@ -302,7 +302,7 @@ function init(participations: Participations) {
         processQueues();
       }
     }
-  }, sourcePointVendorIds);
+  }, vendorIds);
 
   pushToDataLayer('DataLayerReady', participations);
 }

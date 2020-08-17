@@ -86,7 +86,7 @@ describe('thirdPartyTrackingConsent', () => {
   });
 
   describe('TCFv2 mode', () => {
-    describe('when sourcepointVendorIds provided', () => {
+    describe('when vendorIds provided', () => {
       it('calls dummyCallback with correct state for each vendor present in vendorConsents', () => {
         onConsentChange.mockImplementation(callback => callback({
           tcfv2: {
