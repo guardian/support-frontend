@@ -150,6 +150,8 @@ const CardForm = (props: PropTypes) => {
   });
   const stripe = stripeJs.useStripe();
   const elements = stripeJs.useElements();
+  // Used to avoid calling grecaptcha.render twice when switching between monthly + annual
+  const [calledRecaptchaRender, setCalledRecaptchaRender] = useState<boolean>(false);
 
   /**
    * Handlers
@@ -184,6 +186,7 @@ const CardForm = (props: PropTypes) => {
 
   // Creates a new setupIntent upon recaptcha verification
   const setupRecurringRecaptchaCallback = () => {
+    setCalledRecaptchaRender(true);
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
@@ -320,7 +323,7 @@ const CardForm = (props: PropTypes) => {
     if (stripe && elements) {
       if (props.contributionType === 'ONE_OFF') {
         setupOneOffHandlers();
-      } else {
+      } else if (!calledRecaptchaRender) {
         setupRecurringHandlers();
       }
     }
