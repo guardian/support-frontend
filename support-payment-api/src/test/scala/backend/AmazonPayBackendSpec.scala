@@ -2,7 +2,7 @@ package backend
 
 import cats.data.EitherT
 import cats.implicits._
-import com.amazon.pay.response.ipn.model.{AuthorizationNotification, NotificationType, RefundNotification}
+import com.amazon.pay.response.ipn.model.{AuthorizationNotification, NotificationType}
 import com.amazon.pay.response.model._
 import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmOrderReferenceResponseData, ResponseData}
 import com.amazonaws.services.sqs.model.SendMessageResult
@@ -12,12 +12,13 @@ import javax.xml.datatype.DatatypeFactory
 import model._
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
 import model.amazonpay.{AmazonPayApiError, AmazonPayResponse, AmazonPaymentData}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.concurrent.IntegrationPatience
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import services._
 import util.FutureEitherValues
 
@@ -80,7 +81,8 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val getOrderRefRes: Either[AmazonPayApiError, OrderReferenceDetails] = Either.right(mockOrderRef)
   val mockConfirmRes: Either[AmazonPayApiError, ConfirmOrderReferenceResponseData] = Either.right(confirmOrderData)
   val mockAuthResponse:  Either[AmazonPayApiError, AuthorizationDetails] = Either.right(mockAuthorizationDetails)
-  val mockCloseResponse:  Either[AmazonPayApiError, CloseOrderReferenceResponseData] = Either.right(new CloseOrderReferenceResponseData(mockCloseResponseDetails, responseData))
+  val mockCloseResponse:  Either[AmazonPayApiError, CloseOrderReferenceResponseData] =
+    Either.right(new CloseOrderReferenceResponseData(mockCloseResponseDetails, responseData))
 
   val unitPaymentResponse: EitherT[Future, AmazonPayApiError, Unit] =
     EitherT.right(Future.successful(()))
@@ -125,7 +127,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
 
 }
 
-class AmazonPayBackendSpec extends WordSpec
+class AmazonPayBackendSpec extends AnyWordSpec
   with Matchers
   with FutureEitherValues
   with IntegrationPatience {
@@ -137,7 +139,7 @@ class AmazonPayBackendSpec extends WordSpec
   "Amazon Pay Backend" when {
     "refund" should {
       "convert refundId to OrderRef" in new AmazonPayBackendFixture {
-        amazonPayBackend.refundIdToOrderRef("S23-1234567-1234567-0000003") shouldBe "S23-1234567-1234567"
+        amazonPayBackend.refundIdToOrderRef("S23-1234567-1234567-0000003") mustBe "S23-1234567-1234567"
       }
 
 
@@ -147,7 +149,7 @@ class AmazonPayBackendSpec extends WordSpec
           when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
           when(mockOrderReferenceStatus.getState).thenReturn("Open")
           when(mockAmazonPayService.setOrderReference(paymentdata)).thenReturn(paymentServiceResponseError)
-          amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft shouldBe paymentError
+          amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft mustBe paymentError
         }
       }
     }
@@ -174,7 +176,7 @@ class AmazonPayBackendSpec extends WordSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponseError)
-        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight shouldBe AmazonPayResponse(None)
+        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe AmazonPayResponse(None)
       }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new AmazonPayBackendFixture {
@@ -196,7 +198,7 @@ class AmazonPayBackendSpec extends WordSpec
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
-        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight shouldBe AmazonPayResponse(expectedGuestToken)
+        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe AmazonPayResponse(expectedGuestToken)
       }
 
       "Not call setOrderRef if state is suspended" in new AmazonPayBackendFixture {
@@ -241,7 +243,8 @@ class AmazonPayBackendSpec extends WordSpec
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
-        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft shouldBe AmazonPayApiError.withReason(200, s"Declined with reason $expectedReason", expectedReason)
+        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft mustBe
+          AmazonPayApiError.withReason(200, s"Declined with reason $expectedReason", expectedReason)
 
       }
 
@@ -265,7 +268,8 @@ class AmazonPayBackendSpec extends WordSpec
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
-        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft shouldBe AmazonPayApiError.withReason(200, s"Declined with reason TransactionTimedOut", "TransactionTimedOut")
+        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft mustBe
+          AmazonPayApiError.withReason(200, s"Declined with reason TransactionTimedOut", "TransactionTimedOut")
         verify(mockAmazonPayService).cancelOrderReference(any())
       }
 
@@ -275,7 +279,7 @@ class AmazonPayBackendSpec extends WordSpec
           val mockNotification = mock[AuthorizationNotification]
           when(mockNotification.getNotificationType).thenReturn(NotificationType.AuthorizationNotification)
 
-          amazonPayBackend.handleNotification(mockNotification).futureRight shouldBe ()
+          amazonPayBackend.handleNotification(mockNotification).futureRight mustBe ()
         }
       }
     }

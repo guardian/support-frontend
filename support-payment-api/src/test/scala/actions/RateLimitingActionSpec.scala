@@ -1,8 +1,9 @@
 package actions
 
 import model.PaymentProvider
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -12,11 +13,11 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class RateLimitingActionSpec extends WordSpec with MustMatchers with Results with MockitoSugar {
+class RateLimitingActionSpec extends AnyWordSpec with Matchers with Results with MockitoSugar {
   val cc = stubControllerComponents()
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
-  def newAction(maxRequests: Int, interval: Duration) =
+  private def newAction(maxRequests: Int, interval: Duration) =
     new RateLimitingAction(
       cc.parsers,
       cc.executionContext,
@@ -36,7 +37,7 @@ class RateLimitingActionSpec extends WordSpec with MustMatchers with Results wit
       val action = newAction(10, 1.hour)
       val result = makeRequest(action)
 
-      status(result) mustEqual 200
+      status(result) mustBe 200
     }
 
     "Return 429 if rate limit exceeded" in {

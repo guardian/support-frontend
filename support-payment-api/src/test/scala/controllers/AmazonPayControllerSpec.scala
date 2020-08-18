@@ -8,10 +8,11 @@ import cats.instances.all._
 import com.amazon.pay.response.ipn.model.Notification
 import model.DefaultThreadPool
 import model.amazonpay.{AmazonPayApiError, AmazonPayResponse}
-import org.mockito.Matchers._
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play._
+import org.mockito.ArgumentMatchers.any
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import play.api._
 import play.api.http.Status
 import play.api.inject.DefaultApplicationLifecycle
@@ -53,7 +54,7 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
       mockNotificationFactory)(DefaultThreadPool(ec), List("https://cors.com"))
 
   val refundError: EitherT[Future, Throwable, Unit] =
-    EitherT.left(Future.successful(BackendError.AmazonPayApiError(AmazonPayApiError.fromString("Error response"))))
+    EitherT.left[Unit](Future.successful[Throwable](BackendError.AmazonPayApiError(AmazonPayApiError.fromString("Error response"))))
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
     mock[RequestBasedProvider[PaypalBackend]]
@@ -78,7 +79,7 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
 }
 
-class AmazonPayControllerSpec extends PlaySpec with Status {
+class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
 
   implicit val actorSystem = ActorSystem("rest-server")
   implicit val materializer: Materializer = ActorMaterializer()

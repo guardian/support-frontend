@@ -3,11 +3,13 @@ package model.email
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
+
 import io.circe.parser._
 import model.PaymentProvider
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class ContributorRowTest extends FlatSpec with Matchers {
+class ContributorRowTest extends AnyFlatSpec with Matchers {
   it should "serialize to json" in {
     val formattedDate = new SimpleDateFormat("d MMMM yyyy").format(Date.from(Instant.now))
     val Right(expected) = parse(
@@ -33,7 +35,11 @@ class ContributorRowTest extends FlatSpec with Matchers {
         |}""".stripMargin
     )
 
-    val Right(result) =  parse(ContributorRow("email@email.email", "GBP", 123l, PaymentProvider.Paypal, Some("Peter"), BigDecimal(5.1)).toJsonContributorRowSqsMessage)
-    result shouldBe expected
+    val Right(result) = parse(
+      ContributorRow(
+        "email@email.email", "GBP", 123L, PaymentProvider.Paypal, Some("Peter"),
+        BigDecimal(5.1)).toJsonContributorRowSqsMessage
+    )
+    result mustBe expected
   }
 }

@@ -3,16 +3,17 @@ package services
 import java.util.UUID
 
 import org.scalatest.time.{Millis, Span}
-import org.scalatest.{Ignore, Matchers, WordSpec}
 import util.FutureEitherValues
-
 import conf.{ConfigLoaderProvider, IdentityConfig}
 import model.TestThreadPoolsProvider
+import org.scalatest.Ignore
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import services.IdentityClient.{GuestRegistrationResponse, UserResponse}
 import services.IdentityClient.UserResponse.User
 
 @Ignore
-class IdentityClientSpec extends WordSpec
+class IdentityClientSpec extends AnyWordSpec
   with Matchers
   with ConfigLoaderProvider
   with TestThreadPoolsProvider
@@ -36,23 +37,23 @@ class IdentityClientSpec extends WordSpec
     "a request is made to lookup user details by email address" should {
 
       "return them if there is an existing account" in {
-        client.getUser(preExistingIdentityAccount.emailAddress).futureRight shouldEqual
+        client.getUser(preExistingIdentityAccount.emailAddress).futureRight mustEqual
           UserResponse(user = User(id = preExistingIdentityAccount.identityId))
       }
 
       "return a not found API error if there is not an existing account" in {
-        client.getUser(generateEmailAddressWithNoIdentityAccount()).futureLeft should beANotFoundApiError
+        client.getUser(generateEmailAddressWithNoIdentityAccount()).futureLeft must beANotFoundApiError
       }
     }
 
     "a request is made to create a guest account for an email address" should {
 
       "return an email in use API error if an account already exists" in {
-        client.createGuestAccount(preExistingIdentityAccount.emailAddress).futureLeft should beAnEmailInUseApiError
+        client.createGuestAccount(preExistingIdentityAccount.emailAddress).futureLeft must beAnEmailInUseApiError
       }
 
       "create one if an account doesn't exist" in {
-        client.createGuestAccount(generateEmailAddressWithNoIdentityAccount()).futureRight shouldBe
+        client.createGuestAccount(generateEmailAddressWithNoIdentityAccount()).futureRight mustBe
           a[GuestRegistrationResponse]
       }
     }
@@ -62,7 +63,7 @@ class IdentityClientSpec extends WordSpec
       "be able to be looked up by email address" in {
         val emailAddress = generateEmailAddressWithNoIdentityAccount()
         val identityId = client.createGuestAccount(emailAddress).futureRight.guestRegistrationRequest.userId
-        client.getUser(emailAddress).futureRight.user.id shouldEqual identityId
+        client.getUser(emailAddress).futureRight.user.id mustEqual identityId
       }
     }
   }
@@ -78,6 +79,6 @@ object IdentityClientSpec {
     identityId = 100000253L
   )
 
-  def generateEmailAddressWithNoIdentityAccount() =
+  def generateEmailAddressWithNoIdentityAccount(): String =
     s"${UUID.randomUUID}@payment-api.gu.com"
 }

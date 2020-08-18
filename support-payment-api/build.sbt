@@ -35,8 +35,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "org.playframework.anorm" %% "anorm" % "2.6.0",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % "test",
-  "org.mockito" % "mockito-all" % "1.10.19" % "test",
+  "org.scalatestplus" %% "mockito-3-4" % "3.2.1.0" % "test",
+  "org.mockito" % "mockito-core" % "3.4.0",
   "org.typelevel" %% "cats-core" % "0.9.0",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
   // This is required to force aws libraries to use the latest version of jackson

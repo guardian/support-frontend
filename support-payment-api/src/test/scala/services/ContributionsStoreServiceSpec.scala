@@ -5,12 +5,12 @@ import java.util.UUID
 
 import model.{Currency, PaymentProvider, PaymentStatus}
 import model.db.ContributionData
-import org.scalatest.{FlatSpec, Matchers}
 import services.ContributionsStoreQueueService.NewContributionData
-
 import io.circe.parser._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class ContributionsStoreServiceSpec extends FlatSpec with Matchers {
+class ContributionsStoreServiceSpec extends AnyFlatSpec with Matchers {
 
   val uuid = UUID.randomUUID()
 
@@ -36,7 +36,7 @@ class ContributionsStoreServiceSpec extends FlatSpec with Matchers {
       |    "paymentId" : "paymentId",
       |    "identityId" : 1,
       |    "email" : "test@test.com",
-      |    "created" : "2000-01-01T00:00:00",
+      |    "created" : "2000-01-01T00:00",
       |    "currency" : "GBP",
       |    "amount" : 20,
       |    "countryCode" : "GB",
@@ -47,6 +47,6 @@ class ContributionsStoreServiceSpec extends FlatSpec with Matchers {
   ).right.get
 
   it should "serialize ContributionData" in {
-    ContributionsStoreQueueService.Message.toJson(NewContributionData(contributionData)) should be(expectedJson)
+    ContributionsStoreQueueService.Message.toJson(NewContributionData(contributionData)) must be(expectedJson)
   }
 }

@@ -1,14 +1,15 @@
 package services
 
 import org.scalatest.time.{Millis, Span}
-import org.scalatest.{Ignore, Matchers, WordSpec}
 import util.FutureEitherValues
-
 import conf.{ConfigLoaderProvider, IdentityConfig}
 import model.TestThreadPoolsProvider
+import org.scalatest.Ignore
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 @Ignore
-class IdentityServiceSpec extends WordSpec
+class IdentityServiceSpec extends AnyWordSpec
   with Matchers
   with ConfigLoaderProvider
   with TestThreadPoolsProvider
@@ -32,12 +33,12 @@ class IdentityServiceSpec extends WordSpec
     "a request is made to lookup an identity id by email address" should {
 
       "return the identity id if the account exists" in {
-        service.getIdentityIdFromEmail(preExistingIdentityAccount.emailAddress).futureRight shouldEqual
+        service.getIdentityIdFromEmail(preExistingIdentityAccount.emailAddress).futureRight mustEqual
           Some(preExistingIdentityAccount.identityId)
       }
 
       "not return an identity id if the account doesn't exist" in {
-        service.getIdentityIdFromEmail(generateEmailAddressWithNoIdentityAccount()).futureRight shouldEqual
+        service.getIdentityIdFromEmail(generateEmailAddressWithNoIdentityAccount()).futureRight mustEqual
           Option.empty[Long]
       }
     }
@@ -46,7 +47,7 @@ class IdentityServiceSpec extends WordSpec
 
       "return an email in use API error if the account already exists" in {
         // https://groups.google.com/forum/?fromgroups#!msg/scalatest-users/4MemQiqLzao/_DsBTQWaqfwJ
-        service.createGuestAccount(preExistingIdentityAccount.emailAddress).futureLeft should beAnEmailInUseApiError
+        service.createGuestAccount(preExistingIdentityAccount.emailAddress).futureLeft must beAnEmailInUseApiError
       }
 
       "create an account and return the identity id if the account doesn't exist" in {
@@ -60,7 +61,7 @@ class IdentityServiceSpec extends WordSpec
     "a create or get request is made to get an identity by email address" should {
 
       "return the identity id if the account exists" in {
-        service.getOrCreateIdentityIdFromEmail(preExistingIdentityAccount.emailAddress).futureRight shouldEqual
+        service.getOrCreateIdentityIdFromEmail(preExistingIdentityAccount.emailAddress).futureRight mustEqual
           preExistingIdentityAccount.identityId
       }
 

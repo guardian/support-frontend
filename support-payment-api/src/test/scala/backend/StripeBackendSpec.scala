@@ -15,12 +15,13 @@ import model.paypal.PaypalApiError
 import model.stripe.StripePaymentIntentRequest.{ConfirmPaymentIntent, CreatePaymentIntent}
 import model.stripe.{StripeApiError, _}
 import model.{AcquisitionData, _}
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
 import org.scalatest.concurrent.IntegrationPatience
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.WSClient
 import services.SwitchState.On
 import services._
@@ -164,7 +165,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
 
 class StripeBackendSpec
-  extends WordSpec
+  extends AnyWordSpec
     with Matchers
     with FutureEitherValues
     with IntegrationPatience
@@ -180,7 +181,7 @@ with WSClientProvider {
 
       "return error if stripe service fails" in new StripeBackendFixture {
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponseError)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureLeft shouldBe stripeApiError
+        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureLeft mustBe stripeApiError
       }
 
       "return successful payment response even if identityService, " +
@@ -190,7 +191,7 @@ with WSClientProvider {
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight shouldBe StripeCreateChargeResponse.fromCharge(chargeMock, None)
+        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock, None)
       }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
@@ -200,7 +201,7 @@ with WSClientProvider {
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight shouldBe StripeCreateChargeResponse.fromCharge(chargeMock, Some("guest-token"))
+        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock, Some("guest-token"))
       }
     }
 
@@ -209,19 +210,19 @@ with WSClientProvider {
       "return error if refund hook is not valid" in new StripeBackendFixture {
         when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookFailure)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponseError)
-        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe backendError
+        stripeBackend.processRefundHook(stripeHook).futureLeft mustBe backendError
       }
 
       "return error if databaseService fails" in new StripeBackendFixture {
         when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponseError)
-        stripeBackend.processRefundHook(stripeHook).futureLeft shouldBe BackendError.fromDatabaseError(dbError)
+        stripeBackend.processRefundHook(stripeHook).futureLeft mustBe BackendError.fromDatabaseError(dbError)
       }
 
       "return success if refund hook is valid and databaseService succeeds" in new StripeBackendFixture {
         when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponse)
-        stripeBackend.processRefundHook(stripeHook).futureRight shouldBe(())
+        stripeBackend.processRefundHook(stripeHook).futureRight mustBe(())
       }
 
     }
@@ -235,7 +236,7 @@ with WSClientProvider {
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
         val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
-        result.futureLeft shouldBe BackendError.Database(dbError)
+        result.futureLeft mustBe BackendError.Database(dbError)
       }
 
       "return a combined error if Ophan and DB fail" in new StripeBackendFixture {
@@ -249,7 +250,7 @@ with WSClientProvider {
           BackendError.Database(dbError),
           BackendError.fromOphanError(List(AnalyticsServiceError.BuildError("Ophan error response"))))
         )
-        result.futureLeft shouldBe error
+        result.futureLeft mustBe error
       }
     }
 
@@ -266,7 +267,7 @@ with WSClientProvider {
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
         when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceSuccess)
 
-        stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight shouldBe
+        stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight mustBe
           StripePaymentIntentsApiResponse.Success(Some("guest-token"))
       }
 
@@ -283,7 +284,7 @@ with WSClientProvider {
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
         when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceSuccess)
 
-        stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight shouldBe
+        stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight mustBe
           StripePaymentIntentsApiResponse.RequiresAction("a_secret")
       }
     }
@@ -302,7 +303,7 @@ with WSClientProvider {
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
         when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceFail)
 
-        stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureLeft shouldBe
+        stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureLeft mustBe
           StripeApiError.fromString(s"Recaptcha failed", None)
       }
 
@@ -318,7 +319,7 @@ with WSClientProvider {
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
         when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceErrorResponse)
 
-        stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureLeft shouldBe
+        stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureLeft mustBe
           StripeApiError.fromString(s"Stripe error", None)
       }
     }
@@ -335,7 +336,7 @@ with WSClientProvider {
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
 
-        stripeBackend.confirmPaymentIntent(confirmPaymentIntent, clientBrowserInfo).futureRight shouldBe
+        stripeBackend.confirmPaymentIntent(confirmPaymentIntent, clientBrowserInfo).futureRight mustBe
           StripePaymentIntentsApiResponse.Success(Some("guest-token"))
       }
 
@@ -350,7 +351,7 @@ with WSClientProvider {
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
 
-        stripeBackend.confirmPaymentIntent(confirmPaymentIntent, clientBrowserInfo).futureLeft shouldBe
+        stripeBackend.confirmPaymentIntent(confirmPaymentIntent, clientBrowserInfo).futureLeft mustBe
           StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: canceled", None)
 
       }

@@ -9,10 +9,11 @@ import com.stripe.exception.{CardException, InvalidRequestException}
 import com.stripe.model.{Charge, Event}
 import model.DefaultThreadPool
 import model.stripe.{StripeApiError, StripeCreateChargeResponse}
-import org.mockito.Matchers._
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play._
+import org.mockito.ArgumentMatchers.any
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import play.api._
 import play.api.http.Status
 import play.api.inject.DefaultApplicationLifecycle
@@ -50,10 +51,14 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.right(Future.successful(stripeChargeSuccessMock))
 
   val stripeServiceInvalidRequestErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", "code", 500, new Throwable), None))
+    EitherT.leftT[Future, StripeCreateChargeResponse](
+      StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", "code", 500, new Throwable), None)
+    )
 
   val stripeServiceCardErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromStripeException(new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable), None))
+    EitherT.leftT[Future, StripeCreateChargeResponse](
+      StripeApiError.fromStripeException(new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable), None)
+    )
 
   val mockEvent: Event = mock[Event]
 
@@ -92,7 +97,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
 }
 
-class StripeControllerSpec extends PlaySpec with Status {
+class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
 
   implicit val actorSystem = ActorSystem("rest-server")
   implicit val materializer: Materializer = ActorMaterializer()

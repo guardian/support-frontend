@@ -8,10 +8,11 @@ import cats.implicits._
 import com.gocardless.errors.GoCardlessApiException
 import model.DefaultThreadPool
 import model.directdebit.CheckDirectDebitDetailsResponse
-import org.mockito.Matchers._
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play._
+import org.mockito.ArgumentMatchers.any
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import play.api._
 import play.api.http.Status
 import play.api.inject.DefaultApplicationLifecycle
@@ -79,7 +80,7 @@ class GoCardlessControllerFixture(implicit ec: ExecutionContext, context: Applic
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
 }
 
-class GoCardlessControllerSpec extends PlaySpec with Status {
+class GoCardlessControllerSpec extends AnyWordSpec with Status with Matchers {
 
   implicit val actorSystem = ActorSystem("rest-server")
   implicit val materializer: Materializer = ActorMaterializer()

@@ -12,14 +12,15 @@ import model.acquisition.PaypalAcquisition
 import com.paypal.api.payments.Payment
 import ophan.thrift.event.Acquisition
 import org.mockito.Mockito._
-import org.scalatest.{FlatSpec, Matchers}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AnalyticsServiceSpec extends FlatSpec with Matchers with MockitoSugar with ScalaFutures {
+class AnalyticsServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with ScalaFutures {
 
   behavior of "Ophan Service"
 
@@ -39,7 +40,7 @@ class AnalyticsServiceSpec extends FlatSpec with Matchers with MockitoSugar with
 
   it should "return an error if the config is invalid" in new OphanServiceTestFixture {
     val result = AnalyticsService.fromConfig(OphanConfig(null), KinesisConfig("test"))
-    result shouldBe an [Invalid[InitializationError]]
+    result mustBe an [Invalid[InitializationError]]
   }
 
   it should "return an error while submitting acquisition if the client throws an exception" in new OphanServiceTestFixture {
@@ -48,7 +49,7 @@ class AnalyticsServiceSpec extends FlatSpec with Matchers with MockitoSugar with
       EitherT.left(Future.successful(List(error)))
     when(defaultOphanService.submit(paypalAcquisition)).thenReturn(paymentServiceResponseError)
     whenReady(ophanService.submitAcquisition(paypalAcquisition).value){ result =>
-      result.isLeft shouldBe(true)
+      result.isLeft mustBe(true)
     }
   }
 
@@ -67,7 +68,7 @@ class AnalyticsServiceSpec extends FlatSpec with Matchers with MockitoSugar with
       EitherT.right(Future.successful(acquisitionSubmission))
     when(defaultOphanService.submit(paypalAcquisition)).thenReturn(paymentServiceResponse)
     whenReady(ophanService.submitAcquisition(paypalAcquisition).value){ result =>
-      result.isRight shouldBe(true)
+      result.isRight mustBe(true)
     }
   }
 }

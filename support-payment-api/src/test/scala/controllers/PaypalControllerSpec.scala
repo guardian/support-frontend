@@ -8,10 +8,11 @@ import cats.implicits._
 import com.paypal.api.payments.{Links, Payment}
 import model.DefaultThreadPool
 import model.paypal.{EnrichedPaypalPayment, PaypalApiError}
-import org.mockito.Matchers._
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play._
+import org.mockito.ArgumentMatchers.any
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import play.api._
 import play.api.http.Status
 import play.api.inject.DefaultApplicationLifecycle
@@ -88,7 +89,7 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
 }
 
-class PaypalControllerSpec extends PlaySpec with Status {
+class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
 
   implicit val actorSystem = ActorSystem("rest-server")
   implicit val materializer: Materializer = ActorMaterializer()

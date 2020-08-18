@@ -4,20 +4,22 @@ import com.amazonaws.services.sqs.AmazonSQSAsync
 import com.amazonaws.services.sqs.model.{GetQueueUrlResult, SendMessageResult}
 import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
 import model.{DefaultThreadPool, PaymentProvider}
-import org.scalatest.Matchers
-import org.mockito.Matchers._
 import org.mockito.Mockito._
-import org.scalatest.FlatSpec
+import org.mockito.ArgumentMatchers.any
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
 import java.util.concurrent.CompletableFuture
+
 import model.email.ContributorRow
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatestplus.mockito.MockitoSugar
+
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext
 
-class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with ScalaFutures {
+class EmailServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with ScalaFutures {
 
   behavior of "Email Service"
 
@@ -37,7 +39,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
     val payerInfo = mock[PayerInfo]
     val transaction = mock[com.paypal.api.payments.Transaction]
     val transactions = List(transaction).asJava
-    val identityId = 666l
+    val identityId = 666L
     when(transaction.getAmount).thenReturn(amount)
     when(amount.getCurrency).thenReturn("GBP")
     when(amount.getTotal).thenReturn("2")
@@ -53,9 +55,11 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    val emailResult = emailService.sendThankYouEmail(ContributorRow("email@email.com", "GBP", 1l, PaymentProvider.Paypal, None, BigDecimal(2)))
+    val emailResult = emailService.sendThankYouEmail(
+      ContributorRow("email@email.com", "GBP", 1L, PaymentProvider.Paypal, None, BigDecimal(2))
+    )
     whenReady(emailResult.value) { result =>
-      result shouldBe Right(new SendMessageResult)
+      result mustBe Right(new SendMessageResult)
     }
   }
 
@@ -66,7 +70,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
     val payerInfo = mock[PayerInfo]
     val transaction = mock[com.paypal.api.payments.Transaction]
     val transactions = List(transaction).asJava
-    val identityId = 666l
+    val identityId = 666L
     when(transaction.getAmount).thenReturn(amount)
     when(amount.getCurrency).thenReturn("GBP")
     when(amount.getTotal).thenReturn("2")
@@ -85,11 +89,11 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    whenReady(emailService.sendThankYouEmail(ContributorRow("email@email.com", "GBP", 1l, PaymentProvider.Paypal, None, BigDecimal(2))).value) { result =>
+    whenReady(emailService.sendThankYouEmail(ContributorRow("email@email.com", "GBP", 1L, PaymentProvider.Paypal, None, BigDecimal(2))).value) { result =>
       result.fold(
         error => {
           // TODO: understand how this java.lang.Exception bit gets added
-          error.getMessage shouldBe s"java.lang.Exception: $errorString"
+          error.getMessage mustBe s"java.lang.Exception: $errorString"
         },
         success => fail
       )

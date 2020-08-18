@@ -2,9 +2,12 @@ package model.paypal
 
 import java.util.UUID
 
-import org.scalatest.{EitherValues, Matchers, WordSpec}
+import org.scalatest.EitherValues
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class PaypalRefundWebHookBodySpec extends WordSpec with Matchers with EitherValues {
+
+class PaypalRefundWebHookBodySpec extends AnyWordSpec with Matchers with EitherValues {
 
   def compressEvent(event: String): String =
     io.circe.parser.parse(event).fold(_ => "something went wrong! unable to compress event!", _.noSpaces)
@@ -80,8 +83,8 @@ class PaypalRefundWebHookBodySpec extends WordSpec with Matchers with EitherValu
 
         val body = io.circe.parser.decode[PaypalRefundWebHookBody](event).right.value
 
-        body.parentPaymentId shouldEqual paymentId
-        body.rawBody shouldEqual compressEvent(event)
+        body.parentPaymentId mustEqual paymentId
+        body.rawBody mustEqual compressEvent(event)
       }
     }
 
@@ -94,8 +97,8 @@ class PaypalRefundWebHookBodySpec extends WordSpec with Matchers with EitherValu
 
         val body = io.circe.parser.decode[PaypalRefundWebHookBody](event).right.value
 
-        body.parentPaymentId shouldEqual paymentId
-        body.rawBody shouldEqual compressEvent(event)
+        body.parentPaymentId mustEqual paymentId
+        body.rawBody mustEqual compressEvent(event)
       }
     }
 
@@ -108,7 +111,7 @@ class PaypalRefundWebHookBodySpec extends WordSpec with Matchers with EitherValu
 
         val body = io.circe.parser.decode[PaypalRefundWebHookBody](event).left.value
 
-        body.getMessage shouldEqual
+        body.getMessage mustEqual
           "event type PAYMENT.SALE.COMPLETED is not a valid refund event type: DownField(event_type)"
       }
     }
