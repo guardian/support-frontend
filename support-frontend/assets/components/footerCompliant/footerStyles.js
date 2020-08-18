@@ -19,6 +19,7 @@ export const componentFooter = css`
   /* TODO: Check if we can remove this; depends on styles applied to the legal text passed in
     Preferably switch to the Link component in Source for all links- current display property means we can't use it as of 2.0 */
   a {
+    font-size: inherit;
     color: ${brandText.anchorPrimary};
     :hover {
       text-decoration: underline;
@@ -30,7 +31,7 @@ export const componentFooter = css`
 export const copyright = css`
   font-size: ${textSans.xsmall()};
   ${until.tablet} {
-    padding-top: ${space[5]}px;
+    padding-top: 28px;
   }
 `;
 
