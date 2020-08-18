@@ -35,7 +35,10 @@ const PromotionTermsPage = (props: State) => (
   <Provider store={store}>
     <Page
       header={<Header countryGroupId={detect()} />}
-      footer={<Footer termsConditionsLink={getTermsConditionsLink(props.page.promotionTerms)} />}
+      footer={<Footer
+        faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+        termsConditionsLink={getTermsConditionsLink(props.page.promotionTerms)}
+      />}
     >
       <PromoDetails {...props.page.promotionTerms} />
       <LegalTerms {...props.page} />

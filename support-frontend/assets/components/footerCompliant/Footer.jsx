@@ -79,7 +79,7 @@ function Footer({
 
 Footer.defaultProps = {
   centred: false,
-  faqsLink: 'https://www.theguardian.com/help',
+  faqsLink: '',
   termsConditionsLink: '',
   children: [],
 };
