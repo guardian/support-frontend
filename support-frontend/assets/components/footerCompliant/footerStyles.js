@@ -48,6 +48,10 @@ export const linksList = css`
     display: flex;
     grid-column-gap: 0;
   }
+
+  a {
+    line-height: 19px;
+  }
 `;
 
 export const link = css`
