@@ -30,7 +30,6 @@ libraryDependencies ++= Seq(
   "com.github.mpilquist" %% "simulacrum" % "0.11.0",
   "com.stripe" % "stripe-java" % stripeVersion,
   "com.gocardless" % "gocardless-pro" % "2.8.0",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
@@ -61,25 +60,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
 )
 
-lazy val TeamCityTest = config("teamcity").extend(Test)
-
-enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging, BuildInfoPlugin, GitVersioning)
-
-lazy val root = (project in file("."))
-  .configs(TeamCityTest)
-  .settings(inConfig(TeamCityTest)(Defaults.testTasks))
-  // Allows us to not run tests which require membership credentials in TeamCity - teamcity:test
-  // Stop gap until we decide how to handle integration tests.
-  .settings(
-    testOptions in TeamCityTest += Tests.Argument("-l", "tags.RequiresMembershipCredentials"),
-    buildInfoKeys := Seq[BuildInfoKey](
-      name,
-      BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER"))
-        .getOrElse(git.gitHeadCommit.value.getOrElse("Unknown Head Commit")))
-    ),
-    buildInfoPackage := "app",
-    buildInfoOptions += BuildInfoOption.ToMap
-  )
+enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging, BuildInfoPlugin)
 
 resolvers += Resolver.bintrayRepo("guardian", "ophan")
 resolvers += Resolver.sonatypeRepo("releases")

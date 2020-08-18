@@ -85,6 +85,7 @@ lazy val root = (project in file("."))
     `it-test-runner`,
     `module-aws`,
     `module-rest`,
+    `support-payment-api`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -118,6 +119,16 @@ lazy val `support-workers` = (project in file("support-workers"))
   ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`)
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`)
 
+lazy val `support-payment-api` = (project in file("support-payment-api"))
+  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .settings(
+    buildInfoKeys := BuildInfoSettings.buildInfoKeys,
+    buildInfoPackage := "app",
+    buildInfoOptions += BuildInfoOption.ToMap,
+    libraryDependencies ++= commonDependencies
+  )
+//  ).dependsOn(`support-models` % "test->test;it->test;compile->compile")
+//  .aggregate(`support-models`)
 
 lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)
