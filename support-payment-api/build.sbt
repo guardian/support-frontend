@@ -72,6 +72,6 @@ maintainer := "Reader Revenue <reader.revenue.dev@theguardian.com>"
 
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffManifestProjectName := "support:payment-api"
+riffRaffManifestProjectName := "support:payment-api-mono"
 riffRaffPackageType := (packageBin in Debian).value
 riffRaffArtifactResources += (file("src/main/resources/cloud-formation.yaml"), "cfn/cloud-formation.yaml")
