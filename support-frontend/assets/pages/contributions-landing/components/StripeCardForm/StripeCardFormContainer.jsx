@@ -60,13 +60,17 @@ const StripeCardFormContainer = (props: PropTypes) => {
   if (props.paymentMethod === Stripe) {
     if (stripeObjects[stripeAccount]) {
 
+      // `options` must be set even if it's empty, otherwise we get 'Unsupported prop change on Elements' warnings
+      // in the console
+      const elementsOptions = {};
+
       /**
        * The `key` attribute is necessary here because you cannot update the stripe object on the Elements.
        * Instead, we create separate instances for ONE_OFF and REGULAR
        */
       return (
         <div className="stripe-card-element-container" key={stripeAccount}>
-          <Elements stripe={stripeObjects[stripeAccount]}>
+          <Elements stripe={stripeObjects[stripeAccount]} options={elementsOptions}>
             <StripeCardForm stripeKey={stripeKey} />
           </Elements>
         </div>
