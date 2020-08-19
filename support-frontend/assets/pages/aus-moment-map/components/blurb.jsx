@@ -5,15 +5,18 @@
 import * as React from 'preact/compat';
 import { SocialLinks } from 'pages/aus-moment-map/components/socialLinks';
 
+const enableSupporterCount = false;
 
 const useSupportersCount = () => {
   const [supportersCount, setSupportersCount] = React.useState(0);
   const supportersCountEndpoint = '/supporters-ticker.json';
 
   React.useEffect(() => {
-    fetch(supportersCountEndpoint)
-      .then(response => response.json())
-      .then(data => setSupportersCount(data.total));
+    if (enableSupporterCount) {
+      fetch(supportersCountEndpoint)
+        .then(response => response.json())
+        .then(data => setSupportersCount(data.total));
+    }
   }, []);
 
   return supportersCount;
@@ -37,8 +40,12 @@ export const Blurb = (props: PropTypes) => {
             their reasons with us – and here is a selection. You can become a supporter right now and add to the
             conversation.
           </p>
-          <p className="supporters-total">{supportersCount.toLocaleString()}</p>
-          <p className="supporters-total-caption">Total supporters in Australia</p>
+          {enableSupporterCount &&
+            <>
+              <p className="supporters-total">{supportersCount.toLocaleString()}</p>
+              <p className="supporters-total-caption">Total supporters in Australia</p>
+            </>
+          }
         </div>}
       </div>
       <SocialLinks />
