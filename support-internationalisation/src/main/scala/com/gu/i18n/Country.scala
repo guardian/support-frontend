@@ -106,7 +106,7 @@ object Country {
       "WA" -> "Western Australia",
       "QLD" -> "Queensland",
       "ACT" -> "Australian Capital Territory",
-      "NT" -> "Northern Territory",
+      "NT" -> "Northern Territory"
     ).toMap
   )
 
