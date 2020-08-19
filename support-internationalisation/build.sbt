@@ -1,6 +1,7 @@
 import sbtrelease.ReleaseStateTransformations._
 
 name := "support-internationalisation"
+organization := "com.gu"
 
 crossScalaVersions := Seq("2.11.8", "2.12.7", "2.13.3")
 
