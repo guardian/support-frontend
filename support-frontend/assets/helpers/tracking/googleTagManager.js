@@ -289,6 +289,11 @@ function init(participations: Participations) {
     if (userHasGrantedConsent) {
       if (!scriptAdded) {
         /**
+         * Instruction for Google Analytics
+         * to leverage the TCFv2 framework
+        */
+        window.gtag_enable_tcf_support = true;
+        /**
           * Add Google Tag Manager script to the page
           * If it hasn't been added already.
         */
