@@ -40,7 +40,7 @@ export const linksList = css`
   list-style: none;
   display: grid;
   grid-column-gap: ${space[5]}px;
-  grid-template: repeat(2, 1fr) / repeat(2, 1fr);
+  grid-template: repeat(2, auto) / repeat(2, 1fr);
   grid-auto-flow: column;
   padding-bottom: ${space[1]}px;
 
@@ -48,13 +48,10 @@ export const linksList = css`
     display: flex;
     grid-column-gap: 0;
   }
-
-  a {
-    line-height: 19px;
-  }
 `;
 
 export const link = css`
+  line-height: 19px;
   padding: ${space[2]}px ${space[1]}px;
 
   ${until.tablet} {
@@ -63,6 +60,14 @@ export const link = css`
     &:nth-of-type(-n+2) {
       padding-right: ${space[5]}px;
       border-right: 1px solid ${brand[600]};
+    }
+
+    &:nth-of-type(odd) {
+      padding-bottom: 0;
+    }
+
+    &:nth-of-type(even) {
+      padding-bottom: ${space[4]}px;
     }
   }
 
