@@ -9,11 +9,7 @@ import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import Footer from 'components/footer/footer';
-import CustomerService from 'components/customerService/customerService';
-import SubscriptionTermsPrivacy
-  from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouPendingContent from './thankYouPendingContent';
 import CheckoutForm
@@ -59,16 +55,7 @@ const content = (
   <Provider store={store}>
     <Page
       header={<HeaderWrapper />}
-      footer={
-        <Footer>
-          <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
-          <CustomerService
-            selectedCountryGroup={countryGroupId}
-            subscriptionProduct="DigitalPack"
-            paperFulfilmentOptions={null}
-          />
-          <SubscriptionFaq subscriptionProduct="DigitalPack" />
-        </Footer>}
+      footer={<DigitalFooter />}
     >
       <CheckoutStage
         checkoutForm={<CheckoutForm />}

@@ -10,7 +10,7 @@ import DOMPurify from 'dompurify';
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import Footer from 'components/footer/footer';
+import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
 import { List } from 'components/productPage/productPageList/productPageList';
 
 import {
@@ -143,7 +143,7 @@ const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
 const { promotionCopy, orderIsAGift } = store.getState().page;
 const copy = getCopy(promotionCopy, orderIsAGift);
 const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
-const promoTerms = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
+const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
 
 type GiftHeadingPropTypes = {
   text: string,
@@ -153,12 +153,11 @@ const GiftHeading = (props: GiftHeadingPropTypes) => (
   <h2 className="component-text">{props.text}</h2>
 );
 
-
 const content = (
   <Provider store={store}>
     <Page
       header={<Header />}
-      footer={<Footer />}
+      footer={<WeeklyFooter promoTermsLink={promoTermsLink} />}
     >
       <CampaignHeader heading={copy.title} orderIsAGift={orderIsAGift} />
       <Content>
@@ -226,16 +225,6 @@ const content = (
         >
           {orderIsAGift ? 'See all subscriptions' : 'See all gift subscriptions'}
         </AnchorButton>
-      </Content>
-      <Content>
-        <Text title="Promotion terms and conditions">
-          <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full annual promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={promoTerms}>here</a>.
-          </p>
-        </Text>
-        <Text title="Guardian Weekly terms and conditions">
-          <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Weekly print subscription services and their terms and conditions, see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions">here</a>.
-          </p>
-        </Text>
       </Content>
       <ConsentBanner />
     </Page>
