@@ -2386,6 +2386,11 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-2.0.0.tgz#2911c9f149331a6faec725d63ae31b3fe38a4839"
   integrity sha512-qtLtLjXSa2HhUGv45BdqWLjsWy2Mdv0R5JSZaCVc2aNa+EEEQ3azQO9i1uPLcC29iQ55Ly0iiihTsZHv92U6oQ==
 
+"@guardian/src-foundations@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-2.1.0.tgz#7d4abd30c7cca6df02cd61b125e43f18ac9b801f"
+  integrity sha512-1ELb3CtDEhkhUWcv2zVwFqonokYg7pbizQqYMmRfNnHIzNp3+aJl48BHMRTd9Nqqcx+As9syUXPs09CeaAOMfg==
+
 "@guardian/src-helpers@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-2.0.0.tgz#d746292143adfe05adaa76fe72a0403777dfbceb"
@@ -2393,10 +2398,22 @@
   dependencies:
     "@guardian/src-foundations" "^2.0.0"
 
+"@guardian/src-helpers@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-2.1.0.tgz#1b2f5d243a8794105b887a1ae46fdf5ce23355f3"
+  integrity sha512-M3ShTyoYHcH6tyGsGEp7KgXaJbIpvzmFB9AVvzjs/Ozn9a1ii1F4/FBEBJAlDwijgrnUtASeSZ73ncSkvofdiw==
+  dependencies:
+    "@guardian/src-foundations" "^2.1.0"
+
 "@guardian/src-icons@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-2.0.0.tgz#040512320b2c297a9fb2e98d159e4cc368a6cbcf"
   integrity sha512-6F7DwPOeltgkR20yNQ+bJObHwxe5VKsZVOgYewaLoJB8LEdfVaF96DHr+WCeMUS5nV38oa7dMqdlnnPoih4CBg==
+
+"@guardian/src-icons@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-2.1.0.tgz#2a5106de9866d31d2171ef14cf8b42017b84bd00"
+  integrity sha512-gZlYOaIjWbXwAUuEmxgEKlXtRl1UCm+4Nt5NDiUnZiGFIbHwJDjdXaHYN/Qu0wLfY9bsESVGg6kGcaupo51GGw==
 
 "@guardian/src-link@^2.0.0":
   version "2.0.0"
@@ -2418,13 +2435,13 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-2.0.0.tgz#982ac9688657df9cdc2071d6857c9b8a32c6e1be"
   integrity sha512-cOTrBn+nHav0WgkwPfkLEWuhGoXuWl86+/Flxvb+USYMmHnqrDKJW/0CkurfOtFGOzi6fqgYg9mHo8UndMKnXA==
 
-"@guardian/src-text-input@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-text-input/-/src-text-input-2.0.0.tgz#1172f5455577048e50d4bb3f2bafe645539ebd8e"
-  integrity sha512-BorxkxKhwLB/M87sg9HrNfEOir2bpGG5VAFSy6OoXxp6KRKNfKrtRBVdwFIG6PMJfPPsLXO1thk5BajaH8QnVA==
+"@guardian/src-text-input@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-text-input/-/src-text-input-2.1.0.tgz#79cf4ceb2c250a541e81bc82fc3414885a8103ec"
+  integrity sha512-JG4jbNH/GNwnu6s34bWycyYurPRf/XhhRZWZXwjA6xzSizJRCBXuYPrhx9TN2RTDYrORhJ7eowey+AZkMzhweQ==
   dependencies:
-    "@guardian/src-helpers" "^2.0.0"
-    "@guardian/src-user-feedback" "^2.0.0"
+    "@guardian/src-helpers" "^2.1.0"
+    "@guardian/src-user-feedback" "^2.1.0"
 
 "@guardian/src-user-feedback@^2.0.0":
   version "2.0.0"
@@ -2433,6 +2450,14 @@
   dependencies:
     "@guardian/src-helpers" "^2.0.0"
     "@guardian/src-icons" "^2.0.0"
+
+"@guardian/src-user-feedback@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-user-feedback/-/src-user-feedback-2.1.0.tgz#1d98a216a382640de72bbd939d6627c8858546b7"
+  integrity sha512-jYwq1OQyMtn7bgIuPE89p/2/is4HBDOOUKrHJ8swfElGn2TkSFlGfHHY2WeX1N9eSDF+wuFK2M3pJdoFGXNNng==
+  dependencies:
+    "@guardian/src-helpers" "^2.1.0"
+    "@guardian/src-icons" "^2.1.0"
 
 "@guardian/src-utilities@^0.14.0":
   version "0.14.0"
@@ -13292,6 +13317,13 @@ react-date-picker@^8.0.1:
     react-calendar "^3.0.0"
     react-fit "^1.0.3"
     update-input-width "^1.1.1"
+
+react-day-picker@^7.4.8:
+  version "7.4.8"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.4.8.tgz#675625240d3fae1b41c0a9d5177c968c8517c1d4"
+  integrity sha512-pp0hnxFVoRuBQcRdR1Hofw4CQtOCGVmzCNrscyvS0Q8NEc+UiYLEDqE5dk37bf0leSnBW4lheIt0CKKhuKzDVw==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-dev-utils@^9.0.0:
   version "9.1.0"

@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { type Dispatch, compose } from 'redux';
-import DatePicker from 'react-date-picker';
 
 import {
   firstError,
@@ -65,6 +64,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { TextArea } from 'components/forms/textArea';
 import { asControlled } from 'hocs/asControlled';
 import { withLabel } from 'hocs/withLabel';
+import DatePickerFields from './datePicker/datePicker';
 
 // ----- Types ----- //
 
@@ -204,11 +204,10 @@ function DigitalCheckoutForm(props: PropTypes) {
             />
           </FormSection>
           <FormSection title="Gift start date">
-            <DatePicker
+            <DatePickerFields
               value={props.giftStartDate}
               onChange={date => props.setDigitalGiftStartDate(date)}
             />
-
           </FormSection>
           <PaymentMethodSelector
             country={props.country}
