@@ -14,7 +14,7 @@ trait GoogleAuth { self: BuiltInComponentsFromContext with AhcWSComponents with 
     appConfig.googleAuth.clientId,
     appConfig.googleAuth.clientSecret,
     appConfig.googleAuth.redirectUrl,
-    appConfig.googleAuth.domain,
+    List(appConfig.googleAuth.domain),
     antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration)
   )
 
