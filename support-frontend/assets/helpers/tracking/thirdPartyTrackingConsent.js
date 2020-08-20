@@ -87,7 +87,7 @@ const onConsentChangeEvent =
             onConsentChangeCallback(consentGranted);
           });
         } catch (err) {
-          logException(`CCPA: ${err}`);
+          logException(`CMP: ${err}`);
           // fallback to default consentGranted of false for all vendors in case of an error
           onConsentChangeCallback(consentGranted);
         }
