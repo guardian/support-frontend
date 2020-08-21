@@ -185,12 +185,12 @@
       }
 
       .other-product {
-        display: inline-block;
+        display: block;
         padding-bottom: $gu-v-spacing * 2;
         margin-top: $gu-v-spacing * 2;
 
         @include mq($from: tablet) {
-          width: 250px;
+          width: 250px + ($gu-h-spacing / 2);
         }
 
         .product-title {
@@ -208,6 +208,10 @@
           .product-title {
             color: gu-colour(culture-main);
           }
+
+          @include mq($from: tablet) {
+            padding-right: $gu-h-spacing / 2;
+          }
         }
 
         &--masterclass {
@@ -224,4 +228,3 @@
     }
   }
 }
-

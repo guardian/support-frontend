@@ -78,7 +78,7 @@ $header-links-min-width: gu-span(12);
 .component-header__wrapper {
   width: 100%;
   margin: auto;
-  padding: 0 ($gu-h-spacing / 2);
+  // padding: 0 ($gu-h-spacing / 2);
   position: relative;
   flex: 1 1 auto;
 
@@ -126,9 +126,9 @@ $header-links-min-width: gu-span(12);
       position: relative;
     }
   }
-  @include mq($from: wide) {
-    padding-right: gu-span(1) + $gu-h-spacing;
-  }
+  // @include mq($from: wide) {
+  //   padding-right: gu-span(1) + $gu-h-spacing;
+  // }
 }
 
 .component-header-topnav-logo__graun {
