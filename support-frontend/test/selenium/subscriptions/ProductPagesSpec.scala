@@ -32,21 +32,18 @@ class ProductPagesSpec extends AnyFeatureSpec
   Feature("Paper product page") {
     Scenario("Basic loading") {
       testPageLoads(new PaperProductPage())
-
     }
   }
 
   Feature("Weekly product page") {
     Scenario("Basic loading") {
       testPageLoads(new WeeklyProductPage())
-
     }
   }
 
   Feature("Weekly gift product page") {
     Scenario("Basic loading") {
       testPageLoads(new WeeklyGiftProductPage())
-
     }
   }
 
@@ -58,10 +55,6 @@ class ProductPagesSpec extends AnyFeatureSpec
 
   Feature("Digital Pack product page") {
     Scenario("Basic loading") {
-      val testUser = IdapiTestUserRequest.getCookies match {
-        case Left(error) => fail(error)
-        case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies))
-      }
       testPageLoads(new DigitalPackProductPage())
     }
   }
