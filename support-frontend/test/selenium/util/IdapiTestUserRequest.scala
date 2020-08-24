@@ -9,20 +9,10 @@ import org.slf4j.LoggerFactory
 
 import cats.syntax.either._
 
-object IdapiTestUserRequest {
-
-  private val client = new OkHttpClient()
-
-  private def logger = LoggerFactory.getLogger(this.getClass)
-
-  private val request: Request = new Request.Builder()
-    .url(Config.idapiNewTestUserUrl)
-    .addHeader(Config.idapiClientAccessTokenName, Config.idapiClientAccessTokenSecret)
-    .post(RequestBody.create(MediaType.parse("application/json"), "{}"))
-    .build()
+class IdapiTestUserRequest {
 
   private def getResult(): Either[String, Json] = {
-    val response: Response = client.newCall(request).execute()
+    val response: Response = IdapiTestUserRequest.client.newCall(IdapiTestUserRequest.request).execute()
     val body: String = response.body().string()
     parse(body).leftMap { error =>
       s"Could not parse $body as JSON from response with code ${response.code()}: $error"
@@ -40,6 +30,17 @@ object IdapiTestUserRequest {
       }
     }
   }
+}
+
+object IdapiTestUserRequest {
+
+  private val client = new OkHttpClient()
+
+  private val request: Request = new Request.Builder()
+    .url(Config.idapiNewTestUserUrl)
+    .addHeader(Config.idapiClientAccessTokenName, Config.idapiClientAccessTokenSecret)
+    .post(RequestBody.create(MediaType.parse("application/json"), "{}"))
+    .build()
 }
 
 case class IdapiCookie(key: String, value: String)

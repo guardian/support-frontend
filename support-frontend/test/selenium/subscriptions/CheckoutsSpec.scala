@@ -58,7 +58,8 @@ class CheckoutsSpec extends AnyFeatureSpec
   }
 
   def testCheckout(checkoutName: String, checkoutPage: CheckoutPage, productPage: ProductPage, paymentFunction: CheckoutPage => Unit): Unit = {
-    val testUser = IdapiTestUserRequest.getCookies match {
+    val testUserRequest = new IdapiTestUserRequest()
+    val testUser = testUserRequest.getCookies match {
       case Left(error) => fail(error)
       case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies))
     }
