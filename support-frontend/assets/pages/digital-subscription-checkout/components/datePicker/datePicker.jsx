@@ -7,6 +7,9 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import calendarIcon from './calendar-icon.jpg';
 import { TextInput } from '@guardian/src-text-input';
+import { formatMachineDate } from 'helpers/dateConversions';
+
+import './styles.scss';
 
 const calendarIconContainer = css`
   padding: 0;
@@ -38,10 +41,6 @@ const marginRight = css`
   margin-right: ${space[3]}px;
 `;
 
-const validation = css`
-  margin-top: ${space[3]}px;
-`;
-
 type PropTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   value: string | null,
@@ -66,6 +65,15 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     };
   }
 
+  handleCalendarDate = (date: Date) => {
+    const dateArray = formatMachineDate(date).split('-');
+    this.setState({
+      day: dateArray[2],
+      month: dateArray[1],
+      year: dateArray[0],
+    }, this.updateStartDate);
+  }
+
   handleDate = (e: Object, field: string) => {
     this.setState({ [field]: e.target.value }, this.updateStartDate);
   }
@@ -73,8 +81,9 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
   updateStartDate = () => this.props.onChange(`${this.state.day}/${this.state.month}/${this.state.year}`)
 
   render() {
-    const { props, state } = this;
-    const validDate = (state.day.length >= 1 && state.month.length >= 1 && state.year.length === 4);
+    const { state } = this;
+    const today = Date.now();
+
     return (
       <div>
         <fieldset css={startDateGroup} role="group" aria-describedby="date-hint">
@@ -120,8 +129,10 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
             </button>
           </div>
         </fieldset>
-        {state.showCalendar && <DayPicker />}
-        {validDate && <p css={validation}>You entered {props.value}</p>}
+        {state.showCalendar && <DayPicker
+          onDayClick={day => this.handleCalendarDate(day)}
+          disabledDays={[{ before: new Date(today) }]}
+        />}
       </div>
     );
   }
