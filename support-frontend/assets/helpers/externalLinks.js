@@ -36,6 +36,7 @@ type PromoCodes = {
 export type SubsUrls = {
   [SubscriptionProduct]: string,
   GuardianWeeklyGift: string,
+  DigitalPackGift: string,
 };
 
 
@@ -169,11 +170,13 @@ function buildSubsUrls(
   const paper = '/uk/subscribe/paper';
   const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', countryGroupId, intCmp, referrerAcquisitionData)}`;
   const digital = `/${countryId}/subscribe/digital`;
+  const digitalGift = `/${countryId}/subscribe/digital/gift`;
   const weekly = `/${countryId}/subscribe/weekly`;
   const weeklyGift = `/${countryId}/subscribe/weekly/gift`;
 
   return {
     DigitalPack: digital,
+    DigitalPackGift: digitalGift,
     Paper: paper,
     PaperAndDigital: paperDig,
     GuardianWeekly: weekly,

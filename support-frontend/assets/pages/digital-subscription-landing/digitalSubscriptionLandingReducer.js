@@ -11,12 +11,16 @@ export type State = {
   common: CommonState,
   page: {
     productPrices: ProductPrices,
+    orderIsAGift: boolean,
   }
 };
 
+const { orderIsAGift } = window.guardian;
 
 // ----- Export ----- //
 
 export default () => combineReducers({
   productPrices: getProductPrices,
+  // Not sure why but this isn't coming through
+  orderIsAGift,
 });

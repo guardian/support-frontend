@@ -28,6 +28,7 @@ const routes: {
   showcase: '/support',
   subscriptionsLanding: '/subscribe',
   digitalSubscriptionLanding: '/subscribe/digital',
+  digitalSubscriptionLandingGift: '/subscribe/digital/gift',
   paperSubscriptionLanding: '/subscribe/paper',
   paperSubscriptionProductChoices: '/subscribe/paper#subscribe',
   guardianWeeklySubscriptionLanding: '/subscribe/weekly',
@@ -51,8 +52,8 @@ function paperSubsUrl(withDelivery: boolean = false): string {
   return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
 }
 
-function digitalSubscriptionLanding(countryGroupId: CountryGroupId) {
-  return `${getOrigin()}/${countryPath(countryGroupId)}${routes.digitalSubscriptionLanding}`;
+function digitalSubscriptionLanding(countryGroupId: CountryGroupId, gift: boolean) {
+  return `${getOrigin()}/${countryPath(countryGroupId)}${gift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLandingGift}`;
 }
 
 function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {

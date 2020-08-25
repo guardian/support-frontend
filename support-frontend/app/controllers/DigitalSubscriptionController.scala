@@ -48,7 +48,7 @@ class DigitalSubscriptionController(
 
   implicit val a: AssetsResolver = assets
 
-  def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | The Guardian Digital Subscription"
     val mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode)
@@ -56,7 +56,6 @@ class DigitalSubscriptionController(
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
-
     val promoCodes: List[PromoCode] = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ DefaultPromotions.DigitalSubscription.all
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
@@ -79,13 +78,18 @@ class DigitalSubscriptionController(
       shareImageUrl = shareImageUrl,
       shareUrl = canonicalLink
     ) {
-      Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
+      Html(s"""<script type="text/javascript">
+        window.guardian.productPrices = ${outputJson(productPrices)}
+        window.guardian.orderIsAGift = $orderIsAGift
+      </script>""")
     }).withSettingsSurrogateKey
   }
 
-  def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
+  def digitalGeoRedirect(orderIsAGift: Boolean = false): Action[AnyContent] = geoRedirect(
+    if (orderIsAGift) "subscribe/digital/gift" else "subscribe/digital"
+  )
 
-  def displayForm(): Action[AnyContent] =
+  def displayForm(orderIsAGift: Boolean): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user.minimalUser).fold(
@@ -95,15 +99,15 @@ class DigitalSubscriptionController(
         },
         user => {
           userHasDigitalSubscription(membersDataService, request.user) map {
-            case true => redirectToExistingThankYouPage
-            case _ => Ok(digitalSubscriptionFormHtml(user))
+            case true => if (orderIsAGift) Ok(digitalSubscriptionFormHtml(user, orderIsAGift)) else redirectToExistingThankYouPage
+            case _ => Ok(digitalSubscriptionFormHtml(user, orderIsAGift))
           }
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
 
-  private def digitalSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
-    val title = "Support the Guardian | The Guardian Digital Subscription"
+  private def digitalSubscriptionFormHtml(idUser: IdUser, orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
+    val title = if (orderIsAGift) "Support the Guardian | The Guardian Digital Gift Subscription" else "Support the Guardian | The Guardian Digital Subscription"
     val id = EmptyDiv("digital-subscription-checkout-page")
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"

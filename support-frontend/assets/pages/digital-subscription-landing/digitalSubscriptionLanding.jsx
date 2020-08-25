@@ -27,7 +27,7 @@ import './digitalSubscriptionLanding.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
-import CallToAction from './components/cta';
+import { CallToAction, CallToActionGift } from './components/cta';
 import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
 // ----- Styles ----- //
@@ -38,6 +38,11 @@ import 'stylesheets/skeleton/skeleton.scss';
 // ----- Redux Store ----- //
 
 const store = pageInit(() => digitalSubscriptionLandingReducer(), true);
+
+// There's some weird disconnect here with the store
+// const { orderIsAGift } = store.getState().page;
+
+const { orderIsAGift } = window.guardian;
 
 // ----- Internationalisation ----- //
 
@@ -78,7 +83,7 @@ function LandingPage() {
     >
       <CampaignHeader countryGroupId={countryGroupId} />
       <ProductBlock countryGroupId={countryGroupId} />
-      <CallToAction />
+      {orderIsAGift ? <CallToActionGift /> : <CallToAction />}
       <TermsAndConditions />
       <FaqsAndHelp selectedCountryGroup={countryGroupId} />
       <ConsentBanner />
