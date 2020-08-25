@@ -129,7 +129,7 @@
 
       @include mq($from: leftCol) {
         .component-text {
-          max-width: 60%;
+          max-width: 65%;
         }
       }
     }
@@ -185,12 +185,12 @@
       }
 
       .other-product {
-        display: block;
+        display: inline-block;
         padding-bottom: $gu-v-spacing * 2;
         margin-top: $gu-v-spacing * 2;
 
         @include mq($from: tablet) {
-          width: 250px + ($gu-h-spacing / 2);
+          width: 250px;
         }
 
         .product-title {
@@ -220,6 +220,7 @@
           }
 
           @include mq($from: tablet) {
+            width: 250px + ($gu-h-spacing / 2);
             border-left: 1px solid gu-colour(neutral-86);
             padding-left: $gu-h-spacing / 2;
           }
