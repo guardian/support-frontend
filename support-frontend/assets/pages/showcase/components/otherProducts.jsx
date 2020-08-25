@@ -12,20 +12,18 @@ export default function OtherProducts() {
   return (
     <Content modifierClasses={['other-products']}>
       <Text title="Other ways you can support us">
-        <div>
-          <OtherProduct
-            title="The Guardian Patrons"
-            description="Support from our Patrons is crucial to ensure that generations to come will be able to enjoy The Guardian"
-            destination={getPatronsLink()}
-            modifierClass="patrons"
-          />
-          <OtherProduct
-            title="Masterclasses &amp; Live Events"
-            description="Meet Guardian journalists and readers at our events, debates, interviews and festivals"
-            destination={getMemLink('events')}
-            modifierClass="masterclass"
-          />
-        </div>
+        <OtherProduct
+          title="The Guardian Patrons"
+          description="Support from our Patrons is crucial to ensure that generations to come will be able to enjoy The Guardian"
+          destination={getPatronsLink()}
+          modifierClass="patrons"
+        />
+        <OtherProduct
+          title="Masterclasses &amp; Live Events"
+          description="Meet Guardian journalists and readers at our events, debates, interviews and festivals"
+          destination={getMemLink('events')}
+          modifierClass="masterclass"
+        />
       </Text>
     </Content>
   );
