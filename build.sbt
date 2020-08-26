@@ -120,7 +120,7 @@ lazy val `support-workers` = (project in file("support-workers"))
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
-  .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging, BuildInfoPlugin)
+  .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
