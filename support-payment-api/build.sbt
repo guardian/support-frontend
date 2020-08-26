@@ -59,8 +59,6 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
 )
 
-enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, RiffRaffArtifact, JDebPackaging, BuildInfoPlugin)
-
 resolvers += Resolver.bintrayRepo("guardian", "ophan")
 resolvers += Resolver.sonatypeRepo("releases")
 
