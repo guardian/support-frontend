@@ -13,7 +13,14 @@ trait TestCSRFComponents {
 
   private lazy val appComponents = {
     val env = Environment.simple(new File("."))
-    val context = ApplicationLoader.Context.create(env)
+    val configuration = Configuration.load(env)
+    val context = ApplicationLoader.Context(
+      environment = env,
+      sourceMapper = None,
+      webCommands = new DefaultWebCommands(),
+      initialConfiguration = configuration,
+      lifecycle = new DefaultApplicationLifecycle()
+    )
     new BuiltInComponentsFromContext(context) with CSRFComponents {
       override def router: Router = ???
 
