@@ -202,6 +202,7 @@ function ContributionThankYou(props: PropTypes) {
             aria-label="Return to The Guardian"
             icon={<SvgArrowLeft />}
             iconSide="left"
+            onClick={() => trackComponentClick('contribution-thankyou-return-to-guardian')}
           >
             Return to The Guardian
           </AnchorButton>
