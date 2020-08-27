@@ -10,10 +10,11 @@ import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.redemption.GetCodeStatus
 import com.gu.support.redemption.GetCodeStatus.{InvalidReaderType, RedemptionInvalid}
+import com.gu.support.redemption.generator.GiftDuration.{Gift12Month, Gift3Month}
 import com.gu.support.redemption.generator.{GiftCodeGenerator, GiftDuration}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.ProductTypeRatePlans._
-import com.gu.support.workers.{BillingPeriod, DigitalPack}
+import com.gu.support.workers.{Annual, BillingPeriod, DigitalPack, Quarterly}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import com.gu.support.zuora.api.{ReaderType, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCode, buildProductSubscription, validateRatePlan}
@@ -88,9 +89,14 @@ object DigitalSubscriptionBuilder {
     EitherT.fromEither[Future](withPromoApplied.left.map(Left.apply))
   }
 
+  def fromBillingPeriod(billingPeriod: BillingPeriod): GiftDuration = billingPeriod match {
+    case Annual => Gift12Month
+    case _ => Gift3Month
+  }
+
   def generateRedemptionCode(readerType: ReaderType, billingPeriod: BillingPeriod, subscriptionData: SubscriptionData) = {
     if (readerType == Gift) {
-      val code = GiftCodeGenerator.randomGiftCodes.next().withDuration(GiftDuration.fromBillingPeriod(billingPeriod))
+      val code = GiftCodeGenerator.randomGiftCodes.next().withDuration(fromBillingPeriod(billingPeriod))
       subscriptionData.copy(
         subscription = subscriptionData.subscription.copy(redemptionCode = Some(code.value))
       )

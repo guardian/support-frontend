@@ -28,11 +28,6 @@ object GiftDuration {
 
   case object Gift12Month extends GiftDuration("12")
 
-  def fromBillingPeriod = (billingPeriod: BillingPeriod) => billingPeriod match {
-    case Quarterly => Gift3Month
-    case Annual => Gift12Month
-  }
-
 }
 
 object CodeBuilder {
