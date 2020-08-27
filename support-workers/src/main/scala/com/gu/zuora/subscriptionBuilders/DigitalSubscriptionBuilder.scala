@@ -17,7 +17,7 @@ import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.{Annual, BillingPeriod, DigitalPack, Quarterly}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import com.gu.support.zuora.api.{ReaderType, SubscriptionData}
-import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCode, buildProductSubscription, validateRatePlan}
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, buildProductSubscription, validateRatePlan}
 import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -83,8 +83,8 @@ object DigitalSubscriptionBuilder {
       initialTerm = initialTerm
     )
 
-    val withRedemptionCode = generateRedemptionCode(readerType, purchase.billingPeriod, subscriptionData)
-    val withPromoApplied = applyPromoCode(purchase.promotionService, purchase.maybePromoCode, purchase.country, productRatePlanId, withRedemptionCode)
+    val withRedemptionCode = addRedemptionCodeIfGift(readerType, purchase.billingPeriod, subscriptionData)
+    val withPromoApplied = applyPromoCodeIfPresent(purchase.promotionService, purchase.maybePromoCode, purchase.country, productRatePlanId, withRedemptionCode)
 
     EitherT.fromEither[Future](withPromoApplied.left.map(Left.apply))
   }
@@ -94,7 +94,7 @@ object DigitalSubscriptionBuilder {
     case _ => Gift3Month
   }
 
-  def generateRedemptionCode(readerType: ReaderType, billingPeriod: BillingPeriod, subscriptionData: SubscriptionData) = {
+  def addRedemptionCodeIfGift(readerType: ReaderType, billingPeriod: BillingPeriod, subscriptionData: SubscriptionData) = {
     if (readerType == Gift) {
       val code = GiftCodeGenerator.randomGiftCodes.next().withDuration(fromBillingPeriod(billingPeriod))
       subscriptionData.copy(

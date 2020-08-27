@@ -10,7 +10,7 @@ import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.exceptions.BadRequestException
 import com.gu.support.workers.{BillingPeriod, GuardianWeekly, SixWeekly}
 import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscriptionData}
-import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCode, buildProductSubscription, validateRatePlan}
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, buildProductSubscription, validateRatePlan}
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
 import scala.util.{Failure, Success, Try}
@@ -55,7 +55,7 @@ object GuardianWeeklySubscriptionBuilder {
       initialTermPeriodType = initialTermPeriodType
     )
 
-    applyPromoCode(promotionService, maybePromoCode, country, promotionProductRatePlanId, subscriptionData)
+    applyPromoCodeIfPresent(promotionService, maybePromoCode, country, promotionProductRatePlanId, subscriptionData)
   }
 
   private[this] def isIntroductoryPromotion(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode]) =

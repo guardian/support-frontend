@@ -68,7 +68,7 @@ object ProductSubscriptionBuilders {
     )
   }
 
-  def applyPromoCode(
+  def applyPromoCodeIfPresent(
     promotionService: PromotionService,
     maybePromoCode: Option[PromoCode],
     country: Country,

@@ -9,7 +9,7 @@ import com.gu.support.workers.Paper
 import com.gu.support.workers.exceptions.BadRequestException
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api.SubscriptionData
-import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCode, buildProductSubscription, validateRatePlan}
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, buildProductSubscription, validateRatePlan}
 import org.joda.time.{DateTimeZone, LocalDate}
 import com.gu.support.workers.ProductTypeRatePlans._
 
@@ -43,6 +43,6 @@ object PaperSubscriptionBuilder {
       readerType = Direct
     )
 
-    applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
+    applyPromoCodeIfPresent(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
   }
 }
