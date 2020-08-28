@@ -5,6 +5,7 @@
 import React from 'react';
 import AnchorButton from 'components/button/anchorButton';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 // ----- Component ----- //
 
@@ -35,8 +36,11 @@ export default function ContributionsSurvey(props: PropTypes) {
       </p>
       <AnchorButton
         href={surveyLink}
+        target="_blank"
+        rel="noopener"
         appearance="secondary"
         aria-label="Link to contribution survey"
+        onClick={() => trackComponentClick('contribution-thankyou-survey')}
       >
           Share your thoughts
       </AnchorButton>
