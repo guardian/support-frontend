@@ -4,8 +4,8 @@
 
 import React, { Children, type Node } from 'react';
 import { ThemeProvider } from 'emotion-theming';
-import { Link, linkBrand } from '@guardian/src-link';
-
+import { Link, ButtonLink, linkBrand } from '@guardian/src-link';
+import { cmp } from '@guardian/consent-management-platform';
 import { copyrightNotice } from 'helpers/legal';
 
 import Rows from '../base/rows';
@@ -60,6 +60,9 @@ function Footer({
                 <Link subdued href={termsConditionsLink}>Terms & Conditions</Link>
               </li>
             }
+            <li css={link}>
+              <ButtonLink subdued onClick={() => cmp.showPrivacyManager()}>Privacy Settings</ButtonLink>
+            </li>
           </ul>
         </FooterContent>
         <FooterContent appearance={{ centred }}>

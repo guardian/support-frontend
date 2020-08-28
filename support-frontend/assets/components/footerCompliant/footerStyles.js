@@ -18,7 +18,7 @@ export const componentFooter = css`
 
   /* TODO: Check if we can remove this; depends on styles applied to the legal text passed in
     Preferably switch to the Link component in Source for all links- current display property means we can't use it as of 2.0 */
-  a {
+  a, button {
     font-size: inherit;
     color: ${brandText.anchorPrimary};
     :hover {
@@ -36,39 +36,45 @@ export const copyright = css`
 `;
 
 export const linksList = css`
+  position: relative;
   width: 100%;
   list-style: none;
-  display: grid;
+  /* display: grid;
   grid-column-gap: ${space[5]}px;
-  grid-template: repeat(2, auto) / repeat(2, 1fr);
-  grid-auto-flow: column;
-  padding-bottom: ${space[1]}px;
+  grid-row-gap: ${space[2]}px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: auto; */
+  /* grid-auto-flow: column; */
 
   ${from.tablet} {
     display: flex;
     grid-column-gap: 0;
   }
+
+  ${until.tablet} {
+    columns: 2;
+    column-gap: ${space[5]}px;
+    padding: ${space[1]}px 0 ${space[2]}px;
+    margin-bottom: ${space[2]}px;
+
+    &:after {
+      position: absolute;
+      content: '';
+      top: 0;
+      left: 50%;
+      transform: translateX(-${space[3]}px);
+      height: 100%;
+      border-right: 1px solid ${brand[600]};
+    }
+  }
 `;
 
 export const link = css`
   line-height: 19px;
-  padding: ${space[2]}px ${space[1]}px;
+  padding: 0 ${space[1]}px;
 
   ${until.tablet} {
-    /* Select only the first two elements
-    https://css-tricks.com/useful-nth-child-recipies/#select-only-the-first-five */
-    &:nth-of-type(-n+2) {
-      padding-right: ${space[5]}px;
-      border-right: 1px solid ${brand[600]};
-    }
-
-    &:nth-of-type(odd) {
-      padding-bottom: 0;
-    }
-
-    &:nth-of-type(even) {
-      padding-bottom: ${space[4]}px;
-    }
+    padding-top: ${space[1]}px;
   }
 
   ${from.tablet} {

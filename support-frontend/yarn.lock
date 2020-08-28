@@ -2393,12 +2393,17 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-2.0.0.tgz#2911c9f149331a6faec725d63ae31b3fe38a4839"
   integrity sha512-qtLtLjXSa2HhUGv45BdqWLjsWy2Mdv0R5JSZaCVc2aNa+EEEQ3azQO9i1uPLcC29iQ55Ly0iiihTsZHv92U6oQ==
 
-"@guardian/src-helpers@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-2.0.0.tgz#d746292143adfe05adaa76fe72a0403777dfbceb"
-  integrity sha512-sUffzDcWYC/sJ0Q5YyuB5c32gL51Oq12P9rlAMHVBppH1wb3s8Ig7qk6vMuFJumEDUCbh5hoJ4XypbznHdkhzA==
+"@guardian/src-foundations@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-2.2.0.tgz#24066902f964bfe4cb4b2056204e10b8787e3e97"
+  integrity sha512-wkXxF9O7xoYxZMxg6XQJWiZpnxG/Luff1BnQfvYJGHRgjZs7GMM7pZCueiO4GyB39qXxQH1Rsp1jlzdV+GKRLw==
+
+"@guardian/src-helpers@^2.0.0", "@guardian/src-helpers@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-helpers/-/src-helpers-2.2.0.tgz#7d24f612ac1db201e235e0482ad9185b7f230a9d"
+  integrity sha512-3tdF8eemIPhYZBBZFF+EFKo2ltfmZKC+JAB2aZajiRS6mVhsbpjkIU2XhvXFjkmtZRMKbT/K/xHWV1PDJLB5uA==
   dependencies:
-    "@guardian/src-foundations" "^2.0.0"
+    "@guardian/src-foundations" "^2.2.0"
 
 "@guardian/src-icons@^2.0.0":
   version "2.0.0"
@@ -2406,11 +2411,11 @@
   integrity sha512-6F7DwPOeltgkR20yNQ+bJObHwxe5VKsZVOgYewaLoJB8LEdfVaF96DHr+WCeMUS5nV38oa7dMqdlnnPoih4CBg==
 
 "@guardian/src-link@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-link/-/src-link-2.0.0.tgz#43d11a7d3d766f374bc28423e44e5cd6c86054b4"
-  integrity sha512-j8WqZW8+whOqe5meKDVY5kn6dMqr0X+JY0G3pk9c2XpzPKee4n43/SGQNffFSiAgyNHB/FDEaXCX25541mKuTQ==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-link/-/src-link-2.2.0.tgz#0f63a5ce904808bf90552b607694e271cdeee99b"
+  integrity sha512-jZpIZVycP/RinMgIdb1dAllYxHGqKDmWrsOWU/dChA/Xt4aCO1U4EiVUzltZeWUYty1BbsJycvvd/pPzaTZNMA==
   dependencies:
-    "@guardian/src-helpers" "^2.0.0"
+    "@guardian/src-helpers" "^2.2.0"
 
 "@guardian/src-radio@^2.0.0":
   version "2.0.0"
