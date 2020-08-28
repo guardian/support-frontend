@@ -184,11 +184,19 @@ const CardForm = (props: PropTypes) => {
     }
   };
 
+  const recaptchaElementEmpty = (): boolean => {
+    const el = document.getElementById('robot_checkbox');
+    if (el) {
+      return el.children.length > 0;
+    }
+    return true;
+  };
+
   // Creates a new setupIntent upon recaptcha verification
   const setupRecurringRecaptchaCallback = () => {
     setCalledRecaptchaRender(true);
     // Fix for safari, where the calledRecaptchaRender state handling does not work. TODO - find a better solution
-    if (document.getElementById('robot_checkbox').children.length > 0) {
+    if (recaptchaElementEmpty()) {
       return;
     }
 
