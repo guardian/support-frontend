@@ -5,6 +5,7 @@ import java.util.UUID
 import com.gu.config.Configuration
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
+import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId, Monthly}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
@@ -36,6 +37,16 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
     uatService.getAccountFields(IdentityId("30001758").get, earlyDate).map {
       response =>
         response.nonEmpty should be(true)
+    }
+  }
+
+  it should "retrieve subscription redemption information from a redemption code" in {
+    val redemptionCode = "gd12-fnc4ox"
+    uatService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).right.get).map {
+      response =>
+        response.records.size shouldBe 1
+        response.records.head.gifteeIdentityId shouldBe None
+        response.records.head.redemptionCode shouldBe Some(redemptionCode)
     }
   }
 

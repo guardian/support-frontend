@@ -5,6 +5,7 @@ import cats.implicits._
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.ZuoraConfig
+import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, QueryData, SubscribeRequest}
@@ -86,6 +87,13 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
       pmId <- OptionT(getDefaultPaymentMethodId(accountNumber))
       ddId <- OptionT(getDirectDebitMandateId(pmId))
     } yield ddId).value
+  }
+
+  def getSubscriptionFromRedemptionCode(redemptionCode: RedemptionCode): Future[SubscriptionRedemptionQueryResponse] = {
+    val queryData = QueryData(
+      s"select id, RedemptionCode__c, GifteeIdentityId__c from subscription where RedemptionCode__c = '${redemptionCode.value}'"
+    )
+    postJson[SubscriptionRedemptionQueryResponse](s"action/query", queryData.asJson, authHeaders)
   }
 
   override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =
