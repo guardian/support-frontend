@@ -139,10 +139,22 @@ trait WebServiceHelper[Error <: Throwable] {
     headers: ParamMap = empty,
     params: ParamMap = empty
   )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
-    val json = data.pretty(Printer.noSpaces.copy(dropNullValues = true))
+    val json = data.printWith(Printer.noSpaces.copy(dropNullValues = true))
     SafeLogger.info(s"Issuing request POST $endpoint $json")
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).post(body))
+  }
+
+  def putJson[A](
+    endpoint: String,
+    data: Json,
+    headers: ParamMap = empty,
+    params: ParamMap = empty
+  )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
+    val json = data.printWith(Printer.noSpaces.copy(dropNullValues = true))
+    SafeLogger.info(s"Issuing request PUT $endpoint $json")
+    val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+    request[A](buildRequest(endpoint, headers, params).put(body))
   }
 
   def postForm[A](

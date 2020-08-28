@@ -50,6 +50,14 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
     }
   }
 
+  it should "handle invalid redemption codes" in {
+    val invalidRedemptionCode = "xxxx-0000"
+    uatService.getSubscriptionFromRedemptionCode(RedemptionCode(invalidRedemptionCode).right.get).map {
+      response =>
+        response.records.size shouldBe 0
+    }
+  }
+
   it should "be resistant to 'ZOQL injection'" in {
     // try https://github.com/guardian/support-service-lambdas/blob/master/lib/zuora/src/main/scala/com/gu/util/zuora/SafeQueryBuilder.scala
     IdentityId("30000701' or status = 'Active").isFailure should be(true)

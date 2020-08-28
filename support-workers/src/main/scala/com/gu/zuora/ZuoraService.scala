@@ -8,7 +8,7 @@ import com.gu.support.config.ZuoraConfig
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._
-import com.gu.support.zuora.api.{PreviewSubscribeRequest, QueryData, SubscribeRequest}
+import com.gu.support.zuora.api.{PreviewSubscribeRequest, QueryData, SubscribeRequest, UpdateRedemptionDataRequest}
 import com.gu.support.zuora.domain.{DomainAccount, DomainSubscription}
 import io.circe
 import io.circe.Decoder
@@ -91,9 +91,14 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
 
   def getSubscriptionFromRedemptionCode(redemptionCode: RedemptionCode): Future[SubscriptionRedemptionQueryResponse] = {
     val queryData = QueryData(
-      s"select id, RedemptionCode__c, GifteeIdentityId__c from subscription where RedemptionCode__c = '${redemptionCode.value}'"
+      s"select id, RedemptionCode__c, GifteeIdentityId__c from subscription where RedemptionCode__c = '${redemptionCode.value}' and status = 'Active'"
     )
     postJson[SubscriptionRedemptionQueryResponse](s"action/query", queryData.asJson, authHeaders)
+  }
+
+  def updateSubscriptionRedemptionData(subscriptionId: String, gifteeIdentityId: String, currentTerm: Int): Future[UpdateRedemptionDataResponse] = {
+    val requestData = UpdateRedemptionDataRequest(gifteeIdentityId, currentTerm)
+    putJson[UpdateRedemptionDataResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
   }
 
   override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =

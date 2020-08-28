@@ -25,3 +25,13 @@ object SubscribeRequest {
 //The subscribe request documented here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
 //fields are upper case to match the expected json structure
 case class SubscribeRequest(subscribes: List[SubscribeItem])
+
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec._
+
+object UpdateRedemptionDataRequest {
+  implicit val codec: Codec[UpdateRedemptionDataRequest] = deriveCodec
+}
+
+case class UpdateRedemptionDataRequest(gifteeIdentityId: String, currentTerm: Int)
+

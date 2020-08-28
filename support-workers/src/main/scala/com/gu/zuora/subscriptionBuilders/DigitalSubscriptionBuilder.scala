@@ -121,14 +121,10 @@ object DigitalSubscriptionBuilder {
         redemption.redemptionData.redemptionCode,
         redemption.getCodeStatus
       )
-      case Gift => buildGiftRedemption(
-        today,
-        productRatePlanId,
-        requestId,
-        redemption.redemptionData.redemptionCode,
-      )
       case _ => val errorType: Either[PromoError, RedemptionInvalid] = Right(InvalidReaderType)
         EitherT.leftT(errorType)
+        // Only corporate subscription redemptions require us to create a Zuora subscription,
+        // gift redemptions modify the sub created during the gift purchase
     }
   }
 
@@ -163,14 +159,4 @@ object DigitalSubscriptionBuilder {
       .leftMap(Right.apply)
   }
 
-  def buildGiftRedemption(
-    today: LocalDate,
-    productRatePlanId: ProductRatePlanId,
-    requestId: UUID,
-    redemptionCode: RedemptionCode,
-  )(implicit ec: ExecutionContext): BuildResult = {
-    // TODO: RB implement this
-    val errorType: Either[PromoError, RedemptionInvalid] = Right(InvalidReaderType)
-    EitherT.leftT(errorType)
-  }
 }
