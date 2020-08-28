@@ -37,6 +37,7 @@ export default function ContributionsSurvey(props: PropTypes) {
       <AnchorButton
         href={surveyLink}
         target="_blank"
+        rel="noopener"
         appearance="secondary"
         aria-label="Link to contribution survey"
         onClick={() => trackComponentClick('contribution-thankyou-survey')}
