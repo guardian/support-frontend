@@ -5,6 +5,8 @@ import ContributionThankYouContinueToAccount from './ContributionThankYouContinu
 import ContributionThankYouHearFromOurNewsroom from './ContributionThankYouHearFromOurNewsroom';
 import ContributionThankYouSetSupportReminder from './ContributionThankYouSetSupportReminder';
 import ContributionThankYouSendYourThoughts from './ContributionThankYouSendYourThoughts';
+import ContributionThankYouShareYourSupport from './ContributionThankYouShareYourSupport';
+
 
 const container = css`
   background: white;
@@ -35,6 +37,11 @@ const ContributionThankYou = () => (
     <GridRow breakpoints={['mobile', 'tablet']} >
       <GridItem spans={[4, 12]}>
         <ContributionThankYouSendYourThoughts />
+      </GridItem>
+    </GridRow>
+    <GridRow breakpoints={['mobile', 'tablet']} >
+      <GridItem spans={[4, 12]}>
+        <ContributionThankYouShareYourSupport />
       </GridItem>
     </GridRow>
   </div>
