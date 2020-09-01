@@ -89,14 +89,14 @@ object DigitalSubscriptionBuilder {
     EitherT.fromEither[Future](withPromoApplied.left.map(Left.apply))
   }
 
-  def fromBillingPeriod(billingPeriod: BillingPeriod): GiftDuration = billingPeriod match {
+  def toDuration(billingPeriod: BillingPeriod): GiftDuration = billingPeriod match {
     case Annual => Gift12Month
     case _ => Gift3Month
   }
 
   def addRedemptionCodeIfGift(readerType: ReaderType, billingPeriod: BillingPeriod, subscriptionData: SubscriptionData) = {
     if (readerType == Gift) {
-      val code = GiftCodeGenerator.randomGiftCodes.next().withDuration(fromBillingPeriod(billingPeriod))
+      val code = GiftCodeGenerator.randomGiftCodes.next().withDuration(toDuration(billingPeriod))
       subscriptionData.copy(
         subscription = subscriptionData.subscription.copy(redemptionCode = Some(code.value))
       )
