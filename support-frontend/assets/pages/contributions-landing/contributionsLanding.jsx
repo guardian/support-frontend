@@ -26,8 +26,9 @@ import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { ContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
-import ContributionThankYouContainer
-  from './components/ContributionThankYou/ContributionThankYouContainer';
+import ContributionThankYou from './components/ContributionThankYou/ContributionThankYou';
+// import ContributionThankYouContainer
+//   from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
@@ -144,7 +145,7 @@ const router = (
                 header={<RoundelHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
-                <ContributionThankYouContainer />
+                <ContributionThankYou />
               </Page>
             );
           }}
