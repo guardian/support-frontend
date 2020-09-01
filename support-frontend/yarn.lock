@@ -2417,12 +2417,12 @@
   resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-2.0.0.tgz#040512320b2c297a9fb2e98d159e4cc368a6cbcf"
   integrity sha512-6F7DwPOeltgkR20yNQ+bJObHwxe5VKsZVOgYewaLoJB8LEdfVaF96DHr+WCeMUS5nV38oa7dMqdlnnPoih4CBg==
 
-"@guardian/src-link@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-link/-/src-link-2.0.0.tgz#43d11a7d3d766f374bc28423e44e5cd6c86054b4"
-  integrity sha512-j8WqZW8+whOqe5meKDVY5kn6dMqr0X+JY0G3pk9c2XpzPKee4n43/SGQNffFSiAgyNHB/FDEaXCX25541mKuTQ==
+"@guardian/src-link@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-link/-/src-link-2.2.0.tgz#0f63a5ce904808bf90552b607694e271cdeee99b"
+  integrity sha512-jZpIZVycP/RinMgIdb1dAllYxHGqKDmWrsOWU/dChA/Xt4aCO1U4EiVUzltZeWUYty1BbsJycvvd/pPzaTZNMA==
   dependencies:
-    "@guardian/src-helpers" "^2.0.0"
+    "@guardian/src-helpers" "^2.2.0"
 
 "@guardian/src-radio@^2.0.0":
   version "2.0.0"
