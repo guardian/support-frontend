@@ -108,6 +108,9 @@ export const imageCatalogue: {
   printFeaturePackshot: '017a2f5c27394635b53c414962bbb775ce9b131d/5_39_1572_861',
   printCampaign2020: 'e50943f03b58caf6fde78d81eb65c92c048701c9/1844_0_1674_1006',
   printCampaignHero: 'fff86e98dbe83b36892baf7942f30fd3bcbcaee6/286_215_714_285',
+  printCampaigniMovo: 'f257e33b922f09ca180cc9205e0c766c2c2d529c/28_0_694_694',
+  printCampaignHD: '817936f0d1a2755c778b523b5ac5daa2d2f27449/10_0_716_694',
+  printCheckoutiMovo: '15677cf8f82a5690bec39bf73b2c098c8f79b24f/15_0_667_400',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
