@@ -9,13 +9,14 @@ import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.{GuardianWeekly, Quarterly}
 import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscriptionData}
+import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar._
 
-class ProductSubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
+class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
 
   "InitialTermLength" should "be correct" in {
     val termStart = new LocalDate(2019, 2, 3)

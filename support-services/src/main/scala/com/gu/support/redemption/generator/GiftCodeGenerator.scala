@@ -3,6 +3,7 @@ package com.gu.support.redemption.generator
 import java.security.SecureRandom
 
 import com.gu.support.redemption.generator.CodeBuilder.GenerateGiftCode
+import com.gu.support.workers.{Annual, BillingPeriod, Quarterly}
 
 object GiftCodeGenerator {
 

@@ -18,7 +18,7 @@ import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ZuoraSubscribeService
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.buildContributionSubscription
-import com.gu.zuora.subscriptionBuilders.{DigitalSubscriptionBuilder, GuardianWeeklySubscriptionBuilder, PaperSubscriptionBuilder, ProductSubscriptionBuilders, SubscriptionPaymentCorporate, SubscriptionPaymentDirect}
+import com.gu.zuora.subscriptionBuilders.{DigitalSubscriptionBuilder, GuardianWeeklySubscriptionBuilder, PaperSubscriptionBuilder, ProductSubscriptionBuilders, SubscriptionRedemption, SubscriptionPurchase}
 import org.joda.time.{DateTime, DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -155,8 +155,14 @@ object CreateZuoraSubscription {
         d,
         state.requestId,
         state.paymentMethod match {
-          case Left(_: PaymentMethod) => SubscriptionPaymentDirect(config.digitalPack, state.promoCode, state.user.billingAddress.country, promotionService)
-          case Right(rd: RedemptionData) => SubscriptionPaymentCorporate(rd, getCodeStatus)
+          case Left(_: PaymentMethod) => SubscriptionPurchase(
+            config.digitalPack,
+            state.promoCode,
+            state.product.billingPeriod,
+            state.user.billingAddress.country,
+            promotionService
+          )
+          case Right(rd: RedemptionData) => SubscriptionRedemption(rd, getCodeStatus)
         },
         environment,
         today

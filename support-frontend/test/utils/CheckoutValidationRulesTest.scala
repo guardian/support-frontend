@@ -5,7 +5,7 @@ import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{Everyday, HomeDelivery}
-import com.gu.support.redemptions.{CorporateRedemption, RedemptionCode}
+import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType.Corporate
 import org.joda.time.LocalDate
@@ -141,7 +141,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid corporate sub" ignore {
     val corporateSub = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Corporate),
-      paymentFields = Right(CorporateRedemption(RedemptionCode("test-code").right.get))
+      paymentFields = Right(RedemptionData(RedemptionCode("test-code").right.get))
     )
 
     DigitalPackValidation.passes(corporateSub) shouldBe true
@@ -187,7 +187,7 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "not allow corporate redemptions for paper products" in {
-    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(CorporateRedemption(RedemptionCode("TEST-CODE").right.get)))
+    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("TEST-CODE").right.get)))
     PaperValidation.passes(requestWithCorporateRedemption) shouldBe false
   }
 
