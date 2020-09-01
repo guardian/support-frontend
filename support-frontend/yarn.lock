@@ -2437,13 +2437,13 @@
   dependencies:
     "@guardian/src-helpers" "^2.2.0"
 
-"@guardian/src-radio@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-radio/-/src-radio-2.0.0.tgz#7abf5c6da14dfc9582213c0628a467a1e83590b9"
-  integrity sha512-bytfI5TQiDkcYqGVHDFm6lfMIx7PdZSMql2pDnnL11IRvYpGAzkJMZuvxoDkREFVxYeT53mh1oygZ6OFgTO9Mg==
+"@guardian/src-radio@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-radio/-/src-radio-2.2.0.tgz#5183b0def9e123666ee8d960710e3c8a53c3ee11"
+  integrity sha512-X9IMskKNfqtjeM/XNKAnx+oqowIZhoay88ZBnFYpTqmdh458RrXEMtVQ4dErkTBG19ibjIgX+L/+yCyPUHUNww==
   dependencies:
-    "@guardian/src-helpers" "^2.0.0"
-    "@guardian/src-user-feedback" "^2.0.0"
+    "@guardian/src-helpers" "^2.2.0"
+    "@guardian/src-user-feedback" "^2.2.0"
 
 "@guardian/src-svgs@^2.0.0":
   version "2.0.0"
