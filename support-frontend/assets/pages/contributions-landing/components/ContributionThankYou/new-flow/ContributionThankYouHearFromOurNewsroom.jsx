@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { css } from '@emotion/core';
 import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
@@ -57,30 +57,51 @@ const SvgNotification = () => (
   </svg>
 );
 
-const ContributionThankYouHearFromOurNewsroom = () => (
-  <section css={container}>
-    <header css={header}>
-      <SvgNotification />
-      <h2 css={headerText}>Hear from our newsroom</h2>
-    </header>
-    <div css={bodyContainer}>
-      <p>Opt in to receive a regular newsletter from inside the Guardian.</p>
-      <div css={checkboxContainer}>
-        <Checkbox supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one." />
+const ContributionThankYouHearFromOurNewsroom = () => {
+  const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+
+  return (
+    <section css={container}>
+      <header css={header}>
+        <SvgNotification />
+        <h2 css={headerText}>
+          {hasBeenInteractedWith
+            ? 'You\'re signed up'
+            : 'Hear from our newsroom'}
+        </h2>
+      </header>
+      <div css={bodyContainer}>
+        {hasBeenInteractedWith ? (
+          <p>
+            Please check your inbox for a confirmation link. Soon after, you’ll
+            receive your first email from the Guardian newsroom. You can
+            unsubscribe at any time.
+          </p>
+        ) : (
+          <>
+            <p>
+              Opt in to receive a regular newsletter from inside the Guardian.
+            </p>
+            <div css={checkboxContainer}>
+              <Checkbox supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one." />
+            </div>
+            <div css={buttonContainer}>
+              <Button
+                onClick={() => setHasBeenInteractedWith(true)}
+                priority="primary"
+                size="default"
+                icon={<SvgArrowRightStraight />}
+                iconSide="right"
+                nudgeIcon
+              >
+                Subscribe
+              </Button>
+            </div>
+          </>
+        )}
       </div>
-      <div css={buttonContainer}>
-        <Button
-          priority="primary"
-          size="default"
-          icon={<SvgArrowRightStraight />}
-          iconSide="right"
-          nudgeIcon
-        >
-          Subscribe
-        </Button>
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default ContributionThankYouHearFromOurNewsroom;
