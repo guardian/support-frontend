@@ -5,6 +5,7 @@ import java.util.UUID
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.Country
+import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
@@ -97,6 +98,7 @@ object DigitalSubscriptionBuilder {
   def addRedemptionCodeIfGift(readerType: ReaderType, billingPeriod: BillingPeriod, subscriptionData: SubscriptionData) = {
     if (readerType == Gift) {
       val code = GiftCodeGenerator.randomGiftCodes.next().withDuration(toDuration(billingPeriod))
+      SafeLogger.info(s"Generated code for Digital Subscription gift: ${code.value}")
       subscriptionData.copy(
         subscription = subscriptionData.subscription.copy(redemptionCode = Some(code.value))
       )
