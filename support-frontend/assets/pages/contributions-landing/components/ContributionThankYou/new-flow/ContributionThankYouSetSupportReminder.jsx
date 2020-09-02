@@ -8,24 +8,8 @@ import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { RadioGroup, Radio } from '@guardian/src-radio';
 import { TextInput } from '@guardian/src-text-input';
 import ActionContainer from './components/ActionContainer';
-
-const header = css`
-  display: flex;
-  align-items: center;
-`;
-
-const headerText = css`
-  display: flex;
-  flex-direction: column;
-  margin-left: ${space[1]}px;
-  ${body.medium({ fontWeight: 'bold' })};
-`;
-
-const bodyContainer = css`
-  * {
-    ${body.small()};
-  }
-`;
+import ActionHeader from './components/ActionHeader';
+import ActionBody from './components/ActionBody';
 
 const bodyText = css`
   ${body.small()};
@@ -83,67 +67,67 @@ const SvgClock = () => (
 
 const ContributionThankYouSetSupportReminder = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  return (
-    <ActionContainer>
-      <header css={header}>
-        <SvgClock />
-        <h2 css={headerText}>Set a support reminder</h2>
-      </header>
-      <div css={bodyContainer}>
+  const actionIcon = <SvgClock />;
+  const actionHeader = <ActionHeader title="Set a support reminder" />;
+  const actionBody = (
+    <ActionBody>
+      <p>
+        Opt in to receive a reminder in case you would like to support our
+        journalism again.{' '}
+        {!isExpanded && (
+          <ButtonLink
+            css={bodyText}
+            priority="secondary"
+            onClick={() => setIsExpanded(true)}
+          >
+            Read more
+          </ButtonLink>
+        )}
+      </p>
+      <div
+        css={
+          isExpanded
+            ? expandableContainerExpanded
+            : expandableContainerCollapsed
+        }
+      >
         <p>
-          Opt in to receive a reminder in case you would like to support our
-          journalism again.{' '}
-          {!isExpanded && (
-            <ButtonLink
-              css={bodyText}
-              priority="secondary"
-              onClick={() => setIsExpanded(true)}
-            >
-              Read more
-            </ButtonLink>
-          )}
+          Lots of readers chose to make single contributions at various points
+          in the year. Opt in to receive a reminder in case you would like to
+          support our journalism again. This will be a single email with no
+          obligation.
         </p>
-        <div
-          css={
-            isExpanded
-              ? expandableContainerExpanded
-              : expandableContainerCollapsed
-          }
-        >
-          <p>
-            Lots of readers chose to make single contributions at various points
-            in the year. Opt in to receive a reminder in case you would like to
-            support our journalism again. This will be a single email with no
-            obligation.
-          </p>
-        </div>
-        <form css={form}>
-          <RadioGroup
-            name="reminder"
-            label="I'd like to be reminded in:"
-            supporting="This is just a test"
-          >
-            <Radio value="march" label="March 2020" defaultChecked />
-            <Radio value="june" label="June 2020" />
-            <Radio value="december" label="December 2020" />
-          </RadioGroup>
-          <div>
-            <TextInput label="Email address" supporting="example@domain.com" />
-          </div>
-        </form>
-        <div css={buttonContainer}>
-          <Button
-            priority="primary"
-            size="default"
-            icon={<SvgArrowRightStraight />}
-            iconSide="right"
-            nudgeIcon
-          >
-            Set my reminder
-          </Button>
-        </div>
       </div>
-    </ActionContainer>
+      <form css={form}>
+        <RadioGroup
+          name="reminder"
+          label="I'd like to be reminded in:"
+          supporting="This is just a test"
+        >
+          <Radio value="march" label="March 2020" defaultChecked />
+          <Radio value="june" label="June 2020" />
+          <Radio value="december" label="December 2020" />
+        </RadioGroup>
+        <div>
+          <TextInput label="Email address" supporting="example@domain.com" />
+        </div>
+      </form>
+      <div css={buttonContainer}>
+        <Button
+          priority="primary"
+          size="default"
+          icon={<SvgArrowRightStraight />}
+          iconSide="right"
+          nudgeIcon
+        >
+          Set my reminder
+        </Button>
+      </div>
+    </ActionBody>
+  );
+
+  return (
+    <ActionContainer icon={actionIcon} header={actionHeader} body={actionBody} />
   );
 };
 

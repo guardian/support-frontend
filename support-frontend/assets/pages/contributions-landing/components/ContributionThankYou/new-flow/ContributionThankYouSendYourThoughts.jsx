@@ -1,28 +1,11 @@
 import React from 'react';
 import { css } from '@emotion/core';
-import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { Button } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
-
-const header = css`
-  display: flex;
-  align-items: center;
-`;
-
-const headerText = css`
-  display: flex;
-  flex-direction: column;
-  margin-left: ${space[1]}px;
-  ${body.medium({ fontWeight: 'bold' })};
-`;
-
-const bodyContainer = css`
-  * {
-    ${body.small()};
-  }
-`;
+import ActionHeader from './components/ActionHeader';
+import ActionBody from './components/ActionBody';
 
 const buttonContainer = css`
   margin-top: ${space[6]}px;
@@ -45,13 +28,11 @@ const SvgNotification = () => (
   </svg>
 );
 
-const ContributionThankYouSendYourThoughts = () => (
-  <ActionContainer>
-    <header css={header}>
-      <SvgNotification />
-      <h2 css={headerText}>Send us your thoughts</h2>
-    </header>
-    <div css={bodyContainer}>
+const ContributionThankYouSendYourThoughts = () => {
+  const actionIcon = <SvgNotification />;
+  const actionHeader = <ActionHeader title="Send us your thoughts" />;
+  const actionBody = (
+    <ActionBody>
       <p>
         Fill out this short form to tell us more about your experience of
         supporting us today.
@@ -67,8 +48,12 @@ const ContributionThankYouSendYourThoughts = () => (
           Provide feedback
         </Button>
       </div>
-    </div>
-  </ActionContainer>
-);
+    </ActionBody>
+  );
+
+  return (
+    <ActionContainer icon={actionIcon} header={actionHeader} body={actionBody} />
+  );
+};
 
 export default ContributionThankYouSendYourThoughts;

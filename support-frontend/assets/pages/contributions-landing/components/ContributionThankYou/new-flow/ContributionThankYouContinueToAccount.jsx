@@ -7,24 +7,8 @@ import { Button } from '@guardian/src-button';
 import { ButtonLink } from '@guardian/src-link';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
-
-const header = css`
-  display: flex;
-  align-items: center;
-`;
-
-const headerText = css`
-  display: flex;
-  flex-direction: column;
-  margin-left: ${space[1]}px;
-  ${body.medium({ fontWeight: 'bold' })};
-`;
-
-const bodyContainer = css`
-  * {
-    ${body.small()};
-  }
-`;
+import ActionHeader from './components/ActionHeader';
+import ActionBody from './components/ActionBody';
 
 const bodyText = css`
   ${body.small()};
@@ -101,71 +85,70 @@ const SvgBullet = () => (
 
 const ContributionThankYouContinueToAccount = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  return (
-    <ActionContainer>
-      <header css={header}>
-        <SvgPersonWithTick />
-        <h2 css={headerText}>Continue to your account</h2>
-      </header>
-      <div css={bodyContainer}>
-        <p>
-          We’ll show you fewer requests for support and improve your Guardian
-          reading experience.{' '}
-          {!isExpanded && (
-            <ButtonLink
-              css={bodyText}
-              priority="secondary"
-              onClick={() => setIsExpanded(true)}
-            >
-              Read more
-            </ButtonLink>
-          )}
-        </p>
-        <div
-          css={
-            isExpanded
-              ? expandableContainerExpanded
-              : expandableContainerCollapsed
-          }
-        >
-          <p>Stay signed in across all your devices, to:</p>
-          <ul css={list}>
-            <li css={listItem}>
-              <div>
-                <SvgBullet />
-              </div>
-              <div>
-                Remove unnecessary messages asking you for financial support
-              </div>
-            </li>
-            <li css={listItem}>
-              <div>
-                <SvgBullet />
-              </div>
-              <div>
-                Let you easily manage your recurring contributions,
-                subscriptions and newsletters in one place
-              </div>
-            </li>
-          </ul>
-          <p>
-            Make sure you sign in on each of the devices you use to read our
-            journalism – either today or next time you use them.
-          </p>
-        </div>
-        <div css={buttonContainer}>
-          <Button
-            priority="primary"
-            size="default"
-            icon={<SvgArrowRightStraight />}
-            iconSide="right"
-            nudgeIcon
+  const actionIcon = <SvgPersonWithTick />;
+  const actionHeader = <ActionHeader title="Continue to your account" />;
+  const actionBody = (
+    <ActionBody>
+      <p>
+        We’ll show you fewer requests for support and improve your Guardian
+        reading experience.{' '}
+        {!isExpanded && (
+          <ButtonLink
+            css={bodyText}
+            priority="secondary"
+            onClick={() => setIsExpanded(true)}
           >
-            Continue
-          </Button>
-        </div>
+            Read more
+          </ButtonLink>
+        )}
+      </p>
+      <div
+        css={
+          isExpanded
+            ? expandableContainerExpanded
+            : expandableContainerCollapsed
+        }
+      >
+        <p>Stay signed in across all your devices, to:</p>
+        <ul css={list}>
+          <li css={listItem}>
+            <div>
+              <SvgBullet />
+            </div>
+            <div>
+              Remove unnecessary messages asking you for financial support
+            </div>
+          </li>
+          <li css={listItem}>
+            <div>
+              <SvgBullet />
+            </div>
+            <div>
+              Let you easily manage your recurring contributions, subscriptions
+              and newsletters in one place
+            </div>
+          </li>
+        </ul>
+        <p>
+          Make sure you sign in on each of the devices you use to read our
+          journalism – either today or next time you use them.
+        </p>
       </div>
-    </ActionContainer>
+      <div css={buttonContainer}>
+        <Button
+          priority="primary"
+          size="default"
+          icon={<SvgArrowRightStraight />}
+          iconSide="right"
+          nudgeIcon
+        >
+          Continue
+        </Button>
+      </div>
+    </ActionBody>
+  );
+  return (
+    <ActionContainer icon={actionIcon} header={actionHeader} body={actionBody} />
   );
 };
 

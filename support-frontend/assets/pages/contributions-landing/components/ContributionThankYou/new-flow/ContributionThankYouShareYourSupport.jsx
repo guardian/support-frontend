@@ -1,28 +1,11 @@
 import React from 'react';
 import { css } from '@emotion/core';
-import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { LinkButton } from '@guardian/src-button';
 import { SvgFacebook, SvgTwitter, SvgEnvelope } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
-
-const header = css`
-  display: flex;
-  align-items: center;
-`;
-
-const headerText = css`
-  display: flex;
-  flex-direction: column;
-  margin-left: ${space[1]}px;
-  ${body.medium({ fontWeight: 'bold' })};
-`;
-
-const bodyContainer = css`
-  * {
-    ${body.small()};
-  }
-`;
+import ActionHeader from './components/ActionHeader';
+import ActionBody from './components/ActionBody';
 
 const buttonsContainer = css`
   margin-top: ${space[6]}px;
@@ -60,13 +43,11 @@ const SvgLinkedIn = () => (
   </svg>
 );
 
-const ContributionThankYouSendYourThoughts = () => (
-  <ActionContainer>
-    <header css={header}>
-      <SvgShare />
-      <h2 css={headerText}>Share your support</h2>
-    </header>
-    <div css={bodyContainer}>
+const ContributionThankYouSendYourThoughts = () => {
+  const actionIcon = <SvgShare />;
+  const actionHeader = <ActionHeader title="Share your support" />;
+  const actionBody = (
+    <ActionBody>
       <p>
         Invite your followers to support the Guardian’s open, independent
         reporting.
@@ -97,8 +78,10 @@ const ContributionThankYouSendYourThoughts = () => (
           hideLabel
         />
       </div>
-    </div>
-  </ActionContainer>
-);
+    </ActionBody>
+  );
+
+  return <ActionContainer icon={actionIcon} header={actionHeader} body={actionBody} />;
+};
 
 export default ContributionThankYouSendYourThoughts;

@@ -17,14 +17,51 @@ const container = css`
     padding-right: 72px;
     border: 1px solid ${neutral[86]};
   }
+
+  display: grid;
+  grid-column-gap: ${space[3]}px;
+  grid-template-columns: min-content 1fr;
+  grid-template-areas:
+    "icon header"
+    "body body";
+
+  ${from.desktop} {
+    grid-template-areas:
+      "icon header"
+      "---- body";
+  }
+`;
+
+const iconContainer = css`
+  grid-area: icon;
+
+  svg {
+    display: block;
+  }
+`;
+
+const headerContainer = css`
+  grid-area: header;
+
+  display: flex;
+  align-items: center;
+`;
+const bodyContainer = css`
+  grid-area: body;
 `;
 
 type ActionContainerProps = {|
-  children: React.Node
+  icon: React.Node,
+  header: React.Node,
+  body: React.Node,
 |};
 
-const ActionContainer = ({
-  children,
-}: ActionContainerProps) => <section css={container}>{children}</section>;
+const ActionContainer = ({ icon, header, body }: ActionContainerProps) => (
+  <section css={container}>
+    <div css={iconContainer}>{icon}</div>
+    <div css={headerContainer}>{ header}</div>
+    <div css={bodyContainer}>{body}</div>
+  </section>
+);
 
 export default ActionContainer;

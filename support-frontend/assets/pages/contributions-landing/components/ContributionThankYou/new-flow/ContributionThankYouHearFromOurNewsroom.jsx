@@ -1,29 +1,12 @@
 import React, { useState } from 'react';
 import { css } from '@emotion/core';
-import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { Checkbox } from '@guardian/src-checkbox';
 import { Button } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
-
-const header = css`
-  display: flex;
-  align-items: center;
-`;
-
-const headerText = css`
-  display: flex;
-  flex-direction: column;
-  margin-left: ${space[1]}px;
-  ${body.medium({ fontWeight: 'bold' })};
-`;
-
-const bodyContainer = css`
-  * {
-    ${body.small()};
-  }
-`;
+import ActionHeader from './components/ActionHeader';
+import ActionBody from './components/ActionBody';
 
 const checkboxContainer = css`
   margin-top: ${space[2]}px;
@@ -52,48 +35,49 @@ const SvgNotification = () => (
 
 const ContributionThankYouHearFromOurNewsroom = () => {
   const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+  const actionIcon = <SvgNotification />;
+  const actionHeader = (
+    <ActionHeader
+      title={
+        hasBeenInteractedWith ? 'You\'re signed up' : 'Hear from our newsroom'
+      }
+    />
+  );
+  const actionBody = (
+    <ActionBody>
+      {hasBeenInteractedWith ? (
+        <p>
+          Please check your inbox for a confirmation link. Soon after, you’ll
+          receive your first email from the Guardian newsroom. You can
+          unsubscribe at any time.
+        </p>
+      ) : (
+        <>
+          <p>
+            Opt in to receive a regular newsletter from inside the Guardian.
+          </p>
+          <div css={checkboxContainer}>
+            <Checkbox supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one." />
+          </div>
+          <div css={buttonContainer}>
+            <Button
+              onClick={() => setHasBeenInteractedWith(true)}
+              priority="primary"
+              size="default"
+              icon={<SvgArrowRightStraight />}
+              iconSide="right"
+              nudgeIcon
+            >
+              Subscribe
+            </Button>
+          </div>
+        </>
+      )}
+    </ActionBody>
+  );
 
   return (
-    <ActionContainer>
-      <header css={header}>
-        <SvgNotification />
-        <h2 css={headerText}>
-          {hasBeenInteractedWith
-            ? 'You\'re signed up'
-            : 'Hear from our newsroom'}
-        </h2>
-      </header>
-      <div css={bodyContainer}>
-        {hasBeenInteractedWith ? (
-          <p>
-            Please check your inbox for a confirmation link. Soon after, you’ll
-            receive your first email from the Guardian newsroom. You can
-            unsubscribe at any time.
-          </p>
-        ) : (
-          <>
-            <p>
-              Opt in to receive a regular newsletter from inside the Guardian.
-            </p>
-            <div css={checkboxContainer}>
-              <Checkbox supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one." />
-            </div>
-            <div css={buttonContainer}>
-              <Button
-                onClick={() => setHasBeenInteractedWith(true)}
-                priority="primary"
-                size="default"
-                icon={<SvgArrowRightStraight />}
-                iconSide="right"
-                nudgeIcon
-              >
-                Subscribe
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
-    </ActionContainer>
+    <ActionContainer icon={actionIcon} header={actionHeader} body={actionBody} />
   );
 };
 
