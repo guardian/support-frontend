@@ -9,6 +9,7 @@ import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
+import styles from './styles';
 
 const bodyText = css`
   ${body.small()};
@@ -90,49 +91,84 @@ const ContributionThankYouContinueToAccount = () => {
   const actionBody = (
     <ActionBody>
       <p>
-        We’ll show you fewer requests for support and improve your Guardian
-        reading experience.{' '}
-        {!isExpanded && (
-          <ButtonLink
-            css={bodyText}
-            priority="secondary"
-            onClick={() => setIsExpanded(true)}
-          >
-            Read more
-          </ButtonLink>
-        )}
+        <span css={styles.hideAfterDesktop}>
+          We’ll show you fewer requests for support and improve your Guardian
+          reading experience.{' '}
+          {!isExpanded && (
+            <ButtonLink
+              css={bodyText}
+              priority="secondary"
+              onClick={() => setIsExpanded(true)}
+            >
+              Read more
+            </ButtonLink>
+          )}
+        </span>
+        <span css={styles.hideBeforeDesktop}>
+          By signing in, you enable us to recognise you as a supporter across
+          our website and apps. This means we will:
+        </span>
       </p>
-      <div
-        css={
+      <div css={styles.hideAfterDesktop}>
+        <div
+          css={
           isExpanded
             ? expandableContainerExpanded
             : expandableContainerCollapsed
         }
-      >
-        <p>Stay signed in across all your devices, to:</p>
-        <ul css={list}>
-          <li css={listItem}>
-            <div>
-              <SvgBullet />
-            </div>
-            <div>
+        >
+          <p>Stay signed in across all your devices, to:</p>
+          <ul css={list}>
+            <li css={listItem}>
+              <div>
+                <SvgBullet />
+              </div>
+              <div>
               Remove unnecessary messages asking you for financial support
-            </div>
-          </li>
-          <li css={listItem}>
-            <div>
-              <SvgBullet />
-            </div>
-            <div>
+              </div>
+            </li>
+            <li css={listItem}>
+              <div>
+                <SvgBullet />
+              </div>
+              <div>
               Let you easily manage your recurring contributions, subscriptions
               and newsletters in one place
-            </div>
-          </li>
-        </ul>
-        <p>
+              </div>
+            </li>
+          </ul>
+          <p>
           Make sure you sign in on each of the devices you use to read our
           journalism – either today or next time you use them.
-        </p>
+          </p>
+        </div>
+      </div>
+      <div css={styles.hideBeforeDesktop}>
+        <div css={expandableContainerExpanded}>
+          <ul css={list}>
+            <li css={listItem}>
+              <div>
+                <SvgBullet />
+              </div>
+              <div>
+              Remove unnecessary messages asking you for financial support
+              </div>
+            </li>
+            <li css={listItem}>
+              <div>
+                <SvgBullet />
+              </div>
+              <div>
+              Let you easily manage your recurring contributions, subscriptions
+              and newsletters in one place
+              </div>
+            </li>
+          </ul>
+          <p>
+          Make sure you sign in on each of the devices you use to read our
+          journalism – either today or next time you use them.
+          </p>
+        </div>
       </div>
       <div css={buttonContainer}>
         <Button
@@ -148,7 +184,11 @@ const ContributionThankYouContinueToAccount = () => {
     </ActionBody>
   );
   return (
-    <ActionContainer icon={actionIcon} header={actionHeader} body={actionBody} />
+    <ActionContainer
+      icon={actionIcon}
+      header={actionHeader}
+      body={actionBody}
+    />
   );
 };
 
