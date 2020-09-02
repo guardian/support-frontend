@@ -1,5 +1,0 @@
-{
-  "checkpoints": {
-    "PROD": { "url": "https://payment.guardianapis.com/healthcheck", "overdue": "15M" }
-  }
-}
