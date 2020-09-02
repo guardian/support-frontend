@@ -1,16 +1,7 @@
 // @flow
-<<<<<<< HEAD
-import { logException } from 'helpers/logger';
-import { getGlobal } from 'helpers/globals';
-
-type ConsentVector = {
-    [key: string]: boolean;
-}
-=======
 
 import { onConsentChange } from '@guardian/consent-management-platform';
 import { logException } from 'helpers/logger';
->>>>>>> 9842386a2... implement tcfv2 banner
 
 type ConsentState = {
     tcfv2?: {
