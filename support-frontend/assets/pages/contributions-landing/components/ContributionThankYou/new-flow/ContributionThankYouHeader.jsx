@@ -4,8 +4,13 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 
 const header = css`
+  background: white;
   padding-top: ${space[4]}px;
   padding-bottom: ${space[5]}px;
+
+  ${from.desktop} {
+    background: none;
+  }
 `;
 
 const headerTitleText = css`

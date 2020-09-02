@@ -2,17 +2,10 @@ import React, { useState } from 'react';
 import { css } from '@emotion/core';
 import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
-import { neutral } from '@guardian/src-foundations/palette';
 import { Checkbox } from '@guardian/src-checkbox';
 import { Button } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-
-const container = css`
-  padding-top: ${space[2]}px;
-  padding-bottom: ${space[5]}px;
-  border-top: 1px solid ${neutral[86]};
-  border-bottom: 1px solid ${neutral[86]};
-`;
+import ActionContainer from './components/ActionContainer';
 
 const header = css`
   display: flex;
@@ -61,7 +54,7 @@ const ContributionThankYouHearFromOurNewsroom = () => {
   const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
 
   return (
-    <section css={container}>
+    <ActionContainer>
       <header css={header}>
         <SvgNotification />
         <h2 css={headerText}>
@@ -100,7 +93,7 @@ const ContributionThankYouHearFromOurNewsroom = () => {
           </>
         )}
       </div>
-    </section>
+    </ActionContainer>
   );
 };
 

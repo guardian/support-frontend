@@ -2,17 +2,11 @@ import React, { useState } from 'react';
 import { css } from '@emotion/core';
 import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
-import { neutral, brand } from '@guardian/src-foundations/palette';
+import { brand } from '@guardian/src-foundations/palette';
 import { Button } from '@guardian/src-button';
 import { ButtonLink } from '@guardian/src-link';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-
-const container = css`
-  padding-top: ${space[2]}px;
-  padding-bottom: ${space[5]}px;
-  border-top: 1px solid ${neutral[86]};
-  border-bottom: 1px solid ${neutral[86]};
-`;
+import ActionContainer from './components/ActionContainer';
 
 const header = css`
   display: flex;
@@ -108,7 +102,7 @@ const SvgBullet = () => (
 const ContributionThankYouContinueToAccount = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
-    <section css={container}>
+    <ActionContainer>
       <header css={header}>
         <SvgPersonWithTick />
         <h2 css={headerText}>Continue to your account</h2>
@@ -171,7 +165,7 @@ const ContributionThankYouContinueToAccount = () => {
           </Button>
         </div>
       </div>
-    </section>
+    </ActionContainer>
   );
 };
 

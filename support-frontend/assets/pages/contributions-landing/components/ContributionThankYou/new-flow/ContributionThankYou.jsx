@@ -1,5 +1,6 @@
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouContinueToAccount from './ContributionThankYouContinueToAccount';
@@ -12,6 +13,11 @@ import ContributionThankYouShareYourSupport from './ContributionThankYouShareYou
 const container = css`
   background: white;
   padding: 0 ${space[3]}px;
+
+  ${from.desktop} {
+    background: none;
+    padding 0 ${space[24]}px;
+  }
 `;
 
 const buttonContainer = css`

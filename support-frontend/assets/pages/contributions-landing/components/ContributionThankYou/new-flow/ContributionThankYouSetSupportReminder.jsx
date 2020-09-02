@@ -2,19 +2,12 @@ import React, { useState } from 'react';
 import { css } from '@emotion/core';
 import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
-import { neutral } from '@guardian/src-foundations/palette';
 import { Button } from '@guardian/src-button';
 import { ButtonLink } from '@guardian/src-link';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { RadioGroup, Radio } from '@guardian/src-radio';
 import { TextInput } from '@guardian/src-text-input';
-
-const container = css`
-  padding-top: ${space[2]}px;
-  padding-bottom: ${space[5]}px;
-  border-top: 1px solid ${neutral[86]};
-  border-bottom: 1px solid ${neutral[86]};
-`;
+import ActionContainer from './components/ActionContainer';
 
 const header = css`
   display: flex;
@@ -91,7 +84,7 @@ const SvgClock = () => (
 const ContributionThankYouSetSupportReminder = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
-    <section css={container}>
+    <ActionContainer>
       <header css={header}>
         <SvgClock />
         <h2 css={headerText}>Set a support reminder</h2>
@@ -150,7 +143,7 @@ const ContributionThankYouSetSupportReminder = () => {
           </Button>
         </div>
       </div>
-    </section>
+    </ActionContainer>
   );
 };
 
