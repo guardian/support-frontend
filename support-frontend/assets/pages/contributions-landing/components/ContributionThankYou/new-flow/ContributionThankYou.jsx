@@ -4,6 +4,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouContinueToAccount from './ContributionThankYouContinueToAccount';
+import ContributionThankYouCompleteRegistration from './ContributionThankYouCompleteRegistration';
 import ContributionThankYouHearFromOurNewsroom from './ContributionThankYouHearFromOurNewsroom';
 import ContributionThankYouSetSupportReminder from './ContributionThankYouSetSupportReminder';
 import ContributionThankYouSendYourThoughts from './ContributionThankYouSendYourThoughts';
@@ -55,6 +56,7 @@ const ContributionThankYou = () => (
     <div css={columnsContainer}>
       <div css={columnContainer}>
         <ContributionThankYouContinueToAccount />
+        <ContributionThankYouCompleteRegistration />
         <ContributionThankYouHearFromOurNewsroom />
       </div>
       <div css={columnContainer}>
