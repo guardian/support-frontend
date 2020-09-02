@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import { Checkbox } from '@guardian/src-checkbox';
 import { Button } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
@@ -10,10 +11,30 @@ import ActionBody from './components/ActionBody';
 
 const checkboxContainer = css`
   margin-top: ${space[2]}px;
+
+  ${from.desktop} {
+    margin-top: ${space[5]}px;
+  }
 `;
 
 const buttonContainer = css`
   margin-top: ${space[6]}px;
+`;
+
+const hideAfterDesktop = css`
+  display: block;
+
+  ${from.desktop} {
+    display: none;
+  }
+`;
+
+const hideBeforeDesktop = css`
+  display: none;
+
+  ${from.desktop} {
+    display: block;
+  }
 `;
 
 const SvgNotification = () => (
@@ -54,10 +75,22 @@ const ContributionThankYouHearFromOurNewsroom = () => {
       ) : (
         <>
           <p>
-            Opt in to receive a regular newsletter from inside the Guardian.
+            <span css={hideAfterDesktop}>
+              Opt in to receive a regular newsletter from inside the Guardian.
+            </span>
+            <span css={hideBeforeDesktop}>
+              Our membership editor and others will discuss the most important
+              recent news stories and suggest compelling articles to read. Opt
+              in to receive their regular newsletter.
+            </span>
           </p>
           <div css={checkboxContainer}>
-            <Checkbox supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one." />
+            <div css={hideAfterDesktop}>
+              <Checkbox supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one." />
+            </div>
+            <div css={hideBeforeDesktop}>
+              <Checkbox supporting="Contributions, subscriptions and membership: get related news and offers – whether you are a contributor, subscriber, member or would like to become one." />
+            </div>
           </div>
           <div css={buttonContainer}>
             <Button
@@ -77,7 +110,11 @@ const ContributionThankYouHearFromOurNewsroom = () => {
   );
 
   return (
-    <ActionContainer icon={actionIcon} header={actionHeader} body={actionBody} />
+    <ActionContainer
+      icon={actionIcon}
+      header={actionHeader}
+      body={actionBody}
+    />
   );
 };
 
