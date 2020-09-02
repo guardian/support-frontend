@@ -8,7 +8,7 @@ import com.gu.support.config.ZuoraConfig
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._
-import com.gu.support.zuora.api.{PreviewSubscribeRequest, QueryData, SubscribeRequest, UpdateRedemptionDataRequest}
+import com.gu.support.zuora.api.{Day, PreviewSubscribeRequest, QueryData, SubscribeRequest, UpdateRedemptionDataRequest}
 import com.gu.support.zuora.domain.{DomainAccount, DomainSubscription}
 import io.circe
 import io.circe.Decoder
@@ -91,13 +91,17 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
 
   def getSubscriptionFromRedemptionCode(redemptionCode: RedemptionCode): Future[SubscriptionRedemptionQueryResponse] = {
     val queryData = QueryData(
+      //TODO RB expire codes
       s"select id, RedemptionCode__c, GifteeIdentityId__c from subscription where RedemptionCode__c = '${redemptionCode.value}' and status = 'Active'"
     )
     postJson[SubscriptionRedemptionQueryResponse](s"action/query", queryData.asJson, authHeaders)
   }
 
+  def getSubscriptionById(id: String): Future[Subscription] =
+    get[Subscription](s"subscriptions/${id}", authHeaders)
+
   def updateSubscriptionRedemptionData(subscriptionId: String, gifteeIdentityId: String, currentTerm: Int): Future[UpdateRedemptionDataResponse] = {
-    val requestData = UpdateRedemptionDataRequest(gifteeIdentityId, currentTerm)
+    val requestData = UpdateRedemptionDataRequest(gifteeIdentityId, currentTerm, Day)
     putJson[UpdateRedemptionDataResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
   }
 

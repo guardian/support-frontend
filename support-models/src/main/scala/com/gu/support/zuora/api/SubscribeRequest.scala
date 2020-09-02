@@ -33,5 +33,5 @@ object UpdateRedemptionDataRequest {
   implicit val codec: Codec[UpdateRedemptionDataRequest] = deriveCodec
 }
 
-case class UpdateRedemptionDataRequest(gifteeIdentityId: String, currentTerm: Int)
+case class UpdateRedemptionDataRequest(gifteeIdentityId: String, currentTerm: Int, termType: PeriodType)
 
