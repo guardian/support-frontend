@@ -6,6 +6,7 @@ import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
+import styles from './styles';
 
 const buttonContainer = css`
   margin-top: ${space[6]}px;
@@ -34,8 +35,15 @@ const ContributionThankYouSendYourThoughts = () => {
   const actionBody = (
     <ActionBody>
       <p>
-        Fill out this short form to tell us more about your experience of
-        supporting us today.
+        <span css={styles.hideAfterDesktop}>
+          Fill out this short form to tell us more about your experience of
+          supporting us today.
+        </span>
+        <span css={styles.hideBeforeDesktop}>
+          We would love to hear more about your experience of supporting the
+          Guardian today. Please fill out this short form – it only takes a
+          minute.
+        </span>
       </p>
       <div css={buttonContainer}>
         <Button
@@ -52,7 +60,11 @@ const ContributionThankYouSendYourThoughts = () => {
   );
 
   return (
-    <ActionContainer icon={actionIcon} header={actionHeader} body={actionBody} />
+    <ActionContainer
+      icon={actionIcon}
+      header={actionHeader}
+      body={actionBody}
+    />
   );
 };
 

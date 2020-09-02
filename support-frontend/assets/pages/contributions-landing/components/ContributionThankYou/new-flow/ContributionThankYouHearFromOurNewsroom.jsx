@@ -8,6 +8,7 @@ import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
+import styles from './styles';
 
 const checkboxContainer = css`
   margin-top: ${space[2]}px;
@@ -19,22 +20,6 @@ const checkboxContainer = css`
 
 const buttonContainer = css`
   margin-top: ${space[6]}px;
-`;
-
-const hideAfterDesktop = css`
-  display: block;
-
-  ${from.desktop} {
-    display: none;
-  }
-`;
-
-const hideBeforeDesktop = css`
-  display: none;
-
-  ${from.desktop} {
-    display: block;
-  }
 `;
 
 const SvgNotification = () => (
@@ -75,20 +60,20 @@ const ContributionThankYouHearFromOurNewsroom = () => {
       ) : (
         <>
           <p>
-            <span css={hideAfterDesktop}>
+            <span css={styles.hideAfterDesktop}>
               Opt in to receive a regular newsletter from inside the Guardian.
             </span>
-            <span css={hideBeforeDesktop}>
+            <span css={styles.hideBeforeDesktop}>
               Our membership editor and others will discuss the most important
               recent news stories and suggest compelling articles to read. Opt
               in to receive their regular newsletter.
             </span>
           </p>
           <div css={checkboxContainer}>
-            <div css={hideAfterDesktop}>
+            <div css={styles.hideAfterDesktop}>
               <Checkbox supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one." />
             </div>
-            <div css={hideBeforeDesktop}>
+            <div css={styles.hideBeforeDesktop}>
               <Checkbox supporting="Contributions, subscriptions and membership: get related news and offers – whether you are a contributor, subscriber, member or would like to become one." />
             </div>
           </div>
