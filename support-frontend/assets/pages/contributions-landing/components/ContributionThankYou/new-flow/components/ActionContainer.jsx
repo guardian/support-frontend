@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
@@ -20,10 +20,10 @@ const container = css`
 `;
 
 type ActionContainerProps = {|
-  children: React.ReacElement
+  children: React.Node
 |};
 
-const ActionContainer: React.FC<ActionContainerProps> = ({
+const ActionContainer = ({
   children,
 }: ActionContainerProps) => <section css={container}>{children}</section>;
 
