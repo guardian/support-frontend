@@ -1,6 +1,5 @@
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { GridRow, GridItem } from '@guardian/src-grid';
 import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouContinueToAccount from './ContributionThankYouContinueToAccount';
@@ -12,6 +11,7 @@ import ContributionThankYouShareYourSupport from './ContributionThankYouShareYou
 
 const container = css`
   background: white;
+  padding: 0 ${space[3]}px;
 `;
 
 const buttonContainer = css`
@@ -21,46 +21,17 @@ const buttonContainer = css`
 
 const ContributionThankYou = () => (
   <div css={container}>
-    <GridRow breakpoints={['mobile', 'tablet']} >
-      <GridItem spans={[4, 12]}>
-        <ContributionThankYouHeader />
-      </GridItem>
-    </GridRow>
-    <GridRow breakpoints={['mobile', 'tablet']} >
-      <GridItem spans={[4, 12]}>
-        <ContributionThankYouContinueToAccount />
-      </GridItem>
-    </GridRow>
-    <GridRow breakpoints={['mobile', 'tablet']} >
-      <GridItem spans={[4, 12]}>
-        <ContributionThankYouHearFromOurNewsroom />
-      </GridItem>
-    </GridRow>
-    <GridRow breakpoints={['mobile', 'tablet']} >
-      <GridItem spans={[4, 12]}>
-        <ContributionThankYouSetSupportReminder />
-      </GridItem>
-    </GridRow>
-    <GridRow breakpoints={['mobile', 'tablet']} >
-      <GridItem spans={[4, 12]}>
-        <ContributionThankYouSendYourThoughts />
-      </GridItem>
-    </GridRow>
-    <GridRow breakpoints={['mobile', 'tablet']} >
-      <GridItem spans={[4, 12]}>
-        <ContributionThankYouShareYourSupport />
-      </GridItem>
-    </GridRow>
-
-    <GridRow breakpoints={['mobile', 'tablet']} >
-      <GridItem spans={[4, 12]}>
-        <div css={buttonContainer} >
-          <LinkButton priority="tertiary" >
+    <ContributionThankYouHeader />
+    <ContributionThankYouContinueToAccount />
+    <ContributionThankYouHearFromOurNewsroom />
+    <ContributionThankYouSetSupportReminder />
+    <ContributionThankYouSendYourThoughts />
+    <ContributionThankYouShareYourSupport />
+    <div css={buttonContainer} >
+      <LinkButton priority="tertiary" >
             Return to the Guardian
-          </LinkButton>
-        </div>
-      </GridItem>
-    </GridRow>
+      </LinkButton>
+    </div>
   </div>
 );
 
