@@ -20,6 +20,29 @@ const container = css`
   }
 `;
 
+const columnsContainer = css`
+  display: flex;
+  flex-direction: column;
+
+  ${from.desktop} {
+    flex-direction: row;
+
+    & > * + * {
+      margin-left: ${space[6]}px;
+    }
+  }
+`;
+
+const columnContainer = css`
+  ${from.desktop} {
+    width: calc(50% - ${space[3]}px);
+
+    & > * + * {
+      margin-top: ${space[6]}px;
+    }
+  }
+`;
+
 const buttonContainer = css`
   padding-top: ${space[6]}px;
   padding-bottom: ${space[6]}px;
@@ -28,11 +51,19 @@ const buttonContainer = css`
 const ContributionThankYou = () => (
   <div css={container}>
     <ContributionThankYouHeader />
-    <ContributionThankYouContinueToAccount />
-    <ContributionThankYouHearFromOurNewsroom />
-    <ContributionThankYouSetSupportReminder />
-    <ContributionThankYouSendYourThoughts />
-    <ContributionThankYouShareYourSupport />
+
+    <div css={columnsContainer}>
+      <div css={columnContainer}>
+        <ContributionThankYouContinueToAccount />
+        <ContributionThankYouHearFromOurNewsroom />
+      </div>
+      <div css={columnContainer}>
+        <ContributionThankYouSetSupportReminder />
+        <ContributionThankYouSendYourThoughts />
+        <ContributionThankYouShareYourSupport />
+      </div>
+    </div>
+
     <div css={buttonContainer} >
       <LinkButton priority="tertiary" >
             Return to the Guardian
