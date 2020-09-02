@@ -39,16 +39,9 @@ export const linksList = css`
   position: relative;
   width: 100%;
   list-style: none;
-  /* display: grid;
-  grid-column-gap: ${space[5]}px;
-  grid-row-gap: ${space[2]}px;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: auto; */
-  /* grid-auto-flow: column; */
 
   ${from.tablet} {
     display: flex;
-    grid-column-gap: 0;
   }
 
   ${until.tablet} {

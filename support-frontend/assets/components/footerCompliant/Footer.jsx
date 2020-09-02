@@ -55,14 +55,14 @@ function Footer({
             <li css={link}>
               <Link subdued href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</Link>
             </li>
+            <li css={link}>
+              <ButtonLink subdued onClick={() => cmp.showPrivacyManager()}>Privacy Settings</ButtonLink>
+            </li>
             {termsConditionsLink &&
               <li css={link}>
                 <Link subdued href={termsConditionsLink}>Terms & Conditions</Link>
               </li>
             }
-            <li css={link}>
-              <ButtonLink subdued onClick={() => cmp.showPrivacyManager()}>Privacy Settings</ButtonLink>
-            </li>
           </ul>
         </FooterContent>
         <FooterContent appearance={{ centred }}>
