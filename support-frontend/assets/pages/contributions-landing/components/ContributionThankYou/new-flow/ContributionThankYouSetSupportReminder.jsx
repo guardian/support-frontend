@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { css } from '@emotion/core';
-import { body } from '@guardian/src-foundations/typography';
+import { body, textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
+import { neutral } from '@guardian/src-foundations/palette';
 import { Button } from '@guardian/src-button';
-import { ButtonLink } from '@guardian/src-link';
+import { ButtonLink, Link } from '@guardian/src-link';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { RadioGroup, Radio } from '@guardian/src-radio';
 import { TextInput } from '@guardian/src-text-input';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
+import styles from './styles';
 
 const bodyText = css`
   ${body.small()};
@@ -48,6 +50,21 @@ const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
+const privacyText = css`
+  ${styles.hideBeforeDesktop}
+  ${textSans.small()}
+
+  color: ${neutral[20]};
+  margin-top: ${space[3]}px;
+`;
+
+const privacyTextLink = css`
+  ${textSans.small()}
+
+  color: ${neutral[20]};
+`;
+
+
 const SvgClock = () => (
   <svg
     width="39"
@@ -72,31 +89,41 @@ const ContributionThankYouSetSupportReminder = () => {
   const actionBody = (
     <ActionBody>
       <p>
-        Opt in to receive a reminder in case you would like to support our
-        journalism again.{' '}
-        {!isExpanded && (
-          <ButtonLink
-            css={bodyText}
-            priority="secondary"
-            onClick={() => setIsExpanded(true)}
-          >
-            Read more
-          </ButtonLink>
-        )}
-      </p>
-      <div
-        css={
-          isExpanded
-            ? expandableContainerExpanded
-            : expandableContainerCollapsed
-        }
-      >
-        <p>
+        <span css={styles.hideAfterDesktop}>
+          Opt in to receive a reminder in case you would like to support our
+          journalism again.{' '}
+          {!isExpanded && (
+            <ButtonLink
+              css={bodyText}
+              priority="secondary"
+              onClick={() => setIsExpanded(true)}
+            >
+              Read more
+            </ButtonLink>
+          )}
+        </span>
+        <span css={styles.hideBeforeDesktop}>
           Lots of readers chose to make single contributions at various points
           in the year. Opt in to receive a reminder in case you would like to
           support our journalism again. This will be a single email with no
           obligation.
-        </p>
+        </span>
+      </p>
+      <div css={styles.hideAfterDesktop}>
+        <div
+          css={
+            isExpanded
+              ? expandableContainerExpanded
+              : expandableContainerCollapsed
+          }
+        >
+          <p>
+            Lots of readers chose to make single contributions at various points
+            in the year. Opt in to receive a reminder in case you would like to
+            support our journalism again. This will be a single email with no
+            obligation.
+          </p>
+        </div>
       </div>
       <form css={form}>
         <RadioGroup
@@ -123,11 +150,19 @@ const ContributionThankYouSetSupportReminder = () => {
           Set my reminder
         </Button>
       </div>
+      <p css={privacyText}>
+        To find out what personal data we collect and how we use it, please
+        visit our <Link css={privacyTextLink} href="/" priority="secondary">Privacy Policy</Link>.
+      </p>
     </ActionBody>
   );
 
   return (
-    <ActionContainer icon={actionIcon} header={actionHeader} body={actionBody} />
+    <ActionContainer
+      icon={actionIcon}
+      header={actionHeader}
+      body={actionBody}
+    />
   );
 };
 
