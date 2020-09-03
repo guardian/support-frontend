@@ -10,7 +10,6 @@ import ContributionThankYouSetSupportReminder from './ContributionThankYouSetSup
 import ContributionThankYouSendYourThoughts from './ContributionThankYouSendYourThoughts';
 import ContributionThankYouShareYourSupport from './ContributionThankYouShareYourSupport';
 
-
 const container = css`
   background: white;
   padding: 0 ${space[3]}px;
@@ -51,7 +50,7 @@ const buttonContainer = css`
 
 const ContributionThankYou = () => (
   <div css={container}>
-    <ContributionThankYouHeader />
+    <ContributionThankYouHeader showDirectDebitMessage />
 
     <div css={columnsContainer}>
       <div css={columnContainer}>
@@ -66,13 +65,10 @@ const ContributionThankYou = () => (
       </div>
     </div>
 
-    <div css={buttonContainer} >
-      <LinkButton priority="tertiary" >
-            Return to the Guardian
-      </LinkButton>
+    <div css={buttonContainer}>
+      <LinkButton priority="tertiary">Return to the Guardian</LinkButton>
     </div>
   </div>
 );
-
 
 export default ContributionThankYou;
