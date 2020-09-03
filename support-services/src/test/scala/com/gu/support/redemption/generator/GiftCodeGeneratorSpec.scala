@@ -7,13 +7,13 @@ class GiftCodeGeneratorSpec extends AnyFlatSpec with Matchers {
 
   it should "work in the basic case" in {
     val giftCode = GiftCodeGenerator.fromInts(Iterator.continually(0)).next.withDuration(GiftDuration.Gift3Month)
-    giftCode.value should be("gd03-000000")
+    giftCode.value should be("gd03-00000000")
   }
 
   it should "always produce different codes with the built in random" in {
     val generateGiftCode = GiftCodeGenerator.randomGiftCodes
     val giftCodes = generateGiftCode.map(_.withDuration(GiftDuration.Gift3Month))
-    val numberToCheck = 10000
+    val numberToCheck = 100000
     val duplicateCodes = giftCodes.take(numberToCheck).toList.groupBy(identity).collect {
       case (code, list) if list.length > 1 => (code, list.length)
     }.toList
