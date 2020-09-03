@@ -11,6 +11,7 @@ import { TextInput } from '@guardian/src-text-input';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
+import ExpandableContainer from './components/ExpandableContainer';
 import styles from './styles';
 
 const bodyText = css`
@@ -18,24 +19,7 @@ const bodyText = css`
 `;
 
 const expandableContainer = css`
-  overflow: hidden;
-
-  transition: max-height 0.1s ease-in-out;
-
-  & > * + * {
-    margin-top: ${space[4]}px;
-  }
-`;
-
-const expandableContainerCollapsed = css`
-  ${expandableContainer}
-  max-height: 0px;
-`;
-
-const expandableContainerExpanded = css`
-  ${expandableContainer}
-  padding-top: ${space[4]}px;
-  max-height: 500px;
+  margin-top: ${space[4]}px;
 `;
 
 const form = css`
@@ -64,7 +48,6 @@ const privacyTextLink = css`
   color: ${neutral[20]};
 `;
 
-
 const SvgClock = () => (
   <svg
     width="39"
@@ -86,6 +69,14 @@ const ContributionThankYouSetSupportReminder = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const actionIcon = <SvgClock />;
   const actionHeader = <ActionHeader title="Set a support reminder" />;
+
+  const expandableContent = (
+    <p css={expandableContainer}>
+      Lots of readers chose to make single contributions at various points in
+      the year. Opt in to receive a reminder in case you would like to support
+      our journalism again. This will be a single email with no obligation.
+    </p>
+  );
   const actionBody = (
     <ActionBody>
       <p>
@@ -110,20 +101,9 @@ const ContributionThankYouSetSupportReminder = () => {
         </span>
       </p>
       <div css={styles.hideAfterDesktop}>
-        <div
-          css={
-            isExpanded
-              ? expandableContainerExpanded
-              : expandableContainerCollapsed
-          }
-        >
-          <p>
-            Lots of readers chose to make single contributions at various points
-            in the year. Opt in to receive a reminder in case you would like to
-            support our journalism again. This will be a single email with no
-            obligation.
-          </p>
-        </div>
+        <ExpandableContainer isExpanded={isExpanded} maxHeight={250}>
+          {expandableContent}
+        </ExpandableContainer>
       </div>
       <form css={form}>
         <RadioGroup
@@ -152,7 +132,11 @@ const ContributionThankYouSetSupportReminder = () => {
       </div>
       <p css={privacyText}>
         To find out what personal data we collect and how we use it, please
-        visit our <Link css={privacyTextLink} href="/" priority="secondary">Privacy Policy</Link>.
+        visit our{' '}
+        <Link css={privacyTextLink} href="/" priority="secondary">
+          Privacy Policy
+        </Link>
+        .
       </p>
     </ActionBody>
   );

@@ -8,6 +8,7 @@ import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
+import ExpandableContainer from './components/ExpandableContainer';
 import BulletPointedList from './components/BulletPointedList';
 import styles from './styles';
 
@@ -16,24 +17,11 @@ const bodyText = css`
 `;
 
 const expandableContainer = css`
-  overflow: hidden;
-
-  transition: max-height 0.1s ease-in-out;
+  margin-top: ${space[4]}px;
 
   & > * + * {
     margin-top: ${space[4]}px;
   }
-`;
-
-const expandableContainerCollapsed = css`
-  ${expandableContainer}
-  max-height: 0px;
-`;
-
-const expandableContainerExpanded = css`
-  ${expandableContainer}
-  padding-top: ${space[4]}px;
-  max-height: 500px;
 `;
 
 const buttonContainer = css`
@@ -61,6 +49,22 @@ const ContributionThankYouContinueToAccount = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const actionIcon = <SvgPersonWithTick />;
   const actionHeader = <ActionHeader title="Continue to your account" />;
+
+  const expandableContent = (
+    <div css={expandableContainer}>
+      <p css={styles.hideAfterDesktop}>Stay signed in across all your devices, to:</p>
+      <BulletPointedList
+        items={[
+          'Remove unnecessary messages asking you for financial support',
+          'Let you easily manage your recurring contributions, subscriptions and newsletters in one place',
+        ]}
+      />
+      <p>
+        Make sure you sign in on each of the devices you use to read our
+        journalism – either today or next time you use them.
+      </p>
+    </div>
+  );
   const actionBody = (
     <ActionBody>
       <p>
@@ -83,39 +87,12 @@ const ContributionThankYouContinueToAccount = () => {
         </span>
       </p>
       <div css={styles.hideAfterDesktop}>
-        <div
-          css={
-            isExpanded
-              ? expandableContainerExpanded
-              : expandableContainerCollapsed
-          }
-        >
-          <p>Stay signed in across all your devices, to:</p>
-          <BulletPointedList
-            items={[
-              'Remove unnecessary messages asking you for financial support',
-              'Let you easily manage your recurring contributions, subscriptions and newsletters in one place',
-            ]}
-          />
-          <p>
-            Make sure you sign in on each of the devices you use to read our
-            journalism – either today or next time you use them.
-          </p>
-        </div>
+        <ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
+          {expandableContent}
+        </ExpandableContainer>
       </div>
       <div css={styles.hideBeforeDesktop}>
-        <div css={expandableContainerExpanded}>
-          <BulletPointedList
-            items={[
-              'Remove unnecessary messages asking you for financial support',
-              'Let you easily manage your recurring contributions, subscriptions and newsletters in one place',
-            ]}
-          />
-          <p>
-            Make sure you sign in on each of the devices you use to read our
-            journalism – either today or next time you use them.
-          </p>
-        </div>
+        {expandableContent}
       </div>
       <div css={buttonContainer}>
         <Button
