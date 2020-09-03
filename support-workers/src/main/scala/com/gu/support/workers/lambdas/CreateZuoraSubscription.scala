@@ -12,6 +12,7 @@ import com.gu.support.config.{Stage, TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemption._
+import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription.createSubscription
@@ -50,13 +51,14 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val promotionService = services.promotionService
     val redemptionService = services.redemptionService
     val zuoraService = services.zuoraService
+    val giftCodeGenerator = services.giftCodeGenerator
     val isTestUser = state.user.isTestUser
     val config: ZuoraConfig = services.config.zuoraConfigProvider.get(isTestUser)
 
     ifDigitalSubscriptionGiftRedemption(state.product, state.paymentMethod).map(redemptionData =>
       redeemGift(redemptionData, state.user.id, zuoraService, state, requestInfo, services.catalogService)
     ).getOrElse(
-      createSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, config)
+      createSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
     )
   }
 }
@@ -73,10 +75,11 @@ object CreateZuoraSubscription {
     promotionService: PromotionService,
     redemptionService: DynamoLookup with DynamoUpdate,
     zuoraService: ZuoraSubscribeService,
+    giftCodeGenerator: GiftCodeGeneratorService,
     config: ZuoraConfig
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     for {
-      subscriptionData <- buildSubscriptionData(state, promotionService, GetCodeStatus.withDynamoLookup(redemptionService), today, config)
+      subscriptionData <- buildSubscriptionData(state, promotionService, GetCodeStatus.withDynamoLookup(redemptionService), giftCodeGenerator, today, config)
         .withLogging("subscription data")
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
@@ -155,6 +158,7 @@ object CreateZuoraSubscription {
     state: CreateZuoraSubscriptionState,
     promotionService: => PromotionService,
     getCodeStatus: => GetCodeStatus,
+    giftCodeGenerator: GiftCodeGeneratorService,
     today: () => LocalDate,
     config: ZuoraConfig
   ): Future[SubscriptionData] = {
@@ -177,6 +181,7 @@ object CreateZuoraSubscription {
           case Right(rd: RedemptionData) => SubscriptionRedemption(rd, getCodeStatus)
         },
         environment,
+        giftCodeGenerator,
         today
       ).leftMap(_.fold(BuildSubscribePromoError, BuildSubscribeRedemptionError))
       case p: Paper => EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
@@ -250,7 +255,7 @@ object DigitalSubscriptionGiftRedemption {
 
   def ifDigitalSubscriptionGiftRedemption(product: ProductType, paymentMethod: Either[PaymentMethod, RedemptionData]) = {
     product match {
-      case d: DigitalPack if paymentMethod.isRight && d.readerType == Gift => Some(paymentMethod.right.get)
+      case d: DigitalPack if paymentMethod.isRight && d.readerType == Gift => paymentMethod.right.toOption
       case _ => None
     }
   }
@@ -274,7 +279,7 @@ object DigitalSubscriptionGiftRedemption {
         .plusDays(1) //To avoid having to think about time zones
         .plusMonths(productRatePlan.billingPeriod.monthsInPeriod)
         .toLocalDate
-      newTermLength = Days.daysBetween(subscription.contractAcceptanceDate, newEndDate).getDays
+      newTermLength = Days.daysBetween(subscription.customerAcceptanceDate, newEndDate).getDays
     } yield Success(newTermLength)).getOrElse(Failure(new RuntimeException(s"Unable to calculate new term length for subscription ${subscription}")))
   }
 

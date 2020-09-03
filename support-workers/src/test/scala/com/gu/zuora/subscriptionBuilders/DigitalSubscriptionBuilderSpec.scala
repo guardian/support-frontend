@@ -8,6 +8,7 @@ import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption.GetCodeStatus.InvalidReaderType
+import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.{DigitalPack, Monthly, Quarterly}
@@ -90,6 +91,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
+  lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
 
   lazy val corporate = DigitalSubscriptionBuilder.build(
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
@@ -103,6 +105,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         )))
       })),
     SANDBOX,
+    giftCodeGeneratorService,
     () => saleDate
   ).value.map(_.right.get)
 
@@ -111,6 +114,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Monthly, Country.UK, promotionService),
     SANDBOX,
+    giftCodeGeneratorService,
     () => saleDate
   ).value.map(_.right.get)
 
@@ -119,6 +123,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Quarterly, Country.UK, promotionService),
     SANDBOX,
+    giftCodeGeneratorService,
     () => saleDate
   ).value.map(_.right.get)
 
@@ -133,6 +138,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         )))
       })),
     SANDBOX,
+    giftCodeGeneratorService,
     () => saleDate
   ).value.map(_.left.get)
 

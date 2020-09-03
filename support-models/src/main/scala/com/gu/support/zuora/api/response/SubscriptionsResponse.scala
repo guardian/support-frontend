@@ -19,7 +19,7 @@ object RatePlan {
 
 case class SubscriptionsResponse(subscriptions: List[Subscription])
 
-case class Subscription(contractAcceptanceDate: LocalDate, accountNumber: String, subscriptionNumber: String, status: String, CreatedRequestId__c: Option[String], ratePlans: List[RatePlan])
+case class Subscription(customerAcceptanceDate: LocalDate, accountNumber: String, subscriptionNumber: String, status: String, CreatedRequestId__c: Option[String], ratePlans: List[RatePlan])
 
 case class RatePlan(productId: String, productName: String, productRatePlanId: String)
 

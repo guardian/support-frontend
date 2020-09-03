@@ -4,8 +4,10 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
+import com.gu.support.catalog.{CatalogService, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
+import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{DynamoTableAsync, GetCodeStatus, RedemptionTable, SetCodeStatus}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
@@ -19,9 +21,9 @@ import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.ZuoraService
+import io.circe.parser.parse
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
 
 import scala.concurrent.Future
@@ -62,10 +64,6 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
   }
 
-  it should "create a Digital Pack gift subscription" in {
-    createSubscription(createDigiPackGiftSubscriptionJson)
-  }
-
   it should "create an everyday paper subscription" in {
     createSubscription(createEverydayPaperSubscriptionJson)
   }
@@ -86,15 +84,37 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     createSubscription(guardianWeeklyGiftJson)
   }
 
-  private def createSubscription(json: String) = {
-    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
+  it should "create a Digital Pack gift subscription" in {
+    createSubscription(createDigiPackGiftSubscriptionJson)
+  }
+
+  it should "redeem a Digital Pack gift subscription" in {
+    val code = new GiftCodeGeneratorService().generateCode(Quarterly)
+    val mockCodeGenerator = mock[GiftCodeGeneratorService]
+    when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(code)
+
+    createSubscription(createDigiPackGiftSubscriptionJson, mockCodeGenerator).flatMap( _ =>
+      createSubscription(createDigiPackGiftRedemptionJson(code), mockCodeGenerator)
+    )
+  }
+
+  it should "throw a NoSuchCode exception redeem a Digital Pack gift subscription" in {
+    createSubscription(createDigiPackGiftSubscriptionJson)
+  }
+
+  it should "throw a CodeAlreadyUsed exception redeem a Digital Pack gift subscription" in {
+    createSubscription(createDigiPackGiftSubscriptionJson)
+  }
+
+  private def createSubscription(json: String, giftCodeGenerator: GiftCodeGeneratorService = new GiftCodeGeneratorService) = {
+    val createZuora = new CreateZuoraSubscription(mockServiceProvider(giftCodeGenerator))
 
     val outStream = new ByteArrayOutputStream()
 
     createZuora.handleRequestFuture(wrapFixture(json), outStream, context).map { _ =>
 
       val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-      sendThankYouEmail._1.subscriptionNumber.length should be > 0
+      sendThankYouEmail._1.user.id.length should be > 1
     }
   }
 
@@ -106,6 +126,10 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
 
   val realRedemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(Stages.DEV))
 
+  private val json = parse("{}").right.get
+  private val jsonProvider = new SimpleJsonProvider(json)
+  val realCatalogService = new CatalogService(TouchPointEnvironments.SANDBOX, jsonProvider)
+
   val mockZuoraService = {
     val mockZuora = mock[ZuoraService]
     // Need to return None from the Zuora service `getRecurringSubscription`
@@ -116,21 +140,39 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     when(mockZuora.getSubscriptions(any[ZuoraAccountNumber]))
       .thenReturn(Future.successful(Nil))
     when(mockZuora.previewSubscribe(any[PreviewSubscribeRequest]))
-      .thenAnswer((invocation: InvocationOnMock) => realZuoraService.previewSubscribe(invocation.getArguments.head.asInstanceOf[PreviewSubscribeRequest]))
+      .thenAnswer((invocation: InvocationOnMock) =>
+        realZuoraService.previewSubscribe(invocation.getArguments.head.asInstanceOf[PreviewSubscribeRequest]))
     when(mockZuora.subscribe(any[SubscribeRequest]))
-      .thenAnswer((invocation: InvocationOnMock) => realZuoraService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
+      .thenAnswer((invocation: InvocationOnMock) =>
+        realZuoraService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
+    when(mockZuora.getSubscriptionFromRedemptionCode(any[RedemptionCode]))
+      .thenAnswer((invocation: InvocationOnMock) =>
+        realZuoraService.getSubscriptionFromRedemptionCode(
+          invocation.getArguments.head.asInstanceOf[RedemptionCode]
+        ))
+    when(mockZuora.getSubscriptionById(any[String]))
+      .thenAnswer((invocation: InvocationOnMock) =>
+        realZuoraService.getSubscriptionById(
+          invocation.getArguments.head.asInstanceOf[String]
+        ))
+    when(mockZuora.updateSubscriptionRedemptionData(any[String], any[String], any[Int]))
+      .thenAnswer((invocation: InvocationOnMock) =>
+        realZuoraService.updateSubscriptionRedemptionData(
+          invocation.getArgument(0).asInstanceOf[String],
+          invocation.getArgument(1).asInstanceOf[String],
+          invocation.getArgument(2).asInstanceOf[Int])
+      )
+
     when(mockZuora.config).thenReturn(realZuoraService.config)
     mockZuora
   }
 
-  val mockServiceProvider = mockServices[Any](
-    (s => s.zuoraService,
-      mockZuoraService),
-    (s => s.promotionService,
-      realPromotionService),
-    (s => s.redemptionService,
-      realRedemptionService),
-    (s => s.config,
-      realConfig)
+  def mockServiceProvider(giftCodeGenerator: GiftCodeGeneratorService) = mockServices[Any](
+    (s => s.zuoraService, mockZuoraService),
+    (s => s.promotionService, realPromotionService),
+    (s => s.redemptionService, realRedemptionService),
+    (s => s.config, realConfig),
+    (s => s.giftCodeGenerator, giftCodeGenerator),
+    (s => s.catalogService, realCatalogService)
   )
 }

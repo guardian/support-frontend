@@ -11,8 +11,8 @@ import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.redemption.GetCodeStatus
 import com.gu.support.redemption.GetCodeStatus.{InvalidReaderType, RedemptionInvalid}
-import com.gu.support.redemption.generator.GiftDuration.{Gift12Month, Gift3Month}
-import com.gu.support.redemption.generator.{GiftCodeGenerator, GiftDuration}
+import com.gu.support.redemption.generator.CodeBuilder.GiftCode
+import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.{Annual, BillingPeriod, DigitalPack, Quarterly}
@@ -47,13 +47,14 @@ object DigitalSubscriptionBuilder {
     requestId: UUID,
     subscriptionPaymentType: SubscriptionPaymentType,
     environment: TouchPointEnvironment,
+    giftCodeGenerator: GiftCodeGeneratorService,
     today: () => LocalDate
   )(implicit ec: ExecutionContext): BuildResult = {
     val productRatePlanId = validateRatePlan(digitalPack.productRatePlan(environment, digitalPack.readerType), digitalPack.describe)
 
     subscriptionPaymentType match {
       case purchase: SubscriptionPurchase =>
-        buildPurchase(today(), productRatePlanId, requestId, digitalPack.readerType, purchase)
+        buildPurchase(today(), productRatePlanId, requestId, digitalPack.readerType, purchase, giftCodeGenerator)
       case redemption: SubscriptionRedemption =>
         buildRedemption(today(), productRatePlanId, requestId, digitalPack.readerType, redemption)
     }
@@ -64,7 +65,8 @@ object DigitalSubscriptionBuilder {
     productRatePlanId: ProductRatePlanId,
     requestId: UUID,
     readerType: ReaderType,
-    purchase: SubscriptionPurchase
+    purchase: SubscriptionPurchase,
+    giftCodeGenerator: GiftCodeGeneratorService
   )(implicit ec: ExecutionContext): BuildResult = {
 
     val (contractAcceptanceDelay, autoRenew, initialTerm) = if (readerType == Gift)
@@ -84,23 +86,17 @@ object DigitalSubscriptionBuilder {
       initialTerm = initialTerm
     )
 
-    val withRedemptionCode = addRedemptionCodeIfGift(readerType, purchase.billingPeriod, subscriptionData)
+    val withRedemptionCode = addRedemptionCodeIfGift(readerType, giftCodeGenerator.generateCode(purchase.billingPeriod), subscriptionData)
     val withPromoApplied = applyPromoCodeIfPresent(purchase.promotionService, purchase.maybePromoCode, purchase.country, productRatePlanId, withRedemptionCode)
 
     EitherT.fromEither[Future](withPromoApplied.left.map(Left.apply))
   }
 
-  def toDuration(billingPeriod: BillingPeriod): GiftDuration = billingPeriod match {
-    case Annual => Gift12Month
-    case _ => Gift3Month
-  }
-
-  def addRedemptionCodeIfGift(readerType: ReaderType, billingPeriod: BillingPeriod, subscriptionData: SubscriptionData) = {
+  def addRedemptionCodeIfGift(readerType: ReaderType, giftCode: GiftCode, subscriptionData: SubscriptionData) = {
     if (readerType == Gift) {
-      val code = GiftCodeGenerator.randomGiftCodes.next().withDuration(toDuration(billingPeriod))
-      SafeLogger.info(s"Generated code for Digital Subscription gift: ${code.value}")
+      SafeLogger.info(s"Generated code for Digital Subscription gift: ${giftCode.value}")
       subscriptionData.copy(
-        subscription = subscriptionData.subscription.copy(redemptionCode = Some(code.value))
+        subscription = subscriptionData.subscription.copy(redemptionCode = Some(giftCode.value))
       )
     }
     else

@@ -7,6 +7,7 @@ import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.support.promotions.PromoCode
+import com.gu.support.redemption.generator.CodeBuilder.GiftCode
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import io.circe.syntax._
 import org.joda.time.{DateTimeZone, LocalDate}
@@ -430,8 +431,23 @@ object JsonFixtures {
             $requestIdJson,
             $userJsonNoAddress,
             "product": $digitalPackGiftJson,
-            "paymentProvider": "RedemptionNoProvider",
+            "paymentProvider": "Stripe",
             "paymentMethod": $stripePaymentMethod,
+            "salesForceContact": $salesforceContactJson,
+            $salesforceContactsJson
+            }
+        """
+
+  def createDigiPackGiftRedemptionJson(code: GiftCode) =
+    s"""
+          {
+            $requestIdJson,
+            $userJsonNoAddress,
+            "product": $digitalPackGiftJson,
+            "paymentProvider": "RedemptionNoProvider",
+            "paymentMethod": {
+              "redemptionCode": "${code.value}"
+            },
             "salesForceContact": $salesforceContactJson,
             $salesforceContactsJson
             }

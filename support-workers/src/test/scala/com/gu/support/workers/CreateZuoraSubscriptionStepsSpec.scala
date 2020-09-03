@@ -7,6 +7,7 @@ import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.config.{ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
+import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{DynamoLookup, DynamoUpdate}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
@@ -74,6 +75,8 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       }
     }
 
+    val giftCodeGeneratorService = new GiftCodeGeneratorService
+
     val result = CreateZuoraSubscription.createSubscription(
       state,
       RequestInfo(false, false, Nil, false),
@@ -82,6 +85,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       null,
       dyanmoDb,
       zuora,
+      giftCodeGeneratorService,
       ZuoraConfig(null, null, null, null, null, null)
     )
 
@@ -147,7 +151,8 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       promotionService = null,// shouldn't be called for subs with no promo code
       redemptionService = null,// shouldn't be called for paid subs
       zuoraService = zuora,
-      config = ZuoraConfig(url = null, username = null, password = null, monthlyContribution = null, annualContribution = null, digitalPack = ZuoraDigitalPackConfig(14, 2))
+      config = ZuoraConfig(url = null, username = null, password = null, monthlyContribution = null, annualContribution = null, digitalPack = ZuoraDigitalPackConfig(14, 2)),
+      giftCodeGenerator = new GiftCodeGeneratorService
     )
 
     result.map { handlerResult =>
