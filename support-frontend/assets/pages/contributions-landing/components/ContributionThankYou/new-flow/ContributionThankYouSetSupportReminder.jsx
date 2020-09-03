@@ -51,8 +51,17 @@ const privacyTextLink = css`
 
 const ContributionThankYouSetSupportReminder = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
   const actionIcon = <SvgClock />;
-  const actionHeader = <ActionHeader title="Set a support reminder" />;
+  const actionHeader = (
+    <ActionHeader
+      title={
+        hasBeenInteractedWith
+          ? 'Your support reminder is set'
+          : 'Set a support reminder'
+      }
+    />
+  );
 
   const expandableContent = (
     <p css={expandableContainer}>
@@ -63,65 +72,78 @@ const ContributionThankYouSetSupportReminder = () => {
   );
   const actionBody = (
     <ActionBody>
-      <p>
-        <span css={styles.hideAfterDesktop}>
-          Opt in to receive a reminder in case you would like to support our
-          journalism again.{' '}
-          {!isExpanded && (
-            <ButtonLink
-              css={bodyText}
-              priority="secondary"
-              onClick={() => setIsExpanded(true)}
+      {hasBeenInteractedWith ? (
+        <p>
+          We will be in touch at the time you selected, so look out for a
+          message from the Guardian in your inbox.
+        </p>
+      ) : (
+        <>
+          <p>
+            <span css={styles.hideAfterDesktop}>
+              Opt in to receive a reminder in case you would like to support our
+              journalism again.{' '}
+              {!isExpanded && (
+                <ButtonLink
+                  css={bodyText}
+                  priority="secondary"
+                  onClick={() => setIsExpanded(true)}
+                >
+                  Read more
+                </ButtonLink>
+              )}
+            </span>
+            <span css={styles.hideBeforeDesktop}>
+              Lots of readers chose to make single contributions at various
+              points in the year. Opt in to receive a reminder in case you would
+              like to support our journalism again. This will be a single email
+              with no obligation.
+            </span>
+          </p>
+          <div css={styles.hideAfterDesktop}>
+            <ExpandableContainer isExpanded={isExpanded} maxHeight={250}>
+              {expandableContent}
+            </ExpandableContainer>
+          </div>
+          <form css={form}>
+            <RadioGroup
+              name="reminder"
+              label="I'd like to be reminded in:"
+              supporting="This is just a test"
             >
-              Read more
-            </ButtonLink>
-          )}
-        </span>
-        <span css={styles.hideBeforeDesktop}>
-          Lots of readers chose to make single contributions at various points
-          in the year. Opt in to receive a reminder in case you would like to
-          support our journalism again. This will be a single email with no
-          obligation.
-        </span>
-      </p>
-      <div css={styles.hideAfterDesktop}>
-        <ExpandableContainer isExpanded={isExpanded} maxHeight={250}>
-          {expandableContent}
-        </ExpandableContainer>
-      </div>
-      <form css={form}>
-        <RadioGroup
-          name="reminder"
-          label="I'd like to be reminded in:"
-          supporting="This is just a test"
-        >
-          <Radio value="march" label="March 2020" defaultChecked />
-          <Radio value="june" label="June 2020" />
-          <Radio value="december" label="December 2020" />
-        </RadioGroup>
-        <div>
-          <TextInput label="Email address" supporting="example@domain.com" />
-        </div>
-      </form>
-      <div css={buttonContainer}>
-        <Button
-          priority="primary"
-          size="default"
-          icon={<SvgArrowRightStraight />}
-          iconSide="right"
-          nudgeIcon
-        >
-          Set my reminder
-        </Button>
-      </div>
-      <p css={privacyText}>
-        To find out what personal data we collect and how we use it, please
-        visit our{' '}
-        <Link css={privacyTextLink} href="/" priority="secondary">
-          Privacy Policy
-        </Link>
-        .
-      </p>
+              <Radio value="march" label="March 2020" defaultChecked />
+              <Radio value="june" label="June 2020" />
+              <Radio value="december" label="December 2020" />
+            </RadioGroup>
+            <div>
+              <TextInput
+                label="Email address"
+                supporting="example@domain.com"
+              />
+            </div>
+          </form>
+          <div css={buttonContainer}>
+            <Button
+              onClick={() => setHasBeenInteractedWith(true)}
+              priority="primary"
+              size="default"
+              icon={<SvgArrowRightStraight />}
+              iconSide="right"
+              nudgeIcon
+            >
+              Set my reminder
+            </Button>
+          </div>
+          <p css={privacyText}>
+            To find out what personal data we collect and how we use it, please
+            visit our{' '}
+            <Link css={privacyTextLink} href="/" priority="secondary">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+        </>
+      )}
     </ActionBody>
   );
 
