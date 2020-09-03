@@ -71,6 +71,7 @@ function getProductPrice(
 ): ProductPrice {
   const countryGroup = getCountryGroup(country);
   // eslint-disable-next-line max-len
+  console.log({ productPrices }, { country }, { billingPeriod });
   return productPrices[countryGroup.name][fulfilmentOption ||
   NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod][countryGroup.currency];
 }

@@ -22,6 +22,7 @@ import views.EmptyDiv
 import views.ViewHelpers._
 import views.html.helper.CSRF
 import views.html.subscriptionCheckout
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -63,7 +64,8 @@ class DigitalSubscriptionController(
       "en-au" -> buildCanonicalDigitalSubscriptionLink("au"),
       "en" -> buildCanonicalDigitalSubscriptionLink("int")
     )
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes)
+    val readerType = if (orderIsAGift) Gift else Direct
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
     val shareImageUrl = Some("https://i.guim.co.uk/img/media/1033800a75851058d619bc0519b0b7b48a53dcf5/0_0_1200_1200/1200.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=0d50dd49d1fedeacff8a3e437332c2bf") // scalastyle:ignore
 
     Ok(views.html.main(

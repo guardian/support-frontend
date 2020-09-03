@@ -6,7 +6,7 @@ const Quarterly: 'Quarterly' = 'Quarterly';
 const SixWeekly: 'SixWeekly' = 'SixWeekly';
 const weeklyBillingPeriods = [SixWeekly, Quarterly, Annual];
 export type BillingPeriod = typeof SixWeekly | typeof Annual | typeof Monthly | typeof Quarterly;
-export type DigitalBillingPeriod = typeof Monthly | typeof Annual;
+export type DigitalBillingPeriod = typeof Monthly | typeof Annual | typeof Quarterly;
 export type WeeklyBillingPeriod = typeof SixWeekly | typeof Quarterly | typeof Annual;
 
 export type ContributionBillingPeriod = typeof Monthly | typeof Annual;

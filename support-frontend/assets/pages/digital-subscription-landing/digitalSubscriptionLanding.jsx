@@ -37,7 +37,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(() => digitalSubscriptionLandingReducer(), true);
+const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
 // There's some weird disconnect here with the store
 // const { orderIsAGift } = store.getState().page;

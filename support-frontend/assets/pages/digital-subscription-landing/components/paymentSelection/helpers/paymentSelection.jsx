@@ -7,12 +7,11 @@ import { getDigitalCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { currencies } from 'helpers/internationalisation/currency';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { Annual, Monthly } from 'helpers/billingPeriods';
 import { fixDecimals } from 'helpers/subscriptions';
 
 // types
+import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
 import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
-import type { BillingPeriod } from 'helpers/billingPeriods';
 import { type Option } from 'helpers/types/option';
 import type {
   ProductPrices,
@@ -90,6 +89,24 @@ const BILLING_PERIOD = {
     offer: 'Save an additional 21%',
     label: 'Best Deal',
   },
+  [Quarterly]: {
+    title: 'Quarterly',
+    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+      const display = price => getDisplayPrice(currencyId, price);
+      return isNumeric(promotionalPrice) ?
+        <span>
+          <span className="product-option__price">{display(promotionalPrice)}</span>
+          <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
+        </span>
+        :
+        <span>
+          <span className="product-option__price">{display(displayPrice)}</span>
+          <span className="product-option__price-detail">{display(displayPrice / 3)}/month</span>
+        </span>;
+    },
+    offer: null,
+    label: null,
+  },
 };
 
 // state
@@ -99,7 +116,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
   const createPaymentOption = (billingPeriod: BillingPeriod): PaymentOption => {
-    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
+    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Monthly';
 
     const productPrice = getProductPrice(productOptions, digitalBillingPeriod, currencyId);
     const fullPrice = productPrice.price;
@@ -123,7 +140,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   };
 
   const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map(createPaymentOption);
-
+  console.log({ paymentOptions });
   return {
     paymentOptions,
   };
