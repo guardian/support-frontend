@@ -109,7 +109,6 @@ const ContributionThankYouSetSupportReminder = () => {
             <RadioGroup
               name="reminder"
               label="I'd like to be reminded in:"
-              supporting="This is just a test"
             >
               <Radio value="march" label="March 2020" defaultChecked />
               <Radio value="june" label="June 2020" />
