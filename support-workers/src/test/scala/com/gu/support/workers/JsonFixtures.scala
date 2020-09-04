@@ -438,7 +438,7 @@ object JsonFixtures {
             }
         """
 
-  def createDigiPackGiftRedemptionJson(code: GiftCode) =
+  def createDigiPackGiftRedemptionJson(code: String) =
     s"""
           {
             $requestIdJson,
@@ -446,7 +446,7 @@ object JsonFixtures {
             "product": $digitalPackGiftJson,
             "paymentProvider": "RedemptionNoProvider",
             "paymentMethod": {
-              "redemptionCode": "${code.value}"
+              "redemptionCode": "${code}"
             },
             "salesForceContact": $salesforceContactJson,
             $salesforceContactsJson

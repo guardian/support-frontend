@@ -7,21 +7,23 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.catalog.{CatalogService, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
+import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, NoSuchCode}
+import com.gu.support.redemption.generator.CodeBuilder.GiftCode
 import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{DynamoTableAsync, GetCodeStatus, RedemptionTable, SetCodeStatus}
-import com.gu.support.redemptions.RedemptionCode
+import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
-import com.gu.support.workers.lambdas.CreateZuoraSubscription
-import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.lambdas.{CreateZuoraSubscription, DigitalSubscriptionGiftRedemption}
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.ZuoraService
-import io.circe.parser.parse
+import io.circe.parser.{decode, parse}
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
 import org.mockito.invocation.InvocationOnMock
@@ -52,7 +54,9 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     for {
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
       _ <- createSubscription(createDigiPackCorporateSubscriptionJson)
-      r <- getCodeStatus(mutableCode).map { _ should be(Left(GetCodeStatus.CodeAlreadyUsed))}
+      r <- getCodeStatus(mutableCode).map {
+        _ should be(Left(GetCodeStatus.CodeAlreadyUsed))
+      }
     } yield r
   }
 
@@ -88,22 +92,51 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     createSubscription(createDigiPackGiftSubscriptionJson)
   }
 
-  it should "redeem a Digital Pack gift subscription" in {
-    val code = new GiftCodeGeneratorService().generateCode(Quarterly)
-    val mockCodeGenerator = mock[GiftCodeGeneratorService]
-    when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(code)
+  val giftCode = GiftCode("gd03-00000000").get
 
-    createSubscription(createDigiPackGiftSubscriptionJson, mockCodeGenerator).flatMap( _ =>
-      createSubscription(createDigiPackGiftRedemptionJson(code), mockCodeGenerator)
+  it should "redeem a Digital Pack gift subscription" in {
+    val mockCodeGenerator = mock[GiftCodeGeneratorService]
+    when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
+
+    createSubscription(createDigiPackGiftSubscriptionJson, mockCodeGenerator).flatMap(_ =>
+      createSubscription(createDigiPackGiftRedemptionJson(giftCode.value), mockCodeGenerator)
+    )
+  }
+
+  it should "throw a CodeAlreadyUsed exception redeem a Digital Pack gift subscription" in {
+    val state = decode[CreateZuoraSubscriptionState](createDigiPackGiftRedemptionJson(giftCode.value)).right.get
+    val usedCode = RedemptionCode(giftCode.value).right.get
+
+    val result = DigitalSubscriptionGiftRedemption.redeemGift(
+      RedemptionData(usedCode),
+      Fixtures.idId,
+      RequestInfo(false, false, Nil, false),
+      state,
+      mockZuoraService,
+      realCatalogService
+    )
+
+    recoverToExceptionIf[RuntimeException](result).map(
+      exception => exception.getMessage shouldBe CodeAlreadyUsed.clientCode
     )
   }
 
   it should "throw a NoSuchCode exception redeem a Digital Pack gift subscription" in {
-    createSubscription(createDigiPackGiftSubscriptionJson)
-  }
+    val nonExistentCode = RedemptionCode("gd06-aaaaaaaa").right.get
+    val state = decode[CreateZuoraSubscriptionState](createDigiPackGiftRedemptionJson("gd06-aaaaaaaa")).right.get
 
-  it should "throw a CodeAlreadyUsed exception redeem a Digital Pack gift subscription" in {
-    createSubscription(createDigiPackGiftSubscriptionJson)
+    val result = DigitalSubscriptionGiftRedemption.redeemGift(
+      RedemptionData(nonExistentCode),
+      Fixtures.idId,
+      RequestInfo(false, false, Nil, false),
+      state,
+      mockZuoraService,
+      realCatalogService
+    )
+
+    recoverToExceptionIf[RuntimeException](result).map(
+      exception => exception.getMessage shouldBe NoSuchCode.clientCode
+    )
   }
 
   private def createSubscription(json: String, giftCodeGenerator: GiftCodeGeneratorService = new GiftCodeGeneratorService) = {
@@ -128,9 +161,9 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
 
   private val json = parse("{}").right.get
   private val jsonProvider = new SimpleJsonProvider(json)
-  val realCatalogService = new CatalogService(TouchPointEnvironments.SANDBOX, jsonProvider)
+  lazy val realCatalogService = new CatalogService(TouchPointEnvironments.SANDBOX, jsonProvider)
 
-  val mockZuoraService = {
+  lazy val mockZuoraService = {
     val mockZuora = mock[ZuoraService]
     // Need to return None from the Zuora service `getRecurringSubscription`
     // method or the subscribe step gets skipped

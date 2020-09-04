@@ -56,7 +56,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val config: ZuoraConfig = services.config.zuoraConfigProvider.get(isTestUser)
 
     ifDigitalSubscriptionGiftRedemption(state.product, state.paymentMethod).map(redemptionData =>
-      redeemGift(redemptionData, state.user.id, zuoraService, state, requestInfo, services.catalogService)
+      redeemGift(redemptionData, state.user.id, requestInfo, state, zuoraService, services.catalogService)
     ).getOrElse(
       createSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
     )
@@ -311,10 +311,10 @@ object DigitalSubscriptionGiftRedemption {
 
   def redeemGift(
     redemptionData: RedemptionData,
-    userId: String,
-    zuoraService: ZuoraService,
-    state: CreateZuoraSubscriptionState,
+    gifteeUserId: String,
     requestInfo: RequestInfo,
+    state: CreateZuoraSubscriptionState,
+    zuoraService: ZuoraService,
     catalogService: CatalogService
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     for {
@@ -322,7 +322,7 @@ object DigitalSubscriptionGiftRedemption {
       validatedSubscription <- Future.fromTry(validateRedemptionData(giftSubscriptionFields))
       fullGiftSubscription <- zuoraService.getSubscriptionById(validatedSubscription.id)
       newTermLength <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
-      updateDataResponse <- zuoraService.updateSubscriptionRedemptionData(validatedSubscription.id, userId, newTermLength)
+      updateDataResponse <- zuoraService.updateSubscriptionRedemptionData(validatedSubscription.id, gifteeUserId, newTermLength)
       handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, redemptionData, requestInfo))
     } yield handlerResult
   }
