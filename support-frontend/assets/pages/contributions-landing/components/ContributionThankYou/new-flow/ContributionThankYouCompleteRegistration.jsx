@@ -36,8 +36,15 @@ const buttonContainer = css`
 
 const ContributionThankYouContinueToAccount = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
   const actionIcon = <SvgPersonWithTick />;
-  const actionHeader = <ActionHeader title="Complete Registration" />;
+  const actionHeader = (
+    <ActionHeader
+      title={
+        hasBeenInteractedWith ? 'You’re almost there!' : 'Complete Registration'
+      }
+    />
+  );
 
   const expandableContent = (
     <div css={expandableContainer}>
@@ -51,58 +58,72 @@ const ContributionThankYouContinueToAccount = () => {
   );
   const actionBody = (
     <ActionBody>
-      <p>
-        <span css={styles.hideAfterDesktop}>
-          If you register, we can start recognising you as a supporter and
-          remove unnecessary messages asking for financial support.{' '}
-          {!isExpanded && (
-            <ButtonLink
-              css={bodyText}
-              priority="secondary"
-              onClick={() => setIsExpanded(true)}
+      {hasBeenInteractedWith ? (
+        <p>
+          Please check your inbox to validate your email address – it takes just
+          30 seconds. Make sure you sign in on each of the devices you use to
+          read our journalism, either today or next time you use them.
+        </p>
+      ) : (
+        <>
+          <p>
+            <span css={styles.hideAfterDesktop}>
+              If you register, we can start recognising you as a supporter and
+              remove unnecessary messages asking for financial support.{' '}
+              {!isExpanded && (
+                <ButtonLink
+                  css={bodyText}
+                  priority="secondary"
+                  onClick={() => setIsExpanded(true)}
+                >
+                  Read more
+                </ButtonLink>
+              )}
+            </span>
+            <span css={styles.hideBeforeDesktop}>
+              Your free Guardian account is almost complete, you just need to
+              set a password.
+              <br />
+              By registering, you enable us to recognise you as a supporter
+              across our website and apps. This means we will:
+            </span>
+          </p>
+          <div css={styles.hideAfterDesktop}>
+            <ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
+              {expandableContent}
+            </ExpandableContainer>
+          </div>
+          <div css={styles.hideBeforeDesktop}>{expandableContent}</div>
+          <div>
+            <form css={form}>
+              <div>
+                <TextInput
+                  label="Email address"
+                  supporting="example@domain.com"
+                />
+              </div>
+              <div>
+                <TextInput
+                  label="Set a password"
+                  supporting="Between 6 and 72 characters"
+                />
+              </div>
+            </form>
+          </div>
+          <div css={buttonContainer}>
+            <Button
+              onClick={() => setHasBeenInteractedWith(true)}
+              priority="primary"
+              size="default"
+              icon={<SvgArrowRightStraight />}
+              iconSide="right"
+              nudgeIcon
             >
-              Read more
-            </ButtonLink>
-          )}
-        </span>
-        <span css={styles.hideBeforeDesktop}>
-          Your free Guardian account is almost complete, you just need to set a
-          password.
-          <br />
-          By registering, you enable us to recognise you as a supporter across
-          our website and apps. This means we will:
-        </span>
-      </p>
-      <div css={styles.hideAfterDesktop}>
-        <ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
-          {expandableContent}
-        </ExpandableContainer>
-      </div>
-      <div css={styles.hideBeforeDesktop}>{expandableContent}</div>
-      <div>
-        <form css={form}>
-          <div>
-            <TextInput label="Email address" supporting="example@domain.com" />
+              Register
+            </Button>
           </div>
-          <div>
-            <TextInput
-              label="Set a password"
-              supporting="Between 6 and 72 characters"
-            />
-          </div>
-        </form>
-      </div>
-      <div css={buttonContainer}>
-        <Button
-          priority="primary"
-          size="default"
-          icon={<SvgArrowRightStraight />}
-          iconSide="right"
-          nudgeIcon
-        >
-          Register
-        </Button>
-      </div>
+        </>
+      )}
     </ActionBody>
   );
   return (
