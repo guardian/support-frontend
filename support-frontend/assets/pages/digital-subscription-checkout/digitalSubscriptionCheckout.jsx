@@ -14,6 +14,8 @@ import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContain
 import ThankYouPendingContent from './thankYouPendingContent';
 import CheckoutForm
   from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
+import CheckoutFormGift
+  from 'pages/digital-subscription-checkout/components/digitalCheckoutFormGift';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import './digitalSubscriptionCheckout.scss';
@@ -43,6 +45,7 @@ const reducer = (commonState: CommonState) => createCheckoutReducer(
 const store = pageInit(reducer, true);
 
 const { countryGroupId } = store.getState().common.internationalisation;
+const { orderIsAGift } = store.getState().page;
 
 const thankyouProps = {
   countryGroupId,
@@ -58,7 +61,7 @@ const content = (
       footer={<DigitalFooter />}
     >
       <CheckoutStage
-        checkoutForm={<CheckoutForm />}
+        checkoutForm={orderIsAGift ? <CheckoutForm /> : <CheckoutFormGift />}
         thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
         thankYouContent={<ThankYouContent {...thankyouProps} />}
         subscriptionProduct="DigitalPack"

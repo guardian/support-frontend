@@ -71,24 +71,6 @@ const BILLING_PERIOD = {
     offer: null,
     label: null,
   },
-  [Annual]: {
-    title: 'Annual',
-    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
-      const display = price => getDisplayPrice(currencyId, price);
-      return isNumeric(promotionalPrice) ?
-        <span>
-          <span className="product-option__price">{display(promotionalPrice)}</span>
-          <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
-        </span>
-        :
-        <span>
-          <span className="product-option__price">{display(displayPrice)}</span>
-          <span className="product-option__price-detail">{display(displayPrice / 12)}/month</span>
-        </span>;
-    },
-    offer: 'Save an additional 21%',
-    label: 'Best Deal',
-  },
   [Quarterly]: {
     title: 'Quarterly',
     salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
@@ -107,11 +89,29 @@ const BILLING_PERIOD = {
     offer: null,
     label: null,
   },
+  [Annual]: {
+    title: 'Annual',
+    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+      const display = price => getDisplayPrice(currencyId, price);
+      return isNumeric(promotionalPrice) ?
+        <span>
+          <span className="product-option__price">{display(promotionalPrice)}</span>
+          <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
+        </span>
+        :
+        <span>
+          <span className="product-option__price">{display(displayPrice)}</span>
+          <span className="product-option__price-detail">{display(displayPrice / 12)}/month</span>
+        </span>;
+    },
+    offer: 'Save an additional 21%',
+    label: 'Best Deal',
+  },
 };
 
 // state
 const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> } => {
-  const { productPrices } = state.page;
+  const { productPrices, orderIsAGift } = state.page;
   const { countryGroupId, currencyId } = state.common.internationalisation;
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
@@ -130,7 +130,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
 
     return {
       title: BILLING_PERIOD[digitalBillingPeriod].title,
-      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode),
+      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, orderIsAGift),
       onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, digitalBillingPeriod),
       salesCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
       offer,
@@ -138,9 +138,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
     };
 
   };
-
   const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map(createPaymentOption);
-  console.log({ paymentOptions });
   return {
     paymentOptions,
   };

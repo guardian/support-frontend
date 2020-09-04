@@ -38,58 +38,53 @@ const getPromoUrl = (
   return promotion ? promotionTermsUrl(promotion.promoCode) : null;
 };
 
-type RegularLinkTypes = {
-  monthlyUrl: Option<string>,
-  annualUrl: Option<string>,
-  multipleOffers: boolean
-}
-
-type GiftLinkTypes = {
-  quarterlyUrl: Option<string>,
-  annualUrl: Option<string>,
-  multipleOffers: boolean
+type LinkTypes = {
+  productPrices: ProductPrices,
+  country: IsoCountry,
 }
 
 const MaybeLink = (props: {href: Option<string>, text: string}) =>
   (props.href ? <a href={props.href}>{props.text}</a> : null);
 
-const RegularLinks = (props: RegularLinkTypes) => (
-  <span>
-    <MaybeLink href={props.monthlyUrl} text="monthly" />{props.multipleOffers ? ' and ' : ''}
-    <MaybeLink href={props.annualUrl} text="annual" />
-    &nbsp;offer{props.multipleOffers ? 's' : ''}
-  </span>
-);
-
-const GiftLinks = (props: GiftLinkTypes) => (
-  <span>
-    <MaybeLink href={props.quarterlyUrl} text="monthly" />{props.multipleOffers ? ' and ' : ''}
-    <MaybeLink href={props.annualUrl} text="annual" />
-    &nbsp;offer{props.multipleOffers ? 's' : ''}
-  </span>
-);
-
-const TermsAndConditions = (props: PropTypes) => {
+const RegularLinks = (props: LinkTypes) => {
   const annualUrl = getPromoUrl(props.productPrices, props.country, Annual);
   const monthlyUrl = getPromoUrl(props.productPrices, props.country, Monthly);
-  const quarterlyUrl = getPromoUrl(props.productPrices, props.country, Quarterly);
   const multipleOffers: boolean = !!(annualUrl && monthlyUrl);
-  console.log(props.country);
-
   return (
-    <div className="hope-is-power__terms">
-      <div className="hope-is-power--centered">
-        <h3>Promotion terms and conditions</h3>
-        <p>Offer subject to availability. Guardian News and Media Ltd
+    <span>
+      <MaybeLink href={monthlyUrl} text="monthly" />{multipleOffers ? ' and ' : ''}
+      <MaybeLink href={annualUrl} text="annual" />
+    &nbsp;offer{multipleOffers ? 's' : ''}
+    </span>
+  );
+};
+
+const GiftLinks = (props: LinkTypes) => {
+  const annualUrl = getPromoUrl(props.productPrices, props.country, Annual);
+  const quarterlyUrl = getPromoUrl(props.productPrices, props.country, Quarterly);
+  const multipleOffers: boolean = !!(annualUrl && quarterlyUrl);
+  return (
+    <span>
+      <MaybeLink href={quarterlyUrl} text="quarterly" />{multipleOffers ? ' and ' : ''}
+      <MaybeLink href={annualUrl} text="annual" />
+    &nbsp;offer{multipleOffers ? 's' : ''}
+    </span>
+  );
+};
+
+const TermsAndConditions = (props: PropTypes) => (
+  <div className="hope-is-power__terms">
+    <div className="hope-is-power--centered">
+      <h3>Promotion terms and conditions</h3>
+      <p>Offer subject to availability. Guardian News and Media Ltd
           (&quot;GNM&quot;) reserves the right to withdraw this promotion at any
           time. Full promotion terms and conditions for our&nbsp;
-          {props.orderIsAGift ?
-            <GiftLinks quarterlyUrl={quarterlyUrl} annualUrl={annualUrl} multipleOffers={multipleOffers} /> :
-            <RegularLinks monthlyUrl={monthlyUrl} annualUrl={annualUrl} multipleOffers={multipleOffers} />
+        {props.orderIsAGift ?
+          <GiftLinks productPrices={props.productPrices} country={props.country} /> :
+          <RegularLinks productPrices={props.productPrices} country={props.country} />
           }.
-        </p>
-      </div>
-    </div>);
-};
+      </p>
+    </div>
+  </div>);
 
 export default connect(mapStateToProps)(TermsAndConditions);

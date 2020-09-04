@@ -216,6 +216,7 @@ function getDigitalCheckout(
   countryGroupId: CountryGroupId,
   billingPeriod: DigitalBillingPeriod = Monthly,
   promoCode: Option<string>,
+  orderIsAGift: boolean,
 ): string {
   const params = new URLSearchParams(window.location.search);
   if (promoCode) {
@@ -224,7 +225,7 @@ function getDigitalCheckout(
   if (billingPeriod === Annual) {
     params.set('period', Annual);
   }
-  return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
+  return `${getOrigin()}/subscribe/digital/checkout${orderIsAGift ? '/gift' : ''}?${params.toString()}`;
 }
 
 

@@ -17,6 +17,7 @@ export type PropTypes = {
   emailGiftRecipient: string,
   setEmailGift: Function,
   formErrors: FormError<FormField>[],
+  isDigitalGift?: boolean,
 }
 
 const InputWithLabel = withLabel(Input);
@@ -47,9 +48,13 @@ export default function PersonalDetailsGift(props: PropTypes) {
         type="emailGiftRecipient"
         value={props.emailGiftRecipient}
         setValue={props.setEmailGift}
-        optional
+        optional={!props.isDigitalGift}
         error={firstError('emailGiftRecipient', props.formErrors)}
       />
     </div>
   );
 }
+
+PersonalDetailsGift.defaultProps = {
+  isDigitalGift: false,
+};

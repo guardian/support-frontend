@@ -9,6 +9,7 @@ import './textArea.scss';
 // ----- Component ----- //
 
 function TextArea(props: {}) {
+  console.log({ props });
   return <textarea className="component-textarea" {...props} />;
 }
 
