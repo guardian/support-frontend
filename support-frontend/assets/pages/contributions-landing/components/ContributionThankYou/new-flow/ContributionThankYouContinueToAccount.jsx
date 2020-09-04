@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+// @flow
+// $FlowIgnore - required for hooks
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
-import { Button } from '@guardian/src-button';
+import { LinkButton } from '@guardian/src-button';
 import { ButtonLink } from '@guardian/src-link';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
@@ -12,6 +14,7 @@ import ExpandableContainer from './components/ExpandableContainer';
 import BulletPointedList from './components/BulletPointedList';
 import SvgPersonWithTick from './components/SvgPersonWithTick';
 import styles from './styles';
+import { routes } from 'helpers/routes';
 
 const bodyText = css`
   ${body.small()};
@@ -29,14 +32,40 @@ const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
-const ContributionThankYouContinueToAccount = () => {
+type ContributionThankYouContinueToAccountProps = {|
+  email: string,
+  csrf: string
+|};
+
+const ContributionThankYouContinueToAccount = ({
+  email,
+  csrf,
+}: ContributionThankYouContinueToAccountProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  // TODO: Fix this and factor into custom useSingInLink hook
+  const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
+  useEffect(() => {
+    const payload = { email };
+    fetch(routes.createSignInUrl, {
+      method: 'post',
+      headers: {
+        'Csrf-Token': csrf,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(response => response.json())
+      .then(data => setSignInUrl(data.signInLink));
+  }, []);
+
   const actionIcon = <SvgPersonWithTick />;
   const actionHeader = <ActionHeader title="Continue to your account" />;
 
   const expandableContent = (
     <div css={expandableContainer}>
-      <p css={styles.hideAfterDesktop}>Stay signed in across all your devices, to:</p>
+      <p css={styles.hideAfterDesktop}>
+        Stay signed in across all your devices, to:
+      </p>
       <BulletPointedList
         items={[
           'Remove unnecessary messages asking you for financial support',
@@ -75,11 +104,12 @@ const ContributionThankYouContinueToAccount = () => {
           {expandableContent}
         </ExpandableContainer>
       </div>
-      <div css={styles.hideBeforeDesktop}>
-        {expandableContent}
-      </div>
+      <div css={styles.hideBeforeDesktop}>{expandableContent}</div>
       <div css={buttonContainer}>
-        <Button
+        <LinkButton
+          href={signInUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           priority="primary"
           size="default"
           icon={<SvgArrowRightStraight />}
@@ -87,7 +117,7 @@ const ContributionThankYouContinueToAccount = () => {
           nudgeIcon
         >
           Continue
-        </Button>
+        </LinkButton>
       </div>
     </ActionBody>
   );

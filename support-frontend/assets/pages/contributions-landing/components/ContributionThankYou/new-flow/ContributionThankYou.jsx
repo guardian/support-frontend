@@ -1,3 +1,6 @@
+// @flow
+import React from 'react';
+import { connect } from 'react-redux';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
@@ -48,13 +51,22 @@ const buttonContainer = css`
   padding-bottom: ${space[6]}px;
 `;
 
-const ContributionThankYou = () => (
+type ContributionThankYouProps = {|
+  csrf: string,
+|};
+
+const mapStateToProps = state => ({
+  csrf: state.page.csrf.token,
+});
+
+
+const ContributionThankYou = ({ csrf }: ContributionThankYouProps) => (
   <div css={container}>
     <ContributionThankYouHeader showDirectDebitMessage />
 
     <div css={columnsContainer}>
       <div css={columnContainer}>
-        <ContributionThankYouContinueToAccount />
+        <ContributionThankYouContinueToAccount email="tom.pretty@guardian.co.uk" csrf={csrf} />
         <ContributionThankYouCompleteRegistration />
         <ContributionThankYouHearFromOurNewsroom />
       </div>
@@ -71,4 +83,4 @@ const ContributionThankYou = () => (
   </div>
 );
 
-export default ContributionThankYou;
+export default connect(mapStateToProps)(ContributionThankYou);

@@ -13,14 +13,14 @@ const expandableContainerCollapsed = css`
   max-height: 0px;
 `;
 
-const expandableContainerExpanded = (maxHeight: Number) => css`
+const expandableContainerExpanded = (maxHeight: number) => css`
   ${expandableContainer}
   max-height: ${maxHeight}px;
 `;
 
 type ExpandableContainerProps = {|
-  isExpanded: Boolean,
-  maxHeight: Number,
+  isExpanded: boolean,
+  maxHeight: number,
   children: React.Node
 |};
 

@@ -59,7 +59,7 @@ const directDebitSetupText = css`
 `;
 
 type ContributionThankYouHeaderProps = {|
-  showDirectDebitMessage: Boolean
+  showDirectDebitMessage: boolean
 |};
 
 const ContributionThankYouHeader = ({
