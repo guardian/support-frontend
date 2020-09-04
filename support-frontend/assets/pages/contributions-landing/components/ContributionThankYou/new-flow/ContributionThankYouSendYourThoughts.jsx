@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { Button } from '@guardian/src-button';
+import { LinkButton } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
@@ -12,6 +12,8 @@ import styles from './styles';
 const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
+
+const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/8DTN7GS';
 
 const ContributionThankYouSendYourThoughts = () => {
   const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
@@ -43,8 +45,11 @@ const ContributionThankYouSendYourThoughts = () => {
             </span>
           </p>
           <div css={buttonContainer}>
-            <Button
+            <LinkButton
               onClick={() => setHasBeenInteractedWith(true)}
+              href={SURVEY_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
               priority="primary"
               size="default"
               icon={<SvgArrowRightStraight />}
@@ -52,7 +57,7 @@ const ContributionThankYouSendYourThoughts = () => {
               nudgeIcon
             >
               Provide feedback
-            </Button>
+            </LinkButton>
           </div>
         </>
       )}
