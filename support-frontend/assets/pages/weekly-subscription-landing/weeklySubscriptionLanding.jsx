@@ -215,7 +215,7 @@ const content = (
         </ProductPageInfoChip>
       </Content>
       <Content>
-        <Text title={orderIsAGift ? 'Looking for a personal subscription?' : 'Gift subscriptions'}>
+        <Text title={orderIsAGift ? 'Looking for a subscription for yourself?' : 'Gift subscriptions'}>
           {!orderIsAGift && <LargeParagraph>A Guardian Weekly subscription makes a great gift.</LargeParagraph>}
         </Text>
         <AnchorButton
@@ -223,7 +223,7 @@ const content = (
           appearance="blue"
           href={orderIsAGift ? routes.guardianWeeklySubscriptionLanding : routes.guardianWeeklySubscriptionLandingGift}
         >
-          {orderIsAGift ? 'See all subscriptions' : 'See all gift subscriptions'}
+          {orderIsAGift ? 'See personal subscriptions' : 'See gift subscriptions'}
         </AnchorButton>
       </Content>
       <ConsentBanner />
