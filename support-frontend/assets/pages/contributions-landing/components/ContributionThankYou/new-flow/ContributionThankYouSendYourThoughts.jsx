@@ -28,12 +28,7 @@ const ContributionThankYouSendYourThoughts = () => {
   const actionBody = (
     <ActionBody>
       {hasBeenInteractedWith ? (
-        // TODO: Replace this with final copy
-        <p>
-          We would love to hear more about your experience of supporting the
-          Guardian today. Please fill out this short form – it only takes a
-          minute.
-        </p>
+        <p>Your feedback helps us better understand our readers.</p>
       ) : (
         <>
           <p>
