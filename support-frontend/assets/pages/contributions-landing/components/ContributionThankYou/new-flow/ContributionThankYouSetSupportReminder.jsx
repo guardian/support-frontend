@@ -50,6 +50,13 @@ const privacyTextLink = css`
 `;
 
 const ContributionThankYouSetSupportReminder = () => {
+  const now = new Date();
+  const reminderDates = [
+    new Date(now.getFullYear(), now.getMonth() + 3),
+    new Date(now.getFullYear(), now.getMonth() + 6),
+    new Date(now.getFullYear(), now.getMonth() + 9),
+  ];
+
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
   const actionIcon = <SvgClock />;
@@ -106,13 +113,17 @@ const ContributionThankYouSetSupportReminder = () => {
             </ExpandableContainer>
           </div>
           <form css={form}>
-            <RadioGroup
-              name="reminder"
-              label="I'd like to be reminded in:"
-            >
-              <Radio value="march" label="March 2020" defaultChecked />
-              <Radio value="june" label="June 2020" />
-              <Radio value="december" label="December 2020" />
+            <RadioGroup name="reminder" label="I'd like to be reminded in:">
+              {reminderDates.map((date, index) => (
+                <Radio
+                  value={index}
+                  label={date.toLocaleString('default', {
+                    month: 'long',
+                    year: 'numeric',
+                  })}
+                  defaultChecked={index === 0}
+                />
+              ))}
             </RadioGroup>
             <div>
               <TextInput
