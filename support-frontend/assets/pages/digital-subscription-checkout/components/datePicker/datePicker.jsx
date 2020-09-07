@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import DayPicker from 'react-day-picker';
+import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
@@ -81,6 +81,8 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
   render() {
     const { state } = this;
     const today = Date.now();
+    const currentMonth = new Date(today);
+    const threeMonthRange = DateUtils.addMonths(currentMonth, 2);
 
     return (
       <div>
@@ -132,6 +134,9 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
             onDayClick={day => this.handleCalendarDate(day)}
             disabledDays={[{ before: new Date(today) }]}
             weekdaysShort={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
+            showOutsideDays
+            fromMonth={currentMonth}
+            toMonth={threeMonthRange}
           />
         )}
       </div>
