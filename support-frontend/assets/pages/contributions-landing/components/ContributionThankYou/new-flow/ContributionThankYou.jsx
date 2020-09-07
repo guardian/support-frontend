@@ -7,7 +7,7 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
+import { from, between } from '@guardian/src-foundations/mq';
 import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouContinueToAccount from './ContributionThankYouContinueToAccount';
@@ -23,8 +23,12 @@ const container = css`
   max-width: 1260px;
   margin: 0 auto;
 
-  ${from.desktop} {
+  ${from.tablet} {
     background: none;
+    padding 0 ${space[9]}px;
+  }
+
+  ${from.desktop} {
     padding 0 ${space[24]}px;
   }
 `;
@@ -32,6 +36,12 @@ const container = css`
 const columnsContainer = css`
   display: flex;
   flex-direction: column;
+
+  ${between.tablet.and.desktop} {
+    & > * + * {
+      margin-top: ${space[6]}px;
+    }
+  }
 
   ${from.desktop} {
     flex-direction: row;
@@ -43,12 +53,13 @@ const columnsContainer = css`
 `;
 
 const columnContainer = css`
-  ${from.desktop} {
-    width: calc(50% - ${space[3]}px);
-
+  ${from.tablet} {
     & > * + * {
       margin-top: ${space[6]}px;
     }
+  }
+  ${from.desktop} {
+    width: calc(50% - ${space[3]}px);
   }
 `;
 

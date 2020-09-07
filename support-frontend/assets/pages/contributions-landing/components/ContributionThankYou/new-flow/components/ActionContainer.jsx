@@ -12,7 +12,7 @@ const container = css`
   border-top: 1px solid ${neutral[86]};
   border-bottom: 1px solid ${neutral[86]};
 
-  ${from.desktop} {
+  ${from.tablet} {
     padding-left: ${space[4]}px;
     padding-right: 72px;
     border: 1px solid ${neutral[86]};
@@ -25,7 +25,7 @@ const container = css`
     "icon header"
     "body body";
 
-  ${from.desktop} {
+  ${from.tablet} {
     grid-template-areas:
       "icon header"
       "---- body";

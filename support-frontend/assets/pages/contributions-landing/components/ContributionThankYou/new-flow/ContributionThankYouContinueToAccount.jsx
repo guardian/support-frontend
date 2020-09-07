@@ -82,7 +82,7 @@ const ContributionThankYouContinueToAccount = ({
   const actionBody = (
     <ActionBody>
       <p>
-        <span css={styles.hideAfterDesktop}>
+        <span css={styles.hideAfterTablet}>
           We’ll show you fewer requests for support and improve your Guardian
           reading experience.{' '}
           {!isExpanded && (
@@ -95,17 +95,17 @@ const ContributionThankYouContinueToAccount = ({
             </ButtonLink>
           )}
         </span>
-        <span css={styles.hideBeforeDesktop}>
+        <span css={styles.hideBeforeTablet}>
           By signing in, you enable us to recognise you as a supporter across
           our website and apps. This means we will:
         </span>
       </p>
-      <div css={styles.hideAfterDesktop}>
+      <div css={styles.hideAfterTablet}>
         <ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
           {expandableContent}
         </ExpandableContainer>
       </div>
-      <div css={styles.hideBeforeDesktop}>{expandableContent}</div>
+      <div css={styles.hideBeforeTablet}>{expandableContent}</div>
       <div css={buttonContainer}>
         <LinkButton
           href={signInUrl}

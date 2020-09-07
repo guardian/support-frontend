@@ -128,7 +128,7 @@ const ContributionThankYouSetSupportReminder = ({
       ) : (
         <>
           <p>
-            <span css={styles.hideAfterDesktop}>
+            <span css={styles.hideAfterTablet}>
               Opt in to receive a reminder in case you would like to support our
               journalism again.{' '}
               {!isExpanded && (
@@ -141,14 +141,14 @@ const ContributionThankYouSetSupportReminder = ({
                 </ButtonLink>
               )}
             </span>
-            <span css={styles.hideBeforeDesktop}>
+            <span css={styles.hideBeforeTablet}>
               Lots of readers chose to make single contributions at various
               points in the year. Opt in to receive a reminder in case you would
               like to support our journalism again. This will be a single email
               with no obligation.
             </span>
           </p>
-          <div css={styles.hideAfterDesktop}>
+          <div css={styles.hideAfterTablet}>
             <ExpandableContainer isExpanded={isExpanded} maxHeight={250}>
               {expandableContent}
             </ExpandableContainer>

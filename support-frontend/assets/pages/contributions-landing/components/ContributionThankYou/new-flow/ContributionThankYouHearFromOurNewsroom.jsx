@@ -71,10 +71,10 @@ const ContributionThankYouHearFromOurNewsroom = ({
       ) : (
         <>
           <p>
-            <span css={styles.hideAfterDesktop}>
+            <span css={styles.hideAfterTablet}>
               Opt in to receive a regular newsletter from inside the Guardian.
             </span>
-            <span css={styles.hideBeforeDesktop}>
+            <span css={styles.hideBeforeTablet}>
               Our membership editor and others will discuss the most important
               recent news stories and suggest compelling articles to read. Opt
               in to receive their regular newsletter.
@@ -82,14 +82,14 @@ const ContributionThankYouHearFromOurNewsroom = ({
           </p>
           <div css={checkboxContainer}>
             <CheckboxGroup error={errorMessage}>
-              <div css={styles.hideAfterDesktop}>
+              <div css={styles.hideAfterTablet}>
                 <Checkbox
                   checked={hasConsented}
                   onChange={() => setHasConsented(!hasConsented)}
                   supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one."
                 />
               </div>
-              <div css={styles.hideBeforeDesktop}>
+              <div css={styles.hideBeforeTablet}>
                 <Checkbox
                   checked={hasConsented}
                   onChange={() => setHasConsented(!hasConsented)}

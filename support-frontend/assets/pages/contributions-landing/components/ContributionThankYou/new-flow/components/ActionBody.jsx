@@ -8,7 +8,7 @@ const bodyContainer = css`
   * {
     ${body.small()};
 
-    ${from.desktop} {
+    ${from.tablet} {
       font-size: 17px;
     }
   }

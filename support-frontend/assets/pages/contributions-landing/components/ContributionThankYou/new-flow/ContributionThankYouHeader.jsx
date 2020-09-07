@@ -11,7 +11,7 @@ const header = css`
   padding-bottom: ${space[5]}px;
   max-width: 600px;
 
-  ${from.desktop} {
+  ${from.tablet} {
     background: none;
   }
 `;
@@ -22,7 +22,7 @@ const headerTitleText = css`
   ${titlepiece.small()};
   font-size: 24px;
 
-  ${from.desktop} {
+  ${from.tablet} {
     font-size: 40px;
   }
 `;
@@ -47,10 +47,11 @@ const headerTitleTextTwoLines = css`
 
 const headerSupportingText = css`
   ${body.small()};
+  padding-top: ${space[1]}px;
 
-  ${from.desktop} {
+  ${from.tablet} {
     font-size: 17px;
-    padding-top: ${space[2]}px;
+    padding-top: ${space[3]}px;
   }
 `;
 

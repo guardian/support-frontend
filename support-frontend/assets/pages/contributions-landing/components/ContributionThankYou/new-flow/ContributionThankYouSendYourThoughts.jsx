@@ -34,11 +34,11 @@ const ContributionThankYouSendYourThoughts = () => {
       ) : (
         <>
           <p>
-            <span css={styles.hideAfterDesktop}>
+            <span css={styles.hideAfterTablet}>
               Fill out this short form to tell us more about your experience of
               supporting us today.
             </span>
-            <span css={styles.hideBeforeDesktop}>
+            <span css={styles.hideBeforeTablet}>
               We would love to hear more about your experience of supporting the
               Guardian today. Please fill out this short form – it only takes a
               minute.

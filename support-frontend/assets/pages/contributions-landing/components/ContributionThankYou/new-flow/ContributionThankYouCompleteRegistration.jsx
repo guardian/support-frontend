@@ -67,7 +67,7 @@ const ContributionThankYouContinueToAccount = () => {
       ) : (
         <>
           <p>
-            <span css={styles.hideAfterDesktop}>
+            <span css={styles.hideAfterTablet}>
               If you register, we can start recognising you as a supporter and
               remove unnecessary messages asking for financial support.{' '}
               {!isExpanded && (
@@ -80,7 +80,7 @@ const ContributionThankYouContinueToAccount = () => {
                 </ButtonLink>
               )}
             </span>
-            <span css={styles.hideBeforeDesktop}>
+            <span css={styles.hideBeforeTablet}>
               Your free Guardian account is almost complete, you just need to
               set a password.
               <br />
@@ -88,12 +88,12 @@ const ContributionThankYouContinueToAccount = () => {
               across our website and apps. This means we will:
             </span>
           </p>
-          <div css={styles.hideAfterDesktop}>
+          <div css={styles.hideAfterTablet}>
             <ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
               {expandableContent}
             </ExpandableContainer>
           </div>
-          <div css={styles.hideBeforeDesktop}>{expandableContent}</div>
+          <div css={styles.hideBeforeTablet}>{expandableContent}</div>
           <div>
             <form css={form}>
               <div>
