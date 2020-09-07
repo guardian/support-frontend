@@ -17,13 +17,13 @@ export type PropTypes = {
   emailGiftRecipient: string,
   setEmailGift: Function,
   formErrors: FormError<FormField>[],
-  isDigitalGift?: boolean,
 }
 
 const InputWithLabel = withLabel(Input);
 const InputWithError = compose(asControlled, withError)(InputWithLabel);
+const InputWithLabelAndError = compose(asControlled, withLabel, withError)(Input);
 
-export default function PersonalDetailsGift(props: PropTypes) {
+function PersonalDetailsGift(props: PropTypes) {
   return (
     <div>
       <InputWithError
@@ -48,13 +48,45 @@ export default function PersonalDetailsGift(props: PropTypes) {
         type="emailGiftRecipient"
         value={props.emailGiftRecipient}
         setValue={props.setEmailGift}
-        optional={!props.isDigitalGift}
+        optional
         error={firstError('emailGiftRecipient', props.formErrors)}
       />
     </div>
   );
 }
 
-PersonalDetailsGift.defaultProps = {
-  isDigitalGift: false,
+function PersonalDetailsDigitalGift(props: PropTypes) {
+  return (
+    <div>
+      <InputWithLabelAndError
+        id="firstNameGiftRecipient"
+        label="First name"
+        type="text"
+        value={props.firstNameGiftRecipient}
+        setValue={props.setFirstNameGift}
+        error={firstError('firstNameGiftRecipient', props.formErrors)}
+      />
+      <InputWithLabelAndError
+        id="lastNameGiftRecipient"
+        label="Last name"
+        type="text"
+        value={props.lastNameGiftRecipient}
+        setValue={props.setLastNameGift}
+        error={firstError('lastNameGiftRecipient', props.formErrors)}
+      />
+      <InputWithLabelAndError
+        id="emailGiftRecipient"
+        label="Email"
+        type="emailGiftRecipient"
+        value={props.emailGiftRecipient}
+        setValue={props.setEmailGift}
+        error={firstError('emailGiftRecipient', props.formErrors)}
+      />
+    </div>
+  );
+}
+
+export {
+  PersonalDetailsGift,
+  PersonalDetailsDigitalGift,
 };

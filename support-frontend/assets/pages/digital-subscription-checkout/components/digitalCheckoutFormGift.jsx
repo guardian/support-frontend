@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { type Dispatch, compose } from 'redux';
 
@@ -37,7 +37,7 @@ import {
   type FormFields,
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
-import PersonalDetailsGift from 'components/subscriptionCheckouts/personalDetailsGift';
+import { PersonalDetailsDigitalGift } from 'components/subscriptionCheckouts/personalDetailsGift';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -139,140 +139,146 @@ const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
 
 // ----- Component ----- //
 
-function DigitalCheckoutFormGift(props: PropTypes) {
-  const productPrice = getProductPrice(
-    props.productPrices,
-    props.country,
-    props.billingPeriod,
-  );
+class DigitalCheckoutFormGift extends Component <PropTypes> {
+  componentDidMount() {
+    this.props.setGiftStatus(true);
+  }
 
-  const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
-    'Sorry we could not process your payment';
+  render() {
+    const { props } = this;
+    const productPrice = getProductPrice(
+      props.productPrices,
+      props.country,
+      props.billingPeriod,
+    );
 
-  return (
-    <Content>
-      <CheckoutLayout aside={(
-        <OrderSummary
-          image={
-            <GridImage
-              gridId="subscriptionDailyPackshot"
-              srcSizes={[1000, 500]}
-              sizes="(max-width: 740px) 50vw, 500"
-              imgType="png"
-              altText=""
-            />
-            }
-          title="Digital Subscription"
-          description="Premium App + The Guardian Daily + Ad-free"
-          productPrice={productPrice}
-          billingPeriod={props.billingPeriod}
-          changeSubscription={routes.digitalSubscriptionLanding}
-        />)}
-      >
-        <Form onSubmit={(ev) => {
-            ev.preventDefault();
-            props.submitForm();
-          }}
-        >
-          <FormSection title="Gift recipient's details">
-            <PersonalDetailsGift
-              firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
-              setFirstNameGift={props.setFirstNameGift}
-              lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
-              setLastNameGift={props.setLastNameGift}
-              emailGiftRecipient={props.emailGiftRecipient || ''}
-              setEmailGift={props.setEmailGift}
-              formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
-              isDigitalGift
-            />
-          </FormSection>
-          <FormSection title="Gift start date">
-            <DatePickerFields
-              value={props.giftStartDate}
-              onChange={date => props.setDigitalGiftStartDate(date)}
-            />
-          </FormSection>
-          <FormSection title="Personalise your gift">
-            <TextAreaWithLabel
-              id="gift-message"
-              label="Gift message"
-              maxlength={300}
-              value={props.giftMessage}
-              setValue={props.setGiftMessage}
-              optional
-            />
-          </FormSection>
-          <FormSection title="Your details" border="top">
-            <PersonalDetails
-              firstName={props.firstName}
-              setFirstName={props.setFirstName}
-              lastName={props.lastName}
-              setLastName={props.setLastName}
-              email={props.email}
-              telephone={props.telephone}
-              setTelephone={props.setTelephone}
-              formErrors={props.formErrors}
-              signOut={props.signOut}
-            />
-          </FormSection>
-          <PaymentMethodSelector
-            country={props.country}
-            paymentMethod={props.paymentMethod}
-            setPaymentMethod={props.setPaymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
-            validationError={firstError('paymentMethod', props.formErrors)}
-            csrf={props.csrf}
-            currencyId={props.currencyId}
-            payPalHasLoaded={props.payPalHasLoaded}
-            formIsValid={props.formIsValid}
-            validateForm={props.validateForm}
-            isTestUser={props.isTestUser}
-            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            amount={props.amount}
+    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
+      'Sorry we could not process your payment';
+    return (
+      <Content>
+        <CheckoutLayout aside={(
+          <OrderSummary
+            image={
+              <GridImage
+                gridId="subscriptionDailyPackshot"
+                srcSizes={[1000, 500]}
+                sizes="(max-width: 740px) 50vw, 500"
+                imgType="png"
+                altText=""
+              />
+                }
+            title="Digital Subscription"
+            description="Premium App + The Guardian Daily + Ad-free"
+            productPrice={productPrice}
             billingPeriod={props.billingPeriod}
-            allErrors={[...props.addressErrors, ...props.formErrors]}
-          />
-          <FormSectionHiddenUntilSelected
-            id="stripeForm"
-            show={props.paymentMethod === Stripe}
-            title="Your card details"
+            changeSubscription={routes.digitalSubscriptionLanding}
+          />)}
+        >
+          <Form onSubmit={(ev) => {
+                ev.preventDefault();
+                props.submitForm();
+              }}
           >
-            <StripeProviderForCountry
+            <FormSection title="Gift recipient's details">
+              <PersonalDetailsDigitalGift
+                firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
+                setFirstNameGift={props.setFirstNameGift}
+                lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
+                setLastNameGift={props.setLastNameGift}
+                emailGiftRecipient={props.emailGiftRecipient || ''}
+                setEmailGift={props.setEmailGift}
+                formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+              />
+            </FormSection>
+            <FormSection title="Gift start date">
+              <DatePickerFields
+                value={props.giftStartDate}
+                onChange={date => props.setDigitalGiftStartDate(date)}
+              />
+            </FormSection>
+            <FormSection title="Personalise your gift">
+              <TextAreaWithLabel
+                id="gift-message"
+                label="Gift message"
+                maxlength={300}
+                value={props.giftMessage}
+                setValue={props.setGiftMessage}
+                optional
+              />
+            </FormSection>
+            <FormSection title="Your details" border="top">
+              <PersonalDetails
+                firstName={props.firstName}
+                setFirstName={props.setFirstName}
+                lastName={props.lastName}
+                setLastName={props.setLastName}
+                email={props.email}
+                telephone={props.telephone}
+                setTelephone={props.setTelephone}
+                formErrors={props.formErrors}
+                signOut={props.signOut}
+              />
+            </FormSection>
+            <PaymentMethodSelector
               country={props.country}
-              isTestUser={props.isTestUser}
-              submitForm={props.submitForm}
-              allErrors={[...props.addressErrors]}
-              setStripePaymentMethod={props.setStripePaymentMethod}
-              validateForm={props.validateForm}
-              buttonText="Start your free trial now"
+              paymentMethod={props.paymentMethod}
+              setPaymentMethod={props.setPaymentMethod}
+              onPaymentAuthorised={props.onPaymentAuthorised}
+              validationError={firstError('paymentMethod', props.formErrors)}
               csrf={props.csrf}
+              currencyId={props.currencyId}
+              payPalHasLoaded={props.payPalHasLoaded}
+              formIsValid={props.formIsValid}
+              validateForm={props.validateForm}
+              isTestUser={props.isTestUser}
+              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+              amount={props.amount}
+              billingPeriod={props.billingPeriod}
+              allErrors={[...props.formErrors]}
             />
-          </FormSectionHiddenUntilSelected>
-          <FormSectionHiddenUntilSelected
-            id="directDebitForm"
-            show={props.paymentMethod === DirectDebit}
-            title="Your account details"
-          >
-            <DirectDebitForm
-              buttonText="Start free trial"
-              submitForm={props.submitForm}
-              allErrors={[...props.addressErrors, ...props.formErrors]}
-              submissionError={props.submissionError}
-              submissionErrorHeading={submissionErrorHeading}
+            <FormSectionHiddenUntilSelected
+              id="stripeForm"
+              show={props.paymentMethod === Stripe}
+              title="Your card details"
+            >
+              <StripeProviderForCountry
+                country={props.country}
+                isTestUser={props.isTestUser}
+                submitForm={props.submitForm}
+                allErrors={[...props.formErrors]}
+                setStripePaymentMethod={props.setStripePaymentMethod}
+                validateForm={props.validateForm}
+                buttonText="Start your free trial now"
+                csrf={props.csrf}
+              />
+            </FormSectionHiddenUntilSelected>
+            <FormSectionHiddenUntilSelected
+              id="directDebitForm"
+              show={props.paymentMethod === DirectDebit}
+              title="Your account details"
+            >
+              <DirectDebitForm
+                buttonText="Start free trial"
+                submitForm={props.submitForm}
+                allErrors={[...props.formErrors]}
+                submissionError={props.submissionError}
+                submissionErrorHeading={submissionErrorHeading}
+              />
+            </FormSectionHiddenUntilSelected>
+            <GeneralErrorMessage
+              errorReason={props.submissionError}
+              errorHeading={submissionErrorHeading}
             />
-          </FormSectionHiddenUntilSelected>
-          <GeneralErrorMessage
-            errorReason={props.submissionError}
-            errorHeading={submissionErrorHeading}
-          />
-          <EndSummaryMobile />
-          <DirectDebitPaymentTerms
-            paymentMethod={props.paymentMethod}
-          />
-        </Form>
-      </CheckoutLayout>
-    </Content>
-  );
+            <EndSummaryMobile />
+            <DirectDebitPaymentTerms
+              paymentMethod={props.paymentMethod}
+            />
+          </Form>
+        </CheckoutLayout>
+      </Content>
+    );
+
+  }
 }
 
 // ----- Exports ----- //
