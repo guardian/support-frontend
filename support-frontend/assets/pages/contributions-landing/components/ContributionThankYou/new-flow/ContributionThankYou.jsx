@@ -20,6 +20,8 @@ import ContributionThankYouShareYourSupport from './ContributionThankYouShareYou
 const container = css`
   background: white;
   padding: 0 ${space[3]}px;
+  max-width: 1260px;
+  margin: 0 auto;
 
   ${from.desktop} {
     background: none;
