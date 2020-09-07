@@ -1,6 +1,7 @@
 // @flow
 // $FlowIgnore - required for hooks
 import React, { useState, useEffect } from 'react';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { css } from '@emotion/core';
 import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
@@ -34,7 +35,7 @@ const buttonContainer = css`
 
 type ContributionThankYouContinueToAccountProps = {|
   email: string,
-  csrf: string
+  csrf: Csrf
 |};
 
 const ContributionThankYouContinueToAccount = ({
@@ -49,7 +50,7 @@ const ContributionThankYouContinueToAccount = ({
     fetch(routes.createSignInUrl, {
       method: 'post',
       headers: {
-        'Csrf-Token': csrf,
+        'Csrf-Token': csrf.token || '',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),

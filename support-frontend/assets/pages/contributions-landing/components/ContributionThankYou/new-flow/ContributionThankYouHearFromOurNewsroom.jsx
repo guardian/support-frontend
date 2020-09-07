@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+// @flow
+// $FlowIgnore - required for hooks
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { Checkbox } from '@guardian/src-checkbox';
+import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import { Button } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
@@ -23,8 +25,33 @@ const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
-const ContributionThankYouHearFromOurNewsroom = () => {
+const ERROR_MESSAGE = 'Please check the box in order to subscribe';
+
+type ContributionThankYouHearFromOurNewsroomProps = {|
+  subscribeToNewsLetter: () => void
+|};
+
+const ContributionThankYouHearFromOurNewsroom = ({
+  subscribeToNewsLetter,
+}: ContributionThankYouHearFromOurNewsroomProps) => {
+  const [hasConsented, setHasConsented] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+
+  // reset error message when consent changes
+  useEffect(() => {
+    setErrorMessage(null);
+  }, [hasConsented]);
+
+  const onSubmit = () => {
+    if (!hasConsented) {
+      setErrorMessage(ERROR_MESSAGE);
+    } else {
+      setHasBeenInteractedWith(true);
+      subscribeToNewsLetter();
+    }
+  };
+
   const actionIcon = <SvgNotification />;
   const actionHeader = (
     <ActionHeader
@@ -54,16 +81,26 @@ const ContributionThankYouHearFromOurNewsroom = () => {
             </span>
           </p>
           <div css={checkboxContainer}>
-            <div css={styles.hideAfterDesktop}>
-              <Checkbox supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one." />
-            </div>
-            <div css={styles.hideBeforeDesktop}>
-              <Checkbox supporting="Contributions, subscriptions and membership: get related news and offers – whether you are a contributor, subscriber, member or would like to become one." />
-            </div>
+            <CheckboxGroup error={errorMessage}>
+              <div css={styles.hideAfterDesktop}>
+                <Checkbox
+                  checked={hasConsented}
+                  onChange={() => setHasConsented(!hasConsented)}
+                  supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one."
+                />
+              </div>
+              <div css={styles.hideBeforeDesktop}>
+                <Checkbox
+                  checked={hasConsented}
+                  onChange={() => setHasConsented(!hasConsented)}
+                  supporting="Contributions, subscriptions and membership: get related news and offers – whether you are a contributor, subscriber, member or would like to become one."
+                />
+              </div>
+            </CheckboxGroup>
           </div>
           <div css={buttonContainer}>
             <Button
-              onClick={() => setHasBeenInteractedWith(true)}
+              onClick={onSubmit}
               priority="primary"
               size="default"
               icon={<SvgArrowRightStraight />}

@@ -1,6 +1,10 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
+import type { Action } from 'helpers/user/userActions';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
@@ -52,15 +56,33 @@ const buttonContainer = css`
 `;
 
 type ContributionThankYouProps = {|
-  csrf: string,
+  csrf: Csrf,
+  subscribeToNewsLetter: (email: string, csrf: Csrf) => void,
 |};
 
 const mapStateToProps = state => ({
   csrf: state.page.csrf.token,
 });
 
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+  return {
+    subscribeToNewsLetter: (
+      email: string,
+      csrf: Csrf,
+    ) => {
+      sendMarketingPreferencesToIdentity(
+        true,
+        email,
+        dispatch,
+        csrf,
+        'MARKETING_CONSENT',
+      );
+    },
+  };
+}
 
-const ContributionThankYou = ({ csrf }: ContributionThankYouProps) => (
+
+const ContributionThankYou = ({ csrf, subscribeToNewsLetter }: ContributionThankYouProps) => (
   <div css={container}>
     <ContributionThankYouHeader showDirectDebitMessage />
 
@@ -68,7 +90,7 @@ const ContributionThankYou = ({ csrf }: ContributionThankYouProps) => (
       <div css={columnContainer}>
         <ContributionThankYouContinueToAccount email="tom.pretty@guardian.co.uk" csrf={csrf} />
         <ContributionThankYouCompleteRegistration />
-        <ContributionThankYouHearFromOurNewsroom />
+        <ContributionThankYouHearFromOurNewsroom subscribeToNewsLetter={() => subscribeToNewsLetter('tom.pretty@guardian.co.uk', csrf)} />
       </div>
       <div css={columnContainer}>
         <ContributionThankYouSetSupportReminder />
@@ -83,4 +105,4 @@ const ContributionThankYou = ({ csrf }: ContributionThankYouProps) => (
   </div>
 );
 
-export default connect(mapStateToProps)(ContributionThankYou);
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionThankYou);
