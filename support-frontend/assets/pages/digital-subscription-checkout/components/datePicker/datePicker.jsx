@@ -8,6 +8,7 @@ import { space } from '@guardian/src-foundations';
 import { TextInput } from '@guardian/src-text-input';
 import { formatMachineDate } from 'helpers/dateConversions';
 import calendarIcon from './calendarIcon.png';
+import { type Option } from 'helpers/types/option';
 
 import './styles.scss';
 
@@ -43,6 +44,8 @@ type PropTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   value: string | null,
   onChange: Function,
+  // eslint-disable-next-line react/no-unused-prop-types
+  id: Option<string>,
 }
 
 type StateTypes = {

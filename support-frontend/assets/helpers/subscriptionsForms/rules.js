@@ -3,11 +3,10 @@
 import { formError, nonEmptyString, notNull, validate } from './validation';
 import type { FormField, FormFields } from './formFields';
 import type { FormError } from './validation';
-import { checkOptionalEmail, checkEmail } from 'helpers/formValidation';
+import { checkOptionalEmail, checkEmail, checkGiftStartDate } from 'helpers/formValidation';
 
 function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
   const { orderIsAGift, product } = fields;
-  console.log({ fields });
   const userFormFields = [
     {
       rule: nonEmptyString(fields.firstName),
@@ -22,20 +21,39 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
       error: formError('paymentMethod', 'Please select a payment method.'),
     },
   ];
-  const giftFormFields = [
-    {
-      rule: nonEmptyString(fields.firstNameGiftRecipient),
-      error: formError('firstNameGiftRecipient', 'Please enter the recipient\'s first name.'),
-    },
-    {
-      rule: nonEmptyString(fields.lastNameGiftRecipient),
-      error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
-    },
-    {
-      rule: product === 'DigitalPack' ? checkEmail(fields.emailGiftRecipient) : checkOptionalEmail(fields.emailGiftRecipient),
-      error: formError('emailGiftRecipient', 'Please use a valid email address for the recipient.'),
-    },
-  ];
+  const giftFormFields = product === 'DigitalPack' ?
+    [
+      {
+        rule: nonEmptyString(fields.firstNameGiftRecipient),
+        error: formError('firstNameGiftRecipient', 'Please enter the recipient\'s first name.'),
+      },
+      {
+        rule: nonEmptyString(fields.lastNameGiftRecipient),
+        error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
+      },
+      {
+        rule: checkEmail(fields.emailGiftRecipient),
+        error: formError('emailGiftRecipient', 'Please use a valid email address for the recipient.'),
+      },
+      {
+        rule: checkGiftStartDate(fields.giftStartDate),
+        error: formError('giftStartDate', 'Please enter a valid start date for your gift.'),
+      },
+    ] :
+    [
+      {
+        rule: nonEmptyString(fields.firstNameGiftRecipient),
+        error: formError('firstNameGiftRecipient', 'Please enter the recipient\'s first name.'),
+      },
+      {
+        rule: nonEmptyString(fields.lastNameGiftRecipient),
+        error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
+      },
+      {
+        rule: checkOptionalEmail(fields.emailGiftRecipient),
+        error: formError('emailGiftRecipient', 'Please use a valid email address for the recipient.'),
+      },
+    ];
   const formFieldsToCheck = orderIsAGift ?
     [...userFormFields, ...giftFormFields]
     : [...userFormFields];

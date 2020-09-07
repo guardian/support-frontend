@@ -62,6 +62,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { TextArea } from 'components/forms/textArea';
 import { asControlled } from 'hocs/asControlled';
 import { withLabel } from 'hocs/withLabel';
+import { withError } from 'hocs/withError';
 import DatePickerFields from './datePicker/datePicker';
 
 // ----- Types ----- //
@@ -136,6 +137,7 @@ function mapDispatchToProps() {
 }
 
 const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
+const DatePickerWithError = withError(DatePickerFields);
 
 // ----- Component ----- //
 
@@ -191,7 +193,9 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
               />
             </FormSection>
             <FormSection title="Gift start date">
-              <DatePickerFields
+              <DatePickerWithError
+                id="giftStartDate"
+                error={firstError('giftStartDate', props.formErrors)}
                 value={props.giftStartDate}
                 onChange={date => props.setDigitalGiftStartDate(date)}
               />

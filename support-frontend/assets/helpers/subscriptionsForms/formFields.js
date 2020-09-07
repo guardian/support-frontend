@@ -37,7 +37,7 @@ export type FormFields = {|
   orderIsAGift: Option<boolean>,
   deliveryInstructions: Option<string>,
   giftMessage: Option<string>,
-  giftStartDate: Option<string>
+  giftStartDate: Option<string>,
 |};
 
 export type FormField = $Keys<FormFields> | 'recaptcha';
