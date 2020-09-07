@@ -63,7 +63,12 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     };
   }
 
+  dateIsPast = (date: Date) => DateUtils.isPastDay(date)
+
   handleCalendarDate = (date: Date) => {
+    if (this.dateIsPast(date)) {
+      return;
+    }
     const dateArray = formatMachineDate(date).split('-');
     this.setState({
       day: dateArray[2],
@@ -134,7 +139,6 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
             onDayClick={day => this.handleCalendarDate(day)}
             disabledDays={[{ before: new Date(today) }]}
             weekdaysShort={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
-            showOutsideDays
             fromMonth={currentMonth}
             toMonth={threeMonthRange}
           />
