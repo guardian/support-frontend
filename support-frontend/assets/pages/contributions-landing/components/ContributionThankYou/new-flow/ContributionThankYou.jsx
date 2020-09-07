@@ -61,7 +61,7 @@ type ContributionThankYouProps = {|
 |};
 
 const mapStateToProps = state => ({
-  csrf: state.page.csrf.token,
+  csrf: state.page.csrf,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -93,7 +93,7 @@ const ContributionThankYou = ({ csrf, subscribeToNewsLetter }: ContributionThank
         <ContributionThankYouHearFromOurNewsroom subscribeToNewsLetter={() => subscribeToNewsLetter('tom.pretty@guardian.co.uk', csrf)} />
       </div>
       <div css={columnContainer}>
-        <ContributionThankYouSetSupportReminder />
+        <ContributionThankYouSetSupportReminder email="tom.pretty@guardian.co.uk" />
         <ContributionThankYouSendYourThoughts />
         <ContributionThankYouShareYourSupport />
       </div>

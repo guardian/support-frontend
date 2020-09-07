@@ -1,4 +1,8 @@
+// @flow
+// $FlowIgnore - required for hooks
 import React, { useState } from 'react';
+import { createReminderEndpoint } from 'helpers/routes';
+import { logException } from 'helpers/logger';
 import { css } from '@emotion/core';
 import { body, textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
@@ -7,7 +11,6 @@ import { Button } from '@guardian/src-button';
 import { ButtonLink, Link } from '@guardian/src-link';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { RadioGroup, Radio } from '@guardian/src-radio';
-import { TextInput } from '@guardian/src-text-input';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
@@ -49,7 +52,17 @@ const privacyTextLink = css`
   color: ${neutral[20]};
 `;
 
-const ContributionThankYouSetSupportReminder = () => {
+type ContributionThankYouSetSupportReminderProps = {|
+  email: string
+|};
+
+const ContributionThankYouSetSupportReminder = ({
+  email,
+}: ContributionThankYouSetSupportReminderProps) => {
+  const [selectedDateIndex, setSelectedDateIndex] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+
   const now = new Date();
   const reminderDates = [
     new Date(now.getFullYear(), now.getMonth() + 3),
@@ -57,8 +70,36 @@ const ContributionThankYouSetSupportReminder = () => {
     new Date(now.getFullYear(), now.getMonth() + 9),
   ];
 
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+  const selectedDateAsApiString = () => {
+    const selectedDate = reminderDates[selectedDateIndex];
+    const year = selectedDate.getFullYear();
+    const month = selectedDate.getMonth();
+    const paddedMonth = month.toString().padStart(2, '0');
+    return `${year}-${paddedMonth}-01 00:00:00`;
+  };
+
+  const setReminder = () => {
+    fetch(createReminderEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        reminderDate: selectedDateAsApiString(),
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        logException('Reminder sign up failed at the point of request');
+      }
+    });
+  };
+
+  const onSubmit = () => {
+    setReminder();
+    setHasBeenInteractedWith(true);
+  };
+
   const actionIcon = <SvgClock />;
   const actionHeader = (
     <ActionHeader
@@ -121,20 +162,15 @@ const ContributionThankYouSetSupportReminder = () => {
                     month: 'long',
                     year: 'numeric',
                   })}
-                  defaultChecked={index === 0}
+                  checked={selectedDateIndex === index}
+                  onChange={() => setSelectedDateIndex(index)}
                 />
               ))}
             </RadioGroup>
-            <div>
-              <TextInput
-                label="Email address"
-                supporting="example@domain.com"
-              />
-            </div>
           </form>
           <div css={buttonContainer}>
             <Button
-              onClick={() => setHasBeenInteractedWith(true)}
+              onClick={onSubmit}
               priority="primary"
               size="default"
               icon={<SvgArrowRightStraight />}
