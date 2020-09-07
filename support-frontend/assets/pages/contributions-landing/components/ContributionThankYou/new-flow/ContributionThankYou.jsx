@@ -33,6 +33,12 @@ const container = css`
   }
 `;
 
+const headerContainer = css`
+  ${from.desktop} {
+    width: calc(50% - ${space[3]}px);
+  }
+`;
+
 const columnsContainer = css`
   display: flex;
   flex-direction: column;
@@ -97,7 +103,9 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 const ContributionThankYou = ({ csrf, subscribeToNewsLetter }: ContributionThankYouProps) => (
   <div css={container}>
-    <ContributionThankYouHeader showDirectDebitMessage />
+    <div css={headerContainer}>
+      <ContributionThankYouHeader showDirectDebitMessage />
+    </div>
 
     <div css={columnsContainer}>
       <div css={columnContainer}>

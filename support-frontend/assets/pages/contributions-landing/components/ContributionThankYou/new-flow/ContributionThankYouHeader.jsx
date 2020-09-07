@@ -9,7 +9,6 @@ const header = css`
   background: white;
   padding-top: ${space[4]}px;
   padding-bottom: ${space[5]}px;
-  max-width: 600px;
 
   ${from.tablet} {
     background: none;
@@ -17,8 +16,6 @@ const header = css`
 `;
 
 const headerTitleText = css`
-  display: flex;
-  flex-direction: column;
   ${titlepiece.small()};
   font-size: 24px;
 
@@ -27,31 +24,12 @@ const headerTitleText = css`
   }
 `;
 
-const headerTitleTextThreeLines = css`
-  ${headerTitleText}
-  display: flex;
-
-  ${from.mobileMedium} {
-    display: none;
-  }
-`;
-
-const headerTitleTextTwoLines = css`
-  ${headerTitleText}
-  display: none;
-
-  ${from.mobileMedium} {
-    display: flex;
-  }
-`;
-
 const headerSupportingText = css`
   ${body.small()};
-  padding-top: ${space[1]}px;
+  padding-top: ${space[3]}px;
 
   ${from.tablet} {
     font-size: 17px;
-    padding-top: ${space[3]}px;
   }
 `;
 
@@ -67,25 +45,10 @@ const ContributionThankYouHeader = ({
   showDirectDebitMessage,
 }: ContributionThankYouHeaderProps) => (
   <header css={header}>
-    <h1>
-      <span css={headerTitleTextThreeLines}>
-        <span>Thank you Anastasia</span>
-        <span>for your valuable</span>
-        <span>
-          contribution{' '}
-          <span role="img" aria-label="heart">
-            ❤️
-          </span>
-        </span>
-      </span>
-      <span css={headerTitleTextTwoLines}>
-        <span>Thank you Anastasia for your</span>
-        <span>
-          valuable contribution{' '}
-          <span role="img" aria-label="heart">
-            ❤️
-          </span>
-        </span>
+    <h1 css={headerTitleText}>
+      Thank you Anastasia for your valuable contribution{' '}
+      <span role="img" aria-label="heart">
+        ❤️
       </span>
     </h1>
     <p css={headerSupportingText}>
