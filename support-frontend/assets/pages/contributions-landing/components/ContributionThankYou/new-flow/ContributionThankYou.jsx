@@ -20,16 +20,19 @@ import ContributionThankYouShareYourSupport from './ContributionThankYouShareYou
 const container = css`
   background: white;
   padding: 0 ${space[3]}px;
-  max-width: 1260px;
   margin: 0 auto;
 
   ${from.tablet} {
     background: none;
-    padding 0 ${space[9]}px;
+    max-width: 740px;
   }
 
   ${from.desktop} {
-    padding 0 ${space[24]}px;
+    max-width: 980px;
+  }
+
+  ${from.wide} {
+    max-width: 1300px;
   }
 `;
 
