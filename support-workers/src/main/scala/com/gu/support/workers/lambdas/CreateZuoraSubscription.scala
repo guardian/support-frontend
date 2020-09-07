@@ -260,6 +260,24 @@ object DigitalSubscriptionGiftRedemption {
     }
   }
 
+  def redeemGift(
+    redemptionData: RedemptionData,
+    gifteeUserId: String,
+    requestInfo: RequestInfo,
+    state: CreateZuoraSubscriptionState,
+    zuoraService: ZuoraService,
+    catalogService: CatalogService
+  ): Future[HandlerResult[SendThankYouEmailState]] = {
+    for {
+      giftSubscriptionFields <- zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode)
+      validatedSubscription <- Future.fromTry(validateRedemptionData(giftSubscriptionFields))
+      fullGiftSubscription <- zuoraService.getSubscriptionById(validatedSubscription.id)
+      newTermLength <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
+      updateDataResponse <- zuoraService.updateSubscriptionRedemptionData(validatedSubscription.id, gifteeUserId, newTermLength)
+      handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, redemptionData, requestInfo))
+    } yield handlerResult
+  }
+
   def validateRedemptionData(existingSub: SubscriptionRedemptionQueryResponse) = {
     existingSub.records.headOption.map(
       existingSubFields =>
@@ -309,21 +327,4 @@ object DigitalSubscriptionGiftRedemption {
     } else
       Failure(new RuntimeException("Failed to redeem Digital Subscription gift"))
 
-  def redeemGift(
-    redemptionData: RedemptionData,
-    gifteeUserId: String,
-    requestInfo: RequestInfo,
-    state: CreateZuoraSubscriptionState,
-    zuoraService: ZuoraService,
-    catalogService: CatalogService
-  ): Future[HandlerResult[SendThankYouEmailState]] = {
-    for {
-      giftSubscriptionFields <- zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode)
-      validatedSubscription <- Future.fromTry(validateRedemptionData(giftSubscriptionFields))
-      fullGiftSubscription <- zuoraService.getSubscriptionById(validatedSubscription.id)
-      newTermLength <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
-      updateDataResponse <- zuoraService.updateSubscriptionRedemptionData(validatedSubscription.id, gifteeUserId, newTermLength)
-      handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, redemptionData, requestInfo))
-    } yield handlerResult
-  }
 }
