@@ -37,7 +37,7 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
       },
       {
         rule: checkGiftStartDate(fields.giftStartDate),
-        error: formError('giftStartDate', 'Please enter a valid start date for your gift.'),
+        error: formError('giftStartDate', 'Please enter a valid delivery date for your gift.'),
       },
     ] :
     [
