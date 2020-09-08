@@ -6,7 +6,7 @@ import com.gu.support.redemption.generator.CodeBuilder.GiftCode
 import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson}
-import com.gu.support.workers.{AsyncLambdaSpec, BillingPeriod, Fixtures, MockContext, RequestInfo}
+import com.gu.support.workers.{Annual, AsyncLambdaSpec, BillingPeriod, Fixtures, MockContext, RequestInfo}
 import com.gu.support.workers.lambdas.{DigitalSubscriptionGiftRedemption, HandlerResult}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -18,12 +18,20 @@ import scala.concurrent.Future
 @IntegrationTest
 class GiftSubcriptionZuoraSpec extends CreateZuoraSubscriptionBaseSpec {
 
-  val giftCode = GiftCode("gd03-00000000").get
+  val giftCode = new GiftCodeGeneratorService().generateCode(Annual)
   val mockCodeGenerator = mock[GiftCodeGeneratorService]
   when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
 
   // This spec relies on the fact that tests within a spec are executed in sequence
   // So we can create a sub, redeem it and then try to redeem it again to get an error
+
+  "DigitalSubscriptionGiftRedemption" should "throw a NoSuchCode exception redeem a Digital Pack gift subscription" in {
+    val nonExistentCode = giftCode.value // We haven't created a sub with this yet
+
+    recoverToExceptionIf[RuntimeException](
+      redeemSubscription(nonExistentCode)
+    ).map(_.getMessage shouldBe NoSuchCode.clientCode)
+  }
 
   "CreateZuoraSubcription" should "create a Digital Pack gift subscription" in {
     createSubscription(createDigiPackGiftSubscriptionJson, mockCodeGenerator)
@@ -39,14 +47,6 @@ class GiftSubcriptionZuoraSpec extends CreateZuoraSubscriptionBaseSpec {
       redeemSubscription(giftCode.value)
     ).map(_.getMessage shouldBe CodeAlreadyUsed.clientCode)
 
-
-  it should "throw a NoSuchCode exception redeem a Digital Pack gift subscription" in {
-    val nonExistentCode = "gd06-aaaaaaaa"
-
-    recoverToExceptionIf[RuntimeException](
-      redeemSubscription(nonExistentCode)
-    ).map(_.getMessage shouldBe NoSuchCode.clientCode)
-  }
 
   def redeemSubscription(codeValue: String): Future[HandlerResult[SendThankYouEmailState]] = {
     val code = RedemptionCode(codeValue).right.get
