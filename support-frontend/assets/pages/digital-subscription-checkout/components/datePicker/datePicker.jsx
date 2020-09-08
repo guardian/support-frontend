@@ -9,8 +9,13 @@ import { TextInput } from '@guardian/src-text-input';
 import { formatMachineDate } from 'helpers/dateConversions';
 import calendarIcon from './calendarIcon.png';
 import { type Option } from 'helpers/types/option';
+import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 
 import './styles.scss';
+
+const dateHint = css`
+  margin-top: ${space[2]}px;
+`;
 
 const calendarIconContainer = css`
   padding: 0;
@@ -66,6 +71,10 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     };
   }
 
+  componentDidMount() {
+    this.handleCalendarDate(new Date(Date.now()));
+  }
+
   dateIsPast = (date: Date) => DateUtils.isPastDay(date)
 
   handleCalendarDate = (date: Date) => {
@@ -91,18 +100,15 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     const today = Date.now();
     const currentMonth = new Date(today);
     const threeMonthRange = DateUtils.addMonths(currentMonth, 2);
+    const rangeDate = new Date();
+    rangeDate.setDate(rangeDate.getDate() + 89);
 
     return (
       <div>
         <fieldset css={startDateGroup} role="group" aria-describedby="date-hint">
-          <legend>
-            <h3>
-              When would you like your gift to start?
-            </h3>
-          </legend>
-          <div id="date-hint">
-          For example, 27 9 2020
-          </div>
+          <p id="date-hint">
+            {`Please choose a date before ${rangeDate.getDate()} ${monthText[rangeDate.getMonth()]} ${rangeDate.getFullYear()} for your gift to be emailed to the recipient.`}
+          </p>
           <div css={startDateFields}>
             <div css={marginRight}>
               <TextInput
@@ -131,7 +137,10 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
             />
             <button
               css={calendarIconContainer}
-              onClick={() => this.setState({ showCalendar: !this.state.showCalendar })}
+              onClick={(e) => {
+                e.preventDefault();
+                this.setState({ showCalendar: !this.state.showCalendar });
+              }}
             >
               <img css={iconImage} src={calendarIcon} alt="calendar" />
             </button>

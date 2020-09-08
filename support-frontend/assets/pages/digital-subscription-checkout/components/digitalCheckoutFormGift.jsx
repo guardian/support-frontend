@@ -64,6 +64,9 @@ import { asControlled } from 'hocs/asControlled';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import DatePickerFields from './datePicker/datePicker';
+import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import { countries } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 
@@ -138,6 +141,7 @@ function mapDispatchToProps() {
 
 const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
 const DatePickerWithError = withError(DatePickerFields);
+const Address = withStore(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 
@@ -192,7 +196,7 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
                 formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
               />
             </FormSection>
-            <FormSection title="Gift start date">
+            <FormSection title="Gift delivery date">
               <DatePickerWithError
                 id="giftStartDate"
                 error={firstError('giftStartDate', props.formErrors)}
@@ -223,6 +227,9 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
                 signOut={props.signOut}
               />
             </FormSection>
+            <FormSection title="Billing address">
+              <Address />
+            </FormSection>
             <PaymentMethodSelector
               country={props.country}
               paymentMethod={props.paymentMethod}
@@ -238,7 +245,7 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
               setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
               amount={props.amount}
               billingPeriod={props.billingPeriod}
-              allErrors={[...props.formErrors]}
+              allErrors={[...props.formErrors, ...props.addressErrors]}
             />
             <FormSectionHiddenUntilSelected
               id="stripeForm"
@@ -249,7 +256,7 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
                 country={props.country}
                 isTestUser={props.isTestUser}
                 submitForm={props.submitForm}
-                allErrors={[...props.formErrors]}
+                allErrors={[...props.formErrors, ...props.addressErrors]}
                 setStripePaymentMethod={props.setStripePaymentMethod}
                 validateForm={props.validateForm}
                 buttonText="Start your free trial now"
@@ -264,7 +271,7 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
               <DirectDebitForm
                 buttonText="Start free trial"
                 submitForm={props.submitForm}
-                allErrors={[...props.formErrors]}
+                allErrors={[...props.formErrors, ...props.addressErrors]}
                 submissionError={props.submissionError}
                 submissionErrorHeading={submissionErrorHeading}
               />

@@ -38,24 +38,16 @@ type Error<T> = {
 type AnyErrorType = Error<AddressFormField> | Error<FormField>;
 
 function checkoutValidation(state: CheckoutState): AnyErrorType[] {
-  const { orderIsAGift, product } = state.page.checkout;
-  return orderIsAGift && product === 'DigitalPack' ?
-    [
-      ({
-        errors: applyCheckoutRules(getFormFields(state)),
-        errorAction: setFormErrors,
-      }: Error<FormField>),
-    ].filter(({ errors }) => errors.length > 0) :
-    [
-      ({
-        errors: applyCheckoutRules(getFormFields(state)),
-        errorAction: setFormErrors,
-      }: Error<FormField>),
-      ({
-        errors: applyBillingAddressRules(getBillingAddressFields(state), 'billing'),
-        errorAction: setAddressFormErrorsFor('billing'),
-      }: Error<AddressFormField>),
-    ].filter(({ errors }) => errors.length > 0);
+  return [
+    ({
+      errors: applyCheckoutRules(getFormFields(state)),
+      errorAction: setFormErrors,
+    }: Error<FormField>),
+    ({
+      errors: applyBillingAddressRules(getBillingAddressFields(state), 'billing'),
+      errorAction: setAddressFormErrorsFor('billing'),
+    }: Error<AddressFormField>),
+  ].filter(({ errors }) => errors.length > 0);
 }
 
 const shouldValidateBillingAddress = (fields: FormFields) =>
@@ -63,7 +55,6 @@ const shouldValidateBillingAddress = (fields: FormFields) =>
 
 function withDeliveryValidation(state: WithDeliveryCheckoutState): AnyErrorType[] {
   const formFields = getFormFields(state);
-  console.log({ formFields });
   return [
     ({
       errors: applyDeliveryRules(formFields),
