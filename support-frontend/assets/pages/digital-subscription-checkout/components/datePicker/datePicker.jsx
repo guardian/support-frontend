@@ -5,17 +5,14 @@ import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { TextInput } from '@guardian/src-text-input';
 import { formatMachineDate } from 'helpers/dateConversions';
 import calendarIcon from './calendarIcon.png';
 import { type Option } from 'helpers/types/option';
 import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { Input } from 'components/forms/input';
+import { withLabel } from 'hocs/withLabel';
 
 import './styles.scss';
-
-const dateHint = css`
-  margin-top: ${space[2]}px;
-`;
 
 const calendarIconContainer = css`
   padding: 0;
@@ -38,10 +35,14 @@ const startDateGroup = css`
 
 const startDateFields = css`
   display: inline-flex;
-  margin-top: ${space[3]}px;
 `;
 
-const marginRight = css`
+const inputLayout = css`
+  width: 25%;
+`;
+
+const inputLayoutWithMargin = css`
+  width: 25%;
   margin-right: ${space[3]}px;
 `;
 
@@ -59,6 +60,8 @@ type StateTypes = {
   year: string,
   showCalendar: boolean,
 }
+
+const InputWithLabel = withLabel(Input);
 
 class DatePickerFields extends Component<PropTypes, StateTypes> {
   constructor(props: PropTypes) {
@@ -110,31 +113,28 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
             {`Please choose a date before ${rangeDate.getDate()} ${monthText[rangeDate.getMonth()]} ${rangeDate.getFullYear()} for your gift to be emailed to the recipient.`}
           </p>
           <div css={startDateFields}>
-            <div css={marginRight}>
-              <TextInput
+            <div css={inputLayoutWithMargin}>
+              <InputWithLabel
                 label="Day"
                 value={state.day}
                 onChange={e => this.handleDate(e, 'day')}
-                optional={false}
-                width={4}
               />
             </div>
-            <div css={marginRight}>
-              <TextInput
+            <div css={inputLayoutWithMargin}>
+              <InputWithLabel
                 label="Month"
                 value={state.month}
                 onChange={e => this.handleDate(e, 'month')}
-                optional={false}
-                width={4}
               />
             </div>
-            <TextInput
-              label="Year"
-              value={state.year}
-              onChange={e => this.handleDate(e, 'year')}
-              optional={false}
-              width={4}
-            />
+            <div css={inputLayout}>
+              <InputWithLabel
+                label="Year"
+                value={state.year}
+                onChange={e => this.handleDate(e, 'year')}
+              />
+            </div>
+
             <button
               css={calendarIconContainer}
               onClick={(e) => {
