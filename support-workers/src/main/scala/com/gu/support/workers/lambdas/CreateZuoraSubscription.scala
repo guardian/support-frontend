@@ -16,7 +16,7 @@ import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription.createSubscription
-import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{ifDigitalSubscriptionGiftRedemption, redeemGift}
+import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
@@ -55,11 +55,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val isTestUser = state.user.isTestUser
     val config: ZuoraConfig = services.config.zuoraConfigProvider.get(isTestUser)
 
-    ifDigitalSubscriptionGiftRedemption(state.product, state.paymentMethod).map(redemptionData =>
-      redeemGift(redemptionData, state.user.id, requestInfo, state, zuoraService, services.catalogService)
-    ).getOrElse(
-      createSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
-    )
+    maybeDigitalSubscriptionGiftRedemption(state.product, state.paymentMethod) match {
+      case Some(redemptionData) =>
+        redeemGift (redemptionData, state.user.id, requestInfo, state, zuoraService, services.catalogService)
+      case None =>
+        createSubscription (state, requestInfo, now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
+    }
   }
 }
 
@@ -253,7 +254,7 @@ object CreateZuoraSubscription {
 
 object DigitalSubscriptionGiftRedemption {
 
-  def ifDigitalSubscriptionGiftRedemption(product: ProductType, paymentMethod: Either[PaymentMethod, RedemptionData]) = {
+  def maybeDigitalSubscriptionGiftRedemption(product: ProductType, paymentMethod: Either[PaymentMethod, RedemptionData]) = {
     product match {
       case d: DigitalPack if paymentMethod.isRight && d.readerType == Gift => paymentMethod.right.toOption
       case _ => None
@@ -267,7 +268,7 @@ object DigitalSubscriptionGiftRedemption {
     state: CreateZuoraSubscriptionState,
     zuoraService: ZuoraService,
     catalogService: CatalogService
-  ): Future[HandlerResult[SendThankYouEmailState]] = {
+  ): Future[HandlerResult[SendThankYouEmailState]] =
     for {
       giftSubscriptionFields <- zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode)
       validatedSubscription <- Future.fromTry(validateRedemptionData(giftSubscriptionFields))
@@ -276,7 +277,6 @@ object DigitalSubscriptionGiftRedemption {
       updateDataResponse <- zuoraService.updateSubscriptionRedemptionData(validatedSubscription.id, gifteeUserId, newTermLength)
       handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, redemptionData, requestInfo))
     } yield handlerResult
-  }
 
   def validateRedemptionData(existingSub: SubscriptionRedemptionQueryResponse) = {
     existingSub.records.headOption.map(
