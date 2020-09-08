@@ -16,7 +16,7 @@ import io.circe.parser.decode
 import scala.concurrent.Future
 
 @IntegrationTest
-class GiftSubcriptionZuoraSpec extends CreateZuoraSubscriptionBaseSpec {
+class GiftSubscriptionZuoraSpec extends CreateZuoraSubscriptionBaseSpec {
 
   val giftCode = new GiftCodeGeneratorService().generateCode(Annual)
   val mockCodeGenerator = mock[GiftCodeGeneratorService]
