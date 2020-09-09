@@ -1,4 +1,9 @@
+// @flow
+// $FlowIgnore - required for hooks
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { type Dispatch } from 'redux';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { css } from '@emotion/core';
 import { body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
@@ -12,6 +17,13 @@ import ActionBody from './components/ActionBody';
 import ExpandableContainer from './components/ExpandableContainer';
 import BulletPointedList from './components/BulletPointedList';
 import SvgPersonWithTick from './components/SvgPersonWithTick';
+import { checkEmail } from 'helpers/formValidation';
+import {
+  setPasswordError as setPasswordErrorAction,
+  updatePassword as updatePasswordAction,
+  type Action,
+} from '../../../contributionsLandingActions';
+import { setPasswordGuest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import styles from './styles';
 
 const bodyText = css`
@@ -34,9 +46,72 @@ const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
-const ContributionThankYouContinueToAccount = () => {
+const mapStateToProps = state => ({
+  password: state.page.form.setPasswordData.password,
+  guestAccountCreationToken: state.page.form.guestAccountCreationToken,
+  passwordError: state.page.form.setPasswordData.passwordError,
+});
+
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+  return {
+    updatePassword: (event: Event) => {
+      if (event.target instanceof HTMLInputElement) {
+        dispatch(updatePasswordAction(event.target.value));
+      }
+    },
+    setPasswordError: (passwordError: boolean) => {
+      dispatch(setPasswordErrorAction(passwordError));
+    },
+  };
+}
+
+const checkPassword = (password: string) =>
+  password.length >= 6 && password.length <= 72;
+
+const PASSWORD_ERROR_MESSAGE =
+  'Please enter a password between 6 and 20 characters long';
+
+type ContributionThankYouCompleteRegistrationProps = {|
+  csrf: Csrf,
+  email: string,
+  password: string,
+  guestAccountCreationToken: string,
+  updatePassword: Event => void,
+  passwordError: boolean,
+  setPasswordError: boolean => void
+|};
+
+const ContributionThankYouCompleteRegistration = ({
+  csrf,
+  email,
+  password,
+  guestAccountCreationToken,
+  updatePassword,
+  setPasswordError,
+  passwordError,
+}: ContributionThankYouCompleteRegistrationProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    const emailIsValid = checkEmail(email);
+
+    const passwordIsValid = checkPassword(password);
+    setPasswordError(!passwordIsValid);
+
+    if (passwordIsValid && emailIsValid) {
+      setPasswordGuest(password, guestAccountCreationToken, csrf).then((response) => {
+        if (response === true) {
+          setHasBeenInteractedWith(true);
+        } else {
+          setPasswordError(true);
+        }
+      });
+    }
+  };
+
   const actionIcon = <SvgPersonWithTick />;
   const actionHeader = (
     <ActionHeader
@@ -95,32 +170,38 @@ const ContributionThankYouContinueToAccount = () => {
           </div>
           <div css={styles.hideBeforeTablet}>{expandableContent}</div>
           <div>
-            <form css={form}>
+            <form onSubmit={onSubmit} css={form}>
               <div>
                 <TextInput
+                  value={email}
                   label="Email address"
                   supporting="example@domain.com"
+                  disabled
                 />
               </div>
               <div>
                 <TextInput
                   label="Set a password"
                   supporting="Between 6 and 72 characters"
+                  value={password}
+                  onChange={updatePassword}
+                  error={passwordError ? PASSWORD_ERROR_MESSAGE : ''}
+                  type="password"
                 />
               </div>
+              <div css={buttonContainer}>
+                <Button
+                  type="submit"
+                  priority="primary"
+                  size="default"
+                  icon={<SvgArrowRightStraight />}
+                  iconSide="right"
+                  nudgeIcon
+                >
+                  Register
+                </Button>
+              </div>
             </form>
-          </div>
-          <div css={buttonContainer}>
-            <Button
-              onClick={() => setHasBeenInteractedWith(true)}
-              priority="primary"
-              size="default"
-              icon={<SvgArrowRightStraight />}
-              iconSide="right"
-              nudgeIcon
-            >
-              Register
-            </Button>
           </div>
         </>
       )}
@@ -135,4 +216,7 @@ const ContributionThankYouContinueToAccount = () => {
   );
 };
 
-export default ContributionThankYouContinueToAccount;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ContributionThankYouCompleteRegistration);

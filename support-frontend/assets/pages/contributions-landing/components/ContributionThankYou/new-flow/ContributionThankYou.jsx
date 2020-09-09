@@ -79,10 +79,12 @@ const buttonContainer = css`
 
 type ContributionThankYouProps = {|
   csrf: Csrf,
+  email: string,
   subscribeToNewsLetter: (email: string, csrf: Csrf) => void,
 |};
 
 const mapStateToProps = state => ({
+  email: state.page.form.formData.email,
   csrf: state.page.csrf,
 });
 
@@ -104,7 +106,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 }
 
 
-const ContributionThankYou = ({ csrf, subscribeToNewsLetter }: ContributionThankYouProps) => (
+const ContributionThankYou = ({ csrf, email, subscribeToNewsLetter }: ContributionThankYouProps) => (
   <div css={container}>
     <div css={headerContainer}>
       <ContributionThankYouHeader showDirectDebitMessage />
@@ -112,12 +114,12 @@ const ContributionThankYou = ({ csrf, subscribeToNewsLetter }: ContributionThank
 
     <div css={columnsContainer}>
       <div css={columnContainer}>
-        <ContributionThankYouContinueToAccount email="tom.pretty@guardian.co.uk" csrf={csrf} />
-        <ContributionThankYouCompleteRegistration />
-        <ContributionThankYouHearFromOurNewsroom subscribeToNewsLetter={() => subscribeToNewsLetter('tom.pretty@guardian.co.uk', csrf)} />
+        <ContributionThankYouContinueToAccount email={email} csrf={csrf} />
+        <ContributionThankYouCompleteRegistration email={email} csrf={csrf} />
+        <ContributionThankYouHearFromOurNewsroom subscribeToNewsLetter={() => subscribeToNewsLetter(email, csrf)} />
       </div>
       <div css={columnContainer}>
-        <ContributionThankYouSetSupportReminder email="tom.pretty@guardian.co.uk" />
+        <ContributionThankYouSetSupportReminder email={email} />
         <ContributionThankYouSendYourThoughts />
         <ContributionThankYouShareYourSupport />
       </div>
