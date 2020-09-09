@@ -1,6 +1,11 @@
 // @flow
 // $FlowIgnore - required for hooks
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
+import type { Action } from 'helpers/user/userActions';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
@@ -27,11 +32,33 @@ const buttonContainer = css`
 
 const ERROR_MESSAGE = 'Please check the box in order to subscribe';
 
+const mapStateToProps = () => ({
+});
+
+
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+  return {
+    subscribeToNewsLetter: (email: string, csrf: Csrf) => {
+      sendMarketingPreferencesToIdentity(
+        true,
+        email,
+        dispatch,
+        csrf,
+        'MARKETING_CONSENT',
+      );
+    },
+  };
+}
+
 type ContributionThankYouHearFromOurNewsroomProps = {|
-  subscribeToNewsLetter: () => void
+  email: string,
+  csrf: Csrf,
+  subscribeToNewsLetter: (email: string, csrf: Csrf) => void
 |};
 
 const ContributionThankYouHearFromOurNewsroom = ({
+  email,
+  csrf,
   subscribeToNewsLetter,
 }: ContributionThankYouHearFromOurNewsroomProps) => {
   const [hasConsented, setHasConsented] = useState(false);
@@ -48,7 +75,7 @@ const ContributionThankYouHearFromOurNewsroom = ({
       setErrorMessage(ERROR_MESSAGE);
     } else {
       setHasBeenCompleted(true);
-      subscribeToNewsLetter();
+      subscribeToNewsLetter(email, csrf);
     }
   };
 
@@ -122,4 +149,4 @@ const ContributionThankYouHearFromOurNewsroom = ({
   );
 };
 
-export default ContributionThankYouHearFromOurNewsroom;
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionThankYouHearFromOurNewsroom);

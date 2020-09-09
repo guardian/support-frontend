@@ -1,12 +1,9 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import { type User } from 'helpers/user/userReducer';
 import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
-import type { Action } from 'helpers/user/userActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from, between } from '@guardian/src-foundations/mq';
@@ -87,7 +84,6 @@ type ContributionThankYouProps = {|
   user: User,
   guestAccountCreationToken: string,
   paymentMethod: PaymentMethod,
-  subscribeToNewsLetter: (email: string, csrf: Csrf) => void
 |};
 
 const mapStateToProps = state => ({
@@ -98,27 +94,12 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
 });
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
-  return {
-    subscribeToNewsLetter: (email: string, csrf: Csrf) => {
-      sendMarketingPreferencesToIdentity(
-        true,
-        email,
-        dispatch,
-        csrf,
-        'MARKETING_CONSENT',
-      );
-    },
-  };
-}
-
 const ContributionThankYou = ({
   csrf,
   email,
   user,
   guestAccountCreationToken,
   paymentMethod,
-  subscribeToNewsLetter,
 }: ContributionThankYouProps) => {
   const actions = [];
 
@@ -129,7 +110,8 @@ const ContributionThankYou = ({
   }
   if (!user.gnmMarketing) {
     actions.push(<ContributionThankYouHearFromOurNewsroom
-      subscribeToNewsLetter={() => subscribeToNewsLetter(email, csrf)}
+      email={email}
+      csrf={csrf}
     />);
   }
   if (!user.isRecurringContributor) {
@@ -138,7 +120,7 @@ const ContributionThankYou = ({
   actions.push(<ContributionThankYouSendYourThoughts />);
   actions.push(<ContributionThankYouShareYourSupport />);
 
-  const firstColumn = actions.slice(0, NUMBER_OF_ACTIONS_IN_FIRST_COLUNM - 1);
+  const firstColumn = actions.slice(0, NUMBER_OF_ACTIONS_IN_FIRST_COLUNM);
   const secondColumn = actions.slice(NUMBER_OF_ACTIONS_IN_FIRST_COLUNM);
 
   return (
@@ -164,7 +146,4 @@ const ContributionThankYou = ({
     </div>
   );
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ContributionThankYou);
+export default connect(mapStateToProps)(ContributionThankYou);
