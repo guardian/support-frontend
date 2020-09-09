@@ -18,7 +18,8 @@ import io.circe.parser.decode
 import scala.concurrent.Future
 
 @IntegrationTest
-class GiftSubscriptionZuoraSpec extends CreateZuoraSubscriptionBaseSpec {
+class GiftSubscriptionZuoraSpec extends AsyncLambdaSpec with MockContext {
+  val createZuoraHelper = new CreateZuoraSubscriptionHelper()
 
   val createSubRequestId = UUID.randomUUID()
   val redeemSubRequestId = UUID.randomUUID()
@@ -38,7 +39,7 @@ class GiftSubscriptionZuoraSpec extends CreateZuoraSubscriptionBaseSpec {
   }
 
   "CreateZuoraSubcription" should "create a Digital Pack gift subscription" in {
-    createSubscription(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
+    createZuoraHelper.createSubscription(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
       .map { case (_, maybeError, _) => maybeError shouldBe None }
   }
 
@@ -65,8 +66,8 @@ class GiftSubscriptionZuoraSpec extends CreateZuoraSubscriptionBaseSpec {
       RedemptionData(code),
       RequestInfo(testUser = false, failed = false, Nil, accountExists = false),
       state,
-      mockZuoraService,
-      realCatalogService
+      createZuoraHelper.mockZuoraService,
+      createZuoraHelper.realCatalogService
     )
   }
 }

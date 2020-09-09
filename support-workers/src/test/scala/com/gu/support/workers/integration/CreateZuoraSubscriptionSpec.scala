@@ -30,7 +30,8 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 @IntegrationTest
-class CreateZuoraSubscriptionSpec extends CreateZuoraSubscriptionBaseSpec {
+class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
+  val createZuoraHelper = new CreateZuoraSubscriptionHelper()
 
   "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
     testCreateSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
@@ -51,7 +52,7 @@ class CreateZuoraSubscriptionSpec extends CreateZuoraSubscriptionBaseSpec {
     val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE").right.get
     for {
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
-      _ <- createSubscription(createDigiPackCorporateSubscriptionJson)
+      _ <- createZuoraHelper.createSubscription(createDigiPackCorporateSubscriptionJson)
       r <- getCodeStatus(mutableCode).map {
         _ should be(Left(GetCodeStatus.CodeAlreadyUsed))
       }
@@ -87,13 +88,13 @@ class CreateZuoraSubscriptionSpec extends CreateZuoraSubscriptionBaseSpec {
   }
 
   def testCreateSubscription(json: String) =
-    createSubscription(json)
+    createZuoraHelper.createSubscription(json)
       .map(
         _._1.subscriptionNumber.length should be > 1
       )
 }
 
-trait CreateZuoraSubscriptionBaseSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
+class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext) extends MockServicesCreator with MockContext {
 
   def createSubscription(
     json: String,
