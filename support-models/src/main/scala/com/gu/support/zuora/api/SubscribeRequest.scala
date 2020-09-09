@@ -34,8 +34,9 @@ import com.gu.support.encoding.Codec._
 object UpdateRedemptionDataRequest {
   implicit val encoder: Encoder[UpdateRedemptionDataRequest] = deriveEncoder[UpdateRedemptionDataRequest].mapJsonObject(
     _.renameField("gifteeIdentityId", "GifteeIdentityId__c")
+      .renameField("requestId", "CreatedRequestId__c")
   )
 }
 
-case class UpdateRedemptionDataRequest(gifteeIdentityId: String, currentTerm: Int, currentTermPeriodType: PeriodType)
+case class UpdateRedemptionDataRequest(requestId: String, gifteeIdentityId: String, currentTerm: Int, currentTermPeriodType: PeriodType)
 

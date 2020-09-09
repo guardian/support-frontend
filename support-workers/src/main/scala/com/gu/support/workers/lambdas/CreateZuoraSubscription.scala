@@ -284,10 +284,10 @@ object DigitalSubscriptionGiftRedemption {
     zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode).flatMap(
       redemptionQueryResponse =>
         getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
-          case u: Unredeemed => doRedemption(u.subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
+          case Unredeemed(subscriptionId) => doRedemption(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
           case RedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
-          case Redeemed => Future.fromTry(Failure(new RuntimeException(GetCodeStatus.CodeAlreadyUsed.clientCode)))
-          case NotFound => Future.fromTry(Failure(new RuntimeException(GetCodeStatus.NoSuchCode.clientCode)))
+          case Redeemed => Future.failed(new RuntimeException(GetCodeStatus.CodeAlreadyUsed.clientCode))
+          case NotFound => Future.failed(new RuntimeException(GetCodeStatus.NoSuchCode.clientCode))
         }
     )
 
@@ -312,7 +312,7 @@ object DigitalSubscriptionGiftRedemption {
   ) = for {
     fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)
     newTermLength <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
-    updateDataResponse <- zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.user.id, newTermLength)
+    updateDataResponse <- zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, newTermLength)
     handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, redemptionData, requestInfo))
   } yield handlerResult
 

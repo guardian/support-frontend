@@ -100,8 +100,8 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
   def getSubscriptionById(id: String): Future[Subscription] =
     get[Subscription](s"subscriptions/${id}", authHeaders)
 
-  def updateSubscriptionRedemptionData(subscriptionId: String, gifteeIdentityId: String, currentTerm: Int): Future[UpdateRedemptionDataResponse] = {
-    val requestData = UpdateRedemptionDataRequest(gifteeIdentityId, currentTerm, Day)
+  def updateSubscriptionRedemptionData(subscriptionId: String, requestId: String, gifteeIdentityId: String, currentTerm: Int): Future[UpdateRedemptionDataResponse] = {
+    val requestData = UpdateRedemptionDataRequest(requestId, gifteeIdentityId, currentTerm, Day)
     putJson[UpdateRedemptionDataResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
   }
 

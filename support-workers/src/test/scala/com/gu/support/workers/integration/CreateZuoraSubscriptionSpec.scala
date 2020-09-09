@@ -145,12 +145,13 @@ trait CreateZuoraSubscriptionBaseSpec extends AsyncLambdaSpec with MockServicesC
         realZuoraService.getSubscriptionById(
           invocation.getArguments.head.asInstanceOf[String]
         ))
-    when(mockZuora.updateSubscriptionRedemptionData(any[String], any[String], any[Int]))
+    when(mockZuora.updateSubscriptionRedemptionData(any[String], any[String], any[String], any[Int]))
       .thenAnswer((invocation: InvocationOnMock) =>
         realZuoraService.updateSubscriptionRedemptionData(
           invocation.getArgument(0).asInstanceOf[String],
           invocation.getArgument(1).asInstanceOf[String],
-          invocation.getArgument(2).asInstanceOf[Int])
+          invocation.getArgument(2).asInstanceOf[String],
+          invocation.getArgument(3).asInstanceOf[Int])
       )
 
     when(mockZuora.config).thenReturn(realZuoraService.config)

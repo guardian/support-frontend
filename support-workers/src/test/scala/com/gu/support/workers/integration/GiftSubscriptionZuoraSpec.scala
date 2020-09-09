@@ -20,7 +20,8 @@ import scala.concurrent.Future
 @IntegrationTest
 class GiftSubscriptionZuoraSpec extends CreateZuoraSubscriptionBaseSpec {
 
-  val requestId = UUID.randomUUID()
+  val createSubRequestId = UUID.randomUUID()
+  val redeemSubRequestId = UUID.randomUUID()
   val giftCode = new GiftCodeGeneratorService().generateCode(Annual)
   val mockCodeGenerator = mock[GiftCodeGeneratorService]
   when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
@@ -32,27 +33,27 @@ class GiftSubscriptionZuoraSpec extends CreateZuoraSubscriptionBaseSpec {
     val nonExistentCode = giftCode.value // We haven't created a sub with this yet
 
     recoverToExceptionIf[RuntimeException](
-      redeemSubscription(nonExistentCode, requestId)
+      redeemSubscription(nonExistentCode, createSubRequestId)
     ).map(_.getMessage shouldBe NoSuchCode.clientCode)
   }
 
   "CreateZuoraSubcription" should "create a Digital Pack gift subscription" in {
-    createSubscription(createDigiPackGiftSubscriptionJson(requestId), mockCodeGenerator)
+    createSubscription(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
       .map { case (_, maybeError, _) => maybeError shouldBe None }
   }
 
   "DigitalSubscriptionGiftRedemption" should "redeem an unredeemed Digital Pack gift subscription" in
-    redeemSubscription(giftCode.value, requestId)
+    redeemSubscription(giftCode.value, redeemSubRequestId)
       .map(_.value.user.id shouldBe idId)
 
   it should "return a successful redemption result if a subscription has already been redeemed in the current request" in
-    redeemSubscription(giftCode.value, requestId)
+    redeemSubscription(giftCode.value, redeemSubRequestId)
       .map(_.value.user.id shouldBe idId)
 
   it should "throw a CodeAlreadyUsed exception if a subscription has been redeemed in a previous request" in {
-    val previousRequestId = UUID.randomUUID()
+    val subsequentRequestId = UUID.randomUUID()
     recoverToExceptionIf[RuntimeException](
-      redeemSubscription(giftCode.value, previousRequestId)
+      redeemSubscription(giftCode.value, subsequentRequestId)
     ).map(_.getMessage shouldBe CodeAlreadyUsed.clientCode)
   }
 
