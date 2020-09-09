@@ -21,8 +21,9 @@ type PropTypes = {
 };
 
 function OrderSummary(props: PropTypes) {
-
-  const priceString = props.orderIsAGift ? giftPeriod[props.billingPeriod].cost : getBillingDescription(props.productPrice, props.billingPeriod);
+  const digitalBillingPeriod = props.billingPeriod === 'Annual' ? props.billingPeriod : 'Monthly';
+  const priceString = props.orderIsAGift ? giftPeriod[digitalBillingPeriod].cost :
+    getBillingDescription(props.productPrice, props.billingPeriod);
 
   return (
     <aside css={styles.wrapper}>
