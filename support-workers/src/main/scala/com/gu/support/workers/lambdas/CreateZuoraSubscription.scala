@@ -284,25 +284,27 @@ object DigitalSubscriptionGiftRedemption {
     zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode).flatMap(
       redemptionQueryResponse =>
         getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
-          case Unredeemed(subscriptionId) => doRedemption(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
+          case Unredeemed(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
           case RedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
           case Redeemed => Future.failed(new RuntimeException(GetCodeStatus.CodeAlreadyUsed.clientCode))
           case NotFound => Future.failed(new RuntimeException(GetCodeStatus.NoSuchCode.clientCode))
         }
     )
 
-  private def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: String) = {
-    existingSub.records.headOption.map(
-      existingSubFields =>
-        if (existingSubFields.gifteeIdentityId.isEmpty)
-          Unredeemed(existingSubFields.id)
-        else if (existingSubFields.createdRequestId == requestId)
-          RedeemedInThisRequest
-        else Redeemed
-    ).getOrElse(NotFound)
-  }
+  private def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: String) =
+    existingSub.records match {
+      case existingSubFields :: Nil if existingSubFields.gifteeIdentityId.isEmpty =>
+        Unredeemed(existingSubFields.id)
+      case existingSubFields :: Nil if existingSubFields.createdRequestId == requestId =>
+        RedeemedInThisRequest
+      case _ :: Nil =>
+        Redeemed
+      case _ =>
+        NotFound
+    }
 
-  private def doRedemption(
+
+  private def redeemInZuora(
     subscriptionId: String,
     state: CreateZuoraSubscriptionState,
     redemptionData: RedemptionData,
