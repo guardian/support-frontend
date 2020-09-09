@@ -9,7 +9,7 @@ const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
 const allBarUkLandingPages = '/((?!uk).)*/contribute(/.*)?$';
 const allLandingPages = '/??/contribute(/.*)?$';
-const allThankYouPages = '/??/thankyou(/.*)?$';
+const allThankYouAndLandingPages = '/??/(thankyou|contribute)(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
@@ -150,7 +150,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: allThankYouPages,
+    targetPage: allThankYouAndLandingPages,
     seed: 3,
   },
 };
