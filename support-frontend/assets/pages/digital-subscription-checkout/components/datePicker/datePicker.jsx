@@ -224,7 +224,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
           />
         )}
         <ThemeProvider theme={buttonDefault}>
-          <Button size="small" css={validationButton} onClick={e => this.checkDateIsValid(e)}>Check date</Button>
+          <Button priority="tertiary" size="small" css={validationButton} onClick={e => this.checkDateIsValid(e)}>Check date</Button>
         </ThemeProvider>
         <span>{state.dateError && (
           <div css={marginTop}><Error error={state.dateError} /></div>)}
