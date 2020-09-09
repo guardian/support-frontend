@@ -108,12 +108,10 @@ const ContributionThankYou = ({
   } else if (!user.isSignedIn) {
     actions.push(<ContributionThankYouContinueToAccount email={email} csrf={csrf} />);
   }
-  if (!user.gnmMarketing) {
-    actions.push(<ContributionThankYouHearFromOurNewsroom
-      email={email}
-      csrf={csrf}
-    />);
-  }
+  actions.push(<ContributionThankYouHearFromOurNewsroom
+    email={email}
+    csrf={csrf}
+  />);
   if (!user.isRecurringContributor) {
     actions.push(<ContributionThankYouSetSupportReminder email={email} />);
   }
