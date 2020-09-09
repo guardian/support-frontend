@@ -22,10 +22,14 @@ const endSummaryMobile = css`
   }
 `;
 
-function EndSummaryMobile(orderIsAGift?: boolean) {
+type PropTypes = {
+  orderIsAGift?: boolean,
+}
+
+function EndSummaryMobile(props: PropTypes) {
   return (
     <span css={endSummaryMobile}>
-      <EndSummary orderIsAGift={orderIsAGift} />
+      <EndSummary orderIsAGift={props.orderIsAGift} />
     </span>
   );
 }
