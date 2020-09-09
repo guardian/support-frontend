@@ -147,7 +147,11 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
   }
 
   handleInput = (value: string, field: string) => {
-    this.setState({ [field]: value, dateError: '', dateValidated: false }, this.updateStartDate);
+    if (/^[0-9]+$/.test(value) === true) {
+      this.setState({ [field]: value, dateError: '', dateValidated: false }, this.updateStartDate);
+    } else {
+      this.setState({ [field]: '', dateError: '', dateValidated: false }, this.updateStartDate);
+    }
   }
 
   updateStartDate = () => this.props.onChange(`${this.state.day}/${this.state.month}/${this.state.year}`)
@@ -175,8 +179,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
                 onChange={e => this.handleInput(e.target.value, 'day')}
                 minLength={1}
                 maxLength={2}
-                pattern="[0-9]*"
-                inputmode="numeric"
+                type="text"
               />
             </div>
             <div css={inputLayoutWithMargin}>
@@ -186,8 +189,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
                 onChange={e => this.handleInput(e.target.value, 'month')}
                 minLength={1}
                 maxLength={2}
-                pattern="[0-9]*"
-                inputmode="numeric"
+                type="text"
               />
             </div>
             <div css={inputLayout}>
@@ -197,8 +199,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
                 onChange={e => this.handleInput(e.target.value, 'year')}
                 minLength={4}
                 maxLength={4}
-                pattern="[0-9]*"
-                inputmode="numeric"
+                type="text"
               />
             </div>
 
@@ -228,8 +229,10 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
         <span>{state.dateError && (
           <div css={marginTop}><Error error={state.dateError} /></div>)}
         </span>
-        <span>{!state.dateError && state.dateValidated && value && (
-          <div css={marginTop}>{`Your gift will be delivered on ${state.day} ${monthText[valueDate.getMonth()]} ${state.year}`}</div>)}
+        <span>{!state.dateError && state.dateValidated && (
+          <div css={marginTop}>
+            {`Your gift will be delivered on ${valueDate ? valueDate.getDate() : ''} ${valueDate ? monthText[valueDate.getMonth()] : ''} ${valueDate ? valueDate.getFullYear() : ''}`}
+          </div>)}
         </span>
       </div>
     );
