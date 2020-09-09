@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
+import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
 import type { Action } from 'helpers/user/userActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
@@ -80,20 +81,19 @@ const buttonContainer = css`
 type ContributionThankYouProps = {|
   csrf: Csrf,
   email: string,
-  subscribeToNewsLetter: (email: string, csrf: Csrf) => void,
+  paymentMethod: PaymentMethod,
+  subscribeToNewsLetter: (email: string, csrf: Csrf) => void
 |};
 
 const mapStateToProps = state => ({
   email: state.page.form.formData.email,
   csrf: state.page.csrf,
+  paymentMethod: state.page.form.paymentMethod,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
-    subscribeToNewsLetter: (
-      email: string,
-      csrf: Csrf,
-    ) => {
+    subscribeToNewsLetter: (email: string, csrf: Csrf) => {
       sendMarketingPreferencesToIdentity(
         true,
         email,
@@ -105,18 +105,26 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
   };
 }
 
-
-const ContributionThankYou = ({ csrf, email, subscribeToNewsLetter }: ContributionThankYouProps) => (
+const ContributionThankYou = ({
+  csrf,
+  email,
+  subscribeToNewsLetter,
+  paymentMethod,
+}: ContributionThankYouProps) => (
   <div css={container}>
     <div css={headerContainer}>
-      <ContributionThankYouHeader showDirectDebitMessage />
+      <ContributionThankYouHeader
+        showDirectDebitMessage={paymentMethod === DirectDebit}
+      />
     </div>
 
     <div css={columnsContainer}>
       <div css={columnContainer}>
         <ContributionThankYouContinueToAccount email={email} csrf={csrf} />
         <ContributionThankYouCompleteRegistration email={email} csrf={csrf} />
-        <ContributionThankYouHearFromOurNewsroom subscribeToNewsLetter={() => subscribeToNewsLetter(email, csrf)} />
+        <ContributionThankYouHearFromOurNewsroom
+          subscribeToNewsLetter={() => subscribeToNewsLetter(email, csrf)}
+        />
       </div>
       <div css={columnContainer}>
         <ContributionThankYouSetSupportReminder email={email} />
@@ -131,4 +139,7 @@ const ContributionThankYou = ({ csrf, email, subscribeToNewsLetter }: Contributi
   </div>
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionThankYou);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ContributionThankYou);
