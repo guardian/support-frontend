@@ -92,7 +92,7 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
   def getSubscriptionFromRedemptionCode(redemptionCode: RedemptionCode): Future[SubscriptionRedemptionQueryResponse] = {
     val queryData = QueryData(
       //TODO RB expire codes
-      s"select id, RedemptionCode__c, GifteeIdentityId__c from subscription where RedemptionCode__c = '${redemptionCode.value}' and status = 'Active'"
+      s"select id, CreatedRequestId__c, GifteeIdentityId__c from subscription where RedemptionCode__c = '${redemptionCode.value}' and status = 'Active'"
     )
     postJson[SubscriptionRedemptionQueryResponse](s"action/query", queryData.asJson, authHeaders)
   }

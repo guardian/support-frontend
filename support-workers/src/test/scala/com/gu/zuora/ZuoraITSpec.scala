@@ -46,7 +46,6 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
       response =>
         response.records.size shouldBe 1
         response.records.head.gifteeIdentityId shouldBe None
-        response.records.head.redemptionCode shouldBe Some(redemptionCode)
     }
   }
 

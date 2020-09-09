@@ -425,10 +425,10 @@ object JsonFixtures {
             $salesforceContactsJson
             }
         """
-  val createDigiPackGiftSubscriptionJson =
+  def createDigiPackGiftSubscriptionJson(requestId: UUID) =
     s"""
           {
-            $requestIdJson,
+            "requestId": "${requestId}\",
             $userJsonNoAddress,
             "product": $digitalPackGiftJson,
             "paymentProvider": "Stripe",
@@ -438,10 +438,10 @@ object JsonFixtures {
             }
         """
 
-  def createDigiPackGiftRedemptionJson(code: String) =
+  def createDigiPackGiftRedemptionJson(code: String, requestId: UUID) =
     s"""
           {
-            $requestIdJson,
+            "requestId": "${requestId}\",
             $userJsonNoAddress,
             "product": $digitalPackGiftJson,
             "paymentProvider": "RedemptionNoProvider",
