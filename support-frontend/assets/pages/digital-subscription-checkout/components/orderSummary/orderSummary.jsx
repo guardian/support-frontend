@@ -16,6 +16,7 @@ type PropTypes = {
   image: $Call<GridImageType, GridImg>,
   productPrice: ProductPrice,
   title: string,
+  orderIsAGift?: boolean,
 };
 
 function OrderSummary(props: PropTypes) {
@@ -33,11 +34,11 @@ function OrderSummary(props: PropTypes) {
         <div css={styles.textBlock}>
           <h3>{props.title}</h3>
           <p>{priceString}</p>
-          <span>14 day free trial</span>
+          {!props.orderIsAGift && <span>14 day free trial</span>}
         </div>
       </div>
       <div css={styles.endSummary}>
-        <EndSummary />
+        <EndSummary orderIsAGift />
       </div>
     </aside>
   );
@@ -45,6 +46,7 @@ function OrderSummary(props: PropTypes) {
 
 OrderSummary.defaultProps = {
   changeSubscription: '',
+  orderIsAGift: false,
 };
 
 export default OrderSummary;

@@ -173,11 +173,12 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
                 altText=""
               />
                 }
-            title="Digital Subscription"
+            title="Digital Gift Subscription"
             description="Premium App + The Guardian Daily + Ad-free"
             productPrice={productPrice}
             billingPeriod={props.billingPeriod}
             changeSubscription={routes.digitalSubscriptionLanding}
+            orderIsAGift
           />)}
         >
           <Form onSubmit={(ev) => {
