@@ -91,7 +91,7 @@ const ContributionThankYouCompleteRegistration = ({
   passwordError,
 }: ContributionThankYouCompleteRegistrationProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+  const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -116,7 +116,7 @@ const ContributionThankYouCompleteRegistration = ({
   const actionHeader = (
     <ActionHeader
       title={
-        hasBeenInteractedWith ? 'You’re almost there!' : 'Complete Registration'
+        hasBeenCompleted ? 'You\u2019re almost there!' : 'Complete Registration'
       }
     />
   );
@@ -133,7 +133,7 @@ const ContributionThankYouCompleteRegistration = ({
   );
   const actionBody = (
     <ActionBody>
-      {hasBeenInteractedWith ? (
+      {hasBeenCompleted ? (
         <p>
           Please check your inbox to validate your email address – it takes just
           30 seconds. Make sure you sign in on each of the devices you use to

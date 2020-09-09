@@ -61,7 +61,7 @@ const ContributionThankYouSetSupportReminder = ({
 }: ContributionThankYouSetSupportReminderProps) => {
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+  const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
   const now = new Date();
   const reminderDates = [
@@ -104,7 +104,7 @@ const ContributionThankYouSetSupportReminder = ({
   const actionHeader = (
     <ActionHeader
       title={
-        hasBeenInteractedWith
+        hasBeenCompleted
           ? 'Your support reminder is set'
           : 'Set a support reminder'
       }
@@ -120,7 +120,7 @@ const ContributionThankYouSetSupportReminder = ({
   );
   const actionBody = (
     <ActionBody>
-      {hasBeenInteractedWith ? (
+      {hasBeenCompleted ? (
         <p>
           We will be in touch at the time you selected, so look out for a
           message from the Guardian in your inbox.

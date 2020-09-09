@@ -36,7 +36,7 @@ const ContributionThankYouHearFromOurNewsroom = ({
 }: ContributionThankYouHearFromOurNewsroomProps) => {
   const [hasConsented, setHasConsented] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+  const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
 
   // reset error message when consent changes
   useEffect(() => {
@@ -47,7 +47,7 @@ const ContributionThankYouHearFromOurNewsroom = ({
     if (!hasConsented) {
       setErrorMessage(ERROR_MESSAGE);
     } else {
-      setHasBeenInteractedWith(true);
+      setHasBeenCompleted(true);
       subscribeToNewsLetter();
     }
   };
@@ -55,14 +55,12 @@ const ContributionThankYouHearFromOurNewsroom = ({
   const actionIcon = <SvgNotification />;
   const actionHeader = (
     <ActionHeader
-      title={
-        hasBeenInteractedWith ? 'You\'re signed up' : 'Hear from our newsroom'
-      }
+      title={hasBeenCompleted ? 'You\'re signed up' : 'Hear from our newsroom'}
     />
   );
   const actionBody = (
     <ActionBody>
-      {hasBeenInteractedWith ? (
+      {hasBeenCompleted ? (
         <p>
           Please check your inbox for a confirmation link. Soon after, you’ll
           receive your first email from the Guardian newsroom. You can
@@ -93,7 +91,7 @@ const ContributionThankYouHearFromOurNewsroom = ({
                 <Checkbox
                   checked={hasConsented}
                   onChange={() => setHasConsented(!hasConsented)}
-                  supporting="Contributions, subscriptions and membership: get related news and offers – whether you are a contributor, subscriber, member or would like to become one."
+                  supporting="Contributions, subscriptions and membership: get related news and offers \u2013 whether you are a contributor, subscriber, member or would like to become one."
                 />
               </div>
             </CheckboxGroup>

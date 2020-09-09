@@ -16,12 +16,12 @@ const buttonContainer = css`
 const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/8DTN7GS';
 
 const ContributionThankYouSendYourThoughts = () => {
-  const [hasBeenInteractedWith, setHasBeenInteractedWith] = useState(false);
+  const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
   const actionIcon = <SvgSpeechBubbleWithPlus />;
   const actionHeader = (
     <ActionHeader
       title={
-        hasBeenInteractedWith
+        hasBeenCompleted
           ? 'Thank you for sharing your thoughts'
           : 'Send us your thoughts'
       }
@@ -29,7 +29,7 @@ const ContributionThankYouSendYourThoughts = () => {
   );
   const actionBody = (
     <ActionBody>
-      {hasBeenInteractedWith ? (
+      {hasBeenCompleted ? (
         <p>Your feedback helps us better understand our readers.</p>
       ) : (
         <>
@@ -46,7 +46,7 @@ const ContributionThankYouSendYourThoughts = () => {
           </p>
           <div css={buttonContainer}>
             <LinkButton
-              onClick={() => setHasBeenInteractedWith(true)}
+              onClick={() => setHasBeenCompleted(true)}
               href={SURVEY_LINK}
               target="_blank"
               rel="noopener noreferrer"
