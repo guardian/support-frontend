@@ -29,7 +29,7 @@ function EndSummary({
             <span css={styles.subText}>{giftType && giftType.cost}</span>
           </li>
           <li>
-            <Dot /><div css={styles.listMain}>We&apos;ll email your gift to the recipient on the date your choose</div>
+            <Dot /><div css={styles.listMain}>We&apos;ll email your gift to the recipient on the date you choose</div>
             <span css={styles.subText}>
               The gift subscription will start when the recipient redeems the gift.
             </span>
@@ -37,7 +37,7 @@ function EndSummary({
           <li>
             <Dot />
             <div css={styles.listMain}>
-              You can send a personal message to the recipient that we&apos;ll send with your gift
+              You can send a personal message to the recipient that we&apos;ll send with your gift.
             </div>
           </li>
         </ul>) :

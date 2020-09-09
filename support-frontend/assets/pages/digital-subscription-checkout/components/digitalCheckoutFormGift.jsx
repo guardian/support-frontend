@@ -281,7 +281,7 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
               errorReason={props.submissionError}
               errorHeading={submissionErrorHeading}
             />
-            <EndSummaryMobile />
+            <EndSummaryMobile orderIsAGift />
             <DirectDebitPaymentTerms
               paymentMethod={props.paymentMethod}
             />

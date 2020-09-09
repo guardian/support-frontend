@@ -22,12 +22,16 @@ const endSummaryMobile = css`
   }
 `;
 
-function EndSummaryMobile() {
+function EndSummaryMobile(orderIsAGift?: boolean) {
   return (
     <span css={endSummaryMobile}>
-      <EndSummary />
+      <EndSummary orderIsAGift={orderIsAGift} />
     </span>
   );
 }
+
+EndSummaryMobile.defaultProps = {
+  orderIsAGift: false,
+};
 
 export default EndSummaryMobile;

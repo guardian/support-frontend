@@ -8,6 +8,7 @@ import { type GridImg } from 'components/gridImage/gridImage';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import * as styles from './orderSummaryStyles';
+import { giftPeriod } from '../helpers';
 
 type PropTypes = {
   billingPeriod: DigitalBillingPeriod,
@@ -21,7 +22,7 @@ type PropTypes = {
 
 function OrderSummary(props: PropTypes) {
 
-  const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
+  const priceString = props.orderIsAGift ? giftPeriod[props.billingPeriod].cost : getBillingDescription(props.productPrice, props.billingPeriod);
 
   return (
     <aside css={styles.wrapper}>
@@ -38,7 +39,7 @@ function OrderSummary(props: PropTypes) {
         </div>
       </div>
       <div css={styles.endSummary}>
-        <EndSummary orderIsAGift />
+        <EndSummary orderIsAGift={props.orderIsAGift} />
       </div>
     </aside>
   );
