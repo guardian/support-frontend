@@ -237,7 +237,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
             onSubmit={this.handleErrorsAndCheckAccount}
           />
         )}
-        {props.phase === 'confirmation' && (
+        {props.phase === 'entry' && (
           <Playback
             editDirectDebitClicked={props.editDirectDebitClicked}
             onSubmit={this.onSubmit}

@@ -259,7 +259,7 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
                 allErrors={[...props.formErrors, ...props.addressErrors]}
                 setStripePaymentMethod={props.setStripePaymentMethod}
                 validateForm={props.validateForm}
-                buttonText="Start your free trial now"
+                buttonText="Pay for your gift"
                 csrf={props.csrf}
               />
             </FormSectionHiddenUntilSelected>
@@ -269,7 +269,7 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
               title="Your account details"
             >
               <DirectDebitForm
-                buttonText="Start free trial"
+                buttonText="Pay for your gift"
                 submitForm={props.submitForm}
                 allErrors={[...props.formErrors, ...props.addressErrors]}
                 submissionError={props.submissionError}

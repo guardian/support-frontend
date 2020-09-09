@@ -11,6 +11,9 @@ import { type Option } from 'helpers/types/option';
 import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { Input } from 'components/forms/input';
 import { withLabel } from 'hocs/withLabel';
+import { ThemeProvider } from 'emotion-theming';
+import { Button, buttonDefault } from '@guardian/src-button';
+import { Error } from 'components/forms/customFields/error';
 
 import './styles.scss';
 
@@ -46,6 +49,14 @@ const inputLayoutWithMargin = css`
   margin-right: ${space[3]}px;
 `;
 
+const validationButton = css`
+  margin-top: ${space[5]}px;
+`;
+
+const marginTop = css`
+  margin-top: ${space[5]}px;
+`;
+
 type PropTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   value: string | null,
@@ -59,9 +70,14 @@ type StateTypes = {
   month: string,
   year: string,
   showCalendar: boolean,
+  dateError: string | null,
+  dateValidated: boolean | null,
 }
 
 const InputWithLabel = withLabel(Input);
+const rangeDate = new Date();
+rangeDate.setDate(rangeDate.getDate() + 89);
+const eightyNineDaysFromNow = `${rangeDate.getDate()} ${monthText[rangeDate.getMonth()]} ${rangeDate.getFullYear()}`;
 
 class DatePickerFields extends Component<PropTypes, StateTypes> {
   constructor(props: PropTypes) {
@@ -71,11 +87,47 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
       month: '',
       year: '',
       showCalendar: false,
+      dateError: null,
+      dateValidated: null,
     };
   }
 
   componentDidMount() {
     this.handleCalendarDate(new Date(Date.now()));
+  }
+
+  checkDateIsValid = (e: Object) => {
+    e.preventDefault();
+    const date = new Date(`${this.state.month}/${this.state.day}/${this.state.year}`);
+    const dateIsNotADate = !DateUtils.isDate(date);
+    const dateOutsideRange = DateUtils.isDayAfter(date, rangeDate);
+    const dateIsPast = DateUtils.isPastDay(date);
+    this.setState({ dateValidated: true, dateError: '' });
+    if (dateIsNotADate) {
+      this.setState({
+        dateError: 'The date is not valid, please try again',
+        day: '',
+        month: '',
+        year: '',
+      });
+      this.updateStartDate();
+    } else if (dateOutsideRange) {
+      this.setState({
+        dateError: `Please choose a date before ${eightyNineDaysFromNow}`,
+        day: '',
+        month: '',
+        year: '',
+      });
+      this.updateStartDate();
+    } else if (dateIsPast) {
+      this.setState({
+        dateError: `Please choose a date between today and ${eightyNineDaysFromNow}`,
+        day: '',
+        month: '',
+        year: '',
+      });
+      this.updateStartDate();
+    }
   }
 
   dateIsPast = (date: Date) => DateUtils.isPastDay(date)
@@ -86,52 +138,67 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     }
     const dateArray = formatMachineDate(date).split('-');
     this.setState({
+      dateError: '',
+      dateValidated: false,
       day: dateArray[2],
       month: dateArray[1],
       year: dateArray[0],
     }, this.updateStartDate);
   }
 
-  handleDate = (e: Object, field: string) => {
-    this.setState({ [field]: e.target.value }, this.updateStartDate);
+  handleInput = (value: string, field: string) => {
+    this.setState({ [field]: value, dateError: '', dateValidated: false }, this.updateStartDate);
   }
 
   updateStartDate = () => this.props.onChange(`${this.state.day}/${this.state.month}/${this.state.year}`)
 
   render() {
     const { state } = this;
+    const { value } = this.props;
     const today = Date.now();
     const currentMonth = new Date(today);
-    const threeMonthRange = DateUtils.addMonths(currentMonth, 2);
-    const rangeDate = new Date();
-    rangeDate.setDate(rangeDate.getDate() + 89);
+    const threeMonthRange = DateUtils.addMonths(currentMonth, 3);
+    const valueArray = value ? value.split('/') : [];
+    const valueDate = valueArray.length ? new Date(`${valueArray[1]} ${valueArray[0]} ${valueArray[2]}`) : null;
 
     return (
       <div>
         <fieldset css={startDateGroup} role="group" aria-describedby="date-hint">
           <p id="date-hint">
-            {`Please choose a date before ${rangeDate.getDate()} ${monthText[rangeDate.getMonth()]} ${rangeDate.getFullYear()} for your gift to be emailed to the recipient.`}
+            {`Please choose a date before ${eightyNineDaysFromNow} for your gift to be emailed to the recipient.`}
           </p>
           <div css={startDateFields}>
             <div css={inputLayoutWithMargin}>
               <InputWithLabel
                 label="Day"
                 value={state.day}
-                onChange={e => this.handleDate(e, 'day')}
+                onChange={e => this.handleInput(e.target.value, 'day')}
+                minLength={1}
+                maxLength={2}
+                pattern="[0-9]*"
+                inputmode="numeric"
               />
             </div>
             <div css={inputLayoutWithMargin}>
               <InputWithLabel
                 label="Month"
                 value={state.month}
-                onChange={e => this.handleDate(e, 'month')}
+                onChange={e => this.handleInput(e.target.value, 'month')}
+                minLength={1}
+                maxLength={2}
+                pattern="[0-9]*"
+                inputmode="numeric"
               />
             </div>
             <div css={inputLayout}>
               <InputWithLabel
                 label="Year"
                 value={state.year}
-                onChange={e => this.handleDate(e, 'year')}
+                onChange={e => this.handleInput(e.target.value, 'year')}
+                minLength={4}
+                maxLength={4}
+                pattern="[0-9]*"
+                inputmode="numeric"
               />
             </div>
 
@@ -155,6 +222,15 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
             toMonth={threeMonthRange}
           />
         )}
+        <ThemeProvider theme={buttonDefault}>
+          <Button size="small" css={validationButton} onClick={e => this.checkDateIsValid(e)}>Check date</Button>
+        </ThemeProvider>
+        <span>{state.dateError && (
+          <div css={marginTop}><Error error={state.dateError} /></div>)}
+        </span>
+        <span>{!state.dateError && state.dateValidated && value && (
+          <div css={marginTop}>{`Your gift will be delivered on ${state.day} ${monthText[valueDate.getMonth()]} ${state.year}`}</div>)}
+        </span>
       </div>
     );
   }
