@@ -34,7 +34,7 @@ const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
-const ERROR_MESSAGE = 'Please check the box in order to subscribe';
+const ERROR_MESSAGE = 'Please tick the box below, then click \'subscribe\'';
 
 const mapStateToProps = () => ({
 });
