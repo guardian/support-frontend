@@ -17,6 +17,11 @@ import ActionBody from './components/ActionBody';
 import ExpandableContainer from './components/ExpandableContainer';
 import SvgClock from './components/SvgClock';
 import styles from './styles';
+import {
+  OPHAN_COMPONENT_ID_SET_REMINDER,
+  OPHAN_COMPONENT_ID_READ_MORE_SET_REMINDER,
+} from './utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const bodyText = css`
   ${body.small()};
@@ -97,7 +102,13 @@ const ContributionThankYouSetSupportReminder = ({
 
   const onSubmit = () => {
     setReminder();
+    trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
     setHasBeenInteractedWith(true);
+  };
+
+  const onReadMoreClick = () => {
+    trackComponentClick(OPHAN_COMPONENT_ID_READ_MORE_SET_REMINDER);
+    setIsExpanded(true);
   };
 
   const actionIcon = <SvgClock />;
@@ -135,7 +146,7 @@ const ContributionThankYouSetSupportReminder = ({
                 <ButtonLink
                   css={bodyText}
                   priority="secondary"
-                  onClick={() => setIsExpanded(true)}
+                  onClick={onReadMoreClick}
                 >
                   Read more
                 </ButtonLink>

@@ -14,6 +14,13 @@ import {
   getLinkedInShareLink,
   getEmailShareLink,
 } from './utils/social';
+import {
+  OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
+  OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
+  OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
+  OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
+} from './utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const buttonsContainer = css`
   margin-top: ${space[6]}px;
@@ -42,6 +49,7 @@ const ContributionThankYouSendYourThoughts = () => {
       <div css={buttonsContainer}>
         <LinkButton
           href={getFacebookShareLink(LANDING_PAGE_URL)}
+          onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)}
           target="_blank"
           rel="noopener noreferrer"
           priority="tertiary"
@@ -51,6 +59,7 @@ const ContributionThankYouSendYourThoughts = () => {
         />
         <LinkButton
           href={getTwitterShareLink(LANDING_PAGE_URL, TWITTER_TEXT_COPY)}
+          onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
           target="_blank"
           rel="noopener noreferrer"
           priority="tertiary"
@@ -60,6 +69,7 @@ const ContributionThankYouSendYourThoughts = () => {
         />
         <LinkButton
           href={getLinkedInShareLink(LANDING_PAGE_URL)}
+          onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)}
           target="_blank"
           rel="noopener noreferrer"
           priority="tertiary"
@@ -69,6 +79,7 @@ const ContributionThankYouSendYourThoughts = () => {
         />
         <LinkButton
           href={getEmailShareLink(EMAIL_SUBJECT_COPY, EMAIL_BODY_COPY)}
+          onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
           target="_blank"
           rel="noopener noreferrer"
           priority="tertiary"

@@ -15,7 +15,12 @@ import ExpandableContainer from './components/ExpandableContainer';
 import BulletPointedList from './components/BulletPointedList';
 import SvgPersonWithTick from './components/SvgPersonWithTick';
 import styles from './styles';
+import {
+  OPHAN_COMPONENT_ID_SIGN_IN,
+  OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN,
+} from './utils/ophan';
 import { routes } from 'helpers/routes';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const bodyText = css`
   ${body.small()};
@@ -43,7 +48,6 @@ const ContributionThankYouContinueToAccount = ({
   csrf,
 }: ContributionThankYouContinueToAccountProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  // TODO: Fix this and factor into custom useSingInLink hook
   const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
   useEffect(() => {
     const payload = { email };
@@ -61,6 +65,15 @@ const ContributionThankYouContinueToAccount = ({
 
   const actionIcon = <SvgPersonWithTick />;
   const actionHeader = <ActionHeader title="Continue to your account" />;
+
+  const onSignInClick = () =>
+    trackComponentClick(OPHAN_COMPONENT_ID_SIGN_IN);
+
+  const onReadMoreClick = () => {
+    trackComponentClick(OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN);
+    setIsExpanded(true);
+  };
+
 
   const expandableContent = (
     <div css={expandableContainer}>
@@ -89,7 +102,7 @@ const ContributionThankYouContinueToAccount = ({
             <ButtonLink
               css={bodyText}
               priority="secondary"
-              onClick={() => setIsExpanded(true)}
+              onClick={onReadMoreClick}
             >
               Read more
             </ButtonLink>
@@ -108,6 +121,7 @@ const ContributionThankYouContinueToAccount = ({
       <div css={styles.hideBeforeTablet}>{expandableContent}</div>
       <div css={buttonContainer}>
         <LinkButton
+          onClick={onSignInClick}
           href={signInUrl}
           target="_blank"
           rel="noopener noreferrer"

@@ -25,6 +25,11 @@ import {
 } from '../../../contributionsLandingActions';
 import { setPasswordGuest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import styles from './styles';
+import {
+  OPHAN_COMPONENT_ID_SIGN_UP,
+  OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP,
+} from './utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const bodyText = css`
   ${body.small()};
@@ -93,6 +98,11 @@ const ContributionThankYouCompleteRegistration = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
+  const onReadMoreClick = () => {
+    trackComponentClick(OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP);
+    setIsExpanded(true);
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -104,6 +114,7 @@ const ContributionThankYouCompleteRegistration = ({
     if (passwordIsValid && emailIsValid) {
       setPasswordGuest(password, guestAccountCreationToken, csrf).then((response) => {
         if (response === true) {
+          trackComponentClick(OPHAN_COMPONENT_ID_SIGN_UP);
           setHasBeenInteractedWith(true);
         } else {
           setPasswordError(true);
@@ -149,7 +160,7 @@ const ContributionThankYouCompleteRegistration = ({
                 <ButtonLink
                   css={bodyText}
                   priority="secondary"
-                  onClick={() => setIsExpanded(true)}
+                  onClick={onReadMoreClick}
                 >
                   Read more
                 </ButtonLink>

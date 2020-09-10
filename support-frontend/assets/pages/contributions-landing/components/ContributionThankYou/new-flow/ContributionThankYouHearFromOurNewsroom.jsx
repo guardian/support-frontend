@@ -17,6 +17,10 @@ import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
 import SvgNotification from './components/SvgNotification';
 import styles from './styles';
+import {
+  OPHAN_COMPONENT_ID_MARKETING,
+} from './utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const checkboxContainer = css`
   margin-top: ${space[2]}px;
@@ -74,6 +78,7 @@ const ContributionThankYouHearFromOurNewsroom = ({
     if (!hasConsented) {
       setErrorMessage(ERROR_MESSAGE);
     } else {
+      trackComponentClick(OPHAN_COMPONENT_ID_MARKETING);
       setHasBeenCompleted(true);
       subscribeToNewsLetter(email, csrf);
     }

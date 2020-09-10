@@ -8,6 +8,10 @@ import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
 import SvgSpeechBubbleWithPlus from './components/SvgSpeechBubbleWithPlus';
 import styles from './styles';
+import {
+  OPHAN_COMPONENT_ID_SURVEY,
+} from './utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const buttonContainer = css`
   margin-top: ${space[6]}px;
@@ -27,6 +31,12 @@ const ContributionThankYouSendYourThoughts = () => {
       }
     />
   );
+
+  const onClick = () => {
+    trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
+    setHasBeenCompleted(true);
+  };
+
   const actionBody = (
     <ActionBody>
       {hasBeenCompleted ? (
@@ -46,7 +56,7 @@ const ContributionThankYouSendYourThoughts = () => {
           </p>
           <div css={buttonContainer}>
             <LinkButton
-              onClick={() => setHasBeenCompleted(true)}
+              onClick={onClick}
               href={SURVEY_LINK}
               target="_blank"
               rel="noopener noreferrer"
