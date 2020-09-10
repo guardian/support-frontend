@@ -127,7 +127,7 @@ const ContributionThankYouCompleteRegistration = ({
   const actionHeader = (
     <ActionHeader
       title={
-        hasBeenCompleted ? 'You\u2019re almost there!' : 'Complete Registration'
+        hasBeenCompleted ? 'You\u2019re almost there!' : 'Complete registration'
       }
     />
   );
