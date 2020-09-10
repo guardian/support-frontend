@@ -6,7 +6,9 @@ import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.ZuoraDigitalPackConfig
-import com.gu.support.promotions.PromotionService
+import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.redemption.GetCodeStatus.InvalidReaderType
+import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.{DigitalPack, Monthly, Quarterly}
@@ -16,6 +18,7 @@ import org.joda.time.LocalDate
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar._
+import org.scalatest.EitherValues._
 
 import scala.concurrent.Future
 
@@ -81,8 +84,14 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       corporateAccountId shouldBe None
     }
 
+  "Attempting to build a subscribe request for a gift redemptions" should "return an error" in
+    threeMonthGiftRedemption.map { error =>
+      error.right.value shouldBe InvalidReaderType
+    }
+
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
+  lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
 
   lazy val corporate = DigitalSubscriptionBuilder.build(
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
@@ -96,6 +105,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         )))
       })),
     SANDBOX,
+    giftCodeGeneratorService,
     () => saleDate
   ).value.map(_.right.get)
 
@@ -104,6 +114,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Monthly, Country.UK, promotionService),
     SANDBOX,
+    giftCodeGeneratorService,
     () => saleDate
   ).value.map(_.right.get)
 
@@ -112,9 +123,23 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Quarterly, Country.UK, promotionService),
     SANDBOX,
+    giftCodeGeneratorService,
     () => saleDate
   ).value.map(_.right.get)
 
-  //TODO: RB test all cases
+  lazy val threeMonthGiftRedemption: Future[Either[PromoError, GetCodeStatus.RedemptionInvalid]] = DigitalSubscriptionBuilder.build(
+    DigitalPack(GBP, Quarterly, Gift),
+    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+    SubscriptionRedemption(RedemptionData(RedemptionCode("any-code").right.get),
+      new GetCodeStatus({
+        case "CODE" => Future.successful(Some(Map(
+          "available" -> DynamoLookup.DynamoBoolean(true),
+          "corporateId" -> DynamoLookup.DynamoString("1")
+        )))
+      })),
+    SANDBOX,
+    giftCodeGeneratorService,
+    () => saleDate
+  ).value.map(_.left.get)
 
 }

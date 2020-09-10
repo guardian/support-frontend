@@ -6,30 +6,37 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
+import com.gu.support.catalog
+import com.gu.support.catalog._
+import com.gu.support.config.{Stage, TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemption._
+import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
+import com.gu.support.workers.lambdas.CreateZuoraSubscription.createSubscription
+import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{buildHandlerResult, calculateNewTermLength, maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
+import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
-import com.gu.support.zuora.api.response._
+import com.gu.support.zuora.api.response.{Subscription, SubscriptionRedemptionQueryResponse, UpdateRedemptionDataResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.support.zuora.domain.DomainSubscription
-import com.gu.zuora.ZuoraSubscribeService
+import com.gu.zuora.{ZuoraService, ZuoraSubscribeService}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.buildContributionSubscription
-import com.gu.zuora.subscriptionBuilders.{DigitalSubscriptionBuilder, GuardianWeeklySubscriptionBuilder, PaperSubscriptionBuilder, ProductSubscriptionBuilders, SubscriptionRedemption, SubscriptionPurchase}
-import org.joda.time.{DateTime, DateTimeZone, LocalDate}
+import com.gu.zuora.subscriptionBuilders._
+import org.joda.time.{DateTime, DateTimeZone, Days, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 
 case class BuildSubscribePromoError(cause: PromoError) extends RuntimeException
 
 case class BuildSubscribeRedemptionError(cause: RedemptionInvalid) extends RuntimeException
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
+  extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
@@ -44,15 +51,24 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val promotionService = services.promotionService
     val redemptionService = services.redemptionService
     val zuoraService = services.zuoraService
+    val giftCodeGenerator = services.giftCodeGenerator
     val isTestUser = state.user.isTestUser
     val config: ZuoraConfig = services.config.zuoraConfigProvider.get(isTestUser)
-    CreateZuoraSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, config)
+
+    maybeDigitalSubscriptionGiftRedemption(state.product, state.paymentMethod) match {
+      case Some(redemptionData) =>
+        redeemGift(redemptionData, requestInfo, state, zuoraService, services.catalogService)
+      case None =>
+        createSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
+    }
   }
 }
+
 object CreateZuoraSubscription {
+
   import com.gu.FutureLogging._
 
-  def apply(
+  def createSubscription(
     state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
     now: () => DateTime,
@@ -60,20 +76,20 @@ object CreateZuoraSubscription {
     promotionService: PromotionService,
     redemptionService: DynamoLookup with DynamoUpdate,
     zuoraService: ZuoraSubscribeService,
+    giftCodeGenerator: GiftCodeGeneratorService,
     config: ZuoraConfig
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     for {
-      subscriptionData <- buildSubscriptionData(state, promotionService, GetCodeStatus.withDynamoLookup(redemptionService), today, config)
-          .withLogging("subscription data")
+      subscriptionData <- buildSubscriptionData(state, promotionService, GetCodeStatus.withDynamoLookup(redemptionService), giftCodeGenerator, today, config)
+        .withLogging("subscription data")
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
       maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
         .withLogging("GetSubscriptionWithCurrentRequestId")
       paymentOrRedemptionData <-
-        state.paymentMethod.leftMap(pm =>
-          PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, zuoraService, checkSingleResponse)
-            .withLogging("PreviewPaymentSchedule").map(ps => PaymentMethodWithSchedule(pm, ps))
+        state.paymentMethod.leftMap(pm => PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, zuoraService, checkSingleResponse)
+          .withLogging("PreviewPaymentSchedule").map(ps => PaymentMethodWithSchedule(pm, ps))
         ).leftSequence
       (account, sub, info) <- subscribeIfApplicable(requestInfo, zuoraService, subscribeItem, maybeDomainSubscription)
         .withLogging("subscribe")
@@ -143,6 +159,7 @@ object CreateZuoraSubscription {
     state: CreateZuoraSubscriptionState,
     promotionService: => PromotionService,
     getCodeStatus: => GetCodeStatus,
+    giftCodeGenerator: GiftCodeGeneratorService,
     today: () => LocalDate,
     config: ZuoraConfig
   ): Future[SubscriptionData] = {
@@ -165,6 +182,7 @@ object CreateZuoraSubscription {
           case Right(rd: RedemptionData) => SubscriptionRedemption(rd, getCodeStatus)
         },
         environment,
+        giftCodeGenerator,
         today
       ).leftMap(_.fold(BuildSubscribePromoError, BuildSubscribeRedemptionError))
       case p: Paper => EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
@@ -231,5 +249,113 @@ object CreateZuoraSubscription {
         )
       case None => Future.successful(())
     }
+
+}
+
+object DigitalSubscriptionGiftRedemption {
+
+  sealed trait SubscriptionState
+
+  case class Unredeemed(subscriptionId: String) extends SubscriptionState
+
+  // This can happen if Zuora is responding very slowly - a redemption request may succeed but not return a response
+  // until after the CreateZuoraSubscription lambda has timed out meaning that the redemption will be retried with the
+  // same requestId. In this case we want the lambda to succeed so that we progress to the next lambda
+  case object RedeemedInThisRequest extends SubscriptionState
+
+  case object Redeemed extends SubscriptionState
+
+  case object NotFound extends SubscriptionState
+
+  def maybeDigitalSubscriptionGiftRedemption(product: ProductType, paymentMethod: Either[PaymentMethod, RedemptionData]) = {
+    product match {
+      case d: DigitalPack if paymentMethod.isRight && d.readerType == Gift => paymentMethod.right.toOption
+      case _ => None
+    }
+  }
+
+  def redeemGift(
+    redemptionData: RedemptionData,
+    requestInfo: RequestInfo,
+    state: CreateZuoraSubscriptionState,
+    zuoraService: ZuoraService,
+    catalogService: CatalogService
+  ): Future[HandlerResult[SendThankYouEmailState]] =
+    zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode).flatMap(
+      redemptionQueryResponse =>
+        getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
+          case Unredeemed(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
+          case RedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
+          case Redeemed => Future.failed(new RuntimeException(GetCodeStatus.CodeAlreadyUsed.clientCode))
+          case NotFound => Future.failed(new RuntimeException(GetCodeStatus.NoSuchCode.clientCode))
+        }
+    )
+
+  private def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: String) =
+    existingSub.records match {
+      case existingSubFields :: Nil if existingSubFields.gifteeIdentityId.isEmpty =>
+        Unredeemed(existingSubFields.id)
+      case existingSubFields :: Nil if existingSubFields.createdRequestId == requestId =>
+        RedeemedInThisRequest
+      case _ :: Nil =>
+        Redeemed
+      case _ =>
+        NotFound
+    }
+
+
+  private def redeemInZuora(
+    subscriptionId: String,
+    state: CreateZuoraSubscriptionState,
+    redemptionData: RedemptionData,
+    requestInfo: RequestInfo,
+    zuoraService: ZuoraService,
+    catalogService: CatalogService
+  ) = for {
+    fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)
+    newTermLength <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
+    updateDataResponse <- zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, newTermLength)
+    handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, redemptionData, requestInfo))
+  } yield handlerResult
+
+
+  private def calculateNewTermLength(subscription: Subscription, catalogService: CatalogService) = {
+    (for {
+      ratePlan <- subscription.ratePlans.headOption
+      productRatePlan <- catalogService.getProductRatePlanFromId(catalog.DigitalPack, ratePlan.productRatePlanId)
+      newEndDate = LocalDate.now()
+        .toDateTimeAtStartOfDay
+        .plusDays(1) //To avoid having to think about time zones
+        .plusMonths(productRatePlan.billingPeriod.monthsInPeriod)
+        .toLocalDate
+      newTermLength = Days.daysBetween(subscription.customerAcceptanceDate, newEndDate).getDays
+    } yield Success(newTermLength)).getOrElse(Failure(new RuntimeException(s"Unable to calculate new term length for subscription ${subscription}")))
+  }
+
+  private def buildHandlerResult(
+    response: UpdateRedemptionDataResponse,
+    state: CreateZuoraSubscriptionState,
+    redemptionData: RedemptionData,
+    requestInfo: RequestInfo
+  ) =
+    if (response.success) {
+      Success(
+        HandlerResult(SendThankYouEmailState(
+          state.requestId,
+          state.user,
+          state.giftRecipient,
+          state.product,
+          state.paymentProvider,
+          Right(redemptionData),
+          state.firstDeliveryDate,
+          state.promoCode,
+          state.salesforceContacts.buyer,
+          "", //TODO: Should these be Options?
+          "",
+          state.acquisitionData
+        ), requestInfo)
+      )
+    } else
+      Failure(new RuntimeException("Failed to redeem Digital Subscription gift"))
 
 }
