@@ -8,9 +8,7 @@ import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
 import SvgSpeechBubbleWithPlus from './components/SvgSpeechBubbleWithPlus';
 import styles from './styles';
-import {
-  OPHAN_COMPONENT_ID_SURVEY,
-} from './utils/ophan';
+import { OPHAN_COMPONENT_ID_SURVEY } from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const buttonContainer = css`
@@ -40,7 +38,9 @@ const ContributionThankYouSendYourThoughts = () => {
   const actionBody = (
     <ActionBody>
       {hasBeenCompleted ? (
-        <p>Your feedback helps us better understand our readers.</p>
+        <p>
+          You’re helping us deepen our understanding of Guardian supporters.
+        </p>
       ) : (
         <>
           <p>
