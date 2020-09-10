@@ -89,7 +89,7 @@ As a result of this we need to decode back to the exact type which we encoded fr
 This behaviour is illustrated through a number of tests in [CirceEncodingBehaviourSpec.](/src/test/scala/com/gu/support/workers/CirceEncodingBehaviourSpec.scala)
 
 ## Emails
-Docs on how emails are sent from this app are [here](/docs/triggered-send-in-exact-target.md)
+Docs on how emails are sent from this app are [here](/docs/triggered-send-in-exact-target.md).
 
 ## Data subject access requests
 The state machine executions of this app have been identified as a data store which we would need to include in a response to any subject
