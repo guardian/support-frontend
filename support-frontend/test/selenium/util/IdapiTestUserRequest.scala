@@ -1,17 +1,14 @@
 package selenium.util
 
-import okhttp3.{OkHttpClient, Request, RequestBody, MediaType, Response}
-import io.circe.generic.semiauto.deriveDecoder
-import io.circe.{Json, Decoder, DecodingFailure}
-import io.circe.parser.parse
-
-import org.slf4j.LoggerFactory
-
 import cats.syntax.either._
+import io.circe.generic.semiauto.deriveDecoder
+import io.circe.parser.parse
+import io.circe.{Decoder, Json}
+import okhttp3._
 
 class IdapiTestUserRequest {
 
-  private def getResult(): Either[String, Json] = {
+  private def getResult: Either[String, Json] = {
     val response: Response = IdapiTestUserRequest.client.newCall(IdapiTestUserRequest.request).execute()
     val body: String = response.body().string()
     parse(body).leftMap { error =>
@@ -20,11 +17,11 @@ class IdapiTestUserRequest {
   }
 
   def getCookies(): Either[String, List[IdapiCookie]] = {
-    getResult() match {
+    getResult match {
       case Left(error) => Left(error)
       case Right(result) => {
         result.as[IdapiSuccessfulResponse] match {
-          case Left(error) => Left(s"Could not deserialise IDAPI response: $error")
+          case Left(error) => Left(s"Could not deserialise IDAPI response: $error from json: ${result}")
           case Right(r) => Right(r.values)
         }
       }
