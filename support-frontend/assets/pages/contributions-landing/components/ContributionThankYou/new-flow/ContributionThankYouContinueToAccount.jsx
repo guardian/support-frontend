@@ -77,7 +77,7 @@ const ContributionThankYouContinueToAccount = ({
 
   const expandableContent = (
     <div css={expandableContainer}>
-      <p css={styles.hideAfterDesktop}>
+      <p css={styles.hideAfterTablet}>
         Stay signed in across all your devices, to:
       </p>
       <BulletPointedList
