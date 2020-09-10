@@ -81,6 +81,7 @@ const NUMBER_OF_ACTIONS_IN_FIRST_COLUNM = 2;
 type ContributionThankYouProps = {|
   csrf: Csrf,
   email: string,
+  name: string,
   user: User,
   guestAccountCreationToken: string,
   paymentMethod: PaymentMethod,
@@ -88,6 +89,7 @@ type ContributionThankYouProps = {|
 
 const mapStateToProps = state => ({
   email: state.page.form.formData.email,
+  name: state.page.form.formData.firstName,
   csrf: state.page.csrf,
   user: state.page.user,
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
@@ -97,6 +99,7 @@ const mapStateToProps = state => ({
 const ContributionThankYou = ({
   csrf,
   email,
+  name,
   user,
   guestAccountCreationToken,
   paymentMethod,
@@ -125,6 +128,7 @@ const ContributionThankYou = ({
     <div css={container}>
       <div css={headerContainer}>
         <ContributionThankYouHeader
+          name={name}
           showDirectDebitMessage={paymentMethod === DirectDebit}
         />
       </div>

@@ -38,15 +38,17 @@ const directDebitSetupText = css`
 `;
 
 type ContributionThankYouHeaderProps = {|
+  name: string,
   showDirectDebitMessage: boolean
 |};
 
 const ContributionThankYouHeader = ({
+  name,
   showDirectDebitMessage,
 }: ContributionThankYouHeaderProps) => (
   <header css={header}>
     <h1 css={headerTitleText}>
-      Thank you Anastasia for your valuable contribution{' '}
+      Thank you {name} for your valuable contribution{' '}
       <span role="img" aria-label="heart">
         ❤️
       </span>
