@@ -48,10 +48,7 @@ const ContributionThankYouHeader = ({
 }: ContributionThankYouHeaderProps) => (
   <header css={header}>
     <h1 css={headerTitleText}>
-      Thank you {name} for your valuable contribution{' '}
-      <span role="img" aria-label="heart">
-        ❤️
-      </span>
+      Thank you {name} for your valuable contribution
     </h1>
     <p css={headerSupportingText}>
       {showDirectDebitMessage && (
