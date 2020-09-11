@@ -20,7 +20,6 @@ function mapStateToProps(state: CheckoutState) {
       state.common.internationalisation.countryId,
       billingPeriod,
     );
-  console.log({ productPrice });
 
   const digitalBillingPeriod = billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Monthly';
   const digitalGiftBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Quarterly';
