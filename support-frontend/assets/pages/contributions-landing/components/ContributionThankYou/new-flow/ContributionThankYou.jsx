@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { type User } from 'helpers/user/userReducer';
 import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from, between, until } from '@guardian/src-foundations/mq';
@@ -16,6 +17,7 @@ import ContributionThankYouHearFromOurNewsroom from './ContributionThankYouHearF
 import ContributionThankYouSetSupportReminder from './ContributionThankYouSetSupportReminder';
 import ContributionThankYouSendYourThoughts from './ContributionThankYouSendYourThoughts';
 import ContributionThankYouShareYourSupport from './ContributionThankYouShareYourSupport';
+import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import { type ContributionType } from 'helpers/contributions';
 
 const container = css`
@@ -100,7 +102,8 @@ type ContributionThankYouProps = {|
   name: string,
   user: User,
   guestAccountCreationToken: string,
-  paymentMethod: PaymentMethod
+  paymentMethod: PaymentMethod,
+  countryId: IsoCountry
 |};
 
 const mapStateToProps = state => ({
@@ -111,6 +114,7 @@ const mapStateToProps = state => ({
   user: state.page.user,
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
   paymentMethod: state.page.form.paymentMethod,
+  countryId: state.common.internationalisation.countryId,
 });
 
 const ContributionThankYou = ({
@@ -121,6 +125,7 @@ const ContributionThankYou = ({
   user,
   guestAccountCreationToken,
   paymentMethod,
+  countryId,
 }: ContributionThankYouProps) => {
   const actions = [];
 
@@ -135,6 +140,9 @@ const ContributionThankYou = ({
   }
   actions.push(<ContributionThankYouSendYourThoughts />);
   actions.push(<ContributionThankYouShareYourSupport />);
+  if (countryId === 'AU') {
+    actions.push(<ContributionThankYouAusMap />);
+  }
 
   const firstColumn = actions.slice(0, NUMBER_OF_ACTIONS_IN_FIRST_COLUNM);
   const secondColumn = actions.slice(NUMBER_OF_ACTIONS_IN_FIRST_COLUNM);

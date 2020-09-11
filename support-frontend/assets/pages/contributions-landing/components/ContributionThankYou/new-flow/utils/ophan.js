@@ -11,6 +11,7 @@ export const OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN =
   'contribution-thankyou-social-linked-in';
 export const OPHAN_COMPONENT_ID_SOCIAL_EMAIL =
   'contribution-thankyou-social-email';
+export const OPHAN_COMPONENT_ID_AUS_MAP = 'contribution-thankyou-aus-map';
 
 export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN =
   'contribution-thankyou-read-more-sign-in';
