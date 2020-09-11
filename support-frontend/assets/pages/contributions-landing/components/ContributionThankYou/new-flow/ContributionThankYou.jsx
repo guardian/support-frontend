@@ -15,6 +15,7 @@ import ContributionThankYouHearFromOurNewsroom from './ContributionThankYouHearF
 import ContributionThankYouSetSupportReminder from './ContributionThankYouSetSupportReminder';
 import ContributionThankYouSendYourThoughts from './ContributionThankYouSendYourThoughts';
 import ContributionThankYouShareYourSupport from './ContributionThankYouShareYourSupport';
+import { type ContributionType } from 'helpers/contributions';
 
 const container = css`
   background: white;
@@ -81,6 +82,7 @@ const NUMBER_OF_ACTIONS_IN_FIRST_COLUNM = 2;
 type ContributionThankYouProps = {|
   csrf: Csrf,
   email: string,
+  contributionType: ContributionType,
   name: string,
   user: User,
   guestAccountCreationToken: string,
@@ -90,6 +92,7 @@ type ContributionThankYouProps = {|
 const mapStateToProps = state => ({
   email: state.page.form.formData.email,
   name: state.page.form.formData.firstName,
+  contributionType: state.page.form.formData.contributionType,
   csrf: state.page.csrf,
   user: state.page.user,
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
@@ -100,6 +103,7 @@ const ContributionThankYou = ({
   csrf,
   email,
   name,
+  contributionType,
   user,
   guestAccountCreationToken,
   paymentMethod,
@@ -112,7 +116,7 @@ const ContributionThankYou = ({
     actions.push(<ContributionThankYouContinueToAccount email={email} csrf={csrf} />);
   }
   actions.push(<ContributionThankYouHearFromOurNewsroom email={email} csrf={csrf} />);
-  if (!user.isRecurringContributor) {
+  if (contributionType === 'ONE_OFF') {
     actions.push(<ContributionThankYouSetSupportReminder email={email} />);
   }
   actions.push(<ContributionThankYouSendYourThoughts />);
