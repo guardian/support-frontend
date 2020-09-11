@@ -60,13 +60,13 @@ const privacyTextLink = css`
   color: ${neutral[20]};
 `;
 
-type ContributionThankYouSetSupportReminderProps = {|
+type ContributionThankYouSupportReminderProps = {|
   email: string
 |};
 
-const ContributionThankYouSetSupportReminder = ({
+const ContributionThankYouSupportReminder = ({
   email,
-}: ContributionThankYouSetSupportReminderProps) => {
+}: ContributionThankYouSupportReminderProps) => {
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
@@ -229,4 +229,4 @@ const ContributionThankYouSetSupportReminder = ({
   );
 };
 
-export default ContributionThankYouSetSupportReminder;
+export default ContributionThankYouSupportReminder;

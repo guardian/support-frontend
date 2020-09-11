@@ -38,15 +38,15 @@ const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
-type ContributionThankYouContinueToAccountProps = {|
+type ContributionThankYouSignInProps = {|
   email: string,
   csrf: Csrf
 |};
 
-const ContributionThankYouContinueToAccount = ({
+const ContributionThankYouSignIn = ({
   email,
   csrf,
-}: ContributionThankYouContinueToAccountProps) => {
+}: ContributionThankYouSignInProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
   useEffect(() => {
@@ -145,4 +145,4 @@ const ContributionThankYouContinueToAccount = ({
   );
 };
 
-export default ContributionThankYouContinueToAccount;
+export default ContributionThankYouSignIn;

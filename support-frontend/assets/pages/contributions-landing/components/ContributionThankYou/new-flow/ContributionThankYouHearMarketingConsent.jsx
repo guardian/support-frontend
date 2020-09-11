@@ -54,17 +54,17 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
   };
 }
 
-type ContributionThankYouHearFromOurNewsroomProps = {|
+type ContributionThankYouMarketingConsentProps = {|
   email: string,
   csrf: Csrf,
   subscribeToNewsLetter: (email: string, csrf: Csrf) => void
 |};
 
-const ContributionThankYouHearFromOurNewsroom = ({
+const ContributionThankYouMarketingConsent = ({
   email,
   csrf,
   subscribeToNewsLetter,
-}: ContributionThankYouHearFromOurNewsroomProps) => {
+}: ContributionThankYouMarketingConsentProps) => {
   const [hasConsented, setHasConsented] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
@@ -156,4 +156,4 @@ const ContributionThankYouHearFromOurNewsroom = ({
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionThankYouHearFromOurNewsroom);
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionThankYouMarketingConsent);

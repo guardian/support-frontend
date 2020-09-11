@@ -76,7 +76,7 @@ const checkPassword = (password: string) =>
 const PASSWORD_ERROR_MESSAGE =
   'Please enter a password between 6 and 20 characters long';
 
-type ContributionThankYouCompleteRegistrationProps = {|
+type ContributionThankYouSignUpProps = {|
   csrf: Csrf,
   email: string,
   password: string,
@@ -86,7 +86,7 @@ type ContributionThankYouCompleteRegistrationProps = {|
   setPasswordError: boolean => void
 |};
 
-const ContributionThankYouCompleteRegistration = ({
+const ContributionThankYouSignUp = ({
   csrf,
   email,
   password,
@@ -94,7 +94,7 @@ const ContributionThankYouCompleteRegistration = ({
   updatePassword,
   setPasswordError,
   passwordError,
-}: ContributionThankYouCompleteRegistrationProps) => {
+}: ContributionThankYouSignUpProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
@@ -229,4 +229,4 @@ const ContributionThankYouCompleteRegistration = ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ContributionThankYouCompleteRegistration);
+)(ContributionThankYouSignUp);

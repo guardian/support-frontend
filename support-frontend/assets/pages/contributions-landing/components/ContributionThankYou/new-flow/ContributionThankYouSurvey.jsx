@@ -17,7 +17,7 @@ const buttonContainer = css`
 
 const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/8DTN7GS';
 
-const ContributionThankYouSendYourThoughts = () => {
+const ContributionThankYouSurvey = () => {
   const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
   const actionIcon = <SvgSpeechBubbleWithPlus />;
   const actionHeader = (
@@ -83,4 +83,4 @@ const ContributionThankYouSendYourThoughts = () => {
   );
 };
 
-export default ContributionThankYouSendYourThoughts;
+export default ContributionThankYouSurvey;

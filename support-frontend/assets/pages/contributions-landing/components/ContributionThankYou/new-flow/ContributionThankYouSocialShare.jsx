@@ -37,7 +37,7 @@ const EMAIL_SUBJECT_COPY = 'Join me in supporting open, independent journalism';
 const EMAIL_BODY_COPY =
   'Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: https://support.theguardian.com/contribute';
 
-const ContributionThankYouSendYourThoughts = () => {
+const ContributionThankYouSocialShare = () => {
   const actionIcon = <SvgShare />;
   const actionHeader = <ActionHeader title="Share your support" />;
   const actionBody = (
@@ -100,4 +100,4 @@ const ContributionThankYouSendYourThoughts = () => {
   );
 };
 
-export default ContributionThankYouSendYourThoughts;
+export default ContributionThankYouSocialShare;

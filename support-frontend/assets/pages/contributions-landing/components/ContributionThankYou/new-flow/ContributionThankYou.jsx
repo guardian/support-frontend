@@ -11,12 +11,12 @@ import { from, between, until } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
-import ContributionThankYouContinueToAccount from './ContributionThankYouContinueToAccount';
-import ContributionThankYouCompleteRegistration from './ContributionThankYouCompleteRegistration';
-import ContributionThankYouHearFromOurNewsroom from './ContributionThankYouHearFromOurNewsroom';
-import ContributionThankYouSetSupportReminder from './ContributionThankYouSetSupportReminder';
-import ContributionThankYouSendYourThoughts from './ContributionThankYouSendYourThoughts';
-import ContributionThankYouShareYourSupport from './ContributionThankYouShareYourSupport';
+import ContributionThankYouSignIn from './ContributionThankYouSignIn';
+import ContributionThankYouSignUp from './ContributionThankYouSignUp';
+import ContributionThankYouHearMarketingConsent from './ContributionThankYouHearMarketingConsent';
+import ContributionThankYouSupportReminder from './ContributionThankYouSupportReminder';
+import ContributionThankYouSurvey from './ContributionThankYouSurvey';
+import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import { type ContributionType } from 'helpers/contributions';
 
@@ -130,16 +130,16 @@ const ContributionThankYou = ({
   const actions = [];
 
   if (guestAccountCreationToken) {
-    actions.push(<ContributionThankYouCompleteRegistration email={email} csrf={csrf} />);
+    actions.push(<ContributionThankYouSignUp email={email} csrf={csrf} />);
   } else if (!user.isSignedIn) {
-    actions.push(<ContributionThankYouContinueToAccount email={email} csrf={csrf} />);
+    actions.push(<ContributionThankYouSignIn email={email} csrf={csrf} />);
   }
-  actions.push(<ContributionThankYouHearFromOurNewsroom email={email} csrf={csrf} />);
+  actions.push(<ContributionThankYouHearMarketingConsent email={email} csrf={csrf} />);
   if (contributionType === 'ONE_OFF') {
-    actions.push(<ContributionThankYouSetSupportReminder email={email} />);
+    actions.push(<ContributionThankYouSupportReminder email={email} />);
   }
-  actions.push(<ContributionThankYouSendYourThoughts />);
-  actions.push(<ContributionThankYouShareYourSupport />);
+  actions.push(<ContributionThankYouSurvey />);
+  actions.push(<ContributionThankYouSocialShare />);
   if (countryId === 'AU') {
     actions.push(<ContributionThankYouAusMap />);
   }
