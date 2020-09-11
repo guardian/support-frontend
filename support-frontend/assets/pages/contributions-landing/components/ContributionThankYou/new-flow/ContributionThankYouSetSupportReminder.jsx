@@ -78,6 +78,16 @@ const ContributionThankYouSetSupportReminder = ({
     new Date(now.getFullYear(), now.getMonth() + 9),
   ];
 
+  const formattedDate = (index: number): string => {
+    const date = reminderDates[index];
+
+    const monthsUntilDate = ['Three', 'Six', 'Nine'][index];
+    const month = date.toLocaleDateString('default', { month: 'long' });
+    const year = now.getFullYear() === date.getFullYear() ? '' : ` ${date.getFullYear()}`;
+
+    return `${monthsUntilDate} months (${month}${year})`;
+  };
+
   const selectedDateAsApiString = () => {
     const selectedDate = reminderDates[selectedDateIndex];
     const year = selectedDate.getFullYear();
@@ -172,10 +182,7 @@ const ContributionThankYouSetSupportReminder = ({
               {reminderDates.map((date, index) => (
                 <Radio
                   value={index}
-                  label={date.toLocaleString('default', {
-                    month: 'long',
-                    year: 'numeric',
-                  })}
+                  label={formattedDate(index)}
                   checked={selectedDateIndex === index}
                   onChange={() => setSelectedDateIndex(index)}
                 />
