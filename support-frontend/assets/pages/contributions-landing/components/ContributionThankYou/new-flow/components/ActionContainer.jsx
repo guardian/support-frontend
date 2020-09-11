@@ -9,8 +9,6 @@ const container = css`
   background: white;
   padding-top: ${space[2]}px;
   padding-bottom: ${space[5]}px;
-  border-top: 1px solid ${neutral[86]};
-  border-bottom: 1px solid ${neutral[86]};
 
   ${from.tablet} {
     padding-left: ${space[4]}px;

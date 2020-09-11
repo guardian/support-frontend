@@ -6,7 +6,8 @@ import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { from, between } from '@guardian/src-foundations/mq';
+import { from, between, until } from '@guardian/src-foundations/mq';
+import { neutral } from '@guardian/src-foundations/palette';
 import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouContinueToAccount from './ContributionThankYouContinueToAccount';
@@ -46,6 +47,14 @@ const columnsContainer = css`
   display: flex;
   flex-direction: column;
 
+  ${until.tablet} {
+    border-top: 1px solid ${neutral[86]};
+    border-bottom: 1px solid ${neutral[86]};
+    & > * + * {
+      border-top: 1px solid ${neutral[86]};
+    }
+  }
+
   ${between.tablet.and.desktop} {
     & > * + * {
       margin-top: ${space[6]}px;
@@ -62,6 +71,12 @@ const columnsContainer = css`
 `;
 
 const columnContainer = css`
+  ${until.tablet} {
+    & > * + * {
+      border-top: 1px solid ${neutral[86]};
+    }
+  }
+
   ${from.tablet} {
     & > * + * {
       margin-top: ${space[6]}px;
