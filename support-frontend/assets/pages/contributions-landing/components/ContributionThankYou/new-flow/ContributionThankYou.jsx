@@ -93,8 +93,6 @@ const buttonContainer = css`
   padding: ${space[12]}px 0;
 `;
 
-const NUMBER_OF_ACTIONS_IN_FIRST_COLUNM = 2;
-
 type ContributionThankYouProps = {|
   csrf: Csrf,
   email: string,
@@ -109,7 +107,7 @@ type ContributionThankYouProps = {|
 const mapStateToProps = state => ({
   email: state.page.form.formData.email,
   name: state.page.form.formData.firstName,
-  contributionType: state.page.form.formData.contributionType,
+  contributionType: state.page.form.contributionType,
   csrf: state.page.csrf,
   user: state.page.user,
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
@@ -127,25 +125,66 @@ const ContributionThankYou = ({
   paymentMethod,
   countryId,
 }: ContributionThankYouProps) => {
-  const actions = [];
+  const signUpAction = {
+    component: <ContributionThankYouSignUp email={email} csrf={csrf} />,
+    shouldShow: guestAccountCreationToken !== null,
+  };
+  const signInAction = {
+    component: <ContributionThankYouSignIn email={email} csrf={csrf} />,
+    shouldShow: guestAccountCreationToken === null && !user.isSignedIn,
+  };
+  const marketingConsentAction = {
+    component: (
+      <ContributionThankYouHearMarketingConsent email={email} csrf={csrf} />
+    ),
+    shouldShow: true,
+  };
+  const supportReminderAction = {
+    component: <ContributionThankYouSupportReminder email={email} />,
+    shouldShow: contributionType === 'ONE_OFF',
+  };
+  const surveyAction = {
+    component: <ContributionThankYouSurvey />,
+    shouldShow: true,
+  };
+  const socialShareAction = {
+    component: <ContributionThankYouSocialShare />,
+    shouldShow: true,
+  };
+  const ausMapAction = {
+    component: <ContributionThankYouAusMap />,
+    shouldShow: countryId === 'AU',
+  };
 
-  if (guestAccountCreationToken) {
-    actions.push(<ContributionThankYouSignUp email={email} csrf={csrf} />);
-  } else if (!user.isSignedIn) {
-    actions.push(<ContributionThankYouSignIn email={email} csrf={csrf} />);
-  }
-  actions.push(<ContributionThankYouHearMarketingConsent email={email} csrf={csrf} />);
-  if (contributionType === 'ONE_OFF') {
-    actions.push(<ContributionThankYouSupportReminder email={email} />);
-  }
-  actions.push(<ContributionThankYouSurvey />);
-  actions.push(<ContributionThankYouSocialShare />);
-  if (countryId === 'AU') {
-    actions.push(<ContributionThankYouAusMap />);
-  }
+  const defaultActions = [
+    signUpAction,
+    signInAction,
+    marketingConsentAction,
+    supportReminderAction,
+    surveyAction,
+    socialShareAction,
+  ];
 
-  const firstColumn = actions.slice(0, NUMBER_OF_ACTIONS_IN_FIRST_COLUNM);
-  const secondColumn = actions.slice(NUMBER_OF_ACTIONS_IN_FIRST_COLUNM);
+  const ausActions = [
+    signUpAction,
+    signInAction,
+    marketingConsentAction,
+    socialShareAction,
+    supportReminderAction,
+    surveyAction,
+    ausMapAction,
+  ];
+
+  const actions = countryId === 'AU' ? ausActions : defaultActions;
+
+  const shownComponents = actions
+    .filter(action => action.shouldShow)
+    .map(action => action.component);
+
+  const numberOfComponentsInFirstColumn = shownComponents.length >= 6 ? 3 : 2;
+
+  const firstColumn = shownComponents.slice(0, numberOfComponentsInFirstColumn);
+  const secondColumn = shownComponents.slice(numberOfComponentsInFirstColumn);
 
   return (
     <div css={container}>
