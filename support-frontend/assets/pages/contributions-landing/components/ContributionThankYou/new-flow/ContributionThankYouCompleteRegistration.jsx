@@ -168,9 +168,7 @@ const ContributionThankYouCompleteRegistration = ({
             </span>
             <span css={styles.hideBeforeTablet}>
               Your free Guardian account is almost complete, you just need to
-              set a password.
-              <br />
-              By registering, you enable us to recognise you as a supporter
+              set a password. By registering, you enable us to recognise you as a supporter
               across our website and apps. This means we will:
             </span>
           </p>
