@@ -84,7 +84,7 @@ type ContributionThankYouProps = {|
   name: string,
   user: User,
   guestAccountCreationToken: string,
-  paymentMethod: PaymentMethod,
+  paymentMethod: PaymentMethod
 |};
 
 const mapStateToProps = state => ({
@@ -111,10 +111,7 @@ const ContributionThankYou = ({
   } else if (!user.isSignedIn) {
     actions.push(<ContributionThankYouContinueToAccount email={email} csrf={csrf} />);
   }
-  actions.push(<ContributionThankYouHearFromOurNewsroom
-    email={email}
-    csrf={csrf}
-  />);
+  actions.push(<ContributionThankYouHearFromOurNewsroom email={email} csrf={csrf} />);
   if (!user.isRecurringContributor) {
     actions.push(<ContributionThankYouSetSupportReminder email={email} />);
   }
@@ -134,16 +131,14 @@ const ContributionThankYou = ({
       </div>
 
       <div css={columnsContainer}>
-        <div css={columnContainer}>
-          {firstColumn}
-        </div>
-        <div css={columnContainer}>
-          {secondColumn}
-        </div>
+        <div css={columnContainer}>{firstColumn}</div>
+        <div css={columnContainer}>{secondColumn}</div>
       </div>
 
       <div css={buttonContainer}>
-        <LinkButton priority="tertiary">Return to the Guardian</LinkButton>
+        <LinkButton href="https://www.theguardian.com" priority="tertiary">
+          Return to the Guardian
+        </LinkButton>
       </div>
     </div>
   );
