@@ -40,9 +40,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
 // There's some weird disconnect here with the store
-// const { orderIsAGift } = store.getState().page;
-
-const { orderIsAGift } = window.guardian;
+const { orderIsAGift } = store.getState().page;
 
 // ----- Internationalisation ----- //
 

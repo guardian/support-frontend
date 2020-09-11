@@ -6,6 +6,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { border, background } from '@guardian/src-foundations/palette';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
+import { type Option } from 'helpers/types/option';
 
 const endSummaryMobile = css`
   display: block;
@@ -23,7 +24,7 @@ const endSummaryMobile = css`
 `;
 
 type PropTypes = {
-  orderIsAGift?: boolean,
+  orderIsAGift?: Option<boolean>,
 }
 
 function EndSummaryMobile(props: PropTypes) {

@@ -31,7 +31,7 @@ import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketin
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
-const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Annual'
+const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Annual' || billingPeriodInUrl === 'Quarterly'
   ? billingPeriodInUrl
   : Monthly;
 
@@ -45,7 +45,8 @@ const reducer = (commonState: CommonState) => createCheckoutReducer(
 const store = pageInit(reducer, true);
 
 const { countryGroupId } = store.getState().common.internationalisation;
-const { orderIsAGift } = store.getState().page;
+const { orderIsAGift } = store.getState().page.checkout;
+
 
 const thankyouProps = {
   countryGroupId,
@@ -58,10 +59,10 @@ const content = (
   <Provider store={store}>
     <Page
       header={<HeaderWrapper />}
-      footer={<DigitalFooter />}
+      footer={<DigitalFooter orderIsAGift={orderIsAGift} />}
     >
       <CheckoutStage
-        checkoutForm={orderIsAGift ? <CheckoutForm /> : <CheckoutFormGift />}
+        checkoutForm={orderIsAGift ? <CheckoutFormGift /> : <CheckoutForm />}
         thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
         thankYouContent={<ThankYouContent {...thankyouProps} />}
         subscriptionProduct="DigitalPack"

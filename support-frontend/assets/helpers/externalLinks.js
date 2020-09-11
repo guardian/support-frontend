@@ -14,9 +14,7 @@ import {
 import type { Participations } from 'helpers/abTests/abtest';
 import { getBaseDomain } from 'helpers/url';
 import {
-  Annual,
   type DigitalBillingPeriod,
-  Monthly,
 } from 'helpers/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { getIntcmp, getPromoCode } from './flashSale';
@@ -214,7 +212,7 @@ function getSubsLinks(
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
   countryGroupId: CountryGroupId,
-  billingPeriod: DigitalBillingPeriod = Monthly,
+  billingPeriod: DigitalBillingPeriod,
   promoCode: Option<string>,
   orderIsAGift: boolean,
 ): string {
@@ -222,9 +220,7 @@ function getDigitalCheckout(
   if (promoCode) {
     params.set(promoQueryParam, promoCode);
   }
-  if (billingPeriod === Annual) {
-    params.set('period', Annual);
-  }
+  params.set('period', billingPeriod);
   return `${getOrigin()}/subscribe/digital/checkout${orderIsAGift ? '/gift' : ''}?${params.toString()}`;
 }
 

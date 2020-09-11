@@ -1,14 +1,14 @@
 // @flow
 
 import React from 'react';
-import { type ProductPrice } from 'helpers/productPrice/productPrices';
+import { type ProductPrice, showPrice } from 'helpers/productPrice/productPrices';
 import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import * as styles from './orderSummaryStyles';
-import { giftPeriod } from '../helpers';
+import { getGiftOrderSummaryText } from '../helpers';
 
 type PropTypes = {
   billingPeriod: DigitalBillingPeriod,
@@ -21,8 +21,9 @@ type PropTypes = {
 };
 
 function OrderSummary(props: PropTypes) {
-  const digitalBillingPeriod = props.billingPeriod === 'Annual' ? props.billingPeriod : 'Monthly';
-  const priceString = props.orderIsAGift ? giftPeriod[digitalBillingPeriod].cost :
+  const giftBillingPeriod = props.billingPeriod === 'Annual' ? props.billingPeriod : 'Quarterly';
+  const giftPriceString = getGiftOrderSummaryText(giftBillingPeriod, showPrice(props.productPrice)).cost;
+  const priceString = props.orderIsAGift ? giftPriceString :
     getBillingDescription(props.productPrice, props.billingPeriod);
 
   return (

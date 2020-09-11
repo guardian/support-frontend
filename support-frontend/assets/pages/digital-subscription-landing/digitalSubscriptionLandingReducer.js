@@ -20,6 +20,5 @@ const { orderIsAGift } = window.guardian;
 
 export default () => ({
   productPrices: getProductPrices(),
-  // Not sure why but this isn't coming through
   orderIsAGift,
 });

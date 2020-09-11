@@ -4,41 +4,44 @@ import React from 'react';
 import * as styles from './endSummaryStyles';
 import { connect } from 'react-redux';
 import mapStateToProps from './endSummarySelector';
+import { getGiftOrderSummaryText } from '../helpers';
 
 export type EndSummaryProps = {
   priceDescription: string,
   promotion: string,
   orderIsAGift?: boolean,
-  giftType: {
-    period: string,
-    cost: string,
-  } | null,
+  digitalGiftBillingPeriod: 'Annual' | 'Quarterly',
+  price: string,
 }
 
 const Dot = () => <div css={styles.dot} />;
 
 function EndSummary({
-  promotion, priceDescription, orderIsAGift, giftType,
+  promotion, priceDescription, orderIsAGift = false, digitalGiftBillingPeriod, price,
 }: EndSummaryProps) {
+  const giftText = getGiftOrderSummaryText(digitalGiftBillingPeriod, price);
   return (
     <span>
       {orderIsAGift ? (
         <ul css={styles.list}>
           <li>
-            <Dot /><div css={styles.listMain}>{giftType && giftType.period}</div>
-            <span css={styles.subText}>{giftType && giftType.cost}</span>
+            <Dot /><div css={styles.listMain}>{giftText.period}</div>
+            <span css={styles.subText}>{giftText.cost}</span>
           </li>
           <li>
-            <Dot /><div css={styles.listMain}>We&apos;ll email your gift to the recipient on the date you choose</div>
+            <Dot /><div css={styles.listMain}>Personalised gift message</div>
             <span css={styles.subText}>
-              The gift subscription will start when the recipient redeems the gift.
+            Your gift recipient will receive their gift on your chosen date which will include a personalised message
             </span>
           </li>
           <li>
             <Dot />
             <div css={styles.listMain}>
-              You can send a personal message to the recipient that we&apos;ll send with your gift.
+            Activating your gift subscription
             </div>
+            <span css={styles.subText}>
+            A gift redemption link with instructions will be emailed to you and the gift recipient
+            </span>
           </li>
         </ul>) :
       (

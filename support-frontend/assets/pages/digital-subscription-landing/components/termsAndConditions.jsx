@@ -27,7 +27,6 @@ const getPromoUrl = (
   country: IsoCountry,
   billingPeriod: BillingPeriod,
 ): Option<string> => {
-  console.log('billingPeriod in terms: ', billingPeriod);
   const promotion = getPromotion(
     productPrices,
     country,

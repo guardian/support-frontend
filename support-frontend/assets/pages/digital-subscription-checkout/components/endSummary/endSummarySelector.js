@@ -1,9 +1,8 @@
 // @flow
 
-import { type ProductPrice, getProductPrice } from 'helpers/productPrice/productPrices';
+import { type ProductPrice, getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
-import { giftPeriod } from '../helpers';
 
 const getPromotion = (productPrice: ProductPrice): string | null =>
   (productPrice.promotions && productPrice.promotions.length > 0
@@ -21,15 +20,17 @@ function mapStateToProps(state: CheckoutState) {
       state.common.internationalisation.countryId,
       billingPeriod,
     );
+  console.log({ productPrice });
 
-  const digitalBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
-
-  const giftType = orderIsAGift ? giftPeriod[digitalBillingPeriod] : null;
+  const digitalBillingPeriod = billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Monthly';
+  const digitalGiftBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Quarterly';
 
   return {
     priceDescription: getBillingDescription(productPrice, digitalBillingPeriod),
     promotion: getPromotion(productPrice),
-    giftType,
+    orderIsAGift,
+    digitalGiftBillingPeriod,
+    price: showPrice(productPrice),
   };
 }
 

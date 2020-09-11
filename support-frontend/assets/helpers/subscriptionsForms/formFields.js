@@ -34,7 +34,7 @@ export type FormFields = {|
   fulfilmentOption: FulfilmentOptions,
   product: SubscriptionProduct,
   productOption: ProductOptions,
-  orderIsAGift: Option<boolean>,
+  orderIsAGift?: Option<boolean>,
   deliveryInstructions: Option<string>,
   giftMessage: Option<string>,
   giftStartDate: Option<string>,

@@ -116,6 +116,7 @@ class DigitalSubscriptionController(
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+    val readerType = if (orderIsAGift) Gift else Direct
 
     subscriptionCheckout(
       title,
@@ -126,12 +127,13 @@ class DigitalSubscriptionController(
       Some(csrf),
       idUser,
       uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCodes),
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCodes, readerType),
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
       payPalConfigProvider.get(true),
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey,
+      orderIsAGift
     )
   }
 
