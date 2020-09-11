@@ -81,7 +81,7 @@ class OneOffContributionsSpec extends AnyFeatureSpec
     Scenario("Check browser navigates to paypal") {
       val testUser = new TestUser {
         val username = "test-stripe-pop-up"
-        driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
+        driverConfig.addCookie(name = "_post_deploy_user", value = "true") //To avoid consent banner, which messes with selenium
       }
 
       val landingPage = ContributionsLanding("au", testUser)
