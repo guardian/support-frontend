@@ -111,22 +111,24 @@ const ContributionThankYouHearFromOurNewsroom = ({
             </span>
           </p>
           <div css={checkboxContainer}>
-            <CheckboxGroup error={errorMessage}>
-              <div css={styles.hideAfterTablet}>
+            <div css={styles.hideAfterTablet}>
+              <CheckboxGroup error={errorMessage}>
                 <Checkbox
                   checked={hasConsented}
                   onChange={() => setHasConsented(!hasConsented)}
                   supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one."
                 />
-              </div>
-              <div css={styles.hideBeforeTablet}>
+              </CheckboxGroup>
+            </div>
+            <div css={styles.hideBeforeTablet}>
+              <CheckboxGroup error={errorMessage}>
                 <Checkbox
                   checked={hasConsented}
                   onChange={() => setHasConsented(!hasConsented)}
                   supporting="Contributions, subscriptions and membership: get related news and offers - whether you are a contributor, subscriber, member or would like to become one."
                 />
-              </div>
-            </CheckboxGroup>
+              </CheckboxGroup>
+            </div>
           </div>
           <div css={buttonContainer}>
             <Button
