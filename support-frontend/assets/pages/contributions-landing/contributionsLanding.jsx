@@ -90,9 +90,6 @@ const setOneOffContributionCookie = () => {
 
 const campaignSettings = getCampaignSettings();
 
-// TODO: Come up with good solution to this!
-// const thankYouClassModifiers = ['contribution-thankyou'];
-
 const cssModifiers = campaignSettings && campaignSettings.cssModifiers ?
   campaignSettings.cssModifiers : [];
 
@@ -141,13 +138,7 @@ const router = (
               setOneOffContributionCookie();
             }
             return (
-              <Page
-                // classModifiers={thankYouClassModifiers}
-                header={<RoundelHeader />}
-                footer={<Footer disclaimer countryGroupId={countryGroupId} />}
-              >
-                <ContributionThankYou />
-              </Page>
+              <ContributionThankYou countryGroupId={countryGroupId} />
             );
           }}
         />
