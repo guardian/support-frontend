@@ -22,6 +22,7 @@ import {
   OPHAN_COMPONENT_ID_READ_MORE_SET_REMINDER,
 } from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { privacyLink } from 'helpers/legal';
 
 const bodyText = css`
   ${body.small()};
@@ -194,7 +195,13 @@ const ContributionThankYouSetSupportReminder = ({
           <p css={privacyText}>
             To find out what personal data we collect and how we use it, please
             visit our{' '}
-            <Link css={privacyTextLink} href="/" priority="secondary">
+            <Link
+              css={privacyTextLink}
+              href={privacyLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              priority="secondary"
+            >
               Privacy Policy
             </Link>
             .
