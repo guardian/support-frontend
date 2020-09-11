@@ -5,7 +5,7 @@ import { body } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
 
 const bodyContainer = css`
-  * {
+  p, li {
     ${body.small()};
 
     ${from.tablet} {
