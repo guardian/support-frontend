@@ -41,8 +41,6 @@ import { AmazonPay, PayPal } from 'helpers/paymentMethods';
 
 // ----- Functions ----- //
 
-const isThankYouPage = () => window.location.href.includes('thankyou');
-
 function getInitialPaymentMethod(
   contributionType: ContributionType,
   countryId: IsoCountry,
@@ -51,18 +49,12 @@ function getInitialPaymentMethod(
   const paymentMethodFromSession = getPaymentMethodFromSession();
   const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
 
-  // The most likely reason for this being called on the thankyou page is that the user
-  // is getting redirected back from a paypal payment. Regardless, here we want to grab
-  // the payment method from the session.
-  if (isThankYouPage()) {
-    if (
-      paymentMethodFromSession &&
-      validPaymentMethods.includes(paymentMethodFromSession)
-    ) {
-      return paymentMethodFromSession;
-    }
+  if (
+    paymentMethodFromSession &&
+    validPaymentMethods.includes(paymentMethodFromSession)
+  ) {
+    return paymentMethodFromSession;
   }
-  // Otherwise, we wan't nothing selected by default (data compliance)
   return 'None';
 }
 
