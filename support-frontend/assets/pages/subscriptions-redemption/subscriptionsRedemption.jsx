@@ -11,7 +11,6 @@ import Footer from 'components/footerCompliant/Footer';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from './components/stage';
 
-import ConsentBanner from '../../components/consentBanner/consentBanner';
 import reducer from './subscriptionsRedemptionReducer';
 import RedemptionForm from 'pages/subscriptions-redemption/components/redemptionForm';
 import Header from 'components/headers/header/header';
@@ -47,7 +46,6 @@ const content = (
         thankYouContentPending={<ThankYouPendingContent includePaymentCopy={false} {...thankyouProps} />}
         thankYouContent={<ThankYouContent {...thankyouProps} />}
       />
-      <ConsentBanner />
     </Page>
   </Provider>
 );

@@ -24,7 +24,6 @@ import './paperSubscriptionLandingPage.scss';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
-import ConsentBanner from 'components/consentBanner/consentBanner';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Collection or delivery ----- //
@@ -67,7 +66,6 @@ const content = (
         </Content>
       }
       <TabsContent />
-      <ConsentBanner />
     </Page>
   </Provider>
 );

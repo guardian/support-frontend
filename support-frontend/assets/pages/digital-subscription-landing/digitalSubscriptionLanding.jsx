@@ -24,7 +24,6 @@ import headerWithCountrySwitcherContainer
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import ProductBlock from './components/productBlock';
 import './digitalSubscriptionLanding.scss';
-import ConsentBanner from 'components/consentBanner/consentBanner';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
 import CallToAction from './components/cta';
@@ -81,7 +80,6 @@ function LandingPage() {
       <CallToAction />
       <TermsAndConditions />
       <FaqsAndHelp selectedCountryGroup={countryGroupId} />
-      <ConsentBanner />
     </Page>
   );
 

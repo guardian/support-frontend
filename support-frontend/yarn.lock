@@ -2333,7 +2333,14 @@
     camelcase "^5.0.0"
     prettier "^1.13.7"
 
-"@guardian/consent-management-platform@^3.4.5":
+"@guardian/consent-management-platform@^4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-4.3.0.tgz#2a9f548db78a7c9017708ec6ba79ba258ae9adc1"
+  integrity sha512-hF8urPA3stLh5gT1Htq6eqvIWoBtikjoI4dXp9MpZ9iKwD2GQKOEFeQeOpmTUrnY0sA860ReLdiWyMUs627oJA==
+  dependencies:
+    "@guardian/old-cmp" "npm:@guardian/consent-management-platform@^3.4.10"
+
+"@guardian/old-cmp@npm:@guardian/consent-management-platform@^3.4.10":
   version "3.4.10"
   resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-3.4.10.tgz#604e71d27c6bfa4664c83c55578a8aa73ff09d82"
   integrity sha512-P3dTf9EqYhpH7JQ+Bg9MNoIQ08U4yD5j+s5epO9mNTaIBiX1BeOF3RcI3KNj/dBxSggaut0rBdQ82GN54Bg4jA==
