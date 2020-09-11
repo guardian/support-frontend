@@ -45,8 +45,10 @@ const buttonContainer = css`
 `;
 
 const privacyText = css`
-  ${styles.hideBeforeDesktop}
+  ${styles.hideBeforeTablet}
   ${textSans.small()}
+  font-family: GuardianTextSans,Guardian Text Sans Web,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif !important;
+  font-size: 15px !important;
 
   color: ${neutral[20]};
   margin-top: ${space[3]}px;
