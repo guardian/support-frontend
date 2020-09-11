@@ -179,7 +179,7 @@ const ContributionThankYouCompleteRegistration = ({
           </div>
           <div css={styles.hideBeforeTablet}>{expandableContent}</div>
           <div>
-            <form onSubmit={onSubmit} css={form}>
+            <form onSubmit={onSubmit} css={form} noValidate>
               <div>
                 <TextInput
                   value={email}
@@ -195,6 +195,7 @@ const ContributionThankYouCompleteRegistration = ({
                   value={password}
                   onChange={updatePassword}
                   error={passwordError ? PASSWORD_ERROR_MESSAGE : ''}
+                  required
                   type="password"
                 />
               </div>
