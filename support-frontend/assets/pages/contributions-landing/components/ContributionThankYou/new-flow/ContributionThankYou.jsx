@@ -73,8 +73,7 @@ const columnContainer = css`
 `;
 
 const buttonContainer = css`
-  padding-top: ${space[6]}px;
-  padding-bottom: ${space[6]}px;
+  padding: ${space[12]}px 0;
 `;
 
 const NUMBER_OF_ACTIONS_IN_FIRST_COLUNM = 2;
