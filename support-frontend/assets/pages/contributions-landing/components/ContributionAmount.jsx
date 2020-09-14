@@ -52,8 +52,8 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  shouldShowFrequencyButtons: state.common.abParticipations.landingPageRetentionR1 === 'variant 2',
-  shouldShowChoiceHeader: state.common.abParticipations.landingPageRetentionR1 === 'variant 3',
+  shouldShowFrequencyButtons: state.common.abParticipations.landingPageRetentionR2 === 'variant 2',
+  shouldShowChoiceHeader: state.common.abParticipations.landingPageRetentionR2 === 'variant 3',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
