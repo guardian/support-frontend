@@ -46,7 +46,7 @@ const ContributionThankYouSurvey = () => {
           <p>
             <span css={styles.hideAfterTablet}>
               Fill out this short form to tell us more about your experience of
-              supporting us today.
+              supporting us today – it only takes a minute.
             </span>
             <span css={styles.hideBeforeTablet}>
               We would love to hear more about your experience of supporting the
