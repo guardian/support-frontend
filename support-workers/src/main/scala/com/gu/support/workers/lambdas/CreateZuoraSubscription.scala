@@ -254,18 +254,24 @@ object CreateZuoraSubscription {
 
 object DigitalSubscriptionGiftRedemption {
 
-  sealed trait SubscriptionState
+  sealed abstract class SubscriptionState(val clientCode: String)
 
-  case class Unredeemed(subscriptionId: String) extends SubscriptionState
+  object Unredeemed {
+    val clientCode = "unredeemed"
+  }
+
+  case class Unredeemed(subscriptionId: String) extends SubscriptionState(Unredeemed.clientCode)
 
   // This can happen if Zuora is responding very slowly - a redemption request may succeed but not return a response
   // until after the CreateZuoraSubscription lambda has timed out meaning that the redemption will be retried with the
   // same requestId. In this case we want the lambda to succeed so that we progress to the next lambda
-  case object RedeemedInThisRequest extends SubscriptionState
+  case object RedeemedInThisRequest extends SubscriptionState("redeemed_in_this_request")
 
-  case object Redeemed extends SubscriptionState
+  case object Redeemed extends SubscriptionState("redeemed")
 
-  case object NotFound extends SubscriptionState
+  case object Expired extends SubscriptionState("expired")
+
+  case object NotFound extends SubscriptionState("not_found")
 
   def maybeDigitalSubscriptionGiftRedemption(product: ProductType, paymentMethod: Either[PaymentMethod, RedemptionData]) = {
     product match {
@@ -286,13 +292,14 @@ object DigitalSubscriptionGiftRedemption {
         getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
           case Unredeemed(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
           case RedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
-          case Redeemed => Future.failed(new RuntimeException(GetCodeStatus.CodeAlreadyUsed.clientCode))
-          case NotFound => Future.failed(new RuntimeException(GetCodeStatus.NoSuchCode.clientCode))
+          case otherState: SubscriptionState => Future.failed(new RuntimeException(otherState.clientCode))
         }
     )
 
-  private def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: String) =
+  def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: String) =
     existingSub.records match {
+      case existingSubFields :: Nil if existingSubFields.contractEffectiveDate.plusYears(1).isBefore(LocalDate.now()) =>
+        Expired
       case existingSubFields :: Nil if existingSubFields.gifteeIdentityId.isEmpty =>
         Unredeemed(existingSubFields.id)
       case existingSubFields :: Nil if existingSubFields.createdRequestId == requestId =>
