@@ -52,10 +52,10 @@ class OneOffContributionsSpec extends AnyFeatureSpec
       When("the user selects the one-time option")
       landingPage.clickOneOff
 
-      And("he/she clicks the other-amount button")
+      And("they click the other-amount button")
       landingPage.clickOtherAmount
 
-      And("he/she manually enters an amount in the other-amount field")
+      And("they manually enter an amount in the other-amount field")
       landingPage.enterAmount(stripePayment)
 
       Given("The user fills in their details correctly")
@@ -81,7 +81,7 @@ class OneOffContributionsSpec extends AnyFeatureSpec
     Scenario("Check browser navigates to paypal") {
       val testUser = new TestUser {
         val username = "test-stripe-pop-up"
-        driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
+        driverConfig.addCookie(name = "_post_deploy_user", value = "true") //To avoid consent banner, which messes with selenium
       }
 
       val landingPage = ContributionsLanding("au", testUser)

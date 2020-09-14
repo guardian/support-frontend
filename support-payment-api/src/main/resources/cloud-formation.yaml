@@ -1,0 +1,576 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: payment-api
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Tags"
+        Parameters:
+          - Stack
+          - App
+          - Stage
+      - Label:
+          default: "AMI"
+        Parameters:
+          - AMI
+      - Label:
+          default: "Used to fetch RiffRaff artifact"
+        Parameters:
+          - ProjectName
+          - ProjectVersion
+      - Label:
+          default: "Networking"
+        Parameters:
+          - SiteDomain
+          - VpcId
+          - Subnets
+          - BastionSecurityGroup
+      - Label:
+          default: "AWS Resources"
+        Parameters:
+          - EmailSqsQueueCodeArn
+          - EmailSqsQueueProdArn
+          - ContributionsStoreSqsQueueCodeArn
+          - ContributionsStoreSqsQueueProdArn
+          - CertificateArn
+
+Parameters:
+  VpcId:
+    Type: String
+    Description: VpcId of your Virtual Private Cloud (VPC)
+  PrivateVpcSubnets:
+    Description: Private subnets to use for EC2 instances
+    Type: List<AWS::EC2::Subnet::Id>
+  PublicVpcSubnets:
+    Description: Public subnets to use for the ELB
+    Type: List<AWS::EC2::Subnet::Id>
+  BastionSecurityGroup:
+    Description: The SG for the bastion to enable ssh tunnelling
+    Type: String
+  Stack:
+    Description: Should never change
+    Type: String
+    Default: support
+  App:
+    Description: Should never change
+    Type: String
+    Default: payment-api
+  Stage:
+    Description: Set by RiffRaff on each deploy
+    Type: String
+    AllowedValues:
+      - CODE
+      - PROD
+  ProjectName:
+    Description: >
+      This must match the name key in your build.sbt.
+      It will probably be the same as App, but doesn't have to be.
+    Type: String
+    Default: payment-api
+  ProjectVersion:
+    Description: This must match the version key in your build.sbt
+    Type: String
+    Default: 0.1
+  SiteDomain:
+    Description: Route53 CNAME for load balancer (pointed to by NS1 domain name)
+    Type: String
+  AMI:
+    Description: AMI ID. Set by RiffRaff on each deploy
+    Type: String
+  EmailSqsQueueCodeArn:
+    Description: >
+     For the PROD stack you still need to supply this,
+     because PROD instances need access to both PROD and CODE email queues.
+    Type: String
+  EmailSqsQueueProdArn:
+    Description: >
+      For the CODE stack you can leave this empty since it won't be used.
+      For the PROD stack you need to set it.
+    Type: String
+  CertificateArn:
+    Description: The ARN of the HTTPS certificate
+    Type: String
+  OphanRole:
+    Type: String
+    Description: ARN of the Ophan cross-account role
+  KinesisStreamArn:
+    Type: String
+    Description: ARN of the kinesis stream to write events to
+  ContributionsStoreSqsQueueProdArn:
+    Type: String
+    Description: >
+      For the CODE stack you can leave this empty since it won't be used.
+      For the PROD stack you need to set it.
+  ContributionsStoreSqsQueueCodeArn:
+    Type: String
+    Description: >
+      For the PROD stack you still need to supply this,
+      because PROD instances need access to both PROD and CODE contribution store queues.
+  SqsKmsArn:
+    Type: String
+    Description: ARN of the KMS key for encrypting SQS data
+
+
+Conditions:
+  CreateProdResources: !Equals [!Ref "Stage", "PROD"]
+  CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
+
+Mappings:
+  StageVariables:
+    CODE:
+      MaxInstances: 2
+      MinInstances: 1
+      InstanceType: t3.small
+
+    PROD:
+      MaxInstances: 6
+      MinInstances: 3
+      InstanceType: t3.small
+
+Resources:
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref PrivateVpcSubnets
+      LaunchConfigurationName: !Ref LaunchConfig
+      MinSize: !FindInMap [ StageVariables, !Ref Stage, MinInstances ]
+      MaxSize: !FindInMap [ StageVariables, !Ref Stage, MaxInstances ]
+      TargetGroupARNs:
+        - !Ref TargetGroup
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      Tags:
+        - Key: Stack
+          Value: !Ref Stack
+          PropagateAtLaunch: true
+        - Key: App
+          Value: !Ref App
+          PropagateAtLaunch: true
+        - Key: Stage
+          Value: !Ref Stage
+          PropagateAtLaunch: true
+  LaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref AMI
+      SecurityGroups: [!Ref InstanceSecurityGroup]
+      InstanceType: !FindInMap [ StageVariables, !Ref Stage, InstanceType ]
+      IamInstanceProfile: !Ref InstanceProfile
+      AssociatePublicIpAddress: false
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -ev
+          mkdir /etc/gu
+
+          cat > /etc/gu/stage <<'EOF'
+          ${Stage}
+          EOF
+
+          aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/${ProjectName}_${ProjectVersion}_all.deb /tmp
+          dpkg -i /tmp/${ProjectName}_${ProjectVersion}_all.deb
+          /opt/cloudwatch-logs/configure-logs application ${Stack} ${Stage} ${App} /var/log/${App}/application.log
+  AppRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: "/"
+      ManagedPolicyArns: [ "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM" ]
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: CloudwatchLogs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+                Resource: !GetAtt PaymentAPILogGroup.Arn
+        - PolicyName: SSMConfigParams
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - ssm:GetParametersByPath
+                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${App}/*
+        - PolicyName: SqsMessages
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:GetQueueUrl
+                  - sqs:SendMessage
+                Resource: !If [CreateProdResources,
+                  # The PROD instance needs access to PROD & CODE email queues because it can accept requests in test mode
+                  [ !Ref EmailSqsQueueCodeArn, !Ref EmailSqsQueueProdArn],
+                  [ !Ref EmailSqsQueueCodeArn]
+                ]
+        - PolicyName: CloudWatchMetrics
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - cloudwatch:PutMetricData
+                Resource: '*'
+        - PolicyName: AssumeOphanRole
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: sts:AssumeRole
+              Resource:
+                Ref: OphanRole
+        - PolicyName: KinesisPut
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: kinesis:*
+              Resource:
+                Ref: KinesisStreamArn
+        - PolicyName: SQSPut
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: sqs:SendMessage
+              Resource: !If [CreateProdResources,
+                # The PROD instance needs access to PROD & CODE contributions-store queues because it can accept requests in test mode
+                [ !Ref ContributionsStoreSqsQueueCodeArn, !Ref ContributionsStoreSqsQueueProdArn],
+                [ !Ref ContributionsStoreSqsQueueCodeArn]
+              ]
+        - PolicyName: SqsKmsEncryption
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: kms:Encrypt
+              Resource: !Ref SqsKmsArn
+        - PolicyName: SettingsBucket
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource:
+                  - !Sub arn:aws:s3:::support-admin-console/${Stage}/*
+
+
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref AppRole
+
+  ElasticLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub ${Stack}-${Stage}-${App}
+      Subnets: !Ref PublicVpcSubnets
+      SecurityGroups:
+        - !Ref LoadBalancerSecurityGroup
+      Tags:
+        - Key: Stack
+          Value: !Ref Stack
+        - Key: App
+          Value: !Ref App
+        - Key: Stage
+          Value: !Ref Stage
+
+  LoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn:
+          Ref: TargetGroup
+      LoadBalancerArn:
+        Ref: ElasticLoadBalancer
+      Certificates:
+        - CertificateArn: !Ref CertificateArn
+      Port: 443
+      Protocol: HTTPS
+
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub ${Stack}-${Stage}-${App}
+      Port: 9000
+      Protocol: HTTP
+      VpcId:
+        Ref: VpcId
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /healthcheck
+      HealthCheckPort: 9000
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref VpcId
+      TargetGroupAttributes:
+      - Key: deregistration_delay.timeout_seconds
+        Value: '20'
+    DependsOn:
+    - ElasticLoadBalancer
+
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Permit incoming HTTPS access on port 443, egress to port 9000
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 9000
+          ToPort: 9000
+          CidrIp: 0.0.0.0/0
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Open up SSH access and enable HTTP access on the configured port
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          SourceSecurityGroupId: !Ref BastionSecurityGroup
+        - IpProtocol: tcp
+          FromPort: 9000
+          ToPort: 9000
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 0.0.0.0/0
+
+  PaymentAPILogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub ${Stack}-${App}-${Stage}
+      RetentionInDays: 14
+
+  FrontendELBDNSrecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: /hostedzone/Z1E4V12LQGXFEC
+      Comment: CNAME for AWS ELB
+      Name: !Ref SiteDomain
+      Type: CNAME
+      TTL: 120
+      ResourceRecords:
+      - !GetAtt ElasticLoadBalancer.DNSName
+
+  NoHealthyInstancesAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub No healthy instances for ${App} in ${Stage}
+      MetricName: HealthyHostCount
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
+        - Name: TargetGroup
+          Value: !GetAtt TargetGroup.TargetGroupFullName
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0.5
+      Period: 60
+      EvaluationPeriods: 2
+      Statistic: Average
+    DependsOn:
+      - TargetGroup
+      - ElasticLoadBalancer
+
+  High5XXRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub High 5XX rate for ${App} in ${Stage}
+      MetricName: HTTPCode_Target_5XX_Count
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
+        - Name: TargetGroup
+          Value: !GetAtt TargetGroup.TargetGroupFullName
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 3
+      Period: 60
+      EvaluationPeriods: 2
+      Statistic: Sum
+    DependsOn:
+    - TargetGroup
+    - ElasticLoadBalancer
+
+  NoPaypalPaymentsInTwoHours247Alarm:
+      Type: AWS::CloudWatch::Alarm
+      Condition: CreateProdResources
+      Properties:
+        AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-24-7
+        AlarmName: !Sub ${App} ${Stage} CP One-off contributions with PayPal might be down
+        AlarmDescription: There have been no one-off contributions using paypal in the last 2 hours
+        MetricName: payment-success
+        Namespace: support-payment-api-PROD
+        Dimensions:
+          - Name: payment-provider
+            Value: Paypal
+        ComparisonOperator: LessThanOrEqualToThreshold
+        Threshold: 0
+        Period: 600
+        EvaluationPeriods: 12
+        Statistic: Sum
+        TreatMissingData: breaching
+
+  NoStripePaymentsInThreeHours247Alarm:
+      Type: AWS::CloudWatch::Alarm
+      Condition: CreateProdResources
+      Properties:
+        AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-24-7
+        AlarmName: !Sub ${App} ${Stage} CP One-off contributions with Card might be down
+        AlarmDescription: There have been no one-off contributions using card payment in the last 3 hours
+        MetricName: payment-success
+        Namespace: support-payment-api-PROD
+        Dimensions:
+          - Name: payment-provider
+            Value: Stripe
+        ComparisonOperator: LessThanOrEqualToThreshold
+        Threshold: 0
+        Period: 900
+        EvaluationPeriods: 12
+        Statistic: Sum
+        TreatMissingData: breaching
+
+  NoPaypalPaymentsInOneHourAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub ${App} ${Stage} No successful paypal payments via payment-api for an hour
+      MetricName: payment-success
+      Namespace: support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: Paypal
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 12
+      Statistic: Sum
+      TreatMissingData: breaching
+
+  NoStripePaymentsInOneHourAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub ${App} ${Stage} No successful stripe payments via payment-api for an hour
+      MetricName: payment-success
+      Namespace: support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: Stripe
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 12
+      Statistic: Sum
+      TreatMissingData: breaching
+
+  ThreeOrMorePaypalPaymentErrorsIn15Mins:
+      Type: AWS::CloudWatch::Alarm
+      Condition: CreateProdResources
+      Properties:
+        AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+        AlarmName: !Sub ${App} ${Stage} Multiple paypal errors in the last fifteen minutes for one-off contributions via the payment-api
+        MetricName: payment-error
+        Namespace: support-payment-api-PROD
+        Dimensions:
+                - Name: payment-provider
+                  Value: Paypal
+        ComparisonOperator: GreaterThanThreshold
+        Threshold: 3
+        Period: 900
+        EvaluationPeriods: 1
+        Statistic: Sum
+        TreatMissingData: notBreaching
+
+  ThreeOrMoreStripePaymentErrorsIn15Mins:
+      Type: AWS::CloudWatch::Alarm
+      Condition: CreateProdResources
+      Properties:
+        AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+        AlarmName: !Sub ${App} ${Stage} Multiple stripe errors in the last fifteen minutes for one-off contributions via the payment-api
+        MetricName: payment-error
+        Namespace: support-payment-api-PROD
+        Dimensions:
+                - Name: payment-provider
+                  Value: Stripe
+        ComparisonOperator: GreaterThanThreshold
+        Threshold: 3
+        Period: 900
+        EvaluationPeriods: 1
+        Statistic: Sum
+        TreatMissingData: notBreaching
+
+  ThreeOrMorePostPaymentErrorsIn15Mins:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub ${App} ${Stage} Multiple errors in post-payment tasks in the last fifteen minutes for one-off contributions via the payment-api
+      MetricName: post-payment-tasks-error
+      Namespace: support-payment-api-PROD
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 1
+      Period: 900
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
+
+  StripeRateLimitingAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub ${App} ${Stage} One or more requests have exceeded the rate limit for Stripe one-off contributions via payment-api in the last 15 mins
+      MetricName: stripe-rate-limit-exceeded
+      Namespace: support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: Stripe
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 0
+      Period: 900
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching

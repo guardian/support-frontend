@@ -11,10 +11,7 @@ import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
-import Footer from 'components/footer/footer';
-import CustomerService from 'components/customerService/customerService';
-import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+import Footer from 'components/footerCompliant/Footer';
 import 'stylesheets/skeleton/skeleton.scss';
 
 import HeadingBlock from 'components/headingBlock/headingBlock';
@@ -39,11 +36,10 @@ const content = (
     <Page
       header={<Header countryGroupId={countryGroupId} />}
       footer={
-        <Footer>
-          <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
-          <CustomerService selectedCountryGroup={countryGroupId} />
-          <SubscriptionFaq subscriptionProduct="DigitalPack" />
-        </Footer>}
+        <Footer
+          faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+          termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
+        />}
     >
       <div className="thank-you-stage">
         <HeroWrapper appearance="custom">

@@ -195,8 +195,8 @@ function PaperCheckoutForm(props: PropTypes) {
   const subsCardOrderSummary = (<OrderSummary
     image={
       <GridImage
-        gridId="checkoutPackshotPaperGraunVoucher"
-        srcSizes={[696, 500]}
+        gridId="printCheckoutiMovo"
+        srcSizes={[500]}
         sizes="(max-width: 740px) 50vw, 696"
         imgType="png"
         altText=""

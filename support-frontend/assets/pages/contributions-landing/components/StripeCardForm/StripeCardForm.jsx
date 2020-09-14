@@ -150,6 +150,8 @@ const CardForm = (props: PropTypes) => {
   });
   const stripe = stripeJs.useStripe();
   const elements = stripeJs.useElements();
+  // Used to avoid calling grecaptcha.render twice when switching between monthly + annual
+  const [calledRecaptchaRender, setCalledRecaptchaRender] = useState<boolean>(false);
 
   /**
    * Handlers
@@ -182,8 +184,22 @@ const CardForm = (props: PropTypes) => {
     }
   };
 
+  const recaptchaElementNotEmpty = (): boolean => {
+    const el = document.getElementById('robot_checkbox');
+    if (el) {
+      return el.children.length > 0;
+    }
+    return true;
+  };
+
   // Creates a new setupIntent upon recaptcha verification
   const setupRecurringRecaptchaCallback = () => {
+    setCalledRecaptchaRender(true);
+    // Fix for safari, where the calledRecaptchaRender state handling does not work. TODO - find a better solution
+    if (recaptchaElementNotEmpty()) {
+      return;
+    }
+
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {
@@ -320,7 +336,7 @@ const CardForm = (props: PropTypes) => {
     if (stripe && elements) {
       if (props.contributionType === 'ONE_OFF') {
         setupOneOffHandlers();
-      } else {
+      } else if (!calledRecaptchaRender) {
         setupRecurringHandlers();
       }
     }

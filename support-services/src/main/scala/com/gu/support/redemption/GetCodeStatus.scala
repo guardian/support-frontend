@@ -13,6 +13,7 @@ object GetCodeStatus {
   sealed abstract class RedemptionInvalid(val clientCode: String)
   case object NoSuchCode extends RedemptionInvalid("NO_SUCH_CODE")
   case object CodeAlreadyUsed extends RedemptionInvalid("CODE_ALREADY_USED")
+  case object InvalidReaderType extends RedemptionInvalid("INVALID_READER_TYPE")
 
   private def statusFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, RedemptionTable.AvailableField] =
     for {

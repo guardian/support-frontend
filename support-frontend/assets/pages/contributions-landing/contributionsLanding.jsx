@@ -30,7 +30,6 @@ import ContributionThankYou from './components/ContributionThankYou/Contribution
 // import ContributionThankYouContainer
 //   from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
-import ConsentBanner from 'components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
 import { FocusStyleManager } from '@guardian/src-utilities';
@@ -109,7 +108,6 @@ const contributionsLandingPage = (campaignCodeParameter: ?string) => (
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
       campaignCodeParameter={campaignCodeParameter}
     />
-    <ConsentBanner />
   </Page>
 );
 

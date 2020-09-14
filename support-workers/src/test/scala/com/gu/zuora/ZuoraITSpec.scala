@@ -5,6 +5,7 @@ import java.util.UUID
 import com.gu.config.Configuration
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
+import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId, Monthly}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
@@ -39,8 +40,25 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
     }
   }
 
+  it should "retrieve subscription redemption information from a redemption code" in {
+    val redemptionCode = "gd12-integration-test"
+    uatService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).right.get).map {
+      response =>
+        response.records.size shouldBe 1
+        response.records.head.gifteeIdentityId shouldBe None
+    }
+  }
+
+  it should "handle invalid redemption codes" in {
+    val invalidRedemptionCode = "xxxx-0000"
+    uatService.getSubscriptionFromRedemptionCode(RedemptionCode(invalidRedemptionCode).right.get).map {
+      response =>
+        response.records.size shouldBe 0
+    }
+  }
+
   it should "be resistant to 'ZOQL injection'" in {
-    // try https://github.com/guardian/zuora-auto-cancel/blob/master/lib/zuora/src/main/scala/com/gu/util/zuora/SafeQueryBuilder.scala
+    // try https://github.com/guardian/support-service-lambdas/blob/main/lib/zuora/src/main/scala/com/gu/util/zuora/SafeQueryBuilder.scala
     IdentityId("30000701' or status = 'Active").isFailure should be(true)
   }
 

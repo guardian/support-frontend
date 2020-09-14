@@ -5,12 +5,11 @@ import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { formatUserDate } from 'helpers/dateConversions';
 import { paperSubsUrl } from 'helpers/routes';
 import OrderedList from 'components/list/orderedList';
-import CopyrightText from 'pages/promotion-terms/CopyrightText';
 
 export default function PaperTerms(props: PromotionTerms) {
 
   const expiryCopy = props.expires ?
-    `The closing date and time of the promotion is ${formatUserDate(props.expires)}. 
+    `The closing date and time of the promotion is ${formatUserDate(props.expires)}.
     Purchases after that date and time will not be eligible for the promotion.`
     : '';
   const copy = [
@@ -44,7 +43,6 @@ export default function PaperTerms(props: PromotionTerms) {
   return (
     <div>
       <OrderedList items={copy} />
-      <CopyrightText />
     </div>
   );
 }

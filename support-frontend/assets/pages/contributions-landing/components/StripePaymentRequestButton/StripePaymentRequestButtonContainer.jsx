@@ -74,13 +74,17 @@ const StripePaymentRequestButtonContainer = (props: PropTypes) => {
   if (showStripePaymentRequestButton && stripeObjects[stripeAccount]) {
     const amount = getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType);
 
+    // `options` must be set even if it's empty, otherwise we get 'Unsupported prop change on Elements' warnings
+    // in the console
+    const elementsOptions = {};
+
     /**
      * The `key` attribute is necessary here because you cannot update the stripe object on the Elements.
      * Instead, we create separate instances for ONE_OFF and REGULAR
      */
     return (
       <div className="stripe-payment-request-button" key={stripeAccount}>
-        <Elements stripe={stripeObjects[stripeAccount]}>
+        <Elements stripe={stripeObjects[stripeAccount]} options={elementsOptions}>
           <StripePaymentRequestButton
             stripeAccount={stripeAccount}
             amount={amount}

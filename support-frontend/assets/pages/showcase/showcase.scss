@@ -129,7 +129,7 @@
 
       @include mq($from: leftCol) {
         .component-text {
-          max-width: 60%;
+          max-width: 65%;
         }
       }
     }
@@ -208,6 +208,10 @@
           .product-title {
             color: gu-colour(culture-main);
           }
+
+          @include mq($from: tablet) {
+            padding-right: $gu-h-spacing / 2;
+          }
         }
 
         &--masterclass {
@@ -216,6 +220,7 @@
           }
 
           @include mq($from: tablet) {
+            width: 250px + ($gu-h-spacing / 2);
             border-left: 1px solid gu-colour(neutral-86);
             padding-left: $gu-h-spacing / 2;
           }

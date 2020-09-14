@@ -14,7 +14,7 @@ object CatalogService {
 class CatalogService(val environment: TouchPointEnvironment, jsonProvider: CatalogJsonProvider) extends LazyLogging {
 
   private[this] def getRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions)
-    = getProductRatePlan(environment, billingPeriod,fulfilmentOptions, NoProductOptions).map(_.id).getOrElse("")
+    = getProductRatePlan(environment, billingPeriod, fulfilmentOptions, NoProductOptions).map(_.id).getOrElse("")
 
   private[this] def fetchQuarterlyPrice(
     quarterlyId: ProductRatePlanId,
@@ -61,6 +61,9 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
       )
     }
   }
+
+  def getProductRatePlanFromId[T <: Product](product: T, id: ProductRatePlanId): Option[ProductRatePlan[Product]] =
+    product.ratePlans(environment).find(_.id == id)
 
   def getPrice[T <: Product](
     product: T,

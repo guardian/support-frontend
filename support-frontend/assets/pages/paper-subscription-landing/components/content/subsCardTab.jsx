@@ -7,7 +7,6 @@ import React from 'react';
 import Content from 'components/content/content';
 import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
-import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
@@ -15,7 +14,7 @@ import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 
-import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpers';
+import { ContentForm, type ContentTabPropTypes } from './helpers';
 
 const accordionContainer = css`
   background-color: ${neutral['97']};
@@ -33,7 +32,7 @@ const SubsCardFaqBlock = () => (
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
-      gridId="paperVoucherFeature"
+      gridId="printCampaigniMovo"
       srcSizes={[750, 500, 140]}
       sizes="(max-width: 740px) 100vw, 400px"
       imgType="png"
@@ -75,23 +74,6 @@ const SubscriptionCardTab = ({ getRef, setTabAction, selectedTab }: ContentTabPr
   <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
     <SubsCardFaqBlock />
     <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below" />
-    <ContentHelpBlock
-      faqLink={
-        <a
-          href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
-          onClick={sendClickedEvent('paper_subscription_collection_page-subscription_faq_link')}
-        >
-        Subscriptions FAQs
-        </a>
-      }
-      telephoneLink={
-        <a
-          href="tel:+4403303336767"
-          onClick={sendClickedEvent('paper_subscription_collection_page-telephone_link')}
-        >0330 333 6767
-        </a>
-      }
-    />
   </div>
 );
 export default SubscriptionCardTab;

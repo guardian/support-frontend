@@ -199,7 +199,7 @@
   top: ($gu-v-spacing*2)*-1;
   .component-grid-image {
     display: none;
-    @include mq($from: tablet) {
+    @include mq($from: desktop) {
       display: block;
       width: 100%;
     }

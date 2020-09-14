@@ -2,7 +2,7 @@
 
 // ----- Types ----- //
 
-// See https://github.com/guardian/support-models/blob/master/src/main/scala/com/gu/support/workers/model/CheckoutFailureReasons.scala
+// See https://github.com/guardian/support-frontend/blob/main/support-models/src/main/scala/com/gu/support/workers/CheckoutFailureReasons.scala
 export type ErrorReason =
   'insufficient_funds' |
   'payment_details_incorrect' |

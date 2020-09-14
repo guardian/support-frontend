@@ -7,8 +7,8 @@ is used by support-frontend.
 
 1. make your changes to cfn
 1. do a PR and get it approved
-1. merge to master
-1. check out master locally
+1. merge to default branch
+1. check out the default branch locally
 1. get janus credentials
 1. run ./PROD-deploy.sh
 

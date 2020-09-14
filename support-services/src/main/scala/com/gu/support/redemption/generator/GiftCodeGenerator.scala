@@ -3,6 +3,7 @@ package com.gu.support.redemption.generator
 import java.security.SecureRandom
 
 import com.gu.support.redemption.generator.CodeBuilder.GenerateGiftCode
+import com.gu.support.workers.{Annual, BillingPeriod, Quarterly}
 
 object GiftCodeGenerator {
 
@@ -38,7 +39,7 @@ object CodeBuilder {
   object GiftCode {
     def apply(value: String): Option[GiftCode] =
       Some(value)
-        .filter(_.matches(raw"""gd(03|06|12)-[a-km-z02-9]{6}"""))
+        .filter(_.matches(raw"""gd(03|06|12)-[a-km-z02-9]{8}"""))
         .map(new GiftCode(_))
   }
 
@@ -60,12 +61,12 @@ object CodeSuffixGenerator {
   object CodeSuffix {
     def apply(value: String): Option[CodeSuffix] =
       Some(value)
-        .filter(_.matches(raw"""[a-km-z02-9]{6}"""))
+        .filter(_.matches(raw"""[a-km-z02-9]{8}"""))
         .map(new CodeSuffix(_))
   }
 
   def generate(random: Iterator[Int]): Iterator[CodeSuffix] =
-    random.grouped(6).map(codeFromGroup).map(CodeSuffix.apply).map(_.get)
+    random.grouped(8).map(codeFromGroup).map(CodeSuffix.apply).map(_.get)
 
   private[generator] def codeFromGroup(groupedInts: Seq[Int]): String = {
     val chars = groupedInts

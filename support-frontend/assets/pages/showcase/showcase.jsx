@@ -8,7 +8,7 @@ import { renderPage } from 'helpers/render';
 
 import Page from 'components/page/page';
 
-import Footer from 'components/footer/footer';
+import Footer from 'components/footerCompliant/Footer';
 import Heading from 'components/heading/heading';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -25,8 +25,6 @@ import Hero from './components/hero';
 import CtaSubscribe from './components/ctaSubscribe';
 import CtaContribute from './components/ctaContribute';
 import OtherProducts from './components/otherProducts';
-import ConsentBanner from 'components/consentBanner/consentBanner';
-
 import './showcase.scss';
 import { Provider } from 'react-redux';
 
@@ -70,7 +68,6 @@ const content = (
       <CtaSubscribe />
       <CtaContribute />
       {countryGroupId === 'GBPCountries' && <OtherProducts />}
-      <ConsentBanner />
     </Page>
   </Provider>
 );

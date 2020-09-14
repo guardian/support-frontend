@@ -9,19 +9,17 @@ import { brand } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 
 type PropTypes = {|
-  paddingTop: boolean,
-  border: boolean,
+  className: string,
+  appearance: {
+    centred?: boolean,
+    paddingTop?: boolean,
+    border?: boolean,
+  },
   children: Node,
 |}
 
 const paddingStyle = css`
-  padding-top: ${space[4]}px;
-`;
-
-const borderStyle = css`
-  ${from.leftCol} {
-    border-left: 1px solid ${brand[600]}; border-right: 1px solid ${brand[600]};
-  }
+  padding-top: ${space[2]}px;
 `;
 
 const contentStyle = css`
@@ -29,20 +27,45 @@ const contentStyle = css`
   display: flex;
   flex-grow: 1;
   flex-basis: ${space[24] * 10}px;
-  padding: 0 ${space[5]}px;
-  padding-bottom: ${space[4]}px;
-  border-bottom: 1px solid ${brand[600]};
+  padding: 0 ${space[5]}px ${space[4]}px;
+  /* padding-bottom: ${space[4]}px; */
+
+  .component-left-margin-section:not(:last-of-type) & {
+    border-bottom: 1px solid ${brand[600]};
+  }
 `;
 
-export function Content({ border, paddingTop, children }: PropTypes) {
+function getBorderStyling(centred = false) {
+  const breakpoint = centred ? from.wide : from.tablet;
+  return css`
+    ${breakpoint} {
+      border-left: 1px solid ${brand[600]}; border-right: 1px solid ${brand[600]};
+    }
+  `;
+}
+
+export function Content({
+  className, appearance, children,
+}: PropTypes) {
+  const { centred, border, paddingTop } = appearance;
   return (
-    <div css={[
+    <div
+      className={className}
+      css={[
       contentStyle,
       paddingTop ? paddingStyle : '',
-      border ? borderStyle : '',
+      border ? getBorderStyling(centred) : '',
     ]}
     >
       {children}
     </div>
   );
 }
+
+Content.defaultProps = {
+  appearance: {
+    centred: false,
+    border: false,
+    paddingTop: false,
+  },
+};

@@ -9,17 +9,12 @@ import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import Footer from 'components/footer/footer';
-import CustomerService from 'components/customerService/customerService';
-import SubscriptionTermsPrivacy
-  from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import ThankYouContent from './components/thankYou';
 import WeeklyCheckoutForm from './components/weeklyCheckoutForm';
 import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
-import ConsentBanner from '../../components/consentBanner/consentBanner';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { GuardianWeekly } from 'helpers/subscriptions';
@@ -29,7 +24,13 @@ import { getQueryParameter } from 'helpers/url';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import {
+  getProductPrice,
+} from 'helpers/productPrice/productPrices';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { formatMachineDate } from 'helpers/dateConversions';
+import { promotionTermsUrl } from 'helpers/routes';
+
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 
 // ----- Redux Store ----- //
@@ -53,8 +54,16 @@ const store = pageInit(
   true,
 );
 
-const { countryGroupId } = store.getState().common.internationalisation;
-const { orderIsAGift } = store.getState().page.checkout;
+
+const {
+  orderIsAGift, billingPeriod, productPrices, fulfilmentOption, productOption,
+} = store.getState().page.checkout;
+const { countryId } = store.getState().common.internationalisation;
+
+const productPrice = getProductPrice(productPrices, countryId, billingPeriod, fulfilmentOption, productOption);
+const appliedPromo = getAppliedPromo(productPrice.promotions);
+const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
+const promoTermsLink = promotionTermsUrl(appliedPromo ? appliedPromo.promoCode : defaultPromo);
 
 // ----- Render ----- //
 
@@ -62,16 +71,7 @@ const content = (
   <Provider store={store}>
     <Page
       header={<HeaderWrapper />}
-      footer={
-        <Footer>
-          <SubscriptionTermsPrivacy subscriptionProduct="GuardianWeekly" />
-          <CustomerService
-            selectedCountryGroup={countryGroupId}
-            subscriptionProduct="GuardianWeekly"
-          />
-          <SubscriptionFaq subscriptionProduct="GuardianWeekly" />
-        </Footer>
-      }
+      footer={<WeeklyFooter promoTermsLink={promoTermsLink} />}
     >
       <CheckoutStage
         checkoutForm={orderIsAGift ? <WeeklyCheckoutFormGifting /> : <WeeklyCheckoutForm />}
@@ -79,7 +79,6 @@ const content = (
         thankYouContent={<ThankYouContent isPending={false} orderIsGift={orderIsAGift} />}
         subscriptionProduct="GuardianWeekly"
       />
-      <ConsentBanner />
     </Page>
   </Provider>
 );

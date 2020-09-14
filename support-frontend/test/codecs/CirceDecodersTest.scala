@@ -121,8 +121,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |    },
           |    "useDotcomContactPage": "Off",
           |    "enableRecaptchaFrontend": "Off",
-          |    "enableRecaptchaBackend": "Off",
-          |    "ccpaEnabled": "Off"
+          |    "enableRecaptchaBackend": "Off"
           |  },
           |  "amounts": {
           |    "GBPCountries": {
@@ -292,8 +291,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           ),
           useDotcomContactPage = Some(Off),
           enableRecaptchaBackend = Off,
-          enableRecaptchaFrontend = Off,
-          ccpaEnabled = Off
+          enableRecaptchaFrontend = Off
         ),
         amountsRegions,
         contributionTypes,

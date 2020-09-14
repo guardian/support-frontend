@@ -28,6 +28,10 @@ global.navigator = {
 
 global.Image = function image() { return this; };
 
+// Appeases emotion SSR
+// cf. https://github.com/emotion-js/emotion/issues/1185
+global.HTMLElement = window.HTMLElement;
+
 // -------------- Write pages to file ----------------
 
 // eslint-disable-next-line
@@ -46,4 +50,3 @@ ssrPages.pages.forEach((page) => {
 
 console.log('Done');
 process.exit();
-

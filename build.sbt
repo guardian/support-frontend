@@ -4,15 +4,13 @@ import sbtrelease.ReleaseStateTransformations._
 
 import scala.sys.process._
 
-val scalatest = "org.scalatest" %% "scalatest" % "3.2.0"// if the following PR is merged in v3.2.1, remove "-eU" parameter from options above - PR https://github.com/scalatest/scalatest/pull/1842
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.1"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
   javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
   resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"),
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
-  testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eU"),
   libraryDependencies += scalatest % "it",
 )
 
@@ -85,6 +83,7 @@ lazy val root = (project in file("."))
     `it-test-runner`,
     `module-aws`,
     `module-rest`,
+    `support-payment-api`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -118,6 +117,16 @@ lazy val `support-workers` = (project in file("support-workers"))
   ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`)
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`)
 
+lazy val `support-payment-api` = (project in file("support-payment-api"))
+  .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .settings(
+    buildInfoKeys := BuildInfoSettings.buildInfoKeys,
+    buildInfoPackage := "app",
+    buildInfoOptions += BuildInfoOption.ToMap,
+    libraryDependencies ++= commonDependencies
+  ).dependsOn(`support-models`, `support-internationalisation`)
+  .aggregate(`support-models`, `support-internationalisation`)
 
 lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)

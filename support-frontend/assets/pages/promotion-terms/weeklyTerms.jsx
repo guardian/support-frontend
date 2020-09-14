@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import Text, { SansParagraph } from 'components/text/text';
+import { SansParagraph } from 'components/text/text';
 import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';
 import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
 import {
@@ -14,8 +14,6 @@ import { Annual, Quarterly } from 'helpers/billingPeriods';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
-import { Divider } from 'components/content/content';
-import CopyrightText from 'pages/promotion-terms/CopyrightText';
 
 type NameAndSaving = {name: CountryGroupName, saving: ?string};
 
@@ -28,25 +26,6 @@ const orderedCountryGroupNames: NameAndSaving[] = [
   { name: 'Canada', saving: '16%' },
   { name: 'International', saving: null },
 ];
-
-function FullTermsLink() {
-  return (
-    <div className="component-weekly-terms-copyright-footer">
-      <Divider />
-      <Text>
-        For full subscription terms and conditions visit{' '}
-        <a
-          href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          theguardian.com/guardian-weekly-subscription-terms-conditions
-        </a>
-      </Text>
-      <CopyrightText />
-    </div>
-  );
-}
 
 export default function WeeklyTerms(props: PromotionTermsPropTypes) {
 
@@ -115,7 +94,6 @@ function StandardTerms(props: PromotionTermsPropTypes) {
         orderedCountryGroupNames.map(nameAndSaving =>
           StandardCountryPrice(nameAndSaving, props.productPrices[nameAndSaving.name]))
       }
-      <FullTermsLink />
     </div>
   );
 }
@@ -136,7 +114,6 @@ function SixForSix(props: PromotionTermsPropTypes) {
         orderedCountryGroupNames.map(nameAndSaving =>
           SixForSixCountryPrice(nameAndSaving, props.productPrices[nameAndSaving.name]))
       }
-      <FullTermsLink />
     </div>
   );
 }

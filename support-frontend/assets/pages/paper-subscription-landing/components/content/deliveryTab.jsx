@@ -6,13 +6,10 @@ import React from 'react';
 import Content from 'components/content/content';
 import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
-import { sendClickedEvent } from 'helpers/tracking/clickTracking';
-
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 
 import {
   ContentForm,
-  ContentHelpBlock,
   type ContentTabPropTypes,
   LinkTo,
 } from './helpers';
@@ -43,9 +40,9 @@ const ContentDeliveryFaqBlock = ({
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
-      gridId="paperDeliveryFeature"
-      srcSizes={[920, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 500px"
+      gridId="printCampaignHD"
+      srcSizes={[716, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 400px"
       imgType="png"
     />
     }
@@ -95,24 +92,6 @@ const DeliveryTab = ({
       setTabAction={setTabAction}
       title="Pick your home delivery subscription package below"
       useDigitalVoucher={useDigitalVoucher}
-    />
-    <ContentHelpBlock
-      faqLink={
-        <a
-          href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
-          onClick={sendClickedEvent('paper_subscription_delivery_page-subscription_faq_link')}
-        >
-        Subscriptions FAQs
-        </a>
-      }
-      telephoneLink={
-        <a
-          href="tel:+4403303336767" // yes, we're using a phone number as a link
-          onClick={sendClickedEvent('paper_subscription_delivery_page-telephone_link')}
-        >
-          0330 333 6767
-        </a>
-      }
     />
   </div>
 );
