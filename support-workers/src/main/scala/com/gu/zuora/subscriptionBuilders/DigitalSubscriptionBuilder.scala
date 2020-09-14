@@ -70,7 +70,7 @@ object DigitalSubscriptionBuilder {
   )(implicit ec: ExecutionContext): BuildResult = {
 
     val (contractAcceptanceDelay, autoRenew, initialTerm) = if (readerType == Gift)
-      (0, false, purchase.billingPeriod.monthsInPeriod)
+      (0, false, 13) // Expiry for gift redemption codes is 12 months so set the initial term to 13 to allow for this
     else
       (purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod, true, 12)
 

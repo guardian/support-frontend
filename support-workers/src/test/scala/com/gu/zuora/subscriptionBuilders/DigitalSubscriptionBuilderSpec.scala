@@ -78,7 +78,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       readerType shouldBe Gift
       redemptionCode.isDefined shouldBe true
       redemptionCode.get.substring(0, 4) shouldBe "gd03"
-      initialTerm shouldBe 3 //TODO: RB check that this is correct
+      initialTerm shouldBe 13
       initialTermPeriodType shouldBe Month
       promoCode shouldBe None
       corporateAccountId shouldBe None
