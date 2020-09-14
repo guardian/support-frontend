@@ -109,7 +109,8 @@ class DigitalSubscriptionController(
     }
 
   private def digitalSubscriptionFormHtml(idUser: IdUser, orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
-    val title = if (orderIsAGift) "Support the Guardian | The Guardian Digital Gift Subscription" else "Support the Guardian | The Guardian Digital Subscription"
+    val title = if (orderIsAGift)
+      "Support the Guardian | The Guardian Digital Gift Subscription" else "Support the Guardian | The Guardian Digital Subscription"
     val id = EmptyDiv("digital-subscription-checkout-page")
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
