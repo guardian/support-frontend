@@ -80,14 +80,11 @@ export const tests: Tests = {
     seed: 9,
   },
 
-  landingPageRetentionR1: {
+  landingPageRetentionR2: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
-      },
-      {
-        id: 'variant 1',
       },
       {
         id: 'variant 2',
