@@ -24,7 +24,7 @@ export default function DigitalPackTerms(props: PropTypes) {
     'The promotion (the “Promotion”) is open to new Guardian Digital Subscription subscribers aged 18 and over ("you") subject to paragraph 2 below.',
     'By entering the promotion you are accepting these terms and conditions.',
     <div>To enter the promotion, you must: (i) either go to{' '}
-      <a href={digitalSubscriptionLanding(props.countryGroupId, false)}>support.theguardian.com</a> or call
+      <a href={digitalSubscriptionLanding(props.countryGroupId)}>support.theguardian.com</a> or call
       +44 (0) 330 333 6767 and quote promotion code {props.promoCode} (ii)
       purchase a Guardian Digital Subscription and maintain that subscription for at
       least three months.

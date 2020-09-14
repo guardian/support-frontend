@@ -214,14 +214,13 @@ function getDigitalCheckout(
   countryGroupId: CountryGroupId,
   billingPeriod: DigitalBillingPeriod,
   promoCode: Option<string>,
-  orderIsAGift: boolean,
 ): string {
   const params = new URLSearchParams(window.location.search);
   if (promoCode) {
     params.set(promoQueryParam, promoCode);
   }
   params.set('period', billingPeriod);
-  return `${getOrigin()}/subscribe/digital/checkout${orderIsAGift ? '/gift' : ''}?${params.toString()}`;
+  return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
 }
 
 

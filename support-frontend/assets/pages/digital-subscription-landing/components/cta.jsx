@@ -6,7 +6,7 @@ import PaymentSelection
 
 import './digitalSubscriptionLanding.scss';
 
-export const CallToAction = () => (
+const CallToAction = () => (
   <div id="subscribe" className="call-to-action__container">
     <div className="hope-is-power--centered">
       <h2>Choose one of our special offers and subscribe today</h2>
@@ -18,11 +18,4 @@ export const CallToAction = () => (
   </div>
 );
 
-export const CallToActionGift = () => (
-  <div id="subscribe" className="call-to-action__container">
-    <div className="hope-is-power--centered">
-      <h2 className="heading--gift">Select a gift period</h2>
-      <PaymentSelection orderIsGift />
-    </div>
-  </div>
-);
+export default CallToAction;

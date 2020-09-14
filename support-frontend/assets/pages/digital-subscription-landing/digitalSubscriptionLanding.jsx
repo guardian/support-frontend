@@ -26,7 +26,7 @@ import ProductBlock from './components/productBlock';
 import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
-import { CallToAction, CallToActionGift } from './components/cta';
+import CallToAction from './components/cta';
 import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
 // ----- Styles ----- //
@@ -37,9 +37,6 @@ import 'stylesheets/skeleton/skeleton.scss';
 // ----- Redux Store ----- //
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
-
-// There's some weird disconnect here with the store
-const { orderIsAGift } = store.getState().page;
 
 // ----- Internationalisation ----- //
 
@@ -80,7 +77,7 @@ function LandingPage() {
     >
       <CampaignHeader countryGroupId={countryGroupId} />
       <ProductBlock countryGroupId={countryGroupId} />
-      {orderIsAGift ? <CallToActionGift /> : <CallToAction />}
+      <CallToAction />
       <TermsAndConditions />
       <FaqsAndHelp selectedCountryGroup={countryGroupId} />
     </Page>
