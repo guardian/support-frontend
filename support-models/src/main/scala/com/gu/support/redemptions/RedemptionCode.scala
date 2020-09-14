@@ -24,4 +24,4 @@ object RedemptionCode {
   implicit val corporateCodec: Codec[RedemptionCode] = new Codec[RedemptionCode](encoder, decoder)
 
 }
-case class RedemptionCode private (value: String) extends AnyVal
+case class RedemptionCode private (value: String)

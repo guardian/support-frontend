@@ -1,71 +1,104 @@
 // @flow
-
-import { get as getCookie, set as setCookie } from '../cookie';
 import { logException } from 'helpers/logger';
-import { ccpaEnabled } from 'helpers/tracking/ccpa';
 import { getGlobal } from 'helpers/globals';
 
-const ConsentCookieName = 'GU_TK';
-const DaysToLive = 30 * 18;
+type ConsentVector = {
+    [key: string]: boolean;
+}
 
-const OptedIn: 'OptedIn' = 'OptedIn';
-const OptedOut: 'OptedOut' = 'OptedOut';
-const Unset: 'Unset' = 'Unset';
+type ConsentState = {
+    tcfv2?: {
+        consents: ConsentVector;
+        eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
+        vendorConsents: ConsentVector;
+    };
+    ccpa?: {
+        doNotSell: boolean;
+    };
+}
 
-export type ThirdPartyTrackingConsent = typeof OptedIn
-  | typeof OptedOut
-  | typeof Unset;
+const onConsentChangeEvent =
+  (onConsentChangeCallback: (thirdPartyTrackingConsent: {
+    [key: string]: boolean
+  }) => void, vendorIds: {
+    [key: string]: string
+  }): Promise<void> => {
+    let consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => ({
+      ...accumulator,
+      [vendorKey]: false,
+    }), {});
 
-const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => {
-  /**
+    /**
      * Dynamically load @guardian/consent-management-platform
      * on condition we're not server side rendering (ssr) the page.
      * @guardian/consent-management-platform breaks ssr otherwise.
      */
-  if (!getGlobal('ssr') && ccpaEnabled()) {
-    return new Promise((resolve) => {
-      import('@guardian/consent-management-platform').then(({ onIabConsentNotification }) => {
-        onIabConsentNotification((consentState: boolean) => {
-          /**
-           * In CCPA mode consentState will be a boolean.
-           * In non-CCPA mode consentState will be an Object.
-           * Check whether consentState is valid (a boolean).
-           * */
-          if (typeof consentState !== 'boolean') {
-            throw new Error('consentState not a boolean');
-          } else {
-            // consentState true means the user has OptedOut
-            resolve(consentState ? OptedOut : OptedIn);
-          }
-        });
-      }).catch((err) => {
-        logException(`CCPA: ${err.message}`);
-        // fallback to OptedOut if there's an issue getting consentState
-        return resolve(OptedOut);
+    if (!getGlobal('ssr')) {
+      // return async import for unit tests
+      return import('@guardian/consent-management-platform').then(({
+        onConsentChange,
+      }) => {
+        /**
+          * @guardian/consent-management-platform exports a function
+          * onConsentChange, this takes a callback, which is called
+          * each time consent changes. EG. if a user consents via the CMP.
+          * The callback will receive the user's consent as the parameter
+          * "state". We take process the state and call onConsentChangeCallback
+          * with the correct ThirdPartyTrackingConsent.
+        */
+        try {
+          onConsentChange((state: ConsentState) => {
+            if (state.ccpa) {
+              consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => ({
+                ...accumulator,
+                [vendorKey]: state.ccpa ? !state.ccpa.doNotSell : false,
+              }), {});
+            } else if (state.tcfv2) {
+              /**
+               * Loop over vendorIds and pull
+               * vendor specific consent from state.
+              */
+              consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => {
+                const vendorId = vendorIds[vendorKey];
+
+                if (
+                  state.tcfv2 &&
+                  state.tcfv2.vendorConsents &&
+                  state.tcfv2.vendorConsents[vendorId] !== undefined
+                ) {
+                  return {
+                    ...accumulator,
+                    [vendorKey]: state.tcfv2.vendorConsents[vendorId],
+                  };
+                }
+
+                /**
+                 * If vendorId not in state.tcfv2.vendorConsents fallback
+                 * to all 10 purposes having to be true for consentGranted to be
+                 * true
+                */
+                return {
+                  ...accumulator,
+                  [vendorKey]: state.tcfv2 ? Object.values(state.tcfv2.consents).every(Boolean) : false,
+                };
+              }, {});
+            }
+
+            onConsentChangeCallback(consentGranted);
+          });
+        } catch (err) {
+          logException(`CMP: ${err}`);
+          // fallback to default consentGranted of false for all vendors in case of an error
+          onConsentChangeCallback(consentGranted);
+        }
       });
-    });
-  }
-
-  const cookieVal: ?string = getCookie(ConsentCookieName);
-
-  if (cookieVal) {
-    const consentVal = cookieVal.split('.')[0];
-
-    if (consentVal === '1') {
-      return Promise.resolve(OptedIn);
-    } else if (consentVal === '0') {
-      return Promise.resolve(OptedOut);
     }
-  }
 
-  return Promise.resolve(Unset);
-};
+    // fallback to default consentGranted of false for all vendors if server side rendering
+    onConsentChangeCallback(consentGranted);
 
-const writeTrackingConsentCookie = (newTrackingConsent: ThirdPartyTrackingConsent) => {
-  if (newTrackingConsent !== Unset) {
-    const cookie = [newTrackingConsent === OptedIn ? '1' : '0', Date.now()].join('.');
-    setCookie(ConsentCookieName, cookie, DaysToLive);
-  }
-};
+    // return Promise.resolve() for unit tests
+    return Promise.resolve();
+  };
 
-export { getTrackingConsent, writeTrackingConsentCookie, OptedIn, OptedOut, Unset, ConsentCookieName };
+export { onConsentChangeEvent };

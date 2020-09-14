@@ -184,9 +184,22 @@ const CardForm = (props: PropTypes) => {
     }
   };
 
+  const recaptchaElementNotEmpty = (): boolean => {
+    const el = document.getElementById('robot_checkbox');
+    if (el) {
+      return el.children.length > 0;
+    }
+    return true;
+  };
+
   // Creates a new setupIntent upon recaptcha verification
   const setupRecurringRecaptchaCallback = () => {
     setCalledRecaptchaRender(true);
+    // Fix for safari, where the calledRecaptchaRender state handling does not work. TODO - find a better solution
+    if (recaptchaElementNotEmpty()) {
+      return;
+    }
+
     window.grecaptcha.render('robot_checkbox', {
       sitekey: window.guardian.v2recaptchaPublicKey,
       callback: (token) => {

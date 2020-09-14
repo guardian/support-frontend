@@ -4,6 +4,7 @@ import React from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { LinkButton, buttonBrandAlt } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const AustraliaMapLink = () => (
   <section className="contribution-thank-you-block">
@@ -19,6 +20,7 @@ const AustraliaMapLink = () => (
         iconSide="right"
         nudgeIcon
         href="https://support.theguardian.com/aus-2020-map?INTCMP=thankyou-page-aus-map-cta"
+        onClick={() => trackComponentClick('contribution-thankyou-aus-map')}
       >
         View the map
       </LinkButton>

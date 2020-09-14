@@ -61,24 +61,19 @@ export const contentBlock = css`
 export const imageContainer = css`
   display: inline-flex;
   align-items: flex-start;
-  width: calc(100% - 30px);
-  padding: ${space[4]}px ${space[3]}px 0;
+  padding: 0;
   background-color: ${neutral['97']};
 
   img {
     width: 100%;
     height: auto;
-
   }
 
   ${until.tablet} {
-    width: 65px;
-    height: 73px;
-    padding-top: 8px;
-    padding-left: 8px;
+    width: 75px;
+    height: 45px;
     overflow: hidden;
     img {
-      width: 200%;
       align-items: flex-end;
     }
   }

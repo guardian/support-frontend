@@ -8,9 +8,11 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.SalesforceService
 import com.gu.stripe.StripeService
+import com.gu.support.catalog.CatalogService
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.RedemptionTable
+import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.zuora.ZuoraService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +36,9 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
   lazy val acquisitionService = AcquisitionServiceBuilder.build(config.kinesisStreamName, isTestUser)
   lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
-  lazy val goCardlessService = new GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
+  lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val redemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(stage, isTestUser))
+  lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
+  lazy val giftCodeGenerator = new GiftCodeGeneratorService
 }
 

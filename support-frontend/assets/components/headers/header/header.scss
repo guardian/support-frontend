@@ -5,6 +5,12 @@
 
 $header-links-min-width: gu-span(12);
 
+// Retain the original box-sizing value for the header
+// to preserve logo positioning logic across the CSS and JS
+.component-header, .component-header * {
+  box-sizing: content-box;
+}
+
 .component-header {
   background-color: gu-colour(brand-main);
   display: flex;

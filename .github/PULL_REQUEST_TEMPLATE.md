@@ -14,6 +14,10 @@ the breakage for reference.
 * Change 1
 * Change 2
 
+## Did you enjoy your PR experience?
+
+ - [ ] [PR experience rated](https://forms.gle/N6FsTGG8JQFGV4Ha9)
+
 ## Accessibility test checklist
  - [ ] [Tested with screen reader](https://accessibility.gutools.co.uk/testing/web/screen-readers/)
  - [ ] [Navigable with keyboard](https://accessibility.gutools.co.uk/testing/web/keyboard-navigation/)
