@@ -1,8 +1,10 @@
 // @flow
-import React from 'react';
+// $FlowIgnore - required for hooks
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { type User } from 'helpers/user/userReducer';
 import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
+import type { ContributionType } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { css } from '@emotion/core';
@@ -18,7 +20,7 @@ import ContributionThankYouSupportReminder from './ContributionThankYouSupportRe
 import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
-import { type ContributionType } from 'helpers/contributions';
+import { trackUserData } from './utils/ophan';
 
 const container = css`
   background: white;
@@ -125,13 +127,24 @@ const ContributionThankYou = ({
   paymentMethod,
   countryId,
 }: ContributionThankYouProps) => {
+  const isKnownEmail = guestAccountCreationToken === null;
+
+  useEffect(() => {
+    trackUserData(
+      paymentMethod,
+      contributionType,
+      user.isSignedIn,
+      isKnownEmail,
+    );
+  }, []);
+
   const signUpAction = {
     component: <ContributionThankYouSignUp email={email} csrf={csrf} />,
-    shouldShow: guestAccountCreationToken !== null,
+    shouldShow: !isKnownEmail,
   };
   const signInAction = {
     component: <ContributionThankYouSignIn email={email} csrf={csrf} />,
-    shouldShow: guestAccountCreationToken === null && !user.isSignedIn,
+    shouldShow: isKnownEmail && !user.isSignedIn,
   };
   const marketingConsentAction = {
     component: (

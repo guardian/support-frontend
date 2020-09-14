@@ -1,3 +1,8 @@
+// @flow
+import { trackComponentEvents } from 'helpers/tracking/ophan';
+import { type PaymentMethod } from 'helpers/paymentMethods';
+import { type ContributionType } from 'helpers/contributions';
+
 export const OPHAN_COMPONENT_ID_SIGN_IN = 'sign-into-the-guardian-link';
 export const OPHAN_COMPONENT_ID_SIGN_UP = 'set-password';
 export const OPHAN_COMPONENT_ID_SET_REMINDER = 'reminder-test-link-clicked';
@@ -19,3 +24,65 @@ export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP =
   'contribution-thankyou-read-more-sign-up';
 export const OPHAN_COMPONENT_ID_READ_MORE_SET_REMINDER =
   'contribution-thankyou-read-more-set-reminder';
+
+const OPHAN_EVENT_ID_PAYMENT_METHOD = 'contributions-thankyou-payment-method';
+const OPHAN_EVENT_ID_CONTRIBUTION_TYPE =
+  'contributions-thankyou-contribution-type';
+const OPHAN_EVENT_ID_SIGNED_IN = 'contributions-thankyou-signed-in';
+const OPHAN_EVENT_ID_KNOWN_EMAIL = 'contributions-thankyou-known-email';
+
+const trackPaymentMethod = (paymentMethod: PaymentMethod) => {
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+    },
+    action: 'VIEW',
+    id: OPHAN_EVENT_ID_PAYMENT_METHOD,
+    value: paymentMethod,
+  });
+};
+
+const trackContributionType = (contributionType: ContributionType) => {
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+    },
+    action: 'VIEW',
+    id: OPHAN_EVENT_ID_CONTRIBUTION_TYPE,
+    value: contributionType,
+  });
+};
+
+const trackSignedIn = (isSignedIn: boolean) => {
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+    },
+    action: 'VIEW',
+    id: OPHAN_EVENT_ID_SIGNED_IN,
+    value: isSignedIn.toString(),
+  });
+};
+
+const trackKnownEmail = (isKnownEmail: boolean) => {
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+    },
+    action: 'VIEW',
+    id: OPHAN_EVENT_ID_KNOWN_EMAIL,
+    value: isKnownEmail.toString(),
+  });
+};
+
+export const trackUserData = (
+  paymentMethod: PaymentMethod,
+  contributionType: ContributionType,
+  isSignedIn: boolean,
+  isKnownEmail: boolean,
+) => {
+  trackPaymentMethod(paymentMethod);
+  trackContributionType(contributionType);
+  trackSignedIn(isSignedIn);
+  trackKnownEmail(isKnownEmail);
+};
