@@ -1,7 +1,10 @@
 // @flow
-
-import { onConsentChange } from '@guardian/consent-management-platform';
 import { logException } from 'helpers/logger';
+import { getGlobal } from 'helpers/globals';
+
+type ConsentVector = {
+    [key: string]: boolean;
+}
 
 type ConsentState = {
     tcfv2?: {
@@ -25,36 +28,77 @@ const onConsentChangeEvent =
       [vendorKey]: false,
     }), {});
 
-type ConsentVector = {
-    [key: string]: boolean;
-}
+    /**
+     * Dynamically load @guardian/consent-management-platform
+     * on condition we're not server side rendering (ssr) the page.
+     * @guardian/consent-management-platform breaks ssr otherwise.
+     */
+    if (!getGlobal('ssr')) {
+      // return async import for unit tests
+      return import('@guardian/consent-management-platform').then(({
+        onConsentChange,
+      }) => {
+        /**
+          * @guardian/consent-management-platform exports a function
+          * onConsentChange, this takes a callback, which is called
+          * each time consent changes. EG. if a user consents via the CMP.
+          * The callback will receive the user's consent as the parameter
+          * "state". We take process the state and call onConsentChangeCallback
+          * with the correct ThirdPartyTrackingConsent.
+        */
+        try {
+          onConsentChange((state: ConsentState) => {
+            if (state.ccpa) {
+              consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => ({
+                ...accumulator,
+                [vendorKey]: state.ccpa ? !state.ccpa.doNotSell : false,
+              }), {});
+            } else if (state.tcfv2) {
+              /**
+               * Loop over vendorIds and pull
+               * vendor specific consent from state.
+              */
+              consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => {
+                const vendorId = vendorIds[vendorKey];
 
-type ConsentState = {
-    tcfv2?: {
-        consents: ConsentVector;
-        eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
-        vendorConsents: ConsentVector;
-    };
-    ccpa?: {
-        doNotSell: boolean;
-    };
-}
+                if (
+                  state.tcfv2 &&
+                  state.tcfv2.vendorConsents &&
+                  state.tcfv2.vendorConsents[vendorId] !== undefined
+                ) {
+                  return {
+                    ...accumulator,
+                    [vendorKey]: state.tcfv2.vendorConsents[vendorId],
+                  };
+                }
 
-const getTrackingConsent = (): Promise<ThirdPartyTrackingConsent> => new Promise((resolve) => {
-  onConsentChange((state: ConsentState) => {
-    const consentGranted = state.ccpa ?
-      !state.ccpa.doNotSell : state.tcfv2 && Object.values(state.tcfv2.consents).every(Boolean);
+                /**
+                 * If vendorId not in state.tcfv2.vendorConsents fallback
+                 * to all 10 purposes having to be true for consentGranted to be
+                 * true
+                */
+                return {
+                  ...accumulator,
+                  [vendorKey]: state.tcfv2 ? Object.values(state.tcfv2.consents).every(Boolean) : false,
+                };
+              }, {});
+            }
 
-    if (consentGranted) {
-      resolve(OptedIn);
-    } else {
-      resolve(OptedOut);
+            onConsentChangeCallback(consentGranted);
+          });
+        } catch (err) {
+          logException(`CMP: ${err}`);
+          // fallback to default consentGranted of false for all vendors in case of an error
+          onConsentChangeCallback(consentGranted);
+        }
+      });
     }
-  });
-}).catch((err) => {
-  logException(`CCPA: ${err}`);
-  // fallback to OptedOut if there's an issue getting consentState
-  return Promise.resolve(OptedOut);
-});
 
-export { getTrackingConsent, OptedIn, OptedOut, Unset };
+    // fallback to default consentGranted of false for all vendors if server side rendering
+    onConsentChangeCallback(consentGranted);
+
+    // return Promise.resolve() for unit tests
+    return Promise.resolve();
+  };
+
+export { onConsentChangeEvent };
