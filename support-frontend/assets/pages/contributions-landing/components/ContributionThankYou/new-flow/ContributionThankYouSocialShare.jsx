@@ -30,12 +30,19 @@ const buttonsContainer = css`
   }
 `;
 
+const INTCMP_FACEBOOK = 'component-share-facebook';
+const INTCMP_TWITTER = 'component-share-twitter';
+const INTCMP_MAIL = 'component-share-mail';
+
 const LANDING_PAGE_URL = 'https://support.theguardian.com/contribute';
+const LANDING_PAGE_URL_FACEBOOK = `${LANDING_PAGE_URL}?INTCMP=${INTCMP_FACEBOOK}`;
+const LANDING_PAGE_URL_TWITTER = `${LANDING_PAGE_URL}?INTCMP=${INTCMP_TWITTER}`;
+const LANDING_PAGE_URL_MAIL = `${LANDING_PAGE_URL}?INTCMP=${INTCMP_MAIL}`;
+
 const TWITTER_TEXT_COPY =
   'Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free';
 const EMAIL_SUBJECT_COPY = 'Join me in supporting open, independent journalism';
-const EMAIL_BODY_COPY =
-  'Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: https://support.theguardian.com/contribute';
+const EMAIL_BODY_COPY = `Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: ${LANDING_PAGE_URL_MAIL}`;
 
 const ContributionThankYouSocialShare = () => {
   const actionIcon = <SvgShare />;
@@ -48,8 +55,10 @@ const ContributionThankYouSocialShare = () => {
       </p>
       <div css={buttonsContainer}>
         <LinkButton
-          href={getFacebookShareLink(LANDING_PAGE_URL)}
-          onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)}
+          href={getFacebookShareLink(LANDING_PAGE_URL_FACEBOOK)}
+          onClick={() =>
+            trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)
+          }
           target="_blank"
           rel="noopener noreferrer"
           priority="tertiary"
@@ -58,7 +67,11 @@ const ContributionThankYouSocialShare = () => {
           hideLabel
         />
         <LinkButton
-          href={getTwitterShareLink(LANDING_PAGE_URL, TWITTER_TEXT_COPY)}
+          href={getTwitterShareLink(
+            LANDING_PAGE_URL_TWITTER,
+            TWITTER_TEXT_COPY,
+            INTCMP_TWITTER,
+          )}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
           target="_blank"
           rel="noopener noreferrer"
@@ -69,7 +82,9 @@ const ContributionThankYouSocialShare = () => {
         />
         <LinkButton
           href={getLinkedInShareLink(LANDING_PAGE_URL)}
-          onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)}
+          onClick={() =>
+            trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)
+          }
           target="_blank"
           rel="noopener noreferrer"
           priority="tertiary"
