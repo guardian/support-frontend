@@ -21,7 +21,6 @@ import { type State } from '../contributionsLandingReducer';
 import ContributionChoicesHeader from './ContributionChoicesHeader';
 import ContributionTextInputDs from './ContributionTextInputDs';
 import ContributionAmountChoices from './ContributionAmountChoices';
-import ContributionAmountRecurringNotification from './ContributionAmountRecurringNotification';
 
 // ----- Types ----- //
 
@@ -37,7 +36,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  shouldShowRecurringNotification: boolean,
   shouldShowFrequencyButtons: boolean,
   shouldShowChoiceHeader: boolean,
 |};
@@ -54,7 +52,6 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  shouldShowRecurringNotification: state.common.abParticipations.landingPageRetentionR1 === 'variant 1',
   shouldShowFrequencyButtons: state.common.abParticipations.landingPageRetentionR1 === 'variant 2',
   shouldShowChoiceHeader: state.common.abParticipations.landingPageRetentionR1 === 'variant 3',
 });
@@ -126,24 +123,9 @@ function withProps(props: PropTypes) {
     checkOtherAmount, checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
   } = props;
   const updateAmount = props.updateOtherAmount;
-  const selectedAmount = getAmount(
-    props.selectedAmounts,
-    props.otherAmounts,
-    props.contributionType,
-  );
-  const formattedSelectedAmount = formatAmount(
-    currencies[props.currency],
-    spokenCurrencies[props.currency],
-    { value: selectedAmount.toString(), isDefault: false },
-    false,
-  );
-  const showRecurringNotification =
-    props.shouldShowRecurringNotification &&
-    !Number.isNaN(selectedAmount) &&
-    props.contributionType !== 'ONE_OFF';
+
   const showWeeklyBreakdown =
-    props.contributionType !== 'ONE_OFF' &&
-    !props.shouldShowRecurringNotification;
+    props.contributionType !== 'ONE_OFF';
 
   const renderOtherField = () => (
     <ContributionTextInputDs
@@ -189,11 +171,6 @@ function withProps(props: PropTypes) {
       />
 
       {showOther && renderOtherField()}
-
-      { showRecurringNotification && <ContributionAmountRecurringNotification
-        formattedAmount={formattedSelectedAmount}
-        contributionType={props.contributionType}
-      />}
 
       {showWeeklyBreakdown ? (
         <p className="amount-per-week-breakdown">
