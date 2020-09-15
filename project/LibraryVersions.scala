@@ -6,4 +6,5 @@ object LibraryVersions {
   val jacksonVersion = "2.10.5"
   val okhttpVersion = "3.10.0"
   val scalaUriVersion = "2.2.2"
+  val playCirceVersion = "2712.0"
 }

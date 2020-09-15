@@ -90,14 +90,7 @@ class SubscribeWithGoogleControllerSpec extends AnyWordSpec with Matchers with S
   implicit val materializer: Materializer = ActorMaterializer()
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  implicit val context = ApplicationLoader.Context(
-    environment = Environment.simple(),
-    sourceMapper = None,
-    webCommands = new DefaultWebCommands(),
-    initialConfiguration = Configuration.load(Environment.simple()),
-    lifecycle = new DefaultApplicationLifecycle()
-  )
-
+  implicit val context = ApplicationLoader.Context.create(Environment.simple())
 
   "Subscribe with Google Controller" must {
     "process a refund" in {
