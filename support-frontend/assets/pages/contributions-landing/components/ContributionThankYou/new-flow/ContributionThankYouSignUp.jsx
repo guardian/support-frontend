@@ -74,7 +74,7 @@ const checkPassword = (password: string) =>
   password.length >= 6 && password.length <= 72;
 
 const PASSWORD_ERROR_MESSAGE =
-  'Please enter a password between 6 and 20 characters long';
+  'Please enter a password between 6 and 72 characters long';
 
 type ContributionThankYouSignUpProps = {|
   csrf: Csrf,
