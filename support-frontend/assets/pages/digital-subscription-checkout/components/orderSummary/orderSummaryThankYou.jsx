@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
-import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
+import { headline, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
 import { background, text, neutral } from '@guardian/src-foundations/palette';
 import { from, between, until } from '@guardian/src-foundations/mq';
