@@ -8,26 +8,6 @@ import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 
 class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with SerialisationTestHelpers {
-  "SubscriptionRedemptionQueryResponse" should "deserialise correctly" in {
-    val jsonResponse = """
-        {
-        "records": [
-            {
-                "CreatedRequestId__c": "35b4c314-d982-4386-983e-2e8c453f50be",
-                "Id": "2c92c0f8742dcaf5017434d002e73a56",
-                "ContractEffectiveDate": "2020-08-09"
-            }
-        ],
-        "done": true,
-        "size": 1
-    }
-    """
-
-    testDecoding[SubscriptionRedemptionQueryResponse](
-      jsonResponse,
-      subResponse => subResponse.records.head.contractEffectiveDate.getDayOfMonth shouldBe 9
-    )
-  }
 
   "DigitalSubscriptionGiftRedemption" should "identify an unredeemed subscription from a SubscriptionRedemptionQueryResponse" in {
     val response = SubscriptionRedemptionQueryResponse(List(SubscriptionRedemptionFields("1", LocalDate.now(), "123", None)))
@@ -62,14 +42,28 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
   }
 
   it should "identify an expired subscription code from a SubscriptionRedemptionQueryResponse" in {
-    val response = SubscriptionRedemptionQueryResponse(
+    val expiredDate = LocalDate.now().minusYears(1).minusDays(1)
+    val expiredResponse = SubscriptionRedemptionQueryResponse(
       List(SubscriptionRedemptionFields(
         id = "1",
-        contractEffectiveDate = new LocalDate(1999, 12, 31),
+        contractEffectiveDate = expiredDate,
         createdRequestId = "123",
         gifteeIdentityId = None)
       ))
-    val state = DigitalSubscriptionGiftRedemption.getSubscriptionState(response, "456")
-    state.clientCode shouldBe Expired.clientCode
+    DigitalSubscriptionGiftRedemption
+      .getSubscriptionState(expiredResponse, "456")
+      .clientCode shouldBe Expired.clientCode
+
+    val nonExpiredDate = LocalDate.now().minusYears(1)
+    val nonExpiredResponse = SubscriptionRedemptionQueryResponse(
+      List(SubscriptionRedemptionFields(
+        id = "1",
+        contractEffectiveDate = nonExpiredDate,
+        createdRequestId = "123",
+        gifteeIdentityId = None)
+      ))
+    DigitalSubscriptionGiftRedemption
+      .getSubscriptionState(nonExpiredResponse, "456")
+      .clientCode shouldBe Unredeemed.clientCode
   }
 }
