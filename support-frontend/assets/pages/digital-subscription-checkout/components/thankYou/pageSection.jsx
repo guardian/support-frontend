@@ -4,6 +4,7 @@ import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
+import { until } from '@guardian/src-foundations/mq';
 
 
 const section = css`
@@ -13,9 +14,12 @@ const section = css`
   padding-bottom: ${space[4]}px;
   border-top: 1px solid ${neutral['93']};
 
-  :first-of-type {
-    border-top: none;
+  ${until.tablet} {
+    :first-of-type {
+      border-top: none;
+    }
   }
+
 `;
 
 

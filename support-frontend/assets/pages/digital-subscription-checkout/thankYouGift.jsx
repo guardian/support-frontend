@@ -27,6 +27,28 @@ import { formatUserDate } from 'helpers/dateConversions';
 
 // ----- Styles ----- //
 
+const topPageSection = css`
+  padding: ${space[3]}px;
+  padding-bottom: 0;
+  background-color: ${neutral['97']};
+
+  ${from.tablet} {
+    background-color: inherit;
+    padding: ${space[3]}px;
+  }
+`;
+
+const mobileImage = css`
+  display: flex;
+  align-self: flex-end;
+  margin-top: ${space[3]}px;
+  justify-content: center;
+
+  ${from.tablet} {
+    display: none;
+  }
+`;
+
 const greenCircle = css`
   display: inline-block;
   width: 22px;
@@ -41,9 +63,13 @@ const greenCircle = css`
 
 const pageHeading = css`
   display: inline-block;
-  ${headline.xsmall({ fontWeight: 'bold' })};
+  ${headline.xxsmall({ fontWeight: 'bold' })};
   color: ${text.ctaSecondary};
   margin-bottom: ${space[2]}px;
+
+  ${from.mobileMedium} {
+    ${headline.xsmall({ fontWeight: 'bold' })};
+  }
 `;
 
 const blueSans = css`
@@ -180,10 +206,19 @@ function ThankYouGift(props: PropTypes) {
             title="Digital Gift Subscription"
           />)}
         >
-          <PageSection>
+          <div css={topPageSection}>
             <GreenCheckMark /><h1 css={pageHeading}>Thank you for your order</h1>
             <div css={blueSans}>Your Digital subscription order has been placed successfully</div>
-          </PageSection>
+            <div css={mobileImage}>
+              <GridImage
+                gridId="subscriptionDailyPackshot"
+                srcSizes={[1000, 500]}
+                sizes="(max-width: 740px) 50vw, 500"
+                imgType="png"
+                altText=""
+              />
+            </div>
+          </div>
           <PageSection>
             <h2 css={subHeading}>Order Summary</h2>
             <div css={detailsWithIcon}>

@@ -81,7 +81,7 @@ function MarketingConsentGift(props: PropTypes) {
             {props.confirmOptIn === true ?
               'We\'ll be in touch. Check your inbox for a confirmation link.' :
               <div>
-                <span className="component-marketing-consent-confirmation__message">You can unsubscribe at any time</span>
+                <span>You can unsubscribe at any time</span>
               </div>
             }
           </small>

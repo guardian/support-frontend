@@ -36,16 +36,6 @@ export const topLine = css`
     padding: ${space[1]}px 0 ${space[2]}px;
   }
 
-
-  a, a:visited {
-    display: block;
-    ${textSans.small()};
-    color: ${text.primary};
-    ${from.desktop} {
-      ${textSans.medium({ fontWeight: 'bold' })};
-    }
-  }
-
   ${between.phablet.and.desktop} {
     display: block;
   }
@@ -87,8 +77,8 @@ export const textBlock = css`
   }
 
   h3 {
-    ${body.medium({ fontWeight: 'bold' })};
-    margin: -5px 0 -3px;
+    ${headline.xxxsmall({ fontWeight: 'bold' })};
+    margin: ${space[1]}px 0 0 -${space[3]}px;
     ${from.desktop} {
       ${headline.xxsmall({ fontWeight: 'bold' })};
       margin-top: 0;
