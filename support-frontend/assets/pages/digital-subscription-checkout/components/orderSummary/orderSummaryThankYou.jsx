@@ -82,6 +82,7 @@ export const textBlock = css`
     ${from.desktop} {
       ${headline.xxsmall({ fontWeight: 'bold' })};
       margin-top: 0;
+      margin-left: ${space[1]}px;
     }
   }
 
@@ -91,6 +92,7 @@ export const textBlock = css`
 type PropTypes = {
   title: string,
   image: $Call<GridImageType, GridImg>,
+  pending?: boolean,
 };
 
 function OrderSummaryThankYou(props: PropTypes) {
@@ -98,7 +100,7 @@ function OrderSummaryThankYou(props: PropTypes) {
   return (
     <aside css={wrapper}>
       <div css={topLine}>
-        <h2 css={sansTitle}>Order confirmed</h2>
+        <h2 css={sansTitle}>{props.pending ? 'Order pending' : 'Order confirmed'}</h2>
       </div>
       <div css={contentBlock}>
         <div css={imageContainer}>{props.image}</div>
@@ -109,6 +111,10 @@ function OrderSummaryThankYou(props: PropTypes) {
     </aside>
   );
 }
+
+OrderSummaryThankYou.defaultProps = {
+  pending: false,
+};
 
 
 export default OrderSummaryThankYou;

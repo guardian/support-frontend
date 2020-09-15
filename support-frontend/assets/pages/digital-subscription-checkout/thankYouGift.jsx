@@ -166,6 +166,7 @@ export type PropTypes = {
   giftDeliveryDate: string,
   giftRecipient: string,
   marketingConsent: React.Node,
+  pending?: boolean,
 };
 
 // ----- Map state to props ----- //
@@ -204,11 +205,14 @@ function ThankYouGift(props: PropTypes) {
               />
                 }
             title="Digital Gift Subscription"
+            pending={props.pending}
           />)}
         >
           <div css={topPageSection}>
             <GreenCheckMark /><h1 css={pageHeading}>Thank you for your order</h1>
-            <div css={blueSans}>Your Digital subscription order has been placed successfully</div>
+            <div css={blueSans}>{props.pending ? 'Your Digital subscription order has been placed and is pending confirmation' :
+            'Your Digital subscription order has been placed successfully'}
+            </div>
             <div css={mobileImage}>
               <GridImage
                 gridId="subscriptionDailyPackshot"
@@ -290,6 +294,10 @@ function ThankYouGift(props: PropTypes) {
   );
 
 }
+
+ThankYouGift.defaultProps = {
+  pending: false,
+};
 
 // ----- Export ----- //
 

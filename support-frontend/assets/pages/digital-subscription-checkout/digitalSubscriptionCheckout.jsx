@@ -64,7 +64,9 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={orderIsAGift ? <CheckoutFormGift /> : <CheckoutForm />}
-        thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
+        thankYouContentPending={orderIsAGift ? <ThankYouGift {...thankyouProps} pending /> :
+        <ThankYouPendingContent includePaymentCopy {...thankyouProps} />
+        }
         thankYouContent={orderIsAGift ? <ThankYouGift {...thankyouProps} /> : <ThankYouContent {...thankyouProps} />}
         subscriptionProduct="DigitalPack"
       />
