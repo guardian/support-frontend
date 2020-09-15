@@ -11,6 +11,7 @@ import { init as pageInit } from 'helpers/page/page';
 import Page from 'components/page/page';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
+import ThankYouGift from 'pages/digital-subscription-checkout/thankYouGift';
 import ThankYouPendingContent from './thankYouPendingContent';
 import CheckoutForm
   from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
@@ -27,6 +28,7 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { DigitalPack } from 'helpers/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
@@ -49,7 +51,7 @@ const { orderIsAGift } = store.getState().page.checkout;
 
 const thankyouProps = {
   countryGroupId,
-  marketingConsent: (<MarketingConsent />),
+  marketingConsent: (orderIsAGift ? <MarketingConsentGift /> : <MarketingConsent />),
 };
 
 // ----- Render ----- //
@@ -63,7 +65,7 @@ const content = (
       <CheckoutStage
         checkoutForm={orderIsAGift ? <CheckoutFormGift /> : <CheckoutForm />}
         thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
-        thankYouContent={<ThankYouContent {...thankyouProps} />}
+        thankYouContent={orderIsAGift ? <ThankYouGift {...thankyouProps} /> : <ThankYouContent {...thankyouProps} />}
         subscriptionProduct="DigitalPack"
       />
     </Page>

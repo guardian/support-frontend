@@ -31,7 +31,7 @@ function createFormReducer(
   const { productPrices, orderIsAGift } = window.guardian;
 
   const initialState = {
-    stage: 'checkout',
+    stage: 'thankyou',
     product,
     title: null,
     email: user.email || '',
@@ -42,8 +42,8 @@ function createFormReducer(
     billingAddressIsSame: true,
     billingPeriod: initialBillingPeriod,
     titleGiftRecipient: null,
-    firstNameGiftRecipient: null,
-    lastNameGiftRecipient: null,
+    firstNameGiftRecipient: 'Kermit',
+    lastNameGiftRecipient: 'LeStrange',
     emailGiftRecipient: null,
     paymentMethod: null,
     formErrors: [],
@@ -59,7 +59,7 @@ function createFormReducer(
     deliveryInstructions: null,
     debugInfo: '',
     giftMessage: null,
-    giftStartDate: null,
+    giftStartDate: '15/10/2020',
   };
 
   const getFulfilmentOption = (action, currentOption) =>
