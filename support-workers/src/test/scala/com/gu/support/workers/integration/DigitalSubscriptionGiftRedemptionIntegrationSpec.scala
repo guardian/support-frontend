@@ -8,6 +8,7 @@ import com.gu.support.redemption.generator.CodeBuilder.GiftCode
 import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson}
+import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{NotFound, Redeemed}
 import com.gu.support.workers.{Annual, AsyncLambdaSpec, BillingPeriod, Fixtures, MockContext, RequestInfo}
 import com.gu.support.workers.lambdas.{DigitalSubscriptionGiftRedemption, HandlerResult}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -18,7 +19,7 @@ import io.circe.parser.decode
 import scala.concurrent.Future
 
 @IntegrationTest
-class GiftSubscriptionZuoraSpec extends AsyncLambdaSpec with MockContext {
+class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec with MockContext {
   val createZuoraHelper = new CreateZuoraSubscriptionHelper()
 
   val createSubRequestId = UUID.randomUUID()
@@ -35,7 +36,7 @@ class GiftSubscriptionZuoraSpec extends AsyncLambdaSpec with MockContext {
 
     recoverToExceptionIf[RuntimeException](
       redeemSubscription(nonExistentCode, createSubRequestId)
-    ).map(_.getMessage shouldBe NoSuchCode.clientCode)
+    ).map(_.getMessage shouldBe NotFound.clientCode)
   }
 
   "CreateZuoraSubcription" should "create a Digital Pack gift subscription" in {
@@ -51,11 +52,11 @@ class GiftSubscriptionZuoraSpec extends AsyncLambdaSpec with MockContext {
     redeemSubscription(giftCode.value, redeemSubRequestId)
       .map(_.value.user.id shouldBe idId)
 
-  it should "throw a CodeAlreadyUsed exception if a subscription has been redeemed in a previous request" in {
+  it should "throw a Redeemed exception if a subscription has been redeemed in a previous request" in {
     val subsequentRequestId = UUID.randomUUID()
     recoverToExceptionIf[RuntimeException](
       redeemSubscription(giftCode.value, subsequentRequestId)
-    ).map(_.getMessage shouldBe CodeAlreadyUsed.clientCode)
+    ).map(_.getMessage shouldBe Redeemed.clientCode)
   }
 
   def redeemSubscription(codeValue: String, requestId: UUID): Future[HandlerResult[SendThankYouEmailState]] = {

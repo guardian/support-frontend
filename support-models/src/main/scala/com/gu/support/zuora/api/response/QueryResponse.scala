@@ -6,6 +6,8 @@ import com.gu.support.encoding.JsonHelpers.JsonObjectExtensions
 import com.gu.support.redemptions.RedemptionCode
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
+import org.joda.time.LocalDate
+import com.gu.support.encoding.CustomCodecs._
 
 object AccountQueryResponse {
   implicit val codec: Codec[AccountQueryResponse] = deriveCodec
@@ -45,4 +47,9 @@ case class PaymentMethodRecord(DefaultPaymentMethodId: String)
 
 case class SubscriptionRedemptionQueryResponse(records: List[SubscriptionRedemptionFields])
 
-case class SubscriptionRedemptionFields(id: String, createdRequestId: String, gifteeIdentityId: Option[String])
+case class SubscriptionRedemptionFields(
+  id: String,
+  contractEffectiveDate: LocalDate,
+  createdRequestId: String,
+  gifteeIdentityId: Option[String]
+)
