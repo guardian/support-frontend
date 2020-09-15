@@ -132,16 +132,6 @@ const ContributionThankYouSignUp = ({
     />
   );
 
-  const expandableContent = (
-    <div css={expandableContainer}>
-      <BulletPointedList
-        items={[
-          'Remove unnecessary messages asking you for financial support',
-          'Let you easily manage your recurring contributions, subscriptions and newsletters in one place',
-        ]}
-      />
-    </div>
-  );
   const actionBody = (
     <ActionBody>
       {hasBeenCompleted ? (
@@ -168,16 +158,30 @@ const ContributionThankYouSignUp = ({
             </span>
             <span css={styles.hideBeforeTablet}>
               Your free Guardian account is almost complete, you just need to
-              set a password. By registering, you enable us to recognise you as a supporter
-              across our website and apps. This means we will:
+              set a password. By registering, you enable us to recognise you as
+              a supporter across our website and apps. This means we will:
             </span>
           </p>
           <div css={styles.hideAfterTablet}>
-            <ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
-              {expandableContent}
+            <ExpandableContainer isExpanded={isExpanded} maxHeight={300}>
+              <div css={expandableContainer}>
+                <p>
+                  You will be able to easily manage your recurring
+                  contributions, subscriptions and newsletters in one place.
+                </p>
+              </div>
             </ExpandableContainer>
           </div>
-          <div css={styles.hideBeforeTablet}>{expandableContent}</div>
+          <div css={styles.hideBeforeTablet}>
+            <div css={expandableContainer}>
+              <BulletPointedList
+                items={[
+                  'Remove unnecessary messages asking you for financial support',
+                  'Let you easily manage your recurring contributions, subscriptions and newsletters in one place',
+                ]}
+              />
+            </div>
+          </div>
           <div>
             <form onSubmit={onSubmit} css={form} noValidate>
               <div>
