@@ -66,38 +66,19 @@ const ContributionThankYouSignIn = ({
   const actionIcon = <SvgPersonWithTick />;
   const actionHeader = <ActionHeader title="Continue to your account" />;
 
-  const onSignInClick = () =>
-    trackComponentClick(OPHAN_COMPONENT_ID_SIGN_IN);
+  const onSignInClick = () => trackComponentClick(OPHAN_COMPONENT_ID_SIGN_IN);
 
   const onReadMoreClick = () => {
     trackComponentClick(OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN);
     setIsExpanded(true);
   };
 
-
-  const expandableContent = (
-    <div css={expandableContainer}>
-      <p css={styles.hideAfterTablet}>
-        Stay signed in across all your devices, to:
-      </p>
-      <BulletPointedList
-        items={[
-          'Remove unnecessary messages asking you for financial support',
-          'Let you easily manage your recurring contributions, subscriptions and newsletters in one place',
-        ]}
-      />
-      <p>
-        Make sure you sign in on each of the devices you use to read our
-        journalism – either today or next time you use them.
-      </p>
-    </div>
-  );
   const actionBody = (
     <ActionBody>
       <p>
         <span css={styles.hideAfterTablet}>
-          We’ll show you fewer requests for support and improve your Guardian
-          reading experience.{' '}
+          This means we can recognise you as a supporter and remove unnecessary
+          messages asking for financial support.{' '}
           {!isExpanded && (
             <ButtonLink
               css={bodyText}
@@ -115,10 +96,32 @@ const ContributionThankYouSignIn = ({
       </p>
       <div css={styles.hideAfterTablet}>
         <ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
-          {expandableContent}
+          <div css={expandableContainer}>
+            <p>
+              You will be able to easily manage your recurring contributions,
+              subscriptions and newsletters in one place.
+            </p>
+            <p>
+              Make sure you sign in on each of the devices you use to read our
+              journalism – either today or next time you use them.
+            </p>
+          </div>
         </ExpandableContainer>
       </div>
-      <div css={styles.hideBeforeTablet}>{expandableContent}</div>
+      <div css={styles.hideBeforeTablet}>
+        <div css={expandableContainer}>
+          <BulletPointedList
+            items={[
+              'Remove unnecessary messages asking you for financial support',
+              'Let you easily manage your recurring contributions, subscriptions and newsletters in one place',
+            ]}
+          />
+          <p>
+            Make sure you sign in on each of the devices you use to read our
+            journalism – either today or next time you use them.
+          </p>
+        </div>
+      </div>
       <div css={buttonContainer}>
         <LinkButton
           onClick={onSignInClick}
