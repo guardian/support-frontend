@@ -15,7 +15,7 @@ const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
-const AUS_MAP_URL = 'https://support.theguardian.com/aus-2020-map';
+const AUS_MAP_URL = 'https://support.theguardian.com/aus-2020-map?INTCMP=thankyou-page-aus-map-cta';
 
 const ContributionThankYouAusMap = () => {
   const actionIcon = <SvgAusMap />;
