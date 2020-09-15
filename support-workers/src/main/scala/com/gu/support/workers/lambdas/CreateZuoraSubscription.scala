@@ -254,6 +254,8 @@ object CreateZuoraSubscription {
 
 object DigitalSubscriptionGiftRedemption {
 
+  val expirationTimeInMonths = 12
+
   sealed abstract class SubscriptionRedemptionState(val clientCode: String)
 
   object Unredeemed {
@@ -298,7 +300,7 @@ object DigitalSubscriptionGiftRedemption {
 
   def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: String) =
     existingSub.records match {
-      case existingSubFields :: Nil if existingSubFields.contractEffectiveDate.plusYears(1).isBefore(LocalDate.now()) =>
+      case existingSubFields :: Nil if existingSubFields.contractEffectiveDate.plusMonths(expirationTimeInMonths).isBefore(LocalDate.now()) =>
         Expired
       case existingSubFields :: Nil if existingSubFields.gifteeIdentityId.isEmpty =>
         Unredeemed(existingSubFields.id)

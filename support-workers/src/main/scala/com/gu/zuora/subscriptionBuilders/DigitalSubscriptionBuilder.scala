@@ -15,6 +15,7 @@ import com.gu.support.redemption.generator.CodeBuilder.GiftCode
 import com.gu.support.redemption.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.ProductTypeRatePlans._
+import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption
 import com.gu.support.workers.{Annual, BillingPeriod, DigitalPack, Quarterly}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import com.gu.support.zuora.api.{ReaderType, SubscriptionData}
@@ -70,7 +71,7 @@ object DigitalSubscriptionBuilder {
   )(implicit ec: ExecutionContext): BuildResult = {
 
     val (contractAcceptanceDelay, autoRenew, initialTerm) = if (readerType == Gift)
-      (0, false, 13) // Expiry for gift redemption codes is 12 months so set the initial term to 13 to allow for this
+      (0, false, DigitalSubscriptionGiftRedemption.expirationTimeInMonths + 1)
     else
       (purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod, true, 12)
 
