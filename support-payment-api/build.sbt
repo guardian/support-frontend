@@ -1,3 +1,5 @@
+import LibraryVersions._
+
 name := "payment-api"
 
 version := "0.1"
@@ -9,12 +11,6 @@ scalacOptions ++= Seq(
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
-
-val circeVersion = "0.11.1"
-val AWSJavaSDKVersion = "1.11.568"
-val jacksonVersion = "2.10.0"
-val stripeVersion = "10.12.0" // Supports API version 2019-05-16
-val playCirceVersion = "2712.0"
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
