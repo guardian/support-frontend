@@ -119,6 +119,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |        "state": "On"
           |      }
           |    },
+          |    "enableDigitalSubGifting": "On",
           |    "useDotcomContactPage": "Off",
           |    "enableRecaptchaFrontend": "Off",
           |    "enableRecaptchaBackend": "Off"
@@ -289,6 +290,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
               state = On
             )
           ),
+          enableDigitalSubGifting = On,
           useDotcomContactPage = Some(Off),
           enableRecaptchaBackend = Off,
           enableRecaptchaFrontend = Off

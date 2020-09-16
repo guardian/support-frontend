@@ -5,8 +5,8 @@
 import { type Dispatch } from 'redux';
 import React from 'react';
 import { connect } from 'react-redux';
-import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributionsLandingActions';
-import SetPasswordForm from '../SetPasswordForm';
+import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../../contributionsLandingActions';
+import SetPasswordForm from '../../SetPasswordForm';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit } from 'helpers/paymentMethods';
 import type { ContributionType } from 'helpers/contributions';

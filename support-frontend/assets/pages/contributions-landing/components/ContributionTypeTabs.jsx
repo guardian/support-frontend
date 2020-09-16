@@ -43,7 +43,7 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-  shouldShowChoiceHeader: state.common.abParticipations.landingPageRetentionR1 === 'variant 3',
+  shouldShowChoiceHeader: state.common.abParticipations.landingPageRetentionR2 === 'variant 3',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
