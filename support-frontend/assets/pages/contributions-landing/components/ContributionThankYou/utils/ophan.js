@@ -22,8 +22,6 @@ export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN =
   'contribution-thankyou-read-more-sign-in';
 export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP =
   'contribution-thankyou-read-more-sign-up';
-export const OPHAN_COMPONENT_ID_READ_MORE_SET_REMINDER =
-  'contribution-thankyou-read-more-set-reminder';
 
 const OPHAN_EVENT_ID_PAYMENT_METHOD = 'contributions-thankyou-payment-method';
 const OPHAN_EVENT_ID_CONTRIBUTION_TYPE =
