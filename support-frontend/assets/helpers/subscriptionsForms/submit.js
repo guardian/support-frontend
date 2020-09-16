@@ -4,6 +4,7 @@
 
 import { type Dispatch } from 'redux';
 import type {
+  DigitalSubscription, PaperSubscription,
   PaymentResult,
   RegularPaymentRequest,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -48,6 +49,7 @@ import {
   validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
 import {
+  DigitalPack,
   isPhysicalProduct,
   type SubscriptionProduct,
 } from 'helpers/subscriptions';
@@ -57,6 +59,7 @@ import type { IsoCountry } from '../internationalisation/country';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+import { Direct, Gift } from 'helpers/productPrice/readerType';
 
 // ----- Functions ----- //
 
@@ -80,11 +83,36 @@ function getAddresses(state: AnyCheckoutState) {
 const getOptions = (
   fulfilmentOptions: FulfilmentOptions,
   productOptions: ProductOptions,
-) =>
+): {fulfilmentOptions: FulfilmentOptions, productOptions: ProductOptions} =>
   ({
     ...(fulfilmentOptions !== NoFulfilmentOptions ? { fulfilmentOptions } : {}),
     ...(productOptions !== NoProductOptions ? { productOptions } : {}),
   });
+
+const getProduct =
+  (state: AnyCheckoutState, currencyId?: Option<IsoCurrency>): DigitalSubscription | PaperSubscription => {
+    const {
+      billingPeriod,
+      fulfilmentOption,
+      productOption,
+      orderIsAGift,
+      product,
+    } = state.page.checkout;
+
+    const readerType = orderIsAGift ? Gift : Direct;
+    if (product === DigitalPack) {
+      return {
+        currency: currencyId || state.common.internationalisation.currencyId,
+        billingPeriod,
+        readerType,
+      };
+    }
+    return {
+      currency: currencyId || state.common.internationalisation.currencyId,
+      billingPeriod,
+      ...getOptions(fulfilmentOption, productOption),
+    };
+  };
 
 const getPromoCode = (promotions: ?Promotion[]) => {
   const promotion = getAppliedPromo(promotions);
@@ -124,11 +152,7 @@ function buildRegularPaymentRequest(
     productOption,
   );
 
-  const product = {
-    currency: currencyId || state.common.internationalisation.currencyId,
-    billingPeriod,
-    ...getOptions(fulfilmentOption, productOption),
-  };
+  const product = getProduct(state, currencyId);
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
   const promoCode = getPromoCode(price.promotions);

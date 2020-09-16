@@ -9,7 +9,7 @@ import { getGiftOrderSummaryText } from '../helpers';
 export type EndSummaryProps = {
   priceDescription: string,
   promotion: string,
-  orderIsAGift?: boolean,
+  orderIsAGift: boolean,
   digitalGiftBillingPeriod: 'Annual' | 'Quarterly',
   price: string,
 }
@@ -64,9 +64,5 @@ function EndSummary({
     </span>
   );
 }
-
-EndSummary.defaultProps = {
-  orderIsAGift: false,
-};
 
 export default connect(mapStateToProps)(EndSummary);
