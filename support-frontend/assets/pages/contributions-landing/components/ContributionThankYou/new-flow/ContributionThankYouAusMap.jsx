@@ -8,7 +8,7 @@ import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
 import SvgAusMap from './components/SvgAusMap';
-import { OPHAN_COMPONENT_ID_AUS_MAP } from './utils/ophan';
+import { OPHAN_COMPONENT_ID_AUS_MAP } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const buttonContainer = css`

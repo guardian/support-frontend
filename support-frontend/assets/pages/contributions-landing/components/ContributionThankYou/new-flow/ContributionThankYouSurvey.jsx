@@ -8,7 +8,7 @@ import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
 import SvgSpeechBubbleWithPlus from './components/SvgSpeechBubbleWithPlus';
 import styles from './styles';
-import { OPHAN_COMPONENT_ID_SURVEY } from './utils/ophan';
+import { OPHAN_COMPONENT_ID_SURVEY } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const buttonContainer = css`

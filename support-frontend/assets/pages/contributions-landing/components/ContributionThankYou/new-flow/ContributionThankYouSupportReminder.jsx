@@ -20,7 +20,7 @@ import styles from './styles';
 import {
   OPHAN_COMPONENT_ID_SET_REMINDER,
   OPHAN_COMPONENT_ID_READ_MORE_SET_REMINDER,
-} from './utils/ophan';
+} from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { privacyLink } from 'helpers/legal';
 

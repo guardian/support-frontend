@@ -28,7 +28,7 @@ import styles from './styles';
 import {
   OPHAN_COMPONENT_ID_SIGN_UP,
   OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP,
-} from './utils/ophan';
+} from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const bodyText = css`

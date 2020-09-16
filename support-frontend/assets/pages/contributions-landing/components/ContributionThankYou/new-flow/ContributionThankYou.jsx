@@ -20,7 +20,7 @@ import ContributionThankYouSupportReminder from './ContributionThankYouSupportRe
 import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
-import { trackUserData } from './utils/ophan';
+import { trackUserData } from '../utils/ophan';
 
 const container = css`
   background: white;
