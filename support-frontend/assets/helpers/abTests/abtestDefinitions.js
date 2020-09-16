@@ -8,6 +8,7 @@ const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
 const allBarUkLandingPages = '/((?!uk).)*/contribute(/.*)?$';
+const allThankYouAndLandingPages = '/??/(thankyou|contribute)(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
@@ -80,14 +81,11 @@ export const tests: Tests = {
     seed: 9,
   },
 
-  landingPageRetentionR1: {
+  landingPageRetentionR2: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
-      },
-      {
-        id: 'variant 1',
       },
       {
         id: 'variant 2',
@@ -106,5 +104,27 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: allBarUkLandingPages,
     seed: 2,
+  },
+
+  newThankYouFlowR1: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'newFlow',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: allThankYouAndLandingPages,
+    seed: 3,
   },
 };
