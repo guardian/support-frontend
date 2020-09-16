@@ -27,8 +27,6 @@ import { initReducer } from './contributionsLandingReducer';
 import { ContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYou from './components/ContributionThankYou/ContributionThankYou';
-// import ContributionThankYouContainer
-//   from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
