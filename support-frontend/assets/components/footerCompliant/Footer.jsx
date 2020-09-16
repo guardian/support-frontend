@@ -1,11 +1,11 @@
 // @flow
 
 // ----- Imports ----- //
-
-import React, { Children, type Node } from 'react';
+// $FlowIgnore - required for hooks
+import React, { Children, useEffect, type Node } from 'react';
 import { ThemeProvider } from 'emotion-theming';
-import { Link, linkBrand } from '@guardian/src-link';
-
+import { Link, ButtonLink, linkBrand } from '@guardian/src-link';
+import { getGlobal } from 'helpers/globals';
 import { copyrightNotice } from 'helpers/legal';
 
 import Rows from '../base/rows';
@@ -30,6 +30,22 @@ type PropTypes = {|
 function Footer({
   centred, children, faqsLink, termsConditionsLink,
 }: PropTypes) {
+  let consentManagementPlatform;
+
+  function showPrivacyManager() {
+    if (consentManagementPlatform) {
+      consentManagementPlatform.showPrivacyManager();
+    }
+  }
+
+  useEffect(() => {
+    if (!getGlobal('ssr')) {
+      import('@guardian/consent-management-platform').then(({ cmp }) => {
+        consentManagementPlatform = cmp;
+      });
+    }
+  }, []);
+
   return (
     <footer css={componentFooter} role="contentinfo">
       <ThemeProvider theme={linkBrand}>
@@ -54,6 +70,9 @@ function Footer({
             </li>
             <li css={link}>
               <Link subdued href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</Link>
+            </li>
+            <li css={link}>
+              <ButtonLink subdued onClick={showPrivacyManager}>Privacy Settings</ButtonLink>
             </li>
             {termsConditionsLink &&
               <li css={link}>
