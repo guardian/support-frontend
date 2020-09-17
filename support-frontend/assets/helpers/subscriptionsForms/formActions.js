@@ -46,7 +46,7 @@ export type Action =
   | { type: 'SET_DELIVERY_INSTRUCTIONS', instructions: Option<string>}
   | { type: 'SET_STRIPE_PAYMENT_METHOD', stripePaymentMethod: Option<string>}
   | { type: 'SET_GIFT_MESSAGE', message: Option<string>}
-  | { type: 'SET_GIFT_START_DATE', giftStartDate: string}
+  | { type: 'SET_GIFT_DELIVERY_DATE', giftDeliveryDate: string}
   | AddressAction
   | PayPalAction
   | DDAction;
@@ -128,9 +128,9 @@ const formActionCreators = {
     type: 'SET_GIFT_MESSAGE',
     message,
   }),
-  setDigitalGiftStartDate: (giftStartDate: string): Action => ({
-    type: 'SET_GIFT_START_DATE',
-    giftStartDate,
+  setDigitalGiftDeliveryDate: (giftDeliveryDate: string): Action => ({
+    type: 'SET_GIFT_DELIVERY_DATE',
+    giftDeliveryDate,
   }),
 };
 

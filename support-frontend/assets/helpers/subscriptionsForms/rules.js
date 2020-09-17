@@ -36,8 +36,8 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
         error: formError('emailGiftRecipient', 'Please use a valid email address for the recipient.'),
       },
       {
-        rule: checkGiftStartDate(fields.giftStartDate),
-        error: formError('giftStartDate', 'Please enter a valid delivery date for your gift.'),
+        rule: checkGiftStartDate(fields.giftDeliveryDate),
+        error: formError('giftDeliveryDate', 'Please enter a valid delivery date for your gift.'),
       },
     ] :
     [

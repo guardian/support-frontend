@@ -199,10 +199,10 @@ class DigitalCheckoutFormGift extends Component <PropTypes> {
             </FormSection>
             <FormSection title="Gift delivery date">
               <DatePickerWithError
-                id="giftStartDate"
-                error={firstError('giftStartDate', props.formErrors)}
-                value={props.giftStartDate}
-                onChange={date => props.setDigitalGiftStartDate(date)}
+                id="giftDeliveryDate"
+                error={firstError('giftDeliveryDate', props.formErrors)}
+                value={props.giftDeliveryDate}
+                onChange={date => props.setDigitalGiftDeliveryDate(date)}
               />
             </FormSection>
             <FormSection title="Personalise your gift">

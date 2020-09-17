@@ -173,7 +173,7 @@ export type PropTypes = {
 
 function mapStateToProps(state: CheckoutState) {
   return {
-    giftDeliveryDate: state.page.checkout.giftStartDate,
+    giftDeliveryDate: state.page.checkout.giftDeliveryDate,
     giftRecipient: state.page.checkout.firstNameGiftRecipient,
   };
 }

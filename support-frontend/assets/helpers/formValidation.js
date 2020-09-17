@@ -19,10 +19,12 @@ export const isEmpty: (string | null) => boolean = input =>
 export const isNotEmpty: (string | null) => boolean = input => !isEmpty(input);
 
 export const isNotInThePast: (Date | null) => boolean = date => !DateUtils.isPastDay(date);
-export const isNotMoreThanThreeMonthsAway: (Date | null) => boolean = (date) => {
-  const today = new Date(Date.now());
-  const limit = DateUtils.addMonths(today, 3);
-  return date < limit;
+
+export const isNotMoreThan89DaysAway: (Date | null) => boolean = (date) => {
+  const rangeDate = new Date();
+  rangeDate.setDate(rangeDate.getDate() + 89);
+  const dateIsInsideRange = !DateUtils.isDayAfter(date, rangeDate);
+  return dateIsInsideRange;
 };
 
 export const isValidEmail: (string | null) => boolean = input => !!input && new RegExp(emailRegexPattern).test(input);
@@ -41,7 +43,7 @@ export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(i
 export const checkGiftStartDate: (string | null) => boolean = (rawDate) => {
   const dateArray = rawDate ? rawDate.split('/') : null;
   const date = dateArray ? new Date(`${dateArray[1]} ${dateArray[0]} ${dateArray[2]}`) : null;
-  return isNotEmpty(rawDate) && isNotInThePast(date) && isNotMoreThanThreeMonthsAway(date);
+  return isNotEmpty(rawDate) && isNotInThePast(date) && isNotMoreThan89DaysAway(date);
 };
 
 export const checkAmount: (string, CountryGroupId, ContributionType) =>
