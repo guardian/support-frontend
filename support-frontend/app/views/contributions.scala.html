@@ -116,5 +116,5 @@
   window.guardian.recaptchaEnabled = @settings.switches.enableRecaptchaFrontend.isOn
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey";
   </script>
-  <script defer id="stripe-js" src=@{s"https://js.stripe.com/v3/${if (serversideTests.get("stripeFraudDetection").contains(Variant)) "?advancedFraudSignals=false" else ""}"}></script>"
+  <script defer id="stripe-js" src=@{s"https://js.stripe.com/v3/${if (serversideTests.get("stripeFraudDetection").contains(Variant)) "?advancedFraudSignals=false" else ""}"}></script>
 }
