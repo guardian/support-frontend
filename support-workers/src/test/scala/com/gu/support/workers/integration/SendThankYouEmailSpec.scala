@@ -84,24 +84,110 @@ class SendThankYouEmailSpec extends LambdaSpec {
 object SendThankYouEmailManualTest {
 
   //This test will send a thank you email to the address below - useful for quickly testing changes
-  val addressToSendTo = "rupert.bates+unitTest@theguardian.com"
-  val salesforceContactId = SfContactId("0033E00001BRKTTQA5")
+  val addressToSendTo = "john.duffell@guardian.co.uk"
+  val salesforceContactId = SfContactId("0033E00001DTBHJQA5")
 
   def main(args: Array[String]): Unit = {
-    sendContributionEmail()
-    sendDigitalPackEmail()
-    sendDigitalPackCorpEmail()
-    sendPaperSubscriptionEmail()
-    sendWeeklySubscriptionEmail()
-    sendWeeklySubscriptionGiftEmail()
+    SendContributionEmail.main(args)
+    SendDigitalPackEmail.main(args)
+    SendDigitalPackCorpEmail.main(args)
+    SendPaperSubscriptionEmail.main(args)
+    SendWeeklySubscriptionEmail.main(args)
+    SendWeeklySubscriptionGiftEmail.main(args)
   }
 
   val realConfig = Configuration.load()
 
-  def sendContributionEmail() {
-    val mandateId = "65HK26E"
-    val user = User("1234", addressToSendTo, None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
-    val ef = ContributionEmailFields.build(
+}
+import SendThankYouEmailManualTest._
+object SendContributionEmail extends App {
+
+  val mandateId = "65HK26E"
+  val user = User("1234", addressToSendTo, None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
+  val ef = ContributionEmailFields.build(
+    AllProductsEmailFields(
+      Monthly,
+      user,
+      GBP,
+      salesforceContactId,
+      Some(mandateId)
+    ),
+    new DateTime(1999, 12, 31, 11, 59),
+    20,
+    directDebitPaymentMethod
+  )
+  val service = new EmailService(realConfig.contributionThanksQueueName)
+  service.send(ef)
+
+}
+object SendDigitalPackEmail extends App {
+
+  val mandateId = "65HK26E"
+  val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
+  val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
+  val ef = DigitalPackEmailFields.build(
+    SubscriptionEmailFields(
+      AllProductsEmailFields(
+        Annual,
+        user,
+        GBP,
+        salesforceContactId,
+        Some(mandateId)
+      ),
+      "A-S00045678",
+      None
+    ),
+    paidSubPaymentData = Some(PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))))
+  )
+  val service = new EmailService(realConfig.contributionThanksQueueName)
+  service.send(ef)
+
+}
+object SendDigitalPackCorpEmail extends App {
+
+  val mandateId = "65HK26E"
+  val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
+  val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
+  val ef = DigitalPackEmailFields.build(
+    SubscriptionEmailFields(
+      AllProductsEmailFields(
+        Annual,
+        user,
+        GBP,
+        salesforceContactId,
+        Some(mandateId)
+      ),
+      "A-S00045678",
+      None
+    ),
+    paidSubPaymentData = None
+  )
+  val service = new EmailService(realConfig.contributionThanksQueueName)
+  service.send(ef)
+
+}
+object SendPaperSubscriptionEmail extends App {
+
+  val mandateId = "65HK26E"
+  val billingAddressWithCountry = Address(
+    lineOne = Some("90 York Way"),
+    lineTwo = None,
+    city = Some("London"),
+    state = None,
+    postCode = Some("N1 9AG"),
+    country = UK
+  )
+  val user = User(
+    "1234",
+    addressToSendTo,
+    None,
+    "Mickey",
+    "Mouse",
+    billingAddress = billingAddressWithCountry,
+    deliveryAddress = Some(billingAddressWithCountry)
+  )
+  val ef = PaperEmailFields.build(
+    SubscriptionEmailFields(
       AllProductsEmailFields(
         Monthly,
         user,
@@ -109,178 +195,99 @@ object SendThankYouEmailManualTest {
         salesforceContactId,
         Some(mandateId)
       ),
-      new DateTime(1999, 12, 31, 11, 59),
-      20,
-      directDebitPaymentMethod
-    )
-    val service = new EmailService(realConfig.contributionThanksQueueName)
-    service.send(ef)
-  }
+      "A-S00045678",
+      None
+    ),
+    Collection,
+    Saturday,
+    Some(new LocalDate(2019, 3, 26)),
+    PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79)))),
+  )
+  val service = new EmailService(realConfig.contributionThanksQueueName)
+  service.send(ef)
 
-  def sendDigitalPackEmail() {
-    val mandateId = "65HK26E"
-    val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
-    val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
-    val ef = DigitalPackEmailFields.build(
-      SubscriptionEmailFields(
-        AllProductsEmailFields(
-          Annual,
-          user,
-          GBP,
-          salesforceContactId,
-          Some(mandateId)
-        ),
-        "A-S00045678",
-        None
+}
+object SendWeeklySubscriptionEmail extends App {
+
+  val mandateId = "65HK26E"
+  val billingAddressWithCountry = Address(
+    lineOne = Some("90 York Way"),
+    lineTwo = None,
+    city = Some("London"),
+    state = None,
+    postCode = Some("N1 9AG"),
+    country = UK
+  )
+  val user = User(
+    "1234",
+    addressToSendTo,
+    None,
+    "Mickey",
+    "Mouse",
+    billingAddress = billingAddressWithCountry,
+    deliveryAddress = Some(billingAddressWithCountry)
+  )
+  val ef = GuardianWeeklyEmailFields.build(
+    SubscriptionEmailFields(
+      AllProductsEmailFields(
+        Quarterly,
+        user,
+        GBP,
+        salesforceContactId,
+        Some(mandateId)
       ),
-      paidSubPaymentData = Some(PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))))
-    )
-    val service = new EmailService(realConfig.contributionThanksQueueName)
-    service.send(ef)
-  }
+      "A-S00045678",
+      None
+    ),
+    Some(new LocalDate(2019, 3, 26)),
+    PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(
+      Payment(new LocalDate(2019, 3, 25), 37.50),
+      Payment(new LocalDate(2019, 6, 25), 37.50)
+    ))),
+  )
+  val service = new EmailService(realConfig.contributionThanksQueueName)
+  service.send(ef)
 
-  def sendDigitalPackCorpEmail() {
-    val mandateId = "65HK26E"
-    val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
-    val user = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
-    val ef = DigitalPackEmailFields.build(
-      SubscriptionEmailFields(
-        AllProductsEmailFields(
-          Annual,
-          user,
-          GBP,
-          salesforceContactId,
-          Some(mandateId)
-        ),
-        "A-S00045678",
-        None
+}
+object SendWeeklySubscriptionGiftEmail extends App {
+
+  val mandateId = "65HK26E"
+  val billingAddressWithCountry = Address(
+    lineOne = Some("90 York Way"),
+    lineTwo = None,
+    city = Some("London"),
+    state = None,
+    postCode = Some("N1 9AG"),
+    country = UK
+  )
+  val user = User(
+    "1234",
+    addressToSendTo,
+    None,
+    "Mickey",
+    "Mouse",
+    billingAddress = billingAddressWithCountry,
+    deliveryAddress = Some(billingAddressWithCountry)
+  )
+  val ef = GuardianWeeklyEmailFields.build(
+    SubscriptionEmailFields(
+      AllProductsEmailFields(
+        Quarterly,
+        user,
+        GBP,
+        salesforceContactId,
+        Some(mandateId)
       ),
-      paidSubPaymentData = None
-    )
-    val service = new EmailService(realConfig.contributionThanksQueueName)
-    service.send(ef)
-  }
+      "A-S00045678",
+      None
+    ),
+    Some(new LocalDate(2019, 3, 26)),
+    PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))),
+    giftRecipient = Some(GiftRecipient(None, "Earl", "Palmer", None))
+  )
 
-  def sendPaperSubscriptionEmail() {
-    val mandateId = "65HK26E"
-    val billingAddressWithCountry = Address(
-      lineOne = Some("90 York Way"),
-      lineTwo = None,
-      city = Some("London"),
-      state = None,
-      postCode = Some("N1 9AG"),
-      country = UK
-    )
-    val user = User(
-      "1234",
-      addressToSendTo,
-      None,
-      "Mickey",
-      "Mouse",
-      billingAddress = billingAddressWithCountry,
-      deliveryAddress = Some(billingAddressWithCountry)
-    )
-    val ef = PaperEmailFields.build(
-      SubscriptionEmailFields(
-        AllProductsEmailFields(
-          Monthly,
-          user,
-          GBP,
-          salesforceContactId,
-          Some(mandateId)
-        ),
-        "A-S00045678",
-        None
-      ),
-      Collection,
-      Saturday,
-      Some(new LocalDate(2019, 3, 26)),
-      PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79)))),
-    )
-    val service = new EmailService(realConfig.contributionThanksQueueName)
-    service.send(ef)
-  }
-
-  def sendWeeklySubscriptionEmail() {
-    val mandateId = "65HK26E"
-    val billingAddressWithCountry = Address(
-      lineOne = Some("90 York Way"),
-      lineTwo = None,
-      city = Some("London"),
-      state = None,
-      postCode = Some("N1 9AG"),
-      country = UK
-    )
-    val user = User(
-      "1234",
-      addressToSendTo,
-      None,
-      "Mickey",
-      "Mouse",
-      billingAddress = billingAddressWithCountry,
-      deliveryAddress = Some(billingAddressWithCountry)
-    )
-    val ef = GuardianWeeklyEmailFields.build(
-      SubscriptionEmailFields(
-        AllProductsEmailFields(
-          Quarterly,
-          user,
-          GBP,
-          salesforceContactId,
-          Some(mandateId)
-        ),
-        "A-S00045678",
-        None
-      ),
-      Some(new LocalDate(2019, 3, 26)),
-      PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(
-        Payment(new LocalDate(2019, 3, 25), 37.50),
-        Payment(new LocalDate(2019, 6, 25), 37.50)
-      ))),
-    )
-    val service = new EmailService(realConfig.contributionThanksQueueName)
-    service.send(ef)
-  }
-
-  def sendWeeklySubscriptionGiftEmail() {
-    val mandateId = "65HK26E"
-    val billingAddressWithCountry = Address(
-      lineOne = Some("90 York Way"),
-      lineTwo = None,
-      city = Some("London"),
-      state = None,
-      postCode = Some("N1 9AG"),
-      country = UK
-    )
-    val user = User(
-      "1234",
-      addressToSendTo,
-      None,
-      "Mickey",
-      "Mouse",
-      billingAddress = billingAddressWithCountry,
-      deliveryAddress = Some(billingAddressWithCountry)
-    )
-    val ef = GuardianWeeklyEmailFields.build(
-      SubscriptionEmailFields(
-        AllProductsEmailFields(
-          Quarterly,
-          user,
-          GBP,
-          salesforceContactId,
-          Some(mandateId)
-        ),
-        "A-S00045678",
-        None
-      ),
-      Some(new LocalDate(2019, 3, 26)),
-      PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))),
-      giftRecipient = Some(GiftRecipient(None, "Earl", "Palmer", None))
-    )
-
-    val service = new EmailService(realConfig.contributionThanksQueueName)
-    service.send(ef)
-  }
+  val service = new EmailService(realConfig.contributionThanksQueueName)
+  service.send(ef)
 
 }
 
