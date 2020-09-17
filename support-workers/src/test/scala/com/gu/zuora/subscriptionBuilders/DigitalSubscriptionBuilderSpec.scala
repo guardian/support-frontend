@@ -10,6 +10,7 @@ import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption.corporate.GetCodeStatus.InvalidReaderType
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.corporate.{DynamoLookup, GetCodeStatus}
+import com.gu.support.redemption.gifting.GiftRedemptionState
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption
 import com.gu.support.workers.{DigitalPack, Monthly, Quarterly}
@@ -79,7 +80,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       readerType shouldBe Gift
       redemptionCode.isDefined shouldBe true
       redemptionCode.get.substring(0, 4) shouldBe "gd03"
-      initialTerm shouldBe DigitalSubscriptionGiftRedemption.expirationTimeInMonths + 1
+      initialTerm shouldBe GiftRedemptionState.expirationTimeInMonths + 1
       initialTermPeriodType shouldBe Month
       promoCode shouldBe None
       corporateAccountId shouldBe None
