@@ -272,7 +272,7 @@ object DigitalSubscriptionGiftRedemption {
   ): Future[HandlerResult[SendThankYouEmailState]] =
     zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode).flatMap(
       redemptionQueryResponse =>
-       GiftRedemptionState.getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
+        GiftRedemptionState.getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
           case Unredeemed(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
           case RedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
           case otherState: SubscriptionRedemptionState => Future.failed(new RuntimeException(otherState.clientCode))
