@@ -1,4 +1,4 @@
-package com.gu.support.redemption
+package com.gu.support.redemption.corporate
 
 import com.gu.support.config.TouchPointEnvironment
 
@@ -9,12 +9,15 @@ object RedemptionTable {
 
   object AvailableField {
     val name = "available"
+
     def decoded(available: Boolean): AvailableField = if (available) CodeIsAvailable else CodeIsUsed
 
     case object CodeIsAvailable extends AvailableField(true)
+
     case object CodeIsUsed extends AvailableField(false)
 
   }
+
   sealed abstract class AvailableField(val encoded: Boolean)
 
   object CorporateIdField {
@@ -25,5 +28,3 @@ object RedemptionTable {
     DynamoTableAsync(s"redemption-codes-${env.envValue}", primaryKey)
 
 }
-
-

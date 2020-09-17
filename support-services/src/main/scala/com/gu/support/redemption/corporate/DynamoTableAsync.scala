@@ -1,9 +1,9 @@
-package com.gu.support.redemption
+package com.gu.support.redemption.corporate
 
 import java.util.concurrent.CompletionException
 
-import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString, DynamoValue}
-import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
+import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString, DynamoValue}
+import com.gu.support.redemption.corporate.DynamoUpdate.DynamoFieldUpdate
 import com.typesafe.scalalogging.LazyLogging
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
 import software.amazon.awssdk.regions.Region

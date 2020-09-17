@@ -1,4 +1,4 @@
-package com.gu.support.redemption.generator
+package com.gu.support.redemption.gifting.generator
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

@@ -10,9 +10,10 @@ import com.gu.support.catalog
 import com.gu.support.catalog._
 import com.gu.support.config.{Stage, TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
+import com.gu.support.redemption.corporate.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemption._
-import com.gu.support.redemption.generator.GiftCodeGeneratorService
+import com.gu.support.redemption.corporate.{DynamoLookup, DynamoUpdate, GetCodeStatus, RedemptionTable, SetCodeStatus}
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription.createSubscription
