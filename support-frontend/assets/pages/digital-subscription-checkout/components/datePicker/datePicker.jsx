@@ -147,7 +147,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
   }
 
   handleCalendarDate = (date: Date) => {
-    if (this.dateIsPast(date)) {
+    if (this.dateIsPast(date) || this.dateIsOutsideRange(date)) {
       return;
     }
     const dateArray = formatMachineDate(date).split('-');
