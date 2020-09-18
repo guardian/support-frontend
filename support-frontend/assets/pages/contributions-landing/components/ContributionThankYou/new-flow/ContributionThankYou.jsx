@@ -20,7 +20,8 @@ import ContributionThankYouSupportReminder from './ContributionThankYouSupportRe
 import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
-import { trackUserData } from '../utils/ophan';
+import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from '../utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const container = css`
   background: white;
@@ -214,7 +215,11 @@ const ContributionThankYou = ({
       </div>
 
       <div css={buttonContainer}>
-        <LinkButton href="https://www.theguardian.com" priority="tertiary">
+        <LinkButton
+          href="https://www.theguardian.com"
+          priority="tertiary"
+          onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)}
+        >
           Return to the Guardian
         </LinkButton>
       </div>
