@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
 import com.gu.identity.model.{User => IdUser}
@@ -86,9 +86,11 @@ class DigitalSubscriptionController(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-  def displayForm(orderIsAGift: Boolean): Action[AnyContent] =
-    authenticatedAction(subscriptionsClientId).async { implicit request =>
-      implicit val settings: AllSettings = settingsProvider.getAllSettings()
+  def displayForm(orderIsAGift: Boolean): Action[AnyContent] = {
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    if (settings.switches.enableDigitalSubGifting.isOn || !orderIsAGift) {
+      authenticatedAction(subscriptionsClientId).async { implicit request =>
+
       identityService.getUser(request.user.minimalUser).fold(
         error => {
           SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.minimalUser.id} due to error from identityService: $error")
@@ -102,6 +104,11 @@ class DigitalSubscriptionController(
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
+    } else {
+      Action(Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect()).withSettingsSurrogateKey)
+    }
+  }
+
 
   private def digitalSubscriptionFormHtml(idUser: IdUser, orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = if (orderIsAGift) {
