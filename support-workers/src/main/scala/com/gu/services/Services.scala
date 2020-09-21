@@ -11,8 +11,8 @@ import com.gu.stripe.StripeService
 import com.gu.support.catalog.CatalogService
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
-import com.gu.support.redemption.RedemptionTable
-import com.gu.support.redemption.generator.GiftCodeGeneratorService
+import com.gu.support.redemption.corporate.RedemptionTable
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.ZuoraService
 
 import scala.concurrent.ExecutionContext.Implicits.global

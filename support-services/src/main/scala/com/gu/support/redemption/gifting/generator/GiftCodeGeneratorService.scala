@@ -1,6 +1,6 @@
-package com.gu.support.redemption.generator
+package com.gu.support.redemption.gifting.generator
 
-import com.gu.support.redemption.generator.GiftDuration.{Gift12Month, Gift3Month}
+import com.gu.support.redemption.gifting.generator.GiftDuration.{Gift12Month, Gift3Month}
 import com.gu.support.workers.{Annual, BillingPeriod}
 
 class GiftCodeGeneratorService {
