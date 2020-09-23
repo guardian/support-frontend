@@ -1,5 +1,6 @@
 package com.gu.support.redemption.gifting
 
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeNotFound, CodeRedeemedInThisRequest, ValidGiftCode}
 import com.gu.support.zuora.api.response.SubscriptionRedemptionQueryResponse
 import org.joda.time.LocalDate
 
@@ -10,15 +11,15 @@ object GiftRedemptionState {
   def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: String) =
     existingSub.records match {
       case existingSubFields :: Nil if existingSubFields.contractEffectiveDate.plusMonths(expirationTimeInMonths).isBefore(LocalDate.now()) =>
-        Expired
+        CodeExpired
       case existingSubFields :: Nil if existingSubFields.gifteeIdentityId.isEmpty =>
-        Unredeemed(existingSubFields.id)
+        ValidGiftCode(existingSubFields.id)
       case existingSubFields :: Nil if existingSubFields.createdRequestId == requestId =>
-        RedeemedInThisRequest
+        CodeRedeemedInThisRequest
       case _ :: Nil =>
-        Redeemed
+        CodeAlreadyUsed
       case _ =>
-        NotFound
+        CodeNotFound
     }
 
 }
