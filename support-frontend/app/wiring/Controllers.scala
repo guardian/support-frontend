@@ -78,7 +78,8 @@ trait Controllers {
     controllerComponents,
     fontLoader,
     authAction,
-    dynamoTableAsync
+    dynamoTableAsync,
+    zuoraServiceProvider
   )
 
   lazy val paperController = new PaperSubscription(

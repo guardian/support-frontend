@@ -6,6 +6,7 @@ import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.ZuoraConfig
 import com.gu.support.redemptions.RedemptionCode
+import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{Day, PreviewSubscribeRequest, QueryData, SubscribeRequest, UpdateRedemptionDataRequest}
@@ -31,7 +32,7 @@ trait ZuoraSubscribeService {
 }
 
 class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: Option[String] = None)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[ZuoraErrorResponse] with ZuoraSubscribeService {
+  extends WebServiceHelper[ZuoraErrorResponse] with ZuoraSubscribeService with TouchpointService {
 
   override val wsUrl: String = baseUrl.getOrElse(config.url)
   override val httpClient: FutureHttpClient = client
