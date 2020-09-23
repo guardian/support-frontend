@@ -1,7 +1,8 @@
 package com.gu.support.redemption.corporate
 
 import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
-import com.gu.support.redemption.corporate.GetCodeStatus.{CodeAlreadyUsed, CorporateId, NoSuchCode}
+import com.gu.support.redemption.corporate.GetCodeStatus.CorporateId
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound, ValidCorporateCode}
 import com.gu.support.redemptions.RedemptionCode
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -18,7 +19,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     getCodeStatus(RedemptionCode("CODE").right.get).map {
-      _ should be(Right(CorporateId("1")))
+      _ should be(ValidCorporateCode(CorporateId("1")))
     }
   }
 
@@ -30,7 +31,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     getCodeStatus(RedemptionCode("CODE").right.get).map {
-      _ should be(Left(CodeAlreadyUsed))
+      _ should be(CodeAlreadyUsed)
     }
   }
 
@@ -39,7 +40,7 @@ class GetCodeStatusSpec extends AsyncFlatSpec with Matchers {
       case "CODE" => Future.successful(None)
     }
     getCodeStatus(RedemptionCode("CODE").right.get).map {
-      _ should be(Left(NoSuchCode))
+      _ should be(CodeNotFound)
     }
   }
 

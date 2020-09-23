@@ -7,6 +7,7 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.catalog.{CatalogService, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
+import com.gu.support.redemption.CodeAlreadyUsed
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.corporate.{DynamoTableAsync, GetCodeStatus, RedemptionTable, SetCodeStatus}
 import com.gu.support.redemptions.RedemptionCode
@@ -54,7 +55,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
       _ <- createZuoraHelper.createSubscription(createDigiPackCorporateSubscriptionJson)
       r <- getCodeStatus(mutableCode).map {
-        _ should be(Left(GetCodeStatus.CodeAlreadyUsed))
+        _ should be(CodeAlreadyUsed)
       }
     } yield r
   }

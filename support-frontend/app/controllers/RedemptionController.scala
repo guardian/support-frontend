@@ -14,7 +14,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.redemption.corporate.{DynamoTableAsync, GetCodeStatus}
 import com.gu.support.redemption.gifting.GiftRedemptionState
-import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, ValidGiftCode}
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, ValidCorporateCode, ValidGiftCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.zuora.ZuoraService
@@ -228,10 +228,12 @@ class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
 
     for {
       codeToCheck <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => "Please check the code and try again")
-      _ <- EitherT(getCodeStatus(codeToCheck)).leftMap {
-        case GetCodeStatus.CodeAlreadyUsed => "Your code has already been redeemed"
-        case _ => "Please check the code and try again"
-      }
+      _ <- EitherT(getCodeStatus(codeToCheck).map {
+        case ValidCorporateCode(_) => Right(())
+        case CodeAlreadyUsed => Left("This code has already been redeemed")
+        case CodeExpired => Left("This code has expired")
+        case _ => Left("Please check the code and try again")
+      })
     } yield ()
   }
 

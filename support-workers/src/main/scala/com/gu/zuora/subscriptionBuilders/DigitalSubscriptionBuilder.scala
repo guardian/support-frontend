@@ -9,16 +9,15 @@ import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
-import com.gu.support.redemption.corporate.GetCodeStatus.{InvalidReaderType, RedemptionInvalid}
 import com.gu.support.redemption.corporate.GetCodeStatus
 import com.gu.support.redemption.gifting.GiftRedemptionState
 import com.gu.support.redemption.gifting.generator.CodeBuilder.GiftCode
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
+import com.gu.support.redemption.{InvalidCode, InvalidReaderType, ValidCorporateCode}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.ProductTypeRatePlans._
-import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption
-import com.gu.support.workers.{Annual, BillingPeriod, DigitalPack, Quarterly}
-import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
+import com.gu.support.workers.{BillingPeriod, DigitalPack}
+import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api.{ReaderType, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, buildProductSubscription, validateRatePlan}
 import org.joda.time.LocalDate
@@ -42,7 +41,7 @@ case class SubscriptionRedemption(
 
 object DigitalSubscriptionBuilder {
 
-  type BuildResult = EitherT[Future, Either[PromoError, RedemptionInvalid], SubscriptionData]
+  type BuildResult = EitherT[Future, Either[PromoError, InvalidCode], SubscriptionData]
 
   def build(
     digitalPack: DigitalPack,
@@ -121,7 +120,7 @@ object DigitalSubscriptionBuilder {
         redemption.redemptionData.redemptionCode,
         redemption.getCodeStatus
       )
-      case _ => val errorType: Either[PromoError, RedemptionInvalid] = Right(InvalidReaderType)
+      case _ => val errorType: Either[PromoError, InvalidCode] = Right(InvalidReaderType)
         EitherT.leftT(errorType)
         // Only corporate subscription redemptions require us to create a Zuora subscription,
         // gift redemptions modify the sub created during the gift purchase
@@ -145,13 +144,16 @@ object DigitalSubscriptionBuilder {
 
     val redeemedSubcription = for {
       subscription <-
-        EitherT(getCodeStatus(redemptionCode).map(_.map { corporateId =>
-          subscriptionData.subscription.copy(
+        EitherT(getCodeStatus(redemptionCode).map{
+          case ValidCorporateCode(corporateId) =>
+          Right(subscriptionData.subscription.copy(
             redemptionCode = Some(redemptionCode.value),
             corporateAccountId = Some(corporateId.corporateIdString),
             readerType = ReaderType.Corporate
-          )
-        }))
+          ))
+          case error: InvalidCode => Left(error)
+          case _ => Left(InvalidReaderType)
+        })
     } yield subscription
 
     redeemedSubcription

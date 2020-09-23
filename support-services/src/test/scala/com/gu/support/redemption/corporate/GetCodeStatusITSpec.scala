@@ -1,7 +1,8 @@
 package com.gu.support.redemption.corporate
 
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.redemption.corporate.GetCodeStatus.{CodeAlreadyUsed, CorporateId, NoSuchCode}
+import com.gu.support.redemption.corporate.GetCodeStatus.CorporateId
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -27,7 +28,7 @@ class GetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
 
   it should "handle an NOT valid code" in {
     getCodeStatus(RedemptionCode("ITTEST-MISSING").right.get).map {
-      _ should be(Left(NoSuchCode))
+      _ should be(Left(CodeNotFound))
     }
   }
 

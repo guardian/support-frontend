@@ -11,7 +11,6 @@ import com.gu.support.catalog._
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption._
-import com.gu.support.redemption.corporate.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemption.corporate._
 import com.gu.support.redemption.gifting.GiftRedemptionState
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
@@ -35,7 +34,7 @@ import scala.util.{Failure, Success}
 
 case class BuildSubscribePromoError(cause: PromoError) extends RuntimeException
 
-case class BuildSubscribeRedemptionError(cause: RedemptionInvalid) extends RuntimeException
+case class BuildSubscribeRedemptionError(cause: InvalidCode) extends RuntimeException
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
   extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
