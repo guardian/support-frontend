@@ -12,9 +12,9 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.redemption.corporate.{DynamoTableAsync, CorporateCodeValidator}
+import com.gu.support.redemption.corporate.{CorporateCodeValidator, DynamoLookup, DynamoTableAsync}
 import com.gu.support.redemption.gifting.GiftCodeValidator
-import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, ValidCorporateCode, ValidGiftCode}
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeNotFound, CodeValidationResult, ValidCorporateCode, ValidGiftCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.zuora.ZuoraService
@@ -34,6 +34,8 @@ import scala.concurrent.{ExecutionContext, Future}
 trait DynamoTableAsyncForUser {
   def apply(isTestUser: Boolean): DynamoTableAsync
 }
+
+
 
 class RedemptionController(
   val actionRefiners: CustomActionBuilders,
@@ -109,7 +111,8 @@ class RedemptionController(
       fontLoaderBundle = fontLoaderBundle,
       csrf = Some(CSRF.getToken.value)
     ) {
-      Html(s"""
+      Html(
+        s"""
         <script type="text/javascript">
           window.guardian.stage = "${stage}";
           window.guardian.user = {
@@ -219,6 +222,39 @@ class TestUserFromRequest(identityService: IdentityService, testUsers: TestUserS
     testUsers.isTestUser(displayName)
   }
 
+}
+
+class CodeValidator(zuoraService: ZuoraService, dynamoLookup: DynamoTableAsyncForUser) {
+  def validate(inputCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): Future[Option[String]] = {
+    val corporateValidator = CorporateCodeValidator.withDynamoLookup(dynamoLookup(isTestUser))
+    val giftValidator = new GiftCodeValidator(zuoraService)
+
+    RedemptionCode(inputCode)
+      .leftMap(_ => "Please check the code and try again")
+      .map {
+        redemptionCode =>
+          for {
+            corporateValidationResult <- corporateValidator.validate(redemptionCode)
+            giftValidationResult <- giftValidator.validate(redemptionCode, "")
+
+          } yield validationResultToErrorMessage(merge(giftValidationResult, corporateValidationResult))
+      }.fold(
+      codeParsingError => Future.successful(Some(codeParsingError)),
+      validationResult => validationResult
+    )
+  }
+
+  def merge(giftResult: CodeValidationResult, corporateResult: CodeValidationResult) =
+    if (giftResult == CodeNotFound) corporateResult else giftResult
+
+  def validationResultToErrorMessage(validationResult: CodeValidationResult) =
+    validationResult match {
+      case ValidGiftCode(_) => None
+      case ValidCorporateCode(_) => None
+      case CodeAlreadyUsed => Some("This code has already been redeemed")
+      case CodeExpired => Some("This code has expired")
+      case _ => Some("Please check the code and try again")
+    }
 }
 
 class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
