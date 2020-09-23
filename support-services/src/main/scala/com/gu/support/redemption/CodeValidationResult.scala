@@ -2,13 +2,13 @@ package com.gu.support.redemption
 
 import com.gu.support.redemption.corporate.GetCodeStatus.CorporateId
 
-sealed abstract class RedemptionValidationResult(val clientCode: String)
+sealed abstract class CodeValidationResult(val clientCode: String)
 
-sealed abstract class ValidCode(clientCode: String) extends RedemptionValidationResult(clientCode)
+sealed abstract class ValidCode(clientCode: String) extends CodeValidationResult(clientCode)
 
-sealed abstract class InvalidCode(clientCode: String) extends RedemptionValidationResult(clientCode)
+sealed abstract class InvalidCode(clientCode: String) extends CodeValidationResult(clientCode)
 
-case object CodeNotFound extends RedemptionValidationResult("code_not_found")
+case object CodeNotFound extends CodeValidationResult("code_not_found")
 
 case object CodeAlreadyUsed extends InvalidCode("code_already_used")
 
@@ -16,7 +16,9 @@ case object CodeExpired extends InvalidCode("code_expired")
 
 case object InvalidReaderType extends InvalidCode("invalid_reader_type")
 
-case class ValidGiftCode(subscriptionId: String) extends ValidCode("valid_gift_code")
+object ValidGiftCode { val clientCode = "valid_gift_code"}
+
+case class ValidGiftCode(subscriptionId: String) extends ValidCode(ValidGiftCode.clientCode)
 
 // This can happen if Zuora is responding very slowly - a redemption request may succeed but not return a response
 // until after the CreateZuoraSubscription lambda has timed out meaning that the redemption will be retried with the

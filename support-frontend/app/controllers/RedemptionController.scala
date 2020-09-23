@@ -13,11 +13,10 @@ import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.redemption.corporate.{DynamoTableAsync, GetCodeStatus}
-import com.gu.support.redemption.gifting.{Expired, GiftRedemptionState, Redeemed, Unredeemed}
-import com.gu.support.redemption.gifting.generator.CodeBuilder.GiftCode
+import com.gu.support.redemption.gifting.GiftRedemptionState
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, ValidGiftCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
-import com.gu.support.zuora.api.response.SubscriptionRedemptionQueryResponse
 import com.gu.zuora.ZuoraService
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import io.circe.syntax._
@@ -230,8 +229,8 @@ class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
     for {
       codeToCheck <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => "Please check the code and try again")
       _ <- EitherT(getCodeStatus(codeToCheck)).leftMap {
-        case GetCodeStatus.NoSuchCode => "Please check the code and try again"
         case GetCodeStatus.CodeAlreadyUsed => "Your code has already been redeemed"
+        case _ => "Please check the code and try again"
       }
     } yield ()
   }
@@ -244,9 +243,9 @@ object GiftCodeValidator {
       codeToCheck <- EitherT.fromEither[Future](RedemptionCode(inputCode)).leftMap(_ => "Please check the code and try again")
       zuoraResponse <- EitherT.right[String](zuoraService.getSubscriptionFromRedemptionCode(codeToCheck))
       _ <- EitherT.fromEither[Future](GiftRedemptionState.getSubscriptionState(zuoraResponse, "") match {
-        case Unredeemed(_) => Right(())
-        case Redeemed => Left("This code has already been redeemed")
-        case Expired => Left("This code has expired")
+        case ValidGiftCode(_) => Right(())
+        case CodeAlreadyUsed => Left("This code has already been redeemed")
+        case CodeExpired => Left("This code has expired")
         case _ => Left("Please check the code and try again")
       })
     } yield ()

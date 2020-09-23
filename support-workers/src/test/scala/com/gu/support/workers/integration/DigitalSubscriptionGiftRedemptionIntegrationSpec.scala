@@ -3,18 +3,16 @@ package com.gu.support.workers.integration
 import java.util.UUID
 
 import com.gu.salesforce.Fixtures.idId
-import com.gu.support.redemption.corporate.GetCodeStatus.{CodeAlreadyUsed, NoSuchCode}
-import com.gu.support.redemption.gifting.{NotFound, Redeemed}
-import com.gu.support.redemption.gifting.generator.CodeBuilder.GiftCode
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound}
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson}
-import com.gu.support.workers.{Annual, AsyncLambdaSpec, BillingPeriod, Fixtures, MockContext, RequestInfo}
 import com.gu.support.workers.lambdas.{DigitalSubscriptionGiftRedemption, HandlerResult}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers._
 import com.gu.test.tags.annotations.IntegrationTest
-import org.mockito.ArgumentMatchers.any
 import io.circe.parser.decode
+import org.mockito.ArgumentMatchers.any
 
 import scala.concurrent.Future
 
@@ -36,7 +34,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
 
     recoverToExceptionIf[RuntimeException](
       redeemSubscription(nonExistentCode, createSubRequestId)
-    ).map(_.getMessage shouldBe NotFound.clientCode)
+    ).map(_.getMessage shouldBe CodeNotFound.clientCode)
   }
 
   "CreateZuoraSubcription" should "create a Digital Pack gift subscription" in {
@@ -56,7 +54,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     val subsequentRequestId = UUID.randomUUID()
     recoverToExceptionIf[RuntimeException](
       redeemSubscription(giftCode.value, subsequentRequestId)
-    ).map(_.getMessage shouldBe Redeemed.clientCode)
+    ).map(_.getMessage shouldBe CodeAlreadyUsed.clientCode)
   }
 
   def redeemSubscription(codeValue: String, requestId: UUID): Future[HandlerResult[SendThankYouEmailState]] = {

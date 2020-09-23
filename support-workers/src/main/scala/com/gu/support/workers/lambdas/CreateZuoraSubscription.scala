@@ -8,30 +8,30 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
 import com.gu.support.catalog._
-import com.gu.support.config.{Stage, TouchPointEnvironments, ZuoraConfig}
+import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.corporate.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemption._
-import com.gu.support.redemption.corporate.{DynamoLookup, DynamoUpdate, GetCodeStatus, RedemptionTable, SetCodeStatus}
-import com.gu.support.redemption.gifting.{GiftRedemptionState, RedeemedInThisRequest, SubscriptionRedemptionState, Unredeemed}
+import com.gu.support.redemption.corporate.GetCodeStatus.RedemptionInvalid
+import com.gu.support.redemption.corporate._
+import com.gu.support.redemption.gifting.GiftRedemptionState
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription.createSubscription
-import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{buildHandlerResult, calculateNewTermLength, maybeDigitalSubscriptionGiftRedemption, redeemGift}
+import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
-import com.gu.support.zuora.api.response.{Subscription, SubscriptionRedemptionQueryResponse, UpdateRedemptionDataResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
+import com.gu.support.zuora.api.response.{Subscription, UpdateRedemptionDataResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.support.zuora.domain.DomainSubscription
-import com.gu.zuora.{ZuoraService, ZuoraSubscribeService}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.buildContributionSubscription
 import com.gu.zuora.subscriptionBuilders._
+import com.gu.zuora.{ZuoraService, ZuoraSubscribeService}
 import org.joda.time.{DateTime, DateTimeZone, Days, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success}
 
 case class BuildSubscribePromoError(cause: PromoError) extends RuntimeException
 
@@ -273,9 +273,9 @@ object DigitalSubscriptionGiftRedemption {
     zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode).flatMap(
       redemptionQueryResponse =>
         GiftRedemptionState.getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
-          case Unredeemed(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
-          case RedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
-          case otherState: SubscriptionRedemptionState => Future.failed(new RuntimeException(otherState.clientCode))
+          case ValidGiftCode(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
+          case CodeRedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
+          case otherState: CodeValidationResult => Future.failed(new RuntimeException(otherState.clientCode))
         }
     )
 
