@@ -1,8 +1,8 @@
 package com.gu.support.redemption.corporate
 
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.redemption.corporate.GetCodeStatus.CorporateId
-import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound}
+import com.gu.support.redemption.corporate.CorporateCodeValidator.CorporateId
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound, ValidCorporateCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -14,7 +14,7 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
 
   private val dynamoTableAsync: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
   val setCodeStatus = SetCodeStatus.withDynamoLookup(dynamoTableAsync)
-  val getCodeStatus = GetCodeStatus.withDynamoLookup(dynamoTableAsync)
+  val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoTableAsync)
 
   // this is one test because it depends on external state which may not be in a particular state
   "setCodeStatus" should "set a code available and used" in {
@@ -24,14 +24,14 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable).map {
         _ should be(())
       }
-      _ <- getCodeStatus(mutableCode).map {
-        _ should be(Right(CorporateId("1")))
+      _ <- codeValidator.validate(mutableCode).map {
+        _ should be(ValidCorporateCode(CorporateId("1")))
       }
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsUsed).map {
         _ should be(())
       }
-      a <- getCodeStatus(mutableCode).map {
-        _ should be(Left(CodeAlreadyUsed))
+      a <- codeValidator.validate(mutableCode).map {
+        _ should be(CodeAlreadyUsed)
       }
     } yield a
   }
@@ -42,8 +42,8 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
       _ <- recoverToSucceededIf[ConditionalCheckFailedException] {
         setCodeStatus(missingCode, RedemptionTable.AvailableField.CodeIsAvailable)
       }
-      a <- getCodeStatus(missingCode).map {
-        _ should be(Left(CodeNotFound))
+      a <- codeValidator.validate(missingCode).map {
+        _ should be(CodeNotFound)
       }
     } yield a
   }

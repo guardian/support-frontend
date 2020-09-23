@@ -12,7 +12,7 @@ import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption._
 import com.gu.support.redemption.corporate._
-import com.gu.support.redemption.gifting.GiftRedemptionState
+import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
@@ -81,7 +81,7 @@ object CreateZuoraSubscription {
     config: ZuoraConfig
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     for {
-      subscriptionData <- buildSubscriptionData(state, promotionService, GetCodeStatus.withDynamoLookup(redemptionService), giftCodeGenerator, today, config)
+      subscriptionData <- buildSubscriptionData(state, promotionService, CorporateCodeValidator.withDynamoLookup(redemptionService), giftCodeGenerator, today, config)
         .withLogging("subscription data")
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
@@ -159,7 +159,7 @@ object CreateZuoraSubscription {
   private def buildSubscriptionData(
     state: CreateZuoraSubscriptionState,
     promotionService: => PromotionService,
-    getCodeStatus: => GetCodeStatus,
+    getCodeStatus: => CorporateCodeValidator,
     giftCodeGenerator: GiftCodeGeneratorService,
     today: () => LocalDate,
     config: ZuoraConfig
@@ -268,16 +268,16 @@ object DigitalSubscriptionGiftRedemption {
     state: CreateZuoraSubscriptionState,
     zuoraService: ZuoraService,
     catalogService: CatalogService
-  ): Future[HandlerResult[SendThankYouEmailState]] =
-    zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode).flatMap(
-      redemptionQueryResponse =>
-        GiftRedemptionState.getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
-          case ValidGiftCode(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
-          case CodeRedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
-          case otherState: CodeValidationResult => Future.failed(new RuntimeException(otherState.clientCode))
-        }
-    )
-
+  ): Future[HandlerResult[SendThankYouEmailState]] = {
+    val codeValidator = new GiftCodeValidator(zuoraService)
+    codeValidator
+      .validate(redemptionData.redemptionCode, state.requestId.toString)
+      .flatMap {
+        case ValidGiftCode(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
+        case CodeRedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
+        case otherState: CodeValidationResult => Future.failed(new RuntimeException(otherState.clientCode))
+      }
+  }
 
   private def redeemInZuora(
     subscriptionId: String,

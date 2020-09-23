@@ -7,7 +7,7 @@ import com.gu.support.redemptions.RedemptionCode
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-object GetCodeStatus {
+object CorporateCodeValidator {
 
   case class CorporateId(corporateIdString: String) extends AnyVal
 
@@ -29,15 +29,15 @@ object GetCodeStatus {
       }
     } yield corporateId
 
-  def withDynamoLookup(dynamoLookup: DynamoLookup): GetCodeStatus = new GetCodeStatus(dynamoLookup)
+  def withDynamoLookup(dynamoLookup: DynamoLookup): CorporateCodeValidator = new CorporateCodeValidator(dynamoLookup)
 
 }
 
-class GetCodeStatus(dynamoLookup: DynamoLookup) extends WithLogging {
+class CorporateCodeValidator(dynamoLookup: DynamoLookup) extends WithLogging {
 
-  import GetCodeStatus._
+  import CorporateCodeValidator._
 
-  def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[CodeValidationResult] =
+  def validate(code: RedemptionCode)(implicit ec: ExecutionContext): Future[CodeValidationResult] =
     (for {
       maybeAttributes <- dynamoLookup.lookup(code.value)
       status <- FlattenErrors(maybeAttributes.map { attributes =>

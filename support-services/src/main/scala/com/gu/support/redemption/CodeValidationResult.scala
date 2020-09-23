@@ -1,6 +1,6 @@
 package com.gu.support.redemption
 
-import com.gu.support.redemption.corporate.GetCodeStatus.CorporateId
+import com.gu.support.redemption.corporate.CorporateCodeValidator.CorporateId
 
 sealed abstract class CodeValidationResult(val clientCode: String)
 

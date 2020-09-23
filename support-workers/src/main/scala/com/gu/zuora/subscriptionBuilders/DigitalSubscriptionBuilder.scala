@@ -9,8 +9,8 @@ import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
-import com.gu.support.redemption.corporate.GetCodeStatus
-import com.gu.support.redemption.gifting.GiftRedemptionState
+import com.gu.support.redemption.corporate.CorporateCodeValidator
+import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.CodeBuilder.GiftCode
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{InvalidCode, InvalidReaderType, ValidCorporateCode}
@@ -36,7 +36,7 @@ case class SubscriptionPurchase(
 
 case class SubscriptionRedemption(
   redemptionData: RedemptionData,
-  getCodeStatus: GetCodeStatus
+  getCodeStatus: CorporateCodeValidator
 ) extends SubscriptionPaymentType
 
 object DigitalSubscriptionBuilder {
@@ -71,7 +71,7 @@ object DigitalSubscriptionBuilder {
   )(implicit ec: ExecutionContext): BuildResult = {
 
     val (contractAcceptanceDelay, autoRenew, initialTerm) = if (readerType == Gift)
-      (0, false, GiftRedemptionState.expirationTimeInMonths + 1)
+      (0, false, GiftCodeValidator.expirationTimeInMonths + 1)
     else
       (purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod, true, 12)
 
@@ -132,7 +132,7 @@ object DigitalSubscriptionBuilder {
     productRatePlanId: ProductRatePlanId,
     requestId: UUID,
     redemptionCode: RedemptionCode,
-    getCodeStatus: GetCodeStatus
+    codeValidator: CorporateCodeValidator
   )(implicit ec: ExecutionContext): BuildResult = {
     val subscriptionData = buildProductSubscription(
       requestId,
@@ -144,7 +144,7 @@ object DigitalSubscriptionBuilder {
 
     val redeemedSubcription = for {
       subscription <-
-        EitherT(getCodeStatus(redemptionCode).map{
+        EitherT(codeValidator.validate(redemptionCode).map{
           case ValidCorporateCode(corporateId) =>
           Right(subscriptionData.subscription.copy(
             redemptionCode = Some(redemptionCode.value),

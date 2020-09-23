@@ -1,7 +1,7 @@
 package com.gu.support.workers
 
 import com.gu.support.SerialisationTestHelpers
-import com.gu.support.redemption.gifting.GiftRedemptionState
+import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeRedeemedInThisRequest, ValidGiftCode}
 import com.gu.support.zuora.api.response.{SubscriptionRedemptionFields, SubscriptionRedemptionQueryResponse}
 import org.joda.time.LocalDate
@@ -9,10 +9,9 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with SerialisationTestHelpers {
 
-
   "DigitalSubscriptionGiftRedemption" should "identify an unredeemed subscription from a SubscriptionRedemptionQueryResponse" in {
     val response = SubscriptionRedemptionQueryResponse(List(SubscriptionRedemptionFields("1", LocalDate.now(), "123", None)))
-    val state = GiftRedemptionState.getSubscriptionState(response, "123")
+    val state = GiftCodeValidator.getSubscriptionState(response, "123")
     state.clientCode shouldBe ValidGiftCode.clientCode
   }
 
@@ -26,7 +25,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
         createdRequestId = createdRequestId,
         gifteeIdentityId = Some("123456789")
       )))
-    val state = GiftRedemptionState.getSubscriptionState(response, thisRequestId)
+    val state = GiftCodeValidator.getSubscriptionState(response, thisRequestId)
     state.clientCode shouldBe CodeAlreadyUsed.clientCode
   }
 
@@ -38,7 +37,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
         createdRequestId = "123",
         gifteeIdentityId = Some("123456789"))
       ))
-    val state = GiftRedemptionState.getSubscriptionState(response, "123")
+    val state = GiftCodeValidator.getSubscriptionState(response, "123")
     state.clientCode shouldBe CodeRedeemedInThisRequest.clientCode
   }
 
@@ -51,7 +50,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
         createdRequestId = "123",
         gifteeIdentityId = None)
       ))
-    GiftRedemptionState
+    GiftCodeValidator
       .getSubscriptionState(expiredResponse, "456")
       .clientCode shouldBe CodeExpired.clientCode
 
@@ -63,7 +62,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
         createdRequestId = "123",
         gifteeIdentityId = None)
       ))
-    GiftRedemptionState
+    GiftCodeValidator
       .getSubscriptionState(nonExpiredResponse, "456")
       .clientCode shouldBe ValidGiftCode.clientCode
   }

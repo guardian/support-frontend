@@ -12,8 +12,8 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.redemption.corporate.{DynamoTableAsync, GetCodeStatus}
-import com.gu.support.redemption.gifting.GiftRedemptionState
+import com.gu.support.redemption.corporate.{DynamoTableAsync, CorporateCodeValidator}
+import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, ValidCorporateCode, ValidGiftCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
@@ -224,11 +224,11 @@ class TestUserFromRequest(identityService: IdentityService, testUsers: TestUserS
 class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
 
   def apply(redemptionCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
-    val getCodeStatus = GetCodeStatus.withDynamoLookup(dynamoLookup(isTestUser))
+    val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoLookup(isTestUser))
 
     for {
       codeToCheck <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => "Please check the code and try again")
-      _ <- EitherT(getCodeStatus(codeToCheck).map {
+      _ <- EitherT(codeValidator.validate(codeToCheck).map {
         case ValidCorporateCode(_) => Right(())
         case CodeAlreadyUsed => Left("This code has already been redeemed")
         case CodeExpired => Left("This code has expired")
@@ -239,18 +239,20 @@ class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
 
 }
 
-object GiftCodeValidator {
-  def verify(inputCode: String, zuoraService: ZuoraService)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] =
+object GetGiftCodeState {
+  def verify(inputCode: String, zuoraService: ZuoraService)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
+    val codeValidator = new GiftCodeValidator(zuoraService)
     for {
       codeToCheck <- EitherT.fromEither[Future](RedemptionCode(inputCode)).leftMap(_ => "Please check the code and try again")
-      zuoraResponse <- EitherT.right[String](zuoraService.getSubscriptionFromRedemptionCode(codeToCheck))
-      _ <- EitherT.fromEither[Future](GiftRedemptionState.getSubscriptionState(zuoraResponse, "") match {
+
+      _ <- EitherT(codeValidator.validate(codeToCheck, "").map {
         case ValidGiftCode(_) => Right(())
         case CodeAlreadyUsed => Left("This code has already been redeemed")
         case CodeExpired => Left("This code has expired")
         case _ => Left("Please check the code and try again")
       })
     } yield ()
+  }
 
 }
 
