@@ -2,6 +2,8 @@ package com.gu.support.touchpoint
 
 import com.gu.support.config.{TouchpointConfig, TouchpointConfigProvider}
 
+import scala.concurrent.ExecutionContext
+
 trait TouchpointService
 
 abstract class TouchpointServiceProvider[T <: TouchpointService, C <: TouchpointConfig](configProvider: TouchpointConfigProvider[C]) {
@@ -11,4 +13,5 @@ abstract class TouchpointServiceProvider[T <: TouchpointService, C <: Touchpoint
   def forUser(isTestUser: Boolean): T = if (isTestUser) uatService else defaultService
 
   protected def createService(config: C): T
+
 }

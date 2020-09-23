@@ -17,7 +17,7 @@ import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeNotFound, CodeValidationResult, ValidCorporateCode, ValidGiftCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
-import com.gu.zuora.ZuoraService
+import com.gu.zuora.{ZuoraService, ZuoraServiceProvider}
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import io.circe.syntax._
 import lib.RedirectWithEncodedQueryString
@@ -47,7 +47,8 @@ class RedemptionController(
   components: ControllerComponents,
   fontLoaderBundle: Either[RefPath, StyleContent],
   googleAuthAction: AuthAction[AnyContent],
-  dynamoLookup: DynamoTableAsyncForUser
+  dynamoLookup: DynamoTableAsyncForUser,
+  zuoraServiceProvider: ZuoraServiceProvider
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with Circe {
@@ -62,15 +63,16 @@ class RedemptionController(
   val js = "subscriptionsRedemptionPage.js"
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
-  val getCorporateCustomer = new GetCorporateCustomer(dynamoLookup)
   val testUserFromRequest = new TestUserFromRequest(identityService, testUsers)
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = (googleAuthAction andThen maybeAuthenticatedAction()).async {
     implicit request =>
+
       for {
         isTestUser <- testUserFromRequest.isTestUser(request)
+        codeValidator = new CodeValidator(zuoraServiceProvider.forUser(isTestUser), dynamoLookup)
         normalisedCode = redemptionCode.toUpperCase(Locale.UK)
-        form <- getCorporateCustomer(redemptionCode, isTestUser).fold(Some.apply, _ => None).map(
+        form <- codeValidator.validate(redemptionCode, isTestUser).map(
           maybeError =>
             Ok(subscriptionRedemptionForm(
               title = title,
@@ -135,7 +137,7 @@ class RedemptionController(
       isTestUser = isTestUser,
       stage = "checkout",
       redemptionCode = redemptionCode,
-      Some("Unfortunately we were unable to process your code, please try again later"),
+      Some("Unfortunately we were unable to process your code, please try again later"), //TODO: RB use actual error?
       user = None,
       submitted = false
     ))
@@ -157,7 +159,11 @@ class RedemptionController(
     val processingPage: EitherT[Future, (String, Boolean), Result] = for {
       user <- identityService.getUser(request.user.minimalUser).leftMap((_, false))
       isTestUser = testUserFromRequest.fromIdUser(user)
-      _ <- getCorporateCustomer(redemptionCode, isTestUser).leftMap((_, isTestUser))
+      codeValidator = new CodeValidator(zuoraServiceProvider.forUser(isTestUser), dynamoLookup)
+      _ <- EitherT(codeValidator.validate(redemptionCode, isTestUser).map { //TODO: RB got to be a simpler way to do this
+        case Some(error) => Left(error, isTestUser)
+        case None => Right(())
+      })
     } yield showProcessing(redemptionCode, user)
 
     processingPage.leftMap {
@@ -185,7 +191,9 @@ class RedemptionController(
     ))
 
   def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] = CachedAction().async {
-    getCorporateCustomer(redemptionCode, isTestUser.getOrElse(false)).fold(Some.apply, _ => None).map(
+    val testUser = isTestUser.getOrElse(false)
+    val codeValidator = new CodeValidator(zuoraServiceProvider.forUser(testUser), dynamoLookup)
+    codeValidator.validate(redemptionCode, testUser).map(
       maybeError => Ok(RedemptionValidationResult(valid = maybeError.isEmpty, maybeError).asJson)
     )
   }
@@ -257,38 +265,38 @@ class CodeValidator(zuoraService: ZuoraService, dynamoLookup: DynamoTableAsyncFo
     }
 }
 
-class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
-
-  def apply(redemptionCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
-    val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoLookup(isTestUser))
-
-    for {
-      codeToCheck <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => "Please check the code and try again")
-      _ <- EitherT(codeValidator.validate(codeToCheck).map {
-        case ValidCorporateCode(_) => Right(())
-        case CodeAlreadyUsed => Left("This code has already been redeemed")
-        case CodeExpired => Left("This code has expired")
-        case _ => Left("Please check the code and try again")
-      })
-    } yield ()
-  }
-
-}
-
-object GetGiftCodeState {
-  def verify(inputCode: String, zuoraService: ZuoraService)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
-    val codeValidator = new GiftCodeValidator(zuoraService)
-    for {
-      codeToCheck <- EitherT.fromEither[Future](RedemptionCode(inputCode)).leftMap(_ => "Please check the code and try again")
-
-      _ <- EitherT(codeValidator.validate(codeToCheck, "").map {
-        case ValidGiftCode(_) => Right(())
-        case CodeAlreadyUsed => Left("This code has already been redeemed")
-        case CodeExpired => Left("This code has expired")
-        case _ => Left("Please check the code and try again")
-      })
-    } yield ()
-  }
-
-}
+//class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
+//
+//  def apply(redemptionCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
+//    val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoLookup(isTestUser))
+//
+//    for {
+//      codeToCheck <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => "Please check the code and try again")
+//      _ <- EitherT(codeValidator.validate(codeToCheck).map {
+//        case ValidCorporateCode(_) => Right(())
+//        case CodeAlreadyUsed => Left("This code has already been redeemed")
+//        case CodeExpired => Left("This code has expired")
+//        case _ => Left("Please check the code and try again")
+//      })
+//    } yield ()
+//  }
+//
+//}
+//
+//object GetGiftCodeState {
+//  def verify(inputCode: String, zuoraService: ZuoraService)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
+//    val codeValidator = new GiftCodeValidator(zuoraService)
+//    for {
+//      codeToCheck <- EitherT.fromEither[Future](RedemptionCode(inputCode)).leftMap(_ => "Please check the code and try again")
+//
+//      _ <- EitherT(codeValidator.validate(codeToCheck, "").map {
+//        case ValidGiftCode(_) => Right(())
+//        case CodeAlreadyUsed => Left("This code has already been redeemed")
+//        case CodeExpired => Left("This code has expired")
+//        case _ => Left("Please check the code and try again")
+//      })
+//    } yield ()
+//  }
+//
+//}
 
