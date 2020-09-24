@@ -4,13 +4,14 @@ import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.ZuoraConfig
 import com.gu.support.redemptions.RedemptionCode
+import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.zuora.api.{Day, QueryData, UpdateRedemptionDataRequest}
 import com.gu.support.zuora.api.response.{Subscription, SubscriptionRedemptionQueryResponse, UpdateRedemptionDataResponse, ZuoraErrorResponse}
 import io.circe.syntax.EncoderOps
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait ZuoraGiftLookupService {
+trait ZuoraGiftLookupService extends TouchpointService {
   def getSubscriptionFromRedemptionCode(redemptionCode: RedemptionCode): Future[SubscriptionRedemptionQueryResponse]
 }
 
