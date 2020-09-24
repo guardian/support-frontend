@@ -67,7 +67,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
       RedemptionData(code),
       RequestInfo(testUser = false, failed = false, Nil, accountExists = false),
       state,
-      createZuoraHelper.mockZuoraService,
+      createZuoraHelper.realZuoraGiftService,
       createZuoraHelper.realCatalogService
     )
   }

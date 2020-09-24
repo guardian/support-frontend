@@ -15,6 +15,7 @@ import com.gu.monitoring.SafeLogger._
 import com.gu.support.redemption.corporate.{DynamoTableAsync, GetCodeStatus}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
+import com.gu.zuora.{ZuoraService, ZuoraGiftLookupServiceProvider}
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import io.circe.syntax._
 import lib.RedirectWithEncodedQueryString
@@ -42,7 +43,8 @@ class RedemptionController(
   components: ControllerComponents,
   fontLoaderBundle: Either[RefPath, StyleContent],
   googleAuthAction: AuthAction[AnyContent],
-  dynamoLookup: DynamoTableAsyncForUser
+  dynamoLookup: DynamoTableAsyncForUser,
+  zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with Circe {
