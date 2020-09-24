@@ -1,16 +1,13 @@
 package com.gu.emailservices
 
-import com.gu.emailservices.DigitalPackEmailFields.Failable
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes.PPAttributes
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.{BasicDSAttributes, DirectDSAttributes}
-import io.circe.Json.{JArray, JObject}
-import io.circe.{Json, JsonObject}
 import io.circe.syntax._
+import io.circe.{Json, JsonObject}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.EitherValues._
 
-class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers {
+class JsonToAttributesSpec extends AnyFlatSpec with Matchers {
 
   "asFlattenedPairs" should "handle a real object" in {
     val data = DirectDSAttributes(
@@ -29,7 +26,7 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers {
       trial_period = "a",
       paymentFieldsAttributes = PPAttributes()
     ).asJsonObject
-    val actual = DigitalPackEmailFields.asFlattenedPairs(data)
+    val actual = JsonToAttributes.asFlattenedPairs(data)
     actual.map(_.toMap) should be(Right(Map(
       "zuorasubscriberid" -> "1",
       "emailaddress" -> "2",
@@ -50,7 +47,7 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers {
     val data = JsonObject(
       "test" -> Json.arr()
     )
-    val actual = DigitalPackEmailFields.asFlattenedPairs(data)
+    val actual = JsonToAttributes.asFlattenedPairs(data)
     actual.map(_.toMap) should matchPattern { case Left(_) => }
   }
 
@@ -60,7 +57,7 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers {
       "test2" -> Json.arr()
       )
     )
-    val actual = DigitalPackEmailFields.asFlattenedPairs(data)
+    val actual = JsonToAttributes.asFlattenedPairs(data)
     actual.map(_.toMap) should matchPattern { case Left(_) => }
   }
 
@@ -71,7 +68,7 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers {
         ("shouldExist2" -> Json.fromString("value2"))
       )
     )
-    val actual = DigitalPackEmailFields.asFlattenedPairs(data)
+    val actual = JsonToAttributes.asFlattenedPairs(data)
     actual.map(_.toMap) should be(Right(Map(
       "shouldExist1" -> "value1",
       "shouldExist2" -> "value2",
@@ -85,7 +82,7 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers {
         ("clash" -> Json.fromString("value2"))
       )
     )
-    val actual = DigitalPackEmailFields.asFlattenedPairs(data)
+    val actual = JsonToAttributes.asFlattenedPairs(data)
     actual.map(_.toMap) should matchPattern { case Left(_) => }
   }
 

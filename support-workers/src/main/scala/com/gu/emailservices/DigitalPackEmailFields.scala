@@ -149,7 +149,7 @@ class DigitalPackEmailFields(
   }
 
   private def wrap(dataExtensionName: String, fields: DigitalSubscriptionEmailAttributes) = for {
-    attributePairs <- asFlattenedPairs(fields.asJsonObject)
+    attributePairs <- JsonToAttributes.asFlattenedPairs(fields.asJsonObject)
   } yield EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
 
   private def giftRecipientNotification =
@@ -201,31 +201,6 @@ class DigitalPackEmailFields(
 
 object DigitalPackEmailFields {
 
-  type Failable[A] = Either[String, A]
-  def asFlattenedPairs(value: JsonObject): Failable[List[(String, String)]] = {
-    def flattenToPairs(value: JsonObject, failablePairsSoFar: Failable[Map[String, String]]): Failable[Map[String, String]] =
-      value.toList.foldLeft(failablePairsSoFar) {
-          case (failablePairsSoFar, (fieldName, jValue)) =>
-            failablePairsSoFar.flatMap { pairsSoFar =>
-              jValue.asString match {
-                case None =>
-                  jValue.asObject match {
-                    case None => Left(s"all values should be string or object: ${fieldName} -> $value")
-                    case Some(obj) =>
-                      flattenToPairs(obj, Right(pairsSoFar))
-                  }
-                case Some(string) =>
-                  if (pairsSoFar.contains(fieldName))
-                    Left(s"found duplicate key ${fieldName} in case classes")
-                  else
-                    Right(pairsSoFar + (fieldName -> string))
-              }
-          }
-        }
-
-    flattenToPairs(value, Right(Map.empty)).map(_.toList)
-  }
-
   def paymentFields(paymentMethod: PaymentMethod, directDebitMandateId: Option[String]): PaymentFieldsAttributes =
     paymentMethod match {
       case dd: DirectDebitPaymentMethod => DDAttributes(
@@ -243,5 +218,37 @@ object DigitalPackEmailFields {
       case _: CreditCardReferenceTransaction => CCAttributes()
       case _: PayPalReferenceTransaction => PPAttributes()
     }
+
+}
+
+object JsonToAttributes {
+
+  type Failable[A] = Either[String, A]
+
+  // this turns a JsonObject into a List of key/value pairs for insertion into the existing EmailFields object.
+  // (We don't want to change the non DS emails at this point, so it makes sense to convert the case classes to the existing structure.)
+  def asFlattenedPairs(value: JsonObject): Failable[List[(String, String)]] = {
+    def flattenToPairs(value: JsonObject, failablePairsSoFar: Failable[Map[String, String]]): Failable[Map[String, String]] =
+      value.toList.foldLeft(failablePairsSoFar) {
+        case (failablePairsSoFar, (fieldName, jValue)) =>
+          failablePairsSoFar.flatMap { pairsSoFar =>
+            jValue.asString match {
+              case None =>
+                jValue.asObject match {
+                  case None => Left(s"all values should be string or object: ${fieldName} -> $value")
+                  case Some(obj) =>
+                    flattenToPairs(obj, Right(pairsSoFar))
+                }
+              case Some(string) =>
+                if (pairsSoFar.contains(fieldName))
+                  Left(s"found duplicate key ${fieldName} in case classes")
+                else
+                  Right(pairsSoFar + (fieldName -> string))
+            }
+          }
+      }
+
+    flattenToPairs(value, Right(Map.empty)).map(_.toList)
+  }
 
 }
