@@ -12,7 +12,7 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.redemption.{DynamoTableAsync, GetCodeStatus}
+import com.gu.support.redemption.corporate.{DynamoTableAsync, GetCodeStatus}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}

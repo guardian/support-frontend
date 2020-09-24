@@ -21,15 +21,15 @@ object DigitalPackEmailFields {
           paymentFields(pm, directDebitMandateId) ++
             directReaderFields(promotion, billingPeriod, user, currency, paymentSchedule)
         case None /*Corporate*/ => List(
-          "Subscription details" -> "Group subscription"
+          "subscription_details" -> "Group subscription"
         )
       }
 
     val fields = List(
-      "ZuoraSubscriberId" -> subscriptionNumber,
-      "EmailAddress" -> user.primaryEmailAddress,
-      "First Name" -> user.firstName,
-      "Last Name" -> user.lastName,
+      "zuorasubscriberid" -> subscriptionNumber,
+      "emailaddress" -> user.primaryEmailAddress,
+      "first_name" -> user.firstName,
+      "last_name" -> user.lastName,
     ) ++ fieldsForReaderType
 
     val dataExtensionName = if (paidSubPaymentData.isDefined) "digipack" else "digipack-corp"
@@ -40,21 +40,21 @@ object DigitalPackEmailFields {
   def paymentFields(paymentMethod: PaymentMethod, directDebitMandateId: Option[String]): Seq[(String, String)] =
     paymentMethod match {
       case dd: DirectDebitPaymentMethod => List(
-        "Account number" -> mask(dd.bankTransferAccountNumber),
-        "Sort Code" -> hyphenate(dd.bankCode),
-        "Account Name" -> dd.bankTransferAccountName,
-        "Default payment method" -> "Direct Debit",
-        "MandateID" -> directDebitMandateId.getOrElse("")
+        "account_number" -> mask(dd.bankTransferAccountNumber),
+        "sort_code" -> hyphenate(dd.bankCode),
+        "account_name" -> dd.bankTransferAccountName,
+        "default_payment_method" -> "Direct Debit",
+        "mandateid" -> directDebitMandateId.getOrElse("")
       )
       case dd: ClonedDirectDebitPaymentMethod => List(
-        "Sort Code" -> hyphenate(dd.bankCode),
-        "Account number" -> mask(dd.bankTransferAccountNumber),
-        "Account Name" -> dd.bankTransferAccountName,
-        "Default payment method" -> "Direct Debit",
-        "MandateID" -> dd.mandateId
+        "sort_code" -> hyphenate(dd.bankCode),
+        "account_number" -> mask(dd.bankTransferAccountNumber),
+        "account_name" -> dd.bankTransferAccountName,
+        "default_payment_method" -> "Direct Debit",
+        "mandateid" -> dd.mandateId
       )
-      case _: CreditCardReferenceTransaction => List("Default payment method" -> "Credit/Debit Card")
-      case _: PayPalReferenceTransaction => Seq("Default payment method" -> "PayPal")
+      case _: CreditCardReferenceTransaction => List("default_payment_method" -> "Credit/Debit Card")
+      case _: PayPalReferenceTransaction => Seq("default_payment_method" -> "PayPal")
     }
 
   def directReaderFields(
@@ -65,13 +65,13 @@ object DigitalPackEmailFields {
     paymentSchedule: PaymentSchedule
   ): Seq[(String, String)] = {
     List(
-      "Subscription term" -> billingPeriod.noun,
-      "Payment amount" -> SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),
-      "Country" -> user.billingAddress.country.name,
-      "Date of first payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
-      "Currency" -> currency.glyph,
-      "Trial period" -> "14", //TODO: depends on Promo code or zuora config
-      "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
+      "subscription_term" -> billingPeriod.noun,
+      "payment_amount" -> SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),
+      "country" -> user.billingAddress.country.name,
+      "date_of_first_payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
+      "currency" -> currency.glyph,
+      "trial_period" -> "14", //TODO: depends on Promo code or zuora config
+      "subscription_details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
     )
   }
 

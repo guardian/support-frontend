@@ -10,9 +10,11 @@ import com.gu.support.catalog
 import com.gu.support.catalog._
 import com.gu.support.config.{Stage, TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.GetCodeStatus.RedemptionInvalid
+import com.gu.support.redemption.corporate.GetCodeStatus.RedemptionInvalid
 import com.gu.support.redemption._
-import com.gu.support.redemption.generator.GiftCodeGeneratorService
+import com.gu.support.redemption.corporate.{DynamoLookup, DynamoUpdate, GetCodeStatus, RedemptionTable, SetCodeStatus}
+import com.gu.support.redemption.gifting.{GiftRedemptionState, RedeemedInThisRequest, SubscriptionRedemptionState, Unredeemed}
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.CreateZuoraSubscription.createSubscription
@@ -254,19 +256,6 @@ object CreateZuoraSubscription {
 
 object DigitalSubscriptionGiftRedemption {
 
-  sealed trait SubscriptionState
-
-  case class Unredeemed(subscriptionId: String) extends SubscriptionState
-
-  // This can happen if Zuora is responding very slowly - a redemption request may succeed but not return a response
-  // until after the CreateZuoraSubscription lambda has timed out meaning that the redemption will be retried with the
-  // same requestId. In this case we want the lambda to succeed so that we progress to the next lambda
-  case object RedeemedInThisRequest extends SubscriptionState
-
-  case object Redeemed extends SubscriptionState
-
-  case object NotFound extends SubscriptionState
-
   def maybeDigitalSubscriptionGiftRedemption(product: ProductType, paymentMethod: Either[PaymentMethod, RedemptionData]) = {
     product match {
       case d: DigitalPack if paymentMethod.isRight && d.readerType == Gift => paymentMethod.right.toOption
@@ -283,25 +272,12 @@ object DigitalSubscriptionGiftRedemption {
   ): Future[HandlerResult[SendThankYouEmailState]] =
     zuoraService.getSubscriptionFromRedemptionCode(redemptionData.redemptionCode).flatMap(
       redemptionQueryResponse =>
-        getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
+        GiftRedemptionState.getSubscriptionState(redemptionQueryResponse, state.requestId.toString) match {
           case Unredeemed(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
           case RedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
-          case Redeemed => Future.failed(new RuntimeException(GetCodeStatus.CodeAlreadyUsed.clientCode))
-          case NotFound => Future.failed(new RuntimeException(GetCodeStatus.NoSuchCode.clientCode))
+          case otherState: SubscriptionRedemptionState => Future.failed(new RuntimeException(otherState.clientCode))
         }
     )
-
-  private def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: String) =
-    existingSub.records match {
-      case existingSubFields :: Nil if existingSubFields.gifteeIdentityId.isEmpty =>
-        Unredeemed(existingSubFields.id)
-      case existingSubFields :: Nil if existingSubFields.createdRequestId == requestId =>
-        RedeemedInThisRequest
-      case _ :: Nil =>
-        Redeemed
-      case _ =>
-        NotFound
-    }
 
 
   private def redeemInZuora(

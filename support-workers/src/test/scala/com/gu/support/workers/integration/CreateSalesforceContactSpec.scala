@@ -28,7 +28,7 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
     }
   }
 
-  it should "upsert a gift SalesforceContactRecord" ignore {
+  it should "upsert a gift SalesforceContactRecord" in {
     val createContact = new CreateSalesforceContact()
 
     val outStream = new ByteArrayOutputStream()

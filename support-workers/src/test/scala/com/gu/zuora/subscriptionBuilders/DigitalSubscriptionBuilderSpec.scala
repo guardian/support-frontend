@@ -7,10 +7,12 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.GetCodeStatus.InvalidReaderType
-import com.gu.support.redemption.generator.GiftCodeGeneratorService
-import com.gu.support.redemption.{DynamoLookup, GetCodeStatus}
+import com.gu.support.redemption.corporate.GetCodeStatus.InvalidReaderType
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
+import com.gu.support.redemption.corporate.{DynamoLookup, GetCodeStatus}
+import com.gu.support.redemption.gifting.GiftRedemptionState
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
+import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption
 import com.gu.support.workers.{DigitalPack, Monthly, Quarterly}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
@@ -78,7 +80,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       readerType shouldBe Gift
       redemptionCode.isDefined shouldBe true
       redemptionCode.get.substring(0, 4) shouldBe "gd03"
-      initialTerm shouldBe 3 //TODO: RB check that this is correct
+      initialTerm shouldBe GiftRedemptionState.expirationTimeInMonths + 1
       initialTermPeriodType shouldBe Month
       promoCode shouldBe None
       corporateAccountId shouldBe None
