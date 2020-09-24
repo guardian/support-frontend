@@ -130,32 +130,37 @@ class DigitalPackEmailFields(
   def build(
     paidSubPaymentData: Option[PaymentMethodWithSchedule],
     readerType: ReaderType
-  ): Either[String, List[EmailFields]] =
+  ): Either[String, List[EmailFields]] = {
+
+    val Purchase = Some
+    val Redemption = None
+
     (paidSubPaymentData, readerType) match {
-      case (Some(PaymentMethodWithSchedule(pm, paymentSchedule)), ReaderType.Gift) =>
+      case (Purchase(paymentInfo), ReaderType.Gift) =>
         List(
-          wrap("digipack-gift-purchase", buildGiftPurchaseAttributes(pm)),
-          wrap("digipack-gift-notification", buildGiftNotificationAttributes)
+          giftPurchaserConfirmation(paymentInfo.paymentMethod),
+          giftRecipientNotification
         ).sequence
-      case (Some(PaymentMethodWithSchedule(pm, paymentSchedule)), _) => wrap("digipack", directAttributes(pm, paymentSchedule)).map(List(_))
-      case (None, ReaderType.Corporate) => wrap("digipack-corp", buildCorpRedemptionAttributes).map(List(_))
-      case (None, ReaderType.Gift) => wrap("digipack-gift-redemption", buildGiftRedemptionAttributes).map(List(_))
-      case (None, _) => Left("can only redeem gift and corporate subs")
+      case (Purchase(paymentInfo), _) => directThankYou(paymentInfo).map(List(_))
+      case (Redemption, ReaderType.Corporate) => corpRedemption.map(List(_))
+      case (Redemption, ReaderType.Gift) => giftRedemption.map(List(_))
+      case (Redemption, _) => Left("redemption is only possible for gift and corporate subs")
     }
+  }
 
   private def wrap(dataExtensionName: String, fields: DigitalSubscriptionEmailAttributes) = for {
     attributePairs <- asFlattenedPairs(fields.asJsonObject)
   } yield EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
 
-  private def buildGiftNotificationAttributes =
-    GifteeNotificationAttributes(
+  private def giftRecipientNotification =
+    wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = user.firstName,
       gift_personal_message = "gift_personal_message",
       gift_code = "gift_code"
-    )
+    ))
 
-  private def buildGiftPurchaseAttributes(pm: PaymentMethod) =
-    GifterPurchaseAttributes(
+  private def giftPurchaserConfirmation(pm: PaymentMethod) =
+    wrap("digipack-gift-purchase", GifterPurchaseAttributes(
       gifter_first_name = user.firstName,
       gifter_last_name = user.lastName,
       gift_recipient_first_name = "gift recipient first name placeholder",
@@ -167,30 +172,30 @@ class DigitalPackEmailFields(
       subscription_details = "subscription details placeholder",
       date_of_first_payment = "date_of_first_payment",
       paymentAttributes = paymentFields(pm, directDebitMandateId)
-    )
+    ))
 
-  private def buildGiftRedemptionAttributes =
-    GifteeRedemptionAttributes(
+  private def giftRedemption =
+    wrap("digipack-gift-redemption", GifteeRedemptionAttributes(
       gift_recipient_first_name = user.firstName,
       subscription_details = "subscription_details placeholder",
       gift_start_date = "gift start date placeholder",
       gift_recipient_email = user.primaryEmailAddress
-    )
+    ))
 
-  private def buildCorpRedemptionAttributes =
-    directOrCorpFields("Group subscription")
+  private def corpRedemption =
+    wrap("digipack-corp", directOrCorpFields("Group subscription"))
 
-  private def directAttributes(pm: PaymentMethod, paymentSchedule: PaymentSchedule) =
-    DirectDSAttributes(
-      directOrCorpFields(SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)),
+  private def directThankYou(paymentMethodWithSchedule: PaymentMethodWithSchedule) =
+    wrap("digipack", DirectDSAttributes(
+      directOrCorpFields(SubscriptionEmailFieldHelpers.describe(paymentMethodWithSchedule.paymentSchedule, billingPeriod, currency, promotion)),
       subscription_term = billingPeriod.noun,
-      payment_amount = SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),
+      payment_amount = SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).amount),
       country = user.billingAddress.country.name,
-      date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
+      date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).date),
       currency = currency.glyph,
       trial_period = "14", //TODO: depends on Promo code or zuora config
-      paymentFields(pm, directDebitMandateId)
-    )
+      paymentFields(paymentMethodWithSchedule.paymentMethod, directDebitMandateId)
+    ))
 
 }
 
