@@ -21,7 +21,7 @@ import { init as pageInit } from 'helpers/page/page';
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import CampaignHeader from './components/hero';
+import CampaignHeader from './components/hero/hero';
 import ProductBlock from './components/productBlock';
 import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
