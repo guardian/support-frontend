@@ -230,13 +230,9 @@ object TestData {
     )
   }
 
-  //
-
   val countryOnlyAddress = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
 
   val billingOnlyUser = User("1234", addressToSendTo, None, "Mickey", "Mouse", billingAddress = countryOnlyAddress)
-
-  //
 
   val officeAddress = Address(
     lineOne = Some("90 York Way"),
@@ -256,8 +252,6 @@ object TestData {
     billingAddress = officeAddress,
     deliveryAddress = Some(officeAddress)
   )
-
-  //
 
   val mandateId = "65HK26E"
 

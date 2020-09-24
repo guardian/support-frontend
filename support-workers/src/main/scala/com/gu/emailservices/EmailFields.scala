@@ -36,7 +36,7 @@ case class EmailFields(
       DataExtensionName = dataExtensionName,
       SfContactId = userId.left.toOption.map(_.id),
       IdentityUserId = userId.right.toOption.map(_.id)
-    ).asJson.toString
+    ).asJson.spaces2
   }
 
 }
