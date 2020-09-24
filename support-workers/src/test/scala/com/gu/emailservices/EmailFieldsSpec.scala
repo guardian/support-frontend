@@ -66,10 +66,7 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers with Inside {
         |      "zuorasubscriberid" : "A-S00045678",
         |      "sort_code" : "20-20-20",
         |      "last_name" : "Mouse",
-        |      "subscription_term" : "year",
         |      "account_name" : "Mickey Mouse",
-        |      "currency" : "£",
-        |      "payment_amount" : "119.90",
         |      "default_payment_method" : "Direct Debit"
         |    }
         |  }

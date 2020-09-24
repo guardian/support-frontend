@@ -18,11 +18,8 @@ class JsonToAttributesSpec extends AnyFlatSpec with Matchers {
         last_name = "4",
         subscription_details = "5"
       ),
-      subscription_term = "6",
-      payment_amount = "7",
       country = "8",
       date_of_first_payment = "9",
-      currency = "0",
       trial_period = "a",
       paymentFieldsAttributes = PPAttributes()
     ).asJsonObject
@@ -33,11 +30,8 @@ class JsonToAttributesSpec extends AnyFlatSpec with Matchers {
       "first_name" -> "3",
       "last_name" -> "4",
       "subscription_details" -> "5",
-      "subscription_term" -> "6",
-      "payment_amount" -> "7",
       "country" -> "8",
       "date_of_first_payment" -> "9",
-      "currency" -> "0",
       "trial_period" -> "a",
       "default_payment_method" -> "PayPal",
     )))
