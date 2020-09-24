@@ -37,6 +37,7 @@ inThisBuild(Seq(
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
   updateOptions := updateOptions.value.withCachedResolution(true),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases")), // libraries that haven't yet synced to maven central
+  scalacOptions += "-Ypartial-unification",
 ))
 
 lazy val releaseSettings = Seq(
