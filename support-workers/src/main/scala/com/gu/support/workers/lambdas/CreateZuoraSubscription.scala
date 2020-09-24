@@ -23,9 +23,9 @@ import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response.{Subscription, UpdateRedemptionDataResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.support.zuora.domain.DomainSubscription
+import com.gu.zuora.{ZuoraGiftService, ZuoraService, ZuoraSubscribeService}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.buildContributionSubscription
 import com.gu.zuora.subscriptionBuilders._
-import com.gu.zuora.{ZuoraService, ZuoraSubscribeService}
 import org.joda.time.{DateTime, DateTimeZone, Days, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -51,6 +51,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val today = () => LocalDate.now(DateTimeZone.UTC)
     val promotionService = services.promotionService
     val redemptionService = services.redemptionService
+    val zuoraGiftService = services.zuoraGiftService
     val zuoraService = services.zuoraService
     val giftCodeGenerator = services.giftCodeGenerator
     val isTestUser = state.user.isTestUser
@@ -58,7 +59,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
     maybeDigitalSubscriptionGiftRedemption(state.product, state.paymentMethod) match {
       case Some(redemptionData) =>
-        redeemGift(redemptionData, requestInfo, state, zuoraService, services.catalogService)
+        redeemGift(redemptionData, requestInfo, state, zuoraGiftService, services.catalogService)
       case None =>
         createSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
     }
@@ -266,7 +267,7 @@ object DigitalSubscriptionGiftRedemption {
     redemptionData: RedemptionData,
     requestInfo: RequestInfo,
     state: CreateZuoraSubscriptionState,
-    zuoraService: ZuoraService,
+    zuoraService: ZuoraGiftService,
     catalogService: CatalogService
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     val codeValidator = new GiftCodeValidator(zuoraService)
@@ -284,7 +285,7 @@ object DigitalSubscriptionGiftRedemption {
     state: CreateZuoraSubscriptionState,
     redemptionData: RedemptionData,
     requestInfo: RequestInfo,
-    zuoraService: ZuoraService,
+    zuoraService: ZuoraGiftService,
     catalogService: CatalogService
   ) = for {
     fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)

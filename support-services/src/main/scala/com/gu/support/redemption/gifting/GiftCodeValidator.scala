@@ -4,7 +4,7 @@ import com.gu.support.redemption.gifting.GiftCodeValidator.{expirationTimeInMont
 import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeNotFound, CodeRedeemedInThisRequest, CodeValidationResult, ValidGiftCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.zuora.api.response.SubscriptionRedemptionQueryResponse
-import com.gu.zuora.ZuoraService
+import com.gu.zuora.{ZuoraGiftLookupService, ZuoraService}
 import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,9 +27,9 @@ object GiftCodeValidator {
     }
 }
 
-class GiftCodeValidator(zuoraService: ZuoraService) {
+class GiftCodeValidator(zuoraLookupService: ZuoraGiftLookupService) {
 
   def validate(redemptionCode: RedemptionCode, requestId: String)(implicit ec: ExecutionContext): Future[CodeValidationResult] =
-    zuoraService.getSubscriptionFromRedemptionCode(redemptionCode).map(response => getSubscriptionState(response, requestId))
+    zuoraLookupService.getSubscriptionFromRedemptionCode(redemptionCode).map(response => getSubscriptionState(response, requestId))
 
 }

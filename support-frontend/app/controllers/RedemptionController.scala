@@ -17,7 +17,7 @@ import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeNotFound, CodeValidationResult, ValidCorporateCode, ValidGiftCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
-import com.gu.zuora.{ZuoraService, ZuoraServiceProvider}
+import com.gu.zuora.{ZuoraGiftLookupService, ZuoraGiftLookupServiceProvider, ZuoraService}
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import io.circe.syntax._
 import lib.RedirectWithEncodedQueryString
@@ -35,8 +35,6 @@ trait DynamoTableAsyncForUser {
   def apply(isTestUser: Boolean): DynamoTableAsync
 }
 
-
-
 class RedemptionController(
   val actionRefiners: CustomActionBuilders,
   val assets: AssetsResolver,
@@ -48,7 +46,7 @@ class RedemptionController(
   fontLoaderBundle: Either[RefPath, StyleContent],
   googleAuthAction: AuthAction[AnyContent],
   dynamoLookup: DynamoTableAsyncForUser,
-  zuoraServiceProvider: ZuoraServiceProvider
+  zuoraLookupServiceProvider: ZuoraGiftLookupServiceProvider
 )(
   implicit val ec: ExecutionContext
 ) extends AbstractController(components) with Circe {
@@ -67,10 +65,9 @@ class RedemptionController(
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = (googleAuthAction andThen maybeAuthenticatedAction()).async {
     implicit request =>
-
       for {
         isTestUser <- testUserFromRequest.isTestUser(request)
-        codeValidator = new CodeValidator(zuoraServiceProvider.forUser(isTestUser), dynamoLookup)
+        codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoLookup)
         normalisedCode = redemptionCode.toUpperCase(Locale.UK)
         form <- codeValidator.validate(redemptionCode, isTestUser).map(
           maybeError =>
@@ -113,8 +110,7 @@ class RedemptionController(
       fontLoaderBundle = fontLoaderBundle,
       csrf = Some(CSRF.getToken.value)
     ) {
-      Html(
-        s"""
+      Html(s"""
         <script type="text/javascript">
           window.guardian.stage = "${stage}";
           window.guardian.user = {
@@ -159,7 +155,7 @@ class RedemptionController(
     val processingPage: EitherT[Future, (String, Boolean), Result] = for {
       user <- identityService.getUser(request.user.minimalUser).leftMap((_, false))
       isTestUser = testUserFromRequest.fromIdUser(user)
-      codeValidator = new CodeValidator(zuoraServiceProvider.forUser(isTestUser), dynamoLookup)
+      codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoLookup)
       _ <- EitherT(codeValidator.validate(redemptionCode, isTestUser).map { //TODO: RB got to be a simpler way to do this
         case Some(error) => Left(error, isTestUser)
         case None => Right(())
@@ -192,7 +188,7 @@ class RedemptionController(
 
   def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] = CachedAction().async {
     val testUser = isTestUser.getOrElse(false)
-    val codeValidator = new CodeValidator(zuoraServiceProvider.forUser(testUser), dynamoLookup)
+    val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(testUser), dynamoLookup)
     codeValidator.validate(redemptionCode, testUser).map(
       maybeError => Ok(RedemptionValidationResult(valid = maybeError.isEmpty, maybeError).asJson)
     )
@@ -232,10 +228,10 @@ class TestUserFromRequest(identityService: IdentityService, testUsers: TestUserS
 
 }
 
-class CodeValidator(zuoraService: ZuoraService, dynamoLookup: DynamoTableAsyncForUser) {
+class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: DynamoTableAsyncForUser) {
   def validate(inputCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): Future[Option[String]] = {
     val corporateValidator = CorporateCodeValidator.withDynamoLookup(dynamoLookup(isTestUser))
-    val giftValidator = new GiftCodeValidator(zuoraService)
+    val giftValidator = new GiftCodeValidator(zuoraLookupService)
 
     RedemptionCode(inputCode)
       .leftMap(_ => "Please check the code and try again")
@@ -284,8 +280,8 @@ class CodeValidator(zuoraService: ZuoraService, dynamoLookup: DynamoTableAsyncFo
 //}
 //
 //object GetGiftCodeState {
-//  def verify(inputCode: String, zuoraService: ZuoraService)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
-//    val codeValidator = new GiftCodeValidator(zuoraService)
+//  def verify(inputCode: String, zuoraLookupService: ZuoraService)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
+//    val codeValidator = new GiftCodeValidator(zuoraLookupService)
 //    for {
 //      codeToCheck <- EitherT.fromEither[Future](RedemptionCode(inputCode)).leftMap(_ => "Please check the code and try again")
 //
