@@ -90,24 +90,6 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     } yield ddId).value
   }
 
-  def getSubscriptionFromRedemptionCode(redemptionCode: RedemptionCode): Future[SubscriptionRedemptionQueryResponse] = {
-    val queryData = QueryData(
-      s"""
-        select id, contractEffectiveDate, CreatedRequestId__c, GifteeIdentityId__c
-        from subscription
-        where RedemptionCode__c = '${redemptionCode.value}' and status = 'Active'"""
-    )
-    postJson[SubscriptionRedemptionQueryResponse](s"action/query", queryData.asJson, authHeaders)
-  }
-
-  def getSubscriptionById(id: String): Future[Subscription] =
-    get[Subscription](s"subscriptions/${id}", authHeaders)
-
-  def updateSubscriptionRedemptionData(subscriptionId: String, requestId: String, gifteeIdentityId: String, currentTerm: Int): Future[UpdateRedemptionDataResponse] = {
-    val requestData = UpdateRedemptionDataRequest(requestId, gifteeIdentityId, currentTerm, Day)
-    putJson[UpdateRedemptionDataResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
-  }
-
   override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =
     //The Zuora api docs say that the subscribe action returns
     //a ZuoraErrorResponse but actually it returns a list of those.
