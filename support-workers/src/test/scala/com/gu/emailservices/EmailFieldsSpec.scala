@@ -1,6 +1,7 @@
 package com.gu.emailservices
 
 import io.circe.parser._
+import io.circe.syntax._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -22,7 +23,7 @@ class EmailFieldsSpec extends AnyFlatSpec with Matchers {
       """.stripMargin
     )
 
-    val Right(serializedJson) = parse(
+    val serializedJson =
       EmailPayload(
       EmailPayloadTo(
         "email@email.com",
@@ -33,8 +34,7 @@ class EmailFieldsSpec extends AnyFlatSpec with Matchers {
       "dataExtensionName",
       Some("sfContactId"),
       Some("identityUserId")
-    ).jsonString
-    )
+    ).asJson
 
     serializedJson shouldBe expectedJson
   }
