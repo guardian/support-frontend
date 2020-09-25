@@ -246,7 +246,7 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
       case invalidCode => Left(validationResultToErrorMessage(invalidCode))
     })
 
-  def getValidationResult(inputCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): Future[CodeValidationResult] = {
+  private def getValidationResult(inputCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): Future[CodeValidationResult] = {
     val corporateValidator = CorporateCodeValidator.withDynamoLookup(dynamoLookup(isTestUser))
     val giftValidator = new GiftCodeValidator(zuoraLookupService)
 
@@ -267,7 +267,7 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
     )
   }
 
-  def validationResultToErrorMessage(validationResult: CodeValidationResult) =
+  private def validationResultToErrorMessage(validationResult: CodeValidationResult) =
     validationResult match {
       case CodeAlreadyUsed => "This code has already been redeemed"
       case CodeExpired => "This code has expired"
