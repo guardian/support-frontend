@@ -15,14 +15,7 @@
     "@babel/plugin-transform-exponentiation-operator",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-dynamic-import",
-    [
-      "@babel/plugin-proposal-object-rest-spread",
-      {
-        "useBuiltIns": true
-      }
-    ],
-    "babel-plugin-add-react-displayname",
-    "@babel/plugin-proposal-optional-chaining"
+    "babel-plugin-add-react-displayname"
   ],
   "sourceType": "unambiguous",
   "env": {
