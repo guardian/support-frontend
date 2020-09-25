@@ -162,7 +162,7 @@ const ContributionThankYou = ({
     shouldShow: true,
   };
   const socialShareAction = {
-    component: <ContributionThankYouSocialShare email={props.email} />,
+    component: <ContributionThankYouSocialShare email={email} />,
     shouldShow: true,
   };
   const ausMapAction = {
