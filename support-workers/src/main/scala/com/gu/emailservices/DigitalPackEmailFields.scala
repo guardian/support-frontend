@@ -73,11 +73,8 @@ object DigitalSubscriptionEmailAttributes {
 
   case class DirectDSAttributes(
     directCorp: BasicDSAttributes,
-    subscription_term: String,
-    payment_amount: String,
     country: String,
     date_of_first_payment: String,
-    currency: String,
     trial_period: String,
     paymentFieldsAttributes: PaymentFieldsAttributes,
   ) extends DigitalSubscriptionEmailAttributes
@@ -188,11 +185,8 @@ class DigitalPackEmailFields(
   private def directThankYou(paymentMethodWithSchedule: PaymentMethodWithSchedule) =
     wrap("digipack", DirectDSAttributes(
       directOrCorpFields(SubscriptionEmailFieldHelpers.describe(paymentMethodWithSchedule.paymentSchedule, billingPeriod, currency, promotion)),
-      subscription_term = billingPeriod.noun,
-      payment_amount = SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).amount),
       country = user.billingAddress.country.name,
       date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).date),
-      currency = currency.glyph,
       trial_period = "14", //TODO: depends on Promo code or zuora config
       paymentFields(paymentMethodWithSchedule.paymentMethod, directDebitMandateId)
     ))

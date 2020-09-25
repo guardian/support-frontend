@@ -84,7 +84,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
 
 object SendThankYouEmailManualTest {
 
-  //This test will send a thank you email to the address below - useful for quickly testing changes
+  //This test will send a thank you email to the address/SF contact below - useful for quickly testing changes
   val addressToSendTo = "john.duffell@guardian.co.uk"
   val salesforceContactId = SfContactId("0033E00001DTBHJQA5")
 
