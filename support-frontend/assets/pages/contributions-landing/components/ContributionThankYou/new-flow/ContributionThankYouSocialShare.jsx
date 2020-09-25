@@ -21,6 +21,7 @@ import {
   OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { generateReferralCode } from "../../../../../helpers/campaignReferralCodes";
 
 const buttonsContainer = css`
   margin-top: ${space[6]}px;
@@ -44,7 +45,12 @@ const TWITTER_TEXT_COPY =
 const EMAIL_SUBJECT_COPY = 'Join me in supporting open, independent journalism';
 const EMAIL_BODY_COPY = `Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: ${LANDING_PAGE_URL_MAIL}`;
 
-const ContributionThankYouSocialShare = () => {
+type PropTypes = {
+  email: string
+}
+
+const ContributionThankYouSocialShare = (props: PropTypes) => {
+  const referralCode = generateReferralCode(props.email); // TODO: add condition to check whether campaign is active before generating code
   const actionIcon = <SvgShare />;
   const actionHeader = <ActionHeader title="Share your support" />;
   const actionBody = (
@@ -55,7 +61,7 @@ const ContributionThankYouSocialShare = () => {
       </p>
       <div css={buttonsContainer}>
         <LinkButton
-          href={getFacebookShareLink(LANDING_PAGE_URL_FACEBOOK)}
+          href={getFacebookShareLink(LANDING_PAGE_URL_FACEBOOK, referralCode)}
           onClick={() =>
             trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)
           }
@@ -71,6 +77,7 @@ const ContributionThankYouSocialShare = () => {
             LANDING_PAGE_URL_TWITTER,
             TWITTER_TEXT_COPY,
             INTCMP_TWITTER,
+            referralCode
           )}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
           target="_blank"
@@ -81,7 +88,7 @@ const ContributionThankYouSocialShare = () => {
           hideLabel
         />
         <LinkButton
-          href={getLinkedInShareLink(LANDING_PAGE_URL)}
+          href={getLinkedInShareLink(LANDING_PAGE_URL, referralCode)}
           onClick={() =>
             trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)
           }
@@ -93,7 +100,7 @@ const ContributionThankYouSocialShare = () => {
           hideLabel
         />
         <LinkButton
-          href={getEmailShareLink(EMAIL_SUBJECT_COPY, EMAIL_BODY_COPY)}
+          href={getEmailShareLink(EMAIL_SUBJECT_COPY, EMAIL_BODY_COPY, referralCode)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
           target="_blank"
           rel="noopener noreferrer"
