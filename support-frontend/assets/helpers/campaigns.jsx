@@ -22,7 +22,7 @@ export type CampaignSettings = {
   createReferralCodes: boolean,
 };
 
-const currentCampaignPath: string | null = null;
+const currentCampaignPath: string | null = 'enviro_moment_2020';
 
 export const campaign: CampaignSettings = ({
   campaignCode: 'enviro_moment_2020',
@@ -30,22 +30,24 @@ export const campaign: CampaignSettings = ({
   createReferralCodes: true,
 });
 
-function campaignEnabledForUser(): boolean {
+function campaignEnabledForUser(campaignCode?: string): boolean {
   if (currentCampaignPath) {
-    return window.guardian.forceCampaign || window.location.pathname.endsWith(`/${currentCampaignPath}`);
+    return window.guardian.forceCampaign ||
+      window.location.pathname.endsWith(`/${currentCampaignPath}`) ||
+      campaign.campaignCode === campaignCode;
   }
   return false;
 }
 
-export function getCampaignSettings(): CampaignSettings | null {
-  if (campaignEnabledForUser()) {
+export function getCampaignSettings(campaignCode?: string): CampaignSettings | null {
+  if (campaignEnabledForUser(campaignCode)) {
     return campaign;
   }
   return null;
 }
 
-export function getCampaignCode(): string | null {
-  const campaignSettings = getCampaignSettings();
+export function getCampaignCode(campaignCode?: string): string | null {
+  const campaignSettings = getCampaignSettings(campaignCode);
   if (campaignSettings) {
     return campaignSettings.campaignCode;
   }
