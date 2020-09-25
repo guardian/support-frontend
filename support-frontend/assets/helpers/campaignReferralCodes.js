@@ -5,7 +5,7 @@ const referralCodeEndpoint = isProd()
   ? 'https://contribution-referrals.support.guardianapis.com/referral-code'
   : 'https://contribution-referrals-code.support.guardianapis.com/referral-code';
 
-const postReferralCode = (endpoint: string, referralCode: string, email: string) => fetch(endpoint, {
+const postReferralCode = (endpoint: string, referralCode: string, email: string, campaignCode: string) => fetch(endpoint, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -14,6 +14,7 @@ const postReferralCode = (endpoint: string, referralCode: string, email: string)
     source: 'thankyou',
     code: referralCode,
     email,
+    campaignId: campaignCode,
   }),
 }).then(response => console.log(`responseStatus: ${response.status}`));
 
@@ -23,9 +24,9 @@ const newReferralCode = () => {
   return (salt + timestamp).toUpperCase();
 };
 
-export const generateReferralCode = (email: string): string => {
+export const generateReferralCode = (email: string, campaignCode: string): string => {
   const code = newReferralCode();
-  postReferralCode(referralCodeEndpoint, code, email);
+  postReferralCode(referralCodeEndpoint, code, email, campaignCode);
 
   return code;
 };

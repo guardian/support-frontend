@@ -23,6 +23,7 @@ import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {getCampaignSettings} from "helpers/campaigns";
+import type {CampaignSettings} from "helpers/campaigns";
 
 const container = css`
   background: white;
@@ -105,7 +106,8 @@ type ContributionThankYouProps = {|
   user: User,
   guestAccountCreationToken: string,
   paymentMethod: PaymentMethod,
-  countryId: IsoCountry
+  countryId: IsoCountry,
+  campaignCode?: string,
 |};
 
 const mapStateToProps = state => ({
@@ -117,6 +119,7 @@ const mapStateToProps = state => ({
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
   paymentMethod: state.page.form.paymentMethod,
   countryId: state.common.internationalisation.countryId,
+  campaignCode: state.common.referrerAcquisitionData.campaignCode,
 });
 
 const ContributionThankYou = ({
@@ -128,12 +131,10 @@ const ContributionThankYou = ({
   guestAccountCreationToken,
   paymentMethod,
   countryId,
+  campaignCode,
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
-  const createReferralCodes = useMemo<boolean>(() => {
-    const campaignSettings = getCampaignSettings();
-    return !!campaignSettings && campaignSettings.createReferralCodes;
-  });
+  const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
 
   useEffect(() => {
     trackUserData(
@@ -167,7 +168,11 @@ const ContributionThankYou = ({
     shouldShow: true,
   };
   const socialShareAction = {
-    component: <ContributionThankYouSocialShare email={email} createReferralCodes={createReferralCodes} />,
+    component: <ContributionThankYouSocialShare
+      email={email}
+      createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
+      campaignCode={campaignSettings && campaignSettings.campaignCode}
+    />,
     shouldShow: true,
   };
   const ausMapAction = {
