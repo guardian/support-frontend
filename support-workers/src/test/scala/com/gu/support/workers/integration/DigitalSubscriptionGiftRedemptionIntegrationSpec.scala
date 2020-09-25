@@ -2,6 +2,7 @@ package com.gu.support.workers.integration
 
 import java.util.UUID
 
+import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Fixtures.idId
 import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound}
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
@@ -23,6 +24,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
   val createSubRequestId = UUID.randomUUID()
   val redeemSubRequestId = UUID.randomUUID()
   val giftCode = new GiftCodeGeneratorService().generateCode(Annual)
+  SafeLogger.info(s"Gift code = ${giftCode}")
   val mockCodeGenerator = mock[GiftCodeGeneratorService]
   when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
 

@@ -9,6 +9,7 @@
 
 @import io.circe.Json
 @import views.JsStringLiteral
+@import com.gu.support.zuora.api.ReaderType
 @(
   title: String,
   mainElement: ReactDiv,
@@ -19,6 +20,7 @@
   isTestUser: Boolean,
   stage: String,
   redemptionCode: RawRedemptionCode,
+  maybeReaderType: Option[ReaderType],
   maybeRedemptionError: Option[String],
   user: Option[IdUser],
   submitted: Boolean
@@ -29,6 +31,7 @@
       window.guardian = window.guardian || {};
       window.guardian.stage = @JsStringLiteral(stage);
       window.guardian.userCode = @JsStringLiteral(redemptionCode);
+      window.guardian.readerType = @JsStringLiteral.fromOption(maybeReaderType.map(_.toString));
       window.guardian.error = @JsStringLiteral.fromOption(maybeRedemptionError);
       window.guardian.submitted = @submitted;
       window.guardian.user = {
