@@ -36,7 +36,7 @@ case class SubscriptionPurchase(
 
 case class SubscriptionRedemption(
   redemptionData: RedemptionData,
-  getCodeStatus: CorporateCodeValidator
+  codeValidator: CorporateCodeValidator
 ) extends SubscriptionPaymentType
 
 object DigitalSubscriptionBuilder {
@@ -118,7 +118,7 @@ object DigitalSubscriptionBuilder {
         productRatePlanId,
         requestId,
         redemption.redemptionData.redemptionCode,
-        redemption.getCodeStatus
+        redemption.codeValidator
       )
       case _ => val errorType: Either[PromoError, InvalidCode] = Right(InvalidReaderType)
         EitherT.leftT(errorType)

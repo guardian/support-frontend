@@ -32,7 +32,7 @@ trait ZuoraSubscribeService {
 }
 
 class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: Option[String] = None)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[ZuoraErrorResponse] with ZuoraSubscribeService with TouchpointService {
+  extends WebServiceHelper[ZuoraErrorResponse] with ZuoraSubscribeService {
 
   override val wsUrl: String = baseUrl.getOrElse(config.url)
   override val httpClient: FutureHttpClient = client
