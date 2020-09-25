@@ -189,9 +189,11 @@ class RedemptionController(
   def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] = CachedAction().async {
     val testUser = isTestUser.getOrElse(false)
     val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(testUser), dynamoLookup)
-    codeValidator.validate(redemptionCode, testUser).map(
-      maybeError => Ok(RedemptionValidationResult(valid = maybeError.isEmpty, maybeError).asJson)
-    )
+    codeValidator.validate(redemptionCode, testUser).map {
+      maybeError =>
+      SafeLogger.info(s"Validating code ${redemptionCode}: ${maybeError.getOrElse("Code is valid")}")
+      Ok(RedemptionValidationResult(valid = maybeError.isEmpty, maybeError).asJson)
+    }
   }
 
   def redirect(redemptionCode: RawRedemptionCode): Action[AnyContent] = CachedAction() { implicit request =>
@@ -238,18 +240,17 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
       .map {
         redemptionCode =>
           for {
-            corporateValidationResult <- corporateValidator.validate(redemptionCode)
             giftValidationResult <- giftValidator.validate(redemptionCode, "")
-
-          } yield validationResultToErrorMessage(merge(giftValidationResult, corporateValidationResult))
+            mergedResult <- if (giftValidationResult == CodeNotFound)
+              corporateValidator.validate(redemptionCode)
+            else
+              Future.successful(giftValidationResult)
+          } yield validationResultToErrorMessage(mergedResult)
       }.fold(
       codeParsingError => Future.successful(Some(codeParsingError)),
       validationResult => validationResult
     )
   }
-
-  def merge(giftResult: CodeValidationResult, corporateResult: CodeValidationResult) =
-    if (giftResult == CodeNotFound) corporateResult else giftResult
 
   def validationResultToErrorMessage(validationResult: CodeValidationResult) =
     validationResult match {
@@ -260,39 +261,3 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
       case _ => Some("Please check the code and try again")
     }
 }
-
-//class GetCorporateCustomer(dynamoLookup: DynamoTableAsyncForUser) {
-//
-//  def apply(redemptionCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
-//    val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoLookup(isTestUser))
-//
-//    for {
-//      codeToCheck <- EitherT.fromEither[Future](RedemptionCode(redemptionCode)).leftMap(_ => "Please check the code and try again")
-//      _ <- EitherT(codeValidator.validate(codeToCheck).map {
-//        case ValidCorporateCode(_) => Right(())
-//        case CodeAlreadyUsed => Left("This code has already been redeemed")
-//        case CodeExpired => Left("This code has expired")
-//        case _ => Left("Please check the code and try again")
-//      })
-//    } yield ()
-//  }
-//
-//}
-//
-//object GetGiftCodeState {
-//  def verify(inputCode: String, zuoraLookupService: ZuoraService)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = {
-//    val codeValidator = new GiftCodeValidator(zuoraLookupService)
-//    for {
-//      codeToCheck <- EitherT.fromEither[Future](RedemptionCode(inputCode)).leftMap(_ => "Please check the code and try again")
-//
-//      _ <- EitherT(codeValidator.validate(codeToCheck, "").map {
-//        case ValidGiftCode(_) => Right(())
-//        case CodeAlreadyUsed => Left("This code has already been redeemed")
-//        case CodeExpired => Left("This code has expired")
-//        case _ => Left("Please check the code and try again")
-//      })
-//    } yield ()
-//  }
-//
-//}
-
