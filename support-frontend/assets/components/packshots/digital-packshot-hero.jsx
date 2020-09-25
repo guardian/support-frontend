@@ -1,12 +1,20 @@
+// @flow
+
 import React from 'react';
 
 import GridImage from 'components/gridImage/gridImage';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { AUDCountries } from 'helpers/internationalisation/countryGroup';
 
-const DigitalPackshotHero = () => (
+type PropTypes = {
+  countryGroupId: CountryGroupId,
+}
+
+const DigitalPackshotHero = (props: PropTypes) => (
   <div className="subscriptions-feature-packshot">
     <GridImage
       classModifiers={['']}
-      gridId="subscriptionDailyPackshot"
+      gridId={props.countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
       srcSizes={[1000, 500]}
       sizes="(max-width: 480px) 100px,
             (max-width: 740px) 100%,

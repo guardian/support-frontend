@@ -35,6 +35,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   AUDCountries,
   GBPCountries,
+  EURCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
 import {
@@ -111,11 +112,11 @@ function getGuardianWeeklyOfferCopy(countryGroupId: CountryGroupId, discountCopy
   return `6 issues for ${currency}6`;
 }
 
-const getDigitalImage = (isTop: boolean) => {
+const getDigitalImage = (isTop: boolean, countryGroupId: CountryGroupId) => {
   if (isTop) {
-    return <DigitalPackshotHero />;
+    return <DigitalPackshotHero countryGroupId={countryGroupId} />;
   }
-  return <DigitalPackshot />;
+  return <DigitalPackshot countryGroupId={countryGroupId} />;
 };
 
 const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: boolean): ProductCopy => ({
@@ -124,7 +125,7 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
   description: countryGroupId === AUDCountries
     ? 'The UK Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
     : 'The Guardian Daily, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
-  productImage: getDigitalImage(isTop),
+  productImage: getDigitalImage(isTop, countryGroupId),
   offer: priceCopy.discountCopy,
   buttons: [{
     ctaButtonText: 'Find out more',
@@ -229,18 +230,25 @@ const orderedProducts = (state: State): ProductCopy[] => {
   const { countryGroupId } = state.common.internationalisation;
   if (countryGroupId === GBPCountries) {
     return [
-      guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
       digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
+      guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
       paper(countryGroupId, state.page.pricingCopy[Paper], false),
       paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
       premiumApp(countryGroupId),
     ];
+  } else if (countryGroupId === EURCountries) {
+    return [
+      guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
+      digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
+      premiumApp(countryGroupId),
+    ];
   }
   return [
-    guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
     digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
+    guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
     premiumApp(countryGroupId),
   ];
+
 };
 
 const getSubscriptionCopy = (state: State) =>
