@@ -2,13 +2,9 @@ package com.gu.support.redemption
 
 import com.gu.support.redemption.corporate.CorporateCodeValidator.CorporateId
 
-sealed abstract class CodeValidationResult(val clientCode: String){
-  def isValid = false
-}
+sealed abstract class CodeValidationResult(val clientCode: String)
 
-sealed abstract class ValidCode(clientCode: String) extends CodeValidationResult(clientCode) {
-  override def isValid = true
-}
+sealed abstract class ValidCode(clientCode: String) extends CodeValidationResult(clientCode)
 
 sealed abstract class InvalidCode(clientCode: String) extends CodeValidationResult(clientCode)
 
