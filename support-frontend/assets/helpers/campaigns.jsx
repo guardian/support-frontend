@@ -19,28 +19,15 @@ export type CampaignSettings = {
   extraComponent?: React$Element<string>,
   tickerSettings?: TickerSettings,
   goalReachedCopy?: React$Element<string>, // If set, the form will be replaced with this if goal reached
+  createReferralCodes: boolean,
 };
 
 const currentCampaignPath: string | null = null;
 
 export const campaign: CampaignSettings = ({
-  campaignCode: 'Aus_moment_2020',
-  copy: (goalReached: boolean) => ({
-    headerCopy: 'You’re doing something powerful',
-    contributeCopy: goalReached ?
-      'We’ve surpassed our ambitious goal of 150,000 supporters in Australia, and together we can do even more. Every contribution you make, however big or small, helps sustain our open, independent journalism for the long term.' :
-      'Help us grow our community of supporters in Australia and reach our ambitious goal. Every contribution you make, however big or small, helps sustain our open, independent journalism for the long term.',
-  }),
-  tickerSettings: {
-    tickerCountType: 'people',
-    tickerEndType: 'unlimited',
-    currencySymbol: '£',
-    copy: {
-      countLabel: 'supporters in Australia',
-      goalReachedPrimary: 'We\'ve hit our goal!',
-      goalReachedSecondary: 'but you can still support us',
-    },
-  },
+  campaignCode: 'enviro_moment_2020',
+  copy: (goalReached: boolean) => ({}), // no special copy
+  createReferralCodes: true,
 });
 
 function campaignEnabledForUser(): boolean {

@@ -1,6 +1,6 @@
 // @flow
 // $FlowIgnore - required for hooks
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { type User } from 'helpers/user/userReducer';
 import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
@@ -22,6 +22,7 @@ import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import {getCampaignSettings} from "helpers/campaigns";
 
 const container = css`
   background: white;
@@ -129,6 +130,10 @@ const ContributionThankYou = ({
   countryId,
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
+  const createReferralCodes = useMemo<boolean>(() => {
+    const campaignSettings = getCampaignSettings();
+    return !!campaignSettings && campaignSettings.createReferralCodes;
+  });
 
   useEffect(() => {
     trackUserData(
@@ -162,7 +167,7 @@ const ContributionThankYou = ({
     shouldShow: true,
   };
   const socialShareAction = {
-    component: <ContributionThankYouSocialShare email={email} />,
+    component: <ContributionThankYouSocialShare email={email} createReferralCodes={createReferralCodes} />,
     shouldShow: true,
   };
   const ausMapAction = {

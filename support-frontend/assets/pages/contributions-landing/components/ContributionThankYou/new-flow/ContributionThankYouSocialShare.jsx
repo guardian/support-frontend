@@ -32,25 +32,10 @@ const buttonsContainer = css`
   }
 `;
 
-const INTCMP_FACEBOOK = 'component-share-facebook';
-const INTCMP_TWITTER = 'component-share-twitter';
-const INTCMP_MAIL = 'component-share-mail';
-
-const LANDING_PAGE_URL = 'https://support.theguardian.com/contribute';
-const LANDING_PAGE_URL_FACEBOOK = `${LANDING_PAGE_URL}?INTCMP=${INTCMP_FACEBOOK}`;
-const LANDING_PAGE_URL_TWITTER = `${LANDING_PAGE_URL}?INTCMP=${INTCMP_TWITTER}`;
-const LANDING_PAGE_URL_MAIL = `${LANDING_PAGE_URL}?INTCMP=${INTCMP_MAIL}`;
-
-const TWITTER_TEXT_COPY =
-  'Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free';
-const EMAIL_SUBJECT_COPY = 'Join me in supporting open, independent journalism';
-const EMAIL_BODY_COPY = `Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: ${LANDING_PAGE_URL_MAIL}`;
-
-type PropTypes = { email: string }
+type PropTypes = { email: string, createReferralCodes: boolean }
 
 const ContributionThankYouSocialShare = (props: PropTypes) => {
-  // TODO: add condition to check whether campaign is active before generating code below
-  const referralCode = generateReferralCode(props.email);
+  const referralCode = props.createReferralCodes ? generateReferralCode(props.email) : null;
 
   const actionIcon = <SvgShare />;
   const actionHeader = <ActionHeader title="Share your support" />;
@@ -62,7 +47,7 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
       </p>
       <div css={buttonsContainer}>
         <LinkButton
-          href={getFacebookShareLink(LANDING_PAGE_URL_FACEBOOK, referralCode)}
+          href={getFacebookShareLink(referralCode)}
           onClick={() =>
             trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)
           }
@@ -74,11 +59,7 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
           hideLabel
         />
         <LinkButton
-          href={getTwitterShareLink(
-            LANDING_PAGE_URL_TWITTER,
-            TWITTER_TEXT_COPY,
-            referralCode,
-          )}
+          href={getTwitterShareLink(referralCode)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
           target="_blank"
           rel="noopener noreferrer"
@@ -88,7 +69,7 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
           hideLabel
         />
         <LinkButton
-          href={getLinkedInShareLink(LANDING_PAGE_URL, referralCode)}
+          href={getLinkedInShareLink(referralCode)}
           onClick={() =>
             trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)
           }
@@ -100,7 +81,7 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
           hideLabel
         />
         <LinkButton
-          href={getEmailShareLink(EMAIL_SUBJECT_COPY, EMAIL_BODY_COPY, referralCode)}
+          href={getEmailShareLink(referralCode)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
           target="_blank"
           rel="noopener noreferrer"
