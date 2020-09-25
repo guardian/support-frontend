@@ -135,8 +135,6 @@ function init<S, A>(
   try {
     const countryId: IsoCountry = detectCountry();
 
-    console.log('***********');
-
     /**
      * Dynamically load @guardian/consent-management-platform
      * on condition we're not server side rendering (ssr) the page.
