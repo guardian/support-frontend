@@ -7,6 +7,7 @@ import { ThemeProvider } from 'emotion-theming';
 
 import { Button, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
+import { type CountryGroupId, AUDCountries } from 'helpers/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
 import {
   wrapper,
@@ -23,7 +24,11 @@ import {
   circleTextBottom,
 } from './heroStyles';
 
-function CampaignHeader() {
+type PropTypes = {
+  countryGroupId: CountryGroupId,
+}
+
+function CampaignHeader(props: PropTypes) {
 
   return (
     <div css={wrapper}>
@@ -53,13 +58,14 @@ function CampaignHeader() {
         </div>
         <div css={packShot}>
           <GridImage
-            gridId="editionsPackshot"
+            gridId={props.countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
             srcSizes={[1000, 750, 500, 140]}
             sizes="(max-width: 480px) 200px,
             (max-width: 740px) 100%,
             (max-width: 1067px) 150%,
             500px"
             altText="Digital subscriptions"
+            imgType="png"
           />
         </div>
         <div css={circle}>
