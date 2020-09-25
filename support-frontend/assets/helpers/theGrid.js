@@ -112,6 +112,11 @@ export const imageCatalogue: {
   printCampaignHD: '817936f0d1a2755c778b523b5ac5daa2d2f27449/10_0_716_694',
   printCheckoutiMovo: '15677cf8f82a5690bec39bf73b2c098c8f79b24f/15_0_667_400',
   editionsPackshot: '77c3a3756748137080863ef8e6dd690740f5a96b/0_0_1160_945',
+  editionsPackshotAus: '77c3a3756748137080863ef8e6dd690740f5a96b/0_0_1160_945',
+  weekendPackshotMobile: '622d1b94173e9c711ff421d89cf9abddf3319197/0_0_1100_1100',
+  weekendPackshotDesktop: 'dc1bb7218877d954a5841b24765e89f7c3aa6f95/0_0_1800_1080',
+  liveAppAusMobile: '66deee17e0c59c254abdad9e1fa9b3605040f66b/0_0_1100_1100',
+  liveAppAusDesktop: '7f6b52bd46bf801e7f55eeb1d6f2666727c0ddf9/0_0_1800_1080',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
