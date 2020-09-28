@@ -78,7 +78,7 @@ trait Controllers {
     controllerComponents,
     fontLoader,
     authAction,
-    dynamoTableAsync,
+    dynamoTableAsyncProvider,
     zuoraGiftLookupServiceProvider
   )
 

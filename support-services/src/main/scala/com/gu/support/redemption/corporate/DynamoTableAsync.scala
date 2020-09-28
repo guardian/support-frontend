@@ -97,3 +97,7 @@ class DynamoTableAsync(
     eventualUpdateItemResponse.map(_ => ())
   }
 }
+
+trait DynamoTableAsyncProvider {
+  def forUser(isTestUser: Boolean): DynamoTableAsync
+}
