@@ -43,7 +43,7 @@ class RedemptionController(
   components: ControllerComponents,
   fontLoaderBundle: Either[RefPath, StyleContent],
   googleAuthAction: AuthAction[AnyContent],
-  dynamoLookupProvider: DynamoTableAsyncProvider,
+  dynamoTableProvider: DynamoTableAsyncProvider,
   zuoraLookupServiceProvider: ZuoraGiftLookupServiceProvider
 )(
   implicit val ec: ExecutionContext
@@ -65,7 +65,7 @@ class RedemptionController(
     implicit request =>
       for {
         isTestUser <- testUserFromRequest.isTestUser(request)
-        codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoLookupProvider.forUser(isTestUser))
+        codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
         normalisedCode = redemptionCode.toUpperCase(Locale.UK)
         form <- codeValidator.validate(redemptionCode).value.map(
           validationResult =>
@@ -155,7 +155,7 @@ class RedemptionController(
     val processingPage: EitherT[Future, (String, Boolean), Result] = for {
       user <- identityService.getUser(request.user.minimalUser).leftMap((_, false))
       isTestUser = testUserFromRequest.fromIdUser(user)
-      codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoLookupProvider.forUser(isTestUser))
+      codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
       readerType <- codeValidator.validate(redemptionCode).leftMap((_, isTestUser))
     } yield showProcessing(redemptionCode, readerType, user)
 
@@ -187,7 +187,7 @@ class RedemptionController(
 
   def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] = CachedAction().async {
     val testUser = isTestUser.getOrElse(false)
-    val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(testUser), dynamoLookupProvider.forUser(testUser))
+    val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(testUser), dynamoTableProvider.forUser(testUser))
     codeValidator.validate(redemptionCode).value.map {
       validationResult =>
       SafeLogger.info(s"Validating code ${redemptionCode}: ${validationResult}")
@@ -233,7 +233,7 @@ class TestUserFromRequest(identityService: IdentityService, testUsers: TestUserS
 
 }
 
-class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: DynamoTableAsync) {
+class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoTableAsync: DynamoTableAsync) {
 
   def validate(inputCode: String)(implicit ec: ExecutionContext): EitherT[Future, String, ReaderType] =
     EitherT(getValidationResult(inputCode).map {
@@ -245,7 +245,7 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
     })
 
   private def getValidationResult(inputCode: String)(implicit ec: ExecutionContext): Future[CodeStatus] = {
-    val corporateValidator = CorporateCodeValidator.withDynamoLookup(dynamoLookup)
+    val corporateValidator = CorporateCodeValidator.withDynamoLookup(dynamoTableAsync)
     val giftValidator = new GiftCodeValidator(zuoraLookupService)
 
     RedemptionCode(inputCode)
