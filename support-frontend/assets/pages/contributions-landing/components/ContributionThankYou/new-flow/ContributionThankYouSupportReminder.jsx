@@ -51,30 +51,39 @@ const privacyTextLink = css`
 `;
 
 type ContributionThankYouSupportReminderProps = {|
-  email: string
+  email: string,
+  isEnvironmentMoment: boolean,
 |};
 
 const ContributionThankYouSupportReminder = ({
   email,
+  isEnvironmentMoment,
 }: ContributionThankYouSupportReminderProps) => {
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
   const now = new Date();
-  const reminderDates = [
+  const reminderDates = isEnvironmentMoment ? [
+    new Date(now.getFullYear(), now.getMonth() + 3),
+    new Date(now.getFullYear(), now.getMonth() + 6),
+    new Date(now.getFullYear(), now.getMonth() + 12),
+  ] : [
     new Date(now.getFullYear(), now.getMonth() + 3),
     new Date(now.getFullYear(), now.getMonth() + 6),
     new Date(now.getFullYear(), now.getMonth() + 9),
   ];
 
   const formattedDate = (index: number): string => {
+    if (isEnvironmentMoment && index === 2) {
+      return 'In one year (our next environment pledge update)';
+    }
     const date = reminderDates[index];
 
-    const monthsUntilDate = ['Three', 'Six', 'Nine'][index];
+    const monthsUntilDate = ['three', 'six', 'nine'][index];
     const month = date.toLocaleDateString('default', { month: 'long' });
     const year = now.getFullYear() === date.getFullYear() ? '' : ` ${date.getFullYear()}`;
 
-    return `${monthsUntilDate} months (${month}${year})`;
+    return `In ${monthsUntilDate} months (${month}${year})`;
   };
 
   const selectedDateAsApiString = () => {
