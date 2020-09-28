@@ -35,7 +35,6 @@ const buttonsContainer = css`
 type PropTypes = { email: string, createReferralCodes: boolean, campaignCode: ?string }
 
 const ContributionThankYouSocialShare = (props: PropTypes) => {
-  console.log('createReferralCodes', props.createReferralCodes);
   const referralCode = props.createReferralCodes && props.campaignCode ?
     generateReferralCode(props.email, props.campaignCode) :
     null;
