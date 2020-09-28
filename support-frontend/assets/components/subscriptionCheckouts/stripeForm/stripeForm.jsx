@@ -183,7 +183,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
   };
 
   const setupRecurringHandlers = (): void => {
-    if (!window.guardian.recaptchaEnabled || isPostDeployUser()) {
+    if (!window.guardian.recaptchaEnabled) {
       fetchPaymentIntent('dummy');
     } else if (window.grecaptcha && window.grecaptcha.render) {
       setupRecurringRecaptchaCallback();
@@ -239,7 +239,6 @@ const StripeForm = (props: StripeFormPropTypes) => {
 
   const checkRecaptcha = () => {
     if (window.guardian.recaptchaEnabled &&
-      !isPostDeployUser() &&
       !recaptchaCompleted &&
       recaptchaError === null) {
       setRecaptchaError({
