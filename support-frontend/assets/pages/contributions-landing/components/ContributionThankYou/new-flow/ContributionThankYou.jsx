@@ -160,7 +160,10 @@ const ContributionThankYou = ({
     shouldShow: true,
   };
   const supportReminderAction = {
-    component: <ContributionThankYouSupportReminder email={email} />,
+    component: <ContributionThankYouSupportReminder
+      email={email}
+      isEnvironmentMoment={campaignSettings && campaignSettings.campaignCode === 'enviro_moment_2020'}
+    />,
     shouldShow: contributionType === 'ONE_OFF',
   };
   const surveyAction = {
