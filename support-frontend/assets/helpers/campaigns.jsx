@@ -10,7 +10,7 @@ type CampaignCopy = {
 
 export type CampaignSettings = {
   campaignCode: string,
-  copy: (goalReached: boolean) => CampaignCopy,
+  copy?: (goalReached: boolean) => CampaignCopy,
   formMessage?: React$Element<string>,
   termsAndConditions?: (contributionsTermsLink: string, contactEmail: string) => React$Element<string>,
   cssModifiers?: string[],
@@ -26,11 +26,10 @@ const currentCampaignPath: string | null = 'enviro_moment_2020';
 
 export const campaign: CampaignSettings = ({
   campaignCode: 'enviro_moment_2020',
-  copy: (goalReached: boolean) => ({}), // no special copy
   createReferralCodes: true,
 });
 
-function campaignEnabledForUser(campaignCode?: string): boolean {
+function campaignEnabledForUser(campaignCode: ?string): boolean {
   if (currentCampaignPath) {
     return window.guardian.forceCampaign ||
       window.location.pathname.endsWith(`/${currentCampaignPath}`) ||
@@ -39,7 +38,7 @@ function campaignEnabledForUser(campaignCode?: string): boolean {
   return false;
 }
 
-export function getCampaignSettings(campaignCode?: string): CampaignSettings | null {
+export function getCampaignSettings(campaignCode: ?string): CampaignSettings | null {
   if (campaignEnabledForUser(campaignCode)) {
     return campaign;
   }

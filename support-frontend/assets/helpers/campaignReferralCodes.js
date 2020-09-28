@@ -5,7 +5,12 @@ const referralCodeEndpoint = isProd()
   ? 'https://contribution-referrals.support.guardianapis.com/referral-code'
   : 'https://contribution-referrals-code.support.guardianapis.com/referral-code';
 
-const postReferralCode = (endpoint: string, referralCode: string, email: string, campaignCode: string) => fetch(endpoint, {
+const postReferralCode = (
+  endpoint: string,
+  referralCode: string,
+  email: string,
+  campaignCode: string,
+) => fetch(endpoint, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
