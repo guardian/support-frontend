@@ -93,7 +93,7 @@ function SocialShare(props: PropTypes) {
     <button
       className="component-social-share"
       onClick={
-          onShare(`contributions-share-${props.name}`, socialMedia[props.name].link(props.referralCode), socialMedia[props.name].windowFeatures)
+        onShare(`contributions-share-${props.name}`, socialMedia[props.name].link(props.referralCode), socialMedia[props.name].windowFeatures)
       }
       aria-labelledby={a11yId}
     >
