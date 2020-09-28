@@ -42,7 +42,7 @@ function dispatchReaderType(dispatch: Dispatch<Action>, readerType: Option<Reade
   dispatch({ type: 'SET_READER_TYPE', readerType });
 }
 
-function doValidation(userCode: string, dispatch: Dispatch<Action>) {
+function validateWithServer(userCode: string, dispatch: Dispatch<Action>) {
   validate(userCode).then((result: ValidationResult) => {
     dispatchError(dispatch, result.errorMessage);
     dispatchReaderType(dispatch, result.readerType);
@@ -53,7 +53,11 @@ function doValidation(userCode: string, dispatch: Dispatch<Action>) {
 
 function validateUserCode(userCode: string, dispatch: Dispatch<Action>) {
   dispatch({ type: 'SET_USER_CODE', userCode });
-  doValidation(userCode, dispatch);
+  if (userCode.length === 13) {
+    validateWithServer(userCode, dispatch);
+  } else {
+    dispatchError(dispatch, 'Please check the code and try again');
+  }
 }
 
 function submitCode(userCode: string, dispatch: Dispatch<Action>) {
