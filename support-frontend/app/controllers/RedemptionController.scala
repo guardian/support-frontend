@@ -137,7 +137,7 @@ class RedemptionController(
       stage = "checkout",
       redemptionCode = redemptionCode,
       maybeReaderType = None,
-      Some("Unfortunately we were unable to process your code, please try again later"), //TODO: RB use actual error?
+      Some(s"Unfortunately we were unable to process your code. ${error}"),
       user = None,
       submitted = false
     ))
