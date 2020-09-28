@@ -34,7 +34,7 @@ class SendThankYouEmailIT extends AsyncLambdaSpec with MockContext {
 
     sendThankYouEmail.handleRequestFuture(wrapFixture(thankYouEmailJson()), outStream, context).map { _ =>
 
-      val result = Encoding.in[SendMessageResult](outStream.toInputStream)
+      val result = Encoding.in[List[SendMessageResult]](outStream.toInputStream)
       result.isSuccess should be(true)
     }
   }
