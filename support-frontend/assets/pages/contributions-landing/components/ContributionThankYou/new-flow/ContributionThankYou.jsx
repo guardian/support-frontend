@@ -22,8 +22,8 @@ import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import {getCampaignSettings} from "helpers/campaigns";
-import type {CampaignSettings} from "helpers/campaigns";
+import { getCampaignSettings } from 'helpers/campaigns';
+import type { CampaignSettings } from 'helpers/campaigns';
 
 const container = css`
   background: white;
@@ -107,7 +107,7 @@ type ContributionThankYouProps = {|
   guestAccountCreationToken: string,
   paymentMethod: PaymentMethod,
   countryId: IsoCountry,
-  campaignCode?: string,
+  campaignCode: ?string,
 |};
 
 const mapStateToProps = state => ({

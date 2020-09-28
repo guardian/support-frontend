@@ -32,12 +32,13 @@ const buttonsContainer = css`
   }
 `;
 
-type PropTypes = { email: string, createReferralCodes: boolean, campaignCode?: string }
+type PropTypes = { email: string, createReferralCodes: boolean, campaignCode: ?string }
 
 const ContributionThankYouSocialShare = (props: PropTypes) => {
-  console.log("createReferralCodes",props.createReferralCodes)
-  const referralCode = props.createReferralCodes && props.campaignCode ? generateReferralCode(props.email, props.campaignCode) : null;
-  console.log("referralCode", referralCode)
+  console.log('createReferralCodes', props.createReferralCodes);
+  const referralCode = props.createReferralCodes && props.campaignCode ?
+    generateReferralCode(props.email, props.campaignCode) :
+    null;
 
   const actionIcon = <SvgShare />;
   const actionHeader = <ActionHeader title="Share your support" />;
