@@ -39,7 +39,6 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
   const referralCode = props.createReferralCodes && props.campaignCode ?
     generateReferralCode(props.email, props.campaignCode) :
     null;
-  console.log('referralCode', referralCode);
 
   const actionIcon = <SvgShare />;
   const actionHeader = <ActionHeader title="Share your support" />;
