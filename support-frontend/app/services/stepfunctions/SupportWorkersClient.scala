@@ -108,28 +108,27 @@ class SupportWorkersClient(
     request.body.referrerAcquisitionData.copy(hostname = Some(hostname), gaClientId = gaClientId, userAgent = userAgent, ipAddress = Some(ipAddress))
   }
 
-  private def getGiftRecipient(request: CreateSupportWorkersRequest): Either[String, Option[GiftRecipient]] =
-    (for {
-      giftRecipient <- request.giftRecipient
-    } yield
-      request.product match {
-        case _: GuardianWeekly =>
-          Right(GiftRecipient.Weekly(
+  private def getGiftRecipient(giftRecipient: GiftRecipientRequest, product: ProductType) =
+    product match {
+      case _: GuardianWeekly =>
+        Right(
+          GiftRecipient.Weekly(
             giftRecipient.title,
             giftRecipient.firstName,
             giftRecipient.lastName,
             giftRecipient.email
-          ))
-        case _: DigitalPack => for {
-          email <- giftRecipient.email.toRight("email address is required for DS gifts")
-        } yield GiftRecipient.DigiSub(
-          giftRecipient.firstName,
-          giftRecipient.lastName,
-          email,
-          giftRecipient.message
+          )
         )
-      }).sequence
-
+      case _: DigitalPack =>
+        giftRecipient.email.toRight("email address is required for DS gifts").map { email =>
+          GiftRecipient.DigiSub(
+            giftRecipient.firstName,
+            giftRecipient.lastName,
+            email,
+            giftRecipient.message
+          )
+        }
+    }
 
   def createSubscription(
     request: AnyAuthRequest[CreateSupportWorkersRequest],
@@ -139,7 +138,7 @@ class SupportWorkersClient(
     SafeLogger.info(s"$requestId: debug info ${request.body.debugInfo}")
 
     for {
-      giftRecipient <- EitherT.fromEither[Future](getGiftRecipient(request.body))
+      giftRecipient <- EitherT.fromEither[Future](request.body.giftRecipient.map(getGiftRecipient(_, request.body.product)).sequence)
       createPaymentMethodState = CreatePaymentMethodState(
         requestId = requestId,
         user = user,
