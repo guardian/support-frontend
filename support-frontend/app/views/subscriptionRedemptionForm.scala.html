@@ -31,7 +31,7 @@
       window.guardian = window.guardian || {};
       window.guardian.stage = @JsStringLiteral(stage);
       window.guardian.userCode = @JsStringLiteral(redemptionCode);
-      window.guardian.readerType = @JsStringLiteral.fromOption(maybeReaderType.map(_.toString));
+      window.guardian.readerType = @JsStringLiteral.fromOption(maybeReaderType.map(_.value));
       window.guardian.error = @JsStringLiteral.fromOption(maybeRedemptionError);
       window.guardian.submitted = @submitted;
       window.guardian.user = {
