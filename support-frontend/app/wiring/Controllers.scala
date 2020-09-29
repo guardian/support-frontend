@@ -39,6 +39,11 @@ trait Controllers {
     fontLoader
   )
 
+  lazy val articleShareController = new ArticleShare(
+    actionRefiners,
+    controllerComponents
+  )
+
   lazy val subscriptionsController = new Subscriptions(
     actionRefiners,
     identityService,
