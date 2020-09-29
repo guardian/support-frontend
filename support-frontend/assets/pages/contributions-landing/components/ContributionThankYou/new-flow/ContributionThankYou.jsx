@@ -1,6 +1,6 @@
 // @flow
 // $FlowIgnore - required for hooks
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { type User } from 'helpers/user/userReducer';
 import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
@@ -20,7 +20,10 @@ import ContributionThankYouSupportReminder from './ContributionThankYouSupportRe
 import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
-import { trackUserData } from '../utils/ophan';
+import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from '../utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { getCampaignSettings } from 'helpers/campaigns';
+import type { CampaignSettings } from 'helpers/campaigns';
 
 const container = css`
   background: white;
@@ -103,7 +106,8 @@ type ContributionThankYouProps = {|
   user: User,
   guestAccountCreationToken: string,
   paymentMethod: PaymentMethod,
-  countryId: IsoCountry
+  countryId: IsoCountry,
+  campaignCode: ?string,
 |};
 
 const mapStateToProps = state => ({
@@ -115,6 +119,7 @@ const mapStateToProps = state => ({
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
   paymentMethod: state.page.form.paymentMethod,
   countryId: state.common.internationalisation.countryId,
+  campaignCode: state.common.referrerAcquisitionData.campaignCode,
 });
 
 const ContributionThankYou = ({
@@ -126,8 +131,10 @@ const ContributionThankYou = ({
   guestAccountCreationToken,
   paymentMethod,
   countryId,
+  campaignCode,
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
+  const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
 
   useEffect(() => {
     trackUserData(
@@ -153,7 +160,10 @@ const ContributionThankYou = ({
     shouldShow: true,
   };
   const supportReminderAction = {
-    component: <ContributionThankYouSupportReminder email={email} />,
+    component: <ContributionThankYouSupportReminder
+      email={email}
+      isEnvironmentMoment={campaignSettings && campaignSettings.campaignCode === 'enviro_moment_2020'}
+    />,
     shouldShow: contributionType === 'ONE_OFF',
   };
   const surveyAction = {
@@ -161,7 +171,11 @@ const ContributionThankYou = ({
     shouldShow: true,
   };
   const socialShareAction = {
-    component: <ContributionThankYouSocialShare />,
+    component: <ContributionThankYouSocialShare
+      email={email}
+      createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
+      campaignCode={campaignSettings && campaignSettings.campaignCode}
+    />,
     shouldShow: true,
   };
   const ausMapAction = {
@@ -214,7 +228,11 @@ const ContributionThankYou = ({
       </div>
 
       <div css={buttonContainer}>
-        <LinkButton href="https://www.theguardian.com" priority="tertiary">
+        <LinkButton
+          href="https://www.theguardian.com"
+          priority="tertiary"
+          onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)}
+        >
           Return to the Guardian
         </LinkButton>
       </div>

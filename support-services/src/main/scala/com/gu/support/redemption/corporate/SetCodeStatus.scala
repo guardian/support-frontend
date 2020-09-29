@@ -1,6 +1,6 @@
-package com.gu.support.redemption
+package com.gu.support.redemption.corporate
 
-import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
+import com.gu.support.redemption.corporate.DynamoUpdate.DynamoFieldUpdate
 import com.gu.support.redemptions.RedemptionCode
 
 import scala.concurrent.{ExecutionContext, Future}

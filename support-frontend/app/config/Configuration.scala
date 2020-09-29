@@ -52,6 +52,7 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val recaptchaConfigProvider = RecaptchaConfigProvider(config, stage)
 
+  lazy val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
 
 }
 

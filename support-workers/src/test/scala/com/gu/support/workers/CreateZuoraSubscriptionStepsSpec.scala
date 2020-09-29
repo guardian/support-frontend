@@ -5,10 +5,10 @@ import java.util.UUID
 import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.config.{ZuoraConfig, ZuoraDigitalPackConfig}
-import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
-import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
-import com.gu.support.redemption.generator.GiftCodeGeneratorService
-import com.gu.support.redemption.{DynamoLookup, DynamoUpdate}
+import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
+import com.gu.support.redemption.corporate.DynamoUpdate.DynamoFieldUpdate
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
+import com.gu.support.redemption.corporate.{DynamoLookup, DynamoUpdate}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.CreateZuoraSubscriptionState

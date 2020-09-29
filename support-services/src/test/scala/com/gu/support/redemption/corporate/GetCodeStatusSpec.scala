@@ -1,7 +1,7 @@
-package com.gu.support.redemption
+package com.gu.support.redemption.corporate
 
-import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
-import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, CorporateId, NoSuchCode}
+import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
+import com.gu.support.redemption.corporate.GetCodeStatus.{CodeAlreadyUsed, CorporateId, NoSuchCode}
 import com.gu.support.redemptions.RedemptionCode
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers

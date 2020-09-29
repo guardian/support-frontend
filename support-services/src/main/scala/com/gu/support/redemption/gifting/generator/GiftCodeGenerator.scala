@@ -1,8 +1,8 @@
-package com.gu.support.redemption.generator
+package com.gu.support.redemption.gifting.generator
 
 import java.security.SecureRandom
 
-import com.gu.support.redemption.generator.CodeBuilder.GenerateGiftCode
+import com.gu.support.redemption.gifting.generator.CodeBuilder.GenerateGiftCode
 import com.gu.support.workers.{Annual, BillingPeriod, Quarterly}
 
 object GiftCodeGenerator {

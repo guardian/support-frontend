@@ -10,7 +10,7 @@ type CampaignCopy = {
 
 export type CampaignSettings = {
   campaignCode: string,
-  copy: (goalReached: boolean) => CampaignCopy,
+  copy?: (goalReached: boolean) => CampaignCopy,
   formMessage?: React$Element<string>,
   termsAndConditions?: (contributionsTermsLink: string, contactEmail: string) => React$Element<string>,
   cssModifiers?: string[],
@@ -19,46 +19,34 @@ export type CampaignSettings = {
   extraComponent?: React$Element<string>,
   tickerSettings?: TickerSettings,
   goalReachedCopy?: React$Element<string>, // If set, the form will be replaced with this if goal reached
+  createReferralCodes: boolean,
 };
 
-const currentCampaignPath: string | null = null;
+const currentCampaignPath: string | null = 'enviro_moment_2020';
 
 export const campaign: CampaignSettings = ({
-  campaignCode: 'Aus_moment_2020',
-  copy: (goalReached: boolean) => ({
-    headerCopy: 'You’re doing something powerful',
-    contributeCopy: goalReached ?
-      'We’ve surpassed our ambitious goal of 150,000 supporters in Australia, and together we can do even more. Every contribution you make, however big or small, helps sustain our open, independent journalism for the long term.' :
-      'Help us grow our community of supporters in Australia and reach our ambitious goal. Every contribution you make, however big or small, helps sustain our open, independent journalism for the long term.',
-  }),
-  tickerSettings: {
-    tickerCountType: 'people',
-    tickerEndType: 'unlimited',
-    currencySymbol: '£',
-    copy: {
-      countLabel: 'supporters in Australia',
-      goalReachedPrimary: 'We\'ve hit our goal!',
-      goalReachedSecondary: 'but you can still support us',
-    },
-  },
+  campaignCode: 'enviro_moment_2020',
+  createReferralCodes: true,
 });
 
-function campaignEnabledForUser(): boolean {
+function campaignEnabledForUser(campaignCode: ?string): boolean {
   if (currentCampaignPath) {
-    return window.guardian.forceCampaign || window.location.pathname.endsWith(`/${currentCampaignPath}`);
+    return window.guardian.forceCampaign ||
+      window.location.pathname.endsWith(`/${currentCampaignPath}`) ||
+      campaign.campaignCode === campaignCode;
   }
   return false;
 }
 
-export function getCampaignSettings(): CampaignSettings | null {
-  if (campaignEnabledForUser()) {
+export function getCampaignSettings(campaignCode: ?string): CampaignSettings | null {
+  if (campaignEnabledForUser(campaignCode)) {
     return campaign;
   }
   return null;
 }
 
-export function getCampaignCode(): string | null {
-  const campaignSettings = getCampaignSettings();
+export function getCampaignCode(campaignCode?: string): string | null {
+  const campaignSettings = getCampaignSettings(campaignCode);
   if (campaignSettings) {
     return campaignSettings.campaignCode;
   }

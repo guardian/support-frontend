@@ -3,12 +3,12 @@ package com.gu.support.workers.integration
 import java.util.UUID
 
 import com.gu.salesforce.Fixtures.idId
-import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, NoSuchCode}
-import com.gu.support.redemption.generator.CodeBuilder.GiftCode
-import com.gu.support.redemption.generator.GiftCodeGeneratorService
+import com.gu.support.redemption.corporate.GetCodeStatus.{CodeAlreadyUsed, NoSuchCode}
+import com.gu.support.redemption.gifting.{NotFound, Redeemed}
+import com.gu.support.redemption.gifting.generator.CodeBuilder.GiftCode
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson}
-import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{NotFound, Redeemed}
 import com.gu.support.workers.{Annual, AsyncLambdaSpec, BillingPeriod, Fixtures, MockContext, RequestInfo}
 import com.gu.support.workers.lambdas.{DigitalSubscriptionGiftRedemption, HandlerResult}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -67,7 +67,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
       RedemptionData(code),
       RequestInfo(testUser = false, failed = false, Nil, accountExists = false),
       state,
-      createZuoraHelper.mockZuoraService,
+      createZuoraHelper.realZuoraGiftService,
       createZuoraHelper.realCatalogService
     )
   }

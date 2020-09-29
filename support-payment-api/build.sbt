@@ -1,19 +1,15 @@
+import LibraryVersions._
+
 name := "payment-api"
 
 version := "0.1"
 scalaVersion := "2.12.4"
 scalacOptions ++= Seq(
-  "-Ypartial-unification",
   "-Ywarn-unused:imports"
 )
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
-
-val circeVersion = "0.11.1"
-val AWSJavaSDKVersion = "1.11.568"
-val jacksonVersion = "2.10.0"
-val stripeVersion = "10.12.0" // Supports API version 2019-05-16
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
@@ -26,7 +22,7 @@ libraryDependencies ++= Seq(
   "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
   "com.beachape" %% "enumeratum" % "1.5.12",
   "com.beachape" %% "enumeratum-circe" % "1.5.12",
-  "com.dripower" %% "play-circe" % "2611.0",
+  "com.dripower" %% "play-circe" % playCirceVersion,
   "com.github.mpilquist" %% "simulacrum" % "0.11.0",
   "com.stripe" % "stripe-java" % stripeVersion,
   "com.gocardless" % "gocardless-pro" % "2.8.0",

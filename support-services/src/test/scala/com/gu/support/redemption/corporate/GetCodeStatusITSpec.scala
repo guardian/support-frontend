@@ -1,7 +1,7 @@
-package com.gu.support.redemption
+package com.gu.support.redemption.corporate
 
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.redemption.GetCodeStatus.{CodeAlreadyUsed, CorporateId, NoSuchCode}
+import com.gu.support.redemption.corporate.GetCodeStatus.{CodeAlreadyUsed, CorporateId, NoSuchCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec

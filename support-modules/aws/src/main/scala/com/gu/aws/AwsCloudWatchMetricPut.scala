@@ -45,7 +45,7 @@ object AwsCloudWatchMetricPut {
     metricDatum1.setValue(request.value)
     metricDatum1.setUnit(StandardUnit.Count)
     putMetricDataRequest.getMetricData.add(metricDatum1)
-    Try(client.putMetricData(putMetricDataRequest)).map(_ => Unit)
+    Try(client.putMetricData(putMetricDataRequest)).map(_ => ())
   }
 
 }
