@@ -160,7 +160,7 @@ object CreateZuoraSubscription {
   private def buildSubscriptionData(
     state: CreateZuoraSubscriptionState,
     promotionService: => PromotionService,
-    getCodeStatus: => CorporateCodeValidator,
+    corporateCodeValidator: => CorporateCodeValidator,
     giftCodeGenerator: GiftCodeGeneratorService,
     today: () => LocalDate,
     config: ZuoraConfig
@@ -181,7 +181,7 @@ object CreateZuoraSubscription {
             state.user.billingAddress.country,
             promotionService
           )
-          case Right(rd: RedemptionData) => SubscriptionRedemption(rd, getCodeStatus)
+          case Right(rd: RedemptionData) => SubscriptionRedemption(rd, corporateCodeValidator)
         },
         environment,
         giftCodeGenerator,
