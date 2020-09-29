@@ -146,7 +146,7 @@ class WeeklySubscription(
       DefaultPromotions.GuardianWeekly.NonGift.all
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ defaultPromos
     val readerType = if (orderIsAGift) Gift else Direct
-    val v2recaptchaConfigPublicKey = if (uatMode) recaptchaConfigProvider.get(true).v2PublicKey else recaptchaConfigProvider.get().v2PublicKey
+    val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
 
     subscriptionCheckout(
       title,
