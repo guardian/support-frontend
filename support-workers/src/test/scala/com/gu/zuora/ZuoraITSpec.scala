@@ -22,6 +22,8 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   def uatService: ZuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(true), RequestRunners.configurableFutureRunner(30.seconds))
 
+  def uatGiftService: ZuoraGiftService = new ZuoraGiftService(Configuration.load().zuoraConfigProvider.get(true), RequestRunners.configurableFutureRunner(30.seconds))
+
   // actual sub "CreatedDate": "2017-12-07T15:47:21.000+00:00",
   val earlyDate = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeZone.UTC)
 
@@ -42,7 +44,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   it should "retrieve subscription redemption information from a redemption code" in {
     val redemptionCode = "gd12-integration-test"
-    uatService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).right.get).map {
+    uatGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).right.get).map {
       response =>
         response.records.size shouldBe 1
         response.records.head.gifteeIdentityId shouldBe None
@@ -51,7 +53,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   it should "handle invalid redemption codes" in {
     val invalidRedemptionCode = "xxxx-0000"
-    uatService.getSubscriptionFromRedemptionCode(RedemptionCode(invalidRedemptionCode).right.get).map {
+    uatGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(invalidRedemptionCode).right.get).map {
       response =>
         response.records.size shouldBe 0
     }

@@ -1,6 +1,6 @@
-package com.gu.support.redemption
+package com.gu.support.redemption.corporate
 
-import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
+import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemptions.RedemptionCode
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -111,7 +111,7 @@ GET  /uk/subscribe/paper/delivery                                  controllers.P
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscription.displayForm()
 
 # redemptions
-GET  /subscribe/redeem/welcome/:redemptionCode                     controllers.RedemptionController.displayForm(redemptionCode: String)
+GET  /subscribe/redeem                                             controllers.RedemptionController.displayForm(redemptionCode: String)
 GET  /subscribe/redeem/create/:redemptionCode                      controllers.RedemptionController.displayProcessing(redemptionCode: String)
 GET  /subscribe/redeem/validate/:redemptionCode                    controllers.RedemptionController.validateCode(redemptionCode: String, isTestUser: Option[Boolean])
 GET  /subscribe/redeem/thankyou                                    controllers.RedemptionController.displayThankYou(stage = "thankyou")

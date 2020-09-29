@@ -1,8 +1,8 @@
-package com.gu.support.redemption
+package com.gu.support.redemption.corporate
 
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.redemption.DynamoLookup.{DynamoBoolean, DynamoString}
-import com.gu.support.redemption.DynamoUpdate.DynamoFieldUpdate
+import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
+import com.gu.support.redemption.corporate.DynamoUpdate.DynamoFieldUpdate
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers

@@ -9,10 +9,11 @@ import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
-import com.gu.support.redemption.GetCodeStatus
-import com.gu.support.redemption.GetCodeStatus.{InvalidReaderType, RedemptionInvalid}
-import com.gu.support.redemption.generator.CodeBuilder.GiftCode
-import com.gu.support.redemption.generator.GiftCodeGeneratorService
+import com.gu.support.redemption.corporate.GetCodeStatus.{InvalidReaderType, RedemptionInvalid}
+import com.gu.support.redemption.corporate.GetCodeStatus
+import com.gu.support.redemption.gifting.GiftRedemptionState
+import com.gu.support.redemption.gifting.generator.CodeBuilder.GiftCode
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption
@@ -71,7 +72,7 @@ object DigitalSubscriptionBuilder {
   )(implicit ec: ExecutionContext): BuildResult = {
 
     val (contractAcceptanceDelay, autoRenew, initialTerm) = if (readerType == Gift)
-      (0, false, DigitalSubscriptionGiftRedemption.expirationTimeInMonths + 1)
+      (0, false, GiftRedemptionState.expirationTimeInMonths + 1)
     else
       (purchase.config.defaultFreeTrialPeriod + purchase.config.paymentGracePeriod, true, 12)
 

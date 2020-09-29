@@ -5,7 +5,6 @@
 import React from 'react';
 import SocialShare from 'components/socialShare/socialShare';
 
-
 // ----- Component ----- //
 
 export default function SpreadTheWord() {

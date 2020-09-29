@@ -1,4 +1,4 @@
-package com.gu.support.redemption
+package com.gu.support.redemption.corporate
 
 import com.gu.monitoring.SafeLogger
 
