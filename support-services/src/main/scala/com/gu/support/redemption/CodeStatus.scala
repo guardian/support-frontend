@@ -2,13 +2,13 @@ package com.gu.support.redemption
 
 import com.gu.support.redemption.corporate.CorporateCodeValidator.CorporateId
 
-sealed abstract class CodeValidationResult(val clientCode: String)
+sealed abstract class CodeStatus(val clientCode: String)
 
-sealed abstract class ValidCode(clientCode: String) extends CodeValidationResult(clientCode)
+sealed abstract class ValidCode(clientCode: String) extends CodeStatus(clientCode)
 
-sealed abstract class InvalidCode(clientCode: String) extends CodeValidationResult(clientCode)
+sealed abstract class InvalidCode(clientCode: String) extends CodeStatus(clientCode)
 
-case object CodeNotFound extends CodeValidationResult("code_not_found")
+case object CodeNotFound extends CodeStatus("code_not_found")
 
 case object CodeMalformed extends InvalidCode("code_malformed")
 

@@ -1,6 +1,6 @@
 package com.gu.support.redemption.corporate
 
-import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound, CodeValidationResult, ValidCorporateCode}
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound, CodeStatus, ValidCorporateCode}
 import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemptions.RedemptionCode
 
@@ -37,7 +37,7 @@ class CorporateCodeValidator(dynamoLookup: DynamoLookup) extends WithLogging {
 
   import CorporateCodeValidator._
 
-  def validate(code: RedemptionCode)(implicit ec: ExecutionContext): Future[CodeValidationResult] =
+  def validate(code: RedemptionCode)(implicit ec: ExecutionContext): Future[CodeStatus] =
     (for {
       maybeAttributes <- dynamoLookup.lookup(code.value)
       status <- FlattenErrors(maybeAttributes.map { attributes =>

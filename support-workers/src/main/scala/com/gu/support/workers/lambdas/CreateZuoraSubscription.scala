@@ -276,7 +276,7 @@ object DigitalSubscriptionGiftRedemption {
       .flatMap {
         case ValidGiftCode(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
         case CodeRedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))
-        case otherState: CodeValidationResult => Future.failed(new RuntimeException(otherState.clientCode))
+        case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
       }
   }
 

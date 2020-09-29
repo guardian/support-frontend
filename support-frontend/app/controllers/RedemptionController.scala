@@ -248,7 +248,7 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
       case _: InvalidCode | CodeNotFound | CodeRedeemedInThisRequest => Left("Please check the code and try again")
     })
 
-  private def getValidationResult(inputCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): Future[CodeValidationResult] = {
+  private def getValidationResult(inputCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): Future[CodeStatus] = {
     val corporateValidator = CorporateCodeValidator.withDynamoLookup(dynamoLookup(isTestUser))
     val giftValidator = new GiftCodeValidator(zuoraLookupService)
 
