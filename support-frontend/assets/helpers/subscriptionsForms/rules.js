@@ -56,7 +56,7 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
     ];
   const formFieldsToCheck = orderIsAGift ?
     [...userFormFields, ...giftFormFields]
-    : [...userFormFields];
+    : userFormFields;
 
   return validate(formFieldsToCheck);
 }

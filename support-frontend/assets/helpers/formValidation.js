@@ -10,6 +10,7 @@ import type { CountryGroup, CountryGroupId } from 'helpers/internationalisation/
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { Canada, UnitedStates, AUDCountries, countryGroups } from './internationalisation/countryGroup';
 import { DateUtils } from 'react-day-picker';
+import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
@@ -20,9 +21,9 @@ export const isNotEmpty: (string | null) => boolean = input => !isEmpty(input);
 
 export const isNotInThePast: (Date | null) => boolean = date => !DateUtils.isPastDay(date);
 
-export const isNotMoreThan89DaysAway: (Date | null) => boolean = (date) => {
+export const isNotTooFarInTheFuture: (Date | null) => boolean = (date) => {
   const rangeDate = new Date();
-  rangeDate.setDate(rangeDate.getDate() + 89);
+  rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
   const dateIsInsideRange = !DateUtils.isDayAfter(date, rangeDate);
   return dateIsInsideRange;
 };
@@ -43,7 +44,7 @@ export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(i
 export const checkGiftStartDate: (string | null) => boolean = (rawDate) => {
   const dateArray = rawDate ? rawDate.split('/') : null;
   const date = dateArray ? new Date(`${dateArray[1]} ${dateArray[0]} ${dateArray[2]}`) : null;
-  return isNotEmpty(rawDate) && isNotInThePast(date) && isNotMoreThan89DaysAway(date);
+  return isNotEmpty(rawDate) && isNotInThePast(date) && isNotTooFarInTheFuture(date);
 };
 
 export const checkAmount: (string, CountryGroupId, ContributionType) =>

@@ -97,6 +97,8 @@ const getProduct =
       productOption,
       orderIsAGift,
       product,
+      giftMessage,
+      giftDeliveryDate,
     } = state.page.checkout;
 
     const readerType = orderIsAGift ? Gift : Direct;
@@ -105,6 +107,8 @@ const getProduct =
         currency: currencyId || state.common.internationalisation.currencyId,
         billingPeriod,
         readerType,
+        giftMessage,
+        giftDeliveryDate,
       };
     }
     return {

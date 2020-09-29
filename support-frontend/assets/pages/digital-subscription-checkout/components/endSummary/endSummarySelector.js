@@ -21,7 +21,7 @@ function mapStateToProps(state: CheckoutState) {
       billingPeriod,
     );
 
-  const digitalBillingPeriod = billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Monthly';
+  const digitalBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
   const digitalGiftBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Quarterly';
 
   return {

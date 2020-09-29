@@ -56,22 +56,36 @@ const thankyouProps = {
 
 // ----- Render ----- //
 
-const content = (
-  <Provider store={store}>
-    <Page
-      header={<HeaderWrapper />}
-      footer={<DigitalFooter orderIsAGift={orderIsAGift} />}
-    >
-      <CheckoutStage
-        checkoutForm={orderIsAGift ? <CheckoutFormGift /> : <CheckoutForm />}
-        thankYouContentPending={orderIsAGift ? <ThankYouGift {...thankyouProps} pending /> :
-        <ThankYouPendingContent includePaymentCopy {...thankyouProps} />
-        }
-        thankYouContent={orderIsAGift ? <ThankYouGift {...thankyouProps} /> : <ThankYouContent {...thankyouProps} />}
-        subscriptionProduct="DigitalPack"
-      />
-    </Page>
-  </Provider>
-);
+const content = orderIsAGift ?
+  (
+    <Provider store={store}>
+      <Page
+        header={<HeaderWrapper />}
+        footer={<DigitalFooter orderIsAGift />}
+      >
+        <CheckoutStage
+          checkoutForm={<CheckoutFormGift />}
+          thankYouContentPending={<ThankYouGift {...thankyouProps} pending />}
+          thankYouContent={<ThankYouGift {...thankyouProps} />}
+          subscriptionProduct="DigitalPack"
+        />
+      </Page>
+    </Provider>
+  ) :
+  (
+    <Provider store={store}>
+      <Page
+        header={<HeaderWrapper />}
+        footer={<DigitalFooter orderIsAGift={false} />}
+      >
+        <CheckoutStage
+          checkoutForm={<CheckoutForm />}
+          thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
+          thankYouContent={<ThankYouContent {...thankyouProps} />}
+          subscriptionProduct="DigitalPack"
+        />
+      </Page>
+    </Provider>
+  );
 
 renderPage(content, 'digital-subscription-checkout-page');

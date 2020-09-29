@@ -30,7 +30,7 @@ class Promotions(
 
   implicit val a: AssetsResolver = assets
 
-  def promo(promoCode: String, orderIsAGift: Boolean = false): Action[AnyContent] = CachedAction() { implicit request =>
+  def promo(promoCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     val promotionService = promotionServiceProvider.forUser(false)
     val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
 

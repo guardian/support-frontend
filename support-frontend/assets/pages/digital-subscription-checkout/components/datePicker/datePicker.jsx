@@ -14,6 +14,12 @@ import { withLabel } from 'hocs/withLabel';
 import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonDefault } from '@guardian/src-button';
 import { Error } from 'components/forms/customFields/error';
+import {
+  getLatestAvailableDateText,
+  getRange,
+  dateIsPast,
+  dateIsOutsideRange,
+} from './helpers';
 
 import './styles.scss';
 
@@ -58,7 +64,6 @@ const marginTop = css`
 `;
 
 type PropTypes = {
-  // eslint-disable-next-line react/no-unused-prop-types
   value: string | null,
   onChange: Function,
   // eslint-disable-next-line react/no-unused-prop-types
@@ -93,61 +98,34 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     this.handleCalendarDate(new Date(Date.now()));
   }
 
-  getLatestAvailableDateText = () => {
-    const rangeDate = this.getRange();
-    return `${rangeDate.getDate()} ${monthText[rangeDate.getMonth()]} ${rangeDate.getFullYear()}`;
-  }
-
-  getRange = () => {
-    const rangeDate = new Date();
-    rangeDate.setDate(rangeDate.getDate() + 89);
-    return rangeDate;
-  }
-
-  dateIsPast = (date: Date) => DateUtils.isPastDay(date)
-
-  dateIsOutsideRange = (date: Date) => {
-    const rangeDate = this.getRange();
-    return DateUtils.isDayAfter(date, rangeDate);
-  }
-
   checkDateIsValid = (e: Object) => {
     e.preventDefault();
     const date = new Date(`${this.state.month}/${this.state.day}/${this.state.year}`);
     const dateIsNotADate = !DateUtils.isDate(date);
-    const dateOutsideRange = this.dateIsOutsideRange(date);
-    const dateIsPast = this.dateIsPast(date);
-    const eightyNineDaysFromNow = this.getLatestAvailableDateText();
+    const latestAvailableDate = getLatestAvailableDateText();
+
     this.setState({ dateValidated: true, dateError: '' });
     if (dateIsNotADate) {
-      this.setState({
-        dateError: 'No date has been selected as the date is not valid. Please try again',
-        day: '',
-        month: '',
-        year: '',
-      });
-      this.updateStartDate();
-    } else if (dateOutsideRange) {
-      this.setState({
-        dateError: `No date has been recorded as the date entered was not available. Please enter a date up to ${eightyNineDaysFromNow}`,
-        day: '',
-        month: '',
-        year: '',
-      });
-      this.updateStartDate();
-    } else if (dateIsPast) {
-      this.setState({
-        dateError: `No date has been recorded as the date was in the past. Please enter a date between today and ${eightyNineDaysFromNow}`,
-        day: '',
-        month: '',
-        year: '',
-      });
-      this.updateStartDate();
+      this.handleError('No date has been selected as the date is not valid. Please try again');
+    } else if (dateIsOutsideRange(date)) {
+      this.handleError(`No date has been recorded as the date entered was not available. Please enter a date up to ${latestAvailableDate}`);
+    } else if (dateIsPast(date)) {
+      this.handleError(`No date has been recorded as the date was in the past. Please enter a date between today and ${latestAvailableDate}`);
     }
   }
 
+  handleError = (error: string) => {
+    this.setState({
+      dateError: error,
+      day: '',
+      month: '',
+      year: '',
+    });
+    this.updateStartDate();
+  }
+
   handleCalendarDate = (date: Date) => {
-    if (this.dateIsPast(date) || this.dateIsOutsideRange(date)) {
+    if (dateIsPast(date) || dateIsOutsideRange(date)) {
       return;
     }
     const dateArray = formatMachineDate(date).split('-');
@@ -182,9 +160,9 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     return (
       <div>
         <fieldset css={startDateGroup} role="group" aria-describedby="date-hint">
-          <p id="date-hint">
-            {`Please choose a date up to ${this.getLatestAvailableDateText()} for your gift to be emailed to the recipient.`}
-          </p>
+          <legend id="date-hint">
+            {`Please choose a date up to ${getLatestAvailableDateText()} for your gift to be emailed to the recipient.`}
+          </legend>
           <div css={startDateFields}>
             <div css={inputLayoutWithMargin}>
               <InputWithLabel
@@ -218,6 +196,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
             </div>
 
             <button
+              aria-hidden
               css={calendarIconContainer}
               onClick={(e) => {
                 e.preventDefault();
@@ -231,7 +210,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
         {state.showCalendar && (
           <DayPicker
             onDayClick={day => this.handleCalendarDate(day)}
-            disabledDays={[{ before: new Date(today) }, { after: this.getRange() }]}
+            disabledDays={[{ before: new Date(today) }, { after: getRange() }]}
             weekdaysShort={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
             fromMonth={currentMonth}
             toMonth={threeMonthRange}

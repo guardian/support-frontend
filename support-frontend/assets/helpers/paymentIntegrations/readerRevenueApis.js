@@ -49,6 +49,8 @@ export type DigitalSubscription = {|
   currency: string,
   billingPeriod: BillingPeriod,
   readerType: ReaderType,
+  giftMessage?: string | null,
+  giftDeliveryDate?: string | null,
 |};
 
 export type PaperSubscription = {|

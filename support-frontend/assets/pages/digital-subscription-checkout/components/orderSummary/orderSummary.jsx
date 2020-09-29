@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { type ProductPrice, showPrice } from 'helpers/productPrice/productPrices';
-import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
+import { type DigitalBillingPeriod, Annual, Quarterly } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
@@ -21,7 +21,7 @@ type PropTypes = {
 };
 
 function OrderSummary(props: PropTypes) {
-  const giftBillingPeriod = props.billingPeriod === 'Annual' ? props.billingPeriod : 'Quarterly';
+  const giftBillingPeriod = props.billingPeriod === Annual ? Annual : Quarterly;
   const giftPriceString = getGiftOrderSummaryText(giftBillingPeriod, showPrice(props.productPrice)).cost;
   const priceString = props.orderIsAGift ? giftPriceString :
     getBillingDescription(props.productPrice, props.billingPeriod);

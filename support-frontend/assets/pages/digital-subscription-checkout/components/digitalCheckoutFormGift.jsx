@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { type Dispatch, compose } from 'redux';
 
@@ -145,152 +145,145 @@ const Address = withStore(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 
-class DigitalCheckoutFormGift extends Component <PropTypes> {
-  componentDidMount() {
-    this.props.setGiftStatus(true);
-  }
+function DigitalCheckoutFormGift(props: PropTypes) {
+  const productPrice = getProductPrice(
+    props.productPrices,
+    props.country,
+    props.billingPeriod,
+  );
 
-  render() {
-    const { props } = this;
-    const productPrice = getProductPrice(
-      props.productPrices,
-      props.country,
-      props.billingPeriod,
-    );
+  const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
+    'Sorry we could not process your payment';
 
-    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
-      'Sorry we could not process your payment';
-    return (
-      <Content>
-        <CheckoutLayout aside={(
-          <OrderSummary
-            image={
-              <GridImage
-                gridId="subscriptionDailyPackshot"
-                srcSizes={[1000, 500]}
-                sizes="(max-width: 740px) 50vw, 500"
-                imgType="png"
-                altText=""
-              />
+  return (
+    <Content>
+      <CheckoutLayout aside={(
+        <OrderSummary
+          image={
+            <GridImage
+              gridId="subscriptionDailyPackshot"
+              srcSizes={[1000, 500]}
+              sizes="(max-width: 740px) 50vw, 500"
+              imgType="png"
+              altText=""
+            />
                 }
-            title="Digital Gift Subscription"
-            description="Premium App + The Guardian Daily + Ad-free"
-            productPrice={productPrice}
-            billingPeriod={props.billingPeriod}
-            changeSubscription={routes.digitalSubscriptionLanding}
-            orderIsAGift
-          />)}
-        >
-          <Form onSubmit={(ev) => {
+          title="Digital Gift Subscription"
+          description="Premium App + The Guardian Daily + Ad-free"
+          productPrice={productPrice}
+          billingPeriod={props.billingPeriod}
+          changeSubscription={routes.digitalSubscriptionLanding}
+          orderIsAGift
+        />)}
+      >
+        <Form onSubmit={(ev) => {
                 ev.preventDefault();
                 props.submitForm();
               }}
+        >
+          <FormSection title="Gift recipient's details">
+            <PersonalDetailsDigitalGift
+              firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
+              setFirstNameGift={props.setFirstNameGift}
+              lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
+              setLastNameGift={props.setLastNameGift}
+              emailGiftRecipient={props.emailGiftRecipient || ''}
+              setEmailGift={props.setEmailGift}
+              formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+            />
+          </FormSection>
+          <FormSection title="Gift delivery date">
+            <DatePickerWithError
+              id="giftDeliveryDate"
+              error={firstError('giftDeliveryDate', props.formErrors)}
+              value={props.giftDeliveryDate}
+              onChange={date => props.setDigitalGiftDeliveryDate(date)}
+            />
+          </FormSection>
+          <FormSection title="Personalise your gift">
+            <TextAreaWithLabel
+              id="gift-message"
+              label="Gift message"
+              maxlength={300}
+              value={props.giftMessage}
+              setValue={props.setGiftMessage}
+              optional
+            />
+          </FormSection>
+          <FormSection title="Your details" border="top">
+            <PersonalDetails
+              firstName={props.firstName}
+              setFirstName={props.setFirstName}
+              lastName={props.lastName}
+              setLastName={props.setLastName}
+              email={props.email}
+              telephone={props.telephone}
+              setTelephone={props.setTelephone}
+              formErrors={props.formErrors}
+              signOut={props.signOut}
+            />
+          </FormSection>
+          <FormSection title="Billing address">
+            <Address />
+          </FormSection>
+          <PaymentMethodSelector
+            country={props.country}
+            paymentMethod={props.paymentMethod}
+            setPaymentMethod={props.setPaymentMethod}
+            onPaymentAuthorised={props.onPaymentAuthorised}
+            validationError={firstError('paymentMethod', props.formErrors)}
+            csrf={props.csrf}
+            currencyId={props.currencyId}
+            payPalHasLoaded={props.payPalHasLoaded}
+            formIsValid={props.formIsValid}
+            validateForm={props.validateForm}
+            isTestUser={props.isTestUser}
+            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+            amount={props.amount}
+            billingPeriod={props.billingPeriod}
+            allErrors={[...props.formErrors, ...props.addressErrors]}
+          />
+          <FormSectionHiddenUntilSelected
+            id="stripeForm"
+            show={props.paymentMethod === Stripe}
+            title="Your card details"
           >
-            <FormSection title="Gift recipient's details">
-              <PersonalDetailsDigitalGift
-                firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
-                setFirstNameGift={props.setFirstNameGift}
-                lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
-                setLastNameGift={props.setLastNameGift}
-                emailGiftRecipient={props.emailGiftRecipient || ''}
-                setEmailGift={props.setEmailGift}
-                formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
-              />
-            </FormSection>
-            <FormSection title="Gift delivery date">
-              <DatePickerWithError
-                id="giftDeliveryDate"
-                error={firstError('giftDeliveryDate', props.formErrors)}
-                value={props.giftDeliveryDate}
-                onChange={date => props.setDigitalGiftDeliveryDate(date)}
-              />
-            </FormSection>
-            <FormSection title="Personalise your gift">
-              <TextAreaWithLabel
-                id="gift-message"
-                label="Gift message"
-                maxlength={300}
-                value={props.giftMessage}
-                setValue={props.setGiftMessage}
-                optional
-              />
-            </FormSection>
-            <FormSection title="Your details" border="top">
-              <PersonalDetails
-                firstName={props.firstName}
-                setFirstName={props.setFirstName}
-                lastName={props.lastName}
-                setLastName={props.setLastName}
-                email={props.email}
-                telephone={props.telephone}
-                setTelephone={props.setTelephone}
-                formErrors={props.formErrors}
-                signOut={props.signOut}
-              />
-            </FormSection>
-            <FormSection title="Billing address">
-              <Address />
-            </FormSection>
-            <PaymentMethodSelector
+            <StripeProviderForCountry
               country={props.country}
-              paymentMethod={props.paymentMethod}
-              setPaymentMethod={props.setPaymentMethod}
-              onPaymentAuthorised={props.onPaymentAuthorised}
-              validationError={firstError('paymentMethod', props.formErrors)}
-              csrf={props.csrf}
-              currencyId={props.currencyId}
-              payPalHasLoaded={props.payPalHasLoaded}
-              formIsValid={props.formIsValid}
-              validateForm={props.validateForm}
               isTestUser={props.isTestUser}
-              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-              amount={props.amount}
-              billingPeriod={props.billingPeriod}
+              submitForm={props.submitForm}
               allErrors={[...props.formErrors, ...props.addressErrors]}
+              setStripePaymentMethod={props.setStripePaymentMethod}
+              validateForm={props.validateForm}
+              buttonText="Pay for your gift"
+              csrf={props.csrf}
             />
-            <FormSectionHiddenUntilSelected
-              id="stripeForm"
-              show={props.paymentMethod === Stripe}
-              title="Your card details"
-            >
-              <StripeProviderForCountry
-                country={props.country}
-                isTestUser={props.isTestUser}
-                submitForm={props.submitForm}
-                allErrors={[...props.formErrors, ...props.addressErrors]}
-                setStripePaymentMethod={props.setStripePaymentMethod}
-                validateForm={props.validateForm}
-                buttonText="Pay for your gift"
-                csrf={props.csrf}
-              />
-            </FormSectionHiddenUntilSelected>
-            <FormSectionHiddenUntilSelected
-              id="directDebitForm"
-              show={props.paymentMethod === DirectDebit}
-              title="Your account details"
-            >
-              <DirectDebitForm
-                buttonText="Pay for your gift"
-                submitForm={props.submitForm}
-                allErrors={[...props.formErrors, ...props.addressErrors]}
-                submissionError={props.submissionError}
-                submissionErrorHeading={submissionErrorHeading}
-              />
-            </FormSectionHiddenUntilSelected>
-            <GeneralErrorMessage
-              errorReason={props.submissionError}
-              errorHeading={submissionErrorHeading}
+          </FormSectionHiddenUntilSelected>
+          <FormSectionHiddenUntilSelected
+            id="directDebitForm"
+            show={props.paymentMethod === DirectDebit}
+            title="Your account details"
+          >
+            <DirectDebitForm
+              buttonText="Pay for your gift"
+              submitForm={props.submitForm}
+              allErrors={[...props.formErrors, ...props.addressErrors]}
+              submissionError={props.submissionError}
+              submissionErrorHeading={submissionErrorHeading}
             />
-            <EndSummaryMobile orderIsAGift />
-            <DirectDebitPaymentTerms
-              paymentMethod={props.paymentMethod}
-            />
-          </Form>
-        </CheckoutLayout>
-      </Content>
-    );
-
-  }
+          </FormSectionHiddenUntilSelected>
+          <GeneralErrorMessage
+            errorReason={props.submissionError}
+            errorHeading={submissionErrorHeading}
+          />
+          <EndSummaryMobile orderIsAGift />
+          <DirectDebitPaymentTerms
+            paymentMethod={props.paymentMethod}
+          />
+        </Form>
+      </CheckoutLayout>
+    </Content>
+  );
 }
 
 // ----- Exports ----- //

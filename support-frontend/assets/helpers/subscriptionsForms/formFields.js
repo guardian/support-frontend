@@ -34,7 +34,7 @@ export type FormFields = {|
   fulfilmentOption: FulfilmentOptions,
   product: SubscriptionProduct,
   productOption: ProductOptions,
-  orderIsAGift?: Option<boolean>,
+  orderIsAGift?: boolean,
   deliveryInstructions: Option<string>,
   giftMessage: Option<string>,
   giftDeliveryDate: Option<string>,
@@ -53,7 +53,6 @@ export type FormState = {|
   isTestUser: boolean,
   productPrices: ProductPrices,
   payPalHasLoaded: boolean,
-  orderIsAGift: boolean,
   stripePaymentMethod: Option<string>,
   debugInfo: string,
 |};
