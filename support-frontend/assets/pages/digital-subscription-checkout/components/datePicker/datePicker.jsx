@@ -155,7 +155,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     const currentMonth = new Date(today);
     const threeMonthRange = DateUtils.addMonths(currentMonth, 3);
     const valueArray = value ? value.split('/') : [];
-    const valueDate = valueArray.length ? new Date(`${valueArray[1]} ${valueArray[0]} ${valueArray[2]}`) : null;
+    const valueDate = valueArray.length ? new Date(`${valueArray[1]}/${valueArray[0]}/${valueArray[2]}`) : null;
 
     return (
       <div>
