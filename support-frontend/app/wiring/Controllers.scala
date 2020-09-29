@@ -41,7 +41,8 @@ trait Controllers {
 
   lazy val articleShareController = new ArticleShare(
     actionRefiners,
-    controllerComponents
+    controllerComponents,
+    capiService
   )
 
   lazy val subscriptionsController = new Subscriptions(
