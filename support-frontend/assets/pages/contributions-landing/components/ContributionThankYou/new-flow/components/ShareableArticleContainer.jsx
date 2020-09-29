@@ -3,20 +3,20 @@ import React from 'react';
 import { LinkButton } from '@guardian/src-button';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {SvgFacebook, SvgTwitter, SvgEnvelope} from '@guardian/src-icons';
-import SvgLinkedIn from './components/SvgLinkedIn';
-import styles from './styles';
+import SvgLinkedIn from '../components/SvgLinkedIn';
+import styles from '../styles';
 import {
   getFacebookShareLink,
   getTwitterShareLink,
   getLinkedInShareLink,
   getEmailShareLink,
-} from '../utils/social';
+} from '../../utils/social';
 import {
   OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
   OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
   OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
   OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
-} from '../utils/ophan';
+} from '../../utils/ophan';
 
 type PropTypes = {
   articleURL: String,

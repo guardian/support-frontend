@@ -26,7 +26,7 @@ const ContributionThankYouArticleShare = (props: PropTypes) => {
       />
       <ShareableArticleContainer
         articleURL="https://www.theguardian.com/environment/2019/oct/17/climate-science-deniers-environment-warning"
-        headline"'There are no excuses left': why climate science deniers are running out of rope"
+        headline="'There are no excuses left': why climate science deniers are running out of rope"
         linkedImageUrl="https://i.guim.co.uk/img/media/9c8c38800c02d2ffcee2c65485f1c9859d9c41a7/3_195_2445_1467/master/2445.jpg"
       />
     </ActionBody>
