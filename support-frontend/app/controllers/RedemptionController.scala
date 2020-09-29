@@ -12,14 +12,14 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.redemption.corporate.{CorporateCodeValidator, DynamoLookup, DynamoTableAsync}
+import com.gu.support.redemption.corporate.{CorporateCodeValidator, DynamoTableAsync}
 import com.gu.support.redemption.gifting.GiftCodeValidator
-import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeMalformed, CodeNotFound, CodeValidationResult, ValidCorporateCode, ValidGiftCode}
+import com.gu.support.redemption._
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
-import com.gu.zuora.{ZuoraGiftLookupService, ZuoraGiftLookupServiceProvider, ZuoraService}
+import com.gu.zuora.{ZuoraGiftLookupService, ZuoraGiftLookupServiceProvider}
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import io.circe.syntax._
 import lib.RedirectWithEncodedQueryString
@@ -243,7 +243,9 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
     EitherT(getValidationResult(inputCode, isTestUser).map {
       case ValidCorporateCode(_) => Right(Corporate)
       case ValidGiftCode(_) => Right(Gift)
-      case invalidCode => Left(validationResultToErrorMessage(invalidCode))
+      case CodeAlreadyUsed => Left("This code has already been redeemed")
+      case CodeExpired => Left("This code has expired")
+      case _: InvalidCode | CodeNotFound | CodeRedeemedInThisRequest => Left("Please check the code and try again")
     })
 
   private def getValidationResult(inputCode: String, isTestUser: Boolean)(implicit ec: ExecutionContext): Future[CodeValidationResult] = {
@@ -251,7 +253,7 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
     val giftValidator = new GiftCodeValidator(zuoraLookupService)
 
     RedemptionCode(inputCode)
-      .leftMap(_ => CodeMalformed)
+      .leftMap(_ => Future.successful(CodeMalformed))
       .map {
         redemptionCode =>
           for {
@@ -261,16 +263,7 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
             else
               Future.successful(giftValidationResult)
           } yield mergedResult
-      }.fold(
-      malformedCode => Future.successful(malformedCode),
-      validationResult => validationResult
-    )
+      }.merge
   }
 
-  private def validationResultToErrorMessage(validationResult: CodeValidationResult) =
-    validationResult match {
-      case CodeAlreadyUsed => "This code has already been redeemed"
-      case CodeExpired => "This code has expired"
-      case _ => "Please check the code and try again"
-    }
 }
