@@ -21,7 +21,6 @@ import { appropriateErrorMessage } from 'helpers/errorReasons';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import { loadRecaptchaV2 } from 'helpers/recaptcha';
-import { isPostDeployUser } from 'helpers/user/user';
 import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 
