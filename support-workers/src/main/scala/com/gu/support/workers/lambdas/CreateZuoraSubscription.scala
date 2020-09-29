@@ -272,7 +272,7 @@ object DigitalSubscriptionGiftRedemption {
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     val codeValidator = new GiftCodeValidator(zuoraService)
     codeValidator
-      .validate(redemptionData.redemptionCode, state.requestId.toString)
+      .validate(redemptionData.redemptionCode, Some(state.requestId.toString))
       .flatMap {
         case ValidGiftCode(subscriptionId) => redeemInZuora(subscriptionId, state, redemptionData, requestInfo, zuoraService, catalogService)
         case CodeRedeemedInThisRequest => Future.fromTry(buildHandlerResult(UpdateRedemptionDataResponse(true), state, redemptionData, requestInfo))

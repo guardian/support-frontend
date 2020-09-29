@@ -12,13 +12,13 @@ import scala.concurrent.{ExecutionContext, Future}
 object GiftCodeValidator {
   val expirationTimeInMonths = 12
 
-  def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: String): CodeValidationResult =
+  def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: Option[String]): CodeValidationResult =
     existingSub.records match {
       case existingSubFields :: Nil if existingSubFields.contractEffectiveDate.plusMonths(expirationTimeInMonths).isBefore(LocalDate.now()) =>
         CodeExpired
       case existingSubFields :: Nil if existingSubFields.gifteeIdentityId.isEmpty =>
         ValidGiftCode(existingSubFields.id)
-      case existingSubFields :: Nil if existingSubFields.createdRequestId == requestId =>
+      case existingSubFields :: Nil if requestId.contains(existingSubFields.createdRequestId) =>
         CodeRedeemedInThisRequest
       case _ :: Nil =>
         CodeAlreadyUsed
@@ -29,7 +29,7 @@ object GiftCodeValidator {
 
 class GiftCodeValidator(zuoraLookupService: ZuoraGiftLookupService) {
 
-  def validate(redemptionCode: RedemptionCode, requestId: String)(implicit ec: ExecutionContext): Future[CodeValidationResult] =
+  def validate(redemptionCode: RedemptionCode, requestId: Option[String])(implicit ec: ExecutionContext): Future[CodeValidationResult] =
     zuoraLookupService.getSubscriptionFromRedemptionCode(redemptionCode).map(response => getSubscriptionState(response, requestId))
 
 }

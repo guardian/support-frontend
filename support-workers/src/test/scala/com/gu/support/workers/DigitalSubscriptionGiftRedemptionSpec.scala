@@ -11,7 +11,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
 
   "DigitalSubscriptionGiftRedemption" should "identify an unredeemed subscription from a SubscriptionRedemptionQueryResponse" in {
     val response = SubscriptionRedemptionQueryResponse(List(SubscriptionRedemptionFields("1", LocalDate.now(), "123", None)))
-    val state = GiftCodeValidator.getSubscriptionState(response, "123")
+    val state = GiftCodeValidator.getSubscriptionState(response, Some("123"))
     state.clientCode shouldBe ValidGiftCode.clientCode
   }
 
@@ -25,7 +25,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
         createdRequestId = createdRequestId,
         gifteeIdentityId = Some("123456789")
       )))
-    val state = GiftCodeValidator.getSubscriptionState(response, thisRequestId)
+    val state = GiftCodeValidator.getSubscriptionState(response, Some(thisRequestId))
     state.clientCode shouldBe CodeAlreadyUsed.clientCode
   }
 
@@ -37,7 +37,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
         createdRequestId = "123",
         gifteeIdentityId = Some("123456789"))
       ))
-    val state = GiftCodeValidator.getSubscriptionState(response, "123")
+    val state = GiftCodeValidator.getSubscriptionState(response, Some("123"))
     state.clientCode shouldBe CodeRedeemedInThisRequest.clientCode
   }
 
@@ -51,7 +51,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
         gifteeIdentityId = None)
       ))
     GiftCodeValidator
-      .getSubscriptionState(expiredResponse, "456")
+      .getSubscriptionState(expiredResponse, Some("456"))
       .clientCode shouldBe CodeExpired.clientCode
 
     val nonExpiredDate = LocalDate.now().minusYears(1)
@@ -63,7 +63,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
         gifteeIdentityId = None)
       ))
     GiftCodeValidator
-      .getSubscriptionState(nonExpiredResponse, "456")
+      .getSubscriptionState(nonExpiredResponse, Some("456"))
       .clientCode shouldBe ValidGiftCode.clientCode
   }
 }
