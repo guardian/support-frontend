@@ -95,6 +95,14 @@ export type RegularPaymentRequestAddress = {|
   city: Option<string>,
 |};
 
+type GiftRecipientType = {|
+  title?: Option<Title>,
+  firstName: string,
+  lastName: string,
+  email?: Option<string>,
+  // message: Option<string>,
+|};
+
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {|
   title?: Option<Title>,
@@ -103,10 +111,7 @@ export type RegularPaymentRequest = {|
   billingAddress: RegularPaymentRequestAddress,
   deliveryAddress: Option<RegularPaymentRequestAddress>,
   email: string,
-  titleGiftRecipient?: Option<Title>,
-  firstNameGiftRecipient?: Option<string>,
-  lastNameGiftRecipient?: Option<string>,
-  emailGiftRecipient?: Option<string>,
+  giftRecipient?: GiftRecipientType,
   product: ProductFields,
   firstDeliveryDate: Option<string>,
   paymentFields: RegularPaymentFields,

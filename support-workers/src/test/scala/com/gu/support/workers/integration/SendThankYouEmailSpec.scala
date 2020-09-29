@@ -110,8 +110,8 @@ object SendThankYouEmailManualTest {
     service.send(ef)
   }
 }
-import SendThankYouEmailManualTest._
-import TestData._
+import com.gu.support.workers.integration.SendThankYouEmailManualTest._
+import com.gu.support.workers.integration.TestData._
 object SendContributionEmail extends App {
 
   val ef = ContributionEmailFields.build(
@@ -139,7 +139,8 @@ object SendDigitalPackEmail extends App {
       directDebitPaymentMethod,
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))
     )),
-    ReaderType.Direct
+    ReaderType.Direct,
+    None
   ))
 
 }
@@ -149,7 +150,8 @@ object SendDigitalPackCorpEmail extends App {
     subsFields(Annual, billingOnlyUser)
   ).build(
     paidSubPaymentData = None,
-    ReaderType.Corporate
+    ReaderType.Corporate,
+    None
   ))
 
 }
@@ -162,7 +164,8 @@ object SendDigitalPackGiftPurchaseEmails extends App {
       directDebitPaymentMethod,
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))
     )),
-    ReaderType.Gift
+    ReaderType.Gift,
+    Some(GiftRecipient.DigiSub("first", "last", addressToSendTo, Some("gift message")))
   ))
 
 }
@@ -172,7 +175,8 @@ object SendDigitalPackGiftRedemptionEmail extends App {
     subsFields(Annual, billingOnlyUser)
   ).build(
     paidSubPaymentData = None,
-    ReaderType.Gift
+    ReaderType.Gift,
+    None
   ))
 
 }
@@ -209,7 +213,7 @@ object SendWeeklySubscriptionGiftEmail extends App {
     subsFields(Quarterly, officeUser),
     Some(new LocalDate(2019, 3, 26)),
     PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))),
-    giftRecipient = Some(GiftRecipient(None, "Earl", "Palmer", None))
+    giftRecipient = Some(GiftRecipient.Weekly(None, "Earl", "Palmer", None))
   ))
 
 }
