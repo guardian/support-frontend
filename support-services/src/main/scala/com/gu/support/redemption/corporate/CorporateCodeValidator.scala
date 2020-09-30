@@ -37,7 +37,7 @@ class CorporateCodeValidator(dynamoLookup: DynamoLookup) extends WithLogging {
 
   import CorporateCodeValidator._
 
-  def validate(code: RedemptionCode)(implicit ec: ExecutionContext): Future[CodeStatus] =
+  def getStatus(code: RedemptionCode)(implicit ec: ExecutionContext): Future[CodeStatus] =
     (for {
       maybeAttributes <- dynamoLookup.lookup(code.value)
       status <- FlattenErrors(maybeAttributes.map { attributes =>

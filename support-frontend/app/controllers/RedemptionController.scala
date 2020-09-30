@@ -257,9 +257,9 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoLookup: Dy
       .map {
         redemptionCode =>
           for {
-            giftValidationResult <- giftValidator.validate(redemptionCode, None)
+            giftValidationResult <- giftValidator.getStatus(redemptionCode, None)
             mergedResult <- if (giftValidationResult == CodeNotFound)
-              corporateValidator.validate(redemptionCode)
+              corporateValidator.getStatus(redemptionCode)
             else
               Future.successful(giftValidationResult)
           } yield mergedResult

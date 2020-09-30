@@ -144,7 +144,7 @@ object DigitalSubscriptionBuilder {
 
     val redeemedSubcription = for {
       subscription <-
-        EitherT(codeValidator.validate(redemptionCode).map{
+        EitherT(codeValidator.getStatus(redemptionCode).map{
           case ValidCorporateCode(corporateId) =>
           Right(subscriptionData.subscription.copy(
             redemptionCode = Some(redemptionCode.value),

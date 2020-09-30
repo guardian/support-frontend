@@ -29,7 +29,7 @@ object GiftCodeValidator {
 
 class GiftCodeValidator(zuoraLookupService: ZuoraGiftLookupService) {
 
-  def validate(redemptionCode: RedemptionCode, requestId: Option[String])(implicit ec: ExecutionContext): Future[CodeStatus] =
+  def getStatus(redemptionCode: RedemptionCode, requestId: Option[String])(implicit ec: ExecutionContext): Future[CodeStatus] =
     zuoraLookupService.getSubscriptionFromRedemptionCode(redemptionCode).map(response => getSubscriptionState(response, requestId))
 
 }

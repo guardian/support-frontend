@@ -24,13 +24,13 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable).map {
         _ should be(())
       }
-      _ <- codeValidator.validate(mutableCode).map {
+      _ <- codeValidator.getStatus(mutableCode).map {
         _ should be(ValidCorporateCode(CorporateId("1")))
       }
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsUsed).map {
         _ should be(())
       }
-      a <- codeValidator.validate(mutableCode).map {
+      a <- codeValidator.getStatus(mutableCode).map {
         _ should be(CodeAlreadyUsed)
       }
     } yield a
@@ -42,7 +42,7 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
       _ <- recoverToSucceededIf[ConditionalCheckFailedException] {
         setCodeStatus(missingCode, RedemptionTable.AvailableField.CodeIsAvailable)
       }
-      a <- codeValidator.validate(missingCode).map {
+      a <- codeValidator.getStatus(missingCode).map {
         _ should be(CodeNotFound)
       }
     } yield a

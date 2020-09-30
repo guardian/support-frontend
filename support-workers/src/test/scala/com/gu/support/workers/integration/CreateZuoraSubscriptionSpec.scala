@@ -54,7 +54,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     for {
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
       _ <- createZuoraHelper.createSubscription(createDigiPackCorporateSubscriptionJson)
-      r <- codeValidator.validate(mutableCode).map {
+      r <- codeValidator.getStatus(mutableCode).map {
         _ should be(CodeAlreadyUsed)
       }
     } yield r

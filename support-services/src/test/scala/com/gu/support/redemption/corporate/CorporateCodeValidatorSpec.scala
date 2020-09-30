@@ -18,7 +18,7 @@ class CorporateCodeValidatorSpec extends AsyncFlatSpec with Matchers {
         "corporateId" -> DynamoString("1")
       )))
     }
-    codeValidator.validate(RedemptionCode("CODE").right.get).map {
+    codeValidator.getStatus(RedemptionCode("CODE").right.get).map {
       _ should be(ValidCorporateCode(CorporateId("1")))
     }
   }
@@ -30,7 +30,7 @@ class CorporateCodeValidatorSpec extends AsyncFlatSpec with Matchers {
         "corporateId" -> DynamoString("1")
       )))
     }
-    codeValidator.validate(RedemptionCode("CODE").right.get).map {
+    codeValidator.getStatus(RedemptionCode("CODE").right.get).map {
       _ should be(CodeAlreadyUsed)
     }
   }
@@ -39,7 +39,7 @@ class CorporateCodeValidatorSpec extends AsyncFlatSpec with Matchers {
     val codeValidator = CorporateCodeValidator.withDynamoLookup {
       case "CODE" => Future.successful(None)
     }
-    codeValidator.validate(RedemptionCode("CODE").right.get).map {
+    codeValidator.getStatus(RedemptionCode("CODE").right.get).map {
       _ should be(CodeNotFound)
     }
   }
@@ -52,7 +52,7 @@ class CorporateCodeValidatorSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.validate(RedemptionCode("CODE").right.get)
+      codeValidator.getStatus(RedemptionCode("CODE").right.get)
     }
   }
 
@@ -64,7 +64,7 @@ class CorporateCodeValidatorSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.validate(RedemptionCode("CODE").right.get)
+      codeValidator.getStatus(RedemptionCode("CODE").right.get)
     }
   }
 
@@ -76,7 +76,7 @@ class CorporateCodeValidatorSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.validate(RedemptionCode("CODE").right.get)
+      codeValidator.getStatus(RedemptionCode("CODE").right.get)
     }
   }
 
@@ -88,7 +88,7 @@ class CorporateCodeValidatorSpec extends AsyncFlatSpec with Matchers {
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.validate(RedemptionCode("CODE").right.get)
+      codeValidator.getStatus(RedemptionCode("CODE").right.get)
     }
   }
 
@@ -97,7 +97,7 @@ class CorporateCodeValidatorSpec extends AsyncFlatSpec with Matchers {
       case "CODE" => Future.failed(new RuntimeException("test exception"))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.validate(RedemptionCode("CODE").right.get)
+      codeValidator.getStatus(RedemptionCode("CODE").right.get)
     }
   }
 
