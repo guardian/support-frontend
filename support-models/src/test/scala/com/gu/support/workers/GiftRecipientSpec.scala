@@ -19,7 +19,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
     val actual = decode[GiftRecipient](json)
-    actual should be(Right(GiftRecipient.DigiSub("bob", "builder", "bob@gu.com", None)))
+    actual should be(Right(GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", None)))
   }
 
   it should "deserialise weekly ok" in {
@@ -32,7 +32,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
     val actual = decode[GiftRecipient](json)
-    actual should be(Right(GiftRecipient.Weekly(None, "bob", "builder", None)))
+    actual should be(Right(GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", None)))
   }
 
   it should "deserialise weekly even where it's compatible with DS" in {
@@ -46,11 +46,11 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
     val actual = decode[GiftRecipient](json)
-    actual should be(Right(GiftRecipient.Weekly(None, "bob", "builder", Some("bob@gu.com"))))
+    actual should be(Right(GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@gu.com"))))
   }
 
   it should "serialise DS" in {
-    val data = GiftRecipient.DigiSub("bob", "builder", "bob@gu.com", Some("message"))
+    val data = GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", Some("message"))
     val expected =
       """
         |{
@@ -65,7 +65,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "serialise Weekly gift" in {
-    val data = GiftRecipient.Weekly(Some(Title.Mx), "bob", "builder", Some("bob@gu.com"))
+    val data = GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com"))
     val expected =
       """
         |{

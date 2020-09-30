@@ -217,8 +217,8 @@ object CreateZuoraSubscription {
   private def buildContactDetails(user: User, giftRecipient: Option[GiftRecipient], address: Address, deliveryInstructions: Option[String] = None) = {
     val email = giftRecipient match {
       case None => Some(user.primaryEmailAddress)
-      case Some(w: GiftRecipient.Weekly) => w.email
-      case Some(ds: GiftRecipient.DigiSub) => Some(ds.email)
+      case Some(w: GiftRecipient.WeeklyGiftRecipient) => w.email
+      case Some(ds: GiftRecipient.DigitalSubGiftRecipient) => Some(ds.email)
     }
     ContactDetails(
       firstName = giftRecipient.fold(user.firstName)(_.firstName),

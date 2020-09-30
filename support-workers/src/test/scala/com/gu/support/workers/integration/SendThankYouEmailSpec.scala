@@ -165,7 +165,7 @@ object SendDigitalPackGiftPurchaseEmails extends App {
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))
     )),
     ReaderType.Gift,
-    Some(GiftRecipient.DigiSub("first", "last", addressToSendTo, Some("gift message")))
+    Some(GiftRecipient.DigitalSubGiftRecipient("first", "last", addressToSendTo, Some("gift message")))
   ))
 
 }
@@ -213,7 +213,7 @@ object SendWeeklySubscriptionGiftEmail extends App {
     subsFields(Quarterly, officeUser),
     Some(new LocalDate(2019, 3, 26)),
     PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))),
-    giftRecipient = Some(GiftRecipient.Weekly(None, "Earl", "Palmer", None))
+    giftRecipient = Some(GiftRecipient.WeeklyGiftRecipient(None, "Earl", "Palmer", None))
   ))
 
 }

@@ -127,7 +127,7 @@ class DigitalPackEmailFields(
   def build(
     paidSubPaymentData: Option[PaymentMethodWithSchedule],
     readerType: ReaderType,
-    maybeGiftRecipient: Option[GiftRecipient.DigiSub]
+    maybeGiftRecipient: Option[GiftRecipient.DigitalSubGiftRecipient]
   ): Either[String, List[EmailFields]] = {
 
     val Purchase = Some
@@ -153,7 +153,7 @@ class DigitalPackEmailFields(
     attributePairs <- JsonToAttributes.asFlattenedPairs(fields.asJsonObject)
   } yield EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
 
-  private def giftRecipientNotification(giftRecipient: GiftRecipient.DigiSub) =
+  private def giftRecipientNotification(giftRecipient: GiftRecipient.DigitalSubGiftRecipient) =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = user.firstName,
       gift_personal_message = giftRecipient.message,

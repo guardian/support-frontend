@@ -117,7 +117,7 @@ class SupportWorkersClient(
     product match {
       case _: GuardianWeekly =>
         Right(
-          GiftRecipient.Weekly(
+          GiftRecipient.WeeklyGiftRecipient(
             giftRecipient.title,
             giftRecipient.firstName,
             giftRecipient.lastName,
@@ -126,7 +126,7 @@ class SupportWorkersClient(
         )
       case _: DigitalPack =>
         giftRecipient.email.toRight("email address is required for DS gifts").map { email =>
-          GiftRecipient.DigiSub(
+          GiftRecipient.DigitalSubGiftRecipient(
             giftRecipient.firstName,
             giftRecipient.lastName,
             email,
