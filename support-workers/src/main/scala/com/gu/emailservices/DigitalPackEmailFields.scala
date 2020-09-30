@@ -156,7 +156,7 @@ class DigitalPackEmailFields(
   private def giftRecipientNotification(giftRecipient: GiftRecipient.DigiSub) =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = user.firstName,
-      gift_personal_message = giftRecipient.giftMessage,
+      gift_personal_message = giftRecipient.message,
       gift_code = "gift_code"
     ))
 
