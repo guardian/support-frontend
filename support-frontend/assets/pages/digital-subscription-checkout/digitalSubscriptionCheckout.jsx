@@ -21,7 +21,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import './digitalSubscriptionCheckout.scss';
 import { getQueryParameter } from 'helpers/url';
-import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
+import type { DigitalBillingPeriod, DigitalGiftBillingPeriod } from 'helpers/billingPeriods';
 import { Monthly } from 'helpers/billingPeriods';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CommonState } from 'helpers/page/commonReducer';
@@ -32,7 +32,7 @@ import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/mark
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
-const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Annual' || billingPeriodInUrl === 'Quarterly'
+const initialBillingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod = billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Annual' || billingPeriodInUrl === 'Quarterly'
   ? billingPeriodInUrl
   : Monthly;
 
