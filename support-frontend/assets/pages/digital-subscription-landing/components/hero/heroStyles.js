@@ -117,11 +117,7 @@ export const textSection = css`
   }
 
   ${from.tablet} {
-    width: 60%;
-  }
-
-  ${from.desktop} {
-    width: 65%;
+    width: 55%;
   }
 
   ${from.leftCol} {
@@ -149,11 +145,7 @@ export const heroHeading = css`
 
   ${from.leftCol} {
     margin-top: 0;
-    margin-bottom: 50px;
-  }
-
-  ${from.wide} {
-    margin-bottom: 60px;
+    margin-bottom: 30px;
   }
 `;
 
@@ -172,25 +164,21 @@ export const paragraph = css`
 
   ${from.phablet} {
     ${body.medium()};
-    max-width: 95%;
+    max-width: 85%;
   }
 
   ${from.tablet} {
-    max-width: 100%;
+    max-width: 90%;
   }
 
   ${from.desktop} {
-    ${headline.xsmall()};
+    ${headline.xxsmall()};
     line-height: 135%;
     max-width: 95%;
   }
 
   ${from.leftCol} {
-    max-width: 90%;
-  }
-
-  ${from.wide} {
-    max-width: 80%;
+    max-width: 95%;
   }
 `;
 
@@ -212,24 +200,23 @@ export const packShot = css`
     display: inline-flex;
     max-width: 40%;
     margin-top: 0;
+    margin-left: -20px;
 
     img {
-      width: 105%;
+      width: 110%;
     }
   }
 
   ${from.tablet} {
+    max-width: 45%;
+    margin-left: 0px;
     img {
       width: 100%;
     }
   }
 
-  ${from.desktop} {
-    max-width: 35%;
-  }
-
   ${from.leftCol} {
-    max-width: 460px;
+    max-width: 540px;
   }
 `;
 
@@ -252,8 +239,8 @@ export const circle = css`
     top: -40px;
   }
 
-  ${from.tablet} {
-    top: -50px;
+  ${from.phablet} {
+    top: 20px;
   }
 
   ${from.desktop} {
