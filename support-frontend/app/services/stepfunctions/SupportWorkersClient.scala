@@ -29,9 +29,14 @@ import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
 
+  import codecs.CirceDecoders._
+  import com.gu.support.encoding.CustomCodecs.encodeEither
+  import com.gu.support.encoding.CustomCodecs.decodeEither
+
+  implicit val giftRecipientCodec: Codec[GiftRecipientRequest] = deriveCodec
+
   implicit val codec: Codec[CreateSupportWorkersRequest] = deriveCodec
 
-  implicit val giftRecipientCodec: Codec[CreateSupportWorkersRequest] = deriveCodec
   case class GiftRecipientRequest(
     title: Option[Title],
     firstName: String,

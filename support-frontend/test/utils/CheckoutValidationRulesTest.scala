@@ -217,10 +217,7 @@ object TestData {
       country = Country.US,
     ),
     deliveryAddress = None,
-    titleGiftRecipient = None,
-    firstNameGiftRecipient = None,
-    lastNameGiftRecipient = None,
-    emailGiftRecipient = None,
+    giftRecipient = None,
     deliveryInstructions = None
   )
 
@@ -248,10 +245,7 @@ object TestData {
     promoCode = None,
     billingAddress = paperAddress,
     deliveryAddress = Some(paperAddress),
-    titleGiftRecipient = None,
-    firstNameGiftRecipient = None,
-    lastNameGiftRecipient = None,
-    emailGiftRecipient = None,
+    giftRecipient = None,
     deliveryInstructions = None
   )
 
