@@ -166,5 +166,5 @@ Resources:
       ComparisonOperator: LessThanThreshold
       Threshold: 100
       EvaluationPeriods: 70
-      DatapointsToAlarm: 69
+      DatapointsToAlarm: 70
       TreatMissingData: breaching
