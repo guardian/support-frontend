@@ -156,14 +156,17 @@ class ProductBlockAus extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const { state, props } = this;
+    const { state } = this;
     return (
       <div className="hope-is-power__products">
         <section className="product-block__container hope-is-power--centered">
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
-            title={props.countryGroupId === 'AUDCountries' ? 'The UK Guardian Daily' : 'The Guardian Daily'}
-            subtitle={<span className="product-block__item__subtitle--short-first">Each day&apos;s edition, in one simple, elegant app</span>}
+            title="Australia Weekend in The Guardian Editions app"
+            subtitle={
+              <span className="product-block__item__subtitle--short-first">
+                Everything you need to make sense of the week, in one simple, elegant app
+              </span>}
             image={weekendImage}
           />
           <Dropdown
@@ -174,19 +177,21 @@ class ProductBlockAus extends Component<PropTypes, StateTypes> {
               items={[
                 {
                   boldText: 'A new way to read',
-                  explainer: props.countryGroupId === 'AUDCountries'
-                    ? 'The UK newspaper, reimagined for mobile and tablet'
-                    : 'The newspaper, reimagined for mobile and tablet',
+                  explainer: 'The weekend paper, reimagined for mobile and tablet. Each new edition available to read Saturday at 6am (AEST)',
                 },
-                { boldText: 'Published daily', explainer: 'Each edition available to read by 6am (GMT), 7 days a week' },
+                { boldText: 'Start your weekend informed', explainer: 'Enjoy advance access to the best journalism planned for the weekend' },
                 { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
               ]}
             />
             <ListHeading
               items={[
-                { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
                 { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
                 { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
+                { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
+                {
+                  boldText: 'Enjoy our other editions',
+                  explainer: 'The UK Daily and other special editions are all included in The Guardian Editions app as part of your subscription',
+                },
               ]}
             />
           </Dropdown>

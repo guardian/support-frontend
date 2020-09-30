@@ -162,8 +162,8 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
         <section className="product-block__container hope-is-power--centered">
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
-            title={props.countryGroupId === 'AUDCountries' ? 'The UK Guardian Daily' : 'The Guardian Daily'}
-            subtitle={<span className="product-block__item__subtitle--short-first">Each day&apos;s edition, in one simple, elegant app</span>}
+            title="UK Daily in The Guardian Editions app"
+            subtitle={<span className="product-block__item__subtitle--short-first">+ Edition Earth &mdash; Limited time only, ending 7 November</span>}
             image={dailyImage}
           />
           <Dropdown
@@ -174,9 +174,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
               items={[
                 {
                   boldText: 'A new way to read',
-                  explainer: props.countryGroupId === 'AUDCountries'
-                    ? 'The UK newspaper, reimagined for mobile and tablet'
-                    : 'The newspaper, reimagined for mobile and tablet',
+                  explainer: 'The newspaper, reimagined for mobile and tablet',
                 },
                 { boldText: 'Published daily', explainer: 'Each edition available to read by 6am (GMT), 7 days a week' },
                 { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
@@ -187,6 +185,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
                 { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
                 { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
                 { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
+                { boldText: 'Enjoy our other editions', explainer: 'Australia Weekend and other special editions are all included in The Guardian Editions app as part of your subscription' },
               ]}
             />
           </Dropdown>
