@@ -14,6 +14,7 @@ const ContributionThankYou = ({
   countryGroupId,
 }: ContributionThankYouProps) => (
   <Page
+    classModifiers={['contribution-thankyou']}
     header={<RoundelHeader />}
     footer={<Footer disclaimer countryGroupId={countryGroupId} />}
   >
