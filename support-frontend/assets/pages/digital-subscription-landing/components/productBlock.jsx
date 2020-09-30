@@ -67,21 +67,21 @@ const dailyImage = (
   <GridPicture
     sources={[
       {
-        gridId: 'digitalSubsDailyMob',
+        gridId: 'editionsRowMobile',
         srcSizes: [140, 500],
         imgType: 'png',
         sizes: '90vw',
         media: '(max-width: 739px)',
       },
       {
-        gridId: 'digitalSubsDaily',
+        gridId: 'editionsRowDesktop',
         srcSizes: [140, 500, 1000],
         imgType: 'png',
         sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
         media: '(min-width: 740px)',
       },
     ]}
-    fallback="digitalSubsDaily"
+    fallback="editionsRowDesktop"
     fallbackSize={500}
     altText=""
     fallbackImgType="png"
@@ -92,21 +92,21 @@ const appImage = (
   <GridPicture
     sources={[
       {
-        gridId: 'digitalSubsAppMob',
+        gridId: 'liveAppMobile',
         srcSizes: [140, 500],
         imgType: 'png',
         sizes: '90vw',
         media: '(max-width: 739px)',
       },
       {
-        gridId: 'digitalSubsApp',
+        gridId: 'liveAppDesktop',
         srcSizes: [140, 500, 1000],
         imgType: 'png',
         sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
         media: '(min-width: 740px)',
       },
     ]}
-    fallback="digitalSubsApp"
+    fallback="liveAppDesktop"
     fallbackSize={500}
     altText=""
     fallbackImgType="png"
@@ -156,7 +156,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const { state, props } = this;
+    const { state } = this;
     return (
       <div className="hope-is-power__products">
         <section className="product-block__container hope-is-power--centered">

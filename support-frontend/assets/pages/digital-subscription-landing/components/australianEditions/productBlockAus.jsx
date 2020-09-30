@@ -92,21 +92,21 @@ const appImageAus = (
   <GridPicture
     sources={[
       {
-        gridId: 'liveAppAusMobile',
+        gridId: 'liveAppMobile',
         srcSizes: [140, 500],
         imgType: 'png',
         sizes: '90vw',
         media: '(max-width: 739px)',
       },
       {
-        gridId: 'liveAppAusDesktop',
+        gridId: 'liveAppDesktop',
         srcSizes: [140, 500, 1000],
         imgType: 'png',
         sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
         media: '(min-width: 740px)',
       },
     ]}
-    fallback="liveAppAusDesktop"
+    fallback="liveAppDesktop"
     fallbackSize={500}
     altText=""
     fallbackImgType="jpg"

@@ -115,8 +115,10 @@ export const imageCatalogue: {
   editionsPackshotAus: 'a1679c54314643a7b611a0c97b53a8ea38b9ec23/0_0_2320_1890',
   weekendPackshotMobile: '622d1b94173e9c711ff421d89cf9abddf3319197/0_0_1100_1100',
   weekendPackshotDesktop: 'dc1bb7218877d954a5841b24765e89f7c3aa6f95/0_0_1800_1080',
-  liveAppAusMobile: '66deee17e0c59c254abdad9e1fa9b3605040f66b/0_0_1100_1100',
-  liveAppAusDesktop: '7f6b52bd46bf801e7f55eeb1d6f2666727c0ddf9/0_0_1800_1080',
+  liveAppMobile: '66deee17e0c59c254abdad9e1fa9b3605040f66b/0_0_1100_1100',
+  liveAppDesktop: '7f6b52bd46bf801e7f55eeb1d6f2666727c0ddf9/0_0_1800_1080',
+  editionsRowMobile: '307653cb535689ce12b93cf90cfb233cddaab3fd/0_0_1100_1100',
+  editionsRowDesktop: 'a37e08fd9d3343eb629ae44b2b30127d7e31184b/0_0_1800_1080',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
