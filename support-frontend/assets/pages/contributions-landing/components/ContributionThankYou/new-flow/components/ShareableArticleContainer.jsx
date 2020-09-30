@@ -55,7 +55,8 @@ const headlineText = css`
   text-decoration: none;
   cursor: pointer;
   color: ${neutral[7]};
-  ${headline.xxxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
+  ${headline.xxxsmall({ lineHeight: 'tight' })};
+  font-weight: 600 !important;
 
   ${until.phablet} {
     font-size: 15px !important;
