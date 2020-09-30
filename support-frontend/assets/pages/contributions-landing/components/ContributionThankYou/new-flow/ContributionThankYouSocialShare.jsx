@@ -2,7 +2,6 @@
 import React from 'react';
 import { LinkButton } from '@guardian/src-button';
 import { SvgFacebook, SvgTwitter, SvgEnvelope } from '@guardian/src-icons';
-import styles from './styles'
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
@@ -22,6 +21,16 @@ import {
 } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { generateReferralCode } from '../../../../../helpers/campaignReferralCodes';
+import { css } from "@emotion/core";
+import { space } from "@guardian/src-foundations";
+
+const buttonsContainer = css`
+  margin-top: ${space[6]}px;
+
+  & > * + * {
+    margin-left: ${space[3]}px;
+  }
+`;
 
 type PropTypes = { email: string, createReferralCodes: boolean, campaignCode: ?string }
 
@@ -38,7 +47,7 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
         Invite your followers to support the Guardian’s open, independent
         reporting.
       </p>
-      <div css={styles.buttonsContainer}>
+      <div css={buttonsContainer}>
         <LinkButton
           href={getFacebookShareLink(referralCode)}
           onClick={() =>

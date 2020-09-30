@@ -1,14 +1,5 @@
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
-import { space } from "@guardian/src-foundations";
-
-const buttonsContainer = css`
-  margin-top: ${space[6]}px;
-
-  & > * + * {
-    margin-left: ${space[3]}px;
-  }
-`;
 
 const hideAfterDesktop = css`
   display: block;
@@ -47,5 +38,4 @@ export default {
   hideBeforeDesktop,
   hideAfterTablet,
   hideBeforeTablet,
-  buttonsContainer,
 };

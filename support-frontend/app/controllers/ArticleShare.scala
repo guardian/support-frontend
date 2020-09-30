@@ -2,13 +2,12 @@ package controllers
 
 import actions.CustomActionBuilders
 import cats.implicits._
-
 import scala.concurrent.duration._
 import com.typesafe.scalalogging.StrictLogging
 import controllers.ArticleShare.articleIds
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.CapiArticle._
+import services.Article._
 import services.CapiService
 
 import scala.concurrent.{ExecutionContext, Future}
