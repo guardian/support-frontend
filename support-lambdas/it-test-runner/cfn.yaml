@@ -102,7 +102,7 @@ Resources:
       Metrics:
         - Id: total
           Expression: "FILL(m1,0)"
-          Label: ITTestsCount
+          Label: ITTestsFailed
         - Id: m1
           ReturnData: false
           MetricStat:
