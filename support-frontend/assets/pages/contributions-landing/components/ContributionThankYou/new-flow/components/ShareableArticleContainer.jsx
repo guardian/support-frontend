@@ -6,7 +6,6 @@ import { LinkButton } from '@guardian/src-button';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {SvgFacebook, SvgTwitter, SvgEnvelope} from '@guardian/src-icons';
 import SvgLinkedIn from '../components/SvgLinkedIn';
-import styles from '../styles';
 import {
   getFacebookShareLink,
   getTwitterShareLink,
@@ -21,17 +20,46 @@ import {
 } from '../../utils/ophan';
 import { headline } from "@guardian/src-foundations/typography";
 import { space } from "@guardian/src-foundations";
+import { from, until } from "@guardian/src-foundations/mq";
 
-const container = css`
+// Styles ///////////////////////////////////////////////////////////
+
+const outerContainer = css`
   display: flex;
-  border-top: 1px solid ${news[400]};
-  background-color: ${neutral[97]};
-  position: relative;
+  flex-direction: column;
   margin-top: ${space[6]}px;
 `
 
+const innerContainer = css`
+  display: flex;
+  flex-direction: row;
+  border-top: 1px solid ${news[400]};
+  background-color: ${neutral[97]};
+`
+
+const buttonsContainer = css`
+  margin-top: ${space[4]}px;
+  margin-left: ${space[2]}px;
+  display: block;
+
+  & > * + * {
+    margin-left: ${space[2]}px;
+  }
+
+  ${until.phablet} {
+    display: none;
+  }
+`
+
 const headlineText = css`
-  ${headline.xxxsmall({ fontWeight: 'bold' })};
+  text-decoration: none;
+  cursor: pointer;
+  color: ${neutral[7]};
+  ${headline.xxxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
+
+  ${until.phablet} {
+    font-size: 15px !important;
+  }
 `;
 
 const button = css`
@@ -39,18 +67,30 @@ const button = css`
   color: ${news[400]};
 `
 
-const img_container = css`
+const imageContainer = css`
+  max-width: 45%;
   padding: ${space[2]}px;
 `
 
-const img = css`
-  width: 198px;
-  height: 120px;
+const image = css`
+  width: 100% !important;
+  width: 100% !important;
 `
 
-const headline_and_buttons_container = css`
-  padding: ${space[2]}px;
+const headlineAndButtonsContainer = css`
+  padding: ${space[2]}px ${space[2]}px ${space[2]}px 0;
 `
+
+const compactShareButtonContainer = css`
+  display: block;
+  margin-top: ${space[2]}px;
+
+  ${from.phablet} {
+    display: none;
+  }
+`
+
+// Types ////////////////////////////////////////////////////////////
 
 type PropTypes = {
   articleUrl: String,
@@ -59,64 +99,86 @@ type PropTypes = {
   imageAltText: String
 }
 
+// Component ////////////////////////////////////////////////////////
+
 const ShareableArticleContainer = (props: PropTypes) => {
   return (
-    <div css={container}>
-      <div css={img_container}>
-        <img css={img} src={props.imageUrl} alt={props.imageAltText} />
-      </div>
-      <div css={headline_and_buttons_container}>
-        <h3 css={headlineText}>{props.headline}</h3>
-        <div css={styles.buttonsContainer}>
-          <LinkButton
-            href={getFacebookShareLink(props.referralCode)}
-            onClick={() =>
-              trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-            priority="tertiary"
-            size="default"
-            icon={<SvgFacebook/>}
-            css={button}
-            hideLabel
-          />
-          <LinkButton
-            href={getTwitterShareLink(props.referralCode)}
-            onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
-            target="_blank"
-            rel="noopener noreferrer"
-            priority="tertiary"
-            size="default"
-            icon={<SvgTwitter/>}
-            css={button}
-            hideLabel
-          />
-          <LinkButton
-            href={getLinkedInShareLink(props.referralCode)}
-            onClick={() =>
-              trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-            priority="tertiary"
-            size="default"
-            icon={<SvgLinkedIn/>}
-            css={button}
-            hideLabel
-          />
-          <LinkButton
-            href={getEmailShareLink(props.referralCode)}
-            onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
-            target="_blank"
-            rel="noopener noreferrer"
-            priority="tertiary"
-            size="default"
-            icon={<SvgEnvelope/>}
-            css={button}
-            hideLabel
-          />
+    <div css={outerContainer}>
+      <div css={innerContainer}>
+        <div css={imageContainer}>
+          <img css={image} src={props.imageUrl} alt={props.imageAltText} />
         </div>
+        <div css={headlineAndButtonsContainer}>
+          <a
+            href={props.articleUrl}
+            css={headlineText}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {props.headline}
+          </a>
+          <div css={buttonsContainer}>
+            <LinkButton
+              href={getFacebookShareLink(props.referralCode)}
+              onClick={() =>
+                trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              priority="tertiary"
+              size="default"
+              icon={<SvgFacebook/>}
+              css={button}
+              hideLabel
+            />
+            <LinkButton
+              href={getTwitterShareLink(props.referralCode)}
+              onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
+              target="_blank"
+              rel="noopener noreferrer"
+              priority="tertiary"
+              size="default"
+              icon={<SvgTwitter/>}
+              css={button}
+              hideLabel
+            />
+            <LinkButton
+              href={getLinkedInShareLink(props.referralCode)}
+              onClick={() =>
+                trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              priority="tertiary"
+              size="default"
+              icon={<SvgLinkedIn/>}
+              css={button}
+              hideLabel
+            />
+            <LinkButton
+              href={getEmailShareLink(props.referralCode)}
+              onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
+              target="_blank"
+              rel="noopener noreferrer"
+              priority="tertiary"
+              size="default"
+              icon={<SvgEnvelope/>}
+              css={button}
+              hideLabel
+            />
+          </div>
+        </div>
+      </div>
+      <div css={compactShareButtonContainer}>
+        <LinkButton
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          priority="secondary"
+          size="small"
+        >
+          Share
+        </LinkButton>
       </div>
     </div>
   )
