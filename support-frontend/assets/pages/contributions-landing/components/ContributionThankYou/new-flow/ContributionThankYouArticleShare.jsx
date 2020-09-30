@@ -42,7 +42,7 @@ const ContributionThankYouArticleShare = (props: PropTypes) => {
   )
 
   return (
-    actionContainer
+    articleData && actionContainer
   );
 };
 
