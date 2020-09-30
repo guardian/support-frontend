@@ -61,8 +61,8 @@ export const contentBlock = css`
 export const imageContainer = css`
   display: inline-flex;
   align-items: flex-start;
-  width: calc(100% - 30px);
-  padding: ${space[4]}px ${space[3]}px 0;
+  width: 100%;
+  padding: ${space[1]}px ${space[3]}px 0;
   background-color: ${neutral['97']};
 
   img {
