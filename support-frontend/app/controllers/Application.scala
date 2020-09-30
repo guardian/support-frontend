@@ -145,9 +145,8 @@ class Application(
     val contributionsMomentEnabled =
       settings
         .switches
-        .experiments
-        .get("contributionsMomentEnabled")
-        .exists(switch => switch.state.isOn)
+        .enableContributionsCampaign
+        .isOn
 
       if (contributionsMomentEnabled)
         "https://media.guim.co.uk/0ab154e35cff7a4e6ff6b5ee0d7cd13b9df32959/0_0_2000_1050/1000.png"
