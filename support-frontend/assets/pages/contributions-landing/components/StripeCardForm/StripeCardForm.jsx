@@ -64,6 +64,7 @@ type PropTypes = {|
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
   postDeploymentTestUser: string,
+  isTestUser: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -78,6 +79,7 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
   postDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
+  isTestUser: state.page.user.isTestUser
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -201,7 +203,7 @@ const CardForm = (props: PropTypes) => {
     }
 
     window.grecaptcha.render('robot_checkbox', {
-      sitekey: window.guardian.v2recaptchaPublicKey,
+      sitekey: props.postDeploymentTestUser ? window.guardian.v2recaptchaPublicKey.uat : window.guardian.v2recaptchaPublicKey.default,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
         props.setStripeRecurringRecaptchaVerified(true);
@@ -209,7 +211,7 @@ const CardForm = (props: PropTypes) => {
         fetchJson(
           routes.stripeSetupIntentRecaptcha,
           requestOptions(
-            { token, stripePublicKey: props.stripeKey },
+            { token, stripePublicKey: props.stripeKey, isTestUser: props.postDeploymentTestUser},
             'same-origin',
             'POST',
             props.csrf,
@@ -235,7 +237,7 @@ const CardForm = (props: PropTypes) => {
 
   const setupRecaptchaTokenForOneOff = () => {
     window.grecaptcha.render('robot_checkbox', {
-      sitekey: window.guardian.v2recaptchaPublicKey,
+      sitekey: props.postDeploymentTestUser ? window.guardian.v2recaptchaPublicKey.uat : window.guardian.v2recaptchaPublicKey.default,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
         props.setOneOffRecaptchaToken(token);
@@ -298,26 +300,6 @@ const CardForm = (props: PropTypes) => {
 
     props.setCreateStripePaymentMethod((clientSecret: string | null) => {
       props.setPaymentWaiting(true);
-
-      // Post-deploy tests bypass recaptcha, and no verification happens server-side for the test Stripe account
-      if (!window.guardian.recaptchaEnabled || props.postDeploymentTestUser) {
-        fetchJson(
-          routes.stripeSetupIntentRecaptcha,
-          requestOptions(
-            { token: 'post-deploy-token', stripePublicKey: props.stripeKey },
-            'same-origin',
-            'POST',
-            props.csrf,
-          ),
-        )
-          .then((json) => {
-            if (json.client_secret) {
-              handleCardSetupForRecurring(json.client_secret);
-            } else {
-              throw new Error(`Missing client_secret field in server response: ${JSON.stringify(json)}`);
-            }
-          });
-      }
 
       /* Recaptcha verification is required for setupIntent creation.
       If setupIntentClientSecret is ready then complete the payment now.

@@ -68,6 +68,9 @@ class OneOffContributionsSpec extends AnyFeatureSpec
       And("enter card details")
       landingPage.fillInCardDetails
 
+      And("click the recaptcha")
+      landingPage.clickRecaptcha
+
       When("they click contribute")
       landingPage.clickContribute
 

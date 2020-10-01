@@ -149,7 +149,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
     fetchJson(
       routes.stripeSetupIntentRecaptcha,
       requestOptions(
-        { token, stripePublicKey: props.stripeKey },
+        { token, stripePublicKey: props.stripeKey, isTestUser: window.guardian.isTestUser},
         'same-origin',
         'POST',
         props.csrf,

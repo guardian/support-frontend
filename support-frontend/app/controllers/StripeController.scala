@@ -16,7 +16,7 @@ import config.RecaptchaConfigProvider
 import scala.concurrent.{ExecutionContext, Future}
 
 
-case class SetupIntentRequestRecaptcha(token: String, stripePublicKey: String)
+case class SetupIntentRequestRecaptcha(token: String, stripePublicKey: String, isTestUser: Boolean)
 object SetupIntentRequestRecaptcha {
   implicit val decoder: Decoder[SetupIntentRequestRecaptcha] = deriveDecoder
 }
@@ -53,7 +53,7 @@ class StripeController(
 
     val v2RecaptchaToken = request.body.token
 
-    val v2RecaptchaSecretKey = recaptchaConfigProvider.get().v2SecretKey
+    val v2RecaptchaSecretKey = recaptchaConfigProvider.get(isTestUser=request.body.isTestUser).v2SecretKey
 
     val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "v2Recaptcha")
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
@@ -63,7 +63,7 @@ class StripeController(
 
     // Requests against the test account do not require verification
     val verified =
-      if (recaptchaEnabled && !testPublicKeys(request.body.stripePublicKey))
+      if (recaptchaEnabled)
         recaptchaService.verify(v2RecaptchaToken, v2RecaptchaSecretKey).map(_.success)
       else
         EitherT.rightT[Future, String](true)

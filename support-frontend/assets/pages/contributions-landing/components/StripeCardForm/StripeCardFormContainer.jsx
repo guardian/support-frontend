@@ -71,7 +71,10 @@ const StripeCardFormContainer = (props: PropTypes) => {
       return (
         <div className="stripe-card-element-container" key={stripeAccount}>
           <Elements stripe={stripeObjects[stripeAccount]} options={elementsOptions}>
-            <StripeCardForm stripeKey={stripeKey} />
+            <StripeCardForm 
+              stripeKey={stripeKey}
+              isTestUser={props.isTestUser}
+            />
           </Elements>
         </div>
       );

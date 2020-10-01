@@ -60,9 +60,7 @@ trait CheckoutPage extends Page with Browser {
     waitForTestRecaptchaToComplete
   }
 
-  def waitForTestRecaptchaToComplete: Unit = {
-    Thread.sleep(1000)
-  }
+  def waitForTestRecaptchaToComplete: Unit = Thread.sleep(1000)
 
   def fillDirectDebitForm(): Unit = {
     setValue(accountName, "Test user")
