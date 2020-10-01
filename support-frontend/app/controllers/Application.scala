@@ -149,7 +149,7 @@ class Application(
         .isOn
 
       if (contributionsMomentEnabled)
-        "https://media.guim.co.uk/c3dad1ffd56077f9e8fe116e54c15e7fd468e244/0_0_2000_1050/1000.png"
+        "https://i.guim.co.uk/img/media/c3dad1ffd56077f9e8fe116e54c15e7fd468e244/0_0_2000_1050/1000.png?quality=85&s=bf3b27bc7f6abcb0ebadb791de8d9179"
       else
         "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
   }
