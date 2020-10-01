@@ -77,6 +77,12 @@ Resources:
                 - dynamodb:GetItem
                 - dynamodb:UpdateItem
               Resource: arn:aws:dynamodb:*:*:table/redemption-codes-DEV
+        - Statement:
+            - Effect: Allow
+              Action:
+                - sqs:SendMessage
+                - sqs:GetQueueUrl
+              Resource: arn:aws:sqs:*:*:contributions-thanks-dev
 
   LambdaLogGroup:
     Type: AWS::Logs::LogGroup
