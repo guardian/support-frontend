@@ -153,7 +153,7 @@ function DigitalCheckoutForm(props: PropTypes) {
         <OrderSummary
           image={
             <GridImage
-              gridId={props.country === 'AU' ? 'editionsPackshotAus' : 'editionsPackshot'}
+              gridId={props.country === 'AU' ? 'editionsPackshotAusShort' : 'editionsPackshotShort'}
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 50vw, 500"
               imgType="png"
