@@ -20,7 +20,7 @@ import {
 } from '../../utils/ophan';
 import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
-import { from, until } from '@guardian/src-foundations/mq';
+import { until } from '@guardian/src-foundations/mq';
 
 // Styles ///////////////////////////////////////////////////////////
 
@@ -45,7 +45,7 @@ const genericButtonContainer = css`
     margin-bottom: ${space[2]}px;
     margin-right: ${space[2]}px;
   }
-`
+`;
 
 const wideButtonsContainer = css`
   ${genericButtonContainer}
@@ -112,8 +112,8 @@ type PropTypes = {
 
 // Component ////////////////////////////////////////////////////////
 
-const shareButtonsContainer = (css: String) => (
-  <div css={css}>
+const shareButtonsContainer = (styles: String) => (
+  <div css={styles}>
     <LinkButton
       href={getFacebookShareLink()}
       onClick={() =>
@@ -163,7 +163,7 @@ const shareButtonsContainer = (css: String) => (
       hideLabel
     />
   </div>
-)
+);
 
 const ShareableArticleContainer = (props: PropTypes) => (
   <div css={outerContainer}>
