@@ -203,7 +203,9 @@ const CardForm = (props: PropTypes) => {
     }
 
     window.grecaptcha.render('robot_checkbox', {
-      sitekey: props.postDeploymentTestUser ? window.guardian.v2recaptchaPublicKey.uat : window.guardian.v2recaptchaPublicKey.default,
+      sitekey: props.postDeploymentTestUser ?
+        window.guardian.v2recaptchaPublicKey.uat :
+        window.guardian.v2recaptchaPublicKey.default,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
         props.setStripeRecurringRecaptchaVerified(true);
@@ -237,7 +239,9 @@ const CardForm = (props: PropTypes) => {
 
   const setupRecaptchaTokenForOneOff = () => {
     window.grecaptcha.render('robot_checkbox', {
-      sitekey: props.postDeploymentTestUser ? window.guardian.v2recaptchaPublicKey.uat : window.guardian.v2recaptchaPublicKey.default,
+      sitekey: props.postDeploymentTestUser ?
+        window.guardian.v2recaptchaPublicKey.uat :
+        window.guardian.v2recaptchaPublicKey.default,
       callback: (token) => {
         trackComponentLoad('contributions-recaptcha-client-token-received');
         props.setOneOffRecaptchaToken(token);
