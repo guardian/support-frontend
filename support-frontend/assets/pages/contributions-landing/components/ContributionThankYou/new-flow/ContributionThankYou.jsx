@@ -178,7 +178,7 @@ const ContributionThankYou = ({
       createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
       campaignCode={campaignSettings && campaignSettings.campaignCode}
     />,
-    shouldShow: !isEnvironmentMoment
+    shouldShow: !isEnvironmentMoment,
   };
   const ausMapAction = {
     component: <ContributionThankYouAusMap />,
@@ -189,7 +189,7 @@ const ContributionThankYou = ({
       header="Share Guardian journalism"
       body="Help extend the reach of our environmental reporting by sharing it with your friends, family and followers."
     />,
-    shouldShow: isEnvironmentMoment
+    shouldShow: isEnvironmentMoment,
   };
 
   const defaultActions = [
@@ -213,7 +213,7 @@ const ContributionThankYou = ({
     ausMapAction,
   ];
 
-  const actions = countryId ==='AU' ? ausActions : defaultActions;
+  const actions = countryId === 'AU' ? ausActions : defaultActions;
 
   const shownComponents = actions
     .filter(action => action.shouldShow)

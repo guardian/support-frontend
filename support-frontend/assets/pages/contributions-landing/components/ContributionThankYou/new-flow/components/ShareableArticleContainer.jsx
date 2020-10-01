@@ -7,12 +7,6 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { SvgFacebook, SvgTwitter, SvgEnvelope } from '@guardian/src-icons';
 import SvgLinkedIn from '../components/SvgLinkedIn';
 import {
-  getFacebookShareLink,
-  getTwitterShareLink,
-  getLinkedInShareLink,
-  getEmailShareLink,
-} from '../../utils/social';
-import {
   OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
   OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
   OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
@@ -105,23 +99,15 @@ const headlineAndButtonsContainer = css`
 
 // Helpers //////////////////////////////////////////////////////////
 
-const facebookShareLink = (articleUrl: String) => {
-  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURI(articleUrl)}`
-}
+const facebookShareLink = (articleUrl: string) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURI(articleUrl)}`;
 
-const twitterShareLink = (articleUrl: String) => {
-  return `https://twitter.com/intent/tweet?url=${encodeURI(articleUrl)}`
-}
+const twitterShareLink = (articleUrl: string) => `https://twitter.com/intent/tweet?url=${encodeURI(articleUrl)}`;
 
-const linkedinShareLink = (articleUrl: String) => {
-  return `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURI(articleUrl)}`;
-}
+const linkedinShareLink = (articleUrl: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURI(articleUrl)}`;
 
-const emailShareLink = (articleUrl: String) => {
-  return `mailto:?body=${encodeURI(articleUrl)}`;
-}
+const emailShareLink = (articleUrl: string) => `mailto:?body=${encodeURI(articleUrl)}`;
 
-const shareButtonsContainer = (styles: String, articleUrl: String) => (
+const shareButtonsContainer = (styles: string, articleUrl: string) => (
   <div css={styles}>
     <LinkButton
       href={facebookShareLink(articleUrl)}
@@ -178,10 +164,10 @@ const shareButtonsContainer = (styles: String, articleUrl: String) => (
 // Types ////////////////////////////////////////////////////////////
 
 type PropTypes = {
-  articleUrl: String,
-  headline: String,
-  imageUrl: String,
-  imageAltText: String,
+  articleUrl: string,
+  headline: string,
+  imageUrl: string,
+  imageAltText: string,
 }
 
 
