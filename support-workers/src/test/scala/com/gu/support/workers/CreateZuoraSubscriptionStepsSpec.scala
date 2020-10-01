@@ -33,7 +33,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, null /* !*/, Corporate),
       RedemptionNoProvider,
-      paymentMethod = Right(RedemptionData(RedemptionCode("TESTCODE").right.get)),
+      paymentMethod = Right(RedemptionData(RedemptionCode("testcode").right.get)),
       firstDeliveryDate = None,
       promoCode = None,
       salesforceContacts = SalesforceContactRecords(
@@ -47,7 +47,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
     var dynamoUpdates: List[(String, DynamoUpdate.DynamoFieldUpdate)] = Nil
     val dyanmoDb = new DynamoLookup with DynamoUpdate {
       override def lookup(key: String): Future[Option[Map[String, DynamoLookup.DynamoValue]]] = key match {
-        case "TESTCODE" => Future.successful(Some(Map("available" -> DynamoBoolean(true), "corporateId" -> DynamoString("1"))))
+        case "testcode" => Future.successful(Some(Map("available" -> DynamoBoolean(true), "corporateId" -> DynamoString("1"))))
       }
       override def update(key: String, dynamoFieldUpdate: DynamoUpdate.DynamoFieldUpdate): Future[Unit] = {
         dynamoUpdates = (key, dynamoFieldUpdate) :: dynamoUpdates
@@ -68,7 +68,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
         val ratePlan = subscribeRequest.subscribes.head.subscriptionData.ratePlanData.head.ratePlan.productRatePlanId
         val actual = (maybeRedemptionCode, paymentType, autoPay, readerType, ratePlan)
         actual match {
-          case (Some("TESTCODE"), false, false, ReaderType.Corporate, "2c92c0f971c65dfe0171c6c1f86e603c") =>
+          case (Some("testcode"), false, false, ReaderType.Corporate, "2c92c0f971c65dfe0171c6c1f86e603c") =>
             Future.successful(List(SubscribeResponseAccount("accountcorp", "subcorp", 135.67f, "ididcorp", 246.67f, "acidcorp", true)))
           case _ => Future.failed(new Throwable(s"subscribe request: $actual"))
         }
@@ -91,7 +91,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
     result.map { handlerResult =>
       withClue(handlerResult) {
-        dynamoUpdates should be(List("TESTCODE" -> DynamoFieldUpdate("available", false)))
+        dynamoUpdates should be(List("testcode" -> DynamoFieldUpdate("available", false)))
         handlerResult.value.accountNumber should be("accountcorp")
         handlerResult.value.subscriptionNumber should be("subcorp")
         handlerResult.value.paymentOrRedemptionData.isRight should be(true) // it's still a corp sub!

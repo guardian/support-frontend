@@ -42,7 +42,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           termType = "TERMED",
           readerType = ReaderType.Corporate,
           promoCode = None,
-          redemptionCode = Some("CODE"),
+          redemptionCode = Some("code"),
           corporateAccountId = Some("1")
         )
       )
@@ -98,9 +98,9 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionRedemption(
-      RedemptionData(RedemptionCode("CODE").right.get),
+      RedemptionData(RedemptionCode("code").right.get),
       new CorporateCodeValidator({
-        case "CODE" => Future.successful(Some(Map(
+        case "code" => Future.successful(Some(Map(
           "available" -> DynamoLookup.DynamoBoolean(true),
           "corporateId" -> DynamoLookup.DynamoString("1")
         )))
@@ -133,7 +133,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionRedemption(RedemptionData(RedemptionCode("any-code").right.get),
       new CorporateCodeValidator({
-        case "CODE" => Future.successful(Some(Map(
+        case "code" => Future.successful(Some(Map(
           "available" -> DynamoLookup.DynamoBoolean(true),
           "corporateId" -> DynamoLookup.DynamoString("1")
         )))

@@ -288,7 +288,7 @@ object Fixtures {
             $userJson,
             "product": $digitalPackJson,
             "paymentProvider": "PayPal",
-            "paymentMethod": {"redemptionCode": "FAKECODE"},
+            "paymentMethod": {"redemptionCode": "fakecode"},
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
             }

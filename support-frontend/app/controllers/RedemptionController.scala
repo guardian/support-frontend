@@ -66,7 +66,7 @@ class RedemptionController(
       for {
         isTestUser <- testUserFromRequest.isTestUser(request)
         codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
-        normalisedCode = redemptionCode.toUpperCase(Locale.UK)
+        normalisedCode = redemptionCode.toLowerCase(Locale.UK)
         form <- codeValidator.validate(redemptionCode).value.map(
           validationResult =>
             Ok(subscriptionRedemptionForm(

@@ -18,7 +18,7 @@ object Stages {
 object Stage {
   def fromString(s: String): Option[Stage] = condOpt(s) {
     case "DEV" => DEV
-    case "CODE" => CODE
+    case "code" => CODE
     case "PROD" => PROD
   }
 }
