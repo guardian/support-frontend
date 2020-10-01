@@ -53,7 +53,8 @@ function validateWithServer(userCode: string, dispatch: Dispatch<Action>) {
 
 function validateUserCode(userCode: string, dispatch: Dispatch<Action>) {
   dispatch({ type: 'SET_USER_CODE', userCode });
-  if (userCode.length === 13) {
+  const codeLength = getGlobal('codeLength') || 13;
+  if (userCode.length === codeLength) {
     validateWithServer(userCode, dispatch);
   } else {
     dispatchError(dispatch, 'Please check the code and try again');

@@ -10,6 +10,7 @@
 @import io.circe.Json
 @import views.JsStringLiteral
 @import com.gu.support.zuora.api.ReaderType
+@import com.gu.support.redemptions.RedemptionCode
 @(
   title: String,
   mainElement: ReactDiv,
@@ -40,6 +41,7 @@
         email: @JsStringLiteral.fromOption(user.map(_.primaryEmailAddress)),
       };
       window.guardian.isTestUser = @isTestUser;
+      window.guardian.codeLength = @{RedemptionCode.length};
   </script>
 
   }
