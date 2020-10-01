@@ -136,6 +136,7 @@ const ContributionThankYou = ({
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
+  const isEnvironmentMoment = (campaignSettings && campaignSettings.campaignCode === 'enviro_moment_2020');
 
   useEffect(() => {
     trackUserData(
@@ -163,7 +164,7 @@ const ContributionThankYou = ({
   const supportReminderAction = {
     component: <ContributionThankYouSupportReminder
       email={email}
-      isEnvironmentMoment={campaignSettings && campaignSettings.campaignCode === 'enviro_moment_2020'}
+      isEnvironmentMoment={isEnvironmentMoment}
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
@@ -177,7 +178,7 @@ const ContributionThankYou = ({
       createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
       campaignCode={campaignSettings && campaignSettings.campaignCode}
     />,
-    shouldShow: true,
+    shouldShow: !isEnvironmentMoment
   };
   const ausMapAction = {
     component: <ContributionThankYouAusMap />,
@@ -188,16 +189,17 @@ const ContributionThankYou = ({
       header="Share Guardian Journalism"
       body="Help extend the reach of our environmental reporting by sharing it with your friends, family and followers."
     />,
-    shouldShow: true,
+    shouldShow: isEnvironmentMoment
   };
 
   const defaultActions = [
     signUpAction,
     signInAction,
     marketingConsentAction,
+    socialShareAction,
+    articleShareAction,
     supportReminderAction,
     surveyAction,
-    articleShareAction,
   ];
 
   const ausActions = [
@@ -205,12 +207,13 @@ const ContributionThankYou = ({
     signInAction,
     marketingConsentAction,
     socialShareAction,
+    articleShareAction,
     supportReminderAction,
     surveyAction,
     ausMapAction,
   ];
 
-  const actions = countryId === 'AU' ? ausActions : defaultActions;
+  const actions = countryId ==='AU' ? ausActions : defaultActions;
 
   const shownComponents = actions
     .filter(action => action.shouldShow)
