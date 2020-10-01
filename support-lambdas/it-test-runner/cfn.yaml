@@ -99,16 +99,27 @@ Resources:
         - ' '
         - - 'Impact - There may be improperly tested code in PROD or DEV test data is broken.'
           - !FindInMap [ Constants, Alarm, Process ]
-      Namespace: support-frontend
-      MetricName: it-test-failed
-      Dimensions:
-        - Name: Stage
-          Value: !Ref Stage
-      Statistic: Sum
+      Metrics:
+        - Id: total
+          Expression: "FILL(m1,0)"
+          Label: ITTestsFailed
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: support-frontend
+              MetricName: it-test-failed
+              Dimensions:
+                - Name: Stage
+                  Value: !Ref Stage
+            Stat: Sum
+            Period: 60
+            Unit: Count
       ComparisonOperator: GreaterThanThreshold
       Threshold: 0
-      EvaluationPeriods: 1
-      Period: 60
+      EvaluationPeriods: 70
+      DatapointsToAlarm: 2
+      TreatMissingData: breaching
 
   ITTestNotRunningAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -138,7 +149,7 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 3600
+            Period: 60
             Unit: Count
         - Id: m2
           ReturnData: false
@@ -150,9 +161,10 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 3600
+            Period: 60
             Unit: Count
       ComparisonOperator: LessThanThreshold
       Threshold: 100
-      EvaluationPeriods: 24
+      EvaluationPeriods: 70
+      DatapointsToAlarm: 70
       TreatMissingData: breaching
