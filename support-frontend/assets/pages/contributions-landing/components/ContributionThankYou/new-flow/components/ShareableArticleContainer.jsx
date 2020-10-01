@@ -182,7 +182,6 @@ const ShareableArticleContainer = (props: PropTypes) => {
       </div>
       <div css={compactShareButtonContainer}>
         <LinkButton
-          href="#"
           target="_blank"
           rel="noopener noreferrer"
           priority="secondary"
