@@ -137,7 +137,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
     newContactNoGift.MailingStreet shouldBe Some(street)
 
-    val newContactWithGift = NewContact.forUser(user, Some(GiftRecipient.WeeklyGiftRecipient(None, "", "", None)))
+    val newContactWithGift = NewContact.forUser(user, Some(GiftRecipient(None, "", "", None)))
 
     newContactWithGift.MailingStreet shouldBe None
   }

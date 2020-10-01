@@ -3,16 +3,14 @@ package utils
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.{GiftRecipient, _}
-import com.gu.support.zuora.api.ReaderType
+import com.gu.support.workers._
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.LocalDate
 import services.stepfunctions.CreateSupportWorkersRequest
-import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 
 object CheckoutValidationRules {
   def validatorFor(productType: ProductType): CreateSupportWorkersRequest => Boolean = productType match {
-    case d: DigitalPack => DigitalPackValidation.passes(d)
+    case _: DigitalPack => DigitalPackValidation.passes
     case _: Paper => PaperValidation.passes
     case _ => PaidProductValidation.passes
   }
@@ -91,13 +89,13 @@ object DigitalPackValidation {
 
   import AddressAndCurrencyValidationRules._
 
-  def passes(d: DigitalPack)(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
+  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
     import createSupportWorkersRequest._
     import createSupportWorkersRequest.product._
     import createSupportWorkersRequest.billingAddress._
 
 
-    def isValidRedemption =
+    def isValidCorporateSub(redemptionData: RedemptionData) =
       SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
         hasStateIfRequired(country, state)
 
@@ -109,17 +107,10 @@ object DigitalPackValidation {
         currencyIsSupportedForCountry(country, currency) &&
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
-    val Purchase = Left
-    type Redemption[A, B] = Right[A, B]
-
-    (paymentFields, d.readerType, createSupportWorkersRequest.giftRecipient) match {
-      case (Purchase(paymentFields), ReaderType.Direct, None) => isValidPaidSub(paymentFields)
-      case (Purchase(paymentFields), ReaderType.Gift, Some(GiftRecipientRequest(_, _, _, Some(_), _))) =>
-        isValidPaidSub(paymentFields)
-      case (_: Redemption[_, _], ReaderType.Corporate, None) => isValidRedemption
-      case (_: Redemption[_, _], ReaderType.Gift, None) => isValidRedemption
-      case _ => false
-    }
+    paymentFields.fold(
+      paymentFields => isValidPaidSub(paymentFields),
+      redemptionData => isValidCorporateSub(redemptionData)
+    )
   }
 }
 

@@ -111,15 +111,11 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
       )
     )
 
-  private def getGiftRecipient(buyerAccountId: String, deliveryAddress: Address, giftRecipient: GiftRecipient) = {
-    val (email, title) = giftRecipient match {
-      case w: GiftRecipient.WeeklyGiftRecipient => (w.email, w.title)
-      case ds: GiftRecipient.DigitalSubGiftRecipient => (Some(ds.email), None)
-    }
+  private def getGiftRecipient(buyerAccountId: String, deliveryAddress: Address, giftRecipient: GiftRecipient) =
     DeliveryContact(
       buyerAccountId,
-      email,
-      title,
+      giftRecipient.email,
+      giftRecipient.title,
       giftRecipient.firstName,
       giftRecipient.lastName,
       getAddressLine(deliveryAddress),
@@ -128,7 +124,6 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
       deliveryAddress.postCode,
       Some(deliveryAddress.country.name)
     )
-  }
 }
 
 /**

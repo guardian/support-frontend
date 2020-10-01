@@ -64,8 +64,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
         ).map(List(_))
       case d: DigitalPack => new DigitalPackEmailFields(getSubscriptionEmailFields(state, directDebitMandateId)).build(
         paidSubPaymentData = state.paymentOrRedemptionData.left.toOption,
-        readerType = d.readerType,
-        maybeGiftRecipient = state.giftRecipient.flatMap(_.asDigiSub)
+        readerType = d.readerType
       )
       case p: Paper =>
         state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
