@@ -24,7 +24,7 @@ import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from '../utils/o
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getCampaignSettings } from 'helpers/campaigns';
 import type { CampaignSettings } from 'helpers/campaigns';
-import ContributionThankYouArticleShare from "./ContributionThankYouArticleShare";
+import ContributionThankYouArticleShare from './ContributionThankYouArticleShare';
 
 const container = css`
   background: white;

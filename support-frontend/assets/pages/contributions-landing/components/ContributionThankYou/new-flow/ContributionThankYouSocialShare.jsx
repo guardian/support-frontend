@@ -21,8 +21,8 @@ import {
 } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { generateReferralCode } from '../../../../../helpers/campaignReferralCodes';
-import { css } from "@emotion/core";
-import { space } from "@guardian/src-foundations";
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 
 const buttonsContainer = css`
   margin-top: ${space[6]}px;
