@@ -37,18 +37,31 @@ const innerContainer = css`
   background-color: ${neutral[97]};
 `;
 
-const buttonsContainer = css`
+const genericButtonContainer = css`
   margin-top: ${space[4]}px;
   margin-left: ${space[2]}px;
-  display: block;
 
   & > * {
     margin-bottom: ${space[2]}px;
     margin-right: ${space[2]}px;
   }
+`
+
+const wideButtonsContainer = css`
+  ${genericButtonContainer}
+  display: block;
 
   ${until.phablet} {
     display: none;
+  }
+`;
+
+const narrowButtonsContainer = css`
+  ${genericButtonContainer}
+  display: none;
+
+  ${until.phablet} {
+    display: block;
   }
 `;
 
@@ -59,10 +72,6 @@ const headlineText = css`
   color: ${neutral[7]};
   ${headline.xxxsmall({ lineHeight: 'tight' })};
   font-weight: 600 !important;
-
-  ${until.phablet} {
-    font-size: 15px !important;
-  }
 `;
 
 const button = css`
@@ -92,15 +101,6 @@ const headlineAndButtonsContainer = css`
   }
 `;
 
-const compactShareButtonContainer = css`
-  display: block;
-  margin-top: ${space[2]}px;
-
-  ${from.phablet} {
-    display: none;
-  }
-`;
-
 // Types ////////////////////////////////////////////////////////////
 
 type PropTypes = {
@@ -111,6 +111,59 @@ type PropTypes = {
 }
 
 // Component ////////////////////////////////////////////////////////
+
+const shareButtonsContainer = (css: String) => (
+  <div css={css}>
+    <LinkButton
+      href={getFacebookShareLink()}
+      onClick={() =>
+        trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)
+      }
+      target="_blank"
+      rel="noopener noreferrer"
+      priority="tertiary"
+      size="default"
+      icon={<SvgFacebook />}
+      css={button}
+      hideLabel
+    />
+    <LinkButton
+      href={getTwitterShareLink()}
+      onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
+      target="_blank"
+      rel="noopener noreferrer"
+      priority="tertiary"
+      size="default"
+      icon={<SvgTwitter />}
+      css={button}
+      hideLabel
+    />
+    <LinkButton
+      href={getLinkedInShareLink()}
+      onClick={() =>
+        trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)
+      }
+      target="_blank"
+      rel="noopener noreferrer"
+      priority="tertiary"
+      size="default"
+      icon={<SvgLinkedIn />}
+      css={button}
+      hideLabel
+    />
+    <LinkButton
+      href={getEmailShareLink()}
+      onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
+      target="_blank"
+      rel="noopener noreferrer"
+      priority="tertiary"
+      size="default"
+      icon={<SvgEnvelope />}
+      css={button}
+      hideLabel
+    />
+  </div>
+)
 
 const ShareableArticleContainer = (props: PropTypes) => (
   <div css={outerContainer}>
@@ -133,68 +186,10 @@ const ShareableArticleContainer = (props: PropTypes) => (
         >
           {props.headline}
         </a>
-        <div css={buttonsContainer}>
-          <LinkButton
-            href={getFacebookShareLink()}
-            onClick={() =>
-                trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)
-              }
-            target="_blank"
-            rel="noopener noreferrer"
-            priority="tertiary"
-            size="default"
-            icon={<SvgFacebook />}
-            css={button}
-            hideLabel
-          />
-          <LinkButton
-            href={getTwitterShareLink()}
-            onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
-            target="_blank"
-            rel="noopener noreferrer"
-            priority="tertiary"
-            size="default"
-            icon={<SvgTwitter />}
-            css={button}
-            hideLabel
-          />
-          <LinkButton
-            href={getLinkedInShareLink()}
-            onClick={() =>
-                trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)
-              }
-            target="_blank"
-            rel="noopener noreferrer"
-            priority="tertiary"
-            size="default"
-            icon={<SvgLinkedIn />}
-            css={button}
-            hideLabel
-          />
-          <LinkButton
-            href={getEmailShareLink()}
-            onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
-            target="_blank"
-            rel="noopener noreferrer"
-            priority="tertiary"
-            size="default"
-            icon={<SvgEnvelope />}
-            css={button}
-            hideLabel
-          />
-        </div>
+        {shareButtonsContainer(wideButtonsContainer)}
       </div>
     </div>
-    <div css={compactShareButtonContainer}>
-      <LinkButton
-        target="_blank"
-        rel="noopener noreferrer"
-        priority="secondary"
-        size="small"
-      >
-          Share
-      </LinkButton>
-    </div>
+    {shareButtonsContainer(narrowButtonsContainer)}
   </div>
 );
 
