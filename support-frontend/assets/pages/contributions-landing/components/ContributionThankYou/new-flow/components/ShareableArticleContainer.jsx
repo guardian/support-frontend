@@ -22,6 +22,7 @@ import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { until } from '@guardian/src-foundations/mq';
 
+
 // Styles ///////////////////////////////////////////////////////////
 
 const outerContainer = css`
@@ -101,21 +102,29 @@ const headlineAndButtonsContainer = css`
   }
 `;
 
-// Types ////////////////////////////////////////////////////////////
 
-type PropTypes = {
-  articleUrl: String,
-  headline: String,
-  imageUrl: String,
-  imageAltText: String,
+// Helpers //////////////////////////////////////////////////////////
+
+const facebookShareLink = (articleUrl: String) => {
+  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURI(articleUrl)}`
 }
 
-// Component ////////////////////////////////////////////////////////
+const twitterShareLink = (articleUrl: String) => {
+  return `https://twitter.com/intent/tweet?url=${encodeURI(articleUrl)}`
+}
 
-const shareButtonsContainer = (styles: String) => (
+const linkedinShareLink = (articleUrl: String) => {
+  return `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURI(articleUrl)}`;
+}
+
+const emailShareLink = (articleUrl: String) => {
+  return `mailto:?body=${encodeURI(articleUrl)}`;
+}
+
+const shareButtonsContainer = (styles: String, articleUrl: String) => (
   <div css={styles}>
     <LinkButton
-      href={getFacebookShareLink()}
+      href={facebookShareLink(articleUrl)}
       onClick={() =>
         trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)
       }
@@ -128,7 +137,7 @@ const shareButtonsContainer = (styles: String) => (
       hideLabel
     />
     <LinkButton
-      href={getTwitterShareLink()}
+      href={twitterShareLink(articleUrl)}
       onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
       target="_blank"
       rel="noopener noreferrer"
@@ -139,7 +148,7 @@ const shareButtonsContainer = (styles: String) => (
       hideLabel
     />
     <LinkButton
-      href={getLinkedInShareLink()}
+      href={linkedinShareLink(articleUrl)}
       onClick={() =>
         trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)
       }
@@ -152,7 +161,7 @@ const shareButtonsContainer = (styles: String) => (
       hideLabel
     />
     <LinkButton
-      href={getEmailShareLink()}
+      href={emailShareLink(articleUrl)}
       onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
       target="_blank"
       rel="noopener noreferrer"
@@ -164,6 +173,19 @@ const shareButtonsContainer = (styles: String) => (
     />
   </div>
 );
+
+
+// Types ////////////////////////////////////////////////////////////
+
+type PropTypes = {
+  articleUrl: String,
+  headline: String,
+  imageUrl: String,
+  imageAltText: String,
+}
+
+
+// Component ////////////////////////////////////////////////////////
 
 const ShareableArticleContainer = (props: PropTypes) => (
   <div css={outerContainer}>
@@ -186,10 +208,10 @@ const ShareableArticleContainer = (props: PropTypes) => (
         >
           {props.headline}
         </a>
-        {shareButtonsContainer(wideButtonsContainer)}
+        {shareButtonsContainer(wideButtonsContainer, props.articleUrl)}
       </div>
     </div>
-    {shareButtonsContainer(narrowButtonsContainer)}
+    {shareButtonsContainer(narrowButtonsContainer, props.articleUrl)}
   </div>
 );
 

@@ -186,7 +186,7 @@ const ContributionThankYou = ({
   };
   const articleShareAction = {
     component: <ContributionThankYouArticleShare
-      header="Share Guardian Journalism"
+      header="Share Guardian journalism"
       body="Help extend the reach of our environmental reporting by sharing it with your friends, family and followers."
     />,
     shouldShow: isEnvironmentMoment
