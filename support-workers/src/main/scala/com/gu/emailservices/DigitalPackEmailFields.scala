@@ -137,11 +137,11 @@ class DigitalPackEmailFields(
       case (Purchase(paymentInfo), ReaderType.Gift) =>
         for {
           giftRecipient <- maybeGiftRecipient.toRight("Gift redemption must have a gift recipient")
-          emailFieldses <- List(
+          emails <- List(
             giftPurchaserConfirmation(paymentInfo.paymentMethod),
             giftRecipientNotification(giftRecipient)
           ).sequence
-        } yield emailFieldses
+        } yield emails
       case (Purchase(paymentInfo), _) => directThankYou(paymentInfo).map(List(_))
       case (Redemption, ReaderType.Corporate) => corpRedemption.map(List(_))
       case (Redemption, ReaderType.Gift) => giftRedemption.map(List(_))
