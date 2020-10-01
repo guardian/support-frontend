@@ -5,11 +5,9 @@ import { neutral, news } from '@guardian/src-foundations/palette';
 import { LinkButton } from '@guardian/src-button';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { SvgFacebook, SvgTwitter, SvgEnvelope } from '@guardian/src-icons';
-import SvgLinkedIn from '../components/SvgLinkedIn';
 import {
   OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
   OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
-  OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
   OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 } from '../../utils/ophan';
 import { headline } from '@guardian/src-foundations/typography';
@@ -103,8 +101,6 @@ const facebookShareLink = (articleUrl: string) => `https://www.facebook.com/shar
 
 const twitterShareLink = (articleUrl: string) => `https://twitter.com/intent/tweet?url=${encodeURI(articleUrl)}`;
 
-const linkedinShareLink = (articleUrl: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURI(articleUrl)}`;
-
 const emailShareLink = (articleUrl: string) => `mailto:?body=${encodeURI(articleUrl)}`;
 
 const shareButtonsContainer = (styles: string, articleUrl: string) => (
@@ -130,19 +126,6 @@ const shareButtonsContainer = (styles: string, articleUrl: string) => (
       priority="tertiary"
       size="default"
       icon={<SvgTwitter />}
-      css={button}
-      hideLabel
-    />
-    <LinkButton
-      href={linkedinShareLink(articleUrl)}
-      onClick={() =>
-        trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)
-      }
-      target="_blank"
-      rel="noopener noreferrer"
-      priority="tertiary"
-      size="default"
-      icon={<SvgLinkedIn />}
       css={button}
       hideLabel
     />
