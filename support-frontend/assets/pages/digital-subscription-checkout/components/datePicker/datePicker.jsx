@@ -7,7 +7,6 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { formatMachineDate } from 'helpers/dateConversions';
 import calendarIcon from './calendarIcon.png';
-import { type Option } from 'helpers/types/option';
 import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { Input } from 'components/forms/input';
 import { withLabel } from 'hocs/withLabel';
@@ -66,8 +65,6 @@ const marginTop = css`
 type PropTypes = {
   value: string | null,
   onChange: Function,
-  // eslint-disable-next-line react/no-unused-prop-types
-  id: Option<string>,
 }
 
 type StateTypes = {

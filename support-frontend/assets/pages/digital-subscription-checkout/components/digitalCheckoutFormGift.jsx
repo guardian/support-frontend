@@ -194,7 +194,6 @@ function DigitalCheckoutFormGift(props: PropTypes) {
           </FormSection>
           <FormSection title="Gift delivery date">
             <DatePickerWithError
-              id="giftDeliveryDate"
               error={firstError('giftDeliveryDate', props.formErrors)}
               value={props.giftDeliveryDate}
               onChange={date => props.setDigitalGiftDeliveryDate(date)}
