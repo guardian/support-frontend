@@ -30,8 +30,8 @@ export const campaign: CampaignSettings = ({
 });
 
 function campaignEnabledForUser(campaignCode: ?string): boolean {
-  if (currentCampaignPath) {
-    return window.guardian.forceCampaign ||
+  if (currentCampaignPath && window.guardian.enableContributionsCampaign) {
+    return window.guardian.forceContributionsCampaign ||
       window.location.pathname.endsWith(`/${currentCampaignPath}`) ||
       campaign.campaignCode === campaignCode;
   }

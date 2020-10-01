@@ -9,6 +9,7 @@ import type { User } from 'helpers/subscriptionsForms/user';
 import { getUser } from 'helpers/subscriptionsForms/user';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { marketingConsentReducerFor, type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
+import type { ReaderType } from 'helpers/productPrice/readerType';
 
 
 export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
@@ -16,6 +17,7 @@ export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
 export type RedemptionFormState = {
   stage: Stage,
   userCode: Option<string>,
+  readerType: Option<ReaderType>,
   error: Option<string>,
   user: User,
   csrf: Option<Csrf>,
@@ -30,12 +32,14 @@ export type RedemptionPageState = {
 // ------- Actions ---------- //
 export type Action =
   | { type: 'SET_USER_CODE', userCode: string }
+  | { type: 'SET_READER_TYPE', readerType: Option<ReaderType> }
   | { type: 'SET_ERROR', error: Option<string> }
   | { type: 'SET_STAGE', stage: Stage }
 
 const initialState: RedemptionFormState = {
   stage: getGlobal('stage') || 'form',
   userCode: getGlobal('userCode'),
+  readerType: getGlobal('readerType'),
   error: getGlobal('error'),
   user: getUser(),
   csrf: getGlobal('csrf'),
@@ -49,6 +53,8 @@ const redemptionFormReducer = (
   switch (action.type) {
     case 'SET_USER_CODE':
       return { ...previousState, userCode: action.userCode };
+    case 'SET_READER_TYPE':
+      return { ...previousState, readerType: action.readerType };
     case 'SET_ERROR':
       return { ...previousState, error: action.error };
     case 'SET_STAGE':

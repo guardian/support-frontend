@@ -11,22 +11,23 @@ import { getOphanIds, getReferrerAcquisitionData, getSupportAbTests } from 'help
 import { routes } from 'helpers/routes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Monthly } from 'helpers/billingPeriods';
-import { Corporate } from 'helpers/productPrice/readerType';
 import type { User } from 'helpers/subscriptionsForms/user';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getOrigin } from 'helpers/url';
 import { appropriateErrorMessage } from 'helpers/errorReasons';
-import { getGlobal } from '../../helpers/globals';
+import { getGlobal } from 'helpers/globals';
+import type { ReaderType } from 'helpers/productPrice/readerType';
 
 type ValidationResult = {
   valid: boolean,
+  readerType: Option<ReaderType>,
   errorMessage: Option<string>,
 }
 
 function validate(userCode: string) {
   if (userCode === '') {
-    return Promise.resolve({ valid: false, errorMessage: 'Please enter your code' });
+    return Promise.resolve({ valid: false, readerType: null, errorMessage: 'Please enter your code' });
   }
   const isTestUser: boolean = !!getGlobal<string>('isTestUser');
   const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}${isTestUser ? '?isTestUser=true' : ''}`;
@@ -37,9 +38,14 @@ function dispatchError(dispatch: Dispatch<Action>, error: Option<string>) {
   dispatch({ type: 'SET_ERROR', error });
 }
 
+function dispatchReaderType(dispatch: Dispatch<Action>, readerType: Option<ReaderType>) {
+  dispatch({ type: 'SET_READER_TYPE', readerType });
+}
+
 function doValidation(userCode: string, dispatch: Dispatch<Action>) {
   validate(userCode).then((result: ValidationResult) => {
     dispatchError(dispatch, result.errorMessage);
+    dispatchReaderType(dispatch, result.readerType);
   }).catch((error) => {
     dispatchError(dispatch, `An error occurred while validating this code: ${error}`);
   });
@@ -65,6 +71,7 @@ function submitCode(userCode: string, dispatch: Dispatch<Action>) {
 
 function buildRegularPaymentRequest(
   userCode: string,
+  readerType: ReaderType,
   user: User,
   currencyId: IsoCurrency,
   countryId: IsoCountry,
@@ -79,7 +86,7 @@ function buildRegularPaymentRequest(
   const product = {
     currency: currencyId,
     billingPeriod: Monthly,
-    readerType: Corporate,
+    readerType,
   };
 
   return {
@@ -114,6 +121,7 @@ function buildRegularPaymentRequest(
 
 function createSubscription(
   userCode: string,
+  readerType: Option<ReaderType>,
   user: User,
   currencyId: IsoCurrency,
   countryId: IsoCountry,
@@ -121,7 +129,11 @@ function createSubscription(
   csrf: Csrf,
   dispatch: Dispatch<Action>,
 ) {
-  const data = buildRegularPaymentRequest(userCode, user, currencyId, countryId, participations);
+  if (readerType == null) {
+    dispatchError(dispatch, 'An error occurred while redeeming this code, please try again later');
+    return;
+  }
+  const data = buildRegularPaymentRequest(userCode, readerType, user, currencyId, countryId, participations);
 
   const handleSubscribeResult = (result: PaymentResult) => {
     if (result.paymentStatus === 'success') {
