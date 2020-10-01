@@ -55,6 +55,7 @@ const buttonsContainer = css`
 const headlineText = css`
   text-decoration: none;
   cursor: pointer;
+  display: inline-block;
   color: ${neutral[7]};
   ${headline.xxxsmall({ lineHeight: 'tight' })};
   font-weight: 600 !important;
@@ -72,6 +73,10 @@ const button = css`
 const imageContainer = css`
   max-width: 45%;
   padding: ${space[2]}px;
+
+  ${until.phablet} {
+    padding: ${space[1]}px;
+  }
 `
 
 const image = css`
@@ -81,6 +86,10 @@ const image = css`
 
 const headlineAndButtonsContainer = css`
   padding: ${space[2]}px ${space[2]}px ${space[2]}px 0;
+
+  ${until.phablet} {
+    padding: ${space[1]}px ${space[1]}px ${space[1]}px 0;
+  }
 `
 
 const compactShareButtonContainer = css`
