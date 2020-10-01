@@ -45,12 +45,13 @@ const HeroCopy = () => (
 const HeroCopyAus = () => (
   <span>
     <p css={paragraph}>
-      With two innovative apps and ad-free reading, a digital Subscription gives you the richest experience
+      With two innovative apps and ad-free reading, a digital subscription gives you the richest experience
       of Guardian Australia journalism. It also sustains the independent reporting you love.
     </p>
     <p css={paragraph}>
-      You&apos;ll gain exclusive access to Australia Weekend, the new digital edition, providing you with a
-      curated view of the week&apos;s biggest stories, plus early access to essential weekend news.
+      You&apos;ll gain exclusive access to <span css={heavyText}>Australia Weekend</span>, the new digital
+      edition, providing you with a curated view of the week&apos;s biggest stories, plus early access to
+      essential weekend news.
     </p>
   </span>);
 
