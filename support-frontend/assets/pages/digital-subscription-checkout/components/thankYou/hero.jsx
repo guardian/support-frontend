@@ -16,17 +16,17 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 const defaultHeroes: GridImages = {
   breakpoints: {
     mobile: {
-      gridId: 'editionsPackshot',
+      gridId: 'editionsPackshotShort',
       srcSizes: [242, 484, 568],
       imgType: 'png',
     },
     tablet: {
-      gridId: 'editionsPackshot',
+      gridId: 'editionsPackshotShort',
       srcSizes: [500, 1000, 1825],
       imgType: 'png',
     },
     desktop: {
-      gridId: 'editionsPackshot',
+      gridId: 'editionsPackshotShort',
       srcSizes: [500, 1000, 1825],
       imgType: 'png',
     },
@@ -37,17 +37,17 @@ const defaultHeroes: GridImages = {
 const australiaHeroes: GridImages = {
   breakpoints: {
     mobile: {
-      gridId: 'editionsPackshotAus',
+      gridId: 'editionsPackshotAusShort',
       srcSizes: [242, 484, 568],
       imgType: 'png',
     },
     tablet: {
-      gridId: 'editionsPackshotAus',
+      gridId: 'editionsPackshotAusShort',
       srcSizes: [500, 1000, 1825],
       imgType: 'png',
     },
     desktop: {
-      gridId: 'editionsPackshotAus',
+      gridId: 'editionsPackshotAusShort',
       srcSizes: [500, 1000, 1825],
       imgType: 'png',
     },
