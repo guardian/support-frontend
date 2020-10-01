@@ -115,15 +115,22 @@ const appImage = (
 
 type ProductCardPropTypes = {
   title: string,
-  subtitle: Node,
+  shortTitle: string,
+  subtitle: string,
   image: Node,
+  second: boolean,
 }
 
-const ProductCard = ({ title, subtitle, image }: ProductCardPropTypes) => (
+const ProductCard = ({
+  title, shortTitle, subtitle, image, second = false,
+}: ProductCardPropTypes) => (
   <section className="product-block__item">
-    <h2 className="product-block__item__title">{title}</h2>
+    <h2 className="product-block__item__title">
+      <span className="product-block__item__title--desktop">{title}</span>
+      <span className="product-block__item__title--mobile">{shortTitle}</span>
+    </h2>
     <p className="product-block__item__subtitle">{subtitle}</p>
-    <span className="product-block__item__image">{image}</span>
+    <span className={`product-block__item__image${second ? '--second' : ''}`}>{image}</span>
   </section>
 );
 
@@ -163,8 +170,10 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
             title="UK Daily in The Guardian Editions app"
-            subtitle={<span className="product-block__item__subtitle--short-first">+ Edition Earth &mdash; Limited time only, ending 7 November</span>}
+            shortTitle="UK Daily"
+            subtitle="+ Edition Earth &mdash; Limited time only, ending 7 November"
             image={dailyImage}
+            second={false}
           />
           <Dropdown
             showDropDown={state.showDropDownDaily}
@@ -197,8 +206,10 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Plus />
           <ProductCard
             title="Premium access to The Guardian Live app"
-            subtitle={<span className="product-block__item__subtitle--short-second">Live news, as it happens</span>}
+            shortTitle="Premium access to The Guardian Live app"
+            subtitle="Live news, as it happens"
             image={appImage}
+            second
           />
           <Dropdown
             showDropDown={state.showDropDownApp}

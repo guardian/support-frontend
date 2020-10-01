@@ -115,15 +115,23 @@ const appImageAus = (
 
 type ProductCardPropTypes = {
   title: string,
+  shortTitle: string,
   subtitle: Node,
   image: Node,
+  first: boolean,
+  secondImage: boolean,
 }
 
-const ProductCard = ({ title, subtitle, image }: ProductCardPropTypes) => (
+const ProductCard = ({
+  title, shortTitle, subtitle, image, first, secondImage,
+}: ProductCardPropTypes) => (
   <section className="product-block__item">
-    <h2 className="product-block__item__title">{title}</h2>
+    <h2 className={`product-block__item__title${first ? '--first' : ''}`}>
+      <span className="product-block__item__title--desktop-Aus">{title}</span>
+      <span className="product-block__item__title--mobile-Aus">{shortTitle}</span>
+    </h2>
     <p className="product-block__item__subtitle">{subtitle}</p>
-    <span className="product-block__item__image">{image}</span>
+    <span className={`product-block__item__image${secondImage ? '--second' : ''}`}>{image}</span>
   </section>
 );
 
@@ -163,11 +171,14 @@ class ProductBlockAus extends Component<PropTypes, StateTypes> {
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
             title="Australia Weekend in The Guardian Editions app"
+            shortTitle="Australia Weekend"
             subtitle={
               <span className="product-block__item__subtitle--short-first">
                 Everything you need to make sense of the week, in one simple, elegant app
               </span>}
             image={weekendImage}
+            first
+            secondImage={false}
           />
           <Dropdown
             showDropDown={state.showDropDownDaily}
@@ -203,8 +214,11 @@ class ProductBlockAus extends Component<PropTypes, StateTypes> {
           <Plus />
           <ProductCard
             title="Premium access to The Guardian Live app"
+            shortTitle="Premium access to The Guardian Live app"
             subtitle={<span className="product-block__item__subtitle--short-second">Live news, as it happens</span>}
             image={appImageAus}
+            first={false}
+            secondImage
           />
           <Dropdown
             showDropDown={state.showDropDownApp}
