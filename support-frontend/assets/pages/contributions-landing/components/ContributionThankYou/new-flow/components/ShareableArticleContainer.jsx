@@ -117,7 +117,13 @@ const ShareableArticleContainer = (props: PropTypes) => {
     <div css={outerContainer}>
       <div css={innerContainer}>
         <div css={imageContainer}>
-          <img css={image} src={props.imageUrl} alt={props.imageAltText} />
+          <a
+            href={props.articleUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img css={image} src={props.imageUrl} alt={props.imageAltText} />
+          </a>
         </div>
         <div css={headlineAndButtonsContainer}>
           <a
