@@ -197,7 +197,6 @@ const ContributionThankYou = ({
     marketingConsentAction,
     supportReminderAction,
     surveyAction,
-    socialShareAction,
     articleShareAction,
   ];
 
