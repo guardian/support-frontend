@@ -5,8 +5,8 @@ import com.gu.salesforce.Salesforce.{DeliveryContact, NewContact}
 
 object Fixtures {
   val idId = "9999999"
-  val salesforceId = "0033E000017rqXsQAI"
-  val salesforceAccountId = "0013E000011gxQuQAI"
+  val salesforceId = "0033E00001FJL2xQAH"
+  val salesforceAccountId = "0013E00001DrKhCQAV"
   val emailAddress = "integration-test@gu.com"
   val telephoneNumber = "0123456789"
   val title = Title.Mrs

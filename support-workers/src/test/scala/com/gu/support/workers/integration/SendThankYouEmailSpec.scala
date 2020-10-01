@@ -25,7 +25,7 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import org.joda.time.{DateTime, LocalDate}
 
-class SendThankYouEmailIT extends AsyncLambdaSpec with MockContext {
+class SendThankYouEmailITSpec extends AsyncLambdaSpec with MockContext {
 
   "SendThankYouEmail lambda" should "add message to sqs queue" taggedAs IntegrationTest in {
     val sendThankYouEmail = new SendThankYouEmail()
