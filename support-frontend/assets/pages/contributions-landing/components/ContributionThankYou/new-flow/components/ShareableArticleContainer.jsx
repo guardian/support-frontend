@@ -42,8 +42,9 @@ const buttonsContainer = css`
   margin-left: ${space[2]}px;
   display: block;
 
-  & > * + * {
-    margin-left: ${space[2]}px;
+  & > * {
+    margin-bottom: ${space[2]}px;
+    margin-right: ${space[2]}px;
   }
 
   ${until.phablet} {
