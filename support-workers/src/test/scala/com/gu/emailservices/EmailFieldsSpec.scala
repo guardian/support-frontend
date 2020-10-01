@@ -83,8 +83,7 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers with Inside {
         directDebitPaymentMethod,
         PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))
       )),
-      ReaderType.Direct,
-      None
+      ReaderType.Direct
     ).map(_.map(ef => parse(ef.payload)))
     inside(actual) {
       case Right(actualJson :: Nil) =>
@@ -108,7 +107,7 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers with Inside {
         |    }
         |  }
         |},
-        |"DataExtensionName" : "digipack-corporate-redemption",
+        |"DataExtensionName" : "digipack-corp",
         |"SfContactId" : "0033E00001DTBHJQA5",
         |"IdentityUserId" : null
         |}
@@ -117,8 +116,7 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers with Inside {
       subsFields(Annual, User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress))
     ).build(
       paidSubPaymentData = None,
-      ReaderType.Corporate,
-      None
+      ReaderType.Corporate
     ).map(_.map(ef => parse(ef.payload)))
     inside(actual) {
       case Right(actualJson :: Nil) =>

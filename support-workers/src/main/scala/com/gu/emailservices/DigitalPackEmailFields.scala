@@ -102,7 +102,7 @@ object DigitalSubscriptionEmailAttributes {
 
   case class GifteeNotificationAttributes(
     gifter_first_name: String,
-    gift_personal_message: Option[String],
+    gift_personal_message: String,
     gift_code: String,
   ) extends DigitalSubscriptionEmailAttributes
 
@@ -126,8 +126,7 @@ class DigitalPackEmailFields(
 
   def build(
     paidSubPaymentData: Option[PaymentMethodWithSchedule],
-    readerType: ReaderType,
-    maybeGiftRecipient: Option[GiftRecipient.DigitalSubGiftRecipient]
+    readerType: ReaderType
   ): Either[String, List[EmailFields]] = {
 
     val Purchase = Some
@@ -135,13 +134,10 @@ class DigitalPackEmailFields(
 
     (paidSubPaymentData, readerType) match {
       case (Purchase(paymentInfo), ReaderType.Gift) =>
-        for {
-          giftRecipient <- maybeGiftRecipient.toRight("Gift redemption must have a gift recipient")
-          emails <- List(
-            giftPurchaserConfirmation(paymentInfo.paymentMethod),
-            giftRecipientNotification(giftRecipient)
-          ).sequence
-        } yield emails
+        List(
+          giftPurchaserConfirmation(paymentInfo.paymentMethod),
+          giftRecipientNotification
+        ).sequence
       case (Purchase(paymentInfo), _) => directThankYou(paymentInfo).map(List(_))
       case (Redemption, ReaderType.Corporate) => corpRedemption.map(List(_))
       case (Redemption, ReaderType.Gift) => giftRedemption.map(List(_))
@@ -153,10 +149,10 @@ class DigitalPackEmailFields(
     attributePairs <- JsonToAttributes.asFlattenedPairs(fields.asJsonObject)
   } yield EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
 
-  private def giftRecipientNotification(giftRecipient: GiftRecipient.DigitalSubGiftRecipient) =
+  private def giftRecipientNotification =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = user.firstName,
-      gift_personal_message = giftRecipient.message,
+      gift_personal_message = "gift_personal_message",
       gift_code = "gift_code"
     ))
 
@@ -184,7 +180,7 @@ class DigitalPackEmailFields(
     ))
 
   private def corpRedemption =
-    wrap("digipack-corporate-redemption", directOrCorpFields("Group subscription"))
+    wrap("digipack-corp", directOrCorpFields("Group subscription"))
 
   private def directThankYou(paymentMethodWithSchedule: PaymentMethodWithSchedule) =
     wrap("digipack", DirectDSAttributes(

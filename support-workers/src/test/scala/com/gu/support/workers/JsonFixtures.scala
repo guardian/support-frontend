@@ -325,8 +325,7 @@ object JsonFixtures {
               "title": "Mr",
               "firstName": "Gifty",
               "lastName": "McRecipent",
-              "email": "gift.recipient@gu.com",
-              "giftRecipientType": "Weekly"
+              "email": "gift.recipient@gu.com"
             }
           }
         """
@@ -511,8 +510,7 @@ object JsonFixtures {
         "giftRecipient": {
           "title": "Mr",
           "firstName": "Harry",
-          "lastName": "Ramsden",
-          "giftRecipientType": "Weekly"
+          "lastName": "Ramsden"
         },
         "product": {
           "currency": "GBP",
@@ -616,7 +614,7 @@ object JsonFixtures {
   val wrapperWithMessages =
     """
       {
-        "state": "{\"requestId\":\"a64ad98e-5d39-4ffc-a4a9-217357dc2b19\",\"user\":{\"id\":\"9999999\",\"primaryEmailAddress\":\"integration-test@gu.com\",\"firstName\":\"test\",\"lastName\":\"user\",\"country\":\"GB\",\"billingAddress\":{\"country\":\"GB\"},\"allowMembershipMail\":false,\"allowThirdPartyMail\":false,\"allowGURelatedMail\":false,\"isTestUser\":false},\"product\":{\"amount\":5,\"currency\":\"GBP\",\"billingPeriod\":\"Monthly\"},\"paymentProvider\": \"PayPal\",\"paymentMethod\":{\"PaypalBaid\":\"B-23637766K5365543J\",\"PaypalEmail\":\"test@paypal.com\",\"PaypalType\":\"ExpressCheckout\",\"Type\":\"PayPal\",\"paymentGateway\":\"PayPal Express\"},\"giftRecipient\":{\"title\":\"Mr\",\"firstName\":\"Gifty\",\"lastName\":\"McRecipent\",\"email\":\"gift.recipient@gu.com\",\"giftRecipientType\":\"Weekly\"}}",
+        "state": "{\"requestId\":\"a64ad98e-5d39-4ffc-a4a9-217357dc2b19\",\"user\":{\"id\":\"9999999\",\"primaryEmailAddress\":\"integration-test@gu.com\",\"firstName\":\"test\",\"lastName\":\"user\",\"country\":\"GB\",\"billingAddress\":{\"country\":\"GB\"},\"allowMembershipMail\":false,\"allowThirdPartyMail\":false,\"allowGURelatedMail\":false,\"isTestUser\":false},\"product\":{\"amount\":5,\"currency\":\"GBP\",\"billingPeriod\":\"Monthly\"},\"paymentProvider\": \"PayPal\",\"paymentMethod\":{\"PaypalBaid\":\"B-23637766K5365543J\",\"PaypalEmail\":\"test@paypal.com\",\"PaypalType\":\"ExpressCheckout\",\"Type\":\"PayPal\",\"paymentGateway\":\"PayPal Express\"},\"giftRecipient\":{\"title\":\"Mr\",\"firstName\":\"Gifty\",\"lastName\":\"McRecipent\",\"email\":\"gift.recipient@gu.com\"}}",
         "error": null,
         "requestInfo": {
           "testUser": false,
