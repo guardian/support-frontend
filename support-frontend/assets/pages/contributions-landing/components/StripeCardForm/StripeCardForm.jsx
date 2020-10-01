@@ -79,7 +79,6 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
   postDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-  isTestUser: state.page.user.isTestUser
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
