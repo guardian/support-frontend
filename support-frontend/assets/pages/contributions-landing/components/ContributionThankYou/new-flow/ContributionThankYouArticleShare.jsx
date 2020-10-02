@@ -7,10 +7,10 @@ import ActionBody from './components/ActionBody';
 import SvgShare from './components/SvgShare';
 import ShareableArticleContainer from './components/ShareableArticleContainer';
 
-type PropTypes = { header: string, body: string }
-
-const ContributionThankYouArticleShare = (props: PropTypes) => {
+const ContributionThankYouArticleShare = () => {
   const [articleData, setArticleData] = useState(null);
+  const header = 'Share Guardian journalism';
+  const copy = 'Help extend the reach of our environmental reporting by sharing it with your friends, family and followers.';
 
   useEffect(() => {
     fetch('/thank-you-shareable-articles')
@@ -19,10 +19,10 @@ const ContributionThankYouArticleShare = (props: PropTypes) => {
   }, []);
 
   const actionIcon = <SvgShare />;
-  const actionHeader = <ActionHeader title={props.header} />;
+  const actionHeader = <ActionHeader title={header} />;
   const actionBody = (
     <ActionBody>
-      <p>{props.body}</p>
+      <p>{copy}</p>
       {articleData && articleData.map(article => (<ShareableArticleContainer
         articleUrl={article.articleUrl}
         headline={article.headline}
