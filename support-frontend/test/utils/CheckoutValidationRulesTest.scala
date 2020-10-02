@@ -237,7 +237,8 @@ object TestData {
     ),
     deliveryAddress = None,
     giftRecipient = None,
-    deliveryInstructions = None
+    deliveryInstructions = None,
+    debugInfo = None
   )
 
   val someDateNextMonth = new LocalDate().plusMonths(1)
@@ -265,7 +266,8 @@ object TestData {
     billingAddress = paperAddress,
     deliveryAddress = Some(paperAddress),
     giftRecipient = None,
-    deliveryInstructions = None
+    deliveryInstructions = None,
+    debugInfo = None
   )
 
 }

@@ -117,6 +117,7 @@ function buildRegularPaymentRequest(
     ophanIds: getOphanIds(),
     referrerAcquisitionData: getReferrerAcquisitionData(),
     supportAbTests: getSupportAbTests(participations),
+    debugInfo: 'no form/redux for corporate subs',
   };
 }
 
