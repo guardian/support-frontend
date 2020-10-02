@@ -230,8 +230,8 @@ const orderedProducts = (state: State): ProductCopy[] => {
   const { countryGroupId } = state.common.internationalisation;
   if (countryGroupId === GBPCountries) {
     return [
-      digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
-      guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
+      digital(countryGroupId, state.page.pricingCopy[DigitalPack], true),
+      guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], false),
       paper(countryGroupId, state.page.pricingCopy[Paper], false),
       paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
       premiumApp(countryGroupId),
@@ -244,8 +244,8 @@ const orderedProducts = (state: State): ProductCopy[] => {
     ];
   }
   return [
-    digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
-    guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
+    digital(countryGroupId, state.page.pricingCopy[DigitalPack], true),
+    guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], false),
     premiumApp(countryGroupId),
   ];
 

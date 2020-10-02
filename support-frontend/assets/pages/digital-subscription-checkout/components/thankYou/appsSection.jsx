@@ -124,8 +124,8 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             href={androidAppUrl}
             onClick={sendTrackingEventsOnClick('checkout_thankyou_play_store', 'DigitalPack', null)}
           >
-            <span css={largerFormatText}>The Guardian Live app for iOS</span>
-            <span css={smallFormatText}>Live app for iOS</span>
+            <span css={largerFormatText}>The Guardian Live app for Android</span>
+            <span css={smallFormatText}>Live app for Android</span>
           </LinkButton>
         </ThemeProvider>
       </div>
