@@ -115,22 +115,22 @@ const appImage = (
 
 type ProductCardPropTypes = {
   title: string,
-  shortTitle: string,
   subtitle: string,
+  shortSubTitle: string | null,
   image: Node,
   second: boolean,
 }
 
 const ProductCard = ({
-  title, shortTitle, subtitle, image, second = false,
+  title, subtitle, shortSubTitle, image, second = false,
 }: ProductCardPropTypes) => (
   <section className="product-block__item">
-    <h2 className="product-block__item__title">
-      <span className="product-block__item__title--desktop">{title}</span>
-      <span className="product-block__item__title--mobile">{shortTitle}</span>
-    </h2>
-    <p className="product-block__item__subtitle">{subtitle}</p>
-    <span className={`product-block__item__image${second ? '--second' : ''}`}>{image}</span>
+    <h2 className="product-block__item__title">{title}</h2>
+    <p className="product-block__item__subtitle">
+      <span className={`product-block__item__subtitle--desktop${second ? '--second' : ''}`}>{subtitle}</span>
+      {!second && <span className="product-block__item__subtitle--mobile">{shortSubTitle}</span>}
+    </p>
+    <span className={`product-block__item__image${second ? '--second' : '--first-row'}`}>{image}</span>
   </section>
 );
 
@@ -170,8 +170,8 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
             title="UK Daily in The Guardian Editions app"
-            shortTitle="UK Daily"
             subtitle="+ Edition Earth &mdash; Limited time only, ending 7 November"
+            shortSubTitle="+ Edition Earth"
             image={dailyImage}
             second={false}
           />
@@ -206,8 +206,8 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Plus />
           <ProductCard
             title="Premium access to The Guardian Live app"
-            shortTitle="Premium access to The Guardian Live app"
             subtitle="Live news, as it happens"
+            shortSubTitle={null}
             image={appImage}
             second
           />

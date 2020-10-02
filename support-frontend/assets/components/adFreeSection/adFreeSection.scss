@@ -17,6 +17,11 @@
   @include mq($from: phablet) {
     padding: 5px 20px 30px 10px;
     border: 1px solid gu-colour(neutral-86);
+    width: calc(100% - 20px);
+  }
+
+  @include mq($from: desktop) {
+    width: calc(100% - 50px);
   }
 }
 
