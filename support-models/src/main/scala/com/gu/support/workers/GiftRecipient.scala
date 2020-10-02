@@ -7,6 +7,7 @@ import com.gu.support.workers.GiftRecipient.{DigitalSubGiftRecipient, WeeklyGift
 import io.circe._
 import io.circe.generic.semiauto._
 import io.circe.syntax._
+import org.joda.time.LocalDate
 
 sealed trait GiftRecipient {
   val firstName: String
@@ -28,6 +29,7 @@ object GiftRecipient {
     lastName: String,
     email: String,
     message: Option[String],
+    deliveryDate: LocalDate,
   ) extends GiftRecipient
 
   val circeDiscriminator = new CirceDiscriminator("giftRecipientType")
