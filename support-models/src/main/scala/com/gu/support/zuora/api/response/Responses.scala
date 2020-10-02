@@ -200,3 +200,9 @@ object PreviewSubscribeResponse {
 }
 
 case class PreviewSubscribeResponse(invoiceData: List[InvoiceDataItem], success: Boolean) extends ZuoraResponse
+
+object UpdateRedemptionDataResponse {
+  implicit val codec: Codec[UpdateRedemptionDataResponse] = deriveCodec
+}
+
+case class UpdateRedemptionDataResponse(success: Boolean)

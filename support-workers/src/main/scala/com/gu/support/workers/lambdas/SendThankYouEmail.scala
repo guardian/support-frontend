@@ -26,7 +26,7 @@ import scala.concurrent.Future
 case class StateNotValidException(message: String) extends RuntimeException(message)
 
 class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[SendThankYouEmailState, SendMessageResult](servicesProvider) {
+    extends ServicesHandler[SendThankYouEmailState, List[SendMessageResult]](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
@@ -41,7 +41,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
       mandateId <- fetchDirectDebitMandateId(state, services.zuoraService)
       emailFields <- Future.fromTry(buildEmail(state, mandateId)
         .left.map(error => new StateNotValidException(s"State was not valid, $error")).toTry)
-      emailResult <- thankYouEmailService.send(emailFields)
+      emailResult <- Future.sequence(emailFields.map(thankYouEmailService.send))
     } yield HandlerResult(emailResult, requestInfo)
   }
 
@@ -51,7 +51,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
     case _ => Future.successful(None)
   }
 
-  def buildEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Either[String, EmailFields] =
+  def buildEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Either[String, List[EmailFields]] =
     state.product match {
       case c: Contribution =>
         state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift contribution").map(paymentMethodWithSchedule =>
@@ -61,11 +61,12 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
             amount = c.amount,
             paymentMethod = paymentMethodWithSchedule.paymentMethod
           )
-        )
-      case _: DigitalPack => Right(DigitalPackEmailFields.build(
-        getSubscriptionEmailFields(state, directDebitMandateId),
+        ).map(List(_))
+      case d: DigitalPack => new DigitalPackEmailFields(getSubscriptionEmailFields(state, directDebitMandateId)).build(
         paidSubPaymentData = state.paymentOrRedemptionData.left.toOption,
-      ))
+        readerType = d.readerType,
+        maybeGiftRecipient = state.giftRecipient.flatMap(_.asDigiSub)
+      )
       case p: Paper =>
         state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
           PaperEmailFields.build(
@@ -76,7 +77,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
             paymentMethodWithSchedule = paymentMethodWithSchedule,
             state.giftRecipient
           )
-        )
+        ).map(List(_))
       case _: GuardianWeekly =>
         state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift GW yet").map(paymentMethodWithSchedule =>
           GuardianWeeklyEmailFields.build(
@@ -85,7 +86,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
             paymentMethodWithSchedule = paymentMethodWithSchedule,
             state.giftRecipient
           )
-        )
+        ).map(List(_))
     }
 
   private def getAllProductEmailFields(state: SendThankYouEmailState, directDebitMandateId: Option[String]) = {

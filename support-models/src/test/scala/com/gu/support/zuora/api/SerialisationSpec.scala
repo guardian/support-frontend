@@ -174,4 +174,25 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     })
   }
 
+  "SubscriptionRedemptionQueryResponse" should "deserialise correctly" in {
+    val jsonResponse = """
+        {
+        "records": [
+            {
+                "CreatedRequestId__c": "35b4c314-d982-4386-983e-2e8c453f50be",
+                "Id": "2c92c0f8742dcaf5017434d002e73a56",
+                "ContractEffectiveDate": "2020-08-09"
+            }
+        ],
+        "done": true,
+        "size": 1
+    }
+    """
+
+    testDecoding[SubscriptionRedemptionQueryResponse](
+      jsonResponse,
+      subResponse => subResponse.records.head.contractEffectiveDate.getDayOfMonth shouldBe 9
+    )
+  }
+
 }

@@ -76,7 +76,7 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       When("the user selects the annual option")
       landingPage.clickAnnual
 
-      Given("The user fills in their details correctly")
+      Given("the user fills in their details correctly")
       landingPage.clearForm(hasNameFields = true)
       landingPage.fillInPersonalDetails(hasNameFields = true)
       landingPage.selectState

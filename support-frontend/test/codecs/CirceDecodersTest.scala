@@ -119,10 +119,12 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |        "state": "On"
           |      }
           |    },
+          |    "enableDigitalSubGifting": "On",
           |    "useDotcomContactPage": "Off",
           |    "enableRecaptchaFrontend": "Off",
           |    "enableRecaptchaBackend": "Off",
-          |    "ccpaEnabled": "Off"
+          |    "enableContributionsCampaign": "On",
+          |    "forceContributionsCampaign": "On"
           |  },
           |  "amounts": {
           |    "GBPCountries": {
@@ -290,10 +292,12 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
               state = On
             )
           ),
+          enableDigitalSubGifting = On,
           useDotcomContactPage = Some(Off),
           enableRecaptchaBackend = Off,
           enableRecaptchaFrontend = Off,
-          ccpaEnabled = Off
+          enableContributionsCampaign = On,
+          forceContributionsCampaign = On
         ),
         amountsRegions,
         contributionTypes,

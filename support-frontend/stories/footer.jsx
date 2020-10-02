@@ -22,7 +22,10 @@ stories.add('Footer', () => {
   const contents = boolean('Show contents', true);
   return (
     <div style={{ width: '100%' }}>
-      <Footer termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
+      <Footer
+        faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+        termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
+      >
         {contents &&
           <>
             <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />

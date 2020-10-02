@@ -53,14 +53,14 @@ These tests are tagged with either an @IntegrationTest annotation at the spec le
 `sbt it:test` - runs all tests including integration tests.
 
 ## Deployment
-We use [Riff-Raff](https://github.com/guardian/riff-raff) to deploy this project to production each time a new change is merged to master.
+We use [Riff-Raff](https://github.com/guardian/riff-raff) to deploy this project to production each time a new change is merged to the default branch.
 
 The following steps happen as part of a deployment:
 
 1. (If necessary) Cloudformation updates are applied in AWS. For example, if your change removes a task from the Step Function, or deletes one of the Lambdas, Riff-Raff triggers a change to the underlying AWS resources.
 2. The .jar used by each of the Lambdas defined in this project is updated, meaning that all future Lambda invocations will run code which contains the new changes.
 
-It's important to be aware that some Step Function executions may still be in progress when new changes are deployed. This means that all changes merged to master should be backwards compatible for old executions (i.e. executions which depend on the resources from the old Cloudformation template, and the old versions of the Lambda functions).
+It's important to be aware that some Step Function executions may still be in progress when new changes are deployed. This means that all changes merged to the default branch should be backwards compatible for old executions (i.e. executions which depend on the resources from the old Cloudformation template, and the old versions of the Lambda functions).
 
 Examples of changes which could break existing executions include editing the JSON structure which is passed between two of the Lambdas, or deleting a Lambda from the Cloudformation template. In such cases, it's often necessary to split changes into two PRs. The initial PR is used to transition all future executions to use only the new code or resources, and a second PR is used to tidy up, after ensuring that all running executions are now using the new JSON structure or Step Function definition.
 
@@ -89,7 +89,7 @@ As a result of this we need to decode back to the exact type which we encoded fr
 This behaviour is illustrated through a number of tests in [CirceEncodingBehaviourSpec.](/src/test/scala/com/gu/support/workers/CirceEncodingBehaviourSpec.scala)
 
 ## Emails
-Docs on how emails are sent from this app are [here](/docs/triggered-send-in-exact-target.md)
+Docs on how emails are sent from this app are [here](/docs/triggered-send-in-exact-target.md).
 
 ## Data subject access requests
 The state machine executions of this app have been identified as a data store which we would need to include in a response to any subject

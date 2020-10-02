@@ -1,5 +1,9 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+.gu-content--new-template, .gu-content--new-template * {
+  box-sizing: content-box;
+}
+
 .gu-content--new-template {
   overflow: initial;
 

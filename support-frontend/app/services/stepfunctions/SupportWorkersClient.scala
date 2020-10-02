@@ -18,21 +18,32 @@ import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
-import io.circe.{Decoder, Encoder}
 import ophan.thrift.event.AbTest
 import org.joda.time.LocalDate
 import play.api.mvc.Call
+import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import services.stepfunctions.SupportWorkersClient._
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
+
   import codecs.CirceDecoders._
   import com.gu.support.encoding.CustomCodecs.encodeEither
   import com.gu.support.encoding.CustomCodecs.decodeEither
 
+  implicit val giftRecipientCodec: Codec[GiftRecipientRequest] = deriveCodec
+
   implicit val codec: Codec[CreateSupportWorkersRequest] = deriveCodec
+
+  case class GiftRecipientRequest(
+    title: Option[Title],
+    firstName: String,
+    lastName: String,
+    email: Option[String],
+    message: Option[String]
+  )
 }
 
 case class CreateSupportWorkersRequest(
@@ -41,10 +52,7 @@ case class CreateSupportWorkersRequest(
   lastName: String,
   billingAddress: Address,
   deliveryAddress: Option[Address],
-  titleGiftRecipient: Option[Title],
-  firstNameGiftRecipient: Option[String],
-  lastNameGiftRecipient: Option[String],
-  emailGiftRecipient: Option[String],
+  giftRecipient: Option[GiftRecipientRequest],
   product: ProductType,
   firstDeliveryDate: Option[LocalDate],
   paymentFields: Either[PaymentFields, RedemptionData],
@@ -55,7 +63,7 @@ case class CreateSupportWorkersRequest(
   email: String,
   telephoneNumber: Option[String],
   deliveryInstructions: Option[String],
-  debugInfo: Option[String] = None
+  debugInfo: Option[String]
 )
 
 object SupportWorkersClient {
@@ -105,64 +113,80 @@ class SupportWorkersClient(
     request.body.referrerAcquisitionData.copy(hostname = Some(hostname), gaClientId = gaClientId, userAgent = userAgent, ipAddress = Some(ipAddress))
   }
 
-  private def getGiftRecipient(request: CreateSupportWorkersRequest) =
-    for {
-      firstName <- request.firstNameGiftRecipient
-      lastName <- request.lastNameGiftRecipient
-    } yield GiftRecipient(
-      request.titleGiftRecipient,
-      firstName,
-      lastName,
-      request.emailGiftRecipient
-    )
-
+  private def getGiftRecipient(giftRecipient: GiftRecipientRequest, product: ProductType) =
+    product match {
+      case _: GuardianWeekly =>
+        Right(
+          GiftRecipient.WeeklyGiftRecipient(
+            giftRecipient.title,
+            giftRecipient.firstName,
+            giftRecipient.lastName,
+            giftRecipient.email
+          )
+        )
+      case _: DigitalPack =>
+        giftRecipient.email.toRight("email address is required for DS gifts").map { email =>
+          GiftRecipient.DigitalSubGiftRecipient(
+            giftRecipient.firstName,
+            giftRecipient.lastName,
+            email,
+            giftRecipient.message
+          )
+        }
+      case _ =>
+        Left(s"gifting is not supported for $product")
+    }
 
   def createSubscription(
     request: AnyAuthRequest[CreateSupportWorkersRequest],
     user: User,
     requestId: UUID
-  ): EitherT[Future, SupportWorkersError, StatusResponse] = {
+  ): EitherT[Future, String, StatusResponse] = {
     SafeLogger.info(s"$requestId: debug info ${request.body.debugInfo}")
 
-    val createPaymentMethodState = CreatePaymentMethodState(
-      requestId = requestId,
-      user = user,
-      giftRecipient = getGiftRecipient(request.body),
-      product = request.body.product,
-      paymentProvider = PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption),
-      paymentFields = request.body.paymentFields,
-      acquisitionData = Some(AcquisitionData(
-        ophanIds = request.body.ophanIds,
-        referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
-        supportAbTests = request.body.supportAbTests
-      )),
-      promoCode = request.body.promoCode,
-      firstDeliveryDate = request.body.firstDeliveryDate
-    )
-    val isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
-    underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(
-      { error =>
-        SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
-        StateMachineFailure: SupportWorkersError
-      },
-      { success =>
-        SafeLogger.info(s"[$requestId] Successfully triggered Step Function execution for ${user.id} ($success)")
-        underlying.jobIdFromArn(success.arn).map { jobId =>
-          StatusResponse(
-            status = Status.Pending,
-            trackingUri = supportUrl + statusCall(jobId).url
-          )
-        } getOrElse {
-          SafeLogger.error(scrub"[$requestId] Failed to parse ${success.arn} to a jobId after triggering Step Function execution for ${user.id} $request")
-          StatusResponse(
-            status = Status.Failure,
-            trackingUri = "",
-            failureReason = Some(CheckoutFailureReasons.Unknown)
-          )
-        }
+    for {
+      giftRecipient <- EitherT.fromEither[Future](request.body.giftRecipient.map(getGiftRecipient(_, request.body.product)).sequence)
+      createPaymentMethodState = CreatePaymentMethodState(
+        requestId = requestId,
+        user = user,
+        giftRecipient = giftRecipient,
+        product = request.body.product,
+        paymentProvider = PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption),
+        paymentFields = request.body.paymentFields,
+        acquisitionData = Some(AcquisitionData(
+          ophanIds = request.body.ophanIds,
+          referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
+          supportAbTests = request.body.supportAbTests
+        )),
+        promoCode = request.body.promoCode,
+        firstDeliveryDate = request.body.firstDeliveryDate
+      )
+      isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
+      executionResult <- underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(
+        { error =>
+          SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
+          StateMachineFailure.toString
+        },
+        { success =>
+          SafeLogger.info(s"[$requestId] Successfully triggered Step Function execution for ${user.id} ($success)")
+          underlying.jobIdFromArn(success.arn).map { jobId =>
+            StatusResponse(
+              status = Status.Pending,
+              trackingUri = supportUrl + statusCall(jobId).url
+            )
+          } getOrElse {
+            SafeLogger.error(scrub"[$requestId] Failed to parse ${success.arn} to a jobId after triggering Step Function execution for ${user.id} $request")
+            StatusResponse(
+              status = Status.Failure,
+              trackingUri = "",
+              failureReason = Some(CheckoutFailureReasons.Unknown)
+            )
+          }
 
-      }
-    )
+        }
+      )
+    } yield executionResult
+
   }
 
   def status(jobId: String, requestId: UUID): EitherT[Future, SupportWorkersError, StatusResponse] = {

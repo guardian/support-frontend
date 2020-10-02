@@ -6,11 +6,13 @@ import com.gu.support.encoding.Codec.deriveCodec
 case class Switches(
   oneOffPaymentMethods: PaymentMethodsSwitch,
   recurringPaymentMethods: PaymentMethodsSwitch,
+  enableDigitalSubGifting: SwitchState,
   useDotcomContactPage: Option[SwitchState],
   enableRecaptchaBackend: SwitchState,
   enableRecaptchaFrontend: SwitchState,
   experiments: Map[String, ExperimentSwitch],
-  ccpaEnabled: SwitchState
+  enableContributionsCampaign: SwitchState,
+  forceContributionsCampaign: SwitchState
 )
 
 object Switches {

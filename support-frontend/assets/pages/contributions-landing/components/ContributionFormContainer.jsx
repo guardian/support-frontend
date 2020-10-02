@@ -75,7 +75,9 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 function withProps(props: PropTypes) {
 
   const campaignSettings = getCampaignSettings();
-  const campaignCopy = campaignSettings ? campaignSettings.copy(props.tickerGoalReached) : null;
+  const campaignCopy = campaignSettings && campaignSettings.copy ?
+    campaignSettings.copy(props.tickerGoalReached) :
+    null;
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     props.setPaymentIsWaiting(true);

@@ -35,8 +35,12 @@ function StripeProviderForCountry(props: PropTypes) {
     }
   }, []);
 
+  // `options` must be set even if it's empty, otherwise we get 'Unsupported prop change on Elements' warnings
+  // in the console
+  const elementsOptions = {};
+
   return (
-    <Elements stripe={stripeObject}>
+    <Elements stripe={stripeObject} options={elementsOptions}>
       <StripeForm
         submitForm={props.submitForm}
         allErrors={props.allErrors}

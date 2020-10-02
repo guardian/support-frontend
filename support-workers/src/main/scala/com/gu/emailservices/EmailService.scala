@@ -21,7 +21,9 @@ class EmailService(contributionThanksQueueName: String)(implicit val executionCo
 
   def send(fields: EmailFields): Future[SendMessageResult] = {
     SafeLogger.info(s"Sending message to SQS queue $queueUrl")
-    val messageResult = AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, fields.payload))
+    val payload = fields.payload
+    SafeLogger.info(s"message content is: $payload")
+    val messageResult = AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, payload))
     messageResult.recover {
       case throwable =>
         SafeLogger.error(scrub"Failed to send message due to $queueUrl due to:", throwable)

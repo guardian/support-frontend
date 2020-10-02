@@ -40,9 +40,9 @@ const ContentDeliveryFaqBlock = ({
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
-      gridId="paperDeliveryFeature"
-      srcSizes={[920, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 500px"
+      gridId="printCampaignHD"
+      srcSizes={[716, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 400px"
       imgType="png"
     />
     }

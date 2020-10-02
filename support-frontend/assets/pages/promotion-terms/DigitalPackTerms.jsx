@@ -4,7 +4,6 @@ import React from 'react';
 import { formatUserDate } from 'helpers/dateConversions';
 import { digitalSubscriptionLanding } from 'helpers/routes';
 import OrderedList from 'components/list/orderedList';
-import CopyrightText from 'pages/promotion-terms/CopyrightText';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
 
@@ -18,7 +17,7 @@ type PropTypes = {
 export default function DigitalPackTerms(props: PropTypes) {
 
   const expiryCopy = props.expires ?
-    `The closing date and time of the promotion is ${formatUserDate(props.expires)}. 
+    `The closing date and time of the promotion is ${formatUserDate(props.expires)}.
     Purchases after that date and time will not be eligible for the promotion.`
     : '';
   const copy = [
@@ -51,7 +50,6 @@ export default function DigitalPackTerms(props: PropTypes) {
   return (
     <div>
       <OrderedList items={copy} />
-      <CopyrightText />
     </div>
   );
 }

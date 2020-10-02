@@ -10,7 +10,7 @@
 @import '~components/marketingConsent/marketingConsent';
 @import '~components/spreadTheWord/spreadTheWord';
 @import '~components/socialShare/socialShare';
-@import '~pages/contributions-landing/components/ContributionThankYou/ContributionThankYou';
+@import '~pages/contributions-landing/components/ContributionThankYou/old-flow/ContributionThankYou';
 @import '~pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
 
 $content-left-margin-leftCol: calc(50% - 480px);
@@ -31,15 +31,6 @@ body {
   position: relative;
   z-index: 0;
   overflow: hidden;
-}
-
-.gu-content--contribution-thankyou {
-  background: gu-colour(highlight-main);
-
-  .gu-content__main {
-    position: relative;
-    background-color: transparent;
-  }
 }
 
 .gu-content__main {

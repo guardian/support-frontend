@@ -26,10 +26,8 @@ import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { ContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
-import ContributionThankYouContainer
-  from './components/ContributionThankYou/ContributionThankYouContainer';
+import ContributionThankYou from './components/ContributionThankYou/ContributionThankYou';
 import { setUserStateActions } from './setUserStateActions';
-import ConsentBanner from 'components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
 import { FocusStyleManager } from '@guardian/src-utilities';
@@ -89,8 +87,6 @@ const setOneOffContributionCookie = () => {
 
 const campaignSettings = getCampaignSettings();
 
-const thankYouClassModifiers = ['contribution-thankyou'];
-
 const cssModifiers = campaignSettings && campaignSettings.cssModifiers ?
   campaignSettings.cssModifiers : [];
 
@@ -110,7 +106,6 @@ const contributionsLandingPage = (campaignCodeParameter: ?string) => (
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
       campaignCodeParameter={campaignCodeParameter}
     />
-    <ConsentBanner />
   </Page>
 );
 
@@ -139,13 +134,7 @@ const router = (
               setOneOffContributionCookie();
             }
             return (
-              <Page
-                classModifiers={thankYouClassModifiers}
-                header={<RoundelHeader />}
-                footer={<Footer disclaimer countryGroupId={countryGroupId} />}
-              >
-                <ContributionThankYouContainer />
-              </Page>
+              <ContributionThankYou countryGroupId={countryGroupId} />
             );
           }}
         />

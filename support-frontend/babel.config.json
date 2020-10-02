@@ -1,0 +1,31 @@
+{
+  "presets": [
+    "@babel/preset-react",
+    "@babel/preset-flow",
+    [
+      "@babel/preset-env",
+      {
+        "modules": false
+      }
+    ],
+    "@emotion/babel-preset-css-prop"
+  ],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-transform-exponentiation-operator",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-syntax-dynamic-import",
+    "babel-plugin-add-react-displayname"
+  ],
+  "sourceType": "unambiguous",
+  "env": {
+    "test": {
+      "presets": [
+        "@babel/preset-env"
+      ],
+      "plugins": [
+        "dynamic-import-node"
+      ]
+    }
+  }
+}
