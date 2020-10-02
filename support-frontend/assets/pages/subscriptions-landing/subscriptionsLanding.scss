@@ -893,12 +893,14 @@
   }
 
   @include mq($from: leftCol) {
+    left: 50px;
     img {
       width: 85%;
     }
   }
 
   @include mq($from: wide) {
+    left: 80px;
     img {
       width: 75%;
     }
