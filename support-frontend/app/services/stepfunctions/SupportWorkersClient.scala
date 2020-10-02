@@ -43,7 +43,7 @@ object CreateSupportWorkersRequest {
     lastName: String,
     email: Option[String],
     message: Option[String],
-    deliveryDate: Option[LocalDate],
+    deliveryDate: Option[LocalDate]
   )
 }
 
