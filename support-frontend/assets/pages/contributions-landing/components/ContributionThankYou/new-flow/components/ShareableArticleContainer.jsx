@@ -97,11 +97,17 @@ const headlineAndButtonsContainer = css`
 
 // Helpers //////////////////////////////////////////////////////////
 
-const facebookShareLink = (articleUrl: string) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURI(articleUrl)}`;
+const INTCMP = 'enviro_moment_2020_thankyou_share';
+const appendIntcmpAndEncodeUrl = (unencodedUrl: string) => encodeURI(`${unencodedUrl}?INTCMP=${INTCMP}`);
 
-const twitterShareLink = (articleUrl: string) => `https://twitter.com/intent/tweet?url=${encodeURI(articleUrl)}`;
+const facebookShareLink = (articleUrl: string) =>
+  `https://www.facebook.com/sharer/sharer.php?u=${appendIntcmpAndEncodeUrl(articleUrl)}`;
 
-const emailShareLink = (articleUrl: string) => `mailto:?body=${encodeURI(articleUrl)}`;
+const twitterShareLink = (articleUrl: string) =>
+  `https://twitter.com/intent/tweet?url=${appendIntcmpAndEncodeUrl(articleUrl)}`;
+
+const emailShareLink = (articleUrl: string) =>
+  `mailto:?body=${appendIntcmpAndEncodeUrl(articleUrl)}`;
 
 const shareButtonsContainer = (styles: string, articleUrl: string) => (
   <div css={styles}>
