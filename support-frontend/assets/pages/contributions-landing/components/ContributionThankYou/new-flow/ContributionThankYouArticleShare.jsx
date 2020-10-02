@@ -24,6 +24,7 @@ const ContributionThankYouArticleShare = () => {
     <ActionBody>
       <p>{copy}</p>
       {articleData && articleData.map(article => (<ShareableArticleContainer
+        key={article.articleUrl}
         articleUrl={article.articleUrl}
         headline={article.headline}
         imageUrl={article.image.imageUrl}
