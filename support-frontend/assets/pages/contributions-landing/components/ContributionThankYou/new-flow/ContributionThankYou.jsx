@@ -193,21 +193,21 @@ const ContributionThankYou = ({
     signUpAction,
     signInAction,
     marketingConsentAction,
-    socialShareAction,
     articleShareAction,
     supportReminderAction,
     surveyAction,
+    socialShareAction,
   ];
 
   const ausActions = [
     signUpAction,
     signInAction,
     marketingConsentAction,
-    socialShareAction,
     articleShareAction,
     supportReminderAction,
     surveyAction,
     ausMapAction,
+    socialShareAction,
   ];
 
   const actions = countryId === 'AU' ? ausActions : defaultActions;
