@@ -13,7 +13,7 @@ object RedemptionCode {
     // make sure no one can inject anything bad
     val validChars = List('A' -> 'Z', '0' -> '9', '-' -> '-')
     val validCharsSet = validChars.flatMap { case (from, to) => (from to to) }.toSet
-    if (upper.length == length && upper.forall(validCharsSet.contains))
+    if (upper.forall(validCharsSet.contains))
       Right(new RedemptionCode(upper))
     else
       Left(s"redemption code must only include A-Z, 0-9 and '-'")
