@@ -11,7 +11,7 @@
   padding: 5px 20px 10px 10px;
   border-top: 1px solid gu-colour(neutral-86);
   border-bottom: 1px solid gu-colour(neutral-86);
-  width: calc(100% - 50px);
+  width: 100%;
 
 
   @include mq($from: phablet) {
