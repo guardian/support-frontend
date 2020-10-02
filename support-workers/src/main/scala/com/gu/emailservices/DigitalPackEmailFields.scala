@@ -138,7 +138,7 @@ class DigitalPackEmailFields(
         for {
           giftRecipient <- maybeGiftRecipient.toRight("Gift redemption must have a gift recipient")
           emails <- List(
-            giftPurchaserConfirmation(paymentInfo.paymentMethod, giftRecipient),
+            giftPurchaserConfirmation(paymentInfo, giftRecipient),
             giftRecipientNotification(giftRecipient)
           ).sequence
         } yield emails
@@ -157,29 +157,29 @@ class DigitalPackEmailFields(
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = user.firstName,
       gift_personal_message = giftRecipient.message,
-      gift_code = "gift_code"
+      gift_code = "gift code placeholder", // TODO need to get CreateZuoraSubscription to pass it on
     ))
 
-  private def giftPurchaserConfirmation(pm: PaymentMethod, giftRecipient: GiftRecipient.DigitalSubGiftRecipient) =
+  private def giftPurchaserConfirmation(paymentMethodWithSchedule: PaymentMethodWithSchedule, giftRecipient: GiftRecipient.DigitalSubGiftRecipient) =
     wrap("digipack-gift-purchase", GifterPurchaseAttributes(
       gifter_first_name = user.firstName,
       gifter_last_name = user.lastName,
-      gift_recipient_first_name = "gift recipient first name placeholder",
-      gift_recipient_last_name = "gift recipient last name placeholder",
-      gift_recipient_email = "gift recipient email placeholder",
-      gift_personal_message = "gift personal message placeholder",
-      gift_code = "gift code placeholder",
+      gift_recipient_first_name = giftRecipient.firstName,
+      gift_recipient_last_name = giftRecipient.lastName,
+      gift_recipient_email = giftRecipient.email,
+      gift_personal_message = giftRecipient.message.getOrElse(""),
+      gift_code = "gift code placeholder", // TODO need to get CreateZuoraSubscription to pass it on
       gift_delivery_date = formatDate(giftRecipient.deliveryDate),
-      subscription_details = "subscription details placeholder",
-      date_of_first_payment = "date_of_first_payment",
-      paymentAttributes = paymentFields(pm, directDebitMandateId)
+      subscription_details = SubscriptionEmailFieldHelpers.describe(paymentMethodWithSchedule.paymentSchedule, billingPeriod, currency, promotion),
+      date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).date),
+      paymentAttributes = paymentFields(paymentMethodWithSchedule.paymentMethod, directDebitMandateId)
     ))
 
   private def giftRedemption =
     wrap("digipack-gift-redemption", GifteeRedemptionAttributes(
       gift_recipient_first_name = user.firstName,
-      subscription_details = "subscription_details placeholder",
-      gift_start_date = "gift start date placeholder",
+      subscription_details = billingPeriod.monthsInPeriod + " month digital subscription",
+      gift_start_date = "gift start date placeholder", // TODO need to pull it through from when we create the sub
       gift_recipient_email = user.primaryEmailAddress
     ))
 
