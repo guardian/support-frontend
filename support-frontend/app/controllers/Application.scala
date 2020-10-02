@@ -142,15 +142,14 @@ class Application(
   }
 
   private def shareImageUrl(settings: AllSettings): String = {
-    val ausMomentEnabled =
+    val contributionsMomentEnabled =
       settings
         .switches
-        .experiments
-        .get("ausMomentEnabled")
-        .exists(switch => switch.state.isOn)
+        .enableContributionsCampaign
+        .isOn
 
-      if (ausMomentEnabled)
-        "https://i.guim.co.uk/img/media/32cd8c7234c391a7b96c8e91945af9b2e9711631/0_0_1000_525/1000.jpg?quality=85&s=5d69b3ed574a58361e1bce4f4a121b45"
+      if (contributionsMomentEnabled)
+        "https://i.guim.co.uk/img/media/c3dad1ffd56077f9e8fe116e54c15e7fd468e244/0_0_2000_1050/1000.png?quality=85&s=bf3b27bc7f6abcb0ebadb791de8d9179"
       else
         "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
   }
@@ -218,7 +217,7 @@ class Application(
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
     )()).withSettingsSurrogateKey
   }
-  
+
   val ausMomentMapSocialImageUrl =
     "https://i.guim.co.uk/img/media/84bf6a5c9535827ff4c307941cf3147fb2fb63c8/0_0_2000_1050/1000.png?width=1000&quality=85&s=2f7dc4ee733fee7117358fbbb1fa057f"
 

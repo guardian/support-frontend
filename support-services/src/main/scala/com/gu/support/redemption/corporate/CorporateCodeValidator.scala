@@ -1,19 +1,15 @@
 package com.gu.support.redemption.corporate
 
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound, CodeStatus, ValidCorporateCode}
 import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemptions.RedemptionCode
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-object GetCodeStatus {
+object CorporateCodeValidator {
 
   case class CorporateId(corporateIdString: String) extends AnyVal
-
-  sealed abstract class RedemptionInvalid(val clientCode: String)
-  case object NoSuchCode extends RedemptionInvalid("NO_SUCH_CODE")
-  case object CodeAlreadyUsed extends RedemptionInvalid("CODE_ALREADY_USED")
-  case object InvalidReaderType extends RedemptionInvalid("INVALID_READER_TYPE")
 
   private def statusFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, RedemptionTable.AvailableField] =
     for {
@@ -33,15 +29,15 @@ object GetCodeStatus {
       }
     } yield corporateId
 
-  def withDynamoLookup(dynamoLookup: DynamoLookup): GetCodeStatus = new GetCodeStatus(dynamoLookup)
+  def withDynamoLookup(dynamoLookup: DynamoLookup): CorporateCodeValidator = new CorporateCodeValidator(dynamoLookup)
 
 }
 
-class GetCodeStatus(dynamoLookup: DynamoLookup) extends WithLogging {
+class CorporateCodeValidator(dynamoLookup: DynamoLookup) extends WithLogging {
 
-  import GetCodeStatus._
+  import CorporateCodeValidator._
 
-  def apply(code: RedemptionCode)(implicit ec: ExecutionContext): Future[Either[RedemptionInvalid, CorporateId]] =
+  def getStatus(code: RedemptionCode)(implicit ec: ExecutionContext): Future[CodeStatus] =
     (for {
       maybeAttributes <- dynamoLookup.lookup(code.value)
       status <- FlattenErrors(maybeAttributes.map { attributes =>
@@ -51,9 +47,9 @@ class GetCodeStatus(dynamoLookup: DynamoLookup) extends WithLogging {
         } yield (available, corporateId)
       })
     } yield status match {
-      case None => Left(NoSuchCode)
-      case Some((RedemptionTable.AvailableField.CodeIsAvailable, corporateId)) => Right(corporateId)
-      case Some((RedemptionTable.AvailableField.CodeIsUsed, _)) => Left(CodeAlreadyUsed)
+      case None => CodeNotFound
+      case Some((RedemptionTable.AvailableField.CodeIsAvailable, corporateId)) => ValidCorporateCode(corporateId)
+      case Some((RedemptionTable.AvailableField.CodeIsUsed, _)) => CodeAlreadyUsed
     }).withLoggingAsync(s"look up $code")
 
 }

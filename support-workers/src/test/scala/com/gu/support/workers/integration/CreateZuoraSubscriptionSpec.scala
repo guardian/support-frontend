@@ -7,8 +7,9 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.catalog.{CatalogService, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
+import com.gu.support.redemption.CodeAlreadyUsed
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.support.redemption.corporate.{DynamoTableAsync, GetCodeStatus, RedemptionTable, SetCodeStatus}
+import com.gu.support.redemption.corporate.{DynamoTableAsync, CorporateCodeValidator, RedemptionTable, SetCodeStatus}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
@@ -20,7 +21,7 @@ import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.ZuoraService
+import com.gu.zuora.{ZuoraGiftService, ZuoraService}
 import io.circe.parser.parse
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
@@ -48,13 +49,13 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Digital Pack corporate subscription" in {
     val dynamoTableAsync: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
     val setCodeStatus = SetCodeStatus.withDynamoLookup(dynamoTableAsync)
-    val getCodeStatus = GetCodeStatus.withDynamoLookup(dynamoTableAsync)
+    val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoTableAsync)
     val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE").right.get
     for {
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
       _ <- createZuoraHelper.createSubscription(createDigiPackCorporateSubscriptionJson)
-      r <- getCodeStatus(mutableCode).map {
-        _ should be(Left(GetCodeStatus.CodeAlreadyUsed))
+      r <- codeValidator.getStatus(mutableCode).map {
+        _ should be(CodeAlreadyUsed)
       }
     } yield r
   }
@@ -113,6 +114,8 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   val realZuoraService = new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
 
+  val realZuoraGiftService = new ZuoraGiftService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
+
   val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())
 
   val realRedemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(Stages.DEV))
@@ -136,24 +139,6 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
     when(mockZuora.subscribe(any[SubscribeRequest]))
       .thenAnswer((invocation: InvocationOnMock) =>
         realZuoraService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
-    when(mockZuora.getSubscriptionFromRedemptionCode(any[RedemptionCode]))
-      .thenAnswer((invocation: InvocationOnMock) =>
-        realZuoraService.getSubscriptionFromRedemptionCode(
-          invocation.getArguments.head.asInstanceOf[RedemptionCode]
-        ))
-    when(mockZuora.getSubscriptionById(any[String]))
-      .thenAnswer((invocation: InvocationOnMock) =>
-        realZuoraService.getSubscriptionById(
-          invocation.getArguments.head.asInstanceOf[String]
-        ))
-    when(mockZuora.updateSubscriptionRedemptionData(any[String], any[String], any[String], any[Int]))
-      .thenAnswer((invocation: InvocationOnMock) =>
-        realZuoraService.updateSubscriptionRedemptionData(
-          invocation.getArgument(0).asInstanceOf[String],
-          invocation.getArgument(1).asInstanceOf[String],
-          invocation.getArgument(2).asInstanceOf[String],
-          invocation.getArgument(3).asInstanceOf[Int])
-      )
 
     when(mockZuora.config).thenReturn(realZuoraService.config)
     mockZuora
@@ -161,6 +146,7 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   def mockServiceProvider(giftCodeGenerator: GiftCodeGeneratorService) = mockServices[Any](
     (s => s.zuoraService, mockZuoraService),
+    (s => s.zuoraGiftService, realZuoraGiftService),
     (s => s.promotionService, realPromotionService),
     (s => s.redemptionService, realRedemptionService),
     (s => s.config, realConfig),

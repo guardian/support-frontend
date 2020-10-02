@@ -6,6 +6,8 @@ import com.gu.support.encoding.Codec
 import io.circe.{Decoder, Encoder}
 
 object RedemptionCode {
+  val length = 13
+
   def apply(value: String): Either[String, RedemptionCode] = {
     val upper = value.toUpperCase(Locale.UK)
     // make sure no one can inject anything bad

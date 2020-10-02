@@ -21,6 +21,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { createSubscription } from 'pages/subscriptions-redemption/api';
 import type { Option } from 'helpers/types/option';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { ReaderType } from 'helpers/productPrice/readerType';
 
 // ----- Types ----- //
 
@@ -30,6 +31,7 @@ type PropTypes = {|
   thankYouContentPending: Node,
   thankYouContent: Node,
   userCode: string,
+  readerType: Option<ReaderType>,
   user: User,
   currencyId: IsoCurrency,
   countryId: IsoCountry,
@@ -44,6 +46,7 @@ function mapStateToProps(state: RedemptionPageState) {
   return {
     stage: state.page.stage,
     userCode: state.page.userCode,
+    readerType: state.page.readerType,
     user: state.page.user,
     currencyId: state.common.internationalisation.currencyId,
     countryId: state.common.internationalisation.countryId,
@@ -55,6 +58,7 @@ function mapStateToProps(state: RedemptionPageState) {
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   const createSub = (props: PropTypes) => createSubscription(
     props.userCode,
+    props.readerType,
     props.user,
     props.currencyId,
     props.countryId,

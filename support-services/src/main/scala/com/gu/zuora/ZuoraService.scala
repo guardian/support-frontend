@@ -6,6 +6,7 @@ import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.ZuoraConfig
 import com.gu.support.redemptions.RedemptionCode
+import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{Day, PreviewSubscribeRequest, QueryData, SubscribeRequest, UpdateRedemptionDataRequest}
@@ -87,24 +88,6 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
       pmId <- OptionT(getDefaultPaymentMethodId(accountNumber))
       ddId <- OptionT(getDirectDebitMandateId(pmId))
     } yield ddId).value
-  }
-
-  def getSubscriptionFromRedemptionCode(redemptionCode: RedemptionCode): Future[SubscriptionRedemptionQueryResponse] = {
-    val queryData = QueryData(
-      s"""
-        select id, contractEffectiveDate, CreatedRequestId__c, GifteeIdentityId__c
-        from subscription
-        where RedemptionCode__c = '${redemptionCode.value}' and status = 'Active'"""
-    )
-    postJson[SubscriptionRedemptionQueryResponse](s"action/query", queryData.asJson, authHeaders)
-  }
-
-  def getSubscriptionById(id: String): Future[Subscription] =
-    get[Subscription](s"subscriptions/${id}", authHeaders)
-
-  def updateSubscriptionRedemptionData(subscriptionId: String, requestId: String, gifteeIdentityId: String, currentTerm: Int): Future[UpdateRedemptionDataResponse] = {
-    val requestData = UpdateRedemptionDataRequest(requestId, gifteeIdentityId, currentTerm, Day)
-    putJson[UpdateRedemptionDataResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
   }
 
   override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =
