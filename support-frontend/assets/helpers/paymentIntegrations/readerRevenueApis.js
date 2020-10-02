@@ -121,7 +121,7 @@ export type RegularPaymentRequest = {|
   telephoneNumber: Option<string>,
   promoCode?: Option<string>,
   deliveryInstructions?: Option<string>,
-  debugInfo?: string,
+  debugInfo: string,
 |};
 
 export type StripePaymentIntentAuthorisation = {|

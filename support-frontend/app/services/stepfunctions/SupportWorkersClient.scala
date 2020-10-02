@@ -63,7 +63,7 @@ case class CreateSupportWorkersRequest(
   email: String,
   telephoneNumber: Option[String],
   deliveryInstructions: Option[String],
-  debugInfo: Option[String] = None
+  debugInfo: Option[String]
 )
 
 object SupportWorkersClient {
@@ -133,6 +133,8 @@ class SupportWorkersClient(
             giftRecipient.message
           )
         }
+      case _ =>
+        Left(s"gifting is not supported for $product")
     }
 
   def createSubscription(
