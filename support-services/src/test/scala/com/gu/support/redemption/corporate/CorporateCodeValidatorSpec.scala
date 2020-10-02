@@ -13,91 +13,91 @@ class CorporateCodeValidatorSpec extends AsyncFlatSpec with Matchers {
 
   "codeValidator" should "handle an available code" in {
     val codeValidator = CorporateCodeValidator.withDynamoLookup {
-      case "code" => Future.successful(Some(Map(
+      case "test-code-123" => Future.successful(Some(Map(
         "available" -> DynamoBoolean(true),
         "corporateId" -> DynamoString("1")
       )))
     }
-    codeValidator.getStatus(RedemptionCode("code").right.get).map {
+    codeValidator.getStatus(RedemptionCode("test-code-123").right.get).map {
       _ should be(ValidCorporateCode(CorporateId("1")))
     }
   }
 
   it should "handle an NON available code" in {
     val codeValidator = CorporateCodeValidator.withDynamoLookup {
-      case "code" => Future.successful(Some(Map(
+      case "test-code-123" => Future.successful(Some(Map(
         "available" -> DynamoBoolean(false),
         "corporateId" -> DynamoString("1")
       )))
     }
-    codeValidator.getStatus(RedemptionCode("code").right.get).map {
+    codeValidator.getStatus(RedemptionCode("test-code-123").right.get).map {
       _ should be(CodeAlreadyUsed)
     }
   }
 
   it should "handle an NON EXISTENT code" in {
     val codeValidator = CorporateCodeValidator.withDynamoLookup {
-      case "code" => Future.successful(None)
+      case "test-code-123" => Future.successful(None)
     }
-    codeValidator.getStatus(RedemptionCode("code").right.get).map {
+    codeValidator.getStatus(RedemptionCode("test-code-123").right.get).map {
       _ should be(CodeNotFound)
     }
   }
 
   it should "handle an code with invalid available type " in {
     val codeValidator = CorporateCodeValidator.withDynamoLookup {
-      case "code" => Future.successful(Some(Map(
+      case "test-code-123" => Future.successful(Some(Map(
         "available" -> DynamoString("haha not a boolean"),
         "corporateId" -> DynamoString("1")
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.getStatus(RedemptionCode("code").right.get)
+      codeValidator.getStatus(RedemptionCode("test-code-123").right.get)
     }
   }
 
   it should "handle an code with invalid corporate id type " in {
     val codeValidator = CorporateCodeValidator.withDynamoLookup {
-      case "code" => Future.successful(Some(Map(
+      case "test-code-123" => Future.successful(Some(Map(
         "available" -> DynamoBoolean(true),
         "corporateId" -> DynamoBoolean(false)
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.getStatus(RedemptionCode("code").right.get)
+      codeValidator.getStatus(RedemptionCode("test-code-123").right.get)
     }
   }
 
   it should "handle a missing attribute code - available" in {
     val codeValidator = CorporateCodeValidator.withDynamoLookup {
-      case "code" => Future.successful(Some(Map(
+      case "test-code-123" => Future.successful(Some(Map(
         "asdfnqweoidnsdknfnakndaknskansdknasdaksnd" -> DynamoBoolean(true),
         "corporateId" -> DynamoString("1")
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.getStatus(RedemptionCode("code").right.get)
+      codeValidator.getStatus(RedemptionCode("test-code-123").right.get)
     }
   }
 
   it should "handle a missing attribute code - corporate id" in {
     val codeValidator = CorporateCodeValidator.withDynamoLookup {
-      case "code" => Future.successful(Some(Map(
+      case "test-code-123" => Future.successful(Some(Map(
         "asdfnqweoidnsdknfnakndaknskansdknasdaksnd" -> DynamoString("1"),
         "available" -> DynamoBoolean(true)
       )))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.getStatus(RedemptionCode("code").right.get)
+      codeValidator.getStatus(RedemptionCode("test-code-123").right.get)
     }
   }
 
   it should "be sure to fail if there is an overall dynamo failure" in {
     val codeValidator = CorporateCodeValidator.withDynamoLookup {
-      case "code" => Future.failed(new RuntimeException("test exception"))
+      case "test-code-123" => Future.failed(new RuntimeException("test exception"))
     }
     recoverToSucceededIf[RuntimeException] {
-      codeValidator.getStatus(RedemptionCode("code").right.get)
+      codeValidator.getStatus(RedemptionCode("test-code-123").right.get)
     }
   }
 

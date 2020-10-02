@@ -50,7 +50,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     val dynamoTableAsync: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
     val setCodeStatus = SetCodeStatus.withDynamoLookup(dynamoTableAsync)
     val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoTableAsync)
-    val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE").right.get
+    val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE").right.get //TODO: RB make this work
     for {
       _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
       _ <- createZuoraHelper.createSubscription(createDigiPackCorporateSubscriptionJson)

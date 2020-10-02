@@ -42,7 +42,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           termType = "TERMED",
           readerType = ReaderType.Corporate,
           promoCode = None,
-          redemptionCode = Some("code"),
+          redemptionCode = Some("code-12345678"),
           corporateAccountId = Some("1")
         )
       )
@@ -98,9 +98,9 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionRedemption(
-      RedemptionData(RedemptionCode("code").right.get),
+      RedemptionData(RedemptionCode("code-12345678").right.get),
       new CorporateCodeValidator({
-        case "code" => Future.successful(Some(Map(
+        case "code-12345678" => Future.successful(Some(Map(
           "available" -> DynamoLookup.DynamoBoolean(true),
           "corporateId" -> DynamoLookup.DynamoString("1")
         )))
@@ -131,9 +131,9 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val threeMonthGiftRedemption: Future[Either[PromoError, InvalidCode]] = DigitalSubscriptionBuilder.build(
     DigitalPack(GBP, Quarterly, Gift),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SubscriptionRedemption(RedemptionData(RedemptionCode("any-code").right.get),
+    SubscriptionRedemption(RedemptionData(RedemptionCode("code-12345678").right.get),
       new CorporateCodeValidator({
-        case "code" => Future.successful(Some(Map(
+        case "code-12345678" => Future.successful(Some(Map(
           "available" -> DynamoLookup.DynamoBoolean(true),
           "corporateId" -> DynamoLookup.DynamoString("1")
         )))

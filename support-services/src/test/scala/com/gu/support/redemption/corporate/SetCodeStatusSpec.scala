@@ -11,31 +11,31 @@ class SetCodeStatusSpec extends AsyncFlatSpec with Matchers {
 
   "setCodeStatus" should "mark a code as used" in {
     val setCodeStatus = SetCodeStatus.withDynamoLookup {
-      case ("code", DynamoFieldUpdate("available", false)) => Future.successful(())
+      case ("test-code-123", DynamoFieldUpdate("available", false)) => Future.successful(())
       case _ => Future.failed(new Throwable)
     }
-    setCodeStatus(RedemptionCode("code").right.get, RedemptionTable.AvailableField.CodeIsUsed).map {
+    setCodeStatus(RedemptionCode("test-code-123").right.get, RedemptionTable.AvailableField.CodeIsUsed).map {
       _ should be(())
     }
   }
 
   it should "mark a code as available" in {
     val setCodeStatus = SetCodeStatus.withDynamoLookup {
-      case ("code", DynamoFieldUpdate("available", true)) => Future.successful(())
+      case ("test-code-123", DynamoFieldUpdate("available", true)) => Future.successful(())
       case _ => Future.failed(new Throwable)
     }
-    setCodeStatus(RedemptionCode("code").right.get, RedemptionTable.AvailableField.CodeIsAvailable).map {
+    setCodeStatus(RedemptionCode("test-code-123").right.get, RedemptionTable.AvailableField.CodeIsAvailable).map {
       _ should be(())
     }
   }
 
   it should "be sure to fail if there is an overall dynamo failure" in {
     val setCodeStatus = SetCodeStatus.withDynamoLookup {
-      case ("code", DynamoFieldUpdate("available", false)) => Future.failed(new RuntimeException("test exception"))
+      case ("test-code-123", DynamoFieldUpdate("available", false)) => Future.failed(new RuntimeException("test exception"))
       case _ => Future.failed(new Throwable)
     }
     recoverToSucceededIf[RuntimeException] {
-      setCodeStatus(RedemptionCode("code").right.get, RedemptionTable.AvailableField.CodeIsUsed)
+      setCodeStatus(RedemptionCode("test-code-123").right.get, RedemptionTable.AvailableField.CodeIsUsed)
     }
   }
 

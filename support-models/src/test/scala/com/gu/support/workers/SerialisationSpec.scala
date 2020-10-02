@@ -46,7 +46,7 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson(Annual))
     testDecoding[CreateZuoraSubscriptionState](createDigiPackZuoraSubscriptionJson)
     testDecoding[CreateZuoraSubscriptionState](createCorporateDigiPackZuoraSubscriptionJson,
-      state => state.paymentMethod.right.value.redemptionCode.value shouldBe "fakecode"
+      state => state.paymentMethod.right.value.redemptionCode.value shouldBe "fake-code-123"
     )
   }
 
