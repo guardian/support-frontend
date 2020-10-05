@@ -111,7 +111,7 @@ const appImage = (
 type ProductCardPropTypes = {
   title: string,
   subtitle: string,
-  shortSubTitle: string | null,
+  shortSubTitle?: string,
   image: Node,
   second: boolean,
 }
@@ -123,11 +123,15 @@ const ProductCard = ({
     <h2 className="product-block__item__title">{title}</h2>
     <p className="product-block__item__subtitle">
       <span className={`product-block__item__subtitle--desktop${second ? '--second' : ''}`}>{subtitle}</span>
-      {!second && <span className="product-block__item__subtitle--mobile">{shortSubTitle}</span>}
+      {!second && shortSubTitle && <span className="product-block__item__subtitle--mobile">{shortSubTitle}</span>}
     </p>
     <span className={`product-block__item__image${second ? '--second' : '--first-row'}`}>{image}</span>
   </section>
 );
+
+ProductCard.defaultProps = {
+  shortSubTitle: '',
+};
 
 type StateTypes = {
   showDropDownDaily: boolean,
@@ -202,7 +206,6 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <ProductCard
             title="Premium access to The Guardian Live app"
             subtitle="Live news, as it happens"
-            shortSubTitle={null}
             image={appImage}
             second
           />
