@@ -9,7 +9,7 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { from, between, until } from '@guardian/src-foundations/mq';
+import { from, between, until, breakpoints } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
@@ -33,15 +33,19 @@ const container = css`
 
   ${from.tablet} {
     background: none;
-    max-width: 740px;
+    max-width: ${breakpoints.tablet}px;
   }
 
   ${from.desktop} {
-    max-width: 980px;
+    max-width: ${breakpoints.desktop}px;
+  }
+
+  ${from.leftCol} {
+    max-width: ${breakpoints.leftCol}px;
   }
 
   ${from.wide} {
-    max-width: 1300px;
+    max-width: ${breakpoints.wide}px;
   }
 `;
 
