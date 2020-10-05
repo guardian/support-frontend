@@ -165,7 +165,7 @@ object SendDigitalPackGiftPurchaseEmails extends App {
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))
     )),
     ReaderType.Gift,
-    Some(GiftRecipient.DigitalSubGiftRecipient("first", "last", addressToSendTo, Some("gift message")))
+    Some(GiftRecipient.DigitalSubGiftRecipient("first", "last", addressToSendTo, Some("gift message"), new LocalDate(2020, 10, 2)))
   ))
 
 }

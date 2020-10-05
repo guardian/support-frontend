@@ -138,7 +138,7 @@ class DigitalPackEmailFields(
         for {
           giftRecipient <- maybeGiftRecipient.toRight("Gift redemption must have a gift recipient")
           emails <- List(
-            giftPurchaserConfirmation(paymentInfo.paymentMethod),
+            giftPurchaserConfirmation(paymentInfo.paymentMethod, giftRecipient),
             giftRecipientNotification(giftRecipient)
           ).sequence
         } yield emails
@@ -160,7 +160,7 @@ class DigitalPackEmailFields(
       gift_code = "gift_code"
     ))
 
-  private def giftPurchaserConfirmation(pm: PaymentMethod) =
+  private def giftPurchaserConfirmation(pm: PaymentMethod, giftRecipient: GiftRecipient.DigitalSubGiftRecipient) =
     wrap("digipack-gift-purchase", GifterPurchaseAttributes(
       gifter_first_name = user.firstName,
       gifter_last_name = user.lastName,
@@ -169,7 +169,7 @@ class DigitalPackEmailFields(
       gift_recipient_email = "gift recipient email placeholder",
       gift_personal_message = "gift personal message placeholder",
       gift_code = "gift code placeholder",
-      gift_delivery_date = "gift delivery date placeholder",
+      gift_delivery_date = formatDate(giftRecipient.deliveryDate),
       subscription_details = "subscription details placeholder",
       date_of_first_payment = "date_of_first_payment",
       paymentAttributes = paymentFields(pm, directDebitMandateId)

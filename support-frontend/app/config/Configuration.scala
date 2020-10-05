@@ -52,8 +52,9 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val recaptchaConfigProvider = RecaptchaConfigProvider(config, stage)
 
-  lazy val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
+  lazy val capiKey = config.getString("capi-key")
 
+  lazy val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
 }
 
 object Configuration {
