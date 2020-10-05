@@ -14,9 +14,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object ArticleShare {
   val articleIds = List(
-    "environment/2019/oct/16/today-we-pledge-to-give-the-climate-crisis-the-attention-it-demands",
-    "environment/2019/oct/16/guardian-language-changes-climate-environment",
-    "environment/2019/oct/17/guardian-editors-climate-emergency-pledge"
+    "ng-interactive/2020/oct/05/the-guardian-climate-pledge-2020-environment-emergency-carbon-emissions",
+    "environment/2020/oct/05/the-guardians-climate-promise-we-will-keep-raising-the-alarm",
+    "environment/2020/oct/05/our-world-is-facing-irreversible-destruction-and-still-theres-no-urgency-in-australian-climate-policy"
   )
 }
 
