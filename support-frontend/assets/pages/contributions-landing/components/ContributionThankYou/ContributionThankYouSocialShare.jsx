@@ -12,15 +12,15 @@ import {
   getTwitterShareLink,
   getLinkedInShareLink,
   getEmailShareLink,
-} from '../utils/social';
+} from './utils/social';
 import {
   OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
   OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
   OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
   OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
-} from '../utils/ophan';
+} from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { generateReferralCode } from '../../../../../helpers/campaignReferralCodes';
+import { generateReferralCode } from '../../../../helpers/campaignReferralCodes';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 
