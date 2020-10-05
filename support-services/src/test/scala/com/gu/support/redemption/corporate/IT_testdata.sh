@@ -34,7 +34,7 @@ function create {
 
 create 'ITTEST- !\"#$%&'"'"'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
 create 'ITTEST-MUTABLE- !\"#$%&'"'"'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
-create 'ITTEST-AVAILABLE'
-create 'ITTEST-USED'
-#create 'ITTEST-MISSING'
-create 'ITTEST-MUTABLE'
+create 'it-available1'
+create 'it-test-used1'
+#create 'it-missing123'
+create 'it-mutable123'

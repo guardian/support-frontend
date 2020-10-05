@@ -15,19 +15,19 @@ class CorporateCodeValidatorITSpec extends AsyncFlatSpec with Matchers {
     CorporateCodeValidator.withDynamoLookup(RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX))
 
   "codeValidator" should "handle an available code" in {
-    codeValidator.getStatus(RedemptionCode("ITTEST-AVAILABLE").right.get).map {
+    codeValidator.getStatus(RedemptionCode("it-available1").right.get).map {
       _ should be(ValidCorporateCode(CorporateId("1")))
     }
   }
 
   it should "handle an NOT available code" in {
-    codeValidator.getStatus(RedemptionCode("ITTEST-USED").right.get).map {
+    codeValidator.getStatus(RedemptionCode("it-test-used1").right.get).map {
       _ should be(CodeAlreadyUsed)
     }
   }
 
   it should "handle an NOT valid code" in {
-    codeValidator.getStatus(RedemptionCode("ITTEST-MISSING").right.get).map {
+    codeValidator.getStatus(RedemptionCode("it-missing123").right.get).map {
       _ should be(CodeNotFound)
     }
   }
