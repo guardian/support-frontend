@@ -109,7 +109,8 @@ export const imageCatalogue: {
   printCampaign2020: 'e50943f03b58caf6fde78d81eb65c92c048701c9/1844_0_1674_1006',
   printCampaignHero: 'fff86e98dbe83b36892baf7942f30fd3bcbcaee6/286_215_714_285',
   printCampaigniMovo: '3cca8e05f3253f5a14329429ec3f6f139f84929a/0_21_562_337',
-  printCampaignHD: 'c482b2fbe5f2c2af01d54cc1c8d47a6dd626eb1f/0_0_750_554',
+  printCampaignHDiMovo: 'c482b2fbe5f2c2af01d54cc1c8d47a6dd626eb1f/0_0_750_554',
+  printCampaignHD: '817936f0d1a2755c778b523b5ac5daa2d2f27449/10_0_716_694',
   printCheckoutiMovo: '15677cf8f82a5690bec39bf73b2c098c8f79b24f/15_0_667_400',
 };
 
