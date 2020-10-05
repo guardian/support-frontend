@@ -3,14 +3,16 @@ package utils
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers._
+import com.gu.support.workers.{GiftRecipient, _}
+import com.gu.support.zuora.api.ReaderType
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.LocalDate
 import services.stepfunctions.CreateSupportWorkersRequest
+import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 
 object CheckoutValidationRules {
   def validatorFor(productType: ProductType): CreateSupportWorkersRequest => Boolean = productType match {
-    case _: DigitalPack => DigitalPackValidation.passes
+    case d: DigitalPack => DigitalPackValidation.passes(d)
     case _: Paper => PaperValidation.passes
     case _ => PaidProductValidation.passes
   }
@@ -89,13 +91,13 @@ object DigitalPackValidation {
 
   import AddressAndCurrencyValidationRules._
 
-  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
+  def passes(d: DigitalPack)(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
     import createSupportWorkersRequest._
     import createSupportWorkersRequest.product._
     import createSupportWorkersRequest.billingAddress._
 
 
-    def isValidCorporateSub(redemptionData: RedemptionData) =
+    def isValidRedemption =
       SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
         hasStateIfRequired(country, state)
 
@@ -107,10 +109,17 @@ object DigitalPackValidation {
         currencyIsSupportedForCountry(country, currency) &&
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
-    paymentFields.fold(
-      paymentFields => isValidPaidSub(paymentFields),
-      redemptionData => isValidCorporateSub(redemptionData)
-    )
+    val Purchase = Left
+    type Redemption[A, B] = Right[A, B]
+
+    (paymentFields, d.readerType, createSupportWorkersRequest.giftRecipient) match {
+      case (Purchase(paymentFields), ReaderType.Direct, None) => isValidPaidSub(paymentFields)
+      case (Purchase(paymentFields), ReaderType.Gift, Some(GiftRecipientRequest(_, _, _, Some(_), _, _))) =>
+        isValidPaidSub(paymentFields)
+      case (_: Redemption[_, _], ReaderType.Corporate, None) => isValidRedemption
+      case (_: Redemption[_, _], ReaderType.Gift, None) => isValidRedemption
+      case _ => false
+    }
   }
 }
 

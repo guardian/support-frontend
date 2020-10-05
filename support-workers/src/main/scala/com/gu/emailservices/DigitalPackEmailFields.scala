@@ -102,7 +102,7 @@ object DigitalSubscriptionEmailAttributes {
 
   case class GifteeNotificationAttributes(
     gifter_first_name: String,
-    gift_personal_message: String,
+    gift_personal_message: Option[String],
     gift_code: String,
   ) extends DigitalSubscriptionEmailAttributes
 
@@ -126,7 +126,8 @@ class DigitalPackEmailFields(
 
   def build(
     paidSubPaymentData: Option[PaymentMethodWithSchedule],
-    readerType: ReaderType
+    readerType: ReaderType,
+    maybeGiftRecipient: Option[GiftRecipient.DigitalSubGiftRecipient]
   ): Either[String, List[EmailFields]] = {
 
     val Purchase = Some
@@ -134,10 +135,13 @@ class DigitalPackEmailFields(
 
     (paidSubPaymentData, readerType) match {
       case (Purchase(paymentInfo), ReaderType.Gift) =>
-        List(
-          giftPurchaserConfirmation(paymentInfo.paymentMethod),
-          giftRecipientNotification
-        ).sequence
+        for {
+          giftRecipient <- maybeGiftRecipient.toRight("Gift redemption must have a gift recipient")
+          emails <- List(
+            giftPurchaserConfirmation(paymentInfo.paymentMethod, giftRecipient),
+            giftRecipientNotification(giftRecipient)
+          ).sequence
+        } yield emails
       case (Purchase(paymentInfo), _) => directThankYou(paymentInfo).map(List(_))
       case (Redemption, ReaderType.Corporate) => corpRedemption.map(List(_))
       case (Redemption, ReaderType.Gift) => giftRedemption.map(List(_))
@@ -149,14 +153,14 @@ class DigitalPackEmailFields(
     attributePairs <- JsonToAttributes.asFlattenedPairs(fields.asJsonObject)
   } yield EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
 
-  private def giftRecipientNotification =
+  private def giftRecipientNotification(giftRecipient: GiftRecipient.DigitalSubGiftRecipient) =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = user.firstName,
-      gift_personal_message = "gift_personal_message",
+      gift_personal_message = giftRecipient.message,
       gift_code = "gift_code"
     ))
 
-  private def giftPurchaserConfirmation(pm: PaymentMethod) =
+  private def giftPurchaserConfirmation(pm: PaymentMethod, giftRecipient: GiftRecipient.DigitalSubGiftRecipient) =
     wrap("digipack-gift-purchase", GifterPurchaseAttributes(
       gifter_first_name = user.firstName,
       gifter_last_name = user.lastName,
@@ -165,7 +169,7 @@ class DigitalPackEmailFields(
       gift_recipient_email = "gift recipient email placeholder",
       gift_personal_message = "gift personal message placeholder",
       gift_code = "gift code placeholder",
-      gift_delivery_date = "gift delivery date placeholder",
+      gift_delivery_date = formatDate(giftRecipient.deliveryDate),
       subscription_details = "subscription details placeholder",
       date_of_first_payment = "date_of_first_payment",
       paymentAttributes = paymentFields(pm, directDebitMandateId)
@@ -180,7 +184,7 @@ class DigitalPackEmailFields(
     ))
 
   private def corpRedemption =
-    wrap("digipack-corp", directOrCorpFields("Group subscription"))
+    wrap("digipack-corporate-redemption", directOrCorpFields("Group subscription"))
 
   private def directThankYou(paymentMethodWithSchedule: PaymentMethodWithSchedule) =
     wrap("digipack", DirectDSAttributes(

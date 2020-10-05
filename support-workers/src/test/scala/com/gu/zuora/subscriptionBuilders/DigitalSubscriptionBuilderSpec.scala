@@ -7,20 +7,19 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.corporate.GetCodeStatus.InvalidReaderType
+import com.gu.support.redemption.corporate.{DynamoLookup, CorporateCodeValidator}
+import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.support.redemption.corporate.{DynamoLookup, GetCodeStatus}
-import com.gu.support.redemption.gifting.GiftRedemptionState
+import com.gu.support.redemption.{InvalidCode, InvalidReaderType}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
-import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption
 import com.gu.support.workers.{DigitalPack, Monthly, Quarterly}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
+import org.scalatest.EitherValues._
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar._
-import org.scalatest.EitherValues._
 
 import scala.concurrent.Future
 
@@ -80,7 +79,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       readerType shouldBe Gift
       redemptionCode.isDefined shouldBe true
       redemptionCode.get.substring(0, 4) shouldBe "gd03"
-      initialTerm shouldBe GiftRedemptionState.expirationTimeInMonths + 1
+      initialTerm shouldBe GiftCodeValidator.expirationTimeInMonths + 1
       initialTermPeriodType shouldBe Month
       promoCode shouldBe None
       corporateAccountId shouldBe None
@@ -100,7 +99,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionRedemption(
       RedemptionData(RedemptionCode("CODE").right.get),
-      new GetCodeStatus({
+      new CorporateCodeValidator({
         case "CODE" => Future.successful(Some(Map(
           "available" -> DynamoLookup.DynamoBoolean(true),
           "corporateId" -> DynamoLookup.DynamoString("1")
@@ -129,11 +128,11 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     () => saleDate
   ).value.map(_.right.get)
 
-  lazy val threeMonthGiftRedemption: Future[Either[PromoError, GetCodeStatus.RedemptionInvalid]] = DigitalSubscriptionBuilder.build(
+  lazy val threeMonthGiftRedemption: Future[Either[PromoError, InvalidCode]] = DigitalSubscriptionBuilder.build(
     DigitalPack(GBP, Quarterly, Gift),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SubscriptionRedemption(RedemptionData(RedemptionCode("any-code").right.get),
-      new GetCodeStatus({
+      new CorporateCodeValidator({
         case "CODE" => Future.successful(Some(Map(
           "available" -> DynamoLookup.DynamoBoolean(true),
           "corporateId" -> DynamoLookup.DynamoString("1")

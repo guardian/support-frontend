@@ -161,16 +161,24 @@ function buildRegularPaymentRequest(
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
   const promoCode = getPromoCode(price.promotions);
 
+  const giftRecipient = (!!firstNameGiftRecipient && !!lastNameGiftRecipient) ? {
+    giftRecipient: {
+      title: titleGiftRecipient,
+      firstName: firstNameGiftRecipient,
+      lastName: lastNameGiftRecipient,
+      email: emailGiftRecipient,
+      // message: giftMessage,
+      // deliveryDate: giftDeliveryDate,
+    },
+  } : {};
+
   return {
     title,
     firstName,
     lastName,
     ...addresses,
     email,
-    titleGiftRecipient,
-    firstNameGiftRecipient,
-    lastNameGiftRecipient,
-    emailGiftRecipient,
+    ...giftRecipient,
     telephoneNumber: telephone,
     product,
     firstDeliveryDate: state.page.checkout.startDate,

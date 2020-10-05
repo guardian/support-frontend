@@ -39,6 +39,12 @@ trait Controllers {
     fontLoader
   )
 
+  lazy val articleShareController = new ArticleShare(
+    actionRefiners,
+    controllerComponents,
+    capiService
+  )
+
   lazy val subscriptionsController = new Subscriptions(
     actionRefiners,
     identityService,
@@ -78,7 +84,7 @@ trait Controllers {
     controllerComponents,
     fontLoader,
     authAction,
-    dynamoTableAsync,
+    dynamoTableAsyncProvider,
     zuoraGiftLookupServiceProvider
   )
 

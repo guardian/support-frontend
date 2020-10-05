@@ -112,7 +112,14 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        exclude: [
+          {
+            test: /node_modules/,
+            exclude: [
+              /@guardian\/(?!(automat-modules))/,
+            ],
+          },
+        ],
         loader: 'babel-loader',
       },
       {

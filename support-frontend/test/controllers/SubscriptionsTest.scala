@@ -75,7 +75,9 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         enableDigitalSubGifting = On,
         useDotcomContactPage = Some(SwitchState.Off),
         enableRecaptchaBackend = Off,
-        enableRecaptchaFrontend = Off
+        enableRecaptchaFrontend = Off,
+        enableContributionsCampaign = On,
+        forceContributionsCampaign = On
       ),
       AmountsRegions(amounts, amounts, amounts, amounts, amounts, amounts, amounts),
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
