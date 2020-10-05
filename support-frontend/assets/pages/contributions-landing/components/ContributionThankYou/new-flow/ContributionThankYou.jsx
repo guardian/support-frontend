@@ -51,6 +51,9 @@ const container = css`
 
 const headerContainer = css`
   ${from.desktop} {
+    width: 60%;
+  }
+  ${from.leftCol} {
     width: calc(50% - ${space[3]}px);
   }
 `;
