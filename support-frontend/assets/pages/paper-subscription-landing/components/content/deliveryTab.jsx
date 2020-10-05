@@ -86,7 +86,7 @@ const DeliveryTab = ({
   getRef, setTabAction, selectedTab, useDigitalVoucher,
 }: ContentTabPropTypes) => (
   <div
-    className={`paper-subscription-landing-content__focusable${useDigitalVoucher ? ' imovo-active' : ''}`}
+    className={`paper-subscription-landing-content__focusable${useDigitalVoucher ? ' use-digital-voucher' : ''}`}
     tabIndex={-1}
     ref={(r) => { getRef(r); }}
   >

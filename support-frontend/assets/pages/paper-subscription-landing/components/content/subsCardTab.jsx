@@ -71,7 +71,7 @@ const SubsCardFaqBlock = () => (
 );
 
 const SubscriptionCardTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
-  <div className="paper-subscription-landing-content__focusable imovo-active" tabIndex={-1} ref={(r) => { getRef(r); }}>
+  <div className="paper-subscription-landing-content__focusable use-digital-voucher" tabIndex={-1} ref={(r) => { getRef(r); }}>
     <SubsCardFaqBlock />
     <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below" />
   </div>
