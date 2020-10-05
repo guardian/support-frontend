@@ -33,9 +33,9 @@ const SubsCardFaqBlock = () => (
     border={paperHasDeliveryEnabled()}
     image={<GridImage
       gridId="printCampaigniMovo"
-      srcSizes={[750, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 400px"
-      imgType="png"
+      srcSizes={[562, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 600px"
+      imgType="jpg"
     />
   }
   >
