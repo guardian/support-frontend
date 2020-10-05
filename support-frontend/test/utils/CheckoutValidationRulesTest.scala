@@ -151,7 +151,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid gift sub purchase" in {
     val giftPurchase = validDigitalPackRequest.copy(
       product = DigitalPack(USD, Monthly, Gift),
-      giftRecipient = Some(GiftRecipientRequest(None, "bob", "builder", Some("bob@gu.com"), Some("have a nice sub")))
+      giftRecipient = Some(GiftRecipientRequest(None, "bob", "builder", Some("bob@gu.com"), Some("have a nice sub"), Some(new LocalDate(2020, 10, 2))))
     )
 
     DigitalPackValidation.passes(giftPurchase.product.asInstanceOf[DigitalPack])(giftPurchase) shouldBe true

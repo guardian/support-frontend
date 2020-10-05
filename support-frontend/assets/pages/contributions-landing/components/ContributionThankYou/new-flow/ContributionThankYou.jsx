@@ -9,7 +9,7 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { from, between, until } from '@guardian/src-foundations/mq';
+import { from, between, until, breakpoints } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
@@ -20,6 +20,7 @@ import ContributionThankYouSupportReminder from './ContributionThankYouSupportRe
 import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
+import ContributionThankYouArticleShare from './ContributionThankYouArticleShare';
 import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getCampaignSettings } from 'helpers/campaigns';
@@ -32,20 +33,27 @@ const container = css`
 
   ${from.tablet} {
     background: none;
-    max-width: 740px;
+    max-width: ${breakpoints.tablet}px;
   }
 
   ${from.desktop} {
-    max-width: 980px;
+    max-width: ${breakpoints.desktop}px;
+  }
+
+  ${from.leftCol} {
+    max-width: ${breakpoints.leftCol}px;
   }
 
   ${from.wide} {
-    max-width: 1300px;
+    max-width: ${breakpoints.wide}px;
   }
 `;
 
 const headerContainer = css`
   ${from.desktop} {
+    width: 60%;
+  }
+  ${from.leftCol} {
     width: calc(50% - ${space[3]}px);
   }
 `;
@@ -135,6 +143,7 @@ const ContributionThankYou = ({
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
+  const isEnvironmentMoment = (campaignSettings && campaignSettings.campaignCode === 'enviro_moment_2020');
 
   useEffect(() => {
     trackUserData(
@@ -162,7 +171,7 @@ const ContributionThankYou = ({
   const supportReminderAction = {
     component: <ContributionThankYouSupportReminder
       email={email}
-      isEnvironmentMoment={campaignSettings && campaignSettings.campaignCode === 'enviro_moment_2020'}
+      isEnvironmentMoment={isEnvironmentMoment}
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
@@ -176,17 +185,22 @@ const ContributionThankYou = ({
       createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
       campaignCode={campaignSettings && campaignSettings.campaignCode}
     />,
-    shouldShow: true,
+    shouldShow: !isEnvironmentMoment,
   };
   const ausMapAction = {
     component: <ContributionThankYouAusMap />,
     shouldShow: countryId === 'AU',
+  };
+  const articleShareAction = {
+    component: <ContributionThankYouArticleShare />,
+    shouldShow: isEnvironmentMoment,
   };
 
   const defaultActions = [
     signUpAction,
     signInAction,
     marketingConsentAction,
+    articleShareAction,
     supportReminderAction,
     surveyAction,
     socialShareAction,
@@ -196,10 +210,11 @@ const ContributionThankYou = ({
     signUpAction,
     signInAction,
     marketingConsentAction,
-    socialShareAction,
+    articleShareAction,
     supportReminderAction,
     surveyAction,
     ausMapAction,
+    socialShareAction,
   ];
 
   const actions = countryId === 'AU' ? ausActions : defaultActions;

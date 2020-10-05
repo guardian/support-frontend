@@ -75,7 +75,7 @@ const ContributionThankYouSupportReminder = ({
 
   const formattedDate = (index: number): string => {
     if (isEnvironmentMoment && index === 2) {
-      return 'In one year (our next environment pledge update)';
+      return 'In one year (our next climate pledge update)';
     }
     const date = reminderDates[index];
 
