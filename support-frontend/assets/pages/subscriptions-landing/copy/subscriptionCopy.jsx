@@ -123,8 +123,8 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
   title: 'Digital Subscription',
   subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
   description: countryGroupId === AUDCountries
-    ? 'Australia Weekend in The Guardian Editions app, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
-    : 'The Guardian Editions, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
+    ? 'The Guardian Editions app including Australia Weekend, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
+    : 'The Guardian Editions app, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
   productImage: getDigitalImage(isTop, countryGroupId),
   offer: priceCopy.discountCopy,
   buttons: [{
