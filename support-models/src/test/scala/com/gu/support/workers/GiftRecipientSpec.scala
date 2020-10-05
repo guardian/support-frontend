@@ -5,6 +5,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
 import io.circe.parser._
+import org.joda.time.LocalDate
 
 class GiftRecipientSpec extends AnyFlatSpec with Matchers {
 
@@ -15,11 +16,12 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |  "giftRecipientType": "DigiSub",
         |  "firstName": "bob",
         |  "lastName": "builder",
-        |  "email": "bob@gu.com"
+        |  "email": "bob@gu.com",
+        |  "deliveryDate": "2020-10-02"
         |}
         |""".stripMargin
     val actual = decode[GiftRecipient](json)
-    actual should be(Right(GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", None)))
+    actual should be(Right(GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", None, new LocalDate(2020, 10, 2))))
   }
 
   it should "deserialise weekly ok" in {
@@ -50,7 +52,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "serialise DS" in {
-    val data = GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", Some("message"))
+    val data = GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2))
     val expected =
       """
         |{
@@ -58,7 +60,8 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |  "firstName": "bob",
         |  "lastName": "builder",
         |  "email": "bob@gu.com",
-        |  "message": "message"
+        |  "message": "message",
+        |  "deliveryDate" : "2020-10-02"
         |}
         |""".stripMargin
     data.asJson should be(parse(expected).right.get)

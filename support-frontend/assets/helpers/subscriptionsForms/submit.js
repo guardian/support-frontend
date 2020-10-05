@@ -140,6 +140,7 @@ function buildRegularPaymentRequest(
       lastName: lastNameGiftRecipient,
       email: emailGiftRecipient,
       // message: giftMessage,
+      // deliveryDate: giftDeliveryDate,
     },
   } : {};
 

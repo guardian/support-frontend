@@ -114,7 +114,7 @@ object DigitalPackValidation {
 
     (paymentFields, d.readerType, createSupportWorkersRequest.giftRecipient) match {
       case (Purchase(paymentFields), ReaderType.Direct, None) => isValidPaidSub(paymentFields)
-      case (Purchase(paymentFields), ReaderType.Gift, Some(GiftRecipientRequest(_, _, _, Some(_), _))) =>
+      case (Purchase(paymentFields), ReaderType.Gift, Some(GiftRecipientRequest(_, _, _, Some(_), _, _))) =>
         isValidPaidSub(paymentFields)
       case (_: Redemption[_, _], ReaderType.Corporate, None) => isValidRedemption
       case (_: Redemption[_, _], ReaderType.Gift, None) => isValidRedemption

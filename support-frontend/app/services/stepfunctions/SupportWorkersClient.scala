@@ -42,7 +42,8 @@ object CreateSupportWorkersRequest {
     firstName: String,
     lastName: String,
     email: Option[String],
-    message: Option[String]
+    message: Option[String],
+    deliveryDate: Option[LocalDate]
   )
 }
 
@@ -125,14 +126,16 @@ class SupportWorkersClient(
           )
         )
       case _: DigitalPack =>
-        giftRecipient.email.toRight("email address is required for DS gifts").map { email =>
-          GiftRecipient.DigitalSubGiftRecipient(
-            giftRecipient.firstName,
-            giftRecipient.lastName,
-            email,
-            giftRecipient.message
-          )
-        }
+        for {
+          email <- giftRecipient.email.toRight("email address is required for DS gifts")
+          deliveryDate <- giftRecipient.deliveryDate.toRight("delivery date is required for DS gifts")
+        } yield GiftRecipient.DigitalSubGiftRecipient(
+          giftRecipient.firstName,
+          giftRecipient.lastName,
+          email,
+          giftRecipient.message,
+          deliveryDate
+        )
       case _ =>
         Left(s"gifting is not supported for $product")
     }
