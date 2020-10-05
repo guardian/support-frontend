@@ -90,7 +90,7 @@ case object Paper extends Product {
   private def homeDelivery(productRatePlanId: ProductRatePlanId, productOptions: ProductOptions, description: String): ProductRatePlan[Paper.type] =
     ProductRatePlan(productRatePlanId, Monthly, HomeDelivery, productOptions, description, List(CountryGroup.UK))
 
-  val useDigitalVoucher = true
+  val useDigitalVoucher = false
 
   private val prodCollection: List[ProductRatePlan[Paper.type]] = if (useDigitalVoucher) {
     List(
