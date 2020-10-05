@@ -40,6 +40,8 @@ trait Services {
     )
   }
 
+  lazy val capiService = new CapiService(wsClient, appConfig.capiKey)
+
   lazy val testUsers = TestUserService(appConfig.identity.testUserSecret)
 
   lazy val asyncAuthenticationService = AsyncAuthenticationService(appConfig.identity, testUsers)

@@ -31,6 +31,7 @@ support-frontend/conf/ssr-cache/
 !support-frontend/conf/ssr-cache/.gitexists
 support-frontend/public/compiled-assets/
 support-frontend/tools/
+support-frontend/Brewfile.lock.json
 tools/
 
 conf/assets.map
