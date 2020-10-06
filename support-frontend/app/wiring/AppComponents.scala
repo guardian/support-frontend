@@ -48,6 +48,7 @@ trait AppComponents extends PlayComponents
     applicationController,
     errorController,
     siteMapController,
+    articleShareController,
     regularContributionsController,
     supportWorkersStatusController,
     stripeController,

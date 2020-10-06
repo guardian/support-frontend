@@ -1,7 +1,5 @@
 // @flow
 import React from 'react';
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
 import { LinkButton } from '@guardian/src-button';
 import { SvgFacebook, SvgTwitter, SvgEnvelope } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
@@ -23,6 +21,8 @@ import {
 } from '../utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { generateReferralCode } from '../../../../../helpers/campaignReferralCodes';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 
 const buttonsContainer = css`
   margin-top: ${space[6]}px;
