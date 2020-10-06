@@ -34,7 +34,7 @@ function ThankYouPendingContent(props: PropTypes) {
       />
       <HeroWrapper appearance="custom">
         <HeadingBlock>
-          Your Digital Subscription is being processed
+          Your digital subscription is being processed
         </HeadingBlock>
       </HeroWrapper>
       <Content>
