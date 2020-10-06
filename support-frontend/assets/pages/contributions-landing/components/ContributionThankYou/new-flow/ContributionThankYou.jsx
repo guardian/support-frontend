@@ -171,7 +171,7 @@ const ContributionThankYou = ({
   const supportReminderAction = {
     component: <ContributionThankYouSupportReminder
       email={email}
-      isEnvironmentMoment={isEnvironmentMoment}
+      isUsEndOfYearAppeal={countryId === 'US' && !campaignSettings}
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
