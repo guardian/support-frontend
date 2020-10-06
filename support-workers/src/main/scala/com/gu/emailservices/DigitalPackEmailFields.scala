@@ -84,6 +84,7 @@ object DigitalSubscriptionEmailAttributes {
     subscription_details: String,
     gift_start_date: String,
     gift_recipient_email: String,
+    gift_end_date: String,
   ) extends DigitalSubscriptionEmailAttributes
 
   case class GifterPurchaseAttributes(
@@ -180,7 +181,8 @@ class DigitalPackEmailFields(
       gift_recipient_first_name = user.firstName,
       subscription_details = billingPeriod.monthsInPeriod + " month digital subscription",
       gift_start_date = "gift start date placeholder", // TODO need to pull it through from when we create the sub
-      gift_recipient_email = user.primaryEmailAddress
+      gift_recipient_email = user.primaryEmailAddress,
+      gift_end_date = "gift end date placeholder", // TODO need to pull it through from when we create the sub
     ))
 
   private def corpRedemption =
