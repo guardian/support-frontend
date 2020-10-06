@@ -1,22 +1,25 @@
 package com.gu.support.workers.lambdas
 
+import java.util.UUID
+
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
+import com.gu.i18n.Country
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
 import com.gu.support.catalog._
-import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
-import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.config.{TouchPointEnvironment, TouchPointEnvironments, ZuoraConfig}
+import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.redemption._
 import com.gu.support.redemption.corporate._
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
-import com.gu.support.workers.lambdas.CreateZuoraSubscription.createSubscription
+import com.gu.support.workers.lambdas.CreateZuoraSubscription.{Impure, createSubscription}
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
 import com.gu.support.zuora.api.ReaderType.Gift
@@ -61,7 +64,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case Some(redemptionData) =>
         redeemGift(redemptionData, requestInfo, state, zuoraGiftService, services.catalogService)
       case None =>
-        createSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
+        createSubscription(state, requestInfo, config, Impure(now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator))
     }
   }
 }
@@ -70,19 +73,26 @@ object CreateZuoraSubscription {
 
   import com.gu.FutureLogging._
 
-  def createSubscription(
-    state: CreateZuoraSubscriptionState,
-    requestInfo: RequestInfo,
+  case class Impure(
     now: () => DateTime,
     today: () => LocalDate,
     promotionService: PromotionService,
     redemptionService: DynamoLookup with DynamoUpdate,
     zuoraService: ZuoraSubscribeService,
     giftCodeGenerator: GiftCodeGeneratorService,
-    config: ZuoraConfig
+  )
+
+  def createSubscription(
+    state: CreateZuoraSubscriptionState,
+    requestInfo: RequestInfo,
+    config: ZuoraConfig,
+    impure: Impure
   ): Future[HandlerResult[SendThankYouEmailState]] = {
+    import impure._
+    val corporateCodeValidator = CorporateCodeValidator.withDynamoLookup(redemptionService)
+    val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService)
     for {
-      subscriptionData <- buildSubscriptionData(state, promotionService, CorporateCodeValidator.withDynamoLookup(redemptionService), giftCodeGenerator, today, config)
+      subscriptionData <- buildSubscriptionData(state, promotionService, corporateCodeValidator, giftCodeGenerator, today, config)
         .withLogging("subscription data")
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
@@ -95,7 +105,7 @@ object CreateZuoraSubscription {
         ).leftSequence
       (account, sub, info) <- subscribeIfApplicable(requestInfo, zuoraService, subscribeItem, maybeDomainSubscription)
         .withLogging("subscribe")
-      _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, SetCodeStatus.withDynamoLookup(redemptionService))
+      _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, corporateCodeStatusUpdater)
     } yield HandlerResult(getEmailState(state, account, sub, paymentOrRedemptionData), info)
   }
 
@@ -246,11 +256,11 @@ object CreateZuoraSubscription {
 
   def updateRedemptionCodeIfApplicable(
     paymentMethod: Either[PaymentMethod, RedemptionData],
-    setCodeStatus: SetCodeStatus
+    corporateCodeStatusUpdater: CorporateCodeStatusUpdater
   ): Future[Unit] =
     paymentMethod.toOption match {
       case Some(rd: RedemptionData) =>
-        setCodeStatus(
+        corporateCodeStatusUpdater.setStatus(
           rd.redemptionCode,
           RedemptionTable.AvailableField.CodeIsUsed
         )
@@ -261,12 +271,14 @@ object CreateZuoraSubscription {
 
 object DigitalSubscriptionGiftRedemption {
 
-  def maybeDigitalSubscriptionGiftRedemption(product: ProductType, paymentMethod: Either[PaymentMethod, RedemptionData]) = {
+  def maybeDigitalSubscriptionGiftRedemption(
+    product: ProductType,
+    paymentMethod: Either[PaymentMethod, RedemptionData]
+  ): Option[RedemptionData] =
     product match {
       case d: DigitalPack if paymentMethod.isRight && d.readerType == Gift => paymentMethod.right.toOption
       case _ => None
     }
-  }
 
   def redeemGift(
     redemptionData: RedemptionData,

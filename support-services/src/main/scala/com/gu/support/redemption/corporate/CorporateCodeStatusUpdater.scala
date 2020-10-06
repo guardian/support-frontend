@@ -5,15 +5,15 @@ import com.gu.support.redemptions.RedemptionCode
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object SetCodeStatus {
+object CorporateCodeStatusUpdater {
 
-  def withDynamoLookup(dynamoLookup: DynamoUpdate): SetCodeStatus = new SetCodeStatus(dynamoLookup)
+  def withDynamoUpdate(dynamoLookup: DynamoUpdate): CorporateCodeStatusUpdater = new CorporateCodeStatusUpdater(dynamoLookup)
 
 }
 
-class SetCodeStatus(dynamoUpdate: DynamoUpdate) extends WithLogging {
+class CorporateCodeStatusUpdater(dynamoUpdate: DynamoUpdate) extends WithLogging {
 
-  def apply(code: RedemptionCode, codeStatus: RedemptionTable.AvailableField)(implicit e: ExecutionContext): Future[Unit] =
+  def setStatus(code: RedemptionCode, codeStatus: RedemptionTable.AvailableField)(implicit e: ExecutionContext): Future[Unit] =
     dynamoUpdate.update(code.value, DynamoFieldUpdate(RedemptionTable.AvailableField.name, codeStatus.encoded))
       .withLoggingAsync(s"marked redemption status of $code to $codeStatus")
 

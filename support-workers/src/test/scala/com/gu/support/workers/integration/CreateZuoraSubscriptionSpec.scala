@@ -9,7 +9,7 @@ import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.redemption.CodeAlreadyUsed
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.support.redemption.corporate.{DynamoTableAsync, CorporateCodeValidator, RedemptionTable, SetCodeStatus}
+import com.gu.support.redemption.corporate.{DynamoTableAsync, CorporateCodeValidator, RedemptionTable, CorporateCodeStatusUpdater}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
@@ -48,11 +48,11 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
 
   it should "create a Digital Pack corporate subscription" in {
     val dynamoTableAsync: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
-    val setCodeStatus = SetCodeStatus.withDynamoLookup(dynamoTableAsync)
+    val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate(dynamoTableAsync)
     val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoTableAsync)
     val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE").right.get
     for {
-      _ <- setCodeStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
+      _ <- corporateCodeStatusUpdater.setStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
       _ <- createZuoraHelper.createSubscription(createDigiPackCorporateSubscriptionJson)
       r <- codeValidator.getStatus(mutableCode).map {
         _ should be(CodeAlreadyUsed)
