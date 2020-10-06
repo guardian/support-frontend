@@ -187,20 +187,21 @@ export const heavyText = css`
 `;
 
 export const packShot = css`
-  display: flex;
-  align-self: flex-end;
+  display: block;
   width: 100%;
   margin-top: ${space[5]}px;
+  margin-bottom: -5px;
 
   img {
     width: 100%;
   }
 
   ${from.phablet} {
-    display: inline-flex;
+    position: absolute;
+    bottom: -5px;
+    right: 20px;
     max-width: 40%;
-    margin-top: 0;
-    margin-left: -20px;
+    margin: 0 0 0 -20px;
 
     img {
       width: 110%;
@@ -215,8 +216,18 @@ export const packShot = css`
     }
   }
 
+  ${from.desktop} {
+    right: 0;
+    max-width: 45%;
+    margin-bottom: 0;
+  }
+
   ${from.leftCol} {
-    max-width: 540px;
+    max-width: 490px;
+  }
+
+  ${from.wide} {
+    right: 20px;
   }
 `;
 
