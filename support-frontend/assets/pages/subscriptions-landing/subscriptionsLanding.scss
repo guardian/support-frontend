@@ -481,6 +481,17 @@
 .subscriptions-packshot {
   width: 100%;
   padding: 6px;
+  .subscriptions-int-daily-packshot {
+    width: 100%;
+
+    @include mq($from: tablet) {
+      width: 90%;
+    }
+
+    @include mq($from: leftCol) {
+      width: 85%;
+    }
+  }
 }
 
 /****************** subscriptions__product-button ********************/
@@ -609,9 +620,6 @@
 
     @include mq($from: wide) {
       width: 800px;
-    }
-
-    @include mq($from: tablet) {
     }
   }
 
@@ -870,16 +878,32 @@
 
   @include mq($from: tablet) {
     position: absolute;
-    bottom: -6px;
-    padding: 0 20px;
+    bottom: 0;
+    padding: 0px;
+
+    img {
+      width: 110%;
+    }
   }
 
   @include mq($from: desktop) {
-    padding: 0 50px;
+    img {
+      width: 100%;
+    }
   }
 
   @include mq($from: leftCol) {
-    padding: 0 80px;
+    left: 50px;
+    img {
+      width: 85%;
+    }
+  }
+
+  @include mq($from: wide) {
+    left: 80px;
+    img {
+      width: 75%;
+    }
   }
 
 }

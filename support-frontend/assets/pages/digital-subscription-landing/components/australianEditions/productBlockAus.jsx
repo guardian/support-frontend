@@ -7,10 +7,11 @@ import GridPicture from 'components/gridPicture/gridPicture';
 import cx from 'classnames';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { ListHeading } from 'components/productPage/productPageList/productPageList';
-import { arrowSvg } from './arrow';
+
+import { arrowSvg } from '../arrow';
 
 // styles
-import './digitalSubscriptionLanding.scss';
+import '../digitalSubscriptionLanding.scss';
 
 const Plus = () => <div className="product-block__plus">+ Plus</div>;
 
@@ -58,32 +59,32 @@ const Button = ({
   </button>
 );
 
-const dailyImage = (
+const weekendImage = (
   <GridPicture
     sources={[
       {
-        gridId: 'editionsRowMobile',
+        gridId: 'weekendPackshotMobile',
         srcSizes: [140, 500],
         imgType: 'png',
         sizes: '90vw',
         media: '(max-width: 739px)',
       },
       {
-        gridId: 'editionsRowDesktop',
+        gridId: 'weekendPackshotDesktop',
         srcSizes: [140, 500, 1000],
         imgType: 'png',
         sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
         media: '(min-width: 740px)',
       },
     ]}
-    fallback="editionsRowDesktop"
+    fallback="weekendPackshotDesktop"
     fallbackSize={500}
     altText=""
     fallbackImgType="png"
   />
 );
 
-const appImage = (
+const appImageAus = (
   <GridPicture
     sources={[
       {
@@ -104,34 +105,27 @@ const appImage = (
     fallback="liveAppDesktop"
     fallbackSize={500}
     altText=""
-    fallbackImgType="png"
+    fallbackImgType="jpg"
   />
 );
 
 type ProductCardPropTypes = {
   title: string,
-  subtitle: string,
-  shortSubTitle?: string,
+  subtitle: Node,
   image: Node,
-  second: boolean,
+  first: boolean,
+  secondImage: boolean,
 }
 
 const ProductCard = ({
-  title, subtitle, shortSubTitle, image, second = false,
+  title, subtitle, image, secondImage, first,
 }: ProductCardPropTypes) => (
   <section className="product-block__item">
     <h2 className="product-block__item__title">{title}</h2>
-    <p className="product-block__item__subtitle">
-      <span className={`product-block__item__subtitle--desktop${second ? '--second' : ''}`}>{subtitle}</span>
-      {!second && shortSubTitle && <span className="product-block__item__subtitle--mobile">{shortSubTitle}</span>}
-    </p>
-    <span className={`product-block__item__image${second ? '--second' : '--first-row'}`}>{image}</span>
+    <p className={`product-block__item__subtitle--Aus${first ? '-first' : ''}`}>{subtitle}</p>
+    <span className={`product-block__item__image${secondImage ? '--second' : ''}`}>{image}</span>
   </section>
 );
-
-ProductCard.defaultProps = {
-  shortSubTitle: '',
-};
 
 type StateTypes = {
   showDropDownDaily: boolean,
@@ -144,7 +138,7 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
 }
 
-class ProductBlock extends Component<PropTypes, StateTypes> {
+class ProductBlockAus extends Component<PropTypes, StateTypes> {
   constructor(props: PropTypes) {
     super(props);
     this.state = {
@@ -168,11 +162,14 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
         <section className="product-block__container hope-is-power--centered">
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
-            title="UK Daily in The Guardian Editions app"
-            subtitle="+ Edition Earth &mdash; Limited time only, ending 7 November"
-            shortSubTitle="+ Edition Earth"
-            image={dailyImage}
-            second={false}
+            title="Australia Weekend in The Guardian Editions app"
+            subtitle={
+              <span className="product-block__item__subtitle--short-first">
+                Everything you need to make sense of the week, in one simple, elegant app
+              </span>}
+            image={weekendImage}
+            first
+            secondImage={false}
           />
           <Dropdown
             showDropDown={state.showDropDownDaily}
@@ -182,18 +179,20 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
               items={[
                 {
                   boldText: 'A new way to read',
-                  explainer: 'The newspaper, reimagined for mobile and tablet',
+                  explainer: 'The weekend paper, reimagined for mobile and tablet. Each new edition available to read Saturday at 6am (AEST)',
                 },
-                { boldText: 'Published daily', explainer: 'Each edition available to read by 6am (GMT), 7 days a week' },
                 { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
+                { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
               ]}
             />
             <ListHeading
               items={[
-                { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
-                { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
                 { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
-                { boldText: 'Enjoy our other editions', explainer: 'Australia Weekend and other special editions are all included in The Guardian Editions app as part of your subscription' },
+                { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
+                {
+                  boldText: 'Enjoy our other editions',
+                  explainer: 'The UK Daily and other special editions are all included in The Guardian Editions app as part of your subscription',
+                },
               ]}
             />
           </Dropdown>
@@ -205,9 +204,10 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <Plus />
           <ProductCard
             title="Premium access to The Guardian Live app"
-            subtitle="Live news, as it happens"
-            image={appImage}
-            second
+            subtitle={<span className="product-block__item__subtitle--short-second">Live news, as it happens</span>}
+            image={appImageAus}
+            first={false}
+            secondImage
           />
           <Dropdown
             showDropDown={state.showDropDownApp}
@@ -242,4 +242,4 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
 }
 
 
-export default ProductBlock;
+export default ProductBlockAus;
