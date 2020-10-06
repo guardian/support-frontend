@@ -16,17 +16,38 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 const defaultHeroes: GridImages = {
   breakpoints: {
     mobile: {
-      gridId: 'subscriptionDailyMobile',
+      gridId: 'editionsPackshotShort',
       srcSizes: [242, 484, 568],
       imgType: 'png',
     },
     tablet: {
-      gridId: 'subscriptionDailyPackshot',
+      gridId: 'editionsPackshotShort',
       srcSizes: [500, 1000, 1825],
       imgType: 'png',
     },
     desktop: {
-      gridId: 'subscriptionDailyPackshot',
+      gridId: 'editionsPackshotShort',
+      srcSizes: [500, 1000, 1825],
+      imgType: 'png',
+    },
+  },
+  fallback: 'digitalSubscriptionHeaderDesktop',
+};
+
+const australiaHeroes: GridImages = {
+  breakpoints: {
+    mobile: {
+      gridId: 'editionsPackshotAusShort',
+      srcSizes: [242, 484, 568],
+      imgType: 'png',
+    },
+    tablet: {
+      gridId: 'editionsPackshotAusShort',
+      srcSizes: [500, 1000, 1825],
+      imgType: 'png',
+    },
+    desktop: {
+      gridId: 'editionsPackshotAusShort',
       srcSizes: [500, 1000, 1825],
       imgType: 'png',
     },
@@ -41,7 +62,7 @@ const heroesByCountry: ImagesByCountry = {
   EURCountries: defaultHeroes,
   NZDCountries: defaultHeroes,
   Canada: defaultHeroes,
-  AUDCountries: defaultHeroes, // Until we have an AU specific product
+  AUDCountries: australiaHeroes,
 };
 
 const ThankYouHero = ({ countryGroupId }: {countryGroupId: CountryGroupId}) => (

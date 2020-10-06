@@ -381,7 +381,10 @@ $teal-green: #006d67;
         border: 1px solid gu-colour(neutral-86);
       }
 
-      .product-block__item__title, .product-block__item__subtitle {
+      .product-block__item__title,
+      .product-block__item__subtitle,
+      .product-block__item__subtitle--Aus,
+      .product-block__item__subtitle--Aus-first {
         margin-left: 10px;
       }
 
@@ -416,7 +419,7 @@ $teal-green: #006d67;
           margin-bottom: 15px;
           font-size: 36px !important;
           line-height: 40px;
-          max-width: gu-span(4);
+          max-width: gu-span(4.5);
         }
 
         @include mq($from: leftCol) {
@@ -424,7 +427,23 @@ $teal-green: #006d67;
         }
       }
 
-      .product-block__item__image {
+      .product-block__item__title--desktop {
+        display: none;
+        @include mq($from: tablet) {
+          display: block;
+        }
+      }
+
+      .product-block__item__title--mobile {
+        display: block;
+        @include mq($from: tablet) {
+          display: none;
+        }
+      }
+
+      .product-block__item__image,
+      .product-block__item__image--second,
+      .product-block__item__image--first-row {
         display: flex;
         align-self: flex-end;
         align-items: flex-end;
@@ -436,10 +455,6 @@ $teal-green: #006d67;
         }
 
         @include mq($until: mobileLandscape) {
-          position: absolute;
-          bottom: 0;
-          right: -20px;
-
           img {
             width: 140px;
           }
@@ -478,14 +493,61 @@ $teal-green: #006d67;
         }
 
         @include mq($from: leftCol) {
-          margin-top: -150px;
-          margin-right: 80px;
+          margin-right: 30px;
+          img {
+            width: 450px;
+          }
         }
       }
 
+      .product-block__item__image {
+        @include mq($from: mobileLandscape) {
+          margin-top: -180px;
+        }
+
+        @include mq($from: phablet) {
+          margin-top: -140px;
+        }
+
+        @include mq($from: desktop) {
+          margin-top: -210px;
+        }
+      }
+
+      .product-block__item__image--first-row {
+        @include mq($from: mobileMedium) {
+          margin-top: -140px;
+        }
+
+        @include mq($from: mobileLandscape) {
+          margin-top: -100px;
+        }
+
+        @include mq($from: desktop) {
+          margin-top: -180px;
+        }
+
+        @include mq($from: leftCol) {
+          margin-top: -150px;
+        }
+      }
+
+      .product-block__item__image--second {
+        @include mq($from: leftCol) {
+          margin-top: -145px;
+        }
+
+        @include mq($until: mobileLandscape) {
+          position: absolute;
+          bottom: 0;
+        }
+      }
     }
 
-    .product-block__item__subtitle, .ad-free-section__copy {
+    .product-block__item__subtitle,
+    .product-block__item__subtitle--Aus,
+    .product-block__item__subtitle--Aus-first,
+    .ad-free-section__copy {
       font-family: $gu-text-egyptian-web;
       font-size: 16px;
       font-weight: 400;
@@ -501,7 +563,7 @@ $teal-green: #006d67;
       }
 
       @include mq($from: mobileLandscape) {
-        max-width: gu-span(4);
+        max-width: gu-span(3.5);
       }
 
       @include mq($from: phablet) {
@@ -515,26 +577,37 @@ $teal-green: #006d67;
       @include mq($from: desktop) {
         font-size: 20px;
         line-height: 24px;
-        max-width: gu-span(7);
+        max-width: gu-span(5);
       }
 
-      .product-block__item__subtitle--short-first {
-        @include mq($from: desktop) {
-          display: block;
-          max-width: 350px;
-        }
+    }
 
-        @include mq($from: leftCol) {
-          max-width: gu-span(4);
-        }
-      }
-
-      .product-block__item__subtitle--short-second {
+    .product-block__item__subtitle--Aus-first {
+      display: none;
+      @include mq($from: mobileLandscape) {
         display: block;
+      }
 
-        @include mq($from: mobileMedium) {
-          display: inline;
-        }
+      @include mq($from: tablet) {
+        display: none;
+      }
+
+      @include mq($from: desktop) {
+        display: block;
+      }
+    }
+
+    .product-block__item__subtitle--desktop {
+      display: none;
+      @include mq($from: phablet) {
+        display: block;
+      }
+    }
+
+    .product-block__item__subtitle--mobile {
+      display: block;
+      @include mq($from: phablet) {
+        display: none;
       }
     }
 
