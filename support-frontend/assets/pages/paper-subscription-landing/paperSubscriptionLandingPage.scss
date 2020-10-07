@@ -14,13 +14,14 @@
 }
 
 .component-content__image {
-  min-width: gu-span(4);
-  top: unset;
-  bottom: 0;
-  right: 0;
+  min-width: gu-span(5);
+  top: 1px;
+  right: 20px;
+
   @include mq($from: leftCol) {
-    left: unset;
+    right: 0;
   }
+
 }
 
 .component-content__content {
