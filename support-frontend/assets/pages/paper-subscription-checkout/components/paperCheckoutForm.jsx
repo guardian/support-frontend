@@ -195,10 +195,10 @@ function PaperCheckoutForm(props: PropTypes) {
   const subsCardOrderSummary = (<OrderSummary
     image={
       <GridImage
-        gridId="printCheckoutiMovo"
+        gridId="printCampaignDigitalVoucher"
         srcSizes={[500]}
         sizes="(max-width: 740px) 50vw, 696"
-        imgType="png"
+        imgType="jpg"
         altText=""
       />}
     title={title}
@@ -212,8 +212,8 @@ function PaperCheckoutForm(props: PropTypes) {
   const regularOrderSummary = (<Summary
     image={
       <GridImage
-        gridId="checkoutPackshotPaperGraunVoucher"
-        srcSizes={[696, 500]}
+        gridId={props.useDigitalVoucher ? 'printCampaignHDdigitalVoucher' : 'checkoutPackshotPaperGraunVoucher'}
+        srcSizes={[500]}
         sizes="(max-width: 740px) 50vw, 696"
         imgType="png"
         altText=""

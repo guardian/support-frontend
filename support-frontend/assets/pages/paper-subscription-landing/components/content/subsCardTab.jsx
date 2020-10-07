@@ -32,10 +32,10 @@ const SubsCardFaqBlock = () => (
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
-      gridId="printCampaigniMovo"
-      srcSizes={[750, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 400px"
-      imgType="png"
+      gridId="printCampaignDigitalVoucher"
+      srcSizes={[562, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 600px"
+      imgType="jpg"
     />
   }
   >
@@ -71,7 +71,7 @@ const SubsCardFaqBlock = () => (
 );
 
 const SubscriptionCardTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
-  <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
+  <div className="paper-subscription-landing-content__focusable use-digital-voucher" tabIndex={-1} ref={(r) => { getRef(r); }}>
     <SubsCardFaqBlock />
     <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below" />
   </div>
