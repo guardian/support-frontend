@@ -108,10 +108,19 @@ export const imageCatalogue: {
   printFeaturePackshot: '017a2f5c27394635b53c414962bbb775ce9b131d/5_39_1572_861',
   printCampaign2020: 'e50943f03b58caf6fde78d81eb65c92c048701c9/1844_0_1674_1006',
   printCampaignHero: 'fff86e98dbe83b36892baf7942f30fd3bcbcaee6/286_215_714_285',
-  printCampaigniMovo: '3cca8e05f3253f5a14329429ec3f6f139f84929a/0_21_562_337',
-  printCampaignHDiMovo: 'c482b2fbe5f2c2af01d54cc1c8d47a6dd626eb1f/0_0_750_554',
+  printCampaignDigitalVoucher: '3cca8e05f3253f5a14329429ec3f6f139f84929a/0_21_562_337',
+  printCampaignHDdigitalVoucher: 'c482b2fbe5f2c2af01d54cc1c8d47a6dd626eb1f/0_102_750_450',
   printCampaignHD: '817936f0d1a2755c778b523b5ac5daa2d2f27449/10_0_716_694',
-  printCheckoutiMovo: '15677cf8f82a5690bec39bf73b2c098c8f79b24f/15_0_667_400',
+  editionsPackshot: '22841f3977aedb85be7b0cf442747b1da51f780f/0_0_2320_1890',
+  editionsPackshotShort: '278357625f580358e74db1563777aa0b4570072d/0_0_1800_1080',
+  editionsPackshotAus: 'a1679c54314643a7b611a0c97b53a8ea38b9ec23/0_0_2320_1890',
+  editionsPackshotAusShort: '1cc6d0197f84430332f58ab6e9926adb83771f0b/0_0_1800_1080',
+  weekendPackshotMobile: '622d1b94173e9c711ff421d89cf9abddf3319197/0_0_1100_1100',
+  weekendPackshotDesktop: 'dc1bb7218877d954a5841b24765e89f7c3aa6f95/0_0_1800_1080',
+  liveAppMobile: '66deee17e0c59c254abdad9e1fa9b3605040f66b/0_0_1100_1100',
+  liveAppDesktop: '7f6b52bd46bf801e7f55eeb1d6f2666727c0ddf9/0_0_1800_1080',
+  editionsRowMobile: '307653cb535689ce12b93cf90cfb233cddaab3fd/0_0_1100_1100',
+  editionsRowDesktop: 'a37e08fd9d3343eb629ae44b2b30127d7e31184b/0_0_1800_1080',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
