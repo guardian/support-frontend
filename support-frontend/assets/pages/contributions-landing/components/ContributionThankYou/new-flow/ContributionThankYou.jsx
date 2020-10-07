@@ -110,7 +110,7 @@ type ContributionThankYouProps = {|
   csrf: Csrf,
   email: string,
   contributionType: ContributionType,
-  name: string,
+  name: string | null,
   user: User,
   guestAccountCreationToken: string,
   paymentMethod: PaymentMethod,
