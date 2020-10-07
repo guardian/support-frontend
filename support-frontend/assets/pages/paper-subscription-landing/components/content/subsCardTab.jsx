@@ -25,7 +25,7 @@ const accordionContainer = css`
   }
 `;
 
-const LinkToImovo = () => <a href="https://imovo.org/guardianstorefinder">Find your nearest participating retailer</a>;
+const LinkToImovo = () => <a href="https://imovo.org/guardianstorefinder" target="_blank">Find your nearest participating retailer</a>;
 
 // ----- Content ----- //
 const SubsCardFaqBlock = () => (
