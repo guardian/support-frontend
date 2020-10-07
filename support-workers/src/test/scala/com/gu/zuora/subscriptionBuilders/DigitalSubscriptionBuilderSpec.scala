@@ -4,15 +4,17 @@ import java.util.UUID
 
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
+import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
-import com.gu.support.config.ZuoraDigitalPackConfig
+import com.gu.support.config.{ZuoraContributionConfig, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.redemption.corporate.{DynamoLookup, CorporateCodeValidator}
+import com.gu.support.redemption.corporate.{CorporateCodeValidator, DynamoLookup}
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{InvalidCode, InvalidReaderType}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
-import com.gu.support.workers.{DigitalPack, Monthly, Quarterly}
+import com.gu.support.workers.states.CreateZuoraSubscriptionState
+import com.gu.support.workers.{Address, DigitalPack, Monthly, PaymentProvider, Quarterly, RedemptionNoProvider, SalesforceContactRecord, User}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
@@ -87,60 +89,71 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   "Attempting to build a subscribe request for a gift redemptions" should "return an error" in
     threeMonthGiftRedemption.map { error =>
-      error.right.value shouldBe InvalidReaderType
+      error shouldBe BuildSubscribeRedemptionError(InvalidReaderType)
     }
 
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
   lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
 
+  lazy val corporateRedemptionBuilder = new DigitalSubscriptionCorporateRedemptionBuilder(
+    new CorporateCodeValidator({
+      case "CODE" => Future.successful(Some(Map(
+        "available" -> DynamoLookup.DynamoBoolean(true),
+        "corporateId" -> DynamoLookup.DynamoString("1")
+      )))
+    }),
+    () => saleDate
+  )
+
   lazy val corporate = DigitalSubscriptionBuilder.build(
+    new corporateRedemptionBuilder.WithRedemption(RedemptionData(RedemptionCode("CODE").right.get)),
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SubscriptionRedemption(
-      RedemptionData(RedemptionCode("CODE").right.get),
-      new CorporateCodeValidator({
-        case "CODE" => Future.successful(Some(Map(
-          "available" -> DynamoLookup.DynamoBoolean(true),
-          "corporateId" -> DynamoLookup.DynamoString("1")
-        )))
-      })),
-    SANDBOX,
-    giftCodeGeneratorService,
-    () => saleDate
+    SANDBOX
   ).value.map(_.right.get)
 
-  lazy val monthly = DigitalSubscriptionBuilder.build(
-    DigitalPack(GBP, Monthly),
-    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Monthly, Country.UK, promotionService),
-    SANDBOX,
+  lazy val subscriptionPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(
+    ZuoraDigitalPackConfig(14, 2),
+    promotionService,
     giftCodeGeneratorService,
     () => saleDate
+  )
+
+  lazy val monthly = DigitalSubscriptionBuilder.build(
+    new subscriptionPurchaseBuilder.WithPurchase(None, Monthly, Country.UK),
+    DigitalPack(GBP, Monthly),
+    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+    SANDBOX,
   ).value.map(_.right.get)
 
   lazy val threeMonthGiftPurchase = DigitalSubscriptionBuilder.build(
+    new subscriptionPurchaseBuilder.WithPurchase(None, Quarterly, Country.UK),
     DigitalPack(GBP, Quarterly, Gift),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SubscriptionPurchase(ZuoraDigitalPackConfig(14, 2), None, Quarterly, Country.UK, promotionService),
     SANDBOX,
-    giftCodeGeneratorService,
-    () => saleDate
   ).value.map(_.right.get)
 
-  lazy val threeMonthGiftRedemption: Future[Either[PromoError, InvalidCode]] = DigitalSubscriptionBuilder.build(
-    DigitalPack(GBP, Quarterly, Gift),
-    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SubscriptionRedemption(RedemptionData(RedemptionCode("any-code").right.get),
-      new CorporateCodeValidator({
-        case "CODE" => Future.successful(Some(Map(
-          "available" -> DynamoLookup.DynamoBoolean(true),
-          "corporateId" -> DynamoLookup.DynamoString("1")
-        )))
-      })),
-    SANDBOX,
-    giftCodeGeneratorService,
-    () => saleDate
-  ).value.map(_.left.get)
+  lazy val threeMonthGiftRedemption: Future[Throwable] =
+    new SubscriptionBuilder(
+      subscriptionPurchaseBuilder,
+      corporateRedemptionBuilder,
+      promotionService,
+      _ => ZuoraContributionConfig("", "")
+    ).build(
+      CreateZuoraSubscriptionState(
+        UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+        User("", "", None, "", "", Address(None, None, None, None, None, Country.Australia)), //user
+        None,
+        DigitalPack(GBP, Quarterly, Gift),
+        RedemptionNoProvider,
+        Right(RedemptionData(RedemptionCode("any-code").right.get)),
+        None,
+        None,
+        SalesforceContactRecords(SalesforceContactRecord("", ""), None),
+        None
+      ),
+      SANDBOX
+    ).value.map(_.left.get)
 
 }
