@@ -1,8 +1,8 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-product-page-hero.component-product-page-hero--weekly-campaign {
-  background: #283942;
-  color: #fff;
+  background: #66c2e9;
+  color: #000;
 }
 
 .component-product-page-hero.component-product-page-hero--weekly-gift {
@@ -123,7 +123,7 @@
 
 .weekly-campaign-hero {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   height: 100%;
   align-items: center;
   padding: 0;
@@ -131,7 +131,7 @@
 
 .weekly-campaign-hero__copy {
   h2 {
-    color: #fff;
+    color: #121212;
   }
 }
 
@@ -188,10 +188,12 @@
   }
 }
 
+.weekly-campaign-hero__copy {
+  padding-left: 0;
+}
+
 .weekly-campaign-hero__graphic {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  position: relative;
   height: 100%;
   width: 100%;
   max-width: 80%;

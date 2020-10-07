@@ -64,7 +64,7 @@ export const imageCatalogue: {
   theMomentDigiHero: 'd9d6da2b77bd9051456cb34ca5af9f79a2d55ae4/0_0_486_772',
   theMomentDigiHero2: '2f3d5a93ea03070a31db9d4a5f7d643fee718d99/0_0_486_772',
   theMomentDigiHero3: 'ffb39dac4ca084c49e547dc55367575671d28d23/0_0_486_772',
-  weeklyCampaignHeroImg: '3d4bf412afdf3c91faed55c9507a6d741575e3c5/0_0_1358_954',
+  weeklyCampaignHeroImg: 'd2baab9f40e198459a02c30d86c774e79096e43e/0_0_1158_954',
   checkoutPackshotPaperGraunVoucher: '5aa8702d1de22589ec5dd1a20a6cf4bc4b7c9674/0_0_696_400',
   checkoutPackshotDigitalPack: 'd68d6e6f276eae28d18851548e59bd7918a23ffc/0_0_1392_800',
   checkoutPackshotWeekly: '0fb50b636e09f459470453a54951ac6a7095c9e6/0_0_696_400',

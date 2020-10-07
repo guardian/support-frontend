@@ -84,8 +84,8 @@ const CampaignHeader = (props: {heading: string | Node, orderIsAGift: boolean}) 
         <div className="weekly-campaign-hero__graphic">
           <GridImage
             gridId="weeklyCampaignHeroImg"
-            srcSizes={[1000, 1358]}
-            sizes="(max-width: 740px) 1000px, 1358px"
+            srcSizes={[1000, 1158]}
+            sizes="(max-width: 740px) 1000px, 1158px"
             imgType="png"
             altText="A collection of Guardian Weekly magazines"
           />
