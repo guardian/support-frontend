@@ -13,20 +13,18 @@
   scroll-behavior: smooth;
 }
 
-.use-digital-voucher {
-  .component-content__image {
-    min-width: gu-span(4);
-    top: unset;
-    bottom: 0;
-    right: 0;
-    @include mq($from: leftCol) {
-      left: unset;
-    }
+.component-content__image {
+  min-width: gu-span(4);
+  top: unset;
+  bottom: 0;
+  right: 0;
+  @include mq($from: leftCol) {
+    left: unset;
   }
+}
 
-  .component-content__content {
-    position: relative;
-  }
+.component-content__content {
+  position: relative;
 }
 
 .component-content--faqs .component-text {
