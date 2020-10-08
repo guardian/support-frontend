@@ -40,7 +40,7 @@ const ContentDeliveryFaqBlock = ({
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
-      gridId="printCampaignHD"
+      gridId="printCampaignHDdigitalVoucher"
       srcSizes={[716, 500, 140]}
       sizes="(max-width: 740px) 100vw, 400px"
       imgType="png"
@@ -85,7 +85,11 @@ ContentDeliveryFaqBlock.defaultProps = {
 const DeliveryTab = ({
   getRef, setTabAction, selectedTab, useDigitalVoucher,
 }: ContentTabPropTypes) => (
-  <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
+  <div
+    className="paper-subscription-landing-content__focusable"
+    tabIndex={-1}
+    ref={(r) => { getRef(r); }}
+  >
     <ContentDeliveryFaqBlock setTabAction={setTabAction} useDigitalVoucher={useDigitalVoucher} />
     <ContentForm
       selectedTab={selectedTab}
