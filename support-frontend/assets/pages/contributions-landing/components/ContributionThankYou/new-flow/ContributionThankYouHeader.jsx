@@ -38,7 +38,7 @@ const directDebitSetupText = css`
 `;
 
 type ContributionThankYouHeaderProps = {|
-  name: string,
+  name: string | null,
   showDirectDebitMessage: boolean
 |};
 
@@ -48,11 +48,11 @@ const ContributionThankYouHeader = ({
   name,
   showDirectDebitMessage,
 }: ContributionThankYouHeaderProps) => {
-  const shouldShowName = name.length < MAX_DISPLAY_NAME_LENGTH;
+  const shouldShowName = name && name.length < MAX_DISPLAY_NAME_LENGTH;
   return (
     <header css={header}>
       <h1 css={headerTitleText}>
-        {shouldShowName
+        {shouldShowName && name
           ? `Thank you ${name} for your valuable contribution`
           : 'Thank you for your valuable contribution'}
       </h1>

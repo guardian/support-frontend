@@ -14,8 +14,18 @@
 }
 
 .component-content__image {
-  max-width: gu-span(5);
-  min-width: gu-span(4);
+  min-width: gu-span(5);
+  top: 1px;
+  right: 20px;
+
+  @include mq($from: leftCol) {
+    right: 0;
+  }
+
+}
+
+.component-content__content {
+  position: relative;
 }
 
 .component-content--faqs .component-text {
