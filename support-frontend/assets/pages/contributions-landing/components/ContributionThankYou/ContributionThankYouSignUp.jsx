@@ -22,13 +22,13 @@ import {
   setPasswordError as setPasswordErrorAction,
   updatePassword as updatePasswordAction,
   type Action,
-} from '../../../contributionsLandingActions';
+} from '../../contributionsLandingActions';
 import { setPasswordGuest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import styles from './styles';
 import {
   OPHAN_COMPONENT_ID_SIGN_UP,
   OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP,
-} from '../utils/ophan';
+} from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const bodyText = css`

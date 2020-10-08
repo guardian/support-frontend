@@ -18,7 +18,7 @@ import styles from './styles';
 import {
   OPHAN_COMPONENT_ID_SIGN_IN,
   OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN,
-} from '../utils/ophan';
+} from './utils/ophan';
 import { routes } from 'helpers/routes';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
