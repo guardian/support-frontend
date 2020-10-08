@@ -79,16 +79,10 @@ class ZuoraSubscriptionCreator(
     requestInfo: RequestInfo,
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     import ZuoraSubscriptionCreator._
-    val subscriptionDataBuilder = {
-      val corporateCodeValidator = CorporateCodeValidator.withDynamoLookup(redemptionService)
-      val dsPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(config.digitalPack, promotionService, giftCodeGenerator, today)
-      val dsRedemptionBuilder = new DigitalSubscriptionRedemptionBuilder(corporateCodeValidator, today)
-      new SubscriptionDataBuilder(dsPurchaseBuilder, dsRedemptionBuilder, promotionService, config.contributionConfig _)
-    }
+    val corporateCodeValidator = CorporateCodeValidator.withDynamoLookup(redemptionService)
     val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService)
-
     for {
-      subscriptionData <- subscriptionDataBuilder.build(state)
+      subscriptionData <- buildSubscriptionData(state, promotionService, corporateCodeValidator, giftCodeGenerator, today, config)
         .withLogging("subscription data")
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
@@ -167,6 +161,62 @@ object ZuoraSubscriptionCreator {
     )
   }
 
+  private def buildSubscriptionData(
+    state: CreateZuoraSubscriptionState,
+    promotionService: => PromotionService,
+    corporateCodeValidator: => CorporateCodeValidator,
+    giftCodeGenerator: GiftCodeGeneratorService,
+    today: () => LocalDate,
+    config: ZuoraConfig
+  ): Future[SubscriptionData] = {
+    val isTestUser = state.user.isTestUser
+    val environment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
+
+    val eventualErrorOrSubscriptionData = state.product match {
+      case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
+      case d: DigitalPack => DigitalSubscriptionBuilder.build(
+        d,
+        state.requestId,
+        state.paymentMethod match {
+          case Left(_: PaymentMethod) => SubscriptionPurchase(
+            config.digitalPack,
+            state.promoCode,
+            state.product.billingPeriod,
+            state.user.billingAddress.country,
+            promotionService
+          )
+          case Right(rd: RedemptionData) => SubscriptionRedemption(rd, corporateCodeValidator)
+        },
+        environment,
+        giftCodeGenerator,
+        today
+      ).leftMap(_.fold(BuildSubscribePromoError, BuildSubscribeRedemptionError))
+      case p: Paper => EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
+        p,
+        state.requestId,
+        state.user.billingAddress.country,
+        state.promoCode,
+        state.firstDeliveryDate,
+        promotionService,
+        environment
+      ).leftMap(BuildSubscribePromoError))
+      case w: GuardianWeekly =>
+        EitherT.fromEither[Future](GuardianWeeklySubscriptionBuilder.build(
+          w,
+          state.requestId,
+          state.user.billingAddress.country,
+          state.promoCode,
+          state.firstDeliveryDate,
+          promotionService,
+          if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct,
+          environment
+        ).leftMap(BuildSubscribePromoError))
+    }
+    eventualErrorOrSubscriptionData.value.flatMap { errorOrSubscriptionData =>
+      Future.fromTry(errorOrSubscriptionData.toTry)
+    }
+  }
+
   private def buildContactDetails(user: User, giftRecipient: Option[GiftRecipient], address: Address, deliveryInstructions: Option[String] = None) = {
     val email = giftRecipient match {
       case None => Some(user.primaryEmailAddress)
@@ -210,62 +260,6 @@ object ZuoraSubscriptionCreator {
         )
       case None => Future.successful(())
     }
-
-}
-
-class SubscriptionDataBuilder(
-  digitalSubscriptionPurchaseBuilder: DigitalSubscriptionPurchaseBuilder,
-  digitalSubscriptionRedemptionBuilder: DigitalSubscriptionRedemptionBuilder,
-  promotionService: => PromotionService,
-  config: BillingPeriod => ZuoraContributionConfig,
-) {
-
-  def build(
-    state: CreateZuoraSubscriptionState,
-  ): Future[SubscriptionData] = {
-    val environment = TouchPointEnvironments.fromStage(Configuration.stage, state.user.isTestUser)
-
-    val eventualErrorOrSubscriptionData = state.product match {
-      case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
-      case d: DigitalPack =>
-        val result = (state.paymentMethod match {
-          case Left(_: PaymentMethod) => DigitalSubscriptionBuilder.build(digitalSubscriptionPurchaseBuilder, SubscriptionPurchase(
-            state.promoCode,
-            state.product.billingPeriod,
-            state.user.billingAddress.country,
-          )) _
-          case Right(rd: RedemptionData) => DigitalSubscriptionBuilder.build(digitalSubscriptionRedemptionBuilder, SubscriptionRedemption(rd)) _
-        })(
-        d,
-        state.requestId,
-        environment,
-      )
-        result.leftMap(_.fold(BuildSubscribePromoError, BuildSubscribeRedemptionError))
-      case p: Paper => EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
-        p,
-        state.requestId,
-        state.user.billingAddress.country,
-        state.promoCode,
-        state.firstDeliveryDate,
-        promotionService,
-        environment
-      ).leftMap(BuildSubscribePromoError))
-      case w: GuardianWeekly =>
-        EitherT.fromEither[Future](GuardianWeeklySubscriptionBuilder.build(
-          w,
-          state.requestId,
-          state.user.billingAddress.country,
-          state.promoCode,
-          state.firstDeliveryDate,
-          promotionService,
-          if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct,
-          environment
-        ).leftMap(BuildSubscribePromoError))
-    }
-    eventualErrorOrSubscriptionData.value.flatMap { errorOrSubscriptionData =>
-      Future.fromTry(errorOrSubscriptionData.toTry)
-    }
-  }
 
 }
 
