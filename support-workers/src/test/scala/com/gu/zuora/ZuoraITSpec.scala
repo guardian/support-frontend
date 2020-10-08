@@ -43,7 +43,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve subscription redemption information from a redemption code" in {
-    val redemptionCode = "gd12-integration-test"
+    val redemptionCode = "gd12-it-test1"
     uatGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).right.get).map {
       response =>
         response.records.size shouldBe 1
@@ -52,7 +52,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "handle invalid redemption codes" in {
-    val invalidRedemptionCode = "xxxx-0000"
+    val invalidRedemptionCode = "xxxx-0000-111"
     uatGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(invalidRedemptionCode).right.get).map {
       response =>
         response.records.size shouldBe 0
