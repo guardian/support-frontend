@@ -34,6 +34,7 @@ export type StripeFormPropTypes = {
   validateForm: Function,
   buttonText: string,
   csrf: Csrf,
+  isTestUser: boolean,
 }
 
 type CardFieldData = {
@@ -149,7 +150,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
     fetchJson(
       routes.stripeSetupIntentRecaptcha,
       requestOptions(
-        { token, stripePublicKey: props.stripeKey, isTestUser: window.guardian.isTestUser},
+        { token, stripePublicKey: props.stripeKey, isTestUser: props.isTestUser },
         'same-origin',
         'POST',
         props.csrf,

@@ -49,6 +49,7 @@ function StripeProviderForCountry(props: PropTypes) {
         validateForm={props.validateForm}
         buttonText={props.buttonText}
         csrf={props.csrf}
+        isTestUser={props.isTestUser}
       />
     </Elements>
   );

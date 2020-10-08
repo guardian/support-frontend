@@ -77,7 +77,6 @@ const mapStateToProps = (state: State) => ({
   recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
-  isTestUser: state.page.user.isTestUser,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
