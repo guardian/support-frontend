@@ -142,7 +142,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid corporate sub" in {
     val corporateSub = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Corporate),
-      paymentFields = Right(RedemptionData(RedemptionCode("test-code").right.get))
+      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get))
     )
 
     DigitalPackValidation.passes(corporateSub.product.asInstanceOf[DigitalPack])(corporateSub) shouldBe true
@@ -160,7 +160,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid gift sub redemption" in {
     val giftRedemption = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Gift),
-      paymentFields = Right(RedemptionData(RedemptionCode("test-code").right.get))
+      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get))
     )
 
     DigitalPackValidation.passes(giftRedemption.product.asInstanceOf[DigitalPack])(giftRedemption) shouldBe true
@@ -206,7 +206,7 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "not allow corporate redemptions for paper products" in {
-    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("TEST-CODE").right.get)))
+    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get)))
     PaperValidation.passes(requestWithCorporateRedemption) shouldBe false
   }
 

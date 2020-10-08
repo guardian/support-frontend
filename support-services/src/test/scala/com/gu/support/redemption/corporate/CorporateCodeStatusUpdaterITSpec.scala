@@ -18,7 +18,7 @@ class CorporateCodeStatusUpdaterITSpec extends AsyncFlatSpec with Matchers {
 
   // this is one test because it depends on external state which may not be in a particular state
   "corporateCodeStatusUpdater" should "set a code available and used" in {
-    val mutableCode: RedemptionCode = RedemptionCode("ITTEST-MUTABLE").right.get
+    val mutableCode: RedemptionCode = RedemptionCode("it-mutable123").right.get
     for {
       _ <- corporateCodeStatusUpdater.setStatus(mutableCode, RedemptionTable.AvailableField.CodeIsUsed) // get in known state
       _ <- corporateCodeStatusUpdater.setStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable).map {
@@ -37,7 +37,7 @@ class CorporateCodeStatusUpdaterITSpec extends AsyncFlatSpec with Matchers {
   }
 
   "corporateCodeStatusUpdater" should "not set a code that doesn't exist" in {
-    val missingCode = RedemptionCode("ITTEST-MISSING").right.get
+    val missingCode = RedemptionCode("it-missing123").right.get
     for {
       _ <- recoverToSucceededIf[ConditionalCheckFailedException] {
         corporateCodeStatusUpdater.setStatus(missingCode, RedemptionTable.AvailableField.CodeIsAvailable)

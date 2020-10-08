@@ -44,7 +44,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           termType = "TERMED",
           readerType = ReaderType.Corporate,
           promoCode = None,
-          redemptionCode = Some("CODE"),
+          redemptionCode = Some(testCode),
           corporateAccountId = Some("1")
         )
       )
@@ -96,9 +96,11 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val saleDate = new LocalDate(2020, 6, 5)
   lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
 
+  val testCode = "test-code-123"
+
   lazy val corporateRedemptionBuilder = new DigitalSubscriptionCorporateRedemptionBuilder(
     new CorporateCodeValidator({
-      case "CODE" => Future.successful(Some(Map(
+      case `testCode` => Future.successful(Some(Map(
         "available" -> DynamoLookup.DynamoBoolean(true),
         "corporateId" -> DynamoLookup.DynamoString("1")
       )))
@@ -108,7 +110,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   lazy val corporate =
     corporateRedemptionBuilder.build(
-      RedemptionData(RedemptionCode("CODE").right.get),
+      RedemptionData(RedemptionCode(testCode).right.get),
       DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       SANDBOX
@@ -150,7 +152,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         None,
         DigitalPack(GBP, Quarterly, Gift),
         RedemptionNoProvider,
-        Right(RedemptionData(RedemptionCode("any-code").right.get)),
+        Right(RedemptionData(RedemptionCode(testCode).right.get)),
         None,
         None,
         SalesforceContactRecords(SalesforceContactRecord("", ""), None),

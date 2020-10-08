@@ -420,7 +420,7 @@ object JsonFixtures {
             "product": $digitalPackCorporateJson,
             "paymentProvider": "RedemptionNoProvider",
             "paymentMethod": {
-              "redemptionCode": "ITTEST-MUTABLE"
+              "redemptionCode": "it-mutable123"
             },
             "salesForceContact": $salesforceContactJson,
             $salesforceContactsJson
