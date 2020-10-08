@@ -75,7 +75,7 @@ const CampaignHeader = (props: {heading: string | Node, orderIsAGift: boolean}) 
         {props.orderIsAGift ? (
           <h2>Give<br />The Guardian Weekly</h2>
           ) : (
-            <h2>The Guardian<br />Weekly</h2>
+            <h2>The<br />Guardian<br />Weekly</h2>
           )
         }
       </div>
