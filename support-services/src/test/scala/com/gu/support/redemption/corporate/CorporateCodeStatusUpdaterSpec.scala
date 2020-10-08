@@ -7,37 +7,37 @@ import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.Future
 
-class SetCodeStatusSpec extends AsyncFlatSpec with Matchers {
+class CorporateCodeStatusUpdaterSpec extends AsyncFlatSpec with Matchers {
 
   val testCode = "test-code-123"
 
-  "setCodeStatus" should "mark a code as used" in {
-    val setCodeStatus = SetCodeStatus.withDynamoLookup {
+  "corporateCodeStatusUpdater" should "mark a code as used" in {
+    val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate {
       case (`testCode`, DynamoFieldUpdate("available", false)) => Future.successful(())
       case _ => Future.failed(new Throwable)
     }
-    setCodeStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsUsed).map {
+    corporateCodeStatusUpdater.setStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsUsed).map {
       _ should be(())
     }
   }
 
   it should "mark a code as available" in {
-    val setCodeStatus = SetCodeStatus.withDynamoLookup {
+    val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate {
       case (`testCode`, DynamoFieldUpdate("available", true)) => Future.successful(())
       case _ => Future.failed(new Throwable)
     }
-    setCodeStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsAvailable).map {
+    corporateCodeStatusUpdater.setStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsAvailable).map {
       _ should be(())
     }
   }
 
   it should "be sure to fail if there is an overall dynamo failure" in {
-    val setCodeStatus = SetCodeStatus.withDynamoLookup {
+    val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate {
       case (`testCode`, DynamoFieldUpdate("available", false)) => Future.failed(new RuntimeException("test exception"))
       case _ => Future.failed(new Throwable)
     }
     recoverToSucceededIf[RuntimeException] {
-      setCodeStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsUsed)
+      corporateCodeStatusUpdater.setStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsUsed)
     }
   }
 
