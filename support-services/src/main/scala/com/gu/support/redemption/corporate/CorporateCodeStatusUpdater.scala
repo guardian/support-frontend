@@ -7,7 +7,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object CorporateCodeStatusUpdater {
 
-  def withDynamoUpdate(dynamoLookup: DynamoUpdate): CorporateCodeStatusUpdater = new CorporateCodeStatusUpdater(dynamoLookup)
+  def withDynamoUpdate(dynamoUpdate: DynamoUpdate): CorporateCodeStatusUpdater = new CorporateCodeStatusUpdater(dynamoUpdate)
 
 }
 
