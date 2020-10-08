@@ -44,7 +44,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           termType = "TERMED",
           readerType = ReaderType.Corporate,
           promoCode = None,
-          redemptionCode = Some("CODE"),
+          redemptionCode = Some(testCode),
           corporateAccountId = Some("1")
         )
       )
@@ -96,9 +96,11 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val saleDate = new LocalDate(2020, 6, 5)
   lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
 
+  val testCode = "test-code-123"
+
   lazy val corporateRedemptionBuilder = new DigitalSubscriptionCorporateRedemptionBuilder(
     new CorporateCodeValidator({
-      case "CODE" => Future.successful(Some(Map(
+      case `testCode` => Future.successful(Some(Map(
         "available" -> DynamoLookup.DynamoBoolean(true),
         "corporateId" -> DynamoLookup.DynamoString("1")
       )))
