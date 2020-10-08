@@ -9,9 +9,9 @@ import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
+import { GuardianWeekly } from 'helpers/subscriptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
-
 // Types
 
 export type DataListItem = {
@@ -86,11 +86,11 @@ const DropDownButton = (props: { onClick: Function, showDropDown: boolean }) => 
 
 const TabletAndDesktop = (props: PropTypes) => (
   <span className={styles.tabletAndDesktop}>
-    <div className={styles.img}>
+    <div className={`${styles.img} ${props.product === GuardianWeekly ? styles.guardianWeekly : ''}`}>
       {props.image}
     </div>
     <div className={styles.content}>
-      <h1 className={styles.header}>Order summary</h1>
+      <h1 className={`${styles.header} ${props.product === GuardianWeekly ? styles.guardianWeekly : ''}`}>Order summary</h1>
       <header>
         <h2 className={styles.title} title={`your subscription is ${props.title}`}>
           {!props.orderIsAGift && 'The '}{props.title}{props.orderIsAGift && ' Gift Subscription'}
