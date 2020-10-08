@@ -42,7 +42,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           termType = "TERMED",
           readerType = ReaderType.Corporate,
           promoCode = None,
-          redemptionCode = Some("code-12345678"),
+          redemptionCode = Some(testCode),
           corporateAccountId = Some("1")
         )
       )
