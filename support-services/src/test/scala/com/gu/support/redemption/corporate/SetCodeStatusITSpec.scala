@@ -37,7 +37,7 @@ class SetCodeStatusITSpec extends AsyncFlatSpec with Matchers {
   }
 
   "setCodeStatus" should "not set a code that doesn't exist" in {
-    val missingCode = RedemptionCode("ittest-missing").right.get
+    val missingCode = RedemptionCode("it-missing123").right.get
     for {
       _ <- recoverToSucceededIf[ConditionalCheckFailedException] {
         setCodeStatus(missingCode, RedemptionTable.AvailableField.CodeIsAvailable)
