@@ -8,14 +8,13 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
 import com.gu.support.catalog._
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
-import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption._
 import com.gu.support.redemption.corporate._
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
-import com.gu.support.workers.lambdas.CreateZuoraSubscription.{Impure, createSubscription}
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
 import com.gu.support.zuora.api.ReaderType.Gift
@@ -42,7 +41,6 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     services: Services
   ): FutureHandlerResult = {
     val now = () => DateTime.now(DateTimeZone.UTC)
-    val today = () => LocalDate.now(DateTimeZone.UTC)
     val promotionService = services.promotionService
     val redemptionService = services.redemptionService
     val zuoraGiftService = services.zuoraGiftService
@@ -55,31 +53,28 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case Some(redemptionData) =>
         redeemGift(redemptionData, requestInfo, state, zuoraGiftService, services.catalogService)
       case None =>
-        createSubscription(state, requestInfo, config, Impure(now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator))
+        val createSubscription = new ZuoraSubscriptionCreator(now, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
+        createSubscription.create(state, requestInfo)
     }
   }
 }
 
-object CreateZuoraSubscription {
-
+class ZuoraSubscriptionCreator(
+  now: () => DateTime,
+  promotionService: PromotionService,
+  redemptionService: DynamoLookup with DynamoUpdate,
+  zuoraService: ZuoraSubscribeService,
+  giftCodeGenerator: GiftCodeGeneratorService,
+  config: ZuoraConfig,
+) {
+  def today(): LocalDate = now().toLocalDate
   import com.gu.FutureLogging._
 
-  case class Impure(
-    now: () => DateTime,
-    today: () => LocalDate,
-    promotionService: PromotionService,
-    redemptionService: DynamoLookup with DynamoUpdate,
-    zuoraService: ZuoraSubscribeService,
-    giftCodeGenerator: GiftCodeGeneratorService,
-  )
-
-  def createSubscription(
+  def create(
     state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
-    config: ZuoraConfig,
-    impure: Impure
   ): Future[HandlerResult[SendThankYouEmailState]] = {
-    import impure._
+    import ZuoraSubscriptionCreator._
     val subscriptionDataBuilder = {
       val corporateCodeValidator = CorporateCodeValidator.withDynamoLookup(redemptionService)
       val dsPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(config.digitalPack, promotionService, giftCodeGenerator, today)
@@ -107,7 +102,11 @@ object CreateZuoraSubscription {
     } yield HandlerResult(getEmailState(state, account, sub, paymentOrRedemptionData), info)
   }
 
-  private def subscribeIfApplicable(
+}
+
+object ZuoraSubscriptionCreator {
+
+  def subscribeIfApplicable(
     requestInfo: RequestInfo,
     zuoraService: ZuoraSubscribeService,
     subscribeItem: SubscribeItem,
@@ -131,12 +130,12 @@ object CreateZuoraSubscription {
     }
   }
 
-  private def getEmailState(
+  def getEmailState(
     state: CreateZuoraSubscriptionState,
     accountNumber: ZuoraAccountNumber,
     subscriptionNumber: ZuoraSubscriptionNumber,
     paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData]
-  ) =
+  ): SendThankYouEmailState =
     SendThankYouEmailState(
       state.requestId,
       state.user,
