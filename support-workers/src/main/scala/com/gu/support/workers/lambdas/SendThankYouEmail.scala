@@ -120,7 +120,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
 
   def getProductRatePlanId(product: ProductType, isTestUser: Boolean, readerType: ReaderType): ProductRatePlanId = {
     val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
-    ProductTypeRatePlans.productTypeRatePlan(product, touchpointEnvironment, readerType).map(_.id).getOrElse("")
+    product.productRatePlan(touchpointEnvironment, readerType).map(_.id).getOrElse("")
   }
 
   private def getAppliedPromotion(

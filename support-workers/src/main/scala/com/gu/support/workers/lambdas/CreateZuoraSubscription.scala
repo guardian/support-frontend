@@ -1,5 +1,6 @@
 package com.gu.support.workers.lambdas
 
+import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
@@ -8,7 +9,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
 import com.gu.support.catalog._
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
-import com.gu.support.promotions.PromotionService
+import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption._
 import com.gu.support.redemption.corporate._
 import com.gu.support.redemption.gifting.GiftCodeValidator
@@ -21,6 +22,7 @@ import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response.{Subscription, UpdateRedemptionDataResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.support.zuora.domain.DomainSubscription
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.buildContributionSubscription
 import com.gu.zuora.subscriptionBuilders._
 import com.gu.zuora.{ZuoraGiftService, ZuoraSubscribeService}
 import org.joda.time.{DateTime, DateTimeZone, Days, LocalDate}
@@ -28,6 +30,10 @@ import org.joda.time.{DateTime, DateTimeZone, Days, LocalDate}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
+
+case class BuildSubscribePromoError(cause: PromoError) extends RuntimeException
+
+case class BuildSubscribeRedemptionError(cause: InvalidCode) extends RuntimeException
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
   extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
@@ -76,16 +82,15 @@ class ZuoraSubscriptionCreator(
     val subscriptionDataBuilder = {
       val corporateCodeValidator = CorporateCodeValidator.withDynamoLookup(redemptionService)
       val dsPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(config.digitalPack, promotionService, giftCodeGenerator, today)
-      val dsRedemptionBuilder = new DigitalSubscriptionCorporateRedemptionBuilder(corporateCodeValidator, today)
-      new SubscriptionBuilder(dsPurchaseBuilder, dsRedemptionBuilder, promotionService, config.contributionConfig _)
+      val dsRedemptionBuilder = new DigitalSubscriptionRedemptionBuilder(corporateCodeValidator, today)
+      new SubscriptionDataBuilder(dsPurchaseBuilder, dsRedemptionBuilder, promotionService, config.contributionConfig _)
     }
     val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService)
-    val environment = TouchPointEnvironments.fromStage(Configuration.stage, state.user.isTestUser)
 
     for {
-      subscriptionData <- subscriptionDataBuilder.build(state, environment).value.map(_.toTry).flatMap(Future.fromTry)
+      subscriptionData <- subscriptionDataBuilder.build(state)
         .withLogging("subscription data")
-      subscribeItem = SubscribeItemBuilder.build(state, subscriptionData)
+      subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
         .withLogging("identity id")
       maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
@@ -149,6 +154,50 @@ object ZuoraSubscriptionCreator {
       state.acquisitionData
     )
 
+  private def buildSubscribeItem(state: CreateZuoraSubscriptionState, subscriptionData: SubscriptionData): SubscribeItem = {
+    val billingEnabled = state.paymentMethod.isLeft
+    //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
+    SubscribeItem(
+      account = buildAccount(state),
+      billToContact = buildContactDetails(state.user, None, state.user.billingAddress),
+      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, state.giftRecipient, _, state.user.deliveryInstructions)),
+      paymentMethod = state.paymentMethod.left.toOption,
+      subscriptionData = subscriptionData,
+      subscribeOptions = SubscribeOptions(generateInvoice = billingEnabled, processPayments = billingEnabled)
+    )
+  }
+
+  private def buildContactDetails(user: User, giftRecipient: Option[GiftRecipient], address: Address, deliveryInstructions: Option[String] = None) = {
+    val email = giftRecipient match {
+      case None => Some(user.primaryEmailAddress)
+      case Some(w: GiftRecipient.WeeklyGiftRecipient) => w.email
+      case Some(ds: GiftRecipient.DigitalSubGiftRecipient) => Some(ds.email)
+    }
+    ContactDetails(
+      firstName = giftRecipient.fold(user.firstName)(_.firstName),
+      lastName = giftRecipient.fold(user.lastName)(_.lastName),
+      workEmail = email,
+      address1 = address.lineOne,
+      address2 = address.lineTwo,
+      city = address.city,
+      postalCode = address.postCode,
+      country = address.country,
+      state = address.state,
+      deliveryInstructions = deliveryInstructions
+    )
+  }
+
+  private def buildAccount(state: CreateZuoraSubscriptionState) = Account(
+    name = state.salesforceContacts.recipient.AccountId, //We store the Salesforce Account id in the name field
+    currency = state.product.currency,
+    crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
+    sfContactId__c = state.salesforceContacts.recipient.Id,
+    identityId__c = state.user.id,
+    paymentGateway = state.paymentMethod.left.toOption.map(_.paymentGateway),
+    createdRequestId__c = state.requestId.toString,
+    autoPay = state.paymentMethod.isLeft
+  )
+
   def updateRedemptionCodeIfApplicable(
     paymentMethod: Either[PaymentMethod, RedemptionData],
     corporateCodeStatusUpdater: CorporateCodeStatusUpdater
@@ -161,6 +210,62 @@ object ZuoraSubscriptionCreator {
         )
       case None => Future.successful(())
     }
+
+}
+
+class SubscriptionDataBuilder(
+  digitalSubscriptionPurchaseBuilder: DigitalSubscriptionPurchaseBuilder,
+  digitalSubscriptionRedemptionBuilder: DigitalSubscriptionRedemptionBuilder,
+  promotionService: => PromotionService,
+  config: BillingPeriod => ZuoraContributionConfig,
+) {
+
+  def build(
+    state: CreateZuoraSubscriptionState,
+  ): Future[SubscriptionData] = {
+    val environment = TouchPointEnvironments.fromStage(Configuration.stage, state.user.isTestUser)
+
+    val eventualErrorOrSubscriptionData = state.product match {
+      case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
+      case d: DigitalPack =>
+        val result = (state.paymentMethod match {
+          case Left(_: PaymentMethod) => DigitalSubscriptionBuilder.build(digitalSubscriptionPurchaseBuilder, SubscriptionPurchase(
+            state.promoCode,
+            state.product.billingPeriod,
+            state.user.billingAddress.country,
+          )) _
+          case Right(rd: RedemptionData) => DigitalSubscriptionBuilder.build(digitalSubscriptionRedemptionBuilder, SubscriptionRedemption(rd)) _
+        })(
+        d,
+        state.requestId,
+        environment,
+      )
+        result.leftMap(_.fold(BuildSubscribePromoError, BuildSubscribeRedemptionError))
+      case p: Paper => EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
+        p,
+        state.requestId,
+        state.user.billingAddress.country,
+        state.promoCode,
+        state.firstDeliveryDate,
+        promotionService,
+        environment
+      ).leftMap(BuildSubscribePromoError))
+      case w: GuardianWeekly =>
+        EitherT.fromEither[Future](GuardianWeeklySubscriptionBuilder.build(
+          w,
+          state.requestId,
+          state.user.billingAddress.country,
+          state.promoCode,
+          state.firstDeliveryDate,
+          promotionService,
+          if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct,
+          environment
+        ).leftMap(BuildSubscribePromoError))
+    }
+    eventualErrorOrSubscriptionData.value.flatMap { errorOrSubscriptionData =>
+      Future.fromTry(errorOrSubscriptionData.toTry)
+    }
+  }
 
 }
 
@@ -211,13 +316,12 @@ object DigitalSubscriptionGiftRedemption {
     (for {
       ratePlan <- subscription.ratePlans.headOption
       productRatePlan <- catalogService.getProductRatePlanFromId(catalog.DigitalPack, ratePlan.productRatePlanId)
-      startDate = LocalDate.now() // TODO needed for thank you email
-      newEndDate = startDate
+      newEndDate = LocalDate.now()
         .toDateTimeAtStartOfDay
         .plusDays(1) //To avoid having to think about time zones
         .plusMonths(productRatePlan.billingPeriod.monthsInPeriod)
         .toLocalDate
-      newTermLength = Days.daysBetween(subscription.customerAcceptanceDate, newEndDate).getDays // TODO needed for thank you email
+      newTermLength = Days.daysBetween(subscription.customerAcceptanceDate, newEndDate).getDays
     } yield Success(newTermLength)).getOrElse(Failure(new RuntimeException(s"Unable to calculate new term length for subscription ${subscription}")))
   }
 

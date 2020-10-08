@@ -20,6 +20,7 @@ sealed trait ProductType {
 
   override def toString: String = this.getClass.getSimpleName
   def describe: String
+  val catalogType: com.gu.support.catalog.Product
 }
 
 case class Contribution(
@@ -27,6 +28,7 @@ case class Contribution(
   currency: Currency,
   billingPeriod: BillingPeriod
 ) extends ProductType {
+  override val catalogType = com.gu.support.catalog.Contribution
   override def describe: String = s"$billingPeriod-Contribution-$currency-$amount"
 }
 
@@ -35,6 +37,7 @@ case class DigitalPack(
   billingPeriod: BillingPeriod,
   readerType: ReaderType = Direct
 ) extends ProductType {
+  override val catalogType = com.gu.support.catalog.DigitalPack
   override def describe: String = s"$billingPeriod-DigitalPack-$currency"
 }
 
@@ -44,6 +47,7 @@ case class Paper(
   fulfilmentOptions: FulfilmentOptions,
   productOptions: PaperProductOptions
 ) extends ProductType {
+  override val catalogType = com.gu.support.catalog.Paper
   override def describe: String = s"Paper-$fulfilmentOptions-$productOptions"
 }
 
@@ -52,6 +56,7 @@ case class GuardianWeekly(
   billingPeriod: BillingPeriod,
   fulfilmentOptions: FulfilmentOptions,
 ) extends ProductType {
+  override val catalogType = com.gu.support.catalog.GuardianWeekly
   override def describe: String = s"$billingPeriod-GuardianWeekly-$fulfilmentOptions-$currency"
 }
 
