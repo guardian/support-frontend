@@ -160,7 +160,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid gift sub redemption" in {
     val giftRedemption = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Gift),
-      paymentFields = Right(RedemptionData(RedemptionCode("test-code").right.get))
+      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get))
     )
 
     DigitalPackValidation.passes(giftRedemption.product.asInstanceOf[DigitalPack])(giftRedemption) shouldBe true
