@@ -63,7 +63,6 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
-  postDeploymentTestUser: string,
   isTestUser: boolean,
 |};
 
@@ -78,7 +77,7 @@ const mapStateToProps = (state: State) => ({
   recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
-  postDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
+  isTestUser: state.page.user.isTestUser,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -202,7 +201,7 @@ const CardForm = (props: PropTypes) => {
     }
 
     window.grecaptcha.render('robot_checkbox', {
-      sitekey: props.postDeploymentTestUser ?
+      sitekey: props.isTestUser ?
         window.guardian.v2recaptchaPublicKey.uat :
         window.guardian.v2recaptchaPublicKey.default,
       callback: (token) => {
@@ -212,7 +211,7 @@ const CardForm = (props: PropTypes) => {
         fetchJson(
           routes.stripeSetupIntentRecaptcha,
           requestOptions(
-            { token, stripePublicKey: props.stripeKey, isTestUser: props.postDeploymentTestUser},
+            { token, stripePublicKey: props.stripeKey, isTestUser: props.isTestUser },
             'same-origin',
             'POST',
             props.csrf,
@@ -237,8 +236,9 @@ const CardForm = (props: PropTypes) => {
   };
 
   const setupRecaptchaTokenForOneOff = () => {
+
     window.grecaptcha.render('robot_checkbox', {
-      sitekey: props.postDeploymentTestUser ?
+      sitekey: props.isTestUser ?
         window.guardian.v2recaptchaPublicKey.uat :
         window.guardian.v2recaptchaPublicKey.default,
       callback: (token) => {
