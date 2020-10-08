@@ -106,12 +106,13 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     () => saleDate
   )
 
-  lazy val corporate = DigitalSubscriptionBuilder.build(
-    new corporateRedemptionBuilder.WithRedemption(RedemptionData(RedemptionCode("CODE").right.get)),
-    DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
-    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SANDBOX
-  ).value.map(_.right.get)
+  lazy val corporate =
+    corporateRedemptionBuilder.build(
+      RedemptionData(RedemptionCode("CODE").right.get),
+      DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
+      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+      SANDBOX
+    ).value.map(_.right.get)
 
   lazy val subscriptionPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2),
@@ -120,19 +121,21 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     () => saleDate
   )
 
-  lazy val monthly = DigitalSubscriptionBuilder.build(
-    new subscriptionPurchaseBuilder.WithPurchase(None, Monthly, Country.UK),
-    DigitalPack(GBP, Monthly),
-    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SANDBOX,
-  ).value.map(_.right.get)
+  lazy val monthly =
+    subscriptionPurchaseBuilder.build(
+      None, Monthly, Country.UK,
+      DigitalPack(GBP, Monthly),
+      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+      SANDBOX,
+    ).value.map(_.right.get)
 
-  lazy val threeMonthGiftPurchase = DigitalSubscriptionBuilder.build(
-    new subscriptionPurchaseBuilder.WithPurchase(None, Quarterly, Country.UK),
-    DigitalPack(GBP, Quarterly, Gift),
-    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    SANDBOX,
-  ).value.map(_.right.get)
+  lazy val threeMonthGiftPurchase =
+    subscriptionPurchaseBuilder.build(
+      None, Quarterly, Country.UK,
+      DigitalPack(GBP, Quarterly, Gift),
+      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+      SANDBOX,
+    ).value.map(_.right.get)
 
   lazy val threeMonthGiftRedemption: Future[Throwable] =
     new SubscriptionBuilder(

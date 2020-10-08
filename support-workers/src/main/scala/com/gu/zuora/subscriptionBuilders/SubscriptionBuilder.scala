@@ -33,12 +33,7 @@ class SubscriptionBuilder(
     state.product match {
       case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
       case d: DigitalPack =>
-        DigitalSubscriptionBuilder.build(
-          digiSubPaymentTypeBuilder(state, d),
-          d,
-          state.requestId,
-          environment,
-        ).leftMap(_.fold(BuildSubscribePromoError, BuildSubscribeRedemptionError): Throwable)
+        buildDigiSub(state, d, environment)
       case p: Paper =>
         EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
           p,
@@ -64,25 +59,36 @@ class SubscriptionBuilder(
         )
     }
 
-  private def digiSubPaymentTypeBuilder(state: CreateZuoraSubscriptionState, d: DigitalPack) = {
+  private def buildDigiSub(
+    state: CreateZuoraSubscriptionState,
+    d: DigitalPack,
+    environment: TouchPointEnvironment
+  ): EitherT[Future, Throwable, SubscriptionData] = {
     val Purchase = Left
     val Redemption = Right
     (state.paymentMethod, d.readerType) match {
       case (Purchase(_: PaymentMethod), _) =>
-        new digitalSubscriptionPurchaseBuilder.WithPurchase(
+        digitalSubscriptionPurchaseBuilder.build(
           state.promoCode,
           state.product.billingPeriod,
-          state.user.billingAddress.country
-        )
+          state.user.billingAddress.country,
+          d,
+          state.requestId,
+          environment,
+        ).leftMap(BuildSubscribePromoError)
       case (Redemption(rd: RedemptionData), ReaderType.Corporate) =>
-        new digitalSubscriptionCorporateRedemptionBuilder.WithRedemption(rd)
+        digitalSubscriptionCorporateRedemptionBuilder.build(rd,
+          d,
+          state.requestId,
+          environment,
+        ).leftMap(BuildSubscribeRedemptionError)
       case (Redemption(_), Gift) =>
         // gift redemptions modify the sub created during the gift purchase
         // this should have been detected earlier
-        new RedemptionErrorBuilder(InvalidReaderType)
+        EitherT.leftT[Future, SubscriptionData](BuildSubscribeRedemptionError(InvalidReaderType))
       case (Redemption(_), _) =>
         // can't redeem other types of sub
-        new RedemptionErrorBuilder(InvalidReaderType)
+        EitherT.leftT[Future, SubscriptionData](BuildSubscribeRedemptionError(InvalidReaderType))
     }
   }
 }
