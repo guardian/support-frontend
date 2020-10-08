@@ -14,9 +14,7 @@ import {
 import type { Participations } from 'helpers/abTests/abtest';
 import { getBaseDomain } from 'helpers/url';
 import {
-  Annual,
   type DigitalBillingPeriod,
-  Monthly,
 } from 'helpers/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { getIntcmp, getPromoCode } from './flashSale';
@@ -36,6 +34,7 @@ type PromoCodes = {
 export type SubsUrls = {
   [SubscriptionProduct]: string,
   GuardianWeeklyGift: string,
+  DigitalPackGift: string,
 };
 
 
@@ -169,11 +168,13 @@ function buildSubsUrls(
   const paper = '/uk/subscribe/paper';
   const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', countryGroupId, intCmp, referrerAcquisitionData)}`;
   const digital = `/${countryId}/subscribe/digital`;
+  const digitalGift = `/${countryId}/subscribe/digital/gift`;
   const weekly = `/${countryId}/subscribe/weekly`;
   const weeklyGift = `/${countryId}/subscribe/weekly/gift`;
 
   return {
     DigitalPack: digital,
+    DigitalPackGift: digitalGift,
     Paper: paper,
     PaperAndDigital: paperDig,
     GuardianWeekly: weekly,
@@ -211,16 +212,14 @@ function getSubsLinks(
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
   countryGroupId: CountryGroupId,
-  billingPeriod: DigitalBillingPeriod = Monthly,
+  billingPeriod: DigitalBillingPeriod,
   promoCode: Option<string>,
 ): string {
   const params = new URLSearchParams(window.location.search);
   if (promoCode) {
     params.set(promoQueryParam, promoCode);
   }
-  if (billingPeriod === Annual) {
-    params.set('period', Annual);
-  }
+  params.set('period', billingPeriod);
   return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
 }
 

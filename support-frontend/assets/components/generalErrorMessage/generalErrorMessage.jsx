@@ -28,7 +28,7 @@ export default function GeneralErrorMessage(props: PropTypes) {
   if (props.errorReason) {
 
     return (
-      <div className={classNameWithModifiers('component-general-error-message', props.classModifiers)}>
+      <div role="status" aria-live="assertive" className={classNameWithModifiers('component-general-error-message', props.classModifiers)}>
         {props.svg}<span className="component-general-error-message__error-heading">{props.errorHeading}</span>
         <span className="component-general-error-message__small-print">{appropriateErrorMessage(props.errorReason)}</span>
       </div>

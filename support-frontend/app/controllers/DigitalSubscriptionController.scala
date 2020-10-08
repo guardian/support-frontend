@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
 import com.gu.identity.model.{User => IdUser}
@@ -22,6 +22,7 @@ import views.EmptyDiv
 import views.ViewHelpers._
 import views.html.helper.CSRF
 import views.html.subscriptionCheckout
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -56,7 +57,6 @@ class DigitalSubscriptionController(
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
-
     val promoCodes: List[PromoCode] = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ DefaultPromotions.DigitalSubscription.all
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
@@ -64,6 +64,7 @@ class DigitalSubscriptionController(
       "en-au" -> buildCanonicalDigitalSubscriptionLink("au"),
       "en" -> buildCanonicalDigitalSubscriptionLink("int")
     )
+
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes)
     val shareImageUrl = Some("https://i.guim.co.uk/img/media/1033800a75851058d619bc0519b0b7b48a53dcf5/0_0_1200_1200/1200.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=0d50dd49d1fedeacff8a3e437332c2bf") // scalastyle:ignore
 
@@ -85,9 +86,11 @@ class DigitalSubscriptionController(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-  def displayForm(): Action[AnyContent] =
-    authenticatedAction(subscriptionsClientId).async { implicit request =>
-      implicit val settings: AllSettings = settingsProvider.getAllSettings()
+  def displayForm(orderIsAGift: Boolean): Action[AnyContent] = {
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    if (settings.switches.enableDigitalSubGifting.isOn || !orderIsAGift) {
+      authenticatedAction(subscriptionsClientId).async { implicit request =>
+
       identityService.getUser(request.user.minimalUser).fold(
         error => {
           SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.minimalUser.id} due to error from identityService: $error")
@@ -95,21 +98,31 @@ class DigitalSubscriptionController(
         },
         user => {
           userHasDigitalSubscription(membersDataService, request.user) map {
-            case true => redirectToExistingThankYouPage
-            case _ => Ok(digitalSubscriptionFormHtml(user))
+            case true => if (orderIsAGift) Ok(digitalSubscriptionFormHtml(user, orderIsAGift)) else redirectToExistingThankYouPage
+            case _ => Ok(digitalSubscriptionFormHtml(user, orderIsAGift))
           }
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
+    } else {
+      Action(Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect()).withSettingsSurrogateKey)
+    }
+  }
 
-  private def digitalSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
-    val title = "Support the Guardian | The Guardian Digital Subscription"
+
+  private def digitalSubscriptionFormHtml(idUser: IdUser, orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
+    val title = if (orderIsAGift) {
+      "Support the Guardian | The Guardian Digital Gift Subscription"
+     } else {
+       "Support the Guardian | The Guardian Digital Subscription"
+     }
     val id = EmptyDiv("digital-subscription-checkout-page")
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+    val readerType = if (orderIsAGift) Gift else Direct
 
     subscriptionCheckout(
       title,
@@ -120,12 +133,13 @@ class DigitalSubscriptionController(
       Some(csrf),
       idUser,
       uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCodes),
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCodes, readerType),
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
       payPalConfigProvider.get(true),
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey,
+      orderIsAGift
     )
   }
 

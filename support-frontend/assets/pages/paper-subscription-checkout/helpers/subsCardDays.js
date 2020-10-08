@@ -45,4 +45,4 @@ const getPaymentStartDate = (date: number, productOption: ActivePaperProducts) =
   return new Date(date + delayInMils);
 };
 
-export { getFormattedStartDate, getPaymentStartDate };
+export { getFormattedStartDate, getPaymentStartDate, monthText };

@@ -34,8 +34,10 @@ export type FormFields = {|
   fulfilmentOption: FulfilmentOptions,
   product: SubscriptionProduct,
   productOption: ProductOptions,
-  orderIsAGift: Option<boolean>,
+  orderIsAGift?: boolean,
   deliveryInstructions: Option<string>,
+  giftMessage: Option<string>,
+  giftDeliveryDate: Option<string>,
 |};
 
 export type FormField = $Keys<FormFields> | 'recaptcha';
@@ -75,6 +77,8 @@ function getFormFields(state: AnyCheckoutState): FormFields {
     billingAddressIsSame: state.page.checkout.billingAddressIsSame,
     orderIsAGift: state.page.checkout.orderIsAGift,
     deliveryInstructions: state.page.checkout.deliveryInstructions,
+    giftMessage: state.page.checkout.giftMessage,
+    giftDeliveryDate: state.page.checkout.giftDeliveryDate,
   };
 }
 

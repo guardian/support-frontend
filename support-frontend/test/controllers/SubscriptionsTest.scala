@@ -136,7 +136,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): Future[Result] = {
-      fakeDigitalPack(actionRefiner, identityService, membersDataService).displayForm()(FakeRequest())
+      fakeDigitalPack(actionRefiner, identityService, membersDataService).displayForm(false)(FakeRequest())
     }
   }
 

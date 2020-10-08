@@ -6,6 +6,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { border, background } from '@guardian/src-foundations/palette';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
+import { type Option } from 'helpers/types/option';
 
 const endSummaryMobile = css`
   display: block;
@@ -22,12 +23,20 @@ const endSummaryMobile = css`
   }
 `;
 
-function EndSummaryMobile() {
+type PropTypes = {
+  orderIsAGift?: Option<boolean>,
+}
+
+function EndSummaryMobile(props: PropTypes) {
   return (
     <span css={endSummaryMobile}>
-      <EndSummary />
+      <EndSummary orderIsAGift={props.orderIsAGift} />
     </span>
   );
 }
+
+EndSummaryMobile.defaultProps = {
+  orderIsAGift: false,
+};
 
 export default EndSummaryMobile;

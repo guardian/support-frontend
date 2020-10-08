@@ -90,9 +90,11 @@ GET  /subscribe/digital                                            controllers.D
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.DigitalSubscriptionController.digital(country: String)
 
 # redirect from old checkout urls
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
-GET  /subscribe/digital/checkout                                   controllers.DigitalSubscriptionController.displayForm()
-GET  /subscribe/digital/checkout/thankyou-existing                 controllers.DigitalSubscriptionController.displayThankYouExisting()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout       controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout/gift  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout/gift")
+GET  /subscribe/digital/checkout                                         controllers.DigitalSubscriptionController.displayForm(orderIsAGift: Boolean = false)
+GET  /subscribe/digital/checkout/gift                                    controllers.DigitalSubscriptionController.displayForm(orderIsAGift: Boolean = true)
+GET  /subscribe/digital/checkout/thankyou-existing                       controllers.DigitalSubscriptionController.displayThankYouExisting()
 
 GET  /weekly                                                       controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly                                             controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = false)

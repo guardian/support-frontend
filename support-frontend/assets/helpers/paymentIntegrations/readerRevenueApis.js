@@ -22,7 +22,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
-import { type ThankYouPageStage } from '../../pages/contributions-landing/contributionsLandingReducer';
+import { type ThankYouPageStage } from 'pages/contributions-landing/contributionsLandingReducer';
 import {
   DirectDebit,
   ExistingCard,
@@ -45,13 +45,15 @@ type RegularContribution = {|
   billingPeriod: BillingPeriod,
 |};
 
-type DigitalSubscription = {|
+export type DigitalSubscription = {|
   currency: string,
   billingPeriod: BillingPeriod,
   readerType: ReaderType,
+  giftMessage?: string | null,
+  giftDeliveryDate?: string | null,
 |};
 
-type PaperSubscription = {|
+export type PaperSubscription = {|
   currency: string,
   billingPeriod: BillingPeriod,
   fulfilmentOptions: FulfilmentOptions,
