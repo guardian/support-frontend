@@ -80,7 +80,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
     val giftCodeGeneratorService = new GiftCodeGeneratorService
 
-    val subscriptionCreator = new ZuoraSubscriptionCreator(
+    val subscriptionCreator = ZuoraSubscriptionCreator.construct(
       () => new DateTime(2020, 6, 15, 16, 28, 57),
       null,
       dynamoDb,
@@ -147,7 +147,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       }
     }
 
-    val subscriptionCreator = new ZuoraSubscriptionCreator(
+    val subscriptionCreator = ZuoraSubscriptionCreator.construct(
       now = () => new DateTime(2020, 6, 15, 16, 28, 57),
       promotionService = null,// shouldn't be called for subs with no promo code
       redemptionService = null,// shouldn't be called for paid subs

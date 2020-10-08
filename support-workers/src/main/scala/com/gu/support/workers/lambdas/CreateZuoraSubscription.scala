@@ -41,12 +41,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     services: Services
   ): FutureHandlerResult = {
 
-    val createSubscription = new ZuoraSubscriptionCreator(
+    val createSubscription = ZuoraSubscriptionCreator.construct(
       () => DateTime.now(DateTimeZone.UTC),
-      services.promotionService, 
-      services.redemptionService, 
-      services.zuoraService, 
-      services.giftCodeGenerator, 
+      services.promotionService,
+      services.redemptionService,
+      services.zuoraService,
+      services.giftCodeGenerator,
       services.config.zuoraConfigProvider.get(state.user.isTestUser)
     )
 
@@ -61,13 +61,10 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
 class ZuoraSubscriptionCreator(
   now: () => DateTime,
-  promotionService: PromotionService,
-  redemptionService: DynamoLookup with DynamoUpdate,
   zuoraService: ZuoraSubscribeService,
-  giftCodeGenerator: GiftCodeGeneratorService,
-  config: ZuoraConfig,
+  subscriptionDataBuilder: SubscriptionBuilder,
+  corporateCodeStatusUpdater: CorporateCodeStatusUpdater
 ) {
-  def today(): LocalDate = now().toLocalDate
   import com.gu.FutureLogging._
 
   def create(
@@ -75,13 +72,7 @@ class ZuoraSubscriptionCreator(
     requestInfo: RequestInfo,
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     import ZuoraSubscriptionCreator._
-    val subscriptionDataBuilder = {
-      val corporateCodeValidator = CorporateCodeValidator.withDynamoLookup(redemptionService)
-      val dsPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(config.digitalPack, promotionService, giftCodeGenerator, today)
-      val dsRedemptionBuilder = new DigitalSubscriptionCorporateRedemptionBuilder(corporateCodeValidator, today)
-      new SubscriptionBuilder(dsPurchaseBuilder, dsRedemptionBuilder, promotionService, config.contributionConfig _)
-    }
-    val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService)
+
     val environment = TouchPointEnvironments.fromStage(Configuration.stage, state.user.isTestUser)
 
     for {
@@ -105,6 +96,29 @@ class ZuoraSubscriptionCreator(
 }
 
 object ZuoraSubscriptionCreator {
+
+  def construct(
+    now: () => DateTime,
+    promotionService: PromotionService,
+    redemptionService: DynamoLookup with DynamoUpdate,
+    zuoraService: ZuoraSubscribeService,
+    giftCodeGenerator: GiftCodeGeneratorService,
+    config: ZuoraConfig,
+  ): ZuoraSubscriptionCreator =
+    new ZuoraSubscriptionCreator(
+      now,
+      zuoraService,
+      new SubscriptionBuilder(
+        new DigitalSubscriptionPurchaseBuilder(config.digitalPack, promotionService, giftCodeGenerator, () => now().toLocalDate),
+        new DigitalSubscriptionCorporateRedemptionBuilder(
+          CorporateCodeValidator.withDynamoLookup(redemptionService),
+          () => now().toLocalDate
+        ),
+        promotionService,
+        config.contributionConfig _
+      ),
+      CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService)
+    )
 
   def subscribeIfApplicable(
     requestInfo: RequestInfo,
