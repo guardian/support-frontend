@@ -7,11 +7,10 @@ import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.config.{ZuoraConfig, ZuoraDigitalPackConfig}
 import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemption.corporate.DynamoUpdate.DynamoFieldUpdate
-import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.corporate.{DynamoLookup, DynamoUpdate}
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
-import com.gu.support.workers.lambdas.CreateZuoraSubscription
-import com.gu.support.workers.lambdas.CreateZuoraSubscription.Impure
+import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api.response._
@@ -78,18 +77,17 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
     val giftCodeGeneratorService = new GiftCodeGeneratorService
 
-    val result = CreateZuoraSubscription.createSubscription(
+    val subscriptionCreator = new ZuoraSubscriptionCreator(
+      () => new DateTime(2020, 6, 15, 16, 28, 57),
+      null,
+      dyanmoDb,
+      zuora,
+      giftCodeGeneratorService,
+      ZuoraConfig(null, null, null, null, null, null),
+    )
+    val result = subscriptionCreator.create(
       state,
       RequestInfo(false, false, Nil, false),
-      ZuoraConfig(null, null, null, null, null, null),
-      Impure(
-        () => new DateTime(2020, 6, 15, 16, 28, 57),
-        () => new LocalDate(2020, 6, 15),
-        null,
-        dyanmoDb,
-        zuora,
-        giftCodeGeneratorService,
-      )
     )
 
     result.map { handlerResult =>
@@ -146,18 +144,17 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       }
     }
 
-    val result = CreateZuoraSubscription.createSubscription(
+    val subscriptionCreator = new ZuoraSubscriptionCreator(
+      now = () => new DateTime(2020, 6, 15, 16, 28, 57),
+      promotionService = null,// shouldn't be called for subs with no promo code
+      redemptionService = null,// shouldn't be called for paid subs
+      zuoraService = zuora,
+      giftCodeGenerator = new GiftCodeGeneratorService,
+      config = ZuoraConfig(url = null, username = null, password = null, monthlyContribution = null, annualContribution = null, digitalPack = ZuoraDigitalPackConfig(14, 2)),
+    )
+    val result = subscriptionCreator.create(
       state = state,
       requestInfo = RequestInfo(false, false, Nil, false),
-      config = ZuoraConfig(url = null, username = null, password = null, monthlyContribution = null, annualContribution = null, digitalPack = ZuoraDigitalPackConfig(14, 2)),
-      Impure(
-        now = () => new DateTime(2020, 6, 15, 16, 28, 57),
-        today = () => new LocalDate(2020, 6, 15),
-        promotionService = null,// shouldn't be called for subs with no promo code
-        redemptionService = null,// shouldn't be called for paid subs
-        zuoraService = zuora,
-        giftCodeGenerator = new GiftCodeGeneratorService
-      )
     )
 
     result.map { handlerResult =>
