@@ -5,7 +5,7 @@ import java.util.UUID
 import com.gu.i18n.Country
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
-import com.gu.support.workers.Paper
+import com.gu.support.workers.{Paper, ProductTypeRatePlans}
 import com.gu.support.workers.exceptions.BadRequestException
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api.SubscriptionData
@@ -33,7 +33,7 @@ object PaperSubscriptionBuilder {
       case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
     }
 
-    val productRatePlanId = validateRatePlan(paper.productRatePlan(environment, Direct), paper.describe)
+    val productRatePlanId = validateRatePlan(paperRatePlan(paper, environment), paper.describe)
 
     val subscriptionData = buildProductSubscription(
       requestId,

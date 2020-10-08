@@ -5,7 +5,7 @@ import java.util.UUID
 import com.gu.i18n.Country
 import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
-import com.gu.support.config.ZuoraConfig
+import com.gu.support.config.{ZuoraConfig, ZuoraContributionConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.CatalogDataNotFoundException
@@ -21,8 +21,8 @@ object ProductSubscriptionBuilders {
       case None => throw new CatalogDataNotFoundException(s"RatePlanId not found for $productDescription")
     }
 
-  def buildContributionSubscription(contribution: Contribution, requestId: UUID, config: ZuoraConfig): SubscriptionData = {
-    val contributionConfig = config.contributionConfig(contribution.billingPeriod)
+  def buildContributionSubscription(contribution: Contribution, requestId: UUID, config: BillingPeriod => ZuoraContributionConfig): SubscriptionData = {
+    val contributionConfig = config(contribution.billingPeriod)
     buildProductSubscription(
       requestId,
       contributionConfig.productRatePlanId,
