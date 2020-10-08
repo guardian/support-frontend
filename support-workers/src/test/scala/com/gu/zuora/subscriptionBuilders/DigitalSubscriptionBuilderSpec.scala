@@ -109,7 +109,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   )
 
   lazy val corporate = DigitalSubscriptionBuilder.build(
-    new corporateRedemptionBuilder.WithRedemption(RedemptionData(RedemptionCode("CODE").right.get)),
+    new corporateRedemptionBuilder.WithRedemption(RedemptionData(RedemptionCode(testCode).right.get)),
     DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     SANDBOX
@@ -149,7 +149,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         None,
         DigitalPack(GBP, Quarterly, Gift),
         RedemptionNoProvider,
-        Right(RedemptionData(RedemptionCode("any-code").right.get)),
+        Right(RedemptionData(RedemptionCode(testCode).right.get)),
         None,
         None,
         SalesforceContactRecords(SalesforceContactRecord("", ""), None),

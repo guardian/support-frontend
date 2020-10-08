@@ -4,7 +4,7 @@ import sbtrelease.ReleaseStateTransformations._
 
 import scala.sys.process._
 
-val scalatest = "org.scalatest" %% "scalatest" % "3.2.1"
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.2"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
