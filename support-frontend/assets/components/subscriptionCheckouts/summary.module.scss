@@ -62,7 +62,7 @@
   }
 }
 
-.guardianWeekly.img {
+.guardianWeeklyImage.img {
   background-color: #66c2e9;
 }
 
@@ -93,7 +93,7 @@
   }
 }
 
-.guardianWeekly.header {
+.guardianWeeklyHeader.header {
   @include mq($from: tablet) {
     border-bottom: 2px solid gu-colour(neutral-100);
   }
