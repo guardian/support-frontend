@@ -40,20 +40,18 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     context: Context,
     services: Services
   ): FutureHandlerResult = {
-    val now = () => DateTime.now(DateTimeZone.UTC)
-    val promotionService = services.promotionService
-    val redemptionService = services.redemptionService
-    val zuoraGiftService = services.zuoraGiftService
-    val zuoraService = services.zuoraService
-    val giftCodeGenerator = services.giftCodeGenerator
-    val isTestUser = state.user.isTestUser
-    val config: ZuoraConfig = services.config.zuoraConfigProvider.get(isTestUser)
+
+    val createSubscription = {
+      val now = () => DateTime.now(DateTimeZone.UTC)
+      val isTestUser = state.user.isTestUser
+      val config: ZuoraConfig = services.config.zuoraConfigProvider.get(isTestUser)
+      new ZuoraSubscriptionCreator(now, services.promotionService, services.redemptionService, services.zuoraService, services.giftCodeGenerator, config)
+    }
 
     maybeDigitalSubscriptionGiftRedemption(state.product, state.paymentMethod) match {
       case Some(redemptionData) =>
-        redeemGift(redemptionData, requestInfo, state, zuoraGiftService, services.catalogService)
+        redeemGift(redemptionData, requestInfo, state, services.zuoraGiftService, services.catalogService)
       case None =>
-        val createSubscription = new ZuoraSubscriptionCreator(now, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
         createSubscription.create(state, requestInfo)
     }
   }
