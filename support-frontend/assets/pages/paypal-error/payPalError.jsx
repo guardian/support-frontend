@@ -10,8 +10,6 @@ import Footer from 'components/footer/footer';
 import CtaLink from 'components/ctaLink/ctaLink';
 import PageSection from 'components/pageSection/pageSection';
 import QuestionsContact from 'components/questionsContact/questionsContact';
-import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
-
 import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect } from 'helpers/internationalisation/countryGroup';
@@ -44,7 +42,6 @@ const content = (
         />
       </PageSection>
       <QuestionsContact />
-      <SpreadTheWord />
     </div>
   </Page>
 );

@@ -1,13 +1,14 @@
 // @flow
 
 import React from 'react';
-import { type ProductPrice } from 'helpers/productPrice/productPrices';
-import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
+import { type ProductPrice, showPrice } from 'helpers/productPrice/productPrices';
+import { type DigitalBillingPeriod, Annual, Quarterly } from 'helpers/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import * as styles from './orderSummaryStyles';
+import { getGiftOrderSummaryText } from '../helpers';
 
 type PropTypes = {
   billingPeriod: DigitalBillingPeriod,
@@ -16,11 +17,14 @@ type PropTypes = {
   image: $Call<GridImageType, GridImg>,
   productPrice: ProductPrice,
   title: string,
+  orderIsAGift?: boolean,
 };
 
 function OrderSummary(props: PropTypes) {
-
-  const priceString = getBillingDescription(props.productPrice, props.billingPeriod);
+  const giftBillingPeriod = props.billingPeriod === Annual ? Annual : Quarterly;
+  const giftPriceString = getGiftOrderSummaryText(giftBillingPeriod, showPrice(props.productPrice)).cost;
+  const priceString = props.orderIsAGift ? giftPriceString :
+    getBillingDescription(props.productPrice, props.billingPeriod);
 
   return (
     <aside css={styles.wrapper}>
@@ -33,11 +37,11 @@ function OrderSummary(props: PropTypes) {
         <div css={styles.textBlock}>
           <h3>{props.title}</h3>
           <p>{priceString}</p>
-          <span>14 day free trial</span>
+          {!props.orderIsAGift && <span>14 day free trial</span>}
         </div>
       </div>
       <div css={styles.endSummary}>
-        <EndSummary />
+        <EndSummary orderIsAGift={props.orderIsAGift} />
       </div>
     </aside>
   );
@@ -45,6 +49,7 @@ function OrderSummary(props: PropTypes) {
 
 OrderSummary.defaultProps = {
   changeSubscription: '',
+  orderIsAGift: false,
 };
 
 export default OrderSummary;

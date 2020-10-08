@@ -40,7 +40,7 @@ import type {
   FormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import PersonalDetailsGift
+import { PersonalDetailsGift }
   from 'components/subscriptionCheckouts/personalDetailsGift';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
@@ -223,7 +223,6 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               emailGiftRecipient={props.emailGiftRecipient || ''}
               setEmailGift={props.setEmailGift}
               formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
-              isGiftRecipient
             />
           </FormSection>
           <FormSection title="Gift delivery date">

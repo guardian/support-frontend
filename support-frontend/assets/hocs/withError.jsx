@@ -5,7 +5,6 @@
 import React from 'react';
 
 import { Error, type PropsForHoc } from 'components/forms/customFields/error';
-import { type Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 
@@ -17,10 +16,10 @@ type Out<Props> = React$ComponentType<AugmentedProps<Props>>;
 
 // ----- Component ----- //
 
-function withError<Props: { id: Option<string> }>(Component: In<Props>): Out<Props> {
+function withError<Props>(Component: In<Props>): Out<Props> {
 
   return ({ error, ...props }: AugmentedProps<Props>) => (
-    <Error htmlFor={props.id} error={error}>
+    <Error error={error}>
       <Component {...props} />
     </Error>
   );

@@ -26,7 +26,7 @@ import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { ContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
-import ContributionThankYou from './components/ContributionThankYou/ContributionThankYou';
+import ContributionThankYouPage from './components/ContributionThankYou/ContributionThankYouPage';
 import { setUserStateActions } from './setUserStateActions';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
@@ -134,7 +134,7 @@ const router = (
               setOneOffContributionCookie();
             }
             return (
-              <ContributionThankYou countryGroupId={countryGroupId} />
+              <ContributionThankYouPage countryGroupId={countryGroupId} />
             );
           }}
         />

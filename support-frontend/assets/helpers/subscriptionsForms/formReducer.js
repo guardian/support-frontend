@@ -58,6 +58,8 @@ function createFormReducer(
     stripePaymentMethod: null,
     deliveryInstructions: null,
     debugInfo: '',
+    giftMessage: null,
+    giftDeliveryDate: null,
   };
 
   const getFulfilmentOption = (action, currentOption) =>
@@ -145,6 +147,12 @@ function createFormReducer(
 
       case 'SET_DELIVERY_INSTRUCTIONS':
         return { ...state, deliveryInstructions: action.instructions };
+
+      case 'SET_GIFT_MESSAGE':
+        return { ...state, giftMessage: action.message };
+
+      case 'SET_GIFT_DELIVERY_DATE':
+        return { ...state, giftDeliveryDate: action.giftDeliveryDate, formErrors: removeError('giftDeliveryDate', state.formErrors) };
 
       default:
         return state;

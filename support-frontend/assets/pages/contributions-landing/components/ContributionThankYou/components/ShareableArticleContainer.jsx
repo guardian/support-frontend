@@ -9,7 +9,7 @@ import {
   OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
   OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
   OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
-} from '../../utils/ophan';
+} from '../utils/ophan';
 import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { until } from '@guardian/src-foundations/mq';

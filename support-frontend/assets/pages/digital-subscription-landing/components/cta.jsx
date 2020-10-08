@@ -13,7 +13,7 @@ const CallToAction = () => (
       <h3>After your <strong>14-day free trial</strong>, your
       subscription will begin automatically and you can cancel any time
       </h3>
-      <PaymentSelection />
+      <PaymentSelection orderIsGift={false} />
     </div>
   </div>
 );
