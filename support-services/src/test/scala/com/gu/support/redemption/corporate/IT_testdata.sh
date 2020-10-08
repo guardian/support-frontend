@@ -13,7 +13,7 @@ fi
 function create {
   code=$1
   echo $code
-  if [[ "$code" == 'ITTEST-USED' ]]; then
+  if [[ "$code" == 'it-test-used1' ]]; then
     value='false'
   else
     value='true'
