@@ -1,6 +1,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.hero {
+.hero,
+.heroGuardianWeekly {
   background-color: gu-colour(brand-main);
   border-top: 1px solid gu-colour(brand-pastel);
   @include mq($from: tablet) {
@@ -40,7 +41,7 @@
   }
 }
 
-.guardianWeeklyHero {
+.heroGuardianWeekly {
   background-color: #66c2e9;
 
   :global(.component-grid-picture) {

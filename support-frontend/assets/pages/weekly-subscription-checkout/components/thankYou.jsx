@@ -113,7 +113,7 @@ function ThankYouContent({
 
   return (
     <div className="thank-you-stage">
-      <HeroWrapper appearance="custom" className={`${styles.hero} ${styles.guardianWeeklyHero}`}>
+      <HeroWrapper appearance="custom" className={styles.heroGuardianWeekly}>
         <HeroImage />
         <HeadingBlock overheadingClass="--thankyou" overheading="Thank you for supporting our journalism!">
           {getHeading(billingPeriod, isPending, orderIsGift)}
