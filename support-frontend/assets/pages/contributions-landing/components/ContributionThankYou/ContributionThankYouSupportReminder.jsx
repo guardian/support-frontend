@@ -75,16 +75,26 @@ const getDefaultReminderDates = (): ReminderDate[] => [
 ];
 
 const GIVING_TUESDAY = {
-  date: new Date(2020, 12, 1),
-  label: 'on Giving Tuesday (1st of December)',
+  date: new Date(2020, 11, 1),
+  label: 'on Giving Tuesday (1 December)',
 };
-const GIVING_TUESDAY_REMINDER_CUT_OFF = new Date(2020, 11, 27);
+const GIVING_TUESDAY_REMINDER_CUT_OFF = new Date(2020, 10, 27);
 
 const LAST_DAY_OF_THE_YEAR = {
-  date: new Date(2020, 12, 31),
-  label: 'on the last day of the year (31st of December)',
+  date: new Date(2020, 11, 31),
+  label: 'at the end of the year (31 December)',
 };
-const LAST_DAY_OF_THE_YEAR_REMINDER_CUT_OFF = new Date(2020, 12, 28);
+const LAST_DAY_OF_THE_YEAR_REMINDER_CUT_OFF = new Date(2020, 11, 28);
+
+const IN_THREE_MONTHS = {
+  date: new Date(2021, 2),
+  label: 'in three months (March 2021)', // slightly custom copy over default (three vs 3)
+};
+
+const THIS_TIME_NEXT_YEAR = {
+  date: new Date(2021, 11),
+  label: 'this time next year (December 2021)',
+};
 
 const getReminderDatesForUsEndOfYearAppeal = (): ReminderDate[] => {
   const now = new Date();
@@ -92,13 +102,13 @@ const getReminderDatesForUsEndOfYearAppeal = (): ReminderDate[] => {
     return [
       GIVING_TUESDAY,
       LAST_DAY_OF_THE_YEAR,
-      getReminderDateWithDefaultLabel(12),
+      THIS_TIME_NEXT_YEAR,
     ];
   } else if (now < LAST_DAY_OF_THE_YEAR_REMINDER_CUT_OFF) {
     return [
       LAST_DAY_OF_THE_YEAR,
-      getReminderDateWithDefaultLabel(3),
-      getReminderDateWithDefaultLabel(12),
+      IN_THREE_MONTHS,
+      THIS_TIME_NEXT_YEAR,
     ];
   }
   return getDefaultReminderDates();
