@@ -89,7 +89,7 @@ const ContributionThankYouSupportReminder = ({
   const selectedDateAsApiString = () => {
     const selectedDate = reminderDates[selectedDateIndex];
     const year = selectedDate.getFullYear();
-    const month = selectedDate.getMonth();
+    const month = selectedDate.getMonth() + 1; // javascript dates run from 0-11, we want 1-12
     const paddedMonth = month.toString().padStart(2, '0');
     return `${year}-${paddedMonth}-01 00:00:00`;
   };
