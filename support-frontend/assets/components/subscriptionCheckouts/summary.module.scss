@@ -52,7 +52,8 @@
   margin-bottom: 0;
 }
 
-.img {
+.img,
+.imgGuardianWeekly {
   overflow: hidden;
   background-color: gu-colour(neutral-97);
   border-bottom: 1px solid gu-colour(neutral-86);
@@ -62,17 +63,20 @@
   }
 }
 
-.guardianWeeklyImage.img {
+.imgGuardianWeekly {
   background-color: #66c2e9;
 }
 
-.img img {
+.img img,
+.imgGuardianWeekly img {
   width: 75%;
   margin: 5% auto 0;
   display: block;
 }
 
-.header, .headerShowDetails {
+.header,
+.headerShowDetails,
+.headerGuardianWeekly {
   @include gu-fontset-body-sans;
   font-weight: 600;
   @include mq($from: tablet) {
@@ -93,14 +97,14 @@
   }
 }
 
-.guardianWeeklyHeader.header {
+.headerShowDetails {
+  margin-bottom: $gu-v-spacing;
+}
+
+.headerGuardianWeekly {
   @include mq($from: tablet) {
     border-bottom: 2px solid gu-colour(neutral-100);
   }
-}
-
-.headerShowDetails {
-  margin-bottom: $gu-v-spacing;
 }
 
 .title, .titleLeftAlign {
