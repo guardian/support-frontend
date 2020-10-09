@@ -626,60 +626,38 @@
 }
 
 .subscriptions__guardian-weekly-packshot {
+  position: relative;
   width: 100%;
 
-  @include mq($until: tablet) {
-    position: static;
+  img {
+    bottom: -25px;
     width: 100%;
   }
 
-  img {
+  @include mq($from: tablet) {
     position: absolute;
-    bottom: 0;
+    bottom: -10px;
+    padding: 0px;
   }
 
-  img:nth-child(1) {
-    left: 80px;
-
-    @include mq($until: leftCol) {
-      left: 50px;
-    }
-
-    @include mq($until: desktop) {
-      left: 20px;
-    }
-
-    @include mq($until: tablet) {
-      display: none;
-    }
-  }
-
-  img:nth-child(2) {
+  @include mq($from: desktop) {
     bottom: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    @include mq($until: tablet) {
-      position: static;
+    img {
       width: 100%;
-      left: 0;
-      transform: none;
     }
   }
 
-  img:nth-child(3) {
-    right: 80px;
-
-    @include mq($until: leftCol) {
-      right: 50px;
+  @include mq($from: leftCol) {
+    left: 50px;
+    img {
+      width: 85%;
     }
+  }
 
-    @include mq($until: desktop) {
-      right: 20px;
-    }
-
-    @include mq($until: tablet) {
-      display: none;
+  @include mq($from: wide) {
+    left: 80px;
+    img {
+      width: 75%;
     }
   }
 
