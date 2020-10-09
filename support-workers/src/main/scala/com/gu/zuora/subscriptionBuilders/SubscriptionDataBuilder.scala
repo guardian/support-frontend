@@ -19,10 +19,10 @@ case class BuildSubscribePromoError(cause: PromoError) extends RuntimeException
 
 case class BuildSubscribeRedemptionError(cause: InvalidCode) extends RuntimeException
 
-class SubscriptionBuilder(
+class SubscriptionDataBuilder(
   digitalSubscriptionPurchaseBuilder: DigitalSubscriptionPurchaseBuilder,
   digitalSubscriptionCorporateRedemptionBuilder: DigitalSubscriptionCorporateRedemptionBuilder,
-  promotionService: => PromotionService,
+  promotionService: PromotionService,
   config: BillingPeriod => ZuoraContributionConfig,
 ) {
 
@@ -61,24 +61,24 @@ class SubscriptionBuilder(
 
   private def buildDigiSub(
     state: CreateZuoraSubscriptionState,
-    d: DigitalPack,
+    digitalPack: DigitalPack,
     environment: TouchPointEnvironment
   ): EitherT[Future, Throwable, SubscriptionData] = {
     val Purchase = Left
     val Redemption = Right
-    (state.paymentMethod, d.readerType) match {
+    (state.paymentMethod, digitalPack.readerType) match {
       case (Purchase(_: PaymentMethod), _) =>
         digitalSubscriptionPurchaseBuilder.build(
           state.promoCode,
           state.product.billingPeriod,
           state.user.billingAddress.country,
-          d,
+          digitalPack,
           state.requestId,
           environment,
         ).leftMap(BuildSubscribePromoError)
       case (Redemption(rd: RedemptionData), ReaderType.Corporate) =>
         digitalSubscriptionCorporateRedemptionBuilder.build(rd,
-          d,
+          digitalPack,
           state.requestId,
           environment,
         ).leftMap(BuildSubscribeRedemptionError)

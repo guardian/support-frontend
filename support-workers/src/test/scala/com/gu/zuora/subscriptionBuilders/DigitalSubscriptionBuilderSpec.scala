@@ -140,7 +140,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     ).value.map(_.right.get)
 
   lazy val threeMonthGiftRedemption: Future[Throwable] =
-    new SubscriptionBuilder(
+    new SubscriptionDataBuilder(
       subscriptionPurchaseBuilder,
       corporateRedemptionBuilder,
       promotionService,

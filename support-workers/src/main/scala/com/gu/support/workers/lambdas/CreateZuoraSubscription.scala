@@ -41,7 +41,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     services: Services
   ): FutureHandlerResult = {
 
-    val createSubscription = ZuoraSubscriptionCreator.construct(
+    val createSubscription = ZuoraSubscriptionCreator(
       () => DateTime.now(DateTimeZone.UTC),
       services.promotionService,
       services.redemptionService,
@@ -62,7 +62,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 class ZuoraSubscriptionCreator(
   now: () => DateTime,
   zuoraService: ZuoraSubscribeService,
-  subscriptionDataBuilder: SubscriptionBuilder,
+  subscriptionDataBuilder: SubscriptionDataBuilder,
   corporateCodeStatusUpdater: CorporateCodeStatusUpdater
 ) {
   import com.gu.FutureLogging._
@@ -97,7 +97,7 @@ class ZuoraSubscriptionCreator(
 
 object ZuoraSubscriptionCreator {
 
-  def construct(
+  def apply(
     now: () => DateTime,
     promotionService: PromotionService,
     redemptionService: DynamoLookup with DynamoUpdate,
@@ -108,14 +108,14 @@ object ZuoraSubscriptionCreator {
     new ZuoraSubscriptionCreator(
       now,
       zuoraService,
-      new SubscriptionBuilder(
+      new SubscriptionDataBuilder(
         new DigitalSubscriptionPurchaseBuilder(config.digitalPack, promotionService, giftCodeGenerator, () => now().toLocalDate),
         new DigitalSubscriptionCorporateRedemptionBuilder(
           CorporateCodeValidator.withDynamoLookup(redemptionService),
           () => now().toLocalDate
         ),
         promotionService,
-        config.contributionConfig _
+        config.contributionConfig
       ),
       CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService)
     )
