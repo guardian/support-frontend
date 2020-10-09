@@ -11,12 +11,11 @@ import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.{IdentityService, RecaptchaService, StripeSetupIntentService}
-import config.RecaptchaConfigProvider
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
-case class SetupIntentRequestRecaptcha(token: String, stripePublicKey: String, isTestUser: Boolean)
+case class SetupIntentRequestRecaptcha(token: String, stripePublicKey: String)
 object SetupIntentRequestRecaptcha {
   implicit val decoder: Decoder[SetupIntentRequestRecaptcha] = deriveDecoder
 }
@@ -32,7 +31,7 @@ class StripeController(
   recaptchaService: RecaptchaService,
   stripeService: StripeSetupIntentService,
   identityService: IdentityService,
-  recaptchaConfigProvider: RecaptchaConfigProvider,
+  v2RecaptchaKey: String,
   testStripeConfig: StripeConfig,
   settingsProvider: AllSettingsProvider,
   stage: Stage
@@ -53,8 +52,6 @@ class StripeController(
 
     val v2RecaptchaToken = request.body.token
 
-    val v2RecaptchaSecretKey = recaptchaConfigProvider.get(isTestUser=request.body.isTestUser).v2SecretKey
-
     val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "v2Recaptcha")
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
@@ -63,8 +60,8 @@ class StripeController(
 
     // Requests against the test account do not require verification
     val verified =
-      if (recaptchaEnabled)
-        recaptchaService.verify(v2RecaptchaToken, v2RecaptchaSecretKey).map(_.success)
+      if (recaptchaEnabled && !testPublicKeys(request.body.stripePublicKey))
+        recaptchaService.verify(v2RecaptchaToken, v2RecaptchaKey).map(_.success)
       else
         EitherT.rightT[Future, String](true)
 

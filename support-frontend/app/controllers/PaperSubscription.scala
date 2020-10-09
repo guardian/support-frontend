@@ -103,7 +103,6 @@ class PaperSubscription(
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
-    val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
 
     subscriptionCheckout(
       title,
@@ -119,7 +118,7 @@ class PaperSubscription(
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),
       payPalConfigProvider.get(true),
-      v2recaptchaConfigPublicKey
+      recaptchaConfigProvider.v2PublicKey
     )
   }
 

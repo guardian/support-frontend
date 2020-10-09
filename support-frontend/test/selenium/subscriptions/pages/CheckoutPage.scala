@@ -13,7 +13,6 @@ trait CheckoutPage extends Page with Browser {
   private val cardNumber = name("cardnumber")
   private val expiry = name("exp-date")
   private val cvc = name("cvc")
-  private val stripeRecaptchaButton = id("robot_checkbox")
 
   // Direct debit
   private val directDebitButton = id("qa-direct-debit")
@@ -56,11 +55,7 @@ trait CheckoutPage extends Page with Browser {
     switchToFrame(2)
     setValue(cvc, "123")
     switchToParentFrame
-    clickOn(stripeRecaptchaButton)
-    waitForTestRecaptchaToComplete
   }
-
-  def waitForTestRecaptchaToComplete: Unit = Thread.sleep(1000)
 
   def fillDirectDebitForm(): Unit = {
     setValue(accountName, "Test user")

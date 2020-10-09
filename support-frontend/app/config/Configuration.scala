@@ -50,7 +50,7 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
 
-  lazy val recaptchaConfigProvider = new RecaptchaConfigProvider(config, stage)
+  lazy val recaptchaConfigProvider = RecaptchaConfigProvider(config, stage)
 
   lazy val capiKey = config.getString("capi-key")
 

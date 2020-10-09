@@ -145,7 +145,7 @@ trait Controllers {
     recaptchaService = recaptchaService,
     stripeService = stripeService,
     identityService = identityService,
-    recaptchaConfigProvider = appConfig.recaptchaConfigProvider,
+    v2RecaptchaKey = appConfig.recaptchaConfigProvider.v2SecretKey,
     testStripeConfig = appConfig.regularStripeConfigProvider.get(true),
     allSettingsProvider,
     appConfig.stage

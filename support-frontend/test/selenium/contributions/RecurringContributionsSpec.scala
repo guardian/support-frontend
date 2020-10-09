@@ -51,9 +51,6 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       And("enter card details")
       landingPage.fillInCardDetails
 
-      And("click the recaptcha")
-      landingPage.clickRecaptcha
-
       When("they click contribute")
       landingPage.clickContribute
 
@@ -90,9 +87,6 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
 
       And("enter card details")
       landingPage.fillInCardDetails
-      
-      And("click the recaptcha")
-      landingPage.clickRecaptcha
 
       When("they click contribute")
       landingPage.clickContribute

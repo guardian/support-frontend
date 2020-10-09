@@ -200,8 +200,7 @@ class Application(
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
-      v2recaptchaConfigPublicKeyDefault = recaptchaConfigProvider.get().v2PublicKey,
-      v2recaptchaConfigPublicKeyUat = recaptchaConfigProvider.get(true).v2PublicKey,
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey,
       serversideTests = serversideTests
     )
   }
