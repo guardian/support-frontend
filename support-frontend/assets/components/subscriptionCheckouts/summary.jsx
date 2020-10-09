@@ -86,11 +86,11 @@ const DropDownButton = (props: { onClick: Function, showDropDown: boolean }) => 
 
 const TabletAndDesktop = (props: PropTypes) => (
   <span className={styles.tabletAndDesktop}>
-    <div className={props.product === GuardianWeekly ? styles.imgGuardianWeekly : styles.img}>
+    <div className={props.product === GuardianWeekly && !props.orderIsAGift ? styles.imgGuardianWeekly : styles.img}>
       {props.image}
     </div>
     <div className={styles.content}>
-      <h1 className={props.product === GuardianWeekly ? styles.headerGuardianWeekly : styles.header}>Order summary</h1>
+      <h1 className={props.product === GuardianWeekly && !props.orderIsAGift ? styles.headerGuardianWeekly : styles.header}>Order summary</h1>
       <header>
         <h2 className={styles.title} title={`your subscription is ${props.title}`}>
           {!props.orderIsAGift && 'The '}{props.title}{props.orderIsAGift && ' Gift Subscription'}

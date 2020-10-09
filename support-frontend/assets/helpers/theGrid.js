@@ -68,6 +68,7 @@ export const imageCatalogue: {
   checkoutPackshotPaperGraunVoucher: '5aa8702d1de22589ec5dd1a20a6cf4bc4b7c9674/0_0_696_400',
   checkoutPackshotDigitalPack: 'd68d6e6f276eae28d18851548e59bd7918a23ffc/0_0_1392_800',
   checkoutPackshotWeekly: 'd94fcbfe497545ef6256cbc923d13037db5e4273/68_71_548_329',
+  checkoutPackshotWeeklyGifting: '0fb50b636e09f459470453a54951ac6a7095c9e6/0_0_696_400',
   editionsProductBlock: 'bdb7361d9fc11a9c5c54fd5ca163a92bdb280714/0_0_2000_1364',
   noMoreAds: 'df9cbdeb0c45bdfcef4edb1466163eed0f020091/0_0_482_304',
   AppPremiumTier: 'dc9769250c22ca60da65a14e89676f59e82d46f5/0_0_1998_1338',

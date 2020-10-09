@@ -177,9 +177,9 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
         <Summary
           image={
             <GridImage
-              gridId="checkoutPackshotWeekly"
-              srcSizes={[548, 500]}
-              sizes="(max-width: 740px) 50vw, 548"
+              gridId="checkoutPackshotWeeklyGifting"
+              srcSizes={[696, 500]}
+              sizes="(max-width: 740px) 50vw, 696"
               imgType="png"
               altText=""
             />

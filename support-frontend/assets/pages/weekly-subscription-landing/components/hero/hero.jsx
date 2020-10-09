@@ -13,25 +13,25 @@ import ProductPageHero
 
 import './weeklyCampaign.scss';
 
-const HeroImage = () => (
+const HeroImage = ({ orderIsGift }: {orderIsGift: boolean}) => (
   <GridPicture
     sources={[
         {
-          gridId: 'weeklyLandingHero',
+          gridId: !orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot',
           srcSizes: [500, 1000],
           imgType: 'png',
           sizes: '100vw',
           media: '(max-width: 739px)',
         },
         {
-          gridId: 'weeklyLandingHero',
+          gridId: !orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot',
           srcSizes: [1000, 2000],
           imgType: 'png',
           sizes: '(min-width: 1000px) 2000px, 1000px',
           media: '(min-width: 740px)',
         },
       ]}
-    fallback="weeklyLandingHero"
+    fallback={!orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot'}
     fallbackSize={1000}
     altText="A collection of Guardian Weekly magazines"
     fallbackImgType="png"
