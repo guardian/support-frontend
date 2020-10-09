@@ -1,6 +1,8 @@
 // @flow
 
 import React from 'react';
+import { css } from '@emotion/core';
+import { from, until } from '@guardian/src-foundations/mq';
 
 import GridImage from 'components/gridImage/gridImage';
 
@@ -13,9 +15,27 @@ import GridImage from 'components/gridImage/gridImage';
  * this is applied using the "subscriptions__guardian-weekly-packshot" class in this instance
  *  */
 
+const weeklyOverride = css`
+  ${until.tablet} {
+    width: 100%;
+  }
+
+  img {
+    width: 100%;
+
+    ${from.tablet} {
+      width: 80%;
+    }
+
+    ${from.desktop} {
+      width: 500px;
+    }
+  }
+`;
+
 
 const GuardianWeeklyPackShotHero = () => (
-  <div className="subscriptions-feature-packshot">
+  <div className="subscriptions-feature-packshot" css={weeklyOverride}>
     <GridImage
       gridId="subscriptionGuardianWeeklyPackShot"
       srcSizes={[1000, 500]}

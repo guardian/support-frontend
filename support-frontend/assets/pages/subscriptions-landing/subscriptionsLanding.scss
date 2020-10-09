@@ -184,6 +184,7 @@
   padding-top: 10px;
   background-color: gu-colour('brand-main');
   overflow: hidden;
+  max-height: 475px;
 
   @include mq($until: tablet) {
     padding-top: 0;
