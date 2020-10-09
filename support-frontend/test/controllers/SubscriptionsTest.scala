@@ -18,7 +18,7 @@ import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.tip.Tip
 import com.typesafe.config.ConfigFactory
 import config.Configuration.MetricUrl
-import config.{RecaptchaConfigProvider, StringsConfig}
+import config.{RecaptchaConfigProvider, RecaptchaConfig, StringsConfig}
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -101,6 +101,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
       val recaptchaConfigProvider = mock[RecaptchaConfigProvider]
+      when(recaptchaConfigProvider.get(any[Boolean])).thenReturn(RecaptchaConfig("",""))
 
       val prices: ProductPrices = Map(
         CountryGroup.UK ->
