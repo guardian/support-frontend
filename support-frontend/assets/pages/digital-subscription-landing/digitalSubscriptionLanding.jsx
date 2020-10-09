@@ -37,7 +37,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(() => digitalSubscriptionLandingReducer(), true);
+const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
 // ----- Internationalisation ----- //
 

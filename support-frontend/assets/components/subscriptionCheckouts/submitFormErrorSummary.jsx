@@ -16,7 +16,7 @@ type PropTypes = {
 // ----- Render ----- //
 
 export const ErrorSummary = (props: PropTypes) => (
-  <div className="component-form-error__border">
+  <div role="status" aria-live="assertive" className="component-form-error__border">
     <Heading className="component-form-error__heading" size={2}>There is a problem</Heading>
     <ul>
       {props.errors.map(error => (

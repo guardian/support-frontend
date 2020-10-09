@@ -1,6 +1,6 @@
 // @flow
 
-import { type ProductPrice, getProductPrice } from 'helpers/productPrice/productPrices';
+import { type ProductPrice, getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 
@@ -11,7 +11,7 @@ const getPromotion = (productPrice: ProductPrice): string | null =>
 
 function mapStateToProps(state: CheckoutState) {
   const {
-    billingPeriod, productPrices,
+    billingPeriod, productPrices, orderIsAGift,
   } = state.page.checkout;
 
   const productPrice =
@@ -22,10 +22,14 @@ function mapStateToProps(state: CheckoutState) {
     );
 
   const digitalBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
+  const digitalGiftBillingPeriod = billingPeriod === 'Annual' ? billingPeriod : 'Quarterly';
 
   return {
     priceDescription: getBillingDescription(productPrice, digitalBillingPeriod),
     promotion: getPromotion(productPrice),
+    orderIsAGift,
+    digitalGiftBillingPeriod,
+    price: showPrice(productPrice),
   };
 }
 

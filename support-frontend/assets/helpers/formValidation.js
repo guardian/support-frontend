@@ -9,6 +9,8 @@ import { config } from 'helpers/contributions';
 import type { CountryGroup, CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { Canada, UnitedStates, AUDCountries, countryGroups } from './internationalisation/countryGroup';
+import { DateUtils } from 'react-day-picker';
+import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
@@ -16,6 +18,15 @@ export const isEmpty: (string | null) => boolean = input =>
   typeof input === 'undefined' || input == null || input.trim().length === 0;
 
 export const isNotEmpty: (string | null) => boolean = input => !isEmpty(input);
+
+export const isNotInThePast: (Date | null) => boolean = date => !DateUtils.isPastDay(date);
+
+export const isNotTooFarInTheFuture: (Date | null) => boolean = (date) => {
+  const rangeDate = new Date();
+  rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
+  const dateIsInsideRange = !DateUtils.isDayAfter(date, rangeDate);
+  return dateIsInsideRange;
+};
 
 export const isValidEmail: (string | null) => boolean = input => !!input && new RegExp(emailRegexPattern).test(input);
 export const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
@@ -29,6 +40,12 @@ export const checkBillingState: (string | null) => boolean = s => typeof s === '
 export const checkEmail: (string | null) => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(input) || isValidEmail(input);
+
+export const checkGiftStartDate: (string | null) => boolean = (rawDate) => {
+  const dateArray = rawDate ? rawDate.split('/') : null;
+  const date = dateArray ? new Date(`${dateArray[1]} ${dateArray[0]} ${dateArray[2]}`) : null;
+  return isNotEmpty(rawDate) && isNotInThePast(date) && isNotTooFarInTheFuture(date);
+};
 
 export const checkAmount: (string, CountryGroupId, ContributionType) =>
   boolean = (input: string, countryGroupId: CountryGroupId, contributionType: ContributionType) =>

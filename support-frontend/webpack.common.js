@@ -178,6 +178,16 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           ...cssLoaders,
         ],
       },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+          },
+          ...cssLoaders,
+        ],
+      },
     ],
   },
 });

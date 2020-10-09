@@ -82,7 +82,7 @@ function CampaignHeader(props: PropTypes) {
         <div css={packShot}>
           <GridImage
             gridId={props.countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
-            srcSizes={[1000, 750, 500, 140]}
+            srcSizes={[1000, 500, 140]}
             sizes="(max-width: 480px) 200px,
             (max-width: 740px) 100%,
             (max-width: 1067px) 150%,

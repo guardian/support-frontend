@@ -16,16 +16,15 @@ import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
-import com.gu.support.workers.lambdas.CreateZuoraSubscription.createSubscription
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response.{Subscription, UpdateRedemptionDataResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.support.zuora.domain.DomainSubscription
-import com.gu.zuora.{ZuoraGiftService, ZuoraService, ZuoraSubscribeService}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.buildContributionSubscription
 import com.gu.zuora.subscriptionBuilders._
+import com.gu.zuora.{ZuoraGiftService, ZuoraSubscribeService}
 import org.joda.time.{DateTime, DateTimeZone, Days, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -47,42 +46,45 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     context: Context,
     services: Services
   ): FutureHandlerResult = {
-    val now = () => DateTime.now(DateTimeZone.UTC)
-    val today = () => LocalDate.now(DateTimeZone.UTC)
-    val promotionService = services.promotionService
-    val redemptionService = services.redemptionService
-    val zuoraGiftService = services.zuoraGiftService
-    val zuoraService = services.zuoraService
-    val giftCodeGenerator = services.giftCodeGenerator
-    val isTestUser = state.user.isTestUser
-    val config: ZuoraConfig = services.config.zuoraConfigProvider.get(isTestUser)
+
+    val createSubscription = new ZuoraSubscriptionCreator(
+      () => DateTime.now(DateTimeZone.UTC),
+      services.promotionService, 
+      services.redemptionService, 
+      services.zuoraService, 
+      services.giftCodeGenerator, 
+      services.config.zuoraConfigProvider.get(state.user.isTestUser)
+    )
 
     maybeDigitalSubscriptionGiftRedemption(state.product, state.paymentMethod) match {
       case Some(redemptionData) =>
-        redeemGift(redemptionData, requestInfo, state, zuoraGiftService, services.catalogService)
+        redeemGift(redemptionData, requestInfo, state, services.zuoraGiftService, services.catalogService)
       case None =>
-        createSubscription(state, requestInfo, now, today, promotionService, redemptionService, zuoraService, giftCodeGenerator, config)
+        createSubscription.create(state, requestInfo)
     }
   }
 }
 
-object CreateZuoraSubscription {
-
+class ZuoraSubscriptionCreator(
+  now: () => DateTime,
+  promotionService: PromotionService,
+  redemptionService: DynamoLookup with DynamoUpdate,
+  zuoraService: ZuoraSubscribeService,
+  giftCodeGenerator: GiftCodeGeneratorService,
+  config: ZuoraConfig,
+) {
+  def today(): LocalDate = now().toLocalDate
   import com.gu.FutureLogging._
 
-  def createSubscription(
+  def create(
     state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
-    now: () => DateTime,
-    today: () => LocalDate,
-    promotionService: PromotionService,
-    redemptionService: DynamoLookup with DynamoUpdate,
-    zuoraService: ZuoraSubscribeService,
-    giftCodeGenerator: GiftCodeGeneratorService,
-    config: ZuoraConfig
   ): Future[HandlerResult[SendThankYouEmailState]] = {
+    import ZuoraSubscriptionCreator._
+    val corporateCodeValidator = CorporateCodeValidator.withDynamoLookup(redemptionService)
+    val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService)
     for {
-      subscriptionData <- buildSubscriptionData(state, promotionService, CorporateCodeValidator.withDynamoLookup(redemptionService), giftCodeGenerator, today, config)
+      subscriptionData <- buildSubscriptionData(state, promotionService, corporateCodeValidator, giftCodeGenerator, today, config)
         .withLogging("subscription data")
       subscribeItem = buildSubscribeItem(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
@@ -95,11 +97,15 @@ object CreateZuoraSubscription {
         ).leftSequence
       (account, sub, info) <- subscribeIfApplicable(requestInfo, zuoraService, subscribeItem, maybeDomainSubscription)
         .withLogging("subscribe")
-      _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, SetCodeStatus.withDynamoLookup(redemptionService))
+      _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, corporateCodeStatusUpdater)
     } yield HandlerResult(getEmailState(state, account, sub, paymentOrRedemptionData), info)
   }
 
-  private def subscribeIfApplicable(
+}
+
+object ZuoraSubscriptionCreator {
+
+  def subscribeIfApplicable(
     requestInfo: RequestInfo,
     zuoraService: ZuoraSubscribeService,
     subscribeItem: SubscribeItem,
@@ -123,12 +129,12 @@ object CreateZuoraSubscription {
     }
   }
 
-  private def getEmailState(
+  def getEmailState(
     state: CreateZuoraSubscriptionState,
     accountNumber: ZuoraAccountNumber,
     subscriptionNumber: ZuoraSubscriptionNumber,
     paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData]
-  ) =
+  ): SendThankYouEmailState =
     SendThankYouEmailState(
       state.requestId,
       state.user,
@@ -246,11 +252,11 @@ object CreateZuoraSubscription {
 
   def updateRedemptionCodeIfApplicable(
     paymentMethod: Either[PaymentMethod, RedemptionData],
-    setCodeStatus: SetCodeStatus
+    corporateCodeStatusUpdater: CorporateCodeStatusUpdater
   ): Future[Unit] =
     paymentMethod.toOption match {
       case Some(rd: RedemptionData) =>
-        setCodeStatus(
+        corporateCodeStatusUpdater.setStatus(
           rd.redemptionCode,
           RedemptionTable.AvailableField.CodeIsUsed
         )
@@ -261,12 +267,14 @@ object CreateZuoraSubscription {
 
 object DigitalSubscriptionGiftRedemption {
 
-  def maybeDigitalSubscriptionGiftRedemption(product: ProductType, paymentMethod: Either[PaymentMethod, RedemptionData]) = {
+  def maybeDigitalSubscriptionGiftRedemption(
+    product: ProductType,
+    paymentMethod: Either[PaymentMethod, RedemptionData]
+  ): Option[RedemptionData] =
     product match {
       case d: DigitalPack if paymentMethod.isRight && d.readerType == Gift => paymentMethod.right.toOption
       case _ => None
     }
-  }
 
   def redeemGift(
     redemptionData: RedemptionData,
