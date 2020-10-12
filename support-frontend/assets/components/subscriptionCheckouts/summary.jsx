@@ -84,42 +84,43 @@ const DropDownButton = (props: { onClick: Function, showDropDown: boolean }) => 
 );
 
 
-const TabletAndDesktop = (props: PropTypes) => (
-  <span className={styles.tabletAndDesktop}>
-    <div className={props.product === GuardianWeekly && !props.orderIsAGift ? styles.imgGuardianWeekly : styles.img}>
-      {props.image}
-    </div>
-    <div className={styles.content}>
-      <h1 className={props.product === GuardianWeekly && !props.orderIsAGift ?
-        styles.headerGuardianWeekly : styles.header}
-      >
-        Order summary
-      </h1>
-      <header>
-        <h2 className={styles.title} title={`your subscription is ${props.title}`}>
-          {!props.orderIsAGift && 'The '}{props.title}{props.orderIsAGift && ' Gift Subscription'}
-        </h2>
-        {props.description &&
+const TabletAndDesktop = (props: PropTypes) => {
+  const isGuardianWeeklyGift = props.product === GuardianWeekly && !props.orderIsAGift;
+  return (
+    <span className={styles.tabletAndDesktop}>
+      <div className={isGuardianWeeklyGift ? styles.imgGuardianWeekly : styles.img}>
+        {props.image}
+      </div>
+      <div className={styles.content}>
+        <h1 className={isGuardianWeeklyGift ? styles.headerGuardianWeekly : styles.header}>
+          Order summary
+        </h1>
+        <header>
+          <h2 className={styles.title} title={`your subscription is ${props.title}`}>
+            {!props.orderIsAGift && 'The '}{props.title}{props.orderIsAGift && ' Gift Subscription'}
+          </h2>
+          {props.description &&
           <h3 className={styles.titleDescription}>{props.description}</h3>
         }
-      </header>
-      <div>
-        <PriceLabel
-          className={styles.pricing}
-          productPrice={props.productPrice}
-          billingPeriod={props.billingPeriod}
-        />
-        <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions)} />
-        {props.dataList &&
+        </header>
+        <div>
+          <PriceLabel
+            className={styles.pricing}
+            productPrice={props.productPrice}
+            billingPeriod={props.billingPeriod}
+          />
+          <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions)} />
+          {props.dataList &&
           <DataList dataList={props.dataList} />
         }
-      </div>
-      {props.changeSubscription ?
-        <ChangeSubscription route={props.changeSubscription} />
+        </div>
+        {props.changeSubscription ?
+          <ChangeSubscription route={props.changeSubscription} />
       : null }
-    </div>
-  </span>
-);
+      </div>
+    </span>
+  );
+};
 
 TabletAndDesktop.defaultProps = {
   changeSubscription: null,

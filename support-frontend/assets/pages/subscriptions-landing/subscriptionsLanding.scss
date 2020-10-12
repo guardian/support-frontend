@@ -183,7 +183,7 @@
   padding-top: 10px;
   background-color: gu-colour('brand-main');
   overflow: hidden;
-  
+
   @include mq($until: tablet) {
     padding-top: 0;
   }
@@ -849,7 +849,8 @@
   width: 100%;
 
   img {
-    bottom: -25px;
+    position: absolute;
+    bottom: -50px;
     width: 100%;
   }
 
