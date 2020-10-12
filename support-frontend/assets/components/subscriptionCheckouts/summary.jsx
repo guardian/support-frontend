@@ -90,7 +90,11 @@ const TabletAndDesktop = (props: PropTypes) => (
       {props.image}
     </div>
     <div className={styles.content}>
-      <h1 className={props.product === GuardianWeekly && !props.orderIsAGift ? styles.headerGuardianWeekly : styles.header}>Order summary</h1>
+      <h1 className={props.product === GuardianWeekly && !props.orderIsAGift ?
+        styles.headerGuardianWeekly : styles.header}
+      >
+        Order summary
+      </h1>
       <header>
         <h2 className={styles.title} title={`your subscription is ${props.title}`}>
           {!props.orderIsAGift && 'The '}{props.title}{props.orderIsAGift && ' Gift Subscription'}
