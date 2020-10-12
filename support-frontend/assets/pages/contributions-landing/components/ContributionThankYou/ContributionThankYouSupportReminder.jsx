@@ -7,7 +7,7 @@ import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
-import { Button } from '@guardian/src-button';
+import { Button, LinkButton } from '@guardian/src-button';
 import { Link } from '@guardian/src-link';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { RadioGroup, Radio } from '@guardian/src-radio';
@@ -16,9 +16,7 @@ import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
 import SvgClock from './components/SvgClock';
 import styles from './styles';
-import {
-  OPHAN_COMPONENT_ID_SET_REMINDER,
-} from './utils/ophan';
+import { OPHAN_COMPONENT_ID_SET_REMINDER } from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { privacyLink } from 'helpers/legal';
 
@@ -50,9 +48,11 @@ const privacyTextLink = css`
   color: ${neutral[20]};
 `;
 
+const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/6VK57VR';
+
 type ContributionThankYouSupportReminderProps = {|
   email: string,
-  isEnvironmentMoment: boolean,
+  isEnvironmentMoment: boolean
 |};
 
 const ContributionThankYouSupportReminder = ({
@@ -63,15 +63,17 @@ const ContributionThankYouSupportReminder = ({
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
   const now = new Date();
-  const reminderDates = isEnvironmentMoment ? [
-    new Date(now.getFullYear(), now.getMonth() + 3),
-    new Date(now.getFullYear(), now.getMonth() + 6),
-    new Date(now.getFullYear(), now.getMonth() + 12),
-  ] : [
-    new Date(now.getFullYear(), now.getMonth() + 3),
-    new Date(now.getFullYear(), now.getMonth() + 6),
-    new Date(now.getFullYear(), now.getMonth() + 9),
-  ];
+  const reminderDates = isEnvironmentMoment
+    ? [
+      new Date(now.getFullYear(), now.getMonth() + 3),
+      new Date(now.getFullYear(), now.getMonth() + 6),
+      new Date(now.getFullYear(), now.getMonth() + 12),
+    ]
+    : [
+      new Date(now.getFullYear(), now.getMonth() + 3),
+      new Date(now.getFullYear(), now.getMonth() + 6),
+      new Date(now.getFullYear(), now.getMonth() + 9),
+    ];
 
   const formattedDate = (index: number): string => {
     if (isEnvironmentMoment && index === 2) {
@@ -81,7 +83,8 @@ const ContributionThankYouSupportReminder = ({
 
     const monthsUntilDate = ['three', 'six', 'nine'][index];
     const month = date.toLocaleDateString('default', { month: 'long' });
-    const year = now.getFullYear() === date.getFullYear() ? '' : ` ${date.getFullYear()}`;
+    const year =
+      now.getFullYear() === date.getFullYear() ? '' : ` ${date.getFullYear()}`;
 
     return `In ${monthsUntilDate} months (${month}${year})`;
   };
@@ -131,10 +134,29 @@ const ContributionThankYouSupportReminder = ({
   const actionBody = (
     <ActionBody>
       {hasBeenCompleted ? (
-        <p>
-          We will be in touch at the time you selected, so look out for a
-          message from the Guardian in your inbox.
-        </p>
+        <>
+          <p>
+            What motivated you to set a reminder today? We’d love to hear from
+            you. If you have a moment, please answer a few questions. Your
+            insight helps us understand better, so we can improve what we offer
+            our readers and supporters.
+          </p>
+
+          <div css={buttonContainer}>
+            <LinkButton
+              target="_blank"
+              rel="noopener noreferrer"
+              href={SURVEY_LINK}
+              priority="primary"
+              size="default"
+              icon={<SvgArrowRightStraight />}
+              iconSide="right"
+              nudgeIcon
+            >
+              Share your thoughts
+            </LinkButton>
+          </div>
+        </>
       ) : (
         <>
           <p>
