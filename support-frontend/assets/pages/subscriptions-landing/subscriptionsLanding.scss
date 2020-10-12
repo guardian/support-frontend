@@ -60,7 +60,6 @@
   max-width: 1290px;
   margin: 0 auto;
   width: 100%;
-  max-width: 1290px;
 }
 
 .subscriptions__feature-text {
@@ -184,8 +183,7 @@
   padding-top: 10px;
   background-color: gu-colour('brand-main');
   overflow: hidden;
-  max-height: 475px;
-
+  
   @include mq($until: tablet) {
     padding-top: 0;
   }
