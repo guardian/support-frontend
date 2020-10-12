@@ -5,10 +5,9 @@ import java.util.UUID
 import com.gu.i18n.Country
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
-import com.gu.support.workers.GuardianWeeklyExtensions._
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.exceptions.BadRequestException
-import com.gu.support.workers.{BillingPeriod, GuardianWeekly, SixWeekly}
+import com.gu.support.workers.{BillingPeriod, GuardianWeekly, ProductTypeRatePlans, SixWeekly}
 import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, buildProductSubscription, validateRatePlan}
 import org.joda.time.{DateTimeZone, Days, LocalDate}
@@ -33,10 +32,10 @@ object GuardianWeeklySubscriptionBuilder {
       case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a Guardian Weekly subscription.", e)
     }
 
-    val recurringProductRatePlanId = validateRatePlan(guardianWeekly.productRatePlan(environment, readerType), guardianWeekly.describe)
+    val recurringProductRatePlanId = validateRatePlan(weeklyRatePlan(guardianWeekly, environment, readerType), guardianWeekly.describe)
 
     val promotionProductRatePlanId = if (isIntroductoryPromotion(guardianWeekly.billingPeriod, maybePromoCode)) {
-      guardianWeekly.introductoryRatePlan(environment).map(_.id).getOrElse(recurringProductRatePlanId)
+      weeklyIntroductoryRatePlan(guardianWeekly, environment).map(_.id).getOrElse(recurringProductRatePlanId)
     } else recurringProductRatePlanId
 
     val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
