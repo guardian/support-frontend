@@ -11,7 +11,7 @@ import com.gu.support.redemption.corporate.{DynamoLookup, DynamoUpdate}
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator
-import com.gu.support.workers.states.CreateZuoraSubscriptionState
+import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, ReaderType, SubscribeRequest}
@@ -35,7 +35,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, null /* !*/, Corporate),
-      RedemptionNoProvider,
+      AnalyticsInfo(false, RedemptionNoProvider),
       paymentMethod = Right(RedemptionData(RedemptionCode(testCode).right.get)),
       firstDeliveryDate = None,
       promoCode = None,
@@ -110,7 +110,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, Monthly),
-      PayPal,
+      AnalyticsInfo(false, PayPal),
       paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
       firstDeliveryDate = None,
       promoCode = None,

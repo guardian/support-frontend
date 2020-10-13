@@ -6,6 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
 import io.circe.parser._
 import org.joda.time.LocalDate
+import com.gu.support.SerialisationTestHelpers._
 
 class GiftRecipientSpec extends AnyFlatSpec with Matchers {
 
@@ -80,6 +81,39 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
     data.asJson should be(parse(expected).right.get)
+  }
+
+  it should "roundtrip ok" in {
+    testRoundTripSerialisation(GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com")))
+    testRoundTripSerialisation(GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)))
+  }
+
+  "GiftCode" should "roundtrip ok" in {
+    testRoundTripSerialisation(GiftCode("gd12-abcd2345").get)
+  }
+  it should "not deserialise an invalid code" in {
+    val json =
+      """
+        |{
+        |  "todo": "hi"
+        |}
+        |""".stripMargin
+    val actual = decode[GiftCode](json)
+    actual.left.map(_ => ()) should be(Left(()))
+  }
+
+  "GiftRecipientAndMaybeCode" should "roundtrip ok" in {
+    testRoundTripSerialisation(
+      GiftRecipientAndMaybeCode.DigitalSubGiftRecipientWithCode(
+        GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
+        GiftCode("gd12-23456789").get
+      )
+    )
+    testRoundTripSerialisation(
+      GiftRecipientAndMaybeCode.NonDigitalSubGiftRecipient(
+        GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@gu.com"))
+      )
+    )
   }
 
 }

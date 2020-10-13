@@ -13,7 +13,7 @@ case class CreatePaymentMethodState(
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
-  paymentProvider: PaymentProvider,
+  analyticsInfo: AnalyticsInfo,
   paymentFields: Either[PaymentFields, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],

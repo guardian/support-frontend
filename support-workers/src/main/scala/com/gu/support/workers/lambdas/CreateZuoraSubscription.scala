@@ -14,6 +14,8 @@ import com.gu.support.redemption.corporate._
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
+import com.gu.support.workers.GiftRecipient.DigitalSubGiftRecipient
+import com.gu.support.workers.GiftRecipientAndMaybeCode.{DigitalSubGiftRecipientWithCode, NonDigitalSubGiftRecipient}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
@@ -63,9 +65,10 @@ class ZuoraSubscriptionCreator(
   now: () => DateTime,
   zuoraService: ZuoraSubscribeService,
   subscriptionDataBuilder: SubscriptionDataBuilder,
-  corporateCodeStatusUpdater: CorporateCodeStatusUpdater
+  corporateCodeStatusUpdater: CorporateCodeStatusUpdater,
+  giftCodeGeneratorService: GiftCodeGeneratorService,
 ) {
-  import com.gu.FutureLogging._
+  import com.gu.WithLoggingSugar._
 
   def create(
     state: CreateZuoraSubscriptionState,
@@ -75,24 +78,36 @@ class ZuoraSubscriptionCreator(
 
     val environment = TouchPointEnvironments.fromStage(Configuration.stage, state.user.isTestUser)
 
+    val maybeGiftRecipWithCode = state.giftRecipient.map(maybeAddCode(state.product.billingPeriod, _))
+      .withLogging("gift recipient with code")
     for {
-      subscriptionData <- subscriptionDataBuilder.build(state, environment).value.map(_.toTry).flatMap(Future.fromTry)
-        .withLogging("subscription data")
+      subscriptionData <- subscriptionDataBuilder.build(state, environment, maybeGiftRecipWithCode).value.map(_.toTry).flatMap(Future.fromTry)
+        .withEventualLogging("subscription data")
       subscribeItem = SubscribeItemBuilder.build(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
-        .withLogging("identity id")
+        .withEventualLogging("identity id")
       maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
-        .withLogging("GetSubscriptionWithCurrentRequestId")
+        .withEventualLogging("GetSubscriptionWithCurrentRequestId")
       paymentOrRedemptionData <-
         state.paymentMethod.leftMap(pm => PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, zuoraService, checkSingleResponse)
-          .withLogging("PreviewPaymentSchedule").map(ps => PaymentMethodWithSchedule(pm, ps))
+          .withEventualLogging("PreviewPaymentSchedule").map(ps => PaymentMethodWithSchedule(pm, ps))
         ).leftSequence
       (account, sub, info) <- subscribeIfApplicable(requestInfo, zuoraService, subscribeItem, maybeDomainSubscription)
-        .withLogging("subscribe")
+        .withEventualLogging("subscribe")
       _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, corporateCodeStatusUpdater)
-    } yield HandlerResult(getEmailState(state, account, sub, paymentOrRedemptionData), info)
+        .withEventualLogging("update redemption code")
+    } yield HandlerResult(getEmailState(state, account, sub, paymentOrRedemptionData, maybeGiftRecipWithCode), info)
   }
 
+  private def maybeAddCode(billingPeriod: BillingPeriod, giftRecipient: GiftRecipient) =
+    giftRecipient match {
+      case digitalSubGiftRecipient: DigitalSubGiftRecipient =>
+        val giftCode = giftCodeGeneratorService.generateCode(billingPeriod)
+          .withLogging("Generated code for Digital Subscription gift")
+        DigitalSubGiftRecipientWithCode(digitalSubGiftRecipient, giftCode)
+      case otherGiftRec =>
+        NonDigitalSubGiftRecipient(otherGiftRec)
+    }
 }
 
 object ZuoraSubscriptionCreator {
@@ -109,7 +124,7 @@ object ZuoraSubscriptionCreator {
       now,
       zuoraService,
       new SubscriptionDataBuilder(
-        new DigitalSubscriptionPurchaseBuilder(config.digitalPack, promotionService, giftCodeGenerator, () => now().toLocalDate),
+        new DigitalSubscriptionPurchaseBuilder(config.digitalPack, promotionService, () => now().toLocalDate),
         new DigitalSubscriptionCorporateRedemptionBuilder(
           CorporateCodeValidator.withDynamoLookup(redemptionService),
           () => now().toLocalDate
@@ -117,7 +132,8 @@ object ZuoraSubscriptionCreator {
         promotionService,
         config.contributionConfig
       ),
-      CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService)
+      CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService),
+      giftCodeGenerator
     )
 
   def subscribeIfApplicable(
@@ -148,21 +164,22 @@ object ZuoraSubscriptionCreator {
     state: CreateZuoraSubscriptionState,
     accountNumber: ZuoraAccountNumber,
     subscriptionNumber: ZuoraSubscriptionNumber,
-    paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData]
+    paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
+    maybeGiftRecipWithCode: Option[GiftRecipientAndMaybeCode],
   ): SendThankYouEmailState =
     SendThankYouEmailState(
-      state.requestId,
-      state.user,
-      state.giftRecipient,
-      state.product,
-      state.paymentProvider,
-      paymentOrRedemptionData,
-      state.firstDeliveryDate,
-      state.promoCode,
-      state.salesforceContacts.buyer,
-      accountNumber.value,
-      subscriptionNumber.value,
-      state.acquisitionData
+      requestId = state.requestId,
+      user = state.user,
+      maybeGiftRecipWithCode = maybeGiftRecipWithCode,
+      product = state.product,
+      analyticsInfo = state.analyticsInfo,
+      paymentOrRedemptionData = paymentOrRedemptionData,
+      firstDeliveryDate = state.firstDeliveryDate,
+      promoCode = state.promoCode,
+      salesForceContact = state.salesforceContacts.buyer,
+      accountNumber = accountNumber.value,
+      subscriptionNumber = subscriptionNumber.value,
+      acquisitionData = state.acquisitionData
     )
 
   def updateRedemptionCodeIfApplicable(
@@ -248,9 +265,9 @@ object DigitalSubscriptionGiftRedemption {
         HandlerResult(SendThankYouEmailState(
           state.requestId,
           state.user,
-          state.giftRecipient,
+          None,
           state.product,
-          state.paymentProvider,
+          state.analyticsInfo,
           Right(redemptionData),
           state.firstDeliveryDate,
           state.promoCode,

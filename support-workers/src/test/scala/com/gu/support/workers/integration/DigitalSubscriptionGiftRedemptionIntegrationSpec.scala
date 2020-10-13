@@ -19,47 +19,48 @@ import scala.concurrent.Future
 
 @IntegrationTest
 class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec with MockContext {
-  val createZuoraHelper = new CreateZuoraSubscriptionHelper()
-
-  val createSubRequestId = UUID.randomUUID()
-  val redeemSubRequestId = UUID.randomUUID()
-  val giftCode = new GiftCodeGeneratorService().generateCode(Annual)
-  SafeLogger.info(s"Gift code = ${giftCode}")
-  val mockCodeGenerator = mock[GiftCodeGeneratorService]
-  when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
-
-  // This spec relies on the fact that tests within a spec are executed in sequence
-  // So we can create a sub, redeem it and then try to redeem it again to get an error
 
   "DigitalSubscriptionGiftRedemption" should "throw a NoSuchCode exception" in {
-    val nonExistentCode = giftCode.value // We haven't created a sub with this yet
+    val createZuoraHelper = new CreateZuoraSubscriptionHelper()
+
+    val requestId = UUID.randomUUID()
+    val giftCode = new GiftCodeGeneratorService().generateCode(Annual)
+    SafeLogger.info(s"Gift code non existent = $giftCode")
+    val nonExistentCode = giftCode.value // We haven't created a sub with this
 
     recoverToExceptionIf[RuntimeException](
-      redeemSubscription(nonExistentCode, createSubRequestId)
+      redeemSubscription(createZuoraHelper, nonExistentCode, requestId)
     ).map(_.getMessage shouldBe CodeNotFound.clientCode)
   }
 
-  "CreateZuoraSubcription" should "create a Digital Pack gift subscription" in {
-    createZuoraHelper.createSubscription(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
-      .map { case (_, maybeError, _) => maybeError shouldBe None }
+  "CreateZuoraSubcription" should "create a Digital Pack gift subscription, redeem it in exactly one request" in {
+    val createZuoraHelper = new CreateZuoraSubscriptionHelper()
+
+    val createSubRequestId = UUID.randomUUID()
+    val redeemSubRequestId = UUID.randomUUID()
+    val giftCode = new GiftCodeGeneratorService().generateCode(Annual)
+    SafeLogger.info(s"Gift code to create = $giftCode")
+    val mockCodeGenerator = mock[GiftCodeGeneratorService]
+    when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
+
+    for {
+      _ <- createZuoraHelper.createSubscription(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
+        .map { case (_, maybeError, _) => maybeError shouldBe None }
+
+      _ <- redeemSubscription(createZuoraHelper, giftCode.value, redeemSubRequestId)
+        .map(_.value.user.id shouldBe idId)
+
+      _ <- redeemSubscription(createZuoraHelper, giftCode.value, redeemSubRequestId) // same request
+        .map(_.value.user.id shouldBe idId)
+
+      subsequentRequestId = UUID.randomUUID()
+      assertion <- recoverToExceptionIf[RuntimeException](
+        redeemSubscription(createZuoraHelper, giftCode.value, subsequentRequestId)
+      ).map(_.getMessage shouldBe CodeAlreadyUsed.clientCode)
+    } yield assertion
   }
 
-  "DigitalSubscriptionGiftRedemption" should "redeem an unredeemed Digital Pack gift subscription" in
-    redeemSubscription(giftCode.value, redeemSubRequestId)
-      .map(_.value.user.id shouldBe idId)
-
-  it should "return a successful redemption result if a subscription has already been redeemed in the current request" in
-    redeemSubscription(giftCode.value, redeemSubRequestId)
-      .map(_.value.user.id shouldBe idId)
-
-  it should "throw a Redeemed exception if a subscription has been redeemed in a previous request" in {
-    val subsequentRequestId = UUID.randomUUID()
-    recoverToExceptionIf[RuntimeException](
-      redeemSubscription(giftCode.value, subsequentRequestId)
-    ).map(_.getMessage shouldBe CodeAlreadyUsed.clientCode)
-  }
-
-  def redeemSubscription(codeValue: String, requestId: UUID): Future[HandlerResult[SendThankYouEmailState]] = {
+  def redeemSubscription(createZuoraHelper: CreateZuoraSubscriptionHelper, codeValue: String, requestId: UUID): Future[HandlerResult[SendThankYouEmailState]] = {
     val code = RedemptionCode(codeValue).right.get
     val state = decode[CreateZuoraSubscriptionState](createDigiPackGiftRedemptionJson(codeValue, requestId)).right.get
 

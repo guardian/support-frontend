@@ -59,9 +59,9 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     val state = SendThankYouEmailState(
       requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-      giftRecipient = None,
+      maybeGiftRecipWithCode = None,
       product = DigitalPack(Currency.GBP, Monthly),
-      paymentProvider = PayPal,
+      AnalyticsInfo(false, paymentProvider = PayPal),
       paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
         PayPalReferenceTransaction("baid", "me@somewhere.com"),
         PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
@@ -100,9 +100,8 @@ object StatesTestData {
   val failureHandlerState: FailureHandlerState = FailureHandlerStateImpl(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    paymentProvider = StripeApplePay,
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     firstDeliveryDate = None,
     promoCode = None
   )
@@ -112,7 +111,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    paymentProvider = StripeApplePay,
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentFields = Left(PayPalPaymentFields("baid")),
     firstDeliveryDate = None,
     promoCode = None,
@@ -124,7 +123,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    paymentProvider = StripeApplePay,
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
     firstDeliveryDate = None,
     promoCode = None,
@@ -136,7 +135,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    paymentProvider = StripeApplePay,
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
     firstDeliveryDate = None,
     promoCode = None,
@@ -147,9 +146,9 @@ object StatesTestData {
   val thankYouEmailState = SendThankYouEmailState(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    giftRecipient = None,
+    maybeGiftRecipWithCode = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    paymentProvider = StripeApplePay,
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
       PayPalReferenceTransaction("baid", "me@somewhere.com"),
       PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
@@ -167,7 +166,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    paymentProvider = StripeApplePay,
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
       PayPalReferenceTransaction("baid", "me@somewhere.com"),
       PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
@@ -182,7 +181,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    paymentProvider = StripeApplePay,
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentFields = ExistingPaymentFields("existingBillingAcId"),
     acquisitionData = None
   )

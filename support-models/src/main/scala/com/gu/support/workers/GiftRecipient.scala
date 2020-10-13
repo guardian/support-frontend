@@ -4,6 +4,7 @@ import cats.implicits._
 import com.gu.i18n.Title
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.GiftRecipient.{DigitalSubGiftRecipient, WeeklyGiftRecipient}
+import com.gu.support.workers.GiftRecipientAndMaybeCode.DigitalSubGiftRecipientWithCode
 import io.circe._
 import io.circe.generic.semiauto._
 import io.circe.syntax._
@@ -51,6 +52,52 @@ object GiftRecipient {
     circeDiscriminator.decode[GiftRecipient](Map(
       discriminatorWeekly -> Decoder[WeeklyGiftRecipient],
       discriminatorDigiSub -> Decoder[DigitalSubGiftRecipient]
+    ))
+}
+
+case class GiftCode private(value: String) extends AnyVal
+
+object GiftCode {
+
+  def apply(value: String): Option[GiftCode] =
+    Some(value)
+      .filter(_.matches(raw"""gd(03|06|12)-[a-km-z02-9]{8}"""))
+      .map(new GiftCode(_))
+
+  implicit val e1 = Encoder.encodeString.contramap[GiftCode](_.value)
+  implicit val d1 = Decoder.decodeString.emap(GiftCode(_).toRight("invalid gift code"))
+
+}
+
+sealed abstract class GiftRecipientAndMaybeCode(val giftRecipient: GiftRecipient) {
+  def asDigiSub: Option[DigitalSubGiftRecipientWithCode] = this match { case a: DigitalSubGiftRecipientWithCode => Some(a); case _ => None }
+}
+object GiftRecipientAndMaybeCode {
+
+  case class NonDigitalSubGiftRecipient(override val giftRecipient: GiftRecipient) extends GiftRecipientAndMaybeCode(giftRecipient)
+  case class DigitalSubGiftRecipientWithCode(
+    override val giftRecipient: DigitalSubGiftRecipient,
+    giftCode: GiftCode
+  ) extends GiftRecipientAndMaybeCode(giftRecipient)
+
+  val circeDiscriminator = new CirceDiscriminator("giftRecipientType")
+  private val discriminatorNonDigiSub = "NonDigiSub"
+  private val discriminatorDigiSub = "DigiSub"
+
+  implicit val e1 = circeDiscriminator.add(deriveEncoder[NonDigitalSubGiftRecipient], discriminatorNonDigiSub)
+  implicit val d1 = deriveDecoder[NonDigitalSubGiftRecipient]
+  implicit val e2 = circeDiscriminator.add(deriveEncoder[DigitalSubGiftRecipientWithCode], discriminatorDigiSub)
+  implicit val d2 = deriveDecoder[DigitalSubGiftRecipientWithCode]
+
+  implicit val encoder: Encoder[GiftRecipientAndMaybeCode] = Encoder.instance {
+    case c: NonDigitalSubGiftRecipient => c.asJson
+    case c: DigitalSubGiftRecipientWithCode => c.asJson
+  }
+
+  implicit val decoder =
+    circeDiscriminator.decode[GiftRecipientAndMaybeCode](Map(
+      discriminatorNonDigiSub -> Decoder[NonDigitalSubGiftRecipient],
+      discriminatorDigiSub -> Decoder[DigitalSubGiftRecipientWithCode]
     ))
 }
 

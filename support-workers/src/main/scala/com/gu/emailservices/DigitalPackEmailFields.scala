@@ -4,6 +4,7 @@ import cats.implicits._
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes.{CCAttributes, DDAttributes, PPAttributes}
 import com.gu.emailservices.SubscriptionEmailFieldHelpers._
+import com.gu.support.workers.GiftRecipientAndMaybeCode.DigitalSubGiftRecipientWithCode
 import com.gu.support.workers._
 import com.gu.support.workers.states.PaymentMethodWithSchedule
 import com.gu.support.zuora.api.ReaderType
@@ -128,7 +129,7 @@ class DigitalPackEmailFields(
   def build(
     paidSubPaymentData: Option[PaymentMethodWithSchedule],
     readerType: ReaderType,
-    maybeGiftRecipient: Option[GiftRecipient.DigitalSubGiftRecipient]
+    maybeGiftRecipWithCode: Option[DigitalSubGiftRecipientWithCode]
   ): Either[String, List[EmailFields]] = {
 
     val Purchase = Some
@@ -137,7 +138,7 @@ class DigitalPackEmailFields(
     (paidSubPaymentData, readerType) match {
       case (Purchase(paymentInfo), ReaderType.Gift) =>
         for {
-          giftRecipient <- maybeGiftRecipient.toRight("Gift redemption must have a gift recipient")
+          giftRecipient <- maybeGiftRecipWithCode.toRight("Gift redemption must have a gift recipient")
           emails <- List(
             giftPurchaserConfirmation(paymentInfo, giftRecipient),
             giftRecipientNotification(giftRecipient)
@@ -154,14 +155,15 @@ class DigitalPackEmailFields(
     attributePairs <- JsonToAttributes.asFlattenedPairs(fields.asJsonObject)
   } yield EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
 
-  private def giftRecipientNotification(giftRecipient: GiftRecipient.DigitalSubGiftRecipient) =
+  private def giftRecipientNotification(giftRecipientWithCode: DigitalSubGiftRecipientWithCode) =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = user.firstName,
-      gift_personal_message = giftRecipient.message,
-      gift_code = "gift code placeholder", // TODO need to get CreateZuoraSubscription to pass it on
+      gift_personal_message = giftRecipientWithCode.giftRecipient.message,
+      gift_code = giftRecipientWithCode.giftCode.value,
     ))
 
-  private def giftPurchaserConfirmation(paymentMethodWithSchedule: PaymentMethodWithSchedule, giftRecipient: GiftRecipient.DigitalSubGiftRecipient) =
+  private def giftPurchaserConfirmation(paymentMethodWithSchedule: PaymentMethodWithSchedule, giftRecipientWithCode: DigitalSubGiftRecipientWithCode) = {
+    import giftRecipientWithCode._
     wrap("digipack-gift-purchase", GifterPurchaseAttributes(
       gifter_first_name = user.firstName,
       gifter_last_name = user.lastName,
@@ -169,12 +171,13 @@ class DigitalPackEmailFields(
       gift_recipient_last_name = giftRecipient.lastName,
       gift_recipient_email = giftRecipient.email,
       gift_personal_message = giftRecipient.message.getOrElse(""),
-      gift_code = "gift code placeholder", // TODO need to get CreateZuoraSubscription to pass it on
+      gift_code = giftCode.value,
       gift_delivery_date = formatDate(giftRecipient.deliveryDate),
       subscription_details = SubscriptionEmailFieldHelpers.describe(paymentMethodWithSchedule.paymentSchedule, billingPeriod, currency, promotion),
       date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).date),
       paymentAttributes = paymentFields(paymentMethodWithSchedule.paymentMethod, directDebitMandateId)
     ))
+  }
 
   private def giftRedemption =
     wrap("digipack-gift-redemption", GifteeRedemptionAttributes(

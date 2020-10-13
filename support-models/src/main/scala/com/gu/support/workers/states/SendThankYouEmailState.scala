@@ -11,9 +11,9 @@ import org.joda.time.LocalDate
 case class SendThankYouEmailState(
   requestId: UUID,
   user: User,
-  giftRecipient: Option[GiftRecipient],
+  maybeGiftRecipWithCode: Option[GiftRecipientAndMaybeCode],
   product: ProductType,
-  paymentProvider: PaymentProvider,
+  analyticsInfo: AnalyticsInfo,
   paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],

@@ -29,11 +29,12 @@ class SubscriptionDataBuilder(
   def build(
     state: CreateZuoraSubscriptionState,
     environment: TouchPointEnvironment,
+    maybeGiftRecipWithCode: Option[GiftRecipientAndMaybeCode],
   ): EitherT[Future, Throwable, SubscriptionData] =
     state.product match {
       case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
       case d: DigitalPack =>
-        buildDigiSub(state, d, environment)
+        buildDigiSub(state, d, environment, maybeGiftRecipWithCode)
       case p: Paper =>
         EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
           p,
@@ -62,20 +63,21 @@ class SubscriptionDataBuilder(
   private def buildDigiSub(
     state: CreateZuoraSubscriptionState,
     digitalPack: DigitalPack,
-    environment: TouchPointEnvironment
-  ): EitherT[Future, Throwable, SubscriptionData] = {
+    environment: TouchPointEnvironment,
+    maybeGiftRecipWithCode: Option[GiftRecipientAndMaybeCode],
+  ): EitherT[Future, Throwable, SubscriptionData]= {
     val Purchase = Left
     val Redemption = Right
     (state.paymentMethod, digitalPack.readerType) match {
       case (Purchase(_: PaymentMethod), _) =>
-        digitalSubscriptionPurchaseBuilder.build(
+        EitherT.fromEither[Future](digitalSubscriptionPurchaseBuilder.build(
           state.promoCode,
-          state.product.billingPeriod,
           state.user.billingAddress.country,
           digitalPack,
           state.requestId,
           environment,
-        ).leftMap(BuildSubscribePromoError)
+          maybeGiftRecipWithCode.flatMap(_.asDigiSub.map(_.giftCode)),
+        ).leftMap(BuildSubscribePromoError))
       case (Redemption(rd: RedemptionData), ReaderType.Corporate) =>
         digitalSubscriptionCorporateRedemptionBuilder.build(rd,
           digitalPack,
