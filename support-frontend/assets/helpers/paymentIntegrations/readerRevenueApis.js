@@ -102,8 +102,8 @@ type GiftRecipientType = {|
   firstName: string,
   lastName: string,
   email?: Option<string>,
-  // message: Option<string>,
-  // deliveryDate: Option<string>,
+  message: Option<string>,
+  deliveryDate: Option<string>,
 |};
 
 // The model that is sent to support-workers

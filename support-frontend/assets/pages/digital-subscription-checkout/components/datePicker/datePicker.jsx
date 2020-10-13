@@ -143,7 +143,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     }
   }
 
-  updateStartDate = () => this.props.onChange(`${this.state.day}/${this.state.month}/${this.state.year}`)
+  updateStartDate = () => this.props.onChange(`${this.state.year}-${this.state.month}-${this.state.day}`)
 
   render() {
     const { state } = this;
@@ -151,8 +151,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     const today = Date.now();
     const currentMonth = new Date(today);
     const threeMonthRange = DateUtils.addMonths(currentMonth, 3);
-    const valueArray = value ? value.split('/') : [];
-    const valueDate = valueArray.length ? new Date(`${valueArray[1]}/${valueArray[0]}/${valueArray[2]}`) : null;
+    const valueDate = value ? new Date(value) : null;
 
     return (
       <div>
