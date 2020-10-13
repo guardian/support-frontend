@@ -42,8 +42,7 @@ export const checkEmail: (string | null) => boolean = input => isNotEmpty(input)
 export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(input) || isValidEmail(input);
 
 export const checkGiftStartDate: (string | null) => boolean = (rawDate) => {
-  const dateArray = rawDate ? rawDate.split('/') : null;
-  const date = dateArray ? new Date(`${dateArray[1]} ${dateArray[0]} ${dateArray[2]}`) : null;
+  const date = rawDate ? new Date(rawDate) : null;
   return isNotEmpty(rawDate) && isNotInThePast(date) && isNotTooFarInTheFuture(date);
 };
 
