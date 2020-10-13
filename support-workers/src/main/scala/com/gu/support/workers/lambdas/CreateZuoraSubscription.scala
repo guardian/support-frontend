@@ -14,7 +14,7 @@ import com.gu.support.redemption.corporate._
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.GiftRecipient.DigitalSubGiftRecipient
+import com.gu.support.workers.GiftRecipient.{DigitalSubGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.GiftRecipientAndMaybeCode.{DigitalSubGiftRecipientWithCode, NonDigitalSubGiftRecipient}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
@@ -105,7 +105,7 @@ class ZuoraSubscriptionCreator(
         val giftCode = giftCodeGeneratorService.generateCode(billingPeriod)
           .withLogging("Generated code for Digital Subscription gift")
         DigitalSubGiftRecipientWithCode(digitalSubGiftRecipient, giftCode)
-      case otherGiftRec =>
+      case otherGiftRec: WeeklyGiftRecipient =>
         NonDigitalSubGiftRecipient(otherGiftRec)
     }
 }

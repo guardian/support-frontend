@@ -4,7 +4,7 @@ import cats.implicits._
 import com.gu.i18n.Title
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.GiftRecipient.{DigitalSubGiftRecipient, WeeklyGiftRecipient}
-import com.gu.support.workers.GiftRecipientAndMaybeCode.DigitalSubGiftRecipientWithCode
+import com.gu.support.workers.GiftRecipientAndMaybeCode.{DigitalSubGiftRecipientWithCode, NonDigitalSubGiftRecipient}
 import io.circe._
 import io.circe.generic.semiauto._
 import io.circe.syntax._
@@ -69,16 +69,17 @@ object GiftCode {
 
 }
 
-sealed abstract class GiftRecipientAndMaybeCode(val giftRecipient: GiftRecipient) {
+sealed trait GiftRecipientAndMaybeCode {
   def asDigiSub: Option[DigitalSubGiftRecipientWithCode] = this match { case a: DigitalSubGiftRecipientWithCode => Some(a); case _ => None }
+  def giftRecipient: GiftRecipient
 }
 object GiftRecipientAndMaybeCode {
 
-  case class NonDigitalSubGiftRecipient(override val giftRecipient: GiftRecipient) extends GiftRecipientAndMaybeCode(giftRecipient)
+  case class NonDigitalSubGiftRecipient(giftRecipient: WeeklyGiftRecipient) extends GiftRecipientAndMaybeCode
   case class DigitalSubGiftRecipientWithCode(
-    override val giftRecipient: DigitalSubGiftRecipient,
+    giftRecipient: DigitalSubGiftRecipient,
     giftCode: GiftCode
-  ) extends GiftRecipientAndMaybeCode(giftRecipient)
+  ) extends GiftRecipientAndMaybeCode
 
   val circeDiscriminator = new CirceDiscriminator("giftRecipientType")
   private val discriminatorNonDigiSub = "NonDigiSub"
