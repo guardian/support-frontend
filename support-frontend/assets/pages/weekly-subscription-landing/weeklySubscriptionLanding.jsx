@@ -122,7 +122,7 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
 };
 
 const getRegionalCopyFor = (region: CountryGroupId): Element<'span'> => (region === GBPCountries ?
-  <span>Pause for thought with The Guardian&apos;s<br />essential news magazine</span> :
+  <span>Find clarity with The Guardian&apos;s global magazine.<br /> Subscribe today</span> :
   <span>Read The Guardian in print. Subscribe to<br className="gw-temp-break" />The Guardian Weekly today</span>);
 
 const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {

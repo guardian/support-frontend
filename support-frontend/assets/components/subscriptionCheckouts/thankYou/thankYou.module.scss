@@ -1,7 +1,8 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.hero {
-  background: gu-colour(brand-main);
+.hero,
+.heroGuardianWeeklyNonGifting {
+  background-color: gu-colour(brand-main);
   border-top: 1px solid gu-colour(brand-pastel);
   @include mq($from: tablet) {
 
@@ -18,6 +19,7 @@
         left: gu-span(2) * -1;
       }
     }
+
     :global(.component-grid-picture__image) {
       height: 100%;
       display: block;
@@ -36,6 +38,14 @@
       float: none;
       display: block;
     }
+  }
+}
+
+.heroGuardianWeeklyNonGifting {
+  background-color: #66c2e9;
+
+  :global(.component-grid-picture) {
+    top: 0;
   }
 }
 

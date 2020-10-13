@@ -52,9 +52,10 @@
   margin-bottom: 0;
 }
 
-.img {
+.img,
+.imgGuardianWeekly {
   overflow: hidden;
-  background: gu-colour(neutral-97);
+  background-color: gu-colour(neutral-97);
   border-bottom: 1px solid gu-colour(neutral-86);
   padding: $gu-v-spacing * 3 $gu-h-spacing/2 0;
   @include mq($until: desktop) {
@@ -62,13 +63,20 @@
   }
 }
 
-.img img {
+.imgGuardianWeekly {
+  background-color: #66c2e9;
+}
+
+.img img,
+.imgGuardianWeekly img {
   width: 75%;
   margin: 5% auto 0;
   display: block;
 }
 
-.header, .headerShowDetails {
+.header,
+.headerShowDetails,
+.headerGuardianWeekly {
   @include gu-fontset-body-sans;
   font-weight: 600;
   @include mq($from: tablet) {
@@ -91,6 +99,12 @@
 
 .headerShowDetails {
   margin-bottom: $gu-v-spacing;
+}
+
+.headerGuardianWeekly {
+  @include mq($from: tablet) {
+    border-bottom: 2px solid gu-colour(neutral-100);
+  }
 }
 
 .title, .titleLeftAlign {

@@ -13,25 +13,25 @@ import ProductPageHero
 
 import './weeklyCampaign.scss';
 
-const HeroImage = () => (
+const HeroImage = ({ orderIsGift }: {orderIsGift: boolean}) => (
   <GridPicture
     sources={[
         {
-          gridId: 'weeklyLandingHero',
+          gridId: !orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot',
           srcSizes: [500, 1000],
           imgType: 'png',
           sizes: '100vw',
           media: '(max-width: 739px)',
         },
         {
-          gridId: 'weeklyLandingHero',
+          gridId: !orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot',
           srcSizes: [1000, 2000],
           imgType: 'png',
           sizes: '(min-width: 1000px) 2000px, 1000px',
           media: '(min-width: 740px)',
         },
       ]}
-    fallback="weeklyLandingHero"
+    fallback={!orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot'}
     fallbackSize={1000}
     altText="A collection of Guardian Weekly magazines"
     fallbackImgType="png"
@@ -75,7 +75,7 @@ const CampaignHeader = (props: {heading: string | Node, orderIsAGift: boolean}) 
         {props.orderIsAGift ? (
           <h2>Give<br />The Guardian Weekly</h2>
           ) : (
-            <h2>The Guardian<br />Weekly</h2>
+            <h2>The<br />Guardian<br />Weekly</h2>
           )
         }
       </div>
@@ -84,8 +84,8 @@ const CampaignHeader = (props: {heading: string | Node, orderIsAGift: boolean}) 
         <div className="weekly-campaign-hero__graphic">
           <GridImage
             gridId="weeklyCampaignHeroImg"
-            srcSizes={[1000, 1358]}
-            sizes="(max-width: 740px) 1000px, 1358px"
+            srcSizes={[1000, 1158]}
+            sizes="(max-width: 740px) 1000px, 1158px"
             imgType="png"
             altText="A collection of Guardian Weekly magazines"
           />
