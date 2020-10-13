@@ -138,6 +138,8 @@ function buildRegularPaymentRequest(
     firstNameGiftRecipient,
     lastNameGiftRecipient,
     emailGiftRecipient,
+    giftMessage,
+    giftDeliveryDate,
     billingPeriod,
     fulfilmentOption,
     productOption,
@@ -167,8 +169,8 @@ function buildRegularPaymentRequest(
       firstName: firstNameGiftRecipient,
       lastName: lastNameGiftRecipient,
       email: emailGiftRecipient,
-      // message: giftMessage,
-      // deliveryDate: giftDeliveryDate,
+      message: giftMessage,
+      deliveryDate: giftDeliveryDate,
     },
   } : {};
 
