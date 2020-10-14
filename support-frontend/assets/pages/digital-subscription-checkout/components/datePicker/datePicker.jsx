@@ -95,9 +95,11 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     this.handleCalendarDate(new Date(Date.now()));
   }
 
+  getDateString = () => `${this.state.year}-${this.state.month}-${this.state.day}`;
+
   checkDateIsValid = (e: Object) => {
     e.preventDefault();
-    const date = new Date(`${this.state.month}/${this.state.day}/${this.state.year}`);
+    const date = new Date(this.getDateString());
     const dateIsNotADate = !DateUtils.isDate(date);
     const latestAvailableDate = getLatestAvailableDateText();
 
@@ -143,7 +145,13 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     }
   }
 
-  updateStartDate = () => this.props.onChange(`${this.state.year}-${this.state.month}-${this.state.day}`)
+  updateStartDate = () => {
+    const dateString = this.getDateString();
+    if (DateUtils.isDate(new Date(dateString))) {
+      return this.props.onChange(dateString);
+    }
+    return this.props.onChange('');
+  }
 
   render() {
     const { state } = this;
