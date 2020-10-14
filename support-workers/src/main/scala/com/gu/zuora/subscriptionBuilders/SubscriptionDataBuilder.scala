@@ -65,7 +65,7 @@ class SubscriptionDataBuilder(
     digitalPack: DigitalPack,
     environment: TouchPointEnvironment,
     maybeGiftPurchase: Option[GiftPurchase],
-  ): EitherT[Future, Throwable, SubscriptionData]= {
+  ): EitherT[Future, Throwable, SubscriptionData] = {
     val Purchase = Left
     val Redemption = Right
     (state.paymentMethod, digitalPack.readerType) match {

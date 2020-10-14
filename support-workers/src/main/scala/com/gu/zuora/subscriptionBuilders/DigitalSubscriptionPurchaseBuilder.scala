@@ -31,20 +31,16 @@ class DigitalSubscriptionPurchaseBuilder(
   )(implicit ec: ExecutionContext): Either[PromoError, SubscriptionData] = {
 
     val productRatePlanId = validateRatePlan(digitalRatePlan(digitalPack, environment), digitalPack.describe)
-    val (contractAcceptanceDelay, autoRenew, initialTerm) =
-      if (digitalPack.readerType == ReaderType.Gift)
-        (0, false, GiftCodeValidator.expirationTimeInMonths + 1)
-      else
-        (config.defaultFreeTrialPeriod + config.paymentGracePeriod, true, 12)
+
+    val (contractAcceptanceDelay, autoRenew, initialTerm, maybeRedemptionCode) =
+      (digitalPack.readerType, maybeGiftCode) match {
+        case (Gift, Some(giftCode)) => (0, false, GiftCodeValidator.expirationTimeInMonths + 1, Some(giftCode))
+        case (Gift, _) | (_, Some(_)) => throw new RuntimeException("coding error - possible unredeemable sub")
+        case _ => (config.defaultFreeTrialPeriod + config.paymentGracePeriod, true, 12, None)
+      }
 
     val todaysDate = today()
     val contractAcceptanceDate = todaysDate.plusDays(contractAcceptanceDelay)
-
-    val maybeRedemptionCode = (digitalPack.readerType, maybeGiftCode) match {
-      case (Gift, Some(giftCode)) => Some(giftCode)
-      case (Gift, _) | (_, Some(_)) => None // FIXME coding error - possible unredeemable sub
-      case _ => None
-    }
 
     val subscriptionData = SubscriptionData(
       List(RatePlanData(RatePlan(productRatePlanId), Nil, Nil)),
