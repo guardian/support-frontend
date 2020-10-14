@@ -59,7 +59,7 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     val state = SendThankYouEmailState(
       requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-      maybeGiftRecipWithCode = None,
+      giftPurchase = None,
       product = DigitalPack(Currency.GBP, Monthly),
       AnalyticsInfo(false, paymentProvider = PayPal),
       paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
@@ -146,7 +146,7 @@ object StatesTestData {
   val thankYouEmailState = SendThankYouEmailState(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    maybeGiftRecipWithCode = None,
+    giftPurchase = None,
     product = DigitalPack(Currency.GBP, Monthly),
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentOrRedemptionData = Left(PaymentMethodWithSchedule(

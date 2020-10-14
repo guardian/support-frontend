@@ -65,7 +65,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
       case d: DigitalPack => new DigitalPackEmailFields(getSubscriptionEmailFields(state, directDebitMandateId)).build(
         paidSubPaymentData = state.paymentOrRedemptionData.left.toOption,
         readerType = d.readerType,
-        maybeGiftRecipWithCode = state.maybeGiftRecipWithCode.flatMap(_.asDigiSub)
+        maybeGiftPurchase = state.giftPurchase.flatMap(_.asDigiSub)
       )
       case p: Paper =>
         state.paymentOrRedemptionData.left.toOption.toRight("can't have a corporate/gift paper yet").map(paymentMethodWithSchedule =>
@@ -75,7 +75,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
             productOptions = p.productOptions,
             firstDeliveryDate = state.firstDeliveryDate,
             paymentMethodWithSchedule = paymentMethodWithSchedule,
-            state.maybeGiftRecipWithCode.map(_.giftRecipient)
+            state.giftPurchase.map(_.giftRecipient)
           )
         ).map(List(_))
       case _: GuardianWeekly =>
@@ -84,7 +84,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
             getSubscriptionEmailFields(state, directDebitMandateId),
             firstDeliveryDate = state.firstDeliveryDate,
             paymentMethodWithSchedule = paymentMethodWithSchedule,
-            state.maybeGiftRecipWithCode.map(_.giftRecipient)
+            state.giftPurchase.map(_.giftRecipient)
           )
         ).map(List(_))
     }
@@ -101,7 +101,7 @@ class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
 
   private def getSubscriptionEmailFields(state: SendThankYouEmailState, directDebitMandateId: Option[String]) = {
 
-    val readerType = if (state.maybeGiftRecipWithCode.isDefined) Gift else Direct
+    val readerType = if (state.giftPurchase.isDefined) Gift else Direct
     val productRatePlanId = getProductRatePlanId(state.product, state.user.isTestUser, readerType)
     val maybePromotion = getAppliedPromotion(
       servicesProvider.forUser(state.user.isTestUser).promotionService,

@@ -15,7 +15,7 @@ import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GiftRecipient.{DigitalSubGiftRecipient, WeeklyGiftRecipient}
-import com.gu.support.workers.GiftRecipientAndMaybeCode.{DigitalSubGiftRecipientWithCode, NonDigitalSubGiftRecipient}
+import com.gu.support.workers.GiftPurchase.{DigitalSubGiftPurchase, WeeklyGiftPurchase}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PaymentMethodWithSchedule, SendThankYouEmailState}
@@ -104,9 +104,9 @@ class ZuoraSubscriptionCreator(
       case digitalSubGiftRecipient: DigitalSubGiftRecipient =>
         val giftCode = giftCodeGeneratorService.generateCode(billingPeriod)
           .withLogging("Generated code for Digital Subscription gift")
-        DigitalSubGiftRecipientWithCode(digitalSubGiftRecipient, giftCode)
-      case otherGiftRec: WeeklyGiftRecipient =>
-        NonDigitalSubGiftRecipient(otherGiftRec)
+        DigitalSubGiftPurchase(digitalSubGiftRecipient, giftCode)
+      case weeklyGiftRec: WeeklyGiftRecipient =>
+        WeeklyGiftPurchase(weeklyGiftRec)
     }
 }
 
@@ -165,12 +165,12 @@ object ZuoraSubscriptionCreator {
     accountNumber: ZuoraAccountNumber,
     subscriptionNumber: ZuoraSubscriptionNumber,
     paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
-    maybeGiftRecipWithCode: Option[GiftRecipientAndMaybeCode],
+    maybeGiftPurchase: Option[GiftPurchase],
   ): SendThankYouEmailState =
     SendThankYouEmailState(
       requestId = state.requestId,
       user = state.user,
-      maybeGiftRecipWithCode = maybeGiftRecipWithCode,
+      giftPurchase = maybeGiftPurchase,
       product = state.product,
       analyticsInfo = state.analyticsInfo,
       paymentOrRedemptionData = paymentOrRedemptionData,
