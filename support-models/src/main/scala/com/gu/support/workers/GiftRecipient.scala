@@ -79,6 +79,7 @@ object GiftPurchase {
   case class DigitalSubGiftPurchase(
     giftRecipient: DigitalSubGiftRecipient,
     giftCode: GiftCode,
+    lastRedemptionDate: LocalDate,
   ) extends GiftPurchase
 
   val circeDiscriminator = new CirceDiscriminator("giftPurchaseType")

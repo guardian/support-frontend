@@ -78,7 +78,7 @@ class ZuoraSubscriptionCreator(
 
     val environment = TouchPointEnvironments.fromStage(Configuration.stage, state.user.isTestUser)
 
-    val maybeGiftRecipWithCode = state.giftRecipient.map(maybeAddCode(state.product.billingPeriod, _))
+    val maybeGiftRecipWithCode = state.giftRecipient.map(maybeAddCode(state.product.billingPeriod, _, () => now().toLocalDate))
       .withLogging("gift recipient with code")
     for {
       subscriptionData <- subscriptionDataBuilder.build(state, environment, maybeGiftRecipWithCode).value.map(_.toTry).flatMap(Future.fromTry)
@@ -99,12 +99,13 @@ class ZuoraSubscriptionCreator(
     } yield HandlerResult(getEmailState(state, account, sub, paymentOrRedemptionData, maybeGiftRecipWithCode), info)
   }
 
-  private def maybeAddCode(billingPeriod: BillingPeriod, giftRecipient: GiftRecipient) =
+  private def maybeAddCode(billingPeriod: BillingPeriod, giftRecipient: GiftRecipient, today: () => LocalDate) =
     giftRecipient match {
       case digitalSubGiftRecipient: DigitalSubGiftRecipient =>
         val giftCode = giftCodeGeneratorService.generateCode(billingPeriod)
           .withLogging("Generated code for Digital Subscription gift")
-        DigitalSubGiftPurchase(digitalSubGiftRecipient, giftCode)
+        val lastRedemptionDate = today().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)
+        DigitalSubGiftPurchase(digitalSubGiftRecipient, giftCode, lastRedemptionDate)
       case weeklyGiftRec: WeeklyGiftRecipient =>
         WeeklyGiftPurchase(weeklyGiftRec)
     }

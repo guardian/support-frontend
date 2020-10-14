@@ -162,7 +162,7 @@ class DigitalPackEmailFields(
       gifter_first_name = user.firstName,
       gift_personal_message = giftPurchase.giftRecipient.message,
       gift_code = giftPurchase.giftCode.value,
-      last_redemption_date = "last_redemption_date placeholder", // TODO need to pull it through from when we create the sub
+      last_redemption_date = formatDate(giftPurchase.lastRedemptionDate),
     ))
 
   private def giftPurchaserConfirmation(paymentMethodWithSchedule: PaymentMethodWithSchedule, giftPurchase: DigitalSubGiftPurchase) = {
@@ -179,7 +179,7 @@ class DigitalPackEmailFields(
       subscription_details = SubscriptionEmailFieldHelpers.describe(paymentMethodWithSchedule.paymentSchedule, billingPeriod, currency, promotion),
       date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).date),
       paymentAttributes = paymentFields(paymentMethodWithSchedule.paymentMethod, directDebitMandateId),
-      last_redemption_date = "last_redemption_date placeholder", // TODO need to pull it through from when we create the sub
+      last_redemption_date = formatDate(lastRedemptionDate),
     ))
   }
 

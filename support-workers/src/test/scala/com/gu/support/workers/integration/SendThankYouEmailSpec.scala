@@ -169,7 +169,8 @@ object SendDigitalPackGiftPurchaseEmails extends App {
     ReaderType.Gift,
     Some(DigitalSubGiftPurchase(
       DigitalSubGiftRecipient("first", "last", addressToSendTo, Some("gift message"), new LocalDate(2020, 10, 2)),
-      GiftCode("gd12-12345678").get
+      GiftCode("gd12-12345678").get,
+      new LocalDate(2020, 10, 14),
     )
   )))
 

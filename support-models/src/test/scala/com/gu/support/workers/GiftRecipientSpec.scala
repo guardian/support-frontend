@@ -106,7 +106,8 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
     testRoundTripSerialisation(
       GiftPurchase.DigitalSubGiftPurchase(
         GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
-        GiftCode("gd12-23456789").get
+        GiftCode("gd12-23456789").get,
+        new LocalDate(2020, 10, 14),
       )
     )
     testRoundTripSerialisation(
