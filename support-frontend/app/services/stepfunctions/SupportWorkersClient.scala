@@ -129,7 +129,7 @@ class SupportWorkersClient(
         for {
           email <- giftRecipient.email.toRight("email address is required for DS gifts")
           deliveryDate <- giftRecipient.deliveryDate.toRight("delivery date is required for DS gifts")
-        } yield GiftRecipient.DigitalSubGiftRecipient(
+        } yield GiftRecipient.DigitalSubscriptionGiftRecipient(
           giftRecipient.firstName,
           giftRecipient.lastName,
           email,

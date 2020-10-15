@@ -1,6 +1,6 @@
 package com.gu.support.redemption.gifting.generator
 
-import com.gu.support.workers.GiftCode
+import com.gu.support.workers.GeneratedGiftCode
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -32,7 +32,7 @@ class CodeBuilderSpec  extends AnyFlatSpec with Matchers {
   }
 
   it should "not allow invalid codes to be constructed" in {
-    GiftCode("invalid") should be(None)
+    GeneratedGiftCode("invalid") should be(None)
   }
 
 }

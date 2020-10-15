@@ -473,7 +473,7 @@ object JsonFixtures {
               "lastName": "McRecipent",
               "email": "gift.recipient@gu.com",
               "deliveryDate": "2020-01-01",
-              "giftRecipientType": "DigiSub"
+              "giftRecipientType": "DigitalSubscription"
             },
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson,

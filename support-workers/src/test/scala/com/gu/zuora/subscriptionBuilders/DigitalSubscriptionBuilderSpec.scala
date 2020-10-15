@@ -14,7 +14,7 @@ import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{InvalidCode, InvalidReaderType}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionState}
-import com.gu.support.workers.{Address, DigitalPack, GiftCode, Monthly, PaymentProvider, Quarterly, RedemptionNoProvider, SalesforceContactRecord, User}
+import com.gu.support.workers.{Address, DigitalPack, GeneratedGiftCode, Monthly, PaymentProvider, Quarterly, RedemptionNoProvider, SalesforceContactRecord, User}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
@@ -135,7 +135,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       DigitalPack(GBP, Quarterly, Gift),
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       SANDBOX,
-      Some(GiftCode("gd03-23456789").get)// code for Quarterly ie Gift3Month
+      Some(GeneratedGiftCode("gd03-23456789").get)// code for Quarterly ie Gift3Month
     ).right.get
 
   lazy val threeMonthGiftRedemption: Future[Throwable] =
