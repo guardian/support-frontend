@@ -144,6 +144,7 @@ const ContributionThankYou = ({
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
   const isEnvironmentMoment = (campaignSettings && campaignSettings.campaignCode === 'enviro_moment_2020');
+  const isUsEndOfYearAppeal = false;
 
   useEffect(() => {
     trackUserData(
@@ -171,7 +172,8 @@ const ContributionThankYou = ({
   const supportReminderAction = {
     component: <ContributionThankYouSupportReminder
       email={email}
-      isUsEndOfYearAppeal={countryId === 'US' && !campaignSettings}
+      isUsEndOfYearAppeal={isUsEndOfYearAppeal}
+      isEnvironmentMoment={isEnvironmentMoment}
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };

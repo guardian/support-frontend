@@ -98,7 +98,7 @@ const IN_THREE_MONTHS: ReminderDate = {
   label: 'in three months (March 2021)', // slightly custom copy over default (three vs 3)
 };
 
-const THIS_TIME_NEXT_YEAR: ReminderDate = {
+const NEXT_US_EOY_APPEAL: ReminderDate = {
   date: new Date(2021, 11),
   label: 'this time next year (December 2021)',
 };
@@ -115,27 +115,46 @@ const getReminderDatesForUsEndOfYearAppeal = (): ReminderDate[] => {
     return [
       LAST_DAY_OF_THE_YEAR,
       IN_THREE_MONTHS,
-      THIS_TIME_NEXT_YEAR,
+      NEXT_US_EOY_APPEAL,
     ];
   }
   return getDefaultReminderDates();
 };
 
+const NEXT_ENVIRONMENT_PLEDGE: ReminderDate = {
+  date: new Date(2021, 11),
+  label: 'in one year (our next climate pledge update)',
+};
+
+const getReminderDatesForEnvironmentMoment = (): ReminderDate[] => [
+  getReminderDateWithDefaultLabel(3),
+  getReminderDateWithDefaultLabel(6),
+  NEXT_ENVIRONMENT_PLEDGE,
+];
+
+
 type ContributionThankYouSupportReminderProps = {|
   email: string,
+  isEnvironmentMoment: boolean,
   isUsEndOfYearAppeal: boolean
 |};
 
 const ContributionThankYouSupportReminder = ({
   email,
+  isEnvironmentMoment,
   isUsEndOfYearAppeal,
 }: ContributionThankYouSupportReminderProps) => {
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
-  const reminderDates = isUsEndOfYearAppeal
-    ? getReminderDatesForUsEndOfYearAppeal()
-    : getDefaultReminderDates();
+  let reminderDates;
+  if (isEnvironmentMoment) {
+    reminderDates = getReminderDatesForEnvironmentMoment();
+  } else if (isUsEndOfYearAppeal) {
+    reminderDates = getReminderDatesForUsEndOfYearAppeal();
+  } else {
+    reminderDates = getDefaultReminderDates();
+  }
 
   const selectedDateAsApiString = () => {
     const selectedDate = reminderDates[selectedDateIndex].date;
