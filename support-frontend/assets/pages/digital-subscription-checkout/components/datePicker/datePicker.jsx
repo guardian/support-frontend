@@ -95,9 +95,11 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     this.handleCalendarDate(new Date(Date.now()));
   }
 
+  getDateString = () => `${this.state.year}-${this.state.month}-${this.state.day}`;
+
   checkDateIsValid = (e: Object) => {
     e.preventDefault();
-    const date = new Date(`${this.state.month}/${this.state.day}/${this.state.year}`);
+    const date = new Date(this.getDateString());
     const dateIsNotADate = !DateUtils.isDate(date);
     const latestAvailableDate = getLatestAvailableDateText();
 
@@ -143,7 +145,13 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     }
   }
 
-  updateStartDate = () => this.props.onChange(`${this.state.day}/${this.state.month}/${this.state.year}`)
+  updateStartDate = () => {
+    const dateString = this.getDateString();
+    if (DateUtils.isDate(new Date(dateString))) {
+      return this.props.onChange(dateString);
+    }
+    return this.props.onChange('');
+  }
 
   render() {
     const { state } = this;
@@ -151,8 +159,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     const today = Date.now();
     const currentMonth = new Date(today);
     const threeMonthRange = DateUtils.addMonths(currentMonth, 3);
-    const valueArray = value ? value.split('/') : [];
-    const valueDate = valueArray.length ? new Date(`${valueArray[1]}/${valueArray[0]}/${valueArray[2]}`) : null;
+    const valueDate = value ? new Date(value) : null;
 
     return (
       <div>
