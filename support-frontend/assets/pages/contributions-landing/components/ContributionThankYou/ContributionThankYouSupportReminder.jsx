@@ -122,7 +122,7 @@ const getReminderDatesForUsEndOfYearAppeal = (): ReminderDate[] => {
 };
 
 const NEXT_ENVIRONMENT_PLEDGE: ReminderDate = {
-  date: new Date(2021, 11),
+  date: new Date(2021, 9),
   label: 'in one year (our next climate pledge update)',
 };
 
