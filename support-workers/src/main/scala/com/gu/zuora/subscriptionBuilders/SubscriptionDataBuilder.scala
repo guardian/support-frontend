@@ -34,7 +34,7 @@ class SubscriptionDataBuilder(
     state.product match {
       case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
       case d: DigitalPack =>
-        buildDigiSub(state, d, environment, maybeGiftPurchase)
+        buildDigitalSubscription(state, d, environment, maybeGiftPurchase)
       case p: Paper =>
         EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
           p,
@@ -60,7 +60,7 @@ class SubscriptionDataBuilder(
         )
     }
 
-  private def buildDigiSub(
+  private def buildDigitalSubscription(
     state: CreateZuoraSubscriptionState,
     digitalPack: DigitalPack,
     environment: TouchPointEnvironment,

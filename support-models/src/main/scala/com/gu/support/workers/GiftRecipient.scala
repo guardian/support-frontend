@@ -13,7 +13,8 @@ import org.joda.time.LocalDate
 sealed trait GiftRecipient {
   val firstName: String
   val lastName: String
-  def asDigiSub: Option[DigitalSubscriptionGiftRecipient] = this match { case a: DigitalSubscriptionGiftRecipient => Some(a); case _ => None }
+  def asDigitalSubscriptionGiftRecipient: Option[DigitalSubscriptionGiftRecipient] =
+    this match { case a: DigitalSubscriptionGiftRecipient => Some(a); case _ => None }
   def asWeekly: Option[WeeklyGiftRecipient] = this match { case a: WeeklyGiftRecipient => Some(a); case _ => None }
 }
 object GiftRecipient {
