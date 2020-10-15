@@ -4,8 +4,7 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route } from 'react-router-dom';
-
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import { isDetailsSupported, polyfillDetails } from 'helpers/details';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
@@ -128,7 +127,16 @@ const router = (
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou"
-          render={() => {
+          render={(props) => {
+            const { pathname } = props.location;
+            const { search } = props.location;
+            const queryParams = new URLSearchParams(search);
+
+            if (!storage.getSession('isPaymentComplete') && !queryParams.has('no-redirect')) {
+              const redirectPath = pathname.replace('thankyou', 'contribute') + search;
+              return <Redirect to={redirectPath} push={false} />;
+            }
+
             // we set the recurring cookie server side
             if (storage.getSession('selectedContributionType') === 'ONE_OFF') {
               setOneOffContributionCookie();

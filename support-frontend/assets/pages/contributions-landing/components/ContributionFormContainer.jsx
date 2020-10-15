@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import * as storage from 'helpers/storage';
 import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
@@ -96,6 +97,7 @@ function withProps(props: PropTypes) {
     // This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
     // back to /thankyou given the current state of the redux store.
     // The effect is that clicking back in the browser will take the user to the page before they arrived at /contribute
+    storage.setSession('isPaymentComplete', 'true');
     return (<Redirect to={props.thankYouRoute} push={false} />);
   }
 
