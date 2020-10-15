@@ -128,10 +128,13 @@ const router = (
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou"
           render={(props) => {
+            const paymentMethod = storage.getSession('selectedPaymentMethod');
+            const isPaymentMethodSelected = paymentMethod && paymentMethod !== 'None';
+
             const { pathname, search } = props.location;
             const queryParams = new URLSearchParams(search);
 
-            if (!storage.getSession('isPaymentComplete') && !queryParams.has('no-redirect')) {
+            if (!isPaymentMethodSelected && !queryParams.has('no-redirect')) {
               const redirectPath = pathname.replace('thankyou', 'contribute') + search;
               return <Redirect to={redirectPath} push={false} />;
             }
