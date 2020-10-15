@@ -18,7 +18,6 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { formatAmount } from 'helpers/checkouts';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { type State } from '../contributionsLandingReducer';
-import ContributionChoicesHeader from './ContributionChoicesHeader';
 import ContributionTextInputDs from './ContributionTextInputDs';
 import ContributionAmountChoices from './ContributionAmountChoices';
 
@@ -36,8 +35,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  shouldShowFrequencyButtons: boolean,
-  shouldShowChoiceHeader: boolean,
 |};
 
 
@@ -52,8 +49,6 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  shouldShowFrequencyButtons: state.common.abParticipations.landingPageRetentionR2 === 'variant 2',
-  shouldShowChoiceHeader: state.common.abParticipations.landingPageRetentionR2 === 'variant 3',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -155,10 +150,6 @@ function withProps(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
 
-      {props.shouldShowChoiceHeader && (
-        <ContributionChoicesHeader>Amount</ContributionChoicesHeader>
-      )}
-
       <ContributionAmountChoices
         countryGroupId={props.countryGroupId}
         currency={props.currency}
@@ -167,7 +158,7 @@ function withProps(props: PropTypes) {
         showOther={showOther}
         selectedAmounts={props.selectedAmounts}
         selectAmount={props.selectAmount}
-        shouldShowFrequencyButtons={props.shouldShowFrequencyButtons}
+        shouldShowFrequencyButtons={props.countryGroupId !== 'GBPCountries' && props.contributionType !== 'ONE_OFF'}
       />
 
       {showOther && renderOtherField()}

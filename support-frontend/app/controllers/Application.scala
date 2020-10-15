@@ -149,7 +149,7 @@ class Application(
         .isOn
 
       if (contributionsMomentEnabled)
-        "https://i.guim.co.uk/img/media/c3dad1ffd56077f9e8fe116e54c15e7fd468e244/0_0_2000_1050/1000.png?quality=85&s=bf3b27bc7f6abcb0ebadb791de8d9179"
+        "https://i.guim.co.uk/img/media/e4ca4068ad12c9fe05d8f3f3fab4142d1eceae0d/0_0_1000_525/1000.png?quality=85&s=541be4a526478168dd24d7402b51a343"
       else
         "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
   }
@@ -200,7 +200,8 @@ class Application(
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.v2PublicKey,
+      v2recaptchaConfigPublicKeyDefault = recaptchaConfigProvider.get().v2PublicKey,
+      v2recaptchaConfigPublicKeyUat = recaptchaConfigProvider.get(true).v2PublicKey,
       serversideTests = serversideTests
     )
   }

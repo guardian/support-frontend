@@ -21,7 +21,6 @@ import { appropriateErrorMessage } from 'helpers/errorReasons';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import { loadRecaptchaV2 } from 'helpers/recaptcha';
-import { isPostDeployUser } from 'helpers/user/user';
 import { routes } from 'helpers/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 
@@ -35,6 +34,7 @@ export type StripeFormPropTypes = {
   validateForm: Function,
   buttonText: string,
   csrf: Csrf,
+  isTestUser: boolean,
 }
 
 type CardFieldData = {
@@ -150,7 +150,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
     fetchJson(
       routes.stripeSetupIntentRecaptcha,
       requestOptions(
-        { token, stripePublicKey: props.stripeKey },
+        { token, stripePublicKey: props.stripeKey, isTestUser: props.isTestUser },
         'same-origin',
         'POST',
         props.csrf,
@@ -183,7 +183,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
   };
 
   const setupRecurringHandlers = (): void => {
-    if (!window.guardian.recaptchaEnabled || isPostDeployUser()) {
+    if (!window.guardian.recaptchaEnabled) {
       fetchPaymentIntent('dummy');
     } else if (window.grecaptcha && window.grecaptcha.render) {
       setupRecurringRecaptchaCallback();
@@ -239,7 +239,6 @@ const StripeForm = (props: StripeFormPropTypes) => {
 
   const checkRecaptcha = () => {
     if (window.guardian.recaptchaEnabled &&
-      !isPostDeployUser() &&
       !recaptchaCompleted &&
       recaptchaError === null) {
       setRecaptchaError({

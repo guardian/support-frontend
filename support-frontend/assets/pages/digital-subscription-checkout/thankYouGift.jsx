@@ -186,9 +186,8 @@ const GreenCheckMark = () => (
 
 
 function ThankYouGift(props: PropTypes) {
-  const dateArray = props.giftDeliveryDate ? props.giftDeliveryDate.split('/') : [];
-  const date = dateArray.length && new Date(`${dateArray[1]} ${dateArray[0]} ${dateArray[2]}`);
-  const fullDate = formatUserDate(new Date(date));
+  const date = props.giftDeliveryDate ? new Date(props.giftDeliveryDate) : null;
+  const fullDate = date ? formatUserDate(date) : 'Invalid date';
 
   return (
     <div className="thank-you-stage">
