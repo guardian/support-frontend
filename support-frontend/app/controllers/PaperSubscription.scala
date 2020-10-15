@@ -53,7 +53,7 @@ class PaperSubscription(
 
   def paper(withDelivery: Boolean = false): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = "The Guardian Newspaper Subscription | Vouchers and Delivery"
+    val title = "The Guardian Newspaper Subscription | Subscription Card and Home Delivery"
     val mainElement = assets.getSsrCacheContentsAsHtml("paper-subscription-landing-page","paper-subscription-landing.html")
     val js = Left(RefPath("paperSubscriptionLandingPage.js"))
     val css = Left(RefPath("paperSubscriptionLandingPage.css"))
