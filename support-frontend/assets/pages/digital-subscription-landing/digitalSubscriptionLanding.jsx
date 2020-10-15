@@ -27,7 +27,7 @@ import ProductBlockAus from './components/australianEditions/productBlockAus';
 import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
-import CallToAction from './components/cta';
+import { CallToAction, CallToActionGift } from './components/cta';
 import TermsAndConditions from './components/termsAndConditions';
 import FaqsAndHelp from './components/faqsAndHelp';
 // ----- Styles ----- //
@@ -38,6 +38,8 @@ import 'stylesheets/skeleton/skeleton.scss';
 // ----- Redux Store ----- //
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
+
+const { orderIsAGift } = store.getState().page;
 
 // ----- Internationalisation ----- //
 
@@ -81,7 +83,7 @@ function LandingPage() {
         <ProductBlockAus countryGroupId={countryGroupId} /> :
         <ProductBlock countryGroupId={countryGroupId} />
       }
-      <CallToAction />
+      {orderIsAGift ? <CallToActionGift /> : <CallToAction />}
       <TermsAndConditions />
       <FaqsAndHelp selectedCountryGroup={countryGroupId} />
     </Page>
