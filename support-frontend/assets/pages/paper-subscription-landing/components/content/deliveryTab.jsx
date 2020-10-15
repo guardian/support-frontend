@@ -16,21 +16,8 @@ import {
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
-import { css } from '@emotion/core';
-import { neutral } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
-import { space } from '@guardian/src-foundations';
 import { type Option } from 'helpers/types/option';
-
-
-const accordionContainer = css`
-  background-color: ${neutral['97']};
-
-  p {
-    ${textSans.small()};
-    margin-bottom: ${space[4]}px;
-  }
-`;
+import { accordionContainer } from './tabsStyles';
 
 // ----- Content ----- //
 const ContentDeliveryFaqBlock = ({

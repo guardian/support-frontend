@@ -9,21 +9,9 @@ import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
-import { css } from '@emotion/core';
-import { neutral } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
-import { space } from '@guardian/src-foundations';
+import { accordionContainer } from './tabsStyles';
 
 import { ContentForm, type ContentTabPropTypes } from './helpers';
-
-const accordionContainer = css`
-  background-color: ${neutral['97']};
-
-  p, a {
-    ${textSans.small()};
-    margin-bottom: ${space[3]}px;
-  }
-`;
 
 const LinkToImovo = () => <a href="https://imovo.org/guardianstorefinder" target="_blank" rel="noopener noreferrer">Find your nearest participating retailer</a>;
 
@@ -59,7 +47,7 @@ const SubsCardFaqBlock = () => (
           <AccordionRow label="Delivery from your retailer">
             <p>
               Simply give your preferred store / retailer the barcode printed on your
-              subscription letter.
+              Home Delivery Letter.
             </p>
             <p><LinkToImovo /></p>
           </AccordionRow>
