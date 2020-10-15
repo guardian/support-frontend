@@ -14,7 +14,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
     val json =
       """
         |{
-        |  "giftRecipientType": "DigiSub",
+        |  "giftRecipientType": "DigitalSubscription",
         |  "firstName": "bob",
         |  "lastName": "builder",
         |  "email": "bob@gu.com",
@@ -22,7 +22,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
     val actual = decode[GiftRecipient](json)
-    actual should be(Right(GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", None, new LocalDate(2020, 10, 2))))
+    actual should be(Right(GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", None, new LocalDate(2020, 10, 2))))
   }
 
   it should "deserialise weekly ok" in {
@@ -53,11 +53,11 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "serialise DS" in {
-    val data = GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2))
+    val data = GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2))
     val expected =
       """
         |{
-        |  "giftRecipientType": "DigiSub",
+        |  "giftRecipientType": "DigitalSubscription",
         |  "firstName": "bob",
         |  "lastName": "builder",
         |  "email": "bob@gu.com",
@@ -85,11 +85,11 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
 
   it should "roundtrip ok" in {
     testRoundTripSerialisation(GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com")))
-    testRoundTripSerialisation(GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)))
+    testRoundTripSerialisation(GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)))
   }
 
   "GiftCode" should "roundtrip ok" in {
-    testRoundTripSerialisation(GiftCode("gd12-abcd2345").get)
+    testRoundTripSerialisation(GeneratedGiftCode("gd12-abcd2345").get)
   }
   it should "not deserialise an invalid code" in {
     val json =
@@ -98,15 +98,15 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |  "todo": "hi"
         |}
         |""".stripMargin
-    val actual = decode[GiftCode](json)
+    val actual = decode[GeneratedGiftCode](json)
     actual.left.map(_ => ()) should be(Left(()))
   }
 
   "GiftRecipientAndMaybeCode" should "roundtrip ok" in {
     testRoundTripSerialisation(
-      GiftPurchase.DigitalSubGiftPurchase(
-        GiftRecipient.DigitalSubGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
-        GiftCode("gd12-23456789").get
+      GiftPurchase.DigitalSubscriptionGiftPurchase(
+        GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
+        GeneratedGiftCode("gd12-23456789").get
       )
     )
     testRoundTripSerialisation(

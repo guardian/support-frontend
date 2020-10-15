@@ -60,7 +60,11 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     } yield assertion
   }
 
-  def redeemSubscription(createZuoraHelper: CreateZuoraSubscriptionHelper, codeValue: String, requestId: UUID): Future[HandlerResult[SendThankYouEmailState]] = {
+  def redeemSubscription(
+    createZuoraHelper: CreateZuoraSubscriptionHelper,
+    codeValue: String,
+    requestId: UUID
+  ): Future[HandlerResult[SendThankYouEmailState]] = {
     val code = RedemptionCode(codeValue).right.get
     val state = decode[CreateZuoraSubscriptionState](createDigiPackGiftRedemptionJson(codeValue, requestId)).right.get
 

@@ -4,7 +4,7 @@ import cats.implicits._
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes.{CCAttributes, DDAttributes, PPAttributes}
 import com.gu.emailservices.SubscriptionEmailFieldHelpers._
-import com.gu.support.workers.GiftPurchase.DigitalSubGiftPurchase
+import com.gu.support.workers.GiftPurchase.DigitalSubscriptionGiftPurchase
 import com.gu.support.workers._
 import com.gu.support.workers.states.PaymentMethodWithSchedule
 import com.gu.support.zuora.api.ReaderType
@@ -131,7 +131,7 @@ class DigitalPackEmailFields(
   def build(
     paidSubPaymentData: Option[PaymentMethodWithSchedule],
     readerType: ReaderType,
-    maybeGiftPurchase: Option[DigitalSubGiftPurchase]
+    maybeGiftPurchase: Option[DigitalSubscriptionGiftPurchase]
   ): Either[String, List[EmailFields]] = {
 
     val Purchase = Some
@@ -157,7 +157,7 @@ class DigitalPackEmailFields(
     attributePairs <- JsonToAttributes.asFlattenedPairs(fields.asJsonObject)
   } yield EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
 
-  private def giftRecipientNotification(giftPurchase: DigitalSubGiftPurchase) =
+  private def giftRecipientNotification(giftPurchase: DigitalSubscriptionGiftPurchase) =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = user.firstName,
       gift_personal_message = giftPurchase.giftRecipient.message,
@@ -165,7 +165,7 @@ class DigitalPackEmailFields(
       last_redemption_date = "last_redemption_date placeholder", // TODO need to pull it through from when we create the sub
     ))
 
-  private def giftPurchaserConfirmation(paymentMethodWithSchedule: PaymentMethodWithSchedule, giftPurchase: DigitalSubGiftPurchase) = {
+  private def giftPurchaserConfirmation(paymentMethodWithSchedule: PaymentMethodWithSchedule, giftPurchase: DigitalSubscriptionGiftPurchase) = {
     import giftPurchase._
     wrap("digipack-gift-purchase", GifterPurchaseAttributes(
       gifter_first_name = user.firstName,

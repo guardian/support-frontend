@@ -7,7 +7,7 @@ import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
-import com.gu.support.workers.{DigitalPack, GiftCode}
+import com.gu.support.workers.{DigitalPack, GeneratedGiftCode}
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
@@ -27,7 +27,7 @@ class DigitalSubscriptionPurchaseBuilder(
     digitalPack: DigitalPack,
     requestId: UUID,
     environment: TouchPointEnvironment,
-    maybeGiftCode: Option[GiftCode],
+    maybeGiftCode: Option[GeneratedGiftCode],
   )(implicit ec: ExecutionContext): Either[PromoError, SubscriptionData] = {
 
     val productRatePlanId = validateRatePlan(digitalRatePlan(digitalPack, environment), digitalPack.describe)

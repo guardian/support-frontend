@@ -76,7 +76,7 @@ class SubscriptionDataBuilder(
           digitalPack,
           state.requestId,
           environment,
-          maybeGiftPurchase.flatMap(_.asDigiSub.map(_.giftCode)),
+          maybeGiftPurchase.flatMap(_.asDigitalSubscriptionGiftPurchase.map(_.giftCode)),
         ).leftMap(BuildSubscribePromoError))
       case (Redemption(rd: RedemptionData), ReaderType.Corporate) =>
         digitalSubscriptionCorporateRedemptionBuilder.build(rd,
