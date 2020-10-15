@@ -128,8 +128,7 @@ const router = (
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou"
           render={(props) => {
-            const { pathname } = props.location;
-            const { search } = props.location;
+            const { pathname, search } = props.location;
             const queryParams = new URLSearchParams(search);
 
             if (!storage.getSession('isPaymentComplete') && !queryParams.has('no-redirect')) {
