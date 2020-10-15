@@ -50,7 +50,8 @@ const privacyTextLink = css`
 
 type ReminderDate = {
   date: Date,
-  label: string
+  label: string,
+  isUsEoyAppealSpecialReminder?: boolean,
 };
 
 const getReminderDateWithDefaultLabel = (monthsUntilDate: number) => {
@@ -74,24 +75,30 @@ const getDefaultReminderDates = (): ReminderDate[] => [
   getReminderDateWithDefaultLabel(9),
 ];
 
-const GIVING_TUESDAY = {
+const GIVING_TUESDAY: ReminderDate = {
   date: new Date(2020, 11, 1),
   label: 'on Giving Tuesday (1 December)',
 };
 const GIVING_TUESDAY_REMINDER_CUT_OFF = new Date(2020, 10, 27);
 
-const LAST_DAY_OF_THE_YEAR = {
+const LAST_DAY_OF_THE_YEAR: ReminderDate = {
   date: new Date(2020, 11, 31),
   label: 'at the end of the year (31 December)',
 };
 const LAST_DAY_OF_THE_YEAR_REMINDER_CUT_OFF = new Date(2020, 11, 28);
 
-const IN_THREE_MONTHS = {
+const BOTH: ReminderDate = {
+  date: new Date(2020, 11, 1),
+  label: 'on both occasions (1 and 31 December)',
+  isUsEoyAppealSpecialReminder: true,
+};
+
+const IN_THREE_MONTHS: ReminderDate = {
   date: new Date(2021, 2),
   label: 'in three months (March 2021)', // slightly custom copy over default (three vs 3)
 };
 
-const THIS_TIME_NEXT_YEAR = {
+const THIS_TIME_NEXT_YEAR: ReminderDate = {
   date: new Date(2021, 11),
   label: 'this time next year (December 2021)',
 };
@@ -102,7 +109,7 @@ const getReminderDatesForUsEndOfYearAppeal = (): ReminderDate[] => {
     return [
       GIVING_TUESDAY,
       LAST_DAY_OF_THE_YEAR,
-      THIS_TIME_NEXT_YEAR,
+      BOTH,
     ];
   } else if (now < LAST_DAY_OF_THE_YEAR_REMINDER_CUT_OFF) {
     return [
@@ -147,6 +154,7 @@ const ContributionThankYouSupportReminder = ({
       body: JSON.stringify({
         email,
         reminderDate: selectedDateAsApiString(),
+        isUsEoyAppealSpecialReminder: reminderDates[selectedDateIndex].isUsEoyAppealSpecialReminder,
       }),
     }).then((response) => {
       if (!response.ok) {
