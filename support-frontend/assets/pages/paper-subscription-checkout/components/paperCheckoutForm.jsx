@@ -208,7 +208,7 @@ function PaperCheckoutForm(props: PropTypes) {
     paymentStartDate={subsCardStartDates.formattedStartDate}
   />);
 
-  const regularOrderSummary = (<OrderSummary
+  const homeDeliveryOrderSummary = (<OrderSummary
     image={
       <GridImage
         gridId="printCheckoutHD"
@@ -234,7 +234,7 @@ function PaperCheckoutForm(props: PropTypes) {
 
   return (
     <Content modifierClasses={['your-details']}>
-      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : regularOrderSummary}>
+      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : homeDeliveryOrderSummary}>
         <Form onSubmit={(ev) => {
           ev.preventDefault();
           props.submitForm();
