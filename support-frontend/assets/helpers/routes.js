@@ -30,6 +30,7 @@ const routes: {
   digitalSubscriptionLanding: '/subscribe/digital',
   paperSubscriptionLanding: '/subscribe/paper',
   paperSubscriptionProductChoices: '/subscribe/paper#subscribe',
+  paperSubscriptionDeliveryProductChoices: '/subscribe/paper/delivery#subscribe',
   guardianWeeklySubscriptionLanding: '/subscribe/weekly',
   guardianWeeklySubscriptionLandingGift: '/subscribe/weekly/gift',
   postcodeLookup: '/postcode-lookup',

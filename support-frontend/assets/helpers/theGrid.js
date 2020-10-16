@@ -113,6 +113,7 @@ export const imageCatalogue: {
   printCampaignHDdigitalVoucher: '817936f0d1a2755c778b523b5ac5daa2d2f27449/10_0_716_694',
   printCampaignHD: '817936f0d1a2755c778b523b5ac5daa2d2f27449/10_0_716_694',
   printCheckoutDigitalVoucher: '15677cf8f82a5690bec39bf73b2c098c8f79b24f/15_0_667_400',
+  printCheckoutHD: 'c482b2fbe5f2c2af01d54cc1c8d47a6dd626eb1f/0_102_750_450',
   editionsPackshot: '22841f3977aedb85be7b0cf442747b1da51f780f/0_0_2320_1890',
   editionsPackshotShort: '278357625f580358e74db1563777aa0b4570072d/0_0_1800_1080',
   editionsPackshotAus: 'a1679c54314643a7b611a0c97b53a8ea38b9ec23/0_0_2320_1890',
