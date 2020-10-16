@@ -13,7 +13,7 @@ export const CallToAction = () => (
       <h3>After your <strong>14-day free trial</strong>, your
       subscription will begin automatically and you can cancel any time
       </h3>
-      <PaymentSelection orderIsGift={false} />
+      <PaymentSelection orderIsAGift={false} />
     </div>
   </div>
 );
@@ -22,7 +22,7 @@ export const CallToActionGift = () => (
   <div id="subscribe" className="call-to-action__container">
     <div className="hope-is-power--centered">
       <h2 className="heading--gift">Select a gift period</h2>
-      <PaymentSelection orderIsGift />
+      <PaymentSelection orderIsAGift />
     </div>
   </div>
 );

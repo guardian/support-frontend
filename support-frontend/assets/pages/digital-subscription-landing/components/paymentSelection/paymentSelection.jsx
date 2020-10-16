@@ -18,9 +18,10 @@ import './paymentSelection.scss';
 
 type PropTypes = {
   paymentOptions: Array<PaymentOption>,
+  orderIsAGift: boolean,
 }
 
-const PaymentSelection = ({ paymentOptions }: PropTypes) => (
+const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) => (
   <div className="payment-selection">
     {
         (paymentOptions.map(paymentOption => (
@@ -43,7 +44,7 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
                 aria-label="Subscribe-button"
                 salesCopy={paymentOption.salesCopy}
               >
-                {'Start free trial now'}
+                {orderIsAGift ? 'Buy gift subscription' : 'Start free trial now'}
               </ProductOptionButton>
             </ProductOption>
           </div>
