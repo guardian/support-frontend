@@ -6,13 +6,13 @@
 
 // We import from preact/compat here rather than react because flow doesn't like it if the child component uses redux
 // $FlowIgnore - required for hooks
-import React, { useEffect, useState } from 'preact/compat';
+import React from 'preact/compat';
 import { Elements } from '@stripe/react-stripe-js';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   getStripeKey,
   stripeAccountForContributionType,
-  type StripeAccount,
+  useStripeObjects,
 } from 'helpers/stripe';
 import type {
   ContributionType,
@@ -22,10 +22,7 @@ import type {
 import { getAmount } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
-import { setupStripe } from 'helpers/stripe';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
-import * as stripeJs from '@stripe/stripe-js';
-
 // ----- Types -----//
 
 /* eslint-disable react/no-unused-prop-types */
@@ -43,12 +40,6 @@ type PropTypes = {|
 // ----- Component ----- //
 
 const StripePaymentRequestButtonContainer = (props: PropTypes) => {
-  // Create separate Stripe objects for REGULAR and ONE_OFF
-  const [stripeObjects, setStripeObjects] = useState<{[StripeAccount]: stripeJs.Stripe | null}>({
-    REGULAR: null,
-    ONE_OFF: null,
-  });
-
   const stripeAccount = stripeAccountForContributionType[props.contributionType];
   const stripeKey = getStripeKey(
     stripeAccount,
@@ -56,18 +47,7 @@ const StripePaymentRequestButtonContainer = (props: PropTypes) => {
     props.isTestUser,
   );
 
-  useEffect(() => {
-    if (!props.stripeHasLoaded) {
-      setupStripe(props.setStripeHasLoaded);
-    } else if (stripeObjects[stripeAccount] === null) {
-
-      stripeJs.loadStripe(stripeKey).then(newStripe =>
-        setStripeObjects(prevData => ({
-          ...prevData,
-          [stripeAccount]: newStripe,
-        })));
-    }
-  }, [props.stripeHasLoaded, props.contributionType]);
+  const stripeObjects = useStripeObjects(stripeAccount, stripeKey);
 
   const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country);
 
