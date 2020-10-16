@@ -56,7 +56,8 @@ function getStripeKey(stripeAccount: StripeAccount, country: IsoCountry, isTestU
         window.guardian.stripeKeyDefaultCurrencies[stripeAccount].default;
   }
 }
-
+//  this is required as useStripeObjects is used in multiple components
+//  but we only want to call setLoadParameters once.
 const stripeScriptHasBeenAddedToPage = (): boolean =>
   !!document.querySelector('script[src^=\'https://js.stripe.com\']');
 
@@ -65,11 +66,9 @@ export const useStripeObjects = (stripeAccount: StripeAccount, stripeKey: string
     REGULAR: null,
     ONE_OFF: null,
   });
-  (useEffect(
+  useEffect(
     () => {
       if (stripeObjects[stripeAccount] === null) {
-        console.log('card form');
-
         new Promise((resolve) => {
           onConsentChange(({ ccpa, tcfv2 }) => {
             if (ccpa) {
@@ -91,7 +90,7 @@ export const useStripeObjects = (stripeAccount: StripeAccount, stripeKey: string
       }
     },
     [stripeAccount],
-  ));
+  );
 
   return stripeObjects;
 };
