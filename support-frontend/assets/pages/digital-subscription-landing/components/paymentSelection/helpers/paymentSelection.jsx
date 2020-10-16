@@ -10,8 +10,8 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fixDecimals } from 'helpers/subscriptions';
 
 // types
-import type { BillingPeriod, DigitalBillingPeriod, DigitalGiftBillingPeriod } from 'helpers/billingPeriods';
-import { Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
+import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
+// import { Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
 import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
 import { type Option } from 'helpers/types/option';
 import type {
@@ -44,7 +44,7 @@ export const getDisplayPrice = (currencyId: IsoCurrency, price: number) =>
 
 export const getProductPrice = (
   productOptions: BillingPeriods,
-  billingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod,
+  billingPeriod: BillingPeriod,
   currencyId: IsoCurrency,
 ): ProductPrice => (
   productOptions[billingPeriod][currencyId]
@@ -114,11 +114,10 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   const { productPrices, orderIsAGift } = state.page;
   const { countryGroupId, currencyId } = state.common.internationalisation;
   const productOptions = getProductOptions(productPrices, countryGroupId);
+  console.log({ productOptions });
 
   const createPaymentOption = (billingPeriod: BillingPeriod): PaymentOption => {
-    const digitalBillingPeriod = billingPeriod === Monthly ||
-    billingPeriod === Annual ||
-    billingPeriod === Quarterly ? billingPeriod : Monthly;
+    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Monthly';
 
     const productPrice = getProductPrice(productOptions, digitalBillingPeriod, currencyId);
     const fullPrice = productPrice.price;
