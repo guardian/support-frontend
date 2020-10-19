@@ -16,6 +16,7 @@ import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, 
 import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendAcquisitionEventState
+import com.gu.support.zuora.api.ReaderType.Gift
 import ophan.thrift.event.{PrintOptions, PrintProduct, Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 
@@ -56,7 +57,18 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       )
     )
 
-    // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
+    state.product match {
+      case d:DigitalPack if d.readerType == Gift && state.paymentOrRedemptionData.isRight =>
+        // We don't want to send an acquisition event for Digital subscription gift redemptions as we have already done so on purchase
+        Future.successful(HandlerResult((), requestInfo))
+      case _ =>
+        sendAcquisitionEvent(state, requestInfo, services)
+    }
+
+  }
+
+  def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
+    // Throw any error in the EitherT monad so that it can be processed by ErrorHandler.handleException
     val result: Future[HandlerResult[Unit]] = services.acquisitionService.submit(
       SendAcquisitionEventStateAndRequestInfo(state, requestInfo)
     ).fold(
