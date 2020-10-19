@@ -142,7 +142,6 @@ const ContributionThankYou = ({
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
-  const isEnvironmentMoment = (campaignSettings && campaignSettings.campaignCode === 'enviro_moment_2020');
   const isUsEndOfYearAppeal = false;
 
   useEffect(() => {
@@ -172,7 +171,6 @@ const ContributionThankYou = ({
     component: <ContributionThankYouSupportReminder
       email={email}
       isUsEndOfYearAppeal={isUsEndOfYearAppeal}
-      isEnvironmentMoment={isEnvironmentMoment}
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
@@ -186,7 +184,7 @@ const ContributionThankYou = ({
       createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
       campaignCode={campaignSettings && campaignSettings.campaignCode}
     />,
-    shouldShow: !isEnvironmentMoment,
+    shouldShow: true,
   };
   const ausMapAction = {
     component: <ContributionThankYouAusMap />,
