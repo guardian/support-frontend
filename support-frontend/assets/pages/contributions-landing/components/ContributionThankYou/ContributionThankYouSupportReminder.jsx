@@ -7,7 +7,7 @@ import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
-import { Button, LinkButton } from '@guardian/src-button';
+import { Button } from '@guardian/src-button';
 import { Link } from '@guardian/src-link';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { RadioGroup, Radio } from '@guardian/src-radio';
@@ -121,8 +121,6 @@ const getReminderDatesForUsEndOfYearAppeal = (): ReminderDate[] => {
   return getDefaultReminderDates();
 };
 
-const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/6VK57VR';
-
 type ContributionThankYouSupportReminderProps = {|
   email: string,
   isUsEndOfYearAppeal: boolean
@@ -183,29 +181,10 @@ const ContributionThankYouSupportReminder = ({
   const actionBody = (
     <ActionBody>
       {hasBeenCompleted ? (
-        <>
-          <p>
-            What motivated you to set a reminder today? We’d love to hear from
-            you. If you have a moment, please answer a few questions. Your
-            insight helps us understand better, so we can improve what we offer
-            our readers and supporters.
-          </p>
-
-          <div css={buttonContainer}>
-            <LinkButton
-              target="_blank"
-              rel="noopener noreferrer"
-              href={SURVEY_LINK}
-              priority="primary"
-              size="default"
-              icon={<SvgArrowRightStraight />}
-              iconSide="right"
-              nudgeIcon
-            >
-              Share your thoughts
-            </LinkButton>
-          </div>
-        </>
+        <p>
+          We will be in touch at the time you selected, so look out for a
+          message from the Guardian in your inbox.
+        </p>
       ) : (
         <>
           <p>
