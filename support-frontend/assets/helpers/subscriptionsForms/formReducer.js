@@ -68,6 +68,7 @@ function createFormReducer(
   return (originalState: FormState = initialState, action: Action): FormState => {
 
     const state = { ...originalState, debugInfo: `${originalState.debugInfo} ${JSON.stringify(action)}\n` };
+    console.log({ state });
 
     switch (action.type) {
 

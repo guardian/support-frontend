@@ -1,7 +1,6 @@
 // @flow
 
 import type { Option } from 'helpers/types/option';
-import type { Title } from 'helpers/user/details';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -26,11 +25,11 @@ import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
-  | { type: 'SET_TITLE', title: Option<Title> }
+  | { type: 'SET_TITLE', title: string }
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_TELEPHONE', telephone: string }
-  | { type: 'SET_TITLE_GIFT', titleGiftRecipient: Option<Title> }
+  | { type: 'SET_TITLE_GIFT', titleGiftRecipient: string }
   | { type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient: string }
   | { type: 'SET_LAST_NAME_GIFT', lastNameGiftRecipient: string }
   | { type: 'SET_EMAIL_GIFT', emailGiftRecipient: string }

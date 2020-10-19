@@ -3,8 +3,11 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
-import { compose, type Dispatch } from 'redux';
+import { type Dispatch } from 'redux';
+import { TextInput } from '@guardian/src-text-input';
 
 import {
   firstError,
@@ -13,13 +16,9 @@ import {
 import { weeklyBillingPeriods } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
-import { options } from 'components/forms/customFields/options';
 import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
 import Form, {
   FormSection,
   FormSectionHiddenUntilSelected,
@@ -31,7 +30,6 @@ import {
   getProductPrice,
   type ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
@@ -78,6 +76,12 @@ import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payP
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+
+// ----- Styles ----- //
+
+const marginBottom = css`
+  margin-bottom: ${space[6]}px;
+`;
 
 // ----- Types ----- //
 
@@ -145,7 +149,6 @@ function mapDispatchToProps() {
 
 // ----- Form Fields ----- //
 
-const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
 const DeliveryAddress = withStore(weeklyDeliverableCountries, 'delivery', getDeliveryAddress);
@@ -193,16 +196,14 @@ function WeeklyCheckoutForm(props: PropTypes) {
         }}
         >
           <FormSection title="Your details">
-            <SelectWithLabel
+            <TextInput
+              css={marginBottom}
               id="title"
               label="Title"
               optional
               value={props.title}
-              setValue={props.setTitle}
-            >
-              <option value="">--</option>
-              {options(titles)}
-            </SelectWithLabel>
+              onChange={e => props.setTitle(e.target.value)}
+            />
             <PersonalDetails
               firstName={props.firstName}
               setFirstName={props.setFirstName}

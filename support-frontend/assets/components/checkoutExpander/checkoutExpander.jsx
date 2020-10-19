@@ -3,8 +3,30 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { textSans } from '@guardian/src-foundations/typography';
 
-import './checkoutExpander.scss';
+const expander = css`
+  summary::-webkit-details-marker {
+    display: none;
+  }
+`;
+
+const summary = css`
+  display: block;
+  cursor: pointer;
+  margin: ${space[1]}px 0;
+`;
+
+const copyStyleLabel = css`
+  ${textSans.medium({ fontWeight: 'bold' })};
+  text-decoration: underline;
+`;
+
+const copyStyle = css`
+  ${textSans.medium()};
+`;
 
 // ----- Types ----- //
 
@@ -17,11 +39,11 @@ type ExpanderPropTypes = {|
 // ----- Component ----- //
 
 const CheckoutExpander = ({ copy, children }: ExpanderPropTypes) => (
-  <details className="component-checkout-expander">
-    <summary className="component-checkout-expander__summary">
-      <strong className="component-checkout-expander__strong">{copy}</strong>
+  <details css={expander}>
+    <summary css={summary}>
+      <strong css={copyStyleLabel}>{copy}</strong>
     </summary>
-    <div className="component-checkout-expander__expando">{children}</div>
+    <div css={copyStyle}>{children}</div>
   </details>
 );
 
