@@ -142,16 +142,7 @@ class Application(
   }
 
   private def shareImageUrl(settings: AllSettings): String = {
-    val contributionsMomentEnabled =
-      settings
-        .switches
-        .enableContributionsCampaign
-        .isOn
-
-      if (contributionsMomentEnabled)
-        "https://i.guim.co.uk/img/media/e4ca4068ad12c9fe05d8f3f3fab4142d1eceae0d/0_0_1000_525/1000.png?quality=85&s=541be4a526478168dd24d7402b51a343"
-      else
-        "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
+    "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
   }
 
   private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],
