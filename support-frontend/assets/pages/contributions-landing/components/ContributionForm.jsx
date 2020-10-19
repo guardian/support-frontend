@@ -42,7 +42,6 @@ import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
-  setStripeV3HasLoaded,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
@@ -69,8 +68,6 @@ type PropTypes = {|
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
-  setStripeV3HasLoaded: () => void,
-  stripeV3HasLoaded: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
@@ -116,7 +113,6 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
-  stripeV3HasLoaded: state.page.form.stripeV3HasLoaded,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   referrerSource: state.common.referrerAcquisitionData.source,
@@ -128,7 +124,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded()); },
 });
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -239,8 +234,6 @@ function withProps(props: PropTypes) {
         />
       </div>
       <StripePaymentRequestButtonContainer
-        setStripeHasLoaded={props.setStripeV3HasLoaded}
-        stripeHasLoaded={props.stripeV3HasLoaded}
         currency={props.currency}
         contributionType={props.contributionType}
         isTestUser={props.isTestUser}
@@ -253,8 +246,6 @@ function withProps(props: PropTypes) {
         <PaymentMethodSelector />
 
         <StripeCardFormContainer
-          setStripeHasLoaded={props.setStripeV3HasLoaded}
-          stripeHasLoaded={props.stripeV3HasLoaded}
           currency={props.currency}
           contributionType={props.contributionType}
           paymentMethod={props.paymentMethod}

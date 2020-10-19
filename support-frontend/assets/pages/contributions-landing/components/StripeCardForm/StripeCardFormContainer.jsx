@@ -21,8 +21,6 @@ type PropTypes = {|
   isTestUser: boolean,
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
-  setStripeHasLoaded: () => void,
-  stripeHasLoaded: boolean,
 |};
 
 const StripeCardFormContainer = (props: PropTypes) => {

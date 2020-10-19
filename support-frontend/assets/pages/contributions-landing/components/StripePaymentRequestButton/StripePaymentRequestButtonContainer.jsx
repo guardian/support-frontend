@@ -31,8 +31,6 @@ type PropTypes = {|
   currency: IsoCurrency,
   isTestUser: boolean,
   contributionType: ContributionType,
-  setStripeHasLoaded: () => void,
-  stripeHasLoaded: boolean,
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
 |};
