@@ -58,7 +58,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     )
 
     state.product match {
-      case d:DigitalPack if d.readerType == Gift && state.paymentOrRedemptionData.isRight =>
+      case d: DigitalPack if d.readerType == Gift && state.paymentOrRedemptionData.isRight =>
         // We don't want to send an acquisition event for Digital subscription gift redemptions as we have already done so on purchase
         Future.successful(HandlerResult((), requestInfo))
       case _ =>
