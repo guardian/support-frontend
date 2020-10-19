@@ -31,7 +31,7 @@ const StripeCardFormContainer = (props: PropTypes) => {
     props.isTestUser,
   );
 
-  const stripeObjects = useStripeObjects(stripeAccount, stripeKey);
+  const stripeObjects = useStripeObjects(stripeAccount, stripeKey, props.isTestUser);
 
   if (props.paymentMethod === Stripe) {
     if (stripeObjects[stripeAccount]) {

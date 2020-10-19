@@ -43,7 +43,7 @@ function getStripeKey(stripeAccount: StripeAccount, country: IsoCountry, isTestU
 const stripeScriptHasBeenAddedToPage = (): boolean =>
   !!document.querySelector('script[src^=\'https://js.stripe.com\']');
 
-export const useStripeObjects = (stripeAccount: StripeAccount, stripeKey: string) => {
+export const useStripeObjects = (stripeAccount: StripeAccount, stripeKey: string, isTestUser: boolean) => {
   const [stripeObjects, setStripeObjects] = useState<{[StripeAccount]: StripeSDK | null}>({
     REGULAR: null,
     ONE_OFF: null,
@@ -52,15 +52,19 @@ export const useStripeObjects = (stripeAccount: StripeAccount, stripeKey: string
     () => {
       if (stripeObjects[stripeAccount] === null) {
         new Promise((resolve) => {
-          onConsentChange(({ ccpa, tcfv2 }) => {
-            if (ccpa) {
-              resolve(true);
-            }
-            if (tcfv2 && tcfv2.consents[1]) {
-              resolve(true);
-            }
+          if (isTestUser) {
             resolve(false);
-          });
+          } else {
+            onConsentChange(({ ccpa, tcfv2 }) => {
+              if (ccpa) {
+                resolve(true);
+              }
+              if (tcfv2 && tcfv2.consents[1]) {
+                resolve(true);
+              }
+              resolve(false);
+            });
+          }
         }).then((hasRequiredConsentsForFraudDetection) => {
           if (!stripeScriptHasBeenAddedToPage()) {
             loadStripe.setLoadParameters({ advancedFraudSignals: hasRequiredConsentsForFraudDetection });
