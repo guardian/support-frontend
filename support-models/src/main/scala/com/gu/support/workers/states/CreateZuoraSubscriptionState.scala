@@ -14,7 +14,7 @@ case class CreateZuoraSubscriptionState(
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
-  paymentProvider: PaymentProvider,
+  analyticsInfo: AnalyticsInfo,
   paymentMethod: Either[PaymentMethod, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],

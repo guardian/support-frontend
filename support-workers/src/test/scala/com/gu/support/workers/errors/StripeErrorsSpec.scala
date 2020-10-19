@@ -89,13 +89,13 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
 
   "JsonWrapped error" should "deserialise correctly" in {
     val stripeError = for {
-      wrapper <- decode[JsonWrapper](JsonFixtures.cardDeclinedJsonStripe).toOption
-      executionError <- wrapper.error
-      errorJson <- decode[ErrorJson](executionError.Cause).toOption
-      stripeError <- decode[StripeError](errorJson.errorMessage).toOption
+      wrapper <- decode[JsonWrapper](JsonFixtures.cardDeclinedJsonStripe)
+      executionError <- wrapper.error.toRight("wrapper.error was empty")
+      errorJson <- decode[ErrorJson](executionError.Cause)
+      stripeError <- decode[StripeError](errorJson.errorMessage)
     } yield stripeError
 
-    stripeError.get.code should be(Some("card_declined"))
+    stripeError.flatMap(_.code.toRight("no code")) should be(Right("card_declined"))
   }
 
   private lazy val timeoutServices = mockService(

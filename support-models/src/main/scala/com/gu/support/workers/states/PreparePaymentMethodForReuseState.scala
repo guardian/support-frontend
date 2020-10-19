@@ -9,7 +9,7 @@ import com.gu.support.workers.{User, _}
 case class PreparePaymentMethodForReuseState(
   requestId: UUID,
   product: ProductType,
-  paymentProvider: PaymentProvider,
+  analyticsInfo: AnalyticsInfo,
   paymentFields: ExistingPaymentFields,
   user: User,
   giftRecipient: Option[GiftRecipient],

@@ -3,7 +3,7 @@ package com.gu.support.redemption.gifting.generator
 import java.security.SecureRandom
 
 import com.gu.support.redemption.gifting.generator.CodeBuilder.GenerateGiftCode
-import com.gu.support.workers.{Annual, BillingPeriod, Quarterly}
+import com.gu.support.workers.{Annual, BillingPeriod, GeneratedGiftCode, Quarterly}
 
 object GiftCodeGenerator {
 
@@ -34,23 +34,14 @@ object CodeBuilder {
 
   private val prefix = "gd"
 
-  case class GiftCode private(value: String) extends AnyVal
-
-  object GiftCode {
-    def apply(value: String): Option[GiftCode] =
-      Some(value)
-        .filter(_.matches(raw"""gd(03|06|12)-[a-km-z02-9]{8}"""))
-        .map(new GiftCode(_))
-  }
-
   trait GenerateGiftCode {
-    def withDuration(duration: GiftDuration): GiftCode
+    def withDuration(duration: GiftDuration): GeneratedGiftCode
   }
 
   def build(code: CodeSuffixGenerator.CodeSuffix): GenerateGiftCode =
     (duration: GiftDuration) => {
       val init = prefix + duration.code + "-"
-      GiftCode(init + code.value).get
+      GeneratedGiftCode(init + code.value).get
     }
 
 }

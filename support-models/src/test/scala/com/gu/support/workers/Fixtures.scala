@@ -143,7 +143,10 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           "product": ${contribution(currency = currency)},
-          "paymentProvider": "PayPal",
+          "analyticsInfo": {
+            "paymentProvider": "PayPal",
+            "isGiftPurchase": false
+          },
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -153,7 +156,10 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           "product": ${contribution(amount = amount, billingPeriod = billingPeriod)},
-          "paymentProvider": "PayPal",
+          "analyticsInfo": {
+            "paymentProvider": "Stripe",
+            "isGiftPurchase": false
+          },
           "paymentFields": $stripeJson,
           "sessionId": "testingToken",
           "acquisitionData": $acquisitionData
@@ -164,7 +170,10 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           $digitalPackProductJson,
-          "paymentProvider": "PayPal",
+          "analyticsInfo": {
+            "paymentProvider": "PayPal",
+            "isGiftPurchase": false
+          },
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -174,7 +183,10 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           $digitalPackProductJson,
-          "paymentProvider": "PayPal",
+          "analyticsInfo": {
+            "paymentProvider": "DirectDebit",
+            "isGiftPurchase": false
+          },
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -184,7 +196,10 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           $guardianWeeklyJson,
-          "paymentProvider": "PayPal",
+          "analyticsInfo": {
+            "paymentProvider": "DirectDebit",
+            "isGiftPurchase": false
+          },
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData
         }"""
@@ -195,7 +210,10 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": ${contribution()},
-            "paymentProvider": "PayPal",
+            "analyticsInfo": {
+              "paymentProvider": "PayPal",
+              "isGiftPurchase": false
+            },
             "paymentMethod": $payPalPaymentMethod,
             "acquisitionData": $acquisitionData
           }
@@ -206,7 +224,10 @@ object Fixtures {
        |  $requestIdJson,
        |  $userJson,
        |  "product": $product,
-       |  "paymentProvider": "PayPal",
+       |  "analyticsInfo": {
+       |    "paymentProvider": "Stripe",
+       |    "isGiftPurchase": false
+       |  },
        |  "salesForceContact": {
        |    "Id": "123",
        |    "AccountId": "123"
@@ -262,7 +283,10 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": ${contribution(billingPeriod = billingPeriod)},
-            "paymentProvider": "PayPal",
+            "analyticsInfo": {
+              "paymentProvider": "Stripe",
+              "isGiftPurchase": false
+            },
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
@@ -274,7 +298,10 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
-            "paymentProvider": "PayPal",
+            "analyticsInfo": {
+              "paymentProvider": "Stripe",
+              "isGiftPurchase": false
+            },
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
@@ -287,7 +314,10 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
-            "paymentProvider": "PayPal",
+            "analyticsInfo": {
+              "paymentProvider": "RedemptionNoProvider",
+              "isGiftPurchase": false
+            },
             "paymentMethod": {"redemptionCode": "fake-code-123"},
             "salesForceContact": $salesforceContactJson,
             "salesforceContacts": $salesforceContactsJson
