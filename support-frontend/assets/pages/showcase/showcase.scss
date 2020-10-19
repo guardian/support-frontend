@@ -90,7 +90,10 @@
         right: 0;
         height: 100%;
         float: right;
-        margin-right: -($gu-v-spacing * 1.5)
+        margin-right: -($gu-v-spacing * 1.5);
+        @include mq($until: tablet) {
+          display: none;
+        }
       }
 
       @include mq($from: tablet) {
