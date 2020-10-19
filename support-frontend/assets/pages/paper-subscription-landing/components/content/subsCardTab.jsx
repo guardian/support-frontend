@@ -13,15 +13,19 @@ import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
-
 import { ContentForm, type ContentTabPropTypes } from './helpers';
 
-const accordionContainer = css`
+export const accordionContainer = css`
   background-color: ${neutral['97']};
 
   p, a {
     ${textSans.small()};
     margin-bottom: ${space[3]}px;
+  }
+
+  p, button {
+    padding-right: ${space[2]}px;
+    padding-left: ${space[2]}px;
   }
 `;
 
@@ -33,9 +37,9 @@ const SubsCardFaqBlock = () => (
     border={paperHasDeliveryEnabled()}
     image={<GridImage
       gridId="printCampaignDigitalVoucher"
-      srcSizes={[562, 500, 140]}
+      srcSizes={[694, 500, 140]}
       sizes="(max-width: 740px) 100vw, 600px"
-      imgType="jpg"
+      imgType="png"
     />
   }
   >
@@ -59,7 +63,7 @@ const SubsCardFaqBlock = () => (
           <AccordionRow label="Delivery from your retailer">
             <p>
               Simply give your preferred store / retailer the barcode printed on your
-              subscription letter.
+              Home Delivery Letter.
             </p>
             <p><LinkToImovo /></p>
           </AccordionRow>
