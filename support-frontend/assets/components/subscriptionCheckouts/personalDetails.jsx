@@ -18,23 +18,6 @@ const marginBotom = css`
   margin-bottom: ${space[6]}px;
 `;
 
-const accordionRows = css`
-  margin-bottom: ${space[6]}px;
-  div {
-    border-top: none;
-    border-bottom: none;
-    button {
-      padding-bottom: 0;
-      strong {
-        ${textSans.medium({ fontWeight: 'bold' })};
-      }
-    }
-    button:nth-of-type(2) {
-      padding-top: 0;
-    }
-  }
-`;
-
 const sansText = css`
   ${textSans.medium()};
 `;
@@ -61,7 +44,7 @@ type EmailFooterTypes = {
 }
 
 const EmailFooter = (props: EmailFooterTypes) => (
-  <div css={accordionRows}>
+  <div css={marginBotom}>
     <CheckoutExpander copy="Want to use a different email address?">
       <p css={sansText}>You will be able to edit this in your account once you have completed this checkout.</p>
     </CheckoutExpander>

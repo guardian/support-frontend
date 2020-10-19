@@ -5,6 +5,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { TextInput } from '@guardian/src-text-input';
 
 import {
   firstError,
@@ -82,6 +85,10 @@ import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 // ----- Styles ----- //
+
+const marginBottom = css`
+  margin-bottom: ${space[6]}px;
+`;
 
 // ----- Types ----- //
 
@@ -205,16 +212,14 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             </Heading>
           </FormSection>
           <FormSection title="Gift recipient's details" border="bottom">
-            <SelectWithLabel
-              id="titleGift"
+            <TextInput
+              css={marginBottom}
+              id="title"
               label="Title"
               optional
-              value={props.titleGiftRecipient}
-              setValue={props.setTitleGift}
-            >
-              <option value="">--</option>
-              {options(titles)}
-            </SelectWithLabel>
+              value={props.title}
+              onChange={e => props.setTitle(e.target.value)}
+            />
             <PersonalDetailsGift
               firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
               setFirstNameGift={props.setFirstNameGift}

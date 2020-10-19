@@ -3,8 +3,11 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
+import { TextInput } from '@guardian/src-text-input';
 
 import {
   firstError,
@@ -14,9 +17,7 @@ import { routes } from 'helpers/routes';
 
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
-import { options } from 'components/forms/customFields/options';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
@@ -32,7 +33,6 @@ import {
   getTitle,
 } from '../../paper-subscription-landing/helpers/products';
 import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
-import { titles } from 'helpers/user/details';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
   type FormField,
@@ -80,6 +80,10 @@ import EndSummaryMobile from 'pages/paper-subscription-checkout/components/endSu
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 
+
+const marginBottom = css`
+  margin-bottom: ${space[6]}px;
+`;
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -160,7 +164,6 @@ function getAndSetStartDateForSubsCard(productOption: ActivePaperProducts, setSt
 // ----- Form Fields ----- //
 
 const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
-const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
 const DeliveryAddress = withStore(newspaperCountries, 'delivery', getDeliveryAddress);
@@ -242,16 +245,14 @@ function PaperCheckoutForm(props: PropTypes) {
         }}
         >
           <FormSection title="Your details">
-            <SelectWithLabel
+            <TextInput
+              css={marginBottom}
               id="title"
               label="Title"
               optional
               value={props.title}
-              setValue={props.setTitle}
-            >
-              <option value="">--</option>
-              {options(titles)}
-            </SelectWithLabel>
+              onChange={e => props.setTitle(e.target.value)}
+            />
             <PersonalDetails
               firstName={props.firstName}
               setFirstName={props.setFirstName}
