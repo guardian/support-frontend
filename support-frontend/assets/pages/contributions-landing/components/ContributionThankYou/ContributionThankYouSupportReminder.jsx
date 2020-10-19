@@ -121,41 +121,21 @@ const getReminderDatesForUsEndOfYearAppeal = (): ReminderDate[] => {
   return getDefaultReminderDates();
 };
 
-const NEXT_ENVIRONMENT_PLEDGE: ReminderDate = {
-  date: new Date(2021, 9),
-  label: 'in one year (our next climate pledge update)',
-};
-
-const getReminderDatesForEnvironmentMoment = (): ReminderDate[] => [
-  getReminderDateWithDefaultLabel(3),
-  getReminderDateWithDefaultLabel(6),
-  NEXT_ENVIRONMENT_PLEDGE,
-];
-
 const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/6VK57VR';
 
 type ContributionThankYouSupportReminderProps = {|
   email: string,
-  isEnvironmentMoment: boolean,
   isUsEndOfYearAppeal: boolean
 |};
 
 const ContributionThankYouSupportReminder = ({
   email,
-  isEnvironmentMoment,
   isUsEndOfYearAppeal,
 }: ContributionThankYouSupportReminderProps) => {
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
-  let reminderDates;
-  if (isEnvironmentMoment) {
-    reminderDates = getReminderDatesForEnvironmentMoment();
-  } else if (isUsEndOfYearAppeal) {
-    reminderDates = getReminderDatesForUsEndOfYearAppeal();
-  } else {
-    reminderDates = getDefaultReminderDates();
-  }
+  const reminderDates = isUsEndOfYearAppeal ? getReminderDatesForUsEndOfYearAppeal() : getDefaultReminderDates();
 
   const selectedDateAsApiString = () => {
     const selectedDate = reminderDates[selectedDateIndex].date;
