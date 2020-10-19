@@ -3,27 +3,9 @@
 import { useEffect, useState } from 'react';
 import { loadStripe, type Stripe as StripeSDK } from '@stripe/stripe-js/pure';
 import { onConsentChange } from '@guardian/consent-management-platform';
-import { logException } from 'helpers/logger';
 import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ContributionType } from 'helpers/contributions';
-
-
-const setupStripe = (setStripeHasLoaded: () => void) => {
-  if (window.Stripe) {
-    setStripeHasLoaded();
-  } else {
-    const htmlElement = document.getElementById('stripe-js');
-    if (htmlElement !== null) {
-      htmlElement.addEventListener(
-        'load',
-        setStripeHasLoaded,
-      );
-    } else {
-      logException('Failed to find stripe-js element, cannot initialise Stripe Elements');
-    }
-  }
-};
 
 const stripeCardFormIsIncomplete = (
   paymentMethod: PaymentMethod,
@@ -97,7 +79,6 @@ export const useStripeObjects = (stripeAccount: StripeAccount, stripeKey: string
 
 
 export {
-  setupStripe,
   stripeCardFormIsIncomplete,
   stripeAccountForContributionType,
   getStripeKey,
