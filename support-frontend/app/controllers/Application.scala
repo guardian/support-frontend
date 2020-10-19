@@ -163,7 +163,7 @@ class Application(
       classes = Some(classes)
     )
 
-    val serversideTests = generateParticipations(List("stripeFraudDetection"))
+    val serversideTests = generateParticipations(Nil)
 
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
