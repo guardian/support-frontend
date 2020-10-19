@@ -4,10 +4,11 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, type Dispatch } from 'redux';
+import { type Dispatch } from 'redux';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { TextInput } from '@guardian/src-text-input';
+import { RadioGroup, Radio } from '@guardian/src-radio';
 
 import {
   firstError,
@@ -15,13 +16,9 @@ import {
 } from 'helpers/subscriptionsForms/validation';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
-import { options } from 'components/forms/customFields/options';
 import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
 import Form, {
   FormSection,
   FormSectionHiddenUntilSelected,
@@ -33,7 +30,6 @@ import {
   getProductPrice,
   type ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
@@ -158,7 +154,6 @@ function mapDispatchToProps() {
 
 // ----- Form Fields ----- //
 
-const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
 const DeliveryAddress = withStore(weeklyDeliverableCountries, 'delivery', getDeliveryAddress);
@@ -266,16 +261,14 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             </Heading>
           </FormSection>
           <FormSection title="Your details" border="bottom">
-            <SelectWithLabel
+            <TextInput
+              css={marginBottom}
               id="title"
               label="Title"
               optional
               value={props.title}
-              setValue={props.setTitle}
-            >
-              <option value="">--</option>
-              {options(titles)}
-            </SelectWithLabel>
+              onChange={e => props.setTitle(e.target.value)}
+            />
             <PersonalDetails
               firstName={props.firstName}
               setFirstName={props.setFirstName}
@@ -290,25 +283,29 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           </FormSection>
           <FormSection title="Is the billing address the same as the recipient's address?">
             <Rows>
-              <FieldsetWithError
+              <RadioGroup
                 id="billingAddressIsSame"
+                name="billingAddressIsSame"
+                orienntation="vertical"
                 error={firstError('billingAddressIsSame', props.formErrors)}
-                legend="Is the billing address the same as the recipient\'s address?"
               >
-                <RadioInput
-                  text="Yes"
+                <Radio
+                  value="yes"
+                  label="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
                   onChange={() => setBillingAddressIsSameHandler(true)}
                 />
-                <RadioInput
+
+                <Radio
                   inputId="qa-billing-address-different"
-                  text="No"
+                  label="No"
+                  value="no"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
                   onChange={() => setBillingAddressIsSameHandler(false)}
                 />
-              </FieldsetWithError>
+              </RadioGroup>
             </Rows>
           </FormSection>
           {

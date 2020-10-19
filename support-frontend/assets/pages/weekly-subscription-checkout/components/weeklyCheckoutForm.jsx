@@ -8,6 +8,7 @@ import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { TextInput } from '@guardian/src-text-input';
+import { RadioGroup, Radio } from '@guardian/src-radio';
 
 import {
   firstError,
@@ -221,25 +222,29 @@ function WeeklyCheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
-              <FieldsetWithError
+              <RadioGroup
                 id="billingAddressIsSame"
+                name="billingAddressIsSame"
+                orienntation="vertical"
                 error={firstError('billingAddressIsSame', props.formErrors)}
-                legend="Is the billing address the same as the delivery address?"
               >
-                <RadioInput
-                  text="Yes"
+                <Radio
+                  value="yes"
+                  label="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
                   onChange={() => setBillingAddressIsSameHandler(true)}
                 />
-                <RadioInput
+
+                <Radio
                   inputId="qa-billing-address-different"
-                  text="No"
+                  label="No"
+                  value="no"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
                   onChange={() => setBillingAddressIsSameHandler(false)}
                 />
-              </FieldsetWithError>
+              </RadioGroup>
             </Rows>
           </FormSection>
           {
