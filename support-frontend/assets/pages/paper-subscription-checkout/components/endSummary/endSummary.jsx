@@ -8,6 +8,7 @@ import { textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { text, border, background } from '@guardian/src-foundations/palette';
+import { type PaperFulfilmentOptions, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 
 const list = css`
   ${from.desktop} {
@@ -57,9 +58,26 @@ type EndSummaryProps = {
   paymentStartDate: string,
   priceDescription: string,
   promotion: string | null,
+  fulfilmentOption: PaperFulfilmentOptions,
 }
 
-function EndSummary({ priceDescription, paymentStartDate, promotion }: EndSummaryProps) {
+function EndSummary({
+  priceDescription, paymentStartDate, promotion, fulfilmentOption,
+}: EndSummaryProps) {
+  const subsCardPoint = (
+    <li css={listItem}>
+      <Dot /><div css={listMain}>Your first payment will be on <span css={bold}>{paymentStartDate}</span></div>
+      <span css={subText}>Your subscription card will arrive in the post before the payment date</span>
+    </li>
+  );
+
+  const homeDeliveryPoint = (
+    <li css={listItem}>
+      <Dot /><div css={listMain}>Choose a start date that suits you</div>
+      <span css={subText}>Your papers will be delivered to your home from the date you&apos;ve chosen</span>
+    </li>
+  );
+
   return (
     <ul css={list}>
       {promotion ? (
@@ -72,10 +90,7 @@ function EndSummary({ priceDescription, paymentStartDate, promotion }: EndSummar
           <Dot /><div css={listMain}>You&apos;ll pay {priceDescription}</div>
         </li>
       )}
-      <li css={listItem}>
-        <Dot /><div css={listMain}>Your first payment will be on <span css={bold}>{paymentStartDate}</span></div>
-        <span css={subText}>Your subscription card will arrive in the post before the payment date</span>
-      </li>
+      {fulfilmentOption === HomeDelivery ? homeDeliveryPoint : subsCardPoint}
       <li css={listItem}>
         <Dot /><div css={listMain}>You can cancel any time</div>
       </li>
