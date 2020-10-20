@@ -37,8 +37,8 @@ const SubsCardFaqBlock = () => (
     border={paperHasDeliveryEnabled()}
     image={<GridImage
       gridId="printCampaignDigitalVoucher"
-      srcSizes={[694, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 600px"
+      srcSizes={[562, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 500px"
       imgType="png"
     />
   }
