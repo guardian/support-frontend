@@ -16,9 +16,6 @@ import {
 } from 'helpers/subscriptionsForms/validation';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import { Fieldset } from 'components/forms/fieldset';
-import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withError } from 'hocs/withError';
 import Form, {
   FormSection,
   FormSectionHiddenUntilSelected,
@@ -79,6 +76,7 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import RadioButton from 'components/forms/customFields/radioButton';
 
 // ----- Styles ----- //
 
@@ -154,8 +152,6 @@ function mapDispatchToProps() {
 
 // ----- Form Fields ----- //
 
-const FieldsetWithError = withError(Fieldset);
-
 const DeliveryAddress = withStore(weeklyDeliverableCountries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(countries, 'billing', getBillingAddress);
 const days = getWeeklyDays();
@@ -227,21 +223,26 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           </FormSection>
           <FormSection title="Gift delivery date">
             <Rows>
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="Gift delivery date">
+              <RadioGroup
+                id="startDate"
+                error={firstError('startDate', props.formErrors)}
+                legend="Gift delivery date"
+              >
                 {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
-                    <RadioInput
-                      appearance="group"
-                      text={userDate}
+                    <RadioButton
+                      label={userDate}
+                      value={userDate}
                       name={machineDate}
                       checked={machineDate === props.startDate}
                       onChange={() => props.setStartDate(machineDate)}
+                      onClick={() => props.setStartDate(machineDate)}
                     />
                   );
                 })
                 }
-              </FieldsetWithError>
+              </RadioGroup>
               <Text className="component-text__paddingTop">
                 <p className="component-text__sans">
                 We will take payment on the date the recipient receives the first Guardian Weekly.

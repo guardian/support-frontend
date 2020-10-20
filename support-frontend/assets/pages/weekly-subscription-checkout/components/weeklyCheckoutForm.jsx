@@ -5,12 +5,10 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { border } from '@guardian/src-foundations/palette';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { TextInput } from '@guardian/src-text-input';
 import { RadioGroup, Radio } from '@guardian/src-radio';
-import { Button } from '@guardian/src-button';
 
 import {
   firstError,
@@ -76,6 +74,7 @@ import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payP
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import RadioButton from 'components/forms/customFields/radioButton';
 
 // ----- Styles ----- //
 
@@ -106,15 +105,6 @@ type PropTypes = {|
   formIsValid: Function,
   setupRecurringPayPalPayment: Function,
 |};
-
-type RadioButtonPropTypes = {
-  label: string,
-  value: string,
-  name: string,
-  checked: boolean,
-  onClick: Function,
-  onChange: Function,
-}
 
 // ----- Map State/Props ----- //
 
@@ -157,18 +147,6 @@ function mapDispatchToProps() {
 }
 
 // ----- Form Fields ----- //
-
-const radioButtonStyles = css`
-  margin-bottom: ${space[2]}px;
-  width: 80%;
-  border: 2px solid ${border.primary};
-`;
-
-const RadioButton = (props: RadioButtonPropTypes) => (
-  <Button onClick={props.onClick} priority="tertiary" css={radioButtonStyles}>
-    <Radio {...props} />
-  </Button>
-);
 
 const DeliveryAddress = withStore(weeklyDeliverableCountries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(countries, 'billing', getBillingAddress);

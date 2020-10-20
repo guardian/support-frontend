@@ -1,8 +1,9 @@
 // @flow
 
 import React from 'react';
-import { Fieldset } from 'components/forms/fieldset';
-import { RadioInput } from 'components/forms/customFields/radioInput';
+import { css } from '@emotion/core';
+import { RadioGroup, Radio } from '@guardian/src-radio';
+
 import Rows from 'components/base/rows';
 import { type Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -11,7 +12,6 @@ import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
-import { withError } from 'hocs/withError';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
@@ -38,7 +38,32 @@ type PropTypes = {|
   payPalHasLoaded: boolean,
 |}
 
-const FieldsetWithError = withError(Fieldset);
+type RadioWithImagePropTypes = {
+  inputId: string,
+  image: Node,
+  label: string,
+  name: string,
+  checked: boolean,
+  onChange: Function,
+}
+
+const radioWithImageStyles = css`
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const paymentIcon = css`
+  min-width: 30px;
+  max-width: 40px;
+`;
+
+const RadioWithImage = (props: RadioWithImagePropTypes) => (
+  <div css={radioWithImageStyles}>
+    <Radio {...props} />
+    <div css={paymentIcon}>{props.image}</div>
+  </div>
+);
 
 function PaymentMethodSelector(props: PropTypes) {
   const paymentMethods = supportedPaymentMethods(props.country);
@@ -47,38 +72,38 @@ function PaymentMethodSelector(props: PropTypes) {
     <FormSection title="How would you like to pay?">
       <Rows gap="large">
         <div>
-          <FieldsetWithError
+          <RadioGroup
             id="payment-methods"
             legend="How would you like to pay?"
             error={props.validationError}
             role="radiogroup"
           >
             {paymentMethods.includes(DirectDebit) &&
-            <RadioInput
+            <RadioWithImage
               inputId="qa-direct-debit"
               image={<SvgDirectDebitSymbol />}
-              text="Direct debit"
+              label="Direct debit"
               name="paymentMethod"
               checked={props.paymentMethod === DirectDebit}
               onChange={() => props.setPaymentMethod(DirectDebit)}
             />}
-            <RadioInput
+            <RadioWithImage
               inputId="qa-credit-card"
               image={<SvgNewCreditCard />}
-              text="Credit/Debit card"
+              label="Credit/Debit card"
               name="paymentMethod"
               checked={props.paymentMethod === Stripe}
               onChange={() => props.setPaymentMethod(Stripe)}
             />
-            <RadioInput
+            <RadioWithImage
               inputId="qa-paypal"
               image={<SvgPayPal />}
-              text="PayPal"
+              label="PayPal"
               name="paymentMethod"
               checked={props.paymentMethod === PayPal}
               onChange={() => props.setPaymentMethod(PayPal)}
             />
-          </FieldsetWithError>
+          </RadioGroup>
         </div>
       </Rows>
       {props.paymentMethod === PayPal && (

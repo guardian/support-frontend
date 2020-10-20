@@ -76,6 +76,7 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import EndSummaryMobile from 'pages/paper-subscription-checkout/components/endSummary/endSummaryMobile';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import RadioButton from 'components/forms/customFields/radioButton';
 
 
 const marginBottom = css`
@@ -106,15 +107,6 @@ type PropTypes = {|
   productOption: ActivePaperProducts,
   fulfilmentOption: FulfilmentOptions,
 |};
-
-type RadioButtonPropTypes = {
-  label: string,
-  value: string,
-  name: string,
-  checked: boolean,
-  onClick: Function,
-  onChange: Function,
-}
 
 // ----- Map State/Props ----- //
 
@@ -171,18 +163,6 @@ function getAndSetStartDateForSubsCard(productOption: ActivePaperProducts, setSt
 
 const DeliveryAddress = withStore(newspaperCountries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddress);
-
-const radioButtonStyles = css`
-  margin-bottom: ${space[2]}px;
-  width: 80%;
-  border: 2px solid ${border.primary};
-`;
-
-const RadioButton = (props: RadioButtonPropTypes) => (
-  <Button onClick={props.onClick} priority="tertiary" css={radioButtonStyles}>
-    <Radio {...props} />
-  </Button>
-);
 
 // ----- Component ----- //
 
