@@ -12,7 +12,6 @@ import org.joda.time.LocalDate
 
 trait SendAcquisitionEventState extends FailureHandlerState {
   def requestId: UUID
-  def giftRecipient: Option[GiftRecipient]
   def product: ProductType
   def paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData]
   def firstDeliveryDate: Option[LocalDate]
@@ -25,7 +24,7 @@ case class SendAcquisitionEventStateImpl(
   user: User,
   giftRecipient: Option[GiftRecipient],
   product: ProductType,
-  paymentProvider: PaymentProvider,
+  analyticsInfo: AnalyticsInfo,
   paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],

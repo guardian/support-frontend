@@ -142,7 +142,7 @@ const ContributionThankYou = ({
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
-  const isUsEndOfYearAppeal = false;
+  const isUsEndOfYearAppeal = countryId === 'US';
 
   useEffect(() => {
     trackUserData(

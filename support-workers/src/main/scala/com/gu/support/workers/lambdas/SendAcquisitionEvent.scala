@@ -45,9 +45,9 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         Success,
         state.user.isTestUser,
         state.product,
-        state.paymentProvider,
+        state.analyticsInfo.paymentProvider,
         state.firstDeliveryDate,
-        state.giftRecipient.isDefined,
+        state.analyticsInfo.isGiftPurchase,
         state.promoCode,
         state.user.billingAddress.country,
         state.user.deliveryAddress.map(_.country),
@@ -196,7 +196,7 @@ object SendAcquisitionEvent {
         Some(Set(
           if (stateAndInfo.requestInfo.accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
           if (isSixForSix(stateAndInfo)) Some("guardian-weekly-six-for-six") else None,
-          stateAndInfo.state.giftRecipient.map(_ => "gift-subscription"),
+          if (stateAndInfo.state.analyticsInfo.isGiftPurchase) Some("gift-subscription") else None,
           stateAndInfo.state.paymentOrRedemptionData.right.map(_ => "corporate-subscription").toOption
         ).flatten)
 

@@ -24,7 +24,6 @@ import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
-import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
@@ -198,24 +197,24 @@ function PaperCheckoutForm(props: PropTypes) {
   const subsCardOrderSummary = (<OrderSummary
     image={
       <GridImage
-        gridId="printCampaignDigitalVoucher"
+        gridId="printCheckoutDigitalVoucher"
         srcSizes={[500]}
         sizes="(max-width: 740px) 50vw, 696"
-        imgType="jpg"
+        imgType="png"
         altText=""
       />}
     title={title}
     productPrice={productPrice}
     billingPeriod="Monthly"
-    changeSubscription={routes.digitalSubscriptionLanding}
+    changeSubscription={routes.paperSubscriptionProductChoices}
     productType={Paper}
     paymentStartDate={subsCardStartDates.formattedStartDate}
   />);
 
-  const regularOrderSummary = (<Summary
+  const homeDeliveryOrderSummary = (<OrderSummary
     image={
       <GridImage
-        gridId={props.useDigitalVoucher ? 'printCampaignHDdigitalVoucher' : 'checkoutPackshotPaperGraunVoucher'}
+        gridId="printCheckoutHD"
         srcSizes={[500]}
         sizes="(max-width: 740px) 50vw, 696"
         imgType="png"
@@ -232,13 +231,13 @@ function PaperCheckoutForm(props: PropTypes) {
       },
     ]}
     billingPeriod="Monthly"
-    changeSubscription={routes.paperSubscriptionProductChoices}
+    changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
     product={Paper}
   />);
 
   return (
     <Content modifierClasses={['your-details']}>
-      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : regularOrderSummary}>
+      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : homeDeliveryOrderSummary}>
         <Form onSubmit={(ev) => {
           ev.preventDefault();
           props.submitForm();

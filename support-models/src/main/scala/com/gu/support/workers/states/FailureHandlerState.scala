@@ -12,9 +12,8 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 case class FailureHandlerStateImpl(
   requestId: UUID,
   user: User,
-  giftRecipient: Option[GiftRecipient],
   product: ProductType,
-  paymentProvider: PaymentProvider,
+  analyticsInfo: AnalyticsInfo,
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode]
 ) extends FailureHandlerState
@@ -28,14 +27,21 @@ trait MinimalFailureHandlerState extends StepFunctionUserState {
   // only required fields needed here
   def requestId: UUID
   def user: User
-  def giftRecipient: Option[GiftRecipient]
   def product: ProductType
-  def paymentProvider: PaymentProvider
+  def analyticsInfo: AnalyticsInfo
 }
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
+
+case class AnalyticsInfo(
+  isGiftPurchase: Boolean,
+  paymentProvider: PaymentProvider
+)
+object AnalyticsInfo {
+  implicit val codec: Codec[AnalyticsInfo] = deriveCodec[AnalyticsInfo]
+}
 
 object FailureHandlerState {
   import com.gu.support.encoding.CustomCodecs._

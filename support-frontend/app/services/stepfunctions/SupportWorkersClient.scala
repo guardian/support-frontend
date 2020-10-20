@@ -16,7 +16,7 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
+import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
 import ophan.thrift.event.AbTest
 import org.joda.time.LocalDate
@@ -129,7 +129,7 @@ class SupportWorkersClient(
         for {
           email <- giftRecipient.email.toRight("email address is required for DS gifts")
           deliveryDate <- giftRecipient.deliveryDate.toRight("delivery date is required for DS gifts")
-        } yield GiftRecipient.DigitalSubGiftRecipient(
+        } yield GiftRecipient.DigitalSubscriptionGiftRecipient(
           giftRecipient.firstName,
           giftRecipient.lastName,
           email,
@@ -154,7 +154,7 @@ class SupportWorkersClient(
         user = user,
         giftRecipient = giftRecipient,
         product = request.body.product,
-        paymentProvider = PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption),
+        analyticsInfo = AnalyticsInfo(giftRecipient.isDefined, PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption)),
         paymentFields = request.body.paymentFields,
         acquisitionData = Some(AcquisitionData(
           ophanIds = request.body.ophanIds,
