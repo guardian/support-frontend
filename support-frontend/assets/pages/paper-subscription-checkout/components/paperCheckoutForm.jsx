@@ -381,9 +381,7 @@ function PaperCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          {isSubscriptionCard ? (
-            <EndSummaryMobile paymentStartDate={subsCardStartDates.formattedStartDate} />
-          ) : null}
+          <EndSummaryMobile paymentStartDate={subsCardStartDates.formattedStartDate} />
           <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
