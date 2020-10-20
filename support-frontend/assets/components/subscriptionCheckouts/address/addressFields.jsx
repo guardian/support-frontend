@@ -3,13 +3,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { TextInput } from '@guardian/src-text-input';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 
 import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
 
-import { Input } from 'components/forms/input';
 import { Select } from 'components/forms/select';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { withLabel } from 'hocs/withLabel';
@@ -53,11 +55,14 @@ type PropTypes<GlobalState> = {|
   ...StatePropTypes<GlobalState>,
 |}
 
-const InputWithError = compose(asControlled, withLabel, withError)(Input);
+const marginBottom = css`
+  margin-bottom: ${space[6]}px;
+`;
+
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const SelectWithError = withError(SelectWithLabel);
 const MaybeSelect = canShow(SelectWithError);
-const MaybeInput = canShow(InputWithError);
+const MaybeInput = canShow(TextInput);
 
 class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
 
@@ -134,30 +139,33 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
             }
           }}
         /> : null}
-        <InputWithError
+        <TextInput
+          css={marginBottom}
           id={`${scope}-lineOne`}
           label="Address Line 1"
           type="text"
           value={props.lineOne}
-          setValue={props.setAddressLineOne}
+          onChange={e => props.setAddressLineOne(e.target.value)}
           error={firstError('lineOne', props.formErrors)}
         />
-        <InputWithError
+        <TextInput
+          css={marginBottom}
           id={`${scope}-lineTwo`}
           label="Address Line 2"
           optional
           type="text"
           value={props.lineTwo}
-          setValue={props.setAddressLineTwo}
+          onChange={e => props.setAddressLineTwo(e.target.value)}
           error={firstError('lineTwo', props.formErrors)}
         />
-        <InputWithError
+        <TextInput
+          css={marginBottom}
           id={`${scope}-city`}
           label="Town/City"
           type="text"
           maxlength={40}
           value={props.city}
-          setValue={props.setTownCity}
+          onChange={e => props.setTownCity(e.target.value)}
           error={firstError('city', props.formErrors)}
         />
         <MaybeSelect
@@ -172,21 +180,23 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           {AddressFields.statesForCountry(props.country)}
         </MaybeSelect>
         <MaybeInput
+          css={marginBottom}
           id={`${scope}-stateProvince`}
           label="State"
           value={props.state}
-          setValue={props.setState}
+          onChange={props.setState}
           error={firstError('state', props.formErrors)}
           optional
           isShown={AddressFields.shouldShowStateInput(props.country)}
         />
-        <InputWithError
+        <TextInput
+          css={marginBottom}
           id={`${scope}-postcode`}
           label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
           type="text"
           optional={isPostcodeOptional(props.country)}
           value={props.postCode}
-          setValue={props.setPostcode}
+          onChange={e => props.setPostcode(e.target.value)}
           error={firstError('postCode', props.formErrors)}
         />
       </div>
