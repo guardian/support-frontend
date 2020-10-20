@@ -8,7 +8,7 @@ import { textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { text, border, background } from '@guardian/src-foundations/palette';
-import { type PaperFulfilmentOptions, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { type PaperFulfilmentOptions, Collection } from 'helpers/productPrice/fulfilmentOptions';
 
 const list = css`
   ${from.desktop} {
@@ -71,13 +71,6 @@ function EndSummary({
     </li>
   );
 
-  const homeDeliveryPoint = (
-    <li css={listItem}>
-      <Dot /><div css={listMain}>Choose a start date that suits you</div>
-      <span css={subText}>Your papers will be delivered to your home from the date you&apos;ve chosen</span>
-    </li>
-  );
-
   return (
     <ul css={list}>
       {promotion ? (
@@ -90,7 +83,7 @@ function EndSummary({
           <Dot /><div css={listMain}>You&apos;ll pay {priceDescription}</div>
         </li>
       )}
-      {fulfilmentOption === HomeDelivery ? homeDeliveryPoint : subsCardPoint}
+      {fulfilmentOption === Collection && subsCardPoint}
       <li css={listItem}>
         <Dot /><div css={listMain}>You can cancel any time</div>
       </li>
