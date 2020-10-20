@@ -181,6 +181,10 @@ class ProductBlockAus extends Component<PropTypes, StateTypes> {
                   boldText: 'A new way to read',
                   explainer: 'The weekend paper, reimagined for mobile and tablet. Each new edition available to read Saturday at 6am (AEST)',
                 },
+                {
+                  boldText: 'Start your weekend informed',
+                  explainer: 'Enjoy early access to the best journalism planned for the weekend',
+                },
                 { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
                 { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
               ]}
