@@ -6,8 +6,12 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
-import { compose, type Dispatch } from 'redux';
+import { type Dispatch } from 'redux';
 import { TextInput } from '@guardian/src-text-input';
+import { RadioGroup, Radio } from '@guardian/src-radio';
+import { Button } from '@guardian/src-button';
+import { border } from '@guardian/src-foundations/palette';
+import { TextArea } from '@guardian/src-text-area';
 
 import {
   firstError,
@@ -17,11 +21,6 @@ import { routes } from 'helpers/routes';
 
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import { Fieldset } from 'components/forms/fieldset';
-import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -58,7 +57,6 @@ import {
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
-import { TextArea } from 'components/forms/textArea';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Stripe, DirectDebit } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
@@ -108,6 +106,15 @@ type PropTypes = {|
   productOption: ActivePaperProducts,
   fulfilmentOption: FulfilmentOptions,
 |};
+
+type RadioButtonPropTypes = {
+  label: string,
+  value: string,
+  name: string,
+  checked: boolean,
+  onClick: Function,
+  onChange: Function,
+}
 
 // ----- Map State/Props ----- //
 
@@ -162,11 +169,20 @@ function getAndSetStartDateForSubsCard(productOption: ActivePaperProducts, setSt
 
 // ----- Form Fields ----- //
 
-const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
-const FieldsetWithError = withError(Fieldset);
-
 const DeliveryAddress = withStore(newspaperCountries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddress);
+
+const radioButtonStyles = css`
+  margin-bottom: ${space[2]}px;
+  width: 80%;
+  border: 2px solid ${border.primary};
+`;
+
+const RadioButton = (props: RadioButtonPropTypes) => (
+  <Button onClick={props.onClick} priority="tertiary" css={radioButtonStyles}>
+    <Radio {...props} />
+  </Button>
+);
 
 // ----- Component ----- //
 
@@ -269,12 +285,12 @@ function PaperCheckoutForm(props: PropTypes) {
             <DeliveryAddress />
             {
               props.fulfilmentOption === HomeDelivery ?
-                <TextAreaWithLabel
+                <TextArea
                   id="delivery-instructions"
                   label="Delivery instructions"
                   maxlength={250}
                   value={props.deliveryInstructions}
-                  setValue={props.setDeliveryInstructions}
+                  onChange={e => props.setDeliveryInstructions(e.target.value)}
                 />
                 : null
             }
@@ -282,26 +298,30 @@ function PaperCheckoutForm(props: PropTypes) {
 
           <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
-              <FieldsetWithError
+              <RadioGroup
                 id="billingAddressIsSame"
+                name="billingAddressIsSame"
+                orienntation="vertical"
                 error={firstError('billingAddressIsSame', props.formErrors)}
-                legend="Is the billing address the same as the delivery address?"
               >
-                <RadioInput
+                <Radio
                   inputId="qa-billing-address-same"
-                  text="Yes"
+                  value="yes"
+                  label="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
                   onChange={() => props.setBillingAddressIsSame(true)}
                 />
-                <RadioInput
+
+                <Radio
                   inputId="qa-billing-address-different"
-                  text="No"
+                  label="No"
+                  value="no"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
                   onChange={() => props.setBillingAddressIsSame(false)}
                 />
-              </FieldsetWithError>
+              </RadioGroup>
             </Rows>
           </FormSection>
           {
@@ -314,24 +334,26 @@ function PaperCheckoutForm(props: PropTypes) {
           {!isSubscriptionCard ? (
             <FormSection title="When would you like your subscription to start?">
               <Rows>
-                <FieldsetWithError
+                <RadioGroup
                   id="startDate"
                   error={firstError('startDate', props.formErrors)}
                   legend="When would you like your subscription to start?"
                 >
                   {days.map((day) => {
-                  const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
-                  return (
-                    <RadioInput
-                      appearance="group"
-                      text={userDate}
-                      name={machineDate}
-                      checked={props.startDate === machineDate}
-                      onChange={() => props.setStartDate(machineDate)}
-                    />
-                  );
-                })}
-                </FieldsetWithError>
+                    const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                    return (
+                      <RadioButton
+                        label={userDate}
+                        value={userDate}
+                        name={machineDate}
+                        checked={machineDate === props.startDate}
+                        onChange={() => props.setStartDate(machineDate)}
+                        onClick={() => props.setStartDate(machineDate)}
+                      />
+                    );
+                  })
+                  }
+                </RadioGroup>
                 <Text className="component-text__paddingTop">
                   <p>
                   We will take the first payment on the

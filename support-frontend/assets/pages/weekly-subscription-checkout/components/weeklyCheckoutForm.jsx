@@ -5,10 +5,12 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import { border } from '@guardian/src-foundations/palette';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { TextInput } from '@guardian/src-text-input';
 import { RadioGroup, Radio } from '@guardian/src-radio';
+import { Button } from '@guardian/src-button';
 
 import {
   firstError,
@@ -17,9 +19,6 @@ import {
 import { weeklyBillingPeriods } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import { Fieldset } from 'components/forms/fieldset';
-import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withError } from 'hocs/withError';
 import Form, {
   FormSection,
   FormSectionHiddenUntilSelected,
@@ -108,6 +107,15 @@ type PropTypes = {|
   setupRecurringPayPalPayment: Function,
 |};
 
+type RadioButtonPropTypes = {
+  label: string,
+  value: string,
+  name: string,
+  checked: boolean,
+  onClick: Function,
+  onChange: Function,
+}
+
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state: WithDeliveryCheckoutState) {
@@ -150,7 +158,17 @@ function mapDispatchToProps() {
 
 // ----- Form Fields ----- //
 
-const FieldsetWithError = withError(Fieldset);
+const radioButtonStyles = css`
+  margin-bottom: ${space[2]}px;
+  width: 80%;
+  border: 2px solid ${border.primary};
+`;
+
+const RadioButton = (props: RadioButtonPropTypes) => (
+  <Button onClick={props.onClick} priority="tertiary" css={radioButtonStyles}>
+    <Radio {...props} />
+  </Button>
+);
 
 const DeliveryAddress = withStore(weeklyDeliverableCountries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(countries, 'billing', getBillingAddress);
@@ -229,6 +247,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
                 error={firstError('billingAddressIsSame', props.formErrors)}
               >
                 <Radio
+                  inputId="qa-billing-address-same"
                   value="yes"
                   label="Yes"
                   name="billingAddressIsSame"
@@ -256,21 +275,26 @@ function WeeklyCheckoutForm(props: PropTypes) {
           }
           <FormSection title="When would you like your subscription to start?">
             <Rows>
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
+              <RadioGroup
+                id="startDate"
+                error={firstError('startDate', props.formErrors)}
+                legend="When would you like your subscription to start?"
+              >
                 {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
-                    <RadioInput
-                      appearance="group"
-                      text={userDate}
+                    <RadioButton
+                      label={userDate}
+                      value={userDate}
                       name={machineDate}
                       checked={machineDate === props.startDate}
                       onChange={() => props.setStartDate(machineDate)}
+                      onClick={() => props.setStartDate(machineDate)}
                     />
                   );
                 })
                 }
-              </FieldsetWithError>
+              </RadioGroup>
               <Text className="component-text__paddingTop">
                 <p className="component-text__sans">
                 We will take the first payment on the
