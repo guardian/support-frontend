@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { RadioGroup, Radio } from '@guardian/src-radio';
 
