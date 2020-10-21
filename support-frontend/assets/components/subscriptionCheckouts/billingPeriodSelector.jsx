@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
 
-import { Fieldset } from 'components/forms/fieldset';
-import { RadioInputWithHelper } from 'components/forms/customFields/radioInputWithHelper';
+import { RadioGroup, Radio } from '@guardian/src-radio';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { billingPeriodTitle } from 'helpers/billingPeriods';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
@@ -29,7 +28,7 @@ type PropTypes = {|
 function BillingPeriodSelector(props: PropTypes) {
   return (
     <FormSection title="How often would you like to pay?">
-      <Fieldset legend="How often would you like to pay?" role="radiogroup">
+      <RadioGroup legend="How often would you like to pay?" role="radiogroup">
         {props.billingPeriods.map((billingPeriod) => {
           const productPrice = getProductPrice(
             props.productPrices,
@@ -37,9 +36,10 @@ function BillingPeriodSelector(props: PropTypes) {
             billingPeriod,
             props.fulfilmentOption,
           );
-          return (<RadioInputWithHelper
-            text={billingPeriodTitle(billingPeriod)}
-            helper={getPriceDescription(
+          return (<Radio
+            label={billingPeriodTitle(billingPeriod)}
+            value={billingPeriodTitle(billingPeriod)}
+            supporting={getPriceDescription(
               productPrice,
               billingPeriod,
             )}
@@ -49,7 +49,7 @@ function BillingPeriodSelector(props: PropTypes) {
             onChange={() => props.onChange(billingPeriod)}
           />);
         })}
-      </Fieldset>
+      </RadioGroup>
     </FormSection>);
 }
 
