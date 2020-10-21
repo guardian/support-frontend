@@ -1,52 +1,62 @@
 package com.gu.emailservices
 
 import com.gu.emailservices.SubscriptionEmailFieldHelpers.{formatDate, hyphenate, mask}
+import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers._
+import com.gu.support.workers.states.ProductTypeCreated.ContributionCreated
 import org.joda.time.DateTime
 
-object ContributionEmailFields {
+import scala.concurrent.{ExecutionContext, Future}
+
+class ContributionEmailFields(
+  getMandate: String => Future[Option[String]],
+  user: User,
+  sfContactId: SfContactId,
+  created: DateTime,
+) {
 
   def build(
-    allProductsEmailFields: AllProductsEmailFields,
-    created: DateTime,
-    amount: BigDecimal,
-    paymentMethod: PaymentMethod
-  ): EmailFields = {
-    import allProductsEmailFields._
+    contributionProcessedInfo: ContributionCreated,
+  )(implicit ec: ExecutionContext): Future[EmailFields] = {
+    getPaymentFields(
+      contributionProcessedInfo.purchaseInfo.paymentMethod,
+      contributionProcessedInfo.purchaseInfo.accountNumber,
+      created
+    ).map { paymentFields =>
+      val fields = List(
+        "EmailAddress" -> user.primaryEmailAddress,
+        "created" -> created.toString,
+        "amount" -> contributionProcessedInfo.product.amount.toString,
+        "currency" -> contributionProcessedInfo.product.currency.identifier,
+        "edition" -> user.billingAddress.country.alpha2,
+        "name" -> user.firstName,
+        "product" -> s"${contributionProcessedInfo.product.billingPeriod.toString.toLowerCase}-contribution"
+      ) ++ paymentFields
 
-    val fields = List(
-      "EmailAddress" -> user.primaryEmailAddress,
-      "created" -> created.toString,
-      "amount" -> amount.toString,
-      "currency" -> currency.identifier,
-      "edition" -> user.billingAddress.country.alpha2,
-      "name" -> user.firstName,
-      "product" -> s"${billingPeriod.toString.toLowerCase}-contribution"
-    ) ++ getPaymentFields(paymentMethod, directDebitMandateId, created)
-
-    EmailFields(fields, Left(sfContactId), user.primaryEmailAddress, "regular-contribution-thank-you")
+      EmailFields(fields, Left(sfContactId), user.primaryEmailAddress, "regular-contribution-thank-you")
+    }
   }
 
-  def getPaymentFields(paymentMethod: PaymentMethod, directDebitMandateId: Option[String], created: DateTime): Seq[(String, String)] = {
+  def getPaymentFields(paymentMethod: PaymentMethod, accountNumber: String, created: DateTime)(implicit ec: ExecutionContext): Future[Seq[(String, String)]] = {
     paymentMethod match {
-      case dd: DirectDebitPaymentMethod => List(
+      case dd: DirectDebitPaymentMethod => getMandate(accountNumber).map(directDebitMandateId => List(
         "account name" -> dd.bankTransferAccountName,
         "account number" -> mask(dd.bankTransferAccountNumber),
         "sort code" -> hyphenate(dd.bankCode),
         "Mandate ID" -> directDebitMandateId.getOrElse(""),
         "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
         "payment method" -> "Direct Debit"
-      )
-      case dd: ClonedDirectDebitPaymentMethod => List(
+      ))
+      case dd: ClonedDirectDebitPaymentMethod => Future.successful(List(
         "account name" -> dd.bankTransferAccountName,
         "account number" -> mask(dd.bankTransferAccountNumber),
         "sort code" -> hyphenate(dd.bankCode),
         "Mandate ID" -> dd.mandateId,
         "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
         "payment method" -> "Direct Debit"
-      )
-      case _: PayPalReferenceTransaction => List("payment method" -> "PayPal")
-      case _: CreditCardReferenceTransaction => List("payment method" -> "credit / debit card")
+      ))
+      case _: PayPalReferenceTransaction => Future.successful(List("payment method" -> "PayPal"))
+      case _: CreditCardReferenceTransaction => Future.successful(List("payment method" -> "credit / debit card"))
     }
   }
 }

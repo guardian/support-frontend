@@ -7,6 +7,7 @@ import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption.{InvalidCode, InvalidReaderType}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
+import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator.DigitalSubscriptionGiftCreationDetails
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api.{ReaderType, SubscriptionData}
@@ -29,12 +30,12 @@ class SubscriptionDataBuilder(
   def build(
     state: CreateZuoraSubscriptionState,
     environment: TouchPointEnvironment,
-    maybeGiftPurchase: Option[GiftPurchase],
+    maybeGeneratedGiftCode: Option[GeneratedGiftCode],
   ): EitherT[Future, Throwable, SubscriptionData] =
     state.product match {
       case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
       case d: DigitalPack =>
-        buildDigitalSubscription(state, d, environment, maybeGiftPurchase)
+        buildDigitalSubscription(state, d, environment, maybeGeneratedGiftCode)
       case p: Paper =>
         EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
           p,
@@ -64,7 +65,7 @@ class SubscriptionDataBuilder(
     state: CreateZuoraSubscriptionState,
     digitalPack: DigitalPack,
     environment: TouchPointEnvironment,
-    maybeGiftPurchase: Option[GiftPurchase],
+    maybeGeneratedGiftCode: Option[GeneratedGiftCode],
   ): EitherT[Future, Throwable, SubscriptionData] = {
     val Purchase = Left
     val Redemption = Right
@@ -76,7 +77,7 @@ class SubscriptionDataBuilder(
           digitalPack,
           state.requestId,
           environment,
-          maybeGiftPurchase.flatMap(_.asDigitalSubscriptionGiftPurchase.map(_.giftCode)),
+          maybeGeneratedGiftCode,
         ).leftMap(BuildSubscribePromoError))
       case (Redemption(rd: RedemptionData), ReaderType.Corporate) =>
         digitalSubscriptionCorporateRedemptionBuilder.build(rd,

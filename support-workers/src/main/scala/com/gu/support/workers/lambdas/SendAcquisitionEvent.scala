@@ -15,8 +15,9 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.workers._
+import com.gu.support.workers.states.ProductTypeCreated.DigitalSubscriptionCreated._
+import com.gu.support.workers.states.ProductTypeCreated.{GuardianWeeklyCreated, PaperCreated, PurchaseCreated}
 import com.gu.support.workers.states.SendAcquisitionEventState
-import com.gu.support.zuora.api.ReaderType.Gift
 import ophan.thrift.event.{PrintOptions, PrintProduct, Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 
@@ -45,11 +46,18 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         state.requestId,
         Success,
         state.user.isTestUser,
-        state.product,
+        state.productTypeCreated.product,
         state.analyticsInfo.paymentProvider,
-        state.firstDeliveryDate,
+        state.productTypeCreated match {
+          case p: PaperCreated => Some(p.firstDeliveryDate)
+          case p: GuardianWeeklyCreated => Some(p.firstDeliveryDate)
+          case _ => None
+        },
         state.analyticsInfo.isGiftPurchase,
-        state.promoCode,
+        state.productTypeCreated match {
+          case p: PurchaseCreated => p.purchaseInfo.promoCode
+          case _ => None
+        },
         state.user.billingAddress.country,
         state.user.deliveryAddress.map(_.country),
         None,
@@ -57,8 +65,8 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       )
     )
 
-    state.product match {
-      case d: DigitalPack if d.readerType == Gift && state.paymentOrRedemptionData.isRight =>
+    state.productTypeCreated match {
+      case _: DigitalSubscriptionGiftRedemptionCreated =>
         // We don't want to send an acquisition event for Digital subscription gift redemptions as we have already done so on purchase
         Future.successful(HandlerResult((), requestInfo))
       case _ =>
@@ -67,7 +75,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
   }
 
-  def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
+  private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
     sendPaymentSuccessMetric(state)
 
     // Throw any error in the EitherT monad so that it can be processed by ErrorHandler.handleException
@@ -79,9 +87,11 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     )
   }
 
-  def sendPaymentSuccessMetric(state: SendAcquisitionEventState) = {
+  private def sendPaymentSuccessMetric(state: SendAcquisitionEventState) = {
+    // scalastyle:off line.size.limit
     // Used for Cloudwatch alarms: https://github.com/guardian/support-frontend/blob/920e638c35430cc260acdb1878f37bffa1d12fae/support-workers/cloud-formation/src/templates/cfn-template.yaml#L210
-    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.analyticsInfo.paymentProvider, state.product)
+    // scalastyle:on line.size.limit
+    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.analyticsInfo.paymentProvider, state.productTypeCreated.product)
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
   }
 }
@@ -169,7 +179,7 @@ object SendAcquisitionEvent {
       }
 
       override def buildAcquisition(stateAndInfo: SendAcquisitionEventStateAndRequestInfo): Either[String, thrift.Acquisition] = {
-        val (productType, productAmount) = stateAndInfo.state.product match {
+        val (productType, productAmount) = stateAndInfo.state.productTypeCreated.product match {
           case c: Contribution => (OphanProduct.RecurringContribution, c.amount.toDouble)
           case _: DigitalPack => (OphanProduct.DigitalSubscription, 0D) //TODO: Send the real amount in the acquisition event
           case _: Paper => (OphanProduct.PrintSubscription, 0D) //TODO: same as above
@@ -180,11 +190,14 @@ object SendAcquisitionEvent {
           stateAndInfo.state.acquisitionData.map { data =>
             thrift.Acquisition(
               product = productType,
-              printOptions = printOptionsFromProduct(stateAndInfo.state.product, stateAndInfo.state.user.deliveryAddress.map(_.country)),
-              paymentFrequency = paymentFrequencyFromBillingPeriod(stateAndInfo.state.product.billingPeriod),
-              currency = stateAndInfo.state.product.currency.iso,
+              printOptions = printOptionsFromProduct(stateAndInfo.state.productTypeCreated.product, stateAndInfo.state.user.deliveryAddress.map(_.country)),
+              paymentFrequency = paymentFrequencyFromBillingPeriod(stateAndInfo.state.productTypeCreated.product.billingPeriod),
+              currency = stateAndInfo.state.productTypeCreated.product.currency.iso,
               amount = productAmount,
-              paymentProvider = stateAndInfo.state.paymentOrRedemptionData.left.toOption.map(_.paymentMethod).map(paymentProviderFromPaymentMethod),
+              paymentProvider = stateAndInfo.state.productTypeCreated match {
+                case p: PurchaseCreated => Some(paymentProviderFromPaymentMethod(p.purchaseInfo.paymentMethod))
+                case _ => None
+              },
               // Currently only passing through at most one campaign code
               campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
               abTests = Some(thrift.AbTestInfo(
@@ -211,10 +224,18 @@ object SendAcquisitionEvent {
           if (stateAndInfo.requestInfo.accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
           if (isSixForSix(stateAndInfo)) Some("guardian-weekly-six-for-six") else None,
           if (stateAndInfo.state.analyticsInfo.isGiftPurchase) Some("gift-subscription") else None,
-          stateAndInfo.state.paymentOrRedemptionData.right.map(_ => "corporate-subscription").toOption
+          stateAndInfo.state.productTypeCreated match {
+            case _: DigitalSubscriptionCorporateRedemptionCreated => Some("corporate-subscription")
+            case _ => None
+          }
         ).flatten)
 
       def isSixForSix(stateAndInfo: SendAcquisitionEventStateAndRequestInfo) =
-        stateAndInfo.state.product.billingPeriod == Quarterly && stateAndInfo.state.promoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)
+        stateAndInfo.state.productTypeCreated match {
+          case GuardianWeeklyCreated(product, _, purchaseInfo, _) =>
+            product.billingPeriod == Quarterly && purchaseInfo.promoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)
+          case _ => false
+        }
     }
+
 }

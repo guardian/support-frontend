@@ -40,17 +40,3 @@ case class EmailFields(
   }
 
 }
-
-case class AllProductsEmailFields(
-  billingPeriod: BillingPeriod,
-  user: User,
-  currency: Currency,
-  sfContactId: SfContactId,
-  directDebitMandateId: Option[String],
-)
-
-case class SubscriptionEmailFields(
-  allProductsEmailFields: AllProductsEmailFields,
-  subscriptionNumber: String,
-  promotion: Option[Promotion] = None
-)

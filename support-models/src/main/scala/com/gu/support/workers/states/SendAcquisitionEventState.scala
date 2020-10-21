@@ -10,24 +10,18 @@ import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import org.joda.time.LocalDate
 
-trait SendAcquisitionEventState extends FailureHandlerState {
+trait SendAcquisitionEventState extends StepFunctionUserState {
   def requestId: UUID
-  def product: ProductType
-  def paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData]
-  def firstDeliveryDate: Option[LocalDate]
-  def promoCode: Option[PromoCode]
+  def productTypeCreated: ProductTypeCreated
   def acquisitionData: Option[AcquisitionData]
+  def analyticsInfo: AnalyticsInfo
 }
 
 case class SendAcquisitionEventStateImpl(
   requestId: UUID,
   user: User,
-  giftRecipient: Option[GiftRecipient],
-  product: ProductType,
+  productTypeCreated: ProductTypeCreated,
   analyticsInfo: AnalyticsInfo,
-  paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
-  firstDeliveryDate: Option[LocalDate],
-  promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]
 ) extends SendAcquisitionEventState
 

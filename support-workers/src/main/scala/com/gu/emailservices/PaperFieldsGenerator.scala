@@ -1,51 +1,70 @@
 package com.gu.emailservices
 
-import com.gu.i18n.Currency
-import com.gu.support.promotions.Promotion
+import com.gu.i18n.{Country, Currency}
+import com.gu.support.catalog.ProductRatePlanId
+import com.gu.support.promotions.{PromoCode, Promotion, PromotionService}
 import com.gu.support.workers._
-import com.gu.support.workers.states.PaymentMethodWithSchedule
+import com.gu.support.workers.states.PurchaseInfo
 import org.joda.time.LocalDate
 
-object PaperFieldsGenerator {
+import scala.concurrent.{ExecutionContext, Future}
+
+class PaperFieldsGenerator(
+  promotionService: PromotionService,
+  getMandate: String => Future[Option[String]],
+) {
+
+  def getAppliedPromotion(
+    maybePromoCode: Option[PromoCode],
+    country: Country,
+    productRatePlanId: ProductRatePlanId
+  ): Option[Promotion] =
+    for {
+      promoCode <- maybePromoCode
+      promotionWithCode <- promotionService.findPromotion(promoCode).toOption
+      validPromotion <- promotionService.validatePromotion(promotionWithCode, country, productRatePlanId, isRenewal = false).toOption
+    } yield validPromotion.promotion
 
   def fieldsFor(
-    subscriptionNumber: String,
-    billingPeriod: BillingPeriod,
+    purchaseInfo: PurchaseInfo,
+    product: ProductType,
     user: User,
-    firstDeliveryDate: Option[LocalDate],
-    currency: Currency,
-    paymentMethodWithSchedule: PaymentMethodWithSchedule,
-    directDebitMandateId: Option[String],
-    promotion: Option[Promotion],
-    giftRecipient: Option[GiftRecipient]
-  ): List[(String, String)] = {
+    productRatePlanId: Option[ProductRatePlanId],
+    fixedTerm: Boolean,
+    firstDeliveryDate: LocalDate
+  )(implicit ec: ExecutionContext): Future[List[(String, String)]] = {
 
-    val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).date
+    val promotion =
+      getAppliedPromotion(
+        purchaseInfo.promoCode,
+        user.billingAddress.country,
+        productRatePlanId.getOrElse(""),
+      )
 
-    val paymentFields = getPaymentFields(paymentMethodWithSchedule.paymentMethod, directDebitMandateId)
+    val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(purchaseInfo.paymentSchedule).date
 
     val deliveryAddressFields = getAddressFields(user)
 
-    val giftRecipientFields = giftRecipient.map(
-      recipient =>
-        List(
-          "giftee_first_name" -> recipient.firstName,
-          "giftee_last_name" -> recipient.lastName,
-        )
-    ).getOrElse(Nil)
+    getPaymentFields(purchaseInfo.paymentMethod, purchaseInfo.accountNumber).map( paymentFields => {
+      val paymentDescription = SubscriptionEmailFieldHelpers.describe(
+        purchaseInfo.paymentSchedule,
+        product,
+        promotion,
+        fixedTerm
+      )
+      List(
+        "ZuoraSubscriberId" -> purchaseInfo.subscriptionNumber,
+        "EmailAddress" -> user.primaryEmailAddress,
+        "subscriber_id" -> purchaseInfo.subscriptionNumber,
+        "first_name" -> user.firstName,
+        "last_name" -> user.lastName,
+        "date_of_first_paper" -> SubscriptionEmailFieldHelpers.formatDate(firstDeliveryDate),
+        "date_of_first_payment" -> SubscriptionEmailFieldHelpers.formatDate(firstPaymentDate),
+        "subscription_rate" -> paymentDescription
+      ) ++ paymentFields ++ deliveryAddressFields
+    }
+    )
 
-    val fields = List(
-      "ZuoraSubscriberId" -> subscriptionNumber,
-      "EmailAddress" -> user.primaryEmailAddress,
-      "subscriber_id" -> subscriptionNumber,
-      "first_name" -> user.firstName,
-      "last_name" -> user.lastName,
-      "date_of_first_paper" -> SubscriptionEmailFieldHelpers.formatDate(firstDeliveryDate.getOrElse(firstPaymentDate)),
-      "date_of_first_payment" -> SubscriptionEmailFieldHelpers.formatDate(firstPaymentDate),
-      "subscription_rate" -> SubscriptionEmailFieldHelpers.describe(paymentMethodWithSchedule.paymentSchedule, billingPeriod, currency, promotion, giftRecipient.isDefined)
-    ) ++ paymentFields ++ deliveryAddressFields ++ giftRecipientFields
-
-    fields
   }
 
   protected def getAddressFields(user: User)= {
@@ -62,24 +81,24 @@ object PaperFieldsGenerator {
 
   protected def getPaymentFields(
     paymentMethod: PaymentMethod,
-    directDebitMandateId: Option[String]
-  ): Seq[(String, String)] = paymentMethod match {
-    case dd: DirectDebitPaymentMethod => List(
+    accountNumber: String
+  )(implicit ec: ExecutionContext): Future[Seq[(String, String)]] = paymentMethod match {
+    case dd: DirectDebitPaymentMethod => getMandate(accountNumber).map(directDebitMandateId => List(
       "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
       "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
       "account_holder" -> dd.bankTransferAccountName,
       "payment_method" -> "Direct Debit",
       "mandate_id" -> directDebitMandateId.getOrElse("")
-    )
-    case dd: ClonedDirectDebitPaymentMethod => List(
+    ))
+    case dd: ClonedDirectDebitPaymentMethod => Future.successful(List(
       "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
       "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
       "account_holder" -> dd.bankTransferAccountName,
       "payment_method" -> "Direct Debit",
       "mandate_id" -> dd.mandateId
-    )
-    case _: CreditCardReferenceTransaction => List("payment_method" -> "Credit/Debit Card")
-    case _: PayPalReferenceTransaction => List("payment_method" -> "PayPal")
+    ))
+    case _: CreditCardReferenceTransaction => Future.successful(List("payment_method" -> "Credit/Debit Card"))
+    case _: PayPalReferenceTransaction => Future.successful(List("payment_method" -> "PayPal"))
   }
 
 }

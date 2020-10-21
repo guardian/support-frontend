@@ -1,40 +1,43 @@
 package com.gu.emailservices
 
 import com.gu.emailservices.SubscriptionEmailFieldHelpers.formatDate
-import com.gu.support.catalog.FulfilmentOptions
+import com.gu.salesforce.Salesforce.SfContactId
+import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers._
-import com.gu.support.workers.states.PaymentMethodWithSchedule
-import org.joda.time.LocalDate
+import com.gu.support.workers.states.ProductTypeCreated.GuardianWeeklyCreated
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 
 import scala.collection.immutable
+import scala.concurrent.{ExecutionContext, Future}
 
-object GuardianWeeklyEmailFields {
-  def build(
-    subscriptionEmailFields: SubscriptionEmailFields,
-    firstDeliveryDate: Option[LocalDate],
-    paymentMethodWithSchedule: PaymentMethodWithSchedule,
-    giftRecipient: Option[GiftRecipient] = None
-  ): EmailFields = {
-    import subscriptionEmailFields._
-    import allProductsEmailFields._
+class GuardianWeeklyEmailFields(
+  paperFieldsGenerator: PaperFieldsGenerator,
+  touchPointEnvironment: TouchPointEnvironment,
+  user: User,
+  sfContactId: SfContactId,
+) {
+  def build(gw: GuardianWeeklyCreated)(implicit ec: ExecutionContext): Future[EmailFields] = {
 
-    val additionalFields: immutable.Seq[(String, String)] = paymentMethodWithSchedule.paymentSchedule.payments.lift(1).map(
+    val additionalFields: immutable.Seq[(String, String)] = gw.purchaseInfo.paymentSchedule.payments.lift(1).map(
       payment => List("date_of_second_payment" -> formatDate(payment.date))
     ).getOrElse(Nil)
 
-    val fields: List[(String, String)] = PaperFieldsGenerator.fieldsFor(
-      subscriptionNumber,
-      billingPeriod,
-      user,
-      firstDeliveryDate,
-      currency,
-      paymentMethodWithSchedule,
-      directDebitMandateId,
-      promotion,
-      giftRecipient
-    ) ++ additionalFields
+    val giftRecipientFields = gw.giftRecipient.toList.flatMap(
+      recipient =>
+        List(
+          "giftee_first_name" -> recipient.firstName,
+          "giftee_last_name" -> recipient.lastName,
+        )
+    )
 
-    EmailFields(fields, Left(sfContactId), user.primaryEmailAddress, "guardian-weekly")
+    paperFieldsGenerator.fieldsFor(
+      gw.purchaseInfo,
+      gw.product,
+      user,
+      ProductTypeRatePlans.weeklyRatePlan(gw.product, touchPointEnvironment, if(gw.giftRecipient.isDefined) Gift else Direct).map(_.id),
+      fixedTerm = gw.giftRecipient.isDefined,
+      gw.firstDeliveryDate,
+    ).map(fields => EmailFields(fields ++ additionalFields ++ giftRecipientFields, Left(sfContactId), user.primaryEmailAddress, "guardian-weekly"))
   }
 
 }

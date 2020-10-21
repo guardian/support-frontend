@@ -2,13 +2,16 @@ package com.gu.support.workers
 
 import cats.implicits._
 import com.gu.i18n.Title
+import com.gu.support.encoding.Codec
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
-import com.gu.support.workers.GiftPurchase.{DigitalSubscriptionGiftPurchase, WeeklyGiftPurchase}
 import io.circe._
+import io.circe.generic.decoding.DerivedDecoder
+import io.circe.generic.encoding.DerivedAsObjectEncoder
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import org.joda.time.LocalDate
+import shapeless.Lazy
 
 sealed trait GiftRecipient {
   val firstName: String
@@ -39,10 +42,8 @@ object GiftRecipient {
   private val discriminatorWeekly = "Weekly"
   private val discriminatorDigitalSubscription = "DigitalSubscription"
 
-  implicit val e1 = circeDiscriminator.add(deriveEncoder[WeeklyGiftRecipient], discriminatorWeekly)
-  implicit val d1 = deriveDecoder[WeeklyGiftRecipient]
-  implicit val e2 = circeDiscriminator.add(deriveEncoder[DigitalSubscriptionGiftRecipient], discriminatorDigitalSubscription)
-  implicit val d2 = deriveDecoder[DigitalSubscriptionGiftRecipient]
+  implicit val c1 = circeDiscriminator.discriminatedCodec[WeeklyGiftRecipient](discriminatorWeekly)
+  implicit val c2 = circeDiscriminator.discriminatedCodec[DigitalSubscriptionGiftRecipient](discriminatorDigitalSubscription)
 
   implicit val encoder: Encoder[GiftRecipient] = Encoder.instance {
     case c: WeeklyGiftRecipient => c.asJson
@@ -70,41 +71,6 @@ object GeneratedGiftCode {
 
 }
 
-sealed trait GiftPurchase {
-  def asDigitalSubscriptionGiftPurchase: Option[DigitalSubscriptionGiftPurchase] =
-    this match { case a: DigitalSubscriptionGiftPurchase => Some(a); case _ => None }
-  def giftRecipient: GiftRecipient
-}
-object GiftPurchase {
-
-  case class WeeklyGiftPurchase(giftRecipient: WeeklyGiftRecipient) extends GiftPurchase
-  case class DigitalSubscriptionGiftPurchase(
-    giftRecipient: DigitalSubscriptionGiftRecipient,
-    giftCode: GeneratedGiftCode,
-    lastRedemptionDate: LocalDate,
-  ) extends GiftPurchase
-
-  val circeDiscriminator = new CirceDiscriminator("giftPurchaseType")
-  private val discriminatorWeekly = "Weekly"
-  private val discriminatorDigitalSubscription = "DigitalSubscription"
-
-  implicit val e1 = circeDiscriminator.add(deriveEncoder[WeeklyGiftPurchase], discriminatorWeekly)
-  implicit val d1 = deriveDecoder[WeeklyGiftPurchase]
-  implicit val e2 = circeDiscriminator.add(deriveEncoder[DigitalSubscriptionGiftPurchase], discriminatorDigitalSubscription)
-  implicit val d2 = deriveDecoder[DigitalSubscriptionGiftPurchase]
-
-  implicit val encoder: Encoder[GiftPurchase] = Encoder.instance {
-    case c: WeeklyGiftPurchase => c.asJson
-    case c: DigitalSubscriptionGiftPurchase => c.asJson
-  }
-
-  implicit val decoder =
-    circeDiscriminator.decode[GiftPurchase](Map(
-      discriminatorWeekly -> Decoder[WeeklyGiftPurchase],
-      discriminatorDigitalSubscription -> Decoder[DigitalSubscriptionGiftPurchase]
-    ))
-}
-
 class CirceDiscriminator(discriminatorFieldName: String) {
 
   def add[A](encoder: Encoder[A], value: String): Encoder[A] =
@@ -118,5 +84,10 @@ class CirceDiscriminator(discriminatorFieldName: String) {
           .getOrElse(Left(DecodingFailure(s"invalid discriminator: $discriminator", List())))
       } yield result
     }
+
+  def discriminatedCodec[A](
+    discriminator: String
+  )(implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedAsObjectEncoder[A]]): Codec[A] =
+    new Codec(add(deriveEncoder, discriminator), deriveDecoder)
 
 }

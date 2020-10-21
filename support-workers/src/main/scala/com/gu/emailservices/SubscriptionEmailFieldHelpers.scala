@@ -30,14 +30,13 @@ object SubscriptionEmailFieldHelpers {
 
   def describe(
     paymentSchedule: PaymentSchedule,
-    billingPeriod: BillingPeriod,
-    currency: Currency,
+    product: ProductType,
     promotion: Option[Promotion],
-    isGift: Boolean = false
+    fixedTerm: Boolean = false
   ): String = {
     promotion.flatMap(_.introductoryPrice)
-      .map(introductoryPrice => introductoryPriceDescription(paymentSchedule, billingPeriod, currency, introductoryPrice))
-      .getOrElse(standardDescription(paymentSchedule, billingPeriod, currency, isGift))
+      .map(introductoryPrice => introductoryPriceDescription(paymentSchedule, product.billingPeriod, product.currency, introductoryPrice))
+      .getOrElse(standardDescription(paymentSchedule, product.billingPeriod, product.currency, fixedTerm))
   }
 
   def introductoryPriceDescription(
@@ -58,11 +57,11 @@ object SubscriptionEmailFieldHelpers {
     case _ => billingPeriod.noun
   }
 
-  def standardDescription(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency, isGift: Boolean): String = {
+  def standardDescription(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency, fixedTerm: Boolean): String = {
     val initialPrice = firstPayment(paymentSchedule).amount
     val (paymentsWithInitialPrice, paymentsWithDifferentPrice) = paymentSchedule.payments.partition(_.amount == initialPrice)
 
-    if (isGift){
+    if (fixedTerm){
       s"${priceWithCurrency(currency, initialPrice)} for ${giftNoun(billingPeriod)}"
     }
     else if (paymentSchedule.payments.size == 1) {
