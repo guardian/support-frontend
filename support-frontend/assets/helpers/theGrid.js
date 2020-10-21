@@ -117,7 +117,7 @@ export const imageCatalogue: {
   editionsPackshot: '22841f3977aedb85be7b0cf442747b1da51f780f/0_0_2320_1890',
   editionsPackshotShort: '278357625f580358e74db1563777aa0b4570072d/0_0_1800_1080',
   editionsPackshotAus: 'a1679c54314643a7b611a0c97b53a8ea38b9ec23/0_0_2320_1890',
-  editionsPackshotAusShort: '1cc6d0197f84430332f58ab6e9926adb83771f0b/0_0_1800_1080',
+  editionsPackshotAusShort: 'b003ac9be7d5acaa84b262c3a4fad64075f8596c/0_0_1800_1080',
   weekendPackshotMobile: '622d1b94173e9c711ff421d89cf9abddf3319197/0_0_1100_1100',
   weekendPackshotDesktop: 'dc1bb7218877d954a5841b24765e89f7c3aa6f95/0_0_1800_1080',
   liveAppMobile: '66deee17e0c59c254abdad9e1fa9b3605040f66b/0_0_1100_1100',
