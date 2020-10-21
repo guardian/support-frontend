@@ -16,6 +16,7 @@ import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, 
 import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendAcquisitionEventState
+import com.gu.support.zuora.api.ReaderType.Gift
 import ophan.thrift.event.{PrintOptions, PrintProduct, Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 
@@ -45,9 +46,9 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         Success,
         state.user.isTestUser,
         state.product,
-        state.paymentProvider,
+        state.analyticsInfo.paymentProvider,
         state.firstDeliveryDate,
-        state.giftRecipient.isDefined,
+        state.analyticsInfo.isGiftPurchase,
         state.promoCode,
         state.user.billingAddress.country,
         state.user.deliveryAddress.map(_.country),
@@ -56,19 +57,32 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       )
     )
 
-    // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
-    val result: Future[HandlerResult[Unit]] = services.acquisitionService.submit(
+    state.product match {
+      case d: DigitalPack if d.readerType == Gift && state.paymentOrRedemptionData.isRight =>
+        // We don't want to send an acquisition event for Digital subscription gift redemptions as we have already done so on purchase
+        Future.successful(HandlerResult((), requestInfo))
+      case _ =>
+        sendAcquisitionEvent(state, requestInfo, services)
+    }
+
+  }
+
+  def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
+    sendPaymentSuccessMetric(state)
+
+    // Throw any error in the EitherT monad so that it can be processed by ErrorHandler.handleException
+    services.acquisitionService.submit(
       SendAcquisitionEventStateAndRequestInfo(state, requestInfo)
     ).fold(
       errors => throw AnalyticsServiceErrorList(errors),
       _ => HandlerResult((), requestInfo)
     )
+  }
 
-    val maybePaymentProvider = state.paymentOrRedemptionData.left.toOption.map(_.paymentMethod).map(paymentProviderFromPaymentMethod)
-    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, maybePaymentProvider, state.product)
+  def sendPaymentSuccessMetric(state: SendAcquisitionEventState) = {
+    // Used for Cloudwatch alarms: https://github.com/guardian/support-frontend/blob/920e638c35430cc260acdb1878f37bffa1d12fae/support-workers/cloud-formation/src/templates/cfn-template.yaml#L210
+    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.analyticsInfo.paymentProvider, state.product)
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
-
-    result
   }
 }
 
@@ -196,7 +210,7 @@ object SendAcquisitionEvent {
         Some(Set(
           if (stateAndInfo.requestInfo.accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
           if (isSixForSix(stateAndInfo)) Some("guardian-weekly-six-for-six") else None,
-          stateAndInfo.state.giftRecipient.map(_ => "gift-subscription"),
+          if (stateAndInfo.state.analyticsInfo.isGiftPurchase) Some("gift-subscription") else None,
           stateAndInfo.state.paymentOrRedemptionData.right.map(_ => "corporate-subscription").toOption
         ).flatten)
 

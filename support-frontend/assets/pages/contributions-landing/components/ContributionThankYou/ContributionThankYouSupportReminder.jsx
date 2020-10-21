@@ -7,7 +7,7 @@ import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
-import { Button, LinkButton } from '@guardian/src-button';
+import { Button } from '@guardian/src-button';
 import { Link } from '@guardian/src-link';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { RadioGroup, Radio } from '@guardian/src-radio';
@@ -48,53 +48,103 @@ const privacyTextLink = css`
   color: ${neutral[20]};
 `;
 
-const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/6VK57VR';
+type ReminderDate = {
+  date: Date,
+  label: string,
+  isUsEoyAppealSpecialReminder?: boolean,
+};
+
+const DAY_OF_MONTH_OF_DEFAULT_REMINDER = 15;
+
+const getReminderDateWithDefaultLabel = (monthsUntilDate: number) => {
+  const now = new Date();
+  const date = new Date(now.getFullYear(), now.getMonth() + monthsUntilDate, DAY_OF_MONTH_OF_DEFAULT_REMINDER);
+
+  const month = date.toLocaleDateString('default', { month: 'long' });
+  const year =
+    now.getFullYear() === date.getFullYear() ? '' : ` ${date.getFullYear()}`;
+  const label = `in ${monthsUntilDate} months (${month}${year})`;
+
+  return {
+    date,
+    label,
+  };
+};
+
+const getDefaultReminderDates = (): ReminderDate[] => [
+  getReminderDateWithDefaultLabel(3),
+  getReminderDateWithDefaultLabel(6),
+  getReminderDateWithDefaultLabel(9),
+];
+
+const GIVING_TUESDAY: ReminderDate = {
+  date: new Date(2020, 11, 1),
+  label: 'on Giving Tuesday (1 December)',
+};
+const GIVING_TUESDAY_REMINDER_CUT_OFF = new Date(2020, 10, 27);
+
+const LAST_DAY_OF_THE_YEAR: ReminderDate = {
+  date: new Date(2020, 11, 31),
+  label: 'at the end of the year (31 December)',
+};
+const LAST_DAY_OF_THE_YEAR_REMINDER_CUT_OFF = new Date(2020, 11, 28);
+
+const BOTH: ReminderDate = {
+  date: new Date(2020, 11, 1),
+  label: 'on both occasions (1 and 31 December)',
+  isUsEoyAppealSpecialReminder: true,
+};
+
+const IN_THREE_MONTHS: ReminderDate = {
+  date: new Date(2021, 2, DAY_OF_MONTH_OF_DEFAULT_REMINDER),
+  label: 'in three months (March 2021)', // slightly custom copy over default (three vs 3)
+};
+
+const NEXT_US_EOY_APPEAL: ReminderDate = {
+  date: new Date(2021, 11, 31),
+  label: 'this time next year (December 2021)',
+};
+
+const getReminderDatesForUsEndOfYearAppeal = (): ReminderDate[] => {
+  const now = new Date();
+  if (now < GIVING_TUESDAY_REMINDER_CUT_OFF) {
+    return [
+      GIVING_TUESDAY,
+      LAST_DAY_OF_THE_YEAR,
+      BOTH,
+    ];
+  } else if (now < LAST_DAY_OF_THE_YEAR_REMINDER_CUT_OFF) {
+    return [
+      LAST_DAY_OF_THE_YEAR,
+      IN_THREE_MONTHS,
+      NEXT_US_EOY_APPEAL,
+    ];
+  }
+  return getDefaultReminderDates();
+};
 
 type ContributionThankYouSupportReminderProps = {|
   email: string,
-  isEnvironmentMoment: boolean
+  isUsEndOfYearAppeal: boolean
 |};
 
 const ContributionThankYouSupportReminder = ({
   email,
-  isEnvironmentMoment,
+  isUsEndOfYearAppeal,
 }: ContributionThankYouSupportReminderProps) => {
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
-  const now = new Date();
-  const reminderDates = isEnvironmentMoment
-    ? [
-      new Date(now.getFullYear(), now.getMonth() + 3),
-      new Date(now.getFullYear(), now.getMonth() + 6),
-      new Date(now.getFullYear(), now.getMonth() + 12),
-    ]
-    : [
-      new Date(now.getFullYear(), now.getMonth() + 3),
-      new Date(now.getFullYear(), now.getMonth() + 6),
-      new Date(now.getFullYear(), now.getMonth() + 9),
-    ];
-
-  const formattedDate = (index: number): string => {
-    if (isEnvironmentMoment && index === 2) {
-      return 'In one year (our next climate pledge update)';
-    }
-    const date = reminderDates[index];
-
-    const monthsUntilDate = ['three', 'six', 'nine'][index];
-    const month = date.toLocaleDateString('default', { month: 'long' });
-    const year =
-      now.getFullYear() === date.getFullYear() ? '' : ` ${date.getFullYear()}`;
-
-    return `In ${monthsUntilDate} months (${month}${year})`;
-  };
+  const reminderDates = isUsEndOfYearAppeal ? getReminderDatesForUsEndOfYearAppeal() : getDefaultReminderDates();
 
   const selectedDateAsApiString = () => {
-    const selectedDate = reminderDates[selectedDateIndex];
+    const selectedDate = reminderDates[selectedDateIndex].date;
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1; // javascript dates run from 0-11, we want 1-12
     const paddedMonth = month.toString().padStart(2, '0');
-    return `${year}-${paddedMonth}-01 00:00:00`;
+    const day = selectedDate.getDate();
+    const paddedDay = day.toString().padStart(2, '0');
+    return `${year}-${paddedMonth}-${paddedDay} 00:00:00`;
   };
 
   const setReminder = () => {
@@ -106,6 +156,7 @@ const ContributionThankYouSupportReminder = ({
       body: JSON.stringify({
         email,
         reminderDate: selectedDateAsApiString(),
+        isUsEoyAppealSpecialReminder: reminderDates[selectedDateIndex].isUsEoyAppealSpecialReminder,
       }),
     }).then((response) => {
       if (!response.ok) {
@@ -134,29 +185,10 @@ const ContributionThankYouSupportReminder = ({
   const actionBody = (
     <ActionBody>
       {hasBeenCompleted ? (
-        <>
-          <p>
-            What motivated you to set a reminder today? We’d love to hear from
-            you. If you have a moment, please answer a few questions. Your
-            insight helps us understand better, so we can improve what we offer
-            our readers and supporters.
-          </p>
-
-          <div css={buttonContainer}>
-            <LinkButton
-              target="_blank"
-              rel="noopener noreferrer"
-              href={SURVEY_LINK}
-              priority="primary"
-              size="default"
-              icon={<SvgArrowRightStraight />}
-              iconSide="right"
-              nudgeIcon
-            >
-              Share your thoughts
-            </LinkButton>
-          </div>
-        </>
+        <p>
+          We will be in touch at the time you selected, so look out for a
+          message from the Guardian in your inbox.
+        </p>
       ) : (
         <>
           <p>
@@ -176,7 +208,7 @@ const ContributionThankYouSupportReminder = ({
               {reminderDates.map((date, index) => (
                 <Radio
                   value={index}
-                  label={formattedDate(index)}
+                  label={date.label}
                   checked={selectedDateIndex === index}
                   onChange={() => setSelectedDateIndex(index)}
                 />

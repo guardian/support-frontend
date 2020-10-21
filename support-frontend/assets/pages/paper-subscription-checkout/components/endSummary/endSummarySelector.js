@@ -26,6 +26,7 @@ function mapStateToProps(state: CheckoutState) {
   return {
     priceDescription: getPriceDescription(productPrice, billingPeriod),
     promotion: getPromotion(productPrice),
+    fulfilmentOption,
   };
 }
 

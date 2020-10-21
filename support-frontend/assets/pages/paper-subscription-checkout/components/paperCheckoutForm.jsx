@@ -23,14 +23,10 @@ import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
-import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
-import {
-  getShortDescription,
-  getTitle,
-} from '../../paper-subscription-landing/helpers/products';
+import { getTitle } from '../../paper-subscription-landing/helpers/products';
 import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
@@ -173,12 +169,10 @@ function PaperCheckoutForm(props: PropTypes) {
   const collectionOptionDescription = props.useDigitalVoucher ? 'subscription card' : 'vouchers';
   const days = getDays(props.fulfilmentOption, props.productOption);
   const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : collectionOption;
-  const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : collectionOption;
   const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
   const title = `${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`;
-  const description = getShortDescription(props.productOption);
   const productPrice = getProductPrice(
     props.productPrices,
     props.fulfilmentOption,
@@ -195,24 +189,24 @@ function PaperCheckoutForm(props: PropTypes) {
   const subsCardOrderSummary = (<OrderSummary
     image={
       <GridImage
-        gridId="printCampaignDigitalVoucher"
+        gridId="printCheckoutDigitalVoucher"
         srcSizes={[500]}
         sizes="(max-width: 740px) 50vw, 696"
-        imgType="jpg"
+        imgType="png"
         altText=""
       />}
     title={title}
     productPrice={productPrice}
     billingPeriod="Monthly"
-    changeSubscription={routes.digitalSubscriptionLanding}
+    changeSubscription={routes.paperSubscriptionProductChoices}
     productType={Paper}
     paymentStartDate={subsCardStartDates.formattedStartDate}
   />);
 
-  const regularOrderSummary = (<Summary
+  const homeDeliveryOrderSummary = (<OrderSummary
     image={
       <GridImage
-        gridId={props.useDigitalVoucher ? 'printCampaignHDdigitalVoucher' : 'checkoutPackshotPaperGraunVoucher'}
+        gridId="printCheckoutHD"
         srcSizes={[500]}
         sizes="(max-width: 740px) 50vw, 696"
         imgType="png"
@@ -220,22 +214,15 @@ function PaperCheckoutForm(props: PropTypes) {
       />
     }
     title={title}
-    description={description}
     productPrice={productPrice}
-    dataList={[
-      {
-        title: 'Delivery method',
-        value: fulfilmentOptionName,
-      },
-    ]}
     billingPeriod="Monthly"
-    changeSubscription={routes.paperSubscriptionProductChoices}
+    changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
     product={Paper}
   />);
 
   return (
     <Content modifierClasses={['your-details']}>
-      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : regularOrderSummary}>
+      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : homeDeliveryOrderSummary}>
         <Form onSubmit={(ev) => {
           ev.preventDefault();
           props.submitForm();
@@ -394,9 +381,7 @@ function PaperCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          {isSubscriptionCard ? (
-            <EndSummaryMobile paymentStartDate={subsCardStartDates.formattedStartDate} />
-          ) : null}
+          <EndSummaryMobile paymentStartDate={subsCardStartDates.formattedStartDate} />
           <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>

@@ -110,7 +110,6 @@ type FormState = {
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
-  stripeV3HasLoaded: boolean,
   stripePaymentRequestButtonData: {
     ONE_OFF: StripePaymentRequestButtonData,
     REGULAR: StripePaymentRequestButtonData,
@@ -194,7 +193,6 @@ function createFormReducer() {
       billingCountry: null,
       checkoutFormHasBeenSubmitted: false,
     },
-    stripeV3HasLoaded: false,
     stripePaymentRequestButtonData: {
       ONE_OFF: {
         paymentMethod: null,
@@ -470,12 +468,6 @@ function createFormReducer() {
               paymentError: action.paymentError,
             },
           },
-        };
-
-      case 'SET_STRIPE_V3_HAS_LOADED':
-        return {
-          ...state,
-          stripeV3HasLoaded: true,
         };
 
       case 'UPDATE_USER_FORM_DATA':

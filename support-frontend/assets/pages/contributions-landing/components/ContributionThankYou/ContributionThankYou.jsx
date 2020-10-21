@@ -20,7 +20,6 @@ import ContributionThankYouSupportReminder from './ContributionThankYouSupportRe
 import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
-import ContributionThankYouArticleShare from './ContributionThankYouArticleShare';
 import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getCampaignSettings } from 'helpers/campaigns';
@@ -143,7 +142,7 @@ const ContributionThankYou = ({
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
-  const isEnvironmentMoment = (campaignSettings && campaignSettings.campaignCode === 'enviro_moment_2020');
+  const isUsEndOfYearAppeal = countryId === 'US';
 
   useEffect(() => {
     trackUserData(
@@ -171,7 +170,7 @@ const ContributionThankYou = ({
   const supportReminderAction = {
     component: <ContributionThankYouSupportReminder
       email={email}
-      isEnvironmentMoment={isEnvironmentMoment}
+      isUsEndOfYearAppeal={isUsEndOfYearAppeal}
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
@@ -185,22 +184,17 @@ const ContributionThankYou = ({
       createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
       campaignCode={campaignSettings && campaignSettings.campaignCode}
     />,
-    shouldShow: !isEnvironmentMoment,
+    shouldShow: true,
   };
   const ausMapAction = {
     component: <ContributionThankYouAusMap />,
     shouldShow: countryId === 'AU',
-  };
-  const articleShareAction = {
-    component: <ContributionThankYouArticleShare />,
-    shouldShow: isEnvironmentMoment,
   };
 
   const defaultActions = [
     signUpAction,
     signInAction,
     marketingConsentAction,
-    articleShareAction,
     supportReminderAction,
     surveyAction,
     socialShareAction,
@@ -210,7 +204,6 @@ const ContributionThankYou = ({
     signUpAction,
     signInAction,
     marketingConsentAction,
-    articleShareAction,
     supportReminderAction,
     surveyAction,
     ausMapAction,

@@ -169,8 +169,6 @@ const setStripePaymentRequestObject =
   (stripePaymentRequestObject: Object, stripeAccount: StripeAccount): Action =>
     ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject, stripeAccount });
 
-const setStripeV3HasLoaded = (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
-
 const setStripePaymentRequestButtonClicked = (stripeAccount: StripeAccount): Action =>
   ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount });
 
@@ -782,7 +780,6 @@ export {
   setStripePaymentRequestObject,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
-  setStripeV3HasLoaded,
   setTickerGoalReached,
   setCreateStripePaymentMethod,
   setHandleStripe3DS,

@@ -10,6 +10,8 @@ import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.catalog.{Collection, Saturday}
+import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
+import com.gu.support.workers.GiftPurchase.DigitalSubscriptionGiftPurchase
 import com.gu.support.workers.JsonFixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -165,8 +167,12 @@ object SendDigitalPackGiftPurchaseEmails extends App {
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))
     )),
     ReaderType.Gift,
-    Some(GiftRecipient.DigitalSubGiftRecipient("first", "last", addressToSendTo, Some("gift message"), new LocalDate(2020, 10, 2)))
-  ))
+    Some(DigitalSubscriptionGiftPurchase(
+      DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), new LocalDate(2020, 10, 2)),
+      GeneratedGiftCode("gd12-12345678").get,
+      new LocalDate(2020, 10, 14),
+    )
+  )))
 
 }
 object SendDigitalPackGiftRedemptionEmail extends App {

@@ -7,7 +7,6 @@ import Content from 'components/content/content';
 import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
-
 import {
   ContentForm,
   type ContentTabPropTypes,
@@ -22,13 +21,17 @@ import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { type Option } from 'helpers/types/option';
 
-
-const accordionContainer = css`
+export const accordionContainer = css`
   background-color: ${neutral['97']};
 
-  p {
+  p, a {
     ${textSans.small()};
-    margin-bottom: ${space[4]}px;
+    margin-bottom: ${space[3]}px;
+  }
+
+  p, button {
+    padding-right: ${space[2]}px;
+    padding-left: ${space[2]}px;
   }
 `;
 
@@ -41,8 +44,8 @@ const ContentDeliveryFaqBlock = ({
     border={paperHasDeliveryEnabled()}
     image={<GridImage
       gridId="printCampaignHDdigitalVoucher"
-      srcSizes={[750, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 400px"
+      srcSizes={[562, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 500px"
       imgType="png"
     />
     }
