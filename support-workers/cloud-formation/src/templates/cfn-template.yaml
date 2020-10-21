@@ -218,7 +218,7 @@ Resources:
       Namespace: support-frontend
       Dimensions:
         - Name: PaymentProvider
-          Value: Paypal
+          Value: PayPal
         - Name: ProductType
           Value: Contribution
         - Name: Stage
@@ -277,7 +277,7 @@ Resources:
       Namespace: support-frontend
       Dimensions:
         - Name: PaymentProvider
-          Value: Gocardless
+          Value: DirectDebit
         - Name: ProductType
           Value: Contribution
         - Name: Stage
@@ -336,7 +336,7 @@ Resources:
             Metric:
               Dimensions:
                 - Name: PaymentProvider
-                  Value: Gocardless
+                  Value: DirectDebit
                 - Name: ProductType
                   Value: DigitalPack
                 - Name: Stage
@@ -353,7 +353,7 @@ Resources:
             Metric:
               Dimensions:
                 - Name: PaymentProvider
-                  Value: Paypal
+                  Value: PayPal
                 - Name: ProductType
                   Value: DigitalPack
                 - Name: Stage
@@ -408,7 +408,7 @@ Resources:
             Metric:
               Dimensions:
                 - Name: PaymentProvider
-                  Value: Gocardless
+                  Value: DirectDebit
                 - Name: ProductType
                   Value: Paper
                 - Name: Stage
@@ -425,7 +425,7 @@ Resources:
             Metric:
               Dimensions:
                 - Name: PaymentProvider
-                  Value: Paypal
+                  Value: PayPal
                 - Name: ProductType
                   Value: Paper
                 - Name: Stage

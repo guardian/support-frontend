@@ -2,8 +2,7 @@ package com.gu.aws
 
 import com.gu.aws.AwsCloudWatchMetricPut._
 import com.gu.support.config.{Stage, TouchPointEnvironment}
-import com.gu.support.workers.ProductType
-import ophan.thrift.event.PaymentProvider
+import com.gu.support.workers.{PaymentProvider, ProductType}
 
 object AwsCloudWatchMetricSetup {
   def setupWarningRequest(stage: Stage): MetricRequest =
@@ -19,11 +18,11 @@ object AwsCloudWatchMetricSetup {
         MetricDimensionName("Environment") -> MetricDimensionValue(environment.toString)
       ))
 
-  def paymentSuccessRequest(stage: Stage, paymentProvider: Option[PaymentProvider], productType: ProductType): MetricRequest =
+  def paymentSuccessRequest(stage: Stage, paymentProvider: PaymentProvider, productType: ProductType): MetricRequest =
     getMetricRequest(
       MetricName("PaymentSuccess"),
       Map(
-        MetricDimensionName("PaymentProvider") -> MetricDimensionValue(paymentProvider.map(_.name).getOrElse("None")),
+        MetricDimensionName("PaymentProvider") -> MetricDimensionValue(paymentProvider.name),
         MetricDimensionName("ProductType") -> MetricDimensionValue(productType.toString),
         MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
       )

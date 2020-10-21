@@ -68,19 +68,21 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   }
 
   def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
+    sendPaymentSuccessMetric(state)
+
     // Throw any error in the EitherT monad so that it can be processed by ErrorHandler.handleException
-    val result: Future[HandlerResult[Unit]] = services.acquisitionService.submit(
+    services.acquisitionService.submit(
       SendAcquisitionEventStateAndRequestInfo(state, requestInfo)
     ).fold(
       errors => throw AnalyticsServiceErrorList(errors),
       _ => HandlerResult((), requestInfo)
     )
+  }
 
-    val maybePaymentProvider = state.paymentOrRedemptionData.left.toOption.map(_.paymentMethod).map(paymentProviderFromPaymentMethod)
-    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, maybePaymentProvider, state.product)
+  def sendPaymentSuccessMetric(state: SendAcquisitionEventState) = {
+    // Used for Cloudwatch alarms: https://github.com/guardian/support-frontend/blob/920e638c35430cc260acdb1878f37bffa1d12fae/support-workers/cloud-formation/src/templates/cfn-template.yaml#L210
+    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.paymentProvider, state.product)
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
-
-    result
   }
 }
 
