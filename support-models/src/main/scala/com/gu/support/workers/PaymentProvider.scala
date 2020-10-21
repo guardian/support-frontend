@@ -1,21 +1,20 @@
 package com.gu.support.workers
 
-import com.gu.support.redemptions.RedemptionData
 import io.circe.{Decoder, Encoder}
 
-sealed trait PaymentProvider
+sealed abstract class PaymentProvider(val name: String)
 
-case object Stripe extends PaymentProvider
+case object Stripe extends PaymentProvider("Stripe")
 
-case object StripeApplePay extends PaymentProvider
+case object StripeApplePay extends PaymentProvider("StripeApplePay")
 
-case object PayPal extends PaymentProvider
+case object PayPal extends PaymentProvider("PayPal")
 
-case object DirectDebit extends PaymentProvider
+case object DirectDebit extends PaymentProvider("DirectDebit")
 
-case object Existing extends PaymentProvider
+case object Existing extends PaymentProvider("Existing")
 
-case object RedemptionNoProvider extends PaymentProvider
+case object RedemptionNoProvider extends PaymentProvider("Redemption")
 
 object PaymentProvider {
 
