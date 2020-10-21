@@ -54,9 +54,11 @@ type ReminderDate = {
   isUsEoyAppealSpecialReminder?: boolean,
 };
 
+const DAY_OF_MONTH_OF_DEFAULT_REMINDER = 15;
+
 const getReminderDateWithDefaultLabel = (monthsUntilDate: number) => {
   const now = new Date();
-  const date = new Date(now.getFullYear(), now.getMonth() + monthsUntilDate);
+  const date = new Date(now.getFullYear(), now.getMonth() + monthsUntilDate, DAY_OF_MONTH_OF_DEFAULT_REMINDER);
 
   const month = date.toLocaleDateString('default', { month: 'long' });
   const year =
@@ -140,7 +142,9 @@ const ContributionThankYouSupportReminder = ({
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1; // javascript dates run from 0-11, we want 1-12
     const paddedMonth = month.toString().padStart(2, '0');
-    return `${year}-${paddedMonth}-01 00:00:00`;
+    const day = selectedDate.getDate();
+    const paddedDay = day.toString().padStart(2, '0');
+    return `${year}-${paddedMonth}-${paddedDay} 00:00:00`;
   };
 
   const setReminder = () => {
