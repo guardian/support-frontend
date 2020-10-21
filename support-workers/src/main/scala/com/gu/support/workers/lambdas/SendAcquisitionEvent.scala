@@ -81,7 +81,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
   def sendPaymentSuccessMetric(state: SendAcquisitionEventState) = {
     // Used for Cloudwatch alarms: https://github.com/guardian/support-frontend/blob/920e638c35430cc260acdb1878f37bffa1d12fae/support-workers/cloud-formation/src/templates/cfn-template.yaml#L210
-    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.paymentProvider, state.product)
+    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.analyticsInfo.paymentProvider, state.product)
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
   }
 }
