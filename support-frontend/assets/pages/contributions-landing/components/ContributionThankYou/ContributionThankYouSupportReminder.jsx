@@ -101,7 +101,7 @@ const IN_THREE_MONTHS: ReminderDate = {
 };
 
 const NEXT_US_EOY_APPEAL: ReminderDate = {
-  date: new Date(2021, 11, 1),
+  date: new Date(2021, 11, 31),
   label: 'this time next year (December 2021)',
 };
 
