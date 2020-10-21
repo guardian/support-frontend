@@ -2998,6 +2998,15 @@
     "@guardian/src-label" "^2.3.0"
     "@guardian/src-user-feedback" "^2.3.0"
 
+"@guardian/src-select@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-select/-/src-select-2.5.0.tgz#1b2a0c419b1074562ff21489d3f298266f26e450"
+  integrity sha512-IqPkrBu8ZrzkwHuKuFURtPrtYqAR2E03jBtQhGacYARg28MjOPTHHgL4bck1qSQqPOMGuhh5YqkF43DnCZ8cUw==
+  dependencies:
+    "@guardian/src-helpers" "^2.5.0"
+    "@guardian/src-icons" "^2.5.0"
+    "@guardian/src-user-feedback" "^2.5.0"
+
 "@guardian/src-svgs@^2.0.0":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-svgs/-/src-svgs-2.4.0.tgz#76a3834b745ad481254c7a6b238fbe660fd8caa6"

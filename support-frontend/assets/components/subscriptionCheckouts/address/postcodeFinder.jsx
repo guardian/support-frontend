@@ -1,16 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { TextInput } from '@guardian/src-text-input';
 import { Button, buttonReaderRevenueBrandAlt } from '@guardian/src-button';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { ThemeProvider } from 'emotion-theming';
 import { border } from '@guardian/src-foundations/palette';
-
-import { Select } from 'components/forms/select';
-import { withLabel } from 'hocs/withLabel';
+import { Select, Option } from '@guardian/src-select';
 
 import {
   type PostcodeFinderActionCreators,
@@ -79,9 +76,6 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
   </div>
 );
 
-const ComposedSelect = compose(withLabel)(Select);
-
-
 // Main class
 
 class PostcodeFinder extends Component<PropTypes> {
@@ -110,7 +104,7 @@ class PostcodeFinder extends Component<PropTypes> {
           value={postcode}
         />
         {(results.length > 0) &&
-          <ComposedSelect
+          <Select
             onChange={(ev) => {
               if (results[ev.currentTarget.value]) {
                 onAddressUpdate(results[ev.currentTarget.value]);
@@ -120,11 +114,11 @@ class PostcodeFinder extends Component<PropTypes> {
             id="address"
             label={`${results.length} addresses found`}
           >
-            <option value={null}>Select an address</option>
+            <Option value={null}>Select an address</Option>
               {results.map((result, key) => (
-                <option value={key}>{[result.lineOne, result.lineTwo].join(', ')}</option>
+                <Option value={key}>{[result.lineOne, result.lineTwo].join(', ')}</Option>
               ))}
-          </ComposedSelect>
+          </Select>
         }
       </div>
     );
