@@ -9,8 +9,6 @@ import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { TextInput } from '@guardian/src-text-input';
 import { RadioGroup, Radio } from '@guardian/src-radio';
-import { Button } from '@guardian/src-button';
-import { border } from '@guardian/src-foundations/palette';
 import { TextArea } from '@guardian/src-text-area';
 
 import {
