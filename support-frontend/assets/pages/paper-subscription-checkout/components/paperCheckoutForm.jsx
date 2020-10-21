@@ -74,7 +74,6 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import EndSummaryMobile from 'pages/paper-subscription-checkout/components/endSummary/endSummaryMobile';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
-import RadioButton from 'components/forms/customFields/radioButton';
 
 
 const marginBottom = css`
@@ -320,7 +319,7 @@ function PaperCheckoutForm(props: PropTypes) {
                   {days.map((day) => {
                     const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                     return (
-                      <RadioButton
+                      <Radio
                         label={userDate}
                         value={userDate}
                         name={machineDate}

@@ -76,7 +76,6 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import RadioButton from 'components/forms/customFields/radioButton';
 
 // ----- Styles ----- //
 
@@ -231,7 +230,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
                 {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
-                    <RadioButton
+                    <Radio
                       label={userDate}
                       value={userDate}
                       name={machineDate}
