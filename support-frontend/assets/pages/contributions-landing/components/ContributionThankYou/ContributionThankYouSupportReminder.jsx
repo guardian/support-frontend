@@ -96,12 +96,12 @@ const BOTH: ReminderDate = {
 };
 
 const IN_THREE_MONTHS: ReminderDate = {
-  date: new Date(2021, 2),
+  date: new Date(2021, 2, DAY_OF_MONTH_OF_DEFAULT_REMINDER),
   label: 'in three months (March 2021)', // slightly custom copy over default (three vs 3)
 };
 
 const NEXT_US_EOY_APPEAL: ReminderDate = {
-  date: new Date(2021, 11),
+  date: new Date(2021, 11, 1),
   label: 'this time next year (December 2021)',
 };
 
