@@ -174,7 +174,7 @@ const ContributionThankYou = ({
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
-  const SURVEY_END_DATE = new Date(2020, 10, 5);
+  const SURVEY_END_DATE = new Date(Date.parse('2020-11-05'));
   const now = new Date();
   const surveyAction = {
     component: <ContributionThankYouSurvey />,
