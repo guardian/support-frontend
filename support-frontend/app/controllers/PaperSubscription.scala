@@ -76,7 +76,6 @@ class PaperSubscription(
     ){
       Html(s"""<script type="text/javascript">
       window.guardian.productPrices = ${outputJson(productPrices)}
-      window.guardian.useDigitalVoucher = ${Paper.useDigitalVoucher}
       </script>""")
     }).withSettingsSurrogateKey
   }

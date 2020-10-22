@@ -13,7 +13,6 @@ import { paperSubsUrl } from 'helpers/routes';
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { type Option } from 'helpers/types/option';
 
 // ----- Tabs ----- //
 
@@ -40,21 +39,11 @@ type DispatchPropTypes = {|
 type PropTypes = {|
   ...StatePropTypes,
   ...DispatchPropTypes,
-  useDigitalVoucher: Option<boolean>,
 |};
-
-// This is a temporary workaround while we have both iMovo and vouchers
-// We can get rid of this when we drop vouchers
-const getTabTitle = (useDigitalVoucher, fulfilmentMethod) => {
-  if (fulfilmentMethod === 'HomeDelivery' || useDigitalVoucher) {
-    return tabs[fulfilmentMethod].name;
-  }
-  return 'Voucher Booklet';
-};
 
 // ----- Component ----- //
 
-function Tabs({ selectedTab, setTabAction, useDigitalVoucher }: PropTypes) {
+function Tabs({ selectedTab, setTabAction }: PropTypes) {
   return (
     <Outset>
       <ProductPageTabs
@@ -63,7 +52,7 @@ function Tabs({ selectedTab, setTabAction, useDigitalVoucher }: PropTypes) {
         tabs={Object.keys(tabs).map(fulfilmentMethod => ({
           // The following line is a workaround for iMovo and vouchers
           // Once we drop vouchers, we can reinstate: name: tabs[fulfilmentMethod].name,
-        name: getTabTitle(useDigitalVoucher, fulfilmentMethod),
+        name: tabs[fulfilmentMethod].name,
         href: tabs[fulfilmentMethod].href,
       }))}
       />
@@ -75,7 +64,6 @@ function Tabs({ selectedTab, setTabAction, useDigitalVoucher }: PropTypes) {
 
 const mapStateToProps = (state: State) => ({
   selectedTab: Object.keys(tabs).indexOf(state.page.tab),
-  useDigitalVoucher: state.common.settings.useDigitalVoucher,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>

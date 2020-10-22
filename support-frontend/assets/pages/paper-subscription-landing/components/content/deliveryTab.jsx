@@ -19,7 +19,6 @@ import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
-import { type Option } from 'helpers/types/option';
 
 export const accordionContainer = css`
   background-color: ${neutral['97']};
@@ -38,8 +37,7 @@ export const accordionContainer = css`
 // ----- Content ----- //
 const ContentDeliveryFaqBlock = ({
   setTabAction,
-  useDigitalVoucher,
-}: {setTabAction: typeof setTab, useDigitalVoucher?: Option<boolean>}) => (
+}: {setTabAction: typeof setTab}) => (
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
@@ -52,7 +50,7 @@ const ContentDeliveryFaqBlock = ({
   >
     <Text>
       If you live in Greater London (within the M25), you can use The Guardian’s home delivery
-      service. If not, you can use our <LinkTo tab={Collection} setTabAction={setTabAction}>{useDigitalVoucher ? 'subscription cards' : 'voucher scheme'}</LinkTo>.
+      service. If not, you can use our <LinkTo tab={Collection} setTabAction={setTabAction}>subscription cards</LinkTo>.
     </Text>
     <Text>
       Select your subscription below and checkout. You&apos;ll receive your first newspaper
@@ -81,24 +79,19 @@ const ContentDeliveryFaqBlock = ({
 
 );
 
-ContentDeliveryFaqBlock.defaultProps = {
-  useDigitalVoucher: null,
-};
-
 const DeliveryTab = ({
-  getRef, setTabAction, selectedTab, useDigitalVoucher,
+  getRef, setTabAction, selectedTab,
 }: ContentTabPropTypes) => (
   <div
     className="paper-subscription-landing-content__focusable"
     tabIndex={-1}
     ref={(r) => { getRef(r); }}
   >
-    <ContentDeliveryFaqBlock setTabAction={setTabAction} useDigitalVoucher={useDigitalVoucher} />
+    <ContentDeliveryFaqBlock setTabAction={setTabAction} />
     <ContentForm
       selectedTab={selectedTab}
       setTabAction={setTabAction}
       title="Pick your home delivery subscription package below"
-      useDigitalVoucher={useDigitalVoucher}
     />
   </div>
 );

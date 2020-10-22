@@ -23,7 +23,6 @@ import InfoSvg from './info.svg';
 export type ContentPropTypes = {|
   selectedTab: ActiveTabState,
   setTabAction: typeof setTab,
-  useDigitalVoucher?: Option<boolean>,
 |};
 
 export type ContentTabPropTypes = {|
@@ -75,13 +74,12 @@ const LinkTo = ({
 );
 
 const ContentForm = ({
-  title, text, setTabAction, selectedTab, useDigitalVoucher,
+  title, text, setTabAction, selectedTab,
 }: {|
   title: string,
   text?: Option<string>,
   selectedTab: ActiveTabState,
   setTabAction: typeof setTab,
-  useDigitalVoucher?: Option<boolean>,
 |}) => (
   <Content id="subscribe" border={false}>
     <Text
@@ -100,7 +98,7 @@ const ContentForm = ({
             selectedTab === Collection ?
               <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo> :
               <LinkTo tab={Collection} setTabAction={setTabAction}>
-                  Switch to {useDigitalVoucher ? 'Subscription card' : 'Vouchers'}
+                  Switch to Subscription card
               </LinkTo>
           }
         </SansParagraph>
@@ -111,6 +109,6 @@ const ContentForm = ({
     </ProductPageInfoChip>
   </Content>
 );
-ContentForm.defaultProps = { text: null, useDigitalVoucher: null };
+ContentForm.defaultProps = { text: null };
 
 export { LinkTo, ContentForm };

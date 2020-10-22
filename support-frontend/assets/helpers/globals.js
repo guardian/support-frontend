@@ -29,8 +29,7 @@ const emptyAmountsSettings = {
 const getSettings = (): Settings => {
   const globalSettings = getGlobal('settings');
   if (globalSettings) {
-    const useDigitalVoucher = getGlobal('useDigitalVoucher');
-    return { ...globalSettings, useDigitalVoucher };
+    return { ...globalSettings };
   }
   return {
     switches: {
@@ -55,7 +54,6 @@ const getSettings = (): Settings => {
       Canada: [],
     },
     metricUrl: '',
-    useDigitalVoucher: null,
   };
 };
 

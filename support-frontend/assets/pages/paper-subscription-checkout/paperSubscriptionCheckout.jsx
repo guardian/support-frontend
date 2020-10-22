@@ -47,8 +47,6 @@ const store = pageInit(
   true,
 );
 
-const { useDigitalVoucher } = store.getState().common.settings;
-
 // ----- Render ----- //
 
 const content = (
@@ -60,7 +58,7 @@ const content = (
           faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
           termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
         >
-          {useDigitalVoucher &&
+          {
             <p>By proceeding, you agree to our{' '}
               <a href="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions">Terms &amp; Conditions</a>.{' '}
               We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.{' '}

@@ -12,7 +12,6 @@ import { setTab, type TabActions } from '../../paperSubscriptionLandingPageActio
 import { type ContentPropTypes } from './helpers';
 import DeliveryTab from './deliveryTab';
 import SubscriptionCardTab from './subsCardTab';
-import CollectionTab from './collectionTab';
 import './content.scss';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 
@@ -32,23 +31,18 @@ class Content extends Component<ContentPropTypes> {
   tabRef: ?HTMLElement;
 
   render() {
-    const { selectedTab, setTabAction, useDigitalVoucher } = this.props;
+    const { selectedTab, setTabAction } = this.props;
 
     if (selectedTab === Collection) {
-      return useDigitalVoucher
-        ? <SubscriptionCardTab
+      return (
+        <SubscriptionCardTab
           {...{ selectedTab, setTabAction }}
           getRef={(r) => { if (r) { this.tabRef = r; } }}
-        />
-
-        : <CollectionTab
-          {...{ selectedTab, setTabAction }}
-          getRef={(r) => { if (r) { this.tabRef = r; } }}
-        />;
+        />);
     }
     return (
       <DeliveryTab
-        {...{ selectedTab, setTabAction, useDigitalVoucher }}
+        {...{ selectedTab, setTabAction }}
         getRef={(r) => { if (r) { this.tabRef = r; } }}
       />);
   }
@@ -59,7 +53,6 @@ class Content extends Component<ContentPropTypes> {
 
 const mapStateToProps = (state: State) => ({
   selectedTab: state.page.tab,
-  useDigitalVoucher: state.common.settings.useDigitalVoucher,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>

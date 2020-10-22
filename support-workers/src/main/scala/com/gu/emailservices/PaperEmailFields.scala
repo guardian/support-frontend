@@ -20,7 +20,7 @@ class PaperEmailFields(
 
     val dataExtension: String = paper.product.fulfilmentOptions match {
       case HomeDelivery => "paper-delivery"
-      case _ => if (Paper.useDigitalVoucher) "paper-subscription-card" else "paper-voucher"
+      case _ => "paper-subscription-card"
     }
 
     paperFieldsGenerator.fieldsFor(
