@@ -1,5 +1,6 @@
 package com.gu.support.workers
 
+import com.gu.i18n.Currency.GBP
 import com.gu.i18n.Title
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -7,6 +8,11 @@ import io.circe.syntax._
 import io.circe.parser._
 import org.joda.time.LocalDate
 import com.gu.support.SerialisationTestHelpers._
+import com.gu.support.catalog.{Domestic, FulfilmentOptions}
+import com.gu.support.workers.states.ProductTypeCreated.DigitalSubscriptionCreated.DigitalSubscriptionGiftPurchaseCreated
+import com.gu.support.workers.states.ProductTypeCreated.GuardianWeeklyCreated
+import com.gu.support.workers.states.PurchaseInfo
+import com.gu.support.zuora.api.ReaderType
 
 class GiftRecipientSpec extends AnyFlatSpec with Matchers {
 
@@ -100,21 +106,6 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |""".stripMargin
     val actual = decode[GeneratedGiftCode](json)
     actual.left.map(_ => ()) should be(Left(()))
-  }
-
-  "GiftRecipientAndMaybeCode" should "roundtrip ok" in {
-    testRoundTripSerialisation(
-      GiftPurchase.DigitalSubscriptionGiftPurchase(
-        GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
-        GeneratedGiftCode("gd12-23456789").get,
-        new LocalDate(2020, 10, 14),
-      )
-    )
-    testRoundTripSerialisation(
-      GiftPurchase.WeeklyGiftPurchase(
-        GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@gu.com"))
-      )
-    )
   }
 
 }
