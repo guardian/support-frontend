@@ -174,9 +174,11 @@ const ContributionThankYou = ({
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
+  const SURVEY_END_DATE = new Date(2020, 10, 5);
+  const now = new Date();
   const surveyAction = {
     component: <ContributionThankYouSurvey />,
-    shouldShow: true,
+    shouldShow: now < SURVEY_END_DATE,
   };
   const socialShareAction = {
     component: <ContributionThankYouSocialShare
