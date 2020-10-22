@@ -1,7 +1,7 @@
 package com.gu.support.workers
 
 import com.gu.i18n.Currency.GBP
-import com.gu.support.SerialisationTestHelpers.SumTypeChecker
+import com.gu.support.SerialisationTestHelpers.testRoundTripSerialisation
 import com.gu.support.catalog.{Collection, Domestic, Saturday}
 import com.gu.support.workers.ProductTypeCreatedTestData._
 import com.gu.support.workers.states.ProductTypeCreated.DigitalSubscriptionCreated._
@@ -15,14 +15,13 @@ import org.scalatest.matchers.should.Matchers
 class ProductTypeCreatedSerialisationSpec extends AnyFlatSpec with Matchers {
 
   "ProductTypeCreated" should "subclasses roundtrip ok via parent" in {
-    val sumTypeChecker = new SumTypeChecker[ProductTypeCreated]()
-    sumTypeChecker.testRoundTripSerialisationViaParent(contributionCreated)
-    sumTypeChecker.testRoundTripSerialisationViaParent(digitalSubscriptionDirectPurchaseCreated)
-    sumTypeChecker.testRoundTripSerialisationViaParent(digitalSubscriptionGiftPurchaseCreated)
-    sumTypeChecker.testRoundTripSerialisationViaParent(digitalSubscriptionCorporateRedemptionCreated)
-    sumTypeChecker.testRoundTripSerialisationViaParent(digitalSubscriptionGiftRedemptionCreated)
-    sumTypeChecker.testRoundTripSerialisationViaParent(paperCreated)
-    sumTypeChecker.testRoundTripSerialisationViaParent(guardianWeeklyCreated)
+    testRoundTripSerialisation[ProductTypeCreated](contributionCreated)
+    testRoundTripSerialisation[ProductTypeCreated](digitalSubscriptionDirectPurchaseCreated)
+    testRoundTripSerialisation[ProductTypeCreated](digitalSubscriptionGiftPurchaseCreated)
+    testRoundTripSerialisation[ProductTypeCreated](digitalSubscriptionCorporateRedemptionCreated)
+    testRoundTripSerialisation[ProductTypeCreated](digitalSubscriptionGiftRedemptionCreated)
+    testRoundTripSerialisation[ProductTypeCreated](paperCreated)
+    testRoundTripSerialisation[ProductTypeCreated](guardianWeeklyCreated)
   }
 
 }

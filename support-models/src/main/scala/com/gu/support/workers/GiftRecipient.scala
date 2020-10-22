@@ -1,10 +1,10 @@
 package com.gu.support.workers
 
-import cats.implicits._
 import com.gu.i18n.Title
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
+import io.circe.Decoder.Result
 import io.circe._
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedAsObjectEncoder
@@ -12,6 +12,8 @@ import io.circe.generic.semiauto._
 import io.circe.syntax._
 import org.joda.time.LocalDate
 import shapeless.Lazy
+
+import scala.reflect.ClassTag
 
 sealed trait GiftRecipient {
   val firstName: String
@@ -37,24 +39,11 @@ object GiftRecipient {
     deliveryDate: LocalDate,
   ) extends GiftRecipient
 
-  val circeDiscriminator = new CirceDiscriminator("giftRecipientType")
+  val discriminatedType = new DiscriminatedType[GiftRecipient]("giftRecipientType")
+  implicit val weeklyCodec = discriminatedType.variant[WeeklyGiftRecipient]("Weekly")
+  implicit val dsCodec = discriminatedType.variant[DigitalSubscriptionGiftRecipient]("DigitalSubscription")
+  implicit val codec = discriminatedType.codec(List(weeklyCodec, dsCodec))
 
-  private val discriminatorWeekly = "Weekly"
-  private val discriminatorDigitalSubscription = "DigitalSubscription"
-
-  implicit val c1 = circeDiscriminator.discriminatedCodec[WeeklyGiftRecipient](discriminatorWeekly)
-  implicit val c2 = circeDiscriminator.discriminatedCodec[DigitalSubscriptionGiftRecipient](discriminatorDigitalSubscription)
-
-  implicit val encoder: Encoder[GiftRecipient] = Encoder.instance {
-    case c: WeeklyGiftRecipient => c.asJson
-    case c: DigitalSubscriptionGiftRecipient => c.asJson
-  }
-
-  implicit val decoder: Decoder[GiftRecipient] =
-    circeDiscriminator.decode[GiftRecipient](Map(
-      discriminatorWeekly -> Decoder[WeeklyGiftRecipient],
-      discriminatorDigitalSubscription -> Decoder[DigitalSubscriptionGiftRecipient]
-    ))
 }
 
 case class GeneratedGiftCode private(value: String) extends AnyVal
@@ -71,23 +60,48 @@ object GeneratedGiftCode {
 
 }
 
-class CirceDiscriminator(discriminatorFieldName: String) {
+class DiscriminatedType[TOPLEVEL](discriminatorFieldName: String) {
 
-  def add[A](encoder: Encoder[A], value: String): Encoder[A] =
-    encoder.mapJson(_.asObject.map(_.add(discriminatorFieldName, Json.fromString(value))).asJson)
+  def getSingle[A](list: List[A]): A = list match {
+    case Nil => throw new RuntimeException("not all subtypes covered")
+    case a :: Nil => a
+    case _ => throw new RuntimeException("duplicate encoder class")
+  }
 
-  def decode[A](all: Map[String, Decoder[_ <: A]]): Decoder[A] =
-    Decoder.instance { cursor =>
-      for {
-        discriminator <- cursor.downField(discriminatorFieldName).as[String]
-        result <- all.get(discriminator).map(_.widen(cursor))
-          .getOrElse(Left(DecodingFailure(s"invalid discriminator: $discriminator", List())))
-      } yield result
-    }
+  def encoder(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Encoder[TOPLEVEL] = Encoder.instance { toplevel =>
+    getSingle(allCodecs.flatMap(_.maybeEncode(toplevel)))
+  }
+  def decoder(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Decoder[TOPLEVEL] = Decoder.instance { cursor =>
+    for {
+      discriminator <- cursor.downField(discriminatorFieldName).as[String]
+      result <- getSingle(allCodecs.flatMap(_.maybeDecode(discriminator, cursor)))
+    } yield result
+  }
 
-  def discriminatedCodec[A](
-    discriminator: String
-  )(implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedAsObjectEncoder[A]]): Codec[A] =
-    new Codec(add(deriveEncoder, discriminator), deriveDecoder)
+  def codec(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Codec[TOPLEVEL] = {
+    new Codec[TOPLEVEL](encoder(allCodecs), decoder(allCodecs))
+  }
+
+  def variant[A: ClassTag](discriminatorValue: String)(implicit
+    decoder: Lazy[DerivedDecoder[A]],
+    encoder: Lazy[DerivedAsObjectEncoder[A]]
+  ): VariantCodec[A] = new VariantCodec[A](discriminatorValue)
+
+  class VariantCodec[A: ClassTag](discriminatorValue: String)(implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedAsObjectEncoder[A]])
+    extends Decoder[A] with Encoder[A] {
+
+    private val encoder = deriveEncoder[A].mapJson(_.asObject.map(_.add(discriminatorFieldName, Json.fromString(discriminatorValue))).asJson)
+    private val decoder = deriveDecoder[A] // doesn't (re)check the discrim - fix?
+
+    def maybeDecode(actualDiscriminator: String, cursor: HCursor): Option[Result[A]] =
+      if (actualDiscriminator == discriminatorValue) Some(apply(cursor)) else None
+    def maybeEncode(t: TOPLEVEL): Option[Json] =
+      implicitly[ClassTag[A]].unapply(t).map(apply)
+
+    override def apply(c: HCursor): Result[A] = decoder(c)
+
+    override def apply(a: A): Json = encoder(a)
+
+  }
 
 }
