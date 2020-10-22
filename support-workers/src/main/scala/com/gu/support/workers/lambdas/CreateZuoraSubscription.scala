@@ -7,7 +7,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
 import com.gu.support.catalog._
-import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
+import com.gu.support.config.{TouchPointEnvironment, TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption._
 import com.gu.support.redemption.corporate._
@@ -51,7 +51,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       services.redemptionService,
       services.zuoraService,
       services.giftCodeGenerator,
-      services.config.zuoraConfigProvider.get(state.user.isTestUser)
+      services.config.zuoraConfigProvider.get(state.user.isTestUser),
+      state.user.isTestUser,
     )
 
     maybeDigitalSubscriptionGiftRedemption(state.product, state.paymentMethod) match {
@@ -78,12 +79,14 @@ class ZuoraSubscriptionCreator(
   ): Future[HandlerResult[SendThankYouEmailState]] = {
     import ZuoraSubscriptionCreator._
 
-    val environment = TouchPointEnvironments.fromStage(Configuration.stage, state.user.isTestUser)
-
-    val maybeGiftPurchase = state.giftRecipient.flatMap(addDigitalSubscriptionGiftCreationDetails(state.product.billingPeriod, _, () => now().toLocalDate))
-      .withLogging("gift recipient with code")
+    val maybeDigitalSubscriptionGiftCreationDetails = for {
+      giftRecipient <- state.giftRecipient
+      digitalSubscriptionGiftCreationDetails <- addDigitalSubscriptionGiftCreationDetails(state.product.billingPeriod, giftRecipient, () => now().toLocalDate)
+        .withLogging("gift recipient with code")
+    } yield digitalSubscriptionGiftCreationDetails
+    val maybeGeneratedGiftCode = maybeDigitalSubscriptionGiftCreationDetails.map(_.giftCode)
     for {
-      subscriptionData <- subscriptionDataBuilder.build(state, environment, maybeGiftPurchase.map(_.giftCode)).value.map(_.toTry).flatMap(Future.fromTry)
+      subscriptionData <- subscriptionDataBuilder.build(state, maybeGeneratedGiftCode).value.map(_.toTry).flatMap(Future.fromTry)
         .withEventualLogging("subscription data")
       subscribeItem = SubscribeItemBuilder.build(state, subscriptionData)
       identityId <- Future.fromTry(IdentityId(state.user.id))
@@ -98,7 +101,7 @@ class ZuoraSubscriptionCreator(
         .withEventualLogging("subscribe")
       _ <- updateRedemptionCodeIfApplicable(state.paymentMethod, corporateCodeStatusUpdater)
         .withEventualLogging("update redemption code")
-    } yield HandlerResult(getEmailState(state, account, sub, paymentOrRedemptionData, maybeGiftPurchase), info)
+    } yield HandlerResult(getEmailState(state, account, sub, paymentOrRedemptionData, maybeDigitalSubscriptionGiftCreationDetails), info)
   }
 
   private def addDigitalSubscriptionGiftCreationDetails(billingPeriod: BillingPeriod, giftRecipient: GiftRecipient, today: () => LocalDate) =
@@ -130,6 +133,7 @@ object ZuoraSubscriptionCreator {
     zuoraService: ZuoraSubscribeService,
     giftCodeGenerator: GiftCodeGeneratorService,
     config: ZuoraConfig,
+    isTestUser: Boolean,
   ): ZuoraSubscriptionCreator =
     new ZuoraSubscriptionCreator(
       now,
@@ -141,8 +145,9 @@ object ZuoraSubscriptionCreator {
           () => now().toLocalDate
         ),
         promotionService,
-        config.contributionConfig
-      ),
+        config.contributionConfig,
+        TouchPointEnvironments.fromStage(Configuration.stage, isTestUser),
+  ),
       CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService),
       giftCodeGenerator
     )

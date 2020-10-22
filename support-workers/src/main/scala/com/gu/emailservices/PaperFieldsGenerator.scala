@@ -17,7 +17,7 @@ class PaperFieldsGenerator(
   def getAppliedPromotion(
     maybePromoCode: Option[PromoCode],
     country: Country,
-    productRatePlanId: ProductRatePlanId
+    productRatePlanId: ProductRatePlanId,
   ): Option[Promotion] =
     for {
       promoCode <- maybePromoCode
@@ -31,39 +31,40 @@ class PaperFieldsGenerator(
     user: User,
     productRatePlanId: Option[ProductRatePlanId],
     fixedTerm: Boolean,
-    firstDeliveryDate: LocalDate
+    firstDeliveryDate: LocalDate,
   )(implicit ec: ExecutionContext): Future[List[(String, String)]] = {
 
-    val promotion =
-      getAppliedPromotion(
-        purchaseInfo.promoCode,
-        user.billingAddress.country,
-        productRatePlanId.getOrElse(""),
-      )
+    val promotion = getAppliedPromotion(
+      purchaseInfo.promoCode,
+      user.billingAddress.country,
+      productRatePlanId.getOrElse(""),
+    )
 
     val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(purchaseInfo.paymentSchedule).date
 
     val deliveryAddressFields = getAddressFields(user)
 
-    getPaymentFields(purchaseInfo.paymentMethod, purchaseInfo.accountNumber).map( paymentFields => {
-      val paymentDescription = SubscriptionEmailFieldHelpers.describe(
-        purchaseInfo.paymentSchedule,
-        product,
-        promotion,
-        fixedTerm
-      )
-      List(
-        "ZuoraSubscriberId" -> purchaseInfo.subscriptionNumber,
-        "EmailAddress" -> user.primaryEmailAddress,
-        "subscriber_id" -> purchaseInfo.subscriptionNumber,
-        "first_name" -> user.firstName,
-        "last_name" -> user.lastName,
-        "date_of_first_paper" -> SubscriptionEmailFieldHelpers.formatDate(firstDeliveryDate),
-        "date_of_first_payment" -> SubscriptionEmailFieldHelpers.formatDate(firstPaymentDate),
-        "subscription_rate" -> paymentDescription
-      ) ++ paymentFields ++ deliveryAddressFields
-    }
+    val paymentDescription = SubscriptionEmailFieldHelpers.describe(
+      purchaseInfo.paymentSchedule,
+      product,
+      promotion,
+      fixedTerm
     )
+
+    val basicFields = List(
+      "ZuoraSubscriberId" -> purchaseInfo.subscriptionNumber,
+      "EmailAddress" -> user.primaryEmailAddress,
+      "subscriber_id" -> purchaseInfo.subscriptionNumber,
+      "first_name" -> user.firstName,
+      "last_name" -> user.lastName,
+      "date_of_first_paper" -> SubscriptionEmailFieldHelpers.formatDate(firstDeliveryDate),
+      "date_of_first_payment" -> SubscriptionEmailFieldHelpers.formatDate(firstPaymentDate),
+      "subscription_rate" -> paymentDescription
+    )
+
+    for {
+      paymentFields <- getPaymentFields(purchaseInfo.paymentMethod, purchaseInfo.accountNumber)
+    } yield basicFields ++ paymentFields ++ deliveryAddressFields
 
   }
 

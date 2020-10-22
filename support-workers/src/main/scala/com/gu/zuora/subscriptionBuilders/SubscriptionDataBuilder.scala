@@ -25,11 +25,11 @@ class SubscriptionDataBuilder(
   digitalSubscriptionCorporateRedemptionBuilder: DigitalSubscriptionCorporateRedemptionBuilder,
   promotionService: PromotionService,
   config: BillingPeriod => ZuoraContributionConfig,
+  environment: TouchPointEnvironment,
 ) {
 
   def build(
     state: CreateZuoraSubscriptionState,
-    environment: TouchPointEnvironment,
     maybeGeneratedGiftCode: Option[GeneratedGiftCode],
   ): EitherT[Future, Throwable, SubscriptionData] =
     state.product match {

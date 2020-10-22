@@ -172,21 +172,21 @@ class DigitalPackEmailFields(
       user.billingAddress.country,
       ProductTypeRatePlans.digitalRatePlan(product, touchPointEnvironment).map(_.id).getOrElse("")
     )
-    digitalPackPaymentEmailFields.paymentFields(paymentMethod, accountNumber).map(eventualFieldsAttributes =>
-    wrap("digipack-gift-purchase", GifterPurchaseAttributes(
-      gifter_first_name = user.firstName,
-      gifter_last_name = user.lastName,
-      gift_recipient_first_name = giftRecipient.firstName,
-      gift_recipient_last_name = giftRecipient.lastName,
-      gift_recipient_email = giftRecipient.email,
-      gift_personal_message = giftRecipient.message.getOrElse(""),
-      gift_code = giftCode.value,
-      gift_delivery_date = formatDate(giftRecipient.deliveryDate),
-      subscription_details = SubscriptionEmailFieldHelpers.describe(paymentSchedule, product, promotion),
-      date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
-      paymentAttributes = eventualFieldsAttributes,
-      last_redemption_date = formatDate(lastRedemptionDate),
-    )))
+    digitalPackPaymentEmailFields.paymentFields(paymentMethod, accountNumber).map(paymentFieldsAttributes =>
+      wrap("digipack-gift-purchase", GifterPurchaseAttributes(
+        gifter_first_name = user.firstName,
+        gifter_last_name = user.lastName,
+        gift_recipient_first_name = giftRecipient.firstName,
+        gift_recipient_last_name = giftRecipient.lastName,
+        gift_recipient_email = giftRecipient.email,
+        gift_personal_message = giftRecipient.message.getOrElse(""),
+        gift_code = giftCode.value,
+        gift_delivery_date = formatDate(giftRecipient.deliveryDate),
+        subscription_details = SubscriptionEmailFieldHelpers.describe(paymentSchedule, product, promotion),
+        date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
+        paymentAttributes = paymentFieldsAttributes,
+        last_redemption_date = formatDate(lastRedemptionDate),
+      )))
   }
 
   private def giftRedemption(billingPeriod: BillingPeriod) =
