@@ -28,10 +28,8 @@ const emptyAmountsSettings = {
 
 const getSettings = (): Settings => {
   const globalSettings = getGlobal('settings');
-  if (globalSettings) {
-    return { ...globalSettings };
-  }
-  return {
+
+  return globalSettings || {
     switches: {
       experiments: {},
     },

@@ -164,7 +164,6 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 function PaperCheckoutForm(props: PropTypes) {
   const days = getDays(props.fulfilmentOption, props.productOption);
   const isHomeDelivery = props.fulfilmentOption === HomeDelivery;
-  const isSubscard = !isHomeDelivery;
   const fulfilmentOptionDescriptor = isHomeDelivery ? 'Paper' : 'Subscription card';
   const deliveryTitle = isHomeDelivery ? 'Where should we deliver your newspaper?' : 'Where should we deliver your subscription card?';
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
@@ -175,7 +174,7 @@ function PaperCheckoutForm(props: PropTypes) {
     props.fulfilmentOption,
     props.productOption,
   );
-  const subsCardStartDate = isSubscard ?
+  const subsCardStartDate = !isHomeDelivery ?
     getAndSetStartDateForSubsCard(props.productOption, props.setStartDate).formattedStartDate
     : '';
 
