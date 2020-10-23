@@ -94,7 +94,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     // Log the result of this execution to Elasticsearch
     LambdaExecutionResult.logResult(
       LambdaExecutionResult(
-        state.requestId,
+        state.analyticsInfo.requestId,
         status,
         state.user.isTestUser,
         state.product,

@@ -5,15 +5,13 @@ import com.gu.support.catalog.{HomeDelivery, Paper}
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers.ProductTypeRatePlans.paperRatePlan
 import com.gu.support.workers._
-import com.gu.support.workers.states.SendThankYouEmailProductSpecificState.SendThankYouEmailPaperState
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailPaperState
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaperEmailFields(
   paperFieldsGenerator: PaperFieldsGenerator,
   touchPointEnvironment: TouchPointEnvironment,
-  user: User,
-  sfContactId: SfContactId,
 ) {
 
   def build(paper: SendThankYouEmailPaperState)(implicit ec: ExecutionContext): Future[EmailFields] = {
@@ -28,12 +26,12 @@ class PaperEmailFields(
     paperFieldsGenerator.fieldsFor(
       paper.paymentMethod, paper.paymentSchedule, paper.promoCode, paper.accountNumber, paper.subscriptionNumber,
       paper.product,
-      user,
+      paper.user,
       paperRatePlan(paper.product, touchPointEnvironment).map(_.id),
       fixedTerm = false,
       paper.firstDeliveryDate,
     ).map(fields =>
-      EmailFields(fields ++ additionalFields, Left(sfContactId), user.primaryEmailAddress, dataExtension)
+      EmailFields(fields ++ additionalFields, Left(SfContactId(paper.salesForceContact.Id)), paper.user.primaryEmailAddress, dataExtension)
     )
   }
 }

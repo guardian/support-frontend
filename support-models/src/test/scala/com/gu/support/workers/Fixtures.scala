@@ -145,7 +145,8 @@ object Fixtures {
           "product": ${contribution(currency = currency)},
           "analyticsInfo": {
             "paymentProvider": "PayPal",
-            "isGiftPurchase": false
+            "isGiftPurchase": false,
+            $requestIdJson
           },
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData
@@ -158,7 +159,8 @@ object Fixtures {
           "product": ${contribution(amount = amount, billingPeriod = billingPeriod)},
           "analyticsInfo": {
             "paymentProvider": "Stripe",
-            "isGiftPurchase": false
+            "isGiftPurchase": false,
+            $requestIdJson
           },
           "paymentFields": $stripeJson,
           "sessionId": "testingToken",
@@ -172,7 +174,8 @@ object Fixtures {
           $digitalPackProductJson,
           "analyticsInfo": {
             "paymentProvider": "PayPal",
-            "isGiftPurchase": false
+            "isGiftPurchase": false,
+            $requestIdJson
           },
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData
@@ -185,7 +188,8 @@ object Fixtures {
           $digitalPackProductJson,
           "analyticsInfo": {
             "paymentProvider": "DirectDebit",
-            "isGiftPurchase": false
+            "isGiftPurchase": false,
+            $requestIdJson
           },
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData
@@ -198,7 +202,8 @@ object Fixtures {
           $guardianWeeklyJson,
           "analyticsInfo": {
             "paymentProvider": "DirectDebit",
-            "isGiftPurchase": false
+            "isGiftPurchase": false,
+            $requestIdJson
           },
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData
@@ -212,7 +217,8 @@ object Fixtures {
             "product": ${contribution()},
             "analyticsInfo": {
               "paymentProvider": "PayPal",
-              "isGiftPurchase": false
+              "isGiftPurchase": false,
+              $requestIdJson
             },
             "paymentMethod": $payPalPaymentMethod,
             "acquisitionData": $acquisitionData
@@ -248,7 +254,8 @@ object Fixtures {
             "product": ${contribution(billingPeriod = billingPeriod)},
             "analyticsInfo": {
               "paymentProvider": "Stripe",
-              "isGiftPurchase": false
+              "isGiftPurchase": false,
+              $requestIdJson
             },
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson,
@@ -263,7 +270,8 @@ object Fixtures {
             "product": $digitalPackJson,
             "analyticsInfo": {
               "paymentProvider": "Stripe",
-              "isGiftPurchase": false
+              "isGiftPurchase": false,
+              $requestIdJson
             },
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson,
@@ -279,7 +287,8 @@ object Fixtures {
             "product": $digitalPackJson,
             "analyticsInfo": {
               "paymentProvider": "RedemptionNoProvider",
-              "isGiftPurchase": false
+              "isGiftPurchase": false,
+              $requestIdJson
             },
             "paymentMethod": {"redemptionCode": "fake-code-123"},
             "salesForceContact": $salesforceContactJson,

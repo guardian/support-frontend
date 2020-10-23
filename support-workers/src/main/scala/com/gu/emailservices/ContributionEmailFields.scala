@@ -3,35 +3,38 @@ package com.gu.emailservices
 import com.gu.emailservices.SubscriptionEmailFieldHelpers.{formatDate, hyphenate, mask}
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers._
-import com.gu.support.workers.states.SendThankYouEmailProductSpecificState.SendThankYouEmailContributionState
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailContributionState
 import org.joda.time.DateTime
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContributionEmailFields(
   getMandate: String => Future[Option[String]],
-  user: User,
-  sfContactId: SfContactId,
   created: DateTime,
 ) {
 
-  def build(contributionProcessedInfo: SendThankYouEmailContributionState,)(implicit ec: ExecutionContext): Future[EmailFields] = {
+  def build(contributionProcessedInfo: SendThankYouEmailContributionState)(implicit ec: ExecutionContext): Future[EmailFields] = {
     getPaymentFields(
       contributionProcessedInfo.paymentMethod,
       contributionProcessedInfo.accountNumber,
       created
     ).map { paymentFields =>
       val fields = List(
-        "EmailAddress" -> user.primaryEmailAddress,
+        "EmailAddress" -> contributionProcessedInfo.user.primaryEmailAddress,
         "created" -> created.toString,
         "amount" -> contributionProcessedInfo.product.amount.toString,
         "currency" -> contributionProcessedInfo.product.currency.identifier,
-        "edition" -> user.billingAddress.country.alpha2,
-        "name" -> user.firstName,
+        "edition" -> contributionProcessedInfo.user.billingAddress.country.alpha2,
+        "name" -> contributionProcessedInfo.user.firstName,
         "product" -> s"${contributionProcessedInfo.product.billingPeriod.toString.toLowerCase}-contribution"
       ) ++ paymentFields
 
-      EmailFields(fields, Left(sfContactId), user.primaryEmailAddress, "regular-contribution-thank-you")
+      EmailFields(
+        fields,
+        Left(SfContactId(contributionProcessedInfo.salesForceContact.Id)),
+        contributionProcessedInfo.user.primaryEmailAddress,
+        "regular-contribution-thank-you"
+      )
     }
   }
 

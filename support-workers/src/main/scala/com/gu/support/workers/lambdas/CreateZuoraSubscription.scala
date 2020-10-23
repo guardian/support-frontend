@@ -18,8 +18,8 @@ import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator.{DigitalSubscriptionGiftCreationDetails, PaymentMethodWithSchedule}
-import com.gu.support.workers.states.SendThankYouEmailProductSpecificState._
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.states.SendThankYouEmailState._
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response.{Subscription, UpdateRedemptionDataResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
+  extends ServicesHandler[CreateZuoraSubscriptionState, SendAcquisitionEventState](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
@@ -75,7 +75,7 @@ class ZuoraSubscriptionCreator(
   def create(
     state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
-  ): Future[HandlerResult[SendThankYouEmailState]] = {
+  ): Future[HandlerResult[SendAcquisitionEventState]] = {
     import ZuoraSubscriptionCreator._
 
     val maybeDigitalSubscriptionGiftCreationDetails = for {
@@ -198,16 +198,13 @@ class NextState(
   def getEmailState(
     paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
     maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftCreationDetails],
-  ): SendThankYouEmailState =
-    SendThankYouEmailState(
-      requestId = state.requestId,
-      user = state.user,
+  ): SendAcquisitionEventState =
+    SendAcquisitionEventState(
       analyticsInfo = state.analyticsInfo,
-      sendThankYouEmailProductState = getProductSpecificState(
+      sendThankYouEmailState = getProductSpecificState(
         paymentOrRedemptionData,
         maybeDigitalSubscriptionGiftCreationDetails
       ),
-      salesForceContact = state.salesforceContacts.buyer,
       acquisitionData = state.acquisitionData
     )
 
@@ -221,7 +218,7 @@ class NextState(
   ) =
     (state.product, paymentOrRedemptionData) match {
       case (product: Contribution, Purchase(purchase)) =>
-        SendThankYouEmailContributionState(product, purchase.paymentMethod, accountNumber.value)
+        SendThankYouEmailContributionState(state.user, state.salesforceContacts.buyer, product, purchase.paymentMethod, accountNumber.value)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
         dsDirect(product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
@@ -231,15 +228,17 @@ class NextState(
       case (product: GuardianWeekly, Purchase(purchase)) =>
         weekly(product, purchase)
       case (product: DigitalPack, _: Redemption) if product.readerType == ReaderType.Corporate =>
-        SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(product, subscriptionNumber.value)
+        SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(state.user, state.salesforceContacts.buyer, product, subscriptionNumber.value)
       case (product: DigitalPack, _: Redemption) if product.readerType == ReaderType.Gift =>
-        SendThankYouEmailDigitalSubscriptionGiftRedemptionState(product /*tbc*/)
+        SendThankYouEmailDigitalSubscriptionGiftRedemptionState(state.user, state.salesforceContacts.buyer, product /*tbc*/)
       case _ => throw new RuntimeException("could not create value state")
     }
   // scalastyle:on cyclomatic.complexity
 
   private def weekly(product: GuardianWeekly, purchase: PaymentMethodWithSchedule) =
     SendThankYouEmailGuardianWeeklyState(
+      state.user,
+      state.salesforceContacts.buyer,
       product,
       state.giftRecipient.map(_.asWeekly.get),
       purchase.paymentMethod,
@@ -252,6 +251,8 @@ class NextState(
 
   private def paper(product: Paper, purchase: PaymentMethodWithSchedule) =
     SendThankYouEmailPaperState(
+      state.user,
+      state.salesforceContacts.buyer,
       product,
       purchase.paymentMethod,
       purchase.paymentSchedule,
@@ -263,6 +264,8 @@ class NextState(
 
   private def dsGift(product: DigitalPack, purchase: PaymentMethodWithSchedule, giftPurchase: DigitalSubscriptionGiftCreationDetails) =
     SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
+      state.user,
+      state.salesforceContacts.buyer,
       product,
       giftPurchase.giftRecipient,
       giftPurchase.giftCode,
@@ -276,6 +279,8 @@ class NextState(
 
   private def dsDirect(product: DigitalPack, purchase: PaymentMethodWithSchedule) =
     SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+      state.user,
+      state.salesforceContacts.buyer,
       product,
       purchase.paymentMethod,
       purchase.paymentSchedule,
@@ -303,7 +308,7 @@ object DigitalSubscriptionGiftRedemption {
     state: CreateZuoraSubscriptionState,
     zuoraService: ZuoraGiftService,
     catalogService: CatalogService
-  ): Future[HandlerResult[SendThankYouEmailState]] = {
+  ): Future[HandlerResult[SendAcquisitionEventState]] = {
     val codeValidator = new GiftCodeValidator(zuoraService)
     codeValidator
       .getStatus(redemptionData.redemptionCode, Some(state.requestId.toString))
@@ -355,12 +360,13 @@ object DigitalSubscriptionGiftRedemption {
         case _ => throw new RuntimeException("this can't happen")
       }
       Success(
-        HandlerResult(SendThankYouEmailState(
-          requestId = state.requestId,
-          user = state.user,
+        HandlerResult(SendAcquisitionEventState(
           analyticsInfo = state.analyticsInfo,
-          sendThankYouEmailProductState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(product/*tbc*/),
-          salesForceContact = state.salesforceContacts.buyer,
+          sendThankYouEmailState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
+            state.user,
+            state.salesforceContacts.buyer,
+            product/*tbc*/
+          ),
           acquisitionData = state.acquisitionData
         ), requestInfo)
       )

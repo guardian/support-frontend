@@ -50,10 +50,6 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     )
   }
 
-  it should "roundtrip successfully" in {
-    testRoundTripSerialisation[SendThankYouEmailState](StatesTestData.thankYouEmailState)
-  }
-
   "FailureHandlerState" should "deserialise correctly from any lambda" in {
     import com.gu.support.workers.StatesTestData._
 
@@ -65,10 +61,17 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     // thankYouEmailState does not go to failure state if it fails
   }
 
-  "SendAcquisitionEventStateImpl" should "deserialise correctly from SendThankYouEmailState state" in {
+  "SendAcquisitionEventState/thankYouEmailProductTypeState" should "deserialise correctly from SerialiseSendThankYouEmailState state" in {
     import com.gu.support.workers.StatesTestData._
 
-    testEncodeToDifferentState(thankYouEmailState, sendAcquisitionEventState)
+    testEncodeToDifferentState(sendAcquisitionEventState, sendAcquisitionEventState)
+    testEncodeToDifferentState(
+      sendAcquisitionEventState,
+      thankYouEmailProductTypeState
+    )(
+      implicitly,
+      SendAcquisitionEventState.decoderToProductSpecificState
+    )
   }
 
 }
@@ -78,7 +81,7 @@ object StatesTestData {
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay, requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5")),
     firstDeliveryDate = None,
     promoCode = None
   )
@@ -88,7 +91,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay, requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5")),
     paymentFields = Left(PayPalPaymentFields("baid")),
     firstDeliveryDate = None,
     promoCode = None,
@@ -100,7 +103,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay, requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5")),
     paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
     firstDeliveryDate = None,
     promoCode = None,
@@ -112,7 +115,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay, requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5")),
     paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
     firstDeliveryDate = None,
     promoCode = None,
@@ -120,20 +123,11 @@ object StatesTestData {
     acquisitionData = None
   )
 
-  val thankYouEmailState = SendThankYouEmailState(
-    requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    AnalyticsInfo(false, paymentProvider = PayPal),
-    ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated,
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
-    acquisitionData = None,
-  )
+  val thankYouEmailProductTypeState: SendThankYouEmailState = ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated
 
-  val sendAcquisitionEventState: SendAcquisitionEventState = SendAcquisitionEventStateImpl(
-    requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
+  val sendAcquisitionEventState: SendAcquisitionEventState = SendAcquisitionEventState(
     ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated,
-    analyticsInfo = AnalyticsInfo(false, PayPal),
+    analyticsInfo = AnalyticsInfo(false, PayPal, requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5")),
     acquisitionData = None,
   )
 
@@ -142,7 +136,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
+    analyticsInfo = AnalyticsInfo(false, StripeApplePay, requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5")),
     paymentFields = ExistingPaymentFields("existingBillingAcId"),
     acquisitionData = None
   )
