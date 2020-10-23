@@ -272,9 +272,7 @@ class NextState(
       giftPurchase.lastRedemptionDate,
       purchase.paymentMethod,
       purchase.paymentSchedule,
-      state.promoCode,
       accountNumber.value,
-      subscriptionNumber.value
     )
 
   private def dsDirect(product: DigitalPack, purchase: PaymentMethodWithSchedule) =

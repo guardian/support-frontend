@@ -243,7 +243,7 @@ object SendAcquisitionEvent {
   def maybePromoCode(s: SendThankYouEmailState): Option[PromoCode] = s match {
     case s: SendThankYouEmailContributionState => None
     case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => s.promoCode
-    case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => s.promoCode
+    case _: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => None
     case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => None
     case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => None
     case s: SendThankYouEmailPaperState => s.promoCode

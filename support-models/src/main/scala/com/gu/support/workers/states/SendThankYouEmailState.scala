@@ -45,9 +45,7 @@ object SendThankYouEmailState {
     lastRedemptionDate: LocalDate,
     paymentMethod: PaymentMethod,
     paymentSchedule: PaymentSchedule,
-    promoCode: Option[PromoCode],
     accountNumber: String,
-    subscriptionNumber: String,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(

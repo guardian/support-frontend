@@ -180,9 +180,7 @@ object SendDigitalPackGiftPurchaseEmails extends App {
       new LocalDate(2020, 10, 14),
       directDebitPaymentMethod,
       paymentSchedule,
-      None,
       acno,
-      subno
     )
   ))
 
