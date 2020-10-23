@@ -55,10 +55,12 @@ object SendThankYouEmailState {
     subscriptionNumber: String,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
-  case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState( //tbc
+  case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user: User,
     salesForceContact: SalesforceContactRecord,
     product: DigitalPack,
+    giftStartDate: LocalDate,
+    giftEndDate: LocalDate,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailPaperState(

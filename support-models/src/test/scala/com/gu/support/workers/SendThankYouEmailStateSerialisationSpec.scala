@@ -67,7 +67,9 @@ object ProductTypeCreatedTestData {
   val digitalSubscriptionGiftRedemptionCreated = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
-    DigitalPack(GBP, Monthly, ReaderType.Gift)
+    DigitalPack(GBP, Monthly, ReaderType.Gift),
+    new LocalDate(2020, 10, 24),
+    new LocalDate(2021, 1, 24),
   )
   val paperCreated = SendThankYouEmailPaperState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),

@@ -2,7 +2,7 @@ package com.gu.support.workers
 
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.redemption.gifting.GiftCodeValidator
-import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeRedeemedInThisRequest, ValidGiftCode}
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeRedeemedInThisRequest, UnredeemedGiftCode}
 import com.gu.support.zuora.api.response.{SubscriptionRedemptionFields, SubscriptionRedemptionQueryResponse}
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
@@ -12,7 +12,7 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
   "DigitalSubscriptionGiftRedemption" should "identify an unredeemed subscription from a SubscriptionRedemptionQueryResponse" in {
     val response = SubscriptionRedemptionQueryResponse(List(SubscriptionRedemptionFields("1", LocalDate.now(), "123", None)))
     val state = GiftCodeValidator.getSubscriptionState(response, Some("123"))
-    state.clientCode shouldBe ValidGiftCode.clientCode
+    state.clientCode shouldBe UnredeemedGiftCode.clientCode
   }
 
   it should "identify a redeemed subscription from a SubscriptionRedemptionQueryResponse" in {
@@ -64,6 +64,6 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
       ))
     GiftCodeValidator
       .getSubscriptionState(nonExpiredResponse, Some("456"))
-      .clientCode shouldBe ValidGiftCode.clientCode
+      .clientCode shouldBe UnredeemedGiftCode.clientCode
   }
 }

@@ -18,13 +18,18 @@ case object CodeExpired extends InvalidCode("code_expired")
 
 case object InvalidReaderType extends InvalidCode("invalid_reader_type")
 
-object ValidGiftCode { val clientCode = "valid_gift_code"}
+object UnredeemedGiftCode { val clientCode = "valid_gift_code"}
+object CodeRedeemedInThisRequest { val clientCode = "redeemed_in_this_request" }
 
-case class ValidGiftCode(subscriptionId: String) extends ValidCode(ValidGiftCode.clientCode)
+sealed abstract class ValidGiftCode(clientCode: String) extends CodeStatus(clientCode) {
+  def subscriptionId: String
+}
+
+case class UnredeemedGiftCode(subscriptionId: String) extends ValidGiftCode(UnredeemedGiftCode.clientCode)
 
 // This can happen if Zuora is responding very slowly - a redemption request may succeed but not return a response
 // until after the CreateZuoraSubscription lambda has timed out meaning that the redemption will be retried with the
 // same requestId. In this case we want the lambda to succeed so that we progress to the next lambda
-case object CodeRedeemedInThisRequest extends ValidCode("redeemed_in_this_request")
+case class CodeRedeemedInThisRequest(subscriptionId: String) extends ValidGiftCode(CodeRedeemedInThisRequest.clientCode)
 
 case class ValidCorporateCode(corporateId: CorporateId) extends ValidCode("valid_corporate_code")
