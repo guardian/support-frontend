@@ -22,6 +22,7 @@ import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import CampaignHeader from './components/hero/hero';
+import CampaignHeaderGift from './components/heroGift/hero';
 import ProductBlock from './components/productBlock';
 import ProductBlockAus from './components/australianEditions/productBlockAus';
 import './digitalSubscriptionLanding.scss';
@@ -78,7 +79,10 @@ function LandingPage() {
     <Page
       header={<CountrySwitcherHeader />}
     >
-      <CampaignHeader countryGroupId={countryGroupId} />
+      {orderIsAGift ?
+        <CampaignHeaderGift countryGroupId={countryGroupId} /> :
+        <CampaignHeader countryGroupId={countryGroupId} />
+      }
       {countryGroupId === AUDCountries ?
         <ProductBlockAus countryGroupId={countryGroupId} /> :
         <ProductBlock countryGroupId={countryGroupId} />
