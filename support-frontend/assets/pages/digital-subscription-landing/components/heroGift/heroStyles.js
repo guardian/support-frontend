@@ -136,7 +136,7 @@ export const toYou = css`
   border-right: 1px solid white; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-  letter-spacing: 0.07em; /* Adjust as needed */
+  letter-spacing: 0.01em; /* Adjust as needed */
   animation:
     typing-to 0.7s steps(3, end),
     blink-caret 0.7s step-end infinite;
@@ -145,7 +145,7 @@ export const toYou = css`
 
   @keyframes typing-to {
     from { width: 0 }
-    to { width: 18% }
+    to { width: 16% }
   }
 
   @keyframes blink-caret {
@@ -171,16 +171,17 @@ export const FromMe = css`
   border-right: 1px solid white; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-  letter-spacing: 0.07em; /* Adjust as needed */
+  letter-spacing: 0.01em; /* Adjust as needed */
   animation:
     typing 0.5s steps(2, end),
     blink-caret 0.7s step-end infinite;
   animation-fill-mode: both;
   animation-delay: 2.4s;
   color: ${brandAltBackground.primary};
+
   @keyframes typing {
     from { width: 0 }
-    to { width: 14% }
+    to { width: 13% }
   }
 
   @keyframes blink-caret {
@@ -204,7 +205,7 @@ export const FromMe = css`
 export const heroHeading = css`
   ${headline.small({ fontWeight: 'bold' })};
   max-width: 100%;
-  letter-spacing: .07em;
+  letter-spacing: .01em;
 
   ${from.mobileLandscape} {
     ${headline.medium({ fontWeight: 'bold' })};
