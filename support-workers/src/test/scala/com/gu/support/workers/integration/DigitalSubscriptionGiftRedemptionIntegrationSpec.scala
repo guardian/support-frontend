@@ -44,8 +44,8 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
 
     for {
-      _ <- createZuoraHelper.createSubscription(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
-        .map { case (_, maybeError, _) => maybeError shouldBe None }
+      _ <- createZuoraHelper.createSubscriptionError(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
+        .map { _ shouldBe None }
 
       _ <- redeemSubscription(createZuoraHelper, giftCode.value, redeemSubRequestId)
         .map(_.value.user.id shouldBe idId)

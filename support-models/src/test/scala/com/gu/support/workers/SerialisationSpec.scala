@@ -57,21 +57,7 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     testEncodeToDifferentState(createZuoraSubscriptionState, failureHandlerState)
     testEncodeToDifferentState(createSalesforceContactState, failureHandlerState)
     testEncodeToDifferentState(createPaymentMethodState, failureHandlerState)
-    // sendAcquisitionEventState is never serialised directly so doesn't need testing
-    // thankYouEmailState does not go to failure state if it fails
-  }
-
-  "SendAcquisitionEventState/thankYouEmailProductTypeState" should "deserialise correctly from SerialiseSendThankYouEmailState state" in {
-    import com.gu.support.workers.StatesTestData._
-
-    testEncodeToDifferentState(sendAcquisitionEventState, sendAcquisitionEventState)
-    testEncodeToDifferentState(
-      sendAcquisitionEventState,
-      thankYouEmailProductTypeState
-    )(
-      implicitly,
-      SendAcquisitionEventState.decoderToProductSpecificState
-    )
+    // sendAcquisitionEventState does not go to failure state if it fails
   }
 
 }

@@ -19,13 +19,14 @@ import scala.concurrent.Future
 case class StateNotValidException(message: String) extends RuntimeException(message)
 
 class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[SendThankYouEmailState, List[SendMessageResult]](
-    servicesProvider
-  )(SendAcquisitionEventState.decoderToProductSpecificState, implicitly, implicitly) {
+  extends SubsetServicesHandler[SendAcquisitionEventState, List[SendMessageResult], SendThankYouEmailState](
+    servicesProvider,
+    _.sendThankYouEmailState
+  ) {
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(
+  override protected def subsetHandler(
     state: SendThankYouEmailState,
     requestInfo: RequestInfo,
     context: Context,
