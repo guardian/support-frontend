@@ -2,6 +2,7 @@ package com.gu.support.workers
 
 import com.gu.i18n.Title
 import com.gu.support.SerialisationTestHelpers._
+import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import io.circe.parser._
 import io.circe.syntax._
 import org.joda.time.LocalDate
@@ -86,6 +87,15 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
   it should "roundtrip ok" in {
     testRoundTripSerialisation(GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com")))
     testRoundTripSerialisation(GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)))
+  }
+
+  it should "roundtrip ok via parent" in {
+    testRoundTripSerialisationViaParent[GiftRecipient, WeeklyGiftRecipient](
+      WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com"))
+    )
+    testRoundTripSerialisationViaParent[GiftRecipient, DigitalSubscriptionGiftRecipient](
+      DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2))
+    )
   }
 
   "GiftCode" should "roundtrip ok" in {
