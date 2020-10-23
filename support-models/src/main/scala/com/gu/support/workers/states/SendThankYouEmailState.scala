@@ -2,7 +2,7 @@ package com.gu.support.workers.states
 
 import java.util.UUID
 
-import com.gu.support.encoding.Codec
+import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromoCode
