@@ -9,21 +9,19 @@ import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SfContactId
-import com.gu.support.catalog.{Collection, Saturday}
+import com.gu.support.catalog.{Collection, Domestic, Saturday}
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.{PromotionsConfig, PromotionsDiscountConfig, PromotionsTablesConfig}
-import com.gu.support.promotions.{PromotionCollection, PromotionService, SimplePromotionCollection}
+import com.gu.support.promotions.{PromotionService, SimplePromotionCollection}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
-import com.gu.support.workers.GiftPurchase.DigitalSubscriptionGiftPurchase
-import com.gu.support.workers.JsonFixtures.{thankYouEmailJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, wrapFixture}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.integration.TestData.{directDebitPaymentMethod, directDebitPurchaseInfo}
+import com.gu.support.workers.integration.SendThankYouEmailManualTest.sfContactRecord
+import com.gu.support.workers.integration.TestData.{billingOnlyUser, directDebitPaymentMethod}
 import com.gu.support.workers.lambdas.SendThankYouEmail
-import com.gu.support.workers.states.{PaymentMethodWithSchedule, PurchaseInfo}
-import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailContributionState
-import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionState.SendThankYouEmailDigitalSubscriptionDirectPurchaseState
+import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.zuora.api.ReaderType
 import com.gu.test.tags.objects.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
@@ -42,7 +40,7 @@ class SendThankYouEmailITSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    sendThankYouEmail.handleRequestFuture(wrapFixture(thankYouEmailJson()), outStream, context).map { _ =>
+    sendThankYouEmail.handleRequestFuture(wrapFixture(sendAcquisitionEventJson), outStream, context).map { _ =>
 
       val result = Encoding.in[List[SendMessageResult]](outStream.toInputStream)
       result.isSuccess should be(true)
@@ -58,13 +56,14 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
     val user = User("1234", "", None, "", "Mouse", billingAddress = Address(None, None, None, None, None, Country.UK))
     new ContributionEmailFields(
       _ => Future.successful(Some(mandateId)),
-      user,
-      SfContactId("sfContactId"),
       new DateTime(1999, 12, 31, 11, 59),
     ).build(
-      ContributionCreated(
+      SendThankYouEmailContributionState(
+        billingOnlyUser,
+        sfContactRecord,
         Contribution(20, GBP, Monthly),
-        directDebitPurchaseInfo,
+        directDebitPaymentMethod,
+        "acno",
       )
     ).map { ef =>
       val resultJson = parse(ef.payload)
@@ -79,7 +78,7 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
         .validate("first payment date", "Monday, 10 January 2000")
         .validate("payment method", "Direct Debit")
         .validate("currency", "£")
-        .validate("SfContactId", "sfContactId")
+        .validate("SfContactId", "0033E00001DTBHJQA5")
       succeed
     }
   }
@@ -98,6 +97,7 @@ object SendThankYouEmailManualTest {
   //This test will send a thank you email to the address/SF contact below - useful for quickly testing changes
   val addressToSendTo = "john.duffell@guardian.co.uk"
   val salesforceContactId = SfContactId("0033E00001DTBHJQA5")
+  val sfContactRecord = SalesforceContactRecord(salesforceContactId.id, "accountID")
 
   def main(args: Array[String]): Unit = {
     SendContributionEmail.main(args)
@@ -127,13 +127,14 @@ object SendContributionEmail extends App {
 
   val ef = new ContributionEmailFields(
     getMandate,
-    billingOnlyUser,
-    salesforceContactId,
     new DateTime(1999, 12, 31, 11, 59),
   ).build(
-    ContributionCreated(
+    SendThankYouEmailContributionState(
+      billingOnlyUser,
+      sfContactRecord,
       Contribution(20, GBP, Monthly),
-      directDebitPurchaseInfo,
+      directDebitPaymentMethod,
+      acno,
     )
   )
   sendSingle(ef)
@@ -142,9 +143,15 @@ object SendContributionEmail extends App {
 object SendDigitalPackEmail extends App {
 
   send(digitalPackEmailFields.build(
-    DigitalSubscriptionDirectPurchaseCreated(
+    SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+      billingOnlyUser,
+      sfContactRecord,
       DigitalPack(GBP, Annual),
-      directDebitPurchaseInfo,
+      directDebitPaymentMethod,
+      paymentSchedule,
+      None,
+      acno,
+      subno,
     )
   ))
 
@@ -152,92 +159,110 @@ object SendDigitalPackEmail extends App {
 object SendDigitalPackCorpEmail extends App {
 
   send(digitalPackEmailFields.build(
-    DigitalSubscriptionDirectPurchaseCreated(
-      DigitalPack(GBP, Annual, ReaderType.Corporate)
+    SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
+      billingOnlyUser,
+      sfContactRecord,
+      DigitalPack(GBP, Annual, ReaderType.Corporate),
+      subno
     )
-    paidSubPaymentData = None,
-    ReaderType.Corporate,
-    None
   ))
 
 }
 object SendDigitalPackGiftPurchaseEmails extends App {
 
-  send(new DigitalPackEmailFields(
-    subsFields(Annual, billingOnlyUser)
-  ).build(
-    paidSubPaymentData = Some(PaymentMethodWithSchedule(
-      directDebitPaymentMethod,
-      PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))
-    )),
-    ReaderType.Gift,
-    Some(DigitalSubscriptionGiftPurchase(
+  send(digitalPackEmailFields.build(
+    SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
+      billingOnlyUser,
+      sfContactRecord,
+      DigitalPack(GBP, Annual, ReaderType.Corporate),
       DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), new LocalDate(2020, 10, 2)),
       GeneratedGiftCode("gd12-12345678").get,
       new LocalDate(2020, 10, 14),
+      directDebitPaymentMethod,
+      paymentSchedule,
+      None,
+      acno,
+      subno
     )
-  )))
+  ))
 
 }
 object SendDigitalPackGiftRedemptionEmail extends App {
 
-  send(new DigitalPackEmailFields(
-    subsFields(Annual, billingOnlyUser)
-  ).build(
-    paidSubPaymentData = None,
-    ReaderType.Gift,
-    None
+  send(digitalPackEmailFields.build(
+    SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
+      billingOnlyUser,
+      sfContactRecord,
+      DigitalPack(GBP, Annual, ReaderType.Gift)
+    )
   ))
 
 }
 object SendPaperSubscriptionEmail extends App {
 
-  sendSingle(PaperEmailFields.build(
-    subsFields(
-        Monthly,
-        officeUser),
-    Collection,
-    Saturday,
-    Some(new LocalDate(2019, 3, 26)),
-    PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79)))),
+  sendSingle(new PaperEmailFields(paperFieldsGenerator, SANDBOX).build(
+    SendThankYouEmailPaperState(
+      officeUser,
+      sfContactRecord,
+      Paper(GBP, Monthly, Collection, Saturday),
+      directDebitPaymentMethod,
+      PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
+      None,
+      acno,
+      subno,
+      firstDeliveryDate = new LocalDate(2019, 3, 26)
+    )
   ))
 
 }
 object SendWeeklySubscriptionEmail extends App {
 
-  sendSingle(GuardianWeeklyEmailFields.build(
-    subsFields(
-        Quarterly,
-        officeUser),
-    Some(new LocalDate(2019, 3, 26)),
-    PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(
-      Payment(new LocalDate(2019, 3, 25), 37.50),
-      Payment(new LocalDate(2019, 6, 25), 37.50)
-    ))),
+  sendSingle(new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
+    SendThankYouEmailGuardianWeeklyState(
+      officeUser,
+      sfContactRecord,
+      GuardianWeekly(GBP, Quarterly, Domestic),
+      None,
+      directDebitPaymentMethod,
+      PaymentSchedule(List(
+        Payment(new LocalDate(2019, 3, 25), 37.50),
+        Payment(new LocalDate(2019, 6, 25), 37.50)
+      )),
+       None,
+      acno,
+      subno,
+      new LocalDate(2019, 3, 26),
+    )
   ))
 
 }
 object SendWeeklySubscriptionGiftEmail extends App {
 
-  sendSingle(GuardianWeeklyEmailFields.build(
-    subsFields(Quarterly, officeUser),
-    Some(new LocalDate(2019, 3, 26)),
-    PaymentMethodWithSchedule(directDebitPaymentMethod, PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))),
-    giftRecipient = Some(GiftRecipient.WeeklyGiftRecipient(None, "Earl", "Palmer", None))
+  sendSingle(new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
+    SendThankYouEmailGuardianWeeklyState(
+      officeUser,
+      sfContactRecord,
+      GuardianWeekly(GBP, Quarterly, Domestic),
+      Some(GiftRecipient.WeeklyGiftRecipient(None, "Earl", "Palmer", None)),
+      directDebitPaymentMethod,
+      PaymentSchedule(List(
+        Payment(new LocalDate(2019, 3, 25), 37.50),
+        Payment(new LocalDate(2019, 6, 25), 37.50)
+      )),
+      None,
+      acno,
+      subno,
+      new LocalDate(2019, 3, 26),
+    )
   ))
 
 }
 
 object TestData {
 
-  val directDebitPurchaseInfo: PurchaseInfo =
-    PurchaseInfo(
-      directDebitPaymentMethod,
-      PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50))),
-      None,
-      "acno",
-      "A-S00045678",
-    )
+  val paymentSchedule = PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))
+  val subno = "A-S00045678"
+  val acno = "A123456"
 
   val countryOnlyAddress = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
 
@@ -269,6 +294,8 @@ object TestData {
     Some(new SimplePromotionCollection(Nil))
   )
 
+  val paperFieldsGenerator = new PaperFieldsGenerator(promotionService, getMandate)
+
   val directDebitPaymentMethod = DirectDebitPaymentMethod(
     firstName = "Mickey",
     lastName = "Mouse",
@@ -290,8 +317,6 @@ object TestData {
     ),
     getMandate,
     SANDBOX,
-    billingOnlyUser,
-    salesforceContactId,
   )
 
 }

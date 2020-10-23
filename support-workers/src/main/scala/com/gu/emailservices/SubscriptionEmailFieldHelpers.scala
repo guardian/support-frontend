@@ -30,13 +30,14 @@ object SubscriptionEmailFieldHelpers {
 
   def describe(
     paymentSchedule: PaymentSchedule,
-    product: ProductType,
+    billingPeriod: BillingPeriod,
+    currency: Currency,
     promotion: Option[Promotion],
     fixedTerm: Boolean = false
   ): String = {
     promotion.flatMap(_.introductoryPrice)
-      .map(introductoryPrice => introductoryPriceDescription(paymentSchedule, product.billingPeriod, product.currency, introductoryPrice))
-      .getOrElse(standardDescription(paymentSchedule, product.billingPeriod, product.currency, fixedTerm))
+      .map(introductoryPrice => introductoryPriceDescription(paymentSchedule, billingPeriod, currency, introductoryPrice))
+      .getOrElse(standardDescription(paymentSchedule, billingPeriod, currency, fixedTerm))
   }
 
   def introductoryPriceDescription(

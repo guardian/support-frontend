@@ -179,7 +179,7 @@ class DigitalPackEmailFields(
         gift_personal_message = giftRecipient.message.getOrElse(""),
         gift_code = giftCode.value,
         gift_delivery_date = formatDate(giftRecipient.deliveryDate),
-        subscription_details = SubscriptionEmailFieldHelpers.describe(paymentSchedule, product, promotion),
+        subscription_details = SubscriptionEmailFieldHelpers.describe(paymentSchedule, product.billingPeriod, product.currency, promotion),
         date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
         paymentAttributes = paymentFieldsAttributes,
         last_redemption_date = formatDate(lastRedemptionDate),
@@ -216,7 +216,7 @@ class DigitalPackEmailFields(
     ).map(paymentFieldsAttributes =>
       wrap("digipack", DirectDSAttributes(
         directOrCorpFields(
-          SubscriptionEmailFieldHelpers.describe(state.paymentSchedule, state.product, promotion),
+          SubscriptionEmailFieldHelpers.describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency, promotion),
           state.subscriptionNumber,
           state.user,
         ),

@@ -4,12 +4,12 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.support.catalog.{CatalogService, SimpleJsonProvider}
+import com.gu.support.catalog.{CatalogService, Everyday, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.redemption.CodeAlreadyUsed
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.support.redemption.corporate.{DynamoTableAsync, CorporateCodeValidator, RedemptionTable, CorporateCodeStatusUpdater}
+import com.gu.support.redemption.corporate.{CorporateCodeStatusUpdater, CorporateCodeValidator, DynamoTableAsync, RedemptionTable}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
@@ -17,7 +17,8 @@ import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
-import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.states.SendThankYouEmailState._
+import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -35,15 +36,23 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   val createZuoraHelper = new CreateZuoraSubscriptionHelper()
 
   "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
-    testCreateSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
+    createZuoraHelper.createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly)
+    ).map(_._1 should matchPattern {
+          case s: SendThankYouEmailContributionState =>
+        })
   }
 
   it should "create an annual Zuora subscription" in {
-    testCreateSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual))
+    createZuoraHelper.createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual)
+    ).map(_._1 should matchPattern {
+          case s: SendThankYouEmailContributionState =>
+        })
   }
 
   it should "create a Digital Pack subscription" in {
-    testCreateSubscription(createDigiPackZuoraSubscriptionJson)
+    createZuoraHelper.createSubscription(createDigiPackZuoraSubscriptionJson).map(_._1 should matchPattern {
+          case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+        })
   }
 
   it should "create a Digital Pack corporate subscription" in {
@@ -61,38 +70,49 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   }
 
   it should "create a Digital Pack subscription with a discount" in {
-    testCreateSubscription(createDigiPackSubscriptionWithPromoJson)
+    createZuoraHelper.createSubscription(createDigiPackSubscriptionWithPromoJson).map(_._1 should matchPattern {
+          case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+        })
   }
 
   it should "create a Digital Pack subscription with a discount and free trial" in {
-    testCreateSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
+    createZuoraHelper.createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson).map(_._1 should matchPattern {
+          case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+        })
   }
 
   it should "create an everyday paper subscription" in {
-    testCreateSubscription(createEverydayPaperSubscriptionJson)
+    createZuoraHelper.createSubscription(createEverydayPaperSubscriptionJson).map(_._1 should matchPattern {
+          case s: SendThankYouEmailPaperState if s.product.productOptions == Everyday =>
+        })
   }
 
   it should "create an Annual Guardian Weekly subscription" in {
-    testCreateSubscription(createGuardianWeeklySubscriptionJson(Annual))
+    createZuoraHelper.createSubscription(createGuardianWeeklySubscriptionJson(Annual)).map(_._1 should matchPattern {
+          case s: SendThankYouEmailGuardianWeeklyState if s.product.billingPeriod == Annual =>
+        })
   }
 
   it should "create an Quarterly Guardian Weekly subscription" in {
-    testCreateSubscription(createGuardianWeeklySubscriptionJson(Quarterly))
+    createZuoraHelper.createSubscription(createGuardianWeeklySubscriptionJson(Quarterly)).map(_._1 should matchPattern {
+          case s: SendThankYouEmailGuardianWeeklyState if s.product.billingPeriod == Quarterly =>
+        })
   }
 
   it should "create a 6 for 6 Guardian Weekly subscription" in {
-    testCreateSubscription(createGuardianWeeklySubscriptionJson(SixWeekly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)))
+    createZuoraHelper.createSubscription(
+      createGuardianWeeklySubscriptionJson(SixWeekly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix))
+    ).map(_._1 should matchPattern {
+          case s: SendThankYouEmailGuardianWeeklyState if s.paymentSchedule.payments.headOption.map(_.amount).contains(6) =>
+        })
   }
 
   it should "create an Guardian Weekly gift subscription" in {
-    testCreateSubscription(guardianWeeklyGiftJson)
+    createZuoraHelper.createSubscription(guardianWeeklyGiftJson).map(_._1 should matchPattern {
+      case s: SendThankYouEmailGuardianWeeklyState if s.giftRecipient.isDefined =>
+    })
   }
 
-  def testCreateSubscription(json: String) =
-    createZuoraHelper.createSubscription(json)
-      .map(
-        _._1.subscriptionNumber.length should be > 1
-      )
 }
 
 class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext) extends MockServicesCreator with MockContext {
@@ -106,7 +126,7 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
     val outStream = new ByteArrayOutputStream()
 
     createZuora.handleRequestFuture(wrapFixture(json), outStream, context).map { _ =>
-      Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
+      Encoding.in[SendThankYouEmailState](outStream.toInputStream)(SendAcquisitionEventState.decoderToProductSpecificState).get
     }
   }
 

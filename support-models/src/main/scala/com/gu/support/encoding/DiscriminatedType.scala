@@ -12,20 +12,20 @@ import scala.reflect.ClassTag
 
 class DiscriminatedType[TOPLEVEL](discriminatorFieldName: String) {
 
-  def getSingle[A](list: List[A]): A = list match {
-    case Nil => throw new RuntimeException("not all subtypes covered")
+  def getSingle[A](list: List[A], message: String): A = list match {
+    case Nil => throw new RuntimeException(s"no codec for: $message")
     case a :: Nil => a
-    case _ => throw new RuntimeException("duplicate encoder class")
+    case many => throw new RuntimeException(s"duplicate codec for: $message: $many")
   }
 
   def encoder(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Encoder[TOPLEVEL] = Encoder.instance { toplevel =>
-    getSingle(allCodecs.flatMap(_.maybeEncode(toplevel)))
+    getSingle(allCodecs.flatMap(_.maybeEncode(toplevel)), toplevel.toString)
   }
 
   def decoder(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Decoder[TOPLEVEL] = Decoder.instance { cursor =>
     for {
       discriminator <- cursor.downField(discriminatorFieldName).as[String]
-      result <- getSingle(allCodecs.flatMap(_.maybeDecode(discriminator, cursor)))
+      result <- getSingle(allCodecs.flatMap(_.maybeDecode(discriminator, cursor)), discriminator)
     } yield result
   }
 

@@ -49,7 +49,8 @@ class PaperFieldsGenerator(
 
     val paymentDescription = SubscriptionEmailFieldHelpers.describe(
       paymentSchedule,
-      product,
+      product.billingPeriod,
+      product.currency,
       promotion,
       fixedTerm
     )
