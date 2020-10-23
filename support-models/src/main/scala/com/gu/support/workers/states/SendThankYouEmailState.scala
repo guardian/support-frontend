@@ -29,13 +29,10 @@ object SendThankYouEmailProductSpecificState {
     override def product: DigitalPack
   }
 
-  case class ContributionCreated(
+  case class SendThankYouEmailContributionState(
     product: Contribution,
     paymentMethod: PaymentMethod,
-    paymentSchedule: PaymentSchedule,
-    promoCode: Option[PromoCode],
     accountNumber: String,
-    subscriptionNumber: String,
   ) extends SendThankYouEmailProductSpecificState
 
   case class SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
@@ -91,7 +88,7 @@ object SendThankYouEmailProductSpecificState {
 
   private val discriminatedType = new DiscriminatedType[SendThankYouEmailProductSpecificState]("productTypeCreatedType")
   implicit val codec = discriminatedType.codec(List(
-    discriminatedType.variant[ContributionCreated]("Contribution"),
+    discriminatedType.variant[SendThankYouEmailContributionState]("Contribution"),
     discriminatedType.variant[SendThankYouEmailDigitalSubscriptionDirectPurchaseState]("DigitalSubscriptionDirectPurchase"),
     discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftPurchaseState]("DigitalSubscriptionGiftPurchase"),
     discriminatedType.variant[SendThankYouEmailDigitalSubscriptionCorporateRedemptionState]("DigitalSubscriptionCorporateRedemption"),

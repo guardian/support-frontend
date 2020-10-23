@@ -3,7 +3,7 @@ package com.gu.emailservices
 import com.gu.emailservices.SubscriptionEmailFieldHelpers.{formatDate, hyphenate, mask}
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers._
-import com.gu.support.workers.states.SendThankYouEmailProductSpecificState.ContributionCreated
+import com.gu.support.workers.states.SendThankYouEmailProductSpecificState.SendThankYouEmailContributionState
 import org.joda.time.DateTime
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -15,9 +15,7 @@ class ContributionEmailFields(
   created: DateTime,
 ) {
 
-  def build(
-    contributionProcessedInfo: ContributionCreated,
-  )(implicit ec: ExecutionContext): Future[EmailFields] = {
+  def build(contributionProcessedInfo: SendThankYouEmailContributionState,)(implicit ec: ExecutionContext): Future[EmailFields] = {
     getPaymentFields(
       contributionProcessedInfo.paymentMethod,
       contributionProcessedInfo.accountNumber,

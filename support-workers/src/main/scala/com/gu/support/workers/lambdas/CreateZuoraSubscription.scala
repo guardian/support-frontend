@@ -221,7 +221,7 @@ class NextState(
   ) =
     (state.product, paymentOrRedemptionData) match {
       case (product: Contribution, Purchase(purchase)) =>
-        contribution(product, purchase)
+        SendThankYouEmailContributionState(product, purchase.paymentMethod, accountNumber.value)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
         dsDirect(product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
@@ -276,16 +276,6 @@ class NextState(
 
   private def dsDirect(product: DigitalPack, purchase: PaymentMethodWithSchedule) =
     SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
-      product,
-      purchase.paymentMethod,
-      purchase.paymentSchedule,
-      state.promoCode,
-      accountNumber.value,
-      subscriptionNumber.value
-    )
-
-  private def contribution(product: Contribution, purchase: PaymentMethodWithSchedule) =
-    ContributionCreated(
       product,
       purchase.paymentMethod,
       purchase.paymentSchedule,

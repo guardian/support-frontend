@@ -58,7 +58,7 @@ class EmailBuilder(
     val contributionEmailFields = new ContributionEmailFields(getMandate, state.user, sfContactId, created = DateTime.now())
 
     state.sendThankYouEmailProductState match {
-      case contribution: ContributionCreated => contributionEmailFields.build(contribution).map(List(_))
+      case contribution: SendThankYouEmailContributionState => contributionEmailFields.build(contribution).map(List(_))
       case digi: SendThankYouEmailDigitalSubscriptionState => digitalPackEmailFields.build(digi)
       case paper: SendThankYouEmailPaperState => paperEmailFields.build(paper).map(List(_))
       case weekly: SendThankYouEmailGuardianWeeklyState => guardianWeeklyEmailFields.build(weekly).map(List(_))

@@ -22,7 +22,7 @@ import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.integration.TestData.{directDebitPaymentMethod, directDebitPurchaseInfo}
 import com.gu.support.workers.lambdas.SendThankYouEmail
 import com.gu.support.workers.states.{PaymentMethodWithSchedule, PurchaseInfo}
-import com.gu.support.workers.states.SendThankYouEmailProductSpecificState.ContributionCreated
+import com.gu.support.workers.states.SendThankYouEmailProductSpecificState.SendThankYouEmailContributionState
 import com.gu.support.workers.states.SendThankYouEmailProductSpecificState.SendThankYouEmailDigitalSubscriptionState.SendThankYouEmailDigitalSubscriptionDirectPurchaseState
 import com.gu.support.zuora.api.ReaderType
 import com.gu.test.tags.objects.IntegrationTest

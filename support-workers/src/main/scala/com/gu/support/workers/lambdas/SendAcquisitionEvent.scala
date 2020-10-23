@@ -232,7 +232,7 @@ object SendAcquisitionEvent {
     }
 
   def maybePaymentProvider(s: SendThankYouEmailProductSpecificState): Option[thrift.PaymentProvider] = (s match {
-    case s: SendThankYouEmailProductSpecificState.ContributionCreated => Some(s.paymentMethod)
+    case s: SendThankYouEmailProductSpecificState.SendThankYouEmailContributionState => Some(s.paymentMethod)
     case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => Some(s.paymentMethod)
     case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => Some(s.paymentMethod)
     case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => None
@@ -241,7 +241,7 @@ object SendAcquisitionEvent {
     case s: SendThankYouEmailProductSpecificState.SendThankYouEmailGuardianWeeklyState => Some(s.paymentMethod)
   }).map(paymentProviderFromPaymentMethod)
   def maybePromoCode(s: SendThankYouEmailProductSpecificState): Option[PromoCode] = s match {
-    case s: SendThankYouEmailProductSpecificState.ContributionCreated => s.promoCode
+    case s: SendThankYouEmailProductSpecificState.SendThankYouEmailContributionState => None
     case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => s.promoCode
     case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => s.promoCode
     case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => None

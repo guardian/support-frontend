@@ -27,13 +27,10 @@ class SendThankYouEmailProductSpecificStateSerialisationSpec extends AnyFlatSpec
 
 object ProductTypeCreatedTestData {
 
-  val contributionCreated = ContributionCreated(
+  val contributionCreated = SendThankYouEmailContributionState(
     Contribution(1, GBP, Monthly),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
-    PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
-    None,
     "acno",
-    "subno",
   )
 
   val digitalSubscriptionDirectPurchaseCreated = SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
