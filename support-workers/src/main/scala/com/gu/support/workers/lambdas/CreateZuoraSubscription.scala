@@ -7,20 +7,19 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
 import com.gu.support.catalog._
-import com.gu.support.config.{TouchPointEnvironment, TouchPointEnvironments, ZuoraConfig}
+import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption._
 import com.gu.support.redemption.corporate._
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
+import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
 import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator.DigitalSubscriptionGiftCreationDetails
-import com.gu.support.workers.states.ProductTypeCreated.{ContributionCreated, GuardianWeeklyCreated, PaperCreated}
-import com.gu.support.workers.states.ProductTypeCreated.DigitalSubscriptionCreated._
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PurchaseInfo, SendThankYouEmailState}
+import com.gu.support.workers.states.SendThankYouEmailProductSpecificState._
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response.{Subscription, UpdateRedemptionDataResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
@@ -189,28 +188,27 @@ object ZuoraSubscriptionCreator {
       requestId = state.requestId,
       user = state.user,
       analyticsInfo = state.analyticsInfo,
-      productTypeCreated = paymentOrRedemptionData match {
+      sendThankYouEmailProductState = paymentOrRedemptionData match {
         case Purchase(PaymentMethodWithSchedule(paymentMethod, paymentSchedule)) =>
-          val purchaseInfo = PurchaseInfo(paymentMethod, paymentSchedule, state.promoCode, accountNumber.value, subscriptionNumber.value)
           state.product match {
             case product: Contribution =>
-              ContributionCreated(product, purchaseInfo)
+              ContributionCreated(product, paymentMethod, paymentSchedule, state.promoCode, accountNumber.value, subscriptionNumber.value)
             case product: DigitalPack if product.readerType == ReaderType.Direct =>
-              DigitalSubscriptionDirectPurchaseCreated(product, purchaseInfo)
+              SendThankYouEmailDigitalSubscriptionDirectPurchaseState(product, paymentMethod, paymentSchedule, state.promoCode, accountNumber.value, subscriptionNumber.value)
             case product: DigitalPack if product.readerType == ReaderType.Gift =>
               val giftPurchase = maybeDigitalSubscriptionGiftCreationDetails.get
-              DigitalSubscriptionGiftPurchaseCreated(product, giftPurchase.giftRecipient, giftPurchase.giftCode, giftPurchase.lastRedemptionDate, purchaseInfo)
+              SendThankYouEmailDigitalSubscriptionGiftPurchaseState(product, giftPurchase.giftRecipient, giftPurchase.giftCode, giftPurchase.lastRedemptionDate, paymentMethod, paymentSchedule, state.promoCode, accountNumber.value, subscriptionNumber.value)
             case product: Paper =>
-              PaperCreated(product, purchaseInfo, state.firstDeliveryDate.get)
+              SendThankYouEmailPaperState(product, paymentMethod, paymentSchedule, state.promoCode, accountNumber.value, subscriptionNumber.value, state.firstDeliveryDate.get)
             case product: GuardianWeekly =>
-              GuardianWeeklyCreated(product, state.giftRecipient.map(_.asWeekly.get), purchaseInfo, state.firstDeliveryDate.get)
+              SendThankYouEmailGuardianWeeklyState(product, state.giftRecipient.map(_.asWeekly.get), paymentMethod, paymentSchedule, state.promoCode, accountNumber.value, subscriptionNumber.value, state.firstDeliveryDate.get)
           }
         case _: Redemption =>
           state.product match {
             case product: DigitalPack if product.readerType == ReaderType.Corporate =>
-              DigitalSubscriptionCorporateRedemptionCreated(product, subscriptionNumber.value)
+              SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(product, subscriptionNumber.value)
             case product: DigitalPack if product.readerType == ReaderType.Gift =>
-              DigitalSubscriptionGiftRedemptionCreated(product/*tbc*/)
+              SendThankYouEmailDigitalSubscriptionGiftRedemptionState(product/*tbc*/)
             case _ => throw new RuntimeException("could not create value state")
           }
 
@@ -309,7 +307,7 @@ object DigitalSubscriptionGiftRedemption {
           requestId = state.requestId,
           user = state.user,
           analyticsInfo = state.analyticsInfo,
-          productTypeCreated = DigitalSubscriptionGiftRedemptionCreated(product/*tbc*/),
+          sendThankYouEmailProductState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(product/*tbc*/),
           salesForceContact = state.salesforceContacts.buyer,
           acquisitionData = state.acquisitionData
         ), requestInfo)

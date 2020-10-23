@@ -1,10 +1,9 @@
 package com.gu.emailservices
 
-import com.gu.i18n.{Country, Currency}
+import com.gu.i18n.Country
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.promotions.{PromoCode, Promotion, PromotionService}
 import com.gu.support.workers._
-import com.gu.support.workers.states.PurchaseInfo
 import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -26,7 +25,11 @@ class PaperFieldsGenerator(
     } yield validPromotion.promotion
 
   def fieldsFor(
-    purchaseInfo: PurchaseInfo,
+    paymentMethod: PaymentMethod,
+    paymentSchedule: PaymentSchedule,
+    promoCode: Option[PromoCode],
+    accountNumber: String,
+    subscriptionNumber: String,
     product: ProductType,
     user: User,
     productRatePlanId: Option[ProductRatePlanId],
@@ -35,26 +38,26 @@ class PaperFieldsGenerator(
   )(implicit ec: ExecutionContext): Future[List[(String, String)]] = {
 
     val promotion = getAppliedPromotion(
-      purchaseInfo.promoCode,
+      promoCode,
       user.billingAddress.country,
       productRatePlanId.getOrElse(""),
     )
 
-    val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(purchaseInfo.paymentSchedule).date
+    val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date
 
     val deliveryAddressFields = getAddressFields(user)
 
     val paymentDescription = SubscriptionEmailFieldHelpers.describe(
-      purchaseInfo.paymentSchedule,
+      paymentSchedule,
       product,
       promotion,
       fixedTerm
     )
 
     val basicFields = List(
-      "ZuoraSubscriberId" -> purchaseInfo.subscriptionNumber,
+      "ZuoraSubscriberId" -> subscriptionNumber,
       "EmailAddress" -> user.primaryEmailAddress,
-      "subscriber_id" -> purchaseInfo.subscriptionNumber,
+      "subscriber_id" -> subscriptionNumber,
       "first_name" -> user.firstName,
       "last_name" -> user.lastName,
       "date_of_first_paper" -> SubscriptionEmailFieldHelpers.formatDate(firstDeliveryDate),
@@ -63,7 +66,7 @@ class PaperFieldsGenerator(
     )
 
     for {
-      paymentFields <- getPaymentFields(purchaseInfo.paymentMethod, purchaseInfo.accountNumber)
+      paymentFields <- getPaymentFields(paymentMethod, accountNumber)
     } yield basicFields ++ paymentFields ++ deliveryAddressFields
 
   }

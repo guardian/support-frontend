@@ -12,7 +12,7 @@ import org.joda.time.LocalDate
 
 trait SendAcquisitionEventState extends StepFunctionUserState {
   def requestId: UUID
-  def productTypeCreated: ProductTypeCreated
+  def sendThankYouEmailProductState: SendThankYouEmailProductSpecificState
   def acquisitionData: Option[AcquisitionData]
   def analyticsInfo: AnalyticsInfo
 }
@@ -20,7 +20,7 @@ trait SendAcquisitionEventState extends StepFunctionUserState {
 case class SendAcquisitionEventStateImpl(
   requestId: UUID,
   user: User,
-  productTypeCreated: ProductTypeCreated,
+  sendThankYouEmailProductState: SendThankYouEmailProductSpecificState,
   analyticsInfo: AnalyticsInfo,
   acquisitionData: Option[AcquisitionData]
 ) extends SendAcquisitionEventState

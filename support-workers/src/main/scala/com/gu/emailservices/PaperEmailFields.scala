@@ -5,7 +5,7 @@ import com.gu.support.catalog.{HomeDelivery, Paper}
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers.ProductTypeRatePlans.paperRatePlan
 import com.gu.support.workers._
-import com.gu.support.workers.states.ProductTypeCreated.PaperCreated
+import com.gu.support.workers.states.SendThankYouEmailProductSpecificState.SendThankYouEmailPaperState
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -16,7 +16,7 @@ class PaperEmailFields(
   sfContactId: SfContactId,
 ) {
 
-  def build(paper: PaperCreated)(implicit ec: ExecutionContext): Future[EmailFields] = {
+  def build(paper: SendThankYouEmailPaperState)(implicit ec: ExecutionContext): Future[EmailFields] = {
 
     val additionalFields = List("package" -> paper.product.productOptions.toString)
 
@@ -26,7 +26,7 @@ class PaperEmailFields(
     }
 
     paperFieldsGenerator.fieldsFor(
-      paper.purchaseInfo,
+      paper.paymentMethod, paper.paymentSchedule, paper.promoCode, paper.accountNumber, paper.subscriptionNumber,
       paper.product,
       user,
       paperRatePlan(paper.product, touchPointEnvironment).map(_.id),

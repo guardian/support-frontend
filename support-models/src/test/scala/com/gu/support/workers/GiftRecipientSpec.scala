@@ -1,18 +1,12 @@
 package com.gu.support.workers
 
-import com.gu.i18n.Currency.GBP
 import com.gu.i18n.Title
+import com.gu.support.SerialisationTestHelpers._
+import io.circe.parser._
+import io.circe.syntax._
+import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import io.circe.syntax._
-import io.circe.parser._
-import org.joda.time.LocalDate
-import com.gu.support.SerialisationTestHelpers._
-import com.gu.support.catalog.{Domestic, FulfilmentOptions}
-import com.gu.support.workers.states.ProductTypeCreated.DigitalSubscriptionCreated.DigitalSubscriptionGiftPurchaseCreated
-import com.gu.support.workers.states.ProductTypeCreated.GuardianWeeklyCreated
-import com.gu.support.workers.states.PurchaseInfo
-import com.gu.support.zuora.api.ReaderType
 
 class GiftRecipientSpec extends AnyFlatSpec with Matchers {
 

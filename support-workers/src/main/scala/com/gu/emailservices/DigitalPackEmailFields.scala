@@ -7,8 +7,7 @@ import com.gu.emailservices.SubscriptionEmailFieldHelpers._
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers._
-import com.gu.support.workers.states.ProductTypeCreated.DigitalSubscriptionCreated._
-import com.gu.support.workers.states.ProductTypeCreated._
+import com.gu.support.workers.states.SendThankYouEmailProductSpecificState._
 import io.circe._
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
@@ -134,18 +133,18 @@ class DigitalPackEmailFields(
     subscription_details = details
   )
 
-  def build(digi: DigitalSubscriptionCreated)(implicit ec: ExecutionContext): Future[List[EmailFields]] =
+  def build(digi: SendThankYouEmailDigitalSubscriptionState)(implicit ec: ExecutionContext): Future[List[EmailFields]] =
     digi match {
-      case giftPurchase: DigitalSubscriptionGiftPurchaseCreated =>
+      case giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState =>
         for {
           emails <- List(
             giftPurchaserConfirmation(giftPurchase),
             Future.successful(giftRecipientNotification(giftPurchase))
           ).sequence
         } yield emails
-      case directPurchase: DigitalSubscriptionDirectPurchaseCreated => directThankYou(directPurchase).map(List(_))
-      case DigitalSubscriptionCorporateRedemptionCreated(_, subscriptionNumber) => Future.successful(List(corpRedemption(subscriptionNumber)))
-      case DigitalSubscriptionGiftRedemptionCreated(product) => Future.successful(List(giftRedemption(product.billingPeriod)))
+      case directPurchase: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => directThankYou(directPurchase).map(List(_))
+      case SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(_, subscriptionNumber) => Future.successful(List(corpRedemption(subscriptionNumber)))
+      case SendThankYouEmailDigitalSubscriptionGiftRedemptionState(product) => Future.successful(List(giftRedemption(product.billingPeriod)))
     }
 
   private def wrap(dataExtensionName: String, fields: DigitalSubscriptionEmailAttributes): EmailFields = {
@@ -155,7 +154,7 @@ class DigitalPackEmailFields(
     EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
   }
 
-  private def giftRecipientNotification(giftPurchase: DigitalSubscriptionGiftPurchaseCreated) =
+  private def giftRecipientNotification(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState) =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = user.firstName,
       gift_personal_message = giftPurchase.giftRecipient.message,
@@ -163,9 +162,8 @@ class DigitalPackEmailFields(
       last_redemption_date = formatDate(giftPurchase.lastRedemptionDate),
     ))
 
-  private def giftPurchaserConfirmation(giftPurchase: DigitalSubscriptionGiftPurchaseCreated)(implicit ec: ExecutionContext) = {
+  private def giftPurchaserConfirmation(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState)(implicit ec: ExecutionContext) = {
     import giftPurchase._
-    import purchaseInfo._
 
     val promotion = paperFieldsGenerator.getAppliedPromotion(
       promoCode,
@@ -201,24 +199,24 @@ class DigitalPackEmailFields(
   private def corpRedemption(subscriptionNumber: String) =
     wrap("digipack-corporate-redemption", directOrCorpFields("Group subscription", subscriptionNumber))
 
-  private def directThankYou(directPurchase: DigitalSubscriptionDirectPurchaseCreated)(implicit ec: ExecutionContext) = {
+  private def directThankYou(directPurchase: SendThankYouEmailDigitalSubscriptionDirectPurchaseState)(implicit ec: ExecutionContext) = {
 
     val promotion = paperFieldsGenerator.getAppliedPromotion(
-      directPurchase.purchaseInfo.promoCode,
+      directPurchase.promoCode,
       user.billingAddress.country,
       ProductTypeRatePlans.digitalRatePlan(directPurchase.product, touchPointEnvironment).map(_.id).getOrElse("")
     )
     digitalPackPaymentEmailFields.paymentFields(
-      directPurchase.purchaseInfo.paymentMethod,
-      directPurchase.purchaseInfo.accountNumber
+      directPurchase.paymentMethod,
+      directPurchase.accountNumber
     ).map(paymentFieldsAttributes =>
       wrap("digipack", DirectDSAttributes(
         directOrCorpFields(
-          SubscriptionEmailFieldHelpers.describe(directPurchase.purchaseInfo.paymentSchedule, directPurchase.product, promotion),
-          directPurchase.purchaseInfo.subscriptionNumber
+          SubscriptionEmailFieldHelpers.describe(directPurchase.paymentSchedule, directPurchase.product, promotion),
+          directPurchase.subscriptionNumber
         ),
         country = user.billingAddress.country.name,
-        date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(directPurchase.purchaseInfo.paymentSchedule).date),
+        date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(directPurchase.paymentSchedule).date),
         trial_period = "14", //TODO: depends on Promo code or zuora config
         paymentFieldsAttributes
       ))

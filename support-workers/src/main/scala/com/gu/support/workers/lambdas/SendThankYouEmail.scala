@@ -9,7 +9,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.{Stage, TouchPointEnvironments}
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers._
-import com.gu.support.workers.states.ProductTypeCreated._
+import com.gu.support.workers.states.SendThankYouEmailProductSpecificState._
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.generic.auto._
@@ -57,11 +57,11 @@ class EmailBuilder(
     val guardianWeeklyEmailFields = new GuardianWeeklyEmailFields(paperFieldsGenerator, touchpointEnvironment, state.user, sfContactId)
     val contributionEmailFields = new ContributionEmailFields(getMandate, state.user, sfContactId, created = DateTime.now())
 
-    state.productTypeCreated match {
+    state.sendThankYouEmailProductState match {
       case contribution: ContributionCreated => contributionEmailFields.build(contribution).map(List(_))
-      case digi: DigitalSubscriptionCreated => digitalPackEmailFields.build(digi)
-      case paper: PaperCreated => paperEmailFields.build(paper).map(List(_))
-      case weekly: GuardianWeeklyCreated => guardianWeeklyEmailFields.build(weekly).map(List(_))
+      case digi: SendThankYouEmailDigitalSubscriptionState => digitalPackEmailFields.build(digi)
+      case paper: SendThankYouEmailPaperState => paperEmailFields.build(paper).map(List(_))
+      case weekly: SendThankYouEmailGuardianWeeklyState => guardianWeeklyEmailFields.build(weekly).map(List(_))
     }
   }
 

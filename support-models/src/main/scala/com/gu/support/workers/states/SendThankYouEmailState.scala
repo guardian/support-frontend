@@ -7,7 +7,6 @@ import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
-import com.gu.support.workers.states.ProductTypeCreated.DigitalSubscriptionCreated._
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
 
@@ -15,89 +14,90 @@ case class SendThankYouEmailState(
   requestId: UUID,
   user: User,
   analyticsInfo: AnalyticsInfo,
-  productTypeCreated: ProductTypeCreated,
+  sendThankYouEmailProductState: SendThankYouEmailProductSpecificState,
   salesForceContact: SalesforceContactRecord,
   acquisitionData: Option[AcquisitionData]
 ) extends SendAcquisitionEventState
 
-case class PurchaseInfo(
-  paymentMethod: PaymentMethod,
-  paymentSchedule: PaymentSchedule,
-  promoCode: Option[PromoCode],
-  accountNumber: String,
-  subscriptionNumber: String,
-)
-object PurchaseInfo {
-  implicit val codec: Codec[PurchaseInfo] = deriveCodec
-}
-
-sealed trait ProductTypeCreated {
+sealed trait SendThankYouEmailProductSpecificState {
   def product: ProductType
 }
 
-object ProductTypeCreated {
+object SendThankYouEmailProductSpecificState {
 
-  case class ContributionCreated(
-    product: Contribution,
-    purchaseInfo: PurchaseInfo,
-  ) extends ProductTypeCreated
-
-  sealed trait DigitalSubscriptionCreated extends ProductTypeCreated {
+  sealed trait SendThankYouEmailDigitalSubscriptionState extends SendThankYouEmailProductSpecificState {
     override def product: DigitalPack
   }
 
-  sealed trait PurchaseCreated {
-    def purchaseInfo: PurchaseInfo
-  }
+  case class ContributionCreated(
+    product: Contribution,
+    paymentMethod: PaymentMethod,
+    paymentSchedule: PaymentSchedule,
+    promoCode: Option[PromoCode],
+    accountNumber: String,
+    subscriptionNumber: String,
+  ) extends SendThankYouEmailProductSpecificState
 
-  object DigitalSubscriptionCreated {
+  case class SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+    product: DigitalPack,
+    paymentMethod: PaymentMethod,
+    paymentSchedule: PaymentSchedule,
+    promoCode: Option[PromoCode],
+    accountNumber: String,
+    subscriptionNumber: String,
+  ) extends SendThankYouEmailDigitalSubscriptionState
 
-    case class DigitalSubscriptionDirectPurchaseCreated(
-      product: DigitalPack,
-      purchaseInfo: PurchaseInfo,
-    ) extends DigitalSubscriptionCreated with PurchaseCreated
+  case class SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
+    product: DigitalPack,
+    giftRecipient: DigitalSubscriptionGiftRecipient,
+    giftCode: GeneratedGiftCode,
+    lastRedemptionDate: LocalDate,
+    paymentMethod: PaymentMethod,
+    paymentSchedule: PaymentSchedule,
+    promoCode: Option[PromoCode],
+    accountNumber: String,
+    subscriptionNumber: String,
+  ) extends SendThankYouEmailDigitalSubscriptionState
 
-    case class DigitalSubscriptionGiftPurchaseCreated(
-      product: DigitalPack,
-      giftRecipient: DigitalSubscriptionGiftRecipient,
-      giftCode: GeneratedGiftCode,
-      lastRedemptionDate: LocalDate,
-      purchaseInfo: PurchaseInfo,
-    ) extends DigitalSubscriptionCreated with PurchaseCreated
+  case class SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
+    product: DigitalPack,
+    subscriptionNumber: String,
+  ) extends SendThankYouEmailDigitalSubscriptionState
 
-    case class DigitalSubscriptionCorporateRedemptionCreated(
-      product: DigitalPack,
-      subscriptionNumber: String,
-    ) extends DigitalSubscriptionCreated
+  case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState( //tbc
+    product: DigitalPack,
+  ) extends SendThankYouEmailDigitalSubscriptionState
 
-    case class DigitalSubscriptionGiftRedemptionCreated( //tbc
-      product: DigitalPack,
-    ) extends DigitalSubscriptionCreated
-
-  }
-
-  case class PaperCreated(
+  case class SendThankYouEmailPaperState(
     product: Paper,
-    purchaseInfo: PurchaseInfo,
+    paymentMethod: PaymentMethod,
+    paymentSchedule: PaymentSchedule,
+    promoCode: Option[PromoCode],
+    accountNumber: String,
+    subscriptionNumber: String,
     firstDeliveryDate: LocalDate,
-  ) extends ProductTypeCreated with PurchaseCreated
+  ) extends SendThankYouEmailProductSpecificState
 
-  case class GuardianWeeklyCreated(
+  case class SendThankYouEmailGuardianWeeklyState(
     product: GuardianWeekly,
     giftRecipient: Option[WeeklyGiftRecipient],
-    purchaseInfo: PurchaseInfo,
+    paymentMethod: PaymentMethod,
+    paymentSchedule: PaymentSchedule,
+    promoCode: Option[PromoCode],
+    accountNumber: String,
+    subscriptionNumber: String,
     firstDeliveryDate: LocalDate,
-  ) extends ProductTypeCreated with PurchaseCreated
+  ) extends SendThankYouEmailProductSpecificState
 
-  private val discriminatedType = new DiscriminatedType[ProductTypeCreated]("productTypeCreatedType")
+  private val discriminatedType = new DiscriminatedType[SendThankYouEmailProductSpecificState]("productTypeCreatedType")
   implicit val codec = discriminatedType.codec(List(
     discriminatedType.variant[ContributionCreated]("Contribution"),
-    discriminatedType.variant[DigitalSubscriptionDirectPurchaseCreated]("DigitalSubscriptionDirectPurchase"),
-    discriminatedType.variant[DigitalSubscriptionGiftPurchaseCreated]("DigitalSubscriptionGiftPurchase"),
-    discriminatedType.variant[DigitalSubscriptionCorporateRedemptionCreated]("DigitalSubscriptionCorporateRedemption"),
-    discriminatedType.variant[DigitalSubscriptionGiftRedemptionCreated]("DigitalSubscriptionGiftRedemption"),
-    discriminatedType.variant[PaperCreated]("Paper"),
-    discriminatedType.variant[GuardianWeeklyCreated]("GuardianWeekly"),
+    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionDirectPurchaseState]("DigitalSubscriptionDirectPurchase"),
+    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftPurchaseState]("DigitalSubscriptionGiftPurchase"),
+    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionCorporateRedemptionState]("DigitalSubscriptionCorporateRedemption"),
+    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftRedemptionState]("DigitalSubscriptionGiftRedemption"),
+    discriminatedType.variant[SendThankYouEmailPaperState]("Paper"),
+    discriminatedType.variant[SendThankYouEmailGuardianWeeklyState]("GuardianWeekly"),
   ))
 
 }

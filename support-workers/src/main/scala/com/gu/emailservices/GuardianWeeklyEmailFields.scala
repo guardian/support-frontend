@@ -4,7 +4,7 @@ import com.gu.emailservices.SubscriptionEmailFieldHelpers.formatDate
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers._
-import com.gu.support.workers.states.ProductTypeCreated.GuardianWeeklyCreated
+import com.gu.support.workers.states.SendThankYouEmailProductSpecificState.SendThankYouEmailGuardianWeeklyState
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 
 import scala.collection.immutable
@@ -16,9 +16,9 @@ class GuardianWeeklyEmailFields(
   user: User,
   sfContactId: SfContactId,
 ) {
-  def build(gw: GuardianWeeklyCreated)(implicit ec: ExecutionContext): Future[EmailFields] = {
+  def build(gw: SendThankYouEmailGuardianWeeklyState)(implicit ec: ExecutionContext): Future[EmailFields] = {
 
-    val additionalFields: immutable.Seq[(String, String)] = gw.purchaseInfo.paymentSchedule.payments.lift(1).map(
+    val additionalFields: immutable.Seq[(String, String)] = gw.paymentSchedule.payments.lift(1).map(
       payment => List("date_of_second_payment" -> formatDate(payment.date))
     ).getOrElse(Nil)
 
@@ -31,7 +31,7 @@ class GuardianWeeklyEmailFields(
     )
 
     paperFieldsGenerator.fieldsFor(
-      gw.purchaseInfo,
+      gw.paymentMethod, gw.paymentSchedule, gw.promoCode, gw.accountNumber, gw.subscriptionNumber,
       gw.product,
       user,
       ProductTypeRatePlans.weeklyRatePlan(gw.product, touchPointEnvironment, if(gw.giftRecipient.isDefined) Gift else Direct).map(_.id),
