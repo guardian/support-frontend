@@ -17,7 +17,7 @@ import {
   giftTag,
   toFromLines,
   toYou,
-  FromMe,
+  fromMe,
   heroHeading,
   paragraph,
   heavyText,
@@ -52,7 +52,7 @@ function CampaignHeaderGift(props: PropTypes) {
             </div>
             <div css={toFromLines}>
               <div css={heroHeading}>From:</div>
-              <div css={FromMe}>Me</div>
+              <div css={fromMe}>Me</div>
             </div>
           </div>
           <GiftCopy />

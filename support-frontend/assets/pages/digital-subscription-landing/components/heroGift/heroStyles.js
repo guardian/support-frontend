@@ -32,15 +32,15 @@ export const wrapper = css`
     }
   }
 
-  ${from.desktop} {
+  ${from.tablet} {
     :before {
-      height:200px;
+      top: -1px;
     }
   }
 `;
 
 export const pageTitle = css`
-  ${headline.large({ fontWeight: 'bold' })};
+  ${headline.medium({ fontWeight: 'bold' })};
   color: ${neutral[97]};
   z-index: 10;
   background-color: transparent;
@@ -56,17 +56,19 @@ export const pageTitle = css`
   }
 
   ${from.tablet} {
+    ${headline.large({ fontWeight: 'bold' })};
     width: calc(100% - 40px);
   }
 
   ${from.desktop} {
-    ${titlepiece.large()}
+    ${titlepiece.medium()}
     max-width: calc(100% - 110px);
     max-width: 1100px;
     padding: 0 ${space[4]}px ${space[12]}px;
   }
 
   ${from.leftCol} {
+    ${titlepiece.large()}
     width: calc(100% - 80px);
     max-width: 80.625rem;
   }
@@ -135,8 +137,8 @@ export const toYou = css`
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: 1px solid white; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
-  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
   letter-spacing: 0.01em; /* Adjust as needed */
+  margin-left: ${space[2]}px;
   animation:
     typing-to 0.7s steps(3, end),
     blink-caret 0.7s step-end infinite;
@@ -145,7 +147,7 @@ export const toYou = css`
 
   @keyframes typing-to {
     from { width: 0 }
-    to { width: 16% }
+    to { width: 17.5% }
   }
 
   @keyframes blink-caret {
@@ -156,32 +158,75 @@ export const toYou = css`
   color: ${brandAltBackground.primary};
   ${headline.small({ fontWeight: 'bold' })};
 
+  ${from.mobileMedium} {
+    @keyframes typing-to {
+      from { width: 0 }
+      to { width: 15% }
+    }
+  }
+
   ${from.mobileLandscape} {
     ${headline.medium({ fontWeight: 'bold' })};
+    @keyframes typing-to {
+      from { width: 0 }
+      to { width: 14% }
+    }
+  }
+
+  ${from.phablet} {
+    @keyframes typing-to {
+      from { width: 0 }
+      to { width: 10% }
+    }
+  }
+
+  ${from.tablet} {
+    @keyframes typing-to {
+      from { width: 0 }
+      to { width: 17% }
+    }
   }
 
   ${from.desktop} {
     ${headline.large({ fontWeight: 'bold' })};
     margin-left: 8px;
+    @keyframes typing-to {
+      from { width: 0 }
+      to { width: 16% }
+    }
+  }
+
+  ${from.leftCol} {
+    @keyframes typing-to {
+      from { width: 0 }
+      to { width: 18.5% }
+    }
+  }
+
+  ${from.wide} {
+    @keyframes typing-to {
+      from { width: 0 }
+      to { width: 16.5% }
+    }
   }
 `;
 
-export const FromMe = css`
+export const fromMe = css`
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: 1px solid white; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
-  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
   letter-spacing: 0.01em; /* Adjust as needed */
+  margin-left: ${space[2]}px;
   animation:
-    typing 0.5s steps(2, end),
+    typing-from 0.5s steps(2, end),
     blink-caret 0.7s step-end infinite;
   animation-fill-mode: both;
   animation-delay: 2.4s;
   color: ${brandAltBackground.primary};
 
-  @keyframes typing {
+  @keyframes typing-from {
     from { width: 0 }
-    to { width: 13% }
+    to { width: 14% }
   }
 
   @keyframes blink-caret {
@@ -191,18 +236,62 @@ export const FromMe = css`
 
   ${headline.small({ fontWeight: 'bold' })};
 
+  ${from.mobileMedium} {
+    @keyframes typing-from {
+      from { width: 0 }
+      to { width: 12% }
+    }
+  }
+
   ${from.mobileLandscape} {
     ${headline.medium({ fontWeight: 'bold' })};
+    @keyframes typing-from {
+      from { width: 0 }
+      to { width: 11% }
+    }
+  }
+
+  ${from.phablet} {
+    @keyframes typing-from {
+      from { width: 0 }
+      to { width: 8% }
+    }
+  }
+
+  ${from.tablet} {
+    @keyframes typing-from {
+      from { width: 0 }
+      to { width: 14% }
+    }
   }
 
   ${from.desktop} {
     ${headline.large({ fontWeight: 'bold' })};
     margin-left: 8px;
+    @keyframes typing-from {
+      from { width: 0 }
+      to { width: 13% }
+    }
+  }
+
+  ${from.leftCol} {
+    @keyframes typing-from {
+      from { width: 0 }
+      to { width: 15.5% }
+    }
+  }
+
+  ${from.wide} {
+    @keyframes typing-from {
+      from { width: 0 }
+      to { width: 13.25% }
+    }
   }
 
 `;
 
 export const heroHeading = css`
+  display: inline-flex;
   ${headline.small({ fontWeight: 'bold' })};
   max-width: 100%;
   letter-spacing: .01em;
