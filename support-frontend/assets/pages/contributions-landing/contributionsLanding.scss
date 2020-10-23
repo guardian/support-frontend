@@ -862,7 +862,7 @@ form {
 
 .form__submit .component-button {
   width: 100%;
-  box-sizing: revert;
+  box-sizing: border-box;
 }
 
 .form__radio-group--contribution-amount {
