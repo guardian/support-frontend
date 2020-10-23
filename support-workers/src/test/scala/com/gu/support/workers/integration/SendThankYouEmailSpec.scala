@@ -176,7 +176,7 @@ object SendDigitalPackGiftPurchaseEmails extends App {
       sfContactRecord,
       DigitalPack(GBP, Annual, ReaderType.Corporate),
       DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), new LocalDate(2020, 10, 2)),
-      GeneratedGiftCode("gd12-12345678").get,
+      GeneratedGiftCode("gd12-02345678").get,
       new LocalDate(2020, 10, 14),
       directDebitPaymentMethod,
       paymentSchedule,
