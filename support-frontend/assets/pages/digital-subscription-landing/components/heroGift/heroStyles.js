@@ -141,7 +141,7 @@ export const toYou = css`
   margin-left: ${space[2]}px;
   animation:
     typing-to 0.7s steps(3, end),
-    blink-caret-to 0.7s steps(3, jump-end);
+    blink-caret-to 0.7s steps(3, jump-both);
   animation-fill-mode: both;
   animation-delay: 1s;
 
