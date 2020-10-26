@@ -141,16 +141,21 @@ export const toYou = css`
   margin-left: ${space[2]}px;
   animation:
     typing-to 0.7s steps(3, end),
-    blink-caret 0.7s step-end infinite;
+    blink-caret-to 0.7s steps(3, jump-end);
   animation-fill-mode: both;
   animation-delay: 1s;
+
+  @media (prefers-reduced-motion) {
+    animation: none;
+    border-right: none;
+  }
 
   @keyframes typing-to {
     from { width: 0 }
     to { width: 17.5% }
   }
 
-  @keyframes blink-caret {
+  @keyframes blink-caret-to {
     from, to { border-color: transparent }
     50% { border-color: white; }
   }
@@ -219,17 +224,22 @@ export const fromMe = css`
   margin-left: ${space[2]}px;
   animation:
     typing-from 0.5s steps(2, end),
-    blink-caret 0.7s step-end infinite;
+    blink-caret-from 0.7s steps(2, jump-end);
   animation-fill-mode: both;
   animation-delay: 2.4s;
   color: ${brandAltBackground.primary};
+
+  @media (prefers-reduced-motion) {
+    animation: none;
+    border-right: none;
+  }
 
   @keyframes typing-from {
     from { width: 0 }
     to { width: 14% }
   }
 
-  @keyframes blink-caret {
+  @keyframes blink-caret-from {
     from, to { border-color: transparent }
     50% { border-color: white; }
   }
