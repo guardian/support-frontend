@@ -19,7 +19,7 @@ const buttonContainer = css`
 const signUpToNewsLetter = (email: string) => {
   const formData = new FormData();
   formData.append('email', email);
-  formData.append('listName', 'minute-us');
+  formData.append('listName', 'us-morning-newsletter');
   formData.append('name', '');
 
   fetch('https://www.theguardian.com/email', {
