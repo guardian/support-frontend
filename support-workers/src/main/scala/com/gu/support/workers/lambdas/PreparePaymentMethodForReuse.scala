@@ -23,20 +23,22 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
 
   override protected def servicesHandler(state: PreparePaymentMethodForReuseState, requestInfo: RequestInfo, context: Context, services: Services) = {
 
+    import com.gu.WithLoggingSugar._
+
     val zuoraService = services.zuoraService
     val accountId = state.paymentFields.billingAccountId
     for {
-      account <- zuoraService.getObjectAccount(accountId)
+      account <- zuoraService.getObjectAccount(accountId).withEventualLogging(s"getObjectAccount($accountId)")
       accountIdentityId <- getOrFailWithMessage(account.IdentityId__c, s"Zuora account $accountId has no identityId")
       _ <- ifFalseReturnError(accountIdentityId == state.user.id, s"Zuora account $accountId identity id: $accountIdentityId does not match ${state.user.id}")
       paymentId <- getOrFailWithMessage(account.DefaultPaymentMethodId, s"Zuora account $accountId has no default payment method")
-      getPaymentMethodResponse <- zuoraService.getPaymentMethod(paymentId)
+      getPaymentMethodResponse <- zuoraService.getPaymentMethod(paymentId).withEventualLogging(s"getPaymentMethod($paymentId)")
       _ <- ifFalseReturnError(getPaymentMethodResponse.paymentMethodStatus == "Active", s"Zuora account $accountId has a non active default payment method")
       sfContactId <- getOrFailWithMessage(account.sfContactId__c, s"Zuora account $accountId has no sfContact")
       crmId <- getOrFailWithMessage(account.CrmId, s"Zuora account $accountId has not CrmId")
       paymentMethod <- toPaymentMethod(getPaymentMethodResponse, services.goCardlessService, account.PaymentGateway)
       sfContact = SalesforceContactRecord(sfContactId, crmId)
-    } yield  HandlerResult(
+    } yield HandlerResult(
         CreateZuoraSubscriptionState(
           requestId = UUID.randomUUID(),
           user = state.user,
