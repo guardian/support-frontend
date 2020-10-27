@@ -58,8 +58,10 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
+const path = orderIsAGift ? '/subscribe/digital/gift' : '/subscribe/digital';
+
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
-  path: '/subscribe/digital',
+  path,
   countryGroupId,
   listOfCountryGroups: [
     GBPCountries,
