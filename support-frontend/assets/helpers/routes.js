@@ -28,6 +28,7 @@ const routes: {
   showcase: '/support',
   subscriptionsLanding: '/subscribe',
   digitalSubscriptionLanding: '/subscribe/digital',
+  digitalSubscriptionLandingGift: '/subscribe/digital/gift',
   paperSubscriptionLanding: '/subscribe/paper',
   paperSubscriptionProductChoices: '/subscribe/paper#subscribe',
   paperSubscriptionDeliveryProductChoices: '/subscribe/paper/delivery#subscribe',

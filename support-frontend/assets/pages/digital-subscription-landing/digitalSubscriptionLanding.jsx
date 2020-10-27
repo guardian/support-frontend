@@ -29,8 +29,8 @@ import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
 import { CallToAction, CallToActionGift } from './components/cta';
-import TermsAndConditions from './components/termsAndConditions';
-import FaqsAndHelp from './components/faqsAndHelp';
+import GiftNonGiftLink from './components/giftNonGiftLink';
+import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 // ----- Styles ----- //
 
 import './components/digitalSubscriptionLanding.scss';
@@ -40,7 +40,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { orderIsAGift } = store.getState().page;
+const { orderIsAGift, productPrices } = store.getState().page;
 
 // ----- Internationalisation ----- //
 
@@ -78,6 +78,11 @@ function LandingPage() {
   return (
     <Page
       header={<CountrySwitcherHeader />}
+      footer={<DigitalFooter
+        country={countryGroupId}
+        orderIsAGift={orderIsAGift}
+        productPrices={productPrices}
+      />}
     >
       {orderIsAGift ?
         <CampaignHeaderGift countryGroupId={countryGroupId} /> :
@@ -88,8 +93,7 @@ function LandingPage() {
         <ProductBlock countryGroupId={countryGroupId} />
       }
       {orderIsAGift ? <CallToActionGift /> : <CallToAction />}
-      <TermsAndConditions />
-      <FaqsAndHelp selectedCountryGroup={countryGroupId} />
+      <GiftNonGiftLink orderIsAGift={orderIsAGift} />
     </Page>
   );
 
