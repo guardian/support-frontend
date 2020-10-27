@@ -32,7 +32,7 @@ type ContributionThankYouUsElectionNewsletterProps = {|
   email: string
 |};
 
-const ContributionThankYouUsElectionNewsletternsent = ({
+const ContributionThankYouUsElectionNewsletter = ({
   email,
 }: ContributionThankYouUsElectionNewsletterProps) => {
   const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
@@ -92,4 +92,4 @@ const ContributionThankYouUsElectionNewsletternsent = ({
   );
 };
 
-export default ContributionThankYouUsElectionNewsletternsent;
+export default ContributionThankYouUsElectionNewsletter;
