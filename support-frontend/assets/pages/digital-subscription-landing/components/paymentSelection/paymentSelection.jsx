@@ -21,10 +21,13 @@ type PropTypes = {
   orderIsAGift: boolean,
 }
 
-const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) => (
-  <div className="payment-selection">
-    {
-        (paymentOptions.map(paymentOption => (
+const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) => {
+  // This line reverses the order of the payment options for gifting so Quarterly is first annd Annual second
+  const paymentOptionsList = orderIsAGift ? [paymentOptions[1], paymentOptions[0]] : paymentOptions;
+  return (
+    <div className="payment-selection">
+      {
+        (paymentOptionsList.map(paymentOption => (
           <div className="payment-selection__card">
             <span className="product-option__label">
               {paymentOption.label}
@@ -50,8 +53,8 @@ const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) => (
           </div>
         )))
       }
-  </div>
-);
+    </div>);
+};
 
 
 export default connect(mapStateToProps)(PaymentSelection);

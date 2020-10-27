@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+import { css } from '@emotion/core';
+import { body } from '@guardian/src-foundations/typography';
 
 import PaymentSelection
   from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
@@ -18,10 +20,17 @@ export const CallToAction = () => (
   </div>
 );
 
+const subheading = css`
+  ${body.medium()};
+`;
+
 export const CallToActionGift = () => (
   <div id="subscribe" className="call-to-action__container">
     <div className="hope-is-power--centered">
-      <h2 className="heading--gift">Select a gift period</h2>
+      <h2>Choose one of our special gift offers</h2>
+      <h3>
+        <span css={subheading}>Select a gift period</span>
+      </h3>
       <PaymentSelection orderIsAGift />
     </div>
   </div>
