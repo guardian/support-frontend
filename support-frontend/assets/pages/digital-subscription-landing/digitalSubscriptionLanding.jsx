@@ -23,8 +23,8 @@ import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import CampaignHeader from './components/hero/hero';
 import CampaignHeaderGift from './components/heroGift/hero';
-import ProductBlock from './components/productBlock';
-import ProductBlockAus from './components/australianEditions/productBlockAus';
+import ProductBlock from './components/productBlock/productBlock';
+import ProductBlockAus from './components/productBlock/productBlockAus';
 import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
@@ -76,15 +76,22 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 // ----- Render ----- //
 function LandingPage() {
+  const footer = (
+    <div className="footer-container">
+      <div className="footer-alignment">
+        <DigitalFooter
+          country={countryGroupId}
+          orderIsAGift={orderIsAGift}
+          productPrices={productPrices}
+          centred
+        />
+      </div>
+    </div>);
 
   return (
     <Page
       header={<CountrySwitcherHeader />}
-      footer={<DigitalFooter
-        country={countryGroupId}
-        orderIsAGift={orderIsAGift}
-        productPrices={productPrices}
-      />}
+      footer={footer}
     >
       {orderIsAGift ?
         <CampaignHeaderGift countryGroupId={countryGroupId} /> :
