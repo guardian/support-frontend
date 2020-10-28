@@ -36,7 +36,7 @@ const GiftNonGiftLink = (props: {orderIsAGift: boolean}) => (
       {props.orderIsAGift ?
         <h4 css={title}>Looking for a subscription for yourself?</h4> :
         <h4 css={title}>Gift subscriptions</h4>}
-      {!props.orderIsAGift && <span css={paragraph}>A subscription makes a great gift.</span>}
+      {!props.orderIsAGift && <span css={paragraph}>A digital subscription makes a great gift.</span>}
       <div css={button}>
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
