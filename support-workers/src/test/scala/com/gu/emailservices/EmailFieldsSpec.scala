@@ -9,31 +9,23 @@ import com.gu.support.workers._
 import com.gu.support.workers.integration.SendThankYouEmailManualTest.sfContactRecord
 import io.circe.parser._
 import io.circe.syntax._
-import org.joda.time.LocalDate
+import org.joda.time.{DateTime, DateTimeZone, LocalDate}
 import org.scalatest.Inside
 import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
 import org.scalatest.matchers.should.Matchers
 
 class EmailFieldsSpec extends AnyFlatSpec with Matchers {
-  "EmailPayload" should "serialize to json" in {
-    val Right(expectedJson) = parse(
-      s"""
-         |{
-         |  "To": {
-         |    "Address": "email@email.com",
-         |    "ContactAttributes": {
-         |      "SubscriberAttributes": { "attribute1" : "value1" ,  "attribute2" : "value2" }
-         |    }
-         |  },
-         |  "DataExtensionName": "dataExtensionName",
-         |  "SfContactId": "sfContactId",
-         |  "IdentityUserId": "identityUserId"
-         |}
-      """.stripMargin
-    )
+  "EmailPayload" should "serialize to json without scheduled time" in {
+    actualSerialisedJson(None) shouldBe expectedQueueJson("")
+  }
 
-    val serializedJson =
-      EmailPayload(
+  "EmailPayload" should "serialize to json with scheduled time" in {
+    val dateToUse = new DateTime(2020, 10, 27, 16, 5, 7, 123, DateTimeZone.UTC)
+    actualSerialisedJson(Some(dateToUse)) shouldBe expectedQueueJson(""", "ScheduledTime": "2020-10-27T16:05:07.123Z"""")
+  }
+
+  private def actualSerialisedJson(scheduledTime: Option[DateTime]) = {
+    EmailPayload(
       EmailPayloadTo(
         "email@email.com",
         EmailPayloadContactAttributes(
@@ -42,10 +34,26 @@ class EmailFieldsSpec extends AnyFlatSpec with Matchers {
       ),
       "dataExtensionName",
       Some("sfContactId"),
-      Some("identityUserId")
-    ).asJson
+      Some("identityUserId"),
+      scheduledTime,
+    ).asJson.dropNullValues
+  }
 
-    serializedJson shouldBe expectedJson
+  private def expectedQueueJson(insert: String) = {
+    parse(s"""
+       |{
+       |  "To": {
+       |    "Address": "email@email.com",
+       |    "ContactAttributes": {
+       |      "SubscriberAttributes": { "attribute1" : "value1" ,  "attribute2" : "value2" }
+       |    }
+       |  },
+       |  "DataExtensionName": "dataExtensionName",
+       |  "SfContactId": "sfContactId",
+       |  "IdentityUserId": "identityUserId"
+       |  $insert
+       |}
+      """.stripMargin).right.get
   }
 }
 

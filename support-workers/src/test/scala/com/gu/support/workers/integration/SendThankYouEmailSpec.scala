@@ -110,14 +110,14 @@ object SendThankYouEmailManualTest {
     SendWeeklySubscriptionGiftEmail.main(args)
   }
 
-  val realConfig = Configuration.load()
+  val queueName = Configuration.load().contributionThanksQueueName
 
   def send(eventualEF: Future[List[EmailFields]]): Unit = {
-    val service = new EmailService(realConfig.contributionThanksQueueName)
+    val service = new EmailService(queueName)
     Await.ready(eventualEF.flatMap(efList => Future.sequence(efList.map(service.send))), Duration.Inf)
   }
   def sendSingle(ef: Future[EmailFields]): Unit = {
-    val service = new EmailService(realConfig.contributionThanksQueueName)
+    val service = new EmailService(queueName)
     Await.ready(ef.flatMap(service.send), Duration.Inf)
   }
 }
@@ -174,7 +174,7 @@ object SendDigitalPackGiftPurchaseEmails extends App {
     SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
       billingOnlyUser,
       sfContactRecord,
-      DigitalPack(GBP, Annual, ReaderType.Corporate),
+      DigitalPack(GBP, Annual, ReaderType.Gift),
       DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), new LocalDate(2020, 10, 2)),
       GeneratedGiftCode("gd12-02345678").get,
       new LocalDate(2020, 10, 14),
