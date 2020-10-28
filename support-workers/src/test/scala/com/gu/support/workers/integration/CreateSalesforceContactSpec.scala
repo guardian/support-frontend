@@ -24,7 +24,7 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
       val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
       result.isSuccess should be(true)
       val contacts = result.get._1.salesforceContacts
-      contacts.buyer.Id should be("0033E00001CVatAQAT")
+      contacts.buyer.Id should be("0039E000017tZUEQA2")
     }
   }
 
