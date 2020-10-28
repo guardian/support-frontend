@@ -20,6 +20,7 @@ import ContributionThankYouSupportReminder from './ContributionThankYouSupportRe
 import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
+import ContributionThankYouUsElectionNewsletter from './ContributionThankYouUsElectionNewsletter';
 import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getCampaignSettings } from 'helpers/campaigns';
@@ -115,6 +116,7 @@ type ContributionThankYouProps = {|
   paymentMethod: PaymentMethod,
   countryId: IsoCountry,
   campaignCode: ?string,
+  shouldShowUsElectionNewsletter: boolean,
 |};
 
 const mapStateToProps = state => ({
@@ -127,6 +129,7 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   countryId: state.common.internationalisation.countryId,
   campaignCode: state.common.referrerAcquisitionData.campaignCode,
+  shouldShowUsElectionNewsletter: state.common.abParticipations.usElectionNewsletter === 'showNewsletter',
 });
 
 const ContributionThankYou = ({
@@ -139,6 +142,7 @@ const ContributionThankYou = ({
   paymentMethod,
   countryId,
   campaignCode,
+  shouldShowUsElectionNewsletter,
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
@@ -174,9 +178,11 @@ const ContributionThankYou = ({
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
+  const SURVEY_END_DATE = new Date(Date.parse('2020-11-05'));
+  const now = new Date();
   const surveyAction = {
     component: <ContributionThankYouSurvey />,
-    shouldShow: true,
+    shouldShow: now < SURVEY_END_DATE,
   };
   const socialShareAction = {
     component: <ContributionThankYouSocialShare
@@ -190,12 +196,17 @@ const ContributionThankYou = ({
     component: <ContributionThankYouAusMap />,
     shouldShow: countryId === 'AU',
   };
+  const usElectionNewsLetter = {
+    component: <ContributionThankYouUsElectionNewsletter email={email} />,
+    shouldShow: shouldShowUsElectionNewsletter,
+  };
 
   const defaultActions = [
     signUpAction,
     signInAction,
     marketingConsentAction,
     supportReminderAction,
+    usElectionNewsLetter,
     surveyAction,
     socialShareAction,
   ];
