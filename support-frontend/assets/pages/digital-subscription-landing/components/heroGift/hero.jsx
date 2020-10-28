@@ -71,7 +71,7 @@ function CampaignHeaderGift(props: PropTypes) {
         </div>
         <div css={packShot}>
           <GridImage
-            gridId={props.countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'digiSubsGiftRow'}
+            gridId={props.countryGroupId === AUDCountries ? 'digiSubsGiftAus' : 'digiSubsGiftRow'}
             srcSizes={[1000, 500, 140]}
             sizes="(max-width: 480px) 200px,
             (max-width: 740px) 100%,

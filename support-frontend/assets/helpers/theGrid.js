@@ -125,6 +125,7 @@ export const imageCatalogue: {
   editionsRowMobile: '307653cb535689ce12b93cf90cfb233cddaab3fd/0_0_1100_1100',
   editionsRowDesktop: 'a37e08fd9d3343eb629ae44b2b30127d7e31184b/0_0_1800_1080',
   digiSubsGiftRow: '518e4f5b42c39218bf3fb0b00465d5f4abb3d93a/0_0_1280_988',
+  digiSubsGiftAus: '9af0c459c507f67a21280789ce139594d13221e1/0_0_1000_815',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
