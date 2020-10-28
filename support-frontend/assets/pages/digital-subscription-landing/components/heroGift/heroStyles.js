@@ -14,15 +14,14 @@ export const wrapper = css`
   background: #ededed;
   display: flex;
   flex-direction: column;
-  padding-top: ${space[4]}px;
 
   :before {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 170px;
-    background: ${brand[300]};
+    height: 120px;
+    background: #006D67;
     content: '';
   }
 
@@ -44,19 +43,19 @@ export const pageTitle = css`
   color: ${neutral[97]};
   z-index: 10;
   background-color: transparent;
-  padding: 0 ${space[3]}px ${space[9]}px;
+  padding: ${space[3]}px;
+  align-self: center;
 
   ${from.mobileLandscape} {
-    padding-bottom: ${space[12]}px;
+    ${headline.large({ fontWeight: 'bold' })};
   }
 
   ${from.phablet} {
     width: 100%;
-    align-self: center;
+    padding: ${space[5]}px ${space[3]}px;
   }
 
   ${from.tablet} {
-    ${headline.large({ fontWeight: 'bold' })};
     width: calc(100% - 40px);
   }
 
@@ -64,7 +63,7 @@ export const pageTitle = css`
     ${titlepiece.medium()}
     max-width: calc(100% - 110px);
     max-width: 1100px;
-    padding: 0 ${space[4]}px ${space[12]}px;
+    padding: ${space[4]}px ${space[4]}px ${space[6]}px;
   }
 
   ${from.leftCol} {
@@ -79,7 +78,7 @@ export const featureContainer = css`
   display: flex;
   flex-direction: column;
   align-self: flex-start;
-  background-color: #006D67;
+  background-color: ${brand[300]};
   color: ${neutral[97]};
   padding: ${space[3]}px;
   padding-bottom: 0;
@@ -113,7 +112,7 @@ export const textSection = css`
   width: 100%;
 
   ${from.tablet} {
-    padding: ${space[4]}px 0;
+    padding: ${space[1]}px 0;
     width: 55%;
   }
 
@@ -347,7 +346,7 @@ export const paragraph = css`
 `;
 
 export const heavyText = css`
-  font-weight: 600;
+  font-weight: bold;
 `;
 
 export const packShot = css`

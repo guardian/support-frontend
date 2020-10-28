@@ -42,7 +42,7 @@ const GiftCopy = () => (
 function CampaignHeaderGift(props: PropTypes) {
   return (
     <div css={wrapper}>
-      <h1 css={pageTitle}>Gift the digital subscription</h1>
+      <h1 css={pageTitle}>Give the digital subscription</h1>
       <div css={featureContainer}>
         <div css={textSection}>
           <div css={giftTag}>
