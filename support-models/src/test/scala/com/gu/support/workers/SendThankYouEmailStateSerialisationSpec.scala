@@ -56,6 +56,7 @@ object ProductTypeCreatedTestData {
     new LocalDate(2020, 10, 14),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
+    None,
     "acno",
   )
   val digitalSubscriptionCorporateRedemptionCreated = SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
