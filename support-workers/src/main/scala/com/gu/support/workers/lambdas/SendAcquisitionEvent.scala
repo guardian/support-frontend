@@ -42,7 +42,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     // Log the result of this execution to Elasticsearch
     LambdaExecutionResult.logResult(
       LambdaExecutionResult(
-        state.analyticsInfo.requestId,
+        state.requestId,
         Success,
         state.user.isTestUser,
         state.sendThankYouEmailState.product,

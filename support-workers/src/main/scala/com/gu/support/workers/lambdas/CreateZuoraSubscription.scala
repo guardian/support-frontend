@@ -204,6 +204,7 @@ class NextState(
     maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftPurchaseDetails],
   ): SendAcquisitionEventState =
     SendAcquisitionEventState(
+      requestId = state.requestId,
       analyticsInfo = state.analyticsInfo,
       sendThankYouEmailState = getProductSpecificState(
         paymentOrRedemptionData,
@@ -363,6 +364,7 @@ object DigitalSubscriptionGiftRedemption {
       }
       Success(
         HandlerResult(SendAcquisitionEventState(
+          requestId = state.requestId,
           analyticsInfo = state.analyticsInfo,
           sendThankYouEmailState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
             state.user,
