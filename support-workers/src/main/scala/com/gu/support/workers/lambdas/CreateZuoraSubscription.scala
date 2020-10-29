@@ -17,7 +17,7 @@ import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
-import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator.{DigitalSubscriptionGiftCreationDetails, PaymentMethodWithSchedule}
+import com.gu.support.workers.lambdas.NextState.{DigitalSubscriptionGiftPurchaseDetails, PaymentMethodWithSchedule}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
 import com.gu.support.zuora.api.ReaderType.Gift
@@ -109,7 +109,7 @@ class ZuoraSubscriptionCreator(
         val giftCode = giftCodeGeneratorService.generateCode(billingPeriod)
           .withLogging("Generated code for Digital Subscription gift")
         val lastRedemptionDate = today().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)
-        Some(DigitalSubscriptionGiftCreationDetails(digitalSubscriptionGiftRecipient, giftCode, lastRedemptionDate))
+        Some(DigitalSubscriptionGiftPurchaseDetails(digitalSubscriptionGiftRecipient, giftCode, lastRedemptionDate))
       case _ =>
         None
     }
@@ -117,13 +117,6 @@ class ZuoraSubscriptionCreator(
 }
 
 object ZuoraSubscriptionCreator {
-
-  case class DigitalSubscriptionGiftCreationDetails(
-    giftRecipient: DigitalSubscriptionGiftRecipient,
-    giftCode: GeneratedGiftCode,
-    lastRedemptionDate: LocalDate,
-  )
-  case class PaymentMethodWithSchedule(paymentMethod: PaymentMethod, paymentSchedule: PaymentSchedule)
 
   def apply(
     now: () => DateTime,
@@ -189,6 +182,17 @@ object ZuoraSubscriptionCreator {
 
 }
 
+object NextState {
+
+  case class DigitalSubscriptionGiftPurchaseDetails(
+    giftRecipient: DigitalSubscriptionGiftRecipient,
+    giftCode: GeneratedGiftCode,
+    lastRedemptionDate: LocalDate,
+  )
+  case class PaymentMethodWithSchedule(paymentMethod: PaymentMethod, paymentSchedule: PaymentSchedule)
+
+}
+
 class NextState(
   state: CreateZuoraSubscriptionState,
   accountNumber: ZuoraAccountNumber,
@@ -197,7 +201,7 @@ class NextState(
 
   def getEmailState(
     paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
-    maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftCreationDetails],
+    maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftPurchaseDetails],
   ): SendAcquisitionEventState =
     SendAcquisitionEventState(
       analyticsInfo = state.analyticsInfo,
@@ -214,7 +218,7 @@ class NextState(
   // scalastyle:off cyclomatic.complexity
   private def getProductSpecificState(
     paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
-    maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftCreationDetails]
+    maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftPurchaseDetails]
   ) =
     (state.product, paymentOrRedemptionData) match {
       case (product: Contribution, Purchase(purchase)) =>
@@ -262,7 +266,7 @@ class NextState(
       state.firstDeliveryDate.get
     )
 
-  private def dsGift(product: DigitalPack, purchase: PaymentMethodWithSchedule, giftPurchase: DigitalSubscriptionGiftCreationDetails) =
+  private def dsGift(product: DigitalPack, purchase: PaymentMethodWithSchedule, giftPurchase: DigitalSubscriptionGiftPurchaseDetails) =
     SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
       state.user,
       state.salesforceContacts.buyer,
