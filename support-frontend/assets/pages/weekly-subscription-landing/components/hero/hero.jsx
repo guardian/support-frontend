@@ -3,124 +3,82 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
-import GridPicture from 'components/gridPicture/gridPicture';
-import AnchorButton from 'components/button/anchorButton';
-import SvgChevron from 'components/svgs/chevron';
+import { ThemeProvider } from 'emotion-theming';
+import { css } from '@emotion/core';
+import { LinkButton, buttonBrand } from '@guardian/src-button';
+import { SvgChevronDownSingle } from '@guardian/src-icons';
+import { space } from '@guardian/src-foundations';
+import { body, titlepiece } from '@guardian/src-foundations/typography';
+
+import CentredContainer from 'components/containers/CentredContainer';
 import GridImage from 'components/gridImage/gridImage';
+import PageTitle from 'components/page/PageTitle';
+import Hero from 'components/page/Hero';
+
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import ProductPageHero
-  from 'components/productPage/productPageHero/productPageHero';
 
-import './weeklyCampaign.scss';
+type PropTypes = {|
+  orderIsAGift: boolean;
+  copy: {
+    title: Node,
+    paragraph: Node,
+  };
+|};
 
-const HeroImage = ({ orderIsGift }: {orderIsGift: boolean}) => (
-  <GridPicture
-    sources={[
-        {
-          gridId: !orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot',
-          srcSizes: [500, 1000],
-          imgType: 'png',
-          sizes: '100vw',
-          media: '(max-width: 739px)',
-        },
-        {
-          gridId: !orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot',
-          srcSizes: [1000, 2000],
-          imgType: 'png',
-          sizes: '(min-width: 1000px) 2000px, 1000px',
-          media: '(min-width: 740px)',
-        },
-      ]}
-    fallback={!orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot'}
-    fallbackSize={1000}
-    altText="A collection of Guardian Weekly magazines"
-    fallbackImgType="png"
-  />
-);
+const weeklyHeroCopy = css`
+  padding: ${space[3]}px;
+`;
 
-const HeroGlobe = () => (
-  <div className="weekly-gifting-hero__globe">
-    <GridImage
-      gridId="giftingGlobe"
-      srcSizes={[1000]}
-      sizes="(max-width: 740px) 1000px"
-      imgType="png"
-      altText=""
-    />
-  </div>
-);
+const weeklyHeroTitle = css`
+  ${titlepiece.small()};
+  margin-bottom: ${space[3]};
+`;
 
-const CampaignHeader = (props: {heading: string | Node, orderIsAGift: boolean}) => (
-  <ProductPageHero
-    appearance="campaign"
-    overheading="Guardian Weekly subscriptions"
-    heading={props.heading}
-    modifierClasses={props.orderIsAGift ? ['weekly-gift'] : ['weekly-campaign']}
-    content={!props.orderIsAGift &&
-      <AnchorButton
-        onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)}
-        icon={<SvgChevron />}
-        href="#subscribe"
-      >
-        See Subscription options
-      </AnchorButton>
-    }
-    hasCampaign
-    orderIsAGift={props.orderIsAGift}
-    giftImage={<HeroGlobe />}
-  >
+const weeklyHeroParagraph = css`
+  ${body.medium({ lineHeight: 'loose' })}
+  margin-bottom: ${space[9]}px;
+`;
 
-    <div className="weekly-campaign-hero">
-      <div className={props.orderIsAGift ? 'weekly-gifting-hero__copy' : 'weekly-campaign-hero__copy'}>
-        {props.orderIsAGift ? (
-          <h2>Give<br />The Guardian Weekly</h2>
-          ) : (
-            <h2>The<br />Guardian<br />Weekly</h2>
-          )
-        }
-      </div>
-
-      {!props.orderIsAGift && (
-        <div className="weekly-campaign-hero__graphic">
-          <GridImage
+function WeeklyHero({ orderIsAGift, copy }: PropTypes) {
+  return (
+    <PageTitle
+      title={orderIsAGift ? 'Gift The Guardian Weekly' : 'The Guardian Weekly'}
+      theme="weekly"
+    >
+      <CentredContainer>
+        <Hero
+          image={<GridImage
             gridId="weeklyCampaignHeroImg"
-            srcSizes={[1000, 1158]}
-            sizes="(max-width: 740px) 1000px, 1158px"
+            srcSizes={[1000, 500, 140]}
+            sizes="(max-width: 480px) 200px,
+            (max-width: 740px) 100%,
+            (max-width: 1067px) 150%,
+            500px"
             imgType="png"
             altText="A collection of Guardian Weekly magazines"
-          />
-        </div>
-      )}
+          />}
+        >
+          <section css={weeklyHeroCopy}>
+            <h2 css={weeklyHeroTitle}>{copy.title}</h2>
+            <p css={weeklyHeroParagraph}>
+              {copy.paragraph}
+            </p>
+            <ThemeProvider theme={buttonBrand}>
+              <LinkButton
+                onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)}
+                priority="tertiary"
+                iconSide="right"
+                icon={<SvgChevronDownSingle />}
+                href="#subscribe"
+              >
+                See pricing options
+              </LinkButton>
+            </ThemeProvider>
+          </section>
+        </Hero>
+      </CentredContainer>
+    </PageTitle>
+  );
+}
 
-      {props.orderIsAGift && (
-        <div className="weekly-campaign-hero__graphic weekly-gift-hero--desktop">
-          <GridImage
-            gridId="gwGiftingPackshot"
-            srcSizes={[1000]}
-            sizes="(max-width: 740px) 1000px"
-            imgType="png"
-            altText="A collection of Guardian Weekly magazines"
-          />
-        </div>
-      )}
-
-      {props.orderIsAGift && (
-        <div className="weekly-campaign-hero__graphic weekly-gift-hero--mobile">
-          <GridImage
-            gridId="gwGiftingPackshotMob"
-            srcSizes={[400]}
-            sizes="(max-width: 400px) 400px"
-            imgType="png"
-            altText="A collection of Guardian Weekly magazines"
-          />
-        </div>
-      )}
-
-    </div>
-
-
-  </ProductPageHero>
-);
-
-
-export { CampaignHeader, HeroImage };
+export { WeeklyHero };

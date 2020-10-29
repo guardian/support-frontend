@@ -44,7 +44,7 @@ const headerThemes: { [key: ThemeType]: string } = {
 const header = css`
   color: ${neutral[7]};
   position: relative;
-  background: #ededed;
+  background: ${neutral[93]};
   display: flex;
   flex-direction: column;
   padding-top: ${space[4]}px;

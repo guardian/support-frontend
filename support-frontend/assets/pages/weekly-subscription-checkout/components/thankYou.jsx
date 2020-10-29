@@ -5,8 +5,8 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-
-import { HeroImage } from 'pages/weekly-subscription-landing/components/hero/hero';
+// TODO: Set up HeroImage separately for this page
+// import { HeroImage } from 'pages/weekly-subscription-landing/components/hero/hero';
 import { sendTrackingEventsOnClick, GuardianWeekly } from 'helpers/subscriptions';
 
 import OrderedList from 'components/list/orderedList';
@@ -114,7 +114,7 @@ function ThankYouContent({
   return (
     <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={!orderIsGift ? styles.heroGuardianWeeklyNonGifting : styles.hero}>
-        <HeroImage orderIsGift={orderIsGift} />
+        {/* <HeroImage orderIsGift={orderIsGift} /> */}
         <HeadingBlock overheadingClass="--thankyou" overheading="Thank you for supporting our journalism!">
           {getHeading(billingPeriod, isPending, orderIsGift)}
         </HeadingBlock>

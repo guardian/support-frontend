@@ -6,6 +6,7 @@ import { radios, withKnobs } from '@storybook/addon-knobs';
 
 import Hero from 'components/page/Hero';
 import PageTitle from 'components/page/PageTitle';
+import Block from 'components/page/Block';
 import GridImage from 'components/gridImage/gridImage';
 import CentredContainer from 'components/containers/CentredContainer';
 
@@ -56,3 +57,15 @@ stories.add('Header', () => {
     </PageTitle>
   );
 });
+
+stories.add('Block', () => (
+  <CentredContainer>
+    <Block>
+      <section style={{ border: '1px solid #DCDCDC', padding: '1rem' }}>
+        <p>
+          This is a container for text or other content
+        </p>
+      </section>
+    </Block>
+  </CentredContainer>
+));

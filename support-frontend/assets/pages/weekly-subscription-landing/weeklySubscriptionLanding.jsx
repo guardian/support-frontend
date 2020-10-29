@@ -28,15 +28,20 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import Content, { Outset } from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
+
+import FullWidthContainer from 'components/containers/FullWidthContainer';
+import CentredContainer from 'components/containers/CentredContainer';
+import Block from 'components/page/Block';
 import ProductPageFeatures
   from 'components/productPage/productPageFeatures/productPageFeatures';
 import ProductPageInfoChip
   from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import SvgInformation from 'components/svgs/information';
 import SvgGift from 'components/svgs/gift';
+
 import 'stylesheets/skeleton/skeleton.scss';
 
-import { CampaignHeader } from './components/hero/hero';
+import { WeeklyHero } from './components/hero/hero';
 
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
@@ -113,12 +118,12 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
     /* eslint-enable react/no-danger */
   }
   return (
-    <LargeParagraph modifierClasses={['mobile-text-resize']}>
-      The Guardian Weekly magazine is a round-up of the world news,
-      opinion and long reads that have shaped the week. Inside, the past seven days&#39;
-      most memorable stories are reframed with striking photography and insightful companion
-      pieces, all handpicked from The Guardian and The Observer.
-    </LargeParagraph>);
+    <>
+      <h3><strong>Catch up on issues that matter</strong></h3>
+      The Guardian Weekly magazine is a round-up of the world news, opinion and long reads that have shaped the week.
+      Inside, the past seven days' most memorable stories are reframed with striking photography and insightful
+      companion pieces, all handpicked from The Guardian and The Observer.
+    </>);
 };
 
 const getRegionalCopyFor = (region: CountryGroupId): Element<'span'> => (region === GBPCountries ?
@@ -128,7 +133,10 @@ const getRegionalCopyFor = (region: CountryGroupId): Element<'span'> => (region 
 const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
   const currentRegion = detect();
   const defaultTitle = orderIsAGift ?
-    <span>Give a gift that challenges<br />the status quo</span>
+    <>
+      To: You<br />
+      From: Me
+    </>
     : getRegionalCopyFor(currentRegion);
   return {
     title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,
@@ -158,12 +166,40 @@ const content = (
       header={<Header />}
       footer={<WeeklyFooter promoTermsLink={promoTermsLink} />}
     >
-      <CampaignHeader heading={copy.title} orderIsAGift={orderIsAGift} />
-      <Content>
-        <Text title="Catch up on the issues that matter">
-          {copy.firstParagraph}
-        </Text>
-      </Content>
+      <WeeklyHero
+        orderIsAGift={orderIsAGift}
+        copy={{
+        title: copy.title,
+        paragraph: copy.firstParagraph,
+      }}
+      />
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block>
+            {orderIsAGift &&
+            <Content id="gift-benefits-them">
+              <GiftHeading text="What they'll get:" />
+              <List items={[
+            { explainer: 'The Guardian Weekly delivered, wherever they are in the world' },
+            { explainer: 'The Guardian\'s global journalism to keep them informed' },
+            { explainer: 'The very best of The Guardian\'s puzzles' },
+          ]}
+              />
+            </Content>}
+            {orderIsAGift &&
+            <Content id="gift-benefits-you">
+              <GiftHeading text="What you'll get:" />
+              <List items={[
+            { explainer: 'Your gift supports The Guardian\'s independent journalism' },
+            { explainer: 'Access to the magazine\'s digital archive' },
+            { explainer: '35% off the cover price' },
+          ]}
+              />
+            </Content>
+      }
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
       {!orderIsAGift &&
         <Content id="benefits">
           <Text title="As a subscriber you’ll enjoy" />
@@ -176,27 +212,6 @@ const content = (
             ]}
             />
           </Outset>
-        </Content>
-      }
-      {orderIsAGift &&
-        <Content id="gift-benefits-them">
-          <GiftHeading text="What they'll get:" />
-          <List items={[
-            { explainer: 'The Guardian Weekly delivered, wherever they are in the world' },
-            { explainer: 'The Guardian\'s global journalism to keep them informed' },
-            { explainer: 'The very best of The Guardian\'s puzzles' },
-          ]}
-          />
-        </Content>}
-      {orderIsAGift &&
-        <Content id="gift-benefits-you">
-          <GiftHeading text="What you'll get:" />
-          <List items={[
-            { explainer: 'Your gift supports The Guardian\'s independent journalism' },
-            { explainer: 'Access to the magazine\'s digital archive' },
-            { explainer: '35% off the cover price' },
-          ]}
-          />
         </Content>
       }
       <Content appearance="feature" id="subscribe">
