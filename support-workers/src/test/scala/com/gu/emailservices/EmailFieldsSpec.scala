@@ -83,8 +83,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |  }
         |},
         |"DataExtensionName" : "digipack",
-        |"SfContactId" : "0033E00001DTBHJQA5",
-        |"IdentityUserId" : null
+        |"SfContactId" : "0033E00001DTBHJQA5"
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
@@ -126,8 +125,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |  }
         |},
         |"DataExtensionName" : "digipack-corporate-redemption",
-        |"SfContactId" : "0033E00001DTBHJQA5",
-        |"IdentityUserId" : null
+        |"SfContactId" : "0033E00001DTBHJQA5"
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(

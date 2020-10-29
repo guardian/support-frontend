@@ -27,7 +27,7 @@ case class Promotion(
 }
 
 object Promotion {
-  import com.gu.support.encoding.CustomCodecs.{decodeDateTime, encodeDateTime}
+  implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeString.map(DateTime.parse)
   implicit val decoder: Decoder[Promotion] = deriveDecoder[Promotion].prepare(mapFields)
 
   private def mapFields(c: ACursor) = c.withFocus {
@@ -39,7 +39,6 @@ object Promotion {
     )
   }
 
-  implicit val encoder: Encoder[Promotion] = deriveEncoder[Promotion].mapJsonObject(_.renameField("channelCodes", "codes"))
 }
 
 object Promotions {

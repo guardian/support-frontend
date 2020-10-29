@@ -9,6 +9,7 @@ import io.circe.generic.semiauto._
 import io.circe.syntax._
 import org.joda.time.{DateTime, DateTimeZone, LocalDate, LocalTime}
 import com.gu.support.encoding.CustomCodecs._
+import org.joda.time.format.ISODateTimeFormat
 
 case class EmailPayloadContactAttributes(SubscriberAttributes: Map[String, String])
 case class EmailPayloadTo(Address: String, ContactAttributes: EmailPayloadContactAttributes)
@@ -21,6 +22,8 @@ case class EmailPayload(
 )
 
 object EmailPayload {
+  implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeString.contramap(ISODateTimeFormat.dateTime().print)
+
   implicit val e1: Encoder[EmailPayload] = deriveEncoder
   implicit val e2: Encoder[EmailPayloadTo] = deriveEncoder
   implicit val e3: Encoder[EmailPayloadContactAttributes] = deriveEncoder

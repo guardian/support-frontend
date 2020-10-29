@@ -3,9 +3,13 @@ package com.gu.support.promotions
 import com.gu.i18n.Country
 import com.gu.support.SerialisationTestHelpers
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.Encoder
+import io.circe.generic.semiauto.deriveEncoder
 import org.joda.time.DateTime
 import org.joda.time.Days.days
 import org.joda.time.Months.months
+import org.joda.time.chrono.ISOChronology
+import org.joda.time.format.ISODateTimeFormat
 import org.scalatest.flatspec.AsyncFlatSpec
 
 
@@ -111,9 +115,11 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       appliesTo,
       "",
       Map[Channel, Set[PromoCode]]("" -> Set()),
-      DateTime.now(),
+      DateTime.now(ISOChronology.getInstanceUTC),
       None, None, None
     )
+    implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeString.contramap(ISODateTimeFormat.dateTime().print)
+    implicit val e: Encoder[Promotion] = deriveEncoder
     testRoundTripSerialisation(promotion)
   }
 

@@ -2,8 +2,9 @@ package com.gu.support.promotions
 
 import com.gu.support.catalog.{DigitalPack, Product}
 import com.gu.support.config.{Stage, TouchPointEnvironments}
-import com.gu.support.encoding.Codec
 import com.gu.support.zuora.api.ReaderType.Gift
+import io.circe.generic.semiauto.deriveEncoder
+import io.circe.Encoder
 import org.joda.time.DateTime
 
 case class PromotionTerms(
@@ -18,9 +19,9 @@ case class PromotionTerms(
 
 object PromotionTerms {
 
-  import com.gu.support.encoding.CustomCodecs.{encodeDateTime, decodeDateTime}
+  implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeLong.contramap(_.getMillis)
 
-  implicit val codec: Codec[PromotionTerms] = Codec.deriveCodec
+  implicit val codec: Encoder[PromotionTerms] = deriveEncoder
 
   def fromPromoCode(promotionService: PromotionService, stage: Stage, promoCode: PromoCode): Option[PromotionTerms] =
     promotionService.findPromotion(promoCode).toOption.map(promotionTermsFromPromotion(stage))
