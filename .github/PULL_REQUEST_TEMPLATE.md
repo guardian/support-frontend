@@ -6,15 +6,14 @@ This pr adds a widget to the doogle so that we can buy a sub from any page in on
 For detailed changes see the inline self-review comments.
 -->
 
+
+[**Trello Card**](https://trello.com)
+
 ## Why are you doing this?
 
 <!--
 Remember, PRs are documentation for future contributors.
 -->
-
-## Useful links (trello, google docs, previous PRs, etc)
-
-<!-- trello -->
 
 ## Accessibility test checklist
  - [ ] [Tested with screen reader](https://accessibility.gutools.co.uk/testing/web/screen-readers/)
