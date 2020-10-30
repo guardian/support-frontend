@@ -61,7 +61,7 @@ stories.add('Header', () => {
 stories.add('Block', () => (
   <CentredContainer>
     <Block>
-      <section style={{ border: '1px solid #DCDCDC', padding: '1rem' }}>
+      <section style={{ backgroundColor: '#ffe500', padding: '1rem' }}>
         <p>
           This is a container for text or other content
         </p>

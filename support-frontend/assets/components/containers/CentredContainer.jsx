@@ -4,7 +4,8 @@ import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 
 type PropTypes = {|
-  children: Node
+  cssOverrides?: string;
+  children: Node;
 |}
 
 const centredContainer = css`
@@ -16,10 +17,14 @@ const centredContainer = css`
 
 function CentredContainer(props: PropTypes) {
   return (
-    <div css={centredContainer}>
+    <div css={[centredContainer, props.cssOverrides]}>
       {props.children}
     </div>
   );
 }
+
+CentredContainer.defaultProps = {
+  cssOverrides: '',
+};
 
 export default CentredContainer;

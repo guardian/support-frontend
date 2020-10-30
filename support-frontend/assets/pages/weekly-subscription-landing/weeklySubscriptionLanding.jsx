@@ -11,7 +11,6 @@ import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
-import { List } from 'components/productPage/productPageList/productPageList';
 
 import {
   AUDCountries,
@@ -26,14 +25,12 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import Content, { Outset } from 'components/content/content';
+import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 
 import FullWidthContainer from 'components/containers/FullWidthContainer';
 import CentredContainer from 'components/containers/CentredContainer';
 import Block from 'components/page/Block';
-import ProductPageFeatures
-  from 'components/productPage/productPageFeatures/productPageFeatures';
 import ProductPageInfoChip
   from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import SvgInformation from 'components/svgs/information';
@@ -42,9 +39,12 @@ import SvgGift from 'components/svgs/gift';
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { WeeklyHero } from './components/hero/hero';
+import Benefits from './components/content/Benefits';
+import GiftBenefits from './components/content/GiftBenefits';
 
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
+import { pricesSection } from './weeklySubscriptionLandingStyles';
 
 import './weeklySubscriptionLanding.scss';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
@@ -107,14 +107,14 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
     const sanitised = getSanitisedHtml(promotionCopy.description);
     return (
     /* eslint-disable react/no-danger */
-      <LargeParagraph>
+      <>
         <span
           className="promotion-description"
           dangerouslySetInnerHTML={
           { __html: sanitised }
         }
         />
-      </LargeParagraph>);
+      </>);
     /* eslint-enable react/no-danger */
   }
   return (
@@ -152,14 +152,6 @@ const copy = getCopy(promotionCopy, orderIsAGift);
 const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
 const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
 
-type GiftHeadingPropTypes = {
-  text: string,
-}
-
-const GiftHeading = (props: GiftHeadingPropTypes) => (
-  <h2 className="component-text">{props.text}</h2>
-);
-
 const content = (
   <Provider store={store}>
     <Page
@@ -176,44 +168,17 @@ const content = (
       <FullWidthContainer>
         <CentredContainer>
           <Block>
-            {orderIsAGift &&
-            <Content id="gift-benefits-them">
-              <GiftHeading text="What they'll get:" />
-              <List items={[
-            { explainer: 'The Guardian Weekly delivered, wherever they are in the world' },
-            { explainer: 'The Guardian\'s global journalism to keep them informed' },
-            { explainer: 'The very best of The Guardian\'s puzzles' },
-          ]}
-              />
-            </Content>}
-            {orderIsAGift &&
-            <Content id="gift-benefits-you">
-              <GiftHeading text="What you'll get:" />
-              <List items={[
-            { explainer: 'Your gift supports The Guardian\'s independent journalism' },
-            { explainer: 'Access to the magazine\'s digital archive' },
-            { explainer: '35% off the cover price' },
-          ]}
-              />
-            </Content>
-      }
+            {orderIsAGift ? <GiftBenefits /> : <Benefits />}
           </Block>
         </CentredContainer>
       </FullWidthContainer>
-      {!orderIsAGift &&
-        <Content id="benefits">
-          <Text title="As a subscriber you’ll enjoy" />
-          <Outset>
-            <ProductPageFeatures features={[
-              { title: 'Every issue delivered with up to 35% off the cover price' },
-              { title: 'Access to the magazine\'s digital archive' },
-              { title: 'A weekly email newsletter from the editor' },
-              { title: 'The very best of The Guardian\'s puzzles' },
-            ]}
-            />
-          </Outset>
-        </Content>
-      }
+      <FullWidthContainer cssOverrides={pricesSection}>
+        <CentredContainer>
+          prices
+        </CentredContainer>
+      </FullWidthContainer>
+
+
       <Content appearance="feature" id="subscribe">
         <Text title="Subscribe to Guardian Weekly today">
           <p>{copy.priceCardSubHeading}</p>
