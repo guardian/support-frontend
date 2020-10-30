@@ -1,13 +1,30 @@
 // @flow
 
 import { css } from '@emotion/core';
-import { brand, neutral, brandText, brandAlt, brandBackground } from '@guardian/src-foundations/palette';
-import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { brand, neutral } from '@guardian/src-foundations/palette';
 
 export const pricesSection = css`
-  padding-top: ${space[24]}px;
-  transform: translateY(-84px);
+  :before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    transform: translateY(-100%);
+    height: 88px;
+    width: 100%;
+    background-color: ${brand[300]};
+  }
+  position: relative;
   background-color: ${brand[300]};
   color: ${neutral[100]};
+`;
+
+export const giftOrPersonalSection = css`
+  background-color: ${neutral[100]};
+  color: ${neutral[7]};
+`;
+
+export const paddedSection = css`
+  padding: ${space[12]}px;
 `;

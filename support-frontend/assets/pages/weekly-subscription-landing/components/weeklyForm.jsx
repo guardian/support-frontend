@@ -1,4 +1,5 @@
 // @flow
+import React from 'react';
 import { connect } from 'react-redux';
 
 import {
@@ -8,7 +9,8 @@ import {
   type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
+
+import Prices, { type PropTypes } from './content/Prices';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
@@ -31,14 +33,26 @@ const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
+/**
+ * export type PaymentOption = {
+  title: string,
+  href: string,
+  salesCopy: Element<'span'>,
+  offer: Option<string>,
+  onClick: Function,
+  label: Option<string>,
+}
+ *
+ */
+
+const mapStateToProps = (state: State): PropTypes => {
   const { countryId } = state.common.internationalisation;
   const { productPrices, orderIsAGift } = state.page;
   const billingPeriodsToUse = weeklyBillingPeriods.filter(billingPeriod =>
     !(state.page.orderIsAGift && billingPeriod === SixWeekly));
 
   return {
-    plans: billingPeriodsToUse.reduce((plans, billingPeriod) => {
+    paymentOptions: billingPeriodsToUse.map((billingPeriod) => {
       const productPrice = productPrices ? getProductPrice(
         productPrices,
         countryId,
@@ -46,26 +60,46 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => {
         getWeeklyFulfilmentOption(countryId),
       ) : { price: 0, fixedTerm: false, currency: 'GBP' };
       return {
-        ...plans,
-        [billingPeriod]: {
-          title: billingPeriodTitle(billingPeriod, orderIsAGift),
-          copy: getPriceDescription(
-            productPrice,
-            billingPeriod,
-          ),
-          offer: getAppliedPromoDescription(billingPeriod, productPrice),
-          href: getCheckoutUrl(billingPeriod, orderIsAGift),
-          onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
-          price: null,
-          saving: null,
-        },
+        title: billingPeriodTitle(billingPeriod, orderIsAGift),
+        href: getCheckoutUrl(billingPeriod, orderIsAGift),
+        salesCopy: (
+          <span>
+            {getPriceDescription(
+              productPrice,
+              billingPeriod,
+            )}
+          </span>),
+        offer: getAppliedPromoDescription(billingPeriod, productPrice),
+        onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
+        label: 'hmm?',
+        // price: null,
+        // saving: null,
       };
-    }, {}),
-    theme: 'dark',
+    }),
+
+    // plans: billingPeriodsToUse.reduce((plans, billingPeriod) => {
+
+    //   return {
+    //     ...plans,
+    //     [billingPeriod]: {
+    //       title: billingPeriodTitle(billingPeriod, orderIsAGift),
+    //       copy: getPriceDescription(
+    //         productPrice,
+    //         billingPeriod,
+    //       ),
+    //       offer: getAppliedPromoDescription(billingPeriod, productPrice),
+    //       href: getCheckoutUrl(billingPeriod, orderIsAGift),
+    //       onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
+    //       price: null,
+    //       saving: null,
+    //     },
+    //   };
+    // }, {}),
+    // theme: 'dark',
   };
 };
 
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(ProductPagePlanForm);
+export default connect(mapStateToProps)(Prices);
