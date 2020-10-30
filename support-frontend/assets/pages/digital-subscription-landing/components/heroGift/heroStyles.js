@@ -132,31 +132,44 @@ export const toFromLines = css`
   justify-content: flex-start;
 `;
 
-export const toYou = css`
+export const toYouTyping = css`
   overflow: hidden; /* Ensures the content is not revealed until the animation */
-  border-right: 1px solid white; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
   letter-spacing: 0.01em; /* Adjust as needed */
   margin-left: ${space[2]}px;
   animation:
-    typing-to 0.7s steps(3, end),
-    blink-caret-to 0.7s steps(3, jump-both);
-  animation-fill-mode: both;
-  animation-delay: 1s;
+    typing-to 0.7s steps(3, end);
 
-  @media (prefers-reduced-motion) {
-    animation: none;
-    border-right: none;
-  }
+  /* This is to make it work on iPhones */
+  -webkit-animation-name: typing-to;
+  -webkit-animation-duration: 0.7s;
+  -webkit-animation-timing-function: steps(3, end);
 
   @keyframes typing-to {
     from { width: 0 }
     to { width: 17.5% }
   }
 
-  @keyframes blink-caret-to {
-    from, to { border-color: transparent }
-    50% { border-color: white; }
+  @-webkit-keyframes typing-to {
+    from { width: 0 }
+    to { width: 17.5% }
+  }
+
+  animation-fill-mode: both;
+  -webkit-animation-fill-mode: both;
+  animation-delay: 1s;
+  -webkit-animation-delay: 1s;
+
+  @media (prefers-reduced-motion) {
+    animation: none;
+    -webkit-animation: none;
+    border-right: none;
+    -webkit-border-right: none;
+  }
+
+  @keyframes typing-to {
+    from { width: 0 }
+    to { width: 17.5% }
   }
 
   color: ${brandAltBackground.primary};
@@ -215,17 +228,58 @@ export const toYou = css`
   }
 `;
 
-export const fromMe = css`
+export const toYouCursor = css`
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: 1px solid white; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  animation:
+    blink-caret-to 0.7s steps(3, jump-both);
+
+  /* This is to make it work on iPhones */
+  -webkit-animation-name: blink-caret-to;
+  -webkit-animation-duration: 0.7s;
+  -webkit-animation-timing-function: steps(3, jump-both);
+  animation-fill-mode: both;
+  -webkit-animation-fill-mode: both;
+  animation-delay: 1s;
+  -webkit-animation-delay: 1s;
+
+  animation-fill-mode: both;
+  -webkit-animation-fill-mode: both;
+  animation-delay: 1s;
+  -webkit-animation-delay: 1s;
+
+  @media (prefers-reduced-motion) {
+    animation: none;
+    -webkit-animation: none;
+    border-right: none;
+    -webkit-border-right: none;
+  }
+
+  @keyframes blink-caret-to {
+    from, to { border-color: transparent }
+    50% { border-color: white; }
+  }
+`;
+
+export const fromMeTyping = css`
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
   white-space: nowrap; /* Keeps the content on a single line */
   letter-spacing: 0.01em; /* Adjust as needed */
   margin-left: ${space[2]}px;
   animation:
-    typing-from 0.5s steps(2, end),
-    blink-caret-from 0.7s steps(2, jump-end);
+    typing-from 0.5s steps(2, end);
+
+  /* This is to make it work on iPhones */
+  -webkit-animation-name: typing-from;
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-timing-function: steps(2, end);
+
   animation-fill-mode: both;
+  -webkit-animation-fill-mode: both;
   animation-delay: 2.4s;
+  -webkit-animation-delay: 2.4s;
+
   color: ${brandAltBackground.primary};
 
   @media (prefers-reduced-motion) {
@@ -238,9 +292,9 @@ export const fromMe = css`
     to { width: 14% }
   }
 
-  @keyframes blink-caret-from {
-    from, to { border-color: transparent }
-    50% { border-color: white; }
+  @-webkit-keyframes typing-from {
+    from { width: 0 }
+    to { width: 14% }
   }
 
   ${headline.small({ fontWeight: 'bold' })};
@@ -248,7 +302,7 @@ export const fromMe = css`
   ${from.mobileMedium} {
     @keyframes typing-from {
       from { width: 0 }
-      to { width: 12% }
+      to { width: 10% }
     }
   }
 
@@ -256,7 +310,7 @@ export const fromMe = css`
     ${headline.medium({ fontWeight: 'bold' })};
     @keyframes typing-from {
       from { width: 0 }
-      to { width: 11% }
+      to { width: 8% }
     }
   }
 
@@ -295,6 +349,39 @@ export const fromMe = css`
       from { width: 0 }
       to { width: 13.25% }
     }
+  }
+
+`;
+
+export const fromMeCursor = css`
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: 1px solid white; /* The typwriter cursor */
+  animation:
+    blink-caret-from 0.7s steps(2, jump-end);
+
+  /* This is to make it work on iPhones */
+  -webkit-animation-name: blink-caret-from;
+  -webkit-animation-duration: 0.7s;
+  -webkit-animation-timing-function: steps(2, jump-end);
+
+  animation-fill-mode: both;
+  -webkit-animation-fill-mode: both;
+  animation-delay: 2.4s;
+  -webkit-animation-delay: 2.4s;
+
+  @media (prefers-reduced-motion) {
+    animation: none;
+    border-right: none;
+  }
+
+  @keyframes typing-from {
+    from { width: 0 }
+    to { width: 14% }
+  }
+
+  @keyframes blink-caret-from {
+    from, to { border-color: transparent }
+    50% { border-color: white; }
   }
 
 `;

@@ -16,8 +16,10 @@ import {
   textSection,
   giftTag,
   toFromLines,
-  toYou,
-  fromMe,
+  toYouTyping,
+  toYouCursor,
+  fromMeTyping,
+  fromMeCursor,
   heroHeading,
   paragraph,
   heavyText,
@@ -48,11 +50,15 @@ function CampaignHeaderGift(props: PropTypes) {
           <div css={giftTag}>
             <div css={toFromLines}>
               <div css={heroHeading}>To:</div>
-              <div css={toYou}>You</div>
+              <div css={toYouTyping}>
+                <div css={toYouCursor}>You</div>
+              </div>
             </div>
             <div css={toFromLines}>
               <div css={heroHeading}>From:</div>
-              <div css={fromMe}>Me</div>
+              <div css={fromMeTyping}>
+                <div css={fromMeCursor}>Me</div>
+              </div>
             </div>
           </div>
           <GiftCopy />
