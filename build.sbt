@@ -31,7 +31,7 @@ lazy val release = Seq[ReleaseStep](
 
 inThisBuild(Seq(
   organization := "com.gu",
-  scalaVersion := "2.12.10",
+  scalaVersion := "2.12.12",
   dependencyStats / aggregate := false,
   dependencyTree / aggregate := false,
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
@@ -89,8 +89,6 @@ lazy val root = (project in file("."))
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
-lazy val setupGitHook = taskKey[Unit]("Set up a pre-push git hook to run the integration tests")
-
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(SeleniumTest)
@@ -100,8 +98,6 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     scalastyleFailOnError := true,
-    setupGitHook := {"ln -s ../../pre-push .git/hooks/pre-push" !},
-    (run in Compile) := ((run in Compile) dependsOn setupGitHook).evaluated,
     testScalastyle := scalastyle.in(Compile).toTask("").value,
     (test in Test) := ((test in Test) dependsOn testScalastyle).value,
     (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
