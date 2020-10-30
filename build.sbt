@@ -32,7 +32,6 @@ lazy val release = Seq[ReleaseStep](
 inThisBuild(Seq(
   organization := "com.gu",
   scalaVersion := "2.12.12",
-  dependencyStats / aggregate := false,
   dependencyTree / aggregate := false,
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
   updateOptions := updateOptions.value.withCachedResolution(true),
