@@ -13,6 +13,9 @@ nvm use
 YARN_VERSION="1.22.5"
 YARN_LOCATION="tools/${YARN_VERSION}"
 
+echo "LOOKING AT tools/"
+ls -l tools/
+
 if [ ! -d "$YARN_LOCATION" ]; then
 	mkdir -p ${YARN_LOCATION}
 	cd ${YARN_LOCATION}/
