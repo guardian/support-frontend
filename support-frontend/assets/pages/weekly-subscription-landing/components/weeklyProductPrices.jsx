@@ -15,14 +15,16 @@ import Prices, { type PropTypes } from './content/Prices';
 import { type State } from '../weeklySubscriptionLandingReducer';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import {
-  getAppliedPromoDescription,
   getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { getOrigin, getQueryParameter } from 'helpers/url';
-import { promoQueryParam } from 'helpers/productPrice/promotions';
+import { promoQueryParam, type Promotion } from 'helpers/productPrice/promotions';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
+import { currencies } from 'helpers/internationalisation/currency';
+import { fixDecimals } from 'helpers/subscriptions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
-// ---- Plans ----- //
 
 const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean): string => {
   const promoCode = getQueryParameter(promoQueryParam);
@@ -31,19 +33,22 @@ const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean
   return `${getOrigin()}/subscribe/weekly/checkout${gift}?period=${billingPeriod.toString()}${promoQuery}`;
 };
 
-// ----- State/Props Maps ----- //
+const getCurrencySymbol = (currencyId: IsoCurrency): string => currencies[currencyId].glyph;
 
-/**
- * export type PaymentOption = {
-  title: string,
-  href: string,
-  salesCopy: Element<'span'>,
-  offer: Option<string>,
-  onClick: Function,
-  label: Option<string>,
-}
- *
- */
+const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
+  getCurrencySymbol(currencyId) + fixDecimals(price);
+
+const getPromotionLabel = (promotion: Promotion | null) => {
+  if (!promotion || !promotion.discount) { return null; }
+  return `Save ${promotion.discount.amount}%`;
+};
+
+const getRelevantPromotion = ({ promotions }: ProductPrice) => {
+  if (promotions && promotions.length) {
+    return promotions[0];
+  }
+  return null;
+};
 
 const mapStateToProps = (state: State): PropTypes => {
   const { countryId } = state.common.internationalisation;
@@ -52,50 +57,31 @@ const mapStateToProps = (state: State): PropTypes => {
     !(state.page.orderIsAGift && billingPeriod === SixWeekly));
 
   return {
-    paymentOptions: billingPeriodsToUse.map((billingPeriod) => {
+    products: billingPeriodsToUse.map((billingPeriod) => {
       const productPrice = productPrices ? getProductPrice(
         productPrices,
         countryId,
         billingPeriod,
         getWeeklyFulfilmentOption(countryId),
       ) : { price: 0, fixedTerm: false, currency: 'GBP' };
+      const promotion = getRelevantPromotion(productPrice);
+      const mainDisplayPrice = promotion && promotion.discountedPrice ? promotion.discountedPrice : productPrice.price;
       return {
         title: billingPeriodTitle(billingPeriod, orderIsAGift),
-        href: getCheckoutUrl(billingPeriod, orderIsAGift),
-        salesCopy: (
+        price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
+        priceCopy: (
           <span>
             {getPriceDescription(
               productPrice,
               billingPeriod,
             )}
           </span>),
-        offer: getAppliedPromoDescription(billingPeriod, productPrice),
+        buttonCopy: 'Subscribe now',
+        href: getCheckoutUrl(billingPeriod, orderIsAGift),
+        label: getPromotionLabel(promotion) || '',
         onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
-        label: 'label',
-        // price: null,
-        // saving: null,
       };
     }),
-
-    // plans: billingPeriodsToUse.reduce((plans, billingPeriod) => {
-
-    //   return {
-    //     ...plans,
-    //     [billingPeriod]: {
-    //       title: billingPeriodTitle(billingPeriod, orderIsAGift),
-    //       copy: getPriceDescription(
-    //         productPrice,
-    //         billingPeriod,
-    //       ),
-    //       offer: getAppliedPromoDescription(billingPeriod, productPrice),
-    //       href: getCheckoutUrl(billingPeriod, orderIsAGift),
-    //       onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
-    //       price: null,
-    //       saving: null,
-    //     },
-    //   };
-    // }, {}),
-    // theme: 'dark',
   };
 };
 

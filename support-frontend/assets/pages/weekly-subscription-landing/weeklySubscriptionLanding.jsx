@@ -40,7 +40,7 @@ import { WeeklyHero } from './components/hero/hero';
 import Benefits from './components/content/Benefits';
 import GiftBenefits from './components/content/GiftBenefits';
 
-import WeeklyPrices from './components/weeklyForm';
+import WeeklyPrices from './components/weeklyProductPrices';
 import reducer from './weeklySubscriptionLandingReducer';
 import { pricesSection, giftOrPersonalSection, paddedSection } from './weeklySubscriptionLandingStyles';
 
