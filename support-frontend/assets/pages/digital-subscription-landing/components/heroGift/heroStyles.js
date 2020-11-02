@@ -89,7 +89,7 @@ export const featureContainer = css`
     flex-direction: row;
     width: 100%;
     align-self: center;
-    padding: 0 ${space[4]}px;
+    padding: 0 ${space[4]}px ${space[4]}px;
   }
 
   ${from.tablet} {
@@ -105,6 +105,7 @@ export const featureContainer = css`
   ${from.leftCol} {
     width: calc(100% - 80px);
     max-width: 80.625rem;
+    padding-bottom: 0;
   }
 `;
 
@@ -118,7 +119,7 @@ export const textSection = css`
 
   ${from.leftCol} {
     width: 40%;
-    padding-bottom: 60px;
+    padding-bottom: 40px;
   }
 `;
 
@@ -314,13 +315,6 @@ export const fromMeTyping = css`
     }
   }
 
-  ${from.phablet} {
-    @keyframes typing-from {
-      from { width: 0 }
-      to { width: 8% }
-    }
-  }
-
   ${from.tablet} {
     @keyframes typing-from {
       from { width: 0 }
@@ -374,11 +368,6 @@ export const fromMeCursor = css`
     border-right: none;
   }
 
-  @keyframes typing-from {
-    from { width: 0 }
-    to { width: 14% }
-  }
-
   @keyframes blink-caret-from {
     from, to { border-color: transparent }
     50% { border-color: white; }
@@ -422,12 +411,12 @@ export const paragraph = css`
   ${from.desktop} {
     ${headline.xxsmall()};
     line-height: 135%;
-    max-width: 95%;
+    max-width: 87%;
     margin-top: 20px;
   }
 
   ${from.leftCol} {
-    max-width: 95%;
+    max-width: 100%;
     margin-top: ${space[12]}px;
   }
 `;
@@ -440,7 +429,7 @@ export const packShot = css`
   display: block;
   width: 100%;
   margin-top: ${space[5]}px;
-  margin-bottom: -5px;
+  margin-bottom: -6px;
 
   img {
     width: 100%;
@@ -448,7 +437,7 @@ export const packShot = css`
 
   ${from.tablet} {
     position: absolute;
-    bottom: -5px;
+    bottom: -6px;
     right: 5px;
     margin: 0;
     max-width: 50%;
