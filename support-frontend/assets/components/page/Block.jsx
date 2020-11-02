@@ -4,6 +4,7 @@ import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 
 type PropTypes = {|
   children: Node;
@@ -12,10 +13,14 @@ type PropTypes = {|
 const block = css`
   position: relative;
   margin: ${space[6]}px 0;
+  padding: ${space[9]}px 0;
   border: 1px solid ${neutral[86]};
   background-color: ${neutral[100]};
-  padding: ${space[12]}px;
   z-index: 2;
+
+  ${from.desktop} {
+    padding: ${space[12]}px;
+  }
 `;
 
 function Block(props: PropTypes) {

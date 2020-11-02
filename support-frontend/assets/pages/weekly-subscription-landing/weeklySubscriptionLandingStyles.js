@@ -26,5 +26,5 @@ export const giftOrPersonalSection = css`
 `;
 
 export const paddedSection = css`
-  padding: ${space[3]}px 0 ${space[12]}px;
+  padding: ${space[3]}px ${space[3]}px ${space[12]}px;
 `;

@@ -4,6 +4,7 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { body, headline } from '@guardian/src-foundations/typography';
+import { from } from '@guardian/src-foundations/mq';
 import FlexContainer from 'components/containers/FlexContainer';
 import ProductOption, { type Product } from 'components/product/ProductOption';
 
@@ -12,18 +13,43 @@ export type PropTypes = {|
 |};
 
 const pricesSection = css`
-  padding-bottom: ${space[12]}px;
+  padding: 0 ${space[3]}px ${space[12]}px;
 `;
 
 const priceBoxes = css`
-  margin-top: ${space[9]}px;
+  margin-top: ${space[6]}px;
   justify-content: flex-start;
   align-items: stretch;
+  ${from.desktop} {
+    margin-top: ${space[9]}px;
+  }
 `;
 
 const productOverride = css`
-  &:not(:last-of-type) {
-    margin-right: ${space[5]}px;
+  &:not(:first-of-type) {
+    margin-top: ${space[4]}px;
+  }
+  ${from.tablet} {
+    &:not(:first-of-type) {
+      margin-top: 0;
+    }
+    &:not(:last-of-type) {
+      margin-right: ${space[5]}px;
+    }
+  }
+`;
+
+const productOverrideWithLabel = css`
+  &:not(:first-of-type) {
+    margin-top: ${space[12]}px;
+  }
+  ${from.tablet} {
+    &:not(:first-of-type) {
+      margin-top: 0;
+    }
+    &:not(:last-of-type) {
+      margin-right: ${space[5]}px;
+    }
   }
 `;
 
@@ -44,7 +70,7 @@ function Prices({ products }: PropTypes) {
       <FlexContainer cssOverrides={priceBoxes}>
         {products.map(product => (
           <ProductOption
-            cssOverrides={productOverride}
+            cssOverrides={product.label ? productOverrideWithLabel : productOverride}
             title={product.title}
             price={product.price}
             priceCopy={product.priceCopy}

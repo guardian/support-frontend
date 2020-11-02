@@ -6,6 +6,7 @@ import { css } from '@emotion/core';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { headline, textSans } from '@guardian/src-foundations/typography';
+import { from, until } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 
@@ -27,10 +28,13 @@ const productOption = css`
   flex-direction: column;
   justify-content: space-between;
   min-height: 272px;
-  width: 300px;
+  width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
   padding: ${space[3]}px;
+  ${from.tablet} {
+    width: 300px;
+  }
 `;
 
 const productOptionTitle = css`
