@@ -17,4 +17,5 @@ module.exports = () => {
   require('./cards.jsx');
   require('./containers.jsx');
   require('./page.jsx');
+  require('./product.jsx');
 };
