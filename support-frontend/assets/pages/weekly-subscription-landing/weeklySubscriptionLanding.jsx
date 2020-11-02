@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import marked from 'marked';
 import DOMPurify from 'dompurify';
 import { LinkButton } from '@guardian/src-button';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
 
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
@@ -39,7 +40,7 @@ import { WeeklyHero } from './components/hero/hero';
 import Benefits from './components/content/Benefits';
 import GiftBenefits from './components/content/GiftBenefits';
 
-import WeeklyForm from './components/weeklyForm';
+import WeeklyPrices from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
 import { pricesSection, giftOrPersonalSection, paddedSection } from './weeklySubscriptionLandingStyles';
 
@@ -170,7 +171,7 @@ const content = (
       </FullWidthContainer>
       <FullWidthContainer cssOverrides={pricesSection}>
         <CentredContainer>
-          <WeeklyForm />
+          <WeeklyPrices />
         </CentredContainer>
       </FullWidthContainer>
       <FullWidthContainer cssOverrides={giftOrPersonalSection}>
@@ -180,6 +181,8 @@ const content = (
               {!orderIsAGift && <LargeParagraph>A Guardian Weekly subscription makes a great gift.</LargeParagraph>}
             </Text>
             <LinkButton
+              icon={<SvgArrowRightStraight />}
+              iconSide="right"
               priority="tertiary"
               href={orderIsAGift ?
               routes.guardianWeeklySubscriptionLanding : routes.guardianWeeklySubscriptionLandingGift}

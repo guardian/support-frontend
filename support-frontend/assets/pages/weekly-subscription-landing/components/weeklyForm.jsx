@@ -71,7 +71,7 @@ const mapStateToProps = (state: State): PropTypes => {
           </span>),
         offer: getAppliedPromoDescription(billingPeriod, productPrice),
         onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
-        label: 'hmm?',
+        label: 'label',
         // price: null,
         // saving: null,
       };

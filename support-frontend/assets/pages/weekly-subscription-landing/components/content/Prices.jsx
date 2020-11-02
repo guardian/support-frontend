@@ -29,7 +29,7 @@ export type PropTypes = {|
 |};
 
 const pricesSection = css`
-  padding: 0 ${space[12]}px ${space[12]}px;
+  padding-bottom: ${space[12]}px;
 `;
 
 const priceBoxes = css`
@@ -70,6 +70,7 @@ const pricesHeadline = css`
 
 const pricesSubHeadline = css`
   ${body.medium()}
+  padding-bottom: ${space[2]}px;
 `;
 
 function Prices({ paymentOptions }: PropTypes) {
