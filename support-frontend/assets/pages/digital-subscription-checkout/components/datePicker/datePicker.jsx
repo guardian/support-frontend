@@ -99,14 +99,15 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 
   checkDateIsValid = (e: Object) => {
     e.preventDefault();
+    const now = new Date();
     const date = new Date(this.getDateString());
     const dateIsNotADate = !DateUtils.isDate(date);
-    const latestAvailableDate = getLatestAvailableDateText();
+    const latestAvailableDate = getLatestAvailableDateText(now);
 
     this.setState({ dateValidated: true, dateError: '' });
     if (dateIsNotADate) {
       this.handleError('No date has been selected as the date is not valid. Please try again');
-    } else if (dateIsOutsideRange(date)) {
+    } else if (dateIsOutsideRange(date, now)) {
       this.handleError(`No date has been recorded as the date entered was not available. Please enter a date up to ${latestAvailableDate}`);
     } else if (dateIsPast(date)) {
       this.handleError(`No date has been recorded as the date was in the past. Please enter a date between today and ${latestAvailableDate}`);
@@ -124,7 +125,8 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
   }
 
   handleCalendarDate = (date: Date) => {
-    if (dateIsPast(date) || dateIsOutsideRange(date)) {
+    const now = new Date();
+    if (dateIsPast(date) || dateIsOutsideRange(date, now)) {
       return;
     }
     const dateArray = formatMachineDate(date).split('-');
@@ -165,7 +167,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
       <div>
         <fieldset css={startDateGroup} role="group" aria-describedby="date-hint">
           <legend id="date-hint">
-            {`Please choose a date up to ${getLatestAvailableDateText()} for your gift to be emailed to the recipient.`}
+            {`Please choose a date up to ${getLatestAvailableDateText(currentMonth)} for your gift to be emailed to the recipient.`}
           </legend>
           <div css={startDateFields}>
             <div css={inputLayoutWithMargin}>
@@ -214,7 +216,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
         {state.showCalendar && (
           <DayPicker
             onDayClick={day => this.handleCalendarDate(day)}
-            disabledDays={[{ before: new Date(today) }, { after: getRange() }]}
+            disabledDays={[{ before: new Date(today) }, { after: getRange(currentMonth) }]}
             weekdaysShort={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
             fromMonth={currentMonth}
             toMonth={threeMonthRange}
