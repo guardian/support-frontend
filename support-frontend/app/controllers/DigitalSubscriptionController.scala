@@ -51,7 +51,11 @@ class DigitalSubscriptionController(
 
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = "Support the Guardian | The Guardian Digital Subscription"
+    val title = if (orderIsAGift) {
+      "Support the Guardian | The Guardian Digital Gift Subscription"
+     } else {
+       "Support the Guardian | The Guardian Digital Subscription"
+     }
     val mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode)
     val js = Left(RefPath("digitalSubscriptionLandingPage.js"))
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
@@ -68,24 +72,27 @@ class DigitalSubscriptionController(
     val readerType = if (orderIsAGift) Gift else Direct
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
     val shareImageUrl = Some("https://i.guim.co.uk/img/media/1033800a75851058d619bc0519b0b7b48a53dcf5/0_0_1200_1200/1200.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=0d50dd49d1fedeacff8a3e437332c2bf") // scalastyle:ignore
-
-    Ok(views.html.main(
-      title = title,
-      mainElement = mainElement,
-      mainJsBundle = js,
-      mainStyleBundle = css,
-      fontLoaderBundle = fontLoaderBundle,
-      description = description,
-      canonicalLink = canonicalLink,
-      hrefLangLinks = hrefLangLinks,
-      shareImageUrl = shareImageUrl,
-      shareUrl = canonicalLink
-    ) {
-      Html(s"""<script type="text/javascript">
-        window.guardian.productPrices = ${outputJson(productPrices)}
-        window.guardian.orderIsAGift = $orderIsAGift
-      </script>""")
-    }).withSettingsSurrogateKey
+    if (settings.switches.enableDigitalSubGifting.isOn || !orderIsAGift) {
+      Ok(views.html.main(
+        title = title,
+        mainElement = mainElement,
+        mainJsBundle = js,
+        mainStyleBundle = css,
+        fontLoaderBundle = fontLoaderBundle,
+        description = description,
+        canonicalLink = canonicalLink,
+        hrefLangLinks = hrefLangLinks,
+        shareImageUrl = shareImageUrl,
+        shareUrl = canonicalLink
+      ) {
+        Html(s"""<script type="text/javascript">
+          window.guardian.productPrices = ${outputJson(productPrices)}
+          window.guardian.orderIsAGift = $orderIsAGift
+        </script>""")
+      }).withSettingsSurrogateKey
+    } else {
+      Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect(false)).withSettingsSurrogateKey
+    }
   }
 
   def digitalGeoRedirect(orderIsAGift: Boolean = false): Action[AnyContent] = geoRedirect(
@@ -111,7 +118,7 @@ class DigitalSubscriptionController(
       ).flatten.map(_.withSettingsSurrogateKey)
     }
     } else {
-      Action(Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift)).withSettingsSurrogateKey)
+      Action(Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect(false)).withSettingsSurrogateKey)
     }
   }
 
