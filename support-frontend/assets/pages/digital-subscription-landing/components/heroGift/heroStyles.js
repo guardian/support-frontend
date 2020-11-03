@@ -21,7 +21,7 @@ export const wrapper = css`
     left: 0;
     width: 100%;
     height: 120px;
-    background: #006D67;
+    background: #00568D;
     content: '';
   }
 

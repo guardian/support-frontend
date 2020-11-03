@@ -114,9 +114,9 @@ export const imageCatalogue: {
   printCampaignHD: '817936f0d1a2755c778b523b5ac5daa2d2f27449/10_0_716_694',
   printCheckoutDigitalVoucher: '15677cf8f82a5690bec39bf73b2c098c8f79b24f/15_0_667_400',
   printCheckoutHD: 'c482b2fbe5f2c2af01d54cc1c8d47a6dd626eb1f/0_102_750_450',
-  editionsPackshot: '22841f3977aedb85be7b0cf442747b1da51f780f/0_0_2320_1890',
+  editionsPackshot: '518e4f5b42c39218bf3fb0b00465d5f4abb3d93a/0_0_1280_988',
   editionsPackshotShort: '278357625f580358e74db1563777aa0b4570072d/0_0_1800_1080',
-  editionsPackshotAus: 'a1679c54314643a7b611a0c97b53a8ea38b9ec23/0_0_2320_1890',
+  editionsPackshotAus: '9af0c459c507f67a21280789ce139594d13221e1/0_0_1000_815',
   editionsPackshotAusShort: '1cc6d0197f84430332f58ab6e9926adb83771f0b/0_0_1800_1080',
   weekendPackshotMobile: '622d1b94173e9c711ff421d89cf9abddf3319197/0_0_1100_1100',
   weekendPackshotDesktop: 'dc1bb7218877d954a5841b24765e89f7c3aa6f95/0_0_1800_1080',
@@ -124,8 +124,6 @@ export const imageCatalogue: {
   liveAppDesktop: '7f6b52bd46bf801e7f55eeb1d6f2666727c0ddf9/0_0_1800_1080',
   editionsRowMobile: '307653cb535689ce12b93cf90cfb233cddaab3fd/0_0_1100_1100',
   editionsRowDesktop: 'a37e08fd9d3343eb629ae44b2b30127d7e31184b/0_0_1800_1080',
-  digiSubsGiftRow: '518e4f5b42c39218bf3fb0b00465d5f4abb3d93a/0_0_1280_988',
-  digiSubsGiftAus: '9af0c459c507f67a21280789ce139594d13221e1/0_0_1000_815',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

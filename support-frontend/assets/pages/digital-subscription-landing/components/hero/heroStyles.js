@@ -22,7 +22,7 @@ export const wrapper = css`
     left: 0;
     width: 100%;
     height: 170px;
-    background: ${brand[300]};
+    background: #00568D;
     content: '';
   }
 
@@ -78,7 +78,7 @@ export const featureContainer = css`
   display: flex;
   flex-direction: column;
   align-self: flex-start;
-  background-color: #00568D;
+  background-color: ${brand[300]};
   color: ${neutral[97]};
   padding: ${space[4]}px;
   padding-bottom: 0;
