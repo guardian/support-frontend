@@ -5,6 +5,8 @@ package com.gu.i18n
 case class Country(alpha2: String, name: String, statesByCode: Map[String, String] = Map.empty) {
   // Backwards compatibility, including using the 2/3-character codes for Australian states as the name
   val states: Seq[String] = if (alpha2 == "AU") statesByCode.keys.toSeq.sorted else statesByCode.values.toSeq.sorted
+
+  override def toString: String = s"com.gu.i18n.Country.$alpha2"
 }
 
 object Country {

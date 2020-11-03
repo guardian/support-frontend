@@ -19,7 +19,6 @@ import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
-import utils.BrowserCheck
 import utils.FastlyGEOIP._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -116,8 +115,6 @@ class Application(
   }
 
   def unsupportedBrowser: Action[AnyContent] = NoCacheAction() { implicit request =>
-    BrowserCheck.logUserAgent(request)
-    SafeLogger.info("Redirecting to unsupported-browser page")
     Ok(views.html.unsupportedBrowserPage())
   }
 
