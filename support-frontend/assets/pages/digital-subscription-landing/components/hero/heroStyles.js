@@ -31,12 +31,6 @@ export const wrapper = css`
       height: 200px;
     }
   }
-
-  ${from.desktop} {
-    :before {
-      height:200px;
-    }
-  }
 `;
 
 export const pageTitle = css`
@@ -64,7 +58,7 @@ export const pageTitle = css`
     ${titlepiece.large()}
     max-width: calc(100% - 110px);
     max-width: 1100px;
-    padding: 0 ${space[4]}px ${space[12]}px;
+    padding: ${space[3]}px ${space[4]}px ${space[9]}px;
   }
 
   ${from.leftCol} {

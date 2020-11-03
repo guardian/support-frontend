@@ -14,6 +14,7 @@ export const wrapper = css`
   background: #ededed;
   display: flex;
   flex-direction: column;
+  padding-top: ${space[4]}px;
 
   :before {
     position: absolute;
@@ -57,13 +58,14 @@ export const pageTitle = css`
 
   ${from.tablet} {
     width: calc(100% - 40px);
+    align-self: center;
   }
 
   ${from.desktop} {
     ${titlepiece.medium()}
     max-width: calc(100% - 110px);
     max-width: 1100px;
-    padding: ${space[4]}px ${space[4]}px ${space[6]}px;
+    padding: ${space[3]}px ${space[4]}px ${space[9]}px;
   }
 
   ${from.leftCol} {
