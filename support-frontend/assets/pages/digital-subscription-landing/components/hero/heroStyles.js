@@ -112,11 +112,7 @@ export const textSection = css`
     width: 60%;
   }
 
-  ${from.tablet} {
-    width: 55%;
-  }
-
-  ${from.leftCol} {
+  ${from.desktop} {
     width: 55%;
   }
 `;
@@ -132,6 +128,11 @@ export const heroHeading = css`
 
   ${from.mobileLandscape} {
     ${headline.medium({ fontWeight: 'bold' })};
+  }
+
+  ${from.tablet} {
+    white-space: nowrap;
+    overflow: visible;
   }
 
   ${from.desktop} {
@@ -163,18 +164,14 @@ export const paragraph = css`
     max-width: 85%;
   }
 
-  ${from.tablet} {
-    max-width: 90%;
-  }
-
   ${from.desktop} {
     ${headline.xxsmall()};
     line-height: 135%;
-    max-width: 95%;
+    max-width: 90%;
   }
 
   ${from.leftCol} {
-    max-width: 95%;
+    /* max-width: 95%; */
   }
 `;
 
