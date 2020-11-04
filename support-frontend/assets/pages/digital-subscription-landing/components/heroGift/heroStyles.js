@@ -14,7 +14,7 @@ export const wrapper = css`
   background: #ededed;
   display: flex;
   flex-direction: column;
-  padding-top: ${space[4]}px;
+  padding: 0 0 ${space[3]}px;
 
   :before {
     position: absolute;
@@ -65,7 +65,7 @@ export const pageTitle = css`
     ${titlepiece.medium()}
     max-width: calc(100% - 110px);
     max-width: 1100px;
-    padding: ${space[3]}px ${space[4]}px ${space[9]}px;
+    padding: ${space[5]}px ${space[4]}px;
   }
 
   ${from.leftCol} {
@@ -305,7 +305,7 @@ export const fromMeTyping = css`
   ${from.mobileMedium} {
     @keyframes typing-from {
       from { width: 0 }
-      to { width: 10% }
+      to { width: 12% }
     }
   }
 

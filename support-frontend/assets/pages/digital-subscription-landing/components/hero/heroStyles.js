@@ -14,7 +14,7 @@ export const wrapper = css`
   background: #ededed;
   display: flex;
   flex-direction: column;
-  padding-top: ${space[4]}px;
+  padding-top: ${space[3]}px;
 
   :before {
     position: absolute;
@@ -27,7 +27,9 @@ export const wrapper = css`
   }
 
   ${from.mobileLandscape} {
+    padding-top: ${space[4]}px;
     :before {
+      margin-top: -1px;
       height: 200px;
     }
   }
@@ -38,11 +40,11 @@ export const pageTitle = css`
   color: ${neutral[97]};
   z-index: 10;
   background-color: transparent;
-  padding: 0 ${space[4]}px ${space[9]}px;
+  padding: 0 ${space[3]}px ${space[3]}px;
   width: 100%;
 
   ${from.mobileLandscape} {
-    padding-bottom: ${space[12]}px;
+    padding-bottom: ${space[4]}px;
   }
 
   ${from.phablet} {
