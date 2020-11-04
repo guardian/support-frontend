@@ -11,7 +11,6 @@ import { fixDecimals } from 'helpers/subscriptions';
 
 // types
 import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
-// import { Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
 import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
 import { type Option } from 'helpers/types/option';
 import type {
