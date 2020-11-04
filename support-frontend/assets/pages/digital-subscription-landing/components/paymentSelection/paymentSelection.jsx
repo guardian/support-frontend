@@ -15,6 +15,7 @@ import {
 } from './helpers/paymentSelection';
 // styles
 import './paymentSelection.scss';
+import { Annual } from 'helpers/billingPeriods';
 
 type PropTypes = {
   paymentOptions: Array<PaymentOption>,
@@ -22,8 +23,10 @@ type PropTypes = {
 }
 
 const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) => {
-  // This line reverses the order of the payment options for gifting so Quarterly is first annd Annual second
-  const paymentOptionsList = orderIsAGift ? [paymentOptions[1], paymentOptions[0]] : paymentOptions;
+  // The following line makes sure the Annual payment selection card is on the right hand side
+  const paymentOptionsList = paymentOptions[0].title === Annual ?
+    [paymentOptions[1], paymentOptions[0]] :
+    paymentOptions;
   return (
     <div className="payment-selection">
       {
