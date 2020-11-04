@@ -313,7 +313,8 @@ export const fromMeTyping = css`
     ${headline.medium({ fontWeight: 'bold' })};
     @keyframes typing-from {
       from { width: 0 }
-      to { width: 8% }
+      // Looks like a repetition but seems only to work at this size if specified
+      to { width: 12% }
     }
   }
 
