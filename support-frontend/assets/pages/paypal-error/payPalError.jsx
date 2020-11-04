@@ -24,12 +24,12 @@ const content = (
   <Page header={<Header countryGroupId={detect()} />} footer={<Footer />}>
     <div className="paypal-error">
       <PageSection modifierClass="paypal-error">
-        <h1 className="paypal-error__heading">Something went wrong</h1>
+        <h1 className="paypal-error__heading">Please try again</h1>
         <p className="paypal-error__copy">
-          Sorry, there was a problem completing your PayPal payment. Please try
-          again:
+          Sorry, we were unable to complete your payment the first time. Don’t
+          worry, you haven’t been charged anything.
         </p>
-        <LinkButton href="/">Try again</LinkButton>
+        <LinkButton href="/contribute">Try again</LinkButton>
       </PageSection>
       <QuestionsContact />
     </div>
