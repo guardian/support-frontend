@@ -56,11 +56,11 @@ $teal-green: #006d67;
 .hope-is-power--centered,
 .component-customer-service {
   align-self: flex-start;
-  padding-left: 0px;
+  padding-left: 0;
   width: 100%;
 
   @include mq($from: mobileLandscape) {
-    padding-left: 0px;
+    padding-left: 0;
   }
 
   @include mq($from: phablet) {
@@ -92,9 +92,9 @@ $teal-green: #006d67;
   width: 100%;
 
   .footer-alignment {
-    padding-left: 0px;
+    padding-left: 0;
     @include mq($from: mobileLandscape) {
-      padding-left: 0px;
+      padding-left: 0;
     }
 
     @include mq($from: phablet) {
@@ -129,7 +129,7 @@ $teal-green: #006d67;
 .component-base-rows.component-base-rows--normal {
   .component-customer-service {
     @include mq($from: phablet) {
-      padding-left: 0px;
+      padding-left: 0;
     }
   }
 }
@@ -257,7 +257,7 @@ $teal-green: #006d67;
     width: 90px;
     border-radius: 50%;
     background-color: gu-colour('highlight-main');
-    margin-top: 0px;
+    margin-top: 0;
     margin-left: 5px;
 
     @include mq($from: mobileLandscape) {
@@ -486,7 +486,7 @@ $teal-green: #006d67;
         display: flex;
         align-self: flex-end;
         align-items: flex-end;
-        margin-right: 0px;
+        margin-right: 0;
         margin-top: -120px;
 
         img {
@@ -513,7 +513,7 @@ $teal-green: #006d67;
 
         @include mq($from: phablet) {
           margin-top: -115px;
-          margin-right: 0px;
+          margin-right: 0;
           img {
             width: 250px;
           }
@@ -983,7 +983,7 @@ div.call-to-action__container {
   background-color: #041f4a;
 
   @include mq($from: mobileLandscape) {
-    padding-left: 0px;
+    padding-left: 0;
   }
 
   @include mq($from: tablet) {
@@ -1094,7 +1094,7 @@ div.call-to-action__container {
       }
 
       @include mq($until: mobileMedium) {
-        margin-left: 0px;
+        margin-left: 0;
         width: calc(100% - 30px);
       }
     }
@@ -1125,7 +1125,7 @@ div.call-to-action__container {
       }
 
       @include mq($until: mobileLandscape) {
-        margin-left: 0px;
+        margin-left: 0;
       }
     }
   }
@@ -1140,7 +1140,7 @@ div.call-to-action__container {
   padding: 26px 0 33px 10px;
 
   @include mq($from: phablet) {
-    padding-left: 0px;
+    padding-left: 0;
   }
 
   h3 {
@@ -1162,7 +1162,7 @@ div.call-to-action__container {
 
     @include mq($from: phablet) {
       max-width: gu-span(7);
-      padding-left: 0px;
+      padding-left: 0;
     }
 
     @include mq($from: tablet) {
@@ -1170,7 +1170,7 @@ div.call-to-action__container {
     }
 
     @include mq($from: desktop) {
-      padding-left: 0px;
+      padding-left: 0;
       margin-left: 20px;
     }
 
