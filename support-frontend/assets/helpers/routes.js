@@ -54,7 +54,7 @@ function paperSubsUrl(withDelivery: boolean = false): string {
 }
 
 function digitalSubscriptionLanding(countryGroupId: CountryGroupId, gift: boolean) {
-  return `${getOrigin()}/${countryPath(countryGroupId)}${gift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLandingGift}`;
+  return `${getOrigin()}/${countryPath(countryGroupId)}${gift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding}`;
 }
 
 function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
