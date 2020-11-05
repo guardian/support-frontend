@@ -80,7 +80,7 @@ export const featureContainer = css`
   align-self: flex-start;
   background-color: #00568D;
   color: ${neutral[97]};
-  padding: ${space[4]}px ${space[4]}px 0;
+  padding: ${space[2]}px ${space[4]}px 0;
   width: 100%;
 
   ${from.phablet} {
