@@ -169,9 +169,6 @@ export const paragraph = css`
     max-width: 90%;
   }
 
-  ${from.leftCol} {
-    /* max-width: 95%; */
-  }
 `;
 
 export const heavyText = css`
