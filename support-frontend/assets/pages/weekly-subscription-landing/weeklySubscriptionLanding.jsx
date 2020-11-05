@@ -145,6 +145,7 @@ const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
 // ----- Render ----- //
 
 const { promotionCopy, orderIsAGift } = store.getState().page;
+const { internationalisation } = store.getState().common;
 const copy = getCopy(promotionCopy, orderIsAGift);
 const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
 const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
@@ -157,10 +158,11 @@ const content = (
     >
       <WeeklyHero
         orderIsAGift={orderIsAGift}
+        currencyId={internationalisation.currencyId}
         copy={{
-        title: copy.title,
-        paragraph: copy.firstParagraph,
-      }}
+          title: copy.title,
+          paragraph: copy.firstParagraph,
+        }}
       />
       <FullWidthContainer>
         <CentredContainer>

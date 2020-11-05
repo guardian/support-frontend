@@ -22,6 +22,13 @@ const DemoHero = (
       imgType="png"
       altText="A collection of Guardian Weekly magazines"
     />}
+    roundelText={
+      <>
+        <div>Try</div>
+        <div style={{ fontSize: '42px' }}>6 issues</div>
+        <div>for £6</div>
+      </>
+    }
   >
     <section style={{ padding: '1rem' }}>
       <h1 style={{ fontSize: '42px' }}>Hero Heading</h1>
@@ -36,7 +43,7 @@ const DemoHero = (
 );
 
 stories.add('Hero', () => (
-  <div style={{ width: '100%' }}>
+  <div style={{ width: '100%', paddingTop: '100px' }}>
     <CentredContainer>
       {DemoHero}
     </CentredContainer>

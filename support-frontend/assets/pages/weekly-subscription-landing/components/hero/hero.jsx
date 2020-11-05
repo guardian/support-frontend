@@ -8,17 +8,19 @@ import { css } from '@emotion/core';
 import { LinkButton, buttonBrand } from '@guardian/src-button';
 import { SvgChevronDownSingle } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
-import { body, titlepiece } from '@guardian/src-foundations/typography';
+import { body, headline, titlepiece } from '@guardian/src-foundations/typography';
 
 import CentredContainer from 'components/containers/CentredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import PageTitle from 'components/page/PageTitle';
 import Hero from 'components/page/Hero';
 
+import { glyph, type IsoCurrency } from 'helpers/internationalisation/currency';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 type PropTypes = {|
   orderIsAGift: boolean;
+  currencyId: IsoCurrency;
   copy: {
     title: Node,
     paragraph: Node,
@@ -39,7 +41,20 @@ const weeklyHeroParagraph = css`
   margin-bottom: ${space[9]}px;
 `;
 
-function WeeklyHero({ orderIsAGift, copy }: PropTypes) {
+const roundelCentreLine = css`
+  ${headline.large({ fontWeight: 'bold' })}
+`;
+
+
+function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
+  const roundelText = (
+    <>
+      <div>Try</div>
+      <div css={roundelCentreLine}>6 issues</div>
+      <div>for {glyph(currencyId)}6</div>
+    </>
+  );
+
   return (
     <PageTitle
       title={orderIsAGift ? 'Gift the Guardian Weekly' : 'The Guardian Weekly'}
@@ -57,6 +72,7 @@ function WeeklyHero({ orderIsAGift, copy }: PropTypes) {
             imgType="png"
             altText="A collection of Guardian Weekly magazines"
           />}
+          roundelText={orderIsAGift ? null : roundelText}
         >
           <section css={weeklyHeroCopy}>
             <h2 css={weeklyHeroTitle}>{copy.title}</h2>
