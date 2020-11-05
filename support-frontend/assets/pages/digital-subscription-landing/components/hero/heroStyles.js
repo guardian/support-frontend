@@ -80,8 +80,7 @@ export const featureContainer = css`
   align-self: flex-start;
   background-color: #00568D;
   color: ${neutral[97]};
-  padding: ${space[4]}px;
-  padding-bottom: 0;
+  padding: ${space[4]}px ${space[4]}px 0;
   width: 100%;
 
   ${from.phablet} {
@@ -112,7 +111,7 @@ export const textSection = css`
   width: 100%;
 
   ${from.phablet} {
-    padding: ${space[4]}px 0;
+    padding: ${space[1]}px 0 ${space[4]}px;
     width: 60%;
   }
 
@@ -128,7 +127,7 @@ export const textSection = css`
 export const heroHeading = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
   max-width: 100%;
-  margin-bottom: ${space[5]}px;
+  margin-bottom: ${space[2]}px;
 
   ${from.mobileMedium} {
     ${headline.small({ fontWeight: 'bold' })};
@@ -140,12 +139,12 @@ export const heroHeading = css`
 
   ${from.desktop} {
     ${headline.large({ fontWeight: 'bold' })};
-    margin-bottom: 20px;
+    margin-bottom: ${space[2]}px;
   }
 
   ${from.leftCol} {
     margin-top: 0;
-    margin-bottom: 30px;
+    margin-bottom: ${space[2]}px;
   }
 `;
 
@@ -156,7 +155,7 @@ export const yellowHeading = css`
 export const paragraph = css`
   ${body.small()};
   max-width: 100%;
-  margin-bottom: ${space[5]}px;
+  margin-bottom: ${space[9]}px;
 
   ${from.mobileMedium} {
     ${body.medium()};
@@ -218,16 +217,16 @@ export const packShot = css`
 
   ${from.desktop} {
     right: 0;
-    max-width: 45%;
+    max-width: 40%;
     margin-bottom: 0;
   }
 
   ${from.leftCol} {
-    max-width: 490px;
+    max-width: 430px;
   }
 
   ${from.wide} {
-    right: 20px;
+    right: 40px;
   }
 `;
 
@@ -251,7 +250,7 @@ export const circle = css`
   }
 
   ${from.phablet} {
-    top: 20px;
+    top: -65px;
   }
 
   ${from.desktop} {
@@ -267,4 +266,15 @@ export const circleTextTop = css`
 export const circleTextBottom = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
   color: ${brand[300]};
+`;
+
+export const spaceAfter = css`
+  ${from.desktop} {
+    margin-bottom: 70px;
+  }
+
+  ${from.leftCol} {
+    margin-bottom: 80px;
+  }
+
 `;
