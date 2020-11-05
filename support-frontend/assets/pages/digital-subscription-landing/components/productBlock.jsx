@@ -111,19 +111,17 @@ const appImage = (
 type ProductCardPropTypes = {
   title: string,
   subtitle: string,
-  shortSubTitle?: string,
   image: Node,
   second: boolean,
 }
 
 const ProductCard = ({
-  title, subtitle, shortSubTitle, image, second = false,
+  title, subtitle, image, second = false,
 }: ProductCardPropTypes) => (
   <section className="product-block__item">
     <h2 className="product-block__item__title">{title}</h2>
     <p className="product-block__item__subtitle">
       <span className={`product-block__item__subtitle--desktop${second ? '--second' : ''}`}>{subtitle}</span>
-      {!second && shortSubTitle && <span className="product-block__item__subtitle--mobile">{shortSubTitle}</span>}
     </p>
     <span className={`product-block__item__image${second ? '--second' : '--first-row'}`}>{image}</span>
   </section>
@@ -169,8 +167,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
             title="UK Daily in The Guardian Editions app"
-            subtitle="+ Edition Earth &mdash; Limited time only, ending 7 November"
-            shortSubTitle="+ Edition Earth"
+            subtitle="Each day's edition, in one simple, elegant app"
             image={dailyImage}
             second={false}
           />
