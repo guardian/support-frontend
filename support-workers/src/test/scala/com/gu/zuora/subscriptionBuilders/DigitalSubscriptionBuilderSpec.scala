@@ -151,7 +151,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         User("", "", None, "", "", Address(None, None, None, None, None, Country.Australia)), //user
         None,
         DigitalPack(GBP, Quarterly, Gift),
-        AnalyticsInfo(false, RedemptionNoProvider, UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5")),
+        AnalyticsInfo(false, RedemptionNoProvider),
         Right(RedemptionData(RedemptionCode(testCode).right.get)),
         None,
         None,

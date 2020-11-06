@@ -238,7 +238,7 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoTableAsync
   def validate(inputCode: String)(implicit ec: ExecutionContext): EitherT[Future, String, ReaderType] =
     EitherT(getValidationResult(inputCode).map {
       case ValidCorporateCode(_) => Right(Corporate)
-      case UnredeemedGiftCode(_) => Right(Gift)
+      case ValidGiftCode(_) => Right(Gift)
       case CodeAlreadyUsed => Left("This code has already been redeemed")
       case CodeExpired => Left("This code has expired")
       case _: InvalidCode | CodeNotFound | _: CodeRedeemedInThisRequest => Left("Please check the code and try again")

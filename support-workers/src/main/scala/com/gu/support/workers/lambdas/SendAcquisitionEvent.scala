@@ -42,7 +42,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     // Log the result of this execution to Elasticsearch
     LambdaExecutionResult.logResult(
       LambdaExecutionResult(
-        state.analyticsInfo.requestId,
+        state.requestId,
         Success,
         state.user.isTestUser,
         state.sendThankYouEmailState.product,
@@ -241,9 +241,9 @@ object SendAcquisitionEvent {
     case s: SendThankYouEmailGuardianWeeklyState => Some(s.paymentMethod)
   }).map(paymentProviderFromPaymentMethod)
   def maybePromoCode(s: SendThankYouEmailState): Option[PromoCode] = s match {
-    case s: SendThankYouEmailContributionState => None
+    case _: SendThankYouEmailContributionState => None
     case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => s.promoCode
-    case _: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => None
+    case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => s.promoCode
     case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => None
     case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => None
     case s: SendThankYouEmailPaperState => s.promoCode

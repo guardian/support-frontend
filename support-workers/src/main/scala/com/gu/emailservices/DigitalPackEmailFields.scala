@@ -166,6 +166,11 @@ class DigitalPackEmailFields(
   private def giftPurchaserConfirmation(state: SendThankYouEmailDigitalSubscriptionGiftPurchaseState)(implicit ec: ExecutionContext) = {
     import state._
 
+    val promotion = paperFieldsGenerator.getAppliedPromotion(
+      state.promoCode,
+      state.user.billingAddress.country,
+      ProductTypeRatePlans.digitalRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse("")
+    )
     digitalPackPaymentEmailFields.paymentFields(paymentMethod, accountNumber).map(paymentFieldsAttributes =>
       wrap("digipack-gift-purchase", GifterPurchaseAttributes(
         gifter_first_name = user.firstName,
@@ -176,7 +181,7 @@ class DigitalPackEmailFields(
         gift_personal_message = giftRecipient.message.getOrElse(""),
         gift_code = giftCode.value,
         gift_delivery_date = formatDate(giftRecipient.deliveryDate),
-        subscription_details = SubscriptionEmailFieldHelpers.describe(paymentSchedule, product.billingPeriod, product.currency, None, true),
+        subscription_details = SubscriptionEmailFieldHelpers.describe(paymentSchedule, product.billingPeriod, product.currency, promotion, true),
         date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
         paymentAttributes = paymentFieldsAttributes,
         last_redemption_date = formatDate(lastRedemptionDate),

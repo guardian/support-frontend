@@ -154,7 +154,7 @@ class SupportWorkersClient(
         user = user,
         giftRecipient = giftRecipient,
         product = request.body.product,
-        analyticsInfo = AnalyticsInfo(giftRecipient.isDefined, PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption), requestId),
+        analyticsInfo = AnalyticsInfo(giftRecipient.isDefined, PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption)),
         paymentFields = request.body.paymentFields,
         acquisitionData = Some(AcquisitionData(
           ophanIds = request.body.ophanIds,

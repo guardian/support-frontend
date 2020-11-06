@@ -17,7 +17,7 @@ import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption.{maybeDigitalSubscriptionGiftRedemption, redeemGift}
-import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator.{DigitalSubscriptionGiftCreationDetails, PaymentMethodWithSchedule}
+import com.gu.support.workers.lambdas.NextState.{DigitalSubscriptionGiftPurchaseDetails, PaymentMethodWithSchedule}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
 import com.gu.support.zuora.api.ReaderType.Gift
@@ -109,7 +109,7 @@ class ZuoraSubscriptionCreator(
         val giftCode = giftCodeGeneratorService.generateCode(billingPeriod)
           .withLogging("Generated code for Digital Subscription gift")
         val lastRedemptionDate = today().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)
-        Some(DigitalSubscriptionGiftCreationDetails(digitalSubscriptionGiftRecipient, giftCode, lastRedemptionDate))
+        Some(DigitalSubscriptionGiftPurchaseDetails(digitalSubscriptionGiftRecipient, giftCode, lastRedemptionDate))
       case _ =>
         None
     }
@@ -117,13 +117,6 @@ class ZuoraSubscriptionCreator(
 }
 
 object ZuoraSubscriptionCreator {
-
-  case class DigitalSubscriptionGiftCreationDetails(
-    giftRecipient: DigitalSubscriptionGiftRecipient,
-    giftCode: GeneratedGiftCode,
-    lastRedemptionDate: LocalDate,
-  )
-  case class PaymentMethodWithSchedule(paymentMethod: PaymentMethod, paymentSchedule: PaymentSchedule)
 
   def apply(
     now: () => DateTime,
@@ -189,6 +182,17 @@ object ZuoraSubscriptionCreator {
 
 }
 
+object NextState {
+
+  case class DigitalSubscriptionGiftPurchaseDetails(
+    giftRecipient: DigitalSubscriptionGiftRecipient,
+    giftCode: GeneratedGiftCode,
+    lastRedemptionDate: LocalDate,
+  )
+  case class PaymentMethodWithSchedule(paymentMethod: PaymentMethod, paymentSchedule: PaymentSchedule)
+
+}
+
 class NextState(
   state: CreateZuoraSubscriptionState,
   accountNumber: ZuoraAccountNumber,
@@ -197,9 +201,10 @@ class NextState(
 
   def getEmailState(
     paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
-    maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftCreationDetails],
+    maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftPurchaseDetails],
   ): SendAcquisitionEventState =
     SendAcquisitionEventState(
+      requestId = state.requestId,
       analyticsInfo = state.analyticsInfo,
       sendThankYouEmailState = getProductSpecificState(
         paymentOrRedemptionData,
@@ -214,7 +219,7 @@ class NextState(
   // scalastyle:off cyclomatic.complexity
   private def getProductSpecificState(
     paymentOrRedemptionData: Either[PaymentMethodWithSchedule, RedemptionData],
-    maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftCreationDetails]
+    maybeDigitalSubscriptionGiftCreationDetails: Option[DigitalSubscriptionGiftPurchaseDetails]
   ) =
     (state.product, paymentOrRedemptionData) match {
       case (product: Contribution, Purchase(purchase)) =>
@@ -262,7 +267,7 @@ class NextState(
       state.firstDeliveryDate.get
     )
 
-  private def dsGift(product: DigitalPack, purchase: PaymentMethodWithSchedule, giftPurchase: DigitalSubscriptionGiftCreationDetails) =
+  private def dsGift(product: DigitalPack, purchase: PaymentMethodWithSchedule, giftPurchase: DigitalSubscriptionGiftPurchaseDetails) =
     SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
       state.user,
       state.salesforceContacts.buyer,
@@ -272,6 +277,7 @@ class NextState(
       giftPurchase.lastRedemptionDate,
       purchase.paymentMethod,
       purchase.paymentSchedule,
+      state.promoCode,
       accountNumber.value,
     )
 
@@ -308,31 +314,24 @@ object DigitalSubscriptionGiftRedemption {
     catalogService: CatalogService
   ): Future[HandlerResult[SendAcquisitionEventState]] = {
     val codeValidator = new GiftCodeValidator(zuoraService)
-    codeValidator
-      .getStatus(redemptionData.redemptionCode, Some(state.requestId.toString))
-      .flatMap {
-        case validCode: ValidGiftCode => redeemInZuoraIfNecessary(validCode, state, requestInfo, zuoraService, catalogService)
+    for {
+      codeValidation <- codeValidator.getStatus(redemptionData.redemptionCode, Some(state.requestId.toString))
+      subIdUpdateAction <- codeValidation match {
+        case ValidGiftCode(subscriptionId) => Future.successful((
+          subscriptionId,
+          zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, _)
+        ))
+        case CodeRedeemedInThisRequest(subscriptionId) => Future.successful(subscriptionId, (_: Int) => Future.successful(UpdateRedemptionDataResponse(true)))
         case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
       }
+      (subscriptionId, updateIfNecessary) = subIdUpdateAction
+      fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)
+      calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
+      (dates, newTermLength) = calculatedDates
+      updateDataResponse <- updateIfNecessary(newTermLength)
+      handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, requestInfo, dates))
+    } yield handlerResult
   }
-
-  private def redeemInZuoraIfNecessary(
-    codeValidation: ValidGiftCode,
-    state: CreateZuoraSubscriptionState,
-    requestInfo: RequestInfo,
-    zuoraService: ZuoraGiftService,
-    catalogService: CatalogService
-  ) = for {
-    fullGiftSubscription <- zuoraService.getSubscriptionById(codeValidation.subscriptionId)
-    calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
-    (dates, newTermLength) = calculatedDates
-    updateDataResponse <- codeValidation match {
-      case _: UnredeemedGiftCode =>
-        zuoraService.updateSubscriptionRedemptionData(codeValidation.subscriptionId, state.requestId.toString, state.user.id, newTermLength)
-      case _: CodeRedeemedInThisRequest => Future.successful(UpdateRedemptionDataResponse(true))
-    }
-    handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, requestInfo, dates))
-  } yield handlerResult
 
   private def calculateNewTermLength(subscription: Subscription, catalogService: CatalogService) = {
     (for {
@@ -373,6 +372,7 @@ object DigitalSubscriptionGiftRedemption {
       }
       Success(
         HandlerResult(SendAcquisitionEventState(
+          requestId = state.requestId,
           analyticsInfo = state.analyticsInfo,
           sendThankYouEmailState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
             state.user,
