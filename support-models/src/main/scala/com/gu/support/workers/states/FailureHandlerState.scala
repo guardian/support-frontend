@@ -25,6 +25,7 @@ trait FailureHandlerState extends MinimalFailureHandlerState {
 
 trait MinimalFailureHandlerState extends StepFunctionUserState {
   // only required fields needed here
+  def requestId: UUID
   def product: ProductType
   def analyticsInfo: AnalyticsInfo
 }
@@ -36,7 +37,6 @@ import com.gu.support.encoding.CustomCodecs._
 case class AnalyticsInfo(
   isGiftPurchase: Boolean,
   paymentProvider: PaymentProvider,
-  requestId: UUID,
 )
 object AnalyticsInfo {
   implicit val codec: Codec[AnalyticsInfo] = deriveCodec[AnalyticsInfo]

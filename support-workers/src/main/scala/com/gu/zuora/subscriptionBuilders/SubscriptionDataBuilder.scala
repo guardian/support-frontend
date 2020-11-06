@@ -7,7 +7,6 @@ import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption.{InvalidCode, InvalidReaderType}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
-import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator.DigitalSubscriptionGiftCreationDetails
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api.{ReaderType, SubscriptionData}

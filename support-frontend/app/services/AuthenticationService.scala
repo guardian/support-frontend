@@ -80,7 +80,7 @@ object AsyncAuthenticationService {
   def logUserAuthenticationError(error: Throwable): Unit =
     error match {
       // Utilises the custom error introduced in: https://github.com/guardian/identity/pull/1578
-      case _: UserCredentialsMissingError => SafeLogger.info(s"unable to authorize user - $error")
+      case _: UserCredentialsMissingError => // user not signed in
       case _ => SafeLogger.error(scrub"unable to authorize user", error)
     }
 }
