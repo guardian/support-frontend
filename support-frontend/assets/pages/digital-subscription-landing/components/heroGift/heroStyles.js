@@ -8,10 +8,11 @@ import { headline, titlepiece, body } from '@guardian/src-foundations/typography
 import { brand, neutral, brandAltBackground } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const wrapper = css`
   position: relative;
-  background: #ededed;
+  background: ${neutral[93]};
   display: flex;
   flex-direction: column;
   padding: 0 0 ${space[3]}px;
@@ -22,7 +23,7 @@ export const wrapper = css`
     left: 0;
     width: 100%;
     height: 120px;
-    background: #00568D;
+    background: ${digitalSubscriptionsBlue};
     content: '';
   }
 

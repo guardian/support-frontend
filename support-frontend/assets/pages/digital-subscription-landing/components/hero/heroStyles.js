@@ -8,6 +8,7 @@ import { headline, titlepiece, body } from '@guardian/src-foundations/typography
 import { brand, neutral, brandAlt } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const wrapper = css`
   position: relative;
@@ -22,7 +23,7 @@ export const wrapper = css`
     left: 0;
     width: 100%;
     height: 170px;
-    background: #00568D;
+    background: ${digitalSubscriptionsBlue};
     content: '';
   }
 
