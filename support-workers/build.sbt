@@ -6,12 +6,6 @@ import sbt.Keys.{libraryDependencies, resolvers}
 version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 
-lazy val setupGitHook = taskKey[Unit]("Set up a pre-push git hook to run the integration tests")
-
-setupGitHook := {
-  "ln -s ../../scripts/pre-push .git/hooks/pre-push" !
-}
-
 libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "2.0.1",
   "org.typelevel" %% "cats-core" % catsVersion,

@@ -22,6 +22,7 @@ import {
   circle,
   circleTextTop,
   circleTextBottom,
+  spaceAfter,
 } from './heroStyles';
 
 type PropTypes = {
@@ -29,18 +30,11 @@ type PropTypes = {
 }
 
 const HeroCopy = () => (
-  <span>
-    <p css={paragraph}>
-      With two innovative apps and ad-free reading, a digital subscription
-      gives you the richest experience of Guardian journalism. It also sustains the independent
-      reporting you love.
-    </p>
-    <p css={paragraph}>
-      For a few weeks only, read <span css={heavyText}>Edition Earth</span>, a new and exclusive
-      showcase of the best Guardian journalism on the climate, wildlife, air pollution, environmental
-      justice &mdash; and solutions.
-    </p>
-  </span>);
+  <p css={paragraph}>
+    With two innovative apps and ad-free reading, a digital subscription
+    gives you the richest experience of Guardian journalism. It also sustains the independent
+    reporting you love.
+  </p>);
 
 const HeroCopyAus = () => (
   <span>
@@ -66,18 +60,20 @@ function CampaignHeader(props: PropTypes) {
             <span css={yellowHeading}>powered by you</span>
           </h2>
           {props.countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />}
-          <ThemeProvider theme={buttonBrand}>
-            <Button
-              priority="tertiary"
-              size="default"
-              icon={<SvgArrowDownStraight />}
-              iconSide="right"
-              nudgeIcon
-              onClick={() => window.scrollTo(0, 1500)}
-            >
+          <div css={props.countryGroupId !== AUDCountries ? spaceAfter : {}}>
+            <ThemeProvider theme={buttonBrand}>
+              <Button
+                priority="tertiary"
+                size="default"
+                icon={<SvgArrowDownStraight />}
+                iconSide="right"
+                nudgeIcon
+                onClick={() => window.scrollTo(0, 1500)}
+              >
             See pricing options
-            </Button>
-          </ThemeProvider>
+              </Button>
+            </ThemeProvider>
+          </div>
         </div>
         <div css={packShot}>
           <GridImage

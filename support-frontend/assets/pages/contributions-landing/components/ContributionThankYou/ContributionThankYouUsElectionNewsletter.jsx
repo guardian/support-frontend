@@ -63,8 +63,7 @@ const ContributionThankYouUsElectionNewsletter = ({
         <>
           <p>
             With First Thing, our morning newsletter, you get a global
-            perspective on America delivered to your inbox. Until 3 November,
-            we&apos;ll be focusing on the latest in the presidential race.
+            perspective on the US delivered to your inbox.
           </p>
           <div css={buttonContainer}>
             <Button
