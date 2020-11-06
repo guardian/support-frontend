@@ -1,13 +1,10 @@
 package com.gu.support.workers
 
-import cats.implicits._
 import com.gu.i18n.Title
+import com.gu.support.encoding.DiscriminatedType
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
-import com.gu.support.workers.GiftPurchase.{DigitalSubscriptionGiftPurchase, WeeklyGiftPurchase}
 import io.circe._
-import io.circe.generic.semiauto._
-import io.circe.syntax._
 import org.joda.time.LocalDate
 
 sealed trait GiftRecipient {
@@ -34,26 +31,11 @@ object GiftRecipient {
     deliveryDate: LocalDate,
   ) extends GiftRecipient
 
-  val circeDiscriminator = new CirceDiscriminator("giftRecipientType")
+  val discriminatedType = new DiscriminatedType[GiftRecipient]("giftRecipientType")
+  implicit val weeklyCodec = discriminatedType.variant[WeeklyGiftRecipient]("Weekly")
+  implicit val dsCodec = discriminatedType.variant[DigitalSubscriptionGiftRecipient]("DigitalSubscription")
+  implicit val codec = discriminatedType.codec(List(weeklyCodec, dsCodec))
 
-  private val discriminatorWeekly = "Weekly"
-  private val discriminatorDigitalSubscription = "DigitalSubscription"
-
-  implicit val e1 = circeDiscriminator.add(deriveEncoder[WeeklyGiftRecipient], discriminatorWeekly)
-  implicit val d1 = deriveDecoder[WeeklyGiftRecipient]
-  implicit val e2 = circeDiscriminator.add(deriveEncoder[DigitalSubscriptionGiftRecipient], discriminatorDigitalSubscription)
-  implicit val d2 = deriveDecoder[DigitalSubscriptionGiftRecipient]
-
-  implicit val encoder: Encoder[GiftRecipient] = Encoder.instance {
-    case c: WeeklyGiftRecipient => c.asJson
-    case c: DigitalSubscriptionGiftRecipient => c.asJson
-  }
-
-  implicit val decoder: Decoder[GiftRecipient] =
-    circeDiscriminator.decode[GiftRecipient](Map(
-      discriminatorWeekly -> Decoder[WeeklyGiftRecipient],
-      discriminatorDigitalSubscription -> Decoder[DigitalSubscriptionGiftRecipient]
-    ))
 }
 
 case class GeneratedGiftCode private(value: String) extends AnyVal
@@ -70,53 +52,4 @@ object GeneratedGiftCode {
 
 }
 
-sealed trait GiftPurchase {
-  def asDigitalSubscriptionGiftPurchase: Option[DigitalSubscriptionGiftPurchase] =
-    this match { case a: DigitalSubscriptionGiftPurchase => Some(a); case _ => None }
-  def giftRecipient: GiftRecipient
-}
-object GiftPurchase {
 
-  case class WeeklyGiftPurchase(giftRecipient: WeeklyGiftRecipient) extends GiftPurchase
-  case class DigitalSubscriptionGiftPurchase(
-    giftRecipient: DigitalSubscriptionGiftRecipient,
-    giftCode: GeneratedGiftCode,
-    lastRedemptionDate: LocalDate,
-  ) extends GiftPurchase
-
-  val circeDiscriminator = new CirceDiscriminator("giftPurchaseType")
-  private val discriminatorWeekly = "Weekly"
-  private val discriminatorDigitalSubscription = "DigitalSubscription"
-
-  implicit val e1 = circeDiscriminator.add(deriveEncoder[WeeklyGiftPurchase], discriminatorWeekly)
-  implicit val d1 = deriveDecoder[WeeklyGiftPurchase]
-  implicit val e2 = circeDiscriminator.add(deriveEncoder[DigitalSubscriptionGiftPurchase], discriminatorDigitalSubscription)
-  implicit val d2 = deriveDecoder[DigitalSubscriptionGiftPurchase]
-
-  implicit val encoder: Encoder[GiftPurchase] = Encoder.instance {
-    case c: WeeklyGiftPurchase => c.asJson
-    case c: DigitalSubscriptionGiftPurchase => c.asJson
-  }
-
-  implicit val decoder =
-    circeDiscriminator.decode[GiftPurchase](Map(
-      discriminatorWeekly -> Decoder[WeeklyGiftPurchase],
-      discriminatorDigitalSubscription -> Decoder[DigitalSubscriptionGiftPurchase]
-    ))
-}
-
-class CirceDiscriminator(discriminatorFieldName: String) {
-
-  def add[A](encoder: Encoder[A], value: String): Encoder[A] =
-    encoder.mapJson(_.asObject.map(_.add(discriminatorFieldName, Json.fromString(value))).asJson)
-
-  def decode[A](all: Map[String, Decoder[_ <: A]]): Decoder[A] =
-    Decoder.instance { cursor =>
-      for {
-        discriminator <- cursor.downField(discriminatorFieldName).as[String]
-        result <- all.get(discriminator).map(_.widen(cursor))
-          .getOrElse(Left(DecodingFailure(s"invalid discriminator: $discriminator", List())))
-      } yield result
-    }
-
-}

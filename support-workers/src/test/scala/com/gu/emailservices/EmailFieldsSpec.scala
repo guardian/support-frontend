@@ -1,14 +1,17 @@
 package com.gu.emailservices
 
-import com.gu.support.workers.integration.TestData.{countryOnlyAddress, directDebitPaymentMethod, subsFields}
-import com.gu.support.workers.states.PaymentMethodWithSchedule
-import com.gu.support.workers.{Annual, Payment, PaymentSchedule, User}
-import com.gu.support.zuora.api.ReaderType
+import com.gu.i18n.Currency.GBP
+import com.gu.support.config.TouchPointEnvironments.SANDBOX
+import com.gu.support.workers.integration.TestData
+import com.gu.support.workers.integration.TestData.{countryOnlyAddress, directDebitPaymentMethod}
+import com.gu.support.workers.states.SendThankYouEmailState._
+import com.gu.support.workers._
+import com.gu.support.workers.integration.SendThankYouEmailManualTest.sfContactRecord
 import io.circe.parser._
 import io.circe.syntax._
 import org.joda.time.LocalDate
 import org.scalatest.Inside
-import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
 import org.scalatest.matchers.should.Matchers
 
 class EmailFieldsSpec extends AnyFlatSpec with Matchers {
@@ -46,7 +49,7 @@ class EmailFieldsSpec extends AnyFlatSpec with Matchers {
   }
 }
 
-class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers with Inside {
+class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside {
 
   it should "generate the right json for direct subs" in {
     val expectedJson = parse(
@@ -77,19 +80,25 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers with Inside {
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
-      subsFields(Annual, User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress))
+      new PaperFieldsGenerator(TestData.promotionService, TestData.getMandate),
+      TestData.getMandate,
+      SANDBOX,
     ).build(
-      paidSubPaymentData = Some(PaymentMethodWithSchedule(
+      SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+        User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
+        sfContactRecord,
+        DigitalPack(GBP, Annual),
         directDebitPaymentMethod,
-        PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90)))
-      )),
-      ReaderType.Direct,
-      None
+        PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
+        None,
+        "acno",
+        "A-S00045678",
+      )
     ).map(_.map(ef => parse(ef.payload)))
-    inside(actual) {
-      case Right(actualJson :: Nil) =>
+    actual.map(inside(_) {
+      case actualJson :: Nil =>
         actualJson should be(expectedJson)
-    }
+    })
   }
 
 
@@ -114,15 +123,20 @@ class DigitalPackEmailFieldsSpec extends AnyFlatSpec with Matchers with Inside {
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
-      subsFields(Annual, User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress))
+      new PaperFieldsGenerator(TestData.promotionService, TestData.getMandate),
+      TestData.getMandate,
+      SANDBOX,
     ).build(
-      paidSubPaymentData = None,
-      ReaderType.Corporate,
-      None
+      SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
+        User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
+        sfContactRecord,
+        DigitalPack(GBP, Annual),
+        "A-S00045678",
+      )
     ).map(_.map(ef => parse(ef.payload)))
-    inside(actual) {
-      case Right(actualJson :: Nil) =>
+    actual.map(inside(_) {
+      case actualJson :: Nil =>
         actualJson should be(expectedJson)
-    }
+    })
   }
 }
