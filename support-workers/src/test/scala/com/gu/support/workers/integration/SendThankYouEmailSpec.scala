@@ -192,7 +192,9 @@ object SendDigitalPackGiftRedemptionEmail extends App {
     SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
       billingOnlyUser,
       sfContactRecord,
-      DigitalPack(GBP, Annual, ReaderType.Gift)
+      DigitalPack(GBP, Annual, ReaderType.Gift),
+      new LocalDate(2020, 10, 24),
+      new LocalDate(2021, 1, 24),
     )
   ))
 

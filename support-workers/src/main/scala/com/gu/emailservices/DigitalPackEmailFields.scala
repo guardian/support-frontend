@@ -190,9 +190,9 @@ class DigitalPackEmailFields(
     wrap("digipack-gift-redemption", GifteeRedemptionAttributes(
       gift_recipient_first_name = state.user.firstName,
       subscription_details = state.product.billingPeriod.monthsInPeriod + " month digital subscription",
-      gift_start_date = "gift start date placeholder", // TODO need to pull it through from when we create the sub
+      gift_start_date = formatDate(state.giftStartDate),
       gift_recipient_email = state.user.primaryEmailAddress,
-      gift_end_date = "gift end date placeholder", // TODO need to pull it through from when we create the sub
+      gift_end_date = formatDate(state.giftEndDate),
     ), SfContactId(state.salesForceContact.Id), state.user)
 
   private def corpRedemption(state: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState) =
