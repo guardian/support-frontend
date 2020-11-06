@@ -42,7 +42,7 @@ import GiftBenefits from './components/content/GiftBenefits';
 
 import WeeklyPrices from './components/weeklyProductPrices';
 import reducer from './weeklySubscriptionLandingReducer';
-import { pricesSection, giftOrPersonalSection, paddedSection } from './weeklySubscriptionLandingStyles';
+import { pricesSection, giftOrPersonalSection, giftOrPersonalCopy, paddedSection } from './weeklySubscriptionLandingStyles';
 
 import './weeklySubscriptionLanding.scss';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
@@ -179,9 +179,11 @@ const content = (
       <FullWidthContainer cssOverrides={giftOrPersonalSection}>
         <CentredContainer>
           <section css={paddedSection}>
-            <Text title={orderIsAGift ? 'Looking for a subscription for yourself?' : 'Gift subscriptions'}>
-              {!orderIsAGift && <LargeParagraph>A Guardian Weekly subscription makes a great gift.</LargeParagraph>}
-            </Text>
+            <div css={giftOrPersonalCopy}>
+              <Text title={orderIsAGift ? 'Looking for a subscription for yourself?' : 'Gift subscriptions'}>
+                {!orderIsAGift && <LargeParagraph>A Guardian Weekly subscription makes a great gift.</LargeParagraph>}
+              </Text>
+            </div>
             <LinkButton
               icon={<SvgArrowRightStraight />}
               iconSide="right"

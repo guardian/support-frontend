@@ -65,8 +65,7 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
           image={<GridImage
             gridId="weeklyCampaignHeroImg"
             srcSizes={[1000, 500, 140]}
-            sizes="(max-width: 480px) 200px,
-            (max-width: 740px) 100%,
+            sizes="(max-width: 740px) 100%,
             (max-width: 1067px) 150%,
             500px"
             imgType="png"

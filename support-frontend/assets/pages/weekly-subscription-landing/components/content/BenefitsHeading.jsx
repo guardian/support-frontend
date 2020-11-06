@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
 
-const giftHeading = css`
+const heading = css`
   ${headline.xsmall({ fontWeight: 'bold' })}
   overflow-wrap: break-word;
   margin-bottom: ${space[3]}px;
@@ -15,8 +15,8 @@ type PropTypes = {
   text: string,
 }
 
-function GiftHeading(props: PropTypes) {
-  return <h2 css={giftHeading}>{props.text}</h2>;
+function BenefitsHeading(props: PropTypes) {
+  return <h2 css={heading}>{props.text}</h2>;
 }
 
-export default GiftHeading;
+export default BenefitsHeading;

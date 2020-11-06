@@ -25,6 +25,10 @@ export const giftOrPersonalSection = css`
   color: ${neutral[7]};
 `;
 
+export const giftOrPersonalCopy = css`
+  margin-bottom: ${space[9]}px;
+`;
+
 export const paddedSection = css`
   padding: ${space[3]}px ${space[3]}px ${space[12]}px;
 `;
