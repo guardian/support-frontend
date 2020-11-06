@@ -96,7 +96,7 @@ object SendThankYouEmailManualTest {
 
   //This test will send a thank you email to the address/SF contact below - useful for quickly testing changes
   val addressToSendTo = "john.duffell@guardian.co.uk"
-  val salesforceContactId = SfContactId("0033E00001DTBHJQA5")
+  val salesforceContactId = SfContactId("0039E000018EoTHQA0")
   val sfContactRecord = SalesforceContactRecord(salesforceContactId.id, "accountID")
 
   def main(args: Array[String]): Unit = {
@@ -175,7 +175,7 @@ object SendDigitalPackGiftPurchaseEmails extends App {
       billingOnlyUser,
       sfContactRecord,
       DigitalPack(GBP, Annual, ReaderType.Gift),
-      DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), new LocalDate(2020, 10, 2)),
+      DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), LocalDate.now()),
       GeneratedGiftCode("gd12-02345678").get,
       new LocalDate(2020, 10, 14),
       directDebitPaymentMethod,
