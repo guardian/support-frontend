@@ -314,31 +314,24 @@ object DigitalSubscriptionGiftRedemption {
     catalogService: CatalogService
   ): Future[HandlerResult[SendAcquisitionEventState]] = {
     val codeValidator = new GiftCodeValidator(zuoraService)
-    codeValidator
-      .getStatus(redemptionData.redemptionCode, Some(state.requestId.toString))
-      .flatMap {
-        case validCode: ValidGiftCode => redeemInZuoraIfNecessary(validCode, state, requestInfo, zuoraService, catalogService)
+    for {
+      codeValidation <- codeValidator.getStatus(redemptionData.redemptionCode, Some(state.requestId.toString))
+      subIdUpdateAction <- codeValidation match {
+        case ValidGiftCode(subscriptionId) => Future.successful((
+          subscriptionId,
+          zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, _)
+        ))
+        case CodeRedeemedInThisRequest(subscriptionId) => Future.successful(subscriptionId, (_: Int) => Future.successful(UpdateRedemptionDataResponse(true)))
         case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
       }
+      (subscriptionId, updateIfNecessary) = subIdUpdateAction
+      fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)
+      calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
+      (dates, newTermLength) = calculatedDates
+      updateDataResponse <- updateIfNecessary(newTermLength)
+      handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, requestInfo, dates))
+    } yield handlerResult
   }
-
-  private def redeemInZuoraIfNecessary(
-    codeValidation: ValidGiftCode,
-    state: CreateZuoraSubscriptionState,
-    requestInfo: RequestInfo,
-    zuoraService: ZuoraGiftService,
-    catalogService: CatalogService
-  ) = for {
-    fullGiftSubscription <- zuoraService.getSubscriptionById(codeValidation.subscriptionId)
-    calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
-    (dates, newTermLength) = calculatedDates
-    updateDataResponse <- codeValidation match {
-      case _: UnredeemedGiftCode =>
-        zuoraService.updateSubscriptionRedemptionData(codeValidation.subscriptionId, state.requestId.toString, state.user.id, newTermLength)
-      case _: CodeRedeemedInThisRequest => Future.successful(UpdateRedemptionDataResponse(true))
-    }
-    handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, requestInfo, dates))
-  } yield handlerResult
 
   private def calculateNewTermLength(subscription: Subscription, catalogService: CatalogService) = {
     (for {
