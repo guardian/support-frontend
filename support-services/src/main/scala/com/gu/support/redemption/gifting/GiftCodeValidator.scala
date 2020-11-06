@@ -1,7 +1,7 @@
 package com.gu.support.redemption.gifting
 
 import com.gu.support.redemption.gifting.GiftCodeValidator.{expirationTimeInMonths, getSubscriptionState}
-import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeNotFound, CodeRedeemedInThisRequest, CodeStatus, UnredeemedGiftCode}
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeExpired, CodeNotFound, CodeRedeemedInThisRequest, CodeStatus, ValidGiftCode}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.zuora.api.response.SubscriptionRedemptionQueryResponse
 import com.gu.zuora.{ZuoraGiftLookupService, ZuoraService}
@@ -17,7 +17,7 @@ object GiftCodeValidator {
       case existingSubFields :: Nil if existingSubFields.contractEffectiveDate.plusMonths(expirationTimeInMonths).isBefore(LocalDate.now()) =>
         CodeExpired
       case existingSubFields :: Nil if existingSubFields.gifteeIdentityId.isEmpty =>
-        UnredeemedGiftCode(existingSubFields.id)
+        ValidGiftCode(existingSubFields.id)
       case existingSubFields :: Nil if requestId.contains(existingSubFields.createdRequestId) =>
         CodeRedeemedInThisRequest(existingSubFields.id)
       case _ :: Nil =>
