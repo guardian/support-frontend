@@ -3,10 +3,9 @@ package com.gu.emailservices
 import com.gu.i18n.Currency.GBP
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.workers.integration.TestData
-import com.gu.support.workers.integration.TestData.{countryOnlyAddress, directDebitPaymentMethod}
+import com.gu.support.workers.integration.TestData.{countryOnlyAddress, directDebitPaymentMethod, sfContactRecord}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers._
-import com.gu.support.workers.integration.SendThankYouEmailManualTest.sfContactRecord
 import io.circe.parser._
 import io.circe.syntax._
 import org.joda.time.{DateTime, DateTimeZone, LocalDate}
@@ -83,7 +82,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |  }
         |},
         |"DataExtensionName" : "digipack",
-        |"SfContactId" : "0033E00001DTBHJQA5"
+        |"SfContactId" : "contactID"
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
@@ -125,7 +124,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |  }
         |},
         |"DataExtensionName" : "digipack-corporate-redemption",
-        |"SfContactId" : "0033E00001DTBHJQA5"
+        |"SfContactId" : "contactID"
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
