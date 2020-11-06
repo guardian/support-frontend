@@ -146,8 +146,37 @@ function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: 
   return '';
 }
 
+function getSimplifiedPriceDescription(
+  productPrice: ProductPrice,
+  billingPeriod: BillingPeriod,
+) {
+  const glyph = extendedGlyph(productPrice.currency);
+  const promotion = getAppliedPromo(productPrice.promotions);
+
+  if (promotion && promotion.introductoryPrice) {
+    const introPrice = promotion.introductoryPrice;
+    const standardCopy = standardRate(glyph, productPrice.price, Quarterly, productPrice.fixedTerm);
+    const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
+
+    return `/${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
+  }
+  if (promotion && promotion.discountedPrice) {
+    const standardCopy = getStandardRateCopy(
+      glyph,
+      productPrice.price,
+      billingPeriod,
+      productPrice.fixedTerm,
+    );
+    return `/${billingPeriodNoun(billingPeriod, productPrice.fixedTerm)}${standardCopy}`;
+
+  }
+
+  return `/${billingPeriodNoun(billingPeriod, productPrice.fixedTerm)}`;
+}
+
 export {
   displayPrice,
   getPriceDescription,
   getAppliedPromoDescription,
+  getSimplifiedPriceDescription,
 };

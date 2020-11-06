@@ -15,7 +15,7 @@ import Prices, { type PropTypes } from './content/Prices';
 import { type State } from '../weeklySubscriptionLandingReducer';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import {
-  getPriceDescription,
+  getSimplifiedPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { getOrigin, getQueryParameter } from 'helpers/url';
@@ -71,7 +71,7 @@ const mapStateToProps = (state: State): PropTypes => {
         price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
         priceCopy: (
           <span>
-            {getPriceDescription(
+            {getSimplifiedPriceDescription(
               productPrice,
               billingPeriod,
             )}

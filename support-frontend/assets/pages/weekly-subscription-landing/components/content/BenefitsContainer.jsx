@@ -30,6 +30,7 @@ const benefits = css`
 const benefitsBlocks = css`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 `;
 
 const benefitsBlock = css`
@@ -38,6 +39,10 @@ const benefitsBlock = css`
     &:not(:first-of-type) {
       border-top: 1px solid ${neutral[86]};
     }
+  }
+
+  .product-block__list-item__ul--simple {
+    margin: 0;
   }
 `;
 
