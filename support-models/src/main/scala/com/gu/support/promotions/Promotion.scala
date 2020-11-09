@@ -27,7 +27,7 @@ case class Promotion(
 }
 
 object Promotion {
-  implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeString.map(DateTime.parse)
+  import com.gu.support.encoding.CustomCodecs.ISODate.decodeDateTime
   implicit val decoder: Decoder[Promotion] = deriveDecoder[Promotion].prepare(mapFields)
 
   private def mapFields(c: ACursor) = c.withFocus {

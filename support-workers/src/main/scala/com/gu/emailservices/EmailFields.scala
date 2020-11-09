@@ -22,7 +22,7 @@ case class EmailPayload(
 )
 
 object EmailPayload {
-  implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeString.contramap(ISODateTimeFormat.dateTime().print)
+  import com.gu.support.encoding.CustomCodecs.ISODate.encodeDateTime
 
   implicit val e1: Encoder[EmailPayload] = deriveEncoder
   implicit val e2: Encoder[EmailPayloadTo] = deriveEncoder

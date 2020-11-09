@@ -118,7 +118,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       DateTime.now(ISOChronology.getInstanceUTC),
       None, None, None
     )
-    implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeString.contramap(ISODateTimeFormat.dateTime().print)
+    import com.gu.support.encoding.CustomCodecs.ISODate.encodeDateTime
     implicit val e: Encoder[Promotion] = deriveEncoder
     testRoundTripSerialisation(promotion)
   }

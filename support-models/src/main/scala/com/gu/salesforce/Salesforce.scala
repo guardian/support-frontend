@@ -202,7 +202,7 @@ object Salesforce {
   }
 
   object Authentication {
-    implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeLong.map(new DateTime(_))
+    import MillisDate.decodeDateTime
     implicit val codec: Decoder[Authentication] = deriveDecoder
   }
 

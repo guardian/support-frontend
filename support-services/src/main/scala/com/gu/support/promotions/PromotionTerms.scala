@@ -19,7 +19,7 @@ case class PromotionTerms(
 
 object PromotionTerms {
 
-  implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeLong.contramap(_.getMillis)
+  import com.gu.support.encoding.CustomCodecs.MillisDate.encodeDateTime
 
   implicit val codec: Encoder[PromotionTerms] = deriveEncoder
 
