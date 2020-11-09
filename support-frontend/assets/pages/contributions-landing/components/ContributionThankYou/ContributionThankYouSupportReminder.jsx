@@ -194,13 +194,14 @@ const ContributionThankYouSupportReminder = ({
           <p>
             <span css={styles.hideAfterTablet}>
               Choose a time when we can invite you to support our journalism
-              again. We’ll send you a single email, with no obligation.
+              again. We’ll send you a maximum of two reminder emails, with no
+              obligation.
             </span>
             <span css={styles.hideBeforeTablet}>
-              Lots of readers chose to make single contributions at various
-              points in the year. Opt in to receive a reminder in case you would
-              like to support our journalism again. This will be a single email
-              with no obligation.
+              Many readers choose to support Guardian journalism by making
+              single contributions at various points in the year. Opt in to
+              whichever time suits you best, and we’ll send you a maximum of two
+              reminder emails, with no obligation.
             </span>
           </p>
           <form css={form}>
