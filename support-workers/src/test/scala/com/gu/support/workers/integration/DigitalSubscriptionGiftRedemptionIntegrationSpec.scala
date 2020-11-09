@@ -9,7 +9,7 @@ import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson}
 import com.gu.support.workers.lambdas.{DigitalSubscriptionGiftRedemption, HandlerResult}
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.workers._
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.parser.decode
@@ -44,8 +44,8 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
 
     for {
-      _ <- createZuoraHelper.createSubscription(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
-        .map { case (_, maybeError, _) => maybeError shouldBe None }
+      _ <- createZuoraHelper.createSubscriptionError(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
+        .map { _ shouldBe None }
 
       _ <- redeemSubscription(createZuoraHelper, giftCode.value, redeemSubRequestId)
         .map(_.value.user.id shouldBe idId)
@@ -64,7 +64,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     createZuoraHelper: CreateZuoraSubscriptionHelper,
     codeValue: String,
     requestId: UUID
-  ): Future[HandlerResult[SendThankYouEmailState]] = {
+  ): Future[HandlerResult[SendAcquisitionEventState]] = {
     val code = RedemptionCode(codeValue).right.get
     val state = decode[CreateZuoraSubscriptionState](createDigiPackGiftRedemptionJson(codeValue, requestId)).right.get
 

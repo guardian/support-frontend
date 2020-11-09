@@ -12,7 +12,7 @@ function ProductSummary() {
       <div css={styles.contentBlock}>
         <div css={styles.imageContainer}>
           <GridImage
-            gridId="subscriptionDailyPackshot"
+            gridId="editionsPackshotShort"
             srcSizes={[1000, 500]}
             sizes="(max-width: 740px) 50vw, 500"
             imgType="png"
@@ -27,8 +27,10 @@ function ProductSummary() {
       <div>
         <ul css={styles.list}>
           <li>
-            <Dot /><div css={styles.listMain}>The Guardian Daily</div>
-            <span css={styles.subText}>Each day&apos;s edition in one simple, elegant app</span>
+            <Dot /><div css={styles.listMain}>The Guardian Editions app</div>
+            <span css={styles.subText}>Access the UK Daily, Australia Weekend and other special editions.
+              Read offline and ad-free across multiple devices
+            </span>
           </li>
           <li>
             <Dot /><div css={styles.listMain}>Premium access to The Guardian Live app</div>

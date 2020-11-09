@@ -351,43 +351,6 @@ object JsonFixtures {
           }
         """
 
-  def thankYouEmailJson(product: String = contribution()): String =
-    s"""{
-       |  $requestIdJson,
-       |  ${userJson()},
-       |  "product": $product,
-       |  "analyticsInfo": {
-       |    "paymentProvider": "Stripe",
-       |    "isGiftPurchase": false
-       |  },
-       |  "salesForceContact": {
-       |    "Id": "sfContactId123",
-       |    "AccountId": "sfAccountId321"
-       |  },
-       |  "accountNumber": "A-00123",
-       |  "subscriptionNumber": "A-S12345678",
-       |  "paymentOrRedemptionData": {
-         |  "paymentMethod": $stripePaymentMethod,
-         |  "paymentSchedule": {
-         |    "payments": [
-         |      {
-         |        "date": "2019-01-14",
-         |        "amount": 11.99
-         |      },
-         |      {
-         |        "date": "2019-02-14",
-         |        "amount": 11.99
-         |      },
-         |      {
-         |        "date": "2019-03-14",
-         |        "amount": 11.99
-         |      }
-         |    ]
-         |  }
-       |  }
-       |}
-     """.stripMargin
-
   val salesforceContactJson =
     """
         {
@@ -686,37 +649,26 @@ object JsonFixtures {
       }
     """
 
-  val sendAcquisitionEventJson = wrapFixture(
+  val sendAcquisitionEventJson =
     s"""{
           $requestIdJson,
-          ${userJson()},
-          "product": ${contribution(currency = GBP)},
           "analyticsInfo": {
             "paymentProvider": "Stripe",
             "isGiftPurchase": false
           },
-          "paymentOrRedemptionData": {
+          "sendThankYouEmailState": {
+            "productType": "Contribution",
+            ${userJson()},
+            "salesForceContact": {
+                "Id": "0036E00000VlOPDQA3",
+                "AccountId": "0016E00000f17pYQAQ"
+            },
+            "product": ${contribution(currency = GBP)},
             "paymentMethod": $stripePaymentMethod,
-            "paymentSchedule": {
-              "payments": [
-                {
-                  "date": "2019-01-14",
-                  "amount": 11.99
-                },
-                {
-                  "date": "2019-02-14",
-                  "amount": 11.99
-                },
-                {
-                  "date": "2019-03-14",
-                  "amount": 11.99
-                }
-              ]
-            }
+            "accountNumber": "accountnumber123"
           },
           "acquisitionData": $acquisitionData
         }"""
-  )
 
   val digipackSubscriptionWithDiscountAndFreeTrialJson =
     s"""

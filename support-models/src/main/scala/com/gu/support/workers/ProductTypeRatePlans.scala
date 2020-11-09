@@ -8,14 +8,6 @@ import com.gu.support.zuora.api.ReaderType.Corporate
 
 object ProductTypeRatePlans {
 
-  def productTypeRatePlan(product: ProductType, environment: TouchPointEnvironment, readerType: ReaderType): Option[ProductRatePlan[Product]] =
-    product match {
-      case d: DigitalPack => digitalRatePlan(d, environment)
-      case p: Paper => paperRatePlan(p, environment)
-      case w: GuardianWeekly => weeklyRatePlan(w, environment, readerType)
-      case _ => None
-    }
-
   def weeklyRatePlan(
     product: GuardianWeekly,
     environment: TouchPointEnvironment,

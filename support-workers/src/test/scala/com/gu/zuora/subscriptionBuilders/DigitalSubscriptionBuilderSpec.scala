@@ -108,7 +108,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val corporate =
     corporateRedemptionBuilder.build(
       RedemptionData(RedemptionCode(testCode).right.get),
-      DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate),
+      DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate), // scalastyle:ignore null
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       SANDBOX
     ).value.map(_.right.get)
@@ -143,7 +143,8 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       subscriptionPurchaseBuilder,
       corporateRedemptionBuilder,
       promotionService,
-      _ => ZuoraContributionConfig("", "")
+      _ => ZuoraContributionConfig("", ""),
+      SANDBOX,
     ).build(
       CreateZuoraSubscriptionState(
         UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
@@ -157,7 +158,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         SalesforceContactRecords(SalesforceContactRecord("", ""), None),
         None
       ),
-      SANDBOX,
       None
     ).value.map(_.left.get)
 

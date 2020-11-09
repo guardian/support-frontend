@@ -23,6 +23,11 @@ trait SerialisationTestHelpers extends Matchers {
     assertDecodingSucceeded(json.as[T], (decoded: T) => decoded shouldEqual t)
   }
 
+  def testRoundTripSerialisationViaParent[ROOT, T <: ROOT](t: T)(implicit decoder: Decoder[T], encoder: Encoder[T], rootDecoder: Decoder[ROOT], encoderRoot: Encoder[ROOT]): Assertion = {
+    assertDecodingSucceeded(t.asJson(encoder).as[ROOT](rootDecoder), (decoded: ROOT) => decoded shouldEqual t)
+    assertDecodingSucceeded((t: ROOT).asJson(encoderRoot).as[ROOT](rootDecoder), (decoded: ROOT) => decoded shouldEqual t)
+  }
+
   def testEncodeToDifferentState[STATE: Encoder, TARGETSTATE: Decoder](state: STATE, targetState: TARGETSTATE): Assertion =
     state.asJson.as[TARGETSTATE].fold(
       e => fail(e.getMessage),
