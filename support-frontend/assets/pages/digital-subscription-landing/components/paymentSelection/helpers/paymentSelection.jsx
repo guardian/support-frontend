@@ -115,7 +115,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
   const createPaymentOption = (billingPeriod: BillingPeriod): PaymentOption => {
-    const digitalBillingPeriod = ['Monthly', 'Annual', 'Quarterly'].includes(billingPeriod) ? billingPeriod : 'Monthly';
+    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Monthly';
 
     const productPrice = getProductPrice(productOptions, digitalBillingPeriod, currencyId);
     const fullPrice = productPrice.price;
