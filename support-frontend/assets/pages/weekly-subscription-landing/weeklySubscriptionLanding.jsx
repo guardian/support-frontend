@@ -118,7 +118,6 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
   }
   return (
     <>
-      <h3><strong>Catch up on issues that matter</strong></h3>
       The Guardian Weekly magazine is a round-up of the world news, opinion and long reads that have shaped the week.
       Inside, the past seven days' most memorable stories are reframed with striking photography and insightful
       companion pieces, all handpicked from The Guardian and The Observer.
@@ -126,7 +125,7 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
 };
 
 const getRegionalCopyFor = (region: CountryGroupId): Element<'span'> => (region === GBPCountries ?
-  <span>Find clarity with The Guardian&apos;s global magazine.<br /> Subscribe today</span> :
+  <span>Find clarity with The Guardian&apos;s global magazine</span> :
   <span>Read The Guardian in print. Subscribe to<br className="gw-temp-break" />The Guardian Weekly today</span>);
 
 const getCopy = (promotionCopy: Object): PageCopy => {
@@ -146,9 +145,9 @@ const getCopy = (promotionCopy: Object): PageCopy => {
 
 // ----- Render ----- //
 
-const { promotionCopy, orderIsAGift } = store.getState().page;
+const { promotionCopy } = store.getState().page;
 const { internationalisation } = store.getState().common;
-const copy = getCopy(promotionCopy, orderIsAGift);
+const copy = getCopy(promotionCopy);
 const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
 const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
 

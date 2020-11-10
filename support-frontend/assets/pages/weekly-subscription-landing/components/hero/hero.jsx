@@ -8,6 +8,7 @@ import { css } from '@emotion/core';
 import { LinkButton, buttonBrand } from '@guardian/src-button';
 import { SvgChevronDownSingle } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import { body, headline, titlepiece } from '@guardian/src-foundations/typography';
 
 import CentredContainer from 'components/containers/CentredContainer';
@@ -33,7 +34,11 @@ const weeklyHeroCopy = css`
 
 const weeklyHeroTitle = css`
   ${titlepiece.small()};
-  margin-bottom: ${space[3]};
+  margin-bottom: ${space[3]}px;
+`;
+
+const weeklyHeroTitleWithRoundel = css`
+  margin-right: ${space[2]}px;
 `;
 
 const weeklyHeroParagraph = css`
@@ -42,7 +47,10 @@ const weeklyHeroParagraph = css`
 `;
 
 const roundelCentreLine = css`
-  ${headline.large({ fontWeight: 'bold' })}
+  ${headline.small({ fontWeight: 'bold' })}
+  ${from.tablet} {
+    ${headline.large({ fontWeight: 'bold' })}
+  }
 `;
 
 
@@ -74,7 +82,7 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
           roundelText={orderIsAGift ? null : roundelText}
         >
           <section css={weeklyHeroCopy}>
-            <h2 css={weeklyHeroTitle}>{copy.title}</h2>
+            <h2 css={[weeklyHeroTitle, orderIsAGift ? '' : weeklyHeroTitleWithRoundel]}>{copy.title}</h2>
             <p css={weeklyHeroParagraph}>
               {copy.paragraph}
             </p>

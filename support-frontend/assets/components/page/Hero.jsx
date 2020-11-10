@@ -28,9 +28,6 @@ const hero = css`
 
   ${from.tablet} {
     flex-direction: row;
-    & > * {
-      max-width: 50%;
-    }
   }
 
 
@@ -52,7 +49,13 @@ const heroImage = css`
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  max-width: 100%;
+  flex-shrink: 0;
+  width: 100%;
+
+  ${from.tablet} {
+    width: 40%;
+  }
+
   & img {
     max-width: 100%;
   }
@@ -65,15 +68,22 @@ const heroRoundel = css`
   align-items: center;
   justify-content: center;
   top: 0;
-  right: ${space[12]}px;
+  right: 0;
   transform: translateY(-50%);
-  width: 180px;
-  height: 180px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   background-color: ${brandAlt[400]};
   color: ${neutral[7]};
-  ${headline.small({ fontWeight: 'bold' })};
+  ${headline.xxsmall({ fontWeight: 'bold' })};
   z-index: 2;
+
+  ${from.tablet} {
+    width: 180px;
+    height: 180px;
+    right: ${space[12]}px;
+    ${headline.small({ fontWeight: 'bold' })};
+  }
 `;
 
 function Hero({

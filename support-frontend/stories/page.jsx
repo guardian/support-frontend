@@ -24,9 +24,7 @@ const DemoHero = (
     />}
     roundelText={
       <>
-        <div>Try</div>
-        <div style={{ fontSize: '42px' }}>6 issues</div>
-        <div>for £6</div>
+        <div>First</div><div>issue</div><div>free</div>
       </>
     }
   >
