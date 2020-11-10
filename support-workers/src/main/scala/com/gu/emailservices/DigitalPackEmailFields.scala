@@ -4,13 +4,15 @@ import cats.implicits._
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes.{CCAttributes, DDAttributes, PPAttributes}
 import com.gu.emailservices.SubscriptionEmailFieldHelpers._
-import com.gu.support.workers.GiftPurchase.DigitalSubscriptionGiftPurchase
+import com.gu.salesforce.Salesforce.SfContactId
+import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers._
-import com.gu.support.workers.states.PaymentMethodWithSchedule
-import com.gu.support.zuora.api.ReaderType
+import com.gu.support.workers.states.SendThankYouEmailState._
 import io.circe._
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
+
+import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait DigitalSubscriptionEmailAttributes extends Product with Serializable
 object DigitalSubscriptionEmailAttributes {
@@ -108,19 +110,21 @@ object DigitalSubscriptionEmailAttributes {
     gift_personal_message: Option[String],
     gift_code: String,
     last_redemption_date: String,
+    duration: String,
   ) extends DigitalSubscriptionEmailAttributes
 
 }
 class DigitalPackEmailFields(
-  subscriptionEmailFields: SubscriptionEmailFields,
+  paperFieldsGenerator: PaperFieldsGenerator,
+  getMandate: String => Future[Option[String]],
+  touchPointEnvironment: TouchPointEnvironment,
 ) {
 
-  import DigitalPackEmailFields._
   import DigitalSubscriptionEmailAttributes._
-  import subscriptionEmailFields._
-  import allProductsEmailFields._
 
-  private def directOrCorpFields(details: String) = BasicDSAttributes(
+  val digitalPackPaymentEmailFields = new DigitalPackPaymentEmailFields(getMandate)
+
+  private def directOrCorpFields(details: String, subscriptionNumber: String, user: User) = BasicDSAttributes(
     zuorasubscriberid = subscriptionNumber,
     emailaddress = user.primaryEmailAddress,
     first_name = user.firstName,
@@ -128,102 +132,124 @@ class DigitalPackEmailFields(
     subscription_details = details
   )
 
-  def build(
-    paidSubPaymentData: Option[PaymentMethodWithSchedule],
-    readerType: ReaderType,
-    maybeGiftPurchase: Option[DigitalSubscriptionGiftPurchase]
-  ): Either[String, List[EmailFields]] = {
-
-    val Purchase = Some
-    val Redemption = None
-
-    (paidSubPaymentData, readerType) match {
-      case (Purchase(paymentInfo), ReaderType.Gift) =>
+  def build(digi: SendThankYouEmailDigitalSubscriptionState)(implicit ec: ExecutionContext): Future[List[EmailFields]] =
+    digi match {
+      case giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState =>
         for {
-          giftRecipient <- maybeGiftPurchase.toRight("Gift redemption must have a gift recipient")
           emails <- List(
-            giftPurchaserConfirmation(paymentInfo, giftRecipient),
-            giftRecipientNotification(giftRecipient)
+            giftPurchaserConfirmation(giftPurchase),
+            Future.successful(giftRecipientNotification(giftPurchase))
           ).sequence
         } yield emails
-      case (Purchase(paymentInfo), _) => directThankYou(paymentInfo).map(List(_))
-      case (Redemption, ReaderType.Corporate) => corpRedemption.map(List(_))
-      case (Redemption, ReaderType.Gift) => giftRedemption.map(List(_))
-      case (Redemption, _) => Left("redemption is only possible for gift and corporate subs")
+      case directPurchase: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => directThankYou(directPurchase).map(List(_))
+      case state: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState =>
+        Future.successful(List(corpRedemption(state)))
+      case state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => Future.successful(List(giftRedemption(state)))
     }
+
+  private def wrap(dataExtensionName: String, fields: DigitalSubscriptionEmailAttributes, sfContactId: SfContactId, user: User): EmailFields = {
+    val attributePairs = JsonToAttributes.asFlattenedPairs(fields.asJsonObject).left.map(
+      error => throw new RuntimeException(s"coding error: $error")
+    ).merge
+    EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
   }
 
-  private def wrap(dataExtensionName: String, fields: DigitalSubscriptionEmailAttributes) = for {
-    attributePairs <- JsonToAttributes.asFlattenedPairs(fields.asJsonObject)
-  } yield EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
-
-  private def giftRecipientNotification(giftPurchase: DigitalSubscriptionGiftPurchase) =
+  private def giftRecipientNotification(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState) =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
-      gifter_first_name = user.firstName,
+      gifter_first_name = giftPurchase.user.firstName,
       gift_personal_message = giftPurchase.giftRecipient.message,
       gift_code = giftPurchase.giftCode.value,
       last_redemption_date = formatDate(giftPurchase.lastRedemptionDate),
-    ))
+      duration = s"${giftPurchase.product.billingPeriod.monthsInPeriod} months",
+    ), SfContactId(giftPurchase.salesForceContact.Id), giftPurchase.user)
 
-  private def giftPurchaserConfirmation(paymentMethodWithSchedule: PaymentMethodWithSchedule, giftPurchase: DigitalSubscriptionGiftPurchase) = {
-    import giftPurchase._
-    wrap("digipack-gift-purchase", GifterPurchaseAttributes(
-      gifter_first_name = user.firstName,
-      gifter_last_name = user.lastName,
-      gift_recipient_first_name = giftRecipient.firstName,
-      gift_recipient_last_name = giftRecipient.lastName,
-      gift_recipient_email = giftRecipient.email,
-      gift_personal_message = giftRecipient.message.getOrElse(""),
-      gift_code = giftCode.value,
-      gift_delivery_date = formatDate(giftRecipient.deliveryDate),
-      subscription_details = SubscriptionEmailFieldHelpers.describe(paymentMethodWithSchedule.paymentSchedule, billingPeriod, currency, promotion),
-      date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).date),
-      paymentAttributes = paymentFields(paymentMethodWithSchedule.paymentMethod, directDebitMandateId),
-      last_redemption_date = formatDate(lastRedemptionDate),
-    ))
+  private def giftPurchaserConfirmation(state: SendThankYouEmailDigitalSubscriptionGiftPurchaseState)(implicit ec: ExecutionContext) = {
+    import state._
+
+    val promotion = paperFieldsGenerator.getAppliedPromotion(
+      state.promoCode,
+      state.user.billingAddress.country,
+      ProductTypeRatePlans.digitalRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse("")
+    )
+    digitalPackPaymentEmailFields.paymentFields(paymentMethod, accountNumber).map(paymentFieldsAttributes =>
+      wrap("digipack-gift-purchase", GifterPurchaseAttributes(
+        gifter_first_name = user.firstName,
+        gifter_last_name = user.lastName,
+        gift_recipient_first_name = giftRecipient.firstName,
+        gift_recipient_last_name = giftRecipient.lastName,
+        gift_recipient_email = giftRecipient.email,
+        gift_personal_message = giftRecipient.message.getOrElse(""),
+        gift_code = giftCode.value,
+        gift_delivery_date = formatDate(giftRecipient.deliveryDate),
+        subscription_details = SubscriptionEmailFieldHelpers.describe(paymentSchedule, product.billingPeriod, product.currency, promotion, true),
+        date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
+        paymentAttributes = paymentFieldsAttributes,
+        last_redemption_date = formatDate(lastRedemptionDate),
+      ), SfContactId(salesForceContact.Id), user))
   }
 
-  private def giftRedemption =
+  private def giftRedemption(state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState) =
     wrap("digipack-gift-redemption", GifteeRedemptionAttributes(
-      gift_recipient_first_name = user.firstName,
-      subscription_details = billingPeriod.monthsInPeriod + " month digital subscription",
-      gift_start_date = "gift start date placeholder", // TODO need to pull it through from when we create the sub
-      gift_recipient_email = user.primaryEmailAddress,
-      gift_end_date = "gift end date placeholder", // TODO need to pull it through from when we create the sub
-    ))
+      gift_recipient_first_name = state.user.firstName,
+      subscription_details = state.product.billingPeriod.monthsInPeriod + " month digital subscription",
+      gift_start_date = formatDate(state.giftStartDate),
+      gift_recipient_email = state.user.primaryEmailAddress,
+      gift_end_date = formatDate(state.giftEndDate),
+    ), SfContactId(state.salesForceContact.Id), state.user)
 
-  private def corpRedemption =
-    wrap("digipack-corporate-redemption", directOrCorpFields("Group subscription"))
+  private def corpRedemption(state: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState) =
+    wrap(
+      "digipack-corporate-redemption",
+      directOrCorpFields("Group subscription", state.subscriptionNumber, state.user),
+      SfContactId(state.salesForceContact.Id),
+      state.user
+    )
 
-  private def directThankYou(paymentMethodWithSchedule: PaymentMethodWithSchedule) =
-    wrap("digipack", DirectDSAttributes(
-      directOrCorpFields(SubscriptionEmailFieldHelpers.describe(paymentMethodWithSchedule.paymentSchedule, billingPeriod, currency, promotion)),
-      country = user.billingAddress.country.name,
-      date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentMethodWithSchedule.paymentSchedule).date),
-      trial_period = "14", //TODO: depends on Promo code or zuora config
-      paymentFields(paymentMethodWithSchedule.paymentMethod, directDebitMandateId)
-    ))
+  private def directThankYou(state: SendThankYouEmailDigitalSubscriptionDirectPurchaseState)(implicit ec: ExecutionContext) = {
+
+    val promotion = paperFieldsGenerator.getAppliedPromotion(
+      state.promoCode,
+      state.user.billingAddress.country,
+      ProductTypeRatePlans.digitalRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse("")
+    )
+    digitalPackPaymentEmailFields.paymentFields(
+      state.paymentMethod,
+      state.accountNumber
+    ).map(paymentFieldsAttributes =>
+      wrap("digipack", DirectDSAttributes(
+        directOrCorpFields(
+          SubscriptionEmailFieldHelpers.describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency, promotion),
+          state.subscriptionNumber,
+          state.user,
+        ),
+        country = state.user.billingAddress.country.name,
+        date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(state.paymentSchedule).date),
+        trial_period = "14", //TODO: depends on Promo code or zuora config
+        paymentFieldsAttributes
+      ), SfContactId(state.salesForceContact.Id), state.user)
+    )
+  }
 
 }
 
-object DigitalPackEmailFields {
+class DigitalPackPaymentEmailFields(getMandate: String => Future[Option[String]]) {
 
-  def paymentFields(paymentMethod: PaymentMethod, directDebitMandateId: Option[String]): PaymentFieldsAttributes =
+  def paymentFields(paymentMethod: PaymentMethod, accountNumber: String)(implicit ec: ExecutionContext): Future[PaymentFieldsAttributes] =
     paymentMethod match {
-      case dd: DirectDebitPaymentMethod => DDAttributes(
+      case dd: DirectDebitPaymentMethod => getMandate(accountNumber).map(directDebitMandateId => DDAttributes(
         account_number = mask(dd.bankTransferAccountNumber),
         sort_code = hyphenate(dd.bankCode),
         account_name = dd.bankTransferAccountName,
         mandateid = directDebitMandateId.getOrElse("")
-      )
-      case dd: ClonedDirectDebitPaymentMethod => DDAttributes(
+      ))
+      case dd: ClonedDirectDebitPaymentMethod => Future.successful(DDAttributes(
         sort_code = hyphenate(dd.bankCode),
         account_number = mask(dd.bankTransferAccountNumber),
         account_name = dd.bankTransferAccountName,
         mandateid = dd.mandateId
-      )
-      case _: CreditCardReferenceTransaction => CCAttributes()
-      case _: PayPalReferenceTransaction => PPAttributes()
+      ))
+      case _: CreditCardReferenceTransaction => Future.successful(CCAttributes())
+      case _: PayPalReferenceTransaction => Future.successful(PPAttributes())
     }
 
 }

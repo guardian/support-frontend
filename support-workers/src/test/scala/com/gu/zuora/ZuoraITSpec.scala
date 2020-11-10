@@ -36,7 +36,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve account ids from an Identity id" in {
-    uatService.getAccountFields(IdentityId("30001758").get, earlyDate).map {
+    uatService.getAccountFields(IdentityId("104725102").get, earlyDate).map {
       response =>
         response.nonEmpty should be(true)
     }
@@ -65,7 +65,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve subscriptions from an account id" in {
-    uatService.getSubscriptions(ZuoraAccountNumber("A00071408")).map {
+    uatService.getSubscriptions(ZuoraAccountNumber("A00084679")).map {
       response =>
         response.nonEmpty should be(true)
         response.head.ratePlans.head.productRatePlanId should be(Configuration.load().zuoraConfigProvider.get(true).monthlyContribution.productRatePlanId)
@@ -75,8 +75,8 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   it should "be able to find a monthly recurring subscription" in {
     GetSubscriptionWithCurrentRequestId(
       uatService,
-      UUID.fromString("cac90497-3001-4dbc-88c3-1f47d54c511c"),
-      IdentityId("30001758").get,
+      UUID.fromString("f131bfb4-bcd9-31e6-0000-00000001ac69"),
+      IdentityId("104725102").get,
       Monthly,
       () => earlyDate
     ).map {
@@ -88,7 +88,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
     GetSubscriptionWithCurrentRequestId(
       uatService,
       UUID.fromString("00000000-3001-4dbc-88c3-1f47d54c511c"),
-      IdentityId("30001758").get,
+      IdentityId("104725102").get,
       Monthly,
       () => earlyDate
     ).map {
@@ -97,8 +97,8 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve a default paymentMethodId from an account number" in {
-    val accountNumber = "A00072689"
-    val defaultPaymentMethodId = Some("2c92c0f9624bbc6c01624eac30f86724")
+    val accountNumber = "A00084679"
+    val defaultPaymentMethodId = Some("2c92c0f8757974cc01757a3583e54333")
     uatService.getDefaultPaymentMethodId(accountNumber).map {
       response =>
         response should be(defaultPaymentMethodId)
@@ -106,8 +106,8 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve a Direct Debit mandateId from a valid paymentMethodId" in {
-    val defaultPaymentMethodId = "2c92c0f9624bbc6c01624eac30f86724"
-    val mandateId = "65HK26E"
+    val defaultPaymentMethodId = "2c92c0f8757974cc01757a3583e54333"
+    val mandateId = "Y5MD5CC"
     uatService.getDirectDebitMandateId(defaultPaymentMethodId).map {
       response =>
         response should be(Some(mandateId))
@@ -123,8 +123,8 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve a Direct Debit mandateId from a valid account number" in {
-    val accountNumber = "A00072689"
-    val mandateId = Some("65HK26E")
+    val accountNumber = "A00084679"
+    val mandateId = Some("Y5MD5CC")
     uatService.getMandateIdFromAccountNumber(accountNumber).map {
       response =>
         response should be(mandateId)
@@ -153,7 +153,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   it should "work for a paper subscription" in doRequest(Right(directDebitSubscriptionRequestPaper))
 
-  def doRequest(request: Either[PreviewSubscribeRequest, SubscribeRequest]) = {
+  private def doRequest(request: Either[PreviewSubscribeRequest, SubscribeRequest]) = {
     //Accounts will be created (or previewed) in Sandbox
     val zuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
     val futureResponse = request.fold(zuoraService.previewSubscribe, zuoraService.subscribe)

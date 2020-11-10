@@ -44,7 +44,7 @@ class RegularContributions(
 
   implicit val a: AssetsResolver = assets
 
-  def create: Action[CreateSupportWorkersRequest] = maybeAuthenticatedAction().async(circe.json[CreateSupportWorkersRequest]) {
+  def create: Action[CreateSupportWorkersRequest] = maybeAuthenticatedAction().async(new LoggingCirceParser(components).requestParser) {
     implicit request =>
       request.user.fold {
         createContributorAndUser()

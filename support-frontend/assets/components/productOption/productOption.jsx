@@ -1,9 +1,14 @@
 // @flow
 import React, { type Node } from 'react';
 import cx from 'classnames';
+import { css } from '@emotion/core';
+import { neutral } from '@guardian/src-foundations/palette';
+import { space } from '@guardian/src-foundations';
+import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
+import { ThemeProvider } from 'emotion-theming';
 
 // components
-import AnchorButton, { type PropTypes } from 'components/button/anchorButton';
+import { type PropTypes } from 'components/button/anchorButton';
 import { defaultProps } from 'components/button/_sharedButton';
 
 // styles
@@ -26,12 +31,23 @@ type ProductOptionOfferType = {
   hidden: boolean
 }
 
+const buttonStyles = css`
+  color: ${neutral[7]};
+  margin-top: ${space[2]}px;
+`;
+
 // hocs
 const withProductOptionsStyle = WrappedComponent => (props: WrappedProps) => (
   <div className="product-option__button">
     <div className="product-option__sales-copy">{props.salesCopy}</div>
     <WrappedComponent {...props} />
   </div>
+);
+
+const LinkButtonPayment = (props: WrappedProps) => (
+  <ThemeProvider theme={buttonReaderRevenue}>
+    <LinkButton css={buttonStyles} {...props} />
+  </ThemeProvider>
 );
 
 // presentation components
@@ -58,7 +74,7 @@ export const ProductOptionOffer = ({ children, hidden }: ProductOptionOfferType)
 
 );
 
-export const ProductOptionButton = withProductOptionsStyle(AnchorButton);
+export const ProductOptionButton = withProductOptionsStyle(LinkButtonPayment);
 
 const ProductOption = ({ children }: ProductOptionType) => (
   <div className="product-option">{ children }</div>

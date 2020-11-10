@@ -50,48 +50,14 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     )
   }
 
-  "SendThankYouEmailState" should "deserialise correctly" in {
-    testDecoding[SendThankYouEmailState](thankYouEmailJson())
-  }
-
-  it should "roundtrip successfully" in {
-
-    val state = SendThankYouEmailState(
-      requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-      giftPurchase = None,
-      product = DigitalPack(Currency.GBP, Monthly),
-      AnalyticsInfo(false, paymentProvider = PayPal),
-      paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
-        PayPalReferenceTransaction("baid", "me@somewhere.com"),
-        PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
-      )),
-      firstDeliveryDate = None,
-      promoCode = None,
-      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
-      acquisitionData = None,
-      accountNumber = "123ac",
-      subscriptionNumber = "123sub"
-    )
-
-    testRoundTripSerialisation[SendThankYouEmailState](state)
-  }
-
   "FailureHandlerState" should "deserialise correctly from any lambda" in {
     import com.gu.support.workers.StatesTestData._
 
-    testEncodeToDifferentState(thankYouEmailState, failureHandlerState)
     testEncodeToDifferentState(preparePaymentMethodForReuseState, failureHandlerState)
     testEncodeToDifferentState(createZuoraSubscriptionState, failureHandlerState)
     testEncodeToDifferentState(createSalesforceContactState, failureHandlerState)
     testEncodeToDifferentState(createPaymentMethodState, failureHandlerState)
-    // sendAcquisitionEventState is never serialised directly so doesn't need testing
-  }
-
-  "SendAcquisitionEventStateImpl" should "deserialise correctly from SendThankYouEmailState state" in {
-    import com.gu.support.workers.StatesTestData._
-
-    testEncodeToDifferentState(thankYouEmailState, sendAcquisitionEventState)
+    // sendAcquisitionEventState does not go to failure state if it fails
   }
 
 }
@@ -143,37 +109,13 @@ object StatesTestData {
     acquisitionData = None
   )
 
-  val thankYouEmailState = SendThankYouEmailState(
-    requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    giftPurchase = None,
-    product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
-    paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
-      PayPalReferenceTransaction("baid", "me@somewhere.com"),
-      PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
-    )),
-    firstDeliveryDate = None,
-    promoCode = None,
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
-    acquisitionData = None,
-    accountNumber = "123ac",
-    subscriptionNumber = "123sub"
-  )
+  val thankYouEmailProductTypeState: SendThankYouEmailState = ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated
 
-  val sendAcquisitionEventState: SendAcquisitionEventState = SendAcquisitionEventStateImpl(
+  val sendAcquisitionEventState: SendAcquisitionEventState = SendAcquisitionEventState(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    giftRecipient = None,
-    product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
-    paymentOrRedemptionData = Left(PaymentMethodWithSchedule(
-      PayPalReferenceTransaction("baid", "me@somewhere.com"),
-      PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49)))
-    )),
-    firstDeliveryDate = None,
-    promoCode = None,
-    acquisitionData = None
+    ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated,
+    analyticsInfo = AnalyticsInfo(false, PayPal),
+    acquisitionData = None,
   )
 
   val preparePaymentMethodForReuseState = PreparePaymentMethodForReuseState(

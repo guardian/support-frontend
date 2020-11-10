@@ -41,9 +41,9 @@ class ZuoraGiftService(val config: ZuoraConfig, client: FutureHttpClient)(implic
     subscriptionId: String,
     requestId: String,
     gifteeIdentityId: String,
-    currentTerm: Int
+    newTermLength: Int
   ): Future[UpdateRedemptionDataResponse] = {
-    val requestData = UpdateRedemptionDataRequest(requestId, gifteeIdentityId, currentTerm, Day)
+    val requestData = UpdateRedemptionDataRequest(requestId, gifteeIdentityId, newTermLength, Day)
     putJson[UpdateRedemptionDataResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
   }
 }

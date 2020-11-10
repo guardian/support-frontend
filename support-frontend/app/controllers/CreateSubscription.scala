@@ -3,6 +3,8 @@ package controllers
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.AuthRequest
 import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
+import akka.stream.scaladsl.Flow
+import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.model.{User => IdUser}
@@ -12,6 +14,7 @@ import com.gu.support.workers.{BillingPeriod, User}
 import io.circe.syntax._
 import lib.PlayImplicits._
 import play.api.libs.circe.Circe
+import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, TestUserService}
@@ -39,7 +42,7 @@ class CreateSubscription(
   type ApiResponseOrError[RES] = EitherT[Future, CreateSubscriptionError, RES]
 
   def create: Action[CreateSupportWorkersRequest] =
-    authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
+    authenticatedAction(recurringIdentityClientId).async(new LoggingCirceParser(components).requestParser) {
       implicit request: AuthRequest[CreateSupportWorkersRequest] =>
         handleCreateSupportWorkersRequest(request, CheckoutValidationRules.validatorFor(request.body.product))
     }
@@ -120,3 +123,19 @@ class CreateSubscription(
   }
 }
 
+class LoggingCirceParser(controllerComponents: ControllerComponents) extends Circe {
+
+  val requestParser: BodyParser[CreateSupportWorkersRequest] = {
+    val underlying = circe.json[CreateSupportWorkersRequest]
+    BodyParser.apply("LoggingCirceParser(" + underlying.toString() + ")") {
+      requestHeader: RequestHeader =>
+        val accumulator: Accumulator[ByteString, Either[Result, CreateSupportWorkersRequest]] = underlying.apply(requestHeader)
+        accumulator.through(Flow.fromFunction { (byteString: ByteString) =>
+          SafeLogger.info("incoming POST: " + byteString.utf8String)
+          byteString
+        })
+    }
+  }
+
+  def parse: PlayBodyParsers = controllerComponents.parsers
+}

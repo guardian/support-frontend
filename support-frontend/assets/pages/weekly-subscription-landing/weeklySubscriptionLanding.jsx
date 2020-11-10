@@ -59,6 +59,7 @@ type PageCopy = {|
 // ----- Redux Store ----- //
 
 const store = pageInit(() => reducer, true);
+const { orderIsAGift } = store.getState().page;
 
 // ----- Internationalisation ----- //
 
@@ -76,9 +77,10 @@ const reactElementId: {
   International: 'weekly-landing-page-int',
 };
 
+const path = orderIsAGift ? '/subscribe/weekly/gift' : '/subscribe/weekly';
 
 const Header = headerWithCountrySwitcherContainer({
-  path: '/subscribe/weekly',
+  path,
   countryGroupId,
   listOfCountryGroups: [
     GBPCountries,
@@ -127,7 +129,7 @@ const getRegionalCopyFor = (region: CountryGroupId): Element<'span'> => (region 
   <span>Find clarity with The Guardian&apos;s global magazine.<br /> Subscribe today</span> :
   <span>Read The Guardian in print. Subscribe to<br className="gw-temp-break" />The Guardian Weekly today</span>);
 
-const getCopy = (promotionCopy: Object, orderIsAGift: boolean): PageCopy => {
+const getCopy = (promotionCopy: Object): PageCopy => {
   const currentRegion = detect();
   const defaultTitle = orderIsAGift ?
     <>

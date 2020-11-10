@@ -11,6 +11,7 @@ import com.gu.support.redemption.corporate.{DynamoLookup, DynamoUpdate}
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator
+import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailDigitalSubscriptionCorporateRedemptionState, SendThankYouEmailDigitalSubscriptionDirectPurchaseState}
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api.response._
@@ -18,6 +19,7 @@ import com.gu.support.zuora.api.{PreviewSubscribeRequest, ReaderType, SubscribeR
 import com.gu.support.zuora.domain
 import com.gu.zuora.ZuoraSubscribeService
 import org.joda.time.{DateTime, LocalDate}
+import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -87,6 +89,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       zuora,
       giftCodeGeneratorService,
       ZuoraConfig(null, null, null, null, null, null),
+      false,
     )
     val result = subscriptionCreator.create(
       state,
@@ -96,9 +99,10 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
     result.map { handlerResult =>
       withClue(handlerResult) {
         dynamoUpdates should be(List(testCode -> DynamoFieldUpdate("available", false)))
-        handlerResult.value.accountNumber should be("accountcorp")
-        handlerResult.value.subscriptionNumber should be("subcorp")
-        handlerResult.value.paymentOrRedemptionData.isRight should be(true) // it's still a corp sub!
+        inside(handlerResult.value.sendThankYouEmailState) {
+          case s: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState =>
+            s.subscriptionNumber should be("subcorp")
+        }
       }
     }
   }
@@ -154,6 +158,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       zuoraService = zuora,
       giftCodeGenerator = new GiftCodeGeneratorService,
       config = ZuoraConfig(url = null, username = null, password = null, monthlyContribution = null, annualContribution = null, digitalPack = ZuoraDigitalPackConfig(14, 2)),
+      false,
     )
     val result = subscriptionCreator.create(
       state = state,
@@ -162,9 +167,11 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
     result.map { handlerResult =>
       withClue(handlerResult) {
-        handlerResult.value.accountNumber should be("accountdigi")
-        handlerResult.value.subscriptionNumber should be("subdigi")
-        handlerResult.value.paymentOrRedemptionData.isLeft should be(true) // it's still marked as a paid sub!
+        inside(handlerResult.value.sendThankYouEmailState) {
+          case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+            s.accountNumber should be("accountdigi")
+            s.subscriptionNumber should be("subdigi")
+        }
       }
     }
   }
