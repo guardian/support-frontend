@@ -1,5 +1,6 @@
-import { configure, addDecorator } from '@storybook/react';
+import { configure, addDecorator, addParameters } from '@storybook/react';
 import { withOptions } from '@storybook/addon-options';
+import { viewports } from "./viewports";
 import loadStories from '../stories/_index';
 
 addDecorator(
@@ -13,7 +14,7 @@ addDecorator(
       textColor: '#121212',
       barFill:  'linear-gradient(to bottom, #ededed 1px,#fff 1px)',
       barSelectedColor: '#ffe500',
-      barBgColor: 'blue',    
+      barBgColor: 'blue',
       menuLink: {
         color: '#767676',
         marginLeft: '0em',
@@ -27,7 +28,7 @@ addDecorator(
         color: '#333',
         fontSize: 13,
         paddingTop: '.5em'
-      },      
+      },
       brandLink: {
         background: 'url("logo.svg") no-repeat bottom left',
         backgroundSize: 'contain',
@@ -47,9 +48,15 @@ addDecorator(
           marginLeft: '-1em'
         }
       }
-      
     }
   })
 )
+
+addParameters({
+	viewport: {
+		viewports,
+		defaultViewport: 'responsive',
+	},
+});
 
 configure(loadStories, module);
