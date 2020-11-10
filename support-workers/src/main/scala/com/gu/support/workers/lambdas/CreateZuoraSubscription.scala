@@ -234,14 +234,14 @@ class NextState(
       case (product: GuardianWeekly, Purchase(purchase)) =>
         weekly(product, purchase)
       case (product: DigitalPack, _: Redemption) if product.readerType == ReaderType.Corporate =>
-        dsCorp(product)
+        dsCorporate(product)
       case (product: DigitalPack, _: Redemption) if product.readerType == ReaderType.Gift =>
         throw new RuntimeException("wrong code path for gift redemption")
       case _ => throw new RuntimeException("could not create value state")
     }
   // scalastyle:on cyclomatic.complexity
 
-  private def dsCorp(product: DigitalPack) =
+  private def dsCorporate(product: DigitalPack) =
     SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
       state.user, SfContactId(state.salesforceContacts.buyer.Id), product, subscriptionNumber.value
     )
