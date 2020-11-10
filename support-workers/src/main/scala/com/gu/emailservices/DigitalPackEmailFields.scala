@@ -272,18 +272,15 @@ object JsonToAttributes {
       value.toList.foldLeft(failablePairsSoFar) {
         case (failablePairsSoFar, (fieldName, jValue)) =>
           failablePairsSoFar.flatMap { pairsSoFar =>
-            jValue.asString match {
-              case None =>
-                jValue.asObject match {
-                  case None => Left(s"all values should be string or object: ${fieldName} -> $value")
-                  case Some(obj) =>
-                    flattenToPairs(obj, Right(pairsSoFar))
-                }
-              case Some(string) =>
+            (jValue.isNull, jValue.asString, jValue.asObject) match {
+              case (true, _, _) => Right(pairsSoFar)
+              case (_, _, Some(obj)) => flattenToPairs(obj, Right(pairsSoFar))
+              case (_, Some(string), _) =>
                 if (pairsSoFar.contains(fieldName))
                   Left(s"found duplicate key ${fieldName} in case classes")
                 else
                   Right(pairsSoFar + (fieldName -> string))
+              case _ => Left(s"all values should be null, string or object: ${fieldName} -> $value")
             }
           }
       }
