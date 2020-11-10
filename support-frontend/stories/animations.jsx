@@ -4,15 +4,14 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 
-
 import AnimatedDots from 'components/spinners/animatedDots';
+import GiftHeadingAnimation from 'components/animations/GiftHeadingAnimation';
 import { radios, withKnobs } from '@storybook/addon-knobs';
-
 
 const appearanceKnob = () => radios('Appearance', ['light', 'dark'], 'light');
 
-
-const stories = storiesOf('Animated dots', module).addDecorator(withKnobs);
+const stories = storiesOf('Animations', module)
+  .addDecorator(withKnobs);
 
 stories.add('Animated dots', () => (
   <div style={{
@@ -29,5 +28,15 @@ stories.add('Animated dots', () => (
     <AnimatedDots
       appearance={appearanceKnob()}
     />
+  </div>
+));
+
+stories.add('Gifting animation', () => (
+  <div style={{
+    backgroundColor: '#00568D',
+    color: '#fff',
+  }}
+  >
+    <GiftHeadingAnimation />
   </div>
 ));

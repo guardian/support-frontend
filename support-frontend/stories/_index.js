@@ -12,7 +12,7 @@ module.exports = () => {
   require('./type.jsx');
   require('./layout.jsx');
   require('./tabs.jsx');
-  require('./animatedDots.jsx');
+  require('./animations.jsx');
   require('./contributionTicker.jsx');
   require('./cards.jsx');
   require('./containers.jsx');

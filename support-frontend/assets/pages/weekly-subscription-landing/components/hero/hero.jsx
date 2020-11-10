@@ -15,6 +15,7 @@ import CentredContainer from 'components/containers/CentredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import PageTitle from 'components/page/PageTitle';
 import Hero from 'components/page/Hero';
+import GiftHeadingAnimation from 'components/animations/GiftHeadingAnimation';
 
 import { glyph, type IsoCurrency } from 'helpers/internationalisation/currency';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
@@ -82,7 +83,10 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
           roundelText={orderIsAGift ? null : roundelText}
         >
           <section css={weeklyHeroCopy}>
-            <h2 css={[weeklyHeroTitle, orderIsAGift ? '' : weeklyHeroTitleWithRoundel]}>{copy.title}</h2>
+            {orderIsAGift ?
+              <GiftHeadingAnimation /> :
+              <h2 css={[weeklyHeroTitle, weeklyHeroTitleWithRoundel]}>{copy.title}</h2>
+            }
             <p css={weeklyHeroParagraph}>
               {copy.paragraph}
             </p>
