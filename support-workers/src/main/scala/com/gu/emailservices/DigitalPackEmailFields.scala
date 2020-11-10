@@ -11,6 +11,7 @@ import com.gu.support.workers.states.SendThankYouEmailState._
 import io.circe._
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
+import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -147,11 +148,17 @@ class DigitalPackEmailFields(
       case state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => Future.successful(List(giftRedemption(state)))
     }
 
-  private def wrap(dataExtensionName: String, fields: DigitalSubscriptionEmailAttributes, sfContactId: SfContactId, user: User): EmailFields = {
+  private def wrap(
+    dataExtensionName: String,
+    fields: DigitalSubscriptionEmailAttributes,
+    sfContactId: SfContactId,
+    user: User,
+    deliveryDate: Option[LocalDate] = None,
+  ): EmailFields = {
     val attributePairs = JsonToAttributes.asFlattenedPairs(fields.asJsonObject).left.map(
       error => throw new RuntimeException(s"coding error: $error")
     ).merge
-    EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
+    EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName, deliveryDate)
   }
 
   private def giftRecipientNotification(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState) =
@@ -161,7 +168,7 @@ class DigitalPackEmailFields(
       gift_code = giftPurchase.giftCode.value,
       last_redemption_date = formatDate(giftPurchase.lastRedemptionDate),
       duration = s"${giftPurchase.product.billingPeriod.monthsInPeriod} months",
-    ), SfContactId(giftPurchase.salesForceContact.Id), giftPurchase.user)
+    ), SfContactId(giftPurchase.salesForceContact.Id), giftPurchase.user, Some(giftPurchase.giftRecipient.deliveryDate))
 
   private def giftPurchaserConfirmation(state: SendThankYouEmailDigitalSubscriptionGiftPurchaseState)(implicit ec: ExecutionContext) = {
     import state._
