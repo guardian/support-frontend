@@ -14,8 +14,11 @@ export type State = {
   }
 };
 
+const { orderIsAGift } = window.guardian;
+
 // ----- Export ----- //
 
 export default () => ({
   productPrices: getProductPrices(),
+  orderIsAGift,
 });

@@ -7,7 +7,6 @@ import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
-const usThankYouAndLandingPages = '/us/(thankyou|contribute)(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
@@ -78,27 +77,5 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: ukOnlyLandingPage,
     seed: 9,
-  },
-
-  usElectionNewsletter: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'showNewsletter',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: usThankYouAndLandingPages,
-    seed: 10,
   },
 };

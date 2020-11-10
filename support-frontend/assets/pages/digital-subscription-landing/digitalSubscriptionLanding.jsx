@@ -22,14 +22,15 @@ import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import CampaignHeader from './components/hero/hero';
-import ProductBlock from './components/productBlock';
-import ProductBlockAus from './components/australianEditions/productBlockAus';
+import CampaignHeaderGift from './components/heroGift/hero';
+import ProductBlock from './components/productBlock/productBlock';
+import ProductBlockAus from './components/productBlock/productBlockAus';
 import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
-import CallToAction from './components/cta';
-import TermsAndConditions from './components/termsAndConditions';
-import FaqsAndHelp from './components/faqsAndHelp';
+import { CallToAction, CallToActionGift } from './components/cta';
+import GiftNonGiftLink from './components/giftNonGiftLink';
+import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 // ----- Styles ----- //
 
 import './components/digitalSubscriptionLanding.scss';
@@ -38,6 +39,8 @@ import 'stylesheets/skeleton/skeleton.scss';
 // ----- Redux Store ----- //
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
+
+const { orderIsAGift, productPrices } = store.getState().page;
 
 // ----- Internationalisation ----- //
 
@@ -55,8 +58,10 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
+const path = orderIsAGift ? '/subscribe/digital/gift' : '/subscribe/digital';
+
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
-  path: '/subscribe/digital',
+  path,
   countryGroupId,
   listOfCountryGroups: [
     GBPCountries,
@@ -71,19 +76,33 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 // ----- Render ----- //
 function LandingPage() {
+  const footer = (
+    <div className="footer-container">
+      <div className="footer-alignment">
+        <DigitalFooter
+          country={countryGroupId}
+          orderIsAGift={orderIsAGift}
+          productPrices={productPrices}
+          centred
+        />
+      </div>
+    </div>);
 
   return (
     <Page
       header={<CountrySwitcherHeader />}
+      footer={footer}
     >
-      <CampaignHeader countryGroupId={countryGroupId} />
+      {orderIsAGift ?
+        <CampaignHeaderGift countryGroupId={countryGroupId} /> :
+        <CampaignHeader countryGroupId={countryGroupId} />
+      }
       {countryGroupId === AUDCountries ?
         <ProductBlockAus countryGroupId={countryGroupId} /> :
         <ProductBlock countryGroupId={countryGroupId} />
       }
-      <CallToAction />
-      <TermsAndConditions />
-      <FaqsAndHelp selectedCountryGroup={countryGroupId} />
+      {orderIsAGift ? <CallToActionGift /> : <CallToAction />}
+      <GiftNonGiftLink orderIsAGift={orderIsAGift} />
     </Page>
   );
 

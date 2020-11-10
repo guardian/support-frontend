@@ -10,7 +10,7 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fixDecimals } from 'helpers/subscriptions';
 
 // types
-import { type BillingPeriod, Annual, Monthly } from 'helpers/billingPeriods';
+import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
 import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
 import { type Option } from 'helpers/types/option';
 import type {
@@ -20,7 +20,6 @@ import type {
 } from 'helpers/productPrice/productPrices';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { isNumeric } from 'helpers/productPrice/productPrices';
 
@@ -44,7 +43,7 @@ export const getDisplayPrice = (currencyId: IsoCurrency, price: number) =>
 
 export const getProductPrice = (
   productOptions: BillingPeriods,
-  billingPeriod: DigitalBillingPeriod,
+  billingPeriod: BillingPeriod,
   currencyId: IsoCurrency,
 ): ProductPrice => (
   productOptions[billingPeriod][currencyId]
@@ -53,6 +52,24 @@ export const getProductPrice = (
 export const getSavingPercentage = (annualCost: number, monthlyCostAnnualized: number) => `${Math.round((1 - (annualCost / monthlyCostAnnualized)) * 100)}%`;
 
 const BILLING_PERIOD = {
+  [Quarterly]: {
+    title: 'Quarterly',
+    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+      const display = price => getDisplayPrice(currencyId, price);
+      return isNumeric(promotionalPrice) ?
+        <span>
+          <span className="product-option__price">{display(promotionalPrice)}</span>
+          <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
+        </span>
+        :
+        <span>
+          <span className="product-option__price">{display(displayPrice)}</span>
+          <span className="product-option__price-detail">{display(displayPrice / 3)}/month</span>
+        </span>;
+    },
+    offer: null,
+    label: null,
+  },
   [Monthly]: {
     title: 'Monthly',
     salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
@@ -93,12 +110,12 @@ const BILLING_PERIOD = {
 
 // state
 const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> } => {
-  const { productPrices } = state.page;
+  const { productPrices, orderIsAGift } = state.page;
   const { countryGroupId, currencyId } = state.common.internationalisation;
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
   const createPaymentOption = (billingPeriod: BillingPeriod): PaymentOption => {
-    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
+    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Monthly';
 
     const productPrice = getProductPrice(productOptions, digitalBillingPeriod, currencyId);
     const fullPrice = productPrice.price;
@@ -112,7 +129,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
 
     return {
       title: BILLING_PERIOD[digitalBillingPeriod].title,
-      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode),
+      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, orderIsAGift),
       onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, digitalBillingPeriod),
       salesCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
       offer,

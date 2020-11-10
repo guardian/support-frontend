@@ -111,6 +111,7 @@ object DigitalSubscriptionEmailAttributes {
     gift_personal_message: Option[String],
     gift_code: String,
     last_redemption_date: String,
+    duration: String,
   ) extends DigitalSubscriptionEmailAttributes
 
 }
@@ -166,6 +167,7 @@ class DigitalPackEmailFields(
       gift_personal_message = giftPurchase.giftRecipient.message,
       gift_code = giftPurchase.giftCode.value,
       last_redemption_date = formatDate(giftPurchase.lastRedemptionDate),
+      duration = s"${giftPurchase.product.billingPeriod.monthsInPeriod} months",
     ), SfContactId(giftPurchase.salesForceContact.Id), giftPurchase.user, Some(giftPurchase.giftRecipient.deliveryDate))
 
   private def giftPurchaserConfirmation(state: SendThankYouEmailDigitalSubscriptionGiftPurchaseState)(implicit ec: ExecutionContext) = {
