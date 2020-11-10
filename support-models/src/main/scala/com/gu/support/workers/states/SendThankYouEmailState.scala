@@ -1,10 +1,12 @@
 package com.gu.support.workers.states
 
+import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.encoding.DiscriminatedType
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
+import io.circe.{Decoder, Encoder}
 import org.joda.time.LocalDate
 
 sealed trait SendThankYouEmailState extends StepFunctionUserState {
@@ -27,7 +29,7 @@ object SendThankYouEmailState {
 
   case class SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
     user: User,
-    salesForceContact: SalesforceContactRecord,
+    sfContactId: SfContactId,
     product: DigitalPack,
     paymentMethod: PaymentMethod,
     paymentSchedule: PaymentSchedule,
@@ -38,7 +40,8 @@ object SendThankYouEmailState {
 
   case class SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
     user: User,
-    salesForceContact: SalesforceContactRecord,
+    purchaserSFContactId: SfContactId,
+    recipientSFContactId: SfContactId,
     product: DigitalPack,
     giftRecipient: DigitalSubscriptionGiftRecipient,
     giftCode: GeneratedGiftCode,
@@ -51,14 +54,14 @@ object SendThankYouEmailState {
 
   case class SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
     user: User,
-    salesForceContact: SalesforceContactRecord,
+    sfContactId: SfContactId,
     product: DigitalPack,
     subscriptionNumber: String,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user: User,
-    salesForceContact: SalesforceContactRecord,
+    sfContactId: SfContactId,
     product: DigitalPack,
     giftStartDate: LocalDate,
     giftEndDate: LocalDate,
@@ -88,6 +91,9 @@ object SendThankYouEmailState {
     subscriptionNumber: String,
     firstDeliveryDate: LocalDate,
   ) extends SendThankYouEmailState
+
+  implicit val encodeSFContactId = Encoder.encodeString.contramap[SfContactId](_.id)
+  implicit val decodeSFContactId = Decoder.decodeString.map(SfContactId.apply)
 
   private val discriminatedType = new DiscriminatedType[SendThankYouEmailState]("productType")
   implicit val codec = discriminatedType.codec(List(

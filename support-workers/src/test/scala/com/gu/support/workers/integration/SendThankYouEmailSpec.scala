@@ -18,7 +18,7 @@ import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, wrapFixtur
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.integration.SendThankYouEmailManualTest.integrationSFContactRecord
+import com.gu.support.workers.integration.SendThankYouEmailManualTest.integrationSFContactId
 import com.gu.support.workers.integration.TestData.{billingOnlyUser, directDebitPaymentMethod, sfContactRecord}
 import com.gu.support.workers.lambdas.SendThankYouEmail
 import com.gu.support.workers.states.SendThankYouEmailState._
@@ -96,7 +96,9 @@ object SendThankYouEmailManualTest {
 
   //This test will send a thank you email to the address/SF contact below - useful for quickly testing changes
   val addressToSendTo = "john.duffell@guardian.co.uk"
-  val integrationSFContactRecord = SalesforceContactRecord(SfContactId("0039E000018EoTHQA0").id, "accountID")
+  val integrationSFContactId = SfContactId("0039E000018EoTHQA0")
+  // deprecated as accountId is not relevant for emails
+  val integrationSFContactRecord = SalesforceContactRecord(integrationSFContactId.id, "accountID")
 
   def main(args: Array[String]): Unit = {
     SendContributionEmail.main(args)
@@ -144,7 +146,7 @@ object SendDigitalPackEmail extends App {
   send(digitalPackEmailFields.build(
     SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
       billingOnlyUser,
-      integrationSFContactRecord,
+      integrationSFContactId,
       DigitalPack(GBP, Annual),
       directDebitPaymentMethod,
       paymentSchedule,
@@ -160,7 +162,7 @@ object SendDigitalPackCorpEmail extends App {
   send(digitalPackEmailFields.build(
     SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
       billingOnlyUser,
-      integrationSFContactRecord,
+      integrationSFContactId,
       DigitalPack(GBP, Annual, ReaderType.Corporate),
       subno
     )
@@ -172,7 +174,8 @@ object SendDigitalPackGiftPurchaseEmails extends App {
   send(digitalPackEmailFields.build(
     SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
       billingOnlyUser,
-      integrationSFContactRecord,
+      integrationSFContactId, // purchaser
+      integrationSFContactId, // recipient
       DigitalPack(GBP, Annual, ReaderType.Gift),
       DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), LocalDate.now()),
       GeneratedGiftCode("gd12-02345678").get,
@@ -190,7 +193,7 @@ object SendDigitalPackGiftRedemptionEmail extends App {
   send(digitalPackEmailFields.build(
     SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
       billingOnlyUser,
-      integrationSFContactRecord,
+      integrationSFContactId,
       DigitalPack(GBP, Annual, ReaderType.Gift),
       new LocalDate(2020, 10, 24),
       new LocalDate(2021, 1, 24),
@@ -260,7 +263,9 @@ object SendWeeklySubscriptionGiftEmail extends App {
 
 object TestData {
 
-  val sfContactRecord = SalesforceContactRecord(SfContactId("contactID").id, "accountID")
+  val sfContactId: SfContactId = SfContactId("contactID")
+  // deprecated as account id is not relevant to emails
+  val sfContactRecord = SalesforceContactRecord(sfContactId.id, "accountID")
 
   val paymentSchedule = PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))
   val subno = "A-S00045678"

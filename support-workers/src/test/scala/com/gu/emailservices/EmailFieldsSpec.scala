@@ -3,7 +3,7 @@ package com.gu.emailservices
 import com.gu.i18n.Currency.GBP
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.workers.integration.TestData
-import com.gu.support.workers.integration.TestData.{countryOnlyAddress, directDebitPaymentMethod, sfContactRecord}
+import com.gu.support.workers.integration.TestData.{countryOnlyAddress, directDebitPaymentMethod, sfContactRecord, sfContactId}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers._
 import io.circe.parser._
@@ -92,7 +92,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
     ).build(
       SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
         User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
-        sfContactRecord,
+        sfContactId,
         DigitalPack(GBP, Annual),
         directDebitPaymentMethod,
         PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
@@ -134,7 +134,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
     ).build(
       SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
         User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
-        sfContactRecord,
+        sfContactId,
         DigitalPack(GBP, Annual),
         "A-S00045678",
       )
