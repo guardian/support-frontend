@@ -8,13 +8,14 @@ import { headline, titlepiece, body } from '@guardian/src-foundations/typography
 import { brand, neutral, brandAlt } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const wrapper = css`
   position: relative;
   background: #ededed;
   display: flex;
   flex-direction: column;
-  padding-top: ${space[4]}px;
+  padding-top: ${space[3]}px;
 
   :before {
     position: absolute;
@@ -22,19 +23,15 @@ export const wrapper = css`
     left: 0;
     width: 100%;
     height: 170px;
-    background: ${brand[300]};
+    background: ${digitalSubscriptionsBlue};
     content: '';
   }
 
   ${from.mobileLandscape} {
+    padding-top: ${space[4]}px;
     :before {
+      margin-top: -1px;
       height: 200px;
-    }
-  }
-
-  ${from.desktop} {
-    :before {
-      height:200px;
     }
   }
 `;
@@ -44,11 +41,11 @@ export const pageTitle = css`
   color: ${neutral[97]};
   z-index: 10;
   background-color: transparent;
-  padding: 0 ${space[4]}px ${space[9]}px;
+  padding: 0 ${space[3]}px ${space[3]}px;
   width: 100%;
 
   ${from.mobileLandscape} {
-    padding-bottom: ${space[12]}px;
+    padding-bottom: ${space[4]}px;
   }
 
   ${from.phablet} {
@@ -64,7 +61,7 @@ export const pageTitle = css`
     ${titlepiece.large()}
     max-width: calc(100% - 110px);
     max-width: 1100px;
-    padding: 0 ${space[4]}px ${space[12]}px;
+    padding: ${space[3]}px ${space[4]}px ${space[9]}px;
   }
 
   ${from.leftCol} {
@@ -78,7 +75,7 @@ export const featureContainer = css`
   display: flex;
   flex-direction: column;
   align-self: flex-start;
-  background-color: #00568D;
+  background-color: ${brand[300]};
   color: ${neutral[97]};
   padding: ${space[2]}px ${space[4]}px 0;
   width: 100%;
@@ -115,11 +112,7 @@ export const textSection = css`
     width: 60%;
   }
 
-  ${from.tablet} {
-    width: 55%;
-  }
-
-  ${from.leftCol} {
+  ${from.desktop} {
     width: 55%;
   }
 `;
@@ -135,6 +128,11 @@ export const heroHeading = css`
 
   ${from.mobileLandscape} {
     ${headline.medium({ fontWeight: 'bold' })};
+  }
+
+  ${from.tablet} {
+    white-space: nowrap;
+    overflow: visible;
   }
 
   ${from.desktop} {
@@ -166,19 +164,12 @@ export const paragraph = css`
     max-width: 85%;
   }
 
-  ${from.tablet} {
-    max-width: 90%;
-  }
-
   ${from.desktop} {
     ${headline.xxsmall()};
     line-height: 135%;
-    max-width: 95%;
+    max-width: 90%;
   }
 
-  ${from.leftCol} {
-    max-width: 95%;
-  }
 `;
 
 export const heavyText = css`
