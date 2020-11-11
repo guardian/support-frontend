@@ -69,12 +69,14 @@ function ProductOption(props: Product) {
   return (
     <div css={[productOption, props.cssOverrides]}>
       <div>
-        <h4 css={productOptionTitle}>{props.title}</h4>
+        <h3 css={productOptionTitle}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
         {props.children && props.children}
       </div>
       <div>
-        <p css={productOptionPriceCopy}>
+        {/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
+        {/* eslint-disable-next-line jsx-a11y/aria-role */}
+        <p role="text" css={productOptionPriceCopy}>
           <span css={productOptionPrice}>{props.price}</span>
           {props.priceCopy}
         </p>

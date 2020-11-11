@@ -54,9 +54,13 @@ const roundelCentreLine = css`
 function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
   const roundelText = (
     <>
-      <div>Try</div>
-      <div css={roundelCentreLine}>6 issues</div>
-      <div>for {glyph(currencyId)}6</div>
+      {/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
+      {/* eslint-disable-next-line jsx-a11y/aria-role */}
+      <div role="text">
+        Try
+        <div css={roundelCentreLine}>6 issues</div>
+        for {glyph(currencyId)}6
+      </div>
     </>
   );
 

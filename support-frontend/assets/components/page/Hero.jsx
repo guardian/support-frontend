@@ -76,6 +76,7 @@ const heroRoundel = css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
   top: 0;
   right: 0;
   transform: translateY(-50%);

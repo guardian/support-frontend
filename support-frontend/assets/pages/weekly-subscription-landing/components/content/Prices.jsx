@@ -66,7 +66,7 @@ function Prices({ products }: PropTypes) {
   return (
     <section css={pricesSection} id="subscribe">
       <h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
-      <h3 css={pricesSubHeadline}>Select a gift period</h3>
+      <p css={pricesSubHeadline}>Select a gift period</p>
       <FlexContainer cssOverrides={priceBoxes}>
         {products.map(product => (
           <ProductOption
