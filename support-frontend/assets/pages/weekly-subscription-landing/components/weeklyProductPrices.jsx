@@ -50,6 +50,14 @@ const getRelevantPromotion = ({ promotions }: ProductPrice) => {
   return null;
 };
 
+const getMainDisplayPrice = (productPrice: ProductPrice, promotion?: Promotion | null): number => {
+  if (promotion) {
+    const introductoryPrice = promotion.introductoryPrice && promotion.introductoryPrice.price;
+    return promotion.discountedPrice || introductoryPrice || productPrice.price;
+  }
+  return productPrice.price;
+};
+
 const mapStateToProps = (state: State): PropTypes => {
   const { countryId } = state.common.internationalisation;
   const { productPrices, orderIsAGift } = state.page;
@@ -65,7 +73,8 @@ const mapStateToProps = (state: State): PropTypes => {
         getWeeklyFulfilmentOption(countryId),
       ) : { price: 0, fixedTerm: false, currency: 'GBP' };
       const promotion = getRelevantPromotion(productPrice);
-      const mainDisplayPrice = promotion && promotion.discountedPrice ? promotion.discountedPrice : productPrice.price;
+      console.log(productPrice);
+      const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
       return {
         title: billingPeriodTitle(billingPeriod, orderIsAGift),
         price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),

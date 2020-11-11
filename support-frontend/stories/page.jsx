@@ -29,7 +29,7 @@ const DemoHero = (
     }
   >
     <section style={{ padding: '1rem' }}>
-      <h1 style={{ fontSize: '42px' }}>Hero Heading</h1>
+      <h1 style={{ fontSize: '42px', fontFamily: 'GH Guardian Headline' }}>Hero Heading</h1>
       <p style={{ padding: '1em 0' }}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Quisque id justo at est elementum egestas rhoncus eu nulla.
