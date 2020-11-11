@@ -30,16 +30,12 @@ type PropTypes = {|
 |};
 
 const weeklyHeroCopy = css`
-  padding: ${space[3]}px;
+  padding: 0 ${space[3]}px ${space[3]}px;
 `;
 
 const weeklyHeroTitle = css`
   ${titlepiece.small()};
   margin-bottom: ${space[3]}px;
-`;
-
-const weeklyHeroTitleWithRoundel = css`
-  margin-right: ${space[2]}px;
 `;
 
 const weeklyHeroParagraph = css`
@@ -85,7 +81,7 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
           <section css={weeklyHeroCopy}>
             {orderIsAGift ?
               <GiftHeadingAnimation /> :
-              <h2 css={[weeklyHeroTitle, weeklyHeroTitleWithRoundel]}>{copy.title}</h2>
+              <h2 css={weeklyHeroTitle}>{copy.title}</h2>
             }
             <p css={weeklyHeroParagraph}>
               {copy.paragraph}

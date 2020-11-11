@@ -28,9 +28,9 @@ const DemoHero = (
       </>
     }
   >
-    <section style={{ padding: '1rem' }}>
+    <section style={{ padding: '0 1rem' }}>
       <h1 style={{ fontSize: '42px', fontFamily: 'GH Guardian Headline' }}>Hero Heading</h1>
-      <p style={{ padding: '1em 0' }}>
+      <p style={{ paddingTop: '1em' }}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Quisque id justo at est elementum egestas rhoncus eu nulla.
         Proin pellentesque massa at metus condimentum, a aliquam erat condimentum. Vivamus quis rutrum nulla.

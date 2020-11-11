@@ -3,10 +3,12 @@
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { brand, brandAlt, neutral } from '@guardian/src-foundations/palette';
-import { from } from '@guardian/src-foundations/mq';
+import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { headline, body } from '@guardian/src-foundations/typography';
 
+const roundelSizeMob = 120;
+const roundelSize = 180;
 
 type PropTypes = {|
   image: Node,
@@ -44,12 +46,19 @@ const hero = css`
   }
 `;
 
+// Keep the content below the roundel on mobile if present
+const roundelOffset = css`
+  ${until.tablet} {
+    margin-top: ${(roundelSizeMob / 2) - space[3]}px;
+  }
+`;
+
 const heroImage = css`
   align-self: flex-end;
+  flex-shrink: 0;
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  flex-shrink: 0;
   width: 100%;
 
   ${from.tablet} {
@@ -70,8 +79,8 @@ const heroRoundel = css`
   top: 0;
   right: 0;
   transform: translateY(-50%);
-  width: 120px;
-  height: 120px;
+  width: ${roundelSizeMob}px;
+  height: ${roundelSizeMob}px;
   border-radius: 50%;
   background-color: ${brandAlt[400]};
   color: ${neutral[7]};
@@ -79,8 +88,8 @@ const heroRoundel = css`
   z-index: 2;
 
   ${from.tablet} {
-    width: 180px;
-    height: 180px;
+    width: ${roundelSize}px;
+    height: ${roundelSize}px;
     right: ${space[12]}px;
     ${headline.small({ fontWeight: 'bold' })};
   }
@@ -92,7 +101,9 @@ function Hero({
   return (
     <div css={[hero, cssOverrides]}>
       {roundelText && <div css={heroRoundel}>{roundelText}</div>}
-      {children}
+      <div css={roundelText ? roundelOffset : ''}>
+        {children}
+      </div>
       <div css={heroImage}>
         {image}
       </div>

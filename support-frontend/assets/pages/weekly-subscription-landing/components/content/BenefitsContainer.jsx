@@ -20,6 +20,7 @@ type PropTypes = {|
 
 const benefits = css`
   justify-content: space-between;
+  align-items: flex-start;
   border-top: 1px solid ${neutral[86]};
   border-bottom: 1px solid ${neutral[86]};
   ${from.tablet} {
@@ -30,7 +31,6 @@ const benefits = css`
 const benefitsBlocks = css`
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
 `;
 
 const benefitsBlock = css`
@@ -48,10 +48,17 @@ const benefitsBlock = css`
 
 const imageContainer = css`
   align-self: flex-end;
-  max-width: 100%;
+  flex-shrink: 0;
   display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 100%;
 
-  img {
+  ${from.tablet} {
+    width: 40%;
+  }
+
+  & img {
     max-width: 100%;
   }
 `;

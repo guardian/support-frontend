@@ -27,12 +27,12 @@ const productOption = css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 272px;
   width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
   padding: ${space[3]}px;
   ${from.tablet} {
+    min-height: 272px;
     width: 300px;
   }
 `;
@@ -40,6 +40,7 @@ const productOption = css`
 const productOptionTitle = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
   border-bottom: 1px solid ${neutral[86]};
+  margin-bottom: ${space[4]}px;
 `;
 
 const productOptionPrice = css`
