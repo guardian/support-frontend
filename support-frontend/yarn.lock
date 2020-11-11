@@ -2862,10 +2862,10 @@
     camelcase "^5.0.0"
     prettier "^1.13.7"
 
-"@guardian/consent-management-platform@^6.1.0":
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-6.1.1.tgz#1d3170d569f748d506a134e7261f1d795aceda6d"
-  integrity sha512-uha2dvmlSHj2jhPxdzxBSliaXDT0vFQ2X6Jk2GbHWWyD6rT9PWDhthOtuLtmrkKlSpDU9wG8LuKD3vN/EClXDw==
+"@guardian/consent-management-platform@^6.6.1":
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-6.6.1.tgz#34a8f9c4e78d9813063312290f27e4096852b2d8"
+  integrity sha512-bCCeqdIlO7lrg/qOM7XQYhghZn1ruxAUqyhvW7mo23nghu8Xz5hRZ6AbK9Juis6g0DeFGKkvBSAMtxrEEheM2Q==
 
 "@guardian/paparazzi@^0.3.1":
   version "0.3.1"
