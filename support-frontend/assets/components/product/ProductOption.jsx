@@ -84,6 +84,7 @@ function ProductOption(props: Product) {
             icon={<SvgArrowRightStraight />}
             iconSide="right"
             onClick={props.onClick}
+            aria-label={`${props.title}- ${props.buttonCopy}`}
           >
             {props.buttonCopy}
           </LinkButton>
