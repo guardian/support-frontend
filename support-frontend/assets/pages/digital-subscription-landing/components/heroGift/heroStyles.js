@@ -144,36 +144,17 @@ export const toYouTyping = css`
   animation:
     typing-to 0.7s steps(3, end);
 
-  /* This is to make it work on iPhones */
-  -webkit-animation-name: typing-to;
-  -webkit-animation-duration: 0.7s;
-  -webkit-animation-timing-function: steps(3, end);
+  animation-fill-mode: both;
+  animation-delay: 1s;
 
   @keyframes typing-to {
     from { width: 0 }
     to { width: 17.5% }
   }
-
-  @-webkit-keyframes typing-to {
-    from { width: 0 }
-    to { width: 17.5% }
-  }
-
-  animation-fill-mode: both;
-  -webkit-animation-fill-mode: both;
-  animation-delay: 1s;
-  -webkit-animation-delay: 1s;
 
   @media (prefers-reduced-motion) {
     animation: none;
-    -webkit-animation: none;
     border-right: none;
-    -webkit-border-right: none;
-  }
-
-  @keyframes typing-to {
-    from { width: 0 }
-    to { width: 17.5% }
   }
 
   color: ${brandAltBackground.primary};
@@ -239,25 +220,14 @@ export const toYouCursor = css`
   animation:
     blink-caret-to 0.7s steps(3, jump-both);
 
-  /* This is to make it work on iPhones */
-  -webkit-animation-name: blink-caret-to;
-  -webkit-animation-duration: 0.7s;
-  -webkit-animation-timing-function: steps(3, jump-both);
   animation-fill-mode: both;
-  -webkit-animation-fill-mode: both;
   animation-delay: 1s;
-  -webkit-animation-delay: 1s;
-
   animation-fill-mode: both;
-  -webkit-animation-fill-mode: both;
   animation-delay: 1s;
-  -webkit-animation-delay: 1s;
 
   @media (prefers-reduced-motion) {
     animation: none;
-    -webkit-animation: none;
     border-right: none;
-    -webkit-border-right: none;
   }
 
   @keyframes blink-caret-to {
@@ -274,16 +244,10 @@ export const fromMeTyping = css`
   animation:
     typing-from 0.5s steps(2, end);
 
-  /* This is to make it work on iPhones */
-  -webkit-animation-name: typing-from;
-  -webkit-animation-duration: 0.5s;
-  -webkit-animation-timing-function: steps(2, end);
-
   animation-fill-mode: both;
-  -webkit-animation-fill-mode: both;
   animation-delay: 2.4s;
-  -webkit-animation-delay: 2.4s;
 
+  ${headline.small({ fontWeight: 'bold' })};
   color: ${brandAltBackground.primary};
 
   @media (prefers-reduced-motion) {
@@ -295,13 +259,6 @@ export const fromMeTyping = css`
     from { width: 0 }
     to { width: 14% }
   }
-
-  @-webkit-keyframes typing-from {
-    from { width: 0 }
-    to { width: 14% }
-  }
-
-  ${headline.small({ fontWeight: 'bold' })};
 
   ${from.mobileMedium} {
     @keyframes typing-from {
@@ -357,15 +314,8 @@ export const fromMeCursor = css`
   animation:
     blink-caret-from 0.7s steps(2, jump-end);
 
-  /* This is to make it work on iPhones */
-  -webkit-animation-name: blink-caret-from;
-  -webkit-animation-duration: 0.7s;
-  -webkit-animation-timing-function: steps(2, jump-end);
-
   animation-fill-mode: both;
-  -webkit-animation-fill-mode: both;
   animation-delay: 2.4s;
-  -webkit-animation-delay: 2.4s;
 
   @media (prefers-reduced-motion) {
     animation: none;
