@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { List } from 'components/productPage/productPageList/productPageList';
+import List from 'components/list/List';
 import BenefitsContainer from './BenefitsContainer';
 import BenefitsHeading from './BenefitsHeading';
 

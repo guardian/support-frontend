@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { brand, brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
-import { headline, titlepiece } from '@guardian/src-foundations/typography';
+import { titlepiece } from '@guardian/src-foundations/typography';
 
 import { guardianWeeklyBlue } from 'stylesheets/emotion/colours';
 
@@ -49,55 +49,39 @@ const header = css`
   background: ${neutral[93]};
   display: flex;
   flex-direction: column;
-  padding-top: ${space[4]}px;
 
   :before {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 170px;
+    height: 100%;
     content: '';
-  }
-
-  ${from.mobileLandscape} {
-    :before {
-      height: 200px;
-    }
   }
 
   ${from.desktop} {
     :before {
-      height:200px;
+      height: 370px;
     }
   }
 `;
 
 export const pageTitle = css`
-  ${headline.large({ fontWeight: 'bold' })};
+  ${titlepiece.small({ fontWeight: 'bold' })};
   z-index: 10;
   background-color: transparent;
-  padding: 0 ${space[4]}px ${space[9]}px;
+  padding: ${space[9]}px ${space[4]}px;
   width: 100%;
-
-  ${from.mobileLandscape} {
-    padding-bottom: ${space[12]}px;
-  }
 
   ${from.phablet} {
     width: 100%;
     align-self: center;
   }
 
-  ${from.tablet} {
-    width: calc(100% - 40px);
-  }
-
   ${from.desktop} {
-    ${titlepiece.large()}
+    ${titlepiece.large({ fontWeight: 'bold' })}
     max-width: calc(100% - 110px);
     max-width: 1100px;
-    padding: 0 ${space[4]}px ${space[12]}px;
   }
 
   ${from.leftCol} {

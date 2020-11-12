@@ -18,4 +18,5 @@ module.exports = () => {
   require('./containers.jsx');
   require('./page.jsx');
   require('./product.jsx');
+  require('./content.jsx');
 };

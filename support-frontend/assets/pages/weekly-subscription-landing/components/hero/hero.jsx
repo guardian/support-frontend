@@ -9,7 +9,7 @@ import { LinkButton, buttonBrand } from '@guardian/src-button';
 import { SvgChevronDownSingle } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { body, headline, titlepiece } from '@guardian/src-foundations/typography';
+import { body, headline } from '@guardian/src-foundations/typography';
 
 import CentredContainer from 'components/containers/CentredContainer';
 import GridImage from 'components/gridImage/gridImage';
@@ -34,8 +34,12 @@ const weeklyHeroCopy = css`
 `;
 
 const weeklyHeroTitle = css`
-  ${titlepiece.small()};
+  ${headline.medium({ fontWeight: 'bold' })};
   margin-bottom: ${space[3]}px;
+
+  ${from.tablet} {
+    ${headline.large({ fontWeight: 'bold' })};
+  }
 `;
 
 const weeklyHeroParagraph = css`
