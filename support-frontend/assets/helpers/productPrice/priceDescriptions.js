@@ -168,9 +168,7 @@ function getSimplifiedPriceDescription(
       productPrice.fixedTerm,
     );
     return `/${billingPeriodNoun(billingPeriod, productPrice.fixedTerm)}${standardCopy}`;
-
   }
-
   return `/${billingPeriodNoun(billingPeriod, productPrice.fixedTerm)}`;
 }
 

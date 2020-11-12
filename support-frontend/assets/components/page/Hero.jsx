@@ -32,7 +32,6 @@ const hero = css`
     flex-direction: row;
   }
 
-
   /* Typography defaults */
   ${body.small()};
 
