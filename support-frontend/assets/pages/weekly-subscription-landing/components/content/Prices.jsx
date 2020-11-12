@@ -5,10 +5,14 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
+import { SvgInfo } from '@guardian/src-icons';
+import ProductInfoChip from 'components/product/ProductInfoChip';
+import SvgGift from 'components/svgs/gift';
 import FlexContainer from 'components/containers/FlexContainer';
 import ProductOption, { type Product } from 'components/product/ProductOption';
 
 export type PropTypes = {|
+  orderIsAGift: boolean,
   products: Product[],
 |};
 
@@ -62,7 +66,11 @@ const pricesSubHeadline = css`
   padding-bottom: ${space[2]}px;
 `;
 
-function Prices({ products }: PropTypes) {
+const pricesInfo = css`
+  margin-top: ${space[6]}px;
+`;
+
+function Prices({ orderIsAGift, products }: PropTypes) {
   return (
     <section css={pricesSection} id="subscribe">
       <h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
@@ -81,6 +89,16 @@ function Prices({ products }: PropTypes) {
           />
         ))}
       </FlexContainer>
+      <div css={pricesInfo}>
+        {!orderIsAGift &&
+        <ProductInfoChip icon={<SvgGift />}>
+            Gifting is available
+        </ProductInfoChip>
+        }
+        <ProductInfoChip icon={<SvgInfo />}>
+          Delivery cost included. {!orderIsAGift && 'You can cancel your subscription at any time'}
+        </ProductInfoChip>
+      </div>
     </section>
   );
 }

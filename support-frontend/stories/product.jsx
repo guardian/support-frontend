@@ -3,8 +3,10 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { text, withKnobs } from '@storybook/addon-knobs';
+import { SvgInfo } from '@guardian/src-icons';
 
 import ProductOption from 'components/product/ProductOption';
+import ProductInfoChip from 'components/product/ProductInfoChip';
 
 const stories = storiesOf('Product', module)
   .addDecorator(withKnobs);
@@ -30,3 +32,17 @@ stories.add('ProductOption', () => {
     </div>
   );
 });
+
+stories.add('ProductInfoChip', () => (
+  <div style={{
+      width: '100%', padding: '16px', backgroundColor: '#04204B', color: '#ffffff',
+     }}
+  >
+    <ProductInfoChip icon={<SvgInfo />}>
+      This can give some additional information about a product
+    </ProductInfoChip>
+    <ProductInfoChip>
+      It can be used with or without an icon
+    </ProductInfoChip>
+  </div>
+));

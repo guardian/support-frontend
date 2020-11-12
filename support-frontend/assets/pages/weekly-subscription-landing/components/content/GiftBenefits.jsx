@@ -15,7 +15,7 @@ function GiftBenefits() {
           id: 'gift-benefits-them',
           content: (
             <>
-              <BenefitsHeading text="What they'll get:" />
+              <BenefitsHeading text="What they'll get" />
               <List items={[
                 { explainer: 'The Guardian Weekly delivered, wherever they are in the world' },
                 { explainer: 'The Guardian\'s global journalism to keep them informed' },
@@ -29,7 +29,7 @@ function GiftBenefits() {
           id: 'gift-benefits-you',
           content: (
             <>
-              <BenefitsHeading text="What you'll get:" />
+              <BenefitsHeading text="What you'll get" />
               <List items={[
                 { explainer: 'Your gift supports The Guardian\'s independent journalism' },
                 { explainer: 'Access to the magazine\'s digital archive' },

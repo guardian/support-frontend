@@ -65,6 +65,7 @@ const mapStateToProps = (state: State): PropTypes => {
     !(state.page.orderIsAGift && billingPeriod === SixWeekly));
 
   return {
+    orderIsAGift,
     products: billingPeriodsToUse.map((billingPeriod) => {
       const productPrice = productPrices ? getProductPrice(
         productPrices,
