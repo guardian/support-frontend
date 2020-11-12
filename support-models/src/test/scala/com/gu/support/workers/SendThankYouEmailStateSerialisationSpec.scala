@@ -71,8 +71,11 @@ object ProductTypeCreatedTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     sfContactId = SfContactId("sfbuy"),
     DigitalPack(GBP, Monthly, ReaderType.Gift),
-    new LocalDate(2020, 10, 24),
-    new LocalDate(2021, 1, 24),
+    TermDates(
+      new LocalDate(2020, 10, 24),
+      new LocalDate(2021, 1, 24),
+      3,
+    )
   )
   val paperCreated = SendThankYouEmailPaperState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),

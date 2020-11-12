@@ -352,18 +352,13 @@ object DigitalSubscriptionGiftRedemption {
 
   }
 
-  case class TermDates(
-    giftStartDate: LocalDate,
-    giftEndDate: LocalDate,
-  )
-
   private def getStartEndDates(months: Int) = {
     val startDate = LocalDate.now()
     val newEndDate = startDate
       .toDateTimeAtStartOfDay
       .plusMonths(months)
       .toLocalDate
-    TermDates(startDate, newEndDate)
+    TermDates(startDate, newEndDate, months)
   }
 
   private def buildHandlerResult(
@@ -385,8 +380,7 @@ object DigitalSubscriptionGiftRedemption {
             state.user,
             SfContactId(state.salesforceContacts.buyer.Id),
             product,
-            termDates.giftStartDate,
-            termDates.giftEndDate,
+            termDates,
           ),
           acquisitionData = state.acquisitionData
         ), requestInfo)

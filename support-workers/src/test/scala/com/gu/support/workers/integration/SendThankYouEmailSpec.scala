@@ -195,8 +195,11 @@ object SendDigitalPackGiftRedemptionEmail extends App {
       billingOnlyUser,
       integrationSFContactId,
       DigitalPack(GBP, Annual, ReaderType.Gift),
-      new LocalDate(2020, 10, 24),
-      new LocalDate(2021, 1, 24),
+      TermDates(
+        new LocalDate(2020, 10, 24),
+        new LocalDate(2021, 1, 24),
+        3,
+      )
     )
   ))
 

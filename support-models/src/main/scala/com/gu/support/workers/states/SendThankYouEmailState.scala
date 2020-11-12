@@ -1,6 +1,7 @@
 package com.gu.support.workers.states
 
 import com.gu.salesforce.Salesforce.SfContactId
+import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.DiscriminatedType
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromoCode
@@ -63,8 +64,7 @@ object SendThankYouEmailState {
     user: User,
     sfContactId: SfContactId,
     product: DigitalPack,
-    giftStartDate: LocalDate,
-    giftEndDate: LocalDate,
+    termDates: TermDates,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailPaperState(
@@ -91,6 +91,14 @@ object SendThankYouEmailState {
     subscriptionNumber: String,
     firstDeliveryDate: LocalDate,
   ) extends SendThankYouEmailState
+
+  case class TermDates(
+    giftStartDate: LocalDate,
+    giftEndDate: LocalDate,
+    months: Int,
+  )
+
+  implicit val codedTermDates = deriveCodec[TermDates]
 
   implicit val encodeSFContactId = Encoder.encodeString.contramap[SfContactId](_.id)
   implicit val decodeSFContactId = Decoder.decodeString.map(SfContactId.apply)
