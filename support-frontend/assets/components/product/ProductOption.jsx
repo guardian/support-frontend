@@ -40,6 +40,7 @@ const productOption = css`
 const productOptionTitle = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
   border-bottom: 1px solid ${neutral[86]};
+  padding-bottom: ${space[2]}px;
   margin-bottom: ${space[4]}px;
 `;
 

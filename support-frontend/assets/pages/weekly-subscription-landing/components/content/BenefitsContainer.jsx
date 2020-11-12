@@ -5,7 +5,6 @@ import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
-import { body } from '@guardian/src-foundations/typography';
 
 import GridImage from 'components/gridImage/gridImage';
 import FlexContainer from 'components/containers/FlexContainer';
@@ -32,22 +31,17 @@ const benefits = css`
 const benefitsBlocks = css`
   display: flex;
   flex-direction: column;
+  ${from.tablet} {
+    min-width: 50%;
+  }
 `;
 
 const benefitsBlock = css`
-  /* TODO: remove this once we have a new List component with the right typography */
-  & .product-block__list-item__ul--simple .product-block__list-item__explainer--simple {
-    ${body.medium()};
-  }
   padding: ${space[3]}px;
   ${until.tablet} {
     &:not(:first-of-type) {
       border-top: 1px solid ${neutral[86]};
     }
-  }
-
-  .product-block__list-item__ul--simple {
-    margin: 0;
   }
 `;
 

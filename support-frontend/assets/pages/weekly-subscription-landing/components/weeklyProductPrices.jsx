@@ -74,7 +74,6 @@ const mapStateToProps = (state: State): PropTypes => {
         getWeeklyFulfilmentOption(countryId),
       ) : { price: 0, fixedTerm: false, currency: 'GBP' };
       const promotion = getRelevantPromotion(productPrice);
-      console.log(productPrice);
       const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
       return {
         title: billingPeriodTitle(billingPeriod, orderIsAGift),

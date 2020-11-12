@@ -7,8 +7,6 @@ import type { Element } from 'react';
 import { Provider } from 'react-redux';
 import marked from 'marked';
 import DOMPurify from 'dompurify';
-import { LinkButton } from '@guardian/src-button';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
 
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
@@ -28,7 +26,6 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import Text, { LargeParagraph } from 'components/text/text';
 
 import FullWidthContainer from 'components/containers/FullWidthContainer';
 import CentredContainer from 'components/containers/CentredContainer';
@@ -39,15 +36,16 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { WeeklyHero } from './components/hero/hero';
 import Benefits from './components/content/Benefits';
 import GiftBenefits from './components/content/GiftBenefits';
+import GiftOrPersonal from './components/content/GiftOrPersonal';
 
 import WeeklyPrices from './components/weeklyProductPrices';
 import reducer from './weeklySubscriptionLandingReducer';
-import { pricesSection, giftOrPersonalSection, giftOrPersonalCopy, paddedSection } from './weeklySubscriptionLandingStyles';
+import { pricesSection, giftOrPersonalSection } from './weeklySubscriptionLandingStyles';
 
 import './weeklySubscriptionLanding.scss';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
-import { promotionTermsUrl, routes } from 'helpers/routes';
+import { promotionTermsUrl } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 
 type PageCopy = {|
@@ -179,22 +177,7 @@ const content = (
       </FullWidthContainer>
       <FullWidthContainer cssOverrides={giftOrPersonalSection}>
         <CentredContainer>
-          <section css={paddedSection}>
-            <div css={giftOrPersonalCopy}>
-              <Text title={orderIsAGift ? 'Looking for a subscription for yourself?' : 'Gift subscriptions'}>
-                {!orderIsAGift && <LargeParagraph>A Guardian Weekly subscription makes a great gift.</LargeParagraph>}
-              </Text>
-            </div>
-            <LinkButton
-              icon={<SvgArrowRightStraight />}
-              iconSide="right"
-              priority="tertiary"
-              href={orderIsAGift ?
-              routes.guardianWeeklySubscriptionLanding : routes.guardianWeeklySubscriptionLandingGift}
-            >
-              {orderIsAGift ? 'See personal subscriptions' : 'See gift subscriptions'}
-            </LinkButton>
-          </section>
+          <GiftOrPersonal orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
     </Page>

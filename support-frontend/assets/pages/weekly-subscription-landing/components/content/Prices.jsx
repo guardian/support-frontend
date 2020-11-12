@@ -74,7 +74,7 @@ function Prices({ orderIsAGift, products }: PropTypes) {
   return (
     <section css={pricesSection} id="subscribe">
       <h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
-      <p css={pricesSubHeadline}>Select a gift period</p>
+      <p css={pricesSubHeadline}>{orderIsAGift ? 'Select a gift period' : 'Choose how you\'d like to pay'}</p>
       <FlexContainer cssOverrides={priceBoxes}>
         {products.map(product => (
           <ProductOption

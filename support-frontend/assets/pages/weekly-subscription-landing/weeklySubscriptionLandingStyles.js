@@ -1,7 +1,6 @@
 // @flow
 
 import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
 import { brand, neutral } from '@guardian/src-foundations/palette';
 
 export const pricesSection = css`
@@ -23,12 +22,4 @@ export const pricesSection = css`
 export const giftOrPersonalSection = css`
   background-color: ${neutral[100]};
   color: ${neutral[7]};
-`;
-
-export const giftOrPersonalCopy = css`
-  margin-bottom: ${space[9]}px;
-`;
-
-export const paddedSection = css`
-  padding: ${space[3]}px ${space[3]}px ${space[12]}px;
 `;
