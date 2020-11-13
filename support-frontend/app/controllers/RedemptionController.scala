@@ -61,7 +61,7 @@ class RedemptionController(
 
   val testUserFromRequest = new TestUserFromRequest(identityService, testUsers)
 
-  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = (googleAuthAction andThen maybeAuthenticatedAction()).async {
+  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = maybeAuthenticatedAction().async {
     implicit request =>
       for {
         isTestUser <- testUserFromRequest.isTestUser(request)
