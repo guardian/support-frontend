@@ -84,8 +84,7 @@ lazy val root = (project in file("."))
     `module-aws`,
     `module-rest`,
     `support-payment-api`,
-    `acquisition-event-client`,
-    `acquisition-event-models`
+    `acquisition-event-producer`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -112,8 +111,8 @@ lazy val `support-workers` = (project in file("support-workers"))
   .settings(
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`, `acquisition-event-client`)
-  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `acquisition-event-client`)
+  ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`, `acquisition-event-producer`)
+  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `acquisition-event-producer`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
   .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
@@ -173,37 +172,18 @@ lazy val `support-internationalisation` = (project in file("support-internationa
     libraryDependencies ++= commonDependencies
   )
 
-val aepCommonSettings: Seq[SettingsDefinition] = Seq(
-  scalaVersion := "2.12.11",
-
-  //  scalacOptions += "-Ymacro-annotations",//for simulacrum scala 2.13
-  licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
-  organization := "com.gu",
-  bintrayOrganization := Some("guardian"),
-  bintrayRepository := "ophan",
-  publishMavenStyle := true
-)
-
-lazy val `acquisition-event-models` = (project in file("acquisition-event-producer/models"))
-  .settings(aepCommonSettings: _*)
+lazy val `acquisition-event-producer` = (project in file("acquisition-event-producer"))
   .settings(
+    licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
+    bintrayOrganization := Some("guardian"),
+    bintrayRepository := "ophan",
+    publishMavenStyle := true,
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full), // for simulacrum
     libraryDependencies ++= Seq(
       "com.gu" %% "ophan-event-model" % "0.0.17" excludeAll ExclusionRule(organization = "com.typesafe.play"),
-      "org.typelevel" %% "simulacrum" % "1.0.0",
       "com.gu" %% "fezziwig" % "1.3",
-      "io.circe" %% "circe-core" % "0.12.1",
       "com.typesafe.play" %% "play-json" % "2.6.14",
-      "org.scalatest" %% "scalatest" % "3.1.1" % "test"
-    ),
-    name := "acquisition-event-models"
-  )
-
-lazy val `acquisition-event-client` = (project in file("acquisition-event-producer/client"))
-  .settings(aepCommonSettings: _*)
-  .settings(
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full), // for simulacrum
-    libraryDependencies ++= Seq(
+      "io.circe" %% "circe-core" % "0.12.1",
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "com.gu" %% "acquisitions-value-calculator-client" % "2.0.5",
       "com.squareup.okhttp3" % "okhttp" % "3.9.0",
@@ -214,10 +194,8 @@ lazy val `acquisition-event-client` = (project in file("acquisition-event-produc
       "org.typelevel" %% "cats-core" % "2.1.1",
       "com.amazonaws" % "aws-java-sdk-kinesis" % "1.11.465",
       "com.gu" %% "thrift-serializer" % "4.0.3"
-    ),
-    name := "acquisition-event-client"
+    )
   )
-  .dependsOn(`acquisition-event-models`)
 
 
 lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
