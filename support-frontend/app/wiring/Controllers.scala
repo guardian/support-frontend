@@ -83,7 +83,6 @@ trait Controllers {
     testUsers,
     controllerComponents,
     fontLoader,
-    authAction,
     dynamoTableAsyncProvider,
     zuoraGiftLookupServiceProvider
   )
