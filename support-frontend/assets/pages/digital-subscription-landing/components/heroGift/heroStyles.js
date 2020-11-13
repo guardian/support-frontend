@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { css } from '@emotion/core';
+import { css, keyframes } from '@emotion/core';
 
 import { headline, titlepiece, body } from '@guardian/src-foundations/typography';
 import { brand, neutral, brandAltBackground } from '@guardian/src-foundations/palette';
@@ -136,21 +136,55 @@ export const toFromLines = css`
   justify-content: flex-start;
 `;
 
+const typingTo = keyframes`
+  from { width: 0 }
+  to { width: 17.5% }
+
+  ${from.mobileMedium} {
+    from { width: 0 }
+    to { width: 15% }
+  }
+
+  ${from.mobileLandscape} {
+    from { width: 0 }
+    to { width: 14% }
+  }
+
+  ${from.phablet} {
+    from { width: 0 }
+    to { width: 10% }
+  }
+
+  ${from.tablet} {
+    from { width: 0 }
+    to { width: 17% }
+  }
+
+  ${from.desktop} {
+    from { width: 0 }
+    to { width: 16% }
+  }
+
+  ${from.leftCol} {
+    from { width: 0 }
+    to { width: 18.5% }
+  }
+
+  ${from.wide} {
+    from { width: 0 }
+    to { width: 16.5% }
+  }
+`;
+
 export const toYouTyping = css`
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   white-space: nowrap; /* Keeps the content on a single line */
   letter-spacing: 0.01em; /* Adjust as needed */
   margin-left: ${space[2]}px;
-  animation:
-    typing-to 0.7s steps(3, end);
+  animation: ${typingTo} 0.7s steps(3, end);
 
-  animation-fill-mode: both;
+  animation-fill-mode: backwards;
   animation-delay: 1s;
-
-  @keyframes typing-to {
-    from { width: 0 }
-    to { width: 17.5% }
-  }
 
   @media (prefers-reduced-motion) {
     animation: none;
@@ -160,79 +194,70 @@ export const toYouTyping = css`
   color: ${brandAltBackground.primary};
   ${headline.small({ fontWeight: 'bold' })};
 
-  ${from.mobileMedium} {
-    @keyframes typing-to {
-      from { width: 0 }
-      to { width: 15% }
-    }
-  }
-
   ${from.mobileLandscape} {
     ${headline.medium({ fontWeight: 'bold' })};
-    @keyframes typing-to {
-      from { width: 0 }
-      to { width: 14% }
-    }
-  }
-
-  ${from.phablet} {
-    @keyframes typing-to {
-      from { width: 0 }
-      to { width: 10% }
-    }
-  }
-
-  ${from.tablet} {
-    @keyframes typing-to {
-      from { width: 0 }
-      to { width: 17% }
-    }
   }
 
   ${from.desktop} {
     ${headline.large({ fontWeight: 'bold' })};
     margin-left: 8px;
-    @keyframes typing-to {
-      from { width: 0 }
-      to { width: 16% }
-    }
   }
+`;
 
-  ${from.leftCol} {
-    @keyframes typing-to {
-      from { width: 0 }
-      to { width: 18.5% }
-    }
-  }
-
-  ${from.wide} {
-    @keyframes typing-to {
-      from { width: 0 }
-      to { width: 16.5% }
-    }
-  }
+const blinkCaretTo = keyframes`
+from, to { border-color: transparent; }
+  /* 0% { border-color: white; }
+  50% { border-color: white; } */
 `;
 
 export const toYouCursor = css`
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: 1px solid white; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
-  animation:
-    blink-caret-to 0.7s steps(3, jump-both);
+  animation: ${blinkCaretTo} 0.7s steps(3, jump-both);
 
-  animation-fill-mode: both;
-  animation-delay: 1s;
-  animation-fill-mode: both;
+  animation-fill-mode: forwards;
   animation-delay: 1s;
 
   @media (prefers-reduced-motion) {
     animation: none;
     border-right: none;
   }
+`;
 
-  @keyframes blink-caret-to {
-    from, to { border-color: transparent }
-    50% { border-color: white; }
+const typingFrom = keyframes`
+  from { width: 0 }
+  to { width: 14% }
+
+  ${from.mobileMedium} {
+    from { width: 0 }
+    to { width: 12% }
+  }
+
+  ${from.mobileLandscape} {
+    from { width: 0 }
+    // Looks like a repetition but seems only to work at this size if specified
+    to { width: 12% }
+  }
+
+  ${from.tablet} {
+    from { width: 0 }
+    to { width: 14% }
+  }
+
+  ${from.desktop} {
+    from { width: 0 }
+    to { width: 13% }
+  }
+
+  ${from.leftCol} {
+    from { width: 0 }
+    to { width: 15.5% }
+  }
+
+  ${from.wide} {
+    from { width: 0 }
+    to { width: 13.25% }
   }
 `;
 
@@ -241,10 +266,8 @@ export const fromMeTyping = css`
   white-space: nowrap; /* Keeps the content on a single line */
   letter-spacing: 0.01em; /* Adjust as needed */
   margin-left: ${space[2]}px;
-  animation:
-    typing-from 0.5s steps(2, end);
-
-  animation-fill-mode: both;
+  animation: ${typingFrom} 0.5s steps(2, end);
+  animation-fill-mode: backwards;
   animation-delay: 2.4s;
 
   ${headline.small({ fontWeight: 'bold' })};
@@ -255,64 +278,29 @@ export const fromMeTyping = css`
     border-right: none;
   }
 
-  @keyframes typing-from {
-    from { width: 0 }
-    to { width: 14% }
-  }
-
-  ${from.mobileMedium} {
-    @keyframes typing-from {
-      from { width: 0 }
-      to { width: 12% }
-    }
-  }
-
   ${from.mobileLandscape} {
     ${headline.medium({ fontWeight: 'bold' })};
-    @keyframes typing-from {
-      from { width: 0 }
-      // Looks like a repetition but seems only to work at this size if specified
-      to { width: 12% }
-    }
-  }
-
-  ${from.tablet} {
-    @keyframes typing-from {
-      from { width: 0 }
-      to { width: 14% }
-    }
   }
 
   ${from.desktop} {
     ${headline.large({ fontWeight: 'bold' })};
     margin-left: 8px;
-    @keyframes typing-from {
-      from { width: 0 }
-      to { width: 13% }
-    }
   }
 
-  ${from.leftCol} {
-    @keyframes typing-from {
-      from { width: 0 }
-      to { width: 15.5% }
-    }
-  }
+`;
 
-  ${from.wide} {
-    @keyframes typing-from {
-      from { width: 0 }
-      to { width: 13.25% }
-    }
+const blinkCaretFrom = keyframes`
+  from, to {
+    border-color: none;
   }
-
+  0% { border-color: white; }
+  50% { border-color: white; }
 `;
 
 export const fromMeCursor = css`
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: 1px solid white; /* The typwriter cursor */
-  animation:
-    blink-caret-from 0.7s steps(2, jump-end);
+  animation: ${blinkCaretFrom} 0.7s steps(2, jump-end);
 
   animation-fill-mode: both;
   animation-delay: 2.4s;
@@ -321,12 +309,6 @@ export const fromMeCursor = css`
     animation: none;
     border-right: none;
   }
-
-  @keyframes blink-caret-from {
-    from, to { border-color: transparent }
-    50% { border-color: white; }
-  }
-
 `;
 
 export const heroHeading = css`
