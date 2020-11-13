@@ -131,7 +131,7 @@ lazy val `support-models` = (project in file("support-models"))
     releaseSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-internationalisation`)
+  ).dependsOn(`support-internationalisation`, `acquisition-event-producer`)
   .aggregate(`support-internationalisation`)
 
 lazy val `support-config` = (project in file("support-config"))
