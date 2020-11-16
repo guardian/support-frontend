@@ -17,7 +17,6 @@ import {
   androidDailyUrl,
   getDailyEditionUrl,
 } from 'helpers/externalLinks';
-import { routes } from 'helpers/routes';
 
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -145,7 +144,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
           iconSide="right"
           nudgeIcon
           aria-label="Click to sign in to the website"
-          href={routes.signInUrl}
+          href="https://www.theguardian.com/"
           onClick={sendTrackingEventsOnClick('checkout_thankyou_sign_in', 'DigitalPack', null)}
         >
           <span css={largerFormatText}>Sign into the website</span>
