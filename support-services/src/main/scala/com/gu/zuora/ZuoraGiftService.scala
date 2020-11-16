@@ -8,6 +8,7 @@ import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.zuora.api.{Day, QueryData, UpdateRedemptionDataRequest}
 import com.gu.support.zuora.api.response.{Subscription, SubscriptionRedemptionQueryResponse, UpdateRedemptionDataResponse, ZuoraErrorResponse}
 import io.circe.syntax.EncoderOps
+import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,9 +42,10 @@ class ZuoraGiftService(val config: ZuoraConfig, client: FutureHttpClient)(implic
     subscriptionId: String,
     requestId: String,
     gifteeIdentityId: String,
+    giftRedemptionDate: LocalDate,
     newTermLength: Int
   ): Future[UpdateRedemptionDataResponse] = {
-    val requestData = UpdateRedemptionDataRequest(requestId, gifteeIdentityId, newTermLength, Day)
+    val requestData = UpdateRedemptionDataRequest(requestId, gifteeIdentityId, giftRedemptionDate, newTermLength, Day)
     putJson[UpdateRedemptionDataResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
   }
 }

@@ -326,7 +326,7 @@ object DigitalSubscriptionGiftRedemption {
       subIdUpdateAction <- codeValidation match {
         case ValidGiftCode(subscriptionId) => Future.successful((
           subscriptionId,
-          zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, _)
+          zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, LocalDate.now(), _)
         ))
         case CodeRedeemedInThisRequest(subscriptionId) => Future.successful(subscriptionId, (_: Int) => Future.successful(UpdateRedemptionDataResponse(true)))
         case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
