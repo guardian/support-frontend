@@ -22,11 +22,10 @@ export type CampaignSettings = {
   createReferralCodes: boolean,
 };
 
-const currentCampaignPath: string | null = 'enviro_moment_2020';
+const currentCampaignPath: string | null = 'us_eoy_2020';
 
 export const campaign: CampaignSettings = ({
-  campaignCode: 'enviro_moment_2020',
-  createReferralCodes: true,
+  campaignCode: 'us_eoy_2020',
 });
 
 function campaignEnabledForUser(campaignCode: ?string): boolean {
