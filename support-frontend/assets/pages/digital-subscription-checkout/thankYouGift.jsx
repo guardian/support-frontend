@@ -209,8 +209,8 @@ function ThankYouGift(props: PropTypes) {
         >
           <div css={topPageSection}>
             <GreenCheckMark /><h1 css={pageHeading}>Thank you for your order</h1>
-            <div css={blueSans}>{props.pending ? 'Your Digital subscription order has been placed and is pending confirmation' :
-            'Your Digital subscription order has been placed successfully'}
+            <div css={blueSans}>{props.pending ? `Your digital subscription order for ${props.giftRecipient} has been placed and is pending confirmation` :
+            `Your digital subscription order for ${props.giftRecipient} has been placed successfully`}
             </div>
             <div css={mobileImage}>
               <GridImage
