@@ -4,6 +4,7 @@ import cats.implicits._
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
 import com.gu.monitoring.SafeLogger
+import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
 import com.gu.support.catalog._
@@ -233,12 +234,17 @@ class NextState(
       case (product: GuardianWeekly, Purchase(purchase)) =>
         weekly(product, purchase)
       case (product: DigitalPack, _: Redemption) if product.readerType == ReaderType.Corporate =>
-        SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(state.user, state.salesforceContacts.buyer, product, subscriptionNumber.value)
+        dsCorporate(product)
       case (product: DigitalPack, _: Redemption) if product.readerType == ReaderType.Gift =>
         throw new RuntimeException("wrong code path for gift redemption")
       case _ => throw new RuntimeException("could not create value state")
     }
   // scalastyle:on cyclomatic.complexity
+
+  private def dsCorporate(product: DigitalPack) =
+    SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
+      state.user, SfContactId(state.salesforceContacts.buyer.Id), product, subscriptionNumber.value
+    )
 
   private def weekly(product: GuardianWeekly, purchase: PaymentMethodWithSchedule) =
     SendThankYouEmailGuardianWeeklyState(
@@ -270,7 +276,8 @@ class NextState(
   private def dsGift(product: DigitalPack, purchase: PaymentMethodWithSchedule, giftPurchase: DigitalSubscriptionGiftPurchaseDetails) =
     SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
       state.user,
-      state.salesforceContacts.buyer,
+      SfContactId(state.salesforceContacts.buyer.Id),
+      SfContactId(state.salesforceContacts.giftRecipient.get.Id),
       product,
       giftPurchase.giftRecipient,
       giftPurchase.giftCode,
@@ -284,7 +291,7 @@ class NextState(
   private def dsDirect(product: DigitalPack, purchase: PaymentMethodWithSchedule) =
     SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
       state.user,
-      state.salesforceContacts.buyer,
+      SfContactId(state.salesforceContacts.buyer.Id),
       product,
       purchase.paymentMethod,
       purchase.paymentSchedule,
@@ -319,7 +326,7 @@ object DigitalSubscriptionGiftRedemption {
       subIdUpdateAction <- codeValidation match {
         case ValidGiftCode(subscriptionId) => Future.successful((
           subscriptionId,
-          zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, _)
+          zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, LocalDate.now(), _)
         ))
         case CodeRedeemedInThisRequest(subscriptionId) => Future.successful(subscriptionId, (_: Int) => Future.successful(UpdateRedemptionDataResponse(true)))
         case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
@@ -345,18 +352,13 @@ object DigitalSubscriptionGiftRedemption {
 
   }
 
-  case class TermDates(
-    giftStartDate: LocalDate,
-    giftEndDate: LocalDate,
-  )
-
   private def getStartEndDates(months: Int) = {
     val startDate = LocalDate.now()
     val newEndDate = startDate
       .toDateTimeAtStartOfDay
       .plusMonths(months)
       .toLocalDate
-    TermDates(startDate, newEndDate)
+    TermDates(startDate, newEndDate, months)
   }
 
   private def buildHandlerResult(
@@ -376,10 +378,9 @@ object DigitalSubscriptionGiftRedemption {
           analyticsInfo = state.analyticsInfo,
           sendThankYouEmailState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
             state.user,
-            state.salesforceContacts.buyer,
+            SfContactId(state.salesforceContacts.buyer.Id),
             product,
-            termDates.giftStartDate,
-            termDates.giftEndDate,
+            termDates,
           ),
           acquisitionData = state.acquisitionData
         ), requestInfo)

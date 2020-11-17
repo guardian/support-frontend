@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.gu.i18n.{Country, CountryGroup, Currency, Title}
 import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
+import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
 import scala.util.Try
@@ -44,12 +45,16 @@ trait HelperCodecs {
   implicit val monthEncoder: Encoder[Months] = Encoder.encodeInt.contramap(_.getMonths)
   implicit val encodeLocalTime: Encoder[LocalDate] = Encoder.encodeString.contramap(_.toString("yyyy-MM-dd"))
   implicit val decodeLocalTime: Decoder[LocalDate] = Decoder.decodeString.map(LocalDate.parse)
-  implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeLong.contramap(_.getMillis)
-  implicit val decodeDateTime: Decoder[DateTime] = Decoder
-    .decodeLong.map(new DateTime(_))
-    .or(Decoder.decodeString.map(DateTime.parse))
   implicit val uuidDecoder: Decoder[UUID] = Decoder.decodeString.emap(code => Try(UUID.fromString(code)).toOption.toRight(s"Invalid UUID '$code'"))
   implicit val uuidEncoder: Encoder[UUID] = Encoder.encodeString.contramap(_.toString)
+  object ISODate {
+    implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeString.contramap(ISODateTimeFormat.dateTime().print)
+    implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeString.map(DateTime.parse)
+  }
+  object MillisDate {
+    implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeLong.contramap(_.getMillis)
+    implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeLong.map(new DateTime(_))
+  }
 }
 
 trait EitherCodecs {

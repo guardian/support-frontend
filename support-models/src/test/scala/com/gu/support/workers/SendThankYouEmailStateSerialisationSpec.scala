@@ -2,6 +2,7 @@ package com.gu.support.workers
 
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
+import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.SerialisationTestHelpers.testRoundTripSerialisation
 import com.gu.support.catalog.{Collection, Domestic, Saturday}
 import com.gu.support.workers.ProductTypeCreatedTestData._
@@ -38,7 +39,7 @@ object ProductTypeCreatedTestData {
 
   val digitalSubscriptionDirectPurchaseCreated = SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+    sfContactId = SfContactId("sfbuy"),
     DigitalPack(GBP, Monthly, ReaderType.Direct),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
@@ -49,7 +50,8 @@ object ProductTypeCreatedTestData {
 
   val digitalSubscriptionGiftPurchaseCreated = SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+    purchaserSFContactId = SfContactId("sfbuy"),
+    recipientSFContactId = SfContactId("sfrecip"),
     DigitalPack(GBP, Monthly, ReaderType.Gift),
     GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
     GeneratedGiftCode("gd12-23456789").get,
@@ -61,16 +63,19 @@ object ProductTypeCreatedTestData {
   )
   val digitalSubscriptionCorporateRedemptionCreated = SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+    sfContactId = SfContactId("sfbuy"),
     DigitalPack(GBP, Monthly, ReaderType.Corporate),
     "subno"
   )
   val digitalSubscriptionGiftRedemptionCreated = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+    sfContactId = SfContactId("sfbuy"),
     DigitalPack(GBP, Monthly, ReaderType.Gift),
-    new LocalDate(2020, 10, 24),
-    new LocalDate(2021, 1, 24),
+    TermDates(
+      new LocalDate(2020, 10, 24),
+      new LocalDate(2021, 1, 24),
+      3,
+    )
   )
   val paperCreated = SendThankYouEmailPaperState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),

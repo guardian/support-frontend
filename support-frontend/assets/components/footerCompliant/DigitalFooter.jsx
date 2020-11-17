@@ -77,7 +77,12 @@ function DigitalFooter(props: PropTypes) {
       faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
       termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
     >
-      <h3 css={footerTextHeading}>Promotion terms and conditions</h3>
+      <h3
+        id="qa-component-customer-service"
+        css={footerTextHeading}
+      >
+          Promotion terms and conditions
+      </h3>
       <p>Offer subject to availability. Guardian News and Media Ltd
           (&quot;GNM&quot;) reserves the right to withdraw this promotion at any
           time. Full promotion terms and conditions for our&nbsp;

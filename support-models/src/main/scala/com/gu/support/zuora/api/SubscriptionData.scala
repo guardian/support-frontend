@@ -4,7 +4,7 @@ import cats.syntax.functor._
 import com.gu.support.catalog.{ProductRatePlanChargeId, ProductRatePlanId}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
-import com.gu.support.encoding.CustomCodecs.{decodeDateTime, encodeDateTime, monthDecoder, _}
+import com.gu.support.encoding.CustomCodecs.{monthDecoder, _}
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode

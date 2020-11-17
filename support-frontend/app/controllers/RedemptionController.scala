@@ -8,7 +8,6 @@ import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.googleauth.AuthAction
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
@@ -42,7 +41,6 @@ class RedemptionController(
   testUsers: TestUserService,
   components: ControllerComponents,
   fontLoaderBundle: Either[RefPath, StyleContent],
-  googleAuthAction: AuthAction[AnyContent],
   dynamoTableProvider: DynamoTableAsyncProvider,
   zuoraLookupServiceProvider: ZuoraGiftLookupServiceProvider
 )(
@@ -61,7 +59,7 @@ class RedemptionController(
 
   val testUserFromRequest = new TestUserFromRequest(identityService, testUsers)
 
-  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = (googleAuthAction andThen maybeAuthenticatedAction()).async {
+  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = maybeAuthenticatedAction().async {
     implicit request =>
       for {
         isTestUser <- testUserFromRequest.isTestUser(request)

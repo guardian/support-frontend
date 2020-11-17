@@ -11,6 +11,7 @@ import com.gu.support.workers.states.SendThankYouEmailState._
 import io.circe._
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
+import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -147,11 +148,17 @@ class DigitalPackEmailFields(
       case state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => Future.successful(List(giftRedemption(state)))
     }
 
-  private def wrap(dataExtensionName: String, fields: DigitalSubscriptionEmailAttributes, sfContactId: SfContactId, user: User): EmailFields = {
+  private def wrap(
+    dataExtensionName: String,
+    fields: DigitalSubscriptionEmailAttributes,
+    sfContactId: SfContactId,
+    emailAddress: String,
+    deliveryDate: Option[LocalDate] = None,
+  ): EmailFields = {
     val attributePairs = JsonToAttributes.asFlattenedPairs(fields.asJsonObject).left.map(
       error => throw new RuntimeException(s"coding error: $error")
     ).merge
-    EmailFields(attributePairs, Left(sfContactId), user.primaryEmailAddress, dataExtensionName)
+    EmailFields(attributePairs, Left(sfContactId), emailAddress, dataExtensionName, deliveryDate)
   }
 
   private def giftRecipientNotification(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState) =
@@ -161,7 +168,7 @@ class DigitalPackEmailFields(
       gift_code = giftPurchase.giftCode.value,
       last_redemption_date = formatDate(giftPurchase.lastRedemptionDate),
       duration = s"${giftPurchase.product.billingPeriod.monthsInPeriod} months",
-    ), SfContactId(giftPurchase.salesForceContact.Id), giftPurchase.user)
+    ), giftPurchase.recipientSFContactId, giftPurchase.giftRecipient.email, Some(giftPurchase.giftRecipient.deliveryDate))
 
   private def giftPurchaserConfirmation(state: SendThankYouEmailDigitalSubscriptionGiftPurchaseState)(implicit ec: ExecutionContext) = {
     import state._
@@ -185,24 +192,24 @@ class DigitalPackEmailFields(
         date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
         paymentAttributes = paymentFieldsAttributes,
         last_redemption_date = formatDate(lastRedemptionDate),
-      ), SfContactId(salesForceContact.Id), user))
+      ), purchaserSFContactId, user.primaryEmailAddress))
   }
 
   private def giftRedemption(state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState) =
     wrap("digipack-gift-redemption", GifteeRedemptionAttributes(
       gift_recipient_first_name = state.user.firstName,
-      subscription_details = state.product.billingPeriod.monthsInPeriod + " month digital subscription",
-      gift_start_date = formatDate(state.giftStartDate),
+      subscription_details = state.termDates.months + " month digital subscription",
+      gift_start_date = formatDate(state.termDates.giftStartDate),
       gift_recipient_email = state.user.primaryEmailAddress,
-      gift_end_date = formatDate(state.giftEndDate),
-    ), SfContactId(state.salesForceContact.Id), state.user)
+      gift_end_date = formatDate(state.termDates.giftEndDate),
+    ), state.sfContactId, state.user.primaryEmailAddress)
 
   private def corpRedemption(state: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState) =
     wrap(
       "digipack-corporate-redemption",
       directOrCorpFields("Group subscription", state.subscriptionNumber, state.user),
-      SfContactId(state.salesForceContact.Id),
-      state.user
+      state.sfContactId,
+      state.user.primaryEmailAddress
     )
 
   private def directThankYou(state: SendThankYouEmailDigitalSubscriptionDirectPurchaseState)(implicit ec: ExecutionContext) = {
@@ -226,7 +233,7 @@ class DigitalPackEmailFields(
         date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(state.paymentSchedule).date),
         trial_period = "14", //TODO: depends on Promo code or zuora config
         paymentFieldsAttributes
-      ), SfContactId(state.salesForceContact.Id), state.user)
+      ), state.sfContactId, state.user.primaryEmailAddress)
     )
   }
 
@@ -265,18 +272,15 @@ object JsonToAttributes {
       value.toList.foldLeft(failablePairsSoFar) {
         case (failablePairsSoFar, (fieldName, jValue)) =>
           failablePairsSoFar.flatMap { pairsSoFar =>
-            jValue.asString match {
-              case None =>
-                jValue.asObject match {
-                  case None => Left(s"all values should be string or object: ${fieldName} -> $value")
-                  case Some(obj) =>
-                    flattenToPairs(obj, Right(pairsSoFar))
-                }
-              case Some(string) =>
+            (jValue.isNull, jValue.asString, jValue.asObject) match {
+              case (true, _, _) => Right(pairsSoFar)
+              case (_, _, Some(obj)) => flattenToPairs(obj, Right(pairsSoFar))
+              case (_, Some(string), _) =>
                 if (pairsSoFar.contains(fieldName))
                   Left(s"found duplicate key ${fieldName} in case classes")
                 else
                   Right(pairsSoFar + (fieldName -> string))
+              case _ => Left(s"all values should be null, string or object: ${fieldName} -> $value")
             }
           }
       }

@@ -18,8 +18,8 @@ import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, wrapFixtur
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.integration.SendThankYouEmailManualTest.sfContactRecord
-import com.gu.support.workers.integration.TestData.{billingOnlyUser, directDebitPaymentMethod}
+import com.gu.support.workers.integration.SendThankYouEmailManualTest.integrationSFContactId
+import com.gu.support.workers.integration.TestData.{billingOnlyUser, directDebitPaymentMethod, sfContactRecord}
 import com.gu.support.workers.lambdas.SendThankYouEmail
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.zuora.api.ReaderType
@@ -78,7 +78,7 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
         .validate("first payment date", "Monday, 10 January 2000")
         .validate("payment method", "Direct Debit")
         .validate("currency", "£")
-        .validate("SfContactId", "0033E00001DTBHJQA5")
+        .validate("SfContactId", "contactID")
       succeed
     }
   }
@@ -96,8 +96,9 @@ object SendThankYouEmailManualTest {
 
   //This test will send a thank you email to the address/SF contact below - useful for quickly testing changes
   val addressToSendTo = "john.duffell@guardian.co.uk"
-  val salesforceContactId = SfContactId("0033E00001DTBHJQA5")
-  val sfContactRecord = SalesforceContactRecord(salesforceContactId.id, "accountID")
+  val integrationSFContactId = SfContactId("0039E000018EoTHQA0")
+  // deprecated as accountId is not relevant for emails
+  val integrationSFContactRecord = SalesforceContactRecord(integrationSFContactId.id, "accountID")
 
   def main(args: Array[String]): Unit = {
     SendContributionEmail.main(args)
@@ -110,14 +111,14 @@ object SendThankYouEmailManualTest {
     SendWeeklySubscriptionGiftEmail.main(args)
   }
 
-  val realConfig = Configuration.load()
+  val queueName = Configuration.load().contributionThanksQueueName
 
   def send(eventualEF: Future[List[EmailFields]]): Unit = {
-    val service = new EmailService(realConfig.contributionThanksQueueName)
+    val service = new EmailService(queueName)
     Await.ready(eventualEF.flatMap(efList => Future.sequence(efList.map(service.send))), Duration.Inf)
   }
   def sendSingle(ef: Future[EmailFields]): Unit = {
-    val service = new EmailService(realConfig.contributionThanksQueueName)
+    val service = new EmailService(queueName)
     Await.ready(ef.flatMap(service.send), Duration.Inf)
   }
 }
@@ -131,7 +132,7 @@ object SendContributionEmail extends App {
   ).build(
     SendThankYouEmailContributionState(
       billingOnlyUser,
-      sfContactRecord,
+      integrationSFContactRecord,
       Contribution(20, GBP, Monthly),
       directDebitPaymentMethod,
       acno,
@@ -145,7 +146,7 @@ object SendDigitalPackEmail extends App {
   send(digitalPackEmailFields.build(
     SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
       billingOnlyUser,
-      sfContactRecord,
+      integrationSFContactId,
       DigitalPack(GBP, Annual),
       directDebitPaymentMethod,
       paymentSchedule,
@@ -161,7 +162,7 @@ object SendDigitalPackCorpEmail extends App {
   send(digitalPackEmailFields.build(
     SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
       billingOnlyUser,
-      sfContactRecord,
+      integrationSFContactId,
       DigitalPack(GBP, Annual, ReaderType.Corporate),
       subno
     )
@@ -173,9 +174,10 @@ object SendDigitalPackGiftPurchaseEmails extends App {
   send(digitalPackEmailFields.build(
     SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
       billingOnlyUser,
-      sfContactRecord,
-      DigitalPack(GBP, Annual, ReaderType.Corporate),
-      DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), new LocalDate(2020, 10, 2)),
+      integrationSFContactId, // purchaser
+      integrationSFContactId, // recipient
+      DigitalPack(GBP, Annual, ReaderType.Gift),
+      DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), LocalDate.now()),
       GeneratedGiftCode("gd12-02345678").get,
       new LocalDate(2020, 10, 14),
       directDebitPaymentMethod,
@@ -191,10 +193,13 @@ object SendDigitalPackGiftRedemptionEmail extends App {
   send(digitalPackEmailFields.build(
     SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
       billingOnlyUser,
-      sfContactRecord,
+      integrationSFContactId,
       DigitalPack(GBP, Annual, ReaderType.Gift),
-      new LocalDate(2020, 10, 24),
-      new LocalDate(2021, 1, 24),
+      TermDates(
+        new LocalDate(2020, 10, 24),
+        new LocalDate(2021, 1, 24),
+        3,
+      )
     )
   ))
 
@@ -204,7 +209,7 @@ object SendPaperSubscriptionEmail extends App {
   sendSingle(new PaperEmailFields(paperFieldsGenerator, SANDBOX).build(
     SendThankYouEmailPaperState(
       officeUser,
-      sfContactRecord,
+      integrationSFContactRecord,
       Paper(GBP, Monthly, Collection, Saturday),
       directDebitPaymentMethod,
       PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
@@ -221,7 +226,7 @@ object SendWeeklySubscriptionEmail extends App {
   sendSingle(new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
     SendThankYouEmailGuardianWeeklyState(
       officeUser,
-      sfContactRecord,
+      integrationSFContactRecord,
       GuardianWeekly(GBP, Quarterly, Domestic),
       None,
       directDebitPaymentMethod,
@@ -242,7 +247,7 @@ object SendWeeklySubscriptionGiftEmail extends App {
   sendSingle(new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
     SendThankYouEmailGuardianWeeklyState(
       officeUser,
-      sfContactRecord,
+      integrationSFContactRecord,
       GuardianWeekly(GBP, Quarterly, Domestic),
       Some(GiftRecipient.WeeklyGiftRecipient(None, "Earl", "Palmer", None)),
       directDebitPaymentMethod,
@@ -260,6 +265,10 @@ object SendWeeklySubscriptionGiftEmail extends App {
 }
 
 object TestData {
+
+  val sfContactId: SfContactId = SfContactId("contactID")
+  // deprecated as account id is not relevant to emails
+  val sfContactRecord = SalesforceContactRecord(sfContactId.id, "accountID")
 
   val paymentSchedule = PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))
   val subno = "A-S00045678"
