@@ -37,7 +37,6 @@ const routes: {
   postcodeLookup: '/postcode-lookup',
   createSignInUrl: '/identity/signin-url',
   stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
-  signInUrl: 'https://profile.theguardian.com/signin',
 };
 
 const createReminderEndpoint = isProd() ?
