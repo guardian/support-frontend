@@ -4,12 +4,35 @@ import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
 
 // ----- Tests ----- //
 
+const landingPage = '/??/contribute|thankyou(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
+  thankyouPageHeadingTest: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'V1',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: landingPage,
+    seed: 1,
+  },
+
   usAmountsTest: {
     type: 'AMOUNTS',
     variants: [
