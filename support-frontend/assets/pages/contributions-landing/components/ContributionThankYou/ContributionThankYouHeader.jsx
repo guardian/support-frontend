@@ -71,7 +71,7 @@ const ContributionThankYouHeader = ({
     if (thankyouPageHeadingTestVariant && !payPalOneOff && amount) {
       switch (contributionType) {
         case 'ONE_OFF':
-          return `Thank you for supporting us with ${currencies[currency].glyph}${amount} today`;
+          return `Thank you for supporting us today with ${currencies[currency].glyph}${amount}`;
         case 'MONTHLY':
           return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencies[currency].glyph}${amount} each month`;
         case 'ANNUAL':
