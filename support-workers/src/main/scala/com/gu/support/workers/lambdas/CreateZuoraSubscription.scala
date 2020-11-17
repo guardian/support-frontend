@@ -23,7 +23,7 @@ import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
-import com.gu.support.zuora.api.response.{Subscription, UpdateRedemptionDataResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
+import com.gu.support.zuora.api.response.{Subscription, ZuoraSuccessOrFailureResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.subscriptionBuilders._
 import com.gu.zuora.{ZuoraGiftService, ZuoraSubscribeService}
@@ -326,16 +326,22 @@ object DigitalSubscriptionGiftRedemption {
       subIdUpdateAction <- codeValidation match {
         case ValidGiftCode(subscriptionId) => Future.successful((
           subscriptionId,
-          zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, LocalDate.now(), _)
+          zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, LocalDate.now(), _),
+          zuoraService.setupRevenueRecognition _
         ))
-        case CodeRedeemedInThisRequest(subscriptionId) => Future.successful(subscriptionId, (_: Int) => Future.successful(UpdateRedemptionDataResponse(true)))
+        case CodeRedeemedInThisRequest(subscriptionId) => Future.successful((
+          subscriptionId,
+          (_: Int) => Future.successful(ZuoraSuccessOrFailureResponse(true)),
+          (_: Subscription, _:TermDates) => Future.successful(ZuoraSuccessOrFailureResponse(true))
+        ))
         case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
       }
-      (subscriptionId, updateIfNecessary) = subIdUpdateAction
+      (subscriptionId, updateIfNecessary, setupRevenueIfNecessary) = subIdUpdateAction
       fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)
       calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
       (dates, newTermLength) = calculatedDates
       updateDataResponse <- updateIfNecessary(newTermLength)
+      setupRevenueResponse <- setupRevenueIfNecessary(fullGiftSubscription, dates)
       handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, requestInfo, dates))
     } yield handlerResult
   }
@@ -362,7 +368,7 @@ object DigitalSubscriptionGiftRedemption {
   }
 
   private def buildHandlerResult(
-    response: UpdateRedemptionDataResponse,
+    response: ZuoraSuccessOrFailureResponse,
     state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
     termDates: TermDates,
