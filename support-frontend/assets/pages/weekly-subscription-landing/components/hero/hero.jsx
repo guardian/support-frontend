@@ -70,7 +70,7 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
 
   return (
     <PageTitle
-      title={orderIsAGift ? 'Gift the Guardian Weekly' : 'The Guardian Weekly'}
+      title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}
       theme="weekly"
     >
       <CentredContainer>

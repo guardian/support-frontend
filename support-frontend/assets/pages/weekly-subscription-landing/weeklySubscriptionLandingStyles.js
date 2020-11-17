@@ -23,3 +23,7 @@ export const giftOrPersonalSection = css`
   background-color: ${neutral[100]};
   color: ${neutral[7]};
 `;
+
+export const giftHeroSubHeading = css`
+  font-weight: 700;
+`;

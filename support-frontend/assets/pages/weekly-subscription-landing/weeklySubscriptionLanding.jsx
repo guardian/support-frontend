@@ -40,7 +40,7 @@ import GiftOrPersonal from './components/content/GiftOrPersonal';
 
 import WeeklyPrices from './components/weeklyProductPrices';
 import reducer from './weeklySubscriptionLandingReducer';
-import { pricesSection, giftOrPersonalSection } from './weeklySubscriptionLandingStyles';
+import { pricesSection, giftOrPersonalSection, giftHeroSubHeading } from './weeklySubscriptionLandingStyles';
 
 import './weeklySubscriptionLanding.scss';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
@@ -114,6 +114,16 @@ const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
       </>);
     /* eslint-enable react/no-danger */
   }
+  if (orderIsAGift) {
+    return (
+      <>
+        <h3 css={giftHeroSubHeading}>Stay on the same page, even when you’re apart</h3>
+        <p>Share the gift of clarity with the Guardian Weekly magazine. A round-up of the world news, opinion and long
+        reads that have shaped the week, all handpicked from The Guardian and The Observer.
+        </p>
+      </>
+    );
+  }
   return (
     <>
       The Guardian Weekly magazine is a round-up of the world news, opinion and long reads that have shaped the week.
@@ -129,10 +139,7 @@ const getRegionalCopyFor = (region: CountryGroupId): Element<'span'> => (region 
 const getCopy = (promotionCopy: Object): PageCopy => {
   const currentRegion = detect();
   const defaultTitle = orderIsAGift ?
-    <>
-      To: You<br />
-      From: Me
-    </>
+    null
     : getRegionalCopyFor(currentRegion);
   return {
     title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,

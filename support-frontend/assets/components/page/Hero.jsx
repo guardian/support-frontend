@@ -48,7 +48,7 @@ const hero = css`
 // Keep the content below the roundel on mobile if present
 const roundelOffset = css`
   ${until.tablet} {
-    margin-top: ${(roundelSizeMob / 2) - space[3]}px;
+    margin-top: ${(roundelSizeMob / 2) - space[6]}px;
   }
 `;
 
@@ -77,8 +77,8 @@ const heroRoundel = css`
   justify-content: center;
   text-align: center;
   top: 0;
-  right: 0;
-  transform: translateY(-50%);
+  right: ${space[3]}px;
+  transform: translateY(-67%);
   width: ${roundelSizeMob}px;
   height: ${roundelSizeMob}px;
   border-radius: 50%;
@@ -91,6 +91,7 @@ const heroRoundel = css`
     width: ${roundelSize}px;
     height: ${roundelSize}px;
     right: ${space[12]}px;
+    transform: translateY(-50%);
     ${headline.small({ fontWeight: 'bold' })};
   }
 `;
