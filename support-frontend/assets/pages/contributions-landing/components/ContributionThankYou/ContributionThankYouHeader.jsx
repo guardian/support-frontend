@@ -69,13 +69,15 @@ const ContributionThankYouHeader = ({
     const payPalOneOff = paymentMethod === 'PayPal' && contributionType === 'ONE_OFF';
 
     if (thankyouPageHeadingTestVariant && !payPalOneOff && amount) {
+      const currencyAndAmount = `${currencies[currency].glyph}${amount}`;
+
       switch (contributionType) {
         case 'ONE_OFF':
-          return `Thank you for supporting us today with ${currencies[currency].glyph}${amount}`;
+          return `Thank you for supporting us today with ${currencyAndAmount}`;
         case 'MONTHLY':
-          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencies[currency].glyph}${amount} each month`;
+          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencyAndAmount} each month`;
         case 'ANNUAL':
-          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencies[currency].glyph}${amount} each year`;
+          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencyAndAmount} each year`;
         default:
           return `Thank you ${nameAndTrailingSpace}for your valuable contribution`;
       }
