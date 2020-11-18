@@ -24,6 +24,8 @@ import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from './utils/op
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getCampaignSettings } from 'helpers/campaigns';
 import type { CampaignSettings } from 'helpers/campaigns';
+import { getAmount } from 'helpers/contributions';
+import type {IsoCurrency} from "helpers/internationalisation/currency";
 
 const container = css`
   background: white;
@@ -109,24 +111,34 @@ type ContributionThankYouProps = {|
   csrf: Csrf,
   email: string,
   contributionType: ContributionType,
+  amount: string,
+  currency: IsoCurrency,
   name: string,
   user: User,
   guestAccountCreationToken: string,
   paymentMethod: PaymentMethod,
   countryId: IsoCountry,
   campaignCode: ?string,
+  thankyouPageHeadingTestVariant: boolean,
 |};
 
 const mapStateToProps = state => ({
   email: state.page.form.formData.email,
   name: state.page.form.formData.firstName,
   contributionType: state.page.form.contributionType,
+  amount: getAmount(
+    state.page.form.selectedAmounts,
+    state.page.form.formData.otherAmounts,
+    state.page.form.contributionType,
+  ),
+  currency: state.common.internationalisation.currencyId,
   csrf: state.page.csrf,
   user: state.page.user,
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
   paymentMethod: state.page.form.paymentMethod,
   countryId: state.common.internationalisation.countryId,
   campaignCode: state.common.referrerAcquisitionData.campaignCode,
+  thankyouPageHeadingTestVariant: state.common.abParticipations.thankyouPageHeadingTest === 'V1',
 });
 
 const ContributionThankYou = ({
@@ -134,11 +146,14 @@ const ContributionThankYou = ({
   email,
   name,
   contributionType,
+  amount,
+  currency,
   user,
   guestAccountCreationToken,
   paymentMethod,
   countryId,
   campaignCode,
+  thankyouPageHeadingTestVariant
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
@@ -229,6 +244,11 @@ const ContributionThankYou = ({
         <ContributionThankYouHeader
           name={name}
           showDirectDebitMessage={paymentMethod === DirectDebit}
+          paymentMethod={paymentMethod}
+          contributionType={contributionType}
+          amount={amount}
+          currency={currency}
+          thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
         />
       </div>
 

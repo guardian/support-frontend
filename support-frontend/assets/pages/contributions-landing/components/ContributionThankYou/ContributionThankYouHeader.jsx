@@ -4,6 +4,10 @@ import { css } from '@emotion/core';
 import { titlepiece, body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
+import type {ContributionType} from "helpers/contributions";
+import { currencies } from 'helpers/internationalisation/currency';
+import type {IsoCurrency} from "helpers/internationalisation/currency";
+import type {PaymentMethod} from "helpers/paymentMethods";
 
 const header = css`
   background: white;
@@ -39,7 +43,12 @@ const directDebitSetupText = css`
 
 type ContributionThankYouHeaderProps = {|
   name: string | null,
-  showDirectDebitMessage: boolean
+  showDirectDebitMessage: boolean,
+  paymentMethod: PaymentMethod,
+  contributionType: ContributionType,
+  amount: string,
+  currency: IsoCurrency,
+  thankyouPageHeadingTestVariant: boolean,
 |};
 
 const MAX_DISPLAY_NAME_LENGTH = 10;
@@ -47,14 +56,40 @@ const MAX_DISPLAY_NAME_LENGTH = 10;
 const ContributionThankYouHeader = ({
   name,
   showDirectDebitMessage,
+  paymentMethod,
+  contributionType,
+  amount,
+  currency,
+  thankyouPageHeadingTestVariant,
 }: ContributionThankYouHeaderProps) => {
-  const shouldShowName = name && name.length < MAX_DISPLAY_NAME_LENGTH;
+
+  const title = (): string => {
+    const nameAndTrailingSpace: string = name && name.length < MAX_DISPLAY_NAME_LENGTH ? `${name} ` : '';
+    // Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
+    const payPalOneOff = paymentMethod === 'PayPal' && contributionType === 'ONE_OFF';
+
+    if (thankyouPageHeadingTestVariant && !payPalOneOff && amount) {
+      const currencyAndAmount = `${currencies[currency].glyph}${amount}`;
+
+      switch (contributionType) {
+        case 'ONE_OFF':
+          return `Thank you for supporting us today with ${currencyAndAmount} ❤️`;
+        case 'MONTHLY':
+          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencyAndAmount} each month ❤️`;
+        case 'ANNUAL':
+          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencyAndAmount} each year ❤️`;
+        default:
+          return `Thank you ${nameAndTrailingSpace}for your valuable contribution`;
+      }
+    } else {
+      return `Thank you ${nameAndTrailingSpace}for your valuable contribution`
+    }
+  };
+
   return (
     <header css={header}>
       <h1 css={headerTitleText}>
-        {shouldShowName && name
-          ? `Thank you ${name} for your valuable contribution`
-          : 'Thank you for your valuable contribution'}
+        {title()}
       </h1>
       <p css={headerSupportingText}>
         {showDirectDebitMessage && (

@@ -187,7 +187,7 @@ const GreenCheckMark = () => (
 
 function ThankYouGift(props: PropTypes) {
   const date = props.giftDeliveryDate ? new Date(props.giftDeliveryDate) : null;
-  const fullDate = date ? formatUserDate(date) : 'Invalid date';
+  const fullDate = date ? formatUserDate(date) : 'Date chosen by you at checkout';
 
   return (
     <div className="thank-you-stage">
@@ -209,8 +209,8 @@ function ThankYouGift(props: PropTypes) {
         >
           <div css={topPageSection}>
             <GreenCheckMark /><h1 css={pageHeading}>Thank you for your order</h1>
-            <div css={blueSans}>{props.pending ? 'Your Digital subscription order has been placed and is pending confirmation' :
-            'Your Digital subscription order has been placed successfully'}
+            <div css={blueSans}>{props.pending ? `Your digital subscription order ${props.giftRecipient ? `for ${props.giftRecipient}` : ''} has been placed and is pending confirmation` :
+            `Your digital subscription order ${props.giftRecipient ? `for ${props.giftRecipient}` : ''} has been placed successfully`}
             </div>
             <div css={mobileImage}>
               <GridImage
@@ -246,7 +246,7 @@ function ThankYouGift(props: PropTypes) {
             <ul>
               <li css={detailsWithIconList}>
                 <div css={iconContainer}><img src={gift} alt="" /></div>
-                <div css={giftStep}>{props.giftRecipient} will receive an email on the date you&apos;ve chosen with
+                <div css={giftStep}>{props.giftRecipient || 'Your recipient'} will receive an email on the date you&apos;ve chosen with
                 the link to redeem the gift.
                 </div>
               </li>
@@ -255,7 +255,7 @@ function ThankYouGift(props: PropTypes) {
               </li>
               <li css={detailsWithIconList}>
                 <div css={iconContainer}><img src={person} alt="" /></div>
-                <div css={giftStep}>After redemption, {props.giftRecipient} will have to register or sign into their
+                <div css={giftStep}>After redemption, {props.giftRecipient || 'your recipient'} will have to register or sign into their
                 account and the subscription will be activated.
                 </div>
               </li>
@@ -264,14 +264,14 @@ function ThankYouGift(props: PropTypes) {
               </li>
               <li css={detailsWithIconList}>
                 <div css={iconContainer}><img src={phone} alt="" /></div>
-                <div css={giftStep}>{props.giftRecipient} will download the smartphone and tablet apps and can sign
+                <div css={giftStep}>{props.giftRecipient || 'Your recipient'} will download the smartphone and tablet apps and can sign
                 in on the web to enjoy all the benefits of being a subscriber.
                 </div>
               </li>
             </ul>
           </PageSection>
           <PageSection>
-            <h3 css={minorHeading}>Tell us about your subscription</h3>
+            <h3 css={minorHeading}>Tell us about your experience</h3>
             <LinkButton
               href="https://www.surveymonkey.co.uk/r/QF9ZGQR"
               priority="secondary"

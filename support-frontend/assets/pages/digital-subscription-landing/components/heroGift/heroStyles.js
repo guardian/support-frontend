@@ -10,32 +10,30 @@ import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
+// ----- Constants ----- //
+
 export const wrapper = css`
   position: relative;
   background: ${neutral[93]};
   display: flex;
   flex-direction: column;
-  padding: 0 0 ${space[3]}px;
+  padding-top: ${space[3]}px;
 
   :before {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 120px;
+    height: 170px;
     background: ${digitalSubscriptionsBlue};
     content: '';
   }
 
   ${from.mobileLandscape} {
+    padding-top: ${space[4]}px;
     :before {
+      margin-top: -1px;
       height: 200px;
-    }
-  }
-
-  ${from.tablet} {
-    :before {
-      top: -1px;
     }
   }
 `;
@@ -45,28 +43,27 @@ export const pageTitle = css`
   color: ${neutral[97]};
   z-index: 10;
   background-color: transparent;
-  padding: ${space[3]}px;
-  align-self: center;
+  padding: 0 ${space[3]}px ${space[3]}px;
+  width: 100%;
 
   ${from.mobileLandscape} {
-    ${headline.large({ fontWeight: 'bold' })};
+    padding-bottom: ${space[4]}px;
   }
 
   ${from.phablet} {
     width: 100%;
-    padding: ${space[5]}px ${space[3]}px;
+    align-self: center;
   }
 
   ${from.tablet} {
     width: calc(100% - 40px);
-    align-self: center;
   }
 
   ${from.desktop} {
     ${titlepiece.medium()}
     max-width: calc(100% - 110px);
     max-width: 1100px;
-    padding: ${space[5]}px ${space[4]}px;
+    padding: ${space[3]}px ${space[4]}px ${space[9]}px;
   }
 
   ${from.leftCol} {
@@ -122,7 +119,11 @@ export const textSection = css`
 
   ${from.leftCol} {
     width: 40%;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
+  }
+
+  ${from.wide} {
+    padding-bottom: 80px;
   }
 `;
 
@@ -148,7 +149,7 @@ export const heroHeading = css`
 export const paragraph = css`
   ${body.small()};
   max-width: 100%;
-  margin: ${space[5]}px 0;
+  margin: ${space[2]}px 0 ${space[5]}px;
 
   ${from.mobileMedium} {
     ${body.medium()};
@@ -156,24 +157,31 @@ export const paragraph = css`
 
   ${from.tablet} {
     ${body.medium()};
-    max-width: 90%;
+    max-width: 83%;
   }
 
   ${from.desktop} {
     ${headline.xxsmall()};
     line-height: 135%;
     max-width: 87%;
-    margin-top: 20px;
+    margin-bottom: ${space[9]}px;
   }
 
   ${from.leftCol} {
     max-width: 100%;
-    margin-top: ${space[12]}px;
   }
 `;
 
 export const heavyText = css`
   font-weight: bold;
+`;
+
+export const mobileLineBreak = css`
+  display: block;
+
+  ${from.desktop} {
+    display: none;
+  }
 `;
 
 export const packShot = css`
