@@ -53,19 +53,14 @@ export const getSavingPercentage = (annualCost: number, monthlyCostAnnualized: n
 
 const BILLING_PERIOD = {
   [Quarterly]: {
-    title: 'Quarterly',
-    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+    title: '3 months',
+    salesCopy: (currencyId: IsoCurrency, displayPrice: number) => {
       const display = price => getDisplayPrice(currencyId, price);
-      return isNumeric(promotionalPrice) ?
-        <span>
-          <span className="product-option__price">{display(promotionalPrice)}</span>
-          <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
-        </span>
-        :
+      return (
         <span>
           <span className="product-option__price">{display(displayPrice)}</span>
-          <span className="product-option__price-detail">{display(displayPrice / 3)}/month</span>
-        </span>;
+          <span className="product-option__price-detail">One-off payment</span>
+        </span>);
     },
     offer: null,
     label: null,
@@ -77,7 +72,7 @@ const BILLING_PERIOD = {
       return promotionalPrice ?
         <span>
           <span className="product-option__price">{display(promotionalPrice)}</span>
-          <span className="product-option__price-detail">then {display(displayPrice)}/month</span>
+          <span className="product-option__price-detail">then {display(displayPrice)} per month</span>
         </span>
         :
         <span>
@@ -90,17 +85,24 @@ const BILLING_PERIOD = {
   },
   [Annual]: {
     title: 'Annual',
-    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+    salesCopy: (
+      currencyId: IsoCurrency,
+      displayPrice: number,
+      promotionalPrice: Option<number>,
+      orderIsAGift: boolean,
+    ) => {
       const display = price => getDisplayPrice(currencyId, price);
       return isNumeric(promotionalPrice) ?
         <span>
           <span className="product-option__price">{display(promotionalPrice)}</span>
-          <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
+          <span className="product-option__price-detail">then {display(displayPrice)} a year</span>
         </span>
         :
         <span>
           <span className="product-option__price">{display(displayPrice)}</span>
-          <span className="product-option__price-detail">{display(displayPrice / 12)}/month</span>
+          {orderIsAGift ?
+            <span className="product-option__price-detail">One-off payment</span> :
+            <span className="product-option__price-detail">{display(displayPrice / 12)} per month</span>}
         </span>;
     },
     offer: 'Save an additional 21%',
@@ -128,10 +130,10 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
       BILLING_PERIOD[digitalBillingPeriod].offer;
 
     return {
-      title: BILLING_PERIOD[digitalBillingPeriod].title,
+      title: billingPeriod === Annual && orderIsAGift ? '12 months' : BILLING_PERIOD[digitalBillingPeriod].title,
       href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, orderIsAGift),
       onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, digitalBillingPeriod),
-      salesCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
+      salesCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice, orderIsAGift),
       offer,
       label: BILLING_PERIOD[digitalBillingPeriod].label,
     };

@@ -28,7 +28,6 @@ type ProductOptionType = {
 
 type ProductOptionOfferType = {
   children: Node,
-  hidden: boolean
 }
 
 const buttonStyles = css`
@@ -59,16 +58,12 @@ export const ProductOptionTitle = (props: Props) => (
   <div className="product-option__title">{ props.children }</div>
 );
 
-export const ProductOptionPrice = ({ children }: { children: Node}) => (
-  <p className="product-option__price">{ children }</p>
-);
-
 export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: boolean }) => (
   <span className={cx('product-option__copy', { 'product-option__copy--bold': bold })}>{ children }</span>
 );
 
-export const ProductOptionOffer = ({ children, hidden }: ProductOptionOfferType) => (
-  <div className={cx('product-option__offer-container', { 'product-option__sales-copy--hidden': hidden })}>
+export const ProductOptionOffer = ({ children }: ProductOptionOfferType) => (
+  <div className="product-option__offer-container">
     <span className="product-option__offer">{ children }</span>
   </div>
 

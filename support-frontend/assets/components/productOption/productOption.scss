@@ -14,6 +14,7 @@
   border-radius: 3px;
   text-decoration: none;
   color: gu-colour(neutral-7);
+  padding: 0 10px 16px;
 
   & * {
     box-sizing: border-box;
@@ -27,7 +28,7 @@
     .product-option__button {
       .component-button--primary {
         background-color: gu-colour(highlight-dark);
-        
+
         .svg-arrow-right-straight {
           transform: translateX(20%);
         }
@@ -38,7 +39,7 @@
 
 .product-option__title {
   @include gu-fontset-heading;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   position: relative;
 
   @include mq(tablet) {
@@ -51,24 +52,26 @@
 }
 
 .product-option__content {
-  // padding: 15px 24px;
   padding: 6px 0 15px 0;
-  margin-left: 24px;
 }
 
 .product-option__price {
   font-family: $gu-headline;
   font-weight: bold;
   font-size: 32px;
+  padding-top: 4px;
+  min-height: 63px;
 
   @include mq(tablet) {
-    font-size: 40px;
+    font-size: 42px;
   }
 
 }
 
 .product-option__price-detail {
-  padding: 0 0 0 10px;
+  padding: 4px 0 10px;
+  border-top: 1px solid gu-colour(neutral-86);
+  min-height: 48px;
 }
 
 .product-option__copy {
@@ -94,6 +97,7 @@
 .product-option__offer-container {
   border-top: 1px solid gu-colour(neutral-86);
   padding: 4px 24px 0 0;
+  min-height: 65px;
 }
 
 .product-option__offer {
@@ -107,15 +111,14 @@
 
 .product-option__button {
   border-top: 1px solid gu-colour(neutral-86);
-  margin-left: 24px;
-  padding: 6px 6px 15px 0;
+  padding: 6px 0 15px;
 
   .component-button {
     position: static;
     margin-top: 15px;
     width: 100%;
     max-width: 210px;
-    
+
     &:after {
       position: absolute;
       top: 0;
@@ -147,10 +150,6 @@
     display: block;
     width: 100%;
   }
-}
-
-.product-option__price-detail {
-  padding: 12px 0 0 0;
 }
 
 .product-option__full-screen-break {

@@ -37,15 +37,14 @@ const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) =>
           return -1;
         }).map(paymentOption => (
           <div css={paymentSelectionCard}>
+            {!orderIsAGift && (
             <span css={productOptionLabel}>
               {paymentOption.label}
-            </span>
+            </span>)}
             <ProductOption>
               <ProductOptionContent>
                 <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
-                <ProductOptionOffer
-                  hidden={!paymentOption.offer}
-                >
+                <ProductOptionOffer>
                   {paymentOption.offer}
                 </ProductOptionOffer>
               </ProductOptionContent>
@@ -55,7 +54,7 @@ const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) =>
                 aria-label="Subscribe-button"
                 salesCopy={paymentOption.salesCopy}
               >
-                {orderIsAGift ? 'Buy gift subscription' : 'Start free trial now'}
+                {orderIsAGift ? 'Give this gift' : 'Start free trial now'}
               </ProductOptionButton>
             </ProductOption>
           </div>
