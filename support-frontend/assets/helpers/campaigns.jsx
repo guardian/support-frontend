@@ -26,6 +26,16 @@ const currentCampaignPath: string | null = 'us/contribute';
 
 export const campaign: CampaignSettings = ({
   campaignCode: 'us_eoyappeal_2020',
+  tickerSettings: {
+    tickerCountType: 'money',
+    tickerEndType: 'unlimited',
+    currencySymbol: '$',
+    copy: {
+      countLabel: 'contributions',
+      goalReachedPrimary: 'We\'ve hit our goal!',
+      goalReachedSecondary: 'but you can still support us',
+    },
+  },
 });
 
 function campaignEnabledForUser(campaignCode: ?string): boolean {
