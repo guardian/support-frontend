@@ -327,14 +327,12 @@ object DigitalSubscriptionGiftRedemption {
         case ValidGiftCode(subscriptionId) => doZuoraUpdates(
           subscriptionId,
           zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, LocalDate.now(), _),
-          zuoraService.setupRevenueRecognition,
           zuoraService,
           catalogService
         )
         case CodeRedeemedInThisRequest(subscriptionId) => doZuoraUpdates(
           subscriptionId,
           (_: Int) => Future.successful(ZuoraSuccessOrFailureResponse(success = true, None)),
-          (_: Subscription, _:TermDates) => Future.successful(()),
           zuoraService,
           catalogService
         )
@@ -347,7 +345,6 @@ object DigitalSubscriptionGiftRedemption {
   private def doZuoraUpdates(
     subscriptionId: String,
     updateGiftIdentityIdCall: Int => Future[ZuoraSuccessOrFailureResponse],
-    setupRevenueRecognitionCall: (Subscription, TermDates) => Future[Unit],
     zuoraService: ZuoraGiftService,
     catalogService: CatalogService
   ) = for {
@@ -355,7 +352,7 @@ object DigitalSubscriptionGiftRedemption {
     calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
     (dates, newTermLength) = calculatedDates
     _ <- updateGiftIdentityIdCall(newTermLength)
-    _ <- setupRevenueRecognitionCall(fullGiftSubscription, dates)
+    _ <- zuoraService.setupRevenueRecognition(fullGiftSubscription, dates)
   } yield dates
 
 
