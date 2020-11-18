@@ -23,6 +23,7 @@ import {
   heroHeading,
   paragraph,
   heavyText,
+  mobileLineBreak,
   packShot,
 } from './heroStyles';
 
@@ -33,10 +34,9 @@ type PropTypes = {
 const GiftCopy = () => (
   <span>
     <p css={paragraph}>
-      <span css={heavyText}>A gift that matters</span><br />
-      With two innovative apps and ad-free reading, a digital gift subscription not only funds The Guardian&apos;s
-      independent reporting but also shares the richest experience of our journalism with the people you care about
-      the most.
+      <span css={heavyText}>Share what matters most,<br css={mobileLineBreak} /> even when apart</span><br />
+      Show that you care with the gift of a digital gift subscription. Your loved ones will get the
+      richest, ad-free experience of our independent journalism and your gift will help fund our work.
     </p>
   </span>);
 

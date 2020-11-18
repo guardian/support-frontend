@@ -130,6 +130,28 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
         </ThemeProvider>
       </div>
     </Text>
+    <Text title="Sign into theguardian.com">
+      <p>
+        Never be interrupted or distracted by ads again by signing in. Just use your subscriber email
+        and password when you next visit.
+      </p>
+      <ThemeProvider theme={buttonReaderRevenueBrandAlt}>
+        <LinkButton
+          css={marginForFirstButton}
+          priority="tertiary"
+          size="default"
+          icon={<SvgArrowRightStraight />}
+          iconSide="right"
+          nudgeIcon
+          aria-label="Click to sign in to the website"
+          href="https://www.theguardian.com/"
+          onClick={sendTrackingEventsOnClick('checkout_thankyou_sign_in', 'DigitalPack', null)}
+        >
+          <span css={largerFormatText}>Sign into the website</span>
+          <span css={smallFormatText}>Sign in</span>
+        </LinkButton>
+      </ThemeProvider>
+    </Text>
   </div>
 );
 

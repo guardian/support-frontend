@@ -12,7 +12,7 @@ import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const wrapper = css`
   position: relative;
-  background: #ededed;
+  background: ${neutral[93]};
   display: flex;
   flex-direction: column;
   padding-top: ${space[3]}px;
