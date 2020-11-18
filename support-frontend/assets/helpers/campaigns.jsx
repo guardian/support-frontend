@@ -22,10 +22,10 @@ export type CampaignSettings = {
   createReferralCodes: boolean,
 };
 
-const currentCampaignPath: string | null = 'us_eoy_2020';
+const currentCampaignPath: string | null = 'us/contribute';
 
 export const campaign: CampaignSettings = ({
-  campaignCode: 'us_eoy_2020',
+  campaignCode: 'us_eoyappeal_2020',
 });
 
 function campaignEnabledForUser(campaignCode: ?string): boolean {
