@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { css } from '@emotion/core';
 import { titlepiece, body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
@@ -68,7 +68,7 @@ const ContributionThankYouHeader = ({
   thankyouPageHeadingTestVariant,
 }: ContributionThankYouHeaderProps) => {
 
-  const title = (): string => {
+  const title = (): React.Node => {
     const nameAndTrailingSpace: string = name && name.length < MAX_DISPLAY_NAME_LENGTH ? `${name} ` : '';
     // Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
     const payPalOneOff = paymentMethod === 'PayPal' && contributionType === 'ONE_OFF';
@@ -91,7 +91,7 @@ const ContributionThankYouHeader = ({
           return <div>Thank you {nameAndTrailingSpace}for your valuable contribution</div>;
       }
     } else {
-      return `Thank you ${nameAndTrailingSpace}for your valuable contribution`;
+      return <div>Thank you {nameAndTrailingSpace}for your valuable contribution</div>;
     }
   };
 
