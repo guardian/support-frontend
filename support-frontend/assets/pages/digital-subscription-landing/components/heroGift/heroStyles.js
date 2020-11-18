@@ -19,27 +19,23 @@ export const wrapper = css`
   background: ${neutral[93]};
   display: flex;
   flex-direction: column;
-  padding: 0 0 ${space[3]}px;
+  padding-top: ${space[3]}px;
 
   :before {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 120px;
+    height: 170px;
     background: ${digitalSubscriptionsBlue};
     content: '';
   }
 
   ${from.mobileLandscape} {
+    padding-top: ${space[4]}px;
     :before {
+      margin-top: -1px;
       height: 200px;
-    }
-  }
-
-  ${from.tablet} {
-    :before {
-      top: -1px;
     }
   }
 `;
@@ -49,28 +45,27 @@ export const pageTitle = css`
   color: ${neutral[97]};
   z-index: 10;
   background-color: transparent;
-  padding: ${space[3]}px;
-  align-self: center;
+  padding: 0 ${space[3]}px ${space[3]}px;
+  width: 100%;
 
   ${from.mobileLandscape} {
-    ${headline.large({ fontWeight: 'bold' })};
+    padding-bottom: ${space[4]}px;
   }
 
   ${from.phablet} {
     width: 100%;
-    padding: ${space[5]}px ${space[3]}px;
+    align-self: center;
   }
 
   ${from.tablet} {
     width: calc(100% - 40px);
-    align-self: center;
   }
 
   ${from.desktop} {
     ${titlepiece.medium()}
     max-width: calc(100% - 110px);
     max-width: 1100px;
-    padding: ${space[5]}px ${space[4]}px;
+    padding: ${space[3]}px ${space[4]}px ${space[9]}px;
   }
 
   ${from.leftCol} {
