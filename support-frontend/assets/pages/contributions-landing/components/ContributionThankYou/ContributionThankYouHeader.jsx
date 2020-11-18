@@ -73,11 +73,11 @@ const ContributionThankYouHeader = ({
 
       switch (contributionType) {
         case 'ONE_OFF':
-          return `Thank you for supporting us today with ${currencyAndAmount}`;
+          return `Thank you for supporting us today with ${currencyAndAmount} ❤️`;
         case 'MONTHLY':
-          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencyAndAmount} each month`;
+          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencyAndAmount} each month ❤️`;
         case 'ANNUAL':
-          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencyAndAmount} each year`;
+          return `Thank you ${nameAndTrailingSpace}for choosing to contribute ${currencyAndAmount} each year ❤️`;
         default:
           return `Thank you ${nameAndTrailingSpace}for your valuable contribution`;
       }
