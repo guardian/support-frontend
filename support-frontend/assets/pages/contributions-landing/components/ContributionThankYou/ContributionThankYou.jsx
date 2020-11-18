@@ -25,7 +25,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getCampaignSettings } from 'helpers/campaigns';
 import type { CampaignSettings } from 'helpers/campaigns';
 import { getAmount } from 'helpers/contributions';
-import type {IsoCurrency} from "helpers/internationalisation/currency";
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 const container = css`
   background: white;
@@ -153,7 +153,7 @@ const ContributionThankYou = ({
   paymentMethod,
   countryId,
   campaignCode,
-  thankyouPageHeadingTestVariant
+  thankyouPageHeadingTestVariant,
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
@@ -178,7 +178,11 @@ const ContributionThankYou = ({
   };
   const marketingConsentAction = {
     component: (
-      <ContributionThankYouHearMarketingConsent email={email} csrf={csrf} />
+      <ContributionThankYouHearMarketingConsent
+        email={email}
+        csrf={csrf}
+        thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
+      />
     ),
     shouldShow: true,
   };
