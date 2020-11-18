@@ -46,7 +46,7 @@ const headerThemes: { [key: ThemeType]: string } = {
 const header = css`
   color: ${neutral[7]};
   position: relative;
-  background: ${neutral[93]};
+  background-color: ${neutral[93]};
   display: flex;
   flex-direction: column;
 
@@ -69,7 +69,6 @@ const header = css`
 export const pageTitle = css`
   ${titlepiece.small({ fontWeight: 'bold' })};
   z-index: 10;
-  background-color: transparent;
   padding: ${space[9]}px ${space[4]}px;
   width: 100%;
 
@@ -80,13 +79,8 @@ export const pageTitle = css`
 
   ${from.desktop} {
     ${titlepiece.large({ fontWeight: 'bold' })}
-    max-width: calc(100% - 110px);
-    max-width: 1100px;
-  }
-
-  ${from.leftCol} {
-    width: calc(100% - 80px);
-    max-width: 80.625rem;
+    margin: 0 auto;
+    max-width: 1290px;
   }
 `;
 
