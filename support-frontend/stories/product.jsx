@@ -5,8 +5,8 @@ import { storiesOf } from '@storybook/react';
 import { text, withKnobs } from '@storybook/addon-knobs';
 import { SvgInfo } from '@guardian/src-icons';
 
-import ProductOption from 'components/product/ProductOption';
-import ProductInfoChip from 'components/product/ProductInfoChip';
+import ProductOption from 'components/product/productOption';
+import ProductInfoChip from 'components/product/productInfoChip';
 
 const stories = storiesOf('Product', module)
   .addDecorator(withKnobs);

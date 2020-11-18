@@ -5,7 +5,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import AnimatedDots from 'components/spinners/animatedDots';
-import GiftHeadingAnimation from 'components/animations/GiftHeadingAnimation';
+import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import { radios, withKnobs } from '@storybook/addon-knobs';
 
 const appearanceKnob = () => radios('Appearance', ['light', 'dark'], 'light');

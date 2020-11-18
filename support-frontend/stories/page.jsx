@@ -4,11 +4,11 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { radios, withKnobs } from '@storybook/addon-knobs';
 
-import Hero from 'components/page/Hero';
-import PageTitle from 'components/page/PageTitle';
-import Block from 'components/page/Block';
+import Hero from 'components/page/hero';
+import PageTitle from 'components/page/pageTitle';
+import Block from 'components/page/block';
 import GridImage from 'components/gridImage/gridImage';
-import CentredContainer from 'components/containers/CentredContainer';
+import CentredContainer from 'components/containers/centredContainer';
 
 const stories = storiesOf('Page', module)
   .addDecorator(withKnobs);

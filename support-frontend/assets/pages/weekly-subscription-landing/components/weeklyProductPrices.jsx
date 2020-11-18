@@ -10,7 +10,7 @@ import {
 } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import Prices, { type PropTypes } from './content/Prices';
+import Prices, { type PropTypes } from './content/prices';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
 import { getProductPrice } from 'helpers/productPrice/productPrices';

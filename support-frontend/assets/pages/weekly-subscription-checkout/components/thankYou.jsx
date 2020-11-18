@@ -86,21 +86,21 @@ const HeroImage = ({ orderIsGift }: {orderIsGift: boolean}) => (
   <GridPicture
     sources={[
         {
-          gridId: !orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot',
+          gridId: orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero',
           srcSizes: [500, 1000],
           imgType: 'png',
           sizes: '100vw',
           media: '(max-width: 739px)',
         },
         {
-          gridId: !orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot',
+          gridId: orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero',
           srcSizes: [1000, 2000],
           imgType: 'png',
           sizes: '(min-width: 1000px) 2000px, 1000px',
           media: '(min-width: 740px)',
         },
       ]}
-    fallback={!orderIsGift ? 'weeklyLandingHero' : 'gwGiftingPackshot'}
+    fallback={orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero'}
     fallbackSize={1000}
     altText="A collection of Guardian Weekly magazines"
     fallbackImgType="png"

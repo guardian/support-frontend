@@ -11,11 +11,11 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
 
-import CentredContainer from 'components/containers/CentredContainer';
+import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
-import PageTitle from 'components/page/PageTitle';
-import Hero from 'components/page/Hero';
-import GiftHeadingAnimation from 'components/animations/GiftHeadingAnimation';
+import PageTitle from 'components/page/pageTitle';
+import Hero from 'components/page/hero';
+import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 
 import { glyph, type IsoCurrency } from 'helpers/internationalisation/currency';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';

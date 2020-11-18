@@ -3,7 +3,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import List from 'components/list/List';
+import List from 'components/list/list';
 
 const stories = storiesOf('Content elements', module);
 

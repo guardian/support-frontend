@@ -27,16 +27,16 @@ import {
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
-import FullWidthContainer from 'components/containers/FullWidthContainer';
-import CentredContainer from 'components/containers/CentredContainer';
-import Block from 'components/page/Block';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
+import CentredContainer from 'components/containers/centredContainer';
+import Block from 'components/page/block';
 
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { WeeklyHero } from './components/hero/hero';
-import Benefits from './components/content/Benefits';
-import GiftBenefits from './components/content/GiftBenefits';
-import GiftOrPersonal from './components/content/GiftOrPersonal';
+import Benefits from './components/content/benefits';
+import GiftBenefits from './components/content/giftBenefits';
+import GiftOrPersonal from './components/content/giftOrPersonal';
 
 import WeeklyPrices from './components/weeklyProductPrices';
 import reducer from './weeklySubscriptionLandingReducer';

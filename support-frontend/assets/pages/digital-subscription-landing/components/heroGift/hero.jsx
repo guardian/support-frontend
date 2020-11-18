@@ -9,7 +9,7 @@ import { Button, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { type CountryGroupId, AUDCountries } from 'helpers/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
-import GiftHeadingAnimation from 'components/animations/GiftHeadingAnimation';
+import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import {
   wrapper,
   pageTitle,

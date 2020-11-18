@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import CentredContainer from 'components/containers/CentredContainer';
-import FullWidthContainer from 'components/containers/FullWidthContainer';
-import FlexContainer from 'components/containers/FlexContainer';
+import CentredContainer from 'components/containers/centredContainer';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
+import FlexContainer from 'components/containers/flexContainer';
 
 const stories = storiesOf('Containers', module);
 
