@@ -81,25 +81,16 @@ class ZuoraGiftService(val config: ZuoraConfig, client: FutureHttpClient)(implic
     } yield successOrFailureResponse).value
 
     val subscriptionNumber = subscription.subscriptionNumber
-    // For the revenue recognition we want to continue even if there is a failure because by this point
-    // the redemption will have succeeded so we need to let the user know about that and then sort out the
-    // revenue recognition separately
     response.transform {
       case Success(Some(response)) if response.success =>
         SafeLogger.info(s"Successfully set up revenue recognition for Digital Subscription gift $subscriptionNumber")
         Success(())
-      case Success(Some(response)) =>
-        val message = response.errorMessage.getOrElse("unknown")
-        val errorMessage = scrub"Failed to set up revenue recognition for Digital Subscription gift $subscriptionNumber. Error was ${message}"
+      case failed =>
+        val errorMessage = scrub"Failed to set up revenue recognition for Digital Subscription gift $subscriptionNumber. Error was $failed"
         SafeLogger.error(errorMessage) //TODO: Add an alarm
-        Success(())
-      case Failure(originalError) =>
-        val errorMessage = scrub"Failed to set up revenue recognition for Digital Subscription gift $subscriptionNumber."
-        SafeLogger.error(errorMessage, originalError) //TODO: Add an alarm
-        Success(())
-      case _ =>
-        val errorMessage = scrub"Failed to set up revenue recognition for Digital Subscription gift $subscriptionNumber."
-        SafeLogger.error(errorMessage) //TODO: Add an alarm
+        // For the revenue recognition we want to continue even if there is a failure because by this point
+        // the redemption will have succeeded so we need to let the user know about that and then sort out the
+        // revenue recognition separately
         Success(())
     }
   }
