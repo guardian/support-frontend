@@ -130,16 +130,16 @@ const mapStateToProps = state => ({
 });
 
 const ContributionThankYou = ({
-  csrf,
-  email,
-  name,
-  contributionType,
-  user,
-  guestAccountCreationToken,
-  paymentMethod,
-  countryId,
-  campaignCode,
-}: ContributionThankYouProps) => {
+                                csrf,
+                                email,
+                                name,
+                                contributionType,
+                                user,
+                                guestAccountCreationToken,
+                                paymentMethod,
+                                countryId,
+                                campaignCode,
+                              }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
   const isUsEndOfYearAppeal = countryId === 'US';
@@ -174,11 +174,11 @@ const ContributionThankYou = ({
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
-  const SURVEY_END_DATE = new Date(Date.parse('2020-11-05'));
+  const SURVEY_END_DATE = new Date(Date.parse('2021-01-05'));
   const now = new Date();
   const surveyAction = {
     component: <ContributionThankYouSurvey />,
-    shouldShow: now < SURVEY_END_DATE,
+    shouldShow: isUsEndOfYearAppeal && (now < SURVEY_END_DATE),
   };
   const socialShareAction = {
     component: <ContributionThankYouSocialShare
