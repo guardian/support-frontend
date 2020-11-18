@@ -50,5 +50,9 @@ case class RevenueSchedulesResponse(revenueSchedules: List[RevenueSchedule])
 object RevenueSchedule {
   implicit val codec: Codec[RevenueSchedule] = deriveCodec
 }
-case class RevenueSchedule(number: String, recognitionRuleName: String)
+case class RevenueSchedule(
+  number: String,
+  amount: BigDecimal,
+  undistributedUnrecognizedRevenue: BigDecimal
+)
 
