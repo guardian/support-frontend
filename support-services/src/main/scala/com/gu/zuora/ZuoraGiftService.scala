@@ -117,6 +117,7 @@ class ZuoraGiftService(val config: ZuoraConfig, client: FutureHttpClient)(implic
       revenueSchedule.amount > revenueSchedule.undistributedUnrecognizedRevenue
     )
 
+  // https://www.zuora.com/developer/api-reference/#operation/PUT_RevenueByRecognitionStartandEndDates
   private def distributeRevenueByStartAndEndDates(
     revenueScheduleNumber: String,
     termDates: TermDates
