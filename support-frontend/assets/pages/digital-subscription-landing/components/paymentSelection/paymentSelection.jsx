@@ -14,7 +14,11 @@ import {
   type PaymentOption,
 } from './helpers/paymentSelection';
 // styles
-import './paymentSelection.scss';
+import {
+  paymentSelection,
+  paymentSelectionCard,
+  productOptionLabel,
+} from './paymentSelectionStyles';
 
 type PropTypes = {
   paymentOptions: Array<PaymentOption>,
@@ -25,15 +29,15 @@ const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) =>
 // The following line makes sure the Annual payment selection card is on the right hand side
 
   (
-    <div className="payment-selection">
+    <div css={paymentSelection}>
       {([...paymentOptions].sort((opt1) => { // Spread operator because .sort is mutating
           if (opt1.title === 'Annual') {
             return 1;
           }
           return -1;
         }).map(paymentOption => (
-          <div className="payment-selection__card">
-            <span className="product-option__label">
+          <div css={paymentSelectionCard}>
+            <span css={productOptionLabel}>
               {paymentOption.label}
             </span>
             <ProductOption>
