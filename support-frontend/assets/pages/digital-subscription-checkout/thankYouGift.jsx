@@ -187,7 +187,7 @@ const GreenCheckMark = () => (
 
 function ThankYouGift(props: PropTypes) {
   const date = props.giftDeliveryDate ? new Date(props.giftDeliveryDate) : null;
-  const fullDate = date ? formatUserDate(date) : 'Invalid date';
+  const fullDate = date ? formatUserDate(date) : 'Date chosen by you at checkout';
 
   return (
     <div className="thank-you-stage">
@@ -246,7 +246,7 @@ function ThankYouGift(props: PropTypes) {
             <ul>
               <li css={detailsWithIconList}>
                 <div css={iconContainer}><img src={gift} alt="" /></div>
-                <div css={giftStep}>{props.giftRecipient ? props.giftRecipient : 'Your recipient'} will receive an email on the date you&apos;ve chosen with
+                <div css={giftStep}>{props.giftRecipient || 'Your recipient'} will receive an email on the date you&apos;ve chosen with
                 the link to redeem the gift.
                 </div>
               </li>
@@ -255,7 +255,7 @@ function ThankYouGift(props: PropTypes) {
               </li>
               <li css={detailsWithIconList}>
                 <div css={iconContainer}><img src={person} alt="" /></div>
-                <div css={giftStep}>After redemption, {props.giftRecipient ? props.giftRecipient : 'your recipient'} will have to register or sign into their
+                <div css={giftStep}>After redemption, {props.giftRecipient || 'your recipient'} will have to register or sign into their
                 account and the subscription will be activated.
                 </div>
               </li>
@@ -264,7 +264,7 @@ function ThankYouGift(props: PropTypes) {
               </li>
               <li css={detailsWithIconList}>
                 <div css={iconContainer}><img src={phone} alt="" /></div>
-                <div css={giftStep}>{props.giftRecipient ? props.giftRecipient : 'Your recipient'} will download the smartphone and tablet apps and can sign
+                <div css={giftStep}>{props.giftRecipient || 'Your recipient'} will download the smartphone and tablet apps and can sign
                 in on the web to enjoy all the benefits of being a subscriber.
                 </div>
               </li>
