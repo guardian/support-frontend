@@ -2,6 +2,8 @@ package com.gu.zuora
 
 import cats.data.OptionT
 import cats.implicits.catsStdInstancesForFuture
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.ZuoraConfig
@@ -14,6 +16,7 @@ import io.circe.syntax.EncoderOps
 import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 trait ZuoraGiftLookupService extends TouchpointService {
   def getSubscriptionFromRedemptionCode(redemptionCode: RedemptionCode): Future[SubscriptionRedemptionQueryResponse]
@@ -49,7 +52,20 @@ class ZuoraGiftService(val config: ZuoraConfig, client: FutureHttpClient)(implic
     newTermLength: Int
   ): Future[ZuoraSuccessOrFailureResponse] = {
     val requestData = UpdateRedemptionDataRequest(requestId, gifteeIdentityId, giftRedemptionDate, newTermLength, Day)
-    putJson[ZuoraSuccessOrFailureResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
+    val response = putJson[ZuoraSuccessOrFailureResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
+    response.transform{
+        case Success(successfulResponse) if successfulResponse.success =>
+          SafeLogger.info(s"Successfully updated gifteeIdentityId on Digital Subscription gift for user $gifteeIdentityId")
+          Success(successfulResponse)
+        case Success(failedResponse) =>
+          // Treat a ZuoraResponse where success = false as a failure
+          val responseMessage = failedResponse.errorMessage.getOrElse("unknown")
+          val errorMessage = s"Failed to update gifteeIdentityId on Digital Subscription gift for user $gifteeIdentityId. Error was ${responseMessage}"
+          Failure(new RuntimeException(errorMessage))
+        case Failure(originalError) =>
+          val errorMessage = s"Failed to update gifteeIdentityId on Digital Subscription gift for user $gifteeIdentityId."
+          Failure(new RuntimeException(errorMessage, originalError))
+      }
   }
 
   def setupRevenueRecognition(
@@ -57,19 +73,42 @@ class ZuoraGiftService(val config: ZuoraConfig, client: FutureHttpClient)(implic
     termDates: TermDates
   ) = {
     //This doc describes what this method is doing: https://docs.google.com/document/d/1yNeaR2l1Ss_unXygntuntmRX-GicDelryuK25vmqToc/edit
-    (for {
+    val response = (for {
       ratePlan <- OptionT.fromOption(subscription.ratePlans.headOption)
       ratePlanChargeId <- OptionT.fromOption(ratePlan.ratePlanCharges.headOption.map(_.id))
       revenueSchedule <- OptionT.liftF(getRevenueSchedule(ratePlanChargeId))
       revenueScheduleNumber <- OptionT.fromOption(revenueSchedule.revenueSchedules.headOption.map(_.number))
       successOrFailureResponse <- OptionT.liftF(distributeRevenueByStartAndEndDates(revenueScheduleNumber, termDates))
     } yield successOrFailureResponse).value
+
+    val subscriptionNumber = subscription.subscriptionNumber
+    // For the revenue recognition we want to continue even if there is a failure because by this point
+    // the redemption will have succeeded so we need to let the user know about that and then sort out the
+    // revenue recognition separately
+    response.transform{
+      case Success(Some(response)) if response.success =>
+        SafeLogger.info(s"Successfully set up revenue recognition for Digital Subscription gift $subscriptionNumber")
+        Success(())
+      case Success(Some(response)) =>
+        val message = response.errorMessage.getOrElse("unknown")
+        val errorMessage = scrub"Failed to set up revenue recognition for Digital Subscription gift $subscriptionNumber. Error was ${message}"
+        SafeLogger.error(errorMessage) //TODO: Add an alarm
+        Success(())
+      case Failure(originalError) =>
+        val errorMessage = scrub"Failed to set up revenue recognition for Digital Subscription gift $subscriptionNumber."
+        SafeLogger.error(errorMessage, originalError) //TODO: Add an alarm
+        Success(())
+      case _ =>
+        val errorMessage = scrub"Failed to set up revenue recognition for Digital Subscription gift $subscriptionNumber."
+        SafeLogger.error(errorMessage) //TODO: Add an alarm
+        Success(())
+    }
   }
 
-  def getRevenueSchedule(ratePlanChargeId: String): Future[RevenueSchedulesResponse] =
+  private def getRevenueSchedule(ratePlanChargeId: String): Future[RevenueSchedulesResponse] =
     get[RevenueSchedulesResponse](s"revenue-schedules/subscription-charges/${ratePlanChargeId}", authHeaders)
 
-  def distributeRevenueByStartAndEndDates(
+  private def distributeRevenueByStartAndEndDates(
     revenueScheduleNumber: String,
     termDates: TermDates
   ) = {

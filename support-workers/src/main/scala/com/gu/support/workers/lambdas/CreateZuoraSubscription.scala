@@ -23,7 +23,7 @@ import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
-import com.gu.support.zuora.api.response.{Subscription, ZuoraSuccessOrFailureResponse, ZuoraAccountNumber, ZuoraSubscriptionNumber}
+import com.gu.support.zuora.api.response.{Subscription, ZuoraAccountNumber, ZuoraSubscriptionNumber, ZuoraSuccessOrFailureResponse}
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.subscriptionBuilders._
 import com.gu.zuora.{ZuoraGiftService, ZuoraSubscribeService}
@@ -323,28 +323,41 @@ object DigitalSubscriptionGiftRedemption {
     val codeValidator = new GiftCodeValidator(zuoraService)
     for {
       codeValidation <- codeValidator.getStatus(redemptionData.redemptionCode, Some(state.requestId.toString))
-      subIdUpdateAction <- codeValidation match {
-        case ValidGiftCode(subscriptionId) => Future.successful((
+      termDates <- codeValidation match {
+        case ValidGiftCode(subscriptionId) => doZuoraUpdates(
           subscriptionId,
           zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, LocalDate.now(), _),
-          zuoraService.setupRevenueRecognition _
-        ))
-        case CodeRedeemedInThisRequest(subscriptionId) => Future.successful((
+          zuoraService.setupRevenueRecognition,
+          zuoraService,
+          catalogService
+        )
+        case CodeRedeemedInThisRequest(subscriptionId) => doZuoraUpdates(
           subscriptionId,
-          (_: Int) => Future.successful(ZuoraSuccessOrFailureResponse(true)),
-          (_: Subscription, _:TermDates) => Future.successful(ZuoraSuccessOrFailureResponse(true))
-        ))
+          (_: Int) => Future.successful(ZuoraSuccessOrFailureResponse(success = true, None)),
+          (_: Subscription, _:TermDates) => Future.successful(()),
+          zuoraService,
+          catalogService
+        )
         case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
       }
-      (subscriptionId, updateIfNecessary, setupRevenueIfNecessary) = subIdUpdateAction
-      fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)
-      calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
-      (dates, newTermLength) = calculatedDates
-      updateDataResponse <- updateIfNecessary(newTermLength)
-      setupRevenueResponse <- setupRevenueIfNecessary(fullGiftSubscription, dates)
-      handlerResult <- Future.fromTry(buildHandlerResult(updateDataResponse, state, requestInfo, dates))
+      handlerResult <- Future.fromTry(buildHandlerResult(state, requestInfo, termDates))
     } yield handlerResult
   }
+
+  private def doZuoraUpdates(
+    subscriptionId: String,
+    updateGiftIdentityIdCall: Int => Future[ZuoraSuccessOrFailureResponse],
+    setupRevenueRecognitionCall: (Subscription, TermDates) => Future[Unit],
+    zuoraService: ZuoraGiftService,
+    catalogService: CatalogService
+  ) = for {
+    fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)
+    calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
+    (dates, newTermLength) = calculatedDates
+    _ <- updateGiftIdentityIdCall(newTermLength)
+    _ <- setupRevenueRecognitionCall(fullGiftSubscription, dates)
+  } yield dates
+
 
   private def calculateNewTermLength(subscription: Subscription, catalogService: CatalogService) = {
     (for {
@@ -368,30 +381,26 @@ object DigitalSubscriptionGiftRedemption {
   }
 
   private def buildHandlerResult(
-    response: ZuoraSuccessOrFailureResponse,
     state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
     termDates: TermDates,
-  ) =
-    if (response.success) {
-      val product = state.product match {
-        case d: DigitalPack => d
-        case _ => throw new RuntimeException("this can't happen")
-      }
-      Success(
-        HandlerResult(SendAcquisitionEventState(
-          requestId = state.requestId,
-          analyticsInfo = state.analyticsInfo,
-          sendThankYouEmailState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
-            state.user,
-            SfContactId(state.salesforceContacts.buyer.Id),
-            product,
-            termDates,
-          ),
-          acquisitionData = state.acquisitionData
-        ), requestInfo)
-      )
-    } else
-      Failure(new RuntimeException("Failed to redeem Digital Subscription gift"))
-
+  ) = {
+    val product = state.product match {
+      case d: DigitalPack => d
+      case _ => throw new RuntimeException("this can't happen")
+    }
+    Success(
+      HandlerResult(SendAcquisitionEventState(
+        requestId = state.requestId,
+        analyticsInfo = state.analyticsInfo,
+        sendThankYouEmailState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
+          state.user,
+          SfContactId(state.salesforceContacts.buyer.Id),
+          product,
+          termDates,
+        ),
+        acquisitionData = state.acquisitionData
+      ), requestInfo)
+    )
+  }
 }

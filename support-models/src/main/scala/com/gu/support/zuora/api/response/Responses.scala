@@ -206,4 +206,12 @@ object ZuoraSuccessOrFailureResponse {
   implicit val codec: Codec[ZuoraSuccessOrFailureResponse] = deriveCodec
 }
 
-case class ZuoraSuccessOrFailureResponse(success: Boolean)
+case class ZuoraSuccessOrFailureResponse(success: Boolean, reasons: Option[List[ZuoraErrorReason]]){
+  def errorMessage = reasons.flatMap(_.headOption).map(_.message)
+}
+
+object ZuoraErrorReason {
+  implicit val codec: Codec[ZuoraErrorReason] = deriveCodec
+}
+
+case class ZuoraErrorReason(code: String, message: String)
