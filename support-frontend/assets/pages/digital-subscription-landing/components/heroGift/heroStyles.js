@@ -142,12 +142,24 @@ export const toFromLines = css`
 export const toYouTyping = css`
   animation: none;
   -webkit-animation: none;
+  letter-spacing: 0.01em; /* Adjust as needed */
+  margin-left: ${space[2]}px;
+
+  color: ${brandAltBackground.primary};
+  ${headline.small({ fontWeight: 'bold' })};
+
+  ${from.mobileLandscape} {
+    ${headline.medium({ fontWeight: 'bold' })};
+  }
+
+  ${from.desktop} {
+    ${headline.large({ fontWeight: 'bold' })};
+    margin-left: 8px;
+  }
 
   ${allowsAnimation} {
     overflow: hidden; /* Ensures the content is not revealed until the animation */
     white-space: nowrap; /* Keeps the content on a single line */
-    letter-spacing: 0.01em; /* Adjust as needed */
-    margin-left: ${space[2]}px;
     animation:
       typing-to 0.7s steps(3, end);
 
@@ -171,14 +183,6 @@ export const toYouTyping = css`
     animation-delay: 1s;
     -webkit-animation-delay: 1s;
 
-    @keyframes typing-to {
-      from { width: 0 }
-      to { width: 17.5% }
-    }
-
-    color: ${brandAltBackground.primary};
-    ${headline.small({ fontWeight: 'bold' })};
-
     ${from.mobileMedium} {
       @keyframes typing-to {
         from { width: 0 }
@@ -187,7 +191,6 @@ export const toYouTyping = css`
     }
 
     ${from.mobileLandscape} {
-      ${headline.medium({ fontWeight: 'bold' })};
       @keyframes typing-to {
         from { width: 0 }
         to { width: 14% }
@@ -209,8 +212,6 @@ export const toYouTyping = css`
     }
 
     ${from.desktop} {
-      ${headline.large({ fontWeight: 'bold' })};
-      margin-left: 8px;
       @keyframes typing-to {
         from { width: 0 }
         to { width: 16% }
@@ -270,12 +271,24 @@ export const toYouCursor = css`
 export const fromMeTyping = css`
   animation: none;
   -webkit-animation: none;
+  letter-spacing: 0.01em; /* Adjust as needed */
+  margin-left: ${space[2]}px;
+
+  color: ${brandAltBackground.primary};
+  ${headline.small({ fontWeight: 'bold' })};
+
+  ${from.mobileLandscape} {
+    ${headline.medium({ fontWeight: 'bold' })};
+  }
+
+  ${from.desktop} {
+    ${headline.large({ fontWeight: 'bold' })};
+    margin-left: 8px;
+  }
 
   ${allowsAnimation} {
     overflow: hidden; /* Ensures the content is not revealed until the animation */
     white-space: nowrap; /* Keeps the content on a single line */
-    letter-spacing: 0.01em; /* Adjust as needed */
-    margin-left: ${space[2]}px;
     animation:
       typing-from 0.5s steps(2, end);
 
@@ -289,8 +302,6 @@ export const fromMeTyping = css`
     animation-delay: 2.4s;
     -webkit-animation-delay: 2.4s;
 
-    color: ${brandAltBackground.primary};
-
     @keyframes typing-from {
       from { width: 0 }
       to { width: 14% }
@@ -301,8 +312,6 @@ export const fromMeTyping = css`
       to { width: 14% }
     }
 
-    ${headline.small({ fontWeight: 'bold' })};
-
     ${from.mobileMedium} {
       @keyframes typing-from {
         from { width: 0 }
@@ -311,7 +320,6 @@ export const fromMeTyping = css`
     }
 
     ${from.mobileLandscape} {
-      ${headline.medium({ fontWeight: 'bold' })};
       @keyframes typing-from {
         from { width: 0 }
         // Looks like a repetition but seems only to work at this size if specified
@@ -327,8 +335,6 @@ export const fromMeTyping = css`
     }
 
     ${from.desktop} {
-      ${headline.large({ fontWeight: 'bold' })};
-      margin-left: 8px;
       @keyframes typing-from {
         from { width: 0 }
         to { width: 13% }
