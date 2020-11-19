@@ -24,8 +24,14 @@ export type CampaignSettings = {
 
 const currentCampaignPath: string | null = 'us/contribute';
 
+const usEndOfYearCampaignCopy = (): CampaignCopy => ({
+  headerCopy: 'Help us reach our $1.25m goal!',
+  contributeCopy: 'As America begins a new chapter, the need for robust, fact-based journalism that highlights injustice and offers solutions is as great as ever. Support the Guardian’s open, independent journalism with a year-end gift.',
+});
+
 export const campaign: CampaignSettings = ({
   campaignCode: 'us_eoyappeal_2020',
+  copy: usEndOfYearCampaignCopy,
   tickerSettings: {
     tickerCountType: 'money',
     tickerEndType: 'unlimited',
