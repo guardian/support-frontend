@@ -61,7 +61,7 @@
 }
 
 .product-option__content {
-  padding: 6px 0 15px 0;
+  padding-top: 6px;
 }
 
 .product-option__price {
@@ -74,7 +74,6 @@
   @include mq(tablet) {
     font-size: 42px;
   }
-
 }
 
 .product-option__price-detail {
@@ -103,10 +102,15 @@
   }
 }
 
-.product-option__offer-container {
+.product-option__offer-container,
+.product-option__offer-container--with-children {
   border-top: 1px solid gu-colour(neutral-86);
   padding: 4px 24px 0 0;
   min-height: 65px;
+}
+
+.product-option__offer-container--with-children {
+  border-bottom: 1px solid gu-colour(neutral-86);
 }
 
 .product-option__offer {
@@ -119,7 +123,6 @@
 }
 
 .product-option__button {
-  border-top: 1px solid gu-colour(neutral-86);
   padding: 6px 0 15px;
 
   .component-button {
@@ -138,7 +141,6 @@
       z-index: 1;
     }
   }
-
 }
 
 .product-option__sales-copy--hidden {

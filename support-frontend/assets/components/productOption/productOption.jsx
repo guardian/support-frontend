@@ -64,7 +64,7 @@ export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: b
 );
 
 export const ProductOptionOffer = ({ children }: ProductOptionOfferType) => (
-  <div className="product-option__offer-container">
+  <div className={children ? 'product-option__offer-container--with-children' : 'product-option__offer-container'}>
     <span className="product-option__offer">{ children }</span>
   </div>
 );
