@@ -15,17 +15,17 @@ const LANDING_PAGE_URL_TWITTER = `${LANDING_PAGE_URL}?INTCMP=${INTCMP_TWITTER}`;
 const emailLandingPageUrl = (referralCode: ?string) =>
   appendReferralCode(`${LANDING_PAGE_URL}?INTCMP=${INTCMP_MAIL}`, 'email', referralCode);
 
-const twitterTextCopy = (isUsEndOfYearAppeal: boolean) =>
+const twitterTextCopy = (isUsEndOfYearAppeal: ?boolean) =>
   (isUsEndOfYearAppeal
     ? 'Join me and support the Guardian’s open, independent journalism for 2021 and beyond. You can contribute today from as little as $1. Together we’re doing something powerful.'
     : 'Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free');
 
-const emailBodyCopy = (referralCode: ?string, isUsEndOfYearAppeal: boolean) =>
+const emailBodyCopy = (referralCode: ?string, isUsEndOfYearAppeal: ?boolean) =>
   (isUsEndOfYearAppeal
     ? `Join me and support the Guardian’s open, independent journalism for 2021 and beyond. You can contribute today from as little as $1. Together we’re doing something powerful. #supporttheguardian - ${emailLandingPageUrl(referralCode)}`
     : `Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: ${emailLandingPageUrl(referralCode)}`);
 
-const emailSubject = (isUsEndOfYearAppeal: boolean) =>
+const emailSubject = (isUsEndOfYearAppeal: ?boolean) =>
   (isUsEndOfYearAppeal
     ? 'Join me in supporting the Guardian'
     : 'Join me in supporting open, independent journalism');
