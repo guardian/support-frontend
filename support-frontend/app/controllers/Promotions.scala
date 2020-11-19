@@ -30,7 +30,7 @@ class Promotions(
 
   implicit val a: AssetsResolver = assets
 
-  def promo(promoCode: String, orderIsAGift: Boolean = false): Action[AnyContent] = CachedAction() { implicit request =>
+  def promo(promoCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     val promotionService = promotionServiceProvider.forUser(false)
     val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
 
@@ -38,7 +38,7 @@ class Promotions(
     ) { promotionTerms =>
       val productLandingPage = promotionTerms.product match {
         case GuardianWeekly => routes.WeeklySubscription.weeklyGeoRedirect(promotionTerms.isGift).url
-        case DigitalPack => routes.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift).url
+        case DigitalPack => routes.DigitalSubscriptionController.digitalGeoRedirect(false).url
         case Paper => routes.PaperSubscription.paper(false).url
         case Contribution => routes.Application.contributeGeoRedirect("").url
       }

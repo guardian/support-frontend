@@ -14,7 +14,7 @@ describe('datePickerHelpers', () => {
 
   class MockDate extends Date {
     constructor(param) {
-      super(param || "2020-05-14T11:01:58.135Z");
+      super(param || '2020-05-14T11:01:58.135Z');
     }
   }
 
