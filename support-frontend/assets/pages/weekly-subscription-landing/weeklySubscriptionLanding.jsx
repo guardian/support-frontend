@@ -156,9 +156,13 @@ const copy = getCopy(promotionCopy);
 const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
 const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
 
+// ID for Selenium tests
+const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
+
 const content = (
   <Provider store={store}>
     <Page
+      id={pageQaId}
       header={<Header />}
       footer={<WeeklyFooter centred promoTermsLink={promoTermsLink} />}
     >
