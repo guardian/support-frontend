@@ -189,7 +189,7 @@ function PaperCheckoutForm(props: PropTypes) {
   const subsCardOrderSummary = (<OrderSummary
     image={
       <GridImage
-        gridId="printCheckoutDigitalVoucher"
+        gridId="printCampaignDigitalVoucher"
         srcSizes={[500]}
         sizes="(max-width: 740px) 50vw, 696"
         imgType="png"
@@ -206,7 +206,7 @@ function PaperCheckoutForm(props: PropTypes) {
   const homeDeliveryOrderSummary = (<OrderSummary
     image={
       <GridImage
-        gridId="printCheckoutHD"
+        gridId="printCampaignHDdigitalVoucher"
         srcSizes={[500]}
         sizes="(max-width: 740px) 50vw, 696"
         imgType="png"
