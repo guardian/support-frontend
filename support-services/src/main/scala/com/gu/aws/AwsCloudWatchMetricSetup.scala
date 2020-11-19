@@ -15,8 +15,11 @@ object AwsCloudWatchMetricSetup {
   def catalogFailureRequest(environment: TouchPointEnvironment): MetricRequest =
     getMetricRequest(MetricName("CatalogLoadingFailure"),
       Map(
-        MetricDimensionName("Environment") -> MetricDimensionValue(environment.toString)
+        MetricDimensionName("Environment") -> MetricDimensionValue(environment.envValue)
       ))
+
+  def revenueDistributionFailureRequest: MetricRequest =
+    getMetricRequest(MetricName("RevenueDistributionFailure"), Map())
 
   def paymentSuccessRequest(stage: Stage, paymentProvider: PaymentProvider, productType: ProductType): MetricRequest =
     getMetricRequest(
