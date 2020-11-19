@@ -15,7 +15,7 @@ const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
-const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/M93X8SG';
+const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/NWW9XZL';
 
 const ContributionThankYouSurvey = () => {
   const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
