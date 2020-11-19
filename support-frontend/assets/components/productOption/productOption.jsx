@@ -24,7 +24,7 @@ type WrappedProps = {
 
 type ProductOptionType = {
   children: Node,
-  orderIsAGift: boolean,
+  orderIsAGift?: boolean,
 }
 
 type ProductOptionOfferType = {
@@ -80,6 +80,10 @@ const ProductOption = ({ children, orderIsAGift }: ProductOptionType) => (
     { children }
   </div>
 );
+
+ProductOption.defaultProps = {
+  orderIsAGift: false,
+};
 
 // default props
 ProductOptionCopy.defaultProps = {
