@@ -41,11 +41,11 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
 
   const header = props.isUsEndOfYearAppeal
     ? 'Share your year-end support'
-    : 'Share your support'
+    : 'Share your support';
 
   const body = props.isUsEndOfYearAppeal
     ? 'As 2020 ends and a new year begins, we need your help to reach more people. Every supporter that joins you helps to sustain the Guardian’s open, independent journalism for the long term. Please invite your friends, family and followers to support us today.'
-    : 'Invite your followers to support the Guardian’s open, independent reporting.'
+    : 'Invite your followers to support the Guardian’s open, independent reporting.';
 
   const actionIcon = <SvgShare />;
   const actionHeader = <ActionHeader title={header} />;

@@ -54,7 +54,7 @@ type ContributionThankYouHeaderProps = {|
   amount: string,
   currency: IsoCurrency,
   thankyouPageHeadingTestVariant: boolean,
-  isLargeUSDonation?: boolean,
+  isLargeUSDonation: boolean,
 |};
 
 const MAX_DISPLAY_NAME_LENGTH = 10;
@@ -98,8 +98,8 @@ const ContributionThankYouHeader = ({
   };
 
   const additionalCopy = isLargeUSDonation
-    ? "It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best."
-    : 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best'
+    ? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best.'
+    : 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best';
 
   return (
     <header css={header}>

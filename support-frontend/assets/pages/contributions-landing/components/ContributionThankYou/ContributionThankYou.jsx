@@ -107,21 +107,25 @@ const buttonContainer = css`
   padding: ${space[12]}px 0;
 `;
 
-const isLargeUSDonation = (amount: string, contributionType: ContributionType, isUsEndOfYearAppeal: boolean): boolean => {
+const isLargeUSDonation = (
+  amount: string,
+  contributionType: ContributionType,
+  isUsEndOfYearAppeal: boolean,
+): boolean => {
   if (!isUsEndOfYearAppeal) {
-    return false
+    return false;
   }
 
-  const amountInCents = parseFloat(amount).toFixed(2) * 100;
+  const amountInCents = parseFloat(amount) * 100;
   const twoHundredAndFiftyDollars = 25_000;
   const twentyFiveDollars = 2_500;
   const largeDonations = {
     MONTHLY: twentyFiveDollars,
     ANNUAL: twoHundredAndFiftyDollars,
     ONE_OFF: twoHundredAndFiftyDollars,
-  }
+  };
 
-  return amountInCents >= largeDonations[contributionType]
+  return amountInCents >= largeDonations[contributionType];
 };
 
 type ContributionThankYouProps = {|

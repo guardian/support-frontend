@@ -17,14 +17,14 @@ const emailLandingPageUrl = (referralCode: ?string) =>
   appendReferralCode(`${LANDING_PAGE_URL}?INTCMP=${INTCMP_MAIL}`, 'email', referralCode);
 
 const twitterTextCopy = (isUsEndOfYearAppeal: ?boolean) =>
-  isUsEndOfYearAppeal
+  (isUsEndOfYearAppeal
     ? 'Join me and support the Guardian’s open, independent journalism for 2021 and beyond. You can contribute today from as little as $1. Together we’re doing something powerful.'
-    : 'Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free'
+    : 'Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free');
 
 const emailBodyCopy = (referralCode: ?string, isUsEndOfYearAppeal: ?boolean) =>
-  isUsEndOfYearAppeal
+  (isUsEndOfYearAppeal
     ? `Join me and support the Guardian’s open, independent journalism for 2021 and beyond. You can contribute today from as little as $1. Together we’re doing something powerful. #supporttheguardian - ${emailLandingPageUrl(referralCode)}`
-    : `Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: ${emailLandingPageUrl(referralCode)}`
+    : `Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: ${emailLandingPageUrl(referralCode)}`);
 
 export const getFacebookShareLink = (referralCode: ?string): string => {
   const encodedUrl = appendReferralCode(LANDING_PAGE_URL_FACEBOOK, 'facebook', referralCode);
