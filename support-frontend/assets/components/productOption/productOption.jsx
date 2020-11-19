@@ -66,7 +66,10 @@ export const ProductOptionOffer = ({ children }: ProductOptionOfferType) => (
   <div className="product-option__offer-container">
     <span className="product-option__offer">{ children }</span>
   </div>
+);
 
+export const ProductOptionPrice = ({ children }: { children: Node}) => (
+  <p className="product-option__price">{ children }</p>
 );
 
 export const ProductOptionButton = withProductOptionsStyle(LinkButtonPayment);
