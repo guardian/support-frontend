@@ -266,7 +266,7 @@ const ContributionThankYou = ({
           amount={amount}
           currency={currency}
           thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
-          isLargeUSDonation={isLargeUSDonation(amount, contributionType)}
+          isLargeUSDonation={isUsEndOfYearAppeal && isLargeUSDonation(amount, contributionType)}
         />
       </div>
 
