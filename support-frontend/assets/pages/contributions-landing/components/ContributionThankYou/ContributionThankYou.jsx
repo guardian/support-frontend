@@ -107,7 +107,11 @@ const buttonContainer = css`
   padding: ${space[12]}px 0;
 `;
 
-const isLargeUSDonation = (amount: string, contributionType: ContributionType): boolean => {
+const isLargeUSDonation = (amount: string, contributionType: ContributionType, isUsEndOfYearAppeal: boolean): boolean => {
+  if (!isUsEndOfYearAppeal) {
+    return false
+  }
+
   const amountInCents = parseFloat(amount).toFixed(2) * 100;
   const twoHundredAndFiftyDollars = 25_000;
   const twentyFiveDollars = 2_500;
@@ -217,6 +221,7 @@ const ContributionThankYou = ({
       email={email}
       createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
       campaignCode={campaignSettings && campaignSettings.campaignCode}
+      isUsEndOfYearAppeal={isUsEndOfYearAppeal}
     />,
     shouldShow: true,
   };
@@ -266,7 +271,7 @@ const ContributionThankYou = ({
           amount={amount}
           currency={currency}
           thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
-          isLargeUSDonation={isUsEndOfYearAppeal && isLargeUSDonation(amount, contributionType)}
+          isLargeUSDonation={isLargeUSDonation(amount, contributionType, isUsEndOfYearAppeal)}
         />
       </div>
 
