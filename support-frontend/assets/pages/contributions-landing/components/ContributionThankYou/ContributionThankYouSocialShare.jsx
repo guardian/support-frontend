@@ -66,7 +66,7 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
           hideLabel
         />
         <LinkButton
-          href={getTwitterShareLink(referralCode)}
+          href={getTwitterShareLink(referralCode, props.isUsEndOfYearAppeal)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
           target="_blank"
           rel="noopener noreferrer"
@@ -88,7 +88,7 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
           hideLabel
         />
         <LinkButton
-          href={getEmailShareLink(referralCode)}
+          href={getEmailShareLink(referralCode, props.isUsEndOfYearAppeal)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
           target="_blank"
           rel="noopener noreferrer"
