@@ -11,20 +11,24 @@ const INTCMP_MAIL = 'component-share-mail';
 const LANDING_PAGE_URL = 'https://support.theguardian.com/contribute';
 const LANDING_PAGE_URL_FACEBOOK = `${LANDING_PAGE_URL}?INTCMP=${INTCMP_FACEBOOK}`;
 const LANDING_PAGE_URL_TWITTER = `${LANDING_PAGE_URL}?INTCMP=${INTCMP_TWITTER}`;
-const EMAIL_SUBJECT_COPY = 'Join me in supporting open, independent journalism';
 
 const emailLandingPageUrl = (referralCode: ?string) =>
   appendReferralCode(`${LANDING_PAGE_URL}?INTCMP=${INTCMP_MAIL}`, 'email', referralCode);
 
-const twitterTextCopy = (isUsEndOfYearAppeal: ?boolean) =>
+const twitterTextCopy = (isUsEndOfYearAppeal: boolean) =>
   (isUsEndOfYearAppeal
     ? 'Join me and support the Guardian’s open, independent journalism for 2021 and beyond. You can contribute today from as little as $1. Together we’re doing something powerful.'
     : 'Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free');
 
-const emailBodyCopy = (referralCode: ?string, isUsEndOfYearAppeal: ?boolean) =>
+const emailBodyCopy = (referralCode: ?string, isUsEndOfYearAppeal: boolean) =>
   (isUsEndOfYearAppeal
     ? `Join me and support the Guardian’s open, independent journalism for 2021 and beyond. You can contribute today from as little as $1. Together we’re doing something powerful. #supporttheguardian - ${emailLandingPageUrl(referralCode)}`
     : `Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: ${emailLandingPageUrl(referralCode)}`);
+
+const emailSubject = (isUsEndOfYearAppeal: boolean) =>
+  (isUsEndOfYearAppeal
+    ? 'Join me in supporting the Guardian'
+    : 'Join me in supporting open, independent journalism');
 
 export const getFacebookShareLink = (referralCode: ?string): string => {
   const encodedUrl = appendReferralCode(LANDING_PAGE_URL_FACEBOOK, 'facebook', referralCode);
@@ -43,7 +47,7 @@ export const getLinkedInShareLink = (referralCode: ?string): string => {
 };
 
 export const getEmailShareLink = (referralCode: ?string, isUsEndOfYearAppeal: ?boolean): string => {
-  const encodedSubject = encodeURI(EMAIL_SUBJECT_COPY);
+  const encodedSubject = encodeURI(emailSubject(isUsEndOfYearAppeal));
   const encodedBody = encodeURI(emailBodyCopy(referralCode, isUsEndOfYearAppeal));
   return `mailto:?subject=${encodedSubject}&body=${encodedBody}`;
 };
