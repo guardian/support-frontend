@@ -39,7 +39,7 @@
 
 .product-option__title {
   @include gu-fontset-heading;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   position: relative;
 
   @include mq(tablet) {

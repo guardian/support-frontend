@@ -29,13 +29,25 @@ export const paymentSelectionCard = css`
   width: 100%;
   max-width: 32.5rem;
   display: flex;
-  margin: 10px;
+  margin: 10px 10px 0 0;
   z-index: 10;
 
+  ${from.mobileLandscape} {
+    margin-left: 10px;
+  }
+
   ${from.tablet} {
-    margin: 0;
+    margin: 0 0 0 20px;
     max-width: 30rem;
     width: 320px;
+  }
+
+  ${from.leftCol} {
+    margin-left: 40px;
+  }
+
+  ${from.wide} {
+    margin-left: 50px;
   }
 
   :last-of-type {
@@ -47,14 +59,6 @@ export const paymentSelectionCard = css`
 
     ${from.tablet} {
       margin: 0 0 0 20px;
-    }
-
-    ${from.leftCol} {
-      margin-left: 40px;
-    }
-
-    ${from.wide} {
-      margin-left: 50px;
     }
   }
 `;
