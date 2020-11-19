@@ -24,6 +24,7 @@ type WrappedProps = {
 
 type ProductOptionType = {
   children: Node,
+  orderIsAGift: boolean,
 }
 
 type ProductOptionOfferType = {
@@ -74,8 +75,10 @@ export const ProductOptionPrice = ({ children }: { children: Node}) => (
 
 export const ProductOptionButton = withProductOptionsStyle(LinkButtonPayment);
 
-const ProductOption = ({ children }: ProductOptionType) => (
-  <div className="product-option">{ children }</div>
+const ProductOption = ({ children, orderIsAGift }: ProductOptionType) => (
+  <div className={orderIsAGift ? 'product-option' : 'product-option--non-gift'}>
+    { children }
+  </div>
 );
 
 // default props

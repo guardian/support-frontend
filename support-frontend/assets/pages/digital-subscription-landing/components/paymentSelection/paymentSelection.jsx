@@ -41,7 +41,7 @@ const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) =>
             <span css={productOptionLabel}>
               {paymentOption.label}
             </span>)}
-            <ProductOption>
+            <ProductOption orderIsAGift={orderIsAGift}>
               <ProductOptionContent>
                 <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
                 <ProductOptionOffer>

@@ -1,7 +1,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-
-.product-option {
+.product-option,
+.product-option--non-gift {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -32,6 +32,16 @@
           transform: translateX(20%);
         }
       }
+    }
+  }
+}
+
+.product-option--non-gift {
+  &:last-of-type {
+    margin-top: 20px;
+
+    @include mq(tablet) {
+      margin-top: 0;
     }
   }
 }
