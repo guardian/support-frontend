@@ -107,6 +107,19 @@ const buttonContainer = css`
   padding: ${space[12]}px 0;
 `;
 
+const isLargeUSDonation = (amount: string, contributionType: ContributionType): boolean => {
+  const amountInCents = parseFloat(amount).toFixed(2) * 100;
+  const twoHundredAndFiftyDollars = 25_000;
+  const twentyFiveDollars = 2_500;
+  const largeDonations = {
+    MONTHLY: twentyFiveDollars,
+    ANNUAL: twoHundredAndFiftyDollars,
+    ONE_OFF: twoHundredAndFiftyDollars,
+  }
+
+  return amountInCents >= largeDonations[contributionType]
+};
+
 type ContributionThankYouProps = {|
   csrf: Csrf,
   email: string,
@@ -253,6 +266,7 @@ const ContributionThankYou = ({
           amount={amount}
           currency={currency}
           thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
+          isLargeUSDonation={isLargeUSDonation(amount, contributionType)}
         />
       </div>
 
