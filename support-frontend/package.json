@@ -71,7 +71,7 @@
     "@emotion/cache": "^10.0.29",
     "@emotion/core": "^10.0.35",
     "@emotion/serialize": "^0.11.16",
-    "@guardian/consent-management-platform": "^6.1.0",
+    "@guardian/consent-management-platform": "^6.7.4",
     "@guardian/pasteup": "^1.0.0-alpha.7",
     "@guardian/src-accordion": "^2.0.0",
     "@guardian/src-button": "^2.1.0",
