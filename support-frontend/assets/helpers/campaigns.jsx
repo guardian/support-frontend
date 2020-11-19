@@ -36,6 +36,7 @@ export const campaign: CampaignSettings = ({
       goalReachedSecondary: 'but you can still support us',
     },
   },
+  createReferralCodes: false,
 });
 
 function campaignEnabledForUser(campaignCode: ?string): boolean {
