@@ -70,7 +70,6 @@ export const productOptionLabel = css`
   padding: 0 ${space[4]}px;
   background-color: ${brandAlt[400]};
   color: ${neutral[7]};
-  border-radius: 0 3px 3px 3px;
   z-index: 0;
 `;
 
