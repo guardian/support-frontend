@@ -24,11 +24,11 @@ type WrappedProps = {
 
 type ProductOptionType = {
   children: Node,
+  orderIsAGift?: boolean,
 }
 
 type ProductOptionOfferType = {
   children: Node,
-  hidden: boolean
 }
 
 const buttonStyles = css`
@@ -59,26 +59,31 @@ export const ProductOptionTitle = (props: Props) => (
   <div className="product-option__title">{ props.children }</div>
 );
 
-export const ProductOptionPrice = ({ children }: { children: Node}) => (
-  <p className="product-option__price">{ children }</p>
-);
-
 export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: boolean }) => (
   <span className={cx('product-option__copy', { 'product-option__copy--bold': bold })}>{ children }</span>
 );
 
-export const ProductOptionOffer = ({ children, hidden }: ProductOptionOfferType) => (
-  <div className={cx('product-option__offer-container', { 'product-option__sales-copy--hidden': hidden })}>
+export const ProductOptionOffer = ({ children }: ProductOptionOfferType) => (
+  <div className={children ? 'product-option__offer-container--with-children' : 'product-option__offer-container'}>
     <span className="product-option__offer">{ children }</span>
   </div>
+);
 
+export const ProductOptionPrice = ({ children }: { children: Node}) => (
+  <p className="product-option__price">{ children }</p>
 );
 
 export const ProductOptionButton = withProductOptionsStyle(LinkButtonPayment);
 
-const ProductOption = ({ children }: ProductOptionType) => (
-  <div className="product-option">{ children }</div>
+const ProductOption = ({ children, orderIsAGift }: ProductOptionType) => (
+  <div className={orderIsAGift ? 'product-option' : 'product-option--non-gift'}>
+    { children }
+  </div>
 );
+
+ProductOption.defaultProps = {
+  orderIsAGift: false,
+};
 
 // default props
 ProductOptionCopy.defaultProps = {

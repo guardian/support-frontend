@@ -52,24 +52,6 @@ export const getProductPrice = (
 export const getSavingPercentage = (annualCost: number, monthlyCostAnnualized: number) => `${Math.round((1 - (annualCost / monthlyCostAnnualized)) * 100)}%`;
 
 const BILLING_PERIOD = {
-  [Quarterly]: {
-    title: 'Quarterly',
-    salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
-      const display = price => getDisplayPrice(currencyId, price);
-      return isNumeric(promotionalPrice) ?
-        <span>
-          <span className="product-option__price">{display(promotionalPrice)}</span>
-          <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
-        </span>
-        :
-        <span>
-          <span className="product-option__price">{display(displayPrice)}</span>
-          <span className="product-option__price-detail">{display(displayPrice / 3)}/month</span>
-        </span>;
-    },
-    offer: null,
-    label: null,
-  },
   [Monthly]: {
     title: 'Monthly',
     salesCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
@@ -77,7 +59,7 @@ const BILLING_PERIOD = {
       return promotionalPrice ?
         <span>
           <span className="product-option__price">{display(promotionalPrice)}</span>
-          <span className="product-option__price-detail">then {display(displayPrice)}/month</span>
+          <span className="product-option__price-detail">then {display(displayPrice)} per month</span>
         </span>
         :
         <span>
@@ -95,16 +77,48 @@ const BILLING_PERIOD = {
       return isNumeric(promotionalPrice) ?
         <span>
           <span className="product-option__price">{display(promotionalPrice)}</span>
-          <span className="product-option__price-detail">then {display(displayPrice)}/year</span>
+          <span className="product-option__price-detail">then {display(displayPrice)} a year</span>
         </span>
         :
         <span>
           <span className="product-option__price">{display(displayPrice)}</span>
-          <span className="product-option__price-detail">{display(displayPrice / 12)}/month</span>
+          <span className="product-option__price-detail">{display(displayPrice / 12)} per month</span>
         </span>;
     },
     offer: 'Save an additional 21%',
     label: 'Best Deal',
+  },
+};
+
+const BILLING_PERIOD_GIFT = {
+  [Quarterly]: {
+    title: '3 months',
+    salesCopy: (currencyId: IsoCurrency, displayPrice: number) => {
+      const display = price => getDisplayPrice(currencyId, price);
+      return (
+        <span>
+          <span className="product-option__price">{display(displayPrice)}</span>
+          <span className="product-option__price-detail">One-off payment</span>
+        </span>);
+    },
+    offer: null,
+    label: null,
+  },
+  [Annual]: {
+    title: '12 months',
+    salesCopy: (
+      currencyId: IsoCurrency,
+      displayPrice: number,
+    ) => {
+      const display = price => getDisplayPrice(currencyId, price);
+      return (
+        <span>
+          <span className="product-option__price">{display(displayPrice)}</span>
+          <span className="product-option__price-detail">One-off payment</span>
+        </span>);
+    },
+    offer: null,
+    label: null,
   },
 };
 
@@ -115,9 +129,10 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
   const createPaymentOption = (billingPeriod: BillingPeriod): PaymentOption => {
-    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Monthly';
-
-    const productPrice = getProductPrice(productOptions, digitalBillingPeriod, currencyId);
+    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
+    const digitalBillingPeriodGift = billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Quarterly';
+    const billingPeriodForHref = orderIsAGift ? digitalBillingPeriodGift : digitalBillingPeriod;
+    const productPrice = getProductPrice(productOptions, billingPeriod, currencyId);
     const fullPrice = productPrice.price;
     const promotion = getAppliedPromo(productPrice.promotions);
     const promoCode = promotion ? promotion.promoCode : null;
@@ -127,14 +142,23 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
     promotion.landingPage.roundel ? promotion.landingPage.roundel :
       BILLING_PERIOD[digitalBillingPeriod].offer;
 
-    return {
-      title: BILLING_PERIOD[digitalBillingPeriod].title,
-      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, orderIsAGift),
-      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, digitalBillingPeriod),
-      salesCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
-      offer,
-      label: BILLING_PERIOD[digitalBillingPeriod].label,
-    };
+    return orderIsAGift ?
+      {
+        title: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].title,
+        href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
+        onClick: sendTrackingEventsOnClick('subscribe_now_cta_gift', 'DigitalPack', null, billingPeriod),
+        salesCopy: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].salesCopy(currencyId, fullPrice),
+        offer: null,
+        label: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].label,
+      } :
+      {
+        title: BILLING_PERIOD[digitalBillingPeriod].title,
+        href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
+        onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, billingPeriod),
+        salesCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
+        offer,
+        label: BILLING_PERIOD[digitalBillingPeriod].label,
+      };
 
   };
   const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map(createPaymentOption);
