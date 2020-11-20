@@ -207,22 +207,22 @@ Resources:
       Statistic: Sum
     DependsOn: SupportWorkersPROD
 
-    RevenueRecognitionSetupFailureAlarm:
-      Type: AWS::CloudWatch::Alarm
-      Condition: CreateProdResources
-      Properties:
-        AlarmActions:
-          - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-        AlarmName: !Sub Revenue distribution for Digital Subscription gift failed in ${Stage}
-        AlarmDescription: There was a failure whilst calling Zuora to distribute revenue during a Digital Subscription gift redemption. Check logs for error details.
-        MetricName: RevenueDistributionFailure
-        Namespace: support-frontend
-        ComparisonOperator: GreaterThanOrEqualToThreshold
-        Threshold: 1
-        Period: 60
-        EvaluationPeriods: 1
-        Statistic: Sum
-      DependsOn: SupportWorkersPROD
+  RevenueRecognitionSetupFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub Revenue distribution for Digital Subscription gift failed in ${Stage}
+      AlarmDescription: There was a failure whilst calling Zuora to distribute revenue during a Digital Subscription gift redemption. Check logs for error details.
+      MetricName: RevenueDistributionFailure
+      Namespace: support-frontend
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Sum
+    DependsOn: SupportWorkersPROD
 
   NoPaypalContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
