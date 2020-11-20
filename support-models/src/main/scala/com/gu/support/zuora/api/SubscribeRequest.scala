@@ -5,7 +5,7 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.JsonHelpers.JsonObjectExtensions
 import com.gu.support.workers.PaymentMethod
-import io.circe.Encoder
+import io.circe.{Encoder, Json}
 import io.circe.generic.semiauto.deriveEncoder
 import org.joda.time.LocalDate
 
@@ -46,5 +46,17 @@ case class UpdateRedemptionDataRequest(
   giftRedemptionDate: LocalDate,
   currentTerm: Int,
   currentTermPeriodType: PeriodType
+)
+
+object DistributeRevenueRequest {
+  implicit val encoder: Encoder[DistributeRevenueRequest] = deriveEncoder[DistributeRevenueRequest].mapJsonObject(
+    _.add("distributionType", Json.fromString("Daily distribution"))
+      .add("eventTypeSystemId", Json.fromString("DigitalSubscriptionGiftRedeemed"))
+  )
+}
+
+case class DistributeRevenueRequest(
+  recognitionStart: LocalDate,
+  recognitionEnd: LocalDate
 )
 

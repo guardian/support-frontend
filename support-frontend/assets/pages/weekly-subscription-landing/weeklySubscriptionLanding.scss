@@ -1,115 +1,25 @@
 // -----  gu-sass ----- //
 @import '~stylesheets/gu-sass/gu-sass';
 
-
-// ----- Shared Components ----- //
-@import '~components/footer/footer';
-
-
 :root {
   scroll-behavior: smooth;
 }
 
-.component-product-page-hero--weekly {
-
-  @include mq($from: tablet) {
-    .component-heading-block {
-      margin-top: 24em;
-    }
-    .component-grid-picture {
-      position: absolute;
-      top: 0;
-      min-width: 100%;
-      height: 100%;
-      @include mq($from: wide) {
-        left: gu-span(2) * -1;
-      }
-    }
-    .component-grid-picture__image {
-      height: 100%;
-      display: block;
-    }
-  }
-  @include mq($until: tablet) {
-    .component-grid-picture {
-      max-height: 20em;
-      overflow: hidden;
-      display: block;
-    }
-    .component-grid-picture__image {
-      max-width: gu-span(8);
-      margin: auto;
-      float: none;
-      display: block;
-    }
-  }
-
-  .component-left-margin-section__content {
-    border-left: none;
-  }
+/**** FOOTER HACK ****/
+.component-left-margin-section:before {
+  content: none;
 }
 
-.promotion-description {
-  p {
-    margin-top: 14px;
-  }
-  em {
-    font-style: italic;
-  }
-  ul li {
-    position: relative;
-    $bullet-size: 16px;
-    padding-left: $gu-h-spacing/2 + $bullet-size;
-    margin-top: $gu-v-spacing / 2;
-    margin-bottom: $gu-v-spacing / 2;
-    &:before {
-      content: '';
-      width: $bullet-size;
-      height: $bullet-size;
-      background: gu-colour(highlight-main);
-      border-radius: 100%;
-      position: absolute;
-      top: 3px;
-      left: 0;
-    }
-  }
-
-  ol li {
-    position: relative;
-    list-style: none;
-    counter-increment: step-counter;
-    padding-left: $gu-h-spacing;
-    margin-top: $gu-v-spacing / 2;
-    margin-bottom: $gu-v-spacing / 2;
-    &:before {
-      position: absolute;
-      top: 0;
-      left: 0;
-      font-weight: 700;
-      content: counter(step-counter) ".";
-    }
-  }
+.component-content.component-content--feature,
+.component-left-margin-section__content {
+  margin: 0 auto;
+  max-width: 1290px;
 }
 
-#gift-benefits-them, #gift-benefits-you {
-  .component-text {
-    @include gu-fontset-heading;
-    overflow-wrap: break-word;
-    margin-bottom: 10px;
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 28px;
-  }
+.component-footer {
+  background-color: gu-colour('brand-main');
 }
 
-.component-button--with-margin-bottom {
-  margin-bottom: 20px;
-}
-
-.gw-temp-break {
-
-  display: block;
-  @include mq($until: phablet) {
-    display: none;
-  }
+.component-content__content {
+  max-width: unset;
 }

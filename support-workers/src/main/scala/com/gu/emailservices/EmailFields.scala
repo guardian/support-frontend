@@ -4,7 +4,7 @@ import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.promotions.Promotion
 import com.gu.support.workers.{BillingPeriod, User}
-import io.circe.{Encoder, Printer}
+import io.circe.{Encoder, JsonObject, Printer}
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import org.joda.time.{DateTime, DateTimeZone, LocalDate, LocalTime}
@@ -19,6 +19,7 @@ case class EmailPayload(
   SfContactId: Option[String], // TODO delete this and make IdentityId non Option
   IdentityUserId: Option[String],
   ScheduledTime: Option[DateTime], // None means immediate
+  UserAttributes: Option[JsonObject],
 )
 
 object EmailPayload {
@@ -37,6 +38,7 @@ case class EmailFields(
   email: String,
   dataExtensionName: String,
   deliveryDate: Option[LocalDate] = None,
+  userAttributes: Option[JsonObject] = None,
 ) {
 
   def payload: String =
@@ -49,6 +51,7 @@ case class EmailFields(
       SfContactId = userId.left.toOption.map(_.id),
       IdentityUserId = userId.right.toOption.map(_.id),
       deliveryDate.map(_.toDateTime(new LocalTime(8, 0), DateTimeZone.UTC)),
+      userAttributes
     ).asJson.printWith(Printer.spaces2.copy(dropNullValues = true))
 
 }

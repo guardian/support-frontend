@@ -1,7 +1,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-
-.product-option {
+.product-option,
+.product-option--non-gift {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -11,9 +11,9 @@
   border: 1px solid gu-colour(neutral-86);
   transition: .4s all;
   cursor: pointer;
-  border-radius: 3px;
   text-decoration: none;
   color: gu-colour(neutral-7);
+  padding: 0 10px 16px;
 
   & * {
     box-sizing: border-box;
@@ -27,11 +27,21 @@
     .product-option__button {
       .component-button--primary {
         background-color: gu-colour(highlight-dark);
-        
+
         .svg-arrow-right-straight {
           transform: translateX(20%);
         }
       }
+    }
+  }
+}
+
+.product-option--non-gift {
+  &:last-of-type {
+    margin-top: 20px;
+
+    @include mq(tablet) {
+      margin-top: 0;
     }
   }
 }
@@ -51,24 +61,25 @@
 }
 
 .product-option__content {
-  // padding: 15px 24px;
-  padding: 6px 0 15px 0;
-  margin-left: 24px;
+  padding-top: 6px;
 }
 
 .product-option__price {
   font-family: $gu-headline;
   font-weight: bold;
   font-size: 32px;
+  padding-top: 4px;
+  min-height: 63px;
 
   @include mq(tablet) {
-    font-size: 40px;
+    font-size: 42px;
   }
-
 }
 
 .product-option__price-detail {
-  padding: 0 0 0 10px;
+  padding: 4px 0 10px;
+  border-top: 1px solid gu-colour(neutral-86);
+  min-height: 48px;
 }
 
 .product-option__copy {
@@ -91,9 +102,15 @@
   }
 }
 
-.product-option__offer-container {
+.product-option__offer-container,
+.product-option__offer-container--with-children {
   border-top: 1px solid gu-colour(neutral-86);
   padding: 4px 24px 0 0;
+  min-height: 65px;
+}
+
+.product-option__offer-container--with-children {
+  border-bottom: 1px solid gu-colour(neutral-86);
 }
 
 .product-option__offer {
@@ -106,16 +123,14 @@
 }
 
 .product-option__button {
-  border-top: 1px solid gu-colour(neutral-86);
-  margin-left: 24px;
-  padding: 6px 6px 15px 0;
+  padding: 6px 0 15px;
 
   .component-button {
     position: static;
     margin-top: 15px;
     width: 100%;
     max-width: 210px;
-    
+
     &:after {
       position: absolute;
       top: 0;
@@ -126,7 +141,6 @@
       z-index: 1;
     }
   }
-
 }
 
 .product-option__sales-copy--hidden {
@@ -147,10 +161,6 @@
     display: block;
     width: 100%;
   }
-}
-
-.product-option__price-detail {
-  padding: 12px 0 0 0;
 }
 
 .product-option__full-screen-break {

@@ -9,18 +9,12 @@ import { Button, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { type CountryGroupId, AUDCountries } from 'helpers/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
+import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import {
   wrapper,
   pageTitle,
   featureContainer,
   textSection,
-  giftTag,
-  toFromLines,
-  toYouTyping,
-  toYouCursor,
-  fromMeTyping,
-  fromMeCursor,
-  heroHeading,
   paragraph,
   heavyText,
   mobileLineBreak,
@@ -47,20 +41,7 @@ function CampaignHeaderGift(props: PropTypes) {
       <h1 css={pageTitle}>Give the digital subscription</h1>
       <div css={featureContainer}>
         <div css={textSection}>
-          <div css={giftTag}>
-            <div css={toFromLines}>
-              <div css={heroHeading}>To:</div>
-              <div css={toYouTyping}>
-                <div css={toYouCursor}>You</div>
-              </div>
-            </div>
-            <div css={toFromLines}>
-              <div css={heroHeading}>From:</div>
-              <div css={fromMeTyping}>
-                <div css={fromMeCursor}>Me</div>
-              </div>
-            </div>
-          </div>
+          <GiftHeadingAnimation />
           <GiftCopy />
           <ThemeProvider theme={buttonBrand}>
             <Button

@@ -143,7 +143,7 @@ function init<S, A>(
     if (!getGlobal('ssr') && !isPostDeployUser()) {
       import('@guardian/consent-management-platform').then(({ cmp }) => {
         cmp.init({
-          isInUsa: countryId === 'US',
+          country: countryId,
         });
       });
     }

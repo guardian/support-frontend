@@ -15,6 +15,9 @@ type ConsentState = {
     ccpa?: {
         doNotSell: boolean;
     };
+    aus?: {
+      personalisedAdvertising: boolean;
+    }
 }
 
 const onConsentChangeEvent =
@@ -52,6 +55,11 @@ const onConsentChangeEvent =
               consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => ({
                 ...accumulator,
                 [vendorKey]: state.ccpa ? !state.ccpa.doNotSell : false,
+              }), {});
+            } else if (state.aus) {
+              consentGranted = Object.keys(vendorIds).reduce((accumulator, vendorKey) => ({
+                ...accumulator,
+                [vendorKey]: state.aus ? state.aus.personalisedAdvertising : false,
               }), {});
             } else if (state.tcfv2) {
               /**
