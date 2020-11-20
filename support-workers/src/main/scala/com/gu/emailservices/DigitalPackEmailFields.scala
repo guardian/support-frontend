@@ -163,16 +163,6 @@ class DigitalPackEmailFields(
     EmailFields(attributePairs, Left(sfContactId), emailAddress, dataExtensionName, deliveryDate, userAttributes)
   }
 
-  private def wrap2[UserAttributes: Encoder.AsObject](
-    dataExtensionName: String,
-    fields: DigitalSubscriptionEmailAttributes,
-    sfContactId: SfContactId,
-    emailAddress: String,
-    userAttributes: Option[UserAttributes] = None,
-  ): EmailFields = {
-    wrap(dataExtensionName, fields, sfContactId, emailAddress, None, userAttributes.map(_.asJsonObject))
-  }
-
   private def giftRecipientNotification(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState) =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = giftPurchase.user.firstName,
@@ -217,17 +207,17 @@ class DigitalPackEmailFields(
   }
 
   private def giftRedemption(state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState) =
-    wrap2("digipack-gift-redemption", GifteeRedemptionAttributes(
+    wrap("digipack-gift-redemption", GifteeRedemptionAttributes(
       gift_recipient_first_name = state.user.firstName,
       subscription_details = state.termDates.months + " month digital subscription",
       gift_start_date = formatDate(state.termDates.giftStartDate),
       gift_recipient_email = state.user.primaryEmailAddress,
       gift_end_date = formatDate(state.termDates.giftEndDate),
-    ), state.sfContactId, state.user.primaryEmailAddress, Some(GifteeRedemptionUserAttributes(
+    ), state.sfContactId, state.user.primaryEmailAddress, None, Some(GifteeRedemptionUserAttributes(
       unmanaged_digital_subscription_gift_duration_months = state.termDates.months,
       unmanaged_digital_subscription_gift_start_date = ISODateTimeFormat.date().print(state.termDates.giftStartDate),
       unmanaged_digital_subscription_gift_end_date = ISODateTimeFormat.date().print(state.termDates.giftEndDate),
-    )))
+    ).asJsonObject))
 
   private def corpRedemption(state: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState) =
     wrap(
