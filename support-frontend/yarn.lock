@@ -2950,11 +2950,6 @@
   dependencies:
     "@guardian/src-foundations" "^2.2.0"
 
-"@guardian/src-icons@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-2.0.0.tgz#040512320b2c297a9fb2e98d159e4cc368a6cbcf"
-  integrity sha512-6F7DwPOeltgkR20yNQ+bJObHwxe5VKsZVOgYewaLoJB8LEdfVaF96DHr+WCeMUS5nV38oa7dMqdlnnPoih4CBg==
-
 "@guardian/src-icons@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-2.2.0.tgz#c4cc2f8a96dbba1ca0aa9f9ab379f6a4e0a3be16"
@@ -2964,6 +2959,11 @@
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-2.4.0.tgz#6560e1e0f486da8aac58b7f9da802bcf93178b89"
   integrity sha512-un/QwSgtBpcAti3sVOo9vtTWlnWlQ8yGsw75oF2zpzyu542ZMb0AEOZnrmZ7zc/df2M6cFoUIFkQYs/alX+HVA==
+
+"@guardian/src-icons@^2.5.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@guardian/src-icons/-/src-icons-2.7.0.tgz#37b920dc18079d0e801c77656c3004ce19d617d0"
+  integrity sha512-wOKAIlIjBOOQQsGYZDU/mzT8CCiyJ8B+0s7xHAtAckPb+j5rGSsNdPCeeo0QnxHMmoZYuaEl09q2/EBJCgyCjA==
 
 "@guardian/src-label@^2.3.0":
   version "2.3.0"
