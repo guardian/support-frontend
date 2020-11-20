@@ -34,7 +34,7 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val payPalService: PayPalService = new PayPalService(payPalConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val salesforceService = new SalesforceService(salesforceConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
-  lazy val zuoraGiftService = new ZuoraGiftService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
+  lazy val zuoraGiftService = new ZuoraGiftService(zuoraConfigProvider.get(isTestUser), Configuration.stage, configurableFutureRunner(60.seconds))
   lazy val acquisitionService = AcquisitionServiceBuilder.build(config.kinesisStreamName, isTestUser)
   lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))

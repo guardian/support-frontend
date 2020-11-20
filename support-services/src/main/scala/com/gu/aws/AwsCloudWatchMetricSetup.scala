@@ -18,8 +18,12 @@ object AwsCloudWatchMetricSetup {
         MetricDimensionName("Environment") -> MetricDimensionValue(environment.envValue)
       ))
 
-  def revenueDistributionFailureRequest: MetricRequest =
-    getMetricRequest(MetricName("RevenueDistributionFailure"), Map())
+  def revenueDistributionFailureRequest(stage: Stage): MetricRequest =
+    getMetricRequest(MetricName("RevenueDistributionFailure"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
+      )
+    )
 
   def paymentSuccessRequest(stage: Stage, paymentProvider: PaymentProvider, productType: ProductType): MetricRequest =
     getMetricRequest(

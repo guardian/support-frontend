@@ -217,6 +217,9 @@ Resources:
       AlarmDescription: There was a failure whilst calling Zuora to distribute revenue during a Digital Subscription gift redemption. Check logs for error details.
       MetricName: RevenueDistributionFailure
       Namespace: support-frontend
+      Dimensions:
+        - Name: Stage
+          Value: !Ref Stage
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
       Period: 60

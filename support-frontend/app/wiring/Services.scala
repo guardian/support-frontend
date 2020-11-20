@@ -65,6 +65,6 @@ trait Services {
     RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(appConfig.stage, isTestUser))
   }
 
-  lazy val zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider = new ZuoraGiftLookupServiceProvider(appConfig.zuoraConfigProvider)
+  lazy val zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider = new ZuoraGiftLookupServiceProvider(appConfig.zuoraConfigProvider, appConfig.stage)
 
 }
