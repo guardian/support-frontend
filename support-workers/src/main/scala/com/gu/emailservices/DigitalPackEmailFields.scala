@@ -109,6 +109,7 @@ object DigitalSubscriptionEmailAttributes {
 
   case class GifteeNotificationAttributes(
     gifter_first_name: String,
+    gifter_last_name: String,
     gift_personal_message: Option[String],
     gift_code: String,
     last_redemption_date: String,
@@ -166,6 +167,7 @@ class DigitalPackEmailFields(
   private def giftRecipientNotification(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState) =
     wrap("digipack-gift-notification", GifteeNotificationAttributes(
       gifter_first_name = giftPurchase.user.firstName,
+      gifter_last_name = giftPurchase.user.lastName,
       gift_personal_message = giftPurchase.giftRecipient.message,
       gift_code = giftPurchase.giftCode.value,
       last_redemption_date = formatDate(giftPurchase.lastRedemptionDate),
