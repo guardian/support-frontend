@@ -85,7 +85,7 @@
     "@guardian/src-text-input": "^2.1.0",
     "@guardian/src-user-feedback": "^2.0.0",
     "@guardian/src-utilities": "^0.14.0",
-    "@sentry/browser": "^5.4.0",
+    "@sentry/browser": "^5.27.2",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.8.0",
     "cssnano": "^4.1.10",
