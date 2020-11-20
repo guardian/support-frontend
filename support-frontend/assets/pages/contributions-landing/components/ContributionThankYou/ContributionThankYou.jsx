@@ -214,9 +214,11 @@ const ContributionThankYou = ({
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
+  const SURVEY_END_DATE = new Date(Date.parse('2021-01-31'));
+  const now = new Date();
   const surveyAction = {
     component: <ContributionThankYouSurvey />,
-    shouldShow: true,
+    shouldShow: isUsEndOfYearAppeal && (now < SURVEY_END_DATE),
   };
   const socialShareAction = {
     component: <ContributionThankYouSocialShare
