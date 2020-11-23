@@ -6,12 +6,6 @@ import sbt.Keys.{libraryDependencies, resolvers}
 version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 
-lazy val setupGitHook = taskKey[Unit]("Set up a pre-push git hook to run the integration tests")
-
-setupGitHook := {
-  "ln -s ../../scripts/pre-push .git/hooks/pre-push" !
-}
-
 libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "2.0.1",
   "org.typelevel" %% "cats-core" % catsVersion,
@@ -39,8 +33,7 @@ libraryDependencies ++= Seq(
   "org.scala-stm" %% "scala-stm" % "0.8",
   "io.sentry" % "sentry-logback" % "1.7.4",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
-  "com.gocardless" % "gocardless-pro" % "2.8.0",
-  "com.gu" %% "acquisition-event-client-play26" % "4.0.31"
+  "com.gocardless" % "gocardless-pro" % "2.8.0"
 )
 
 riffRaffPackageType := assembly.value

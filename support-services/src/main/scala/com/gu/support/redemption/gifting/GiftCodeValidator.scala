@@ -19,7 +19,7 @@ object GiftCodeValidator {
       case existingSubFields :: Nil if existingSubFields.gifteeIdentityId.isEmpty =>
         ValidGiftCode(existingSubFields.id)
       case existingSubFields :: Nil if requestId.contains(existingSubFields.createdRequestId) =>
-        CodeRedeemedInThisRequest
+        CodeRedeemedInThisRequest(existingSubFields.id)
       case _ :: Nil =>
         CodeAlreadyUsed
       case _ =>

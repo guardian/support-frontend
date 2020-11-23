@@ -202,7 +202,8 @@ object Salesforce {
   }
 
   object Authentication {
-    implicit val codec: Codec[Authentication] = deriveCodec
+    import MillisDate.decodeDateTime
+    implicit val codec: Decoder[Authentication] = deriveDecoder
   }
 
   case class Authentication(access_token: String, instance_url: String, issued_at: DateTime) {

@@ -14,26 +14,37 @@ import {
   type PaymentOption,
 } from './helpers/paymentSelection';
 // styles
-import './paymentSelection.scss';
+import {
+  paymentSelection,
+  paymentSelectionCard,
+  productOptionLabel,
+} from './paymentSelectionStyles';
 
 type PropTypes = {
   paymentOptions: Array<PaymentOption>,
+  orderIsAGift: boolean,
 }
 
-const PaymentSelection = ({ paymentOptions }: PropTypes) => (
-  <div className="payment-selection">
-    {
-        (paymentOptions.map(paymentOption => (
-          <div className="payment-selection__card">
-            <span className="product-option__label">
+const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) =>
+// The following line makes sure the Annual payment selection card is on the right hand side
+
+  (
+    <div css={paymentSelection}>
+      {([...paymentOptions].sort((opt1) => { // Spread operator because .sort is mutating
+          if (opt1.title === 'Annual') {
+            return 1;
+          }
+          return -1;
+        }).map(paymentOption => (
+          <div css={paymentSelectionCard}>
+            {!orderIsAGift && (
+            <span css={productOptionLabel}>
               {paymentOption.label}
-            </span>
-            <ProductOption>
+            </span>)}
+            <ProductOption orderIsAGift={orderIsAGift}>
               <ProductOptionContent>
                 <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
-                <ProductOptionOffer
-                  hidden={!paymentOption.offer}
-                >
+                <ProductOptionOffer>
                   {paymentOption.offer}
                 </ProductOptionOffer>
               </ProductOptionContent>
@@ -43,14 +54,11 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => (
                 aria-label="Subscribe-button"
                 salesCopy={paymentOption.salesCopy}
               >
-                {'Start free trial now'}
+                {orderIsAGift ? 'Give this gift' : 'Start free trial now'}
               </ProductOptionButton>
             </ProductOption>
           </div>
         )))
       }
-  </div>
-);
-
-
+    </div>);
 export default connect(mapStateToProps)(PaymentSelection);

@@ -12,6 +12,7 @@ import io.circe.syntax._
 import io.circe.{Decoder, Encoder, HCursor, Json}
 import org.joda.time.LocalDate
 
+
 sealed trait ZuoraResponse {
   def success: Boolean
 }
@@ -201,8 +202,16 @@ object PreviewSubscribeResponse {
 
 case class PreviewSubscribeResponse(invoiceData: List[InvoiceDataItem], success: Boolean) extends ZuoraResponse
 
-object UpdateRedemptionDataResponse {
-  implicit val codec: Codec[UpdateRedemptionDataResponse] = deriveCodec
+object ZuoraSuccessOrFailureResponse {
+  implicit val codec: Codec[ZuoraSuccessOrFailureResponse] = deriveCodec
 }
 
-case class UpdateRedemptionDataResponse(success: Boolean)
+case class ZuoraSuccessOrFailureResponse(success: Boolean, reasons: Option[List[ZuoraErrorReason]]){
+  def errorMessage = reasons.flatMap(_.headOption).map(_.message)
+}
+
+object ZuoraErrorReason {
+  implicit val codec: Codec[ZuoraErrorReason] = deriveCodec
+}
+
+case class ZuoraErrorReason(code: String, message: String)

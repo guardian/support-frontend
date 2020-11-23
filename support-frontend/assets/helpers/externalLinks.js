@@ -13,8 +13,8 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getBaseDomain } from 'helpers/url';
-import {
-  type DigitalBillingPeriod,
+import type {
+  DigitalBillingPeriod, DigitalGiftBillingPeriod,
 } from 'helpers/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { getIntcmp, getPromoCode } from './flashSale';
@@ -212,15 +212,16 @@ function getSubsLinks(
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
   countryGroupId: CountryGroupId,
-  billingPeriod: DigitalBillingPeriod,
+  billingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod,
   promoCode: Option<string>,
+  orderIsAGift: boolean,
 ): string {
   const params = new URLSearchParams(window.location.search);
   if (promoCode) {
     params.set(promoQueryParam, promoCode);
   }
   params.set('period', billingPeriod);
-  return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
+  return `${getOrigin()}/subscribe/digital/checkout${orderIsAGift ? '/gift' : ''}?${params.toString()}`;
 }
 
 

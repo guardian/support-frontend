@@ -5,10 +5,9 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-
-import { HeroImage } from 'pages/weekly-subscription-landing/components/hero/hero';
 import { sendTrackingEventsOnClick, GuardianWeekly } from 'helpers/subscriptions';
 
+import GridPicture from 'components/gridPicture/gridPicture';
 import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/content';
@@ -82,6 +81,31 @@ const StartDateCopy = ({ startDate, orderIsGift }: {startDate: Option<string>, o
   }
   return null;
 };
+
+const HeroImage = ({ orderIsGift }: {orderIsGift: boolean}) => (
+  <GridPicture
+    sources={[
+        {
+          gridId: orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero',
+          srcSizes: [500, 1000],
+          imgType: 'png',
+          sizes: '100vw',
+          media: '(max-width: 739px)',
+        },
+        {
+          gridId: orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero',
+          srcSizes: [1000, 2000],
+          imgType: 'png',
+          sizes: '(min-width: 1000px) 2000px, 1000px',
+          media: '(min-width: 740px)',
+        },
+      ]}
+    fallback={orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero'}
+    fallbackSize={1000}
+    altText="A collection of Guardian Weekly magazines"
+    fallbackImgType="png"
+  />
+);
 
 function ThankYouContent({
   billingPeriod, startDate, isPending, orderIsGift, product,

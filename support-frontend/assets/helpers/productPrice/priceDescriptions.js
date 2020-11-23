@@ -36,10 +36,8 @@ const standardRate = (
   billingPeriod: BillingPeriod,
   fixedTerm: boolean,
 ) => {
-  if (fixedTerm) {
-    return `${displayPrice(glyph, price)} for ${billingPeriodNoun(billingPeriod, fixedTerm)}`;
-  }
-  return `${displayPrice(glyph, price)}/${billingPeriodNoun(billingPeriod, fixedTerm)}`;
+  const termPrepositon = fixedTerm ? 'for' : 'per';
+  return `${displayPrice(glyph, price)} ${termPrepositon} ${billingPeriodNoun(billingPeriod, fixedTerm)}`;
 };
 
 const getStandardRateCopy = (
@@ -146,8 +144,36 @@ function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: 
   return '';
 }
 
+function getSimplifiedPriceDescription(
+  productPrice: ProductPrice,
+  billingPeriod: BillingPeriod,
+) {
+  const glyph = extendedGlyph(productPrice.currency);
+  const promotion = getAppliedPromo(productPrice.promotions);
+  const termPrepositon = productPrice.fixedTerm ? 'for' : 'per';
+
+  if (promotion && promotion.introductoryPrice) {
+    const introPrice = promotion.introductoryPrice;
+    const standardCopy = standardRate(glyph, productPrice.price, Quarterly, productPrice.fixedTerm);
+    const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
+
+    return `for ${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
+  }
+  if (promotion && promotion.discountedPrice) {
+    const standardCopy = getStandardRateCopy(
+      glyph,
+      productPrice.price,
+      billingPeriod,
+      productPrice.fixedTerm,
+    );
+    return `${termPrepositon} ${billingPeriodNoun(billingPeriod, productPrice.fixedTerm)}${standardCopy}`;
+  }
+  return `${termPrepositon} ${billingPeriodNoun(billingPeriod, productPrice.fixedTerm)}`;
+}
+
 export {
   displayPrice,
   getPriceDescription,
   getAppliedPromoDescription,
+  getSimplifiedPriceDescription,
 };

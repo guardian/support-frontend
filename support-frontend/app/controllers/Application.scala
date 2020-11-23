@@ -19,7 +19,6 @@ import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
-import utils.BrowserCheck
 import utils.FastlyGEOIP._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -116,8 +115,6 @@ class Application(
   }
 
   def unsupportedBrowser: Action[AnyContent] = NoCacheAction() { implicit request =>
-    BrowserCheck.logUserAgent(request)
-    SafeLogger.info("Redirecting to unsupported-browser page")
     Ok(views.html.unsupportedBrowserPage())
   }
 
@@ -142,7 +139,11 @@ class Application(
   }
 
   private def shareImageUrl(settings: AllSettings): String = {
-    "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
+    // Standard image
+    // "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
+
+    // US EOY appeal image
+    "https://i.guim.co.uk/img/media/c8ac7d83a65fc4f4c1071e48cbe8416b0f5504de/0_0_1000_525/1000.png?quality=85&s=a81db4ac4e52561fb56bbc588a1e196c"
   }
 
   private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],

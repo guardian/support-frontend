@@ -1,42 +1,37 @@
 package com.gu.emailservices
 
-import com.gu.support.catalog.{FulfilmentOptions, HomeDelivery, Paper, ProductOptions}
+import com.gu.salesforce.Salesforce.SfContactId
+import com.gu.support.catalog.{HomeDelivery, Paper}
+import com.gu.support.config.TouchPointEnvironment
+import com.gu.support.workers.ProductTypeRatePlans.paperRatePlan
 import com.gu.support.workers._
-import com.gu.support.workers.states.PaymentMethodWithSchedule
-import org.joda.time.LocalDate
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailPaperState
 
-object PaperEmailFields {
+import scala.concurrent.{ExecutionContext, Future}
 
-  def build(
-    subscriptionEmailFields: SubscriptionEmailFields,
-    fulfilmentOptions: FulfilmentOptions,
-    productOptions: ProductOptions,
-    firstDeliveryDate: Option[LocalDate],
-    paymentMethodWithSchedule: PaymentMethodWithSchedule,
-    giftRecipient: Option[GiftRecipient] = None
-  ): EmailFields = {
-    import subscriptionEmailFields._
-    import allProductsEmailFields._
+class PaperEmailFields(
+  paperFieldsGenerator: PaperFieldsGenerator,
+  touchPointEnvironment: TouchPointEnvironment,
+) {
 
-    val additionalFields = List("package" -> productOptions.toString)
+  def build(paper: SendThankYouEmailPaperState)(implicit ec: ExecutionContext): Future[EmailFields] = {
 
-    val dataExtension: String = fulfilmentOptions match {
+    val additionalFields = List("package" -> paper.product.productOptions.toString)
+
+    val dataExtension: String = paper.product.fulfilmentOptions match {
       case HomeDelivery => "paper-delivery"
       case _ => if (Paper.useDigitalVoucher) "paper-subscription-card" else "paper-voucher"
     }
 
-    val fields: List[(String, String)] = PaperFieldsGenerator.fieldsFor(
-      subscriptionNumber,
-      billingPeriod,
-      user,
-      firstDeliveryDate,
-      currency,
-      paymentMethodWithSchedule,
-      directDebitMandateId,
-      promotion,
-      giftRecipient
-    ) ++ additionalFields
-
-    EmailFields(fields, Left(sfContactId), user.primaryEmailAddress, dataExtension)
+    paperFieldsGenerator.fieldsFor(
+      paper.paymentMethod, paper.paymentSchedule, paper.promoCode, paper.accountNumber, paper.subscriptionNumber,
+      paper.product,
+      paper.user,
+      paperRatePlan(paper.product, touchPointEnvironment).map(_.id),
+      fixedTerm = false,
+      paper.firstDeliveryDate,
+    ).map(fields =>
+      EmailFields(fields ++ additionalFields, Left(SfContactId(paper.salesForceContact.Id)), paper.user.primaryEmailAddress, dataExtension)
+    )
   }
 }

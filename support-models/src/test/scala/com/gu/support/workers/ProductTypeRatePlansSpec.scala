@@ -19,7 +19,6 @@ class ProductTypeRatePlansSpec extends AsyncFlatSpec with Matchers{
     val paper = Paper(USD, Monthly, HomeDelivery, Everyday)
     paperRatePlan(paper, SANDBOX).value.id shouldBe "2c92c0f955c3cf0f0155c5d9e2493c43"
 
-    productTypeRatePlan(weekly, SANDBOX, Gift).value.description shouldBe "Guardian Weekly one year, domestic delivery"
   }
 
 }

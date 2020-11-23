@@ -8,13 +8,14 @@ import { headline, titlepiece, body } from '@guardian/src-foundations/typography
 import { brand, neutral, brandAlt } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const wrapper = css`
   position: relative;
-  background: #ededed;
+  background: ${neutral[93]};
   display: flex;
   flex-direction: column;
-  padding-top: ${space[4]}px;
+  padding-top: ${space[3]}px;
 
   :before {
     position: absolute;
@@ -22,19 +23,15 @@ export const wrapper = css`
     left: 0;
     width: 100%;
     height: 170px;
-    background: ${brand[300]};
+    background: ${digitalSubscriptionsBlue};
     content: '';
   }
 
   ${from.mobileLandscape} {
+    padding-top: ${space[4]}px;
     :before {
+      margin-top: -1px;
       height: 200px;
-    }
-  }
-
-  ${from.desktop} {
-    :before {
-      height:200px;
     }
   }
 `;
@@ -44,11 +41,11 @@ export const pageTitle = css`
   color: ${neutral[97]};
   z-index: 10;
   background-color: transparent;
-  padding: 0 ${space[4]}px ${space[9]}px;
+  padding: 0 ${space[3]}px ${space[3]}px;
   width: 100%;
 
   ${from.mobileLandscape} {
-    padding-bottom: ${space[12]}px;
+    padding-bottom: ${space[4]}px;
   }
 
   ${from.phablet} {
@@ -64,7 +61,7 @@ export const pageTitle = css`
     ${titlepiece.large()}
     max-width: calc(100% - 110px);
     max-width: 1100px;
-    padding: 0 ${space[4]}px ${space[12]}px;
+    padding: ${space[3]}px ${space[4]}px ${space[9]}px;
   }
 
   ${from.leftCol} {
@@ -78,10 +75,9 @@ export const featureContainer = css`
   display: flex;
   flex-direction: column;
   align-self: flex-start;
-  background-color: #00568D;
+  background-color: ${brand[300]};
   color: ${neutral[97]};
-  padding: ${space[4]}px;
-  padding-bottom: 0;
+  padding: ${space[2]}px ${space[4]}px 0;
   width: 100%;
 
   ${from.phablet} {
@@ -112,15 +108,11 @@ export const textSection = css`
   width: 100%;
 
   ${from.phablet} {
-    padding: ${space[4]}px 0;
+    padding: ${space[1]}px 0 ${space[4]}px;
     width: 60%;
   }
 
-  ${from.tablet} {
-    width: 55%;
-  }
-
-  ${from.leftCol} {
+  ${from.desktop} {
     width: 55%;
   }
 `;
@@ -128,7 +120,7 @@ export const textSection = css`
 export const heroHeading = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
   max-width: 100%;
-  margin-bottom: ${space[5]}px;
+  margin-bottom: ${space[2]}px;
 
   ${from.mobileMedium} {
     ${headline.small({ fontWeight: 'bold' })};
@@ -138,14 +130,19 @@ export const heroHeading = css`
     ${headline.medium({ fontWeight: 'bold' })};
   }
 
+  ${from.tablet} {
+    white-space: nowrap;
+    overflow: visible;
+  }
+
   ${from.desktop} {
     ${headline.large({ fontWeight: 'bold' })};
-    margin-bottom: 20px;
+    margin-bottom: ${space[2]}px;
   }
 
   ${from.leftCol} {
     margin-top: 0;
-    margin-bottom: 30px;
+    margin-bottom: ${space[2]}px;
   }
 `;
 
@@ -156,7 +153,7 @@ export const yellowHeading = css`
 export const paragraph = css`
   ${body.small()};
   max-width: 100%;
-  margin-bottom: ${space[5]}px;
+  margin-bottom: ${space[9]}px;
 
   ${from.mobileMedium} {
     ${body.medium()};
@@ -167,19 +164,12 @@ export const paragraph = css`
     max-width: 85%;
   }
 
-  ${from.tablet} {
-    max-width: 90%;
-  }
-
   ${from.desktop} {
     ${headline.xxsmall()};
     line-height: 135%;
-    max-width: 95%;
+    max-width: 90%;
   }
 
-  ${from.leftCol} {
-    max-width: 95%;
-  }
 `;
 
 export const heavyText = css`
@@ -218,16 +208,16 @@ export const packShot = css`
 
   ${from.desktop} {
     right: 0;
-    max-width: 45%;
+    max-width: 40%;
     margin-bottom: 0;
   }
 
   ${from.leftCol} {
-    max-width: 490px;
+    max-width: 430px;
   }
 
   ${from.wide} {
-    right: 20px;
+    right: 40px;
   }
 `;
 
@@ -251,7 +241,7 @@ export const circle = css`
   }
 
   ${from.phablet} {
-    top: 20px;
+    top: -65px;
   }
 
   ${from.desktop} {
@@ -267,4 +257,15 @@ export const circleTextTop = css`
 export const circleTextBottom = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
   color: ${brand[300]};
+`;
+
+export const spaceAfter = css`
+  ${from.desktop} {
+    margin-bottom: 70px;
+  }
+
+  ${from.leftCol} {
+    margin-bottom: 80px;
+  }
+
 `;

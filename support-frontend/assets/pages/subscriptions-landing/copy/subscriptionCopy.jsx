@@ -129,7 +129,7 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
   offer: priceCopy.discountCopy,
   buttons: [{
     ctaButtonText: 'Find out more',
-    link: digitalSubscriptionLanding(countryGroupId),
+    link: digitalSubscriptionLanding(countryGroupId, false),
     analyticsTracking: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription'),
   }],
 });

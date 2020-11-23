@@ -5,8 +5,9 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.JsonHelpers.JsonObjectExtensions
 import com.gu.support.workers.PaymentMethod
-import io.circe.Encoder
+import io.circe.{Encoder, Json}
 import io.circe.generic.semiauto.deriveEncoder
+import org.joda.time.LocalDate
 
 object SubscribeItem {
   implicit val codec: Codec[SubscribeItem] = capitalizingCodec
@@ -35,8 +36,27 @@ object UpdateRedemptionDataRequest {
   implicit val encoder: Encoder[UpdateRedemptionDataRequest] = deriveEncoder[UpdateRedemptionDataRequest].mapJsonObject(
     _.renameField("gifteeIdentityId", "GifteeIdentityId__c")
       .renameField("requestId", "CreatedRequestId__c")
+      .renameField("giftRedemptionDate", "GiftRedemptionDate__c")
   )
 }
 
-case class UpdateRedemptionDataRequest(requestId: String, gifteeIdentityId: String, currentTerm: Int, currentTermPeriodType: PeriodType)
+case class UpdateRedemptionDataRequest(
+  requestId: String,
+  gifteeIdentityId: String,
+  giftRedemptionDate: LocalDate,
+  currentTerm: Int,
+  currentTermPeriodType: PeriodType
+)
+
+object DistributeRevenueRequest {
+  implicit val encoder: Encoder[DistributeRevenueRequest] = deriveEncoder[DistributeRevenueRequest].mapJsonObject(
+    _.add("distributionType", Json.fromString("Daily distribution"))
+      .add("eventTypeSystemId", Json.fromString("DigitalSubscriptionGiftRedeemed"))
+  )
+}
+
+case class DistributeRevenueRequest(
+  recognitionStart: LocalDate,
+  recognitionEnd: LocalDate
+)
 

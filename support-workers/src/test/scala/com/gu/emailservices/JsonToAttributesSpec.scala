@@ -80,4 +80,15 @@ class JsonToAttributesSpec extends AnyFlatSpec with Matchers {
     actual.map(_.toMap) should matchPattern { case Left(_) => }
   }
 
+  it should "handle a null ok" in {
+    val data = JsonObject(
+      ("shouldExist1" -> Json.fromString("value1")),
+      "test" -> Json.Null
+    )
+    val actual = JsonToAttributes.asFlattenedPairs(data)
+    actual.map(_.toMap) should be(Right(Map(
+      "shouldExist1" -> "value1"
+    )))
+  }
+
 }

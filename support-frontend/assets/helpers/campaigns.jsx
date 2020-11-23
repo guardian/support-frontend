@@ -22,11 +22,27 @@ export type CampaignSettings = {
   createReferralCodes: boolean,
 };
 
-const currentCampaignPath: string | null = 'enviro_moment_2020';
+const currentCampaignPath: string | null = 'us/contribute';
+
+const usEndOfYearCampaignCopy = (): CampaignCopy => ({
+  headerCopy: 'Help us reach our $1.25m goal!',
+  contributeCopy: 'As America begins a new chapter, the need for robust, fact-based journalism that highlights injustice and offers solutions is as great as ever. Support the Guardian’s open, independent journalism with a year-end gift.',
+});
 
 export const campaign: CampaignSettings = ({
-  campaignCode: 'enviro_moment_2020',
-  createReferralCodes: true,
+  campaignCode: 'us_eoyappeal_2020',
+  copy: usEndOfYearCampaignCopy,
+  tickerSettings: {
+    tickerCountType: 'money',
+    tickerEndType: 'unlimited',
+    currencySymbol: '$',
+    copy: {
+      countLabel: 'contributions',
+      goalReachedPrimary: 'We\'ve hit our goal!',
+      goalReachedSecondary: 'but you can still support us',
+    },
+  },
+  createReferralCodes: false,
 });
 
 function campaignEnabledForUser(campaignCode: ?string): boolean {

@@ -23,3 +23,18 @@ abstract class ServicesHandler[IN <: StepFunctionUserState, OUT](servicesProvide
   protected def servicesHandler(input: IN, requestInfo: RequestInfo, context: Context, services: Services): FutureHandlerResult
 
 }
+
+abstract class SubsetServicesHandler[IN <: StepFunctionUserState, OUT, SUBSET](servicesProvider: ServiceProvider, makeSubset: IN => SUBSET)(
+  implicit
+  decoder: Decoder[IN],
+  encoder: Encoder[OUT],
+  ec: ExecutionContext
+) extends ServicesHandler[IN, OUT](servicesProvider) {
+
+  override protected def servicesHandler(input: IN, requestInfo: RequestInfo, context: Context, services: Services) = {
+    subsetHandler(makeSubset(input), requestInfo, context, services)
+  }
+
+  protected def subsetHandler(input: SUBSET, requestInfo: RequestInfo, context: Context, services: Services): FutureHandlerResult
+
+}
