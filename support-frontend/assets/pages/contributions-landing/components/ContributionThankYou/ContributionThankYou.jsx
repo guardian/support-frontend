@@ -107,6 +107,27 @@ const buttonContainer = css`
   padding: ${space[12]}px 0;
 `;
 
+const isLargeUSDonation = (
+  amount: string,
+  contributionType: ContributionType,
+  isUsEndOfYearAppeal: boolean,
+): boolean => {
+  if (!isUsEndOfYearAppeal) {
+    return false;
+  }
+
+  const amountInCents = parseFloat(amount) * 100;
+  const twoHundredAndFiftyDollars = 25_000;
+  const twentyFiveDollars = 2_500;
+  const largeDonations = {
+    MONTHLY: twentyFiveDollars,
+    ANNUAL: twoHundredAndFiftyDollars,
+    ONE_OFF: twoHundredAndFiftyDollars,
+  };
+
+  return amountInCents >= largeDonations[contributionType];
+};
+
 type ContributionThankYouProps = {|
   csrf: Csrf,
   email: string,
@@ -193,17 +214,18 @@ const ContributionThankYou = ({
     />,
     shouldShow: contributionType === 'ONE_OFF',
   };
-  const SURVEY_END_DATE = new Date(Date.parse('2020-11-05'));
+  const SURVEY_END_DATE = new Date(Date.parse('2021-01-31'));
   const now = new Date();
   const surveyAction = {
     component: <ContributionThankYouSurvey />,
-    shouldShow: now < SURVEY_END_DATE,
+    shouldShow: isUsEndOfYearAppeal && (now < SURVEY_END_DATE),
   };
   const socialShareAction = {
     component: <ContributionThankYouSocialShare
       email={email}
       createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
       campaignCode={campaignSettings && campaignSettings.campaignCode}
+      isUsEndOfYearAppeal={isUsEndOfYearAppeal}
     />,
     shouldShow: true,
   };
@@ -253,6 +275,7 @@ const ContributionThankYou = ({
           amount={amount}
           currency={currency}
           thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
+          isLargeUSDonation={isLargeUSDonation(amount, contributionType, isUsEndOfYearAppeal)}
         />
       </div>
 
