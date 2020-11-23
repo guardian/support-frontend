@@ -161,7 +161,7 @@ function DigitalCheckoutFormGift(props: PropTypes) {
         <OrderSummary
           image={
             <GridImage
-              gridId="subscriptionDailyPackshot"
+              gridId={props.country === 'AU' ? 'editionsPackshotAusShort' : 'editionsPackshotShort'}
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 50vw, 500"
               imgType="png"

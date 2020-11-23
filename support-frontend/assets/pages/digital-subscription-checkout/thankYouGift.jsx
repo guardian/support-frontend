@@ -23,6 +23,7 @@ import gift from 'pages/digital-subscription-checkout/components/thankYou/icons/
 import person from 'pages/digital-subscription-checkout/components/thankYou/icons/person.png';
 import phone from 'pages/digital-subscription-checkout/components/thankYou/icons/phone.png';
 import { formatUserDate } from 'helpers/dateConversions';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Styles ----- //
@@ -167,6 +168,7 @@ export type PropTypes = {
   giftRecipient: string,
   marketingConsent: React.Node,
   pending?: boolean,
+  countryGroupId: CountryGroupId,
 };
 
 // ----- Map state to props ----- //
@@ -196,7 +198,7 @@ function ThankYouGift(props: PropTypes) {
           <OrderSummaryThankYou
             image={
               <GridImage
-                gridId="subscriptionDailyPackshot"
+                gridId={props.countryGroupId === 'AUDCountries' ? 'editionsPackshotAusShort' : 'editionsPackshotShort'}
                 srcSizes={[1000, 500]}
                 sizes="(max-width: 740px) 50vw, 500"
                 imgType="png"
