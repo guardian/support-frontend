@@ -118,7 +118,7 @@ const BILLING_PERIOD_GIFT = {
         </span>);
     },
     offer: null,
-    label: null,
+    label: 'Best Deal',
   },
 };
 
