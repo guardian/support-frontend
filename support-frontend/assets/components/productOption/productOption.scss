@@ -45,7 +45,7 @@
 
 .product-option__title {
   @include gu-fontset-heading;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   position: relative;
 
   @include mq(tablet) {
@@ -65,8 +65,7 @@
   font-family: $gu-headline;
   font-weight: bold;
   font-size: 32px;
-  padding-top: 4px;
-  min-height: 63px;
+  padding: 4px 0 12px;
 
   @include mq(tablet) {
     font-size: 42px;
@@ -75,7 +74,6 @@
 
 .product-option__price-detail {
   padding: 4px 0 10px;
-  border-top: 1px solid gu-colour(neutral-86);
   min-height: 48px;
 }
 
@@ -116,7 +114,6 @@
   margin-top: 20px;
   color: gu-colour(neutral-7);
   line-height: 1.4;
-  font-weight: bold;
 }
 
 .product-option__button {
