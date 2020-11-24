@@ -864,23 +864,17 @@
     }
   }
 
-  @include mq($from: desktop) {
-    img {
-      width: 100%;
-    }
-  }
-
   @include mq($from: leftCol) {
     left: 50px;
     img {
-      width: 85%;
+      width: 100%;
     }
   }
 
   @include mq($from: wide) {
     left: 80px;
     img {
-      width: 75%;
+      width: 90%;
     }
   }
 
