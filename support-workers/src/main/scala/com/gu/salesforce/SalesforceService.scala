@@ -17,7 +17,7 @@ import okhttp3.Request
 
 import scala.concurrent.duration._
 import scala.concurrent.stm._
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
   extends WebServiceHelper[SalesforceErrorResponse] {
@@ -51,15 +51,24 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
       recipientContactRecord <- maybeAddGiftRecipient(
         contactRecord.ContactRecord,
         giftRecipient,
-        user.deliveryAddress.getOrElse(user.billingAddress)
+        user
       )
     } yield SalesforceContactRecordsResponse(contactRecord, recipientContactRecord)
   }
 
-  private def maybeAddGiftRecipient(contactRecord: SalesforceContactRecord, maybeGiftRecipient: Option[GiftRecipient], deliveryAddress: Address) =
+  private def deliveryAddressForGiftRecipientType(giftRecipient: GiftRecipient, user: User) =
+    giftRecipient match {
+      case _: GiftRecipient.WeeklyGiftRecipient => Some(user.deliveryAddress.getOrElse(user.billingAddress))
+      case _: GiftRecipient.DigitalSubscriptionGiftRecipient  => None
+    }
+
+  private def maybeAddGiftRecipient(contactRecord: SalesforceContactRecord, maybeGiftRecipient: Option[GiftRecipient], user: User) =
     maybeGiftRecipient
       .filter(recipient => recipient.firstName != "" && recipient.lastName != "")
-      .map(giftRecipient => upsert(getGiftRecipient(contactRecord.AccountId, deliveryAddress, giftRecipient)).map(Some(_)))
+      .map{ giftRecipient =>
+          val deliveryAddress = deliveryAddressForGiftRecipientType(giftRecipient, user)
+          upsert(getGiftRecipient(contactRecord.AccountId, deliveryAddress, giftRecipient)).map(Some(_))
+      }
       .getOrElse(Future.successful(None))
 
 
@@ -111,22 +120,22 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
       )
     )
 
-  private def getGiftRecipient(buyerAccountId: String, deliveryAddress: Address, giftRecipient: GiftRecipient) = {
+  private def getGiftRecipient(buyerAccountId: String, deliveryAddress: Option[Address], giftRecipient: GiftRecipient) = {
     val (email, title) = giftRecipient match {
       case w: GiftRecipient.WeeklyGiftRecipient => (w.email, w.title)
       case ds: GiftRecipient.DigitalSubscriptionGiftRecipient => (Some(ds.email), None)
     }
     DeliveryContact(
-      buyerAccountId,
-      email,
-      title,
-      giftRecipient.firstName,
-      giftRecipient.lastName,
-      getAddressLine(deliveryAddress),
-      deliveryAddress.city,
-      deliveryAddress.state,
-      deliveryAddress.postCode,
-      Some(deliveryAddress.country.name)
+      AccountId = buyerAccountId,
+      Email = email,
+      Salutation = title,
+      FirstName = giftRecipient.firstName,
+      LastName = giftRecipient.lastName,
+      MailingStreet = deliveryAddress.flatMap(getAddressLine),
+      MailingCity = deliveryAddress.flatMap(_.city),
+      MailingState = deliveryAddress.flatMap(_.state),
+      MailingPostalCode = deliveryAddress.flatMap(_.postCode),
+      MailingCountry = deliveryAddress.map(_.country.name)
     )
   }
 }
