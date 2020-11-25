@@ -25,7 +25,7 @@ function ThankYouExistingContent({ countryGroupId }: PropTypes) {
       <Content>
         <Text>
           <LargeParagraph>
-            You have access to the following products:
+            To see your subscriptions go to <a href="https://manage.theguardian.com" target="_blank" rel="noopener noreferrer">My Account</a>. You have access to the following products:
           </LargeParagraph>
         </Text>
         <AppsSection countryGroupId={countryGroupId} />

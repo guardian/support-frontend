@@ -45,7 +45,7 @@ const content = (
         <HeroWrapper appearance="custom">
           <ThankYouContent countryGroupId={countryGroupId} />
           <HeadingBlock>
-            Your digital subscription is already live
+            You already have an active digital subscription
           </HeadingBlock>
         </HeroWrapper>
         <ThankYouExistingContent countryGroupId={countryGroupId} />
