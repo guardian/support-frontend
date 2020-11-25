@@ -6,7 +6,7 @@ import actions.CustomActionBuilders
 import actions.CustomActionBuilders.{AuthRequest, OptionalAuthRequest}
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import cats.data.EitherT
+import cats.data.{EitherT, OptionT}
 import cats.implicits._
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
@@ -61,10 +61,16 @@ class RedemptionController(
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = maybeAuthenticatedAction().async {
     implicit request =>
+      val futureMaybeUser = (for {
+        minimalUser <- OptionT.fromOption[Future](request.user.map(_.minimalUser))
+        fullUser <- identityService.getUser(minimalUser).toOption
+      } yield fullUser).value
+
       for {
         isTestUser <- testUserFromRequest.isTestUser(request)
         codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
         normalisedCode = redemptionCode.toLowerCase(Locale.UK)
+        maybeUser <- futureMaybeUser
         form <- codeValidator.validate(redemptionCode).value.map(
           validationResult =>
             Ok(subscriptionRedemptionForm(
@@ -79,7 +85,7 @@ class RedemptionController(
               redemptionCode = normalisedCode,
               maybeReaderType = validationResult.right.toOption,
               maybeRedemptionError = validationResult.left.toOption,
-              user = None,
+              user = maybeUser,
               submitted = false
             ))
         )
