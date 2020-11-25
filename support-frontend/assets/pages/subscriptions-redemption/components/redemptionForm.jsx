@@ -135,7 +135,7 @@ function RedemptionForm(props: PropTypes) {
           >
             <div css={mainCss}>
               <h2 css={headingCss}>Enjoy your Digital Subscription from The Guardian</h2>
-              {missingNames ? MissingNamesMessage() : null}
+              {missingNames ? <MissingNamesMessage /> : null}
               <div>
                 <TextInput
                   autoComplete="off"
