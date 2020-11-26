@@ -65,15 +65,15 @@ export const paymentSelectionCard = css`
 
 export const productOptionLabel = css`
   position: absolute;
-  top: -4px;
+  top: -5px;
   ${body.medium({ fontWeight: 'bold' })};
-  padding: 0 ${space[4]}px;
+  padding: 0 ${space[3]}px;
   background-color: ${brandAlt[400]};
   color: ${neutral[7]};
   z-index: 0;
 
   ${from.tablet} {
-    top: -24px;
+    top: -25px;
     }
 `;
 

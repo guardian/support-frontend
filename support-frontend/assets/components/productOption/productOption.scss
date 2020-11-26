@@ -7,7 +7,6 @@
   justify-content: space-between;
   width: 100%;
   background-color: gu-colour(neutral-100);
-  border: 1px solid gu-colour(neutral-86);
   transition: .4s all;
   cursor: pointer;
   text-decoration: none;
@@ -29,8 +28,6 @@
 
   &:hover,
   &:focus {
-    box-shadow: 0px 2px 10px 0px rgba(153,153,153,0.3);
-    border: 1px solid gu-colour(neutral-60);
     .product-option__button {
       .component-button--primary {
         background-color: gu-colour(highlight-dark);
