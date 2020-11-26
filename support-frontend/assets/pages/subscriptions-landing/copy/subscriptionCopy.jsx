@@ -134,7 +134,7 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
   },
   {
     ctaButtonText: 'See gift options',
-    link: guardianWeeklyLanding(countryGroupId, true),
+    link: digitalSubscriptionLanding(countryGroupId, true),
     analyticsTracking: sendTrackingEventsOnClick('digipack_cta_gift', 'DigitalPack', abTest, 'digital-subscription'),
     modifierClasses: '',
   }],
