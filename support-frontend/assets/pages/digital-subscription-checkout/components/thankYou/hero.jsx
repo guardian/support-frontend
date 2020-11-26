@@ -17,7 +17,7 @@ const defaultHeroes: GridImages = {
   breakpoints: {
     mobile: {
       gridId: 'editionsPackshotShort',
-      srcSizes: [242, 484, 568],
+      srcSizes: [500],
       imgType: 'png',
     },
     tablet: {
@@ -38,17 +38,17 @@ const australiaHeroes: GridImages = {
   breakpoints: {
     mobile: {
       gridId: 'editionsPackshotAusShort',
-      srcSizes: [242, 484, 568],
+      srcSizes: [500],
       imgType: 'png',
     },
     tablet: {
       gridId: 'editionsPackshotAusShort',
-      srcSizes: [500, 1000, 1825],
+      srcSizes: [500, 1000, 1800],
       imgType: 'png',
     },
     desktop: {
       gridId: 'editionsPackshotAusShort',
-      srcSizes: [500, 1000, 1825],
+      srcSizes: [500, 1000, 1800],
       imgType: 'png',
     },
   },
