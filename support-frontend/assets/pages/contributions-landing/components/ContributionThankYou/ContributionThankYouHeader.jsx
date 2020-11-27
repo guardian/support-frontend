@@ -54,7 +54,7 @@ type ContributionThankYouHeaderProps = {|
   amount: string,
   currency: IsoCurrency,
   thankyouPageHeadingTestVariant: boolean,
-  isLargeUSDonation: boolean,
+  shouldShowLargeDonationMessage: boolean
 |};
 
 const MAX_DISPLAY_NAME_LENGTH = 10;
@@ -67,45 +67,67 @@ const ContributionThankYouHeader = ({
   amount,
   currency,
   thankyouPageHeadingTestVariant,
-  isLargeUSDonation,
+  shouldShowLargeDonationMessage,
 }: ContributionThankYouHeaderProps) => {
-
   const title = (): React.Node => {
-    const nameAndTrailingSpace: string = name && name.length < MAX_DISPLAY_NAME_LENGTH ? `${name} ` : '';
+    const nameAndTrailingSpace: string =
+      name && name.length < MAX_DISPLAY_NAME_LENGTH ? `${name} ` : '';
     // Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
-    const payPalOneOff = paymentMethod === 'PayPal' && contributionType === 'ONE_OFF';
+    const payPalOneOff =
+      paymentMethod === 'PayPal' && contributionType === 'ONE_OFF';
 
     if (thankyouPageHeadingTestVariant && !payPalOneOff && amount) {
-      const currencyAndAmount = <span css={amountText}>{currencies[currency].glyph}{amount}</span>;
+      const currencyAndAmount = (
+        <span css={amountText}>
+          {currencies[currency].glyph}
+          {amount}
+        </span>
+      );
 
       switch (contributionType) {
         case 'ONE_OFF':
-          return <div>Thank you for supporting us today with {currencyAndAmount} ❤️</div>;
+          return (
+            <div>
+              Thank you for supporting us today with {currencyAndAmount} ❤️
+            </div>
+          );
         case 'MONTHLY':
           return (
             <div>
-              Thank you {nameAndTrailingSpace}for choosing to contribute {currencyAndAmount} each month ❤️
+              Thank you {nameAndTrailingSpace}for choosing to contribute{' '}
+              {currencyAndAmount} each month ❤️
             </div>
           );
         case 'ANNUAL':
-          return <div>Thank you {nameAndTrailingSpace}for choosing to contribute {currencyAndAmount} each year ❤️</div>;
+          return (
+            <div>
+              Thank you {nameAndTrailingSpace}for choosing to contribute{' '}
+              {currencyAndAmount} each year ❤️
+            </div>
+          );
         default:
-          return <div>Thank you {nameAndTrailingSpace}for your valuable contribution</div>;
+          return (
+            <div>
+              Thank you {nameAndTrailingSpace}for your valuable contribution
+            </div>
+          );
       }
     } else {
-      return <div>Thank you {nameAndTrailingSpace}for your valuable contribution</div>;
+      return (
+        <div>
+          Thank you {nameAndTrailingSpace}for your valuable contribution
+        </div>
+      );
     }
   };
 
-  const additionalCopy = isLargeUSDonation
+  const additionalCopy = shouldShowLargeDonationMessage
     ? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best.'
     : 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best';
 
   return (
     <header css={header}>
-      <h1 css={headerTitleText}>
-        {title()}
-      </h1>
+      <h1 css={headerTitleText}>{title()}</h1>
       <p css={headerSupportingText}>
         {showDirectDebitMessage && (
           <>
