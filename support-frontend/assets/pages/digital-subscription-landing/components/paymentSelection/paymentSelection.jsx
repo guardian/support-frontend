@@ -37,11 +37,10 @@ const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) =>
           return -1;
         }).map(paymentOption => (
           <div css={paymentSelectionCard}>
-            {!orderIsAGift && (
             <span css={productOptionLabel}>
               {paymentOption.label}
-            </span>)}
-            <ProductOption orderIsAGift={orderIsAGift}>
+            </span>
+            <ProductOption>
               <ProductOptionContent>
                 <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
                 <ProductOptionOffer>

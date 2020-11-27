@@ -2,11 +2,12 @@ package com.gu.zuora
 
 import cats.data.OptionT
 import cats.implicits.catsStdInstancesForFuture
+import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
-import com.gu.support.config.ZuoraConfig
+import com.gu.support.config.{Stage, ZuoraConfig}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.workers.states.SendThankYouEmailState.TermDates
@@ -22,7 +23,7 @@ trait ZuoraGiftLookupService extends TouchpointService {
   def getSubscriptionFromRedemptionCode(redemptionCode: RedemptionCode): Future[SubscriptionRedemptionQueryResponse]
 }
 
-class ZuoraGiftService(val config: ZuoraConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
+class ZuoraGiftService(val config: ZuoraConfig, stage: Stage, client: FutureHttpClient)(implicit ec: ExecutionContext)
   extends WebServiceHelper[ZuoraErrorResponse] with ZuoraGiftLookupService {
 
   override val wsUrl: String = config.url
@@ -87,7 +88,8 @@ class ZuoraGiftService(val config: ZuoraConfig, client: FutureHttpClient)(implic
         Success(())
       case failed =>
         val errorMessage = scrub"Failed to set up revenue recognition for Digital Subscription gift $subscriptionNumber. Error was $failed"
-        SafeLogger.error(errorMessage) //TODO: Add an alarm
+        SafeLogger.error(errorMessage)
+        AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(AwsCloudWatchMetricSetup.revenueDistributionFailureRequest(stage))
         // For the revenue recognition we want to continue even if there is a failure because by this point
         // the redemption will have succeeded so we need to let the user know about that and then sort out the
         // revenue recognition separately

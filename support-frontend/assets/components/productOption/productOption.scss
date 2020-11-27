@@ -1,14 +1,12 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.product-option,
-.product-option--non-gift {
+.product-option {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
   background-color: gu-colour(neutral-100);
-  border: 1px solid gu-colour(neutral-86);
   transition: .4s all;
   cursor: pointer;
   text-decoration: none;
@@ -20,10 +18,16 @@
     z-index: 2;
   }
 
+  &:last-of-type {
+    margin-top: 20px;
+
+    @include mq(tablet) {
+      margin-top: 0;
+    }
+  }
+
   &:hover,
   &:focus {
-    box-shadow: 0px 2px 10px 0px rgba(153,153,153,0.3);
-    border: 1px solid gu-colour(neutral-60);
     .product-option__button {
       .component-button--primary {
         background-color: gu-colour(highlight-dark);
@@ -36,19 +40,9 @@
   }
 }
 
-.product-option--non-gift {
-  &:last-of-type {
-    margin-top: 20px;
-
-    @include mq(tablet) {
-      margin-top: 0;
-    }
-  }
-}
-
 .product-option__title {
   @include gu-fontset-heading;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   position: relative;
 
   @include mq(tablet) {
@@ -68,8 +62,7 @@
   font-family: $gu-headline;
   font-weight: bold;
   font-size: 32px;
-  padding-top: 4px;
-  min-height: 63px;
+  padding: 4px 0 12px;
 
   @include mq(tablet) {
     font-size: 42px;
@@ -78,7 +71,6 @@
 
 .product-option__price-detail {
   padding: 4px 0 10px;
-  border-top: 1px solid gu-colour(neutral-86);
   min-height: 48px;
 }
 
@@ -119,7 +111,6 @@
   margin-top: 20px;
   color: gu-colour(neutral-7);
   line-height: 1.4;
-  font-weight: bold;
 }
 
 .product-option__button {

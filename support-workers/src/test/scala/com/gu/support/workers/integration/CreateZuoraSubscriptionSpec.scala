@@ -147,7 +147,7 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   val realZuoraService = new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
 
-  val realZuoraGiftService = new ZuoraGiftService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
+  val realZuoraGiftService = new ZuoraGiftService(realConfig.zuoraConfigProvider.get(), Stages.DEV, configurableFutureRunner(60.seconds))
 
   val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())
 

@@ -6,7 +6,7 @@ import { Button } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { line } from '@guardian/src-foundations/palette';
+import { line, text } from '@guardian/src-foundations/palette';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import Form from 'components/checkoutForm/checkoutForm';
 import { connect } from 'react-redux';
@@ -18,9 +18,14 @@ import type { Option } from 'helpers/types/option';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 import { TextInput } from '@guardian/src-text-input';
-import { headline } from '@guardian/src-foundations/typography/obj';
+import { headline, textSans } from '@guardian/src-foundations/typography/obj';
+import type { User } from 'helpers/subscriptionsForms/user';
+import { error } from '@guardian/src-foundations/palette';
+import { InlineError } from '@guardian/src-user-feedback';
+
 
 type PropTypes = {
+  user: User,
   userCode: Option<string>,
   error: Option<ErrorMessage>,
   setUserCode: string => void,
@@ -29,6 +34,7 @@ type PropTypes = {
 
 function mapStateToProps(state: RedemptionPageState) {
   return {
+    user: state.page.user,
     userCode: state.page.userCode,
     error: state.page.error,
   };
@@ -40,6 +46,50 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     submit: (userCode: string) => submitCode(userCode, dispatch),
   };
 }
+
+const MissingNamesMessage = () => {
+  const mainCss = css`
+    border: 4px solid ${error['400']};
+    padding: 8px;
+    margin-bottom: ${space[6]}px;
+    ${textSans.medium()};
+  `;
+
+  const detailsCss = css`
+    margin-top: 16px;
+    margin-left: 32px;
+    a, a:visited {
+      ${textSans.small()};
+      color: ${text.primary};
+      ${from.desktop} {
+        ${textSans.medium()};
+      }
+    }
+    ol {
+      list-style-type: decimal;
+    }
+  `;
+
+  return (
+    <div role="status" aria-live="assertive" css={mainCss}>
+      <InlineError>
+        We notice you&apos;ve already set up a Guardian username and password,
+        please complete your account to proceed.
+      </InlineError>
+      <div css={detailsCss}>
+        <ol>
+          <li>Go to{' '}
+            <a href="https://manage.theguardian.com/account-settings" target="_blank" rel="noopener noreferrer">
+              Account settings
+            </a>,  add your first name and last name and save changes.
+          </li>
+          <li>Refresh this page to continue</li>
+        </ol>
+      </div>
+    </div>
+  );
+};
+
 
 function RedemptionForm(props: PropTypes) {
   const mainCss = css`
@@ -67,6 +117,7 @@ function RedemptionForm(props: PropTypes) {
 
   const validationText = props.error ? null : 'This code is valid';
   const signedIn = doesUserAppearToBeSignedIn();
+  const missingNames = signedIn && props.user.firstName === '' && props.user.lastName === '';
   const buttonText = signedIn ? 'Activate' : 'Continue to account setup';
 
   return (
@@ -84,6 +135,7 @@ function RedemptionForm(props: PropTypes) {
           >
             <div css={mainCss}>
               <h2 css={headingCss}>Enjoy your Digital Subscription from The Guardian</h2>
+              {missingNames ? <MissingNamesMessage /> : null}
               <div>
                 <TextInput
                   autoComplete="off"

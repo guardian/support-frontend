@@ -2,7 +2,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import { ThemeProvider } from 'emotion-theming';
-import { headline /* body (commented out as temporarily not in use) */ } from '@guardian/src-foundations/typography';
+import { headline, body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
@@ -20,12 +20,11 @@ const title = css`
   }
 `;
 
-// commented out as temporarily not in use
-// const paragraph = css`
-//   ${body.medium()};
-//   display: block;
-//   margin: ${space[1]}px 0 ${space[5]}px;
-// `;
+const paragraph = css`
+  ${body.medium()};
+  display: block;
+  margin: ${space[1]}px 0 ${space[5]}px;
+`;
 
 const button = css`
   margin-top: ${space[5]}px;
@@ -47,30 +46,29 @@ const giftPageVersion = (
   </span>
 );
 
-// commented out as temporarily not in use
-// const nonGiftPageVersion = (
-//   <span>
-//     <h4 css={title}>Gift subscriptions</h4>
-//     <span css={paragraph}>A digital subscription makes a great gift.</span>
-//     <div css={button}>
-//       <ThemeProvider theme={buttonReaderRevenue}>
-//         <LinkButton
-//           href={routes.digitalSubscriptionLandingGift}
-//           priority="tertiary"
-//         >
-//             See gift subscriptions
-//         </LinkButton>
-//       </ThemeProvider>
-//     </div>
-//   </span>
-// );
+const nonGiftPageVersion = (
+  <span>
+    <h4 css={title}>Gift subscriptions</h4>
+    <span css={paragraph}>A digital subscription makes a great gift.</span>
+    <div css={button}>
+      <ThemeProvider theme={buttonReaderRevenue}>
+        <LinkButton
+          href={routes.digitalSubscriptionLandingGift}
+          priority="tertiary"
+        >
+            See gift subscriptions
+        </LinkButton>
+      </ThemeProvider>
+    </div>
+  </span>
+);
 
 const GiftNonGiftLink = (props: {orderIsAGift: boolean}) => (
   <div className="hope-is-power__terms">
     <div className="hope-is-power--centered">
       {props.orderIsAGift ?
         giftPageVersion :
-        null // to be replaced with nonGiftPageVersion when we're ready to go live
+        nonGiftPageVersion
       }
 
     </div>

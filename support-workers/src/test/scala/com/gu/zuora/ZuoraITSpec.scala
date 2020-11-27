@@ -5,6 +5,7 @@ import java.util.UUID
 import com.gu.config.Configuration
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
+import com.gu.support.config.{Stage, Stages}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId, Monthly}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
@@ -22,7 +23,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   def uatService: ZuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(true), RequestRunners.configurableFutureRunner(30.seconds))
 
-  def uatGiftService: ZuoraGiftService = new ZuoraGiftService(Configuration.load().zuoraConfigProvider.get(true), RequestRunners.configurableFutureRunner(30.seconds))
+  def uatGiftService: ZuoraGiftService = new ZuoraGiftService(Configuration.load().zuoraConfigProvider.get(true), Stages.DEV, RequestRunners.configurableFutureRunner(30.seconds))
 
   // actual sub "CreatedDate": "2017-12-07T15:47:21.000+00:00",
   val earlyDate = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeZone.UTC)

@@ -72,10 +72,16 @@ const GiftLinks = (props: LinkTypes) => {
 };
 
 function DigitalFooter(props: PropTypes) {
+  const { orderIsAGift, country } = props;
+  const faqsLink = orderIsAGift ? 'https://www.theguardian.com/help/2020/nov/23/guardian-gift-digital-subscription-faqs' :
+    'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions';
+  const termsConditionsLink = orderIsAGift ?
+    'https://www.theguardian.com/help/2020/nov/24/gift-digital-subscriptions-terms-and-conditions' :
+    'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';
   return (
     <Footer
-      faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
-      termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
+      faqsLink={faqsLink}
+      termsConditionsLink={termsConditionsLink}
     >
       <h3
         id="qa-component-customer-service"
@@ -86,9 +92,9 @@ function DigitalFooter(props: PropTypes) {
       <p>Offer subject to availability. Guardian News and Media Ltd
           (&quot;GNM&quot;) reserves the right to withdraw this promotion at any
           time. Full promotion terms and conditions for our&nbsp;
-        {props.orderIsAGift ?
-          <GiftLinks productPrices={props.productPrices} country={props.country} /> :
-          <RegularLinks productPrices={props.productPrices} country={props.country} />
+        {orderIsAGift ?
+          <GiftLinks productPrices={props.productPrices} country={country} /> :
+          <RegularLinks productPrices={props.productPrices} country={country} />
           }.
       </p>
     </Footer>);
