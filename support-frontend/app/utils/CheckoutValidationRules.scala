@@ -117,7 +117,7 @@ object DigitalPackValidation {
       case (Purchase(paymentFields), ReaderType.Gift, Some(GiftRecipientRequest(_, _, _, Some(_), _, _))) =>
         isValidPaidSub(paymentFields)
       case (_: Redemption[_, _], ReaderType.Corporate, None) => isValidRedemption
-      case (_: Redemption[_, _], ReaderType.Gift, None) => isValidRedemption
+      case (_: Redemption[_, _], ReaderType.Gift, None) => SimpleCheckoutFormValidation.passes(createSupportWorkersRequest)
       case _ => false
     }
   }
