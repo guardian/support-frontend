@@ -4,7 +4,8 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { type Dispatch, compose } from 'redux';
+import { type Dispatch } from 'redux';
+import { TextArea } from '@guardian/src-text-area';
 
 import {
   firstError,
@@ -59,9 +60,6 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { routes } from 'helpers/routes';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
-import { TextArea } from 'components/forms/textArea';
-import { asControlled } from 'hocs/asControlled';
-import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import DatePickerFields from './datePicker/datePicker';
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -139,7 +137,6 @@ function mapDispatchToProps() {
   };
 }
 
-const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
 const DatePickerWithError = withError(DatePickerFields);
 const Address = withStore(countries, 'billing', getBillingAddress);
 
@@ -200,7 +197,7 @@ function DigitalCheckoutFormGift(props: PropTypes) {
             />
           </FormSection>
           <FormSection title="Personalise your gift">
-            <TextAreaWithLabel
+            <TextArea
               id="gift-message"
               label="Gift message"
               maxlength={300}
