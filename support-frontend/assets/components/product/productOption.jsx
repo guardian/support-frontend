@@ -8,12 +8,12 @@ import { space } from '@guardian/src-foundations';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
 
 export type Product = {
   title: string,
   price: string,
   children?: Node,
+  offerCopy?: string,
   priceCopy: Node,
   buttonCopy: string,
   href: string,
@@ -23,10 +23,10 @@ export type Product = {
 }
 
 const productOption = css`
+  ${textSans.medium()}
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: 48px 66px 100px 86px;
   width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
@@ -37,11 +37,18 @@ const productOption = css`
   }
 `;
 
+const productOptionUnderline = css`
+  border-bottom: 1px solid ${neutral[86]};
+`;
+
 const productOptionTitle = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
-  border-bottom: 1px solid ${neutral[86]};
   padding-bottom: ${space[2]}px;
   margin-bottom: ${space[4]}px;
+`;
+
+const productOptionOfferCopy = css`
+  height: 100%;
 `;
 
 const productOptionPrice = css`
@@ -50,7 +57,7 @@ const productOptionPrice = css`
 `;
 
 const productOptionPriceCopy = css`
-  ${textSans.medium()}
+  height: 100%;
   margin-bottom: ${space[4]}px;
 `;
 
@@ -70,9 +77,14 @@ function ProductOption(props: Product) {
   return (
     <div css={[productOption, props.cssOverrides]}>
       <div>
-        <h3 css={productOptionTitle}>{props.title}</h3>
+        <h3 css={[productOptionTitle, productOptionUnderline]}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
         {props.children && props.children}
+      </div>
+      <div>
+        <p css={[productOptionOfferCopy, productOptionUnderline]}>
+          {props.offerCopy}
+        </p>
       </div>
       <div>
         {/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
@@ -84,8 +96,6 @@ function ProductOption(props: Product) {
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
             href={props.href}
-            icon={<SvgArrowRightStraight />}
-            iconSide="right"
             onClick={props.onClick}
             aria-label={`${props.title}- ${props.buttonCopy}`}
           >
@@ -100,6 +110,7 @@ function ProductOption(props: Product) {
 ProductOption.defaultProps = {
   children: null,
   label: '',
+  offerCopy: '',
   cssOverrides: '',
 };
 
