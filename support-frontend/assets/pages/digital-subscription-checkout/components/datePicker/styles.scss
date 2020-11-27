@@ -4,7 +4,7 @@
 .DayPicker {
   display: inline-block;
   font-size: 1rem;
-  border: gu-colour(neutral-86) 1px solid;
+  border: gu-colour(neutral-60) 2px solid;
   margin-top: 20px;
 }
 
@@ -98,7 +98,7 @@
   font-family: $gu-text-sans-web;
   display: table-cell;
   padding: 0.8em 0.99em 0.1em;
-  color: #8B9898;
+  color: gu-colour(neutral-46);
   text-align: center;
   font-size: 1.1em;
 }
@@ -124,8 +124,8 @@
   vertical-align: middle;
   text-align: center;
   cursor: pointer;
-  border-top: 1px solid gu-colour(neutral-86);
-  border-left: 1px solid gu-colour(neutral-86);
+  border-top: gu-colour(neutral-60) 2px solid;
+  border-left: gu-colour(neutral-60) 2px solid;
 }
 
 .DayPicker-Day:first-of-type {
