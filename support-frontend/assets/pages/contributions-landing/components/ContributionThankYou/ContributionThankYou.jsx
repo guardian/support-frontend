@@ -9,7 +9,12 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { from, between, until, breakpoints } from '@guardian/src-foundations/mq';
+import {
+  from,
+  between,
+  until,
+  breakpoints,
+} from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
@@ -20,7 +25,10 @@ import ContributionThankYouSupportReminder from './ContributionThankYouSupportRe
 import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
-import { trackUserData, OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from './utils/ophan';
+import {
+  trackUserData,
+  OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
+} from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getCampaignSettings } from 'helpers/campaigns';
 import type { CampaignSettings } from 'helpers/campaigns';
@@ -107,15 +115,10 @@ const buttonContainer = css`
   padding: ${space[12]}px 0;
 `;
 
-const isLargeUSDonation = (
+const isLargeDonation = (
   amount: string,
   contributionType: ContributionType,
-  isUsEndOfYearAppeal: boolean,
 ): boolean => {
-  if (!isUsEndOfYearAppeal) {
-    return false;
-  }
-
   const amountInCents = parseFloat(amount) * 100;
   const twoHundredAndFiftyDollars = 25_000;
   const twentyFiveDollars = 2_500;
@@ -141,6 +144,7 @@ type ContributionThankYouProps = {|
   countryId: IsoCountry,
   campaignCode: ?string,
   thankyouPageHeadingTestVariant: boolean,
+  largeDonationMessageTestVariant: boolean
 |};
 
 const mapStateToProps = state => ({
@@ -159,7 +163,10 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   countryId: state.common.internationalisation.countryId,
   campaignCode: state.common.referrerAcquisitionData.campaignCode,
-  thankyouPageHeadingTestVariant: state.common.abParticipations.thankyouPageHeadingTest === 'V1',
+  thankyouPageHeadingTestVariant:
+    state.common.abParticipations.thankyouPageHeadingTest === 'V1',
+  largeDonationMessageTestVariant:
+    state.common.abParticipations.usThankyouPageLargeDonationTest === 'V1',
 });
 
 const ContributionThankYou = ({
@@ -175,10 +182,18 @@ const ContributionThankYou = ({
   countryId,
   campaignCode,
   thankyouPageHeadingTestVariant,
+  largeDonationMessageTestVariant,
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
-  const campaignSettings = useMemo<CampaignSettings | null>(() => getCampaignSettings(campaignCode));
+  const campaignSettings = useMemo<CampaignSettings | null>(() =>
+    getCampaignSettings(campaignCode));
   const isUsEndOfYearAppeal = countryId === 'US';
+
+  const isLargeUSDonation =
+    countryId === 'US' && isLargeDonation(amount, contributionType);
+
+  const shouldShowLargeDonationMessage =
+    largeDonationMessageTestVariant && isLargeUSDonation;
 
   useEffect(() => {
     trackUserData(
@@ -186,6 +201,7 @@ const ContributionThankYou = ({
       contributionType,
       user.isSignedIn,
       isKnownEmail,
+      isLargeUSDonation,
     );
   }, []);
 
@@ -208,25 +224,31 @@ const ContributionThankYou = ({
     shouldShow: true,
   };
   const supportReminderAction = {
-    component: <ContributionThankYouSupportReminder
-      email={email}
-      isUsEndOfYearAppeal={isUsEndOfYearAppeal}
-    />,
+    component: (
+      <ContributionThankYouSupportReminder
+        email={email}
+        isUsEndOfYearAppeal={isUsEndOfYearAppeal}
+      />
+    ),
     shouldShow: contributionType === 'ONE_OFF',
   };
   const SURVEY_END_DATE = new Date(Date.parse('2021-01-31'));
   const now = new Date();
   const surveyAction = {
     component: <ContributionThankYouSurvey />,
-    shouldShow: isUsEndOfYearAppeal && (now < SURVEY_END_DATE),
+    shouldShow: isUsEndOfYearAppeal && now < SURVEY_END_DATE,
   };
   const socialShareAction = {
-    component: <ContributionThankYouSocialShare
-      email={email}
-      createReferralCodes={campaignSettings && campaignSettings.createReferralCodes}
-      campaignCode={campaignSettings && campaignSettings.campaignCode}
-      isUsEndOfYearAppeal={isUsEndOfYearAppeal}
-    />,
+    component: (
+      <ContributionThankYouSocialShare
+        email={email}
+        createReferralCodes={
+          campaignSettings && campaignSettings.createReferralCodes
+        }
+        campaignCode={campaignSettings && campaignSettings.campaignCode}
+        isUsEndOfYearAppeal={isUsEndOfYearAppeal}
+      />
+    ),
     shouldShow: true,
   };
   const ausMapAction = {
@@ -275,7 +297,7 @@ const ContributionThankYou = ({
           amount={amount}
           currency={currency}
           thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
-          isLargeUSDonation={isLargeUSDonation(amount, contributionType, isUsEndOfYearAppeal)}
+          shouldShowLargeDonationMessage={shouldShowLargeDonationMessage}
         />
       </div>
 
@@ -288,7 +310,9 @@ const ContributionThankYou = ({
         <LinkButton
           href="https://www.theguardian.com"
           priority="tertiary"
-          onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)}
+          onClick={() =>
+            trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
+          }
         >
           Return to the Guardian
         </LinkButton>

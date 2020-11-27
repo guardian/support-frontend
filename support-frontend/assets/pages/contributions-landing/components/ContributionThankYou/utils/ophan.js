@@ -17,7 +17,8 @@ export const OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN =
 export const OPHAN_COMPONENT_ID_SOCIAL_EMAIL =
   'contribution-thankyou-social-email';
 export const OPHAN_COMPONENT_ID_AUS_MAP = 'contribution-thankyou-aus-map';
-export const OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN = 'contribution-thankyou-return-to-guardian';
+export const OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN =
+  'contribution-thankyou-return-to-guardian';
 
 export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN =
   'contribution-thankyou-read-more-sign-in';
@@ -29,6 +30,8 @@ const OPHAN_EVENT_ID_CONTRIBUTION_TYPE =
   'contributions-thankyou-contribution-type';
 const OPHAN_EVENT_ID_SIGNED_IN = 'contributions-thankyou-signed-in';
 const OPHAN_EVENT_ID_KNOWN_EMAIL = 'contributions-thankyou-known-email';
+const OPHAN_EVENT_ID_LARGE_US_DONATION =
+  'contributions-thankyou-large-us-donation';
 
 const trackPaymentMethod = (paymentMethod: PaymentMethod) => {
   trackComponentEvents({
@@ -74,14 +77,27 @@ const trackKnownEmail = (isKnownEmail: boolean) => {
   });
 };
 
+const trackLargeUsDonation = (isLargeUsDonation: boolean) => {
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+    },
+    action: 'VIEW',
+    id: OPHAN_EVENT_ID_LARGE_US_DONATION,
+    value: isLargeUsDonation.toString(),
+  });
+};
+
 export const trackUserData = (
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   isSignedIn: boolean,
   isKnownEmail: boolean,
+  isLargeUsDonation: boolean,
 ) => {
   trackPaymentMethod(paymentMethod);
   trackContributionType(contributionType);
   trackSignedIn(isSignedIn);
   trackKnownEmail(isKnownEmail);
+  trackLargeUsDonation(isLargeUsDonation);
 };
