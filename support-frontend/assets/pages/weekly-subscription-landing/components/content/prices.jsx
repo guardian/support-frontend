@@ -81,6 +81,7 @@ function Prices({ orderIsAGift, products }: PropTypes) {
             cssOverrides={product.label ? productOverrideWithLabel : productOverride}
             title={product.title}
             price={product.price}
+            offerCopy={product.offerCopy}
             priceCopy={product.priceCopy}
             buttonCopy={product.buttonCopy}
             href={product.href}

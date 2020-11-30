@@ -40,7 +40,7 @@ const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
 
 const getPromotionLabel = (promotion: Promotion | null) => {
   if (!promotion || !promotion.discount) { return null; }
-  return `Save ${promotion.discount.amount}%`;
+  return `Save ${Math.round(promotion.discount.amount)}%`;
 };
 
 const getRelevantPromotion = ({ promotions }: ProductPrice) => {
@@ -78,6 +78,7 @@ const mapStateToProps = (state: State): PropTypes => {
       return {
         title: billingPeriodTitle(billingPeriod, orderIsAGift),
         price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
+        offerCopy: promotion ? promotion.description : '',
         priceCopy: (
           <span>
             {getSimplifiedPriceDescription(
