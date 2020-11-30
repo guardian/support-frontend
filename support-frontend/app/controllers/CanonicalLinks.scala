@@ -8,11 +8,13 @@ trait CanonicalLinks {
     if (withDelivery) s"${supportUrl}/uk/subscribe/paper/delivery"
     else s"${supportUrl}/uk/subscribe/paper"
 
-  def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
-    s"${supportUrl}/${countryCode}/subscribe/digital"
+  def buildCanonicalDigitalSubscriptionLink(countryCode: String, orderIsAGift: Boolean): String =
+    if (orderIsAGift) s"${supportUrl}/${countryCode}/subscribe/digital/gift"
+    else s"${supportUrl}/${countryCode}/subscribe/digital"
 
-  def buildCanonicalWeeklySubscriptionLink(countryCode: String): String =
-    s"${supportUrl}/${countryCode}/subscribe/weekly"
+  def buildCanonicalWeeklySubscriptionLink(countryCode: String, orderIsAGift: Boolean): String =
+    if (orderIsAGift) s"${supportUrl}/${countryCode}/subscribe/weekly/gift"
+    else s"${supportUrl}/${countryCode}/subscribe/weekly"
 
   def buildCanonicalShowcaseLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/support"
