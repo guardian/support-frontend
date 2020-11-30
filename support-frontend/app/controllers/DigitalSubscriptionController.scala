@@ -60,13 +60,13 @@ class DigitalSubscriptionController(
     val js = Left(RefPath("digitalSubscriptionLandingPage.js"))
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
-    val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
+    val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift))
     val promoCodes: List[PromoCode] = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ DefaultPromotions.DigitalSubscription.all
     val hrefLangLinks = Map(
-      "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
-      "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),
-      "en-au" -> buildCanonicalDigitalSubscriptionLink("au"),
-      "en" -> buildCanonicalDigitalSubscriptionLink("int")
+      "en-us" -> buildCanonicalDigitalSubscriptionLink("us", orderIsAGift),
+      "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift),
+      "en-au" -> buildCanonicalDigitalSubscriptionLink("au", orderIsAGift),
+      "en" -> buildCanonicalDigitalSubscriptionLink("int", orderIsAGift)
     )
 
     val readerType = if (orderIsAGift) Gift else Direct

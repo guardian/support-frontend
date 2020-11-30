@@ -51,17 +51,6 @@ class WeeklySubscription(
 
   implicit val a: AssetsResolver = assets
 
-  val weeklyHrefLangLinks: Map[String, String] =
-    Map(
-      "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
-      "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk"),
-      "en-au" -> buildCanonicalWeeklySubscriptionLink("au"),
-      "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz"),
-      "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca"),
-      "en" -> buildCanonicalWeeklySubscriptionLink("int"),
-      "en" -> buildCanonicalWeeklySubscriptionLink("eu")
-    )
-
   def weeklyGeoRedirect(orderIsAGift: Boolean = false): Action[AnyContent] = geoRedirect(
     if (orderIsAGift) "subscribe/weekly/gift" else "subscribe/weekly"
   )
@@ -73,7 +62,7 @@ class WeeklySubscription(
     val js = Left(RefPath("weeklySubscriptionLandingPage.js"))
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
-    val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
+    val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift))
     val defaultPromos = if (orderIsAGift)
       DefaultPromotions.GuardianWeekly.Gift.all
      else
@@ -89,6 +78,16 @@ class WeeklySubscription(
       countryGroup <- CountryGroup.byId(countryCode)
       country <- countryGroup.countries.headOption
     } yield country).getOrElse(UK)
+    val weeklyHrefLangLinks: Map[String, String] =
+    Map(
+      "en-us" -> buildCanonicalWeeklySubscriptionLink("us", orderIsAGift),
+      "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift),
+      "en-au" -> buildCanonicalWeeklySubscriptionLink("au", orderIsAGift),
+      "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz", orderIsAGift),
+      "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca", orderIsAGift),
+      "en" -> buildCanonicalWeeklySubscriptionLink("int", orderIsAGift),
+      "en" -> buildCanonicalWeeklySubscriptionLink("eu", orderIsAGift)
+    )
 
     val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
       ProductPromotionCopy(promotionServiceProvider
