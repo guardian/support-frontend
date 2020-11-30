@@ -158,7 +158,7 @@ function withProps(props: PropTypes) {
         showOther={showOther}
         selectedAmounts={props.selectedAmounts}
         selectAmount={props.selectAmount}
-        shouldShowFrequencyButtons={props.countryGroupId !== 'GBPCountries' && props.contributionType !== 'ONE_OFF'}
+        shouldShowFrequencyButtons={props.contributionType !== 'ONE_OFF'}
       />
 
       {showOther && renderOtherField()}
