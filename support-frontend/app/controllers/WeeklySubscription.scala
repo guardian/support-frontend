@@ -55,6 +55,16 @@ class WeeklySubscription(
     if (orderIsAGift) "subscribe/weekly/gift" else "subscribe/weekly"
   )
 
+  def getWeeklyHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = Map(
+      "en-us" -> buildCanonicalWeeklySubscriptionLink("us", orderIsAGift),
+      "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift),
+      "en-au" -> buildCanonicalWeeklySubscriptionLink("au", orderIsAGift),
+      "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz", orderIsAGift),
+      "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca", orderIsAGift),
+      "en" -> buildCanonicalWeeklySubscriptionLink("int", orderIsAGift),
+      "en" -> buildCanonicalWeeklySubscriptionLink("eu", orderIsAGift)
+    )
+
   def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian" else "The Guardian Weekly Subscriptions | The Guardian"
@@ -78,17 +88,7 @@ class WeeklySubscription(
       countryGroup <- CountryGroup.byId(countryCode)
       country <- countryGroup.countries.headOption
     } yield country).getOrElse(UK)
-    val weeklyHrefLangLinks: Map[String, String] =
-    Map(
-      "en-us" -> buildCanonicalWeeklySubscriptionLink("us", orderIsAGift),
-      "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift),
-      "en-au" -> buildCanonicalWeeklySubscriptionLink("au", orderIsAGift),
-      "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz", orderIsAGift),
-      "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca", orderIsAGift),
-      "en" -> buildCanonicalWeeklySubscriptionLink("int", orderIsAGift),
-      "en" -> buildCanonicalWeeklySubscriptionLink("eu", orderIsAGift)
-    )
-
+    val weeklyHrefLangLinks = getWeeklyHrefLangLinks(orderIsAGift)
     val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
       ProductPromotionCopy(promotionServiceProvider
         .forUser(false), stage)
