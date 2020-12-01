@@ -3,22 +3,28 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { css } from '@emotion/core';
 import { TextInput } from '@guardian/src-text-input';
 import { Checkbox } from '@guardian/src-checkbox';
 import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonReaderRevenueBrand } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 
-import {
-  directDebitForm,
-  spaceBetween,
-} from './formStyles';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type Option } from 'helpers/types/option';
 
+const directDebitForm = css`
+  clear: left;
+  margin-top: 20px;
+  margin-left: 0;
+`;
+
+const spaceBetween = css`
+  margin-bottom: 20px;
+`;
 
 type EventHandler = (e: SyntheticInputEvent<HTMLInputElement>) => void;
 
