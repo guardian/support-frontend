@@ -2,9 +2,11 @@ package com.gu.support.zuora.api
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
+import io.circe.Encoder
+import io.circe.generic.semiauto.deriveEncoder
 
 object PreviewSubscribeItem {
-  implicit val codec: Codec[PreviewSubscribeItem] = capitalizingCodec
+  implicit val encoder: Encoder[PreviewSubscribeItem] = capitalizingEncoder
 }
 
 case class PreviewSubscribeItem(
@@ -17,7 +19,7 @@ case class PreviewSubscribeItem(
 
 object PreviewSubscribeRequest {
 
-  implicit val codec: Codec[PreviewSubscribeRequest] = deriveCodec
+  implicit val encoder: Encoder[PreviewSubscribeRequest] = deriveEncoder
 
   def fromSubscribe(subscribeItem: SubscribeItem, numberOfBillingPeriodsToPreview: Int): PreviewSubscribeRequest = {
     val initialTerm = subscribeItem.subscriptionData.subscription.initialTerm

@@ -49,13 +49,13 @@ class DigitalSubscriptionPurchaseBuilder(
         contractEffectiveDate = todaysDate,
         contractAcceptanceDate = contractAcceptanceDate,
         termStartDate = todaysDate,
-        createdRequestId__c = requestId.toString,
+        createdRequestId = requestId.toString,
         readerType = digitalPack.readerType,
         autoRenew = autoRenew,
         initialTerm = initialTerm,
         initialTermPeriodType = Month,
         redemptionCode = maybeRedemptionCode.map(_.value),
-        giftNotificationEmailDate__c = deliveryDate,
+        giftNotificationEmailDate = deliveryDate,
       )
     )
 
