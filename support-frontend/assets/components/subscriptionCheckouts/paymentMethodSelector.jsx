@@ -3,14 +3,16 @@
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { RadioGroup, Radio } from '@guardian/src-radio';
+import {
+  SvgCreditCard,
+  SvgDirectDebit,
+  SvgPayPal,
+} from '@guardian/src-icons';
 
 import Rows from 'components/base/rows';
 import { type Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
-import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
-import SvgNewCreditCard from 'components/svgs/newCreditCard';
-import SvgPayPal from 'components/svgs/paypal';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -81,7 +83,7 @@ function PaymentMethodSelector(props: PropTypes) {
             {paymentMethods.includes(DirectDebit) &&
             <RadioWithImage
               inputId="qa-direct-debit"
-              image={<SvgDirectDebitSymbol />}
+              image={<SvgDirectDebit />}
               label="Direct debit"
               name="paymentMethod"
               checked={props.paymentMethod === DirectDebit}
@@ -89,7 +91,7 @@ function PaymentMethodSelector(props: PropTypes) {
             />}
             <RadioWithImage
               inputId="qa-credit-card"
-              image={<SvgNewCreditCard />}
+              image={<SvgCreditCard />}
               label="Credit/Debit card"
               name="paymentMethod"
               checked={props.paymentMethod === Stripe}
