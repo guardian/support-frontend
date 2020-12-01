@@ -3025,14 +3025,14 @@
     "@guardian/src-label" "^2.3.0"
     "@guardian/src-user-feedback" "^2.3.0"
 
-"@guardian/src-select@^2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@guardian/src-select/-/src-select-2.5.0.tgz#1b2a0c419b1074562ff21489d3f298266f26e450"
-  integrity sha512-IqPkrBu8ZrzkwHuKuFURtPrtYqAR2E03jBtQhGacYARg28MjOPTHHgL4bck1qSQqPOMGuhh5YqkF43DnCZ8cUw==
+"@guardian/src-select@^2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-select/-/src-select-2.7.1.tgz#777dd2f1fb6f6800d25765c81f30e97d25676ce8"
+  integrity sha512-SacT0jLa9J6CT0gEWHbwou430L9JduDTv/+zQFZK9rDC3zQcC5grdlwk7ajjU1Oqfmr49e+b3rqtvUyse+imgg==
   dependencies:
-    "@guardian/src-helpers" "^2.5.0"
-    "@guardian/src-icons" "^2.5.0"
-    "@guardian/src-user-feedback" "^2.5.0"
+    "@guardian/src-helpers" "^2.7.1"
+    "@guardian/src-icons" "^2.7.1"
+    "@guardian/src-user-feedback" "^2.7.1"
 
 "@guardian/src-svgs@^2.0.0":
   version "2.4.0"

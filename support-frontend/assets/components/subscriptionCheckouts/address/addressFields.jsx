@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { TextInput } from '@guardian/src-text-input';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
@@ -12,11 +11,9 @@ import {
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
 
-import { Select } from 'components/forms/select';
+// import { Select } from 'components/forms/select';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
+import { Select, Option as OptionForSelect } from '@guardian/src-select';
 
 import { withStore as postcodeFinderWithStore } from 'components/subscriptionCheckouts/address/postcodeFinder';
 import { type PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
@@ -59,9 +56,7 @@ const marginBottom = css`
   margin-bottom: ${space[6]}px;
 `;
 
-const SelectWithLabel = compose(asControlled, withLabel)(Select);
-const SelectWithError = withError(SelectWithLabel);
-const MaybeSelect = canShow(SelectWithError);
+const MaybeSelect = canShow(Select);
 const MaybeInput = canShow(TextInput);
 
 class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
@@ -114,16 +109,17 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
     const { PostcodeFinder } = this;
     return (
       <div>
-        <SelectWithError
+        <Select
+          css={marginBottom}
           id={`${scope}-country`}
-          label="Select Country"
+          label="Country"
           value={props.country}
-          setValue={props.setCountry}
+          onChange={e => props.setCountry(e.target.value)}
           error={firstError('country', props.formErrors)}
         >
-          <option value="">--</option>
+          <OptionForSelect value="">Select a country</OptionForSelect>
           {sortedOptions(props.countries)}
-        </SelectWithError>
+        </Select>
         {props.country === 'GB' ? <PostcodeFinder
           id={`${scope}-postcode`}
           onPostcodeUpdate={props.setPostcode}
@@ -169,14 +165,15 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           error={firstError('city', props.formErrors)}
         />
         <MaybeSelect
+          css={marginBottom}
           id={`${scope}-stateProvince`}
           label={props.country === 'CA' ? 'Province/Territory' : 'State'}
           value={props.state}
-          setValue={props.setState}
+          onChange={e => props.setState(e.target.value)}
           error={firstError('state', props.formErrors)}
           isShown={AddressFields.shouldShowStateDropdown(props.country)}
         >
-          <option value="">--</option>
+          <option value="">{`Select a ${props.country === 'CA' ? 'province/territory' : 'state'}`}</option>
           {AddressFields.statesForCountry(props.country)}
         </MaybeSelect>
         <MaybeInput
