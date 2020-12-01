@@ -253,6 +253,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
               <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
                 {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                  const hideDate = new RegExp('-12-25$').test(machineDate);
+
+                  // Don't render input if Christmas day
+                  if (hideDate) {
+                    return null;
+                  }
+
                   return (
                     <RadioInput
                       appearance="group"
