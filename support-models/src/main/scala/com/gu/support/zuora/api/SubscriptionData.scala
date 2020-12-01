@@ -179,7 +179,8 @@ case class Subscription(
   readerType: ReaderType = ReaderType.Direct,
   promoCode: Option[PromoCode] = None,
   redemptionCode: Option[RawRedemptionCode] = None,
-  corporateAccountId: Option[String] = None
+  corporateAccountId: Option[String] = None,
+  giftNotificationEmailDate__c: Option[LocalDate] = None,
 )
 
 object RatePlanChargeData {

@@ -83,6 +83,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       initialTermPeriodType shouldBe Month
       promoCode shouldBe None
       corporateAccountId shouldBe None
+      giftNotificationEmailDate__c shouldBe Some(new LocalDate(2020, 12, 1))
     }
 
   "Attempting to build a subscribe request for a gift redemptions" should "return an error" in {
@@ -127,6 +128,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       SANDBOX,
       None,
+      None,
     ).right.get
 
   lazy val threeMonthGiftPurchase =
@@ -135,7 +137,8 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       DigitalPack(GBP, Quarterly, Gift),
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       SANDBOX,
-      Some(GeneratedGiftCode("gd03-23456789").get)// code for Quarterly ie Gift3Month
+      Some(GeneratedGiftCode("gd03-23456789").get),// code for Quarterly ie Gift3Month
+      Some(new LocalDate(2020, 12, 1)),
     ).right.get
 
   lazy val threeMonthGiftRedemption: Future[Throwable] =
