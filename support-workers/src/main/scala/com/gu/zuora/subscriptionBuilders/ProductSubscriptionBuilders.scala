@@ -59,7 +59,7 @@ object ProductSubscriptionBuilders {
         contractEffectiveDate = contractEffectiveDate,
         contractAcceptanceDate = contractAcceptanceDate,
         termStartDate = contractEffectiveDate,
-        createdRequestId__c = createdRequestId.toString,
+        createdRequestId = createdRequestId.toString,
         readerType = readerType,
         autoRenew = autoRenew,
         initialTerm = initialTerm,

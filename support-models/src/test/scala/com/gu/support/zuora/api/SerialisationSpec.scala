@@ -36,15 +36,69 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     testDecoding[ContactDetails](soldToContact, c => c.deliveryInstructions shouldBe Some("Stick it in the shed"))
   }
 
+  "Subscription" should "serialise if it's a non gift" in {
+    val json = dsSubscriptionData.asJson
+    val expected =
+      parse("""
+        |{
+        |  "RatePlanData" : [
+        |    {
+        |      "RatePlan" : { "ProductRatePlanId" : "12345" },
+        |      "RatePlanChargeData" : [],
+        |      "SubscriptionProductFeatureList" : []
+        |    }
+        |  ],
+        |  "Subscription" : {
+        |    "ContractEffectiveDate" : "2020-12-01",
+        |    "ContractAcceptanceDate" : "2020-12-01",
+        |    "TermStartDate" : "2020-12-01",
+        |    "AutoRenew" : true,
+        |    "InitialTermPeriodType" : "Month",
+        |    "InitialTerm" : 12,
+        |    "RenewalTerm" : 12,
+        |    "TermType" : "TERMED",
+        |    "ReaderType__c" : "Direct",
+        |    "CreatedRequestId__c" : "requestId"
+        |  }
+        |}""".stripMargin).toTry.get
+    json.mapObject(_.mapValues(_.dropNullValues)) should be(expected)
+  }
+
+  it should "serialise if it is a gift" in {
+    val json = dsGiftSubscriptionData.asJson
+    val expected =
+      parse("""
+              |{
+              |  "RatePlanData" : [
+              |    {
+              |      "RatePlan" : { "ProductRatePlanId" : "12345" },
+              |      "RatePlanChargeData" : [],
+              |      "SubscriptionProductFeatureList" : []
+              |    }
+              |  ],
+              |  "Subscription" : {
+              |    "ContractEffectiveDate" : "2020-12-01",
+              |    "ContractAcceptanceDate" : "2020-12-01",
+              |    "TermStartDate" : "2020-12-01",
+              |    "AutoRenew" : false,
+              |    "InitialTermPeriodType" : "Month",
+              |    "InitialTerm" : 3,
+              |    "RenewalTerm" : 12,
+              |    "TermType" : "TERMED",
+              |    "ReaderType__c" : "Gift",
+              |    "RedemptionCode__c" : "gd03-asdfghjq",
+              |    "CreatedRequestId__c" : "requestId",
+              |    "GiftNotificationEmailDate__c" : "2020-12-25"
+              |  }
+              |}""".stripMargin).toTry.get
+    json.mapObject(_.mapValues(_.dropNullValues)) should be(expected)
+  }
+
   "SubscribeRequest" should "serialise to correct json" in {
     val json = creditCardSubscriptionRequest().asJson
     (json \\ "GenerateInvoice").head.asBoolean should be(Some(true))
     (json \\ "sfContactId__c").head.asString.get should be(salesforceId)
     (json \\ "SpecialDeliveryInstructions__c").head.asString.get should be(deliveryInstructions)
-  }
-
-  it should "deserialise correctly" in {
-    testDecoding[SubscribeRequest](subscribeRequestJson)
   }
 
   "DiscountRatePlanCharge with fixed end date" should "serialise and deserialize correctly" in {
@@ -118,11 +172,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     testDecoding[InvoiceResult](invoiceResult)
   }
 
-  "Subscription" should "serialise and deserialise correctly" in {
-    testDecoding[Subscription](subscriptionJson, s => {
-        s.promoCode shouldBe Some(promoCode)
-      })
-
+  "Subscription" should "serialise correctly" in {
     val encoded = subscription.asJson
     (encoded \\ "InitialPromotionCode__c").map(_ shouldBe Json.fromString(promoCode))
     (encoded \\ "PromotionCode__c").map(_ shouldBe Json.fromString(promoCode))

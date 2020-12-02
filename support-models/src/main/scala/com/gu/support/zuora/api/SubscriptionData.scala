@@ -152,10 +152,6 @@ object SubscriptionProductFeature {
 case class SubscriptionProductFeature(featureId: String)
 
 object Subscription {
-  implicit val decoder: Decoder[Subscription] = decapitalizingDecoder[Subscription].prepare(
-    _.withFocus(_.mapObject(_.renameField("PromotionCode__c", "promoCode")))
-      .withFocus(_.mapObject(_.renameField("ReaderType__c", "readerType")))
-  )
 
   implicit val encoder: Encoder[Subscription] = capitalizingEncoder[Subscription].mapJsonObject(_
     .copyField("PromoCode", "PromotionCode__c")
@@ -163,6 +159,8 @@ object Subscription {
     .renameField("ReaderType", "ReaderType__c")
     .renameField("RedemptionCode", "RedemptionCode__c")
     .renameField("CorporateAccountId", "CorporateAccountId__c")
+    .renameField("CreatedRequestId", "CreatedRequestId__c")
+    .renameField("GiftNotificationEmailDate", "GiftNotificationEmailDate__c")
   )
 }
 
@@ -170,7 +168,7 @@ case class Subscription(
   contractEffectiveDate: LocalDate,
   contractAcceptanceDate: LocalDate,
   termStartDate: LocalDate,
-  createdRequestId__c: String,
+  createdRequestId: String,
   autoRenew: Boolean = true,
   initialTermPeriodType: PeriodType = Month,
   initialTerm: Int = 12,
@@ -179,7 +177,8 @@ case class Subscription(
   readerType: ReaderType = ReaderType.Direct,
   promoCode: Option[PromoCode] = None,
   redemptionCode: Option[RawRedemptionCode] = None,
-  corporateAccountId: Option[String] = None
+  corporateAccountId: Option[String] = None,
+  giftNotificationEmailDate: Option[LocalDate] = None,
 )
 
 object RatePlanChargeData {
@@ -199,7 +198,7 @@ case class RatePlanData(
 )
 
 object SubscriptionData {
-  implicit val codec: Codec[SubscriptionData] = capitalizingCodec
+  implicit val encoder: Encoder[SubscriptionData] = capitalizingEncoder
 }
 
 case class SubscriptionData(ratePlanData: List[RatePlanData], subscription: Subscription)

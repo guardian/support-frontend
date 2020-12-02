@@ -10,7 +10,7 @@ import io.circe.generic.semiauto.deriveEncoder
 import org.joda.time.LocalDate
 
 object SubscribeItem {
-  implicit val codec: Codec[SubscribeItem] = capitalizingCodec
+  implicit val encoder: Encoder[SubscribeItem] = capitalizingEncoder
 }
 
 case class SubscribeItem(
@@ -23,7 +23,7 @@ case class SubscribeItem(
 )
 
 object SubscribeRequest {
-  implicit val codec: Codec[SubscribeRequest] = deriveCodec
+  implicit val encoder: Encoder[SubscribeRequest] = deriveEncoder
 }
 
 //The subscribe request documented here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe

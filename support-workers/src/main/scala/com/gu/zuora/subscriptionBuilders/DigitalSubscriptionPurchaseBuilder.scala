@@ -28,15 +28,16 @@ class DigitalSubscriptionPurchaseBuilder(
     requestId: UUID,
     environment: TouchPointEnvironment,
     maybeGiftCode: Option[GeneratedGiftCode],
+    maybeDeliveryDate: Option[LocalDate],
   )(implicit ec: ExecutionContext): Either[PromoError, SubscriptionData] = {
 
     val productRatePlanId = validateRatePlan(digitalRatePlan(digitalPack, environment), digitalPack.describe)
 
-    val (contractAcceptanceDelay, autoRenew, initialTerm, maybeRedemptionCode) =
-      (digitalPack.readerType, maybeGiftCode) match {
-        case (Gift, Some(giftCode)) => (0, false, GiftCodeValidator.expirationTimeInMonths + 1, Some(giftCode))
-        case (Gift, _) | (_, Some(_)) => throw new RuntimeException("coding error - possible unredeemable sub")
-        case _ => (config.defaultFreeTrialPeriod + config.paymentGracePeriod, true, 12, None)
+    val (contractAcceptanceDelay, autoRenew, initialTerm, maybeRedemptionCode, deliveryDate) =
+      (digitalPack.readerType, maybeGiftCode, maybeDeliveryDate) match {
+        case (Gift, Some(giftCode), Some(deliveryDate)) => (0, false, GiftCodeValidator.expirationTimeInMonths + 1, Some(giftCode), Some(deliveryDate))
+        case (Gift, _, _) | (_, Some(_), _) | (Gift, _, None) => throw new RuntimeException("coding error - possible unredeemable sub")
+        case _ => (config.defaultFreeTrialPeriod + config.paymentGracePeriod, true, 12, None, None)
       }
 
     val todaysDate = today()
@@ -48,12 +49,13 @@ class DigitalSubscriptionPurchaseBuilder(
         contractEffectiveDate = todaysDate,
         contractAcceptanceDate = contractAcceptanceDate,
         termStartDate = todaysDate,
-        createdRequestId__c = requestId.toString,
+        createdRequestId = requestId.toString,
         readerType = digitalPack.readerType,
         autoRenew = autoRenew,
         initialTerm = initialTerm,
         initialTermPeriodType = Month,
-        redemptionCode = maybeRedemptionCode.map(_.value)
+        redemptionCode = maybeRedemptionCode.map(_.value),
+        giftNotificationEmailDate = deliveryDate,
       )
     )
 
