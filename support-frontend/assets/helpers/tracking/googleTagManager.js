@@ -297,12 +297,7 @@ function init(participations: Participations) {
   }) => {
 
     // Update vendorConsentsLookup value based on thirdPartyTrackingConsent
-    vendorConsentsLookup = Object.keys(thirdPartyTrackingConsent).reduce((accumulator, vendorKey) => {
-      if (thirdPartyTrackingConsent[vendorKey]) {
-        return [...accumulator, vendorKey];
-      }
-      return [...accumulator];
-    }, []).join(',');
+    vendorConsentsLookup = Object.keys(thirdPartyTrackingConsent).filter(vendorKey => thirdPartyTrackingConsent[vendorKey]).join(',');
 
     /**
       * Update userConsentsToGTM value when
