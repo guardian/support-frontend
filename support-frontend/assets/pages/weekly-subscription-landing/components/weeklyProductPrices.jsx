@@ -75,10 +75,13 @@ const mapStateToProps = (state: State): PropTypes => {
       ) : { price: 0, fixedTerm: false, currency: 'GBP' };
       const promotion = getRelevantPromotion(productPrice);
       const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
+
+      const offerCopy = (promotion && promotion.landingPage && promotion.landingPage.roundel) || '';
+
       return {
         title: billingPeriodTitle(billingPeriod, orderIsAGift),
         price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
-        offerCopy: promotion ? promotion.description : '',
+        offerCopy,
         priceCopy: (
           <span>
             {getSimplifiedPriceDescription(
