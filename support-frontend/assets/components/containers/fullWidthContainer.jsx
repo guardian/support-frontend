@@ -2,33 +2,67 @@
 
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
-import { neutral } from '@guardian/src-foundations/palette';
+import { brand, neutral } from '@guardian/src-foundations/palette';
 
+type Theme = 'light' | 'dark';
 type PropTypes = {|
   cssOverrides?: string;
   children: Node;
+  theme?: Theme,
+  hasOverlap?: boolean
 |}
 
+const containerThemes: { [key: Theme]: string } = {
+  light: css`
+    background-color: ${neutral[93]};
+  `,
+  dark: css`
+    background-color: ${brand[300]};
+    color: ${neutral[100]};
+  `,
+};
+
 const fullWidthContainer = css`
-  background-color: ${neutral[93]};
+  position: relative;
   width: 100%;
   display: flex;
 `;
 
-function FullWidthContainer(props: PropTypes) {
+// This allows part of the colour of the container to appear to overlap the previous section of the page
+const fullWidthContainerOverlap = css`
+  :before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    transform: translateY(-100%);
+    height: 88px;
+    width: 100%;
+    background-color: inherit;
+  }
+`;
+
+function FullWidthContainer({
+  theme, hasOverlap, cssOverrides, children,
+}: PropTypes) {
+  const themeStyles = containerThemes[theme || 'light'];
   return (
     <div css={[
       fullWidthContainer,
-      props.cssOverrides,
+      themeStyles,
+      hasOverlap ? fullWidthContainerOverlap : '',
+      cssOverrides,
     ]}
     >
-      {props.children}
+      {children}
     </div>
   );
 }
 
 FullWidthContainer.defaultProps = {
   cssOverrides: '',
+  theme: 'light',
+  hasOverlap: false,
 };
 
 export default FullWidthContainer;

@@ -32,22 +32,10 @@ export const paymentSelectionCard = css`
   margin: 10px 10px 0 0;
   z-index: 10;
 
-  ${from.mobileLandscape} {
-    margin-left: 10px;
-  }
-
   ${from.tablet} {
-    margin: 0 0 0 20px;
+    margin: 0 0 0;
     max-width: 30rem;
     width: 320px;
-  }
-
-  ${from.leftCol} {
-    margin-left: 40px;
-  }
-
-  ${from.wide} {
-    margin-left: 50px;
   }
 
   :last-of-type {

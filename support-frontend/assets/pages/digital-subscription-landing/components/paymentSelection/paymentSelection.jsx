@@ -4,58 +4,43 @@ import React from 'react';
 import { connect } from 'react-redux';
 // components
 import ProductOption, {
-  ProductOptionButton,
-  ProductOptionContent,
-  ProductOptionOffer,
-  ProductOptionTitle,
-} from 'components/productOption/productOption';
+  type Product,
+} from 'components/product/productOption';
 import {
   mapStateToProps,
-  type PaymentOption,
 } from './helpers/paymentSelection';
 // styles
 import {
   paymentSelection,
   paymentSelectionCard,
-  productOptionLabel,
 } from './paymentSelectionStyles';
 
-type PropTypes = {
-  paymentOptions: Array<PaymentOption>,
-  orderIsAGift: boolean,
+export type PropTypes = {
+  paymentOptions: Product[],
 }
 
-const PaymentSelection = ({ paymentOptions, orderIsAGift }: PropTypes) =>
+const PaymentSelection = ({ paymentOptions }: PropTypes) =>
 // The following line makes sure the Annual payment selection card is on the right hand side
 
   (
     <div css={paymentSelection}>
       {([...paymentOptions].sort((opt1) => { // Spread operator because .sort is mutating
-          if (opt1.title === 'Annual') {
+          if (opt1.title === 'Annual' || opt1.title === '12 months') {
             return 1;
           }
-          return -1;
-        }).map(paymentOption => (
+          return 0;
+        }).map(product => (
           <div css={paymentSelectionCard}>
-            <span css={productOptionLabel}>
-              {paymentOption.label}
-            </span>
-            <ProductOption>
-              <ProductOptionContent>
-                <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
-                <ProductOptionOffer>
-                  {paymentOption.offer}
-                </ProductOptionOffer>
-              </ProductOptionContent>
-              <ProductOptionButton
-                href={paymentOption.href}
-                onClick={paymentOption.onClick}
-                aria-label="Subscribe-button"
-                salesCopy={paymentOption.salesCopy}
-              >
-                {orderIsAGift ? 'Give this gift' : 'Start free trial now'}
-              </ProductOptionButton>
-            </ProductOption>
+            <ProductOption
+              title={product.title}
+              price={product.price}
+              offerCopy={product.offerCopy}
+              priceCopy={product.priceCopy}
+              buttonCopy={product.buttonCopy}
+              href={product.href}
+              onClick={product.onClick}
+              label={product.label}
+            />
           </div>
         )))
       }

@@ -181,7 +181,7 @@ const content = (
           </Block>
         </CentredContainer>
       </FullWidthContainer>
-      <FullWidthContainer cssOverrides={pricesSection}>
+      <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <WeeklyPrices />
         </CentredContainer>

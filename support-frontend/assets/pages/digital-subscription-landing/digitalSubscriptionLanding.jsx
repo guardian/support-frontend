@@ -19,6 +19,9 @@ import {
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
+import CentredContainer from 'components/containers/centredContainer';
+
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import CampaignHeader from './components/hero/hero';
@@ -28,7 +31,7 @@ import ProductBlockAus from './components/productBlock/productBlockAus';
 import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
-import { CallToAction, CallToActionGift } from './components/cta';
+import Prices from './components/cta';
 import GiftNonGiftLink from './components/giftNonGiftLink';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 // ----- Styles ----- //
@@ -101,7 +104,11 @@ function LandingPage() {
         <ProductBlockAus countryGroupId={countryGroupId} /> :
         <ProductBlock countryGroupId={countryGroupId} />
       }
-      {orderIsAGift ? <CallToActionGift /> : <CallToAction />}
+      <FullWidthContainer theme="dark" hasOverlap>
+        <CentredContainer>
+          <Prices orderIsAGift={orderIsAGift} />
+        </CentredContainer>
+      </FullWidthContainer>
       <GiftNonGiftLink orderIsAGift={orderIsAGift} />
     </Page>
   );

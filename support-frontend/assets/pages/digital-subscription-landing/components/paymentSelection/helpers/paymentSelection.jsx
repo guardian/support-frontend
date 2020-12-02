@@ -10,6 +10,10 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fixDecimals } from 'helpers/subscriptions';
 
 // types
+import {
+  type Product,
+} from 'components/product/productOption';
+
 import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
 import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
 import { type Option } from 'helpers/types/option';
@@ -22,6 +26,8 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { isNumeric } from 'helpers/productPrice/productPrices';
+
+import { type PropTypes } from '../paymentSelection';
 
 export type PaymentOption = {
   title: string,
@@ -58,17 +64,15 @@ const BILLING_PERIOD = {
       const display = price => getDisplayPrice(currencyId, price);
       return promotionalPrice ?
         <span>
-          <span className="product-option__price">{display(promotionalPrice)}</span>
           <span className="product-option__price-detail">then {display(displayPrice)} per month</span>
         </span>
         :
         <span>
-          <span className="product-option__price">{display(displayPrice)}</span>
           <span className="product-option__price-detail">14 day free trial</span>
         </span>;
     },
-    offer: null,
-    label: null,
+    offer: '',
+    label: '',
   },
   [Annual]: {
     title: 'Annual',
@@ -76,13 +80,11 @@ const BILLING_PERIOD = {
       const display = price => getDisplayPrice(currencyId, price);
       return isNumeric(promotionalPrice) ?
         <span>
-          <span className="product-option__price">{display(promotionalPrice)}</span>
           <span className="product-option__price-detail">then {display(displayPrice)} a year</span>
         </span>
         :
         <span>
-          <span className="product-option__price">{display(displayPrice)}</span>
-          <span className="product-option__price-detail">{display(displayPrice / 12)} per month</span>
+          <span className="product-option__price-detail">per month</span>
         </span>;
     },
     offer: 'Save an additional 21%',
@@ -93,42 +95,43 @@ const BILLING_PERIOD = {
 const BILLING_PERIOD_GIFT = {
   [Quarterly]: {
     title: '3 months',
-    salesCopy: (currencyId: IsoCurrency, displayPrice: number) => {
-      const display = price => getDisplayPrice(currencyId, price);
-      return (
-        <span>
-          <span className="product-option__price">{display(displayPrice)}</span>
-          <span className="product-option__price-detail">One-off payment</span>
-        </span>);
-    },
-    offer: null,
-    label: null,
+    salesCopy: () => (
+      <span>
+        <span className="product-option__price-detail">One-off payment</span>
+      </span>),
+    offer: '',
+    label: '',
   },
   [Annual]: {
     title: '12 months',
-    salesCopy: (
-      currencyId: IsoCurrency,
-      displayPrice: number,
-    ) => {
-      const display = price => getDisplayPrice(currencyId, price);
-      return (
-        <span>
-          <span className="product-option__price">{display(displayPrice)}</span>
-          <span className="product-option__price-detail">One-off payment</span>
-        </span>);
-    },
-    offer: null,
+    salesCopy: () => (
+      <span>
+        <span className="product-option__price-detail">One-off payment</span>
+      </span>),
+    offer: '',
     label: 'Best Deal',
   },
 };
 
+// export type Product = {
+//   title: string,
+//   price: string,
+//   children?: Node,
+//   offerCopy?: string,
+//   priceCopy: Node,
+//   buttonCopy: string,
+//   href: string,
+//   onClick: Function,
+//   label?: string,
+// }
+
 // state
-const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> } => {
+const mapStateToProps = (state: State): PropTypes => {
   const { productPrices, orderIsAGift } = state.page;
   const { countryGroupId, currencyId } = state.common.internationalisation;
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
-  const createPaymentOption = (billingPeriod: BillingPeriod): PaymentOption => {
+  const createPaymentOption = (billingPeriod: BillingPeriod): Product => {
     const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
     const digitalBillingPeriodGift = billingPeriod === 'Annual' || billingPeriod === 'Quarterly' ? billingPeriod : 'Quarterly';
     const billingPeriodForHref = orderIsAGift ? digitalBillingPeriodGift : digitalBillingPeriod;
@@ -137,7 +140,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
     const promotion = getAppliedPromo(productPrice.promotions);
     const promoCode = promotion ? promotion.promoCode : null;
     const promotionalPrice = promotion && isNumeric(promotion.discountedPrice) ? promotion.discountedPrice : null;
-    const offer = promotion &&
+    const offerCopy = promotion &&
     promotion.landingPage &&
     promotion.landingPage.roundel ? promotion.landingPage.roundel :
       BILLING_PERIOD[digitalBillingPeriod].offer;
@@ -145,25 +148,28 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
     return orderIsAGift ?
       {
         title: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].title,
+        price: getDisplayPrice(currencyId, fullPrice),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
         onClick: sendTrackingEventsOnClick('subscribe_now_cta_gift', 'DigitalPack', null, billingPeriod),
-        salesCopy: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].salesCopy(currencyId, fullPrice),
-        offer: null,
+        priceCopy: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].salesCopy(),
+        offerCopy: '',
         label: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].label,
+        buttonCopy: 'Give this gift',
       } :
       {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
+        price: getDisplayPrice(currencyId, promotionalPrice || fullPrice),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
         onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, billingPeriod),
-        salesCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
-        offer,
+        priceCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
+        offerCopy,
         label: BILLING_PERIOD[digitalBillingPeriod].label,
+        buttonCopy: 'Start free trial',
       };
 
   };
-  const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map(createPaymentOption);
   return {
-    paymentOptions,
+    paymentOptions: Object.keys(productOptions).map(createPaymentOption),
   };
 };
 

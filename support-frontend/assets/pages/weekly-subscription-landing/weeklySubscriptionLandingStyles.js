@@ -4,16 +4,6 @@ import { css } from '@emotion/core';
 import { brand, neutral } from '@guardian/src-foundations/palette';
 
 export const pricesSection = css`
-  :before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    transform: translateY(-100%);
-    height: 88px;
-    width: 100%;
-    background-color: ${brand[300]};
-  }
   position: relative;
   background-color: ${brand[300]};
   color: ${neutral[100]};
