@@ -43,8 +43,8 @@ const productOptionUnderline = css`
 
 const productOptionTitle = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
-  padding-bottom: ${space[2]}px;
-  margin-bottom: ${space[4]}px;
+  padding-bottom: ${space[4]}px;
+  margin-bottom: ${space[2]}px;
 `;
 
 const productOptionOfferCopy = css`

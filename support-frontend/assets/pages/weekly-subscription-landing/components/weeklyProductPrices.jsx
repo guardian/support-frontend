@@ -3,9 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-  SixWeekly,
   billingPeriodTitle,
   weeklyBillingPeriods,
+  weeklyGiftBillingPeriods,
   type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
@@ -24,7 +24,6 @@ import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { currencies } from 'helpers/internationalisation/currency';
 import { fixDecimals } from 'helpers/subscriptions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-
 
 const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean): string => {
   const promoCode = getQueryParameter(promoQueryParam);
@@ -58,11 +57,34 @@ const getMainDisplayPrice = (productPrice: ProductPrice, promotion?: Promotion |
   return productPrice.price;
 };
 
+const weeklyProductProps = (billingPeriod: WeeklyBillingPeriod, productPrice: ProductPrice, orderIsAGift = false) => {
+  const promotion = getRelevantPromotion(productPrice);
+  const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
+
+  const offerCopy = (promotion && promotion.landingPage && promotion.landingPage.roundel) || '';
+
+  return {
+    title: billingPeriodTitle(billingPeriod, orderIsAGift),
+    price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
+    offerCopy,
+    priceCopy: (
+      <span>
+        {getSimplifiedPriceDescription(
+          productPrice,
+          billingPeriod,
+        )}
+      </span>),
+    buttonCopy: 'Subscribe now',
+    href: getCheckoutUrl(billingPeriod, orderIsAGift),
+    label: getPromotionLabel(promotion) || '',
+    onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
+  };
+};
+
 const mapStateToProps = (state: State): PropTypes => {
   const { countryId } = state.common.internationalisation;
   const { productPrices, orderIsAGift } = state.page;
-  const billingPeriodsToUse = weeklyBillingPeriods.filter(billingPeriod =>
-    !(state.page.orderIsAGift && billingPeriod === SixWeekly));
+  const billingPeriodsToUse = orderIsAGift ? weeklyGiftBillingPeriods : weeklyBillingPeriods;
 
   return {
     orderIsAGift,
@@ -73,27 +95,7 @@ const mapStateToProps = (state: State): PropTypes => {
         billingPeriod,
         getWeeklyFulfilmentOption(countryId),
       ) : { price: 0, fixedTerm: false, currency: 'GBP' };
-      const promotion = getRelevantPromotion(productPrice);
-      const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
-
-      const offerCopy = (promotion && promotion.landingPage && promotion.landingPage.roundel) || '';
-
-      return {
-        title: billingPeriodTitle(billingPeriod, orderIsAGift),
-        price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
-        offerCopy,
-        priceCopy: (
-          <span>
-            {getSimplifiedPriceDescription(
-              productPrice,
-              billingPeriod,
-            )}
-          </span>),
-        buttonCopy: 'Subscribe now',
-        href: getCheckoutUrl(billingPeriod, orderIsAGift),
-        label: getPromotionLabel(promotion) || '',
-        onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
-      };
+      return weeklyProductProps(billingPeriod, productPrice, orderIsAGift);
     }),
   };
 };
