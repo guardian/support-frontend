@@ -18,7 +18,7 @@ import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
-import Footer from 'components/footer/footer';
+import ContributionsFooter from 'components/footerCompliant/ContributionsFooter';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import { getCampaignSettings } from 'helpers/campaigns';
 import { init as formInit } from './contributionsLandingInit';
@@ -98,7 +98,7 @@ const contributionsLandingPage = (campaignCodeParameter: ?string) => (
   <Page
     classModifiers={['new-template', 'contribution-form', ...cssModifiers]}
     header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-    footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+    footer={<ContributionsFooter />}
     backgroundImageSrc={backgroundImageSrc}
   >
     <ContributionFormContainer
