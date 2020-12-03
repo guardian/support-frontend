@@ -16,11 +16,6 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with LazyLogging with EitherValues {
 
-  "Contribution JSON with a billing period set" should "be decoded correctly" in {
-    val input = contribution(billingPeriod = Annual)
-    testDecoding[Contribution](input, _.billingPeriod shouldBe Annual)
-  }
-
   "CreatePaymentMethodState" should "deserialise correctly (comes from the support-frontend backend side)" in {
     // if you change the format, you need to make sure support workers and frontend can handle the same state
     testDecoding[CreatePaymentMethodState](createStripePaymentMethodContributionJson())
