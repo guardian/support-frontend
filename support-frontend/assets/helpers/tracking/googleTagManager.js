@@ -204,7 +204,7 @@ function getData(
     internalCampaignCode: getQueryParameter('INTCMP') || undefined,
     experience: getVariantsAsString(participations),
     paymentRequestApiStatus,
-    vendorConsentsLookup, // eg. "googleAnalytics,googleTagManager"
+    vendorConsentsLookup, // eg. "google-analytics,twitter"
   };
 }
 
@@ -303,7 +303,7 @@ function init(participations: Participations) {
       * Update userConsentsToGTM value when
       * consent changes via the CMP library.
     */
-    userConsentsToGTM = thirdPartyTrackingConsent[googleTagManagerKey];
+    userConsentsToGTM = thirdPartyTrackingConsent[googleTagManagerKey] && thirdPartyTrackingConsent[googleAnalyticsKey];
 
     if (userConsentsToGTM) {
       if (!scriptAdded) {
