@@ -53,7 +53,7 @@ import {
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Stripe, DirectDebit } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit, PayPal } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
@@ -71,6 +71,8 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import EndSummaryMobile from 'pages/paper-subscription-checkout/components/endSummary/endSummaryMobile';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 
 
 const marginBottom = css`
@@ -174,6 +176,7 @@ function PaperCheckoutForm(props: PropTypes) {
     props.fulfilmentOption,
     props.productOption,
   );
+  const paymentMethods = supportedPaymentMethods(props.country);
   const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
   const subsCardStartDates = isSubscriptionCard ?
     getAndSetStartDateForSubsCard(props.productOption, props.setStartDate) :
@@ -330,23 +333,15 @@ function PaperCheckoutForm(props: PropTypes) {
                 </Text>
               </Rows>
             </FormSection>) : null}
-          <PaymentMethodSelector
-            country="GB"
-            paymentMethod={props.paymentMethod}
-            setPaymentMethod={props.setPaymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
-            validationError={firstError('paymentMethod', props.formErrors)}
-            csrf={props.csrf}
-            currencyId={props.currencyId}
-            payPalHasLoaded={props.payPalHasLoaded}
-            formIsValid={props.formIsValid}
-            validateForm={props.validateForm}
-            isTestUser={props.isTestUser}
-            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            amount={props.amount}
-            billingPeriod={props.billingPeriod}
-            allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-          />
+          {paymentMethods.length > 1 ?
+            <FormSection title="How would you like to pay?">
+              <PaymentMethodSelector
+                country="GB"
+                paymentMethod={props.paymentMethod}
+                setPaymentMethod={props.setPaymentMethod}
+                validationError={firstError('paymentMethod', props.formErrors)}
+              />
+            </FormSection> : null}
           <FormSectionHiddenUntilSelected
             id="stripeForm"
             show={props.paymentMethod === Stripe}
@@ -377,6 +372,21 @@ function PaperCheckoutForm(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
+          {props.paymentMethod === PayPal ? (
+            <PayPalSubmitButton
+              paymentMethod={props.paymentMethod}
+              onPaymentAuthorised={props.onPaymentAuthorised}
+              csrf={props.csrf}
+              currencyId={props.currencyId}
+              payPalHasLoaded={props.payPalHasLoaded}
+              formIsValid={props.formIsValid}
+              validateForm={props.validateForm}
+              isTestUser={props.isTestUser}
+              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+              amount={props.amount}
+              billingPeriod={props.billingPeriod}
+              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+            />) : null}
           <GeneralErrorMessage
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}

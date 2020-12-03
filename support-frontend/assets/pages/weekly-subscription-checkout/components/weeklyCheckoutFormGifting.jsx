@@ -63,7 +63,7 @@ import {
   type SetCountryChangedAction,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
-import { Stripe, DirectDebit } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit, PayPal } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Heading from 'components/heading/heading';
@@ -76,6 +76,7 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 
 // ----- Styles ----- //
 
@@ -319,18 +320,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             country={props.billingCountry}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
             validationError={firstError('paymentMethod', props.formErrors)}
-            csrf={props.csrf}
-            currencyId={props.currencyId}
-            payPalHasLoaded={props.payPalHasLoaded}
-            formIsValid={props.formIsValid}
-            validateForm={props.validateForm}
-            isTestUser={props.isTestUser}
-            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            amount={price.price}
-            billingPeriod={props.billingPeriod}
-            allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"
@@ -362,6 +352,21 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
+          {props.paymentMethod === PayPal ? (
+            <PayPalSubmitButton
+              paymentMethod={props.paymentMethod}
+              onPaymentAuthorised={props.onPaymentAuthorised}
+              csrf={props.csrf}
+              currencyId={props.currencyId}
+              payPalHasLoaded={props.payPalHasLoaded}
+              formIsValid={props.formIsValid}
+              validateForm={props.validateForm}
+              isTestUser={props.isTestUser}
+              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+              amount={price.price}
+              billingPeriod={props.billingPeriod}
+              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+            />) : null}
           <GeneralErrorMessage
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}

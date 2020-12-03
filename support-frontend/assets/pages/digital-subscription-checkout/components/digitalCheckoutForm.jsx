@@ -61,6 +61,7 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { routes } from 'helpers/routes';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 
 // ----- Types ----- //
 
@@ -192,18 +193,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             country={props.country}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
             validationError={firstError('paymentMethod', props.formErrors)}
-            csrf={props.csrf}
-            currencyId={props.currencyId}
-            payPalHasLoaded={props.payPalHasLoaded}
-            formIsValid={props.formIsValid}
-            validateForm={props.validateForm}
-            isTestUser={props.isTestUser}
-            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            amount={props.amount}
-            billingPeriod={props.billingPeriod}
-            allErrors={[...props.addressErrors, ...props.formErrors]}
           />
           <FormSectionHiddenUntilSelected
             id="stripeForm"
@@ -234,6 +224,21 @@ function DigitalCheckoutForm(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
+          {props.paymentMethod === PayPal ? (
+            <PayPalSubmitButton
+              paymentMethod={props.paymentMethod}
+              onPaymentAuthorised={props.onPaymentAuthorised}
+              csrf={props.csrf}
+              currencyId={props.currencyId}
+              payPalHasLoaded={props.payPalHasLoaded}
+              formIsValid={props.formIsValid}
+              validateForm={props.validateForm}
+              isTestUser={props.isTestUser}
+              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+              amount={props.amount}
+              billingPeriod={props.billingPeriod}
+              allErrors={[...props.addressErrors, ...props.formErrors]}
+            />) : null}
           <GeneralErrorMessage
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
