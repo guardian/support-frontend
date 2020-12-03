@@ -5,6 +5,7 @@ import { css } from '@emotion/core';
 import { brand, neutral } from '@guardian/src-foundations/palette';
 
 type Theme = 'light' | 'dark' | 'white';
+
 type PropTypes = {|
   cssOverrides?: string;
   children: Node;
