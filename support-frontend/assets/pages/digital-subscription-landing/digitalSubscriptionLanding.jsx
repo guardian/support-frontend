@@ -17,6 +17,7 @@ import {
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
+import { routes } from 'helpers/routes';
 
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -32,7 +33,7 @@ import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
 import Prices from './components/cta';
-import GiftNonGiftLink from './components/giftNonGiftLink';
+import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 // ----- Styles ----- //
 
@@ -61,7 +62,8 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
-const path = orderIsAGift ? '/subscribe/digital/gift' : '/subscribe/digital';
+const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
+const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
 
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   path,
@@ -109,7 +111,11 @@ function LandingPage() {
           <Prices orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
-      <GiftNonGiftLink orderIsAGift={orderIsAGift} />
+      <FullWidthContainer theme="white">
+        <CentredContainer>
+          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
+        </CentredContainer>
+      </FullWidthContainer>
     </Page>
   );
 

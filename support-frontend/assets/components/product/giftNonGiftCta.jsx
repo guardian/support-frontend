@@ -7,9 +7,11 @@ import { body, headline } from '@guardian/src-foundations/typography';
 import { LinkButton } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 
-import { routes } from 'helpers/routes';
+type GiftableProduct = 'digital' | 'Guardian Weekly'
 
 type PropTypes = {|
+  href: string,
+  product: GiftableProduct,
   orderIsAGift: boolean,
 |};
 
@@ -26,19 +28,18 @@ const giftOrPersonalHeading = css`
   ${headline.medium({ fontWeight: 'bold' })};
 `;
 
-function GiftOrPersonal({ orderIsAGift }: PropTypes) {
+function GiftOrPersonal({ href, product, orderIsAGift }: PropTypes) {
   return (
     <section css={giftOrPersonal}>
       <div css={giftOrPersonalCopy}>
         <h2 css={giftOrPersonalHeading}>{orderIsAGift ? 'Looking for a subscription for yourself?' : 'Gift subscriptions'}</h2>
-        {!orderIsAGift && <p>A Guardian Weekly subscription makes a great gift.</p>}
+        {!orderIsAGift && <p>A {product} subscription makes a great gift.</p>}
       </div>
       <LinkButton
         icon={<SvgArrowRightStraight />}
         iconSide="right"
         priority="tertiary"
-        href={orderIsAGift ?
-              routes.guardianWeeklySubscriptionLanding : routes.guardianWeeklySubscriptionLandingGift}
+        href={href}
       >
         {orderIsAGift ? 'See personal subscriptions' : 'See gift subscriptions'}
       </LinkButton>

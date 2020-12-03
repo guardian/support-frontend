@@ -1,10 +1,5 @@
 import { css } from '@emotion/core';
-import { neutral } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
-import { space } from '@guardian/src-foundations';
-import { body } from '@guardian/src-foundations/typography';
-
-import { brandAlt } from '@guardian/src-foundations/palette';
 
 export const paymentSelection = css`
   display: flex;
@@ -50,18 +45,3 @@ export const paymentSelectionCard = css`
     }
   }
 `;
-
-export const productOptionLabel = css`
-  position: absolute;
-  top: -5px;
-  ${body.medium({ fontWeight: 'bold' })};
-  padding: 0 ${space[3]}px;
-  background-color: ${brandAlt[400]};
-  color: ${neutral[7]};
-  z-index: 0;
-
-  ${from.tablet} {
-    top: -25px;
-    }
-`;
-

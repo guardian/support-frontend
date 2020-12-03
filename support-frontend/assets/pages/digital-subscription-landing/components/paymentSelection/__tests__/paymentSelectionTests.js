@@ -6,7 +6,7 @@ import {
   getDisplayPrice,
   getProductPrice,
   getSavingPercentage,
-} from '../helpers/paymentSelection';
+} from '../paymentSelection';
 
 jest.mock('ophan', () => {});
 

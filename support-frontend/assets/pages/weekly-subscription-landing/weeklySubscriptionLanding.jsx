@@ -26,21 +26,22 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { routes } from 'helpers/routes';
 
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
 import Block from 'components/page/block';
+import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { WeeklyHero } from './components/hero/hero';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
-import GiftOrPersonal from './components/content/giftOrPersonal';
 
 import WeeklyPrices from './components/weeklyProductPrices';
 import reducer from './weeklySubscriptionLandingReducer';
-import { pricesSection, giftOrPersonalSection, giftHeroSubHeading } from './weeklySubscriptionLandingStyles';
+import { giftHeroSubHeading } from './weeklySubscriptionLandingStyles';
 
 import './weeklySubscriptionLanding.scss';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
@@ -75,7 +76,9 @@ const reactElementId: {
   International: 'weekly-landing-page-int',
 };
 
-const path = orderIsAGift ? '/subscribe/weekly/gift' : '/subscribe/weekly';
+const path = orderIsAGift ? routes.guardianWeeklySubscriptionLandingGift : routes.guardianWeeklySubscriptionLanding;
+const giftNonGiftLink = orderIsAGift ?
+  routes.guardianWeeklySubscriptionLanding : routes.guardianWeeklySubscriptionLandingGift;
 
 const Header = headerWithCountrySwitcherContainer({
   path,
@@ -186,9 +189,9 @@ const content = (
           <WeeklyPrices />
         </CentredContainer>
       </FullWidthContainer>
-      <FullWidthContainer cssOverrides={giftOrPersonalSection}>
+      <FullWidthContainer theme="white">
         <CentredContainer>
-          <GiftOrPersonal orderIsAGift={orderIsAGift} />
+          <GiftNonGiftCta product="Guardian Weekly" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
     </Page>
