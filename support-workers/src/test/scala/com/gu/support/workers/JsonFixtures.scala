@@ -140,6 +140,7 @@ object JsonFixtures {
   def contribution(amount: BigDecimal = 5, currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly): String =
     s"""
       {
+        "productType": "Contribution",
         "amount": $amount,
         "currency": "$currency",
         "billingPeriod": "$billingPeriod"
@@ -149,14 +150,17 @@ object JsonFixtures {
   val digitalPackJson =
     """
       {
+        "productType": "DigitalPack",
         "currency": "GBP",
-        "billingPeriod" : "Annual"
+        "billingPeriod" : "Annual",
+        "readerType": "Direct"
       }
     """
 
   val digitalPackCorporateJson =
     """
       {
+        "productType": "DigitalPack",
         "currency": "GBP",
         "billingPeriod" : "Annual",
         "readerType" : "Corporate"
@@ -166,6 +170,7 @@ object JsonFixtures {
   val digitalPackGiftJson =
     """
       {
+        "productType": "DigitalPack",
         "currency": "GBP",
         "billingPeriod" : "Annual",
         "readerType" : "Gift"
@@ -175,6 +180,7 @@ object JsonFixtures {
   val everydayPaperJson =
     """
       {
+        "productType": "Paper",
         "currency": "GBP",
         "billingPeriod" : "Monthly",
         "fulfilmentOptions" : "HomeDelivery",
@@ -636,7 +642,7 @@ object JsonFixtures {
   val wrapperWithMessages =
     """
       {
-        "state": "{\"requestId\":\"a64ad98e-5d39-4ffc-a4a9-217357dc2b19\",\"user\":{\"id\":\"9999999\",\"primaryEmailAddress\":\"integration-test@gu.com\",\"firstName\":\"test\",\"lastName\":\"user\",\"country\":\"GB\",\"billingAddress\":{\"country\":\"GB\"},\"allowMembershipMail\":false,\"allowThirdPartyMail\":false,\"allowGURelatedMail\":false,\"isTestUser\":false},\"product\":{\"amount\":5,\"currency\":\"GBP\",\"billingPeriod\":\"Monthly\"},\"analyticsInfo\":{\"paymentProvider\": \"Stripe\",\"isGiftPurchase\":false},\"paymentMethod\":{\"PaypalBaid\":\"B-23637766K5365543J\",\"PaypalEmail\":\"test@paypal.com\",\"PaypalType\":\"ExpressCheckout\",\"Type\":\"PayPal\",\"paymentGateway\":\"PayPal Express\"},\"giftRecipient\":{\"title\":\"Mr\",\"firstName\":\"Gifty\",\"lastName\":\"McRecipent\",\"email\":\"gift.recipient@gu.com\",\"giftRecipientType\":\"Weekly\"}}",
+        "state": "{\"requestId\":\"a64ad98e-5d39-4ffc-a4a9-217357dc2b19\",\"user\":{\"id\":\"9999999\",\"primaryEmailAddress\":\"integration-test@gu.com\",\"firstName\":\"test\",\"lastName\":\"user\",\"country\":\"GB\",\"billingAddress\":{\"country\":\"GB\"},\"allowMembershipMail\":false,\"allowThirdPartyMail\":false,\"allowGURelatedMail\":false,\"isTestUser\":false},\"product\":{\"productType\":\"Contribution\",\"amount\":5,\"currency\":\"GBP\",\"billingPeriod\":\"Monthly\"},\"analyticsInfo\":{\"paymentProvider\": \"Stripe\",\"isGiftPurchase\":false},\"paymentMethod\":{\"PaypalBaid\":\"B-23637766K5365543J\",\"PaypalEmail\":\"test@paypal.com\",\"PaypalType\":\"ExpressCheckout\",\"Type\":\"PayPal\",\"paymentGateway\":\"PayPal Express\"},\"giftRecipient\":{\"title\":\"Mr\",\"firstName\":\"Gifty\",\"lastName\":\"McRecipent\",\"email\":\"gift.recipient@gu.com\",\"giftRecipientType\":\"Weekly\"}}",
         "error": null,
         "requestInfo": {
           "testUser": false,
