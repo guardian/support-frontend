@@ -40,27 +40,37 @@ export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripeP
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
 type RegularContribution = {|
+  productType: 'Contribution',
   amount: number,
   currency: string,
   billingPeriod: BillingPeriod,
 |};
 
 export type DigitalSubscription = {|
+  productType: 'DigitalSubscription',
   currency: string,
   billingPeriod: BillingPeriod,
   readerType: ReaderType,
-  giftMessage?: string | null,
-  giftDeliveryDate?: string | null,
 |};
 
 export type PaperSubscription = {|
+  productType: 'Paper',
   currency: string,
   billingPeriod: BillingPeriod,
   fulfilmentOptions: FulfilmentOptions,
   productOptions: ProductOptions,
 |};
 
-type ProductFields = RegularContribution | DigitalSubscription | PaperSubscription
+export type WeeklySubscription = {|
+  productType: 'GuardianWeekly',
+  currency: string,
+  billingPeriod: BillingPeriod,
+  fulfilmentOptions: FulfilmentOptions,
+|};
+
+export type SubscriptionProductFields = DigitalSubscription | PaperSubscription | WeeklySubscription
+
+type ProductFields = RegularContribution | SubscriptionProductFields
 
 type RegularPayPalPaymentFields = {| baid: string |};
 

@@ -89,6 +89,7 @@ function buildRegularPaymentRequest(
   } = user;
 
   const product = {
+    productType: 'DigitalSubscription',
     currency: currencyId,
     billingPeriod: Monthly,
     readerType,
@@ -117,7 +118,7 @@ function buildRegularPaymentRequest(
     ophanIds: getOphanIds(),
     referrerAcquisitionData: getReferrerAcquisitionData(),
     supportAbTests: getSupportAbTests(participations),
-    debugInfo: 'no form/redux for corporate subs',
+    debugInfo: 'no form/redux for redemption page',
   };
 }
 

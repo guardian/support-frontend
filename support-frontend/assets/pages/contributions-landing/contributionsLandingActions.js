@@ -437,6 +437,7 @@ function regularPaymentRequestFromAuthorisation(
     },
     deliveryAddress: null,
     product: {
+      productType: 'Contribution',
       amount: getAmount(
         state.page.form.selectedAmounts,
         state.page.form.formData.otherAmounts,
