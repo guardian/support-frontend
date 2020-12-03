@@ -16,19 +16,18 @@ const containerStyles = css`
   }
 
   .component-content__content {
-    ${from.desktop} {
-      width: 100%;
-      max-width: 800px;
-    }
-    ${from.leftCol}{
-      max-width: 980px;
-    }
+    max-width: 1060px;
   }
 `;
 
 const alignmentStyles = css`
+  ${from.tablet} {
+    margin-left: 25px;
+    margin-right: 25px;
+  }
   ${from.leftCol} {
-    margin-left: 90px;
+    margin-left: 70px;
+    margin-right: 150px;
   }
 `;
 
