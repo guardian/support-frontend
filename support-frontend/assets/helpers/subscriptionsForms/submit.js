@@ -45,7 +45,7 @@ import {
   validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
 import {
-  DigitalPack, GuardianWeekly,
+  DigitalPack, GuardianWeekly, Paper,
   isPhysicalProduct,
   type SubscriptionProduct,
 } from 'helpers/subscriptions';
@@ -89,21 +89,21 @@ const getProduct =
     const readerType = orderIsAGift ? Gift : Direct;
     if (product === DigitalPack) {
       return {
-        productType: 'DigitalPack',
+        productType: DigitalPack,
         currency: currencyId || state.common.internationalisation.currencyId,
         billingPeriod,
         readerType,
       };
     } else if (product === GuardianWeekly) {
       return {
-        productType: 'GuardianWeekly',
+        productType: GuardianWeekly,
         currency: currencyId || state.common.internationalisation.currencyId,
         billingPeriod,
         fulfilmentOptions: fulfilmentOption,
       };
     } /* Paper or PaperAndDigital */
     return {
-      productType: 'Paper',
+      productType: Paper,
       currency: currencyId || state.common.internationalisation.currencyId,
       billingPeriod,
       fulfilmentOptions: fulfilmentOption,
