@@ -29,8 +29,9 @@ type GaEventData = {
   label: ?string,
 }
 
-const googleAnalyticsKey = 'googleAnalytics';
-const googleTagManagerKey = 'googleTagManager';
+// these values match the keys used by @guardian/consent-management-platform
+const googleAnalyticsKey = 'google-analytics';
+const googleTagManagerKey = 'google-tag-manager';
 
 const vendorIds: {
   [key: string]: string
@@ -41,11 +42,25 @@ const vendorIds: {
 
 const gaPropertyId = 'UA-51507017-5';
 
+/**
+ * vendorConsentsLookup is a string we
+ * pass to GTM, it as a comma delimited list
+ * of vendor keys we query in GTM before
+ * adding tags
+ *
+*/
+let vendorConsentsLookup = '';
+
+// Default userConsentsToGTM to false
+let userConsentsToGTM: boolean = false;
+
 // Default scriptAdded to false
 let scriptAdded: boolean = false;
-// Default userHasGrantedConsent to false
-let userHasGrantedConsent: boolean = false;
-// We store tracking events in these queues when userHasGrantedConsent is false
+
+// Default scriptReady to false
+let scriptReady: boolean = false;
+
+// We store tracking events in these queues when userConsentsToGTM is false
 const googleTagManagerDataQueue: Array<() => void> = [];
 const googleAnalyticsEventQueue: Array<() => void> = [];
 
@@ -189,6 +204,7 @@ function getData(
     internalCampaignCode: getQueryParameter('INTCMP') || undefined,
     experience: getVariantsAsString(participations),
     paymentRequestApiStatus,
+    vendorConsentsLookup, // eg. "google-analytics,twitter"
   };
 }
 
@@ -197,17 +213,16 @@ function sendData(
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
-  const dataToPush = getData(event, participations, paymentRequestApiStatus);
-
   const pushDataToGTM = () => {
+    const dataToPush = getData(event, participations, paymentRequestApiStatus);
     push(dataToPush);
   };
 
   /**
-   * If userHasGrantedConsent process event immediately,
+   * If userConsentsToGTM and scriptReady process event immediately,
    * else add to googleTagManagerDataQueue.
    */
-  if (userHasGrantedConsent) {
+  if (userConsentsToGTM && scriptReady) {
     pushDataToGTM();
   } else {
     googleTagManagerDataQueue.push(pushDataToGTM);
@@ -256,10 +271,13 @@ function addTagManagerScript() {
   /**
    * After Google Tag Manager has loaded we can
    * process pending events in googleAnalyticsEventQueue and
-   * googleTagManagerDataQueue if userHasGrantedConsent. This also
-   * clears the queues as it executes each function in them.
+   * googleTagManagerDataQueue if userConsentsToGTM.
+   * This also clears the queues as it executes each function in them.
   */
-  googleTagManagerScript.onload = processQueues;
+  googleTagManagerScript.onload = () => {
+    scriptReady = true;
+    processQueues();
+  };
 
   if (firstScript && firstScript.parentNode) {
     firstScript.parentNode.insertBefore(googleTagManagerScript, firstScript);
@@ -277,16 +295,17 @@ function init(participations: Participations) {
   onConsentChangeEvent((thirdPartyTrackingConsent: {
     [key: string]: boolean
   }) => {
-    /**
-      * Update userHasGrantedConsent value when
-      * consent changes via the CMP library.
-      * For now userHasGrantedConsent will be true only
-      * if user has consented to BOTH GoogleTagManager and GoogleAnalytics
-    */
-    userHasGrantedConsent =
-        thirdPartyTrackingConsent[googleAnalyticsKey] && thirdPartyTrackingConsent[googleTagManagerKey];
 
-    if (userHasGrantedConsent) {
+    // Update vendorConsentsLookup value based on thirdPartyTrackingConsent
+    vendorConsentsLookup = Object.keys(thirdPartyTrackingConsent).filter(vendorKey => thirdPartyTrackingConsent[vendorKey]).join(',');
+
+    /**
+      * Update userConsentsToGTM value when
+      * consent changes via the CMP library.
+    */
+    userConsentsToGTM = thirdPartyTrackingConsent[googleTagManagerKey] && thirdPartyTrackingConsent[googleAnalyticsKey];
+
+    if (userConsentsToGTM) {
       if (!scriptAdded) {
         /**
          * Instruction for Google Analytics
@@ -328,10 +347,10 @@ function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
   };
 
   /**
-   * If userHasGrantedConsent process event immediately,
+   * If userConsentsToGTM and scriptReady then process event immediately,
    * else add to googleAnalyticsEventQueue.
    */
-  if (userHasGrantedConsent) {
+  if (userConsentsToGTM && scriptReady) {
     pushEventToGA();
   } else {
     googleAnalyticsEventQueue.push(pushEventToGA);
