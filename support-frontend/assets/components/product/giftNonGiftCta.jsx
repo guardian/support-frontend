@@ -39,6 +39,7 @@ function GiftOrPersonal({ href, product, orderIsAGift }: PropTypes) {
         icon={<SvgArrowRightStraight />}
         iconSide="right"
         priority="tertiary"
+        nudgeIcon
         href={href}
       >
         {orderIsAGift ? 'See personal subscriptions' : 'See gift subscriptions'}
