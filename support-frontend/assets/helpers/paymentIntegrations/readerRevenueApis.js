@@ -7,6 +7,9 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import {
+  DigitalPack, GuardianWeekly, Paper,
+} from 'helpers/subscriptions';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 import { type Participations } from 'helpers/abTests/abtest';
 import {
@@ -47,28 +50,28 @@ type RegularContribution = {|
 |};
 
 export type DigitalSubscription = {|
-  productType: 'DigitalPack',
+  productType: typeof DigitalPack,
   currency: string,
   billingPeriod: BillingPeriod,
   readerType: ReaderType,
 |};
 
 export type PaperSubscription = {|
-  productType: 'Paper',
+  productType: typeof Paper,
   currency: string,
   billingPeriod: BillingPeriod,
   fulfilmentOptions: FulfilmentOptions,
   productOptions: ProductOptions,
 |};
 
-export type WeeklySubscription = {|
-  productType: 'GuardianWeekly',
+export type GuardianWeeklySubscription = {|
+  productType: typeof GuardianWeekly,
   currency: string,
   billingPeriod: BillingPeriod,
   fulfilmentOptions: FulfilmentOptions,
 |};
 
-export type SubscriptionProductFields = DigitalSubscription | PaperSubscription | WeeklySubscription
+export type SubscriptionProductFields = DigitalSubscription | PaperSubscription | GuardianWeeklySubscription
 
 type ProductFields = RegularContribution | SubscriptionProductFields
 
