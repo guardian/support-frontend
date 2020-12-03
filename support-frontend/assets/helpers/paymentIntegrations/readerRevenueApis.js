@@ -7,6 +7,9 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import {
+  DigitalPack, GuardianWeekly, Paper,
+} from 'helpers/subscriptions';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 import { type Participations } from 'helpers/abTests/abtest';
 import {
@@ -40,27 +43,37 @@ export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripeP
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
 type RegularContribution = {|
+  productType: 'Contribution',
   amount: number,
   currency: string,
   billingPeriod: BillingPeriod,
 |};
 
 export type DigitalSubscription = {|
+  productType: typeof DigitalPack,
   currency: string,
   billingPeriod: BillingPeriod,
   readerType: ReaderType,
-  giftMessage?: string | null,
-  giftDeliveryDate?: string | null,
 |};
 
 export type PaperSubscription = {|
+  productType: typeof Paper,
   currency: string,
   billingPeriod: BillingPeriod,
   fulfilmentOptions: FulfilmentOptions,
   productOptions: ProductOptions,
 |};
 
-type ProductFields = RegularContribution | DigitalSubscription | PaperSubscription
+export type GuardianWeeklySubscription = {|
+  productType: typeof GuardianWeekly,
+  currency: string,
+  billingPeriod: BillingPeriod,
+  fulfilmentOptions: FulfilmentOptions,
+|};
+
+export type SubscriptionProductFields = DigitalSubscription | PaperSubscription | GuardianWeeklySubscription
+
+type ProductFields = RegularContribution | SubscriptionProductFields
 
 type RegularPayPalPaymentFields = {| baid: string |};
 

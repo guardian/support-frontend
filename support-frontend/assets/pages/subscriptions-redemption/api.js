@@ -18,6 +18,7 @@ import { getOrigin } from 'helpers/url';
 import { appropriateErrorMessage } from 'helpers/errorReasons';
 import { getGlobal } from 'helpers/globals';
 import type { ReaderType } from 'helpers/productPrice/readerType';
+import { DigitalPack } from 'helpers/subscriptions';
 
 type ValidationResult = {
   valid: boolean,
@@ -89,6 +90,7 @@ function buildRegularPaymentRequest(
   } = user;
 
   const product = {
+    productType: DigitalPack,
     currency: currencyId,
     billingPeriod: Monthly,
     readerType,
@@ -117,7 +119,7 @@ function buildRegularPaymentRequest(
     ophanIds: getOphanIds(),
     referrerAcquisitionData: getReferrerAcquisitionData(),
     supportAbTests: getSupportAbTests(participations),
-    debugInfo: 'no form/redux for corporate subs',
+    debugInfo: 'no form/redux for redemption page',
   };
 }
 

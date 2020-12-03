@@ -4,9 +4,9 @@
 
 import { type Dispatch } from 'redux';
 import type {
-  DigitalSubscription, PaperSubscription,
   PaymentResult,
   RegularPaymentRequest,
+  SubscriptionProductFields,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -40,16 +40,12 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
   validateCheckoutForm,
   validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
 import {
-  DigitalPack,
+  DigitalPack, GuardianWeekly, Paper,
   isPhysicalProduct,
   type SubscriptionProduct,
 } from 'helpers/subscriptions';
@@ -80,42 +76,40 @@ function getAddresses(state: AnyCheckoutState) {
   };
 }
 
-const getOptions = (
-  fulfilmentOptions: FulfilmentOptions,
-  productOptions: ProductOptions,
-): {fulfilmentOptions: FulfilmentOptions, productOptions: ProductOptions} =>
-  ({
-    ...(fulfilmentOptions !== NoFulfilmentOptions ? { fulfilmentOptions } : {}),
-    ...(productOptions !== NoProductOptions ? { productOptions } : {}),
-  });
-
 const getProduct =
-  (state: AnyCheckoutState, currencyId?: Option<IsoCurrency>): DigitalSubscription | PaperSubscription => {
+  (state: AnyCheckoutState, currencyId?: Option<IsoCurrency>): SubscriptionProductFields => {
     const {
       billingPeriod,
       fulfilmentOption,
       productOption,
       orderIsAGift,
       product,
-      giftMessage,
-      giftDeliveryDate,
     } = state.page.checkout;
 
     const readerType = orderIsAGift ? Gift : Direct;
     if (product === DigitalPack) {
       return {
+        productType: DigitalPack,
         currency: currencyId || state.common.internationalisation.currencyId,
         billingPeriod,
         readerType,
-        giftMessage,
-        giftDeliveryDate,
       };
-    }
+    } else if (product === GuardianWeekly) {
+      return {
+        productType: GuardianWeekly,
+        currency: currencyId || state.common.internationalisation.currencyId,
+        billingPeriod,
+        fulfilmentOptions: fulfilmentOption,
+      };
+    } /* Paper or PaperAndDigital */
     return {
+      productType: Paper,
       currency: currencyId || state.common.internationalisation.currencyId,
       billingPeriod,
-      ...getOptions(fulfilmentOption, productOption),
+      fulfilmentOptions: fulfilmentOption,
+      productOptions: productOption,
     };
+
   };
 
 const getPromoCode = (promotions: ?Promotion[]) => {
