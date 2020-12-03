@@ -6,7 +6,6 @@ import { Button, buttonReaderRevenueBrandAlt } from '@guardian/src-button';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { ThemeProvider } from 'emotion-theming';
-import { border } from '@guardian/src-foundations/palette';
 import { Select, Option } from '@guardian/src-select';
 
 import {
@@ -31,7 +30,6 @@ const inputStyles = css`
 
 const buttonStyles = css`
   align-self: flex-end;
-  border: 2px ${border.primary} solid;
 `;
 
 // Types
