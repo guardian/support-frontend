@@ -45,4 +45,5 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) =>
         )))
       }
     </div>);
+
 export default connect(mapStateToProps)(PaymentSelection);
