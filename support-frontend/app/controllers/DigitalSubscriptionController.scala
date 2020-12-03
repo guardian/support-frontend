@@ -71,7 +71,7 @@ class DigitalSubscriptionController(
 
     val readerType = if (orderIsAGift) Gift else Direct
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
-    val shareImageUrl = Some("https://i.guim.co.uk/img/media/74422ad120c709448f433c34f5190e2465ffa65e/0_0_1200_1200/1200.png?width-1200&auto=format&fit=crop&quality=85&s=e86eccf1b764be15437b3ca93c542d92") // scalastyle:ignore
+    val shareImageUrl = Some("https://i.guim.co.uk/img/media/74422ad120c709448f433c34f5190e2465ffa65e/0_0_1200_1200/1200.png?width=1200&auto=format&fit=crop&quality=85&s=1407add4d016d15cc074b0f9de8f1433") // scalastyle:ignore
     if (settings.switches.enableDigitalSubGifting.isOn || !orderIsAGift) {
       Ok(views.html.main(
         title = title,
