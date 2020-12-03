@@ -113,18 +113,6 @@ const BILLING_PERIOD_GIFT = {
   },
 };
 
-// export type Product = {
-//   title: string,
-//   price: string,
-//   children?: Node,
-//   offerCopy?: string,
-//   priceCopy: Node,
-//   buttonCopy: string,
-//   href: string,
-//   onClick: Function,
-//   label?: string,
-// }
-
 // state
 const mapStateToProps = (state: State): PropTypes => {
   const { productPrices, orderIsAGift } = state.page;
