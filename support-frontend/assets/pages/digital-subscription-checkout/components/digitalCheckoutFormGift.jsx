@@ -223,12 +223,14 @@ function DigitalCheckoutFormGift(props: PropTypes) {
           <FormSection title="Billing address">
             <Address />
           </FormSection>
-          <PaymentMethodSelector
-            country={props.country}
-            paymentMethod={props.paymentMethod}
-            setPaymentMethod={props.setPaymentMethod}
-            validationError={firstError('paymentMethod', props.formErrors)}
-          />
+          <FormSection title="How would you like to pay?">
+            <PaymentMethodSelector
+              country={props.country}
+              paymentMethod={props.paymentMethod}
+              setPaymentMethod={props.setPaymentMethod}
+              validationError={firstError('paymentMethod', props.formErrors)}
+            />
+          </FormSection>
           <FormSectionHiddenUntilSelected
             id="stripeForm"
             show={props.paymentMethod === Stripe}

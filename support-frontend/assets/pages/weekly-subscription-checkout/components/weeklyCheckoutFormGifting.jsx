@@ -316,12 +316,14 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               </FormSection>
             : null
           }
-          <PaymentMethodSelector
-            country={props.billingCountry}
-            paymentMethod={props.paymentMethod}
-            setPaymentMethod={props.setPaymentMethod}
-            validationError={firstError('paymentMethod', props.formErrors)}
-          />
+          <FormSection title="How would you like to pay?">
+            <PaymentMethodSelector
+              country={props.billingCountry}
+              paymentMethod={props.paymentMethod}
+              setPaymentMethod={props.setPaymentMethod}
+              validationError={firstError('paymentMethod', props.formErrors)}
+            />
+          </FormSection>
           <FormSectionHiddenUntilSelected
             id="stripeForm"
             show={props.paymentMethod === Stripe}
