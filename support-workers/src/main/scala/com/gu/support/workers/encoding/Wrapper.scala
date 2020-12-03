@@ -21,6 +21,6 @@ object Wrapper {
   }
 
   def wrap[T](handlerResult: HandlerResult[T])(implicit encoder: Encoder[T]): JsonWrapper =
-    JsonWrapper(handlerResult.value.asJson.noSpaces, None, handlerResult.requestInfo)
+    JsonWrapper(handlerResult.value.asJson, None, handlerResult.requestInfo)
 
 }

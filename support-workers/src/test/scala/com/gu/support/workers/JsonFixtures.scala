@@ -8,6 +8,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
+import io.circe.parser
 import io.circe.syntax._
 import org.joda.time.{DateTimeZone, LocalDate}
 
@@ -15,7 +16,7 @@ import org.joda.time.{DateTimeZone, LocalDate}
 object JsonFixtures {
 
   def wrapFixture(string: String): ByteArrayInputStream =
-    JsonWrapper(string, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
+    JsonWrapper(parser.parse(string).right.get, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
       .asJson.noSpaces.asInputStream
 
   def userJson(id: String = idId): String =
@@ -644,7 +645,7 @@ object JsonFixtures {
   val wrapperWithMessages =
     """
       {
-        "state": "{\"requestId\":\"a64ad98e-5d39-4ffc-a4a9-217357dc2b19\",\"user\":{\"id\":\"9999999\",\"primaryEmailAddress\":\"integration-test@gu.com\",\"firstName\":\"test\",\"lastName\":\"user\",\"country\":\"GB\",\"billingAddress\":{\"country\":\"GB\"},\"allowMembershipMail\":false,\"allowThirdPartyMail\":false,\"allowGURelatedMail\":false,\"isTestUser\":false},\"product\":{\"productType\":\"Contribution\",\"amount\":5,\"currency\":\"GBP\",\"billingPeriod\":\"Monthly\"},\"analyticsInfo\":{\"paymentProvider\": \"Stripe\",\"isGiftPurchase\":false},\"paymentMethod\":{\"PaypalBaid\":\"B-23637766K5365543J\",\"PaypalEmail\":\"test@paypal.com\",\"PaypalType\":\"ExpressCheckout\",\"Type\":\"PayPal\",\"paymentGateway\":\"PayPal Express\"},\"giftRecipient\":{\"title\":\"Mr\",\"firstName\":\"Gifty\",\"lastName\":\"McRecipent\",\"email\":\"gift.recipient@gu.com\",\"giftRecipientType\":\"Weekly\"}}",
+        "state": {"requestId":"a64ad98e-5d39-4ffc-a4a9-217357dc2b19","user":{"id":"9999999","primaryEmailAddress":"integration-test@gu.com","firstName":"test","lastName":"user","country":"GB","billingAddress":{"country":"GB"},"allowMembershipMail":false,"allowThirdPartyMail":false,"allowGURelatedMail":false,"isTestUser":false},"product":{"productType":"Contribution","amount":5,"currency":"GBP","billingPeriod":"Monthly"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentMethod":{"PaypalBaid":"B-23637766K5365543J","PaypalEmail":"test@paypal.com","PaypalType":"ExpressCheckout","Type":"PayPal","paymentGateway":"PayPal Express"},"giftRecipient":{"title":"Mr","firstName":"Gifty","lastName":"McRecipent","email":"gift.recipient@gu.com","giftRecipientType":"Weekly"}},
         "error": null,
         "requestInfo": {
           "testUser": false,
