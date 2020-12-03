@@ -47,7 +47,7 @@ type RegularContribution = {|
 |};
 
 export type DigitalSubscription = {|
-  productType: 'DigitalSubscription',
+  productType: 'DigitalPack',
   currency: string,
   billingPeriod: BillingPeriod,
   readerType: ReaderType,

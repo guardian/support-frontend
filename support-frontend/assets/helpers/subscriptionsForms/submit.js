@@ -89,7 +89,7 @@ const getProduct =
     const readerType = orderIsAGift ? Gift : Direct;
     if (product === DigitalPack) {
       return {
-        productType: 'DigitalSubscription',
+        productType: 'DigitalPack',
         currency: currencyId || state.common.internationalisation.currencyId,
         billingPeriod,
         readerType,

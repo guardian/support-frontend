@@ -89,7 +89,7 @@ function buildRegularPaymentRequest(
   } = user;
 
   const product = {
-    productType: 'DigitalSubscription',
+    productType: 'DigitalPack',
     currency: currencyId,
     billingPeriod: Monthly,
     readerType,
