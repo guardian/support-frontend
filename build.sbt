@@ -1,6 +1,7 @@
 import SeleniumTestConfig.SeleniumTest
 import sbt.Keys.{publishTo, resolvers, scalaVersion, skip, updateOptions, organization}
 import sbtrelease.ReleaseStateTransformations._
+import LibraryVersions.jacksonVersion
 
 import scala.sys.process._
 
@@ -182,7 +183,7 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
     libraryDependencies ++= Seq(
       "com.gu" %% "ophan-event-model" % "0.0.17" excludeAll ExclusionRule(organization = "com.typesafe.play"),
       "com.gu" %% "fezziwig" % "1.3",
-      "com.typesafe.play" %% "play-json" % "2.6.14",
+      "com.typesafe.play" %% "play-json" % "2.7.4",
       "io.circe" %% "circe-core" % "0.12.1",
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "com.gu" %% "acquisitions-value-calculator-client" % "2.0.5",
@@ -193,7 +194,8 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
       "org.scalactic" %% "scalactic" % "3.1.1",
       "org.typelevel" %% "cats-core" % "2.1.1",
       "com.amazonaws" % "aws-java-sdk-kinesis" % "1.11.465",
-      "com.gu" %% "thrift-serializer" % "4.0.3"
+      "com.gu" %% "thrift-serializer" % "4.0.3",
+      "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
     )
   )
 
