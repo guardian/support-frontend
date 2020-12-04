@@ -18,7 +18,7 @@ object Encoding {
   def in[T](is: InputStream)(implicit decoder: Decoder[T]): Try[(T, Option[ExecutionError], RequestInfo)] =
     for {
       wrapper <- unWrap(is)
-      result <- decode[T](wrapper.state).toTry
+      result <- wrapper.state.as[T].toTry
     } yield (result, wrapper.error, wrapper.requestInfo)
 
   def out[T](handlerResult: HandlerResult[T], os: OutputStream)(implicit encoder: Encoder[T]): Try[Unit] = {
