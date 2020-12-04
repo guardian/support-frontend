@@ -16,7 +16,7 @@ type TabProps = {|
 type PropTypes = {|
   tabElement: TabElement,
   tabs: TabProps[],
-  onTabChange?: (tabName: string) => void
+  onTabChange: (tabName: any) => void
 |};
 
 function Tabs({ tabElement, tabs, onTabChange }: PropTypes) {
@@ -35,7 +35,10 @@ function Tabs({ tabElement, tabs, onTabChange }: PropTypes) {
               href={tab.href}
               aria-selected={selected}
               aria-controls={`${tab.id}-tab`}
-              onClick={() => onTabChange && onTabChange(tab.id)}
+              onClick={(event) => {
+                event.preventDefault();
+                onTabChange(tab.id);
+              }}
             >
               {tab.text}
             </Element>
@@ -50,9 +53,5 @@ function Tabs({ tabElement, tabs, onTabChange }: PropTypes) {
     </div>
   );
 }
-
-Tabs.defaultProps = {
-  onTabChange: () => {},
-};
 
 export default Tabs;

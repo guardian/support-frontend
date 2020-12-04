@@ -18,6 +18,7 @@ export const tabButton = css`
   text-decoration: none;
   appearance: none;
   width: 100%;
+  height: ${space[12]}px;
   text-align: left;
   color: ${neutral[7]};
   padding: ${space[2]}px ${space[3]}px;

@@ -2,12 +2,12 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { Outset } from 'components/content/content';
-import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
+import Tabs from 'components/tabs/tabs';
 import { paperSubsUrl } from 'helpers/routes';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
@@ -15,22 +15,26 @@ import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions'
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { type Option } from 'helpers/types/option';
 
+import { SubsCardFaqBlock } from './content/subsCardTab';
+import { ContentDeliveryFaqBlock } from './content/deliveryTab';
+
 // ----- Tabs ----- //
 
-
-export const tabs: {[PaperFulfilmentOptions]: {name: string, href: string}} = {
+export const tabs: {[PaperFulfilmentOptions]: {name: string, href: string, content: Node }} = {
   Collection: {
     name: 'Subscription Card',
     href: paperSubsUrl(false),
+    content: <SubsCardFaqBlock />,
   },
   HomeDelivery: {
     name: 'Home Delivery',
     href: paperSubsUrl(true),
+    content: <ContentDeliveryFaqBlock useDigitalVoucher setTabAction={() => {}} />,
   },
 };
 
 type StatePropTypes = {|
-  selectedTab: number,
+  selectedTab: PaperFulfilmentOptions,
 |};
 
 type DispatchPropTypes = {|
@@ -54,18 +58,25 @@ const getTabTitle = (useDigitalVoucher, fulfilmentMethod) => {
 
 // ----- Component ----- //
 
-function Tabs({ selectedTab, setTabAction, useDigitalVoucher }: PropTypes) {
+function PaperTabs({ selectedTab, setTabAction, useDigitalVoucher }: PropTypes) {
+  const tabItems = Object.keys(tabs).map(fulfilmentMethod => ({
+    id: fulfilmentMethod,
+    // The following line is a workaround for iMovo and vouchers
+    // Once we drop vouchers, we can reinstate: name: tabs[fulfilmentMethod].name,
+    text: getTabTitle(useDigitalVoucher, fulfilmentMethod),
+    href: tabs[fulfilmentMethod].href,
+    selected: fulfilmentMethod === selectedTab,
+    content: tabs[fulfilmentMethod].content,
+  }));
   return (
     <Outset>
-      <ProductPageTabs
-        active={selectedTab}
-        onChange={(t) => { setTabAction(Object.keys(tabs)[t]); }}
-        tabs={Object.keys(tabs).map(fulfilmentMethod => ({
-          // The following line is a workaround for iMovo and vouchers
-          // Once we drop vouchers, we can reinstate: name: tabs[fulfilmentMethod].name,
-        name: getTabTitle(useDigitalVoucher, fulfilmentMethod),
-        href: tabs[fulfilmentMethod].href,
-      }))}
+      <Tabs
+        tabElement="a"
+        tabs={tabItems}
+        onTabChange={(tabId) => {
+          const newActiveTab = (tabId: PaperFulfilmentOptions);
+          setTabAction(newActiveTab);
+        }}
       />
     </Outset>
   );
@@ -74,7 +85,7 @@ function Tabs({ selectedTab, setTabAction, useDigitalVoucher }: PropTypes) {
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State) => ({
-  selectedTab: Object.keys(tabs).indexOf(state.page.tab),
+  selectedTab: state.page.tab,
   useDigitalVoucher: state.common.settings.useDigitalVoucher,
 });
 
@@ -86,4 +97,4 @@ const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tabs);
+export default connect(mapStateToProps, mapDispatchToProps)(PaperTabs);

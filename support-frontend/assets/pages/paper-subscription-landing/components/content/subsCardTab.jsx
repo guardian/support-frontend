@@ -32,7 +32,7 @@ export const accordionContainer = css`
 const LinkToImovo = () => <a href="https://imovo.org/guardianstorefinder" target="_blank" rel="noopener noreferrer">Find your nearest participating retailer</a>;
 
 // ----- Content ----- //
-const SubsCardFaqBlock = () => (
+export const SubsCardFaqBlock = () => (
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage

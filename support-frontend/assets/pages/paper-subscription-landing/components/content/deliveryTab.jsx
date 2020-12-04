@@ -36,7 +36,7 @@ export const accordionContainer = css`
 `;
 
 // ----- Content ----- //
-const ContentDeliveryFaqBlock = ({
+export const ContentDeliveryFaqBlock = ({
   setTabAction,
   useDigitalVoucher,
 }: {setTabAction: typeof setTab, useDigitalVoucher?: Option<boolean>}) => (
