@@ -1,51 +1,44 @@
 package com.gu.support.workers
 
-import com.gu.i18n.Currency
+import com.gu.i18n.Currency.GBP
 import com.gu.support.SerialisationTestHelpers
-import com.gu.support.catalog.{Collection, RestOfWorld, Sunday}
+import com.gu.support.catalog.{Collection, RestOfWorld, Sixday}
 import com.gu.support.workers.ProductType._
+import com.gu.support.zuora.api.ReaderType
 import org.scalatest.wordspec.AnyWordSpec
 
 class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
 
   "ProductTypeDecoder" should {
-    "decode a contribution" in {
-      val json =
-        """
-          |{
-          |  "amount":10,
-          |  "currency":"GBP",
-          |  "billingPeriod": "Monthly"
-          |}
-        """
-          .stripMargin
 
-      testDecoding[Contribution](json,
-        contribution => {
-          contribution.amount shouldBe 10
-          contribution.billingPeriod shouldBe Monthly
-        }
-      )
+    "decode a contribution - monthly" in {
+      val json = """{"productType": "Contribution", "amount": 5, "currency": "GBP", "billingPeriod": "Monthly"}"""
+      val expected = Contribution(5, GBP, Monthly)
+      testDecoding[Contribution](json, _ shouldBe expected)
+    }
+
+    "decode a contribution - annual" in {
+      val json = """{"productType": "Contribution", "amount": 5, "currency": "GBP", "billingPeriod": "Annual"}"""
+      val expected = Contribution(5, GBP, Annual)
+      testDecoding[Contribution](json, _ shouldBe expected)
     }
 
     "decode a paper sub" in {
       val json =
         """
           |{
-          |  "currency":"GBP",
           |  "billingPeriod": "Monthly",
-          |  "productOptions":"Sunday",
-          |  "fulfilmentOptions": "Collection"
+          |  "currency": "GBP",
+          |  "fulfilmentOptions": "Collection",
+          |  "productOptions": "Sixday",
+          |  "productType": "Paper"
           |}
         """
           .stripMargin
 
-      testDecoding[Paper](json,
-        paper => {
-          paper.billingPeriod shouldBe Monthly
-          paper.productOptions shouldBe Sunday
-          paper.fulfilmentOptions shouldBe Collection
-        }
+      testDecoding[Paper](
+        json,
+        _ shouldBe Paper(GBP, Monthly, Collection, Sixday)
       )
     }
 
@@ -53,58 +46,38 @@ class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
       val json =
         """
           |{
-          |  "currency":"GBP",
-          |  "billingPeriod": "Annual",
-          |  "fulfilmentOptions": "RestOfWorld"
+          |  "billingPeriod": "Quarterly",
+          |  "currency": "GBP",
+          |  "fulfilmentOptions": "RestOfWorld",
+          |  "productType": "GuardianWeekly"
           |}
         """
           .stripMargin
 
-      testDecoding[GuardianWeekly](json,
-        paper => {
-          paper.billingPeriod shouldBe Annual
-          paper.fulfilmentOptions shouldBe RestOfWorld
-        }
+      testDecoding[GuardianWeekly](
+        json,
+        _ shouldBe GuardianWeekly(GBP, Quarterly, RestOfWorld)
       )
     }
 
-    "decode as a digital pack if productOptions are missing" in {
-      val json =
-        """
-          |{
-          |  "currency":"GBP",
-          |  "billingPeriod": "Monthly",
-          |  "fulfilmentOptions": "Collection"
-          |}
-        """
-          .stripMargin
-
-      testDecoding[DigitalPack](json,
-        digitalPack => {
-          digitalPack.billingPeriod shouldBe Monthly
-        }
-      )
+    "decode a digital pack" in {
+      val json = """{"productType": "DigitalPack", "currency": "GBP", "billingPeriod": "Monthly", "readerType": "Direct"}"""
+      val expected = DigitalPack(GBP, Monthly)
+      testDecoding[DigitalPack](json, _ shouldBe expected)
     }
 
-    "decode as a digital pack when just billingPeriod and currency are provided" in {
-
-      val json =
-        """
-          |{
-          |  "currency":"USD",
-          |  "billingPeriod": "Annual"
-          |}
-        """
-          .stripMargin
-
-      testDecoding[DigitalPack](json,
-        digitalPack => {
-          digitalPack.billingPeriod shouldBe Annual
-          digitalPack.currency shouldBe Currency.USD
-        }
-      )
-
+    "decode a digital pack - gift purchase or redemption" in {
+      val json = """{"productType": "DigitalPack", "currency": "GBP", "billingPeriod": "Monthly", "readerType": "Gift"}"""
+      val expected = DigitalPack(GBP, Monthly, ReaderType.Gift)
+      testDecoding[DigitalPack](json, _ shouldBe expected)
     }
+
+    "decode a digital pack - corporate redemption" in {
+      val json = """{"productType": "DigitalPack", "currency": "GBP", "billingPeriod": "Monthly", "readerType": "Corporate"}"""
+      val expected = DigitalPack(GBP, Monthly, ReaderType.Corporate)
+      testDecoding[DigitalPack](json, _ shouldBe expected)
+    }
+
   }
 
 }
