@@ -4,8 +4,7 @@
 
 import React from 'react';
 
-import Content from 'components/content/content';
-import Text from 'components/text/text';
+import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
@@ -13,7 +12,23 @@ import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import { ContentForm, type ContentTabPropTypes } from './helpers';
+
+const flexContainerOverride = css`
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const faqsContainer = css`
+  ${from.tablet} {
+    max-width: 50%;
+  }
+`;
+
+const paragraphSpacing = css`
+  margin-bottom: ${space[6]}px;
+`;
 
 export const accordionContainer = css`
   background-color: ${neutral['97']};
@@ -33,24 +48,15 @@ const LinkToImovo = () => <a href="https://imovo.org/guardianstorefinder" target
 
 // ----- Content ----- //
 export const SubsCardFaqBlock = () => (
-  <Content
-    border={paperHasDeliveryEnabled()}
-    image={<GridImage
-      gridId="printCampaignDigitalVoucher"
-      srcSizes={[562, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 500px"
-      imgType="png"
-    />
-  }
-  >
-    <Text>
-      The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with
-      news kiosks in the UK.
-    </Text>
-    <Text>
-      You can collect the newspaper from your local store or have your copies delivered by your newsagent.
-    </Text>
-    <Text>
+  <FlexContainer cssOverrides={flexContainerOverride}>
+    <div css={faqsContainer}>
+      <p css={paragraphSpacing}>
+        The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with
+        news kiosks in the UK.
+      </p>
+      <p css={paragraphSpacing}>
+        You can collect the newspaper from your local store or have your copies delivered by your newsagent.
+      </p>
       <div css={accordionContainer}>
         <Accordion>
           <AccordionRow label="Collecting from multiple newsagents">
@@ -69,9 +75,14 @@ export const SubsCardFaqBlock = () => (
           </AccordionRow>
         </Accordion>
       </div>
-    </Text>
-
-  </Content>
+    </div>
+    <GridImage
+      gridId="printCampaignDigitalVoucher"
+      srcSizes={[562, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 500px"
+      imgType="png"
+    />
+  </FlexContainer>
 );
 
 const SubscriptionCardTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (

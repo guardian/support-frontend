@@ -15,11 +15,12 @@ import Block from 'components/page/block';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import 'stylesheets/skeleton/skeleton.scss';
+import './paperSubscriptionLanding.scss';
 
 // import CampaignHeader from 'pages/paper-subscription-landing/components/hero/campaignHeader';
 import PaperHero from './components/hero/hero';
 import Tabs from './components/tabs';
-import TabsContent from './components/content/content';
+// import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -58,8 +59,13 @@ const content = (
         <CentredContainer>
           <Block>
             <Tabs />
-            <TabsContent />
+            {/* <TabsContent /> */}
           </Block>
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer>
+        <CentredContainer>
+          Fabulous prices
         </CentredContainer>
       </FullWidthContainer>
     </Page>

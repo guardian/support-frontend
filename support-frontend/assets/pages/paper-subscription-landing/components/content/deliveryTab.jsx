@@ -3,8 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import Content from 'components/content/content';
-import Text from 'components/text/text';
+import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 import {
@@ -19,7 +18,24 @@ import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import { type Option } from 'helpers/types/option';
+
+const flexContainerOverride = css`
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const faqsContainer = css`
+  ${from.tablet} {
+    max-width: 50%;
+  }
+`;
+
+const paragraphSpacing = css`
+  margin-bottom: ${space[6]}px;
+`;
+
 
 export const accordionContainer = css`
   background-color: ${neutral['97']};
@@ -37,28 +53,18 @@ export const accordionContainer = css`
 
 // ----- Content ----- //
 export const ContentDeliveryFaqBlock = ({
-  setTabAction,
   useDigitalVoucher,
-}: {setTabAction: typeof setTab, useDigitalVoucher?: Option<boolean>}) => (
-  <Content
-    border={paperHasDeliveryEnabled()}
-    image={<GridImage
-      gridId="printCampaignHDdigitalVoucher"
-      srcSizes={[562, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 500px"
-      imgType="png"
-    />
-    }
-  >
-    <Text>
-      If you live in Greater London (within the M25), you can use The Guardian’s home delivery
-      service. If not, you can use our <LinkTo tab={Collection} setTabAction={setTabAction}>{useDigitalVoucher ? 'subscription cards' : 'voucher scheme'}</LinkTo>.
-    </Text>
-    <Text>
-      Select your subscription below and checkout. You&apos;ll receive your first newspaper
-      as quickly as five days from subscribing.
-    </Text>
-    <Text>
+}: {useDigitalVoucher?: Option<boolean>}) => (
+  <FlexContainer cssOverrides={flexContainerOverride}>
+    <div css={faqsContainer}>
+      <p css={paragraphSpacing}>
+        If you live in Greater London (within the M25), you can use The Guardian’s home delivery
+        service. If not, you can use our <LinkTo tab={Collection} setTabAction={() => setTab('Collection')}>{useDigitalVoucher ? 'subscription cards' : 'voucher scheme'}</LinkTo>.
+      </p>
+      <p css={paragraphSpacing}>
+        Select your subscription below and checkout. You&apos;ll receive your first newspaper
+        as quickly as five days from subscribing.
+      </p>
       <div css={accordionContainer}>
         <Accordion>
           <AccordionRow label="Delivery details">
@@ -76,8 +82,14 @@ export const ContentDeliveryFaqBlock = ({
           </AccordionRow>
         </Accordion>
       </div>
-    </Text>
-  </Content>
+    </div>
+    <GridImage
+      gridId="printCampaignHDdigitalVoucher"
+      srcSizes={[562, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 500px"
+      imgType="png"
+    />
+  </FlexContainer>
 
 );
 
