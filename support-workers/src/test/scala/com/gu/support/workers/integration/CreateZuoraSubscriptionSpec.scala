@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.support.catalog.{CatalogService, Everyday, SimpleJsonProvider}
+import com.gu.support.catalog.{CatalogService, Everyday, EverydayPlus, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.redemption.CodeAlreadyUsed
@@ -85,6 +85,12 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     createZuoraHelper.createSubscription(createEverydayPaperSubscriptionJson).map(_ should matchPattern {
           case s: SendThankYouEmailPaperState if s.product.productOptions == Everyday =>
         })
+  }
+
+  it should "create an everyday Paper + Digital subscription" in {
+    createZuoraHelper.createSubscription(createEverydayPaperPlusSubscriptionJson).map(_ should matchPattern {
+      case s: SendThankYouEmailPaperState if s.product.productOptions == EverydayPlus =>
+    })
   }
 
   it should "create an Annual Guardian Weekly subscription" in {

@@ -189,6 +189,17 @@ object JsonFixtures {
       }
     """
 
+  val everydayPaperPlusJson =
+    """
+      {
+        "productType": "Paper",
+        "currency": "GBP",
+        "billingPeriod" : "Monthly",
+        "fulfilmentOptions" : "HomeDelivery",
+        "productOptions" : "EverydayPlus"
+      }
+    """
+
   val digitalPackProductJson =
     s"""
       "product": $digitalPackJson
@@ -492,6 +503,23 @@ object JsonFixtures {
             $requestIdJson,
             $userJsonWithDeliveryAddress,
             "product": $everydayPaperJson,
+            "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC)}",
+            "analyticsInfo": {
+              "paymentProvider": "Stripe",
+              "isGiftPurchase": false
+            },
+            "paymentMethod": $stripePaymentMethod,
+            "salesForceContact": $salesforceContactJson,
+            $salesforceContactsJson
+            }
+      """
+
+  val createEverydayPaperPlusSubscriptionJson =
+    s"""
+          {
+            $requestIdJson,
+            $userJsonWithDeliveryAddress,
+            "product": $everydayPaperPlusJson,
             "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC)}",
             "analyticsInfo": {
               "paymentProvider": "Stripe",
