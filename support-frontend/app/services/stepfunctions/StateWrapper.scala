@@ -21,12 +21,12 @@ class StateWrapper() {
   val utf8 = java.nio.charset.StandardCharsets.UTF_8
 
   def wrap[T](state: T, isTestUser: Boolean, isExistingAccount: Boolean)(implicit encoder: Encoder[T]): String = {
-    JsonWrapper(state.asJson, None, RequestInfo(isTestUser, failed = false, Nil, isExistingAccount)).asJson.noSpaces
+    JsonWrapper(state.asJson.noSpaces, None, RequestInfo(isTestUser, failed = false, Nil, isExistingAccount)).asJson.noSpaces
   }
 
   def unWrap[T](s: String)(implicit decoder: Decoder[T]): Try[T] =
     for {
       wrapper <- decode[JsonWrapper](s)(wrapperDecoder).toTry
-      decoded <- wrapper.state.as[T].toTry
+      decoded <- decode[T](wrapper.state).toTry
     } yield decoded
 }
