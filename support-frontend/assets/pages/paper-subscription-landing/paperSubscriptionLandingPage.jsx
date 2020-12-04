@@ -22,7 +22,6 @@ import Tabs from './components/tabs';
 import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
-import './paperSubscriptionLandingPage.scss';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 // import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
