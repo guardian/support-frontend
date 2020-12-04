@@ -7,9 +7,9 @@ import { brand, brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { titlepiece } from '@guardian/src-foundations/typography';
 
-import { guardianWeeklyBlue } from 'stylesheets/emotion/colours';
+import { guardianWeeklyBlue, paperSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
-type ThemeType = 'showcase' | 'digital' | 'weekly';
+export type ThemeType = 'showcase' | 'digital' | 'paper' | 'weekly';
 
 type PropTypes = {|
   title: string,
@@ -20,6 +20,7 @@ type PropTypes = {|
 
 const themeColors: { [key: ThemeType]: string } = {
   weekly: guardianWeeklyBlue,
+  paper: paperSubscriptionsBlue,
   digital: brand[300],
   showcase: brandAlt[400],
 };
@@ -28,6 +29,11 @@ const headerThemes: { [key: ThemeType]: string } = {
   weekly: css`
     :before {
       background-color: ${themeColors.weekly};
+    }
+  `,
+  paper: css`
+    :before {
+      background-color: ${themeColors.paper};
     }
   `,
   digital: css`
