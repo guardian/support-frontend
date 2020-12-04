@@ -92,17 +92,15 @@ const TabletAndDesktop = (props: PropTypes) => {
         {props.image}
       </div>
       <div className={styles.content}>
-        <h1 className={isGuardianWeeklyGift ? styles.headerGuardianWeekly : styles.header}>
+        <h3 className={isGuardianWeeklyGift ? styles.headerGuardianWeekly : styles.header}>
           Order summary
-        </h1>
-        <header>
-          <h2 className={styles.title} title={`your subscription is ${props.title}`}>
-            {!props.orderIsAGift && 'The '}{props.title}{props.orderIsAGift && ' Gift Subscription'}
-          </h2>
-          {props.description &&
-          <h3 className={styles.titleDescription}>{props.description}</h3>
+        </h3>
+        <h4 className={styles.title} title={`your subscription is ${props.title}`}>
+          {!props.orderIsAGift && 'The '}{props.title}{props.orderIsAGift && ' Gift Subscription'}
+        </h4>
+        {props.description &&
+          <h4 className={styles.titleDescription}>{props.description}</h4>
         }
-        </header>
         <div>
           <PriceLabel
             className={styles.pricing}
@@ -137,10 +135,8 @@ const HideDropDown = (props: {
   paper: boolean,
 }) => (
   <div className={styles.content}>
-    <h1 className={styles.header}>Order summary</h1>
-    <header>
-      <h2 className={styles.title} title={`your subscription is ${props.title}`}>{props.title}</h2>
-    </header>
+    <h3 className={styles.header}>Order summary</h3>
+    <h4 className={styles.title} title={`your subscription is ${props.title}`}>{props.title}</h4>
     <DropDownButton showDropDown={props.showDropDown} onClick={props.onClick} />
     <div>
       <PriceLabel
@@ -169,11 +165,9 @@ const ShowDropDown = (props: {
   title: string,
 }) => (
   <div className={styles.contentWrapper}>
-    <h1 className={styles.headerShowDetails}>Order summary</h1>
+    <h3 className={styles.headerShowDetails}>Order summary</h3>
     <div className={props.description ? styles.contentShowDetails : styles.contentShowDetailsNoDecription}>
-      <header>
-        <h2 className={styles.titleLeftAlign} title={`your subscription is ${props.title}`}>{props.title}</h2>
-      </header>
+      <h4 className={styles.titleLeftAlign} title={`your subscription is ${props.title}`}>{props.title}</h4>
       <h3 className={styles.titleDescription}>{props.description}</h3>
     </div>
     <div className={styles.contentShowDetails}>
