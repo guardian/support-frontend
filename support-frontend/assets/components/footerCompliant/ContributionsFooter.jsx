@@ -17,13 +17,21 @@ const containerStyles = css`
 
   .component-content__content {
     max-width: 1060px;
+
+    padding-left: 12px;
+    padding-right: 12px;
+
+    ${from.tablet} {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
   }
 `;
 
 const alignmentStyles = css`
   ${from.tablet} {
-    margin-left: 25px;
-    margin-right: 25px;
+    margin-left: 18px;
+    margin-right: 18px;
   }
   ${from.leftCol} {
     margin-left: 70px;
