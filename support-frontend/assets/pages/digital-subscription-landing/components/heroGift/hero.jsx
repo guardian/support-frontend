@@ -49,7 +49,6 @@ function CampaignHeaderGift(props: PropTypes) {
               size="default"
               icon={<SvgArrowDownStraight />}
               iconSide="right"
-              nudgeIcon
               onClick={() => window.scrollTo(0, 1500)}
             >
             See pricing options
