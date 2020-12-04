@@ -16,7 +16,7 @@ case class EmailPayloadTo(Address: String, ContactAttributes: EmailPayloadContac
 case class EmailPayload(
   To: EmailPayloadTo,
   DataExtensionName: String,
-  SfContactId: Option[String], // TODO delete this and make IdentityId non Option
+  SfContactId: Option[String], // this should only be used where no identity account exists e.g. giftee notification
   IdentityUserId: Option[String],
   ScheduledTime: Option[DateTime], // None means immediate
   UserAttributes: Option[JsonObject],
@@ -37,8 +37,8 @@ case class EmailFields(
   userId: Either[SfContactId, IdentityUserId],
   email: String,
   dataExtensionName: String,
-  deliveryDate: Option[LocalDate] = None,
-  userAttributes: Option[JsonObject] = None,
+  deliveryDate: Option[LocalDate],
+  userAttributes: Option[JsonObject],
 ) {
 
   def payload: String =
@@ -54,4 +54,9 @@ case class EmailFields(
       userAttributes
     ).asJson.printWith(Printer.spaces2.copy(dropNullValues = true))
 
+}
+
+object EmailFields {
+  def apply(fields: List[(String, String)], user: User, dataExtensionName: String, userAttributes: Option[JsonObject] = None): EmailFields =
+    new EmailFields(fields, Right(IdentityUserId(user.id)), user.primaryEmailAddress, dataExtensionName, None, userAttributes = userAttributes)
 }

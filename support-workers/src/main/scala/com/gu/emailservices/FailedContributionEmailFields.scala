@@ -15,6 +15,6 @@ object FailedEmailFields {
     failedEmailFields("paper-failed", email, identityUserId)
 
   private def failedEmailFields(dataExtensionName: String, email: String, identityUserId: IdentityUserId): EmailFields =
-    EmailFields(Nil, Right(identityUserId), email, dataExtensionName)
+    EmailFields(Nil, Right(identityUserId), email, dataExtensionName, None, None)
 
 }

@@ -31,7 +31,7 @@ class PaperEmailFields(
       fixedTerm = false,
       paper.firstDeliveryDate,
     ).map(fields =>
-      EmailFields(fields ++ additionalFields, Left(SfContactId(paper.salesForceContact.Id)), paper.user.primaryEmailAddress, dataExtension)
+      EmailFields(fields ++ additionalFields, paper.user, dataExtension)
     )
   }
 }

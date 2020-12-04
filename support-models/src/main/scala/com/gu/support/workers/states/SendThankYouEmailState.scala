@@ -22,7 +22,6 @@ object SendThankYouEmailState {
 
   case class SendThankYouEmailContributionState(
     user: User,
-    salesForceContact: SalesforceContactRecord,
     product: Contribution,
     paymentMethod: PaymentMethod,
     accountNumber: String,
@@ -30,7 +29,6 @@ object SendThankYouEmailState {
 
   case class SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
     user: User,
-    sfContactId: SfContactId,
     product: DigitalPack,
     paymentMethod: PaymentMethod,
     paymentSchedule: PaymentSchedule,
@@ -41,7 +39,6 @@ object SendThankYouEmailState {
 
   case class SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
     user: User,
-    purchaserSFContactId: SfContactId,
     recipientSFContactId: SfContactId,
     product: DigitalPack,
     giftRecipient: DigitalSubscriptionGiftRecipient,
@@ -55,21 +52,18 @@ object SendThankYouEmailState {
 
   case class SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
     user: User,
-    sfContactId: SfContactId,
     product: DigitalPack,
     subscriptionNumber: String,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user: User,
-    sfContactId: SfContactId,
     product: DigitalPack,
     termDates: TermDates,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailPaperState(
     user: User,
-    salesForceContact: SalesforceContactRecord,
     product: Paper,
     paymentMethod: PaymentMethod,
     paymentSchedule: PaymentSchedule,
@@ -81,7 +75,6 @@ object SendThankYouEmailState {
 
   case class SendThankYouEmailGuardianWeeklyState(
     user: User,
-    salesForceContact: SalesforceContactRecord,
     product: GuardianWeekly,
     giftRecipient: Option[WeeklyGiftRecipient],
     paymentMethod: PaymentMethod,
