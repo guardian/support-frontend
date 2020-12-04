@@ -6,7 +6,7 @@ import React, { type Node } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { css } from '@emotion/core';
 import { LinkButton, buttonBrand } from '@guardian/src-button';
-import { SvgChevronDownSingle } from '@guardian/src-icons';
+import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
@@ -99,7 +99,7 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
                 onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)}
                 priority="tertiary"
                 iconSide="right"
-                icon={<SvgChevronDownSingle />}
+                icon={<SvgArrowDownStraight />}
                 href="#subscribe"
               >
                 See pricing options
