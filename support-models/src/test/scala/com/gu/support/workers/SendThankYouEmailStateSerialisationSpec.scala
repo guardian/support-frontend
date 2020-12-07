@@ -31,7 +31,6 @@ object ProductTypeCreatedTestData {
 
   val contributionCreated = SendThankYouEmailContributionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     Contribution(1, GBP, Monthly),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     "acno",
@@ -39,7 +38,6 @@ object ProductTypeCreatedTestData {
 
   val digitalSubscriptionDirectPurchaseCreated = SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    sfContactId = SfContactId("sfbuy"),
     DigitalPack(GBP, Monthly, ReaderType.Direct),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
@@ -50,7 +48,6 @@ object ProductTypeCreatedTestData {
 
   val digitalSubscriptionGiftPurchaseCreated = SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    purchaserSFContactId = SfContactId("sfbuy"),
     recipientSFContactId = SfContactId("sfrecip"),
     DigitalPack(GBP, Monthly, ReaderType.Gift),
     GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
@@ -63,13 +60,11 @@ object ProductTypeCreatedTestData {
   )
   val digitalSubscriptionCorporateRedemptionCreated = SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    sfContactId = SfContactId("sfbuy"),
     DigitalPack(GBP, Monthly, ReaderType.Corporate),
     "subno"
   )
   val digitalSubscriptionGiftRedemptionCreated = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    sfContactId = SfContactId("sfbuy"),
     DigitalPack(GBP, Monthly, ReaderType.Gift),
     TermDates(
       new LocalDate(2020, 10, 24),
@@ -79,7 +74,6 @@ object ProductTypeCreatedTestData {
   )
   val paperCreated = SendThankYouEmailPaperState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     Paper(fulfilmentOptions = Collection, productOptions = Saturday),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
@@ -91,7 +85,6 @@ object ProductTypeCreatedTestData {
 
   val guardianWeeklyCreated = SendThankYouEmailGuardianWeeklyState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     GuardianWeekly(GBP, Monthly, Domestic),
     Some(GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@gu.com"))),
     PayPalReferenceTransaction("baid", "email@emaail.com"),

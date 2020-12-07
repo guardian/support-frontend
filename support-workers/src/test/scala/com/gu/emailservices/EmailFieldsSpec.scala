@@ -3,7 +3,7 @@ package com.gu.emailservices
 import com.gu.i18n.Currency.GBP
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.workers.integration.TestData
-import com.gu.support.workers.integration.TestData.{countryOnlyAddress, directDebitPaymentMethod, sfContactRecord, sfContactId}
+import com.gu.support.workers.integration.TestData.{countryOnlyAddress, directDebitPaymentMethod}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers._
 import io.circe.parser._
@@ -83,7 +83,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |  }
         |},
         |"DataExtensionName" : "digipack",
-        |"SfContactId" : "contactID"
+        |"IdentityUserId" : "1234"
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
@@ -93,7 +93,6 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
     ).build(
       SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
         User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
-        sfContactId,
         DigitalPack(GBP, Annual),
         directDebitPaymentMethod,
         PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
@@ -125,7 +124,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |  }
         |},
         |"DataExtensionName" : "digipack-corporate-redemption",
-        |"SfContactId" : "contactID"
+        |"IdentityUserId" : "1234"
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
@@ -135,7 +134,6 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
     ).build(
       SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
         User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
-        sfContactId,
         DigitalPack(GBP, Annual),
         "A-S00045678",
       )
@@ -162,7 +160,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |    }
         |  },
         |  "DataExtensionName" : "digipack-gift-redemption",
-        |  "SfContactId" : "contactID",
+        |  "IdentityUserId" : "1234",
         |  "UserAttributes" : {
         |    "unmanaged_digital_subscription_gift_duration_months" : 3,
         |    "unmanaged_digital_subscription_gift_start_date" : "2020-11-18",
@@ -177,7 +175,6 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
     ).build(
       SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
         User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
-        sfContactId,
         DigitalPack(GBP, Annual),
         TermDates(
           new LocalDate(2020, 11, 18),

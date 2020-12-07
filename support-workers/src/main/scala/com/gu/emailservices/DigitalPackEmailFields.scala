@@ -153,26 +153,36 @@ class DigitalPackEmailFields(
   private def wrap(
     dataExtensionName: String,
     fields: DigitalSubscriptionEmailAttributes,
-    sfContactId: SfContactId,
-    emailAddress: String,
-    deliveryDate: Option[LocalDate] = None,
+    user: User,
     userAttributes: Option[JsonObject] = None,
   ): EmailFields = {
     val attributePairs = JsonToAttributes.asFlattenedPairs(fields.asJsonObject).left.map(
       error => throw new RuntimeException(s"coding error: $error")
     ).merge
-    EmailFields(attributePairs, Left(sfContactId), emailAddress, dataExtensionName, deliveryDate, userAttributes)
+    EmailFields(attributePairs, user, dataExtensionName, userAttributes)
   }
 
-  private def giftRecipientNotification(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState) =
-    wrap("digipack-gift-notification", GifteeNotificationAttributes(
+  private def giftRecipientNotification(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState) = {
+    val fields = GifteeNotificationAttributes(
       gifter_first_name = giftPurchase.user.firstName,
       gifter_last_name = giftPurchase.user.lastName,
       gift_personal_message = giftPurchase.giftRecipient.message,
       gift_code = giftPurchase.giftCode.value,
       last_redemption_date = formatDate(giftPurchase.lastRedemptionDate),
       duration = s"${giftPurchase.product.billingPeriod.monthsInPeriod} months",
-    ), giftPurchase.recipientSFContactId, giftPurchase.giftRecipient.email, Some(giftPurchase.giftRecipient.deliveryDate))
+    )
+    val attributePairs = JsonToAttributes.asFlattenedPairs(fields.asJsonObject).left.map(
+      error => throw new RuntimeException(s"coding error: $error")
+    ).merge
+    EmailFields(
+      attributePairs,
+      Left(giftPurchase.recipientSFContactId),
+      giftPurchase.giftRecipient.email,
+      "digipack-gift-notification",
+      Some(giftPurchase.giftRecipient.deliveryDate),
+      None,
+    )
+  }
 
   private def giftPurchaserConfirmation(state: SendThankYouEmailDigitalSubscriptionGiftPurchaseState)(implicit ec: ExecutionContext) = {
     import state._
@@ -196,7 +206,7 @@ class DigitalPackEmailFields(
         date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
         paymentAttributes = paymentFieldsAttributes,
         last_redemption_date = formatDate(lastRedemptionDate),
-      ), purchaserSFContactId, user.primaryEmailAddress))
+      ), user))
   }
 
   case class GifteeRedemptionUserAttributes(
@@ -215,7 +225,7 @@ class DigitalPackEmailFields(
       gift_start_date = formatDate(state.termDates.giftStartDate),
       gift_recipient_email = state.user.primaryEmailAddress,
       gift_end_date = formatDate(state.termDates.giftEndDate),
-    ), state.sfContactId, state.user.primaryEmailAddress, None, Some(GifteeRedemptionUserAttributes(
+    ), state.user, Some(GifteeRedemptionUserAttributes(
       unmanaged_digital_subscription_gift_duration_months = state.termDates.months,
       unmanaged_digital_subscription_gift_start_date = ISODateTimeFormat.date().print(state.termDates.giftStartDate),
       unmanaged_digital_subscription_gift_end_date = ISODateTimeFormat.date().print(state.termDates.giftEndDate),
@@ -225,8 +235,7 @@ class DigitalPackEmailFields(
     wrap(
       "digipack-corporate-redemption",
       directOrCorpFields("Group subscription", state.subscriptionNumber, state.user),
-      state.sfContactId,
-      state.user.primaryEmailAddress
+      state.user,
     )
 
   private def directThankYou(state: SendThankYouEmailDigitalSubscriptionDirectPurchaseState)(implicit ec: ExecutionContext) = {
@@ -250,7 +259,7 @@ class DigitalPackEmailFields(
         date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(state.paymentSchedule).date),
         trial_period = "14", //TODO: depends on Promo code or zuora config
         paymentFieldsAttributes
-      ), state.sfContactId, state.user.primaryEmailAddress)
+      ), state.user)
     )
   }
 

@@ -29,12 +29,7 @@ class ContributionEmailFields(
         "product" -> s"${contributionProcessedInfo.product.billingPeriod.toString.toLowerCase}-contribution"
       ) ++ paymentFields
 
-      EmailFields(
-        fields,
-        Left(SfContactId(contributionProcessedInfo.salesForceContact.Id)),
-        contributionProcessedInfo.user.primaryEmailAddress,
-        "regular-contribution-thank-you"
-      )
+      EmailFields(fields, contributionProcessedInfo.user, "regular-contribution-thank-you")
     }
   }
 
