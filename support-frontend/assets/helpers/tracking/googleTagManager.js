@@ -32,7 +32,7 @@ type GaEventData = {
 // these values match the keys used by @guardian/consent-management-platform
 const googleTagManagerKey = 'google-tag-manager';
 const googleAnalyticsKey = 'google-analytics';
-const googleRemarketingId = 'remarketing';
+const googleRemarketingKey = 'remarketing';
 const facebookKey = 'fb';
 const twitterKey = 'twitter';
 const bingKey = 'bing';
@@ -42,7 +42,7 @@ const vendorIds: {
 } = {
   [googleTagManagerKey]: '5e952f6107d9d20c88e7c975',
   [googleAnalyticsKey]: '5e542b3a4cd8884eb41b5a72',
-  [googleRemarketingId]: '5ed0eb688a76503f1016578f',
+  [googleRemarketingKey]: '5ed0eb688a76503f1016578f',
   [facebookKey]: '5e7e1298b8e05c54a85c52d2',
   [twitterKey]: '5e71760b69966540e4554f01',
   [bingKey]: '5f353ea3f8baf8390b95ffd4',
