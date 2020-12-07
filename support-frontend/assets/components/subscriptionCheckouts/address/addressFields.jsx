@@ -11,7 +11,6 @@ import {
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
 
-// import { Select } from 'components/forms/select';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { Select, Option as OptionForSelect } from '@guardian/src-select';
 
@@ -181,7 +180,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           id={`${scope}-stateProvince`}
           label="State"
           value={props.state}
-          onChange={props.setState}
+          onChange={e => props.setState(e.target.value)}
           error={firstError('state', props.formErrors)}
           optional
           isShown={AddressFields.shouldShowStateInput(props.country)}

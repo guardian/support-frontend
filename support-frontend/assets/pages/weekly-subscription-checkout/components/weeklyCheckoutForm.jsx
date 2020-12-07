@@ -268,7 +268,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
                       name={machineDate}
                       checked={machineDate === props.startDate}
                       onChange={() => props.setStartDate(machineDate)}
-                      onClick={() => props.setStartDate(machineDate)}
                     />
                   );
                 })

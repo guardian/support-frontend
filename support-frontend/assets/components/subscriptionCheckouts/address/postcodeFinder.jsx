@@ -48,9 +48,9 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
   <div css={root}>
     <TextInput
       {...props}
-      onKeyPress={(ev) => {
-        if (ev.key && ev.key === 'Enter') {
-          ev.preventDefault();
+      onKeyPress={(e) => {
+        if (e.key && e.key === 'Enter') {
+          e.preventDefault();
           onClick();
         }
       }}
@@ -94,18 +94,18 @@ class PostcodeFinder extends Component<PropTypes> {
           label="Postcode"
           onClick={() => { fetchResults(postcode); }}
           id={id}
-          onChange={(val) => {
-            setPostcode(val);
-            onPostcodeUpdate(val);
+          onChange={(e) => {
+            setPostcode(e.target.value);
+            onPostcodeUpdate(e.target.value);
           }}
           isLoading={isLoading}
           value={postcode}
         />
         {(results.length > 0) &&
           <Select
-            onChange={(ev) => {
-              if (results[ev.currentTarget.value]) {
-                onAddressUpdate(results[ev.currentTarget.value]);
+            onChange={(e) => {
+              if (results[e.currentTarget.value]) {
+                onAddressUpdate(results[e.currentTarget.value]);
               }
             }}
             forwardRef={(r) => { this.selectRef = r; }}
