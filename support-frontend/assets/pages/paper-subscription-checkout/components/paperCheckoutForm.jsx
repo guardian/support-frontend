@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { Component } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
@@ -104,6 +104,10 @@ type PropTypes = {|
   fulfilmentOption: FulfilmentOptions,
 |};
 
+type StateTypes = {
+  formattedStartDate: string,
+}
+
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state: WithDeliveryCheckoutState) {
@@ -144,17 +148,6 @@ function mapDispatchToProps() {
   };
 }
 
-function getAndSetStartDateForSubsCard(productOption: ActivePaperProducts, setStartDateInState) {
-  const timeNow = Date.now();
-  const subsCardStartDate = getPaymentStartDate(timeNow, productOption);
-  setStartDateInState(formatMachineDate(subsCardStartDate));
-
-  return {
-    subsCardStartDate,
-    formattedStartDate: getFormattedStartDate(getPaymentStartDate(timeNow, productOption)),
-  };
-}
-
 // ----- Form Fields ----- //
 
 const DeliveryAddress = withStore(newspaperCountries, 'delivery', getDeliveryAddress);
@@ -162,241 +155,261 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 
 // ----- Component ----- //
 
-function PaperCheckoutForm(props: PropTypes) {
-  const collectionOption = props.useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
-  const collectionOptionDescription = props.useDigitalVoucher ? 'subscription card' : 'vouchers';
-  const days = getDays(props.fulfilmentOption, props.productOption);
-  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : collectionOption;
-  const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
-  const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
-    'Sorry we could not process your payment';
-  const title = `${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`;
-  const productPrice = getProductPrice(
-    props.productPrices,
-    props.fulfilmentOption,
-    props.productOption,
-  );
-  const paymentMethods = supportedPaymentMethods(props.country);
-  const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
-  const subsCardStartDates = isSubscriptionCard ?
-    getAndSetStartDateForSubsCard(props.productOption, props.setStartDate) :
-    {
-      subsCardStartDate: '',
+// Change to a class because we need componentDidMount
+class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
+  constructor(props) {
+    super(props);
+    this.state = {
       formattedStartDate: '',
     };
+  }
 
-  const subsCardOrderSummary = (<OrderSummary
-    image={
-      <GridImage
-        gridId="printCampaignDigitalVoucher"
-        srcSizes={[500]}
-        sizes="(max-width: 740px) 50vw, 696"
-        imgType="png"
-        altText=""
-      />}
-    title={title}
-    productPrice={productPrice}
-    billingPeriod="Monthly"
-    changeSubscription={routes.paperSubscriptionProductChoices}
-    productType={Paper}
-    paymentStartDate={subsCardStartDates.formattedStartDate}
-  />);
+  // This is here to prevent the start date state being updated every time any other state was updated
+  componentDidMount() {
+    const { useDigitalVoucher, fulfilmentOption, productOption } = this.props;
+    const isSubscriptionCard = useDigitalVoucher && fulfilmentOption === Collection;
 
-  const homeDeliveryOrderSummary = (<OrderSummary
-    image={
-      <GridImage
-        gridId="printCampaignHDdigitalVoucher"
-        srcSizes={[500]}
-        sizes="(max-width: 740px) 50vw, 696"
-        imgType="png"
-        altText=""
-      />
+    if (isSubscriptionCard) {
+      const timeNow = Date.now();
+      /* eslint-disable react/no-did-mount-set-state */
+      this.setState({
+        formattedStartDate: getFormattedStartDate(getPaymentStartDate(timeNow, productOption)),
+      });
     }
-    title={title}
-    productPrice={productPrice}
-    billingPeriod="Monthly"
-    changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
-    product={Paper}
-  />);
+  }
 
-  return (
-    <Content modifierClasses={['your-details']}>
-      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : homeDeliveryOrderSummary}>
-        <Form onSubmit={(ev) => {
-          ev.preventDefault();
-          props.submitForm();
-        }}
-        >
-          <FormSection title="Your details">
-            <TextInput
-              css={marginBottom}
-              id="title"
-              label="Title"
-              optional
-              value={props.title}
-              onChange={e => props.setTitle(e.target.value)}
-            />
-            <PersonalDetails
-              firstName={props.firstName}
-              setFirstName={props.setFirstName}
-              lastName={props.lastName}
-              setLastName={props.setLastName}
-              email={props.email}
-              telephone={props.telephone}
-              setTelephone={props.setTelephone}
-              formErrors={props.formErrors}
-              signOut={props.signOut}
-            />
-          </FormSection>
+  render() {
+    const { props, state } = this;
+    const collectionOption = props.useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
+    const collectionOptionDescription = props.useDigitalVoucher ? 'subscription card' : 'vouchers';
+    const days = getDays(props.fulfilmentOption, props.productOption);
+    const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : collectionOption;
+    const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
+    const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
+      'Sorry we could not process your payment';
+    const title = `${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`;
+    const productPrice = getProductPrice(
+      props.productPrices,
+      props.fulfilmentOption,
+      props.productOption,
+    );
+    const paymentMethods = supportedPaymentMethods(props.country);
+    const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
 
-          <FormSection title={deliveryTitle}>
-            <DeliveryAddress />
-            {
-              props.fulfilmentOption === HomeDelivery ?
-                <TextArea
-                  id="delivery-instructions"
-                  label="Delivery instructions"
-                  maxlength={250}
-                  value={props.deliveryInstructions}
-                  onChange={e => props.setDeliveryInstructions(e.target.value)}
-                />
-                : null
-            }
-          </FormSection>
+    const subsCardOrderSummary = (<OrderSummary
+      image={
+        <GridImage
+          gridId="printCampaignDigitalVoucher"
+          srcSizes={[500]}
+          sizes="(max-width: 740px) 50vw, 696"
+          imgType="png"
+          altText=""
+        />}
+      title={title}
+      productPrice={productPrice}
+      billingPeriod="Monthly"
+      changeSubscription={routes.paperSubscriptionProductChoices}
+      productType={Paper}
+      paymentStartDate={state.formattedStartDate}
+    />);
 
-          <FormSection title="Is the billing address the same as the delivery address?">
-            <Rows>
-              <RadioGroup
-                id="billingAddressIsSame"
-                name="billingAddressIsSame"
-                orienntation="vertical"
-                error={firstError('billingAddressIsSame', props.formErrors)}
-              >
-                <Radio
-                  inputId="qa-billing-address-same"
-                  value="yes"
-                  label="Yes"
-                  name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame === true}
-                  onChange={() => props.setBillingAddressIsSame(true)}
-                />
+    const homeDeliveryOrderSummary = (<OrderSummary
+      image={
+        <GridImage
+          gridId="printCampaignHDdigitalVoucher"
+          srcSizes={[500]}
+          sizes="(max-width: 740px) 50vw, 696"
+          imgType="png"
+          altText=""
+        />
+      }
+      title={title}
+      productPrice={productPrice}
+      billingPeriod="Monthly"
+      changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
+      product={Paper}
+    />);
 
-                <Radio
-                  inputId="qa-billing-address-different"
-                  label="No"
-                  value="no"
-                  name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame === false}
-                  onChange={() => props.setBillingAddressIsSame(false)}
-                />
-              </RadioGroup>
-            </Rows>
-          </FormSection>
-          {
-            props.billingAddressIsSame === false ?
-              <FormSection title="Your billing address">
-                <BillingAddress />
-              </FormSection>
-              : null
-          }
-          {!isSubscriptionCard ? (
-            <FormSection title="When would you like your subscription to start?">
+    return (
+      <Content modifierClasses={['your-details']}>
+        <Layout aside={isSubscriptionCard ? subsCardOrderSummary : homeDeliveryOrderSummary}>
+          <Form onSubmit={(ev) => {
+            ev.preventDefault();
+            props.submitForm();
+          }}
+          >
+            <FormSection title="Your details">
+              <TextInput
+                css={marginBottom}
+                id="title"
+                label="Title"
+                optional
+                value={props.title}
+                onChange={e => props.setTitle(e.target.value)}
+              />
+              <PersonalDetails
+                firstName={props.firstName}
+                setFirstName={props.setFirstName}
+                lastName={props.lastName}
+                setLastName={props.setLastName}
+                email={props.email}
+                telephone={props.telephone}
+                setTelephone={props.setTelephone}
+                formErrors={props.formErrors}
+                signOut={props.signOut}
+              />
+            </FormSection>
+
+            <FormSection title={deliveryTitle}>
+              <DeliveryAddress />
+              {
+                props.fulfilmentOption === HomeDelivery ?
+                  <TextArea
+                    id="delivery-instructions"
+                    label="Delivery instructions"
+                    maxlength={250}
+                    value={props.deliveryInstructions}
+                    onChange={e => props.setDeliveryInstructions(e.target.value)}
+                  />
+                  : null
+              }
+            </FormSection>
+
+            <FormSection title="Is the billing address the same as the delivery address?">
               <Rows>
                 <RadioGroup
-                  id="startDate"
-                  error={firstError('startDate', props.formErrors)}
-                  legend="When would you like your subscription to start?"
+                  id="billingAddressIsSame"
+                  name="billingAddressIsSame"
+                  orienntation="vertical"
+                  error={firstError('billingAddressIsSame', props.formErrors)}
                 >
-                  {days.map((day) => {
-                    const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
-                    return (
-                      <Radio
-                        label={userDate}
-                        value={userDate}
-                        name={machineDate}
-                        checked={machineDate === props.startDate}
-                        onChange={() => props.setStartDate(machineDate)}
-                        onClick={() => props.setStartDate(machineDate)}
-                      />
-                    );
-                  })
-                  }
+                  <Radio
+                    inputId="qa-billing-address-same"
+                    value="yes"
+                    label="Yes"
+                    name="billingAddressIsSame"
+                    checked={props.billingAddressIsSame === true}
+                    onChange={() => props.setBillingAddressIsSame(true)}
+                  />
+
+                  <Radio
+                    inputId="qa-billing-address-different"
+                    label="No"
+                    value="no"
+                    name="billingAddressIsSame"
+                    checked={props.billingAddressIsSame === false}
+                    onChange={() => props.setBillingAddressIsSame(false)}
+                  />
                 </RadioGroup>
-                <Text className="component-text__paddingTop">
-                  <p>
-                  We will take the first payment on the
-                  date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
-                  </p>
-                  <p>
-                 Subscription start dates are automatically selected to be the earliest we can fulfil your order.
-                  </p>
-                </Text>
               </Rows>
-            </FormSection>) : null}
-          {paymentMethods.length > 1 ?
-            <FormSection title="How would you like to pay?">
-              <PaymentMethodSelector
-                country="GB"
-                paymentMethod={props.paymentMethod}
-                setPaymentMethod={props.setPaymentMethod}
-                validationError={firstError('paymentMethod', props.formErrors)}
+            </FormSection>
+            {
+              props.billingAddressIsSame === false ?
+                <FormSection title="Your billing address">
+                  <BillingAddress />
+                </FormSection>
+                : null
+            }
+            {!isSubscriptionCard ? (
+              <FormSection title="When would you like your subscription to start?">
+                <Rows>
+                  <RadioGroup
+                    id="startDate"
+                    error={firstError('startDate', props.formErrors)}
+                    legend="When would you like your subscription to start?"
+                  >
+                    {days.map((day) => {
+                      const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                      return (
+                        <Radio
+                          label={userDate}
+                          value={userDate}
+                          name={machineDate}
+                          checked={machineDate === props.startDate}
+                          onChange={() => props.setStartDate(machineDate)}
+                          onClick={() => props.setStartDate(machineDate)}
+                        />
+                      );
+                    })
+                    }
+                  </RadioGroup>
+                  <Text className="component-text__paddingTop">
+                    <p>
+                    We will take the first payment on the
+                    date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
+                    </p>
+                    <p>
+                  Subscription start dates are automatically selected to be the earliest we can fulfil your order.
+                    </p>
+                  </Text>
+                </Rows>
+              </FormSection>) : null}
+            {paymentMethods.length > 1 ?
+              <FormSection title="How would you like to pay?">
+                <PaymentMethodSelector
+                  country="GB"
+                  paymentMethod={props.paymentMethod}
+                  setPaymentMethod={props.setPaymentMethod}
+                  validationError={firstError('paymentMethod', props.formErrors)}
+                />
+              </FormSection> : null}
+            <FormSectionHiddenUntilSelected
+              id="stripeForm"
+              show={props.paymentMethod === Stripe}
+              title="Your card details"
+            >
+              <StripeProviderForCountry
+                country={props.country}
+                isTestUser={props.isTestUser}
+                submitForm={props.submitForm}
+                allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+                setStripePaymentMethod={props.setStripePaymentMethod}
+                name={`${props.firstName} ${props.lastName}`}
+                validateForm={props.validateForm}
+                buttonText="Pay now"
+                csrf={props.csrf}
               />
-            </FormSection> : null}
-          <FormSectionHiddenUntilSelected
-            id="stripeForm"
-            show={props.paymentMethod === Stripe}
-            title="Your card details"
-          >
-            <StripeProviderForCountry
-              country={props.country}
-              isTestUser={props.isTestUser}
-              submitForm={props.submitForm}
-              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-              setStripePaymentMethod={props.setStripePaymentMethod}
-              name={`${props.firstName} ${props.lastName}`}
-              validateForm={props.validateForm}
-              buttonText="Pay now"
-              csrf={props.csrf}
+            </FormSectionHiddenUntilSelected>
+            <FormSectionHiddenUntilSelected
+              id="directDebitForm"
+              show={props.paymentMethod === DirectDebit}
+              title="Your account details"
+            >
+              <DirectDebitForm
+                buttonText="Subscribe"
+                submitForm={props.submitForm}
+                allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+                submissionError={props.submissionError}
+                submissionErrorHeading={submissionErrorHeading}
+              />
+            </FormSectionHiddenUntilSelected>
+            {props.paymentMethod === PayPal ? (
+              <PayPalSubmitButton
+                paymentMethod={props.paymentMethod}
+                onPaymentAuthorised={props.onPaymentAuthorised}
+                csrf={props.csrf}
+                currencyId={props.currencyId}
+                payPalHasLoaded={props.payPalHasLoaded}
+                formIsValid={props.formIsValid}
+                validateForm={props.validateForm}
+                isTestUser={props.isTestUser}
+                setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+                amount={props.amount}
+                billingPeriod={props.billingPeriod}
+                allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+              />) : null}
+            <GeneralErrorMessage
+              errorReason={props.submissionError}
+              errorHeading={submissionErrorHeading}
             />
-          </FormSectionHiddenUntilSelected>
-          <FormSectionHiddenUntilSelected
-            id="directDebitForm"
-            show={props.paymentMethod === DirectDebit}
-            title="Your account details"
-          >
-            <DirectDebitForm
-              buttonText="Subscribe"
-              submitForm={props.submitForm}
-              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-              submissionError={props.submissionError}
-              submissionErrorHeading={submissionErrorHeading}
-            />
-          </FormSectionHiddenUntilSelected>
-          {props.paymentMethod === PayPal ? (
-            <PayPalSubmitButton
-              paymentMethod={props.paymentMethod}
-              onPaymentAuthorised={props.onPaymentAuthorised}
-              csrf={props.csrf}
-              currencyId={props.currencyId}
-              payPalHasLoaded={props.payPalHasLoaded}
-              formIsValid={props.formIsValid}
-              validateForm={props.validateForm}
-              isTestUser={props.isTestUser}
-              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-              amount={props.amount}
-              billingPeriod={props.billingPeriod}
-              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-            />) : null}
-          <GeneralErrorMessage
-            errorReason={props.submissionError}
-            errorHeading={submissionErrorHeading}
-          />
-          <EndSummaryMobile paymentStartDate={subsCardStartDates.formattedStartDate} />
-          <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
-        </Form>
-      </Layout>
-    </Content>
-  );
+            <EndSummaryMobile paymentStartDate={state.formattedStartDate} />
+            <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
+          </Form>
+        </Layout>
+      </Content>
+    );
+  }
+
 }
 
 
