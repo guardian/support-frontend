@@ -1,10 +1,6 @@
 import { css } from '@emotion/core';
-import { neutral } from '@guardian/src-foundations/palette';
-import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
-import { body } from '@guardian/src-foundations/typography';
-
-import { brandAlt } from '@guardian/src-foundations/palette';
+import { from } from '@guardian/src-foundations/mq';
 
 export const paymentSelection = css`
   display: flex;
@@ -24,56 +20,31 @@ export const paymentSelection = css`
   }
 `;
 
-export const paymentSelectionCard = css`
-  position: relative;
-  width: 100%;
-  max-width: 32.5rem;
-  display: flex;
-  margin: 10px 10px 0 0;
-  z-index: 10;
-
-  ${from.mobileLandscape} {
-    margin-left: 10px;
+export const productOverride = css`
+  &:not(:first-of-type) {
+    margin-top: ${space[4]}px;
   }
-
   ${from.tablet} {
-    margin: 0 0 0 20px;
-    max-width: 30rem;
-    width: 320px;
-  }
-
-  ${from.leftCol} {
-    margin-left: 40px;
-  }
-
-  ${from.wide} {
-    margin-left: 50px;
-  }
-
-  :last-of-type {
-    margin: 30px 10px 20px 0;
-
-    ${from.mobileLandscape} {
-      margin-left: 10px;
+    &:not(:first-of-type) {
+      margin-top: 0;
     }
-
-    ${from.tablet} {
-      margin: 0 0 0 20px;
+    &:not(:last-of-type) {
+      margin-right: ${space[5]}px;
     }
   }
 `;
 
-export const productOptionLabel = css`
-  position: absolute;
-  top: -5px;
-  ${body.medium({ fontWeight: 'bold' })};
-  padding: 0 ${space[3]}px;
-  background-color: ${brandAlt[400]};
-  color: ${neutral[7]};
-  z-index: 0;
-
+export const productOverrideWithLabel = css`
+  &:not(:first-of-type) {
+    margin-top: ${space[12]}px;
+  }
   ${from.tablet} {
-    top: -25px;
+    &:not(:first-of-type) {
+      margin-top: 0;
     }
+    &:not(:last-of-type) {
+      margin-right: ${space[5]}px;
+    }
+  }
 `;
 

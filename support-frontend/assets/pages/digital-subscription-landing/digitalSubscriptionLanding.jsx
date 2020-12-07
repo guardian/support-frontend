@@ -17,8 +17,12 @@ import {
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
+import { routes } from 'helpers/routes';
 
 import Page from 'components/page/page';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
+import CentredContainer from 'components/containers/centredContainer';
+
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import CampaignHeader from './components/hero/hero';
@@ -28,8 +32,8 @@ import ProductBlockAus from './components/productBlock/productBlockAus';
 import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
-import { CallToAction, CallToActionGift } from './components/cta';
-import GiftNonGiftLink from './components/giftNonGiftLink';
+import Prices from './components/prices';
+import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 // ----- Styles ----- //
 
@@ -58,7 +62,8 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
-const path = orderIsAGift ? '/subscribe/digital/gift' : '/subscribe/digital';
+const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
+const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
 
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   path,
@@ -101,8 +106,16 @@ function LandingPage() {
         <ProductBlockAus countryGroupId={countryGroupId} /> :
         <ProductBlock countryGroupId={countryGroupId} />
       }
-      {orderIsAGift ? <CallToActionGift /> : <CallToAction />}
-      <GiftNonGiftLink orderIsAGift={orderIsAGift} />
+      <FullWidthContainer theme="dark" hasOverlap>
+        <CentredContainer>
+          <Prices orderIsAGift={orderIsAGift} />
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer theme="white">
+        <CentredContainer>
+          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
+        </CentredContainer>
+      </FullWidthContainer>
     </Page>
   );
 

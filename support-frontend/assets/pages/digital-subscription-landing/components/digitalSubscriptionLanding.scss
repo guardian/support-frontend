@@ -312,10 +312,11 @@ $teal-green: #006d67;
   overflow: hidden;
 
   @include mq($from: tablet) {
-    margin-bottom: -40px;
+    margin-bottom: 24px;
   }
 
   .product-block__container {
+    z-index: 2;
     padding-bottom: 50px;
 
     @include mq($from:phablet, $until: tablet) {
@@ -1040,7 +1041,7 @@ div.call-to-action__container {
       }
     }
 
-    h3 {
+    .call-to-action__subheading {
       margin-bottom: 20px;
       padding-left: 0;
       @include gu-fontset-body-sans;

@@ -15,11 +15,12 @@ stories.add('ProductOption', () => {
   const product = {
     title: text('Title', '6 for 6'),
     price: text('Price', '£6'),
-    priceCopy: text('Price copy', 'for the first 6 issues'),
+    offerCopy: text('Offer copy', '£6 for the first 6 issues'),
+    priceCopy: text('Price copy', 'then £37.50 per quarter'),
     href: '',
-    buttonCopy: text('Button copy', 'Buy now'),
+    buttonCopy: text('Button copy', 'Subscribe now'),
     onClick: () => {},
-    label: text('Label', 'Save 10%'),
+    label: text('Label', 'Best deal'),
   };
   return (
     <div style={{

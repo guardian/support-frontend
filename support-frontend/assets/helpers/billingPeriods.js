@@ -4,13 +4,16 @@ const Annual: 'Annual' = 'Annual';
 const Monthly: 'Monthly' = 'Monthly';
 const Quarterly: 'Quarterly' = 'Quarterly';
 const SixWeekly: 'SixWeekly' = 'SixWeekly';
-const weeklyBillingPeriods = [SixWeekly, Quarterly, Annual];
+
 export type BillingPeriod = typeof SixWeekly | typeof Annual | typeof Monthly | typeof Quarterly;
 export type DigitalBillingPeriod = typeof Monthly | typeof Annual;
 export type DigitalGiftBillingPeriod = typeof Annual | typeof Quarterly;
 export type WeeklyBillingPeriod = typeof SixWeekly | typeof Quarterly | typeof Annual;
 
 export type ContributionBillingPeriod = typeof Monthly | typeof Annual;
+
+const weeklyBillingPeriods = [SixWeekly, Quarterly, Annual];
+const weeklyGiftBillingPeriods: WeeklyBillingPeriod[] = [Quarterly, Annual];
 
 function billingPeriodNoun(billingPeriod: BillingPeriod, fixedTerm: boolean = false) {
   switch (billingPeriod) {
@@ -46,4 +49,5 @@ export {
   billingPeriodNoun,
   billingPeriodTitle,
   weeklyBillingPeriods,
+  weeklyGiftBillingPeriods,
 };
