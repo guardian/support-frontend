@@ -53,12 +53,12 @@
 
   .gu-content__form {
     border: 0;
-    padding-top: ($gu-v-spacing * 2);
+    padding: ($gu-v-spacing * 2) 12px 0;
     margin: 0;
 
     @include mq($from: tablet) {
       max-width: $gu-h-spacing * 19.25;
-      padding: ($gu-v-spacing * 1.5) ($gu-h-spacing * 1.25) 0;
+      padding: ($gu-v-spacing * 1.5) 38px 0;
     }
 
     @include mq($from: desktop) {
@@ -67,7 +67,7 @@
 
     @include mq($from: leftCol) {
       max-width: $gu-h-spacing * 32;
-      padding: ($gu-v-spacing * 1.5) ($gu-h-spacing * 4.25) 0;
+      padding: ($gu-v-spacing * 1.5) 90px 0;
     }
   }
 }
