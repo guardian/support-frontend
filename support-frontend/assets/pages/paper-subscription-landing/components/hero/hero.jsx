@@ -30,6 +30,9 @@ type PropTypes = {|
 
 const heroCopy = css`
   padding: 0 ${space[3]}px ${space[3]}px;
+  ${from.desktop} {
+    max-width: 80%;
+  }
 `;
 
 const heroTitle = css`
@@ -85,10 +88,10 @@ function PaperHero({ productPrices }: PropTypes) {
         <Hero
           image={<GridImage
             gridId="printCampaignHero"
-            srcSizes={[1000, 500, 140]}
+            srcSizes={[714, 500, 140]}
             sizes="(max-width: 740px) 100%,
             (max-width: 1067px) 150%,
-            500px"
+            1000px"
             imgType="png"
             altText="Newspapers"
           />}

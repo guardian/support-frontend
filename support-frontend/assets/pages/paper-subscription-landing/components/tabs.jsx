@@ -80,6 +80,7 @@ function PaperTabs({ selectedTab, setTabAction, useDigitalVoucher }: PropTypes) 
   return (
     <Outset>
       <Tabs
+        tabsLabel="Paper subscription options"
         tabElement="a"
         tabs={tabItems}
         onTabChange={(tabId) => {

@@ -1,4 +1,5 @@
 // @flow
+import React from 'react';
 import { connect } from 'react-redux';
 
 import { type Option } from 'helpers/types/option';
@@ -12,7 +13,7 @@ import {
   finalPrice,
   getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
-import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
+// import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -28,32 +29,34 @@ import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { flashSaleIsActive } from 'helpers/flashSale';
 import { Paper } from 'helpers/subscriptions';
 
+import Prices, { type PropTypes } from './prices';
+
 // ---- Helpers ----- //
 
-const getRegularPriceStr = (price: ProductPrice): string => `You pay ${showPrice(price)} a month`;
+const getRegularPriceStr = (price: ProductPrice): string => showPrice(price);
 
 const getPriceStr = (price: ProductPrice): string => {
   const promotion = getAppliedPromo(price.promotions);
   if (promotion && promotion.numberOfDiscountedPeriods) {
     // $FlowIgnore - we have checked numberOfDiscountedPeriods is not null above
-    return `You pay ${showPrice(price)} a month for ${promotion.numberOfDiscountedPeriods} months`;
+    return `${showPrice(price)} a month for ${promotion.numberOfDiscountedPeriods} months`;
   }
   return getRegularPriceStr(price);
 };
 
-const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> => {
+const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): string => {
   if ((subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0)) {
     return `Save ${getNewsstandSavingPercentage(subscription, newsstand)}% a month on retail price`;
   }
-  return null;
+  return '';
 };
 
-const getSavingStr = (price: ProductPrice): Option<string> => {
+const getSavingStr = (price: ProductPrice): string => {
   const promotionApplied = getAppliedPromo(price.promotions);
   if (promotionApplied) {
     return `${showPrice(price)} a month thereafter`;
   }
-  return null;
+  return '';
 };
 
 
@@ -67,7 +70,6 @@ const copy = {
     Weekend: 'Saturday Guardian and Observer papers, delivered',
     Sunday: 'Observer paper, delivered',
   },
-
   Collection: {
     Everyday: 'Guardian and Observer papers',
     Sixday: 'Guardian papers',
@@ -82,45 +84,54 @@ const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) =
   }
   if (price.savingVsRetail && price.savingVsRetail > 0) { return `Save ${price.savingVsRetail}% on retail price`; }
 
-  return null;
+  return '';
 };
+
+// export type Product = {
+//   title: string,
+//   price: string,
+//   children?: Node,
+//   priceCopy: Node,
+//   buttonCopy: string,
+//   href: string,
+//   onClick: Function,
+//   label?: string,
+//   cssOverrides?: string,
+// }
 
 const getPlans = (
   fulfilmentOption: PaperFulfilmentOptions,
   productPrices: ProductPrices,
 ) =>
-  ActivePaperProductTypes.reduce((products, productOption) => {
+  ActivePaperProductTypes.map((productOption) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
     const promotion = getAppliedPromo(price.promotions);
     const promoCode = promotion ? promotion.promoCode : null;
     return {
-      ...products,
-      [productOption]: {
-        href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
-        onClick: sendTrackingEventsOnClick(
-          'subscribe_now_cta',
-          'Paper',
-          null,
-          [productOption, fulfilmentOption].join(),
-        ),
-        title: getTitle(productOption),
-        copy: copy[fulfilmentOption][productOption],
-        price: flashSaleIsActive(Paper) ? getPriceStr(price) : getRegularPriceStr(price),
-        offer: getOfferText(price, productOption),
-        saving: flashSaleIsActive(Paper)
-          ? getSavingStr(getProductPrice(productPrices, fulfilmentOption, productOption))
-          : null,
-      },
+      title: getTitle(productOption),
+      price: flashSaleIsActive(Paper) ? getPriceStr(price) : getRegularPriceStr(price),
+      href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
+      onClick: sendTrackingEventsOnClick(
+        'subscribe_now_cta',
+        'Paper',
+        null,
+        [productOption, fulfilmentOption].join(),
+      ),
+      buttonCopy: 'Subscribe now',
+      priceCopy: copy[fulfilmentOption][productOption],
+      offerCopy: <p>{getOfferText(price, productOption)}<br />{copy[fulfilmentOption][productOption]}</p>,
+      label: flashSaleIsActive(Paper)
+        ? getSavingStr(getProductPrice(productPrices, fulfilmentOption, productOption))
+        : '',
     };
-  }, {});
+  });
 
 
 // ----- State/Props Maps ----- //
-const mapStateToProps = (state: State): PropTypes<PaperProductOptions> => ({
-  plans: state.page.productPrices ? getPlans(state.page.tab, state.page.productPrices) : {},
-  theme: 'light',
+const mapStateToProps = (state: State): PropTypes => ({
+  products: state.page.productPrices ? getPlans(state.page.tab, state.page.productPrices) : [],
 });
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(ProductPagePlanForm);
+export default connect(mapStateToProps)(Prices);

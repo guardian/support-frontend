@@ -64,7 +64,12 @@ stories.add('Tabs', () => {
 
     return (
       <div style={{ padding: '48px' }}>
-        <Tabs tabElement="button" tabs={tabs} onTabChange={onTabChange} />
+        <Tabs
+          tabsLabel="Pets"
+          tabElement="button"
+          tabs={tabs}
+          onTabChange={onTabChange}
+        />
       </div>
     );
   }

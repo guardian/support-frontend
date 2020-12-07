@@ -20,6 +20,7 @@ import './paperSubscriptionLanding.scss';
 // import CampaignHeader from 'pages/paper-subscription-landing/components/hero/campaignHeader';
 import PaperHero from './components/hero/hero';
 import Tabs from './components/tabs';
+import Prices from './components/content/form';
 // import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
@@ -27,6 +28,8 @@ import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 // import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+
+import { pricesSection } from '../weekly-subscription-landing/weeklySubscriptionLandingStyles';
 
 // ----- Collection or delivery ----- //
 
@@ -63,9 +66,9 @@ const content = (
           </Block>
         </CentredContainer>
       </FullWidthContainer>
-      <FullWidthContainer>
+      <FullWidthContainer cssOverrides={pricesSection}>
         <CentredContainer>
-          Fabulous prices
+          <Prices />
         </CentredContainer>
       </FullWidthContainer>
     </Page>

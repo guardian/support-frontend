@@ -14,17 +14,20 @@ type TabProps = {|
 |}
 
 type PropTypes = {|
+  tabsLabel: string,
   tabElement: TabElement,
   tabs: TabProps[],
   onTabChange: (tabName: any) => void
 |};
 
-function Tabs({ tabElement, tabs, onTabChange }: PropTypes) {
+function Tabs({
+  tabsLabel, tabElement, tabs, onTabChange,
+}: PropTypes) {
   const Element = tabElement;
 
   return (
     <div>
-      <div css={tabList} role="tablist">
+      <div css={tabList} role="tablist" aria-label={tabsLabel}>
         {tabs.map((tab: TabProps) => {
           const selected = tab.selected ? 'true' : 'false';
           return (
