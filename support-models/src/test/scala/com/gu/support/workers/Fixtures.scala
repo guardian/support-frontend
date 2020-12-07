@@ -56,6 +56,7 @@ object Fixtures {
   def contribution(amount: BigDecimal = 5, currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly): String =
     s"""
       {
+        "productType": "Contribution",
         "amount": $amount,
         "currency": "$currency",
         "billingPeriod": "$billingPeriod"
@@ -65,8 +66,10 @@ object Fixtures {
   val digitalPackJson =
     """
       {
+        "productType": "DigitalPack",
         "currency": "GBP",
-        "billingPeriod" : "Annual"
+        "billingPeriod" : "Annual",
+        "readerType": "Direct"
       }
     """
 
@@ -78,9 +81,10 @@ object Fixtures {
   val guardianWeeklyJson =
     s"""
        "product": {
-        "currency": "GBP",
-        "billingPeriod" : "Annual",
-        "fulfilmentOptions": "RestOfWorld"
+         "productType": "GuardianWeekly",
+         "currency": "GBP",
+         "billingPeriod" : "Annual",
+         "fulfilmentOptions": "RestOfWorld"
       }
      """
   val payPalJson =

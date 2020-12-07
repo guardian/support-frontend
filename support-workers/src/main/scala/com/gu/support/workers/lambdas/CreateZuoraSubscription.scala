@@ -224,7 +224,7 @@ class NextState(
   ) =
     (state.product, paymentOrRedemptionData) match {
       case (product: Contribution, Purchase(purchase)) =>
-        SendThankYouEmailContributionState(state.user, state.salesforceContacts.buyer, product, purchase.paymentMethod, accountNumber.value)
+        SendThankYouEmailContributionState(state.user, product, purchase.paymentMethod, accountNumber.value)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
         dsDirect(product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
@@ -243,13 +243,12 @@ class NextState(
 
   private def dsCorporate(product: DigitalPack) =
     SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
-      state.user, SfContactId(state.salesforceContacts.buyer.Id), product, subscriptionNumber.value
+      state.user, product, subscriptionNumber.value
     )
 
   private def weekly(product: GuardianWeekly, purchase: PaymentMethodWithSchedule) =
     SendThankYouEmailGuardianWeeklyState(
       state.user,
-      state.salesforceContacts.buyer,
       product,
       state.giftRecipient.map(_.asWeekly.get),
       purchase.paymentMethod,
@@ -263,7 +262,6 @@ class NextState(
   private def paper(product: Paper, purchase: PaymentMethodWithSchedule) =
     SendThankYouEmailPaperState(
       state.user,
-      state.salesforceContacts.buyer,
       product,
       purchase.paymentMethod,
       purchase.paymentSchedule,
@@ -276,7 +274,6 @@ class NextState(
   private def dsGift(product: DigitalPack, purchase: PaymentMethodWithSchedule, giftPurchase: DigitalSubscriptionGiftPurchaseDetails) =
     SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
       state.user,
-      SfContactId(state.salesforceContacts.buyer.Id),
       SfContactId(state.salesforceContacts.giftRecipient.get.Id),
       product,
       giftPurchase.giftRecipient,
@@ -291,7 +288,6 @@ class NextState(
   private def dsDirect(product: DigitalPack, purchase: PaymentMethodWithSchedule) =
     SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
       state.user,
-      SfContactId(state.salesforceContacts.buyer.Id),
       product,
       purchase.paymentMethod,
       purchase.paymentSchedule,
@@ -354,7 +350,6 @@ object DigitalSubscriptionGiftRedemption {
         analyticsInfo = state.analyticsInfo,
         sendThankYouEmailState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
           state.user,
-          SfContactId(state.salesforceContacts.buyer.Id),
           product,
           termDates,
         ),

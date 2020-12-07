@@ -38,8 +38,7 @@ class GuardianWeeklyEmailFields(
     ).map(fields =>
       EmailFields(
         fields ++ additionalFields ++ giftRecipientFields,
-        Left(SfContactId(gw.salesForceContact.Id)),
-        gw.user.primaryEmailAddress,
+        gw.user,
         "guardian-weekly"
       ))
   }
