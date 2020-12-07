@@ -32,8 +32,11 @@ const faqsContainer = css`
   }
 `;
 
-const paragraphSpacing = css`
+const paragraph = css`
   margin-bottom: ${space[6]}px;
+  a {
+    color: inherit;
+  }
 `;
 
 
@@ -54,14 +57,16 @@ export const accordionContainer = css`
 // ----- Content ----- //
 export const ContentDeliveryFaqBlock = ({
   useDigitalVoucher,
-}: {useDigitalVoucher?: Option<boolean>}) => (
+  setTabAction,
+}: {useDigitalVoucher?: Option<boolean>, setTabAction: typeof setTab,
+}) => (
   <FlexContainer cssOverrides={flexContainerOverride}>
     <div css={faqsContainer}>
-      <p css={paragraphSpacing}>
+      <p css={paragraph}>
         If you live in Greater London (within the M25), you can use The Guardian’s home delivery
-        service. If not, you can use our <LinkTo tab={Collection} setTabAction={() => setTab('Collection')}>{useDigitalVoucher ? 'subscription cards' : 'voucher scheme'}</LinkTo>.
+        service. If not, you can use our <LinkTo tab={Collection} setTabAction={setTabAction}>{useDigitalVoucher ? 'subscription cards' : 'voucher scheme'}</LinkTo>.
       </p>
-      <p css={paragraphSpacing}>
+      <p css={paragraph}>
         Select your subscription below and checkout. You&apos;ll receive your first newspaper
         as quickly as five days from subscribing.
       </p>

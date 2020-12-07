@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { type Node } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -20,16 +20,22 @@ import { ContentDeliveryFaqBlock } from './content/deliveryTab';
 
 // ----- Tabs ----- //
 
-export const tabs: {[PaperFulfilmentOptions]: {name: string, href: string, content: Node }} = {
+type TabOptions = {|
+  name: string,
+  href: string,
+  content: (args: any) => React$Element<(props: any) => React$Element<"div">>
+|}
+
+export const tabs: {[PaperFulfilmentOptions]: TabOptions} = {
   Collection: {
     name: 'Subscription Card',
     href: paperSubsUrl(false),
-    content: <SubsCardFaqBlock />,
+    content: SubsCardFaqBlock,
   },
   HomeDelivery: {
     name: 'Home Delivery',
     href: paperSubsUrl(true),
-    content: <ContentDeliveryFaqBlock useDigitalVoucher setTabAction={() => {}} />,
+    content: ContentDeliveryFaqBlock,
   },
 };
 
@@ -59,15 +65,18 @@ const getTabTitle = (useDigitalVoucher, fulfilmentMethod) => {
 // ----- Component ----- //
 
 function PaperTabs({ selectedTab, setTabAction, useDigitalVoucher }: PropTypes) {
-  const tabItems = Object.keys(tabs).map(fulfilmentMethod => ({
-    id: fulfilmentMethod,
-    // The following line is a workaround for iMovo and vouchers
-    // Once we drop vouchers, we can reinstate: name: tabs[fulfilmentMethod].name,
-    text: getTabTitle(useDigitalVoucher, fulfilmentMethod),
-    href: tabs[fulfilmentMethod].href,
-    selected: fulfilmentMethod === selectedTab,
-    content: tabs[fulfilmentMethod].content,
-  }));
+  const tabItems = Object.keys(tabs).map((fulfilmentMethod) => {
+    const TabContent = tabs[fulfilmentMethod].content;
+    return {
+      id: fulfilmentMethod,
+      // The following line is a workaround for iMovo and vouchers
+      // Once we drop vouchers, we can reinstate: name: tabs[fulfilmentMethod].name,
+      text: getTabTitle(useDigitalVoucher, fulfilmentMethod),
+      href: tabs[fulfilmentMethod].href,
+      selected: fulfilmentMethod === selectedTab,
+      content: <TabContent useDigitalVoucher={useDigitalVoucher} setTabAction={setTabAction} />,
+    };
+  });
   return (
     <Outset>
       <Tabs
