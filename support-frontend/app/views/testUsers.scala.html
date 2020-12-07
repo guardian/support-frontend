@@ -1,5 +1,6 @@
 @(
-        key: String
+    key: String,
+    email: String
 )
 
 <!DOCTYPE html>
@@ -10,16 +11,27 @@
         <title>Test Users</title>
     </head>
     <body>
-        <h1>New Test User key: @key</h1>
-        Your user will be valid for the next 48H.<br/>
-        When registering please populate the following fields with your new test user key.<br/>
-        This test username has also been added as the session cookie _test_username for the client side and for testing one-off paypal contributions.<br/>
-        You must have the cookie present on the client side for the payment providers otherwise the client and server side will use different keys and cause a support workers failure
-        <ul>
-            <li><strong>First Name:</strong> @key (only field checked by recurring contributions)</li>
-            <li><strong>Username:</strong> @key (if applicable?)</li>
-            <li><strong>Email:</strong> @{key}@@gu.com (for one off contributions)<li>or alternatively yourname+@{key}@@guardian.co.uk</li>
-        </ul>
+        <h1>Test User generator.</h1>
+        <p>This is for testing without using real payment details</p>
+        <p>@key</p>
+        <p><a href="https://github.com/guardian/support-frontend/wiki/Test-users">Read this to learn about test users</a></p>
+        <div>When registering please populate the following fields with your new test user key.<br/>
+            All other fields can be populated as you wish.
+            <h2>All recurring product purchases</h2>
+            <ul>
+                <li><strong>First Name:</strong> @key</li>
+                <br><strong>(Optional) Recommended Email (if you do not want to receive emails):</strong> @{key}@@gu.com<br>
+                <li>If you DO want to receive emails: @{email}</li>
+            </ul>
+            <h2>Single contributions</h2>
+            <ul>
+                <li><strong>Email (if you do not want to receive emails):</strong> @{key}@@gu.com</li>
+                <li>If you DO want to receive emails: @{email}</li>
+            </ul>
+            <h2>Redemption of corporate or gift subscriptions</h2>
+            <p>You do not have to use any details, just make sure you are logged out, have visited this page before hand and the red flash is visible.</p>
+            <p>Alternatively, register an identity account as per a recurring product purchase, and make sure you are logged in.</p>
+        </div>
         <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
     </body>
 </html>
