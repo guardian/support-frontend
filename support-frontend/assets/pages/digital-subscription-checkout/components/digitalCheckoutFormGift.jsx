@@ -203,7 +203,7 @@ function DigitalCheckoutFormGift(props: PropTypes) {
               label="Gift message"
               maxlength={300}
               value={props.giftMessage}
-              setValue={props.setGiftMessage}
+              onChange={e => props.setGiftMessage(e.target.value)}
               optional
             />
           </FormSection>
