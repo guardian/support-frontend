@@ -68,7 +68,7 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
 
       resultJson.isRight should be(true)
 
-      new JsonValidater(resultJson.right.get)
+      new JsonValidater(resultJson.toOption.get)
         .validate("Mandate ID", mandateId)
         .validate("account name", directDebitPaymentMethod.bankTransferAccountName)
         .validate("account number", "******11")

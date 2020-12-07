@@ -108,11 +108,11 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   lazy val corporate =
     corporateRedemptionBuilder.build(
-      RedemptionData(RedemptionCode(testCode).right.get),
+      RedemptionData(RedemptionCode(testCode).toOption.get),
       DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate), // scalastyle:ignore null
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       SANDBOX
-    ).value.map(_.right.get)
+    ).value.map(_.toOption.get)
 
   lazy val subscriptionPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2),
@@ -129,7 +129,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       SANDBOX,
       None,
       None,
-    ).right.get
+    ).toOption.get
 
   lazy val threeMonthGiftPurchase =
     subscriptionPurchaseBuilder.build(
@@ -139,7 +139,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       SANDBOX,
       Some(GeneratedGiftCode("gd03-23456789").get),// code for Quarterly ie Gift3Month
       Some(new LocalDate(2020, 12, 1)),
-    ).right.get
+    ).toOption.get
 
   lazy val threeMonthGiftRedemption: Future[Throwable] =
     new SubscriptionDataBuilder(
@@ -155,13 +155,13 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         None,
         DigitalPack(GBP, Quarterly, Gift),
         AnalyticsInfo(false, RedemptionNoProvider),
-        Right(RedemptionData(RedemptionCode(testCode).right.get)),
+        Right(RedemptionData(RedemptionCode(testCode).toOption.get)),
         None,
         None,
         SalesforceContactRecords(SalesforceContactRecord("", ""), None),
         None
       ),
       None
-    ).value.map(_.left.get)
+    ).value.map(_.left.toOption.get)
 
 }

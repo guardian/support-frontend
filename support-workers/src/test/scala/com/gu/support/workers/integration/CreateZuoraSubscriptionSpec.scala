@@ -59,7 +59,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     val dynamoTableAsync: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
     val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate(dynamoTableAsync)
     val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoTableAsync)
-    val mutableCode: RedemptionCode = RedemptionCode("it-mutable123").right.get
+    val mutableCode: RedemptionCode = RedemptionCode("it-mutable123").toOption.get
     for {
       _ <- corporateCodeStatusUpdater.setStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
       _ <- createZuoraHelper.createSubscription(createDigiPackCorporateSubscriptionJson)
@@ -153,7 +153,7 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   val realRedemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(Stages.DEV))
 
-  private val json = parse("{}").right.get
+  private val json = parse("{}").toOption.get
   private val jsonProvider = new SimpleJsonProvider(json)
   lazy val realCatalogService = new CatalogService(TouchPointEnvironments.SANDBOX, jsonProvider)
 

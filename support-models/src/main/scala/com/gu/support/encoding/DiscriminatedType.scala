@@ -29,8 +29,8 @@ class DiscriminatedType[TOPLEVEL](discriminatorFieldName: String) {
     } yield getSingle(decodeAttempts.flatten, cursor.toString)
   }
 
-  def codec(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Codec[TOPLEVEL] = {
-    new Codec[TOPLEVEL](encoder(allCodecs), decoder(allCodecs))
+  def codec(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): com.gu.support.encoding.Codec[TOPLEVEL] = {
+    new com.gu.support.encoding.Codec[TOPLEVEL](encoder(allCodecs), decoder(allCodecs))
   }
 
   def variant[A: ClassTag](discriminatorValue: String)(

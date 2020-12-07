@@ -305,7 +305,7 @@ object DigitalSubscriptionGiftRedemption {
     paymentMethod: Either[PaymentMethod, RedemptionData]
   ): Option[RedemptionData] =
     product match {
-      case d: DigitalPack if paymentMethod.isRight && d.readerType == Gift => paymentMethod.right.toOption
+      case d: DigitalPack if paymentMethod.isRight && d.readerType == Gift => paymentMethod.toOption
       case _ => None
     }
 
