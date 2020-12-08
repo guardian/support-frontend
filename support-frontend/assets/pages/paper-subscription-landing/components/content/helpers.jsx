@@ -7,7 +7,6 @@ import React, { type Node } from 'react';
 import { type Option } from 'helpers/types/option';
 import Content from 'components/content/content';
 import Text, { SansParagraph, Callout } from 'components/text/text';
-import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import { paperSubsUrl } from 'helpers/routes';
 import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
 
@@ -17,7 +16,6 @@ import { setTab } from '../../paperSubscriptionLandingPageActions';
 import Form from './form';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
-import InfoSvg from './info.svg';
 
 // Types
 export type ContentPropTypes = {|
@@ -32,12 +30,14 @@ export type ContentTabPropTypes = {|
 |};
 
 // Helper functions
-const getPageInfoChip = (): string => {
-  if (flashSaleIsActive('Paper', 'GBPCountries')) {
-    return 'You can cancel your subscription at any time. Offer is for the first year. Standard subscription rates apply thereafter.';
-  }
-  return 'You can cancel your subscription at any time.';
-};
+// const getPageInfoChip = (): string => {
+//   if (flashSaleIsActive('Paper', 'GBPCountries')) {
+//     return
+// 'You can cancel your subscription at any time.
+//  Offer is for the first year. Standard subscription rates apply thereafter.';
+//   }
+//   return 'You can cancel your subscription at any time.';
+// };
 
 const DiscountCalloutMaybe = () => {
   if (!flashSaleIsActive('Paper', 'GBPCountries')) { return null; }
@@ -106,9 +106,6 @@ const ContentForm = ({
         </SansParagraph>
       </Text>
     }
-    <ProductPageInfoChip icon={<InfoSvg />}>
-      {getPageInfoChip()}
-    </ProductPageInfoChip>
   </Content>
 );
 ContentForm.defaultProps = { text: null, useDigitalVoucher: null };

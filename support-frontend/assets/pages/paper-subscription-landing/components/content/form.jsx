@@ -28,6 +28,7 @@ import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { flashSaleIsActive } from 'helpers/flashSale';
 import { Paper } from 'helpers/subscriptions';
 
+import PaperPriceCopy from './paperPriceCopy';
 import Prices, { type PropTypes } from './prices';
 
 // ---- Helpers ----- //
@@ -35,7 +36,6 @@ import Prices, { type PropTypes } from './prices';
 // const getPriceStr = (price: ProductPrice): string => {
 //   const promotion = getAppliedPromo(price.promotions);
 //   if (promotion && promotion.numberOfDiscountedPeriods) {
-//     // $FlowIgnore - we have checked numberOfDiscountedPeriods is not null above
 //     return `${showPrice(price)} a month for ${promotion.numberOfDiscountedPeriods} months`;
 //   }
 //   return showPrice(price);
@@ -67,18 +67,10 @@ const getPriceCopyString = (price: ProductPrice): string => {
 
 // ---- Plans ----- //
 const copy = {
-  HomeDelivery: {
-    Everyday: 'Guardian and Observer papers, delivered',
-    Sixday: 'Guardian papers, delivered',
-    Weekend: 'Saturday Guardian and Observer papers, delivered',
-    Sunday: 'Observer paper, delivered',
-  },
-  Collection: {
-    Everyday: 'Guardian and Observer papers',
-    Sixday: 'Guardian papers',
-    Weekend: 'Saturday Guardian and Observer papers',
-    Sunday: 'Observer paper',
-  },
+  Everyday: 'Guardian and Observer papers',
+  Sixday: 'Guardian papers',
+  Weekend: 'Saturday Guardian + Observer papers',
+  Sunday: 'Observer paper',
 };
 
 const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) => {
@@ -112,7 +104,7 @@ const getPlans = (
       ),
       buttonCopy: 'Subscribe now',
       priceCopy: getPriceCopyString(price),
-      offerCopy: <p>{getOfferText(price, productOption)}<br />{copy[fulfilmentOption][productOption]}</p>,
+      offerCopy: <PaperPriceCopy saving={getOfferText(price, productOption)} copy={copy[productOption]} />,
       label: '',
     };
   });
@@ -120,6 +112,7 @@ const getPlans = (
 
 // ----- State/Props Maps ----- //
 const mapStateToProps = (state: State): PropTypes => ({
+  activeTab: state.page.tab,
   products: state.page.productPrices ? getPlans(state.page.tab, state.page.productPrices) : [],
 });
 

@@ -29,8 +29,6 @@ import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions
 // import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
-import { pricesSection } from '../weekly-subscription-landing/weeklySubscriptionLandingStyles';
-
 // ----- Collection or delivery ----- //
 
 const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
@@ -66,7 +64,7 @@ const content = (
           </Block>
         </CentredContainer>
       </FullWidthContainer>
-      <FullWidthContainer cssOverrides={pricesSection}>
+      <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices />
         </CentredContainer>

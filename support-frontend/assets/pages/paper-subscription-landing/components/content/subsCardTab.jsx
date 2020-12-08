@@ -6,22 +6,28 @@ import React from 'react';
 
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
-import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+// import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
+import { from, until } from '@guardian/src-foundations/mq';
 import { ContentForm, type ContentTabPropTypes } from './helpers';
 
 const flexContainerOverride = css`
   align-items: flex-start;
   justify-content: space-between;
+
+  img {
+    ${until.desktop} {
+      display: none;
+    }
+  }
 `;
 
 const faqsContainer = css`
-  ${from.tablet} {
+  ${from.desktop} {
     max-width: 50%;
   }
 `;

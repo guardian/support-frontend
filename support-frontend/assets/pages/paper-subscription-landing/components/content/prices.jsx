@@ -9,8 +9,10 @@ import { SvgInfo } from '@guardian/src-icons';
 import ProductInfoChip from 'components/product/productInfoChip';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductOption, { type Product } from 'components/product/productOption';
+import { type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
 
 export type PropTypes = {|
+  activeTab: ActiveTabState,
   products: Product[],
 |};
 
@@ -63,7 +65,8 @@ const pricesInfo = css`
   margin-top: ${space[6]}px;
 `;
 
-function Prices({ products }: PropTypes) {
+function Prices({ activeTab, products }: PropTypes) {
+  const infoText = `${activeTab === 'HomeDelivery' ? 'Delivery is included.' : ''} You can cancel your subscription at any time`;
   return (
     <section css={pricesSection} id="subscribe">
       <h2 css={pricesHeadline}>Pick your subscription package below</h2>
@@ -74,6 +77,7 @@ function Prices({ products }: PropTypes) {
             title={product.title}
             price={product.price}
             priceCopy={product.priceCopy}
+            offerCopy={product.offerCopy}
             buttonCopy={product.buttonCopy}
             href={product.href}
             onClick={product.onClick}
@@ -83,7 +87,7 @@ function Prices({ products }: PropTypes) {
       </FlexContainer>
       <div css={pricesInfo}>
         <ProductInfoChip icon={<SvgInfo />}>
-          You can cancel your subscription at any time
+          {infoText}
         </ProductInfoChip>
       </div>
     </section>
