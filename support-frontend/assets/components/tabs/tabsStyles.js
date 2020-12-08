@@ -12,7 +12,7 @@ export const tabList = css`
 
 export const tabButton = css`
   background-color: ${neutral[100]};
-  ${headline.xxsmall({ fontWeight: 'bold' })}
+  ${headline.xxxsmall({ fontWeight: 'bold' })}
   position: relative;
   display: block;
   text-decoration: none;
@@ -29,6 +29,7 @@ export const tabButton = css`
   cursor: pointer;
 
   ${from.phablet} {
+    ${headline.xxsmall({ fontWeight: 'bold' })}
     width: 210px;
   }
 

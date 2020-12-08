@@ -66,7 +66,7 @@ const pricesInfo = css`
 `;
 
 function Prices({ activeTab, products }: PropTypes) {
-  const infoText = `${activeTab === 'HomeDelivery' ? 'Delivery is included.' : ''} You can cancel your subscription at any time`;
+  const infoText = `${activeTab === 'HomeDelivery' ? 'Delivery is included. ' : ''}You can cancel your subscription at any time`;
   return (
     <section css={pricesSection} id="subscribe">
       <h2 css={pricesHeadline}>Pick your subscription package below</h2>

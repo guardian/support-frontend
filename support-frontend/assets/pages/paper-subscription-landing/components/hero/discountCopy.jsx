@@ -1,6 +1,5 @@
 // @flow
 
-
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';

@@ -12,7 +12,6 @@ import {
 import {
   finalPrice,
 } from 'helpers/productPrice/paperProductPrices';
-// import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -33,14 +32,6 @@ import Prices, { type PropTypes } from './prices';
 
 // ---- Helpers ----- //
 
-// const getPriceStr = (price: ProductPrice): string => {
-//   const promotion = getAppliedPromo(price.promotions);
-//   if (promotion && promotion.numberOfDiscountedPeriods) {
-//     return `${showPrice(price)} a month for ${promotion.numberOfDiscountedPeriods} months`;
-//   }
-//   return showPrice(price);
-// };
-
 const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): string => {
   if ((subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0)) {
     return `Save ${getNewsstandSavingPercentage(subscription, newsstand)}% a month on retail price`;
@@ -56,23 +47,6 @@ const getPriceCopyString = (price: ProductPrice): string => {
   return 'per month';
 };
 
-// const getSavingStr = (price: ProductPrice): string => {
-//   const promotionApplied = getAppliedPromo(price.promotions);
-//   if (promotionApplied) {
-//     return `${showPrice(price)} a month thereafter`;
-//   }
-//   return '';
-// };
-
-
-// ---- Plans ----- //
-const copy = {
-  Everyday: 'Guardian and Observer papers',
-  Sixday: 'Guardian papers',
-  Weekend: 'Saturday Guardian + Observer papers',
-  Sunday: 'Observer paper',
-};
-
 const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) => {
   if (flashSaleIsActive(Paper)) {
     return getOfferStr(price.price, getNewsstandPrice(productOption));
@@ -82,6 +56,15 @@ const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) =
   }
   return '';
 };
+
+// ---- Plans ----- //
+const copy = {
+  Everyday: 'Guardian and Observer papers',
+  Sixday: 'Guardian papers',
+  Weekend: 'Saturday Guardian + Observer papers',
+  Sunday: 'Observer paper',
+};
+
 
 const getPlans = (
   fulfilmentOption: PaperFulfilmentOptions,

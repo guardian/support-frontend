@@ -85,7 +85,7 @@ const heroRoundel = css`
   background-color: ${brandAlt[400]};
   color: ${neutral[7]};
   ${headline.xxsmall({ fontWeight: 'bold' })};
-  z-index: 2;
+  z-index: 20;
 
   ${from.tablet} {
     width: ${roundelSize}px;

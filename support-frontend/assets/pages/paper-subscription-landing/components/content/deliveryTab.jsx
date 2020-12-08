@@ -7,8 +7,6 @@ import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 import {
-  ContentForm,
-  type ContentTabPropTypes,
   LinkTo,
 } from './helpers';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
@@ -19,7 +17,6 @@ import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
-import { type Option } from 'helpers/types/option';
 
 const flexContainerOverride = css`
   align-items: flex-start;
@@ -63,7 +60,7 @@ export const accordionContainer = css`
 export const ContentDeliveryFaqBlock = ({
   useDigitalVoucher,
   setTabAction,
-}: {useDigitalVoucher?: Option<boolean>, setTabAction: typeof setTab,
+}: {useDigitalVoucher?: boolean, setTabAction: typeof setTab,
 }) => (
   <FlexContainer cssOverrides={flexContainerOverride}>
     <div css={faqsContainer}>
@@ -104,25 +101,5 @@ export const ContentDeliveryFaqBlock = ({
 );
 
 ContentDeliveryFaqBlock.defaultProps = {
-  useDigitalVoucher: null,
+  useDigitalVoucher: true,
 };
-
-const DeliveryTab = ({
-  getRef, setTabAction, selectedTab, useDigitalVoucher,
-}: ContentTabPropTypes) => (
-  <div
-    className="paper-subscription-landing-content__focusable"
-    tabIndex={-1}
-    ref={(r) => { getRef(r); }}
-  >
-    <ContentDeliveryFaqBlock setTabAction={setTabAction} useDigitalVoucher={useDigitalVoucher} />
-    <ContentForm
-      selectedTab={selectedTab}
-      setTabAction={setTabAction}
-      title="Pick your home delivery subscription package below"
-      useDigitalVoucher={useDigitalVoucher}
-    />
-  </div>
-);
-
-export default DeliveryTab;

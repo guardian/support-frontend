@@ -13,7 +13,6 @@ import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
-import { ContentForm, type ContentTabPropTypes } from './helpers';
 
 const flexContainerOverride = css`
   align-items: flex-start;
@@ -34,6 +33,9 @@ const faqsContainer = css`
 
 const paragraphSpacing = css`
   margin-bottom: ${space[6]}px;
+  ${until.desktop} {
+    padding: 0 ${space[2]}px;
+  }
 `;
 
 export const accordionContainer = css`
@@ -90,11 +92,3 @@ export const SubsCardFaqBlock = () => (
     />
   </FlexContainer>
 );
-
-const SubscriptionCardTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
-  <div className="paper-subscription-landing-content__focusable use-digital-voucher" tabIndex={-1} ref={(r) => { getRef(r); }}>
-    <SubsCardFaqBlock />
-    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below" />
-  </div>
-);
-export default SubscriptionCardTab;

@@ -54,9 +54,9 @@ const heroParagraph = css`
 `;
 
 const roundelCentreLine = css`
-  ${headline.small({ fontWeight: 'bold' })}
+  ${headline.xsmall({ fontWeight: 'bold' })}
   ${from.tablet} {
-    ${headline.large({ fontWeight: 'bold' })}
+    ${headline.medium({ fontWeight: 'bold' })}
   }
 `;
 
