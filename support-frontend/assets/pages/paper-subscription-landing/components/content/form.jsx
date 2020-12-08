@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import {
@@ -14,6 +15,9 @@ import {
 } from 'helpers/productPrice/paperProductPrices';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
+import { setTab, type TabActions } from '../../paperSubscriptionLandingPageActions';
+
+import { type Product } from 'components/product/productOption';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type {
   PaperProductOptions,
@@ -28,7 +32,7 @@ import { flashSaleIsActive } from 'helpers/flashSale';
 import { Paper } from 'helpers/subscriptions';
 
 import PaperPriceCopy from './paperPriceCopy';
-import Prices, { type PropTypes } from './prices';
+import Prices from './prices';
 
 // ---- Helpers ----- //
 
@@ -94,11 +98,23 @@ const getPlans = (
 
 
 // ----- State/Props Maps ----- //
-const mapStateToProps = (state: State): PropTypes => ({
+type StateProps = {|
+  activeTab: PaperFulfilmentOptions,
+  products: Product[],
+  useDigitalVoucher: boolean
+|}
+
+const mapStateToProps = (state: State): StateProps => ({
   activeTab: state.page.tab,
   products: state.page.productPrices ? getPlans(state.page.tab, state.page.productPrices) : [],
+  useDigitalVoucher: state.common.settings.useDigitalVoucher || false,
 });
+
+const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>
+  ({
+    setTabAction: bindActionCreators(setTab, dispatch),
+  });
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(Prices);
+export default connect(mapStateToProps, mapDispatchToProps)(Prices);

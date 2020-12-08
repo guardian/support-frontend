@@ -60,7 +60,6 @@ const content = (
         <CentredContainer>
           <Block>
             <Tabs />
-            {/* <TabsContent /> */}
           </Block>
         </CentredContainer>
       </FullWidthContainer>
