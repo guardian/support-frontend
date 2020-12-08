@@ -172,7 +172,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           error={firstError('state', props.formErrors)}
           isShown={AddressFields.shouldShowStateDropdown(props.country)}
         >
-          <option value="">{`Select a ${props.country === 'CA' ? 'province/territory' : 'state'}`}</option>
+          <OptionForSelect value="">{`Select a ${props.country === 'CA' ? 'province/territory' : 'state'}`}</OptionForSelect>
           {AddressFields.statesForCountry(props.country)}
         </MaybeSelect>
         <MaybeInput
