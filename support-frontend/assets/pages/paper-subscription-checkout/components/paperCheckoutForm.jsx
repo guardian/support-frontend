@@ -155,7 +155,7 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 
 // ----- Component ----- //
 
-// Change to a class because we need componentDidMount
+// Changed to a class because we need componentDidMount
 class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
   constructor(props) {
     super(props);
@@ -331,7 +331,6 @@ class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
                           name={machineDate}
                           checked={machineDate === props.startDate}
                           onChange={() => props.setStartDate(machineDate)}
-                          onClick={() => props.setStartDate(machineDate)}
                         />
                       );
                     })
