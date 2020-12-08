@@ -166,11 +166,15 @@ class PaperCheckoutForm extends Component<PropTypes, StateTypes> {
 
   // This is here to prevent the start date state being updated every time any other state was updated
   componentDidMount() {
-    const { useDigitalVoucher, fulfilmentOption, productOption } = this.props;
+    const {
+      useDigitalVoucher, fulfilmentOption, productOption, setStartDate,
+    } = this.props;
     const isSubscriptionCard = useDigitalVoucher && fulfilmentOption === Collection;
 
     if (isSubscriptionCard) {
       const timeNow = Date.now();
+      const startDate = getPaymentStartDate(timeNow, productOption);
+      setStartDate(formatMachineDate(startDate));
       /* eslint-disable react/no-did-mount-set-state */
       this.setState({
         formattedStartDate: getFormattedStartDate(getPaymentStartDate(timeNow, productOption)),
