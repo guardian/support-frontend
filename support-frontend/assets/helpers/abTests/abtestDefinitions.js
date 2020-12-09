@@ -34,6 +34,28 @@ export const tests: Tests = {
     seed: 1,
   },
 
+  stripePaymentRequestButtonDec2020: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'PRB',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: landingPage,
+    seed: 2,
+  },
+
   usThankyouPageLargeDonationTest: {
     type: 'OTHER',
     variants: [

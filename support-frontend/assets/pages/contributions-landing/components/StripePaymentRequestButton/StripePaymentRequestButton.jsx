@@ -84,6 +84,7 @@ type PropTypes = {
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   csrf: CsrfState,
+  stripePaymentRequestButtonVariant: boolean,
 };
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -99,6 +100,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   paymentMethod: state.page.form.paymentMethod,
   switches: state.common.settings.switches,
   csrf: state.page.csrf,
+  stripePaymentRequestButtonVariant: state.common.abParticipations.stripePaymentRequestButtonDec2020 === 'PRB',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -343,7 +345,12 @@ function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe) {
   });
 
   paymentRequest.canMakePayment().then((result) => {
-    const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
+    const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(
+      result,
+      props.contributionType,
+      props.stripePaymentRequestButtonVariant,
+    );
+
     if (paymentMethod) {
       trackComponentLoad(`${paymentMethod}-displayed`);
       props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);

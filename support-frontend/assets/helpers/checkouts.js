@@ -198,11 +198,17 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 function getAvailablePaymentRequestButtonPaymentMethod(
   result: Object,
   contributionType: ContributionType,
+  stripePaymentRequestButtonVariant: boolean,
 ): StripePaymentMethod | null {
   const switchKey = switchKeyForContributionType(contributionType);
   if (result && result.applePay === true && isSwitchOn(`${switchKey}.stripeApplePay`)) {
     return 'StripeApplePay';
-  } else if (result && result.applePay === false && isSwitchOn(`${switchKey}.stripePaymentRequestButton`)) {
+  } else if (
+    result &&
+    result.applePay === false &&
+    isSwitchOn(`${switchKey}.stripePaymentRequestButton`) &&
+    stripePaymentRequestButtonVariant
+  ) {
     return 'StripePaymentRequestButton';
   }
   return null;
