@@ -10,11 +10,14 @@ import { headline, body } from '@guardian/src-foundations/typography';
 const roundelSizeMob = 120;
 const roundelSize = 180;
 
+// Options for moving the roundel position on mobile
+type RoundelNudgeDirection = 'up' | 'down' | 'none';
 type PropTypes = {|
   image: Node,
   children: Node,
   cssOverrides?: string,
   roundelText?: Node,
+  roundelNudgeDirection?: RoundelNudgeDirection,
 |}
 
 const hero = css`
@@ -96,13 +99,33 @@ const heroRoundel = css`
   }
 `;
 
+const roundelNudgeUp = css`
+  ${until.tablet} {
+    transform: translateY(-67%);
+  }
+`;
+
+const roundelNudgeDown = css`
+  ${until.tablet} {
+    transform: translateY(-34%);
+  }
+`;
+
+const roundelNudges: { [RoundelNudgeDirection]: string } = {
+  up: roundelNudgeUp,
+  down: roundelNudgeDown,
+  none: '',
+};
+
 function Hero({
-  children, image, cssOverrides, roundelText,
+  children, image, cssOverrides, roundelText, roundelNudgeDirection = 'up',
 }: PropTypes) {
+  const useOffset = roundelText && roundelNudgeDirection === 'up';
+  const nudgeCSS = roundelNudges[roundelNudgeDirection];
   return (
     <div css={[hero, cssOverrides]}>
-      {roundelText && <div css={heroRoundel}>{roundelText}</div>}
-      <div css={roundelText ? roundelOffset : ''}>
+      {roundelText && <div css={[heroRoundel, nudgeCSS]}>{roundelText}</div>}
+      <div css={useOffset ? roundelOffset : ''}>
         {children}
       </div>
       <div css={heroImage}>
@@ -115,6 +138,7 @@ function Hero({
 Hero.defaultProps = {
   cssOverrides: '',
   roundelText: null,
+  roundelNudgeDirection: 'up',
 };
 
 export default Hero;

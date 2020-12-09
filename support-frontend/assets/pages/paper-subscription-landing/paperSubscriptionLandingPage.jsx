@@ -20,7 +20,7 @@ import './paperSubscriptionLanding.scss';
 // import CampaignHeader from 'pages/paper-subscription-landing/components/hero/campaignHeader';
 import PaperHero from './components/hero/hero';
 import Tabs from './components/tabs';
-import Prices from './components/content/form';
+import Prices from './components/paperPrices';
 // import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 

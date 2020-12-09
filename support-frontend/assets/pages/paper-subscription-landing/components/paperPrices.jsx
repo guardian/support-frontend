@@ -14,8 +14,8 @@ import {
   finalPrice,
 } from 'helpers/productPrice/paperProductPrices';
 
-import { type State } from '../../paperSubscriptionLandingPageReducer';
-import { setTab, type TabActions } from '../../paperSubscriptionLandingPageActions';
+import { type State } from '../paperSubscriptionLandingPageReducer';
+import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
 
 import { type Product } from 'components/product/productOption';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -24,15 +24,15 @@ import type {
 } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { paperCheckoutUrl } from 'helpers/routes';
-import { getTitle } from '../../helpers/products';
+import { getTitle } from '../helpers/products';
 import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { flashSaleIsActive } from 'helpers/flashSale';
 import { Paper } from 'helpers/subscriptions';
 
-import PaperPriceCopy from './paperPriceCopy';
-import Prices from './prices';
+import PaperPriceCopy from './content/paperPriceCopy';
+import Prices from './content/prices';
 
 // ---- Helpers ----- //
 
@@ -63,10 +63,18 @@ const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) =
 
 // ---- Plans ----- //
 const copy = {
-  Everyday: 'Guardian and Observer papers',
-  Sixday: 'Guardian papers',
-  Weekend: 'Saturday Guardian + Observer papers',
-  Sunday: 'Observer paper',
+  HomeDelivery: {
+    Everyday: 'Guardian and Observer papers, delivered',
+    Sixday: 'Guardian papers, delivered',
+    Weekend: 'Saturday Guardian and Observer papers, delivered',
+    Sunday: 'Observer paper, delivered',
+  },
+  Collection: {
+    Everyday: 'Guardian and Observer papers',
+    Sixday: 'Guardian papers',
+    Weekend: 'Saturday Guardian and Observer papers',
+    Sunday: 'Observer paper',
+  },
 };
 
 
@@ -91,7 +99,10 @@ const getPlans = (
       ),
       buttonCopy: 'Subscribe now',
       priceCopy: getPriceCopyString(price),
-      offerCopy: <PaperPriceCopy saving={getOfferText(price, productOption)} copy={copy[productOption]} />,
+      offerCopy: <PaperPriceCopy
+        saving={getOfferText(price, productOption)}
+        copy={copy[fulfilmentOption][productOption]}
+      />,
       label: '',
     };
   });

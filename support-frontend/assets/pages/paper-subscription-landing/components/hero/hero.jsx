@@ -31,7 +31,7 @@ type PropTypes = {|
 const heroCopy = css`
   padding: 0 ${space[3]}px ${space[3]}px;
   ${from.desktop} {
-    max-width: 80%;
+    max-width: 85%;
   }
 `;
 
@@ -53,10 +53,17 @@ const heroParagraph = css`
   margin-bottom: ${space[9]}px;
 `;
 
-const roundelCentreLine = css`
-  ${headline.xsmall({ fontWeight: 'bold' })}
+const roundelLines = css`
+  ${headline.xxxsmall({ fontWeight: 'bold' })}
   ${from.tablet} {
-    ${headline.medium({ fontWeight: 'bold' })}
+    ${headline.xxsmall({ fontWeight: 'bold' })}
+  }
+`;
+
+const roundelCentreLine = css`
+  ${headline.medium({ fontWeight: 'bold' })}
+  ${from.tablet} {
+    ${headline.xlarge({ fontWeight: 'bold' })}
   }
 `;
 
@@ -68,7 +75,7 @@ function PaperHero({ productPrices }: PropTypes) {
     <>
       {/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
       {/* eslint-disable-next-line jsx-a11y/aria-role */}
-      <div role="text">
+      <div role="text" css={roundelLines}>
         {roundel.map((text, index) => {
           if (index === 1) {
             return <div css={roundelCentreLine}>{text}</div>;
@@ -96,19 +103,17 @@ function PaperHero({ productPrices }: PropTypes) {
             altText="Newspapers"
           />}
           roundelText={roundelText}
+          roundelNudgeDirection="down"
         >
           <section css={heroCopy}>
             <h2 css={heroTitle}>
-              The other side to the story<br />
-              <span css={heroTitleHighlight}>is your subscription</span>
+              Subscribe to<br />
+              <span css={heroTitleHighlight}>The&nbsp;Guardian and&nbsp;The&nbsp;Observer</span>
             </h2>
             <p css={heroParagraph}>
-              With two innovative apps and ad-free reading, a digital subscription gives you the richest experience
-              of Guardian journalism. It also sustains the independent reporting you love.
-            </p>
-            <p css={heroParagraph}>
-              For a few weeks only, read Edition Earth, a new and exclusive showcase of the best Guardian journalism
-              on the climate, wildlife, air pollution, environmental justice — and solutions.
+              <strong>Choose from a range of packages to suit you.</strong><br />
+              We offer two different subscription types: subscription cards and home delivery.
+              Pick the most convenient option available in your area.
             </p>
             <ThemeProvider theme={buttonBrand}>
               <LinkButton
