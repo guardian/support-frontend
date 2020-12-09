@@ -345,16 +345,16 @@ function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe) {
   });
 
   paymentRequest.canMakePayment().then((result) => {
-    const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(
-      result,
-      props.contributionType,
-      props.stripePaymentRequestButtonVariant,
-    );
-
+    const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
     if (paymentMethod) {
-      trackComponentLoad(`${paymentMethod}-displayed`);
-      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
-      setUpPaymentListenerSca(props, stripe, paymentRequest, paymentMethod);
+      // Track the fact that it loaded, even if the user is in the control for the PRB test
+      trackComponentLoad(`${paymentMethod}-loaded`);
+
+      if (paymentMethod === 'StripeApplePay' || props.stripePaymentRequestButtonVariant) {
+        trackComponentLoad(`${paymentMethod}-displayed`);
+        props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
+        setUpPaymentListenerSca(props, stripe, paymentRequest, paymentMethod);
+      }
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }
