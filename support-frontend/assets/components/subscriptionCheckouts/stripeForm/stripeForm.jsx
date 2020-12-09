@@ -347,7 +347,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
           <ThemeProvider theme={buttonReaderRevenue}>
             <Button
               id="qa-stripe-submit-button"
-              onClick={event => requestSCAPaymentMethod(event)}
+              onClick={requestSCAPaymentMethod}
               priority="primary"
               icon={<SvgArrowRightStraight />}
               iconSide="right"

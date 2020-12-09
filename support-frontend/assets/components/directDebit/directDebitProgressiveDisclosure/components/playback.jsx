@@ -94,7 +94,7 @@ function Playback(props: {
         <ThemeProvider theme={buttonReaderRevenueBrand}>
           <Button
             id="qa-submit-button-2"
-            onClick={e => props.onSubmit(e)}
+            onClick={props.onSubmit}
             icon={<SvgArrowRightStraight />}
             iconSide="right"
           >

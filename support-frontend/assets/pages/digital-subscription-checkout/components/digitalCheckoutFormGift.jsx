@@ -66,6 +66,7 @@ import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionChecko
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import { countries } from 'helpers/internationalisation/country';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 
 // ----- Types ----- //
 
@@ -153,6 +154,8 @@ function DigitalCheckoutFormGift(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
+  const paymentMethods = supportedPaymentMethods(props.country);
+
   return (
     <Content>
       <CheckoutLayout aside={(
@@ -223,14 +226,16 @@ function DigitalCheckoutFormGift(props: PropTypes) {
           <FormSection title="Billing address">
             <Address />
           </FormSection>
-          <FormSection title="How would you like to pay?">
-            <PaymentMethodSelector
-              country={props.country}
-              paymentMethod={props.paymentMethod}
-              setPaymentMethod={props.setPaymentMethod}
-              validationError={firstError('paymentMethod', props.formErrors)}
-            />
-          </FormSection>
+          {paymentMethods.length > 1 ?
+            <FormSection title="How would you like to pay?">
+              <PaymentMethodSelector
+                country={props.country}
+                paymentMethod={props.paymentMethod}
+                setPaymentMethod={props.setPaymentMethod}
+                validationError={firstError('paymentMethod', props.formErrors)}
+              />
+            </FormSection> :
+          null}
           <FormSectionHiddenUntilSelected
             id="stripeForm"
             show={props.paymentMethod === Stripe}

@@ -62,6 +62,7 @@ import { routes } from 'helpers/routes';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 
 // ----- Types ----- //
 
@@ -147,6 +148,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
+  const paymentMethods = supportedPaymentMethods(props.country);
 
   return (
     <Content>
@@ -189,14 +191,16 @@ function DigitalCheckoutForm(props: PropTypes) {
           <FormSection title="Address">
             <Address />
           </FormSection>
-          <FormSection title="How would you like to pay?">
-            <PaymentMethodSelector
-              country={props.country}
-              paymentMethod={props.paymentMethod}
-              setPaymentMethod={props.setPaymentMethod}
-              validationError={firstError('paymentMethod', props.formErrors)}
-            />
-          </FormSection>
+          {paymentMethods.length > 1 ?
+            <FormSection title="How would you like to pay?">
+              <PaymentMethodSelector
+                country={props.country}
+                paymentMethod={props.paymentMethod}
+                setPaymentMethod={props.setPaymentMethod}
+                validationError={firstError('paymentMethod', props.formErrors)}
+              />
+            </FormSection> :
+          null}
           <FormSectionHiddenUntilSelected
             id="stripeForm"
             show={props.paymentMethod === Stripe}

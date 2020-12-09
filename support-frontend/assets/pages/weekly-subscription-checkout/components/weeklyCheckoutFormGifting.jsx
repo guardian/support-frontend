@@ -77,6 +77,7 @@ import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 
 // ----- Styles ----- //
 
@@ -168,6 +169,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
     props.setBillingAddressIsSame(newState);
     props.setBillingCountry(props.deliveryCountry);
   };
+  const paymentMethods = supportedPaymentMethods(props.billingCountry);
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -315,14 +317,16 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               </FormSection>
             : null
           }
-          <FormSection title="How would you like to pay?">
-            <PaymentMethodSelector
-              country={props.billingCountry}
-              paymentMethod={props.paymentMethod}
-              setPaymentMethod={props.setPaymentMethod}
-              validationError={firstError('paymentMethod', props.formErrors)}
-            />
-          </FormSection>
+          {paymentMethods.length > 1 ?
+            <FormSection title="How would you like to pay?">
+              <PaymentMethodSelector
+                country={props.billingCountry}
+                paymentMethod={props.paymentMethod}
+                setPaymentMethod={props.setPaymentMethod}
+                validationError={firstError('paymentMethod', props.formErrors)}
+              />
+            </FormSection> :
+          null}
           <FormSectionHiddenUntilSelected
             id="stripeForm"
             show={props.paymentMethod === Stripe}

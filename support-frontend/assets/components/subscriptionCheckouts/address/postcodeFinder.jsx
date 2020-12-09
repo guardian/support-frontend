@@ -16,8 +16,6 @@ import {
 import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import { type PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 
-// Styles
-
 const root = css`
   display: flex;
   justify-content: flex-start;

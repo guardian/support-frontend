@@ -112,7 +112,7 @@ function Form(props: PropTypes) {
       <ThemeProvider theme={buttonReaderRevenueBrand}>
         <Button
           id="qa-direct-debit-submit"
-          onClick={e => props.onSubmit(e)}
+          onClick={props.onSubmit}
           priority="primary"
           icon={<SvgArrowRightStraight />}
           iconSide="right"
