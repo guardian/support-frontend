@@ -8,6 +8,7 @@ import com.gu.support.redemption.{InvalidCode, InvalidReaderType}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionState._
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api.{ReaderType, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.buildContributionSubscription
@@ -28,16 +29,17 @@ class SubscriptionDataBuilder(
 ) {
 
   def build(
-    state: CreateZuoraSubscriptionState,
+    state: CreateZuoraSubscriptionNewSubscriptionState,
     maybeGeneratedGiftCode: Option[GeneratedGiftCode],
   ): EitherT[Future, Throwable, SubscriptionData] =
-    state.product match {
-      case c: Contribution => EitherT.pure[Future, Throwable](buildContributionSubscription(c, state.requestId, config))
-      case d: DigitalPack =>
-        buildDigitalSubscription(state, d, environment, maybeGeneratedGiftCode)
-      case p: Paper =>
+    state match {
+      case state: CreateZuoraSubscriptionDigitalSubscriptionState =>
+        buildDigitalSubscription(state, state.product, environment, maybeGeneratedGiftCode)
+      case state: CreateZuoraSubscriptionContributionState =>
+        EitherT.pure[Future, Throwable](buildContributionSubscription(state.product, state.requestId, config))
+      case state: CreateZuoraSubscriptionPaperState =>
         EitherT.fromEither[Future](PaperSubscriptionBuilder.build(
-          p,
+          state.product,
           state.requestId,
           state.user.billingAddress.country,
           state.promoCode,
@@ -46,9 +48,9 @@ class SubscriptionDataBuilder(
           environment
         ).leftMap(BuildSubscribePromoError)
         )
-      case w: GuardianWeekly =>
+      case state: CreateZuoraSubscriptionGuardianWeeklyState =>
         EitherT.fromEither[Future](GuardianWeeklySubscriptionBuilder.build(
-          w,
+          state.product,
           state.requestId,
           state.user.billingAddress.country,
           state.promoCode,
@@ -61,15 +63,13 @@ class SubscriptionDataBuilder(
     }
 
   private def buildDigitalSubscription(
-    state: CreateZuoraSubscriptionState,
+    state: CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState,
     digitalPack: DigitalPack,
     environment: TouchPointEnvironment,
     maybeGeneratedGiftCode: Option[GeneratedGiftCode],
-  ): EitherT[Future, Throwable, SubscriptionData] = {
-    val Purchase = Left
-    val Redemption = Right
-    (state.paymentMethod, digitalPack.readerType) match {
-      case (Purchase(_: PaymentMethod), _) =>
+  ): EitherT[Future, Throwable, SubscriptionData] =
+    state match {
+      case state: CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState =>
         EitherT.fromEither[Future](digitalSubscriptionPurchaseBuilder.build(
           state.promoCode,
           state.user.billingAddress.country,
@@ -77,21 +77,25 @@ class SubscriptionDataBuilder(
           state.requestId,
           environment,
           maybeGeneratedGiftCode,
-          state.giftRecipient.flatMap(_.asDigitalSubscriptionGiftRecipient).map(_.deliveryDate),
+          None,
         ).leftMap(BuildSubscribePromoError))
-      case (Redemption(rd: RedemptionData), ReaderType.Corporate) =>
-        digitalSubscriptionCorporateRedemptionBuilder.build(rd,
+      case state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState =>
+        EitherT.fromEither[Future](digitalSubscriptionPurchaseBuilder.build(
+          state.promoCode,
+          state.user.billingAddress.country,
+          digitalPack,
+          state.requestId,
+          environment,
+          maybeGeneratedGiftCode,
+          Some(state.giftRecipient.deliveryDate),
+        ).leftMap(BuildSubscribePromoError))
+      case state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState =>
+        digitalSubscriptionCorporateRedemptionBuilder.build(
+          state.redemptionData,
           digitalPack,
           state.requestId,
           environment,
         ).leftMap(BuildSubscribeRedemptionError)
-      case (Redemption(_), Gift) =>
-        // gift redemptions modify the sub created during the gift purchase
-        // this should have been detected earlier
-        EitherT.leftT[Future, SubscriptionData](BuildSubscribeRedemptionError(InvalidReaderType))
-      case (Redemption(_), _) =>
-        // can't redeem other types of sub
-        EitherT.leftT[Future, SubscriptionData](BuildSubscribeRedemptionError(InvalidReaderType))
     }
-  }
+
 }

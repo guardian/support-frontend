@@ -10,7 +10,7 @@ import scala.concurrent.Future
 
 object PreviewPaymentSchedule {
 
-  def apply(
+  def preview(
     subscribeItem: SubscribeItem,
     billingPeriod: BillingPeriod,
     zuoraService: ZuoraSubscribeService,

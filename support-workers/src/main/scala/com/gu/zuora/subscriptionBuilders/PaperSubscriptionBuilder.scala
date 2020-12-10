@@ -21,24 +21,19 @@ object PaperSubscriptionBuilder {
     requestId: UUID,
     country: Country,
     maybePromoCode: Option[PromoCode],
-    firstDeliveryDate: Option[LocalDate],
+    firstDeliveryDate: LocalDate,
     promotionService: PromotionService,
     environment: TouchPointEnvironment
   ): Either[PromoError, SubscriptionData] = {
 
     val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
-    val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
-      case Success(value) => value
-      case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
-    }
-
     val productRatePlanId = validateRatePlan(paperRatePlan(paper, environment), paper.describe)
 
     val subscriptionData = buildProductSubscription(
       requestId,
       productRatePlanId,
-      contractAcceptanceDate = contractAcceptanceDate,
+      contractAcceptanceDate = firstDeliveryDate,
       contractEffectiveDate = contractEffectiveDate,
       readerType = Direct
     )

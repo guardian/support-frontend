@@ -20,17 +20,12 @@ object GuardianWeeklySubscriptionBuilder {
     requestId: UUID,
     country: Country,
     maybePromoCode: Option[PromoCode],
-    firstDeliveryDate: Option[LocalDate],
+    firstDeliveryDate: LocalDate,
     promotionService: PromotionService,
     readerType: ReaderType,
     environment: TouchPointEnvironment,
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
   ): Either[PromoError, SubscriptionData] = {
-
-    val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
-      case Success(value) => value
-      case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a Guardian Weekly subscription.", e)
-    }
 
     val recurringProductRatePlanId = validateRatePlan(weeklyRatePlan(guardianWeekly, environment, readerType), guardianWeekly.describe)
 
@@ -39,14 +34,14 @@ object GuardianWeeklySubscriptionBuilder {
     } else recurringProductRatePlanId
 
     val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
-      (initialTermInDays(contractEffectiveDate, contractAcceptanceDate, guardianWeekly.billingPeriod.monthsInPeriod), false, Day)
+      (initialTermInDays(contractEffectiveDate, firstDeliveryDate, guardianWeekly.billingPeriod.monthsInPeriod), false, Day)
     else
       (12, true, Month)
 
     val subscriptionData = buildProductSubscription(
       requestId,
       recurringProductRatePlanId,
-      contractAcceptanceDate = contractAcceptanceDate,
+      contractAcceptanceDate = firstDeliveryDate,
       contractEffectiveDate = contractEffectiveDate,
       readerType = readerType,
       autoRenew = autoRenew,
