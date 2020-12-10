@@ -273,6 +273,7 @@ function PaperCheckoutForm(props: PropTypes) {
           <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
               <RadioGroup
+                legend="Is the billing address the same as the delivery address?"
                 id="billingAddressIsSame"
                 name="billingAddressIsSame"
                 orienntation="vertical"
