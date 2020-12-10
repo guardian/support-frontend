@@ -4,7 +4,7 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
-import { from } from '@guardian/src-foundations/mq';
+import { from, between } from '@guardian/src-foundations/mq';
 import { SvgInfo } from '@guardian/src-icons';
 
 import ProductInfoChip from 'components/product/productInfoChip';
@@ -31,6 +31,7 @@ const pricesSection = css`
 
 const priceBoxes = css`
   margin-top: ${space[6]}px;
+  margin-left: -${space[2]}px;
   justify-content: flex-start;
   align-items: stretch;
   ${from.desktop} {
@@ -47,21 +48,27 @@ const productOverride = css`
       margin-top: 0;
     }
     &:not(:last-of-type) {
+      margin-right: ${space[4]}px;
+    }
+  }
+  ${between.tablet.and.desktop} {
+    padding: ${space[3]}px ${space[2]}px;
+  }
+  ${from.desktop} {
+    &:not(:last-of-type) {
       margin-right: ${space[5]}px;
     }
   }
 `;
 
 const productOverrideWithLabel = css`
+  ${productOverride}
   &:not(:first-of-type) {
     margin-top: ${space[12]}px;
   }
   ${from.tablet} {
     &:not(:first-of-type) {
       margin-top: 0;
-    }
-    &:not(:last-of-type) {
-      margin-right: ${space[5]}px;
     }
   }
 `;

@@ -30,8 +30,12 @@ type PropTypes = {|
 
 const heroCopy = css`
   padding: 0 ${space[3]}px ${space[3]}px;
+  ${from.tablet} {
+    padding-bottom: ${space[9]}px;
+  }
   ${from.desktop} {
     max-width: 85%;
+    padding-bottom: ${space[24]}px;
   }
 `;
 
@@ -50,7 +54,10 @@ const heroTitleHighlight = css`
 
 const heroParagraph = css`
   ${body.medium({ lineHeight: 'loose' })}
-  margin-bottom: ${space[9]}px;
+  margin-bottom: ${space[6]}px;
+  ${from.desktop} {
+    margin-bottom: ${space[9]}px;
+  }
 `;
 
 const roundelLines = css`
