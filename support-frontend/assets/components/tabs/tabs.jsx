@@ -23,7 +23,7 @@ type PropTypes = {|
 function Tabs({
   tabsLabel, tabElement, tabs, onTabChange,
 }: PropTypes) {
-  const Element = tabElement;
+  const TabControllerElement = tabElement;
 
   return (
     <div>
@@ -31,7 +31,7 @@ function Tabs({
         {tabs.map((tab: TabProps) => {
           const selected = tab.selected ? 'true' : 'false';
           return (
-            <Element
+            <TabControllerElement
               css={tabButton}
               role="tab"
               id={tab.id}
@@ -44,7 +44,7 @@ function Tabs({
               }}
             >
               {tab.text}
-            </Element>
+            </TabControllerElement>
           );
         })}
       </div>
