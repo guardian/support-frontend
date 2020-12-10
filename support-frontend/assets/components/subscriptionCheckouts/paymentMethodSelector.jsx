@@ -58,7 +58,8 @@ function PaymentMethodSelector(props: PropTypes) {
     <Rows gap="large">
       <RadioGroup
         id="payment-methods"
-        legend="How would you like to pay?"
+        label="How would you like to pay?"
+        hideLabel
         error={props.validationError}
         role="radiogroup"
       >

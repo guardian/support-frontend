@@ -278,7 +278,8 @@ function PaperCheckoutForm(props: PropTypes) {
           <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
               <RadioGroup
-                legend="Is the billing address the same as the delivery address?"
+                label="Is the billing address the same as the delivery address?"
+                hideLabel
                 id="billingAddressIsSame"
                 name="billingAddressIsSame"
                 orienntation="vertical"
@@ -315,6 +316,8 @@ function PaperCheckoutForm(props: PropTypes) {
             <FormSection title="When would you like your subscription to start?">
               <Rows>
                 <RadioGroup
+                  label="When would you like your subscription to start?"
+                  hideLabel
                   id="startDate"
                   error={firstError('startDate', props.formErrors)}
                   legend="When would you like your subscription to start?"

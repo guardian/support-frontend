@@ -294,6 +294,8 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           <FormSection title="Is the billing address the same as the recipient's address?">
             <Rows>
               <RadioGroup
+                label="Is the billing address the same as the recipient's address?"
+                hideLabel
                 id="billingAddressIsSame"
                 name="billingAddressIsSame"
                 orienntation="vertical"

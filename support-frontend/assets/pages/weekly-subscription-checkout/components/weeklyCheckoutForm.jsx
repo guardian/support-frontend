@@ -227,6 +227,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
           <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
               <RadioGroup
+                label="Is the billing address the same as the delivery address?"
+                hideLabel
                 id="billingAddressIsSame"
                 name="billingAddressIsSame"
                 orienntation="vertical"
