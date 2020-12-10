@@ -79,6 +79,11 @@ import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmi
 const marginBottom = css`
   margin-bottom: ${space[6]}px;
 `;
+
+const controlTextAreaResizing = css`
+  resize: vertical;
+`;
+
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -254,6 +259,7 @@ function PaperCheckoutForm(props: PropTypes) {
             {
               props.fulfilmentOption === HomeDelivery ?
                 <TextArea
+                  css={controlTextAreaResizing}
                   id="delivery-instructions"
                   label="Delivery instructions"
                   maxlength={250}
