@@ -31,7 +31,6 @@ const pricesSection = css`
 
 const priceBoxes = css`
   margin-top: ${space[6]}px;
-  margin-left: -${space[2]}px;
   justify-content: flex-start;
   align-items: stretch;
   ${from.desktop} {

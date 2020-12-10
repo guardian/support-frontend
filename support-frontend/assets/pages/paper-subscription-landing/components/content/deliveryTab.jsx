@@ -35,6 +35,10 @@ const faqsContainer = css`
 
 const paragraph = css`
   margin-bottom: ${space[6]}px;
+  ${until.desktop} {
+    padding: 0 ${space[2]}px;
+  }
+
   a {
     color: inherit;
   }

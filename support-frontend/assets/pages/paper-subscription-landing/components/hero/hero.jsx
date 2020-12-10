@@ -111,6 +111,7 @@ function PaperHero({ productPrices }: PropTypes) {
           />}
           roundelText={roundelText}
           roundelNudgeDirection="down"
+          hideRoundelBelow="mobileMedium"
         >
           <section css={heroCopy}>
             <h2 css={heroTitle}>
