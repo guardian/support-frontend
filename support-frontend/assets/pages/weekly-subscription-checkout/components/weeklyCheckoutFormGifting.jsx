@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { TextInput } from '@guardian/src-text-input';
 import { RadioGroup, Radio } from '@guardian/src-radio';
 
 import {
@@ -78,6 +77,9 @@ import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { titles } from 'helpers/user/details';
+import { Select, Option as OptionForSelect } from '@guardian/src-select';
+import { options } from 'components/forms/customFields/options';
 
 // ----- Styles ----- //
 
@@ -205,14 +207,17 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             </Heading>
           </FormSection>
           <FormSection title="Gift recipient's details" border="bottom">
-            <TextInput
+            <Select
               css={marginBottom}
               id="title"
               label="Title"
               optional
-              value={props.title}
-              onChange={e => props.setTitle(e.target.value)}
-            />
+              value={props.titleGiftRecipient}
+              onChange={e => props.setTitleGift(e.target.value)}
+            >
+              <OptionForSelect>Enter a title</OptionForSelect>
+              {options(titles)}
+            </Select>
             <PersonalDetailsGift
               firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
               setFirstNameGift={props.setFirstNameGift}
@@ -263,14 +268,17 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             </Heading>
           </FormSection>
           <FormSection title="Your details" border="bottom">
-            <TextInput
+            <Select
               css={marginBottom}
               id="title"
               label="Title"
               optional
               value={props.title}
               onChange={e => props.setTitle(e.target.value)}
-            />
+            >
+              <OptionForSelect>Enter a title</OptionForSelect>
+              {options(titles)}
+            </Select>
             <PersonalDetails
               firstName={props.firstName}
               setFirstName={props.setFirstName}

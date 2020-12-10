@@ -8,7 +8,6 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
-import { TextInput } from '@guardian/src-text-input';
 import { RadioGroup, Radio } from '@guardian/src-radio';
 import { TextArea } from '@guardian/src-text-area';
 
@@ -74,6 +73,9 @@ import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebi
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import { titles } from 'helpers/user/details';
+import { Select, Option as OptionForSelect } from '@guardian/src-select';
+import { options } from 'components/forms/customFields/options';
 
 
 const marginBottom = css`
@@ -233,14 +235,17 @@ function PaperCheckoutForm(props: PropTypes) {
         }}
         >
           <FormSection title="Your details">
-            <TextInput
+            <Select
               css={marginBottom}
               id="title"
               label="Title"
               optional
               value={props.title}
               onChange={e => props.setTitle(e.target.value)}
-            />
+            >
+              <OptionForSelect>Enter a title</OptionForSelect>
+              {options(titles)}
+            </Select>
             <PersonalDetails
               firstName={props.firstName}
               setFirstName={props.setFirstName}
