@@ -7,21 +7,20 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.{Contribution, DigitalPack, GuardianWeekly, Paper, PaymentMethod, RequestInfo}
 import com.gu.support.workers.exceptions.SalesforceException
-import com.gu.support.workers.states.CreateZuoraSubscriptionState._
-import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
+import com.gu.support.workers.states.{CreateSalesforceContactState, PassThroughState}
 import com.gu.support.zuora.api.ReaderType
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState](ServiceProvider) {
+class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, PassThroughState](ServiceProvider) {
 
   override protected def servicesHandler(
     state: CreateSalesforceContactState,
     requestInfo: RequestInfo,
     context: Context,
     services: Services
-  ): Future[HandlerResult[CreateZuoraSubscriptionState]] = {
+  ): Future[HandlerResult[PassThroughState]] = {
     SafeLogger.debug(s"CreateSalesforceContact state: $state")
 
     services.salesforceService.createContactRecords(state.user, state.giftRecipient).flatMap { response =>
@@ -46,7 +45,7 @@ class NextZuoraState(
   type Redemption = Right[PaymentMethod, RedemptionData]
 
   // scalastyle:off cyclomatic.complexity
-  def getZuoraState(): CreateZuoraSubscriptionState =
+  def getZuoraState(): PassThroughState =
     (state.product, state.paymentMethod) match {
       case (product: Contribution, Purchase(purchase)) =>
         state.toNextContribution(salesforceContactRecords, product, purchase)

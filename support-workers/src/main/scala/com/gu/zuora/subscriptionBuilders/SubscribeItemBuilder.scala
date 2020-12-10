@@ -4,40 +4,15 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionState._
 import com.gu.support.workers.{Address, PaymentMethod, SalesforceContactRecord}
 import com.gu.support.zuora.api._
 
-class SubscribeItemBuilder(state: CreateZuoraSubscriptionNewSubscriptionState, subscriptionData: SubscriptionData) {
+object SubscribeItemBuilder {
 
-  //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
-  def build: SubscribeItem = (state, state.user.deliveryAddress, state.user.deliveryInstructions) match {
-    case (state: CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState, None, None) =>
-      buildSubscribeItem(state.salesForceContact, Some(state.paymentMethod), None)
-    case (state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState, None, None) =>
-      buildSubscribeItem(state.salesforceContacts.recipient, Some(state.paymentMethod), None)
-    case (state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, None, None) =>
-      buildSubscribeItem(state.salesForceContact, None, None)
-    case (state: CreateZuoraSubscriptionContributionState, None, None) =>
-      buildSubscribeItem(state.salesForceContact, Some(state.paymentMethod), None)
-    case (state: CreateZuoraSubscriptionPaperState, Some(deliveryAddress), maybeDeliveryInstructions) =>
-      val user = state.user
-      val soldToContact = buildContactDetails(Some(user.primaryEmailAddress), user.firstName, user.lastName, deliveryAddress, maybeDeliveryInstructions)
-      buildSubscribeItem(state.salesForceContact, Some(state.paymentMethod), Some(soldToContact))
-    case (state: CreateZuoraSubscriptionGuardianWeeklyState, Some(deliveryAddress), None) =>
-      val soldToContact = state.giftRecipient match {
-        case None => buildContactDetails(Some(state.user.primaryEmailAddress), state.user.firstName, state.user.lastName, deliveryAddress, None)
-        case Some(gR) => buildContactDetails(gR.email, gR.firstName, gR.lastName, deliveryAddress, None)
-      }
-      buildSubscribeItem(state.salesforceContacts.recipient, Some(state.paymentMethod), Some(soldToContact))
-    case _ =>
-      // TODO deliveryAddress and deliveryInstructions should later be moved out of User and into the relevant case class
-      throw new RuntimeException(s"delivery information was specified incorrectly for the product $state")
-  }
-
-  private def buildContactDetails(
+  def buildContactDetails(
     email: Option[String],
     firstName: String,
     lastName: String,
     address: Address,
     maybeDeliveryInstructions: Option[String] = None
-  ) = ContactDetails(
+  ): ContactDetails = ContactDetails(
     firstName = firstName,
     lastName = lastName,
     workEmail = email,
@@ -50,11 +25,13 @@ class SubscribeItemBuilder(state: CreateZuoraSubscriptionNewSubscriptionState, s
     deliveryInstructions = maybeDeliveryInstructions
   )
 
-  private def buildSubscribeItem(
+  def buildSubscribeItem(
+    state: CreateZuoraSubscriptionNewSubscriptionState,
+    subscriptionData: SubscriptionData,
     salesForceContact: SalesforceContactRecord,
     maybePaymentMethod: Option[PaymentMethod],
     soldToContact: Option[ContactDetails]
-  ) = {
+  ): SubscribeItem = {
     val billingEnabled = maybePaymentMethod.isDefined
     SubscribeItem(
       account = Account(

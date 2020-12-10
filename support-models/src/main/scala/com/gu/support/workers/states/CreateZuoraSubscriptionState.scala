@@ -2,19 +2,28 @@ package com.gu.support.workers.states
 
 import java.util.UUID
 import com.gu.salesforce.Salesforce.{SalesforceContactRecords, SfContactId}
+import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
-import com.gu.support.encoding.DiscriminatedType
+import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraSubscriptionNumber}
 
-sealed trait CreateZuoraSubscriptionState extends MinimalFailureHandlerState {
-  def product: ProductType
-  def acquisitionData: Option[AcquisitionData]
+case class PassThroughState(
+  createZuoraSubscriptionState: CreateZuoraSubscriptionState,
+  firstDeliveryDate: Option[LocalDate],
+  promoCode: Option[PromoCode],
+  requestId: UUID,
+  product: ProductType,
+  analyticsInfo: AnalyticsInfo,
+  user: User,
+  acquisitionData: Option[AcquisitionData],
+) extends FailureHandlerState {
+
   def nextStateWrapper(sendThankYouEmailState: SendThankYouEmailState): SendAcquisitionEventState =
     SendAcquisitionEventState(
       requestId = requestId,
@@ -22,6 +31,17 @@ sealed trait CreateZuoraSubscriptionState extends MinimalFailureHandlerState {
       sendThankYouEmailState = sendThankYouEmailState,
       acquisitionData = acquisitionData
     )
+
+}
+
+object PassThroughState {
+  implicit val codec = deriveCodec[PassThroughState]
+}
+
+sealed trait CreateZuoraSubscriptionState {
+  def requestId: UUID
+  def user: User
+  def product: ProductType
 }
 
 object CreateZuoraSubscriptionState {
@@ -31,19 +51,18 @@ object CreateZuoraSubscriptionState {
   }
 
   sealed trait CreateZuoraSubscriptionNewSubscriptionState extends CreateZuoraSubscriptionState // marker to say we will actually create rather than updating
+  sealed trait CreateZuoraSubscriptionDSPurchaseState extends CreateZuoraSubscriptionDigitalSubscriptionState // marker - buy, not redeem
 
   case class CreateZuoraSubscriptionContributionState(
     requestId: UUID,
     user: User,
     product: Contribution,
-    analyticsInfo: AnalyticsInfo,
     paymentMethod: PaymentMethod,
     salesForceContact: SalesforceContactRecord,
-    acquisitionData: Option[AcquisitionData]
   ) extends CreateZuoraSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
 
-    def nextState(accountNumber: ZuoraAccountNumber): SendAcquisitionEventState =
-      nextStateWrapper(SendThankYouEmailContributionState(user, product, paymentMethod, accountNumber.value))
+    def nextState(accountNumber: ZuoraAccountNumber)  : SendThankYouEmailState =
+      SendThankYouEmailContributionState(user, product, paymentMethod, accountNumber.value)
 
   }
 
@@ -51,19 +70,17 @@ object CreateZuoraSubscriptionState {
     requestId: UUID,
     user: User,
     product: DigitalPack,
-    analyticsInfo: AnalyticsInfo,
     paymentMethod: PaymentMethod,
     promoCode: Option[PromoCode],
     salesForceContact: SalesforceContactRecord,
-    acquisitionData: Option[AcquisitionData]
-  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
+  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState with CreateZuoraSubscriptionDSPurchaseState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
       accountNumber: ZuoraAccountNumber,
       subscriptionNumber: ZuoraSubscriptionNumber,
-    ): SendAcquisitionEventState =
-      nextStateWrapper(SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+    )  : SendThankYouEmailState =
+      SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
         user,
         product,
         paymentMethod,
@@ -71,7 +88,7 @@ object CreateZuoraSubscriptionState {
         promoCode,
         accountNumber.value,
         subscriptionNumber.value
-      ))
+      )
 
   }
 
@@ -80,20 +97,18 @@ object CreateZuoraSubscriptionState {
     user: User,
     giftRecipient: DigitalSubscriptionGiftRecipient,
     product: DigitalPack,
-    analyticsInfo: AnalyticsInfo,
     paymentMethod: PaymentMethod,
     promoCode: Option[PromoCode],
     salesforceContacts: SalesforceContactRecords,
-    acquisitionData: Option[AcquisitionData]
-  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
+  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState with CreateZuoraSubscriptionDSPurchaseState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
       giftCode: GeneratedGiftCode,
       lastRedemptionDate: LocalDate,
       accountNumber: ZuoraAccountNumber,
-    ): SendAcquisitionEventState =
-      nextStateWrapper(SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
+    )  : SendThankYouEmailState =
+      SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
         user,
         SfContactId(salesforceContacts.giftRecipient.get.Id),
         product,
@@ -104,7 +119,7 @@ object CreateZuoraSubscriptionState {
         paymentSchedule,
         promoCode,
         accountNumber.value,
-      ))
+      )
 
   }
 
@@ -112,14 +127,12 @@ object CreateZuoraSubscriptionState {
     requestId: UUID,
     user: User,
     product: DigitalPack,
-    analyticsInfo: AnalyticsInfo,
     redemptionData: RedemptionData,
     salesForceContact: SalesforceContactRecord,
-    acquisitionData: Option[AcquisitionData]
   ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
 
-    def nextState(subscriptionNumber: ZuoraSubscriptionNumber): SendAcquisitionEventState =
-      nextStateWrapper(SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, subscriptionNumber.value))
+    def nextState(subscriptionNumber: ZuoraSubscriptionNumber)  : SendThankYouEmailState =
+      SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, subscriptionNumber.value)
 
   }
 
@@ -127,13 +140,11 @@ object CreateZuoraSubscriptionState {
     requestId: UUID,
     user: User,
     product: DigitalPack,
-    analyticsInfo: AnalyticsInfo,
     redemptionData: RedemptionData,
-    acquisitionData: Option[AcquisitionData]
   ) extends CreateZuoraSubscriptionDigitalSubscriptionState {
 
-    def nextState(termDates: TermDates): SendAcquisitionEventState =
-      nextStateWrapper(SendThankYouEmailDigitalSubscriptionGiftRedemptionState(user, product, termDates))
+    def nextState(termDates: TermDates)  : SendThankYouEmailState =
+      SendThankYouEmailDigitalSubscriptionGiftRedemptionState(user, product, termDates)
 
   }
 
@@ -141,20 +152,18 @@ object CreateZuoraSubscriptionState {
     requestId: UUID,
     user: User,
     product: Paper,
-    analyticsInfo: AnalyticsInfo,
     paymentMethod: PaymentMethod,
     firstDeliveryDate: LocalDate,
     promoCode: Option[PromoCode],
     salesForceContact: SalesforceContactRecord,
-    acquisitionData: Option[AcquisitionData]
   ) extends CreateZuoraSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
       accountNumber: ZuoraAccountNumber,
       subscriptionNumber: ZuoraSubscriptionNumber,
-    ): SendAcquisitionEventState =
-      nextStateWrapper(SendThankYouEmailPaperState(
+    )  : SendThankYouEmailState =
+      SendThankYouEmailPaperState(
         user,
         product,
         paymentMethod,
@@ -163,7 +172,7 @@ object CreateZuoraSubscriptionState {
         accountNumber.value,
         subscriptionNumber.value,
         firstDeliveryDate
-      ))
+      )
 
   }
 
@@ -172,20 +181,18 @@ object CreateZuoraSubscriptionState {
     user: User,
     giftRecipient: Option[WeeklyGiftRecipient],
     product: GuardianWeekly,
-    analyticsInfo: AnalyticsInfo,
     paymentMethod: PaymentMethod,
     firstDeliveryDate: LocalDate,
     promoCode: Option[PromoCode],
     salesforceContacts: SalesforceContactRecords,
-    acquisitionData: Option[AcquisitionData]
   ) extends CreateZuoraSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
       accountNumber: ZuoraAccountNumber,
       subscriptionNumber: ZuoraSubscriptionNumber,
-    ): SendAcquisitionEventState =
-      nextStateWrapper(SendThankYouEmailGuardianWeeklyState(
+    )  : SendThankYouEmailState =
+      SendThankYouEmailGuardianWeeklyState(
         user,
         product,
         giftRecipient,
@@ -195,12 +202,12 @@ object CreateZuoraSubscriptionState {
         accountNumber.value,
         subscriptionNumber.value,
         firstDeliveryDate
-      ))
+      )
 
   }
 
   private val discriminatedType = new DiscriminatedType[CreateZuoraSubscriptionState]("productType")
-  implicit val codec = discriminatedType.codec(List(
+  implicit val codec: Codec[CreateZuoraSubscriptionState] = discriminatedType.codec(List(
     discriminatedType.variant[CreateZuoraSubscriptionContributionState]("Contribution"),
     discriminatedType.variant[CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState]("DigitalSubscriptionDirectPurchase"),
     discriminatedType.variant[CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState]("DigitalSubscriptionGiftPurchase"),

@@ -1,17 +1,17 @@
 package com.gu.zuora.subscriptionBuilders
 
 import java.util.UUID
-
 import com.gu.i18n.Country
 import com.gu.support.catalog
 import com.gu.support.catalog.{ProductRatePlan, ProductRatePlanId}
-import com.gu.support.config.{ZuoraConfig, ZuoraContributionConfig}
-import com.gu.support.promotions.{PromoCode, PromotionService}
+import com.gu.support.config.ZuoraContributionConfig
+import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.CatalogDataNotFoundException
+import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionContributionState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
-import org.joda.time.{DateTimeZone, Days, LocalDate}
+import org.joda.time.{DateTimeZone, LocalDate}
 
 object ProductSubscriptionBuilders {
 
@@ -21,18 +21,19 @@ object ProductSubscriptionBuilders {
       case None => throw new CatalogDataNotFoundException(s"RatePlanId not found for $productDescription")
     }
 
-  def buildContributionSubscription(contribution: Contribution, requestId: UUID, config: BillingPeriod => ZuoraContributionConfig): SubscriptionData = {
-    val contributionConfig = config(contribution.billingPeriod)
-    buildProductSubscription(
-      requestId,
+  def buildContributionSubscription(state: CreateZuoraSubscriptionContributionState, config: BillingPeriod => ZuoraContributionConfig): SubscribeItem = {
+    val contributionConfig = config(state.product.billingPeriod)
+    val subscriptionData = buildProductSubscription(
+      state.requestId,
       contributionConfig.productRatePlanId,
       List(
         RatePlanChargeData(
-          ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = contribution.amount) //Pass the amount the user selected into Zuora
+          ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = state.product.amount) //Pass the amount the user selected into Zuora
         )
       ),
       readerType = Direct
     )
+    SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
   }
 
   def buildProductSubscription(
@@ -74,7 +75,7 @@ object ProductSubscriptionBuilders {
     country: Country,
     productRatePlanId: ProductRatePlanId,
     subscriptionData: SubscriptionData
-  ) = {
+  ): Either[PromoError, SubscriptionData] = {
     val withPromotion = maybePromoCode.map { promoCode =>
       for {
         promotionWithCode <- promotionService.findPromotion(promoCode)

@@ -1,17 +1,14 @@
 package com.gu.zuora.subscriptionBuilders
 
-import java.util.UUID
-
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.redemption.corporate.CorporateCodeValidator
 import com.gu.support.redemption.{InvalidCode, InvalidReaderType, ValidCorporateCode}
-import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.DigitalPack
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
+import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState
 import com.gu.support.zuora.api.ReaderType.Corporate
-import com.gu.support.zuora.api.{ReaderType, SubscriptionData}
+import com.gu.support.zuora.api.{ReaderType, SubscribeItem}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{buildProductSubscription, validateRatePlan}
 import org.joda.time.LocalDate
 
@@ -23,12 +20,11 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
 ) {
 
   def build(
-    redemptionData: RedemptionData,
-    digitalPack: DigitalPack,
-    requestId: UUID,
+    state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState,
     environment: TouchPointEnvironment,
-  )(implicit ec: ExecutionContext): EitherT[Future, InvalidCode, SubscriptionData] = {
-    val productRatePlanId = validateRatePlan(digitalRatePlan(digitalPack, environment), digitalPack.describe)
+  )(implicit ec: ExecutionContext): EitherT[Future, InvalidCode, SubscribeItem] = {
+    import state._
+    val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
     val redemptionCode = redemptionData.redemptionCode
     val todaysDate = today()
     val subscriptionData = buildProductSubscription(
@@ -44,7 +40,7 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
         EitherT(codeValidator.getStatus(redemptionCode).map {
           case ValidCorporateCode(corporateId) =>
             Right(subscriptionData.subscription.copy(
-              redemptionCode = Some(redemptionCode.value),
+              redemptionCode = Some(Right(redemptionCode)),
               corporateAccountId = Some(corporateId.corporateIdString),
               readerType = ReaderType.Corporate
             ))
@@ -55,6 +51,7 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
 
     redeemedSubcription
       .map(subscription => subscriptionData.copy(subscription = subscription))
+      .map(subscriptionData => SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesForceContact, None, None))
   }
 
 }

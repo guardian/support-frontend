@@ -26,44 +26,63 @@ case class CreateSalesforceContactState(
     salesforceContactRecords: SalesforceContactRecords,
     product: Contribution,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionContributionState = {
-    CreateZuoraSubscriptionContributionState(
+  ): PassThroughState =
+    PassThroughState(
+      CreateZuoraSubscriptionContributionState(
+        requestId,
+        user,
+        product,
+        purchase,
+        salesforceContactRecords.buyer,
+      ),
+      None,
+      None,
       requestId,
-      user,
       product,
       analyticsInfo,
-      purchase,
-      salesforceContactRecords.buyer,
+      user,
       acquisitionData,
     )
-  }
 
   def toNextDSRedemption(
     product: DigitalPack,
     redemptionData: RedemptionData
-  ): CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState = {
-    CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState(
+  ): PassThroughState =
+    PassThroughState(
+      CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState(
+        requestId,
+        user,
+        product,
+        redemptionData,
+      ),
+      None,
+      None,
       requestId,
-      user,
       product,
       analyticsInfo,
-      redemptionData,
+      user,
       acquisitionData,
     )
-  }
 
   def toNextDSCorporate(
     salesforceContactRecord: SalesforceContactRecord,
     product: DigitalPack,
     redemptionData: RedemptionData
-  ): CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState =
-    CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState(
+  ): PassThroughState =
+    PassThroughState(
+      CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState(
+        requestId,
+        user,
+        product,
+        redemptionData,
+        salesforceContactRecord,
+      ),
+      None,
+      None,
       requestId,
-      user,
       product,
       analyticsInfo,
-      redemptionData,
-      salesforceContactRecord,
+      user,
       acquisitionData,
     )
 
@@ -71,17 +90,24 @@ case class CreateSalesforceContactState(
     salesforceContactRecords: SalesforceContactRecords,
     product: GuardianWeekly,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionGuardianWeeklyState =
-    CreateZuoraSubscriptionGuardianWeeklyState(
+  ): PassThroughState =
+    PassThroughState(
+      CreateZuoraSubscriptionGuardianWeeklyState(
+        requestId,
+        user,
+        giftRecipient.map(_.asWeekly.get),
+        product,
+        purchase,
+        firstDeliveryDate.get,
+        promoCode,
+        salesforceContactRecords,
+      ),
+      firstDeliveryDate,
+      promoCode,
       requestId,
-      user,
-      giftRecipient.map(_.asWeekly.get),
       product,
       analyticsInfo,
-      purchase,
-      firstDeliveryDate.get,
-      promoCode,
-      salesforceContactRecords,
+      user,
       acquisitionData,
     )
 
@@ -89,16 +115,23 @@ case class CreateSalesforceContactState(
     salesforceContactRecord: SalesforceContactRecord,
     product: Paper,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionPaperState =
-    CreateZuoraSubscriptionPaperState(
+  ): PassThroughState =
+    PassThroughState(
+      CreateZuoraSubscriptionPaperState(
+        requestId,
+        user,
+        product,
+        purchase,
+        firstDeliveryDate.get,
+        promoCode,
+        salesforceContactRecord,
+      ),
+      firstDeliveryDate,
+      promoCode,
       requestId,
-      user,
       product,
       analyticsInfo,
-      purchase,
-      firstDeliveryDate.get,
-      promoCode,
-      salesforceContactRecord,
+      user,
       acquisitionData,
     )
 
@@ -106,16 +139,23 @@ case class CreateSalesforceContactState(
     salesforceContactRecords: SalesforceContactRecords,
     product: DigitalPack,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState =
-    CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState(
+  ): PassThroughState =
+    PassThroughState(
+      CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState(
+        requestId,
+        user,
+        giftRecipient.flatMap(_.asDigitalSubscriptionGiftRecipient).get,
+        product,
+        purchase,
+        promoCode,
+        salesforceContactRecords,
+      ),
+      firstDeliveryDate,
+      promoCode,
       requestId,
-      user,
-      giftRecipient.flatMap(_.asDigitalSubscriptionGiftRecipient).get,
       product,
       analyticsInfo,
-      purchase,
-      promoCode,
-      salesforceContactRecords,
+      user,
       acquisitionData,
     )
 
@@ -123,15 +163,22 @@ case class CreateSalesforceContactState(
     salesforceContactRecord: SalesforceContactRecord,
     product: DigitalPack,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState =
-    CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+  ): PassThroughState =
+    PassThroughState(
+      CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+        requestId,
+        user,
+        product,
+        purchase,
+        promoCode,
+        salesforceContactRecord,
+      ),
+      firstDeliveryDate,
+      promoCode,
       requestId,
-      user,
       product,
       analyticsInfo,
-      purchase,
-      promoCode,
-      salesforceContactRecord,
+      user,
       acquisitionData,
     )
 

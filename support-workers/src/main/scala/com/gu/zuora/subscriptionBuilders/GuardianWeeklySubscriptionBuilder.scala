@@ -7,34 +7,31 @@ import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.exceptions.BadRequestException
-import com.gu.support.workers.{BillingPeriod, GuardianWeekly, ProductTypeRatePlans, SixWeekly}
-import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscriptionData}
+import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionGuardianWeeklyState
+import com.gu.support.workers.{BillingPeriod, SixWeekly}
+import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscribeItem}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, buildProductSubscription, validateRatePlan}
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
-import scala.util.{Failure, Success, Try}
-
 object GuardianWeeklySubscriptionBuilder {
   def build(
-    guardianWeekly: GuardianWeekly,
-    requestId: UUID,
-    country: Country,
-    maybePromoCode: Option[PromoCode],
-    firstDeliveryDate: LocalDate,
+    state: CreateZuoraSubscriptionGuardianWeeklyState,
     promotionService: PromotionService,
-    readerType: ReaderType,
     environment: TouchPointEnvironment,
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
-  ): Either[PromoError, SubscriptionData] = {
+  ): Either[PromoError, SubscribeItem] = {
 
-    val recurringProductRatePlanId = validateRatePlan(weeklyRatePlan(guardianWeekly, environment, readerType), guardianWeekly.describe)
+    import state._
+    val readerType = if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct
 
-    val promotionProductRatePlanId = if (isIntroductoryPromotion(guardianWeekly.billingPeriod, maybePromoCode)) {
-      weeklyIntroductoryRatePlan(guardianWeekly, environment).map(_.id).getOrElse(recurringProductRatePlanId)
+    val recurringProductRatePlanId = validateRatePlan(weeklyRatePlan(product, environment, readerType), product.describe)
+
+    val promotionProductRatePlanId = if (isIntroductoryPromotion(product.billingPeriod, promoCode)) {
+      weeklyIntroductoryRatePlan(product, environment).map(_.id).getOrElse(recurringProductRatePlanId)
     } else recurringProductRatePlanId
 
     val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
-      (initialTermInDays(contractEffectiveDate, firstDeliveryDate, guardianWeekly.billingPeriod.monthsInPeriod), false, Day)
+      (initialTermInDays(contractEffectiveDate, firstDeliveryDate, product.billingPeriod.monthsInPeriod), false, Day)
     else
       (12, true, Month)
 
@@ -49,7 +46,15 @@ object GuardianWeeklySubscriptionBuilder {
       initialTermPeriodType = initialTermPeriodType
     )
 
-    applyPromoCodeIfPresent(promotionService, maybePromoCode, country, promotionProductRatePlanId, subscriptionData)
+    applyPromoCodeIfPresent(promotionService, promoCode, user.billingAddress.country, promotionProductRatePlanId, subscriptionData).map { subscriptionData =>
+      val soldToContact = state.giftRecipient match {
+        case None =>
+          SubscribeItemBuilder.buildContactDetails(Some(user.primaryEmailAddress), user.firstName, user.lastName, user.deliveryAddress.get, None)
+        case Some(gR) =>
+          SubscribeItemBuilder.buildContactDetails(gR.email, gR.firstName, gR.lastName, user.deliveryAddress.get, None)
+      }
+      SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, salesforceContacts.recipient, Some(paymentMethod), Some(soldToContact))
+    }
   }
 
   private[this] def isIntroductoryPromotion(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode]) =

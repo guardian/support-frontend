@@ -1,14 +1,13 @@
 package com.gu.zuora.subscriptionBuilders
 
-import java.util.UUID
-
-import com.gu.i18n.Country
+import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.redemption.gifting.GiftCodeValidator
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
-import com.gu.support.workers.{DigitalPack, GeneratedGiftCode}
-import com.gu.support.zuora.api.ReaderType.Gift
+import com.gu.support.workers.states.CreateZuoraSubscriptionState._
+import com.gu.support.workers.GeneratedGiftCode
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 import org.joda.time.LocalDate
@@ -19,26 +18,64 @@ class DigitalSubscriptionPurchaseBuilder(
   config: ZuoraDigitalPackConfig,
   promotionService: PromotionService,
   today: () => LocalDate,
+  giftCodeGeneratorService: GiftCodeGeneratorService,
 ) {
 
   def build(
-    maybePromoCode: Option[PromoCode],
-    country: Country,
-    digitalPack: DigitalPack,
-    requestId: UUID,
+    state: CreateZuoraSubscriptionDSPurchaseState,
     environment: TouchPointEnvironment,
-    maybeGiftCode: Option[GeneratedGiftCode],
-    maybeDeliveryDate: Option[LocalDate],
-  )(implicit ec: ExecutionContext): Either[PromoError, SubscriptionData] = {
+  )(implicit ec: ExecutionContext): Either[PromoError, SubscribeItem] = {
 
-    val productRatePlanId = validateRatePlan(digitalRatePlan(digitalPack, environment), digitalPack.describe)
+    import state._
+    import com.gu.WithLoggingSugar._
 
-    val (contractAcceptanceDelay, autoRenew, initialTerm, maybeRedemptionCode, deliveryDate) =
-      (digitalPack.readerType, maybeGiftCode, maybeDeliveryDate) match {
-        case (Gift, Some(giftCode), Some(deliveryDate)) => (0, false, GiftCodeValidator.expirationTimeInMonths + 1, Some(giftCode), Some(deliveryDate))
-        case (Gift, _, _) | (_, Some(_), _) | (Gift, _, None) => throw new RuntimeException("coding error - possible unredeemable sub")
-        case _ => (config.defaultFreeTrialPeriod + config.paymentGracePeriod, true, 12, None, None)
-      }
+    val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
+    val subscriptionDataBuilder = new DigitalSubscriptionDataBuilder(promotionService, productRatePlanId, today, state)
+
+    state match {
+      case state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState =>
+        val giftCode = giftCodeGeneratorService.generateCode(state.product.billingPeriod)
+          .withLogging("Generated code for Digital Subscription gift")
+        subscriptionDataBuilder.buildSubscriptionData(
+          contractAcceptanceDelay = 0,
+          autoRenew = false,
+          initialTerm = GiftCodeValidator.expirationTimeInMonths + 1,
+          maybeRedemptionCode = Some(giftCode),
+          deliveryDate = Some(state.giftRecipient.deliveryDate),
+          promoCode = state.promoCode
+        ).map { subscriptionData =>
+          SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesforceContacts.recipient, Some(state.paymentMethod), None)
+        }
+      case state: CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState =>
+        subscriptionDataBuilder.buildSubscriptionData(
+          contractAcceptanceDelay = config.defaultFreeTrialPeriod + config.paymentGracePeriod,
+          autoRenew = true,
+          initialTerm = 12,
+          maybeRedemptionCode = None,
+          deliveryDate = None,
+          promoCode = state.promoCode
+        ).map { subscriptionData =>
+          SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
+        }
+    }
+
+  }
+}
+class DigitalSubscriptionDataBuilder(
+  promotionService: PromotionService,
+  productRatePlanId: ProductRatePlanId,
+  today: () => LocalDate,
+  state: CreateZuoraSubscriptionDSPurchaseState,
+) {
+
+  def buildSubscriptionData(
+    contractAcceptanceDelay: Int,
+    autoRenew: Boolean,
+    initialTerm: Int,
+    maybeRedemptionCode: Option[GeneratedGiftCode],
+    deliveryDate: Option[LocalDate],
+    promoCode: Option[PromoCode],
+  ): Either[PromoError, SubscriptionData] = {
 
     val todaysDate = today()
     val contractAcceptanceDate = todaysDate.plusDays(contractAcceptanceDelay)
@@ -49,18 +86,18 @@ class DigitalSubscriptionPurchaseBuilder(
         contractEffectiveDate = todaysDate,
         contractAcceptanceDate = contractAcceptanceDate,
         termStartDate = todaysDate,
-        createdRequestId = requestId.toString,
-        readerType = digitalPack.readerType,
+        createdRequestId = state.requestId.toString,
+        readerType = state.product.readerType,
         autoRenew = autoRenew,
         initialTerm = initialTerm,
         initialTermPeriodType = Month,
-        redemptionCode = maybeRedemptionCode.map(_.value),
+        redemptionCode = maybeRedemptionCode.map(Left.apply),
         giftNotificationEmailDate = deliveryDate,
       )
     )
 
-    applyPromoCodeIfPresent(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
-
+    applyPromoCodeIfPresent(
+      promotionService, promoCode, state.user.billingAddress.country, productRatePlanId, subscriptionData
+    )
   }
-
 }

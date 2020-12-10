@@ -1,7 +1,5 @@
 package com.gu.support.workers.lambdas
 
-import java.util.UUID
-
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.gocardless.GoCardlessWorkersService
 import com.gu.i18n.{Country, CountryGroup}
@@ -9,7 +7,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionContributionState
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PreparePaymentMethodForReuseState}
+import com.gu.support.workers.states.{PassThroughState, PreparePaymentMethodForReuseState}
 import com.gu.support.zuora.api.PaymentGateway
 import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodDirectDebitResponse, GetPaymentMethodResponse}
 
@@ -18,7 +16,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[PreparePaymentMethodForReuseState, CreateZuoraSubscriptionState](servicesProvider) {
+    extends ServicesHandler[PreparePaymentMethodForReuseState, PassThroughState](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
@@ -44,15 +42,22 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         case _ => Failure(new RuntimeException("not yet supported reuse payment method for other than contributions"))
       })
     } yield HandlerResult(
+      PassThroughState(
         CreateZuoraSubscriptionContributionState(
-          requestId = UUID.randomUUID(),
+          requestId = state.requestId,
           user = state.user,
           product = contribution,
-          state.analyticsInfo,
           paymentMethod = paymentMethod,
           salesForceContact = sfContact,
-          acquisitionData = state.acquisitionData
         ),
+        None,
+        None,
+        state.requestId,
+        contribution,
+        state.analyticsInfo,
+        state.user,
+        acquisitionData = state.acquisitionData
+      ),
       requestInfo
         .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
         .appendMessage(s"Product is ${state.product.describe}")
