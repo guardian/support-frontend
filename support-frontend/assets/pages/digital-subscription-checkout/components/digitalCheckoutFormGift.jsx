@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { css } from '@emotion/core';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { TextArea } from '@guardian/src-text-area';
@@ -67,6 +68,10 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import { countries } from 'helpers/internationalisation/country';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+
+const controlTextAreaResizing = css`
+  resize: vertical;
+`;
 
 // ----- Types ----- //
 
@@ -202,6 +207,7 @@ function DigitalCheckoutFormGift(props: PropTypes) {
           </FormSection>
           <FormSection title="Personalise your gift">
             <TextArea
+              css={controlTextAreaResizing}
               id="gift-message"
               label="Gift message"
               maxlength={300}

@@ -7,7 +7,7 @@ import 'react-day-picker/lib/style.css';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { formatMachineDate } from 'helpers/dateConversions';
-import calendarIcon from './calendarIcon.png';
+import CalendarIcon from './calendarIcon.svg';
 import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { TextInput } from '@guardian/src-text-input';
 import { ThemeProvider } from 'emotion-theming';
@@ -25,15 +25,10 @@ import './styles.scss';
 const calendarIconContainer = css`
   padding: 0;
   border: none;
-  width: 35px;
-  height: 35px;
+  width: 41px;
+  height: 45px;
   align-self: flex-end;
-  margin: 0 0 ${space[1]}px ${space[4]}px ;
-`;
-
-const iconImage = css`
-  width: 100%;
-  height: 100%;
+  margin: 0 0 -${space[1]}px ${space[4]}px;
 `;
 
 const startDateGroup = css`
@@ -206,7 +201,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
                 this.setState({ showCalendar: !this.state.showCalendar });
               }}
             >
-              <img css={iconImage} src={calendarIcon} alt="calendar" />
+              <CalendarIcon />
             </button>
           </div>
         </fieldset>
