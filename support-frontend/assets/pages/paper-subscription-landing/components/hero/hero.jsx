@@ -8,12 +8,13 @@ import { css } from '@emotion/core';
 import { LinkButton, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
+import { from, until } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { brandAlt } from '@guardian/src-foundations/palette';
 
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
+import GridPicture from 'components/gridPicture/gridPicture';
 import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
 
@@ -22,7 +23,6 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 
 import { getDiscountCopy } from './discountCopy';
-
 
 type PropTypes = {|
   productPrices: ProductPrices
@@ -93,6 +93,23 @@ function PaperHero({ productPrices }: PropTypes) {
     </>
   );
 
+  const heroImages = [
+    {
+      gridId: 'printCampaignHeroMobile',
+      srcSizes: [500, 140],
+      imgType: 'png',
+      sizes: '(max-width: 739px) 100%',
+      media: '(max-width: 739px)',
+    },
+    {
+      gridId: 'printCampaignHeroDesktop',
+      srcSizes: [1620, 1000, 500],
+      imgType: 'png',
+      sizes: '(min-width: 740px) 100%',
+      media: '(min-width: 740px)',
+    },
+  ];
+
   return (
     <PageTitle
       title="Paper subscription"
@@ -100,14 +117,12 @@ function PaperHero({ productPrices }: PropTypes) {
     >
       <CentredContainer>
         <Hero
-          image={<GridImage
-            gridId="printCampaignHero"
-            srcSizes={[714, 500, 140]}
-            sizes="(max-width: 740px) 100%,
-            (max-width: 1067px) 150%,
-            1000px"
-            imgType="png"
+          image={<GridPicture
+            sources={heroImages}
+            fallback="printCampaignHeroDesktop"
+            fallbackSize={500}
             altText="Newspapers"
+            fallbackImgType="png"
           />}
           roundelText={roundelText}
           roundelNudgeDirection="down"

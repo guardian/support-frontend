@@ -36,6 +36,10 @@ export const hero = css`
     ${headline.xxsmall()};
     line-height: 135%;
   }
+  /* TODO: fix this when we port over the image components */
+  .component-grid-picture {
+    display: flex;
+  }
 `;
 
 // Keep the content below the roundel on mobile if present
