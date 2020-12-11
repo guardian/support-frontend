@@ -215,7 +215,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               value={props.titleGiftRecipient}
               onChange={e => props.setTitleGift(e.target.value)}
             >
-              <OptionForSelect>Enter a title</OptionForSelect>
+              <OptionForSelect>Select a title</OptionForSelect>
               {options(titles)}
             </Select>
             <PersonalDetailsGift
@@ -276,7 +276,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               value={props.title}
               onChange={e => props.setTitle(e.target.value)}
             >
-              <OptionForSelect>Enter a title</OptionForSelect>
+              <OptionForSelect>Select a title</OptionForSelect>
               {options(titles)}
             </Select>
             <PersonalDetails

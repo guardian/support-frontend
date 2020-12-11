@@ -206,7 +206,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
               value={props.title}
               onChange={e => props.setTitle(e.target.value)}
             >
-              <OptionForSelect>Enter a title</OptionForSelect>
+              <OptionForSelect>Select a title</OptionForSelect>
               {options(titles)}
             </Select>
             <PersonalDetails
