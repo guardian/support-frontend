@@ -16,7 +16,7 @@ type PropTypes = {|
 |};
 
 const surveyLinks: {[key: SubscriptionProduct]: string} = {
-  DigitalPack: 'https://www.surveymonkey.co.uk/r/QF9ZGQR',
+  DigitalPack: 'https://www.surveymonkey.com/r/PQMWMHW',
   GuardianWeekly: 'https://www.surveymonkey.co.uk/r/QFNYV5G',
   Paper: 'https://www.surveymonkey.co.uk/r/Q37XNTV',
 };
