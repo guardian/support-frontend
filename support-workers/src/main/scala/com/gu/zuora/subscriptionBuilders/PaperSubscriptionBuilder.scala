@@ -9,12 +9,11 @@ import org.joda.time.{DateTimeZone, LocalDate}
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionPaperState
 
-object PaperSubscriptionBuilder {
-  def build(
-    state: CreateZuoraSubscriptionPaperState,
-    promotionService: PromotionService,
-    environment: TouchPointEnvironment
-  ): Either[PromoError, SubscribeItem] = {
+class PaperSubscriptionBuilder(
+  promotionService: PromotionService,
+  environment: TouchPointEnvironment
+) {
+  def build(state: CreateZuoraSubscriptionPaperState): Either[PromoError, SubscribeItem] = {
 
     import state._
 

@@ -19,12 +19,10 @@ class DigitalSubscriptionPurchaseBuilder(
   promotionService: PromotionService,
   today: () => LocalDate,
   giftCodeGeneratorService: GiftCodeGeneratorService,
+  environment: TouchPointEnvironment,
 ) {
 
-  def build(
-    state: CreateZuoraSubscriptionDSPurchaseState,
-    environment: TouchPointEnvironment,
-  )(implicit ec: ExecutionContext): Either[PromoError, SubscribeItem] = {
+  def build(state: CreateZuoraSubscriptionDSPurchaseState)(implicit ec: ExecutionContext): Either[PromoError, SubscribeItem] = {
 
     import state._
     import com.gu.WithLoggingSugar._

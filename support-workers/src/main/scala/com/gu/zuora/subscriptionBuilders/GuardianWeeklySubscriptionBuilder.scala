@@ -13,11 +13,12 @@ import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscribeItem}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, buildProductSubscription, validateRatePlan}
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
-object GuardianWeeklySubscriptionBuilder {
+class GuardianWeeklySubscriptionBuilder(
+  promotionService: PromotionService,
+  environment: TouchPointEnvironment,
+) {
   def build(
     state: CreateZuoraSubscriptionGuardianWeeklyState,
-    promotionService: PromotionService,
-    environment: TouchPointEnvironment,
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
   ): Either[PromoError, SubscribeItem] = {
 

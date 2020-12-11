@@ -7,20 +7,18 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
 import com.gu.support.catalog._
-import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
-import com.gu.support.promotions.PromotionService
+import com.gu.support.config.{TouchPointEnvironment, TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.redemption._
 import com.gu.support.redemption.corporate._
 import com.gu.support.redemption.gifting.GiftCodeValidator
-import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionState._
 import com.gu.support.workers.states.SendThankYouEmailState._
-import com.gu.support.workers.states.{PassThroughState, SendAcquisitionEventState, SendThankYouEmailState}
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PassThroughState, SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response.{Subscription, ZuoraAccountNumber, ZuoraSubscriptionNumber, ZuoraSuccessOrFailureResponse}
 import com.gu.support.zuora.domain.DomainSubscription
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.buildContributionSubscription
 import com.gu.zuora.subscriptionBuilders._
 import com.gu.zuora.{ZuoraGiftService, ZuoraSubscribeService}
 import org.joda.time.{DateTime, DateTimeZone, Days, LocalDate}
@@ -28,6 +26,8 @@ import org.joda.time.{DateTime, DateTimeZone, Days, LocalDate}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
+import com.gu.WithLoggingSugar._
+import ZuoraSubscriptionCreator._
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
   extends ServicesHandler[PassThroughState, SendAcquisitionEventState](servicesProvider) {
@@ -43,108 +43,129 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
     val state = passThroughState.createZuoraSubscriptionState
 
-    val createSubscription = ZuoraSubscriptionCreator(
-      () => DateTime.now(DateTimeZone.UTC),
-      services.promotionService,
-      services.redemptionService,
-      services.zuoraService,
-      services.giftCodeGenerator,
-      services.config.zuoraConfigProvider.get(state.user.isTestUser),
-      state.user.isTestUser,
-    )
+    val subscriptionCreator = SubscriptionCreator(services, state.user.isTestUser)
 
-    val digitalSubscriptionGiftRedemption = new DigitalSubscriptionGiftRedemption(services.zuoraGiftService, services.catalogService)
-
-    for {
-      nextState <- state match {
-        case state: CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState =>
-          digitalSubscriptionGiftRedemption.redeemGift(state.redemptionData, state)
-        case state: CreateZuoraSubscriptionNewSubscriptionState =>
-          createSubscription.create(state)
-      }
-    } yield HandlerResult(passThroughState.nextStateWrapper(nextState), requestInfo)
+    subscriptionCreator.create(state).map(nextState => HandlerResult(passThroughState.nextStateWrapper(nextState), requestInfo))
 
   }
+
 }
 
-class ZuoraSubscriptionCreator(
-  now: () => DateTime,
-  zuoraService: ZuoraSubscribeService,
-  subscriptionDataBuilder: SubscriptionDataBuilder,
-  corporateCodeStatusUpdater: CorporateCodeStatusUpdater,
-) {
-  import com.gu.WithLoggingSugar._
-  import ZuoraSubscriptionCreator._
+object SubscriptionCreator {
 
-  def create(
-    state: CreateZuoraSubscriptionNewSubscriptionState,
-  ): Future[SendThankYouEmailState] =
-    for {
-      subscribeItem <- subscriptionDataBuilder.build(state).value.map(_.toTry).flatMap(Future.fromTry)
-        .withEventualLogging("subscription data")
-      identityId <- Future.fromTry(IdentityId(state.user.id))
-        .withEventualLogging("identity id")
-      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
-        .withEventualLogging("GetSubscriptionWithCurrentRequestId")
-      maybePaymentSchedule <- previewIfNeeded(state, subscribeItem).sequence.withEventualLogging("PreviewPaymentSchedule")
-      (account, sub) <- subscribeIfApplicable(zuoraService, subscribeItem, maybeDomainSubscription)
-        .withEventualLogging("subscribe")
-      _ <- updateRedemptionCodeIfApplicable(state, corporateCodeStatusUpdater)
-        .withEventualLogging("update redemption code")
-    } yield NextState.getEmailState(
-      state,
-      account,
-      sub,
-      maybePaymentSchedule,
-      subscribeItem.subscriptionData.subscription.redemptionCode.flatMap(_.left.toOption),
+  def apply(services: Services, isTestUser: Boolean) = {
+    val config = services.config.zuoraConfigProvider.get(isTestUser)
+    val now = () => DateTime.now(DateTimeZone.UTC)
+    val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate(services.redemptionService)
+
+    val touchPointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
+
+    val digitalSubscriptionPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(
+      config.digitalPack,
+      services.promotionService,
       () => now().toLocalDate,
+      services.giftCodeGenerator,
+      touchPointEnvironment,
+    )
+    val digitalSubscriptionCorporateRedemptionBuilder = new DigitalSubscriptionCorporateRedemptionBuilder(
+      CorporateCodeValidator.withDynamoLookup(services.redemptionService),
+      () => now().toLocalDate,
+      touchPointEnvironment,
+    )
+    val paperSubscriptionBuilder = new PaperSubscriptionBuilder(services.promotionService, touchPointEnvironment)
+    val guardianWeeklySubscriptionBuilder = new GuardianWeeklySubscriptionBuilder(services.promotionService, touchPointEnvironment)
+
+    val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, now)
+
+    val digitalSubscriptionGiftRedemption = new DigitalSubscriptionGiftRedemption(services.zuoraGiftService, services.catalogService)
+    val digitalSubscriptionGiftPurchase = new DigitalSubscriptionGiftPurchase(
+      zuoraSubscriptionCreator, now, digitalSubscriptionPurchaseBuilder, touchPointEnvironment
     )
 
-  private def previewIfNeeded(state: CreateZuoraSubscriptionNewSubscriptionState, subscribeItem: SubscribeItem) =
+    new SubscriptionCreator(
+      config, corporateCodeStatusUpdater, digitalSubscriptionPurchaseBuilder, digitalSubscriptionCorporateRedemptionBuilder, paperSubscriptionBuilder,
+      guardianWeeklySubscriptionBuilder, zuoraSubscriptionCreator, digitalSubscriptionGiftRedemption, digitalSubscriptionGiftPurchase
+    )
+  }
+
+}
+class SubscriptionCreator(
+  config: ZuoraConfig,
+  corporateCodeStatusUpdater: CorporateCodeStatusUpdater,
+  digitalSubscriptionPurchaseBuilder: DigitalSubscriptionPurchaseBuilder,
+  digitalSubscriptionCorporateRedemptionBuilder: DigitalSubscriptionCorporateRedemptionBuilder,
+  paperSubscriptionBuilder: PaperSubscriptionBuilder,
+  guardianWeeklySubscriptionBuilder: GuardianWeeklySubscriptionBuilder,
+  zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
+  digitalSubscriptionGiftRedemption: DigitalSubscriptionGiftRedemption,
+  digitalSubscriptionGiftPurchase: DigitalSubscriptionGiftPurchase
+) {
+
+  def create(state: CreateZuoraSubscriptionState) =
     state match {
-      case _: CreateZuoraSubscriptionContributionState |
-           _: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState =>
-        None
-      case _: CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState |
-           _: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState |
-           _: CreateZuoraSubscriptionPaperState |
-           _: CreateZuoraSubscriptionGuardianWeeklyState =>
-        Some(PreviewPaymentSchedule.preview(subscribeItem, state.product.billingPeriod, zuoraService, checkSingleResponse))
+      case state: CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState =>
+        digitalSubscriptionGiftRedemption.redeemGift(state)
+      case state: CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState =>
+        for {
+          subscribeItem <- Future.fromTry(digitalSubscriptionPurchaseBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
+            .withEventualLogging("subscription data")
+          (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(state, subscribeItem)
+        } yield state.nextState(paymentSchedule, account, sub)
+      case state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState =>
+        digitalSubscriptionGiftPurchase.build(state)
+      case state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState =>
+        for {
+          subscribeItem <- digitalSubscriptionCorporateRedemptionBuilder.build(state).leftMap(BuildSubscribeRedemptionError).value.map(_.toTry).flatMap(
+            Future.fromTry
+          )
+            .withEventualLogging("subscription data")
+          (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(state, subscribeItem)
+          _ <- corporateCodeStatusUpdater.setStatus(state.redemptionData.redemptionCode, RedemptionTable.AvailableField.CodeIsUsed)
+            .withEventualLogging("update redemption code")
+        } yield state.nextState(sub)
+      case state: CreateZuoraSubscriptionContributionState =>
+        for {
+          (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(state, buildContributionSubscription(state, config.contributionConfig))
+        } yield state.nextState(account)
+      case state: CreateZuoraSubscriptionPaperState =>
+        for {
+          subscribeItem <- Future.fromTry(paperSubscriptionBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
+            .withEventualLogging("subscription data")
+          (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(state, subscribeItem)
+        } yield state.nextState(paymentSchedule, account, sub)
+      case state: CreateZuoraSubscriptionGuardianWeeklyState =>
+        for {
+          subscribeItem <- Future.fromTry(guardianWeeklySubscriptionBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
+            .withEventualLogging("subscription data")
+          (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(state, subscribeItem)
+        } yield state.nextState(paymentSchedule, account, sub)
+
     }
 
 }
 
-object ZuoraSubscriptionCreator {
+class ZuoraSubscriptionCreator(zuoraService: ZuoraSubscribeService, now: () => DateTime) {
 
-  def apply(
-    now: () => DateTime,
-    promotionService: PromotionService,
-    redemptionService: DynamoLookup with DynamoUpdate,
-    zuoraService: ZuoraSubscribeService,
-    giftCodeGenerator: GiftCodeGeneratorService,
-    config: ZuoraConfig,
-    isTestUser: Boolean,
-  ): ZuoraSubscriptionCreator =
-    new ZuoraSubscriptionCreator(
-      now,
-      zuoraService,
-      new SubscriptionDataBuilder(
-        new DigitalSubscriptionPurchaseBuilder(
-          config.digitalPack,
-          promotionService,
-          () => now().toLocalDate,
-          giftCodeGenerator,
-        ),
-        new DigitalSubscriptionCorporateRedemptionBuilder(
-          CorporateCodeValidator.withDynamoLookup(redemptionService),
-          () => now().toLocalDate,
-        ),
-        promotionService,
-        config.contributionConfig,
-        TouchPointEnvironments.fromStage(Configuration.stage, isTestUser),
-      ),
-      CorporateCodeStatusUpdater.withDynamoUpdate(redemptionService),
-    )
+  def ensureSubscriptionCreatedWithPreview(state: CreateZuoraSubscriptionNewSubscriptionState, subscribeItem: SubscribeItem): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber, PaymentSchedule)] =
+    for {
+      paymentSchedule <- PreviewPaymentSchedule.preview(subscribeItem, state.product.billingPeriod, zuoraService, checkSingleResponse)
+        .withEventualLogging("PreviewPaymentSchedule")
+      (account, sub) <- ensureSubscriptionCreated(state, subscribeItem)
+    } yield (account, sub, paymentSchedule)
+
+  def ensureSubscriptionCreated(state: CreateZuoraSubscriptionNewSubscriptionState, subscribeItem: SubscribeItem): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber)] =
+    for {
+      identityId <- Future.fromTry(IdentityId(state.user.id))
+        .withEventualLogging("identity id")
+      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
+        .withEventualLogging("GetSubscriptionWithCurrentRequestId")
+      (account, sub) <- ZuoraSubscriptionCreator.subscribeIfApplicable(zuoraService, subscribeItem, maybeDomainSubscription)
+        .withEventualLogging("subscribe")
+    } yield (account, sub)
+
+}
+
+object ZuoraSubscriptionCreator {
 
   def subscribeIfApplicable(
     zuoraService: ZuoraSubscribeService,
@@ -167,49 +188,24 @@ object ZuoraSubscriptionCreator {
     }
   }
 
-  def updateRedemptionCodeIfApplicable(
-    state: CreateZuoraSubscriptionNewSubscriptionState,
-    corporateCodeStatusUpdater: CorporateCodeStatusUpdater
-  ): Future[Unit] =
-    state match {
-      case state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState =>
-        corporateCodeStatusUpdater.setStatus(
-          state.redemptionData.redemptionCode,
-          RedemptionTable.AvailableField.CodeIsUsed
-        )
-      case _ => Future.successful(())
-    }
-
 }
 
-object NextState {
+class DigitalSubscriptionGiftPurchase(zuoraSubscriptionCreator: ZuoraSubscriptionCreator, now: () => DateTime, digitalSubscriptionPurchaseBuilder: DigitalSubscriptionPurchaseBuilder, touchPointEnvironment: TouchPointEnvironment) {
 
-  // scalastyle:off cyclomatic.complexity
-  def getEmailState(
-    state: CreateZuoraSubscriptionNewSubscriptionState,
-    accountNumber: ZuoraAccountNumber,
-    subscriptionNumber: ZuoraSubscriptionNumber,
-    paymentSchedule: Option[PaymentSchedule],
-    maybeGeneratedGiftCode: Option[GeneratedGiftCode],
-    today: () => LocalDate,
-  ): SendThankYouEmailState =
-    (state, paymentSchedule, maybeGeneratedGiftCode) match {
-      case (state: CreateZuoraSubscriptionContributionState, None, None) =>
-        state.nextState(accountNumber)
-      case (state: CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState, Some(paymentSchedule), None) =>
-        state.nextState(paymentSchedule, accountNumber, subscriptionNumber)
-      case (state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState, Some(paymentSchedule), Some(giftCode)) =>
-        val lastRedemptionDate = today().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)
-        state.nextState(paymentSchedule, giftCode, lastRedemptionDate, accountNumber)
-      case (state: CreateZuoraSubscriptionPaperState, Some(paymentSchedule), None) =>
-        state.nextState(paymentSchedule, accountNumber, subscriptionNumber)
-      case (state: CreateZuoraSubscriptionGuardianWeeklyState, Some(paymentSchedule), None) =>
-        state.nextState(paymentSchedule, accountNumber, subscriptionNumber)
-      case (state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, None, None) =>
-        state.nextState(subscriptionNumber)
-      case _ => throw new RuntimeException("could not create value state")
+  def build(state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState) = {
+    for {
+      subscribeItem <- Future.fromTry(digitalSubscriptionPurchaseBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
+        .withEventualLogging("subscription data")
+      (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(state, subscribeItem)
+        .withEventualLogging("update redemption code")
+    } yield {
+      val giftCode = subscribeItem.subscriptionData.subscription.redemptionCode.flatMap(_.left.toOption)
+      val lastRedemptionDate = (() => now().toLocalDate) ().plusMonths(
+        GiftCodeValidator.expirationTimeInMonths
+      ).minusDays(1)
+      state.nextState(paymentSchedule, giftCode.get, lastRedemptionDate, account)
     }
-  // scalastyle:on cyclomatic.complexity
+  }
 
 }
 
@@ -219,13 +215,12 @@ class DigitalSubscriptionGiftRedemption(
 ) {
 
   def redeemGift(
-    redemptionData: RedemptionData,
     state: CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState,
   ): Future[SendThankYouEmailState] = {
     val codeValidator = new GiftCodeValidator(zuoraService)
     val zuoraUpdater = new ZuoraUpdater(zuoraService, catalogService)
     for {
-      codeValidation <- codeValidator.getStatus(redemptionData.redemptionCode, Some(state.requestId.toString))
+      codeValidation <- codeValidator.getStatus(state.redemptionData.redemptionCode, Some(state.requestId.toString))
       termDates <- codeValidation match {
         case ValidGiftCode(subscriptionId) => zuoraUpdater.doZuoraUpdates(
           subscriptionId,
