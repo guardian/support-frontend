@@ -8,12 +8,11 @@ import { css } from '@emotion/core';
 import { LinkButton, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
-import { from, until } from '@guardian/src-foundations/mq';
+import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { brandAlt } from '@guardian/src-foundations/palette';
 
 import CentredContainer from 'components/containers/centredContainer';
-import GridImage from 'components/gridImage/gridImage';
 import GridPicture from 'components/gridPicture/gridPicture';
 import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
