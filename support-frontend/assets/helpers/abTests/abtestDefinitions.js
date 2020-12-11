@@ -9,6 +9,7 @@ const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const usLandingPageAndThankyouPage = '/us/contribute|thankyou(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
 const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
+const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
@@ -32,6 +33,28 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: landingPage,
     seed: 1,
+  },
+
+  stripePaymentRequestButtonDec2020: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'PRB',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: notUkLandingPage,
+    seed: 2,
   },
 
   usThankyouPageLargeDonationTest: {
