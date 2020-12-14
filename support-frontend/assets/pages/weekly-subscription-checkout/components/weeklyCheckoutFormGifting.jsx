@@ -317,7 +317,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
                 />
 
                 <Radio
-                  inputId="qa-billing-address-different"
+                  id="qa-billing-address-different"
                   label="No"
                   value="no"
                   name="billingAddressIsSame"
