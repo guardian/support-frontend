@@ -25,7 +25,7 @@ type PropTypes = {|
 |}
 
 type RadioWithImagePropTypes = {
-  inputId: string,
+  id: string,
   image: Node,
   label: string,
   name: string,
@@ -65,7 +65,7 @@ function PaymentMethodSelector(props: PropTypes) {
       >
         {paymentMethods.includes(DirectDebit) &&
           <RadioWithImage
-            inputId="qa-direct-debit"
+            id="qa-direct-debit"
             image={<SvgDirectDebit />}
             label="Direct debit"
             name="paymentMethod"
@@ -73,7 +73,7 @@ function PaymentMethodSelector(props: PropTypes) {
             onChange={() => props.setPaymentMethod(DirectDebit)}
           />}
         <RadioWithImage
-          inputId="qa-credit-card"
+          id="qa-credit-card"
           image={<SvgCreditCard />}
           label="Credit/Debit card"
           name="paymentMethod"
@@ -81,7 +81,7 @@ function PaymentMethodSelector(props: PropTypes) {
           onChange={() => props.setPaymentMethod(Stripe)}
         />
         <RadioWithImage
-          inputId="qa-paypal"
+          id="qa-paypal"
           image={<SvgPayPal />}
           label="PayPal"
           name="paymentMethod"
