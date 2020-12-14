@@ -25,7 +25,7 @@ type PropTypes = {|
 |}
 
 type RadioWithImagePropTypes = {
-  inputId: string,
+  id: string,
   image: Node,
   label: string,
   name: string,
