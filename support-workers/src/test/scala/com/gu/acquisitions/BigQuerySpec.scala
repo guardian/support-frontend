@@ -52,6 +52,15 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       "country_code" -> "GB",
       "currency" -> "GBP",
       "payment_provider" -> "STRIPE",
+      "ab_tests" -> List(
+        Map(
+          "name" -> "test_test",
+          "variant" -> "monkey nuts"
+        ).asJava,
+        Map(
+          "name" -> "test2",
+          "variant" -> "Oy vey!"
+        ).asJava).asJavaCollection
       //"campaign_code" -> state.acquisitionData.map(_.referrerAcquisitionData.campaignCode.map(Set(_)))
     )
 
