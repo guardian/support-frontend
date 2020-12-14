@@ -113,6 +113,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
       errorIncomplete: 'Please enter a valid CVC number',
     },
   });
+  const [disableButton, setDisableButton] = useState<boolean>(false);
 
   const stripe = stripeJs.useStripe();
   const elements = stripeJs.useElements();
@@ -257,6 +258,13 @@ const StripeForm = (props: StripeFormPropTypes) => {
     }
   };
 
+  const handleCardSetupAndPay = () => handleCardSetup(setupIntentClientSecret)
+    .then(props.setStripePaymentMethod)
+    .then(() => {
+      setDisableButton(false);
+      props.submitForm();
+    });
+
   const requestSCAPaymentMethod = (event) => {
     event.preventDefault();
     props.validateForm();
@@ -264,10 +272,9 @@ const StripeForm = (props: StripeFormPropTypes) => {
     checkRecaptcha();
 
     if (stripe && props.allErrors.length === 0 && cardErrors.length === 0 && !recaptchaError) {
+      setDisableButton(true);
       if (setupIntentClientSecret) {
-        handleCardSetup(setupIntentClientSecret)
-          .then(props.setStripePaymentMethod)
-          .then(() => props.submitForm());
+        handleCardSetupAndPay();
       } else if (recaptchaCompleted) {
         // User has completed the form and recaptcha, but we're still waiting for the setupIntentClientSecret to
         // come back. A hook will complete subscription once the setupIntentClientSecret is available.
@@ -290,9 +297,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
   useEffect(() => {
     if (paymentWaiting && setupIntentClientSecret) {
       // User has already completed the form and clicked the button, so go ahead and complete the subscription
-      handleCardSetup(setupIntentClientSecret)
-        .then(props.setStripePaymentMethod)
-        .then(() => props.submitForm());
+      handleCardSetupAndPay();
     }
   }, [setupIntentClientSecret]);
 
@@ -351,6 +356,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
               priority="primary"
               icon={<SvgArrowRightStraight />}
               iconSide="right"
+              disabled={disableButton}
             >
               {props.buttonText}
             </Button>
