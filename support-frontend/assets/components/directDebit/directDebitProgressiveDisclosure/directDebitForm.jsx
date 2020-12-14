@@ -20,8 +20,6 @@ import Playback from './components/playback';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ErrorReason } from 'helpers/errorReasons';
 
-import './directDebitForm.scss';
-
 
 // ---- Types ----- //
 

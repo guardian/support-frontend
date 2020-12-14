@@ -29,13 +29,13 @@ function OrderSummary(props: PropTypes) {
   return (
     <aside css={styles.wrapper}>
       <div css={styles.topLine}>
-        <h2 css={styles.sansTitle}>Order summary</h2>
+        <h3 css={styles.sansTitle}>Order summary</h3>
         <a href={props.changeSubscription}>Change</a>
       </div>
       <div css={styles.contentBlock}>
         <div css={styles.imageContainer}>{props.image}</div>
         <div css={styles.textBlock}>
-          <h3>{props.title}</h3>
+          <h4>{props.title}</h4>
           <p>{priceString}</p>
           {!props.orderIsAGift && <span>14 day free trial</span>}
         </div>

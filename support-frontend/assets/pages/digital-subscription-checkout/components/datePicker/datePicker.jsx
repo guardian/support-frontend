@@ -1,17 +1,17 @@
 // @flow
 
 import React, { Component } from 'react';
+import { border } from '@guardian/src-foundations/palette';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { formatMachineDate } from 'helpers/dateConversions';
-import calendarIcon from './calendarIcon.png';
+import CalendarIcon from './calendarIcon.svg';
 import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
-import { Input } from 'components/forms/input';
-import { withLabel } from 'hocs/withLabel';
+import { TextInput } from '@guardian/src-text-input';
 import { ThemeProvider } from 'emotion-theming';
-import { Button, buttonDefault } from '@guardian/src-button';
+import { Button, buttonBrandAlt } from '@guardian/src-button';
 import { Error } from 'components/forms/customFields/error';
 import {
   getLatestAvailableDateText,
@@ -25,15 +25,10 @@ import './styles.scss';
 const calendarIconContainer = css`
   padding: 0;
   border: none;
-  width: 35px;
-  height: 35px;
+  width: 41px;
+  height: 45px;
   align-self: flex-end;
-  margin: 0 0 ${space[1]}px ${space[4]}px ;
-`;
-
-const iconImage = css`
-  width: 100%;
-  height: 100%;
+  margin: 0 0 -${space[1]}px ${space[4]}px;
 `;
 
 const startDateGroup = css`
@@ -43,19 +38,17 @@ const startDateGroup = css`
 
 const startDateFields = css`
   display: inline-flex;
-`;
-
-const inputLayout = css`
-  width: 25%;
+  margin-top: ${space[3]}px;
 `;
 
 const inputLayoutWithMargin = css`
   width: 25%;
-  margin-right: ${space[3]}px;
+  margin-right: ${space[1]}px;
 `;
 
 const validationButton = css`
   margin-top: ${space[5]}px;
+  border: 2px ${border.primary} solid;
 `;
 
 const marginTop = css`
@@ -75,8 +68,6 @@ type StateTypes = {
   dateError: string | null,
   dateValidated: boolean | null,
 }
-
-const InputWithLabel = withLabel(Input);
 
 class DatePickerFields extends Component<PropTypes, StateTypes> {
   constructor(props: PropTypes) {
@@ -169,33 +160,36 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
           </legend>
           <div css={startDateFields}>
             <div css={inputLayoutWithMargin}>
-              <InputWithLabel
+              <TextInput
                 label="Day"
                 value={state.day}
                 onChange={e => this.handleInput(e.target.value, 'day')}
                 minLength={1}
                 maxLength={2}
                 type="text"
+                width={4}
               />
             </div>
             <div css={inputLayoutWithMargin}>
-              <InputWithLabel
+              <TextInput
                 label="Month"
                 value={state.month}
                 onChange={e => this.handleInput(e.target.value, 'month')}
                 minLength={1}
                 maxLength={2}
                 type="text"
+                width={4}
               />
             </div>
-            <div css={inputLayout}>
-              <InputWithLabel
+            <div>
+              <TextInput
                 label="Year"
                 value={state.year}
                 onChange={e => this.handleInput(e.target.value, 'year')}
                 minLength={4}
                 maxLength={4}
                 type="text"
+                width={4}
               />
             </div>
 
@@ -207,7 +201,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
                 this.setState({ showCalendar: !this.state.showCalendar });
               }}
             >
-              <img css={iconImage} src={calendarIcon} alt="calendar" />
+              <CalendarIcon />
             </button>
           </div>
         </fieldset>
@@ -220,8 +214,15 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
             toMonth={threeMonthRange}
           />
         )}
-        <ThemeProvider theme={buttonDefault}>
-          <Button priority="tertiary" size="small" css={validationButton} onClick={e => this.checkDateIsValid(e)}>Check date</Button>
+        <ThemeProvider theme={buttonBrandAlt}>
+          <Button
+            priority="tertiary"
+            size="small"
+            css={validationButton}
+            onClick={e => this.checkDateIsValid(e)}
+          >
+              Check date
+          </Button>
         </ThemeProvider>
         <span>{state.dateError && (
           <div role="status" aria-live="assertive" css={marginTop}><Error error={state.dateError} /></div>)}

@@ -3,13 +3,14 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { Option } from '@guardian/src-select';
 
 // ----- Functions ----- //
 
-function sortedOptions(os: { [string]: string }): React$Node {
-  return Object.keys(os)
-    .sort((a, b) => os[a].localeCompare(os[b]))
-    .map(k => <option value={k}>{os[k]}</option>);
+function sortedOptions(optionsForSorting: { [string]: string }): React$Node {
+  return Object.keys(optionsForSorting)
+    .sort((a, b) => optionsForSorting[a].localeCompare(optionsForSorting[b]))
+    .map(key => <Option value={key}>{optionsForSorting[key]}</Option>);
 }
 
 // ----- Exports ----- //

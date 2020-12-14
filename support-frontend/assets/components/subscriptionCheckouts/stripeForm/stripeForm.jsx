@@ -3,9 +3,14 @@
 
 // $FlowIgnore - required for hooks
 import React, { useEffect, useState } from 'react';
+import { css } from '@emotion/core';
+import { Button, buttonReaderRevenue } from '@guardian/src-button';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { space } from '@guardian/src-foundations';
+import { ThemeProvider } from 'emotion-theming';
+
 import { compose } from 'redux';
 import * as stripeJs from '@stripe/react-stripe-js';
-import Button from 'components/button/button';
 import { ErrorSummary } from '../submitFormErrorSummary';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
@@ -64,6 +69,10 @@ const baseStyles = {
 const invalidStyles = {
   color: '#c70000',
 };
+
+const marginTop = css`
+  margin-top: ${space[5]}px;
+`;
 
 // Main component
 
@@ -300,7 +309,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
   return (
     <span>
       {stripe && (
-      <fieldset>
+      <fieldset css={marginTop}>
         <CardNumberWithError
           id="card-number"
           error={cardFieldsData.cardNumber.error}
@@ -335,9 +344,17 @@ const StripeForm = (props: StripeFormPropTypes) => {
             error={recaptchaError && recaptchaError.message}
           /> : null }
         <div className="component-stripe-submit-button">
-          <Button id="qa-stripe-submit-button" onClick={event => requestSCAPaymentMethod(event)}>
-            {props.buttonText}
-          </Button>
+          <ThemeProvider theme={buttonReaderRevenue}>
+            <Button
+              id="qa-stripe-submit-button"
+              onClick={requestSCAPaymentMethod}
+              priority="primary"
+              icon={<SvgArrowRightStraight />}
+              iconSide="right"
+            >
+              {props.buttonText}
+            </Button>
+          </ThemeProvider>
         </div>
         { errors.length > 0 && <ErrorSummary errors={errors} /> }
       </fieldset>

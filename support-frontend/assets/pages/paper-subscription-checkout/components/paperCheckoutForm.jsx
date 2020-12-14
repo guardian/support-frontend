@@ -2,9 +2,14 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+// $FlowIgnore - required for hooks
+import React, { useEffect } from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
-import { compose, type Dispatch } from 'redux';
+import { type Dispatch } from 'redux';
+import { RadioGroup, Radio } from '@guardian/src-radio';
+import { TextArea } from '@guardian/src-text-area';
 
 import {
   firstError,
@@ -14,13 +19,6 @@ import { routes } from 'helpers/routes';
 
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import { Select } from 'components/forms/select';
-import { Fieldset } from 'components/forms/fieldset';
-import { options } from 'components/forms/customFields/options';
-import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -28,7 +26,6 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
 import { getTitle } from '../../paper-subscription-landing/helpers/products';
 import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
-import { titles } from 'helpers/user/details';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
   type FormField,
@@ -55,9 +52,8 @@ import {
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
-import { TextArea } from 'components/forms/textArea';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Stripe, DirectDebit } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit, PayPal } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
@@ -75,6 +71,20 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import EndSummaryMobile from 'pages/paper-subscription-checkout/components/endSummary/endSummaryMobile';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import { titles } from 'helpers/user/details';
+import { Select, Option as OptionForSelect } from '@guardian/src-select';
+import { options } from 'components/forms/customFields/options';
+
+
+const marginBottom = css`
+  margin-bottom: ${space[6]}px;
+`;
+
+const controlTextAreaResizing = css`
+  resize: vertical;
+`;
 
 // ----- Types ----- //
 
@@ -142,25 +152,19 @@ function mapDispatchToProps() {
   };
 }
 
-function getAndSetStartDateForSubsCard(productOption: ActivePaperProducts, setStartDateInState) {
-  const timeNow = Date.now();
-  const subsCardStartDate = getPaymentStartDate(timeNow, productOption);
-  setStartDateInState(formatMachineDate(subsCardStartDate));
-
-  return {
-    subsCardStartDate,
-    formattedStartDate: getFormattedStartDate(getPaymentStartDate(timeNow, productOption)),
-  };
-}
-
 // ----- Form Fields ----- //
-
-const TextAreaWithLabel = compose(asControlled, withLabel)(TextArea);
-const SelectWithLabel = compose(asControlled, withLabel)(Select);
-const FieldsetWithError = withError(Fieldset);
 
 const DeliveryAddress = withStore(newspaperCountries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddress);
+
+// ----- Lifecycle hooks ----- //
+
+// Updated to use useEffect so it only fires once (like componentDidMount)
+function setSubsCardStartDateInState(setStartDate, startDate) {
+  useEffect(() => {
+    setStartDate(formatMachineDate(startDate));
+  }, []);
+}
 
 // ----- Component ----- //
 
@@ -178,13 +182,15 @@ function PaperCheckoutForm(props: PropTypes) {
     props.fulfilmentOption,
     props.productOption,
   );
+  const paymentMethods = supportedPaymentMethods(props.country);
   const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
-  const subsCardStartDates = isSubscriptionCard ?
-    getAndSetStartDateForSubsCard(props.productOption, props.setStartDate) :
-    {
-      subsCardStartDate: '',
-      formattedStartDate: '',
-    };
+  let formattedStartDate = '';
+  if (isSubscriptionCard) {
+    const timeNow = Date.now();
+    const startDate = getPaymentStartDate(timeNow, props.productOption);
+    formattedStartDate = getFormattedStartDate(getPaymentStartDate(timeNow, props.productOption));
+    setSubsCardStartDateInState(props.setStartDate, startDate);
+  }
 
   const subsCardOrderSummary = (<OrderSummary
     image={
@@ -200,7 +206,7 @@ function PaperCheckoutForm(props: PropTypes) {
     billingPeriod="Monthly"
     changeSubscription={routes.paperSubscriptionProductChoices}
     productType={Paper}
-    paymentStartDate={subsCardStartDates.formattedStartDate}
+    paymentStartDate={formattedStartDate}
   />);
 
   const homeDeliveryOrderSummary = (<OrderSummary
@@ -229,16 +235,17 @@ function PaperCheckoutForm(props: PropTypes) {
         }}
         >
           <FormSection title="Your details">
-            <SelectWithLabel
+            <Select
+              css={marginBottom}
               id="title"
               label="Title"
               optional
               value={props.title}
-              setValue={props.setTitle}
+              onChange={e => props.setTitle(e.target.value)}
             >
-              <option value="">--</option>
+              <OptionForSelect>Select a title</OptionForSelect>
               {options(titles)}
-            </SelectWithLabel>
+            </Select>
             <PersonalDetails
               firstName={props.firstName}
               setFirstName={props.setFirstName}
@@ -256,12 +263,13 @@ function PaperCheckoutForm(props: PropTypes) {
             <DeliveryAddress />
             {
               props.fulfilmentOption === HomeDelivery ?
-                <TextAreaWithLabel
+                <TextArea
+                  css={controlTextAreaResizing}
                   id="delivery-instructions"
                   label="Delivery instructions"
                   maxlength={250}
                   value={props.deliveryInstructions}
-                  setValue={props.setDeliveryInstructions}
+                  onChange={e => props.setDeliveryInstructions(e.target.value)}
                 />
                 : null
             }
@@ -269,26 +277,32 @@ function PaperCheckoutForm(props: PropTypes) {
 
           <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
-              <FieldsetWithError
+              <RadioGroup
+                label="Is the billing address the same as the delivery address?"
+                hideLabel
                 id="billingAddressIsSame"
+                name="billingAddressIsSame"
+                orienntation="vertical"
                 error={firstError('billingAddressIsSame', props.formErrors)}
-                legend="Is the billing address the same as the delivery address?"
               >
-                <RadioInput
+                <Radio
                   inputId="qa-billing-address-same"
-                  text="Yes"
+                  value="yes"
+                  label="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
                   onChange={() => props.setBillingAddressIsSame(true)}
                 />
-                <RadioInput
+
+                <Radio
                   inputId="qa-billing-address-different"
-                  text="No"
+                  label="No"
+                  value="no"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
                   onChange={() => props.setBillingAddressIsSame(false)}
                 />
-              </FieldsetWithError>
+              </RadioGroup>
             </Rows>
           </FormSection>
           {
@@ -301,52 +315,47 @@ function PaperCheckoutForm(props: PropTypes) {
           {!isSubscriptionCard ? (
             <FormSection title="When would you like your subscription to start?">
               <Rows>
-                <FieldsetWithError
+                <RadioGroup
+                  label="When would you like your subscription to start?"
+                  hideLabel
                   id="startDate"
                   error={firstError('startDate', props.formErrors)}
                   legend="When would you like your subscription to start?"
                 >
                   {days.map((day) => {
-                  const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
-                  return (
-                    <RadioInput
-                      appearance="group"
-                      text={userDate}
-                      name={machineDate}
-                      checked={props.startDate === machineDate}
-                      onChange={() => props.setStartDate(machineDate)}
-                    />
-                  );
-                })}
-                </FieldsetWithError>
+                    const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                    return (
+                      <Radio
+                        label={userDate}
+                        value={userDate}
+                        name={machineDate}
+                        checked={machineDate === props.startDate}
+                        onChange={() => props.setStartDate(machineDate)}
+                      />
+                    );
+                  })
+                  }
+                </RadioGroup>
                 <Text className="component-text__paddingTop">
                   <p>
                   We will take the first payment on the
                   date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
                   </p>
                   <p>
-                 Subscription start dates are automatically selected to be the earliest we can fulfil your order.
+                Subscription start dates are automatically selected to be the earliest we can fulfil your order.
                   </p>
                 </Text>
               </Rows>
             </FormSection>) : null}
-          <PaymentMethodSelector
-            country="GB"
-            paymentMethod={props.paymentMethod}
-            setPaymentMethod={props.setPaymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
-            validationError={firstError('paymentMethod', props.formErrors)}
-            csrf={props.csrf}
-            currencyId={props.currencyId}
-            payPalHasLoaded={props.payPalHasLoaded}
-            formIsValid={props.formIsValid}
-            validateForm={props.validateForm}
-            isTestUser={props.isTestUser}
-            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            amount={props.amount}
-            billingPeriod={props.billingPeriod}
-            allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-          />
+          {paymentMethods.length > 1 ?
+            <FormSection title="How would you like to pay?">
+              <PaymentMethodSelector
+                country="GB"
+                paymentMethod={props.paymentMethod}
+                setPaymentMethod={props.setPaymentMethod}
+                validationError={firstError('paymentMethod', props.formErrors)}
+              />
+            </FormSection> : null}
           <FormSectionHiddenUntilSelected
             id="stripeForm"
             show={props.paymentMethod === Stripe}
@@ -377,16 +386,32 @@ function PaperCheckoutForm(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
+          {props.paymentMethod === PayPal ? (
+            <PayPalSubmitButton
+              paymentMethod={props.paymentMethod}
+              onPaymentAuthorised={props.onPaymentAuthorised}
+              csrf={props.csrf}
+              currencyId={props.currencyId}
+              payPalHasLoaded={props.payPalHasLoaded}
+              formIsValid={props.formIsValid}
+              validateForm={props.validateForm}
+              isTestUser={props.isTestUser}
+              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+              amount={props.amount}
+              billingPeriod={props.billingPeriod}
+              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+            />) : null}
           <GeneralErrorMessage
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <EndSummaryMobile paymentStartDate={subsCardStartDates.formattedStartDate} />
+          <EndSummaryMobile paymentStartDate={formattedStartDate} />
           <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
     </Content>
   );
+
 }
 
 
