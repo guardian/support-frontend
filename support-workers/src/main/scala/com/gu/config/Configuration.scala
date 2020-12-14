@@ -12,9 +12,7 @@ object Configuration {
 
   def load(): Configuration = new Configuration(loadConfig)
 
-  val loadFromS3: Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG"))
-    .getOrElse("TRUE").toBoolean)
-    .getOrElse(true) //Should we load config from S3
+  val loadFromS3: Boolean = false
 
   val stage = Stage.fromString(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
     .getOrElse("DEV"))
@@ -39,6 +37,7 @@ case class Configuration(config: Config) {
   val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
   val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
   val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
+  val bigQueryConfigProvider = new BigQueryConfigProvider(config, stage)
 
   val contributionThanksQueueName = config.getString("email.thankYou.queueName")
 

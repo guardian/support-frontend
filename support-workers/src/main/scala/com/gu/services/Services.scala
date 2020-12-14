@@ -1,6 +1,6 @@
 package com.gu.services
 
-import com.gu.acquisitions.AcquisitionServiceBuilder
+import com.gu.acquisitions.{AcquisitionServiceBuilder, BigQueryService}
 import com.gu.config.Configuration
 import com.gu.config.Configuration._
 import com.gu.gocardless.GoCardlessWorkersService
@@ -41,5 +41,6 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val redemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
+  lazy val bigQueryService = new BigQueryService(bigQueryConfigProvider.get(isTestUser))
 }
 
