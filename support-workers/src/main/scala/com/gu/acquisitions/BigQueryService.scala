@@ -4,6 +4,7 @@ import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.bigquery.{BigQueryException, BigQueryOptions, InsertAllRequest, TableId}
 import com.gu.support.config.BigQueryConfig
 import com.gu.support.touchpoint.TouchpointService
+import scala.collection.immutable.Map
 
 import java.util
 import scala.collection.JavaConverters._
@@ -22,11 +23,11 @@ class BigQueryService(config: BigQueryConfig) extends TouchpointService {
       ))
       .build().getService
 
-  def tableInsertRow(datasetName: String, tableName: String, rowContent: util.Map[String, AnyRef]): Unit = {
+  def tableInsertRow(datasetName: String, tableName: String, rowContent: Map[String, Any]): Either[String, Unit] = {
     try {
       val tableId = TableId.of(datasetName, tableName)
 
-      val insertRequest = InsertAllRequest.newBuilder(tableId).addRow(rowContent).build
+      val insertRequest = InsertAllRequest.newBuilder(tableId).addRow(rowContent.asJava).build
 
       val response = bigQuery.insertAll(insertRequest)
 
@@ -34,11 +35,14 @@ class BigQueryService(config: BigQueryConfig) extends TouchpointService {
         for (entry <- response.getInsertErrors.entrySet.asScala) {
           System.out.println("Response error: \n" + entry.getValue)
         }
+        Left("There were errors")
+      } else {
+        System.out.println("Rows successfully inserted into table")
+        Right(())
       }
-      System.out.println("Rows successfully inserted into table")
     } catch {
-      case e: BigQueryException =>
-        System.out.println("Insert operation not performed \n" + e.toString)
+      case e: BigQueryException => System.out.println("Insert operation not performed \n" + e.toString)
+        Left("Insert operation not performed \n" + e.toString)
     }
   }
 }

@@ -13,23 +13,22 @@ import scala.collection.JavaConverters._
 
 @IntegrationTest
 class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
+  lazy val config = Configuration.load().bigQueryConfigProvider.get()
+  lazy val bigQuery =
+    BigQueryOptions
+      .newBuilder()
+      .setProjectId(config.projectId)
+      .setCredentials(ServiceAccountCredentials.fromPkcs8(
+        config.clientId,
+        config.clientEmail,
+        config.privateKey,
+        config.privateKeyId,
+        Nil.asJavaCollection
+      ))
+      .build().getService
 
   "BigQuery" should "be able to run a query" in {
-    val config = Configuration.load().bigQueryConfigProvider.get()
-    lazy val bigQuery =
-      BigQueryOptions
-        .newBuilder()
-        .setProjectId(config.projectId)
-        .setCredentials(ServiceAccountCredentials.fromPkcs8(
-          config.clientId,
-          config.clientEmail,
-          config.privateKey,
-          config.privateKeyId,
-          Nil.asJavaCollection
-        ))
-        .build().getService
-
-    val query = "select * from datalake.zuora_subscription where created_date = TIMESTAMP(\"2020-12-13 00:00:00\") and gift_notification_email_date is not null;"
+    val query = s"""select * from ${BigQuerySchema.datasetName}.${BigQuerySchema.tableName} where amount = 9999 and event_timestamp > TIMESTAMP("2020-12-14 00:20:00");"""
     val queryConfig = QueryJobConfiguration.newBuilder(query).build
 
     val tableResult = bigQuery.query(queryConfig)
@@ -40,6 +39,23 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       System.out.printf("\n")
     }
     tableResult.getTotalRows should be > 0L
+  }
+
+  it should "be able to run an insert" in {
+    val service = new BigQueryService(config)
+
+    val row = Map(
+      "event_timestamp" -> "2020-12-14 01:00:00",
+      "product" -> "RECURRING_CONTRIBUTION",
+      "amount" -> 9999,
+      "payment_frequency" -> "MONTHLY",
+      "country_code" -> "GB",
+      "currency" -> "GBP",
+      "payment_provider" -> "STRIPE",
+      //"campaign_code" -> state.acquisitionData.map(_.referrerAcquisitionData.campaignCode.map(Set(_)))
+    )
+
+    service.tableInsertRow(BigQuerySchema.datasetName, BigQuerySchema.tableName, row) shouldBe Right(())
   }
 
 }

@@ -1,5 +1,6 @@
 package com.gu.acquisitions
 
+import com.gu.acquisition.model.ReferrerAcquisitionData
 import com.gu.support.catalog._
 import com.gu.support.workers.lambdas.SendAcquisitionEventOld.paymentProviderFromPaymentMethod
 import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailContributionState, SendThankYouEmailDigitalSubscriptionCorporateRedemptionState, SendThankYouEmailDigitalSubscriptionDirectPurchaseState, SendThankYouEmailDigitalSubscriptionGiftPurchaseState, SendThankYouEmailDigitalSubscriptionGiftRedemptionState, SendThankYouEmailGuardianWeeklyState, SendThankYouEmailPaperState}
@@ -7,16 +8,18 @@ import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEma
 import com.gu.support.workers.{Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebitPaymentMethod, GuardianWeekly, Monthly, Paper, PayPalReferenceTransaction, PaymentMethod, ProductType, Quarterly, SixWeekly, StripePaymentType}
 
 object AcquisitionTableRowBuilder {
-  def buildAcquisitionTableRow(state: SendThankYouEmailState) = {
-    val (productType, amount) = productTypeAndAmount(state)
+  def buildAcquisitionTableRow(state: SendAcquisitionEventState) = {
+    val commonState = state.sendThankYouEmailState
+    val (productType, amount) = productTypeAndAmount(commonState)
     val row = Map(
       "product" -> productType,
       "amount" -> amount,
-      "print_options.product" -> printOptionsFromProduct(state.product),
-      "payment_frequency" -> paymentFrequencyFromBillingPeriod(state.product.billingPeriod),
-      "country_code" -> state.user.billingAddress.country.alpha2,
-      "currency" -> state.product.currency.iso,
-      "payment_provider" -> maybePaymentProvider(state)
+      "print_options.product" -> printOptionsFromProduct(commonState.product),
+      "payment_frequency" -> paymentFrequencyFromBillingPeriod(commonState.product.billingPeriod),
+      "country_code" -> commonState.user.billingAddress.country.alpha2,
+      "currency" -> commonState.product.currency.iso,
+      "payment_provider" -> maybePaymentProvider(commonState),
+      //"campaign_code" -> state.acquisitionData.map(_.referrerAcquisitionData.campaignCode.map(Set(_)))
     )
   }
 
@@ -89,4 +92,19 @@ object AcquisitionTableRowBuilder {
       case _: PayPalReferenceTransaction => "PAYPAL"
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => "GOCARDLESS"
     }
+
+//  def getReferrerData(referrerAcquisitionData: ReferrerAcquisitionData) = {
+//    Map("campaign_codes" -> referrerAcquisitionData.campaignCode,
+//    abTests = Some(thrift.AbTestInfo(
+//      data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set())
+//    )),
+//    countryCode = Some(stateAndInfo.state.user.billingAddress.country.alpha2),
+//    referrerPageViewId = data.referrerAcquisitionData.referrerPageviewId,
+//    referrerUrl = data.referrerAcquisitionData.referrerUrl,
+//    componentId = data.referrerAcquisitionData.componentId,
+//    componentTypeV2 = data.referrerAcquisitionData.componentType,
+//    source = data.referrerAcquisitionData.source,
+//    platform = Some(ophan.thrift.event.Platform.Support),
+//    queryParameters = data.referrerAcquisitionData.queryParameters,
+//  }
 }
