@@ -44,6 +44,9 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
   it should "be able to run an insert" in {
     val service = new BigQueryService(config)
 
+    val promoCode: Option[String] = Some("six_for_six")
+    val optionalFields = List(promoCode.map(code => "promo_code" -> code)).flatten
+
     val row = Map(
       "event_timestamp" -> "2020-12-14 01:00:00",
       "product" -> "RECURRING_CONTRIBUTION",
@@ -66,7 +69,7 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
           "key" -> "foo",
           "value" -> "bar"
         ).asJava).asJava
-    )
+    ) ++ optionalFields
 
     service.tableInsertRow(BigQuerySchema.datasetName, BigQuerySchema.tableName, row) shouldBe Right(())
   }

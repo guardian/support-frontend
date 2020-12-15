@@ -216,6 +216,7 @@ object SendAcquisitionEventOld {
     case s: SendThankYouEmailPaperState => Some(s.paymentMethod)
     case s: SendThankYouEmailGuardianWeeklyState => Some(s.paymentMethod)
   }).map(paymentProviderFromPaymentMethod)
+
   def maybePromoCode(s: SendThankYouEmailState): Option[PromoCode] = s match {
     case _: SendThankYouEmailContributionState => None
     case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => s.promoCode

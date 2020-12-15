@@ -4,7 +4,7 @@ import com.gu.acquisition.model.ReferrerAcquisitionData
 import com.gu.acquisitions.AcquisitionType.{Purchase, Redemption}
 import com.gu.i18n.Country
 import com.gu.support.catalog._
-import com.gu.support.promotions.DefaultPromotions
+import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers.lambdas.SendAcquisitionEventOld.paymentProviderFromPaymentMethod
 import com.gu.support.workers.lambdas.SendAcquisitionEventStateAndRequestInfo
 import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailContributionState, SendThankYouEmailDigitalSubscriptionCorporateRedemptionState, SendThankYouEmailDigitalSubscriptionDirectPurchaseState, SendThankYouEmailDigitalSubscriptionGiftPurchaseState, SendThankYouEmailDigitalSubscriptionGiftRedemptionState, SendThankYouEmailGuardianWeeklyState, SendThankYouEmailPaperState}
@@ -20,18 +20,25 @@ object AcquisitionTableRowBuilder {
     val commonState = state.sendThankYouEmailState
     val (productType, amount) = productTypeAndAmount(commonState)
     val acquisitionTypeDetails = getAcquisitionTypeDetails(commonState)
-    val row = Map(
+
+    val optionalFields = List(
+      maybePromoCode(commonState).map("promo_code" -> _),
+      acquisitionTypeDetails.paymentProvider.map("payment_provider" -> _)
+    ).flatten.toMap
+
+    val referrerData = state.acquisitionData.map(getReferrerData).getOrElse(Map[String, String]())
+
+    Map(
       "product" -> productType,
       "amount" -> amount,
-      "print_options" -> printOptionsFromProduct(commonState.product, commonState.user.deliveryAddress.map(_.country)),
+      "print_options" -> printOptionsFromProduct(commonState.product, commonState.user.deliveryAddress.map(_.country)).getOrElse(Nil),
       "payment_frequency" -> paymentFrequencyFromBillingPeriod(commonState.product.billingPeriod),
       "country_code" -> commonState.user.billingAddress.country.alpha2,
       "currency" -> commonState.product.currency.iso,
-      "payment_provider" -> acquisitionTypeDetails.paymentProvider,
       "platform" -> "SUPPORT",
       "identity_id" -> commonState.user.id,
-      "labels" -> buildLabels(state, requestInfo.accountExists)
-    ) ++ state.acquisitionData.map(getReferrerData).getOrElse(Map[String, String]())
+      "labels" -> buildLabels(state, requestInfo.accountExists),
+    ) ++ referrerData ++ optionalFields
 
   }
 
@@ -118,7 +125,7 @@ object AcquisitionTableRowBuilder {
   }
 
   def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) =
-    Some(Set(
+    Set(
       if (accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
       if (isSixForSix(state)) Some("guardian-weekly-six-for-six") else None,
       if (state.analyticsInfo.isGiftPurchase) Some("gift-subscription") else None,
@@ -126,7 +133,7 @@ object AcquisitionTableRowBuilder {
         case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => Some("corporate-subscription")
         case _ => None
       }
-    ).flatten)
+    ).flatten
 
   def isSixForSix(state: SendAcquisitionEventState) =
     state.sendThankYouEmailState match {
@@ -161,7 +168,7 @@ object AcquisitionTableRowBuilder {
     )
     case s: SendThankYouEmailGuardianWeeklyState => AcquisitionTypeDetails(
       paymentProviderFromPaymentMethod(s.paymentMethod),
-      if(s.giftRecipient.isDefined) Gift.value else Direct.value,
+      if (s.giftRecipient.isDefined) Gift.value else Direct.value,
       Purchase.value
     )
     case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => AcquisitionTypeDetails(
@@ -187,6 +194,16 @@ object AcquisitionTableRowBuilder {
       case _: PayPalReferenceTransaction => "PAYPAL"
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => "GOCARDLESS"
     })
+
+  def maybePromoCode(s: SendThankYouEmailState): Option[PromoCode] = s match {
+    case _: SendThankYouEmailContributionState => None
+    case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => s.promoCode
+    case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => s.promoCode
+    case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => None
+    case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => None
+    case s: SendThankYouEmailPaperState => s.promoCode
+    case s: SendThankYouEmailGuardianWeeklyState => s.promoCode
+  }
 
   case class AcquisitionTypeDetails(paymentProvider: Option[String], readerType: String, acquisitionType: String)
 }
