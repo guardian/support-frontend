@@ -8,8 +8,6 @@ import { headline, body } from '@guardian/src-foundations/typography';
 import { breakpoints } from '@guardian/src-foundations';
 
 const roundelSizeMob = 120;
-const roundelSizeTab = 140;
-const roundelSize = 180;
 
 export const hero = css`
   position: relative;
@@ -67,18 +65,26 @@ export const heroImage = css`
   }
 `;
 
-export const heroRoundel = css`
+export const heroRoundelContainer = css`
   position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   top: 0;
   right: ${space[3]}px;
+
+  ${from.tablet} {
+  right: ${space[12]}px;
+  }
+`;
+
+export const heroRoundel = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  float: right;
+  text-align: center;
   transform: translateY(-67%);
-  width: ${roundelSizeMob}px;
-  height: ${roundelSizeMob}px;
+  min-width: ${roundelSizeMob}px;
+  min-height: ${roundelSizeMob}px;
+  padding: ${space[1]}px;
   border-radius: 50%;
   background-color: ${brandAlt[400]};
   color: ${neutral[7]};
@@ -86,16 +92,19 @@ export const heroRoundel = css`
   z-index: 20;
 
   ${from.tablet} {
-    width: ${roundelSizeTab}px;
-    height: ${roundelSizeTab}px;
-    right: ${space[12]}px;
     transform: translateY(-50%);
     ${headline.small({ fontWeight: 'bold' })};
   }
 
   ${from.leftCol} {
-    width: ${roundelSize}px;
-    height: ${roundelSize}px;
+    padding: ${space[3]}px;
+  }
+
+  /* Combined with float on the main element, this makes the height match the content width for a perfect circle
+  cf. https://medium.com/@kz228747/height-equals-width-pure-css-1c79794e470c */
+  &::before {
+    content: "";
+    margin-top: 100%;
   }
 `;
 

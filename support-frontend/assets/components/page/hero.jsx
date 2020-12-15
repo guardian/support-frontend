@@ -1,7 +1,7 @@
 // @flow
 
 import React, { type Node } from 'react';
-import { hero, heroRoundel, heroImage, roundelOffset, roundelNudgeDown, roundelNudgeUp, roundelHidingPoints } from './heroStyles';
+import { hero, heroRoundel, heroRoundelContainer, heroImage, roundelOffset, roundelNudgeDown, roundelNudgeUp, roundelHidingPoints } from './heroStyles';
 
 // Options for moving the roundel position on mobile
 type RoundelNudgeDirection = 'up' | 'down' | 'none';
@@ -29,7 +29,11 @@ function Hero({
 
   return (
     <div css={[hero, cssOverrides]}>
-      {roundelText && <div css={[heroRoundel, nudgeCSS, hideRoundel]}>{roundelText}</div>}
+      {roundelText &&
+        <div css={heroRoundelContainer}>
+          <div css={[heroRoundel, nudgeCSS, hideRoundel]}>{roundelText}</div>
+        </div>
+      }
       <div css={useOffset ? roundelOffset : ''}>
         {children}
       </div>
