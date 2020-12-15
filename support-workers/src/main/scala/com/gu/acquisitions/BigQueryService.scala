@@ -2,10 +2,12 @@ package com.gu.acquisitions
 
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.bigquery.{BigQueryException, BigQueryOptions, InsertAllRequest, TableId}
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.config.BigQueryConfig
 import com.gu.support.touchpoint.TouchpointService
-import scala.collection.immutable.Map
 
+import scala.collection.immutable.Map
 import java.util
 import scala.collection.JavaConverters._
 
@@ -31,18 +33,18 @@ class BigQueryService(config: BigQueryConfig) extends TouchpointService {
 
       val response = bigQuery.insertAll(insertRequest)
 
-      if (response.hasErrors) { // If any of the insertions failed, this lets you inspect the errors
-        for (entry <- response.getInsertErrors.entrySet.asScala) {
-          System.out.println("Response error: \n" + entry.getValue)
-        }
-        Left("There were errors")
+      if (response.hasErrors) {
+        val errors = response.getInsertErrors.entrySet.asScala.mkString(", ").stripSuffix(", ")
+        SafeLogger.error(scrub"Failed to insert row into $tableName: $errors")
+        Left(s"Failed to insert row into $tableName: $errors")
       } else {
-        System.out.println("Rows successfully inserted into table")
+        SafeLogger.info(s"Rows successfully inserted into table $tableName")
         Right(())
       }
     } catch {
-      case e: BigQueryException => System.out.println("Insert operation not performed \n" + e.toString)
-        Left("Insert operation not performed \n" + e.toString)
+      case e: BigQueryException =>
+        SafeLogger.error(scrub"There was an exception inserting a row into $tableName", e)
+        Left(s"There was an exception inserting a row into $tableName")
     }
   }
 }

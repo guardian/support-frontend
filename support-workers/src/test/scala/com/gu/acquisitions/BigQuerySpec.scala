@@ -60,8 +60,12 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
         Map(
           "name" -> "test2",
           "variant" -> "Oy vey!"
-        ).asJava).asJavaCollection
-      //"campaign_code" -> state.acquisitionData.map(_.referrerAcquisitionData.campaignCode.map(Set(_)))
+        ).asJava).asJava,
+      "query_parameters" -> List(
+        Map(
+          "key" -> "foo",
+          "value" -> "bar"
+        ).asJava).asJava
     )
 
     service.tableInsertRow(BigQuerySchema.datasetName, BigQuerySchema.tableName, row) shouldBe Right(())
