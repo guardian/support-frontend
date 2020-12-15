@@ -8,6 +8,7 @@ import { headline, body } from '@guardian/src-foundations/typography';
 import { breakpoints } from '@guardian/src-foundations';
 
 const roundelSizeMob = 120;
+const roundelSize = 180;
 
 export const hero = css`
   position: relative;
@@ -83,7 +84,7 @@ export const heroRoundel = css`
   text-align: center;
   transform: translateY(-67%);
   min-width: ${roundelSizeMob}px;
-  min-height: ${roundelSizeMob}px;
+  max-width: ${roundelSize}px;
   width: calc(100% + ${space[3]}px);
   padding: ${space[1]}px;
   border-radius: 50%;
@@ -96,10 +97,6 @@ export const heroRoundel = css`
     width: calc(100% + ${space[6]}px);
     transform: translateY(-50%);
     ${headline.small({ fontWeight: 'bold' })};
-  }
-
-  ${from.leftCol} {
-    padding: ${space[3]}px;
   }
 
   /* Combined with float on the main element, this makes the height match the content width for a perfect circle
