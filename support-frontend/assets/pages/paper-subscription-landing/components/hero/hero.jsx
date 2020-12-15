@@ -13,7 +13,7 @@ import { body, headline } from '@guardian/src-foundations/typography';
 import { brandAlt } from '@guardian/src-foundations/palette';
 
 import CentredContainer from 'components/containers/centredContainer';
-import GridPicture from 'components/gridPicture/gridPicture';
+import GridImage from 'components/gridImage/gridImage';
 import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
 
@@ -104,23 +104,6 @@ function PaperHero({ productPrices }: PropTypes) {
     </>
   );
 
-  const heroImages = [
-    {
-      gridId: 'printCampaignHeroMobile',
-      srcSizes: [500, 140],
-      imgType: 'png',
-      sizes: '(max-width: 739px) 100%',
-      media: '(max-width: 739px)',
-    },
-    {
-      gridId: 'printCampaignHeroMobile',
-      srcSizes: [1055, 1000, 500],
-      imgType: 'png',
-      sizes: '(min-width: 740px) 100%',
-      media: '(min-width: 740px)',
-    },
-  ];
-
   return (
     <PageTitle
       title="Newspaper subscription"
@@ -128,12 +111,14 @@ function PaperHero({ productPrices }: PropTypes) {
     >
       <CentredContainer>
         <Hero
-          image={<GridPicture
-            sources={heroImages}
-            fallback="printCampaignHeroDesktop"
-            fallbackSize={500}
+          image={<GridImage
+            gridId="printCampaignHeroHD"
+            srcSizes={[1000, 500, 140]}
+            sizes="(max-width: 740px) 100%,
+            (max-width: 1067px) 150%,
+            500px"
+            imgType="png"
             altText="Newspapers"
-            fallbackImgType="png"
           />}
           roundelText={roundelText}
           roundelNudgeDirection="down"

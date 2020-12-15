@@ -84,6 +84,7 @@ export const heroRoundel = css`
   transform: translateY(-67%);
   min-width: ${roundelSizeMob}px;
   min-height: ${roundelSizeMob}px;
+  width: calc(100% + ${space[3]}px);
   padding: ${space[1]}px;
   border-radius: 50%;
   background-color: ${brandAlt[400]};
@@ -92,6 +93,7 @@ export const heroRoundel = css`
   z-index: 20;
 
   ${from.tablet} {
+    width: calc(100% + ${space[6]}px);
     transform: translateY(-50%);
     ${headline.small({ fontWeight: 'bold' })};
   }
