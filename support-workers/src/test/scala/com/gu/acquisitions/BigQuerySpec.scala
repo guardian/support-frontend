@@ -6,6 +6,8 @@ import com.gu.config.Configuration
 import com.gu.salesforce.Salesforce.{Authentication, DeliveryContact, NewContact, SalesforceContactResponse}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
+import org.joda.time.{DateTime, DateTimeZone}
+import org.joda.time.format.ISODateTimeFormat
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -48,7 +50,7 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
     val optionalFields = List(promoCode.map(code => "promo_code" -> code)).flatten
 
     val row = Map(
-      "event_timestamp" -> "2020-12-14 01:00:00",
+      "event_timestamp" -> ISODateTimeFormat.dateTime().print(DateTime.now(DateTimeZone.UTC)),
       "product" -> "RECURRING_CONTRIBUTION",
       "amount" -> 9999,
       "payment_frequency" -> "MONTHLY",

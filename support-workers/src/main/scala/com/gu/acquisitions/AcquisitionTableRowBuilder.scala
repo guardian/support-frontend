@@ -1,22 +1,21 @@
 package com.gu.acquisitions
 
-import com.gu.acquisition.model.ReferrerAcquisitionData
 import com.gu.acquisitions.AcquisitionType.{Purchase, Redemption}
 import com.gu.i18n.Country
 import com.gu.support.catalog._
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
-import com.gu.support.workers.lambdas.SendAcquisitionEventOld.paymentProviderFromPaymentMethod
-import com.gu.support.workers.lambdas.SendAcquisitionEventStateAndRequestInfo
 import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailContributionState, SendThankYouEmailDigitalSubscriptionCorporateRedemptionState, SendThankYouEmailDigitalSubscriptionDirectPurchaseState, SendThankYouEmailDigitalSubscriptionGiftPurchaseState, SendThankYouEmailDigitalSubscriptionGiftRedemptionState, SendThankYouEmailGuardianWeeklyState, SendThankYouEmailPaperState}
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.workers.{AcquisitionData, Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebitPaymentMethod, GuardianWeekly, Monthly, Paper, PayPalReferenceTransaction, PaymentMethod, ProductType, Quarterly, RequestInfo, SixWeekly, StripePaymentType}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import ophan.thrift.event.AbTest
+import org.joda.time.format.ISODateTimeFormat
+import org.joda.time.{DateTime, DateTimeZone}
 
 import scala.collection.JavaConverters._
 
 object AcquisitionTableRowBuilder {
-  def buildAcquisitionTableRow(state: SendAcquisitionEventState, requestInfo: RequestInfo) = {
+  def buildAcquisitionTableRow(state: SendAcquisitionEventState, requestInfo: RequestInfo): Map[String, Any] = {
     val commonState = state.sendThankYouEmailState
     val (productType, amount) = productTypeAndAmount(commonState)
     val acquisitionTypeDetails = getAcquisitionTypeDetails(commonState)
@@ -29,6 +28,7 @@ object AcquisitionTableRowBuilder {
     val referrerData = state.acquisitionData.map(getReferrerData).getOrElse(Map[String, String]())
 
     Map(
+      "event_timestamp" -> ISODateTimeFormat.dateTime().print(DateTime.now(DateTimeZone.UTC)),
       "product" -> productType,
       "amount" -> amount,
       "print_options" -> printOptionsFromProduct(commonState.product, commonState.user.deliveryAddress.map(_.country)).getOrElse(Nil),
@@ -38,18 +38,21 @@ object AcquisitionTableRowBuilder {
       "platform" -> "SUPPORT",
       "identity_id" -> commonState.user.id,
       "labels" -> buildLabels(state, requestInfo.accountExists),
+      "reused_existing_payment_method" -> requestInfo.accountExists,
+      "acquisition_type" -> acquisitionTypeDetails.acquisitionType,
+      "reader_type" -> acquisitionTypeDetails.readerType
     ) ++ referrerData ++ optionalFields
 
   }
 
-  def productTypeAndAmount(state: SendThankYouEmailState) = state.product match {
+  private def productTypeAndAmount(state: SendThankYouEmailState) = state.product match {
     case c: Contribution => ("RECURRING_CONTRIBUTION", c.amount.toDouble)
     case _: DigitalPack => ("DIGITAL_SUBSCRIPTION", 0D)
     case _: Paper => ("PRINT_SUBSCRIPTION", 0D)
     case _: GuardianWeekly => ("PRINT_SUBSCRIPTION", 0D)
   }
 
-  def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[Map[String, String]] = {
+  private def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[Map[String, String]] = {
 
     def printProduct(fulfilmentOptions: FulfilmentOptions, productOptions: ProductOptions): String = {
       (fulfilmentOptions, productOptions) match {
@@ -89,14 +92,14 @@ object AcquisitionTableRowBuilder {
     }
   }
 
-  def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod) =
+  private def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod) =
     billingPeriod match {
       case Monthly => "MONTHLY"
       case Quarterly | SixWeekly => "QUARTERLY"
       case Annual => "ANNUALLY"
     }
 
-  def getReferrerData(data: AcquisitionData) = {
+  private def getReferrerData(data: AcquisitionData) = {
     val abTests = (data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set[AbTest]()))
       .map(abTest =>
         Map(
@@ -124,7 +127,7 @@ object AcquisitionTableRowBuilder {
     )
   }
 
-  def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) =
+  private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) =
     Set(
       if (accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
       if (isSixForSix(state)) Some("guardian-weekly-six-for-six") else None,
@@ -135,14 +138,14 @@ object AcquisitionTableRowBuilder {
       }
     ).flatten
 
-  def isSixForSix(state: SendAcquisitionEventState) =
+  private def isSixForSix(state: SendAcquisitionEventState) =
     state.sendThankYouEmailState match {
       case state: SendThankYouEmailGuardianWeeklyState =>
         state.product.billingPeriod == Quarterly && state.promoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)
       case _ => false
     }
 
-  def getAcquisitionTypeDetails(s: SendThankYouEmailState): AcquisitionTypeDetails = (s match {
+  private def getAcquisitionTypeDetails(s: SendThankYouEmailState): AcquisitionTypeDetails = s match {
     case s: SendThankYouEmailContributionState =>
       AcquisitionTypeDetails(
         paymentProviderFromPaymentMethod(s.paymentMethod),
@@ -181,9 +184,9 @@ object AcquisitionTableRowBuilder {
       Gift.value,
       Redemption.value
     )
-  })
+  }
 
-  def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): Option[String] =
+  private def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): Option[String] =
     Some(paymentMethod match {
       case creditCardPayment: CreditCardReferenceTransaction =>
         creditCardPayment.stripePaymentType match {
@@ -195,7 +198,7 @@ object AcquisitionTableRowBuilder {
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => "GOCARDLESS"
     })
 
-  def maybePromoCode(s: SendThankYouEmailState): Option[PromoCode] = s match {
+  private def maybePromoCode(s: SendThankYouEmailState): Option[PromoCode] = s match {
     case _: SendThankYouEmailContributionState => None
     case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => s.promoCode
     case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => s.promoCode
