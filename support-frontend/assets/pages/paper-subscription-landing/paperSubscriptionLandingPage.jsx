@@ -14,6 +14,7 @@ import Block from 'components/page/block';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
 
@@ -59,7 +60,9 @@ const content = (
       <FullWidthContainer>
         <CentredContainer>
           <Block>
-            <Tabs />
+            <div css={tabsTabletSpacing}>
+              <Tabs />
+            </div>
           </Block>
         </CentredContainer>
       </FullWidthContainer>

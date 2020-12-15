@@ -21,21 +21,21 @@ const flexContainerOverride = css`
   justify-content: space-between;
 
   img {
-    ${until.desktop} {
+    ${until.leftCol} {
       display: none;
     }
   }
 `;
 
 const faqsContainer = css`
-  ${from.desktop} {
+  ${from.leftCol} {
     max-width: 50%;
   }
 `;
 
 const paragraph = css`
   margin-bottom: ${space[6]}px;
-  ${until.desktop} {
+  ${until.tablet} {
     padding: 0 ${space[2]}px;
   }
 
