@@ -8,6 +8,7 @@ import { headline, body } from '@guardian/src-foundations/typography';
 import { breakpoints } from '@guardian/src-foundations';
 
 const roundelSizeMob = 120;
+const roundelSizeTab = 140;
 const roundelSize = 180;
 
 export const hero = css`
@@ -85,11 +86,16 @@ export const heroRoundel = css`
   z-index: 20;
 
   ${from.tablet} {
-    width: ${roundelSize}px;
-    height: ${roundelSize}px;
+    width: ${roundelSizeTab}px;
+    height: ${roundelSizeTab}px;
     right: ${space[12]}px;
     transform: translateY(-50%);
     ${headline.small({ fontWeight: 'bold' })};
+  }
+
+  ${from.leftCol} {
+    width: ${roundelSize}px;
+    height: ${roundelSize}px;
   }
 `;
 

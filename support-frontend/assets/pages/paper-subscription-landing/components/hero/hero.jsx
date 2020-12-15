@@ -33,7 +33,6 @@ const heroCopy = css`
     padding-bottom: ${space[9]}px;
   }
   ${from.desktop} {
-    max-width: 85%;
     padding-bottom: ${space[24]}px;
   }
 `;
@@ -55,6 +54,7 @@ const heroParagraph = css`
   ${body.medium({ lineHeight: 'loose' })}
   margin-bottom: ${space[6]}px;
   ${from.desktop} {
+    max-width: 75%;
     margin-bottom: ${space[9]}px;
   }
 `;
@@ -70,6 +70,18 @@ const roundelCentreLine = css`
   ${headline.medium({ fontWeight: 'bold' })}
   ${from.tablet} {
     ${headline.xlarge({ fontWeight: 'bold' })}
+  }
+`;
+
+const mobileLineBreak = css`
+  ${from.tablet} {
+    display: none;
+  }
+`;
+
+const tabletLineBreak = css`
+  ${from.desktop} {
+    display: none;
   }
 `;
 
@@ -101,8 +113,8 @@ function PaperHero({ productPrices }: PropTypes) {
       media: '(max-width: 739px)',
     },
     {
-      gridId: 'printCampaignHeroDesktop',
-      srcSizes: [1620, 1000, 500],
+      gridId: 'printCampaignHeroMobile',
+      srcSizes: [1055, 1000, 500],
       imgType: 'png',
       sizes: '(min-width: 740px) 100%',
       media: '(min-width: 740px)',
@@ -111,8 +123,8 @@ function PaperHero({ productPrices }: PropTypes) {
 
   return (
     <PageTitle
-      title="Paper subscription"
-      theme="weekly"
+      title="Newspaper subscription"
+      theme="paper"
     >
       <CentredContainer>
         <Hero
@@ -129,13 +141,13 @@ function PaperHero({ productPrices }: PropTypes) {
         >
           <section css={heroCopy}>
             <h2 css={heroTitle}>
-              Subscribe to<br />
-              <span css={heroTitleHighlight}>The&nbsp;Guardian and&nbsp;The&nbsp;Observer</span>
+              Guardian <br css={mobileLineBreak} />and&nbsp;Observer <br css={mobileLineBreak} />
+              newspaper subscriptions <br css={tabletLineBreak} />
+              <span css={heroTitleHighlight}>to suit every reader</span>
             </h2>
             <p css={heroParagraph}>
-              <strong>Choose from a range of packages to suit you.</strong><br />
-              We offer two different subscription types: subscription cards and home delivery.
-              Pick the most convenient option available in your area.
+              We offer a range of packages from every day to weekend, and different subscription types depending on
+              whether you want to collect your paper in a shop or get it delivered.
             </p>
             <ThemeProvider theme={buttonBrand}>
               <LinkButton
