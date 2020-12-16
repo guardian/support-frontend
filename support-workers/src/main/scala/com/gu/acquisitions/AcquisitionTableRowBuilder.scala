@@ -118,6 +118,8 @@ object AcquisitionTableRowBuilder {
         ).asJava).asJava
 
     val optionalFields = List(
+      data.ophanIds.pageviewId.map("page_view_id" -> _),
+      data.ophanIds.browserId.map("browser_id" -> _),
       referrerData.referrerPageviewId.map("referrer_page_view_id" -> _),
       referrerData.referrerUrl.map("referrer_url" -> _),
       referrerData.componentId.map("component_id" -> _),
