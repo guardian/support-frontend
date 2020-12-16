@@ -1,5 +1,7 @@
 package com.gu.acquisition.services
 
+import java.net.URLEncoder
+
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
@@ -31,7 +33,7 @@ private [acquisition] class OphanService(endpointOverride: Option[HttpUrl] = Non
     val url = endpoint.newBuilder()
       .addPathSegment("a.gif")
       .addQueryParameter("viewId", ophanIds.pageviewId.getOrElse(SyntheticPageviewId.generate))
-      .addQueryParameter("acquisition" , acquisition.asJson.noSpaces)
+      .addQueryParameter("acquisition" , URLEncoder.encode(acquisition.asJson.noSpaces, "UTF-8"))
       .build()
 
     val request = new Request.Builder()
