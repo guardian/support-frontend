@@ -30,10 +30,10 @@ import scala.concurrent.Future
 // Google Analytics and the contributions Kinesis stream as both of those are serviced via
 // acquisition-event-producer currently
 
-class SendAcquisitionEventOld(serviceProvider: ServiceProvider = ServiceProvider)
+class SendOldAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   extends ServicesHandler[SendAcquisitionEventState, Unit](serviceProvider) {
 
-  import SendAcquisitionEventOld._
+  import SendOldAcquisitionEvent._
   import cats.instances.future._
 
   def this() = this(ServiceProvider)
@@ -73,7 +73,7 @@ case class SendAcquisitionEventStateAndRequestInfo(
   requestInfo: RequestInfo
 )
 
-object SendAcquisitionEventOld {
+object SendOldAcquisitionEvent {
 
   case class AnalyticsServiceErrorList(errors: List[AnalyticsServiceError]) extends Throwable {
     override def getMessage: String = errors.map(_.getMessage).mkString(". ")

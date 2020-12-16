@@ -12,7 +12,7 @@ import org.mockito.ArgumentMatchers._
 
 import java.io.ByteArrayOutputStream
 
-class SendAcquisitionEventOldSpec extends AsyncLambdaSpec with MockContext {
+class SendOldAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
   lazy val mockServices = {
     val configuration = Configuration.load()
@@ -26,8 +26,8 @@ class SendAcquisitionEventOldSpec extends AsyncLambdaSpec with MockContext {
     serviceProvider
   }
 
-  "SendAcquisitionEventOld" should "work with a valid input" taggedAs IntegrationTest in {
-    val sendAcquisitionEvent = new SendAcquisitionEventOld(mockServices)
+  "SendOldAcquisitionEvent" should "work with a valid input" taggedAs IntegrationTest in {
+    val sendAcquisitionEvent = new SendOldAcquisitionEvent(mockServices)
 
     val outStream = new ByteArrayOutputStream()
 
