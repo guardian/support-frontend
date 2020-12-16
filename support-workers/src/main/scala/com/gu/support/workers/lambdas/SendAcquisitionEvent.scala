@@ -96,12 +96,3 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     )
 }
 
-object SendToBigQuery {
-  import com.google.cloud.bigquery.{BigQueryException, InsertAllRequest, TableId}
-  import java.util
-
-  def sendEvent(state: SendAcquisitionEventState) = {
-
-  }
-
-}
