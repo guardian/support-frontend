@@ -1,4 +1,4 @@
-Comment: Carries out the steps needed to create a Monthly Contributor
+Comment: Carries out the steps needed to create a Subscription or Regular Contributor
 StartAt: ShouldClonePaymentMethodChoice
 TimeoutSeconds: 86400
 States:
