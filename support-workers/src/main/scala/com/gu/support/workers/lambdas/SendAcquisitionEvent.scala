@@ -6,22 +6,18 @@ import com.google.cloud.bigquery.BigQueryOptions
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
+import com.gu.acquisitions.{AcquisitionTableRowBuilder, BigQuerySchema}
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricSetup.paymentSuccessRequest
 import com.gu.config.Configuration
-import com.gu.i18n.Country
 import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
-import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers._
+import com.gu.support.workers.exceptions.RetryUnlimited
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
-import ophan.thrift.event.{PrintOptions, PrintProduct, Product => OphanProduct}
-import ophan.thrift.{event => thrift}
 
-import java.util.UUID
-import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -56,8 +52,17 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
     sendPaymentSuccessMetric(state)
 
-    // Throw any error in the EitherT monad so that it can be processed by ErrorHandler.handleException
-    Future.successful(HandlerResult((), requestInfo))
+    val insertResult = services.bigQueryService.tableInsertRow(
+      BigQuerySchema.datasetName,
+      BigQuerySchema.tableName,
+      AcquisitionTableRowBuilder.buildAcquisitionTableRow(state, requestInfo)
+    )
+
+    // Throw any error in the Either so that it can be processed by ErrorHandler.handleException
+    insertResult match {
+      case Left(errorMessage) => throw new RetryUnlimited(errorMessage)
+      case Right(_) => Future.successful(HandlerResult((), requestInfo))
+    }
   }
 
   private def sendPaymentSuccessMetric(state: SendAcquisitionEventState) = {

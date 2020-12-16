@@ -31,7 +31,7 @@ class BigQueryService(config: BigQueryConfig) extends TouchpointService {
 
       val insertRequest = InsertAllRequest.newBuilder(tableId).addRow(rowContent.asJava).build
 
-      val response = bigQuery.insertAll(insertRequest)
+      val response = bigQuery.insertAll(insertRequest) // Seems there is currently no Async way to do this
 
       if (response.hasErrors) {
         val errors = response.getInsertErrors.entrySet.asScala.mkString(", ").stripSuffix(", ")
@@ -44,7 +44,7 @@ class BigQueryService(config: BigQueryConfig) extends TouchpointService {
     } catch {
       case e: BigQueryException =>
         SafeLogger.error(scrub"There was an exception inserting a row into $tableName", e)
-        Left(s"There was an exception inserting a row into $tableName")
+        Left(s"There was an exception inserting a row into $tableName: ${e.getMessage}")
     }
   }
 }
