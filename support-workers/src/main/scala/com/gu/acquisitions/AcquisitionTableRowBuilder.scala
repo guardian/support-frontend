@@ -100,31 +100,35 @@ object AcquisitionTableRowBuilder {
     }
 
   private def getReferrerData(data: AcquisitionData) = {
-    val abTests = (data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set[AbTest]()))
+    val referrerData = data.referrerAcquisitionData
+    val abTests = (data.supportAbTests ++ referrerData.abTests.getOrElse(Set[AbTest]()))
       .map(abTest =>
         Map(
           "name" -> abTest.name,
           "variant" -> abTest.variant
-        ).asJava)
+        ).asJava).asJava
 
-    val queryParams = data.referrerAcquisitionData.queryParameters.getOrElse(Set())
+    val queryParams = referrerData.queryParameters.getOrElse(Set())
       .map(queryParam =>
         Map(
           "key" -> queryParam.name,
           "value" -> queryParam.value
         ).asJava).asJava
 
+    val optionalFields = List(
+      referrerData.referrerPageviewId.map("referrer_page_view_id" -> _),
+      referrerData.referrerUrl.map("referrer_url" -> _),
+      referrerData.componentId.map("component_id" -> _),
+      referrerData.componentType.map("component_type" -> _.originalName),
+      referrerData.source.map("source" -> _.originalName)
+    ).flatten.toMap
+
     Map(
       // Currently only passing through at most one campaign code
-      "campaign_codes" -> List(data.referrerAcquisitionData.campaignCode).asJava,
+      "campaign_codes" -> referrerData.campaignCode.map(List(_)).getOrElse(Nil).asJava,
       "ab_tests" -> abTests,
-      "referrer_page_view_id" -> data.referrerAcquisitionData.referrerPageviewId,
-      "referrer_url" -> data.referrerAcquisitionData.referrerUrl,
-      "component_id" -> data.referrerAcquisitionData.componentId,
-      "component_type" -> data.referrerAcquisitionData.componentType,
-      "source" -> data.referrerAcquisitionData.source,
       "query_parameters" -> queryParams
-    )
+    ) ++ optionalFields
   }
 
   private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) =
@@ -136,7 +140,7 @@ object AcquisitionTableRowBuilder {
         case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => Some("corporate-subscription")
         case _ => None
       }
-    ).flatten
+    ).flatten.toList.asJava
 
   private def isSixForSix(state: SendAcquisitionEventState) =
     state.sendThankYouEmailState match {

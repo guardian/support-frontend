@@ -1,8 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import java.io.ByteArrayOutputStream
-
-import com.gu.acquisitions.AcquisitionServiceBuilder
+import com.gu.acquisitions.{AcquisitionServiceBuilder, BigQueryService}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -38,12 +37,15 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 object MockAcquisitionHelper extends MockitoSugar {
 
   lazy val mockServices = {
+    val configuration = Configuration.load()
     //Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val acquisitionService = AcquisitionServiceBuilder.build(Configuration.load().kinesisStreamName, isTestService = true)
+    val acquisitionService = AcquisitionServiceBuilder.build(configuration.kinesisStreamName, isTestService = true)
+    val bigQueryService = new BigQueryService(configuration.bigQueryConfigProvider.get())
 
     when(services.acquisitionService).thenReturn(acquisitionService)
+    when(services.bigQueryService).thenReturn(bigQueryService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
     serviceProvider
   }
