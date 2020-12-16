@@ -3,7 +3,7 @@ package com.gu.support.workers.lambdas
 import java.io.ByteArrayOutputStream
 import com.gu.acquisitions.{AcquisitionServiceBuilder, BigQueryService}
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, sendAcquisitionEventPrintJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventGWJson, sendAcquisitionEventJson, sendAcquisitionEventPrintJson, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
@@ -18,12 +18,20 @@ import scala.concurrent.Future
 
 class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
-  "SendAcquisitionEvent" should "work with a valid input" taggedAs IntegrationTest in {
+  "SendAcquisitionEvent" should "work with print input" taggedAs IntegrationTest in {
+    sendEvent(sendAcquisitionEventPrintJson)
+  }
+
+  "SendAcquisitionEvent" should "work with GW 6 for 6 input" taggedAs IntegrationTest in {
+    sendEvent(sendAcquisitionEventGWJson)
+  }
+
+  private def sendEvent(json: String) = {
     val sendAcquisitionEvent = new SendAcquisitionEvent(MockAcquisitionHelper.mockServices)
 
     val outStream = new ByteArrayOutputStream()
 
-    sendAcquisitionEvent.handleRequestFuture(wrapFixture(sendAcquisitionEventPrintJson), outStream, context).map { _ =>
+    sendAcquisitionEvent.handleRequestFuture(wrapFixture(json), outStream, context).map { _ =>
 
       //Check the output
       val out = Encoding.in[Unit](outStream.toInputStream)

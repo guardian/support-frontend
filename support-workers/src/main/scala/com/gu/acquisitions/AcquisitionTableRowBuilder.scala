@@ -138,18 +138,18 @@ object AcquisitionTableRowBuilder {
   private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) =
     Set(
       if (accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
-      if (isSixForSix(state)) Some("guardian-weekly-six-for-six") else None,
-      if (state.analyticsInfo.isGiftPurchase) Some("gift-subscription") else None,
+      if (isSixForSix(state)) Some("GUARDIAN_WEEKLY_SIX_FOR_SIX") else None,
+      if (state.analyticsInfo.isGiftPurchase) Some("GIFT_SUBSCRIPTION") else None,
       state.sendThankYouEmailState match {
-        case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => Some("corporate-subscription")
+        case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => Some("CORPORATE_SUBSCRIPTION")
         case _ => None
       }
     ).flatten.toList.asJava
 
   private def isSixForSix(state: SendAcquisitionEventState) =
     state.sendThankYouEmailState match {
-      case state: SendThankYouEmailGuardianWeeklyState =>
-        state.product.billingPeriod == Quarterly && state.promoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)
+      case s: SendThankYouEmailGuardianWeeklyState =>
+        s.product.billingPeriod == SixWeekly && s.promoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)
       case _ => false
     }
 
@@ -157,39 +157,39 @@ object AcquisitionTableRowBuilder {
     case s: SendThankYouEmailContributionState =>
       AcquisitionTypeDetails(
         paymentProviderFromPaymentMethod(s.paymentMethod),
-        Direct.value,
+        Direct.value.toUpperCase,
         Purchase.value
       )
     case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
       AcquisitionTypeDetails(
         paymentProviderFromPaymentMethod(s.paymentMethod),
-        Direct.value,
+        Direct.value.toUpperCase,
         Purchase.value
       )
     case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState =>
       AcquisitionTypeDetails(
         paymentProviderFromPaymentMethod(s.paymentMethod),
-        Gift.value,
+        Gift.value.toUpperCase,
         Purchase.value
       )
     case s: SendThankYouEmailPaperState => AcquisitionTypeDetails(
       paymentProviderFromPaymentMethod(s.paymentMethod),
-      Direct.value,
+      Direct.value.toUpperCase,
       Purchase.value
     )
     case s: SendThankYouEmailGuardianWeeklyState => AcquisitionTypeDetails(
       paymentProviderFromPaymentMethod(s.paymentMethod),
-      if (s.giftRecipient.isDefined) Gift.value else Direct.value,
+      (if (s.giftRecipient.isDefined) Gift.value else Direct.value).toUpperCase,
       Purchase.value
     )
     case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => AcquisitionTypeDetails(
       None,
-      Corporate.value,
+      Corporate.value.toUpperCase,
       Redemption.value
     )
     case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => AcquisitionTypeDetails(
       None,
-      Gift.value,
+      Gift.value.toUpperCase,
       Redemption.value
     )
   }
