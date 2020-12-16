@@ -15,9 +15,11 @@ import org.joda.time.{DateTimeZone, LocalDate}
 //noinspection TypeAnnotation
 object JsonFixtures {
 
-  def wrapFixture(string: String): ByteArrayInputStream =
-    JsonWrapper(parser.parse(string).right.get, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
+  def wrapFixture(string: String): ByteArrayInputStream = {
+    val parsed = parser.parse(string)
+    JsonWrapper(parsed.right.get, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
       .asJson.noSpaces.asInputStream
+  }
 
   def userJson(id: String = idId): String =
     s"""
@@ -210,18 +212,16 @@ object JsonFixtures {
           "browserId":null
         },
         "referrerAcquisitionData":{
-          "campaignCode":null,
-          "referrerPageviewId":null,
-          "referrerUrl":null,
-          "componentId":null,
-          "componentType":null,
-          "source":null,
+          "source": "GUARDIAN_WEB",
+          "componentId": "header_support",
+          "componentType": "ACQUISITIONS_HEADER",
+          "campaignCode": "header_support",
+          "referrerPageviewId": "kirbr24j42oda63r9c1s",
+          "referrerUrl": "https://www.theguardian.com/uk",
           "abTests":[{
             "name":"fakeTest",
             "variant":"fakeVariant"
-          }],
-          "queryParameters":null,
-          "hostname":"support.thegulocal.com"
+          }]
         },
         "supportAbTests":[{
           "name":"fakeSupportTest",
@@ -678,7 +678,75 @@ object JsonFixtures {
           },
           "acquisitionData": $acquisitionData
         }"""
-
+  val sendAcquisitionEventPrintJson =
+    s"""
+    {
+      "requestId": "1a94c891-e98a-13ae-0000-0000000038a3",
+      "sendThankYouEmailState": {
+        "user": {
+          "id": "200004237",
+          "primaryEmailAddress": "rupert.bates+test-mma2@theguardian.com",
+          "title": null,
+          "firstName": "rupert",
+          "lastName": "bates",
+          "billingAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "deliveryAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "telephoneNumber": null,
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false,
+          "deliveryInstructions": null
+        },
+        "product": {
+          "currency": "GBP",
+          "billingPeriod": "Monthly",
+          "fulfilmentOptions": "HomeDelivery",
+          "productOptions": "Sixday",
+          "productType": "Paper"
+        },
+        "paymentMethod": {
+          "TokenId": "pm_0Hyx9kItVxyc3Q6ndwisZWtU",
+          "SecondTokenId": "cus_Ia7OiUxIGHWyAy",
+          "CreditCardNumber": "4242",
+          "CreditCardCountry": "US",
+          "CreditCardExpirationMonth": 2,
+          "CreditCardExpirationYear": 2027,
+          "CreditCardType": "Visa",
+          "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+          "Type": "CreditCardReferenceTransaction",
+          "StripePaymentType": "StripeCheckout"
+        },
+        "paymentSchedule": {
+          "payments": []
+        },
+        "promoCode": "fake_code",
+        "accountNumber": "A00102360",
+        "subscriptionNumber": "A-S00125315",
+        "firstDeliveryDate": "2020-12-19",
+        "productType": "Paper"
+      },
+      "analyticsInfo": {
+        "isGiftPurchase": false,
+        "paymentProvider": "Stripe"
+      },
+      "acquisitionData": $acquisitionData
+    }
+    """
   val digipackSubscriptionWithDiscountAndFreeTrialJson =
     s"""
         {

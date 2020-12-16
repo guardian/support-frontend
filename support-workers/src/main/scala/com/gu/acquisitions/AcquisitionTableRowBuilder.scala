@@ -12,6 +12,7 @@ import ophan.thrift.event.AbTest
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 
+import java.util
 import scala.collection.JavaConverters._
 
 object AcquisitionTableRowBuilder {
@@ -19,10 +20,12 @@ object AcquisitionTableRowBuilder {
     val commonState = state.sendThankYouEmailState
     val (productType, amount) = productTypeAndAmount(commonState)
     val acquisitionTypeDetails = getAcquisitionTypeDetails(commonState)
+    val printOptions = printOptionsFromProduct(commonState.product, commonState.user.deliveryAddress.map(_.country))
 
     val optionalFields = List(
       maybePromoCode(commonState).map("promo_code" -> _),
-      acquisitionTypeDetails.paymentProvider.map("payment_provider" -> _)
+      acquisitionTypeDetails.paymentProvider.map("payment_provider" -> _),
+      printOptions.map("print_options" -> _)
     ).flatten.toMap
 
     val referrerData = state.acquisitionData.map(getReferrerData).getOrElse(Map[String, String]())
@@ -31,7 +34,6 @@ object AcquisitionTableRowBuilder {
       "event_timestamp" -> ISODateTimeFormat.dateTime().print(DateTime.now(DateTimeZone.UTC)),
       "product" -> productType,
       "amount" -> amount,
-      "print_options" -> printOptionsFromProduct(commonState.product, commonState.user.deliveryAddress.map(_.country)).getOrElse(Nil),
       "payment_frequency" -> paymentFrequencyFromBillingPeriod(commonState.product.billingPeriod),
       "country_code" -> commonState.user.billingAddress.country.alpha2,
       "currency" -> commonState.product.currency.iso,
@@ -52,7 +54,7 @@ object AcquisitionTableRowBuilder {
     case _: GuardianWeekly => ("PRINT_SUBSCRIPTION", 0D)
   }
 
-  private def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[Map[String, String]] = {
+  private def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[util.Map[PromoCode, String]] = {
 
     def printProduct(fulfilmentOptions: FulfilmentOptions, productOptions: ProductOptions): String = {
       (fulfilmentOptions, productOptions) match {
@@ -83,11 +85,11 @@ object AcquisitionTableRowBuilder {
       case p: Paper => Some(Map(
         "product" -> printProduct(p.fulfilmentOptions, p.productOptions),
         "delivery_country_code" -> "GB"
-      ))
+      ).asJava)
       case _: GuardianWeekly => Some(Map(
         "product" -> "GUARDIAN_WEEKLY",
         "delivery_country_code" -> deliveryCountry.map(_.alpha2).getOrElse("")
-      ))
+      ).asJava)
       case _ => None
     }
   }
