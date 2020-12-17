@@ -1,6 +1,6 @@
 package com.gu.services
 
-import com.gu.acquisitions.{AcquisitionServiceBuilder, BigQueryService}
+import com.gu.acquisitions.AcquisitionServiceBuilder
 import com.gu.config.Configuration
 import com.gu.config.Configuration._
 import com.gu.gocardless.GoCardlessWorkersService
@@ -8,6 +8,7 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.SalesforceService
 import com.gu.stripe.StripeService
+import com.gu.support.acquisitions.BigQueryService
 import com.gu.support.catalog.CatalogService
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService

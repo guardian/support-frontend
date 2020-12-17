@@ -6,7 +6,7 @@ import com.google.cloud.bigquery.BigQueryOptions
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
-import com.gu.acquisitions.{AcquisitionTableRowBuilder, BigQuerySchema}
+import com.gu.acquisitions.{AcquisitionDataRowBuilder, BigQuerySchema}
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricSetup.paymentSuccessRequest
 import com.gu.config.Configuration
@@ -55,7 +55,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     val insertResult = services.bigQueryService.tableInsertRow(
       BigQuerySchema.datasetName,
       BigQuerySchema.tableName,
-      AcquisitionTableRowBuilder.buildAcquisitionTableRow(state, requestInfo)
+      AcquisitionDataRowBuilder.buildAcquisitionDataRow(state, requestInfo)
     )
 
     // Throw any error in the Either so that it can be processed by ErrorHandler.handleException

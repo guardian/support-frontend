@@ -1,4 +1,4 @@
-package com.gu.acquisitions
+package com.gu.support.acquisitions
 
 sealed abstract class AcquisitionType(val value: String)
 

@@ -3,7 +3,12 @@ package com.gu.acquisitions
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.bigquery.{BigQueryOptions, QueryJobConfiguration}
 import com.gu.config.Configuration
+import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.{Authentication, DeliveryContact, NewContact, SalesforceContactResponse}
+import com.gu.support.acquisitions.AcquisitionType.Purchase
+import com.gu.support.acquisitions.{AbTest, AcquisitionDataRow, AcquisitionProduct, BigQueryService, QueryParameter}
+import com.gu.support.workers.{Monthly, PayPal}
+import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.{DateTime, DateTimeZone}
@@ -73,7 +78,30 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
         ).asJava).asJava
     ) ++ optionalFields
 
-    service.tableInsertRow(BigQuerySchema.datasetName, BigQuerySchema.tableName, row) shouldBe Right(())
+    val dataRow = AcquisitionDataRow(
+      DateTime.now(),
+      AcquisitionProduct.RecurringContribution,
+      Some(9999),
+      Country.UK,
+      Currency.GBP,
+      None, None, None, None, None,
+      List(
+        AbTest("test_test", "Hello"),
+        AbTest("payment_method_test", "variant1")
+      ),
+      Monthly,
+      Some(PayPal),
+      None, None,
+      Some("9999"),
+      None, None, Nil, None,
+      reusedExistingPaymentMethod = false,
+      Direct,
+      Purchase,
+      None, None, None,
+      List(QueryParameter("foo", "bar"))
+    )
+
+    service.tableInsertRow(BigQuerySchema.datasetName, BigQuerySchema.tableName, dataRow) shouldBe Right(())
   }
 
 }

@@ -12,9 +12,10 @@ object Configuration {
 
   def load(): Configuration = new Configuration(loadConfig)
 
-  val loadFromS3: Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG"))
-    .getOrElse("TRUE").toBoolean)
-    .getOrElse(true) //Should we load config from S3
+  val loadFromS3: Boolean = false
+//  Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG"))
+//    .getOrElse("TRUE").toBoolean)
+//    .getOrElse(true) //Should we load config from S3
 
   val stage = Stage.fromString(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
     .getOrElse("DEV"))

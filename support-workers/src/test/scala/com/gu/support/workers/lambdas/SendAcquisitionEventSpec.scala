@@ -1,7 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import java.io.ByteArrayOutputStream
-import com.gu.acquisitions.{AcquisitionServiceBuilder, BigQueryService}
+import com.gu.acquisitions.AcquisitionServiceBuilder
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventGWJson, sendAcquisitionEventJson, sendAcquisitionEventPrintJson, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -13,6 +13,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import cats.implicits._
 import com.gu.config.Configuration
+import com.gu.support.acquisitions.BigQueryService
 
 import scala.concurrent.Future
 

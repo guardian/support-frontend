@@ -1,17 +1,14 @@
-package com.gu.acquisitions
+package com.gu.support.acquisitions
 
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.bigquery.{BigQueryException, BigQueryOptions, InsertAllRequest, TableId}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.config.BigQueryConfig
-import com.gu.support.touchpoint.TouchpointService
 
-import scala.collection.immutable.Map
-import java.util
 import scala.collection.JavaConverters._
 
-class BigQueryService(config: BigQueryConfig) extends TouchpointService {
+class BigQueryService(config: BigQueryConfig) {
   lazy val bigQuery =
     BigQueryOptions
       .newBuilder()
@@ -25,11 +22,11 @@ class BigQueryService(config: BigQueryConfig) extends TouchpointService {
       ))
       .build().getService
 
-  def tableInsertRow(datasetName: String, tableName: String, rowContent: Map[String, Any]): Either[String, Unit] = {
+  def tableInsertRow(datasetName: String, tableName: String, acquisitionDataRow: AcquisitionDataRow): Either[String, Unit] = {
     try {
       val tableId = TableId.of(datasetName, tableName)
-
-      val insertRequest = InsertAllRequest.newBuilder(tableId).addRow(rowContent.asJava).build
+      val rowContent = AcquisitionDataRowMapper.mapToTableRow(acquisitionDataRow)
+      val insertRequest = InsertAllRequest.newBuilder(tableId).addRow(rowContent).build
 
       val response = bigQuery.insertAll(insertRequest) // Seems there is currently no Async way to do this
 
