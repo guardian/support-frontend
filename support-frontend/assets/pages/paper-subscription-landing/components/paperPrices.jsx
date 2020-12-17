@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { type Node } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -31,7 +31,6 @@ import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { flashSaleIsActive } from 'helpers/flashSale';
 import { Paper } from 'helpers/subscriptions';
 
-import PaperPriceCopy from './content/paperPriceCopy';
 import Prices from './content/prices';
 
 // ---- Helpers ----- //
@@ -43,12 +42,12 @@ const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): s
   return '';
 };
 
-const getPriceCopyString = (price: ProductPrice): string => {
+const getPriceCopyString = (price: ProductPrice, productCopy: Node = null): Node => {
   const promotion = getAppliedPromo(price.promotions);
   if (promotion && promotion.numberOfDiscountedPeriods) {
-    return `per month for ${promotion.numberOfDiscountedPeriods} months`;
+    return <>per month for {promotion.numberOfDiscountedPeriods} months{productCopy}</>;
   }
-  return 'per month';
+  return <>per month{productCopy}</>;
 };
 
 const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) => {
@@ -64,16 +63,16 @@ const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) =
 // ---- Plans ----- //
 const copy = {
   HomeDelivery: {
-    Everyday: 'Guardian and Observer papers, delivered',
-    Sixday: 'Guardian papers, delivered',
-    Weekend: 'Saturday Guardian and Observer papers, delivered',
-    Sunday: 'Observer paper, delivered',
+    Everyday: <> for <strong>Guardian</strong> and <strong>Observer</strong>, delivered</>,
+    Sixday: <> for <strong>Guardian</strong>, delivered</>,
+    Weekend: <> for <strong>Guardian</strong> and <strong>Observer</strong>, delivered</>,
+    Sunday: <> for <strong>Observer</strong>, delivered</>,
   },
   Collection: {
-    Everyday: 'Guardian and Observer papers',
-    Sixday: 'Guardian papers',
-    Weekend: 'Saturday Guardian and Observer papers',
-    Sunday: 'Observer paper',
+    Everyday: <> for <strong>Guardian</strong> and <strong>Observer</strong></>,
+    Sixday: <> for <strong>Guardian</strong></>,
+    Weekend: <> for <strong>Guardian</strong> and <strong>Observer</strong></>,
+    Sunday: <> for <strong>Observer</strong></>,
   },
 };
 
@@ -98,11 +97,8 @@ const getPlans = (
         [productOption, fulfilmentOption].join(),
       ),
       buttonCopy: 'Subscribe now',
-      priceCopy: getPriceCopyString(price),
-      offerCopy: <PaperPriceCopy
-        saving={getOfferText(price, productOption)}
-        copy={copy[fulfilmentOption][productOption]}
-      />,
+      priceCopy: getPriceCopyString(price, copy[fulfilmentOption][productOption]),
+      offerCopy: getOfferText(price, productOption),
       label: '',
     };
   });
