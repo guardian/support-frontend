@@ -118,7 +118,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |      "first_name" : "Mickey",
         |      "emailaddress" : "test@gu.com",
         |      "subscription_details" : "Group subscription",
-        |      "zuorasubscriberid" : "A-S00045678",
+        |      "zuorasubscriberid" : "subscription number",
         |      "last_name" : "Mouse"
         |    }
         |  }
