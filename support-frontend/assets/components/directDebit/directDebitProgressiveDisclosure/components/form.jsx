@@ -26,6 +26,15 @@ const spaceBetween = css`
   margin-bottom: 20px;
 `;
 
+// Quick & dirty fix for the <span> that overlays the checkbox for animation purposes intercepting click
+// events and thus breaking our Selenium tests
+// TODO: Remove this once a PR to Source has been made to fix this on the component itself
+const passThroughClicksToInput = css`
+  & span {
+    pointer-events: none;
+  }
+`;
+
 type EventHandler = (e: SyntheticInputEvent<HTMLInputElement>) => void;
 
 type PropTypes = {
@@ -99,7 +108,7 @@ function Form(props: PropTypes) {
         />
       </div>
 
-      <div css={spaceBetween}>
+      <div css={[spaceBetween, passThroughClicksToInput]}>
         <Checkbox
           id="account-holder-confirmation"
           onChange={e => props.onChange('accountHolderConfirmation', props.updateAccountHolderConfirmation, e)}
