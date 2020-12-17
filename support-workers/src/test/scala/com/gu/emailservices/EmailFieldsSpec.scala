@@ -136,6 +136,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
         DigitalPack(GBP, Annual),
         "A-S00045678",
+        "subscription number"
       )
     ).map(_.map(ef => parse(ef.payload)))
     actual.map(inside(_) {

@@ -34,6 +34,7 @@ object ProductTypeCreatedTestData {
     Contribution(1, GBP, Monthly),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     "acno",
+    "subno"
   )
 
   val digitalSubscriptionDirectPurchaseCreated = SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
@@ -57,10 +58,12 @@ object ProductTypeCreatedTestData {
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,
     "acno",
+    "subno"
   )
   val digitalSubscriptionCorporateRedemptionCreated = SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     DigitalPack(GBP, Monthly, ReaderType.Corporate),
+    "acno",
     "subno"
   )
   val digitalSubscriptionGiftRedemptionCreated = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
