@@ -51,33 +51,6 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
   it should "be able to run an insert" in {
     val service = new BigQueryService(config)
 
-    val promoCode: Option[String] = Some("six_for_six")
-    val optionalFields = List(promoCode.map(code => "promo_code" -> code)).flatten
-
-    val row = Map(
-      "event_timestamp" -> ISODateTimeFormat.dateTime().print(DateTime.now(DateTimeZone.UTC)),
-      "product" -> "RECURRING_CONTRIBUTION",
-      "amount" -> 9999,
-      "payment_frequency" -> "MONTHLY",
-      "country_code" -> "GB",
-      "currency" -> "GBP",
-      "payment_provider" -> "STRIPE",
-      "ab_tests" -> List(
-        Map(
-          "name" -> "test_test",
-          "variant" -> "monkey nuts"
-        ).asJava,
-        Map(
-          "name" -> "test2",
-          "variant" -> "Oy vey!"
-        ).asJava).asJava,
-      "query_parameters" -> List(
-        Map(
-          "key" -> "foo",
-          "value" -> "bar"
-        ).asJava).asJava
-    ) ++ optionalFields
-
     val dataRow = AcquisitionDataRow(
       DateTime.now(),
       AcquisitionProduct.RecurringContribution,

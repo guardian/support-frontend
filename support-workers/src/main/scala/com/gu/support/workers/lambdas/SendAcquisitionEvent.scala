@@ -55,7 +55,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     val insertResult = services.bigQueryService.tableInsertRow(
       BigQuerySchema.datasetName,
       BigQuerySchema.tableName,
-      AcquisitionDataRowBuilder.buildAcquisitionDataRow(state, requestInfo)
+      AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
     )
 
     // Throw any error in the Either so that it can be processed by ErrorHandler.handleException
@@ -87,7 +87,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
           case _ => None
         },
         state.analyticsInfo.isGiftPurchase,
-        None, //TODO get from state
+        SendOldAcquisitionEvent.maybePromoCode(state.sendThankYouEmailState),
         state.user.billingAddress.country,
         state.user.deliveryAddress.map(_.country),
         None,

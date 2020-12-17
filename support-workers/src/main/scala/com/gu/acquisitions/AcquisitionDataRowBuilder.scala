@@ -16,7 +16,7 @@ import com.gu.support.zuora.api.ReaderType
 
 
 object AcquisitionDataRowBuilder {
-  def buildAcquisitionDataRow(state: SendAcquisitionEventState, requestInfo: RequestInfo): AcquisitionDataRow = {
+  def buildFromState(state: SendAcquisitionEventState, requestInfo: RequestInfo): AcquisitionDataRow = {
     val commonState = state.sendThankYouEmailState
     val (acquisitionProduct, amount) = productTypeAndAmount(commonState.product)
     val acquisitionTypeDetails = getAcquisitionTypeDetails(commonState)
@@ -50,7 +50,6 @@ object AcquisitionDataRowBuilder {
       acquisitionTypeDetails.zuoraAccountNumber,
       None,
       state.acquisitionData.map(getQueryParameters).getOrElse(Nil)
-
     )
   }
 
@@ -72,37 +71,6 @@ object AcquisitionDataRowBuilder {
         abTest.name,
         abTest.variant
       )).toList
-
-//  def buildAcquisitionDataRowOld(state: SendAcquisitionEventState, requestInfo: RequestInfo): AcquisitionDataRow = {
-//    val commonState = state.sendThankYouEmailState
-//    val (productType, amount) = productTypeAndAmount(commonState)
-//    val acquisitionTypeDetails = getAcquisitionTypeDetails(commonState)
-//    val printOptions = printOptionsFromProduct(commonState.product, commonState.user.deliveryAddress.map(_.country))
-//
-//    val optionalFields = List(
-//      maybePromoCode(commonState).map("promo_code" -> _),
-//      acquisitionTypeDetails.paymentProvider.map("payment_provider" -> _),
-//      printOptions.map("print_options" -> _)
-//    ).flatten.toMap
-//
-//    val referrerData = state.acquisitionData.map(getReferrerData).getOrElse(Map[String, String]())
-//
-//    Map(
-//      "event_timestamp" -> ISODateTimeFormat.dateTime().print(DateTime.now(DateTimeZone.UTC)),
-//      "product" -> productType,
-//      "amount" -> amount,
-//      "payment_frequency" -> paymentFrequencyFromBillingPeriod(commonState.product.billingPeriod),
-//      "country_code" -> commonState.user.billingAddress.country.alpha2,
-//      "currency" -> commonState.product.currency.iso,
-//      "platform" -> "SUPPORT",
-//      "identity_id" -> commonState.user.id,
-//      "labels" -> buildLabels(state, requestInfo.accountExists),
-//      "reused_existing_payment_method" -> requestInfo.accountExists,
-//      "acquisition_type" -> acquisitionTypeDetails.acquisitionType,
-//      "reader_type" -> acquisitionTypeDetails.readerType
-//    ) ++ referrerData ++ optionalFields
-//
-//  }
 
   private def productTypeAndAmount(product: ProductType): (AcquisitionProduct, Option[BigDecimal]) = product match {
     case c: Contribution => (AcquisitionProduct.RecurringContribution, Some(c.amount.toDouble))
@@ -209,40 +177,6 @@ object AcquisitionDataRowBuilder {
         None
       )
     }
-
-//  private def getReferrerData(data: AcquisitionData) = {
-//    val referrerData = data.referrerAcquisitionData
-//    val abTests = (data.supportAbTests ++ referrerData.abTests.getOrElse(Set[AbTest]()))
-//      .map(abTest =>
-//        Map(
-//          "name" -> abTest.name,
-//          "variant" -> abTest.variant
-//        ).asJava).asJava
-//
-//    val queryParams = referrerData.queryParameters.getOrElse(Set())
-//      .map(queryParam =>
-//        Map(
-//          "key" -> queryParam.name,
-//          "value" -> queryParam.value
-//        ).asJava).asJava
-//
-//    val optionalFields = List(
-//      data.ophanIds.pageviewId.map("page_view_id" -> _),
-//      data.ophanIds.browserId.map("browser_id" -> _),
-//      referrerData.referrerPageviewId.map("referrer_page_view_id" -> _),
-//      referrerData.referrerUrl.map("referrer_url" -> _),
-//      referrerData.componentId.map("component_id" -> _),
-//      referrerData.componentType.map("component_type" -> _.originalName),
-//      referrerData.source.map("source" -> _.originalName)
-//    ).flatten.toMap
-//
-//    Map(
-//      // Currently only passing through at most one campaign code
-//      "campaign_codes" -> referrerData.campaignCode.map(List(_)).getOrElse(Nil).asJava,
-//      "ab_tests" -> abTests,
-//      "query_parameters" -> queryParams
-//    ) ++ optionalFields
-//  }
 
   private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) =
     Set(

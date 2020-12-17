@@ -15,11 +15,9 @@ import org.joda.time.{DateTimeZone, LocalDate}
 //noinspection TypeAnnotation
 object JsonFixtures {
 
-  def wrapFixture(string: String): ByteArrayInputStream = {
-    val parsed = parser.parse(string)
-    JsonWrapper(parsed.right.get, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
+  def wrapFixture(string: String): ByteArrayInputStream =
+    JsonWrapper(parser.parse(string).right.get, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
       .asJson.noSpaces.asInputStream
-  }
 
   def userJson(id: String = idId): String =
     s"""
@@ -153,7 +151,7 @@ object JsonFixtures {
   val digitalPackJson =
     """
       {
-        "productType": "DigitalSubscription",
+        "productType": "DigitalPack",
         "currency": "GBP",
         "billingPeriod" : "Annual",
         "readerType": "Direct"
@@ -163,7 +161,7 @@ object JsonFixtures {
   val digitalPackCorporateJson =
     """
       {
-        "productType": "DigitalSubscription",
+        "productType": "DigitalPack",
         "currency": "GBP",
         "billingPeriod" : "Annual",
         "readerType" : "Corporate"
@@ -173,7 +171,7 @@ object JsonFixtures {
   val digitalPackGiftJson =
     """
       {
-        "productType": "DigitalSubscription",
+        "productType": "DigitalPack",
         "currency": "GBP",
         "billingPeriod" : "Annual",
         "readerType" : "Gift"
