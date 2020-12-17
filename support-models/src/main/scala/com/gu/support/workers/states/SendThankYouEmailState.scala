@@ -25,6 +25,7 @@ object SendThankYouEmailState {
     product: Contribution,
     paymentMethod: PaymentMethod,
     accountNumber: String,
+    subscriptionNumber: String,
   ) extends SendThankYouEmailState
 
   case class SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
@@ -48,18 +49,20 @@ object SendThankYouEmailState {
     paymentSchedule: PaymentSchedule,
     promoCode: Option[PromoCode],
     accountNumber: String,
+    subscriptionNumber: String,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
     user: User,
     product: DigitalPack,
+    accountNumber: String,
     subscriptionNumber: String,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user: User,
     product: DigitalPack,
-    termDates: TermDates,
+    termDates: TermDates
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailPaperState(

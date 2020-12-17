@@ -126,7 +126,7 @@ object AcquisitionDataRowBuilder {
         Direct,
         Purchase,
         Some(s.accountNumber),
-        None //TODO: we should have a sub number for this
+        Some(s.subscriptionNumber),
       )
       case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => AcquisitionTypeDetails(
         Some(s.paymentMethod),
@@ -142,7 +142,7 @@ object AcquisitionDataRowBuilder {
         Gift,
         Purchase,
         Some(s.accountNumber),
-        None //TODO: we should have a sub number for this
+        Some(s.subscriptionNumber),
       )
       case s: SendThankYouEmailPaperState => AcquisitionTypeDetails(
         Some(s.paymentMethod),
@@ -160,20 +160,20 @@ object AcquisitionDataRowBuilder {
         Some(s.accountNumber),
         Some(s.subscriptionNumber)
       )
-      case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => AcquisitionTypeDetails(
+      case s: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => AcquisitionTypeDetails(
         None,
         None,
         Corporate,
         Redemption,
-        None, //Todo we need a customer account id and sub id
-        None
+        Some(s.accountNumber),
+        Some(s.subscriptionNumber)
       )
-      case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => AcquisitionTypeDetails(
+      case s: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => AcquisitionTypeDetails(
         None,
         None,
         Gift,
         Redemption,
-        None, //Todo we need a customer account id and sub id
+        None, //TODO: if we rework digital gift modelling in Zuora we should include the relevant ids here
         None
       )
     }
