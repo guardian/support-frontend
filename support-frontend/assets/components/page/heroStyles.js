@@ -5,7 +5,6 @@ import { brand, brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { headline, body } from '@guardian/src-foundations/typography';
-import { breakpoints } from '@guardian/src-foundations';
 
 const roundelSizeMob = 120;
 const roundelSize = 180;
@@ -42,7 +41,8 @@ export const hero = css`
   }
 `;
 
-// Keep the content below the roundel on mobile if present
+// On mobile the roundel can overlay and hide the h2 inside the hero
+// This adds a little extra top margin if the roundel is present to keep the headline visible
 export const roundelOffset = css`
   ${until.tablet} {
     margin-top: ${(roundelSizeMob / 2) - space[6]}px;
@@ -119,13 +119,21 @@ export const roundelNudgeDown = css`
   }
 `;
 
-export const roundelHidingPoints: { [key: string]: string } = Object.keys(breakpoints)
-  .reduce((hidingPoints, breakpoint) => {
-  // eslint-disable-next-line no-param-reassign
-    hidingPoints[breakpoint] = css`
-      ${until[breakpoint]} {
-        display: none;
-      }
-    `;
-    return hidingPoints;
-  }, {});
+function hideUntilBreakpoint(breakpoint): string {
+  return css`
+    ${until[breakpoint]} {
+      display: none;
+    }
+  `;
+}
+
+export const roundelHidingPoints: { [key: string]: string } = {
+  mobile: hideUntilBreakpoint('mobile'),
+  mobileMedium: hideUntilBreakpoint('mobileMedium'),
+  mobileLandscape: hideUntilBreakpoint('mobileLandscape'),
+  phablet: hideUntilBreakpoint('phablet'),
+  tablet: hideUntilBreakpoint('tablet'),
+  desktop: hideUntilBreakpoint('desktop'),
+  leftCol: hideUntilBreakpoint('leftCol'),
+  wide: hideUntilBreakpoint('wide'),
+};

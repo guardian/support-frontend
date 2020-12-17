@@ -6,7 +6,6 @@ import React from 'react';
 
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
-// import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
@@ -59,8 +58,8 @@ export const SubsCardFaqBlock = () => (
   <FlexContainer cssOverrides={flexContainerOverride}>
     <div css={faqsContainer}>
       <p css={paragraphSpacing}>
-        The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with
-        news kiosks in the UK.
+        The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with news
+        kiosks in the UK such as McColl&apos;s, Co-op, One Stop and selected SPAR stores.
       </p>
       <p css={paragraphSpacing}>
         You can collect the newspaper from your local store or have your copies delivered by your newsagent.

@@ -8,7 +8,6 @@ import GridImage from 'components/gridImage/gridImage';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 import LinkTo from './linkTo';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
-// import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
