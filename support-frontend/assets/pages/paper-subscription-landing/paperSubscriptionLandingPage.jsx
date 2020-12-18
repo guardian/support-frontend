@@ -50,9 +50,13 @@ const paperSubsFooter = (
 
 // ----- Render ----- //
 
+// ID for Selenium tests
+const pageQaId = 'qa-paper-subscriptions';
+
 const content = (
   <Provider store={store}>
     <Page
+      id={pageQaId}
       header={<Header countryGroupId={GBPCountries} />}
       footer={paperSubsFooter}
     >
