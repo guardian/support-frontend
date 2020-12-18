@@ -6,7 +6,7 @@ import com.gu.config.Configuration
 import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.{Authentication, DeliveryContact, NewContact, SalesforceContactResponse}
 import com.gu.support.acquisitions.AcquisitionType.Purchase
-import com.gu.support.acquisitions.{AbTest, AcquisitionDataRow, AcquisitionProduct, BigQueryService, QueryParameter}
+import com.gu.support.acquisitions.{AbTest, AcquisitionDataRow, AcquisitionProduct, BigQueryService, PrintOptions, PrintProduct, QueryParameter}
 import com.gu.support.workers.{Monthly, PayPal}
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.test.tags.annotations.IntegrationTest
@@ -53,24 +53,25 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
     val dataRow = AcquisitionDataRow(
       DateTime.now(),
-      AcquisitionProduct.RecurringContribution,
+      AcquisitionProduct.Paper,
       Some(9999),
       Country.UK,
       Currency.GBP,
-      None, None, None, None, None,
+      Some("componentId"), Some("componentType"), Some("campaignCode"), Some("source"), Some("referrerUrl"),
       List(
         AbTest("test_test", "Hello"),
         AbTest("payment_method_test", "variant1")
       ),
       Monthly,
       Some(PayPal),
-      None, None,
+      Some(PrintOptions(PrintProduct.HomeDeliveryEveryday, Country.UK)),
+      Some("browserId"),
       Some("9999"),
-      None, None, Nil, None,
+      Some("pageViewId"), Some("referrerPageViewId"), List("TEST_LABEL"), Some("test_promocode"),
       reusedExistingPaymentMethod = false,
       Direct,
       Purchase,
-      None, None, None,
+      Some("subscription number"), Some("account number"), Some("contributionId"),
       List(QueryParameter("foo", "bar"))
     )
 

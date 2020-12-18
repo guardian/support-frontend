@@ -14,9 +14,9 @@ object AcquisitionDataRowMapper {
       acquisition.promoCode.map("promo_code" -> _),
       acquisition.paymentProvider.map("payment_provider" -> paymentProviderName(_)),
       acquisition.printOptions.map(p => "print_options" -> Map(
-        "product" -> p.product,
+        "product" -> p.product.value,
         "delivery_country_code" -> p.deliveryCountry.alpha2
-      )),
+      ).asJava),
       acquisition.amount.map("amount" -> _),
       acquisition.identityId.map("identity_id" -> _),
       acquisition.pageViewId.map("page_view_id" -> _),
@@ -27,6 +27,9 @@ object AcquisitionDataRowMapper {
       acquisition.componentType.map("component_type" -> _),
       acquisition.source.map("source" -> _),
       acquisition.campaignCode.map("campaign_codes" -> List(_).asJava),
+      acquisition.zuoraAccountNumber.map("zuora_account_number" -> _),
+      acquisition.zuoraSubscriptionNumber.map("zuora_subscription_number" -> _),
+      acquisition.contributionId.map("contribution_id" -> _)
     ).flatten.toMap
 
     (Map(
