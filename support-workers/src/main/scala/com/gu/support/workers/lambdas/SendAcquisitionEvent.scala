@@ -6,12 +6,13 @@ import com.google.cloud.bigquery.BigQueryOptions
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
-import com.gu.acquisitions.{AcquisitionDataRowBuilder, BigQuerySchema}
+import com.gu.acquisitions.AcquisitionDataRowBuilder
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricSetup.paymentSuccessRequest
 import com.gu.config.Configuration
 import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
+import com.gu.support.acquisitions.AcquisitionEventTable
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.RetryUnlimited
@@ -53,8 +54,6 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     sendPaymentSuccessMetric(state)
 
     val insertResult = services.bigQueryService.tableInsertRow(
-      BigQuerySchema.datasetName,
-      BigQuerySchema.tableName,
       AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
     )
 
