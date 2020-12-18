@@ -673,7 +673,8 @@ object JsonFixtures {
             },
             "product": ${contribution(currency = GBP)},
             "paymentMethod": $stripePaymentMethod,
-            "accountNumber": "accountnumber123"
+            "accountNumber": "accountnumber123",
+            "subscriptionNumber": "subno123"
           },
           "acquisitionData": $acquisitionData
         }"""
