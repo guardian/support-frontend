@@ -263,6 +263,9 @@ const StripeForm = (props: StripeFormPropTypes) => {
     .then(() => {
       setDisableButton(false);
       props.submitForm();
+    })
+    .catch(() => {
+      setDisableButton(false);
     });
 
   const requestSCAPaymentMethod = (event) => {
