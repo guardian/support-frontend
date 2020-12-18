@@ -8,8 +8,10 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
+import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.ConfigLoader._
 import conf._
 import model.Environment.{Live, Test}
@@ -28,15 +30,16 @@ import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
 class StripeBackend(
-                     stripeService: StripeService,
-                     databaseService: ContributionsStoreService,
-                     identityService: IdentityService,
-                     ophanService: AnalyticsService,
-                     emailService: EmailService,
-                     recaptchaService: RecaptchaService,
-                     cloudWatchService: CloudWatchService,
-                     switchService: SwitchService,
-                     environment: Environment
+  stripeService: StripeService,
+  databaseService: ContributionsStoreService,
+  identityService: IdentityService,
+  ophanService: AnalyticsService,
+  bigQueryService: BigQueryService,
+  emailService: EmailService,
+  recaptchaService: RecaptchaService,
+  cloudWatchService: CloudWatchService,
+  switchService: SwitchService,
+  environment: Environment
 )(implicit pool: DefaultThreadPool, WSClient: WSClient) extends StrictLogging {
 
   switchService.startPoller()
@@ -262,22 +265,25 @@ class StripeBackend(
 object StripeBackend {
 
   private def apply(
-                     stripeService: StripeService,
-                     databaseService: ContributionsStoreService,
-                     identityService: IdentityService,
-                     ophanService: AnalyticsService,
-                     emailService: EmailService,
-                     recaptchaService: RecaptchaService,
-                     cloudWatchService: CloudWatchService,
-                     switchService: SwitchService,
-                     environment: Environment
+    stripeService: StripeService,
+    databaseService: ContributionsStoreService,
+    identityService: IdentityService,
+    ophanService: AnalyticsService,
+    bigQueryService: BigQueryService,
+    emailService: EmailService,
+    recaptchaService: RecaptchaService,
+    cloudWatchService: CloudWatchService,
+    switchService: SwitchService,
+    environment: Environment
   )(implicit pool: DefaultThreadPool,
     WSClient: WSClient,
     awsClient: AmazonS3): StripeBackend = {
-    new StripeBackend(stripeService,
+    new StripeBackend(
+      stripeService,
       databaseService,
       identityService,
       ophanService,
+      bigQueryService,
       emailService,
       recaptchaService,
       cloudWatchService,
@@ -305,6 +311,9 @@ object StripeBackend {
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
       services.AnalyticsService(configLoader, env),
+      configLoader
+        .loadConfig[Environment, BigQueryConfig](env)
+        .map(new BigQueryService(_)): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],

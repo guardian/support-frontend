@@ -4,6 +4,7 @@ import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.bigquery.{BigQueryException, BigQueryOptions, InsertAllRequest, TableId}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
+import com.gu.support.acquisitions.AcquisitionEventTable.{datasetName, tableName}
 
 import scala.collection.JavaConverters._
 
@@ -21,7 +22,7 @@ class BigQueryService(config: BigQueryConfig) {
       ))
       .build().getService
 
-  def tableInsertRow(datasetName: String, tableName: String, acquisitionDataRow: AcquisitionDataRow): Either[String, Unit] = {
+  def tableInsertRow(acquisitionDataRow: AcquisitionDataRow): Either[String, Unit] = {
     try {
       val tableId = TableId.of(datasetName, tableName)
       val rowContent = AcquisitionDataRowMapper.mapToTableRow(acquisitionDataRow)
