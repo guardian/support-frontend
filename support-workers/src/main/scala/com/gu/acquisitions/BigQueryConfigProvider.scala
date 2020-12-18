@@ -1,14 +1,8 @@
-package com.gu.support.config
+package com.gu.acquisitions
 
+import com.gu.support.acquisitions.BigQueryConfig
+import com.gu.support.config.{Stage, TouchpointConfigProvider}
 import com.typesafe.config.Config
-
-case class BigQueryConfig(
-  projectId: String,
-  clientId: String,
-  clientEmail: String,
-  privateKey: String,
-  privateKeyId: String
-) extends TouchpointConfig
 
 class BigQueryConfigProvider(config: Config, defaultStage: Stage) extends TouchpointConfigProvider[BigQueryConfig](config, defaultStage) {
   def fromConfig(config: Config): BigQueryConfig = {

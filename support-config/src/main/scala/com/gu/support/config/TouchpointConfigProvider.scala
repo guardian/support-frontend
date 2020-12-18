@@ -8,9 +8,8 @@ import com.typesafe.config.{Config, ConfigValueFactory}
  * TouchpointConfig abstracts the details of talking to the correct environment based on the user details contained in
  * the request.
  */
-trait TouchpointConfig
 
-abstract class TouchpointConfigProvider[T <: TouchpointConfig](config: Config, defaultStage: Stage) {
+abstract class TouchpointConfigProvider[T](config: Config, defaultStage: Stage) {
 
   private lazy val defaultConfig: T = fromConfig(getTouchpointBackend(fromStage(defaultStage)))
   private lazy val uatConfig: T = fromConfig(getTouchpointBackend(UAT))

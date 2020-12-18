@@ -4,7 +4,6 @@ import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.bigquery.{BigQueryException, BigQueryOptions, InsertAllRequest, TableId}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
-import com.gu.support.config.BigQueryConfig
 
 import scala.collection.JavaConverters._
 
