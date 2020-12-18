@@ -9,7 +9,6 @@ import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
-import { ContentForm, type ContentTabPropTypes } from './helpers';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
@@ -28,7 +27,7 @@ const accordionContainer = css`
 
 
 // ----- Content ----- //
-const ContentVoucherFaqBlock = () => (
+export const ContentVoucherFaqBlock = () => (
   <Content
     border={paperHasDeliveryEnabled()}
     image={<GridImage
@@ -65,11 +64,3 @@ const ContentVoucherFaqBlock = () => (
     </Text>
   </Content>
 );
-
-const CollectionTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (
-  <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(r) => { getRef(r); }}>
-    <ContentVoucherFaqBlock />
-    <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your voucher subscription package below" />
-  </div>
-);
-export default CollectionTab;
