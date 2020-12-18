@@ -314,7 +314,7 @@ Resources:
 
 
   # This alarm is for the PaymentSuccess metric where
-  # ProductType == DigitalPack AND PaymentProvider in [Stripe, Gocardless, Paypal]
+  # ProductType == DigitalSubscription AND PaymentProvider in [Stripe, Gocardless, Paypal]
   #
   # The general idea here is
   # a) Have a calculated metric which is a sum of all the payment method metrics for digipack [1]
@@ -343,7 +343,7 @@ Resources:
                 - Name: PaymentProvider
                   Value: Stripe
                 - Name: ProductType
-                  Value: DigitalPack
+                  Value: DigitalSubscription
                 - Name: Stage
                   Value: !Ref Stage
               MetricName: PaymentSuccess
@@ -360,7 +360,7 @@ Resources:
                 - Name: PaymentProvider
                   Value: DirectDebit
                 - Name: ProductType
-                  Value: DigitalPack
+                  Value: DigitalSubscription
                 - Name: Stage
                   Value: !Ref Stage
               MetricName: PaymentSuccess
@@ -377,7 +377,7 @@ Resources:
                 - Name: PaymentProvider
                   Value: PayPal
                 - Name: ProductType
-                  Value: DigitalPack
+                  Value: DigitalSubscription
                 - Name: Stage
                   Value: !Ref Stage
               MetricName: PaymentSuccess

@@ -210,18 +210,17 @@ object JsonFixtures {
           "browserId":null
         },
         "referrerAcquisitionData":{
-          "campaignCode":null,
-          "referrerPageviewId":null,
-          "referrerUrl":null,
-          "componentId":null,
-          "componentType":null,
-          "source":null,
+          "source": "GUARDIAN_WEB",
+          "componentId": "header_support",
+          "componentType": "ACQUISITIONS_HEADER",
+          "campaignCode": "header_support",
+          "referrerPageviewId": "kirbr24j42oda63r9c1s",
+          "referrerUrl": "https://www.theguardian.com/uk",
           "abTests":[{
             "name":"fakeTest",
             "variant":"fakeVariant"
           }],
-          "queryParameters":null,
-          "hostname":"support.thegulocal.com"
+          "hostname": "support.code.dev-theguardian.com"
         },
         "supportAbTests":[{
           "name":"fakeSupportTest",
@@ -576,7 +575,7 @@ object JsonFixtures {
   val digipackCardDeclinedStripeJson =
     """
     {
-      "state": {"requestId":"299f0204-8f82-f479-0000-00000000e33d","user":{"id":"30001643","primaryEmailAddress":"test@gu.com","firstName":"FygxilMxB5QMoAkmuIc","lastName":"FygxilMxB5QMoAkmuIc","billingAddress":{"country":"GB"},"country":"GB","state":null,"allowMembershipMail":false,"allowThirdPartyMail":false,"allowGURelatedMail":false,"isTestUser":false},"product":{"productType":"DigitalPack","currency":"GBP","billingPeriod":"Annual","readerType":"Direct"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentFields":{"userId":"30001643","stripeToken":"tok_chargeDeclined"},"acquisitionData":{"ophanIds":{"pageviewId":"jaignx8mlwazhhpaq9tk","visitId":null,"browserId":null},"referrerAcquisitionData":{"campaignCode":null,"referrerPageviewId":null,"referrerUrl":null,"componentId":null,"componentType":null,"source":null,"abTest":null},"supportAbTests":[{"name":"usRecurringCopyTest","variant":"notintest"},{"name":"ukRecurringAmountsTest","variant":"lower"},{"name":"usRecurringAmountsTest","variant":"notintest"}]}},
+      "state": {"requestId":"299f0204-8f82-f479-0000-00000000e33d","user":{"id":"30001643","primaryEmailAddress":"test@gu.com","firstName":"FygxilMxB5QMoAkmuIc","lastName":"FygxilMxB5QMoAkmuIc","billingAddress":{"country":"GB"},"country":"GB","state":null,"allowMembershipMail":false,"allowThirdPartyMail":false,"allowGURelatedMail":false,"isTestUser":false},"product":{"productType":"DigitalSubscription","currency":"GBP","billingPeriod":"Annual","readerType":"Direct"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentFields":{"userId":"30001643","stripeToken":"tok_chargeDeclined"},"acquisitionData":{"ophanIds":{"pageviewId":"jaignx8mlwazhhpaq9tk","visitId":null,"browserId":null},"referrerAcquisitionData":{"campaignCode":null,"referrerPageviewId":null,"referrerUrl":null,"componentId":null,"componentType":null,"source":null,"abTest":null},"supportAbTests":[{"name":"usRecurringCopyTest","variant":"notintest"},{"name":"ukRecurringAmountsTest","variant":"lower"},{"name":"usRecurringAmountsTest","variant":"notintest"}]}},
       "error": {
         "Error": "com.gu.support.workers.exceptions.RetryNone",
         "Cause": "{\"errorMessage\":\"{\\n  \\\"error\\\" : {\\n    \\\"type\\\" : \\\"card_error\\\",\\n    \\\"message\\\" : \\\"Your card was declined.\\\",\\n    \\\"code\\\" : \\\"card_declined\\\",\\n    \\\"decline_code\\\" : \\\"generic_decline\\\",\\n    \\\"param\\\" : \\\"\\\"\\n  }\\n}\",\"errorType\":\"com.gu.support.workers.exceptions.RetryNone\",\"stackTrace\":[\"com.gu.stripe.Stripe$StripeError.asRetryException(Stripe.scala:37)\",\"com.gu.support.workers.exceptions.ErrorHandler$$anonfun$1.applyOrElse(ErrorHandler.scala:20)\",\"com.gu.support.workers.exceptions.ErrorHandler$$anonfun$1.applyOrElse(ErrorHandler.scala:18)\",\"scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:36)\",\"com.gu.support.workers.lambdas.Handler.handleRequest(Handler.scala:30)\",\"sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\",\"sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\",\"sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\",\"java.lang.reflect.Method.invoke(Method.java:498)\"],\"cause\":{\"errorMessage\":\"message: Your card was declined.; type: card_error; code: card_declined; decline_code: generic_decline; param: \",\"errorType\":\"com.gu.stripe.Stripe$StripeError\",\"stackTrace\":[\"com.gu.stripe.Stripe$StripeError$anon$lazy$macro$308$1$anon$macro$304$1.from(Stripe.scala:17)\",\"com.gu.stripe.Stripe$StripeError$anon$lazy$macro$308$1$anon$macro$304$1.from(Stripe.scala:17)\",\"shapeless.LabelledGeneric$$anon$1.from(generic.scala:229)\",\"shapeless.LabelledGeneric$$anon$1.from(generic.scala:226)\",\"io.circe.generic.decoding.DerivedDecoder$$anon$1.apply(DerivedDecoder.scala:14)\",\"io.circe.Decoder$class.tryDecode(Decoder.scala:33)\",\"io.circe.generic.decoding.DerivedDecoder.tryDecode(DerivedDecoder.scala:6)\",\"io.circe.Decoder$$anon$20.tryDecode(Decoder.scala:178)\",\"io.circe.Decoder$$anon$20.apply(Decoder.scala:177)\",\"com.gu.support.workers.encoding.Codec.apply(Codec.scala:9)\",\"io.circe.Decoder$class.decodeJson(Decoder.scala:49)\",\"com.gu.support.workers.encoding.Codec.decodeJson(Codec.scala:6)\",\"io.circe.Parser$class.finishDecode(Parser.scala:11)\",\"io.circe.parser.package$.finishDecode(package.scala:5)\",\"io.circe.Parser$class.decode(Parser.scala:25)\",\"io.circe.parser.package$.decode(package.scala:5)\",\"com.gu.helpers.WebServiceHelper$class.decodeError(WebServiceHelper.scala:73)\",\"com.gu.stripe.StripeService.decodeError(StripeService.scala:11)\",\"com.gu.helpers.WebServiceHelper$$anonfun$request$1.apply(WebServiceHelper.scala:59)\",\"com.gu.helpers.WebServiceHelper$$anonfun$request$1.apply(WebServiceHelper.scala:54)\",\"scala.util.Success$$anonfun$map$1.apply(Try.scala:237)\",\"scala.util.Try$.apply(Try.scala:192)\",\"scala.util.Success.map(Try.scala:237)\",\"scala.concurrent.Future$$anonfun$map$1.apply(Future.scala:237)\",\"scala.concurrent.Future$$anonfun$map$1.apply(Future.scala:237)\",\"scala.concurrent.impl.CallbackRunnable.run(Promise.scala:32)\",\"scala.concurrent.impl.ExecutionContextImpl$AdaptedForkJoinTask.exec(ExecutionContextImpl.scala:121)\",\"scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)\",\"scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)\",\"scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)\",\"scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)\"]}}"
@@ -678,7 +677,166 @@ object JsonFixtures {
           },
           "acquisitionData": $acquisitionData
         }"""
+  val sendAcquisitionEventPrintJson =
+    s"""
+    {
+      "requestId": "1a94c891-e98a-13ae-0000-0000000038a3",
+      "sendThankYouEmailState": {
+        "user": {
+          "id": "200004237",
+          "primaryEmailAddress": "rupert.bates+test-mma2@theguardian.com",
+          "title": null,
+          "firstName": "rupert",
+          "lastName": "bates",
+          "billingAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "deliveryAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "telephoneNumber": null,
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false,
+          "deliveryInstructions": null
+        },
+        "product": {
+          "currency": "GBP",
+          "billingPeriod": "Monthly",
+          "fulfilmentOptions": "HomeDelivery",
+          "productOptions": "Sixday",
+          "productType": "Paper"
+        },
+        "paymentMethod": {
+          "TokenId": "pm_0Hyx9kItVxyc3Q6ndwisZWtU",
+          "SecondTokenId": "cus_Ia7OiUxIGHWyAy",
+          "CreditCardNumber": "4242",
+          "CreditCardCountry": "US",
+          "CreditCardExpirationMonth": 2,
+          "CreditCardExpirationYear": 2027,
+          "CreditCardType": "Visa",
+          "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+          "Type": "CreditCardReferenceTransaction",
+          "StripePaymentType": "StripeCheckout"
+        },
+        "paymentSchedule": {
+          "payments": []
+        },
+        "promoCode": "fake_code",
+        "accountNumber": "A00102360",
+        "subscriptionNumber": "A-S00125315",
+        "firstDeliveryDate": "2020-12-19",
+        "productType": "Paper"
+      },
+      "analyticsInfo": {
+        "isGiftPurchase": false,
+        "paymentProvider": "Stripe"
+      },
+      "acquisitionData": $acquisitionData
+    }
+    """
 
+  val sendAcquisitionEventGWJson =
+    """
+    {
+      "requestId": "1a94c891-e98a-13ae-0000-000000003f18",
+      "sendThankYouEmailState": {
+        "user": {
+          "id": "200004237",
+          "primaryEmailAddress": "rupert.bates+test-mma2@theguardian.com",
+          "title": null,
+          "firstName": "rupert",
+          "lastName": "bates",
+          "billingAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "deliveryAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "telephoneNumber": null,
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false,
+          "deliveryInstructions": null
+        },
+        "product": {
+          "currency": "GBP",
+          "billingPeriod": "SixWeekly",
+          "fulfilmentOptions": "Domestic",
+          "productType": "GuardianWeekly"
+        },
+        "giftRecipient": null,
+        "paymentMethod": {
+          "PaypalBaid": "B-8JT45264A2787164W",
+          "PaypalEmail": "membership.paypal-buyer@theguardian.com",
+          "PaypalType": "ExpressCheckout",
+          "Type": "PayPal",
+          "PaymentGateway": "PayPal Express"
+        },
+        "paymentSchedule": {
+          "payments": [
+            {
+              "date": "2021-01-08",
+              "amount": 6
+            }
+          ]
+        },
+        "promoCode": "6FOR6",
+        "accountNumber": "A00102401",
+        "subscriptionNumber": "A-S00125354",
+        "firstDeliveryDate": "2021-01-08",
+        "productType": "GuardianWeekly"
+      },
+      "analyticsInfo": {
+        "isGiftPurchase": false,
+        "paymentProvider": "PayPal"
+      },
+      "acquisitionData": {
+        "ophanIds": {
+          "pageviewId": "kirefisckm7vh76bd1w8",
+          "visitId": null,
+          "browserId": null
+        },
+        "referrerAcquisitionData": {
+          "campaignCode": null,
+          "referrerPageviewId": null,
+          "referrerUrl": null,
+          "componentId": null,
+          "componentType": null,
+          "source": null,
+          "abTests": null,
+          "queryParameters": [],
+          "hostname": "support.code.dev-theguardian.com",
+          "gaClientId": "GA1.2.1846757665.1596457717",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+          "ipAddress": "10.248.135.37"
+        },
+        "supportAbTests": []
+      }
+    }
+    """
   val digipackSubscriptionWithDiscountAndFreeTrialJson =
     s"""
         {

@@ -39,7 +39,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
     {
       "currency" : "GBP",
       "billingPeriod" : "Annual",
-      "type" : "DigitalPack"
+      "type" : "DigitalSubscription"
     }
      */
   }
@@ -94,7 +94,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
     }
   }
 
-  it should "be able to decode a DigitalPack with Direct Debit payment fields" in {
+  it should "be able to decode a DigitalSubscription with Direct Debit payment fields" in {
     val state = decode[CreatePaymentMethodState](createDirectDebitDigitalPackJson)
     state.fold(e => logger.error(s"$e"), result => {
       result.product match {
