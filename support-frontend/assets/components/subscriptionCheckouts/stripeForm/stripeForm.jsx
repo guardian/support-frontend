@@ -252,7 +252,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
       recaptchaError === null) {
       setRecaptchaError({
         field: 'recaptcha',
-        message: 'Please check the \'I am not a robot\' checkbox',
+        message: 'Please check the \'I\'m not a robot\' checkbox',
       });
     }
   };
