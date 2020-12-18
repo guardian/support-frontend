@@ -22,6 +22,7 @@ import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+import type { ContributionType } from 'helpers/contributions';
 
 export type CheckoutState = ReduxState<{|
   checkout: FormState,

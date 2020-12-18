@@ -23,6 +23,7 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
+import type { Amount, ContributionType } from 'helpers/contributions';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -47,6 +48,8 @@ export type Action =
   | { type: 'SET_STRIPE_PAYMENT_METHOD', stripePaymentMethod: Option<string>}
   | { type: 'SET_GIFT_MESSAGE', message: Option<string>}
   | { type: 'SET_GIFT_DELIVERY_DATE', giftDeliveryDate: string}
+  | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
+  | { type: 'OPEN' }
   | AddressAction
   | PayPalAction
   | DDAction;
@@ -134,6 +137,16 @@ const formActionCreators = {
   }),
 };
 
+const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(({ type: 'SELECT_AMOUNT', amount, contributionType }));
+  };
+
+const open = (): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(({ type: 'OPEN' }));
+  };
+
 export type FormActionCreators = typeof formActionCreators;
 
 export {
@@ -142,4 +155,6 @@ export {
   setSubmissionError,
   setFormSubmitted,
   formActionCreators,
+  selectAmount,
+  open,
 };

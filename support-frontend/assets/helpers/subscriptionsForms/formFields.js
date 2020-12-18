@@ -14,6 +14,7 @@ import type {
   CheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
+import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 
@@ -38,6 +39,10 @@ export type FormFields = {|
   deliveryInstructions: Option<string>,
   giftMessage: Option<string>,
   giftDeliveryDate: Option<string>,
+  contributionType: ContributionType,
+  selectedAmounts: SelectedAmounts,
+  otherAmounts: OtherAmounts,
+  closed: boolean,
 |};
 
 export type FormField = $Keys<FormFields> | 'recaptcha';

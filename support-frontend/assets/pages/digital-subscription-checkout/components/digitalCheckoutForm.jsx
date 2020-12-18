@@ -14,7 +14,7 @@ import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
 import {
   finalPrice,
   getProductPrice,
@@ -61,6 +61,9 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { routes } from 'helpers/routes';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
+import { ContributionTypeTabs } from 'pages/digital-subscription-checkout/components/amounts/ContributionTypeTabs';
+import { ContributionAmount } from 'pages/digital-subscription-checkout/components/amounts/ContributionAmount';
+import { checkAmount } from 'helpers/formValidation';
 
 // ----- Types ----- //
 
@@ -100,11 +103,7 @@ function mapStateToProps(state: CheckoutState) {
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
     paymentMethod: state.page.checkout.paymentMethod,
     isTestUser: state.page.checkout.isTestUser,
-    amount: finalPrice(
-      state.page.checkout.productPrices,
-      state.common.internationalisation.countryId,
-      state.page.checkout.billingPeriod,
-    ).price,
+    amount: state.page.checkout.selectedAmounts['MONTHLY'].value,
     billingPeriod: state.page.checkout.billingPeriod,
     addressErrors: state.page.billingAddress.fields.formErrors,
     participations: state.common.abParticipations,
@@ -138,11 +137,12 @@ const Address = withStore(countries, 'billing', getBillingAddress);
 // ----- Component ----- //
 
 function DigitalCheckoutForm(props: PropTypes) {
-  const productPrice = getProductPrice(
-    props.productPrices,
-    props.country,
-    props.billingPeriod,
-  );
+  const productPrice: ProductPrice = {
+    price: parseFloat(props.amount),
+    currency: 'GBP',
+    fixedTerm: false,
+    promotions: []
+  };
 
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
@@ -188,6 +188,9 @@ function DigitalCheckoutForm(props: PropTypes) {
           <FormSection title="Address">
             <Address />
           </FormSection>
+          <ContributionAmount
+            checkOtherAmount={checkAmount}
+          />
           <PaymentMethodSelector
             country={props.country}
             paymentMethod={props.paymentMethod}

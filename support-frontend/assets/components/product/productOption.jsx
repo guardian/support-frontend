@@ -83,19 +83,19 @@ function ProductOption(props: Product) {
       </div>
       <div>
         <p css={[productOptionOfferCopy, productOptionUnderline]}>
-          {props.offerCopy}
+
         </p>
       </div>
       <div>
         {/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
         {/* eslint-disable-next-line jsx-a11y/aria-role */}
         <p role="text" css={productOptionPriceCopy}>
-          <span css={productOptionPrice}>{props.price}</span>
-          {props.priceCopy}
+          <span css={productOptionPrice}>£11.99</span>
+          per month, plus optional enhanced contribution
         </p>
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
-            href={props.href}
+            href={'https://support.thegulocal.com/subscribe/digital/checkout?period=Monthly'}
             onClick={props.onClick}
             aria-label={`${props.title}- ${props.buttonCopy}`}
           >

@@ -9,6 +9,17 @@ import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDig
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import * as styles from './orderSummaryStyles';
 import { getGiftOrderSummaryText } from '../helpers';
+import { css } from '@emotion/core';
+
+const titlee = css`
+font-weight: bold;
+margin-top: 0.5em;
+`
+
+const includess = css`
+margin-top: 0.5em;
+margin-bottom: 0.5em;
+`
 
 type PropTypes = {
   billingPeriod: DigitalBillingPeriod,
@@ -26,6 +37,8 @@ function OrderSummary(props: PropTypes) {
   const priceString = props.orderIsAGift ? giftPriceString :
     getBillingDescription(props.productPrice, props.billingPeriod);
 
+  const contAmount = props.productPrice.price - 11.99;
+
   return (
     <aside css={styles.wrapper}>
       <div css={styles.topLine}>
@@ -37,6 +50,13 @@ function OrderSummary(props: PropTypes) {
         <div css={styles.textBlock}>
           <h3>{props.title}</h3>
           <p>{priceString}</p>
+          {(props.productPrice.price > 11.99) ?
+            (<div css={includess}>
+  <p css={titlee}>Includes:</p>
+  <p>* £11.99 base price</p>
+  <p>* £{contAmount} monthly contribution</p>
+</div>)
+            : null}
           {!props.orderIsAGift && <span>14 day free trial</span>}
         </div>
       </div>

@@ -18,6 +18,7 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
+import { getContributionTypeFromSession } from 'helpers/checkouts';
 
 function createFormReducer(
   initialCountry: IsoCountry,
@@ -60,6 +61,20 @@ function createFormReducer(
     debugInfo: '',
     giftMessage: null,
     giftDeliveryDate: null,
+    contributionType: 'MONTHLY',
+    selectedAmounts: {
+      MONTHLY: {
+        value: '11.99',
+        isDefault: true
+      },
+    },
+    otherAmounts: {
+      MONTHLY: {
+        value: '5',
+        isDefault: true
+      },
+    },
+    closed: true,
   };
 
   const getFulfilmentOption = (action, currentOption) =>
@@ -153,6 +168,15 @@ function createFormReducer(
 
       case 'SET_GIFT_DELIVERY_DATE':
         return { ...state, giftDeliveryDate: action.giftDeliveryDate, formErrors: removeError('giftDeliveryDate', state.formErrors) };
+
+      case 'SELECT_AMOUNT':
+        return {
+          ...state,
+          selectedAmounts: { ...state.selectedAmounts, [action.contributionType]: action.amount },
+        };
+
+      case 'OPEN':
+        return {...state, closed: false};
 
       default:
         return state;
