@@ -29,9 +29,16 @@ const usEndOfYearCampaignCopy = (): CampaignCopy => ({
   contributeCopy: 'As America begins a new chapter, the need for robust, fact-based journalism that highlights injustice and offers solutions is as great as ever. Support the Guardian’s open, independent journalism with a year-end gift.',
 });
 
+const usEndOfYearCampaignXmasCopy = (): CampaignCopy => ({
+  headerCopy: 'Help fund high\xa0impact journalism in\xa02021',
+  contributeCopy: 'As America begins a new chapter, the need for robust, fact-based journalism that highlights injustice and offers solutions is as great as ever. Support the Guardian’s open, independent journalism with a gift today.',
+});
+
+const DEC_29 = Date.parse('2020-12-29');
+
 export const campaign: CampaignSettings = ({
   campaignCode: 'us_eoyappeal_2020',
-  copy: usEndOfYearCampaignCopy,
+  copy: Date.now() < DEC_29 ? usEndOfYearCampaignCopy : usEndOfYearCampaignXmasCopy,
   tickerSettings: {
     tickerCountType: 'money',
     tickerEndType: 'unlimited',
