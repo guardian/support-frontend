@@ -59,6 +59,12 @@ class ProductPagesSpec extends AnyFeatureSpec
     }
   }
 
+  Feature("Digital Pack gift product page") {
+    Scenario("Basic loading") {
+      testPageLoads(new DigitalPackGiftProductPage())
+    }
+  }
+
 
   def testPageLoads(page: ProductPage): Unit ={
     Given("that a user goes to the page")
