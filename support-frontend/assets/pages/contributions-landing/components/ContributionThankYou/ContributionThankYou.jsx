@@ -227,7 +227,6 @@ const ContributionThankYou = ({
     component: (
       <ContributionThankYouSupportReminder
         email={email}
-        isUsEndOfYearAppeal={isUsEndOfYearAppeal}
       />
     ),
     shouldShow: contributionType === 'ONE_OFF',
