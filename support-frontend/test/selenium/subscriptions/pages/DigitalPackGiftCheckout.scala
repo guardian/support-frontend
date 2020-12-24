@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver
 import selenium.util.Config
 
 class DigitalPackGiftCheckout(implicit val webDriver: WebDriver) extends CheckoutPage {
-  val url = s"${Config.supportFrontendUrl}/subscribe/digital/checkout/gift?period=Quarterly"
+  val url = s"${Config.supportFrontendUrl}/subscribe/digital/checkout/gift"
 
   private val giftRecipientFirstName = id("firstNameGiftRecipient")
   private val giftRecipientLastName = id("lastNameGiftRecipient")
