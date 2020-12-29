@@ -8,11 +8,6 @@ import { boolean, withKnobs } from '@storybook/addon-knobs';
 import { withVerticalCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
 import Footer from 'components/footerCompliant/Footer';
-import SubscriptionTermsPrivacy
-  from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-import CustomerService from 'components/customerService/customerService';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
-
 
 const stories = storiesOf('Footer', module)
   .addDecorator(withKnobs)
@@ -28,13 +23,7 @@ stories.add('Footer', () => {
       >
         {contents &&
           <>
-            <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
-            <CustomerService
-              selectedCountryGroup="GBPCountries"
-              subscriptionProduct="DigitalPack"
-              paperFulfilmentOptions={null}
-            />
-            <SubscriptionFaq subscriptionProduct="DigitalPack" />
+            Terms and conditions may (or may not) apply
           </>
         }
       </Footer>
