@@ -7,7 +7,7 @@ import { storiesOf } from '@storybook/react';
 import List from 'components/list/list';
 import Tabs from 'components/tabs/tabs';
 
-const stories = storiesOf('Content elements', module);
+const stories = storiesOf('Content components', module);
 
 stories.add('List', () => (
   <List items={[
