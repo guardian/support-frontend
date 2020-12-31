@@ -44,9 +44,9 @@ export const campaign: CampaignSettings = ({
     tickerEndType: 'unlimited',
     currencySymbol: '$',
     copy: {
-      countLabel: 'contributed so far',
-      goalReachedPrimary: 'We\'ve hit our goal!',
-      goalReachedSecondary: 'but you can still support us',
+      countLabel: 'contributed',
+      goalReachedPrimary: "It's not too late to give!",
+      goalReachedSecondary: '',
     },
   },
   createReferralCodes: false,
