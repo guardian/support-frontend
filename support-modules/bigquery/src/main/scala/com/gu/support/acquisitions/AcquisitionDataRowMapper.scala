@@ -35,7 +35,7 @@ object AcquisitionDataRowMapper {
     (Map(
       "event_timestamp" -> ISODateTimeFormat.dateTime().print(acquisition.eventTimeStamp),
       "product" -> acquisition.product.value,
-      "payment_frequency" -> paymentFrequencyFromBillingPeriod(acquisition.paymentFrequency),
+      "payment_frequency" -> acquisition.paymentFrequency.value,
       "country_code" -> acquisition.country.alpha2,
       "currency" -> acquisition.currency.iso,
       "reused_existing_payment_method" -> acquisition.reusedExistingPaymentMethod,
@@ -49,13 +49,6 @@ object AcquisitionDataRowMapper {
     ) ++ optionalFields).asJava
 
   }
-
-  private def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod) =
-    billingPeriod match {
-      case Monthly => "MONTHLY"
-      case Quarterly | SixWeekly => "QUARTERLY"
-      case Annual => "ANNUALLY"
-    }
 
   def paymentProviderName(provider: PaymentProvider) = provider match {
     case PayPal => "PAYPAL"

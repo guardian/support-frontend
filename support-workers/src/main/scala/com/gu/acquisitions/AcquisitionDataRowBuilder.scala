@@ -5,13 +5,13 @@ import com.gu.support.catalog._
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
-import com.gu.support.workers.{AcquisitionData, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebit, DirectDebitPaymentMethod, GuardianWeekly, Paper, PayPal, PayPalReferenceTransaction, PaymentMethod, PaymentProvider, ProductType, RequestInfo, SixWeekly, Stripe, StripeApplePay, StripePaymentRequestButton, StripePaymentType}
+import com.gu.support.workers.{AcquisitionData, Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebit, DirectDebitPaymentMethod, GuardianWeekly, Monthly, Paper, PayPal, PayPalReferenceTransaction, PaymentMethod, PaymentProvider, ProductType, Quarterly, RequestInfo, SixWeekly, Stripe, StripeApplePay, StripePaymentRequestButton, StripePaymentType}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
 import com.gu.support.acquisitions
 import com.gu.support.acquisitions.AcquisitionType.{Purchase, Redemption}
 import com.gu.support.acquisitions.PrintProduct._
-import com.gu.support.acquisitions.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PrintOptions, PrintProduct}
+import com.gu.support.acquisitions.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PrintOptions, PrintProduct}
 import com.gu.support.zuora.api.ReaderType
 
 
@@ -34,7 +34,7 @@ object AcquisitionDataRowBuilder {
       state.acquisitionData.flatMap(_.referrerAcquisitionData.source.map(_.originalName)),
       state.acquisitionData.flatMap(_.referrerAcquisitionData.referrerUrl),
       state.acquisitionData.map(getAbTests).getOrElse(Nil),
-      commonState.product.billingPeriod,
+      paymentFrequencyFromBillingPeriod(commonState.product.billingPeriod),
       acquisitionTypeDetails.paymentMethod.map(paymentProviderFromPaymentMethod),
       printOptions,
       state.acquisitionData.flatMap(_.ophanIds.browserId),
@@ -52,6 +52,13 @@ object AcquisitionDataRowBuilder {
       state.acquisitionData.map(getQueryParameters).getOrElse(Nil)
     )
   }
+
+  private def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod) =
+    billingPeriod match {
+      case Monthly => PaymentFrequency.Monthly
+      case Quarterly | SixWeekly => PaymentFrequency.Quarterly
+      case Annual => PaymentFrequency.Annually
+    }
 
   private def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): PaymentProvider =
     paymentMethod match {

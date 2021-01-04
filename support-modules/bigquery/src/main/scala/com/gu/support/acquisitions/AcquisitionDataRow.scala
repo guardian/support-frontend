@@ -17,7 +17,7 @@ case class AcquisitionDataRow(
   source: Option[String],
   referrerUrl: Option[String],
   abTests: List[AbTest],
-  paymentFrequency: BillingPeriod,
+  paymentFrequency: PaymentFrequency,
   paymentProvider: Option[PaymentProvider],
   printOptions: Option[PrintOptions],
   browserId: Option[String],
@@ -50,8 +50,23 @@ case class QueryParameter(
   value: String
 )
 
+sealed abstract class PaymentFrequency(val value: String)
+
+object PaymentFrequency {
+  case object OneOff extends PaymentFrequency("ONE_OFF")
+
+  case object Monthly extends PaymentFrequency("MONTHLY")
+
+  case object Quarterly extends PaymentFrequency("QUARTERLY")
+
+  case object Annually extends PaymentFrequency("ANNUALLY")
+}
+
 sealed abstract class AcquisitionProduct(val value: String)
+
 object AcquisitionProduct {
+
+  case object Contribution extends AcquisitionProduct("CONTRIBUTION")
 
   case object RecurringContribution extends AcquisitionProduct("RECURRING_CONTRIBUTION")
 
