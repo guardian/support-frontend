@@ -260,7 +260,11 @@ Resources:
               - Effect: Allow
                 Action: s3:GetObject
                 Resource:
-                  - !Sub arn:aws:s3:::support-admin-console/${Stage}/*
+                  - !If [CreateProdResources,
+                     # PROD needs both stages for test mode
+                    !Sub arn:aws:s3:::support-admin-console/*/*,
+                    !Sub arn:aws:s3:::support-admin-console/CODE/*
+                  ]
 
 
 
