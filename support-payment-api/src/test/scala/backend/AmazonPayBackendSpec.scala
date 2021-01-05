@@ -8,6 +8,8 @@ import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmO
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
+import com.gu.support.acquisitions.BigQueryService
+
 import javax.xml.datatype.DatatypeFactory
 import model._
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
@@ -109,6 +111,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
   val mockOphanService: AnalyticsService = mock[AnalyticsService]
+  val mockBigQueryService: BigQueryService = mock[BigQueryService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
@@ -119,6 +122,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockIdentityService,
     mockEmailService,
     mockOphanService,
+    mockBigQueryService,
     mockDatabaseService
   )(new DefaultThreadPool(ec))
 
