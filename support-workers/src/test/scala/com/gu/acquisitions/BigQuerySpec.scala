@@ -7,8 +7,8 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.{Authentication, DeliveryContact, NewContact, SalesforceContactResponse}
 import com.gu.support.acquisitions.AcquisitionType.Purchase
 import com.gu.support.acquisitions.PaymentFrequency.Monthly
+import com.gu.support.acquisitions.PaymentProvider.PayPal
 import com.gu.support.acquisitions.{AbTest, AcquisitionDataRow, AcquisitionEventTable, AcquisitionProduct, BigQueryService, PrintOptions, PrintProduct, QueryParameter}
-import com.gu.support.workers.PayPal
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging

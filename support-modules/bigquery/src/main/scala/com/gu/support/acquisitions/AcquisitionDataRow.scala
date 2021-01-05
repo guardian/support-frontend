@@ -1,7 +1,6 @@
 package com.gu.support.acquisitions
 
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.workers.{BillingPeriod, PaymentProvider}
 import com.gu.support.zuora.api.ReaderType
 import org.joda.time.DateTime
 
@@ -123,4 +122,20 @@ object PrintProduct {
   case object VoucherSundayPlus extends PrintProduct("VOUCHER_SUNDAY_PLUS")
 
   case object GuardianWeekly extends PrintProduct("GUARDIAN_WEEKLY")
+}
+
+sealed abstract class PaymentProvider(val value: String)
+
+object PaymentProvider{
+  case object Stripe extends PaymentProvider("STRIPE")
+
+  case object StripeApplePay extends PaymentProvider("STRIPE_APPLE_PAY")
+
+  case object StripePaymentRequestButton extends PaymentProvider("STRIPE_PAYMENT_REQUEST_BUTTON")
+
+  case object PayPal extends PaymentProvider("PAYPAL")
+
+  case object DirectDebit extends PaymentProvider("GOCARDLESS")
+
+  case object AmazonPay extends PaymentProvider("AMAZON_PAY")
 }

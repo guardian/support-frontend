@@ -12,7 +12,7 @@ object AcquisitionDataRowMapper {
 
     val optionalFields = List(
       acquisition.promoCode.map("promo_code" -> _),
-      acquisition.paymentProvider.map("payment_provider" -> paymentProviderName(_)),
+      acquisition.paymentProvider.map("payment_provider" -> _),
       acquisition.printOptions.map(p => "print_options" -> Map(
         "product" -> p.product.value,
         "delivery_country_code" -> p.deliveryCountry.alpha2
@@ -48,14 +48,6 @@ object AcquisitionDataRowMapper {
       "platform" -> "SUPPORT",
     ) ++ optionalFields).asJava
 
-  }
-
-  def paymentProviderName(provider: PaymentProvider) = provider match {
-    case PayPal => "PAYPAL"
-    case DirectDebit => "GOCARDLESS"
-    case Stripe => "STRIPE"
-    case StripeApplePay => "STRIPE_APPLE_PAY"
-    case StripePaymentRequestButton => "STRIPE_PAYMENT_REQUEST_BUTTON"
   }
 
   private def mapAbTests(abtests: List[AbTest]) =
