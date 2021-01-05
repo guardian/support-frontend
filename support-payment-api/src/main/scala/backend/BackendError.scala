@@ -28,6 +28,7 @@ sealed abstract class BackendError extends Exception {
 
 object BackendError {
   final case class IdentityIdMissingError(error: String) extends BackendError
+  final case class BigQueryError(error: String) extends BackendError
   final case class Database(error: ContributionsStoreService.Error) extends BackendError
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
   final case class Ophan(error: List[AnalyticsServiceError]) extends BackendError
@@ -42,13 +43,16 @@ object BackendError {
   Semigroup.instance((x,y) => MultipleErrors(List(x,y)))
 
   def combineResults(
-      result1: EitherT[Future, BackendError, Unit],
-      result2:  EitherT[Future, BackendError, Unit])(implicit pool: DefaultThreadPool):  EitherT[Future, BackendError, Unit] = {
+    result1: EitherT[Future, BackendError, Unit],
+    result2:  EitherT[Future, BackendError, Unit],
+    result3:  EitherT[Future, BackendError, Unit]
+  )(implicit pool: DefaultThreadPool):  EitherT[Future, BackendError, Unit] = {
     EitherT(for {
       r1 <- result1.toValidated
       r2 <- result2.toValidated
+      r3 <- result3.toValidated
     } yield {
-      r1.combine(r2).toEither
+      r1.combine(r2).combine(r3).toEither
     })
   }
 

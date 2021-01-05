@@ -7,13 +7,14 @@ import com.gu.support.acquisitions._
 import com.gu.support.workers.{PaymentProvider, Stripe, StripeApplePay, StripePaymentRequestButton}
 import com.gu.support.zuora.api.ReaderType
 import model.{Currency => ModelCurrency}
-import model.Currency.{AUD => ModelAUD, CAD => ModelCAD, GBP => ModelGBP, EUR => ModelEUR, NZD => ModelNZD, USD => ModelUSD}
+import model.Currency.{AUD => ModelAUD, CAD => ModelCAD, EUR => ModelEUR, GBP => ModelGBP, NZD => ModelNZD, USD => ModelUSD}
+import model.db.ContributionData
 import model.stripe.StripePaymentMethod
 import ophan.thrift.event.{AbTest, QueryParameter => ThriftQueryParam}
 import org.joda.time.{DateTime, DateTimeZone}
 
 object AcquisitionDataRowBuilder {
-  def buildFromStripe(acquisition: StripeAcquisition): AcquisitionDataRow = {
+  def buildFromStripe(acquisition: StripeAcquisition, contributionData: ContributionData): AcquisitionDataRow = {
     val paymentData = acquisition.stripeChargeData.paymentData
     val acquisitionData = acquisition.stripeChargeData.acquisitionData
     val paymentProvider = mapStripePaymentProvider(acquisition.stripeChargeData.paymentData.stripePaymentMethod)
@@ -44,7 +45,7 @@ object AcquisitionDataRowBuilder {
       acquisitionType = AcquisitionType.Purchase,
       zuoraSubscriptionNumber = None,
       zuoraAccountNumber = None,
-      contributionId = None, // TODO Get the contribution id for this contribution
+      contributionId = Some(contributionData.contributionId.toString),
       queryParameters = mapQueryParams(acquisitionData.queryParameters)
     )
   }

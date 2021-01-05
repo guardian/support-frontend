@@ -16,7 +16,7 @@ import conf.ConfigLoader._
 import conf._
 import model.Environment.{Live, Test}
 import model._
-import model.acquisition.StripeAcquisition
+import model.acquisition.{AcquisitionDataRowBuilder, StripeAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
 import model.stripe.StripeApiError.recaptchaErrorText
@@ -207,18 +207,24 @@ class StripeBackend(
     }
   }
 
-  private def trackContribution(charge: Charge, data: StripeRequest, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  =
+  private def trackContribution(charge: Charge, data: StripeRequest, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  = {
+    val contributionData = ContributionData.fromStripeCharge(
+      identityId,
+      charge,
+      clientBrowserInfo.countrySubdivisionCode,
+      PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod)
+    )
+
+    val stripeAcquisition = StripeAcquisition(data, charge, identityId, clientBrowserInfo)
+
     BackendError.combineResults(
       insertContributionDataIntoDatabase(
-        ContributionData.fromStripeCharge(
-          identityId,
-          charge,
-          clientBrowserInfo.countrySubdivisionCode,
-          PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod)
-        )
+        contributionData
       ),
-      submitAcquisitionToOphan(StripeAcquisition(data, charge, identityId, clientBrowserInfo))
+      submitAcquisitionToOphan(stripeAcquisition),
+      submitAcquisitionToBigQuery(stripeAcquisition, contributionData)
     )
+  }
 
   private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[IdentityIdWithGuestAccountCreationToken]] =
     identityService.getOrCreateIdentityIdFromEmail(email).fold(
@@ -239,6 +245,14 @@ class StripeBackend(
   private def submitAcquisitionToOphan(acquisition: StripeAcquisition): EitherT[Future, BackendError, Unit] =
     ophanService.submitAcquisition(acquisition)
       .bimap(BackendError.fromOphanError, _ => ())
+
+  private def submitAcquisitionToBigQuery(
+    acquisition: StripeAcquisition,
+    contributionData: ContributionData
+  ): EitherT[Future, BackendError, Unit] =
+    EitherT.fromEither(bigQueryService.tableInsertRow(
+      AcquisitionDataRowBuilder.buildFromStripe(acquisition, contributionData)
+    )).bimap(BackendError.BigQueryError, _ => ())
 
   private def validateRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] =
     stripeService.validateRefundHook(refundHook)
