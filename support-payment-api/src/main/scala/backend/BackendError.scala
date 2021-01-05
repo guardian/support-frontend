@@ -14,9 +14,11 @@ import scala.concurrent.Future
 
 sealed abstract class BackendError extends Exception {
   override def getMessage: String = this match {
+    case BackendError.IdentityIdMissingError(err) => err
     case BackendError.Database(err) => err.getMessage
     case BackendError.IdentityServiceError(err) => err.getMessage
     case BackendError.Ophan(err) => err.map(_.getMessage).mkString(", ")
+    case BackendError.BigQueryError(err) => err
     case BackendError.StripeApiError(err) => err.getMessage
     case BackendError.PaypalApiError(err) => err.message
     case BackendError.AmazonPayApiError(err) => err.message

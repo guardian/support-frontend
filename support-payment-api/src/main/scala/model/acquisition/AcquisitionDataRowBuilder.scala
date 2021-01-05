@@ -3,7 +3,7 @@ package model.acquisition
 import com.gu.i18n.Currency._
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.acquisitions
-import com.gu.support.acquisitions.PaymentProvider.{AmazonPay, Stripe, StripeApplePay, StripePaymentRequestButton}
+import com.gu.support.acquisitions.PaymentProvider.{AmazonPay, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton}
 import com.gu.support.acquisitions._
 import com.gu.support.zuora.api.ReaderType
 import model.{Currency => ModelCurrency}
@@ -82,6 +82,42 @@ object AcquisitionDataRowBuilder {
       zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
       queryParameters = mapQueryParams(acquisitionData.flatMap(_.queryParameters))
+    )
+  }
+
+  def buildFromPayPal(acquisition: PaypalAcquisition, contributionData: ContributionData): AcquisitionDataRow = {
+    val acquisitionData = acquisition.acquisitionData
+    val transaction = acquisition.payment.getTransactions.get(0)
+    val country = CountryGroup.countryByName(acquisition.payment.getPayer.getPayerInfo.getCountryCode).getOrElse(Country.UK)
+
+    AcquisitionDataRow(
+      eventTimeStamp = DateTime.now(DateTimeZone.UTC),
+      product = AcquisitionProduct.Contribution,
+      amount = Some(transaction.getAmount.getTotal.toDouble),
+      country = country,
+      currency = Currency.fromString(transaction.getAmount.getCurrency).getOrElse(GBP), //TODO test this
+      componentId = acquisitionData.componentId,
+      componentType = acquisitionData.componentType.map(_.originalName),
+      campaignCode = acquisitionData.campaignCodes.map(_.mkString(", ")),
+      source = acquisitionData.source.map(_.originalName),
+      referrerUrl = acquisitionData.referrerUrl,
+      abTests = mapAbTests(acquisitionData.abTests),
+      paymentFrequency = PaymentFrequency.OneOff,
+      paymentProvider = Some(PayPal),
+      printOptions = None,
+      browserId = acquisitionData.browserId,
+      identityId = acquisition.identityId.map(_.toString),
+      pageViewId = acquisitionData.pageviewId,
+      referrerPageViewId = acquisitionData.referrerPageviewId,
+      labels = Nil,
+      promoCode = None,
+      reusedExistingPaymentMethod = false,
+      readerType = ReaderType.Direct,
+      acquisitionType = AcquisitionType.Purchase,
+      zuoraSubscriptionNumber = None,
+      zuoraAccountNumber = None,
+      contributionId = Some(contributionData.contributionId.toString),
+      queryParameters = mapQueryParams(acquisitionData.queryParameters)
     )
   }
 
