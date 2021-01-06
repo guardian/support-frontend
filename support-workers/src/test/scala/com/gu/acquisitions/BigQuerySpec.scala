@@ -73,7 +73,8 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       Direct,
       Purchase,
       Some("subscription number"), Some("account number"), Some("contributionId"),
-      List(QueryParameter("foo", "bar"))
+      List(QueryParameter("foo", "bar")),
+      None
     )
 
     service.tableInsertRow(dataRow) shouldBe Right(())

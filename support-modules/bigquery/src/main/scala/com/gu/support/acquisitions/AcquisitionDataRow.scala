@@ -31,7 +31,8 @@ case class AcquisitionDataRow(
   zuoraSubscriptionNumber: Option[String],
   zuoraAccountNumber: Option[String],
   contributionId: Option[String],
-  queryParameters: List[QueryParameter]
+  queryParameters: List[QueryParameter],
+  platform: Option[String]
 )
 
 case class AbTest(

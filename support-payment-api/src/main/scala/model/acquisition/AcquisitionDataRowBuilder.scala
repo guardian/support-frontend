@@ -46,7 +46,8 @@ object AcquisitionDataRowBuilder {
       zuoraSubscriptionNumber = None,
       zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
-      queryParameters = mapQueryParams(acquisitionData.queryParameters)
+      queryParameters = mapQueryParams(acquisitionData.queryParameters),
+      platform = acquisitionData.platform
     )
   }
 
@@ -81,7 +82,8 @@ object AcquisitionDataRowBuilder {
       zuoraSubscriptionNumber = None,
       zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
-      queryParameters = mapQueryParams(acquisitionData.flatMap(_.queryParameters))
+      queryParameters = mapQueryParams(acquisitionData.flatMap(_.queryParameters)),
+      platform = acquisitionData.flatMap(_.platform)
     )
   }
 
@@ -117,7 +119,8 @@ object AcquisitionDataRowBuilder {
       zuoraSubscriptionNumber = None,
       zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
-      queryParameters = mapQueryParams(acquisitionData.queryParameters)
+      queryParameters = mapQueryParams(acquisitionData.queryParameters),
+      platform = acquisitionData.platform
     )
   }
 

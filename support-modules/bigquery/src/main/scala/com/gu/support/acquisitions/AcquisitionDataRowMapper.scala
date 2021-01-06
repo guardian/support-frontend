@@ -12,7 +12,7 @@ object AcquisitionDataRowMapper {
 
     val optionalFields = List(
       acquisition.promoCode.map("promo_code" -> _),
-      acquisition.paymentProvider.map("payment_provider" -> _),
+      acquisition.paymentProvider.map("payment_provider" -> _.value),
       acquisition.printOptions.map(p => "print_options" -> Map(
         "product" -> p.product.value,
         "delivery_country_code" -> p.deliveryCountry.alpha2
@@ -45,10 +45,17 @@ object AcquisitionDataRowMapper {
       "ab_tests" -> mapAbTests(acquisition.abTests),
       "query_parameters" -> mapQueryParameters(acquisition.queryParameters),
       "labels" -> acquisition.labels.asJava,
-      "platform" -> "SUPPORT",
+      "platform" -> acquisition.platform.map(mapPlatformName).getOrElse("SUPPORT"),
     ) ++ optionalFields).asJava
 
   }
+
+  def mapPlatformName(name: String) =
+    name.toLowerCase match {
+      case "iosnativeapp" => "IOS_NATIVE_APP"
+      case "androidnativeapp" => "ANDROID_NATIVE_APP"
+      case _ => name
+    }
 
   private def mapAbTests(abtests: List[AbTest]) =
     abtests.map(abTest =>
