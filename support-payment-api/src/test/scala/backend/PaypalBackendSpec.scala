@@ -79,6 +79,8 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
+  val bigQueryResponse = Right[String, Unit](())
+  val bigQueryResponseError = Left[String, Unit]("a BigQuery error")
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
     EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, Some("guest-token"))))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
@@ -235,8 +237,10 @@ class PaypalBackendSpec
       "return just a DB error if Ophan succeeds but DB fails" in new PaypalBackendFixture {
         populatePaymentMock()
 
+        when(mockBigQueryService.tableInsertRow(any())).thenReturn(bigQueryResponse)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+
 
         val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
         val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None, clientBrowserInfo)
@@ -249,6 +253,7 @@ class PaypalBackendSpec
 
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRow(any())).thenReturn(bigQueryResponse)
 
         val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
         val errors = BackendError.MultipleErrors(List(
@@ -260,6 +265,7 @@ class PaypalBackendSpec
         val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None, clientBrowserInfo)
         result.futureLeft mustBe errors
       }
+
     }
 
   }
