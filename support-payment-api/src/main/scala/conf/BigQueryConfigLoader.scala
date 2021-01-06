@@ -12,12 +12,12 @@ object BigQueryConfigLoader {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
         new GetParametersByPathRequest()
-          .withPath(s"/payment-api/identity-config/${environment.entryName}/")
+          .withPath(s"/payment-api/bigquery-config/${environment.entryName}/")
           .withWithDecryption(true)
           .withRecursive(false)
 
       override def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, BigQueryConfig] = {
-        val validator = new ParameterStoreValidator[BigQueryConfig, Environment](environment, data);
+        val validator = new ParameterStoreValidator[BigQueryConfig, Environment](environment, data)
         import validator._
         (
           validate("projectId"),
