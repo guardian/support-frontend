@@ -97,7 +97,7 @@ object AcquisitionDataRowBuilder {
       product = AcquisitionProduct.Contribution,
       amount = Some(transaction.getAmount.getTotal.toDouble),
       country = country,
-      currency = Currency.fromString(transaction.getAmount.getCurrency).getOrElse(GBP), //TODO test this
+      currency = Currency.fromString(transaction.getAmount.getCurrency).getOrElse(GBP),
       componentId = acquisitionData.componentId,
       componentType = acquisitionData.componentType.map(_.originalName),
       campaignCode = acquisitionData.campaignCodes.map(_.mkString(", ")),
