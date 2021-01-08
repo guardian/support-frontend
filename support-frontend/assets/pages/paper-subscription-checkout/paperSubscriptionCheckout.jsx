@@ -26,6 +26,7 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { Monthly } from 'helpers/billingPeriods';
 import { Paper } from 'helpers/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
+import { FocusStyleManager } from '@guardian/src-utilities';
 
 // ----- Redux Store ----- //
 
@@ -48,6 +49,8 @@ const store = pageInit(
 );
 
 const { useDigitalVoucher } = store.getState().common.settings;
+
+FocusStyleManager.onlyShowFocusOnTabs();
 
 // ----- Render ----- //
 
