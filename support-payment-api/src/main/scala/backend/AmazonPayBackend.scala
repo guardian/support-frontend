@@ -133,9 +133,9 @@ class AmazonPayBackend(
     acquisition: AmazonPayAcquisition,
     contributionData: ContributionData
   ): EitherT[Future, BackendError, Unit] =
-    EitherT.fromEither[Future](bigQueryService.tableInsertRow(
+    bigQueryService.tableInsertRow(
       AcquisitionDataRowBuilder.buildFromAmazonPay(acquisition, contributionData)
-    )).bimap(BackendError.BigQueryError, _ => ())
+    ).bimap(BackendError.BigQueryError, _ => ())
 
   private def sendThankYouEmail(email: String, payment: AmazonPaymentData, identityId: Long): EitherT[Future, BackendError, SendMessageResult] = {
     val contributorRow = ContributorRow(

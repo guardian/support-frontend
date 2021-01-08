@@ -98,6 +98,10 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
+  val bigQueryResponse: EitherT[Future, String, Unit] =
+    EitherT.right(Future.successful(()))
+  val bigQueryResponseError: EitherT[Future, String, Unit] =
+    EitherT.left(Future.successful("a BigQuery error"))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
     EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, expectedGuestToken)))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
@@ -160,7 +164,7 @@ class AmazonPayBackendSpec extends AnyWordSpec
 
     "request" should {
       "return successful payment response even if identityService, " +
-        "ophanService, databaseService and emailService all fail" in new AmazonPayBackendFixture {
+        "ophanService, databaseService, bigQueryService and emailService all fail" in new AmazonPayBackendFixture {
         when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
         when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
         when(mockOrderReferenceStatus.getState).thenReturn("Open")
@@ -179,6 +183,7 @@ class AmazonPayBackendSpec extends AnyWordSpec
 
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponseError)
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe AmazonPayResponse(None)
       }
@@ -196,9 +201,7 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAuthorizationDetails.getAuthorizationAmount).thenReturn(new Price("50.00", "USD"))
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-
-        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 

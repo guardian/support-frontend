@@ -78,9 +78,11 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
-  val bigQueryResponse = Right[String, Unit](())
+  val bigQueryResponse: EitherT[Future, String, Unit] =
+    EitherT.right(Future.successful(()))
   val bigQueryErrorMessage = "a BigQuery error"
-  val bigQueryResponseError = Left[String, Unit](bigQueryErrorMessage)
+  val bigQueryResponseError: EitherT[Future, String, Unit] =
+    EitherT.left(Future.successful(bigQueryErrorMessage))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
     EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, Some("guest-token"))))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
@@ -237,7 +239,7 @@ class PaypalBackendSpec
       "return just a DB error if Ophan succeeds but DB fails" in new PaypalBackendFixture {
         populatePaymentMock()
 
-        when(mockBigQueryService.tableInsertRow(any())).thenReturn(bigQueryResponse)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
@@ -253,7 +255,7 @@ class PaypalBackendSpec
 
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockBigQueryService.tableInsertRow(any())).thenReturn(bigQueryResponse)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
 
         val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
         val errors = BackendError.MultipleErrors(List(
@@ -269,7 +271,7 @@ class PaypalBackendSpec
 
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
-        when(mockBigQueryService.tableInsertRow(any())).thenReturn(bigQueryResponseError)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponseError)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
         val errors = BackendError.MultipleErrors(List(
           BackendError.fromOphanError(ophanError),

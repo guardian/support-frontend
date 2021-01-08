@@ -166,9 +166,9 @@ class PaypalBackend(
     acquisition: PaypalAcquisition,
     contributionData: ContributionData
   ): EitherT[Future, BackendError, Unit] =
-    EitherT.fromEither[Future](bigQueryService.tableInsertRow(
+    bigQueryService.tableInsertRow(
       AcquisitionDataRowBuilder.buildFromPayPal(acquisition, contributionData)
-    )).bimap(BackendError.BigQueryError, _ => ())
+    ).bimap(BackendError.BigQueryError, _ => ())
 
   private def validateRefundHook(headers: Map[String, String], rawJson: String): EitherT[Future, BackendError, Unit] =
     paypalService.validateWebhookEvent(headers, rawJson)

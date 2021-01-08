@@ -250,9 +250,9 @@ class StripeBackend(
     acquisition: StripeAcquisition,
     contributionData: ContributionData
   ): EitherT[Future, BackendError, Unit] =
-    EitherT.fromEither(bigQueryService.tableInsertRow(
+    bigQueryService.tableInsertRow(
       AcquisitionDataRowBuilder.buildFromStripe(acquisition, contributionData)
-    )).bimap(BackendError.BigQueryError, _ => ())
+    ).bimap(BackendError.BigQueryError, _ => ())
 
   private def validateRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] =
     stripeService.validateRefundHook(refundHook)
