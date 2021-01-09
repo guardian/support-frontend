@@ -5,7 +5,7 @@ import play.api.mvc._
 import Results.Ok
 
 class DiagnosticsController(
-  actionRefiners: CustomActionBuilders,
+  actionRefiners: CustomActionBuilders
 ) {
 
   val relevantCookies = List(
@@ -21,7 +21,7 @@ class DiagnosticsController(
     "gu.contributions.recurring.contrib-timestamp.Annual",
     "gu.contributions.contrib-timestamp",
     "gu_article_count_opt_out",
-    "gu_contributions_reminder_signed_up",
+    "gu_contributions_reminder_signed_up"
   )
 
   import actionRefiners._
@@ -31,7 +31,8 @@ class DiagnosticsController(
     }
     Ok(cookies.map { cookie =>
       "* " + cookie.name + "\n" +
-        " ( domain: " + cookie.domain + ", httpOnly: " + cookie.httpOnly + ", path: " + cookie.path + ", maxAge: " + cookie.maxAge + ", sameSite: " + cookie.sameSite + ", secure: " + cookie.secure + " )\n" +
+        " ( domain: " + cookie.domain + ", httpOnly: " + cookie.httpOnly + ", path: " + cookie.path + ", maxAge: " + cookie.maxAge + ", sameSite: " +
+        cookie.sameSite + ", secure: " + cookie.secure + " )\n" +
         " = " + cookie.value
     }.mkString("\n\n"))
   }
