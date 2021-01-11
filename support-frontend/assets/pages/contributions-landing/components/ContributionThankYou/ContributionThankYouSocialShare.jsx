@@ -32,11 +32,11 @@ const buttonsContainer = css`
   }
 `;
 
-type ContributionThankYouSocialShareProps = {
+type ContributionThankYouSocialShareProps = {|
   email: string,
   createReferralCodes: boolean,
   campaignCode: ?string
-};
+|};
 
 const ContributionThankYouSocialShare = ({
   email,
