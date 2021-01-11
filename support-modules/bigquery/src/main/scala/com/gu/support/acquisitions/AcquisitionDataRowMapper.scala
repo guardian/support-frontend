@@ -12,7 +12,7 @@ object AcquisitionDataRowMapper {
 
     val optionalFields = List(
       acquisition.promoCode.map("promo_code" -> _),
-      acquisition.paymentProvider.map("payment_provider" -> paymentProviderName(_)),
+      acquisition.paymentProvider.map("payment_provider" -> _.value),
       acquisition.printOptions.map(p => "print_options" -> Map(
         "product" -> p.product.value,
         "delivery_country_code" -> p.deliveryCountry.alpha2
@@ -35,7 +35,7 @@ object AcquisitionDataRowMapper {
     (Map(
       "event_timestamp" -> ISODateTimeFormat.dateTime().print(acquisition.eventTimeStamp),
       "product" -> acquisition.product.value,
-      "payment_frequency" -> paymentFrequencyFromBillingPeriod(acquisition.paymentFrequency),
+      "payment_frequency" -> acquisition.paymentFrequency.value,
       "country_code" -> acquisition.country.alpha2,
       "currency" -> acquisition.currency.iso,
       "reused_existing_payment_method" -> acquisition.reusedExistingPaymentMethod,
@@ -45,25 +45,17 @@ object AcquisitionDataRowMapper {
       "ab_tests" -> mapAbTests(acquisition.abTests),
       "query_parameters" -> mapQueryParameters(acquisition.queryParameters),
       "labels" -> acquisition.labels.asJava,
-      "platform" -> "SUPPORT",
+      "platform" -> acquisition.platform.map(mapPlatformName).getOrElse("SUPPORT"),
     ) ++ optionalFields).asJava
 
   }
 
-  private def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod) =
-    billingPeriod match {
-      case Monthly => "MONTHLY"
-      case Quarterly | SixWeekly => "QUARTERLY"
-      case Annual => "ANNUALLY"
+  def mapPlatformName(name: String) =
+    name.toLowerCase match {
+      case "iosnativeapp" => "IOS_NATIVE_APP"
+      case "androidnativeapp" => "ANDROID_NATIVE_APP"
+      case _ => name
     }
-
-  def paymentProviderName(provider: PaymentProvider) = provider match {
-    case PayPal => "PAYPAL"
-    case DirectDebit => "GOCARDLESS"
-    case Stripe => "STRIPE"
-    case StripeApplePay => "STRIPE_APPLE_PAY"
-    case StripePaymentRequestButton => "STRIPE_PAYMENT_REQUEST_BUTTON"
-  }
 
   private def mapAbTests(abtests: List[AbTest]) =
     abtests.map(abTest =>

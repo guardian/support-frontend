@@ -5,13 +5,14 @@ import com.gu.support.catalog._
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
-import com.gu.support.workers.{AcquisitionData, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebit, DirectDebitPaymentMethod, GuardianWeekly, Paper, PayPal, PayPalReferenceTransaction, PaymentMethod, PaymentProvider, ProductType, RequestInfo, SixWeekly, Stripe, StripeApplePay, StripePaymentRequestButton, StripePaymentType}
+import com.gu.support.workers.{AcquisitionData, Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebitPaymentMethod, GuardianWeekly, Monthly, Paper, PayPalReferenceTransaction, PaymentMethod, ProductType, Quarterly, RequestInfo, SixWeekly, StripePaymentType}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
 import com.gu.support.acquisitions
 import com.gu.support.acquisitions.AcquisitionType.{Purchase, Redemption}
+import com.gu.support.acquisitions.PaymentProvider.{DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton}
 import com.gu.support.acquisitions.PrintProduct._
-import com.gu.support.acquisitions.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PrintOptions, PrintProduct}
+import com.gu.support.acquisitions.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions, PrintProduct}
 import com.gu.support.zuora.api.ReaderType
 
 
@@ -23,35 +24,43 @@ object AcquisitionDataRowBuilder {
     val printOptions = printOptionsFromProduct(commonState.product, commonState.user.deliveryAddress.map(_.country))
 
     AcquisitionDataRow(
-      DateTime.now(DateTimeZone.UTC),
-      acquisitionProduct,
-      amount,
-      commonState.user.billingAddress.country,
-      commonState.product.currency,
-      state.acquisitionData.flatMap(_.referrerAcquisitionData.componentId),
-      state.acquisitionData.flatMap(_.referrerAcquisitionData.componentType.map(_.originalName)),
-      state.acquisitionData.flatMap(_.referrerAcquisitionData.campaignCode),
-      state.acquisitionData.flatMap(_.referrerAcquisitionData.source.map(_.originalName)),
-      state.acquisitionData.flatMap(_.referrerAcquisitionData.referrerUrl),
-      state.acquisitionData.map(getAbTests).getOrElse(Nil),
-      commonState.product.billingPeriod,
-      acquisitionTypeDetails.paymentMethod.map(paymentProviderFromPaymentMethod),
-      printOptions,
-      state.acquisitionData.flatMap(_.ophanIds.browserId),
-      Some(commonState.user.id),
-      state.acquisitionData.flatMap(_.ophanIds.pageviewId),
-      state.acquisitionData.flatMap(_.referrerAcquisitionData.referrerPageviewId),
-      buildLabels(state, requestInfo.accountExists),
-      acquisitionTypeDetails.promoCode,
-      requestInfo.accountExists,
-      acquisitionTypeDetails.readerType,
-      acquisitionTypeDetails.acquisitionType,
-      acquisitionTypeDetails.zuoraSubscriptionNumber,
-      acquisitionTypeDetails.zuoraAccountNumber,
-      None,
-      state.acquisitionData.map(getQueryParameters).getOrElse(Nil)
+      eventTimeStamp = DateTime.now(DateTimeZone.UTC),
+      product = acquisitionProduct,
+      amount = amount,
+      country = commonState.user.billingAddress.country,
+      currency = commonState.product.currency,
+      componentId = state.acquisitionData.flatMap(_.referrerAcquisitionData.componentId),
+      componentType = state.acquisitionData.flatMap(_.referrerAcquisitionData.componentType.map(_.originalName)),
+      campaignCode = state.acquisitionData.flatMap(_.referrerAcquisitionData.campaignCode),
+      source = state.acquisitionData.flatMap(_.referrerAcquisitionData.source.map(_.originalName)),
+      referrerUrl = state.acquisitionData.flatMap(_.referrerAcquisitionData.referrerUrl),
+      abTests = state.acquisitionData.map(getAbTests).getOrElse(Nil),
+      paymentFrequency = paymentFrequencyFromBillingPeriod(commonState.product.billingPeriod),
+      paymentProvider = acquisitionTypeDetails.paymentMethod.map(paymentProviderFromPaymentMethod),
+      printOptions = printOptions,
+      browserId = state.acquisitionData.flatMap(_.ophanIds.browserId),
+      identityId = Some(commonState.user.id),
+      pageViewId = state.acquisitionData.flatMap(_.ophanIds.pageviewId),
+      referrerPageViewId = state.acquisitionData.flatMap(_.referrerAcquisitionData.referrerPageviewId),
+      labels = buildLabels(state, requestInfo.accountExists),
+      promoCode = acquisitionTypeDetails.promoCode,
+      reusedExistingPaymentMethod = requestInfo.accountExists,
+      readerType = acquisitionTypeDetails.readerType,
+      acquisitionType = acquisitionTypeDetails.acquisitionType,
+      zuoraSubscriptionNumber = acquisitionTypeDetails.zuoraSubscriptionNumber,
+      zuoraAccountNumber = acquisitionTypeDetails.zuoraAccountNumber,
+      contributionId = None,
+      queryParameters = state.acquisitionData.map(getQueryParameters).getOrElse(Nil),
+      platform = None
     )
   }
+
+  private def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod) =
+    billingPeriod match {
+      case Monthly => PaymentFrequency.Monthly
+      case Quarterly | SixWeekly => PaymentFrequency.Quarterly
+      case Annual => PaymentFrequency.Annually
+    }
 
   private def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): PaymentProvider =
     paymentMethod match {

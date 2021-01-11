@@ -1,5 +1,6 @@
 package com.gu.config
 
+import com.gu.acquisitions.BigQueryConfigProvider
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.SalesforceConfigProvider
