@@ -245,7 +245,6 @@ const ContributionThankYou = ({
           campaignSettings && campaignSettings.createReferralCodes
         }
         campaignCode={campaignSettings && campaignSettings.campaignCode}
-        isUsEndOfYearAppeal={isUsEndOfYearAppeal}
       />
     ),
     shouldShow: true,
