@@ -39,6 +39,12 @@ class CheckoutsSpec extends AnyFeatureSpec
     }
   }
 
+  Feature("Digital Pack gift checkout") {
+    Scenario("User already logged in - Direct Debit checkout") {
+      testCheckout("Digital Pack gift", new DigitalPackGiftCheckout, new DigitalPackGiftProductPage, payWithDirectDebit)
+    }
+  }
+
   Feature("Paper checkout") {
     Scenario("User already logged in - Direct Debit checkout") {
       testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
