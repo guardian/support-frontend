@@ -22,7 +22,6 @@ import ContributionThankYouSignIn from './ContributionThankYouSignIn';
 import ContributionThankYouSignUp from './ContributionThankYouSignUp';
 import ContributionThankYouHearMarketingConsent from './ContributionThankYouHearMarketingConsent';
 import ContributionThankYouSupportReminder from './ContributionThankYouSupportReminder';
-import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import {
@@ -187,7 +186,6 @@ const ContributionThankYou = ({
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() =>
     getCampaignSettings(campaignCode));
-  const isUsEndOfYearAppeal = countryId === 'US';
 
   const isLargeUSDonation =
     countryId === 'US' && isLargeDonation(amount, contributionType);
@@ -231,12 +229,6 @@ const ContributionThankYou = ({
     ),
     shouldShow: contributionType === 'ONE_OFF',
   };
-  const SURVEY_END_DATE = new Date(Date.parse('2021-01-31'));
-  const now = new Date();
-  const surveyAction = {
-    component: <ContributionThankYouSurvey />,
-    shouldShow: isUsEndOfYearAppeal && now < SURVEY_END_DATE,
-  };
   const socialShareAction = {
     component: (
       <ContributionThankYouSocialShare
@@ -259,7 +251,6 @@ const ContributionThankYou = ({
     signInAction,
     marketingConsentAction,
     supportReminderAction,
-    surveyAction,
     socialShareAction,
   ];
 
@@ -268,7 +259,6 @@ const ContributionThankYou = ({
     signInAction,
     marketingConsentAction,
     supportReminderAction,
-    surveyAction,
     ausMapAction,
     socialShareAction,
   ];
