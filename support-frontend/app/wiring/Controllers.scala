@@ -39,6 +39,10 @@ trait Controllers {
     fontLoader
   )
 
+  lazy val diagnosticsController = new DiagnosticsController(
+    actionRefiners
+  )
+
   lazy val articleShareController = new ArticleShare(
     actionRefiners,
     controllerComponents,
