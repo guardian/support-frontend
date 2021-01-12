@@ -77,9 +77,9 @@ trait CheckoutPage extends Page with Browser {
 
   def clickStripeSubmit(): Unit = clickOn(stripeSubmitButton)
 
-  def clickDirectDebitSubmit(): Unit = clickOn(directDebitSubmitButton)
+  def clickDirectDebitConfirm(): Unit = clickOn(directDebitSubmitButton)
 
-  def clickDirectDebitConfirm(): Unit = clickOn(directDebitPlaybackSubmit)
+  def clickDirectDebitPay(): Unit = clickOn(directDebitPlaybackSubmit)
 
   def fillForm(): Unit
 }
