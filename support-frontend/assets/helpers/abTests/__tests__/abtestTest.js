@@ -20,7 +20,7 @@ jest.mock('ophan', () => ({
 
 const emptySettings: Settings = {
   switches: { experiments: {} },
-  amounts: { },
+  amounts: { GBPCountries: {}, UnitedStates: {} },
 };
 
 const acquisitionDataMockTestControl = { componentId: 'acquisitions-subscription-banner', componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER', abTest: { name: 'mockTest', variant: 'control' } };
