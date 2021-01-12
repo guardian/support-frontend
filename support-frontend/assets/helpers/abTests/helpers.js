@@ -10,6 +10,10 @@ export function getAmounts(
   abParticipations: Participations,
   countryGroupId: CountryGroupId,
 ): ContributionAmounts {
+  if (!settings.amounts) {
+    return {};
+  }
+
   const { test, control } = settings.amounts[countryGroupId];
   if (!test) {
     return control;

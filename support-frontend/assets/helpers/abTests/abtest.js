@@ -335,15 +335,20 @@ function getParticipations(
 }
 
 function getAmountsTestParticipations(countryGroupId: CountryGroupId, settings: Settings): ?Participations {
-  const { test } = settings.amounts[countryGroupId];
-  if (test && test.isLive) {
-    const variants = ['CONTROL', ...test.variants.map(variant => variant.name)];
-
-    const assignmentIndex = randomNumber(getMvtId(), test.seed) % variants.length;
-
-    return { [test.name]: variants[assignmentIndex] };
+  if (!settings.amounts) {
+    return null;
   }
-  return null;
+  const { test } = settings.amounts[countryGroupId];
+
+  if (!test || !test.isLive) {
+    return null;
+  }
+
+  const variants = ['CONTROL', ...test.variants.map(variant => variant.name)];
+
+  const assignmentIndex = randomNumber(getMvtId(), test.seed) % variants.length;
+
+  return { [test.name]: variants[assignmentIndex] };
 }
 
 const init = (
