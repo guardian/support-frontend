@@ -5,7 +5,7 @@
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { config, type ConfiguredAmounts, type ContributionType, getAmount } from 'helpers/contributions';
+import { config, type ContributionAmounts, type ContributionType, getAmount } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
@@ -27,7 +27,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: ContributionType,
-  amounts: ConfiguredAmounts,
+  amounts: ContributionAmounts,
   selectedAmounts: SelectedAmounts,
   selectAmount: (number | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmounts: OtherAmounts,
@@ -42,7 +42,7 @@ const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
-  amounts: state.common.settings.amounts,
+  amounts: state.common.amounts,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
@@ -105,7 +105,7 @@ export const getAmountPerWeekBreakdown = (
 };
 
 function withProps(props: PropTypes) {
-  const validAmounts: number[] = props.amounts[props.countryGroupId].control[props.contributionType].amounts;
+  const { amounts: validAmounts, defaultAmount } = props.amounts[props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
@@ -155,6 +155,7 @@ function withProps(props: PropTypes) {
         currency={props.currency}
         contributionType={props.contributionType}
         validAmounts={validAmounts}
+        defaultAmount={defaultAmount}
         showOther={showOther}
         selectedAmounts={props.selectedAmounts}
         selectAmount={props.selectAmount}

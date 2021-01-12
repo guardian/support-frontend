@@ -1,49 +1,24 @@
 // @flow
 
-// import { tests as allTests } from 'helpers/abTests/abtestDefinitions';
-// import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { Settings } from 'helpers/settings';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { ContributionAmounts } from 'helpers/contributions';
 
-// function overrideAmountsForTest(
-//   variantId: string,
-//   abTest: Test,
-//   currentAmountsRegions: AmountsRegions,
-// ): AmountsRegions {
+export function getAmounts(
+  settings: Settings,
+  abParticipations: Participations,
+  countryGroupId: CountryGroupId,
+): ContributionAmounts {
+  const { test, control } = settings.amounts[countryGroupId];
+  if (!test) {
+    return control;
+  }
 
-//   const variant = abTest.variants.find(v => v.id === variantId);
-
-//   if (variant && variant.amountsRegions) {
-//     const { amountsRegions } = variant;
-//     const newAmountsRegions = { ...currentAmountsRegions };
-
-//     Object.keys(amountsRegions).forEach((countryGroupId) => {
-
-//       Object.keys(amountsRegions[countryGroupId]).forEach((contributionType) => {
-
-//         newAmountsRegions[countryGroupId][contributionType] = amountsRegions[countryGroupId][contributionType];
-//       });
-//     });
-
-//     return newAmountsRegions;
-//   }
-
-//   return currentAmountsRegions;
-// }
-
-// Returns a new AmountsRegions by combining currentAmountsRegions with any test participation amounts
-// export function overrideAmountsForParticipations(
-//   abParticipations: Participations,
-//   currentAmountsRegions: AmountsRegions,
-// ): AmountsRegions {
-
-//   return Object.keys(abParticipations).reduce((amountsRegions, testName) => {
-//     const test = allTests[testName];
-
-//     if (test && test.type === 'AMOUNTS') {
-//       const variant = abParticipations[testName];
-//       return overrideAmountsForTest(variant, test, amountsRegions);
-//     }
-
-//     return amountsRegions;
-
-//   }, currentAmountsRegions);
-// }
+  const variantName = abParticipations[test.name];
+  const variant = test.variants.find(v => v.name === variantName);
+  if (!variant) {
+    return control;
+  }
+  return variant.amounts;
+}

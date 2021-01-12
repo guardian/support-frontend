@@ -12,6 +12,7 @@ import type { Action } from 'helpers/page/commonActions';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import type { ContributionAmounts } from 'helpers/contributions';
 
 export type Internationalisation = {|
   currencyId: IsoCurrency,
@@ -25,6 +26,7 @@ export type CommonState = {
   otherQueryParams: Array<[string, string]>,
   abParticipations: Participations,
   settings: Settings,
+  amounts: ContributionAmounts,
   internationalisation: Internationalisation,
   existingPaymentMethods?: ExistingPaymentMethod[],
 };

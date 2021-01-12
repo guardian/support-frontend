@@ -3,9 +3,7 @@
 // ----- Imports ----- //
 import React from 'react';
 import { type SelectedAmounts } from 'helpers/contributions';
-import {
-  type ContributionType,
-} from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
@@ -48,6 +46,7 @@ type ContributionAmountChoicesProps = {|
   currency: IsoCurrency,
   contributionType: ContributionType,
   validAmounts: number[],
+  defaultAmount: number,
   showOther: boolean,
   selectedAmounts: SelectedAmounts,
   selectAmount: (
@@ -62,6 +61,7 @@ const isSelected = (
   amount: number,
   selectedAmounts: SelectedAmounts,
   contributionType: ContributionType,
+  defaultAmount: number,
 ) => {
   if (selectedAmounts[contributionType]) {
     return (
@@ -69,7 +69,7 @@ const isSelected = (
       amount === selectedAmounts[contributionType]
     );
   }
-  return false;
+  return amount === defaultAmount;
 };
 
 const ContributionAmountChoices = (props: ContributionAmountChoicesProps) =>
@@ -81,6 +81,7 @@ const ContributionAmountChoices = (props: ContributionAmountChoicesProps) =>
 
 const ContributionAmountChoicesDefault = ({
   validAmounts,
+  defaultAmount,
   countryGroupId,
   contributionType,
   showOther,
@@ -95,7 +96,12 @@ const ContributionAmountChoicesDefault = ({
         id={`contributionAmount-${amount}`}
         name="contributionAmount"
         value={amount}
-        checked={isSelected(amount, selectedAmounts, contributionType)}
+        checked={isSelected(
+          amount,
+          selectedAmounts,
+          contributionType,
+          defaultAmount,
+        )}
         onChange={selectAmount(amount, countryGroupId, contributionType)}
         label={
           <ContributionAmountChoicesChoiceLabel
@@ -124,6 +130,7 @@ const ContributionAmountChoicesDefault = ({
 
 const ContributionAmountChoicesTwoColumnAfterMobile = ({
   validAmounts,
+  defaultAmount,
   countryGroupId,
   contributionType,
   showOther,
@@ -140,7 +147,12 @@ const ContributionAmountChoicesTwoColumnAfterMobile = ({
             id={`contributionAmount-${amount}`}
             name="contributionAmount"
             value={amount}
-            checked={isSelected(amount, selectedAmounts, contributionType)}
+            checked={isSelected(
+              amount,
+              selectedAmounts,
+              contributionType,
+              defaultAmount,
+            )}
             onChange={selectAmount(amount, countryGroupId, contributionType)}
             label={
               <ContributionAmountChoicesChoiceLabel

@@ -43,6 +43,7 @@ import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
 import { getGlobal } from 'helpers/globals';
 import { isPostDeployUser } from 'helpers/user/user';
+import { getAmounts } from 'helpers/abTests/helpers';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -87,9 +88,7 @@ function buildInitialState(
     currencyId,
   };
 
-  // Override the default amounts config with any test participations
-  // const amountsWithParticipationOverrides = settings.amounts ?
-  //   overrideAmountsForParticipations(abParticipations, settings.amounts) : settings.amounts;
+  const amounts = getAmounts(settings, abParticipations, countryGroupId);
 
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
@@ -98,6 +97,7 @@ function buildInitialState(
     internationalisation,
     abParticipations,
     settings,
+    amounts,
   };
 
 }
