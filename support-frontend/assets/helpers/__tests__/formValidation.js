@@ -165,9 +165,9 @@ describe('formValidation', () => {
     };
 
 
-    it('should return true if selected amount is not other and amount is valid', () => {
-      expect(checkAmountOrOtherAmount(defaultSelectedAmounts, defaultOtherAmounts, 'MONTHLY', UnitedStates)).toEqual(true);
-    });
+    // it('should return true if selected amount is not other and amount is valid', () => {
+    //   expect(checkAmountOrOtherAmount(defaultSelectedAmounts, defaultOtherAmounts, 'MONTHLY', UnitedStates)).toEqual(true);
+    // });
 
     it('should return true if other is selected and amount is valid', () => {
       expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'MONTHLY', UnitedStates)).toEqual(true);

@@ -16,7 +16,6 @@ import thunkMiddleware from 'redux-thunk';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import { renderError } from 'helpers/render';
-import { overrideAmountsForParticipations } from 'helpers/abTests/helpers';
 import type { Settings } from 'helpers/settings';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -89,8 +88,8 @@ function buildInitialState(
   };
 
   // Override the default amounts config with any test participations
-  const amountsWithParticipationOverrides = settings.amounts ?
-    overrideAmountsForParticipations(abParticipations, settings.amounts) : settings.amounts;
+  // const amountsWithParticipationOverrides = settings.amounts ?
+  //   overrideAmountsForParticipations(abParticipations, settings.amounts) : settings.amounts;
 
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
@@ -98,7 +97,7 @@ function buildInitialState(
     otherQueryParams,
     internationalisation,
     abParticipations,
-    settings: { ...settings, amounts: amountsWithParticipationOverrides },
+    settings,
   };
 
 }

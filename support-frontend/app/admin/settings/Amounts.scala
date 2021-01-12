@@ -2,23 +2,33 @@ package admin.settings
 
 import io.circe.{Decoder, Encoder}
 
-case class Amount(value: String, isDefault: Option[Boolean])
+case class AmountsSelection(amounts: List[Int], defaultAmount: Int)
 
-case class Amounts(ONE_OFF: List[Amount], MONTHLY: List[Amount], ANNUAL: List[Amount])
+case class ContributionAmounts(
+    ONE_OFF: AmountsSelection,
+    MONTHLY: AmountsSelection,
+    ANNUAL: AmountsSelection
+)
 
-case class AmountsRegions(
-  GBPCountries: Amounts,
-  UnitedStates: Amounts,
-  EURCountries: Amounts,
-  AUDCountries: Amounts,
-  International: Amounts,
-  NZDCountries: Amounts,
-  Canada: Amounts
+case class AmountsTestVariant(name: String, amounts: ContributionAmounts)
+
+case class AmountsTest(name: String, isLive: Boolean, variants: List[AmountsTestVariant])
+
+case class ConfiguredRegionAmounts(control: ContributionAmounts, test: Option[AmountsTest])
+
+case class ConfiguredAmounts(
+    GBPCountries: ConfiguredRegionAmounts,
+    UnitedStates: ConfiguredRegionAmounts,
+    EURCountries: ConfiguredRegionAmounts,
+    AUDCountries: ConfiguredRegionAmounts,
+    International: ConfiguredRegionAmounts,
+    NZDCountries: ConfiguredRegionAmounts,
+    Canada: ConfiguredRegionAmounts
 )
 
 object Amounts {
   import io.circe.generic.auto._
 
-  implicit val amountsEncoder = Encoder[AmountsRegions]
-  implicit val amountsDecoder = Decoder[AmountsRegions]
+  implicit val amountsEncoder = Encoder[ConfiguredAmounts]
+  implicit val amountsDecoder = Decoder[ConfiguredAmounts]
 }

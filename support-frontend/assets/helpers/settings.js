@@ -1,6 +1,6 @@
 // @flow
 
-import { type AmountsRegions, type ContributionTypes } from 'helpers/contributions';
+import { type ConfiguredAmounts, type ContributionTypes } from 'helpers/contributions';
 import { type Option } from 'helpers/types/option';
 
 export type Status = 'On' | 'Off';
@@ -22,7 +22,7 @@ export type Switches = {
 
 export type Settings = {
   switches: Switches,
-  amounts: AmountsRegions,
+  amounts: ConfiguredAmounts,
   contributionTypes: ContributionTypes,
   metricUrl: string,
   useDigitalVoucher: Option<boolean>,

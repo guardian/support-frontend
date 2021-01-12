@@ -5,6 +5,7 @@ import type {
   PromotionCopy,
 } from 'helpers/productPrice/promotions';
 import type { Option } from 'helpers/types/option';
+import type { ConfiguredRegionAmounts } from './contributions';
 
 function getGlobal<T>(path: string = ''): Option<T> {
 
@@ -20,10 +21,21 @@ function getGlobal<T>(path: string = ''): Option<T> {
   return null;
 }
 
-const emptyAmountsSettings = {
-  ONE_OFF: [],
-  MONTHLY: [],
-  ANNUAL: [],
+const emptyConfiguredRegionAmounts: ConfiguredRegionAmounts = {
+  control: {
+    ONE_OFF: {
+      amounts: [],
+      defaultAmount: 0,
+    },
+    MONTHLY: {
+      amounts: [],
+      defaultAmount: 0,
+    },
+    ANNUAL: {
+      amounts: [],
+      defaultAmount: 0,
+    },
+  },
 };
 
 const getSettings = (): Settings => {
@@ -37,13 +49,13 @@ const getSettings = (): Settings => {
       experiments: {},
     },
     amounts: {
-      GBPCountries: emptyAmountsSettings,
-      UnitedStates: emptyAmountsSettings,
-      EURCountries: emptyAmountsSettings,
-      AUDCountries: emptyAmountsSettings,
-      International: emptyAmountsSettings,
-      NZDCountries: emptyAmountsSettings,
-      Canada: emptyAmountsSettings,
+      GBPCountries: emptyConfiguredRegionAmounts,
+      UnitedStates: emptyConfiguredRegionAmounts,
+      EURCountries: emptyConfiguredRegionAmounts,
+      AUDCountries: emptyConfiguredRegionAmounts,
+      International: emptyConfiguredRegionAmounts,
+      NZDCountries: emptyConfiguredRegionAmounts,
+      Canada: emptyConfiguredRegionAmounts,
     },
     contributionTypes: {
       GBPCountries: [],

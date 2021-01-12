@@ -119,11 +119,8 @@ function selectInitialAmounts(state: State, dispatch: Function) {
   const { amounts } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
 
-  Object.keys(amounts[countryGroupId]).forEach((contributionType) => {
-    const defaultAmount =
-      amounts[countryGroupId][contributionType].find(amount => amount.isDefault) ||
-      amounts[countryGroupId][contributionType][0];
-
+  Object.keys(amounts[countryGroupId].control).forEach((contributionType) => {
+    const { defaultAmount } = amounts[countryGroupId].control[contributionType];
     dispatch(selectAmount(defaultAmount, contributionType));
   });
 }

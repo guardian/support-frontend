@@ -4,7 +4,6 @@
 import React from 'react';
 import { type SelectedAmounts } from 'helpers/contributions';
 import {
-  type Amount,
   type ContributionType,
 } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -48,11 +47,11 @@ type ContributionAmountChoicesProps = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: ContributionType,
-  validAmounts: Amount[],
+  validAmounts: number[],
   showOther: boolean,
   selectedAmounts: SelectedAmounts,
   selectAmount: (
-    Amount | "other",
+    number | "other",
     CountryGroupId,
     ContributionType
   ) => () => void,
@@ -60,17 +59,17 @@ type ContributionAmountChoicesProps = {|
 |};
 
 const isSelected = (
-  amount: Amount,
+  amount: number,
   selectedAmounts: SelectedAmounts,
   contributionType: ContributionType,
 ) => {
   if (selectedAmounts[contributionType]) {
     return (
       selectedAmounts[contributionType] !== 'other' &&
-      amount.value === selectedAmounts[contributionType].value
+      amount === selectedAmounts[contributionType]
     );
   }
-  return amount.isDefault;
+  return false;
 };
 
 const ContributionAmountChoices = (props: ContributionAmountChoicesProps) =>
@@ -91,11 +90,11 @@ const ContributionAmountChoicesDefault = ({
   shouldShowFrequencyButtons,
 }: ContributionAmountChoicesProps) => (
   <ChoiceCardGroup name="amounts" css={choiceCardGroupOverrides}>
-    {validAmounts.map((amount: Amount) => (
+    {validAmounts.map((amount: number) => (
       <ChoiceCard
-        id={`contributionAmount-${amount.value}`}
+        id={`contributionAmount-${amount}`}
         name="contributionAmount"
-        value={amount.value}
+        value={amount}
         checked={isSelected(amount, selectedAmounts, contributionType)}
         onChange={selectAmount(amount, countryGroupId, contributionType)}
         label={
@@ -135,12 +134,12 @@ const ContributionAmountChoicesTwoColumnAfterMobile = ({
 }: ContributionAmountChoicesProps) => (
   <ChoiceCardGroup name="amounts">
     <div css={choiceCardGrid}>
-      {validAmounts.map((amount: Amount) => (
+      {validAmounts.map((amount: number) => (
         <div>
           <ChoiceCard
-            id={`contributionAmount-${amount.value}`}
+            id={`contributionAmount-${amount}`}
             name="contributionAmount"
-            value={amount.value}
+            value={amount}
             checked={isSelected(amount, selectedAmounts, contributionType)}
             onChange={selectAmount(amount, countryGroupId, contributionType)}
             label={

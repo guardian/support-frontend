@@ -30,7 +30,7 @@ abstract class SettingsProvider[T] {
 
 class AllSettingsProvider private (
   switchesProvider: SettingsProvider[Switches],
-  amountsProvider: SettingsProvider[AmountsRegions],
+  amountsProvider: SettingsProvider[ConfiguredAmounts],
   contributionTypesProvider: SettingsProvider[ContributionTypes],
   metricUrl: MetricUrl
 ) {
@@ -52,7 +52,7 @@ object AllSettingsProvider {
   def fromConfig(config: Configuration)(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
-      amountsProvider <- SettingsProvider.fromAppConfig[AmountsRegions](config.settingsSources.amounts, config)
+      amountsProvider <- SettingsProvider.fromAppConfig[ConfiguredAmounts](config.settingsSources.amounts, config)
       contributionTypesProvider <- SettingsProvider.fromAppConfig[ContributionTypes](config.settingsSources.contributionTypes, config)
     } yield new AllSettingsProvider(
       switchesProvider,

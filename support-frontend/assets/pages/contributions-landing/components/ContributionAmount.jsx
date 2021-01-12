@@ -5,7 +5,7 @@
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { config, type AmountsRegions, type Amount, type ContributionType, getAmount } from 'helpers/contributions';
+import { config, type ConfiguredAmounts, type ContributionType, getAmount } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
@@ -27,9 +27,9 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: ContributionType,
-  amounts: AmountsRegions,
+  amounts: ConfiguredAmounts,
   selectedAmounts: SelectedAmounts,
-  selectAmount: (Amount | 'other', CountryGroupId, ContributionType) => (() => void),
+  selectAmount: (number | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmounts: OtherAmounts,
   checkOtherAmount: (string, CountryGroupId, ContributionType) => boolean,
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
@@ -105,13 +105,13 @@ export const getAmountPerWeekBreakdown = (
 };
 
 function withProps(props: PropTypes) {
-  const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
+  const validAmounts: number[] = props.amounts[props.countryGroupId].control[props.contributionType].amounts;
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
-    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], min, false);
   const maxAmount: string =
-    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], max, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
   const otherLabelSymbol: string = currencies[props.currency].glyph;
   const {
