@@ -29,12 +29,16 @@ class DiagnosticsController(
     val cookies = request.cookies.filter { cookie =>
       relevantCookies.contains(cookie.name)
     }
-    Ok(cookies.map { cookie =>
-      "* " + cookie.name + "\n" +
-        " ( domain: " + cookie.domain + ", httpOnly: " + cookie.httpOnly + ", path: " + cookie.path + ", maxAge: " + cookie.maxAge + ", sameSite: " +
-        cookie.sameSite + ", secure: " + cookie.secure + " )\n" +
-        " = " + cookie.value
-    }.mkString("\n\n"))
+    val humanReadableCookies =
+      "Please make sure you are logged in and have visited https://www.theguardian.com and seen the issue, immediately before sending the information from this page" ::
+        s"you have ${cookies.size} cookie(s)." ::
+        cookies.map { cookie =>
+          "* " + cookie.name + "\n" +
+            " ( domain: " + cookie.domain + ", httpOnly: " + cookie.httpOnly + ", path: " + cookie.path + ", maxAge: " + cookie.maxAge + ", sameSite: " +
+            cookie.sameSite + ", secure: " + cookie.secure + " )\n" +
+            " = " + cookie.value
+        }.toList
+    Ok(humanReadableCookies.mkString("\n\n"))
   }
 
 }
