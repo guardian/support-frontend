@@ -30,7 +30,8 @@ class DiagnosticsController(
       relevantCookies.contains(cookie.name)
     }
     val humanReadableCookies =
-      "Please make sure you are logged in and have visited https://www.theguardian.com and seen the issue, immediately before sending the information from this page" ::
+      "Please make sure you are logged in and have visited https://www.theguardian.com and seen the issue," +
+        " immediately before sending the information from this page" ::
         s"you have ${cookies.size} cookie(s)." ::
         cookies.map { cookie =>
           "* " + cookie.name + "\n" +
