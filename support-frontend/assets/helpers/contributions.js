@@ -61,6 +61,7 @@ export type AmountsTest = {
   name: string,
   isLive: boolean,
   variants: AmountsTestVariant[],
+  seed: number,
 }
 
 export type ConfiguredRegionAmounts = {

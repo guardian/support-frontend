@@ -1,6 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
-import { USV1, AusAmounts, UkAmountsV1 } from './data/testAmountsData';
+import { USV1, AusAmounts } from './data/testAmountsData';
 
 // ----- Tests ----- //
 
@@ -8,7 +8,6 @@ const landingPage = '/??/contribute|thankyou(/.*)?$';
 const usOnlyLandingPage = '/us/contribute(/.*)?$';
 const usLandingPageAndThankyouPage = '/us/contribute|thankyou(/.*)?$';
 const auOnlyLandingPage = '/au/contribute(/.*)?$';
-const ukOnlyLandingPage = '/uk/contribute(/.*)?$';
 const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
@@ -123,28 +122,5 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: auOnlyLandingPage,
     seed: 10,
-  },
-
-  ukAmountsTest: {
-    type: 'AMOUNTS',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1',
-        amountsRegions: UkAmountsV1,
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: ukOnlyLandingPage,
-    seed: 9,
   },
 };

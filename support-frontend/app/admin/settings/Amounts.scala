@@ -12,7 +12,7 @@ case class ContributionAmounts(
 
 case class AmountsTestVariant(name: String, amounts: ContributionAmounts)
 
-case class AmountsTest(name: String, isLive: Boolean, variants: List[AmountsTestVariant])
+case class AmountsTest(name: String, isLive: Boolean, variants: List[AmountsTestVariant], seed: Int)
 
 case class ConfiguredRegionAmounts(control: ContributionAmounts, test: Option[AmountsTest])
 

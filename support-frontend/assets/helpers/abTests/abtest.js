@@ -334,6 +334,18 @@ function getParticipations(
   return participations;
 }
 
+function getAmountsTestParticipations(countryGroupId: CountryGroupId, settings: Settings): ?Participations {
+  const { test } = settings.amounts[countryGroupId];
+  if (test && test.isLive) {
+    const variants = ['CONTROL', ...test.variants.map(variant => variant.name)];
+
+    const assignmentIndex = randomNumber(getMvtId(), test.seed) % variants.length;
+
+    return { [test.name]: variants[assignmentIndex] };
+  }
+  return null;
+}
+
 const init = (
   country: IsoCountry,
   countryGroupId: CountryGroupId,
@@ -344,10 +356,12 @@ const init = (
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   const serverSideParticipations: ?Participations = getServerSideParticipations();
+  const amountsTestParticipations: ?Participations = getAmountsTestParticipations(countryGroupId, settings);
   const combinedParticipations: Participations = {
     ...participations,
     ...urlParticipations,
     ...serverSideParticipations,
+    ...amountsTestParticipations,
   };
   setLocalStorageParticipations(combinedParticipations);
 
