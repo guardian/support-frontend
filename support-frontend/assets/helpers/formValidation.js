@@ -65,7 +65,7 @@ export const checkAmountOrOtherAmount: (SelectedAmounts, OtherAmounts, Contribut
     if (otherAmounts[contributionType] && otherAmounts[contributionType].amount) {
       amt = otherAmounts[contributionType].amount;
     }
-  } else if (selectedAmounts[contributionType] && selectedAmounts[contributionType]) {
+  } else if (selectedAmounts[contributionType]) {
     amt = selectedAmounts[contributionType].toString();
   }
   return checkAmount(amt, countryGroupId, contributionType);
