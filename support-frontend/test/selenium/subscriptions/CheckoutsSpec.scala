@@ -41,7 +41,7 @@ class CheckoutsSpec extends AnyFeatureSpec
 
   Feature("Digital Pack gift checkout") {
     Scenario("User already logged in - Direct Debit checkout") {
-      testCheckout("Digital Pack gift", new DigitalPackGiftCheckout, new DigitalPackGiftProductPage, payWithDirectDebit)
+      testCheckout("Digital Pack gift", new DigitalPackGiftCheckout, new DigitalPackGiftProductPage, payWithStripe)
     }
   }
 
@@ -120,8 +120,6 @@ class CheckoutsSpec extends AnyFeatureSpec
 
     Given("the playback of the user's details has loaded")
     assert(checkoutPage.directDebitPlaybackHasLoaded)
-
-    Thread.sleep(1000) // for some reason in travis we need this sleep otherwise it doesn't click the pay button
 
     When("they click Pay")
     checkoutPage.clickDirectDebitPay()
