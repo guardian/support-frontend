@@ -10,7 +10,6 @@ export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscrib
 
 export const tests: Tests = {
   thankyouPageHeadingTest: {
-    type: 'OTHER',
     variants: [
       {
         id: 'control',
@@ -32,7 +31,6 @@ export const tests: Tests = {
   },
 
   stripePaymentRequestButtonDec2020: {
-    type: 'OTHER',
     variants: [
       {
         id: 'control',
@@ -54,7 +52,6 @@ export const tests: Tests = {
   },
 
   usThankyouPageLargeDonationTest: {
-    type: 'OTHER',
     variants: [
       {
         id: 'control',

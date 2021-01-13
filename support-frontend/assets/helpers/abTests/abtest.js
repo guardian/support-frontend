@@ -10,7 +10,6 @@ import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import { type Settings } from 'helpers/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type ConfiguredAmounts } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
@@ -59,13 +58,9 @@ type AcquisitionABTest = {
 
 export type Variant = {
   id: string,
-  configuredAmounts?: ConfiguredAmounts,
 }
 
-export type TestType = 'AMOUNTS' | 'OTHER';
-
 export type Test = {|
-  type: TestType,
   variants: Variant[],
   audiences: Audiences,
   isActive: boolean,
