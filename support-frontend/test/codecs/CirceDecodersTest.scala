@@ -128,81 +128,116 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |  },
           |  "amounts": {
           |    "GBPCountries": {
-          |        "ONE_OFF": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "MONTHLY": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "ANNUAL": [
-          |            { "value": "25", "isDefault": true }
-          |        ]
+          |      "control": {
+          |         "ONE_OFF": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "MONTHLY": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "ANNUAL": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         }
+          |      },
           |    },
           |    "UnitedStates": {
-          |        "ONE_OFF": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "MONTHLY": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "ANNUAL": [
-          |            { "value": "25", "isDefault": true }
-          |        ]
+          |      "control": {
+          |         "ONE_OFF": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "MONTHLY": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "ANNUAL": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         }
+          |      },
           |    },
           |    "EURCountries": {
-          |        "ONE_OFF": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "MONTHLY": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "ANNUAL": [
-          |            { "value": "25", "isDefault": true }
-          |        ]
+          |      "control": {
+          |         "ONE_OFF": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "MONTHLY": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "ANNUAL": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         }
+          |      },
           |    },
           |    "AUDCountries": {
-          |        "ONE_OFF": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "MONTHLY": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "ANNUAL": [
-          |            { "value": "25", "isDefault": true }
-          |        ]
+          |      "control": {
+          |         "ONE_OFF": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "MONTHLY": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "ANNUAL": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         }
+          |      },
           |    },
           |    "International": {
-          |        "ONE_OFF": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "MONTHLY": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "ANNUAL": [
-          |            { "value": "25", "isDefault": true }
-          |        ]
+          |      "control": {
+          |         "ONE_OFF": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "MONTHLY": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "ANNUAL": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         }
+          |      },
           |    },
           |    "NZDCountries": {
-          |        "ONE_OFF": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "MONTHLY": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "ANNUAL": [
-          |            { "value": "25", "isDefault": true }
-          |        ]
+          |      "control": {
+          |         "ONE_OFF": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "MONTHLY": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "ANNUAL": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         }
+          |      },
           |    },
           |    "Canada": {
-          |        "ONE_OFF": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "MONTHLY": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "ANNUAL": [
-          |            { "value": "25", "isDefault": true }
-          |        ]
+          |      "control": {
+          |         "ONE_OFF": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "MONTHLY": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         },
+          |         "ANNUAL": {
+          |             "amounts": [25],
+          |             "defaultAmount": 25
+          |         }
+          |      },
           |    }
           |  },
           |  "contributionTypes": {
@@ -231,20 +266,25 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |  "metricUrl": "http://localhost"
           |}""".stripMargin
 
-      val amount = Amount(value = "25", isDefault = Some(true))
-      val amounts = Amounts(
-        ONE_OFF = List(amount),
-        MONTHLY = List(amount),
-        ANNUAL = List(amount)
+      val amount = 25
+      val selection = AmountsSelection(amounts = List(amount), defaultAmount = 25)
+      val contributionAmounts = ContributionAmounts(
+        ONE_OFF = selection,
+        MONTHLY = selection,
+        ANNUAL = selection
       )
-      val amountsRegions = AmountsRegions(
-        GBPCountries = amounts,
-        UnitedStates = amounts,
-        EURCountries = amounts,
-        AUDCountries = amounts,
-        International = amounts,
-        NZDCountries = amounts,
-        Canada = amounts
+      val configuredRegionAmounts = ConfiguredRegionAmounts(
+        control = contributionAmounts,
+        test = None,
+      )
+      val configuredAmounts = ConfiguredAmounts(
+        GBPCountries = configuredRegionAmounts,
+        UnitedStates = configuredRegionAmounts,
+        EURCountries = configuredRegionAmounts,
+        AUDCountries = configuredRegionAmounts,
+        International = configuredRegionAmounts,
+        NZDCountries = configuredRegionAmounts,
+        Canada = configuredRegionAmounts
       )
 
       val contributionTypesSettings = List(
@@ -299,7 +339,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           enableContributionsCampaign = On,
           forceContributionsCampaign = On
         ),
-        amountsRegions,
+        configuredAmounts,
         contributionTypes,
         metricUrl = MetricUrl("http://localhost")
       )
