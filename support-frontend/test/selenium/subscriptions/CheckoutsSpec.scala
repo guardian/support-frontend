@@ -41,7 +41,7 @@ class CheckoutsSpec extends AnyFeatureSpec
 
   Feature("Digital Pack gift checkout") {
     Scenario("User already logged in - Direct Debit checkout") {
-      testCheckout("Digital Pack gift", new DigitalPackGiftCheckout, new DigitalPackGiftProductPage, payWithDirectDebit)
+      testCheckout("Digital Pack gift", new DigitalPackGiftCheckout, new DigitalPackGiftProductPage, payWithStripe)
     }
   }
 
@@ -96,11 +96,22 @@ class CheckoutsSpec extends AnyFeatureSpec
     Given("they fill in the stripe form")
     checkoutPage.fillStripeForm()
 
+    import org.openqa.selenium.JavascriptExecutor
+    val js = checkoutPage.webDriver.asInstanceOf[JavascriptExecutor]
+    js.executeScript("window.scrollBy(0,document.body.scrollHeight)")
+
+    Thread.sleep(1000)
+
     When("they click to process payment")
     checkoutPage.clickStripeSubmit()
-Thread.sleep(1000)
-    When("they click to process payment again")
-    checkoutPage.clickStripeSubmit()
+
+    Thread.sleep(1000)
+
+    js.executeScript("window.scrollBy(0,document.body.scrollHeight)")
+
+    Thread.sleep(1000)
+
+    js.executeScript("window.scrollBy(0,document.body.scrollHeight * -1)")
 
     And("the mock calls the backend using a test Stripe token")
     thankYouPage(checkoutPage)
