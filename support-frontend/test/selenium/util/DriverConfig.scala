@@ -30,6 +30,7 @@ class DriverConfig {
     val chromeOptions = new ChromeOptions
     chromeOptions.setCapability("platform", "WINDOWS")
     chromeOptions.setCapability("name", "support-frontend")
+    chromeOptions.setCapability("browserstack.networkLogs", "true")
     new RemoteWebDriver(new URL(Config.webDriverRemoteUrl), chromeOptions)
   }
 

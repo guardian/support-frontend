@@ -33,11 +33,11 @@ class CheckoutsSpec extends AnyFeatureSpec
     driverConfig.quit()
   }
 
-  Feature("Digital Pack checkout") {
-    Scenario("User already logged in - Stripe checkout") {
-      testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
-    }
-  }
+//  Feature("Digital Pack checkout") {
+//    Scenario("User already logged in - Stripe checkout") {
+//      testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
+//    }
+//  }
 
   Feature("Digital Pack gift checkout") {
     Scenario("User already logged in - Direct Debit checkout") {
@@ -45,23 +45,23 @@ class CheckoutsSpec extends AnyFeatureSpec
     }
   }
 
-  Feature("Paper checkout") {
-    Scenario("User already logged in - Direct Debit checkout") {
-      testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
-    }
-  }
-
-  Feature("Guardian Weekly checkout") {
-    Scenario("User already logged in - Direct Debit checkout") {
-      testCheckout("Guardian Weekly", new GuardianWeeklyCheckout, new WeeklyProductPage, payWithDirectDebit)
-    }
-  }
-
-  Feature("Guardian Weekly gift checkout") {
-    Scenario("User already logged in - Stripe checkout") {
-      testCheckout("Guardian Weekly gift", new GuardianWeeklyGiftCheckout, new WeeklyGiftProductPage, payWithStripe)
-    }
-  }
+//  Feature("Paper checkout") {
+//    Scenario("User already logged in - Direct Debit checkout") {
+//      testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
+//    }
+//  }
+//
+//  Feature("Guardian Weekly checkout") {
+//    Scenario("User already logged in - Direct Debit checkout") {
+//      testCheckout("Guardian Weekly", new GuardianWeeklyCheckout, new WeeklyProductPage, payWithDirectDebit)
+//    }
+//  }
+//
+//  Feature("Guardian Weekly gift checkout") {
+//    Scenario("User already logged in - Stripe checkout") {
+//      testCheckout("Guardian Weekly gift", new GuardianWeeklyGiftCheckout, new WeeklyGiftProductPage, payWithStripe)
+//    }
+//  }
 
   def testCheckout(checkoutName: String, checkoutPage: CheckoutPage, productPage: ProductPage, paymentFunction: CheckoutPage => Unit): Unit = {
     val testUserRequest = new IdapiTestUserRequest()
@@ -97,6 +97,9 @@ class CheckoutsSpec extends AnyFeatureSpec
     checkoutPage.fillStripeForm()
 
     When("they click to process payment")
+    checkoutPage.clickStripeSubmit()
+Thread.sleep(1000)
+    When("they click to process payment again")
     checkoutPage.clickStripeSubmit()
 
     And("the mock calls the backend using a test Stripe token")
