@@ -141,7 +141,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |             "amounts": [25],
           |             "defaultAmount": 25
           |         }
-          |      },
+          |      }
           |    },
           |    "UnitedStates": {
           |      "control": {
@@ -157,7 +157,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |             "amounts": [25],
           |             "defaultAmount": 25
           |         }
-          |      },
+          |      }
           |    },
           |    "EURCountries": {
           |      "control": {
@@ -173,7 +173,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |             "amounts": [25],
           |             "defaultAmount": 25
           |         }
-          |      },
+          |      }
           |    },
           |    "AUDCountries": {
           |      "control": {
@@ -189,7 +189,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |             "amounts": [25],
           |             "defaultAmount": 25
           |         }
-          |      },
+          |      }
           |    },
           |    "International": {
           |      "control": {
@@ -205,7 +205,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |             "amounts": [25],
           |             "defaultAmount": 25
           |         }
-          |      },
+          |      }
           |    },
           |    "NZDCountries": {
           |      "control": {
@@ -221,7 +221,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |             "amounts": [25],
           |             "defaultAmount": 25
           |         }
-          |      },
+          |      }
           |    },
           |    "Canada": {
           |      "control": {
@@ -237,7 +237,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |             "amounts": [25],
           |             "defaultAmount": 25
           |         }
-          |      },
+          |      }
           |    }
           |  },
           |  "contributionTypes": {
