@@ -41,7 +41,7 @@ class CheckoutsSpec extends AnyFeatureSpec
 
   Feature("Digital Pack gift checkout") {
     Scenario("User already logged in - Direct Debit checkout") {
-      testCheckout("Digital Pack gift", new DigitalPackGiftCheckout, new DigitalPackGiftProductPage, payWithStripe)
+      testCheckout("Digital Pack gift", new DigitalPackGiftCheckout, new DigitalPackGiftProductPage, payWithDirectDebit)
     }
   }
 
