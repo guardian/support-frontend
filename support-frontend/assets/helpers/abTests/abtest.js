@@ -104,7 +104,7 @@ function getMvtId(): number {
   return mvtId;
 }
 
-function getLocalStorageParticipation(): Participations {
+function getLocalStorageParticipations(): Participations {
 
   const abTests = storage.getLocal('gu.support.abTests');
 
@@ -282,8 +282,6 @@ function getParticipations(
   country: IsoCountry,
   countryGroupId: CountryGroupId,
 ): Participations {
-
-  const currentParticipation = getLocalStorageParticipation();
   const participations: Participations = {};
 
   const acquisitionDataTest: ?AcquisitionABTest = getTestFromAcquisitionData();
@@ -312,9 +310,7 @@ function getParticipations(
       return;
     }
 
-    if (testId in currentParticipation) {
-      participations[testId] = currentParticipation[testId];
-    } else if (userInTest(test, testId, mvtId, country, countryGroupId, acquisitionDataTest)) {
+    if (userInTest(test, testId, mvtId, country, countryGroupId, acquisitionDataTest)) {
       const variantIndex = assignUserToVariant(mvtId, test, acquisitionDataTest);
       participations[testId] = test.variants[variantIndex].id;
 
@@ -357,11 +353,13 @@ const init = (
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   const serverSideParticipations: ?Participations = getServerSideParticipations();
   const amountsTestParticipations: ?Participations = getAmountsTestParticipations(countryGroupId, settings);
+  const localStorageParticipations: Participations = getLocalStorageParticipations();
   const combinedParticipations: Participations = {
     ...participations,
-    ...urlParticipations,
     ...serverSideParticipations,
     ...amountsTestParticipations,
+    ...localStorageParticipations,
+    ...urlParticipations,
   };
   setLocalStorageParticipations(combinedParticipations);
 
@@ -378,7 +376,7 @@ const getVariantsAsString = (participation: Participations): string => {
   return variants.join('; ');
 };
 
-const getCurrentParticipations = (): Participations => getLocalStorageParticipation();
+const getCurrentParticipations = (): Participations => getLocalStorageParticipations();
 
 // ----- Exports ----- //
 
