@@ -29,6 +29,7 @@ import { DigitalPack } from 'helpers/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
+import { FocusStyleManager } from '@guardian/src-utilities';
 
 // ----- Redux Store ----- //
 
@@ -69,6 +70,8 @@ const thankyouProps = {
   countryGroupId,
   marketingConsent: (orderIsAGift ? <MarketingConsentGift /> : <MarketingConsent />),
 };
+
+FocusStyleManager.onlyShowFocusOnTabs();
 
 // ----- Render ----- //
 
