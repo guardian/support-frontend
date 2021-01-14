@@ -45,7 +45,7 @@ export const campaign: CampaignSettings = ({
     currencySymbol: '$',
     copy: {
       countLabel: 'contributed',
-      goalReachedPrimary: "It's not too late to give!",
+      goalReachedPrimary: 'It\'s not too late to give!',
       goalReachedSecondary: '',
     },
   },
