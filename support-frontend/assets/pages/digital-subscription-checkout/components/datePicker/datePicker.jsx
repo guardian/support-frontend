@@ -16,7 +16,7 @@ import { Error } from 'components/forms/customFields/error';
 import {
   getLatestAvailableDateText,
   getRange,
-  dateIsPast,
+  // dateIsPast,
   dateIsOutsideRange,
 } from './helpers';
 
@@ -99,8 +99,6 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
       this.handleError('No date has been selected as the date is not valid. Please try again');
     } else if (dateIsOutsideRange(date)) {
       this.handleError(`No date has been recorded as the date entered was not available. Please enter a date up to ${latestAvailableDate}`);
-    } else if (dateIsPast(date)) {
-      this.handleError(`No date has been recorded as the date was in the past. Please enter a date between today and ${latestAvailableDate}`);
     }
   }
 
@@ -115,7 +113,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
   }
 
   handleCalendarDate = (date: Date) => {
-    if (dateIsPast(date) || dateIsOutsideRange(date)) {
+    if (dateIsOutsideRange(date)) {
       return;
     }
     const dateArray = formatMachineDate(date).split('-');

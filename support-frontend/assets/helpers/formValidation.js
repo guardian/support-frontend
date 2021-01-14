@@ -43,7 +43,7 @@ export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(i
 
 export const checkGiftStartDate: (string | null) => boolean = (rawDate) => {
   const date = rawDate ? new Date(rawDate) : null;
-  return isNotEmpty(rawDate) && isNotInThePast(date) && isNotTooFarInTheFuture(date);
+  return isNotEmpty(rawDate) && isNotTooFarInTheFuture(date);
 };
 
 export const checkAmount: (string, CountryGroupId, ContributionType) =>
