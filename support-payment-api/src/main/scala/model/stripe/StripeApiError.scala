@@ -46,7 +46,7 @@ object StripeApiError {
       }
     }
 
-    val declineCode: Option[String] = condOpt(err) { case e: CardException => e.getDeclineCode }
+    val declineCode: Option[String] = condOpt(err) { case e: CardException => e.getCode }
 
     StripeApiError(exceptionType, Option(err.getStatusCode), declineCode, err.getMessage, publicKey)
 
