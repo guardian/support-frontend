@@ -64,7 +64,6 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
     }
   }
 
-  // TODO - paypal needs to use
   def recordPostPaymentTasksError(paymentProvider: PaymentProvider, message: String): Unit = {
     logger.error(s"Post-payment task error for $paymentProvider: $message")
     put("post-payment-tasks-error", paymentProvider)
