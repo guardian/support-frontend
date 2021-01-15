@@ -53,7 +53,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
 
   private def handleAlreadyProcessedPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
     logger.error(s"Received a duplicate payment id for payment : $googleRecordPayment")
-    cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+    cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
     EitherT.leftT[Future, Unit](BackendError.fromSubscribeWithGoogleDuplicatePaymentError(
       SubscribeWithGoogleDuplicateInsertEventError(s"Received a duplicate payment id for payment : $googleRecordPayment")))
   }
@@ -73,7 +73,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
     val trackContributionResult =
       insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, None))
         .leftMap { err =>
-          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
           logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
           err
         }.map { f =>
@@ -82,7 +82,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
       }
 
     val ophanTrackingResult = submitAcquisitionToOphan(googleRecordPayment, None, clientBrowserInfo).leftMap { err =>
-      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
       logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
       err
     }
@@ -98,7 +98,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
     val trackContributionResult =
       insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, Some(identity)))
         .leftMap { err =>
-          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
           logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
           err
         }.map { f =>
@@ -107,7 +107,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
       }
 
     val ophanTrackingResult = submitAcquisitionToOphan(googleRecordPayment, Some(identity), clientBrowserInfo).leftMap { err =>
-      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
       logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
       err
     }

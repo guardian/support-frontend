@@ -8,7 +8,7 @@ import model.paypal.PaypalApiError
 import model.stripe.StripeApiError
 import model.{Environment, PaymentProvider}
 
-class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environment: Environment) {
+class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environment: Environment) extends StrictLogging {
 
   private val namespace = {
     val qualifier = if (environment == Environment.Live) "PROD" else "CODE"
@@ -36,10 +36,13 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
   def recordPaymentSuccess(paymentProvider: PaymentProvider): Unit = put("payment-success", paymentProvider)
 
   def recordFailedPayment(error: Exception, paymentProvider: PaymentProvider): Unit = {
-    if (isPaymentError(error))
+    if (isPaymentError(error)) {
+      logger.error(s"Payment error with $paymentProvider: $error")
       put("payment-error", paymentProvider)
-    else
+    } else {
+      logger.info(s"Payment failure with $paymentProvider: $error")
       put("failed-payment", paymentProvider)
+    }
   }
 
   def isPaymentError(error: Exception): Boolean = {
@@ -61,7 +64,11 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
     }
   }
 
-  def recordPostPaymentTasksError(paymentProvider: PaymentProvider): Unit = put("post-payment-tasks-error", paymentProvider)
+  // TODO - paypal needs to use
+  def recordPostPaymentTasksError(paymentProvider: PaymentProvider, message: String): Unit = {
+    logger.error(s"Post-payment task error for $paymentProvider: $message")
+    put("post-payment-tasks-error", paymentProvider)
+  }
 
   def recordTrackingRefundFailure(paymentProvider: PaymentProvider): Unit = put("tracking-refund-failure", paymentProvider)
 

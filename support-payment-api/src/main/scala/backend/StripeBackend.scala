@@ -187,8 +187,11 @@ class StripeBackend(
             * was reported as successful by Stripe. It does however prevent us from executing post-payment tasks and so
             * would need investigation.
             */
-          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Stripe)
-          logger.error(s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request")
+          cloudWatchService.recordPostPaymentTasksError(
+            PaymentProvider.Stripe,
+            s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request"
+          )
+//          logger.error(s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request")
       }
 
       StripePaymentIntentsApiResponse.Success(
@@ -199,12 +202,18 @@ class StripeBackend(
 
   private def postPaymentTasks(email: String, chargeData: StripeRequest, charge: Charge, clientBrowserInfo: ClientBrowserInfo, identityId: Option[Long]): Unit = {
     trackContribution(charge, chargeData, identityId, clientBrowserInfo).leftMap { err =>
-      logger.error(s"unable to track contribution due to error: ${err.getMessage}")
+      cloudWatchService.recordPostPaymentTasksError(
+        PaymentProvider.Stripe,
+        s"unable to track contribution due to error: ${err.getMessage}"
+      )
     }
 
     identityId.foreach { id =>
       sendThankYouEmail(email, chargeData, id).leftMap { err =>
-        logger.error(s"unable to send thank you email: ${err.getMessage}")
+        cloudWatchService.recordPostPaymentTasksError(
+          PaymentProvider.Stripe,
+          s"unable to send thank you email: ${err.getMessage}"
+        )
       }
     }
   }

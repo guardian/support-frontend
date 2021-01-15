@@ -43,6 +43,7 @@ class PaypalBackend(
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] =
     paypalService.createPayment(c)
       .leftMap { error =>
+        // TODO - why no cloudwatch metric?
         logger.error(s"Error creating paypal payment data. Error: $error")
         error
       }
