@@ -19,8 +19,6 @@ export const isEmpty: (string | null) => boolean = input =>
 
 export const isNotEmpty: (string | null) => boolean = input => !isEmpty(input);
 
-export const isNotInThePast: (Date | null) => boolean = date => !DateUtils.isPastDay(date);
-
 export const isNotTooFarInTheFuture: (Date | null) => boolean = (date) => {
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
@@ -43,7 +41,7 @@ export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(i
 
 export const checkGiftStartDate: (string | null) => boolean = (rawDate) => {
   const date = rawDate ? new Date(rawDate) : null;
-  return isNotEmpty(rawDate) && isNotInThePast(date) && isNotTooFarInTheFuture(date);
+  return isNotEmpty(rawDate) && isNotTooFarInTheFuture(date);
 };
 
 export const checkAmount: (string, CountryGroupId, ContributionType) =>
