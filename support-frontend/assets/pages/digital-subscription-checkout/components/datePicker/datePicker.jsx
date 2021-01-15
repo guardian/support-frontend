@@ -88,6 +88,17 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 
   getDateString = () => `${this.state.year}-${this.state.month}-${this.state.day}`;
 
+  getDateConfirmationText = () => {
+    const { value } = this.props;
+    if (!value) {
+      return '';
+    }
+    // Specifying midnight means that the Date object will always be the selected date in the user's time zone
+    // A date instantiated with just new Date('2021-01-01') will be in UTC and causes time zone issues
+    const valueDate = new Date(`${value}T00:00:00`);
+    return `${valueDate.getDate()} ${monthText[valueDate.getMonth()]} ${valueDate.getFullYear()}`;
+  }
+
   checkDateIsValid = (e: Object) => {
     e.preventDefault();
     const date = new Date(this.getDateString());
@@ -144,11 +155,9 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 
   render() {
     const { state } = this;
-    const { value } = this.props;
     const today = Date.now();
     const currentMonth = new Date(today);
     const threeMonthRange = DateUtils.addMonths(currentMonth, 3);
-    const valueDate = value ? new Date(value) : null;
 
     return (
       <div>
@@ -227,7 +236,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
         </span>
         <span>{!state.dateError && state.dateValidated && (
           <div role="status" aria-live="assertive" css={marginTop}>
-            {`Your gift will be delivered on ${valueDate ? valueDate.getDate() : ''} ${valueDate ? monthText[valueDate.getMonth()] : ''} ${valueDate ? valueDate.getFullYear() : ''}`}
+            {`Your gift will be delivered on ${this.getDateConfirmationText()}`}
           </div>)}
         </span>
       </div>
