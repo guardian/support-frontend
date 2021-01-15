@@ -507,43 +507,62 @@ Resources:
       Statistic: Sum
       TreatMissingData: breaching
 
-  ThreeOrMorePaypalPaymentErrorsIn15Mins:
+  PaypalPaymentError:
       Type: AWS::CloudWatch::Alarm
       Condition: CreateProdResources
       Properties:
         AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-        AlarmName: !Sub ${App} ${Stage} Multiple paypal errors in the last fifteen minutes for one-off contributions via the payment-api
+        AlarmName: !Sub ${App} ${Stage} Paypal payment error in the last fifteen minutes for one-off contributions via the payment-api
         MetricName: payment-error
         Namespace: support-payment-api-PROD
         Dimensions:
                 - Name: payment-provider
                   Value: Paypal
         ComparisonOperator: GreaterThanThreshold
-        Threshold: 3
+        Threshold: 1
         Period: 900
         EvaluationPeriods: 1
         Statistic: Sum
         TreatMissingData: notBreaching
 
-  ThreeOrMoreStripePaymentErrorsIn15Mins:
+  StripePaymentError:
       Type: AWS::CloudWatch::Alarm
       Condition: CreateProdResources
       Properties:
         AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-        AlarmName: !Sub ${App} ${Stage} Multiple stripe errors in the last fifteen minutes for one-off contributions via the payment-api
+        AlarmName: !Sub ${App} ${Stage} Stripe payment error in the last fifteen minutes for one-off contributions via the payment-api
         MetricName: payment-error
         Namespace: support-payment-api-PROD
         Dimensions:
                 - Name: payment-provider
                   Value: Stripe
         ComparisonOperator: GreaterThanThreshold
-        Threshold: 3
+        Threshold: 1
         Period: 900
         EvaluationPeriods: 1
         Statistic: Sum
         TreatMissingData: notBreaching
+
+  AmazonPayPaymentError:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub ${App} ${Stage} Amazon Pay payment error in the last fifteen minutes for one-off contributions via the payment-api
+      MetricName: payment-error
+      Namespace: support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: AmazonPay
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 1
+      Period: 900
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
 
   ThreeOrMorePostPaymentErrorsIn15Mins:
     Type: AWS::CloudWatch::Alarm
