@@ -96,7 +96,9 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
     // Specifying midnight means that the Date object will always be the selected date in the user's time zone
     // A date instantiated with just new Date('2021-01-01') will be in UTC and causes time zone issues
     const valueDate = new Date(`${value}T00:00:00`);
-    return `${valueDate.getDate()} ${monthText[valueDate.getMonth()]} ${valueDate.getFullYear()}`;
+    const today = new Date();
+    const confirmedDate = today > valueDate ? today : valueDate;
+    return `${confirmedDate.getDate()} ${monthText[confirmedDate.getMonth()]} ${confirmedDate.getFullYear()}`;
   }
 
   checkDateIsValid = (e: Object) => {
