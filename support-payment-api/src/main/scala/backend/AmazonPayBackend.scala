@@ -65,7 +65,7 @@ class AmazonPayBackend(
   private def handleResponse(response: Either[AmazonPayApiError, AuthorizationDetails] , amazonPayRequest: AmazonPayRequest, clientBrowserInfo: ClientBrowserInfo)  = {
     response.toEitherT[Future]
       .leftMap { error =>
-        logger.error(s"Something went wrong with ${amazonPayRequest.paymentData.orderReferenceId}: ${error.getMessage}")
+        logger.info(s"Something went wrong with AmazonPay orderReferenceId: ${amazonPayRequest.paymentData.orderReferenceId}")
         cloudWatchService.recordFailedPayment(error, PaymentProvider.AmazonPay)
         error
       }.semiflatMap { authDetails =>
@@ -96,12 +96,19 @@ class AmazonPayBackend(
   private def postPaymentTasks(authDetails: AuthorizationDetails, email: String, acquisitionData: AmazonPayAcquisition): Unit = {
     val clientBrowserInfo = acquisitionData.clientBrowserInfo
     val identityId = acquisitionData.identityId
-    trackContribution(authDetails, acquisitionData, email, identityId, clientBrowserInfo)
+    trackContribution(authDetails, acquisitionData, email, identityId, clientBrowserInfo).leftMap { err =>
+      cloudWatchService.recordPostPaymentTasksError(
+        PaymentProvider.AmazonPay,
+        s"Error tracking contribution: ${err.getMessage}"
+      )
+    }
 
     identityId.foreach { id =>
-      sendThankYouEmail(email, acquisitionData.amazonPayment, id)
-        .leftMap { err =>
-        logger.error(s"unable to send thank you email: ${err.getMessage}")
+      sendThankYouEmail(email, acquisitionData.amazonPayment, id).leftMap { err =>
+        cloudWatchService.recordPostPaymentTasksError(
+          PaymentProvider.AmazonPay,
+          s"unable to send thank you email: ${err.getMessage}"
+        )
       }
     }
   }
@@ -112,10 +119,7 @@ class AmazonPayBackend(
       submitAcquisitionToOphan(acquisitionData),
       submitAcquisitionToBigQuery(acquisitionData, contributionData),
       insertContributionDataIntoDatabase(contributionData)
-    ).leftMap { err =>
-      logger.error("Error tracking contribution", err)
-      err
-    }
+    )
   }
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {

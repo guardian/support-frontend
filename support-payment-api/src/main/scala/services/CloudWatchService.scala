@@ -37,10 +37,10 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
 
   def recordFailedPayment(error: Exception, paymentProvider: PaymentProvider): Unit = {
     if (isPaymentError(error)) {
-      logger.error(s"Payment error with $paymentProvider: $error")
+      logger.error(s"Payment error with $paymentProvider", error)
       put("payment-error", paymentProvider)
     } else {
-      logger.info(s"Payment failure with $paymentProvider: $error")
+      logger.info(s"Payment failure with $paymentProvider", error)
       put("failed-payment", paymentProvider)
     }
   }

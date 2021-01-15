@@ -54,7 +54,7 @@ class StripeBackend(
   def createCharge(chargeData: LegacyStripeChargeRequest, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
     stripeService.createCharge(chargeData)
       .leftMap(err => {
-        logger.error(s"unable to create Stripe charge ($chargeData)", err)
+        logger.info(s"unable to create Stripe charge ($chargeData)")
         cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
         err
       })
@@ -108,7 +108,7 @@ class StripeBackend(
     def createIntent(): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] =
       stripeService.createPaymentIntent(request)
         .leftMap(err => {
-          logger.info(s"Unable to create Stripe Payment Intent ($request). User-Agent was: ${clientBrowserInfo.userAgent}", err)
+          logger.info(s"Unable to create Stripe Payment Intent ($request). User-Agent was: ${clientBrowserInfo.userAgent}")
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
           err
         })
@@ -127,10 +127,10 @@ class StripeBackend(
               )
 
             case otherStatus =>
-              logger.error(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
-              EitherT.fromEither(
-                Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None))
-              )
+              logger.info(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
+              val error = StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None)
+              cloudWatchService.recordFailedPayment(error, PaymentProvider.Stripe)
+              EitherT.fromEither(Left(error))
           }
         }
 
@@ -152,7 +152,7 @@ class StripeBackend(
 
     stripeService.confirmPaymentIntent(request)
       .leftMap(err => {
-        logger.error(s"Unable to confirm Stripe Payment Intent ($request)", err)
+        logger.info(s"Unable to confirm Stripe Payment Intent ($request)")
         cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
         err
       })
@@ -162,10 +162,10 @@ class StripeBackend(
           case "succeeded" => EitherT.liftF(paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo))
 
           case otherStatus =>
-            logger.error(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
-            EitherT.fromEither(
-              Left(StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None))
-            )
+            logger.info(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
+            val error = StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None)
+            cloudWatchService.recordFailedPayment(error, PaymentProvider.Stripe)
+            EitherT.fromEither(Left(error))
         }
       }
   }
@@ -191,7 +191,6 @@ class StripeBackend(
             PaymentProvider.Stripe,
             s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request"
           )
-//          logger.error(s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request")
       }
 
       StripePaymentIntentsApiResponse.Success(
