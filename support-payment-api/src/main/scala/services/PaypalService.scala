@@ -185,11 +185,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
   private def executePayment(paymentId: String, payerId: String): Either[PaypalApiError, Payment] = {
     val payment = new Payment().setId(paymentId)
     val paymentExecution = new PaymentExecution().setPayerId(payerId)
-    Either.catchNonFatal(payment.execute(buildAPIContext, paymentExecution)).leftMap{ error =>
-      // TODO - does this need to be an error?
-      logger.error(s"Error calling execute paypal payment. Error: $error")
-      PaypalApiError.fromThrowable(error)
-    }
+    Either.catchNonFatal(payment.execute(buildAPIContext, paymentExecution)).leftMap(PaypalApiError.fromThrowable)
   }
 
 }
