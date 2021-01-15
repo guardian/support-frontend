@@ -564,13 +564,13 @@ Resources:
       Statistic: Sum
       TreatMissingData: notBreaching
 
-  ThreeOrMorePostPaymentErrorsIn15Mins:
+  PostPaymentError:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub ${App} ${Stage} Multiple errors in post-payment tasks in the last fifteen minutes for one-off contributions via the payment-api
+      AlarmName: !Sub ${App} ${Stage} Failed post-payment task for one-off contributions via the payment-api
       MetricName: post-payment-tasks-error
       Namespace: support-payment-api-PROD
       ComparisonOperator: GreaterThanThreshold
