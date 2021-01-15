@@ -15,15 +15,12 @@ const getLatestAvailableDateText = () => {
   return `${rangeDate.getDate()} ${monthText[rangeDate.getMonth()]} ${rangeDate.getFullYear()}`;
 };
 
-const dateIsPast = (date: Date) => DateUtils.isPastDay(date);
-
 const dateIsOutsideRange = (date: Date) => {
   const rangeDate = getRange();
   return DateUtils.isDayAfter(date, rangeDate);
 };
 
 export {
-  dateIsPast,
   dateIsOutsideRange,
   getRange,
   getLatestAvailableDateText,

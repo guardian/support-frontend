@@ -19,8 +19,6 @@ export const isEmpty: (string | null) => boolean = input =>
 
 export const isNotEmpty: (string | null) => boolean = input => !isEmpty(input);
 
-export const isNotInThePast: (Date | null) => boolean = date => !DateUtils.isPastDay(date);
-
 export const isNotTooFarInTheFuture: (Date | null) => boolean = (date) => {
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
