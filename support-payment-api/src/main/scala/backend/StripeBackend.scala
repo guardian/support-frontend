@@ -122,7 +122,9 @@ class StripeBackend(
 
             case "succeeded" =>
               //Payment complete without the need for 3DS - do post-payment tasks and return success to client
-              EitherT.liftF(paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo))
+              EitherT.liftF[Future, StripeApiError, StripePaymentIntentsApiResponse](
+                paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo)
+              )
 
             case otherStatus =>
               logger.error(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
