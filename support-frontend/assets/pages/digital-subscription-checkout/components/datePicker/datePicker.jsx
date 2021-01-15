@@ -16,7 +16,6 @@ import { Error } from 'components/forms/customFields/error';
 import {
   getLatestAvailableDateText,
   getRange,
-  // dateIsPast,
   dateIsOutsideRange,
 } from './helpers';
 
