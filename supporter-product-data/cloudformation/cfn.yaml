@@ -49,13 +49,6 @@ Resources:
             Prefix: "zuora"
             Status: Enabled
             ExpirationInDays: 14
-      LoggingConfiguration:
-        DestinationBucketName:
-          Fn::FindInMap:
-            - EnvironmentBucketMap
-            - Ref: Stage
-            - "logs"
-        LogFilePrefix: "supporter-product-backup-_[STAGE]/"
       VersioningConfiguration:
         Status: "Enabled"
 
