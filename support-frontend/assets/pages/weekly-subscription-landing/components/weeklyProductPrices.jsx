@@ -13,7 +13,7 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import Prices, { type PropTypes } from './content/prices';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
-import { getProductPrice } from 'helpers/productPrice/productPrices';
+import { getProductPrice, getFirstValidPrice } from 'helpers/productPrice/productPrices';
 import {
   getSimplifiedPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
@@ -52,7 +52,7 @@ const getRelevantPromotion = ({ promotions }: ProductPrice) => {
 const getMainDisplayPrice = (productPrice: ProductPrice, promotion?: Promotion | null): number => {
   if (promotion) {
     const introductoryPrice = promotion.introductoryPrice && promotion.introductoryPrice.price;
-    return promotion.discountedPrice || introductoryPrice || productPrice.price;
+    return getFirstValidPrice(promotion.discountedPrice, introductoryPrice, productPrice.price);
   }
   return productPrice.price;
 };
