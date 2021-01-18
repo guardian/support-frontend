@@ -16,7 +16,6 @@ import thunkMiddleware from 'redux-thunk';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import { renderError } from 'helpers/render';
-import { overrideAmountsForParticipations } from 'helpers/abTests/helpers';
 import type { Settings } from 'helpers/settings';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -44,6 +43,7 @@ import { getSettings } from 'helpers/globals';
 import { doNotTrack } from 'helpers/tracking/doNotTrack';
 import { getGlobal } from 'helpers/globals';
 import { isPostDeployUser } from 'helpers/user/user';
+import { getAmounts } from 'helpers/abTests/helpers';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -88,9 +88,7 @@ function buildInitialState(
     currencyId,
   };
 
-  // Override the default amounts config with any test participations
-  const amountsWithParticipationOverrides = settings.amounts ?
-    overrideAmountsForParticipations(abParticipations, settings.amounts) : settings.amounts;
+  const amounts = getAmounts(settings, abParticipations, countryGroupId);
 
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
@@ -98,7 +96,8 @@ function buildInitialState(
     otherQueryParams,
     internationalisation,
     abParticipations,
-    settings: { ...settings, amounts: amountsWithParticipationOverrides },
+    settings,
+    amounts,
   };
 
 }

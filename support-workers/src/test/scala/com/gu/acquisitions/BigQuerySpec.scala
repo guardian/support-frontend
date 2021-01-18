@@ -6,8 +6,9 @@ import com.gu.config.Configuration
 import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.{Authentication, DeliveryContact, NewContact, SalesforceContactResponse}
 import com.gu.support.acquisitions.AcquisitionType.Purchase
-import com.gu.support.acquisitions.{AbTest, AcquisitionDataRow, AcquisitionProduct, BigQueryService, PrintOptions, PrintProduct, QueryParameter}
-import com.gu.support.workers.{Monthly, PayPal}
+import com.gu.support.acquisitions.PaymentFrequency.Monthly
+import com.gu.support.acquisitions.PaymentProvider.PayPal
+import com.gu.support.acquisitions.{AbTest, AcquisitionDataRow, AcquisitionEventTable, AcquisitionProduct, BigQueryService, PrintOptions, PrintProduct, QueryParameter}
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
@@ -35,7 +36,7 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       .build().getService
 
   "BigQuery" should "be able to run a query" in {
-    val query = s"""select * from ${BigQuerySchema.datasetName}.${BigQuerySchema.tableName} where amount = 9999 and event_timestamp > TIMESTAMP("2020-12-14 00:20:00");"""
+    val query = s"""select * from ${AcquisitionEventTable.datasetName}.${AcquisitionEventTable.tableName} where amount = 9999 and event_timestamp > TIMESTAMP("2020-12-14 00:20:00");"""
     val queryConfig = QueryJobConfiguration.newBuilder(query).build
 
     val tableResult = bigQuery.query(queryConfig)
@@ -72,10 +73,11 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       Direct,
       Purchase,
       Some("subscription number"), Some("account number"), Some("contributionId"),
-      List(QueryParameter("foo", "bar"))
+      List(QueryParameter("foo", "bar")),
+      None
     )
 
-    service.tableInsertRow(BigQuerySchema.datasetName, BigQuerySchema.tableName, dataRow) shouldBe Right(())
+    service.tableInsertRow(dataRow).value.map(_ shouldBe Right(()))
   }
 
 }

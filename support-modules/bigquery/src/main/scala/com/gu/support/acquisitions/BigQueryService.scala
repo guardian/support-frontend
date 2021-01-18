@@ -1,12 +1,14 @@
 package com.gu.support.acquisitions
 
+import cats.data.EitherT
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.bigquery.{BigQueryException, BigQueryOptions, InsertAllRequest, TableId}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
-import com.gu.support.config.BigQueryConfig
+import com.gu.support.acquisitions.AcquisitionEventTable.{datasetName, tableName}
 
 import scala.collection.JavaConverters._
+import scala.concurrent.{ExecutionContext, Future, blocking}
 
 class BigQueryService(config: BigQueryConfig) {
   lazy val bigQuery =
@@ -22,13 +24,20 @@ class BigQueryService(config: BigQueryConfig) {
       ))
       .build().getService
 
-  def tableInsertRow(datasetName: String, tableName: String, acquisitionDataRow: AcquisitionDataRow): Either[String, Unit] = {
+  def tableInsertRow(acquisitionDataRow: AcquisitionDataRow)(implicit executionContext: ExecutionContext): EitherT[Future, String, Unit] =
+    EitherT(Future(blocking(
+      // The BigQuery sdk isn't asynchronous so wrap it in a blocking future as documented here:
+      // https://docs.scala-lang.org/overviews/core/futures.html#blocking-inside-a-future
+      blockingInsert(acquisitionDataRow)
+    )))
+
+  private def blockingInsert(acquisitionDataRow: AcquisitionDataRow): Either[String, Unit] =
     try {
       val tableId = TableId.of(datasetName, tableName)
       val rowContent = AcquisitionDataRowMapper.mapToTableRow(acquisitionDataRow)
       val insertRequest = InsertAllRequest.newBuilder(tableId).addRow(rowContent).build
 
-      val response = bigQuery.insertAll(insertRequest) // Seems there is currently no Async way to do this
+      val response = bigQuery.insertAll(insertRequest)
 
       if (response.hasErrors) {
         val errors = response.getInsertErrors.entrySet.asScala.mkString(", ").stripSuffix(", ")
@@ -43,5 +52,4 @@ class BigQueryService(config: BigQueryConfig) {
         SafeLogger.error(scrub"There was an exception inserting a row into $tableName", e)
         Left(s"There was an exception inserting a row into $tableName: ${e.getMessage}")
     }
-  }
 }

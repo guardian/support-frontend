@@ -5,7 +5,7 @@
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { config, type AmountsRegions, type Amount, type ContributionType, getAmount } from 'helpers/contributions';
+import { config, type ContributionAmounts, type ContributionType, getAmount } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
@@ -27,9 +27,9 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: ContributionType,
-  amounts: AmountsRegions,
+  amounts: ContributionAmounts,
   selectedAmounts: SelectedAmounts,
-  selectAmount: (Amount | 'other', CountryGroupId, ContributionType) => (() => void),
+  selectAmount: (number | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmounts: OtherAmounts,
   checkOtherAmount: (string, CountryGroupId, ContributionType) => boolean,
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
@@ -42,7 +42,7 @@ const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
-  amounts: state.common.settings.amounts,
+  amounts: state.common.amounts,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
@@ -105,13 +105,13 @@ export const getAmountPerWeekBreakdown = (
 };
 
 function withProps(props: PropTypes) {
-  const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
+  const { amounts: validAmounts, defaultAmount } = props.amounts[props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
-    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], min, false);
   const maxAmount: string =
-    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], max, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
   const otherLabelSymbol: string = currencies[props.currency].glyph;
   const {
@@ -155,6 +155,7 @@ function withProps(props: PropTypes) {
         currency={props.currency}
         contributionType={props.contributionType}
         validAmounts={validAmounts}
+        defaultAmount={defaultAmount}
         showOther={showOther}
         selectedAmounts={props.selectedAmounts}
         selectAmount={props.selectAmount}

@@ -124,8 +124,8 @@ lazy val `support-payment-api` = (project in file("support-payment-api"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-models`, `support-internationalisation`, `acquisition-event-producer`)
-  .aggregate(`support-models`, `support-internationalisation`, `acquisition-event-producer`)
+  ).dependsOn(`support-models`, `support-internationalisation`, `module-bigquery`)
+  .aggregate(`support-models`, `support-internationalisation`, `module-bigquery`)
 
 lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)

@@ -5,7 +5,7 @@ import com.typesafe.config.Config
 case class AmazonPayConfig(
   sellerId: String,
   clientId: String
-) extends TouchpointConfig
+)
 
 class AmazonPayConfigProvider(config: Config, defaultStage: Stage) extends TouchpointConfigProvider[AmazonPayConfig](config, defaultStage) {
   def fromConfig(config: Config): AmazonPayConfig = {

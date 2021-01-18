@@ -1,50 +1,133 @@
 // @flow
 
-import { tests as allTests } from 'helpers/abTests/abtestDefinitions';
-import { type AmountsRegions } from 'helpers/contributions';
-import type { Test, Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { Settings } from 'helpers/settings';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { ContributionAmounts } from 'helpers/contributions';
 
-function overrideAmountsForTest(
-  variantId: string,
-  abTest: Test,
-  currentAmountsRegions: AmountsRegions,
-): AmountsRegions {
-
-  const variant = abTest.variants.find(v => v.id === variantId);
-
-  if (variant && variant.amountsRegions) {
-    const { amountsRegions } = variant;
-    const newAmountsRegions = { ...currentAmountsRegions };
-
-    Object.keys(amountsRegions).forEach((countryGroupId) => {
-
-      Object.keys(amountsRegions[countryGroupId]).forEach((contributionType) => {
-
-        newAmountsRegions[countryGroupId][contributionType] = amountsRegions[countryGroupId][contributionType];
-      });
-    });
-
-    return newAmountsRegions;
-  }
-
-  return currentAmountsRegions;
+type FallbackAmounts = {
+  [CountryGroupId]: ContributionAmounts,
 }
 
-// Returns a new AmountsRegions by combining currentAmountsRegions with any test participation amounts
-export function overrideAmountsForParticipations(
+const FALLBACK_AMOUNTS: FallbackAmounts = {
+  GBPCountries: {
+    ONE_OFF: {
+      amounts: [30, 60, 120, 240],
+      defaultAmount: 60,
+    },
+    MONTHLY: {
+      amounts: [3, 7, 12],
+      defaultAmount: 7,
+    },
+    ANNUAL: {
+      amounts: [60, 120, 240, 480],
+      defaultAmount: 120,
+    },
+  },
+  UnitedStates: {
+    ONE_OFF: {
+      amounts: [25, 50, 100, 250],
+      defaultAmount: 50,
+    },
+    MONTHLY: {
+      amounts: [7, 15, 30],
+      defaultAmount: 15,
+    },
+    ANNUAL: {
+      amounts: [50, 100, 250, 500],
+      defaultAmount: 50,
+    },
+  },
+  EURCountries: {
+    ONE_OFF: {
+      amounts: [25, 50, 100, 250],
+      defaultAmount: 50,
+    },
+    MONTHLY: {
+      amounts: [6, 10, 20],
+      defaultAmount: 10,
+    },
+    ANNUAL: {
+      amounts: [50, 100, 250, 500],
+      defaultAmount: 50,
+    },
+  },
+  International: {
+    ONE_OFF: {
+      amounts: [25, 50, 100, 250],
+      defaultAmount: 50,
+    },
+    MONTHLY: {
+      amounts: [5, 10, 20],
+      defaultAmount: 10,
+    },
+    ANNUAL: {
+      amounts: [60, 100, 250, 500],
+      defaultAmount: 60,
+    },
+  },
+  Canada: {
+    ONE_OFF: {
+      amounts: [25, 50, 100, 250],
+      defaultAmount: 50,
+    },
+    MONTHLY: {
+      amounts: [5, 10, 20],
+      defaultAmount: 10,
+    },
+    ANNUAL: {
+      amounts: [60, 100, 250, 500],
+      defaultAmount: 60,
+    },
+  },
+  AUDCountries: {
+    ONE_OFF: {
+      amounts: [60, 100, 250, 500],
+      defaultAmount: 100,
+    },
+    MONTHLY: {
+      amounts: [10, 20, 40],
+      defaultAmount: 20,
+    },
+    ANNUAL: {
+      amounts: [80, 250, 500, 750],
+      defaultAmount: 80,
+    },
+  },
+  NZDCountries: {
+    ONE_OFF: {
+      amounts: [50, 100, 250, 500],
+      defaultAmount: 100,
+    },
+    MONTHLY: {
+      amounts: [10, 20, 50],
+      defaultAmount: 20,
+    },
+    ANNUAL: {
+      amounts: [50, 100, 250, 500],
+      defaultAmount: 50,
+    },
+  },
+};
+
+export function getAmounts(
+  settings: Settings,
   abParticipations: Participations,
-  currentAmountsRegions: AmountsRegions,
-): AmountsRegions {
+  countryGroupId: CountryGroupId,
+): ContributionAmounts {
+  if (!settings.amounts) {
+    return FALLBACK_AMOUNTS[countryGroupId];
+  }
 
-  return Object.keys(abParticipations).reduce((amountsRegions, testName) => {
-    const test = allTests[testName];
+  const { test, control } = settings.amounts[countryGroupId];
+  if (!test) {
+    return control;
+  }
 
-    if (test && test.type === 'AMOUNTS') {
-      const variant = abParticipations[testName];
-      return overrideAmountsForTest(variant, test, amountsRegions);
-    }
-
-    return amountsRegions;
-
-  }, currentAmountsRegions);
+  const variantName = abParticipations[test.name];
+  const variant = test.variants.find(v => v.name === variantName);
+  if (!variant) {
+    return control;
+  }
+  return variant.amounts;
 }

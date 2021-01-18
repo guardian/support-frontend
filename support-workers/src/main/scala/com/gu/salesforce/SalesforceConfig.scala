@@ -1,6 +1,6 @@
 package com.gu.salesforce
 
-import com.gu.support.config.{Stage, TouchpointConfig, TouchpointConfigProvider}
+import com.gu.support.config.{Stage, TouchpointConfigProvider}
 import com.typesafe.config.Config
 
 case class SalesforceConfig(
@@ -11,8 +11,7 @@ case class SalesforceConfig(
   username: String,
   password: String,
   token: String
-) extends TouchpointConfig
-
+)
 class SalesforceConfigProvider(config: Config, defaultStage: Stage) extends TouchpointConfigProvider[SalesforceConfig](config, defaultStage) {
   def fromConfig(config: Config): SalesforceConfig = SalesforceConfig(
     environment = config.getString("environment"),

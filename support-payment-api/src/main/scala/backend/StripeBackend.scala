@@ -8,13 +8,15 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
+import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.ConfigLoader._
 import conf._
 import model.Environment.{Live, Test}
 import model._
-import model.acquisition.StripeAcquisition
+import model.acquisition.{AcquisitionDataRowBuilder, StripeAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
 import model.stripe.StripeApiError.recaptchaErrorText
@@ -28,15 +30,16 @@ import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
 class StripeBackend(
-                     stripeService: StripeService,
-                     databaseService: ContributionsStoreService,
-                     identityService: IdentityService,
-                     ophanService: AnalyticsService,
-                     emailService: EmailService,
-                     recaptchaService: RecaptchaService,
-                     cloudWatchService: CloudWatchService,
-                     switchService: SwitchService,
-                     environment: Environment
+  stripeService: StripeService,
+  databaseService: ContributionsStoreService,
+  identityService: IdentityService,
+  ophanService: AnalyticsService,
+  bigQueryService: BigQueryService,
+  emailService: EmailService,
+  recaptchaService: RecaptchaService,
+  cloudWatchService: CloudWatchService,
+  switchService: SwitchService,
+  environment: Environment
 )(implicit pool: DefaultThreadPool, WSClient: WSClient) extends StrictLogging {
 
   switchService.startPoller()
@@ -204,18 +207,24 @@ class StripeBackend(
     }
   }
 
-  private def trackContribution(charge: Charge, data: StripeRequest, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  =
+  private def trackContribution(charge: Charge, data: StripeRequest, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  = {
+    val contributionData = ContributionData.fromStripeCharge(
+      identityId,
+      charge,
+      clientBrowserInfo.countrySubdivisionCode,
+      PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod)
+    )
+
+    val stripeAcquisition = StripeAcquisition(data, charge, identityId, clientBrowserInfo)
+
     BackendError.combineResults(
       insertContributionDataIntoDatabase(
-        ContributionData.fromStripeCharge(
-          identityId,
-          charge,
-          clientBrowserInfo.countrySubdivisionCode,
-          PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod)
-        )
+        contributionData
       ),
-      submitAcquisitionToOphan(StripeAcquisition(data, charge, identityId, clientBrowserInfo))
+      submitAcquisitionToOphan(stripeAcquisition),
+      submitAcquisitionToBigQuery(stripeAcquisition, contributionData)
     )
+  }
 
   private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[IdentityIdWithGuestAccountCreationToken]] =
     identityService.getOrCreateIdentityIdFromEmail(email).fold(
@@ -236,6 +245,14 @@ class StripeBackend(
   private def submitAcquisitionToOphan(acquisition: StripeAcquisition): EitherT[Future, BackendError, Unit] =
     ophanService.submitAcquisition(acquisition)
       .bimap(BackendError.fromOphanError, _ => ())
+
+  private def submitAcquisitionToBigQuery(
+    acquisition: StripeAcquisition,
+    contributionData: ContributionData
+  ): EitherT[Future, BackendError, Unit] =
+    bigQueryService.tableInsertRow(
+      AcquisitionDataRowBuilder.buildFromStripe(acquisition, contributionData)
+    ).bimap(BackendError.BigQueryError, _ => ())
 
   private def validateRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] =
     stripeService.validateRefundHook(refundHook)
@@ -262,22 +279,25 @@ class StripeBackend(
 object StripeBackend {
 
   private def apply(
-                     stripeService: StripeService,
-                     databaseService: ContributionsStoreService,
-                     identityService: IdentityService,
-                     ophanService: AnalyticsService,
-                     emailService: EmailService,
-                     recaptchaService: RecaptchaService,
-                     cloudWatchService: CloudWatchService,
-                     switchService: SwitchService,
-                     environment: Environment
+    stripeService: StripeService,
+    databaseService: ContributionsStoreService,
+    identityService: IdentityService,
+    ophanService: AnalyticsService,
+    bigQueryService: BigQueryService,
+    emailService: EmailService,
+    recaptchaService: RecaptchaService,
+    cloudWatchService: CloudWatchService,
+    switchService: SwitchService,
+    environment: Environment
   )(implicit pool: DefaultThreadPool,
     WSClient: WSClient,
     awsClient: AmazonS3): StripeBackend = {
-    new StripeBackend(stripeService,
+    new StripeBackend(
+      stripeService,
       databaseService,
       identityService,
       ophanService,
+      bigQueryService,
       emailService,
       recaptchaService,
       cloudWatchService,
@@ -305,6 +325,9 @@ object StripeBackend {
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
       services.AnalyticsService(configLoader, env),
+      configLoader
+        .loadConfig[Environment, BigQueryConfig](env)
+        .map(new BigQueryService(_)): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],

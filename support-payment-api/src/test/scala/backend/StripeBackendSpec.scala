@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
+import com.gu.support.acquisitions.BigQueryService
 import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, ChargeCollection, Event, PaymentIntent}
 import io.circe.Json
@@ -91,6 +92,10 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(dbError))
   val databaseResponse: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.right(Future.successful(()))
+  val bigQueryResponse: EitherT[Future, String, Unit] =
+    EitherT.right(Future.successful(()))
+  val bigQueryResponseError: EitherT[Future, String, Unit] =
+    EitherT.left(Future.successful("a BigQuery error"))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
   val emailServiceErrorResponse: EitherT[Future, EmailService.Error, SendMessageResult] =
@@ -109,6 +114,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
   val mockOphanService: AnalyticsService = mock[AnalyticsService]
+  val mockBigQueryService: BigQueryService = mock[BigQueryService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockRecaptchaService: RecaptchaService = mock[RecaptchaService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
@@ -126,6 +132,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockDatabaseService,
     mockIdentityService,
     mockOphanService,
+    mockBigQueryService,
     mockEmailService,
     mockRecaptchaService,
     mockCloudWatchService,
@@ -185,12 +192,13 @@ with WSClientProvider {
       }
 
       "return successful payment response even if identityService, " +
-        "ophanService, databaseService and emailService all fail" in new StripeBackendFixture {
+        "ophanService, databaseService, bigQueryService and emailService all fail" in new StripeBackendFixture {
         populateChargeMock()
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponseError)
         stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock, None)
       }
 
@@ -198,6 +206,7 @@ with WSClientProvider {
         populateChargeMock()
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
@@ -234,6 +243,7 @@ with WSClientProvider {
 
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
         val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
         result.futureLeft mustBe BackendError.Database(dbError)
@@ -244,6 +254,7 @@ with WSClientProvider {
 
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
         val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
         val error = BackendError.MultipleErrors(List(
@@ -262,6 +273,7 @@ with WSClientProvider {
         populatePaymentIntentMock()
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntent)).thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
@@ -332,6 +344,7 @@ with WSClientProvider {
         populatePaymentIntentMock()
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
         when(mockStripeService.confirmPaymentIntent(confirmPaymentIntent)).thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
