@@ -62,7 +62,7 @@ import { routes } from 'helpers/routes';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
 import { withError } from 'hocs/withError';
-import DatePickerFields from './datePicker/datePicker';
+import DatePickerFields from 'components/datePicker/datePicker';
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import { countries } from 'helpers/internationalisation/country';
