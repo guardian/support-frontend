@@ -1,0 +1,468 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Product data information for supporters."
+
+Parameters:
+  Stage:
+    Description: Stage name
+    Type: String
+    AllowedValues:
+      - PROD
+      - CODE
+    Default: CODE
+
+Conditions:
+  CreateProdResources: !Equals [!Ref "Stage", "PROD"]
+
+Mappings:
+
+  EnvironmentBucketMap:
+    CODE:
+      "logs": "supporter-product-logs-code"
+      "export": "supporter-product-export-code"
+    PROD:
+      "logs": "supporter-product-logs-prod"
+      "export": "supporter-product-export-prod"
+
+  Constants:
+    Alarm:
+      Process: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      Urgent: URGENT 9-5 -
+
+Resources:
+
+  SupporterProductLogBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName:
+        Fn::FindInMap:
+          - EnvironmentBucketMap
+          - Ref: Stage
+          - "logs"
+      AccessControl: LogDeliveryWrite
+      LoggingConfiguration:
+        DestinationBucketName:
+          Fn::FindInMap:
+            - EnvironmentBucketMap
+            - Ref: Stage
+            - "logs"
+        LogFilePrefix: "logs-logs/"
+      VersioningConfiguration:
+        Status: "Enabled"
+
+  SupporterProductExportBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName:
+        Fn::FindInMap:
+          - EnvironmentBucketMap
+          - Ref: Stage
+          - "export"
+      AccessControl: Private
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteAllOldFiles
+            Prefix: ""
+            Status: Enabled
+            ExpirationInDays: 365
+          - Id: DeleteOldFilesZuora
+            Prefix: "zuora"
+            Status: Enabled
+            ExpirationInDays: 14
+      LoggingConfiguration:
+        DestinationBucketName:
+          Fn::FindInMap:
+            - EnvironmentBucketMap
+            - Ref: Stage
+            - "logs"
+        LogFilePrefix: "supporter-product-backup-_[STAGE]/"
+      VersioningConfiguration:
+        Status: "Enabled"
+
+  EncryptBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    DependsOn: FulfilmentBucket
+    Properties:
+      Bucket: !Sub ${SupporterProductExportBucket}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyIncorrectEncryptionHeader
+            Effect: Deny
+            Principal: "*"
+            Action: s3:PutObject
+            Resource: !Sub arn:aws:s3:::${SupporterProductExportBucket}/*
+            Condition:
+              StringNotEquals:
+                s3:x-amz-server-side-encryption:
+                  - AES256
+                  - aws:kms
+          - Sid: DenyUnEncryptedObjectUploads
+            Effect: Deny
+            Principal: "*"
+            Action: s3:PutObject
+            Resource: !Sub arn:aws:s3:::${SupporterProductExportBucket}/*
+            Condition:
+              'Null':
+                s3:x-amz-server-side-encryption: 'true'
+
+  SupportProductDataLambdaRole:
+    Type: AWS::IAM::Role
+    DependsOn: SupporterProductExportBucket
+    Properties:
+      RoleName: !Sub SupportProductData-${Stage}
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: LambdaPolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - lambda:InvokeFunction
+                Resource: "*"
+        - PolicyName: PrivateBucket
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub arn:aws:s3:::gu-reader-revenue-private/membership/supporter-product-data/${Stage}/*
+        - PolicyName: WorkBucket
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:AbortMultipartUpload
+                  - s3:DeleteObject
+                  - s3:GetObject
+                  - s3:GetObjectAcl
+                  - s3:GetBucketAcl
+                  - s3:ListBucket
+                  - s3:PutObject
+                  - s3:GetObjectVersion
+                  - s3:DeleteObjectVersion
+                Resource: !Sub arn:aws:s3:::${SupporterProductExportBucket}/*
+        - PolicyName: ListWorkBucket
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !Sub arn:aws:s3:::${SupporterProductExportBucket}
+
+  ZuoraQuerierLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName:
+        !Sub membership-SupporterProductDataQuery-${Stage}
+      Description: "Trigger zuora export"
+      Handler: "com.gu.lambdas.ZuoraQuerierLambda::handleRequest"
+      Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
+      Code:
+        S3Bucket: supporter-product-data-dist
+        S3Key: !Sub ${Stage}/supporter-product-data.zip
+      MemorySize: 512
+      Runtime: "java8"
+      Timeout: 300
+      Environment:
+        Variables:
+          'Stage': !Sub ${Stage}
+
+  ResultsFetcherLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName:
+        !Sub zuora_fulfilment_fetcher-${Stage}
+      Description: "Fetch zuora export results"
+      Handler: "com.gu.lambdas.ZuoraResultsFetcherLambda::handleRequest"
+      Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
+        Code:
+          S3Bucket: supporter-product-data-dist
+          S3Key: !Sub ${Stage}/supporter-product-data.zip
+        MemorySize: 512
+        Runtime: "java8"
+        Timeout: 300
+        Environment:
+          Variables:
+            'Stage': !Sub ${Stage}
+
+  StatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: "Allow"
+          Principal:
+            Service: !Sub states.${AWS::Region}.amazonaws.com
+          Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: "*"
+
+  SupporterProductData_[STAGE]:
+    Type: "AWS::StepFunctions::StateMachine"
+    Properties:
+      DefinitionString:
+        !Sub
+        - |-
+          {
+            "Comment": "fulfilment test",
+            "StartAt": "QueryZuora",
+            "States": {
+              "QueryZuora": {
+                "Type": "Task",
+                "Resource": "${querierArn}",
+                "Next": "WaitSomeTime",
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 30,
+                    "MaxAttempts": 3
+                  }]
+              },
+              "WaitSomeTime": {
+                "Type": "Wait",
+                "Seconds": 180,
+                "Next": "FetchResults"
+              },
+              "FetchResults": {
+                "Type": "Task",
+                "Resource": "${fetcherArn}",
+                "End": "True",
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 60,
+                    "MaxAttempts": 20,
+                    "BackoffRate": 1.0
+                  }]
+              }
+            }
+          }
+        - {
+          querierArn: !GetAtt [ ZuoraQuerierLambda, Arn ],
+          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ]
+        }
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
+
+  WeeklyScheduledRule:
+    Type: "AWS::Events::Rule"
+    Properties:
+      Description: "Trigger nightly data synchronisation"
+      ScheduleExpression: "cron(00 3 ? * * *)"
+      State: "ENABLED"
+      Targets:
+        -
+          Arn: !Ref SupporterProductData_[STAGE]
+          Id: !Sub trigger_state_machine-${Stage}-1
+          Input: |
+            {
+            "type":"weekly",
+            "deliveryDayOfWeek": "friday",
+            "minDaysInAdvance" : 8
+            }
+          RoleArn: !GetAtt [ supporterDataTriggerRole, Arn ]
+
+  supporterDataTriggerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - events.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: TriggerStateMchine
+          PolicyDocument:
+            Version : "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - states:StartExecution
+                Resource: !Ref SupporterProductData_[STAGE]
+
+  checkerLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName:
+        !Sub zuora_fulfilment_checker-${Stage}
+      Description: "daily check to verify fulfilment files have been generated"
+      Handler: "checker.handler"
+      Role: !GetAtt [ FulfilmentWorkersLambdaRole, Arn ]
+      Code:
+        S3Bucket: fulfilment-lambdas-dist
+        S3Key: !Sub membership/${Stage}/fulfilment-lambdas/fulfilment-lambdas.zip
+      MemorySize: 128
+      Runtime: nodejs10.x
+      Timeout: 300
+      Environment:
+        Variables:
+          'Stage': !Sub ${Stage}
+
+  fulfilmentCheckerMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${checkerLambda}"
+      FilterPattern: '"CHECK:PASSED"'
+      MetricTransformations:
+        - MetricNamespace: !Sub "${Stage}/fulfilment"
+          MetricName: "fulfilmentFileUpdated"
+          MetricValue: 1
+    DependsOn: checkerLambda
+
+  CheckerScheduledRule:
+    Type: "AWS::Events::Rule"
+    Properties:
+      Description: "trigger fulfilment file check"
+      ScheduleExpression: "cron(30 11 * * ? *)"
+      State: "ENABLED"
+      Targets:
+        - Id: !Sub fulfilmentChecker_${Stage}
+          Arn: !GetAtt checkerLambda.Arn
+    DependsOn: fulfilmentCheckerMetricFilter
+
+  checkerSchedulePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt checkerLambda.Arn
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CheckerScheduledRule.Arn
+
+  weeklyScheduledUploadPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt WeeklyUploaderLambda.Arn
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt WeeklyScheduledUploadRule.Arn
+
+  sfDownloadSchedulePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt SalesforceDownloaderLambda.Arn
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt SFDownloadScheduledRule.Arn
+
+  CheckerAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Condition: CreateProdResources
+    Properties:
+      AlarmDescription: "alarm when fulfilment file has not been generated"
+      AlarmName: !Sub "fulfilment_check_alarm_${Stage}"
+      MetricName: fulfilmentFileUpdated
+      Namespace: !Sub "${Stage}/fulfilment"
+      TreatMissingData: breaching
+      Statistic: Sum
+      Period: 86400
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: LessThanThreshold
+    DependsOn: fulfilmentCheckerMetricFilter
+
+  SupporterProductDataAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:fulfilment-dev
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ Constants, Alarm, Urgent ]
+          - !Ref 'Stage'
+          - 'Failed to generate GW and HD fulfilment files'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Guardian Weekly and Home Delivery subscribes will not get their paper. Fix SupporterProductData ASAP!'
+          - !FindInMap [ Constants, Alarm, Process ]
+      MetricName: ExecutionsFailed
+      Namespace: AWS/States
+      Dimensions:
+        - Name: StateMachineArn
+          Value: !Ref SupporterProductData_[STAGE]
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
+    DependsOn: SupporterProductData_[STAGE]
+
+  HomeDeliveryUploadToSalesforceApiAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:fulfilment-dev
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ Constants, Alarm, Urgent ]
+          - !Ref 'Stage'
+          - 'Failed to upload Home Delivery fulfilment files to Salesforce'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Home Delivery subscribers will not get their paper. Investigate fulfilment-api Gateway ASAP! '
+          - !FindInMap [ Constants, Alarm, Process ]
+      MetricName: 5XXError
+      Namespace: AWS/ApiGateway
+      Dimensions:
+        - Name: ApiName
+          Value: !Sub fulfilment-api-${Stage}
+        - Name: Stage
+          Value: !Sub ${Stage}
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
+    DependsOn: FulfilmentAPI
+
+  GuardianWeeklyUploadToSalesforceLambdaAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:fulfilment-dev
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ Constants, Alarm, Urgent ]
+          - !Ref 'Stage'
+          - 'Failed to upload Guardian Weekly fulfilment files to Salesforce'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Guardian Weekly subscribers will not get their paper. Investigate weekly-fulfilmentUploader ASAP! '
+          - !FindInMap [ Constants, Alarm, Process ]
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref WeeklyUploaderLambda
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
+    DependsOn: WeeklyUploaderLambda
