@@ -65,9 +65,7 @@ function createFormReducer(
   const getFulfilmentOption = (action, currentOption) =>
     (action.scope === 'delivery' ? getWeeklyFulfilmentOption(action.country) : currentOption);
 
-  return (originalState: FormState = initialState, action: Action): FormState => {
-
-    const state = { ...originalState, debugInfo: `${originalState.debugInfo} ${JSON.stringify(action)}\n` };
+  return (state: FormState = initialState, action: Action): FormState => {
 
     switch (action.type) {
 
