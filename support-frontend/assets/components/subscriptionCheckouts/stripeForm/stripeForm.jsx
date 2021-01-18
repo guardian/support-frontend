@@ -269,6 +269,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
     });
 
   const requestSCAPaymentMethod = (event) => {
+    console.log('called request method');
     event.preventDefault();
     props.validateForm();
     handleCardErrors();
@@ -308,9 +309,11 @@ const StripeForm = (props: StripeFormPropTypes) => {
    * Rendering
    */
 
+  const cardErrorsList = getAllCardErrors();
+
   const errors = [
     ...props.allErrors,
-    ...cardErrors,
+    ...(cardErrorsList || []),
     ...(recaptchaError ? [recaptchaError] : []),
   ];
 

@@ -228,7 +228,6 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
 
   render() {
     const { props, state } = this;
-    // Need to get following const to update onChange, so might have to put it in state
     const accountErrorsLength = this.getAccountErrorsLength();
     const showGeneralError = props.allErrors.length === 0 && accountErrorsLength === 0 &&
     (props.submissionError !== null || (props.formError !== null && props.formError.length > 0));
