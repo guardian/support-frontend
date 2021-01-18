@@ -244,7 +244,7 @@ Resources:
               "FetchResults": {
                 "Type": "Task",
                 "Resource": "${fetcherArn}",
-                "End": "True",
+                "End": true,
                 "Retry": [
                    {
                     "ErrorEquals": ["States.ALL"],
@@ -289,7 +289,7 @@ Resources:
               "FetchResults": {
                 "Type": "Task",
                 "Resource": "${fetcherArn}",
-                "End": "True",
+                "End": true,
                 "Retry": [
                    {
                     "ErrorEquals": ["States.ALL"],
