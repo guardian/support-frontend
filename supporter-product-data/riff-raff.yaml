@@ -11,6 +11,7 @@ deployments:
     parameters:
       bucket: supporter-product-data-dist
       functionNames:
-        - "-SupporterProductDataQuery-"
+        - "-SupporterProductDataQuerier-"
+        - "-SupporterProductDataFetcher-"
       fileName: supporter-product-data.jar
     dependencies: [cfn]

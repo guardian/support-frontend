@@ -163,7 +163,7 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub membership-SupporterProductDataQuery-${Stage}
+        !Sub membership-SupporterProductDataQuerier-${Stage}
       Description: "Trigger zuora export"
       Handler: "com.gu.lambdas.ZuoraQuerierLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
@@ -181,7 +181,7 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub zuora_fulfilment_fetcher-${Stage}
+        !Sub membership-SupporterProductDataFetcher-${Stage}
       Description: "Fetch zuora export results"
       Handler: "com.gu.lambdas.ZuoraResultsFetcherLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
