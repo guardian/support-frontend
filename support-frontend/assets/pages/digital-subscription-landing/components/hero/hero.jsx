@@ -36,10 +36,6 @@ const HeroCopy = () => (
       gives you the richest experience of Guardian journalism. It also sustains the independent
       reporting you love.
     </p>
-    <p css={paragraph}>
-      For a few weeks only, read <strong>The best of a bad year</strong>, a new and exclusive look at the cultural,
-      scientific, environmental and political high points that stand out from a year dominated by the pandemic.
-    </p>
   </>
 );
 
