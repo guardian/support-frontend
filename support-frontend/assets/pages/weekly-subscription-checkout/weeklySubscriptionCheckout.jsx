@@ -30,6 +30,7 @@ import {
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { formatMachineDate } from 'helpers/dateConversions';
 import { promotionTermsUrl } from 'helpers/routes';
+import { FocusStyleManager } from '@guardian/src-utilities';
 
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 
@@ -64,6 +65,8 @@ const productPrice = getProductPrice(productPrices, countryId, billingPeriod, fu
 const appliedPromo = getAppliedPromo(productPrice.promotions);
 const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
 const promoTermsLink = promotionTermsUrl(appliedPromo ? appliedPromo.promoCode : defaultPromo);
+
+FocusStyleManager.onlyShowFocusOnTabs();
 
 // ----- Render ----- //
 

@@ -224,7 +224,7 @@ class NextState(
   ) =
     (state.product, paymentOrRedemptionData) match {
       case (product: Contribution, Purchase(purchase)) =>
-        SendThankYouEmailContributionState(state.user, product, purchase.paymentMethod, accountNumber.value)
+        contribution(product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
         dsDirect(product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
@@ -241,9 +241,21 @@ class NextState(
     }
   // scalastyle:on cyclomatic.complexity
 
+  private def contribution(product: Contribution, purchase: PaymentMethodWithSchedule) =
+    SendThankYouEmailContributionState(
+      state.user,
+      product,
+      purchase.paymentMethod,
+      accountNumber.value,
+      subscriptionNumber.value
+    )
+
   private def dsCorporate(product: DigitalPack) =
     SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
-      state.user, product, subscriptionNumber.value
+      state.user,
+      product,
+      accountNumber.value,
+      subscriptionNumber.value
     )
 
   private def weekly(product: GuardianWeekly, purchase: PaymentMethodWithSchedule) =
@@ -283,6 +295,7 @@ class NextState(
       purchase.paymentSchedule,
       state.promoCode,
       accountNumber.value,
+      subscriptionNumber.value
     )
 
   private def dsDirect(product: DigitalPack, purchase: PaymentMethodWithSchedule) =

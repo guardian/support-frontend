@@ -1,7 +1,6 @@
 // flow
 
 import {
-  dateIsPast,
   dateIsOutsideRange,
   getRange,
   getLatestAvailableDateText,
@@ -24,20 +23,6 @@ describe('datePickerHelpers', () => {
 
   afterEach(() => {
     global.Date = RealDate;
-  });
-
-  describe('dateIsPast', () => {
-    it('should be able to indicate if a selected date is in the past', () => {
-      const pastDate = new RealDate('05/13/2020');
-      const resultPast = dateIsPast(pastDate);
-      console.log('past', pastDate);
-      expect(resultPast).toBe(true);
-
-      const todaysDate = new RealDate('05/14/2020');
-      const resultToday = dateIsPast(todaysDate);
-      expect(resultToday).toBe(false);
-    });
-
   });
 
   describe('dateIsOutsideRange', () => {

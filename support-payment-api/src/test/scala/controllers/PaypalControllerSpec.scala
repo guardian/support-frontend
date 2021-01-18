@@ -8,27 +8,24 @@ import cats.implicits._
 import com.paypal.api.payments.{Links, Payment}
 import model.DefaultThreadPool
 import model.paypal.{EnrichedPaypalPayment, PaypalApiError}
-import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito._
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import play.api._
 import play.api.http.Status
-import play.api.inject.DefaultApplicationLifecycle
+import play.api.libs.json.Json._
 import play.api.mvc._
 import play.api.routing.Router
 import play.api.test.Helpers._
 import play.api.test._
-import play.core.DefaultWebCommands
 import router.Routes
+import services.CloudWatchService
 import util.RequestBasedProvider
 
-import scala.concurrent.{ExecutionContext, Future}
-import play.api.libs.json.Json._
-import services.CloudWatchService
-
 import scala.collection.JavaConverters._
+import scala.concurrent.{ExecutionContext, Future}
 
 class PaypalControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context)
   extends BuiltInComponentsFromContext(context) with MockitoSugar {

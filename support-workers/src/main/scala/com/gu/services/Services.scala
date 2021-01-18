@@ -8,6 +8,7 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.SalesforceService
 import com.gu.stripe.StripeService
+import com.gu.support.acquisitions.BigQueryService
 import com.gu.support.catalog.CatalogService
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
@@ -41,5 +42,6 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val redemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
+  lazy val bigQueryService = new BigQueryService(bigQueryConfigProvider.get(isTestUser))
 }
 

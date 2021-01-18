@@ -21,7 +21,7 @@ import scala.util.Try
 
 case class AllSettings(
   switches: Switches,
-  amounts: AmountsRegions,
+  amounts: ConfiguredAmounts,
   contributionTypes: ContributionTypes,
   metricUrl: MetricUrl
 )
@@ -61,7 +61,7 @@ object SettingsSources {
   def fromConfig(config: Config, stage: Stage): Either[Throwable, SettingsSources] = {
     for {
       switchesSource <- SettingsSource.fromConfig(config, "switches", stage)
-      amountsSource <- SettingsSource.fromConfig(config, "amounts", stage)
+      amountsSource <- SettingsSource.fromConfig(config, "configured-amounts", stage)
       contributionTypesSource <- SettingsSource.fromConfig(config, "contributionTypes", stage)
     } yield SettingsSources(switchesSource, amountsSource, contributionTypesSource)
   }

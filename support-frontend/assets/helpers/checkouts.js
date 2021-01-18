@@ -14,7 +14,7 @@ import { type Switches } from 'helpers/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
-import type { Amount, SelectedAmounts } from 'helpers/contributions';
+import type { SelectedAmounts } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe, AmazonPay } from 'helpers/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
@@ -134,10 +134,10 @@ function getPaymentDescription(contributionType: ContributionType, paymentMethod
   return '';
 }
 
-const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: Amount, verbose: boolean) =>
+const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: number, verbose: boolean) =>
   (verbose ?
-    `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
-    `${currency.glyph}${amount.value}`);
+    `${amount} ${amount === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
+    `${currency.glyph}${amount}`);
 
 
 const getContributeButtonCopy = (
@@ -147,12 +147,7 @@ const getContributeButtonCopy = (
   currency: IsoCurrency,
 ) => {
   const frequency = getFrequency(contributionType);
-  const otherAmount = maybeOtherAmount ? {
-    value: maybeOtherAmount,
-    spoken: '',
-    isDefault: false,
-  } : null;
-  const amount = selectedAmounts[contributionType] === 'other' ? otherAmount : selectedAmounts[contributionType];
+  const amount = selectedAmounts[contributionType] === 'other' ? parseInt(maybeOtherAmount, 10) : selectedAmounts[contributionType];
 
   const amountCopy = amount ?
     formatAmount(

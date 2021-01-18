@@ -5,7 +5,6 @@
 import type { ErrorReason } from 'helpers/errorReasons';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
-  type Amount,
   type ContributionType,
   getAmount,
   logInvalidCombination,
@@ -77,7 +76,7 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
   | { type: 'UPDATE_RECAPTCHA_TOKEN', recaptchaToken: string }
-  | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
+  | { type: 'SELECT_AMOUNT', amount: number | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
   | { type: 'PAYMENT_FAILURE', paymentError: ErrorReason }
@@ -188,7 +187,7 @@ const updateBillingState = (billingState: StateProvince | null): ((Function) => 
 const updateBillingCountry = (billingCountry: IsoCountry | null): Action =>
   ({ type: 'UPDATE_BILLING_COUNTRY', billingCountry });
 
-const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): ((Function) => void) =>
+const selectAmount = (amount: number | 'other', contributionType: ContributionType): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SELECT_AMOUNT', amount, contributionType })));
   };

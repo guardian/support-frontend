@@ -6,7 +6,6 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/heroPicture';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
@@ -25,6 +24,7 @@ import { formatUserDate } from 'helpers/dateConversions';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { Paper } from 'helpers/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import { HeroPicture } from './heroPicture';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 

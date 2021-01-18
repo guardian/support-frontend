@@ -5,8 +5,7 @@ import com.typesafe.config.Config
 case class GoCardlessConfig(
     apiToken: String,
     environment: String
-) extends TouchpointConfig
-
+)
 class GoCardlessConfigProvider(config: Config, defaultStage: Stage) extends TouchpointConfigProvider[GoCardlessConfig](config, defaultStage) {
   def fromConfig(config: Config): GoCardlessConfig = {
     GoCardlessConfig(

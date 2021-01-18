@@ -2,6 +2,7 @@
 
 GET /healthcheck                                                   controllers.Application.healthcheck
 GET /error500                                                      lib.ErrorController.error500
+GET /cookies                                                       controllers.DiagnosticsController.cookies
 
 # ----- Unsupported Browsers ----- #
 

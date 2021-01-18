@@ -22,7 +22,7 @@ import org.scalatest.matchers.should.Matchers
 import scala.concurrent.{ExecutionContext, Future}
 
 @IntegrationTest
-class FailureHandlerIT extends AsyncLambdaSpec with MockContext {
+class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
 
   "FailureHandler lambda" should "return a failed JsonWrapper and an Unknown failure reason for any errors except payment errors" in {
     val failureHandler = new FailureHandler()

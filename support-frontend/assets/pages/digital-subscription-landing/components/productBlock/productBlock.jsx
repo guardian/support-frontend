@@ -167,7 +167,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
           <div className="product-block__container__label--top">What&apos;s included?</div>
           <ProductCard
             title="UK Daily in The Guardian Editions app"
-            subtitle="Each day's edition, in one simple, elegant app"
+            subtitle="The best of a bad year- limited time only, ending 23 January"
             image={dailyImage}
             second={false}
           />

@@ -210,18 +210,17 @@ object JsonFixtures {
           "browserId":null
         },
         "referrerAcquisitionData":{
-          "campaignCode":null,
-          "referrerPageviewId":null,
-          "referrerUrl":null,
-          "componentId":null,
-          "componentType":null,
-          "source":null,
+          "source": "GUARDIAN_WEB",
+          "componentId": "header_support",
+          "componentType": "ACQUISITIONS_HEADER",
+          "campaignCode": "header_support",
+          "referrerPageviewId": "kirbr24j42oda63r9c1s",
+          "referrerUrl": "https://www.theguardian.com/uk",
           "abTests":[{
             "name":"fakeTest",
             "variant":"fakeVariant"
           }],
-          "queryParameters":null,
-          "hostname":"support.thegulocal.com"
+          "hostname": "support.code.dev-theguardian.com"
         },
         "supportAbTests":[{
           "name":"fakeSupportTest",
@@ -674,11 +673,171 @@ object JsonFixtures {
             },
             "product": ${contribution(currency = GBP)},
             "paymentMethod": $stripePaymentMethod,
-            "accountNumber": "accountnumber123"
+            "accountNumber": "accountnumber123",
+            "subscriptionNumber": "subno123"
           },
           "acquisitionData": $acquisitionData
         }"""
+  val sendAcquisitionEventPrintJson =
+    s"""
+    {
+      "requestId": "1a94c891-e98a-13ae-0000-0000000038a3",
+      "sendThankYouEmailState": {
+        "user": {
+          "id": "200004237",
+          "primaryEmailAddress": "rupert.bates+test-mma2@theguardian.com",
+          "title": null,
+          "firstName": "rupert",
+          "lastName": "bates",
+          "billingAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "deliveryAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "telephoneNumber": null,
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false,
+          "deliveryInstructions": null
+        },
+        "product": {
+          "currency": "GBP",
+          "billingPeriod": "Monthly",
+          "fulfilmentOptions": "HomeDelivery",
+          "productOptions": "Sixday",
+          "productType": "Paper"
+        },
+        "paymentMethod": {
+          "TokenId": "pm_0Hyx9kItVxyc3Q6ndwisZWtU",
+          "SecondTokenId": "cus_Ia7OiUxIGHWyAy",
+          "CreditCardNumber": "4242",
+          "CreditCardCountry": "US",
+          "CreditCardExpirationMonth": 2,
+          "CreditCardExpirationYear": 2027,
+          "CreditCardType": "Visa",
+          "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+          "Type": "CreditCardReferenceTransaction",
+          "StripePaymentType": "StripeCheckout"
+        },
+        "paymentSchedule": {
+          "payments": []
+        },
+        "promoCode": "fake_code",
+        "accountNumber": "A00102360",
+        "subscriptionNumber": "A-S00125315",
+        "firstDeliveryDate": "2020-12-19",
+        "productType": "Paper"
+      },
+      "analyticsInfo": {
+        "isGiftPurchase": false,
+        "paymentProvider": "Stripe"
+      },
+      "acquisitionData": $acquisitionData
+    }
+    """
 
+  val sendAcquisitionEventGWJson =
+    """
+    {
+      "requestId": "1a94c891-e98a-13ae-0000-000000003f18",
+      "sendThankYouEmailState": {
+        "user": {
+          "id": "200004237",
+          "primaryEmailAddress": "rupert.bates+test-mma2@theguardian.com",
+          "title": null,
+          "firstName": "rupert",
+          "lastName": "bates",
+          "billingAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "deliveryAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "telephoneNumber": null,
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false,
+          "deliveryInstructions": null
+        },
+        "product": {
+          "currency": "GBP",
+          "billingPeriod": "SixWeekly",
+          "fulfilmentOptions": "Domestic",
+          "productType": "GuardianWeekly"
+        },
+        "giftRecipient": null,
+        "paymentMethod": {
+          "PaypalBaid": "B-8JT45264A2787164W",
+          "PaypalEmail": "membership.paypal-buyer@theguardian.com",
+          "PaypalType": "ExpressCheckout",
+          "Type": "PayPal",
+          "PaymentGateway": "PayPal Express"
+        },
+        "paymentSchedule": {
+          "payments": [
+            {
+              "date": "2021-01-08",
+              "amount": 6
+            }
+          ]
+        },
+        "promoCode": "6FOR6",
+        "accountNumber": "A00102401",
+        "subscriptionNumber": "A-S00125354",
+        "firstDeliveryDate": "2021-01-08",
+        "productType": "GuardianWeekly"
+      },
+      "analyticsInfo": {
+        "isGiftPurchase": false,
+        "paymentProvider": "PayPal"
+      },
+      "acquisitionData": {
+        "ophanIds": {
+          "pageviewId": "kirefisckm7vh76bd1w8",
+          "visitId": null,
+          "browserId": null
+        },
+        "referrerAcquisitionData": {
+          "campaignCode": null,
+          "referrerPageviewId": null,
+          "referrerUrl": null,
+          "componentId": null,
+          "componentType": null,
+          "source": null,
+          "abTests": null,
+          "queryParameters": [],
+          "hostname": "support.code.dev-theguardian.com",
+          "gaClientId": "GA1.2.1846757665.1596457717",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+          "ipAddress": "10.248.135.37"
+        },
+        "supportAbTests": []
+      }
+    }
+    """
   val digipackSubscriptionWithDiscountAndFreeTrialJson =
     s"""
         {

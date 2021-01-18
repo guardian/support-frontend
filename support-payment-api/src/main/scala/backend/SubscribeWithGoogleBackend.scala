@@ -1,12 +1,13 @@
 package backend
 
+import backend.SubscribeWithGoogleBackend.dummyBigQueryTracking
 import cats.instances.future._
 import cats.data.EitherT
 import cats.syntax.validated._
 import cats.syntax.apply._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.typesafe.scalalogging.StrictLogging
-import conf.{ConfigLoader, EmailConfig, IdentityConfig, ContributionsStoreQueueConfig}
+import conf.{ConfigLoader, ContributionsStoreQueueConfig, EmailConfig, IdentityConfig}
 import model._
 import model.db.ContributionData
 import model.email.ContributorRow
@@ -88,7 +89,8 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
 
     BackendError.combineResults(
       trackContributionResult,
-      ophanTrackingResult
+      ophanTrackingResult,
+      dummyBigQueryTracking
     )
   }
 
@@ -121,9 +123,11 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
     BackendError.combineResults(
       BackendError.combineResults(
         trackContributionResult,
-        ophanTrackingResult
+        ophanTrackingResult,
+        dummyBigQueryTracking
       ),
-      sendThankYouEmailResult
+      sendThankYouEmailResult,
+      dummyBigQueryTracking
     )
   }
 
@@ -174,6 +178,9 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
 }
 
 object SubscribeWithGoogleBackend {
+
+  // Not going to track this to BigQuery since subscribe to Google is no longer supported
+  val dummyBigQueryTracking = EitherT[Future, BackendError, Unit](Future.successful(Right(())))
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
     implicit defaultThreadPool: DefaultThreadPool,

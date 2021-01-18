@@ -52,6 +52,7 @@ stories.add('Header', () => {
   const theme = radios('Theme', {
     showcase: 'showcase',
     digital: 'digital',
+    paper: 'paper',
     weekly: 'weekly',
   }, 'digital');
   return (

@@ -129,21 +129,9 @@ describe('formValidation', () => {
   describe('checkAmountOrOtherAmount', () => {
 
     const defaultSelectedAmounts = {
-      ONE_OFF: {
-        value: '50',
-        spoken: 'fifty',
-        isDefault: true,
-      },
-      MONTHLY: {
-        value: '15',
-        spoken: 'fifteen',
-        isDefault: true,
-      },
-      ANNUAL: {
-        value: '100',
-        spoken: 'one hundred',
-        isDefault: true,
-      },
+      ONE_OFF: 50,
+      MONTHLY: 15,
+      ANNUAL: 100,
     };
 
     const selectedAmountsWithOtherSelected = {

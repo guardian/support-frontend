@@ -116,14 +116,10 @@ function initialisePaymentMethods(
 }
 
 function selectInitialAmounts(state: State, dispatch: Function) {
-  const { amounts } = state.common.settings;
-  const { countryGroupId } = state.common.internationalisation;
+  const { amounts } = state.common;
 
-  Object.keys(amounts[countryGroupId]).forEach((contributionType) => {
-    const defaultAmount =
-      amounts[countryGroupId][contributionType].find(amount => amount.isDefault) ||
-      amounts[countryGroupId][contributionType][0];
-
+  Object.keys(amounts).forEach((contributionType) => {
+    const { defaultAmount } = amounts[contributionType];
     dispatch(selectAmount(defaultAmount, contributionType));
   });
 }

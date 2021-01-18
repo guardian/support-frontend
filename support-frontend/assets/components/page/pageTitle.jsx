@@ -7,9 +7,11 @@ import { brand, brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { titlepiece } from '@guardian/src-foundations/typography';
 
-import { guardianWeeklyBlue } from 'stylesheets/emotion/colours';
+import CentredContainer from '../containers/centredContainer';
 
-type ThemeType = 'showcase' | 'digital' | 'weekly';
+import { guardianWeeklyBlue, paperSubscriptionsBlue } from 'stylesheets/emotion/colours';
+
+type ThemeType = 'showcase' | 'digital' | 'weekly' | 'paper';
 
 type PropTypes = {|
   title: string,
@@ -22,6 +24,7 @@ const themeColors: { [key: ThemeType]: string } = {
   weekly: guardianWeeklyBlue,
   digital: brand[300],
   showcase: brandAlt[400],
+  paper: paperSubscriptionsBlue,
 };
 
 const headerThemes: { [key: ThemeType]: string } = {
@@ -39,6 +42,11 @@ const headerThemes: { [key: ThemeType]: string } = {
   showcase: css`
     :before {
       background-color: ${themeColors.showcase};
+    }
+  `,
+  paper: css`
+    :before {
+      background-color: ${themeColors.paper};
     }
   `,
 };
@@ -94,7 +102,9 @@ function PageTitle({
       cssOverrides,
     ]}
     >
-      <h1 css={pageTitle}>{title}</h1>
+      <CentredContainer>
+        <h1 css={pageTitle}>{title}</h1>
+      </CentredContainer>
       {children}
     </div>
   );

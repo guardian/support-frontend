@@ -43,18 +43,36 @@ export type ThirdPartyPaymentLibraries = {
   ANNUAL: { Stripe: ThirdPartyPaymentLibrary | null },
 };
 
-export type Amount = {
-  value: string,
-  isDefault?: boolean,
+export type AmountSelection = {
+  amounts: number[],
+  defaultAmount: number,
 }
 
-export type Amounts = {
-  [ContributionType]: Amount[]
+export type ContributionAmounts = {
+  [ContributionType]: AmountSelection,
+};
+
+export type AmountsTestVariant = {
+  name: string,
+  amounts: ContributionAmounts,
 }
 
-export type AmountsRegions = {
-  [CountryGroupId]: Amounts
+export type AmountsTest = {
+  name: string,
+  isLive: boolean,
+  variants: AmountsTestVariant[],
+  seed: number,
 }
+
+export type ConfiguredRegionAmounts = {
+  control: ContributionAmounts,
+  test?: AmountsTest,
+};
+
+export type ConfiguredAmounts = {
+  [CountryGroupId]: ConfiguredRegionAmounts,
+};
+
 
 export type ContributionTypeSetting = {
   contributionType: ContributionType,
@@ -90,13 +108,13 @@ export type OtherAmounts = {
   [ContributionType]: { amount: string | null }
 };
 
-export type SelectedAmounts = { [ContributionType]: Amount | 'other' };
+export type SelectedAmounts = { [ContributionType]: number | 'other' };
 
 
 const getAmount = (selectedAmounts: SelectedAmounts, otherAmounts: OtherAmounts, contributionType: ContributionType) =>
   parseFloat(selectedAmounts[contributionType] === 'other'
     ? otherAmounts[contributionType].amount
-    : selectedAmounts[contributionType].value);
+    : selectedAmounts[contributionType]);
 
 // ----- Setup ----- //
 
@@ -390,7 +408,7 @@ function getCustomAmountA11yHint(
   }
 
   return `Enter an amount of ${config[countryGroupId][contributionType].minInWords}
-    ${spokenCurrency} or more for your 
+    ${spokenCurrency} or more for your
     ${getSpokenType(contributionType)} contribution.`;
 
 }
@@ -433,15 +451,15 @@ const contributionTypeRadios = [
 ];
 
 function getContributionAmountRadios(
-  amounts: Amount[],
+  amounts: number[],
   contributionType: ContributionType,
   currencyId: IsoCurrency,
 ): Radio[] {
 
   return amounts.map(amount => ({
-    value: amount.value,
-    text: `${currencies[currencyId].glyph}${amount.value}`,
-    accessibilityHint: getAmountA11yHint(contributionType, currencyId, numbersInWords[amount.value]),
+    value: amount.toString(),
+    text: `${currencies[currencyId].glyph}${amount}`,
+    accessibilityHint: getAmountA11yHint(contributionType, currencyId, numbersInWords[amount]),
   }));
 }
 

@@ -13,7 +13,7 @@ export type Product = {
   title: string,
   price: string,
   children?: Node,
-  offerCopy?: string,
+  offerCopy?: Node,
   priceCopy: Node,
   buttonCopy: string,
   href: string,
@@ -26,7 +26,7 @@ const productOption = css`
   ${textSans.medium()}
   position: relative;
   display: grid;
-  grid-template-rows: 48px 66px 100px 86px;
+  grid-template-rows: 48px minmax(66px, 1fr) 100px 86px;
   width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
@@ -49,6 +49,7 @@ const productOptionTitle = css`
 
 const productOptionOfferCopy = css`
   height: 100%;
+  padding-bottom: ${space[2]}px;
 `;
 
 const productOptionPrice = css`
