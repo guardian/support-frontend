@@ -146,7 +146,7 @@ const mapStateToProps = (state: State): PropTypes => {
       } :
       {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
-        price: getDisplayPrice(currencyId, promotionalPrice || fullPrice),
+        price: getDisplayPrice(currencyId, isNumeric(promotionalPrice) ? promotionalPrice : fullPrice),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
         onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, billingPeriod),
         priceCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
