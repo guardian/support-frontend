@@ -30,25 +30,6 @@ Mappings:
 
 Resources:
 
-  SupporterProductLogBucket:
-    Type: "AWS::S3::Bucket"
-    Properties:
-      BucketName:
-        Fn::FindInMap:
-          - EnvironmentBucketMap
-          - Ref: Stage
-          - "logs"
-      AccessControl: LogDeliveryWrite
-      LoggingConfiguration:
-        DestinationBucketName:
-          Fn::FindInMap:
-            - EnvironmentBucketMap
-            - Ref: Stage
-            - "logs"
-        LogFilePrefix: "logs-logs/"
-      VersioningConfiguration:
-        Status: "Enabled"
-
   SupporterProductExportBucket:
     Type: "AWS::S3::Bucket"
     Properties:
