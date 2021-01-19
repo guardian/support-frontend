@@ -21,7 +21,13 @@ class DriverConfig {
   // Used in dev to run tests locally
   private def instantiateLocalBrowser(): WebDriver = {
     WebDriverManager.chromedriver().setup()
-    new ChromeDriver()
+    val driver = new ChromeDriver()
+    val dev = new java.util.HashMap[String, Object]()
+    dev.put("timezoneId", "America/New_York")
+    val devTools = driver.getDevTools
+    devTools.createSession
+    driver.executeCdpCommand("Emulation.setTimezoneOverride", dev)
+    driver
   }
 
   // Used by Travis to run tests in BrowserStack
@@ -30,7 +36,8 @@ class DriverConfig {
     val chromeOptions = new ChromeOptions
     chromeOptions.setCapability("platform", "WINDOWS")
     chromeOptions.setCapability("name", "support-frontend")
-    chromeOptions.setCapability("browserstack.networkLogs", "true")
+//    chromeOptions.setCapability("browserstack.networkLogs", "true")
+    chromeOptions.setCapability("browserstack.timezone", "New_York")
     new RemoteWebDriver(new URL(Config.webDriverRemoteUrl), chromeOptions)
   }
 
