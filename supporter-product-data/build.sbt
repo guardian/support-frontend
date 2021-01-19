@@ -1,5 +1,4 @@
-import LibraryVersions.awsClientVersion
-
+import LibraryVersions.{awsClientVersion, circeVersion}
 import sbt.Keys.{libraryDependencies, resolvers}
 import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
 
@@ -11,6 +10,9 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
+  "io.circe" %% "circe-core" % circeVersion,
+  "io.circe" %% "circe-generic" % circeVersion,
+  "io.circe" %% "circe-parser" % circeVersion
 )
 
 riffRaffPackageType := assembly.value
