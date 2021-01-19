@@ -132,6 +132,14 @@ Resources:
                 Action:
                   - s3:ListBucket
                 Resource: !Sub arn:aws:s3:::${SupporterProductExportBucket}
+        - PolicyName: SSMConfigParams
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParametersByPath
+                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/supporter-product-data/*
 
   ZuoraQuerierLambda:
     Type: "AWS::Lambda::Function"
