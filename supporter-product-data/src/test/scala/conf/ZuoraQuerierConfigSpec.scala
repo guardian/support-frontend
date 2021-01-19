@@ -2,9 +2,11 @@ package conf
 
 import com.gu.conf.ZuoraQuerierConfig
 import com.gu.model.Stage.CODE
+import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
+@IntegrationTest
 class ZuoraQuerierConfigSpec extends AsyncFlatSpec with Matchers{
   "ZuoraQuerierConfig" should "load from SSM" in {
     val futureConfig = ZuoraQuerierConfig.load(CODE)
