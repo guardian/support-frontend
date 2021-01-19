@@ -178,7 +178,7 @@ trait WebServiceHelper[Error <: Throwable] {
       .headers(buildHeaders(headers))
 
   private def endpointUrl(endpoint: String, params: ParamMap): HttpUrl = {
-    val withSegments = endpoint.split("/").foldLeft(urlBuilder) {
+    val withSegments = endpoint.split("/", -1).foldLeft(urlBuilder) {
       case (url, segment) =>
         url.addEncodedPathSegment(segment)
     }
