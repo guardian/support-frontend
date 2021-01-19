@@ -20,4 +20,8 @@ object Stage {
       .find(_.value == str)
       .toRight(s"Unknown batch status $str")
 
+  def fromEnvironment = fromString(Option(System.getenv("Stage"))
+    .getOrElse("DEV"))
+    .getOrElse(Stage.DEV)
+
 }
