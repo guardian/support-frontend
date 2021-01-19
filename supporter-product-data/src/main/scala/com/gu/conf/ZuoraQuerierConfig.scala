@@ -12,8 +12,8 @@ import scala.concurrent.Future
 
 case class ZuoraQuerierConfig(
   url: String,
-  password: String,
-  username: String
+  username: String,
+  password: String
 )
 
 object ZuoraQuerierConfig {

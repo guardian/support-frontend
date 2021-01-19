@@ -5,7 +5,7 @@ import io.circe.generic.semiauto.deriveDecoder
 
 case class BatchQueryResponse(
   id: String,
-  status: BatchStatus,
+  status: JobStatus,
 )
 
 object BatchQueryResponse {

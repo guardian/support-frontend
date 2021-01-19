@@ -7,7 +7,7 @@ import java.io.{InputStream, OutputStream}
 class ZuoraQuerierLambda extends RequestStreamHandler{
 
   def handleRequest(input: InputStream, output: OutputStream, context: Context): Unit = {
-
+    //val querier =  new ZuoraQuerierService()
   }
 
 }

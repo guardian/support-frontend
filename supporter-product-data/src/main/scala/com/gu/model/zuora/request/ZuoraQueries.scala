@@ -10,14 +10,5 @@ object ZuoraFieldNames {
 
 object ExportZoqlQueries {
   def selectNewRatePlans(date: LocalDate): String =
-    s"""SELECT
-          ${ZuoraFieldNames.identityId},
-          ${ZuoraFieldNames.ratePlanName},
-          ${ZuoraFieldNames.termEndDate}
-            FROM
-            rateplan
-            WHERE
-            Subscription.Status = 'Active' AND
-            ${ZuoraFieldNames.termEndDate} >= '$date'
-    """
+    s"""SELECT ${ZuoraFieldNames.identityId}, ${ZuoraFieldNames.ratePlanName}, ${ZuoraFieldNames.termEndDate} FROM rateplan WHERE Subscription.Status = 'Active' AND ${ZuoraFieldNames.termEndDate} >= '$date'"""
 }

@@ -15,16 +15,16 @@ case class BatchQuery(
 
 object ZoqlExportQuery{
   implicit val encoder: Encoder[ZoqlExportQuery] = deriveEncoder[ZoqlExportQuery].mapJsonObject(_
-    .add("format", Json.fromString("csv"))
-    .add("version", Json.fromString("1.0"))
-    .add("encrypted", Json.fromString("none"))
-    .add("useQueryLabels", Json.fromString("true"))
-    .add("dateTimeUtc", Json.fromString("true"))
+    .add("type", Json.fromString("zoqlexport"))
   )
 }
 
 object BatchQuery{
   implicit val encoder: Encoder[BatchQuery] = deriveEncoder[BatchQuery].mapJsonObject(_
-    .add("type", Json.fromString("zoqlexport"))
+    .add("format", Json.fromString("csv"))
+    .add("version", Json.fromString("1.0"))
+    .add("encrypted", Json.fromString("none"))
+    .add("useQueryLabels", Json.fromString("true"))
+    .add("dateTimeUtc", Json.fromString("true"))
   )
 }

@@ -29,6 +29,6 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
         )
       )
     )
-    postJson[BatchQueryResponse](s"action/query", query.asJson, authHeaders)
+    postJson[BatchQueryResponse](s"batch-query/", query.asJson, authHeaders)
   }
 }
