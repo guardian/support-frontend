@@ -1,11 +1,12 @@
 import LibraryVersions.{awsClientVersion, circeVersion}
-import sbt.Keys.{libraryDependencies, resolvers}
 import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
+import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
 
 
 libraryDependencies ++= Seq(
+  "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.568",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,

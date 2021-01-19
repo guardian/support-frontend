@@ -123,8 +123,8 @@ lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .settings(
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`module-rest`)
-  .aggregate(`module-rest`)
+  ).dependsOn(`module-rest`, `module-aws`)
+  .aggregate(`module-rest`, `module-aws`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
   .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
