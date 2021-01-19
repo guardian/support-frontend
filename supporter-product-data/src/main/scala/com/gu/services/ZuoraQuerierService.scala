@@ -20,12 +20,12 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
     "apiAccessKeyId" -> config.username
   )
 
-  def postQuery(): Future[BatchQueryResponse] = {
+  def postQuery(date: LocalDate): Future[BatchQueryResponse] = {
     val query = BatchQuery(
       "SupporterProductData",
       List(
         ZoqlExportQuery("New Subscriptions",
-          ExportZoqlQueries.selectNewRatePlans(LocalDate.now(ZoneId.of("UTC")))
+          ExportZoqlQueries.selectActiveRatePlans(date)
         )
       )
     )

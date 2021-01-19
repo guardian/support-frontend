@@ -8,6 +8,7 @@ import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
+import java.time.LocalDate
 import scala.concurrent.duration._
 
 @IntegrationTest
@@ -16,7 +17,7 @@ class ZuoraQuerierServiceSpec extends AsyncFlatSpec with Matchers {
     val futureResult = for {
       config <- ZuoraQuerierConfig.load(CODE)
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
-      result <- service.postQuery()
+      result <- service.postQuery(LocalDate.now())
     } yield result
 
     futureResult.map {

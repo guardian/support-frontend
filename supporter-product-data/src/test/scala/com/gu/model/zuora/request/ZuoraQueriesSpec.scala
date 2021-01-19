@@ -19,7 +19,7 @@ class ZuoraQueriesSpec extends AnyFlatSpec with Matchers with LazyLogging {
             Subscription.Status = 'Active' AND
             Subscription.TermEndDate >= '2011-11-01'
     """
-    val actual = ExportZoqlQueries.selectNewRatePlans(date)
+    val actual = ExportZoqlQueries.selectActiveRatePlans(date)
     logger.info(actual)
     actual shouldEqual expected
   }
