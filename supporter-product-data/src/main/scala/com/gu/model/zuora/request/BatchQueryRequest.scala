@@ -8,7 +8,7 @@ case class ZoqlExportQuery(
   query: String
 )
 
-case class BatchQuery(
+case class BatchQueryRequest(
   name: String,
   queries: List[ZoqlExportQuery]
 )
@@ -19,8 +19,8 @@ object ZoqlExportQuery{
   )
 }
 
-object BatchQuery{
-  implicit val encoder: Encoder[BatchQuery] = deriveEncoder[BatchQuery].mapJsonObject(_
+object BatchQueryRequest{
+  implicit val encoder: Encoder[BatchQueryRequest] = deriveEncoder[BatchQueryRequest].mapJsonObject(_
     .add("format", Json.fromString("csv"))
     .add("version", Json.fromString("1.0"))
     .add("encrypted", Json.fromString("none"))
